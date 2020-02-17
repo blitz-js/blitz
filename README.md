@@ -12,4 +12,4 @@ There’s a LOT of work left and I can’t do it alone.
 
 I invite you to join me — let’s build the future of web dev together. 🤝
 
-If you’re interested in helping or just want to keep a pulse on the project, drop your email here 👉 [Blitzjs.com](https://blitzjs.com)
+If you’re interested in helping or just want to keep a pulse on the project, [drop your email here 👉 Blitzjs.com](https://blitzjs.com)
