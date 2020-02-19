@@ -3,7 +3,7 @@
 Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management
 
 
-## Welcome to the Blitz Community
+## Welcome to the Blitz Community 👋
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. There will be a **zero** tolerance policy for any type of harassment or discrimination. I (Brandon) will soon be posting the first RFC — an RFC for a code of conduct. First things first.
 
