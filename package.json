@@ -15,10 +15,7 @@
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
     "start": "lerna exec --parallel -- yarn start",
-    "test": "npm-run-all -s lint jest test:peril",
-    "test:coverage": "jest --coverage",
-    "test:update": "jest --updateSnapshot",
-    "test:watch": "jest --watch"
+    "test": "lerna exec --parallel -- yarn test"
   },
   "devDependencies": {
     "cross-env": "^7.0.0",

@@ -1,33 +1,33 @@
-name: Github Stars to Slack
+name: Continuous Integration
 
-on: 
-  watch:
-    types: [started]
+on: [push]
 
 jobs:
-  celebrate:
-    name: Celebrate
-    runs-on: [ubuntu-latest]
-    steps: 
-    - uses: 8398a7/action-slack@v2
-      with:
-        status: custom
-        payload: | 
-           {
-            text: "GitHub Stargazer",
-            blocks: [{
-               "type": "section", 
-               "text": {
-                 "type": "mrkdwn",
-                 "text": "✨New Star from *<${{github.event.sender.url}}|${{ github.actor }}>*!✨\n\n Hot dog! You now have *${{ github.event.repository.stargazers_count }}* stargazers! Keep up the good work!!" 
-                 },
-               "accessory": {
-                 "type": "image",
-                 "image_url": "${{ github.event.sender.avatar_url }}",
-                 "alt_text": "${{ github.actor }} avatar"
-               } 
-               }]
-           }
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
-      if: always() # P
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.1'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
+      - name: Test Blitz Packages
+        run: yarn test
+        env:
+          CI: true
