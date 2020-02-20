@@ -1,0 +1,44 @@
+{
+  "name": "@blitzjs/cli",
+  "description": "Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": {
+    "yarn": "^1.19.1",
+    "node": ">=12.16.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "contributors": [
+    {
+      "name": "Michael Edelman",
+      "email": "michael@fabulas.io",
+      "url": "https://twitter.com/edelman215"
+    }
+  ],
+  "main": "dist/index.js",
+  "module": "dist/testtsdx.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint"
+  },
+  "peerDependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  }
+}

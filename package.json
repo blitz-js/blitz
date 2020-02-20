@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "examples/*"
+    ]
+  },
+  "engines": {
+    "yarn": "^1.19.1",
+    "node": ">=12.16.1"
+  },
+  "scripts": {
+    "build": "lerna exec --stream -- yarn build",
+    "lerna": "lerna",
+    "lerna-prepare": "lerna run prepare",
+    "start": "lerna exec --parallel -- yarn start",
+    "test": "npm-run-all -s lint jest test:peril",
+    "test:coverage": "jest --coverage",
+    "test:update": "jest --updateSnapshot",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "lerna": "^3.20.2",
+    "lint-staged": "^10.0.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.7.5",
+    "tsdx": "^0.12.3",
+    "tslib": "^1.10.0",
+    "@types/jest": "^25.1.3"
+  }
+}
