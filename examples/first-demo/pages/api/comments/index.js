@@ -1,1 +1,1 @@
-export { default } from "./[...id]"
+export {default} from './[...id]'
