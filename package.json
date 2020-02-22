@@ -11,12 +11,12 @@
     "node": ">=12.16.1"
   },
   "scripts": {
+    "dev": "lerna run start --scope @blitzjs/* --stream --parallel",
     "build": "lerna exec --scope @blitzjs/* --stream -- yarn build",
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
     "start": "lerna exec --parallel -- yarn start",
-    "test": "lerna exec --parallel -- yarn test",
-    "postinstall": "yarn run build"
+    "test": "lerna exec --parallel -- yarn test"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",
