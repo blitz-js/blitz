@@ -5,6 +5,7 @@
   "scripts": {
     "postinstall": "prisma2 generate",
     "start": "next dev",
+    "migrate": "prisma2 migrate up --experimental",
     "build": "prisma2 generate && next build",
     "now-start": "next start"
   },

@@ -8,6 +8,7 @@ You must set the `DATABASE_URL` env variable
 - My production env is using a managed postgres DB from Digital Ocean
 
 1. yarn
-2. Deploy via Zeit now
+2. yarn migrate
+3. yarn start
 
 Currently deployed to https://first-demo.blitzjs.com
