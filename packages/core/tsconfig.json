@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src", "types", "test"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": "./",
+    "declarationDir": "./dist",
     "paths": {
       "*": ["src/*", "node_modules/*"]
     }

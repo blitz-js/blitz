@@ -11,7 +11,7 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "build": "lerna exec --stream -- yarn build",
+    "build": "lerna exec --scope @blitzjs/* --stream -- yarn build",
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
     "start": "lerna exec --parallel -- yarn start",
