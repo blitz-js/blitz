@@ -23,8 +23,5 @@
     "autoprefixer": "9.7.4",
     "prisma2": "2.0.0-preview021",
     "typescript": "3.7.5"
-  },
-  "browser": {
-    "@prisma/client": false
   }
 }

@@ -8,20 +8,23 @@ export default function({children, action, method, ...props}: {[index: string]: 
   React.useEffect(() => {
     // Warm the lamba
     // TODO: not sure if this is working correctly
+    // TODO: Only do this once per route
     fetch(action, {method: 'HEAD'})
   }, [])
 
   return (
     <form
       onSubmit={async event => {
-        event.preventDefault()
-
         setInProgress(true)
 
+        event.preventDefault()
+
+        const form = event.target as HTMLFormElement
         const data = new URLSearchParams()
-        for (const pair in new FormData(event.target as HTMLFormElement)) {
-          // TODO properly handle file types here
-          data.append(pair[0], pair[1] as string)
+
+        for (const pair of new FormData(form).entries()) {
+          console.log(pair[0], pair[1])
+          data.append(pair[0], pair[1])
         }
 
         const res = await fetch(action, {

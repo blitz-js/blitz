@@ -2,11 +2,13 @@ import {NextApiRequest, NextApiResponse} from 'next'
 import {PrismaClient} from '@prisma/client'
 import prettyMs from 'pretty-ms'
 import permit from 'permit-params'
-import {isBrowser} from './utils'
+import {isServer} from './utils'
 
 let db: PrismaClient
-if (!isBrowser) {
-  db = new PrismaClient({log: ['info', 'query']})
+if (isServer) {
+  // db = new PrismaClient({log: ['info', 'query']})
+  const Client = eval("require('@prisma/client')").PrismaClient
+  db = new Client({log: ['info', 'query']})
 }
 
 export {default as Form} from './Form'
