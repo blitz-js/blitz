@@ -24,7 +24,8 @@ export default function({children, action, method, ...props}: {[index: string]: 
 
         for (const pair of new FormData(form).entries()) {
           console.log(pair[0], pair[1])
-          data.append(pair[0], pair[1])
+          // TODO: handle file types
+          data.append(pair[0], pair[1] as string)
         }
 
         const res = await fetch(action, {

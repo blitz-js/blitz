@@ -49,7 +49,7 @@ interface ControllerDefinition {
 
 interface ControllerInstance {
   name: string
-  permit?: Array<any>
+  permit: Array<any>
   index: ControllerActionWithRequiredData
   show: ControllerActionWithRequiredData
   create: ControllerAction
@@ -61,7 +61,7 @@ export function Controller(getController: ControllerInput) {
   const controller = getController({db})
   return {
     name: controller.name,
-    permit: controller.permit,
+    permit: controller.permit || [],
     index: controller.index,
     show: controller.show,
     create: controller.create,
@@ -87,7 +87,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
   const id = isNaN(parseInt(stringId)) ? null : parseInt(stringId)
 
   const params = {id, query: req.query}
-  const data = req.body
+  const data = req.body || {}
 
   console.log(`  params: ${JSON.stringify(params)}`)
   console.log(`  data: ${JSON.stringify(data)}`)
@@ -95,19 +95,19 @@ export const harnessController = (Controller: ControllerInstance) => async (
   let result: Record<any, any> = {}
   if (req.method === 'GET' && id) {
     console.log(`  Processing by ${Controller.name}.show`)
-    result = await Controller.show(params, permit(data))
+    result = await Controller.show(params, permit(data, ...Controller.permit))
   } else if (req.method === 'GET') {
     console.log(`  Processing by ${Controller.name}.index`)
-    result = await Controller.index(params, permit(data))
+    result = await Controller.index(params, permit(data, ...Controller.permit))
   } else if (req.method === 'POST') {
     console.log(`  Processing by ${Controller.name}.create`)
-    result = await Controller.create(params, permit(data))
+    result = await Controller.create(params, permit(data, ...Controller.permit))
   } else if (req.method === 'PATCH') {
     console.log(`  Processing by ${Controller.name}.update`)
-    result = await Controller.update(params, permit(data))
+    result = await Controller.update(params, permit(data, ...Controller.permit))
   } else if (req.method === 'DELETE') {
     console.log(`  Processing by ${Controller.name}.delete`)
-    result = await Controller.delete(params, permit(data))
+    result = await Controller.delete(params, permit(data, ...Controller.permit))
   } else if (req.method === 'HEAD') {
     return res.status(204).end()
   } else {
