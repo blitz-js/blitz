@@ -32,7 +32,7 @@ type ControllerInput = (args: {db: PrismaClient}) => ControllerDefinition
 type ControllerAction = (params: ControllerParams, data: Record<any, any>) => Promise<ControllerResponse>
 type ControllerActionWithRequiredData = (
   params: ControllerParams,
-  data: Record<any, any>,
+  data: Record<any, any>
 ) => Promise<ControllerResponseWithRequiredData>
 
 interface ControllerDefinition {
@@ -74,7 +74,7 @@ export const harnessServerProps = (Controller: ControllerInstance) => (ctx: any)
 
 export const harnessController = (Controller: ControllerInstance) => async (
   req: NextApiRequest & {url: any},
-  res: NextApiResponse,
+  res: NextApiResponse
 ) => {
   const startTime = new Date().getTime()
   console.log('')

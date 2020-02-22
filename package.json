@@ -15,7 +15,8 @@
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
     "start": "lerna exec --parallel -- yarn start",
-    "test": "lerna exec --parallel -- yarn test"
+    "test": "lerna exec --parallel -- yarn test",
+    "postinstall": "yarn run build"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",

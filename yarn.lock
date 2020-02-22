@@ -8951,14 +8951,6 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-next-transpile-modules@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/next-transpile-modules/-/next-transpile-modules-3.0.2.tgz#b289698d453bb7346fd768da171b53a740bfe436"
-  integrity sha512-w3WsyxvkJ3ws16InHwXhlDaOyG6Peo4co9U2sVBMePwEDo9r3SsbzX7p43sLUTYbpuA2t9iwJoCXkj/4BuD3Qw==
-  dependencies:
-    micromatch "^4.0.2"
-    slash "^3.0.0"
-
 next@9.2.2-canary.21:
   version "9.2.2-canary.21"
   resolved "https://registry.yarnpkg.com/next/-/next-9.2.2-canary.21.tgz#fd53ed14ef7a81413879057dc311eaa7b9102a28"
