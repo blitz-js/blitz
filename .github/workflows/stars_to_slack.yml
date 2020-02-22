@@ -1,6 +1,6 @@
 name: Github Stars to Slack
 
-on: 
+on:
   watch:
     types: [started]
 
@@ -8,26 +8,26 @@ jobs:
   celebrate:
     name: Celebrate
     runs-on: [ubuntu-latest]
-    steps: 
-    - uses: 8398a7/action-slack@v2
-      with:
-        status: custom
-        payload: | 
-           {
-            text: "GitHub Stargazer",
-            blocks: [{
-               "type": "section", 
-               "text": {
-                 "type": "mrkdwn",
-                 "text": "✨New Star from *<${{github.event.sender.url}}|${{ github.actor }}>*!✨\n\n Hot dog! You now have *${{ github.event.repository.stargazers_count }}* stargazers! Keep up the good work!!" 
-                 },
-               "accessory": {
-                 "type": "image",
-                 "image_url": "${{ github.event.sender.avatar_url }}",
-                 "alt_text": "${{ github.actor }} avatar"
-               } 
-               }]
-           }
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
-      if: always() # P
+    steps:
+      - uses: 8398a7/action-slack@v2
+        with:
+          status: custom
+          payload: |
+            {
+             text: "GitHub Stargazer",
+             blocks: [{
+                "type": "section", 
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "✨New Star from *<${{github.event.sender.url}}|${{ github.actor }}>*!✨\n\n Hot dog! You now have *${{ github.event.repository.stargazers_count }}* stargazers! Keep up the good work!!" 
+                  },
+                "accessory": {
+                  "type": "image",
+                  "image_url": "${{ github.event.sender.avatar_url }}",
+                  "alt_text": "${{ github.actor }} avatar"
+                } 
+                }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
+        if: github.event.repository.stargazers_count % 25 == 0 # P
