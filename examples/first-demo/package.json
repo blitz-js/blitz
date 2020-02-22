@@ -10,7 +10,7 @@
     "now-start": "next start"
   },
   "dependencies": {
-    "@blitzjs/core": "0.0.1",
+    "@blitzjs/core": "*",
     "@prisma/client": "2.0.0-preview021",
     "next": "9.2.2-canary.21",
     "react": "16.12.0",
