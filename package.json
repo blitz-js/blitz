@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "lerna run start --scope @blitzjs/* --stream --parallel",
+    "dev2": "lerna run start --stream --parallel",
     "build": "lerna run build --scope @blitzjs/* --stream",
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
