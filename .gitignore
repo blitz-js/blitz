@@ -5,3 +5,4 @@ lib
 node_modules
 reports
 *.log
+**/.env*
