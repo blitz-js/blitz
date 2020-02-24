@@ -17,7 +17,7 @@ export default class Db extends Command {
     const {args, flags} = this.parse(Db)
 
     const name = flags.name || 'world'
-    this.log(`hello ${name} from /Users/mina/Code/blitz-cli/src/commands/db.ts`)
+    this.log(`hello ${name} from src/commands/db.ts`)
     if (args.file && flags.force) {
       this.log(`you input --force and --file: ${args.file}`)
     }

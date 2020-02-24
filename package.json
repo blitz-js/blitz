@@ -33,14 +33,12 @@
     "rimraf": "^3.0.2",
     "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
+    "debug": "^4.1.1",
     "typescript": "^3.7.5"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "dependencies": {
-    "debug": "^4.1.1"
   }
 }

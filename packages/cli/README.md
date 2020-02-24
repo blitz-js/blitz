@@ -1,5 +1,4 @@
-blitz-cli
-=========
+# blitz-cli
 
 Blitz CLI
 
@@ -9,11 +8,15 @@ Blitz CLI
 [![License](https://img.shields.io/npm/l/blitz-cli.svg)](https://github.com/mabadir/blitz-cli/blob/master/package.json)
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
+
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g blitz-cli
 $ blitz COMMAND
@@ -25,16 +28,20 @@ USAGE
   $ blitz COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`blitz console [FILE]`](#blitz-console-file)
-* [`blitz db [FILE]`](#blitz-db-file)
-* [`blitz generate [FILE]`](#blitz-generate-file)
-* [`blitz help [COMMAND]`](#blitz-help-command)
-* [`blitz new [FILE]`](#blitz-new-file)
-* [`blitz run [FILE]`](#blitz-run-file)
-* [`blitz start [FILE]`](#blitz-start-file)
+
+- [`blitz console [FILE]`](#blitz-console-file)
+- [`blitz db [FILE]`](#blitz-db-file)
+- [`blitz generate [FILE]`](#blitz-generate-file)
+- [`blitz help [COMMAND]`](#blitz-help-command)
+- [`blitz new [FILE]`](#blitz-new-file)
+- [`blitz run [FILE]`](#blitz-run-file)
+- [`blitz start [FILE]`](#blitz-start-file)
 
 ## `blitz console [FILE]`
 
@@ -148,4 +155,5 @@ OPTIONS
 ```
 
 _See code: [src/commands/start.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/start.ts)_
+
 <!-- commandsstop -->

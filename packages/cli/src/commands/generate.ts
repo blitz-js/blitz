@@ -17,7 +17,7 @@ export default class Generate extends Command {
     const {args, flags} = this.parse(Generate)
 
     const name = flags.name || 'world'
-    this.log(`hello ${name} from /Users/mina/Code/blitz-cli/src/commands/generate.ts`)
+    this.log(`hello ${name} from src/commands/generate.ts`)
     if (args.file && flags.force) {
       this.log(`you input --force and --file: ${args.file}`)
     }

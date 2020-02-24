@@ -17,7 +17,7 @@ export default class Run extends Command {
     const {args, flags} = this.parse(Run)
 
     const name = flags.name || 'world'
-    this.log(`hello ${name} from /Users/mina/Code/blitz-cli/src/commands/run.ts`)
+    this.log(`hello ${name} from src/commands/run.ts`)
     if (args.file && flags.force) {
       this.log(`you input --force and --file: ${args.file}`)
     }

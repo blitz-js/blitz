@@ -17,7 +17,7 @@ export default class Console extends Command {
     const {args, flags} = this.parse(Console)
 
     const name = flags.name || 'world'
-    this.log(`hello ${name} from /Users/mina/Code/blitz-cli/src/commands/console.ts`)
+    this.log(`hello ${name} from src/commands/console.ts`)
     if (args.file && flags.force) {
       this.log(`you input --force and --file: ${args.file}`)
     }
