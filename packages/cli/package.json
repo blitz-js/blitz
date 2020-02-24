@@ -23,27 +23,25 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
-    "@oclif/command": "^1",
-    "@oclif/config": "^1",
-    "@oclif/plugin-help": "^2",
+    "@oclif/command": "^1.5.19",
+    "@oclif/config": "^1.14.0",
+    "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
-    "tslib": "^1"
+    "yeoman-environment": "^2.8.0",
+    "yeoman-generator": "^4.5.0"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1",
-    "@oclif/test": "^1",
-    "@types/chai": "^4",
-    "@types/mocha": "^5",
-    "@types/node": "^10",
-    "chai": "^4",
-    "eslint": "^5.13",
-    "eslint-config-oclif": "^3.1",
-    "eslint-config-oclif-typescript": "^0.1",
-    "globby": "^10",
-    "mocha": "^5",
-    "nyc": "^14",
-    "ts-node": "^8",
-    "typescript": "^3.7.5"
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
+    "@types/chai": "^4.2.9",
+    "@types/mocha": "^7.0.1",
+    "@types/yeoman-environment": "^2.3.2",
+    "@types/yeoman-generator": "^3.1.4",
+    "chai": "^4.2.0",
+    "globby": "^11.0.0",
+    "mocha": "^7.0.1",
+    "nyc": "^15.0.0",
+    "ts-node": "^8.6.2"
   },
   "oclif": {
     "commands": "./lib/commands",
@@ -58,7 +56,8 @@
     "node": ">=12.16.1"
   },
   "keywords": [
-    "oclif"
+    "blitz",
+    "cli"
   ],
   "repository": {
     "type": "git",

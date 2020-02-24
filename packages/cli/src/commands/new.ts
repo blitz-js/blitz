@@ -1,25 +1,40 @@
 import {Command, flags} from '@oclif/command'
+import * as yeoman from 'yeoman-environment'
+import createDebug from 'debug'
+
+const debug = createDebug('blitz:new')
+
+export interface Options {
+  path?: string
+  typescript: boolean
+}
 
 export default class New extends Command {
-  static description = 'Create new Blitz project'
+  static description = 'Create a new Blitz project'
+
+  static args = [
+    {
+      name: 'path',
+      required: false,
+      description: 'path to the new project, defaults to the current directory',
+    },
+  ]
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'Directory name'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
+    typescript: flags.boolean({char: 't', description: 'generate a TypeScript project', default: false}),
   }
-
-  static args = [{name: 'file'}]
 
   async run() {
     const {args, flags} = this.parse(New)
+    debug('args: ', args)
+    debug('flags: ', flags)
+    const env = yeoman.createEnv()
 
-    const name = flags.name || 'hello-world'
-    // TODO: Handoff to generator
-    if (args.file && flags.force) {
-      // TODO: Logic to force creation on existing directory
-    }
+    env.register(require.resolve('../generators/app'), 'generate:app')
+    env.run('generate:app', {...args, ...flags} as Options, (err: Error | null) => {
+      if (err) this.error(err) // Maybe tell a bit more...
+      this.log('App created!') // This needs some sparkles ✨
+    })
   }
 }
