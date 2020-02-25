@@ -35,13 +35,14 @@
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@types/chai": "^4.2.9",
+    "@types/jest": "^25.1.3",
     "@types/mocha": "^7.0.1",
     "@types/yeoman-environment": "^2.3.2",
     "@types/yeoman-generator": "^3.1.4",
     "chai": "^4.2.0",
     "globby": "^11.0.0",
-    "mocha": "^7.0.1",
-    "nyc": "^15.0.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
     "ts-node": "^8.6.2"
   },
   "oclif": {
