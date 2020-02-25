@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "postpack": "rm -f oclif.manifest.json",
-    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "version": "oclif-dev readme && git add README.md",
+    "build": "oclif-dev pack",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postpack": "rm -f oclif.manifest.json",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "posttest": "eslint . --ext .ts --config .eslintrc"
   },
   "author": "Mina Abadir @mabadir",
   "main": "lib/index.js",

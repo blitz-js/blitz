@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "module": "commonjs"
+    "module": "commonjs",
+    "target": "es2017",
+    "outDir": "lib"
   },
   "include": ["src/**/*"]
 }

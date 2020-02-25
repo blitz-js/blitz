@@ -7,6 +7,17 @@ Blitz CLI
 [![Downloads/week](https://img.shields.io/npm/dw/blitz-cli.svg)](https://npmjs.org/package/blitz-cli)
 [![License](https://img.shields.io/npm/l/blitz-cli.svg)](https://github.com/mabadir/blitz-cli/blob/master/package.json)
 
+## Contributing
+
+**Run locally from this directory:**
+`./bin/run [COMMAND]`
+
+**Run tests:**
+`yarn test`
+
+**Build package:**
+`yarn build`
+
 <!-- toc -->
 
 - [Usage](#usage)
