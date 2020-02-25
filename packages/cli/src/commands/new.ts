@@ -1,12 +1,10 @@
 import {Command, flags} from '@oclif/command'
-import * as yeoman from 'yeoman-environment'
-import createDebug from 'debug'
+const yeoman = require('yeoman-environment')
+const debug = require('debug')('blitz:new')
 
-const debug = createDebug('blitz:new')
-
-export interface Options {
-  path?: string
+export interface Flags {
   typescript: boolean
+  yarn: boolean
 }
 
 export default class New extends Command {
@@ -23,6 +21,7 @@ export default class New extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     typescript: flags.boolean({char: 't', description: 'generate a TypeScript project', default: false}),
+    yarn: flags.boolean({description: 'Use Yarn instead of NPM', default: false}),
   }
 
   async run() {
@@ -32,7 +31,7 @@ export default class New extends Command {
     const env = yeoman.createEnv()
 
     env.register(require.resolve('../generators/app'), 'generate:app')
-    env.run('generate:app', {...args, ...flags} as Options, (err: Error | null) => {
+    env.run(['generate:app', args.path], flags as Flags, (err: Error | null) => {
       if (err) this.error(err) // Maybe tell a bit more...
       this.log('App created!') // This needs some sparkles ✨
     })

@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "module": "commonjs",
     "target": "es2017",
+    "rootDir": "src",
     "outDir": "lib"
   },
   "include": ["src/**/*"]
