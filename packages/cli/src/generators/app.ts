@@ -73,7 +73,7 @@ class AppGenerator extends Generator {
       name: this.options.appName,
     })
 
-    this.fs.writeJSON(this.destinationPath('package.json'), this._packageJson(this.path))
+    this.fs.writeJSON(this.destinationPath('package.json'), this._packageJson())
 
     this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'))
   }
@@ -82,7 +82,7 @@ class AppGenerator extends Generator {
     const dependencies = ['next', 'react', 'react-dom']
     const install = (depts: string[], opts: object) =>
       this.options.yarn ? this.yarnInstall(depts, opts) : this.npmInstall(depts, opts)
-    const dev = this.options.yarn ? {dev: true} : {'save-dev': true}
+    // const dev = this.options.yarn ? {dev: true} : {'save-dev': true}
     const save = this.options.yarn ? {} : {save: true}
 
     install(dependencies, save)
