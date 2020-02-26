@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command'
-const yeoman = require('yeoman-environment')
+import yeoman = require('yeoman-environment')
 const debug = require('debug')('blitz:new')
 
 export interface Flags {

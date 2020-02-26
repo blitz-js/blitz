@@ -1,6 +1,6 @@
 import {execSync} from 'child_process'
 import * as path from 'path'
-const Generator = require('yeoman-generator')
+import Generator = require('yeoman-generator')
 const debug = require('debug')('blitz:generate-app')
 
 import {Flags} from '../commands/new'
@@ -17,17 +17,17 @@ class AppGenerator extends Generator {
   constructor(args: string | string[], opts: Flags) {
     super(args, opts)
 
-    this.path = args[0]
+    this.path = args[0] ? path.resolve(args[0]) : this.destinationRoot()
   }
 
   async prompting() {
+    const appName = path.basename(this.path)
     const answers = await this.prompt([
       {
         type: 'input',
         name: 'path',
         message: 'How do you want your project to be called?',
-        default: this.path ?? this.determineAppname(),
-        when: !this.path,
+        default: appName,
       },
       {
         type: 'confirm',
