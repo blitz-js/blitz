@@ -1,4 +1,5 @@
 import {Controller} from '@blitzjs/core'
+import {PostCreateInput} from '@prisma/client'
 
 export const PostsController = Controller(({db}) => ({
   name: 'PostsController',
@@ -23,7 +24,7 @@ export const PostsController = Controller(({db}) => ({
 
   async create(params, newData) {
     const data = await db.post.create({
-      data: newData,
+      data: newData as PostCreateInput,
     })
 
     return {
