@@ -53,8 +53,6 @@ cd packages/core
 yarn test:watch
 ```
 
-**3.** Edit package files like any project
-
 #### Run a Blitz `example`
 
 **1.** Change to an example directory
