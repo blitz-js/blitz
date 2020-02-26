@@ -2,10 +2,8 @@
 
 ## Setup
 
-You must set the `DATABASE_URL` env variable
-
-- My local env is set to: `postgresql://b@localhost:5432/blitz-demo`
-- My production env is using a managed postgres DB from Digital Ocean
+- You must have postgres installed and running
+- You must set the `DATABASE_URL` env variable. Ex: `postgresql://b@localhost:5432/blitz-demo`
 
 1. yarn
 2. yarn migrate

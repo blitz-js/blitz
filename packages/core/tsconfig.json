@@ -5,6 +5,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declarationDir": "./dist",
+    "downlevelIteration": true,
     "paths": {
       "*": ["src/*", "node_modules/*"]
     }
