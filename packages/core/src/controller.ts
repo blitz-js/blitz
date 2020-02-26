@@ -9,9 +9,9 @@ export {default as Form} from './components/Form'
 
 let db: PrismaClient
 if (isServer) {
-  // db = new PrismaClient({log: ['info', 'query']})
-  const Client = eval("require('@prisma/client')").PrismaClient
-  db = new Client({log: ['info', 'query']})
+  db = new PrismaClient({log: ['info', 'query']})
+  // const Client = eval("require('@prisma/client')").PrismaClient
+  // db = new Client({log: ['info', 'query']})
   // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
   db.connect()
 }

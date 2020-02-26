@@ -2270,10 +2270,10 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@prisma/client@2.0.0-preview022":
-  version "2.0.0-preview022"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-preview022.tgz#89c95b2ba17d151edb5891f0a114a2b000ed4e02"
-  integrity sha512-VVjwodKA7f/xIw704ZP5aAmaVXbcOa0g69E0RWDsMc/mSJlQyBjUtAnQy1QPvjaEA2V8+x+A85zW5JwrIs6qQg==
+"@prisma/client@2.0.0-alpha.836":
+  version "2.0.0-alpha.836"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.836.tgz#673c75c0a7a09d8d58f9da38348f59cd3c59a110"
+  integrity sha512-LRO4dz50M7iPrBJx9N0+IcSeNmniKkQ5BAaj6irYB6TzBMNnv6WwwQ8lzNKvKm0vtPIhuBcd22ZoilZiIUWuhg==
 
 "@rollup/plugin-commonjs@^11.0.0":
   version "11.0.2"
@@ -10503,6 +10503,11 @@ pretty-quick@2.0.1:
     ignore "^5.1.4"
     mri "^1.1.4"
     multimatch "^4.0.0"
+
+prisma2@2.0.0-alpha.833:
+  version "2.0.0-alpha.833"
+  resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-alpha.833.tgz#f62ac2096efa63a1e7b084c8f7c5bea1c5bb0ec6"
+  integrity sha512-vO8UDdrcZh60xfU48RbvC/5Y1QsnUwFaY3Q8MRXzNj8ATMQlDwpMNF/QNSLHYEzP8Djb422dU6Agpf/NHgEoRw==
 
 prisma2@2.0.0-preview022:
   version "2.0.0-preview022"

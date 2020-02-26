@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@blitzjs/core": "*",
-    "@prisma/client": "2.0.0-preview022",
+    "@prisma/client": "2.0.0-alpha.836",
     "next": "9.2.3-canary.13",
     "next-transpile-modules": "3.0.2",
     "react": "16.12.0",
@@ -22,7 +22,10 @@
     "@types/node": "13.7.6",
     "@types/react": "16.9.23",
     "autoprefixer": "9.7.4",
-    "prisma2": "2.0.0-preview022",
+    "prisma2": "2.0.0-alpha.833",
     "typescript": "3.8.2"
+  },
+  "browser": {
+    "@prisma/client": false
   }
 }
