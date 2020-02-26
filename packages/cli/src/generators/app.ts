@@ -12,26 +12,24 @@ try {
 } catch {}
 
 class AppGenerator extends Generator {
-  path!: string
-
   constructor(args: string | string[], opts: Flags) {
     super(args, opts)
 
-    this.path = args[0] ? path.resolve(args[0]) : this.destinationRoot()
+    this.options.path = args[0] ? path.resolve(args[0]) : this.destinationRoot()
+    this.options.appName = path.basename(this.options.path)
   }
 
   async prompting() {
-    const appName = path.basename(this.path)
     const answers = await this.prompt([
       {
         type: 'input',
-        name: 'path',
+        name: 'appName',
         message: 'How do you want your project to be called?',
-        default: appName,
+        default: this.options.appName,
       },
       {
         type: 'confirm',
-        name: 'typescript',
+        name: 'ts',
         message: 'Do you want to use TypeScript?',
         default: this.options.ts,
         when: !this.options.ts,
@@ -49,25 +47,30 @@ class AppGenerator extends Generator {
 
     this.options = {
       ...this.options,
-      ...answers,
+      ts: answers.ts ?? this.options.ts,
+      yarn: answers.yarn ?? this.options.yarn,
     }
 
     debug('Options: ', answers)
 
-    if (this.path) {
-      this.destinationRoot(path.resolve(this.path))
-      process.chdir(this.destinationRoot())
-    }
+    const fullPath = path.join(
+      this.options.path,
+      answers.appName !== this.options.appName ? answers.appName : '',
+    )
+    this.destinationRoot(path.resolve(fullPath))
+    process.chdir(this.destinationRoot())
+
+    if (answers.appName) this.options.appName = answers.appName
   }
 
   writing() {
     this.sourceRoot(path.join(__dirname, '../../templates/app'))
 
     this.fs.copyTpl(this.templatePath('README.md.ejs'), this.destinationPath('README.md'), {
-      name: this.path,
+      name: this.options.appName,
     })
     this.fs.copyTpl(this.templatePath('pages/index.js.ejs'), this.destinationPath('pages/index.js'), {
-      name: this.path,
+      name: this.options.appName,
     })
 
     this.fs.writeJSON(this.destinationPath('package.json'), this._packageJson(this.path))
@@ -85,9 +88,9 @@ class AppGenerator extends Generator {
     install(dependencies, save)
   }
 
-  _packageJson(name: string) {
+  _packageJson() {
     return {
-      name,
+      name: this.options.appName,
       version: '0.0.1',
       private: true,
       scripts: {
