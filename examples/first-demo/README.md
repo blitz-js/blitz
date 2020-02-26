@@ -9,4 +9,6 @@
 2. yarn migrate
 3. yarn start
 
-Currently deployed to https://first-demo.blitzjs.com
+## Production Deployment
+
+WARNING: Production deployment works, but does not work correctly. There's a bug in the unreleased, canary feature Blitz uses. Will update once that's fixed.
