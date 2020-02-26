@@ -1,0 +1,27 @@
+{
+  "name": "first-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "next dev",
+    "migrate": "prisma2 generate && prisma2 migrate up --experimental",
+    "build": "prisma2 generate && next build",
+    "now-start": "next start"
+  },
+  "dependencies": {
+    "@blitzjs/core": "*",
+    "@prisma/client": "2.0.0-preview022",
+    "next": "9.2.3-canary.13",
+    "next-transpile-modules": "3.0.2",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "tailwindcss": "1.2.0"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "2.1.0",
+    "@types/react": "16.9.23",
+    "autoprefixer": "9.7.4",
+    "prisma2": "2.0.0-preview022",
+    "typescript": "3.8.2"
+  }
+}

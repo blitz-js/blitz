@@ -24,8 +24,8 @@
     }
   ],
   "main": "dist/index.js",
-  "module": "dist/testtsdx.esm.js",
-  "typings": "dist/index.d.ts",
+  "module": "dist/core.esm.js",
+  "typings": "dist/packages/core/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -33,12 +33,25 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
+    "test:watch": "tsdx test --watch",
     "lint": "tsdx lint"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@prisma/client": "^2.0.0-preview021",
+    "next": "^9.2.2-canary.21"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
     }
+  },
+  "devDependencies": {
+    "@types/react": "16.9.23",
+    "next": "9.2.3-canary.8",
+    "prisma2": "2.0.0-preview022"
+  },
+  "dependencies": {
+    "permit-params": "1.0.0",
+    "pretty-ms": "6.0.0"
   }
 }

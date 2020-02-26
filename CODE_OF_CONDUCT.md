@@ -17,7 +17,7 @@ If you are being harassed, notice that someone else is being harassed, or have a
 - We are aware that language shapes reality. Thus, we use inclusive, gender-neutral language in the documents we provide and when we talk to people. When referring to a group of people, we aim to use gender-neutral terms like “team”, “folks”, “everyone”. (For details, we recommend [this post](https://modelviewculture.com/pieces/gendered-language-feature-or-bug-in-software-documentation)).
 - We respect that people have differences of opinion and criticize constructively.
 
-## Don'ts 
+## Don'ts
 
 - Don’t discriminate against anyone.
 - Sexism and racism of any kind (including sexist and racist “jokes”), demeaning or insulting behaviour and harassment are seen as direct violations to this Code of Conduct. Harassment includes offensive verbal comments related to age, body size, culture, ethnicity, gender expression, gender identity, level of experience, nationality, personal ability or disability, physical appearance, physical or mental difference, race, religion, set of skills, sexual orientation, socio-economic status, and subculture. Harassment also includes sexual images in public spaces, deliberate intimidation, stalking, following, harassing photography or recording, inappropriate physical contact, and unwelcome sexual attention.
@@ -32,7 +32,7 @@ If you are being harassed, notice that someone else is being harassed, or have a
 
 ## Consequences for Violations to this Code of Conduct
 
-If a participant engages in any behavior  violating this Code of Conduct, the core members of this community will take any action they deem appropriate, including warning the offender or expulsion from the community, exclusion from any interaction and loss of all rights in this community.
+If a participant engages in any behavior violating this Code of Conduct, the core members of this community will take any action they deem appropriate, including warning the offender or expulsion from the community, exclusion from any interaction and loss of all rights in this community.
 
 ## Decisions About Consequences of Violations
 
