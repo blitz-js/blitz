@@ -6,10 +6,13 @@
 // The `url` field must contain the connection string to your DB.
 // Learn more about connection strings for your DB: https://pris.ly/d/connection-strings
 datasource db {
-  provider = "postgresql" // other options are: "mysql" and "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  // other options are: "mysql" and "sqlite"
+  url      = "file:./dev.db"
+  // env("DATABASE_URL")
   // url      = env("PROD_DB_URL")
 }
+
 // Other examples for connection strings are:
 // SQLite: url = "sqlite:./dev.db"
 // MySQL:  url = "mysql://johndoe:johndoe@localhost:3306/mydb"
@@ -29,14 +32,14 @@ generator client {
 // 4. Start using Prisma Client JS in your application
 
 model Post {
-  id    Int     @id @default(autoincrement())
-  title String
-  content String
+  id       Int       @id @default(autoincrement())
+  title    String
+  content  String
   comments Comment[]
 }
 
 model Comment {
-  id    Int     @id @default(autoincrement())
-  post Post
+  id      Int    @id @default(autoincrement())
+  post    Post
   content String
 }
