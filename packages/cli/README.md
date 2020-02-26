@@ -9,8 +9,10 @@ Blitz CLI
 
 ## Contributing
 
+Run `yarn` from the monorepo root
+
 **Run locally from this directory:**
-`./bin/run [COMMAND]`
+`yarn b [COMMAND]`
 
 **Run tests:**
 `yarn test`

@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
+    "b": "./bin/run",
     "version": "oclif-dev readme && git add README.md",
     "build": "oclif-dev pack",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
