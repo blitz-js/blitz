@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "2.1.0",
+    "@types/node": "13.7.6",
     "@types/react": "16.9.23",
     "autoprefixer": "9.7.4",
     "prisma2": "2.0.0-preview022",
