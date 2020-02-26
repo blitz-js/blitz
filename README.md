@@ -10,9 +10,11 @@ Framework for building monolithic, full-stack, serverless React apps with zero d
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
 
-## Demo
+## LIVE Demo
 
-The initial Blitz demo app is at [examples/first-demo](https://github.com/blitz-js/blitz/blob/canary/examples/first-demo/README.md). NOTE: The API is very alpha, and will change.
+The initial Blitz demo is live at [first-demo.blitzjs.com](https://first-demo.blitzjs.com/)!
+
+It's source code is at [examples/first-demo](https://github.com/blitz-js/blitz/blob/canary/examples/first-demo). NOTE: The API is very alpha, and will change.
 
 ## I invite you to join me — let’s build the future of web dev together. 🤝
 

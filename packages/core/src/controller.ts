@@ -9,9 +9,11 @@ export {default as Form} from './components/Form'
 
 let db: PrismaClient
 if (isServer) {
-  // db = new PrismaClient({log: ['info', 'query']})
-  const Client = eval("require('@prisma/client')").PrismaClient
-  db = new Client({log: ['info', 'query']})
+  db = new PrismaClient({log: ['info', 'query']})
+  // const Client = eval("require('@prisma/client')").PrismaClient
+  // db = new Client({log: ['info', 'query']})
+  // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
+  db.connect()
 }
 
 export function Controller(getController: ControllerInput) {
@@ -37,7 +39,9 @@ export const harnessController = (Controller: ControllerInstance) => async (
 ) => {
   const startTime = new Date().getTime()
   console.log('')
-  console.log(`Started ${req.method} "${req.url}" for ${req.connection.remoteAddress} at ${new Date()}`)
+  console.log(
+    `Started ${req.method} "${req.url}" for ${req.socket?.remoteAddress || 'unknown'} at ${new Date()}`,
+  )
 
   const stringId = req.query && (Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
   delete req.query.id
@@ -66,6 +70,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
     console.log(`  Processing by ${Controller.name}.delete`)
     result = await Controller.delete(params, permit(data, ...Controller.permit))
   } else if (req.method === 'HEAD') {
+    // This is used to warm the lamba before it's actually needed
     return res.status(204).end()
   } else {
     res.status(404)
