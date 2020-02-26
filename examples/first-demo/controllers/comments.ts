@@ -1,4 +1,5 @@
 import {Controller} from '@blitzjs/core'
+import {CommentCreateInput} from '@prisma/client'
 
 export const CommentsController = Controller(({db}) => ({
   name: 'CommentsController',
@@ -8,7 +9,7 @@ export const CommentsController = Controller(({db}) => ({
   async create(params, newData) {
     const data = await db.comment.create({
       data: {
-        ...newData,
+        ...(newData as Pick<CommentCreateInput, 'content'>),
         post: {
           connect: {id: parseInt(params.query.postId)},
         },
