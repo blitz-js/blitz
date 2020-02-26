@@ -13,31 +13,34 @@ if (isServer) {
 
 export {default as Form} from './Form'
 
-interface ControllerParams extends Record<any, any> {
+export interface ControllerParams extends Record<any, any> {
   id: number | null
   query: Record<any, any>
 }
 
-interface ControllerResponse {
+export interface ControllerResponse {
   data?: Record<any, any>
   redirect?: {
     href: string
     as?: string
   }
 }
-interface ControllerResponseWithRequiredData extends ControllerResponse {
+export interface ControllerResponseWithRequiredData extends ControllerResponse {
   data: Record<any, any>
 }
 
-type ControllerInput = (args: {db: PrismaClient}) => ControllerDefinition
+export type ControllerInput = (args: {db: PrismaClient}) => ControllerDefinition
 
-type ControllerAction = (params: ControllerParams, data: Record<any, any>) => Promise<ControllerResponse>
-type ControllerActionWithRequiredData = (
+export type ControllerAction = (
   params: ControllerParams,
-  data: Record<any, any>
+  data: Record<any, any>,
+) => Promise<ControllerResponse>
+export type ControllerActionWithRequiredData = (
+  params: ControllerParams,
+  data: Record<any, any>,
 ) => Promise<ControllerResponseWithRequiredData>
 
-interface ControllerDefinition {
+export interface ControllerDefinition {
   name: string
   permit?: Array<any>
   index?: ControllerActionWithRequiredData
@@ -47,7 +50,7 @@ interface ControllerDefinition {
   delete?: ControllerAction
 }
 
-interface ControllerInstance {
+export interface ControllerInstance {
   name: string
   permit: Array<any>
   index: ControllerActionWithRequiredData
@@ -76,7 +79,7 @@ export const harnessServerProps = (Controller: ControllerInstance) => (ctx: any)
 
 export const harnessController = (Controller: ControllerInstance) => async (
   req: NextApiRequest & {url: any},
-  res: NextApiResponse
+  res: NextApiResponse,
 ) => {
   const startTime = new Date().getTime()
   console.log('')
