@@ -9,6 +9,12 @@ export default Page
 function Page({posts}) {
   return (
     <div className="container flex flex-col items-center max-w-md  mx-auto py-20 px-2">
+      <p className="fixed top-0 right-0 pt-3 px-4">
+        <a href="https://github.com/blitz-js/blitz" className="text-purple-700 underline text-md">
+          View on GitHub
+        </a>
+      </p>
+
       <h1 className="text-3xl">{posts.length} Posts</h1>
       <p className="mt-5">
         <Link href="/">
