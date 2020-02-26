@@ -33,8 +33,8 @@ class AppGenerator extends Generator {
         type: 'confirm',
         name: 'typescript',
         message: 'Do you want to use TypeScript?',
-        default: this.options.typescript,
-        when: !this.options.typescript,
+        default: this.options.ts,
+        when: !this.options.ts,
       },
       {
         type: 'confirm',

@@ -1,7 +1,7 @@
 module.exports = {
+  preset: 'ts-jest/presets/default',
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js', 'json'],
-  transform: {'\\.ts$': 'ts-jest/preprocessor'},
   coverageReporters: ['lcov', 'text-summary'],
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ['src/**/*.ts'],

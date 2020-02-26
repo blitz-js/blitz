@@ -3,7 +3,7 @@ import yeoman = require('yeoman-environment')
 const debug = require('debug')('blitz:new')
 
 export interface Flags {
-  typescript: boolean
+  ts: boolean
   yarn: boolean
 }
 
@@ -20,8 +20,13 @@ export default class New extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    typescript: flags.boolean({char: 't', description: 'generate a TypeScript project', default: false}),
-    yarn: flags.boolean({description: 'Use Yarn instead of NPM', default: false}),
+    ts: flags.boolean({
+      char: 't',
+      description: 'generate a TypeScript project',
+      default: true,
+      allowNo: true,
+    }),
+    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
   }
 
   async run() {
