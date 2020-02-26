@@ -1,5 +1,7 @@
 # First Blitz Demo
 
+NOTE: The Blitz API is very alpha and will change! This demo is an early prototype
+
 ## Setup
 
 - You must have postgres installed and running
@@ -11,4 +13,4 @@
 
 ## Production Deployment
 
-WARNING: Production deployment works, but does not work correctly. There's a bug in the unreleased, canary feature Blitz uses. Will update once that's fixed.
+This demo is live at [first-demo.blitzjs.com](https://first-demo.blitzjs.com/)

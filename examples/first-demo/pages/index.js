@@ -14,8 +14,19 @@ const Home = props => (
       </a>
     </p>
 
-    <div className="container flex flex-col items-center py-20">
+    <div className="container flex flex-col items-center py-20 max-w-md mx-auto">
       <h1 className="text-3xl">First Ever Blitz ⚡️ Demo!</h1>
+      <p className="mt-10">
+        This demo is deployed on{' '}
+        <a href="https://zeit.co" target="_blank" rel="noreferer,noopener" className="underline">
+          Zeit
+        </a>
+        , as a combo of static pages and serverless functions.
+        <br />
+        <br />
+        It has <strong>no client-side data fetching or state management</strong>. All data reads & writes are
+        server-side using Prisma 2.
+      </p>
       <p className="mt-10">
         <Link href="/posts">
           <a className="underline text-purple-700 text-2xl">View Posts</a>
