@@ -3,3 +3,5 @@ declare module '@prisma/client' {
     constructor(args: any)
   }
 }
+
+export * from './controller'
