@@ -28,7 +28,7 @@ function Page({posts}) {
         {posts.map(post => (
           <p key={post.id} className="mb-4">
             <Link href="/posts/[id]" as={`/posts/${post.id}`}>
-              <a className="underline text-purple-700 text-1xl">{post.title}</a>
+              <a className="underline text-purple-700 text-1xl">{post.title || 'Untitled'}</a>
             </Link>
           </p>
         ))}
