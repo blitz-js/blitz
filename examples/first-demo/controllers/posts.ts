@@ -1,4 +1,5 @@
 import {Controller} from '@blitzjs/core'
+import alex from 'alex'
 
 export const PostsController = Controller(({db}) => ({
   name: 'PostsController',
@@ -22,6 +23,13 @@ export const PostsController = Controller(({db}) => ({
   },
 
   async create(params, newData) {
+    if (alex(newData.title).messages.length || newData.title?.toLowerCase().includes('4chan')) {
+      newData.title = 'Be nice'
+    }
+    if (alex(newData.content).messages.length || newData.content?.toLowerCase().includes('4chan')) {
+      newData.content = 'Be nice'
+    }
+
     const data = await db.post.create({
       data: newData,
     })
@@ -36,6 +44,13 @@ export const PostsController = Controller(({db}) => ({
   },
 
   async update(params, newData) {
+    if (alex(newData.title).messages.length || newData.title?.toLowerCase().includes('4chan')) {
+      newData.title = 'Be nice'
+    }
+    if (alex(newData.content).messages.length || newData.content?.toLowerCase().includes('4chan')) {
+      newData.content = 'Be nice'
+    }
+
     const data = await db.post.update({
       where: {id: params.id},
       data: newData,
