@@ -63,6 +63,8 @@ function Page({post}) {
           </button>
         </div>
       </Form>
+
+      <p className="py-3">For your safety, content can only be the name of a fruit</p>
     </div>
   )
 }

@@ -14,6 +14,8 @@ function Page() {
 
       <h1 className="text-3xl">New Post</h1>
 
+      <p className="py-3">For your safety, content can only be the name of a fruit</p>
+
       <Form action={`/api/posts`} method="POST" className="min-w-full">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>

@@ -15,7 +15,7 @@ function Page({posts}) {
         </a>
       </p>
 
-      <h1 className="text-3xl">{posts.length} Posts</h1>
+      <h1 className="text-3xl">First {posts.length} Posts</h1>
       <p className="mt-5">
         <Link href="/">
           <a className="underline text-purple-700 text-sm">Back Home</a>

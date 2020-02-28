@@ -1,5 +1,5 @@
 import {Controller} from '@blitzjs/core'
-import alex from 'alex'
+import {validContent} from '../utils/contentFilter'
 
 export const PostsController = Controller(({db}) => ({
   name: 'PostsController',
@@ -7,7 +7,7 @@ export const PostsController = Controller(({db}) => ({
   permit: ['title', 'content'],
 
   async index() {
-    const posts = await db.post.findMany({orderBy: {id: 'asc'}})
+    const posts = await db.post.findMany({orderBy: {id: 'desc'}, first: 20})
 
     return {
       data: {posts},
@@ -23,11 +23,11 @@ export const PostsController = Controller(({db}) => ({
   },
 
   async create(params, newData) {
-    if (alex(newData.title).messages.length || newData.title?.toLowerCase().includes('4chan')) {
-      newData.title = 'Be nice'
+    if (!validContent(newData.title)) {
+      newData.title = 'Fruit'
     }
-    if (alex(newData.content).messages.length || newData.content?.toLowerCase().includes('4chan')) {
-      newData.content = 'Be nice'
+    if (!validContent(newData.content)) {
+      newData.content = 'Fruit'
     }
 
     const data = await db.post.create({
@@ -44,11 +44,11 @@ export const PostsController = Controller(({db}) => ({
   },
 
   async update(params, newData) {
-    if (alex(newData.title).messages.length || newData.title?.toLowerCase().includes('4chan')) {
-      newData.title = 'Be nice'
+    if (!validContent(newData.title)) {
+      newData.title = 'Fruit'
     }
-    if (alex(newData.content).messages.length || newData.content?.toLowerCase().includes('4chan')) {
-      newData.content = 'Be nice'
+    if (!validContent(newData.content)) {
+      newData.content = 'Fruit'
     }
 
     const data = await db.post.update({
