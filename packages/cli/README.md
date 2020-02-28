@@ -22,6 +22,7 @@ Run `yarn` from the monorepo root
 
 <!-- toc -->
 
+- [blitz-cli](#blitz-cli)
 - [Usage](#usage)
 - [Commands](#commands)
   <!-- tocstop -->
@@ -31,11 +32,11 @@ Run `yarn` from the monorepo root
 <!-- usage -->
 
 ```sh-session
-$ npm install -g blitz-cli
+$ npm install -g @blitzjs/cli
 $ blitz COMMAND
 running command...
 $ blitz (-v|--version|version)
-blitz-cli/0.0.0 darwin-x64 node-v12.14.1
+@blitzjs/cli/0.0.1 darwin-x64 node-v12.16.1
 $ blitz --help [COMMAND]
 USAGE
   $ blitz COMMAND
@@ -48,61 +49,8 @@ USAGE
 
 <!-- commands -->
 
-- [`blitz console [FILE]`](#blitz-console-file)
-- [`blitz db [FILE]`](#blitz-db-file)
-- [`blitz generate [FILE]`](#blitz-generate-file)
 - [`blitz help [COMMAND]`](#blitz-help-command)
-- [`blitz new [FILE]`](#blitz-new-file)
-- [`blitz run [FILE]`](#blitz-run-file)
-- [`blitz start [FILE]`](#blitz-start-file)
-
-## `blitz console [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ blitz console [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/console.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/console.ts)_
-
-## `blitz db [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ blitz db [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/db.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/db.ts)_
-
-## `blitz generate [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ blitz generate [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/generate.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/generate.ts)_
+- [`blitz new [PATH]`](#blitz-new-path)
 
 ## `blitz help [COMMAND]`
 
@@ -121,52 +69,23 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `blitz new [FILE]`
+## `blitz new [PATH]`
 
-Create new Blitz project
-
-```
-USAGE
-  $ blitz new [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  Directory name
-```
-
-_See code: [src/commands/new.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/new.ts)_
-
-## `blitz run [FILE]`
-
-describe the command here
+Create a new Blitz project
 
 ```
 USAGE
-  $ blitz run [FILE]
+  $ blitz new [PATH]
+
+ARGUMENTS
+  PATH  path to the new project, defaults to the current directory
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help     show CLI help
+  -t, --[no-]ts  generate a TypeScript project
+  --yarn         use Yarn as the package manager
 ```
 
-_See code: [src/commands/run.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/run.ts)_
-
-## `blitz start [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ blitz start [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/start.ts](https://github.com/mabadir/blitz-cli/blob/v0.0.0/src/commands/start.ts)_
+_See code: [lib/commands/new.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/new.js)_
 
 <!-- commandsstop -->

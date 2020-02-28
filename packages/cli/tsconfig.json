@@ -4,7 +4,9 @@
     "baseUrl": "./",
     "module": "commonjs",
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "types": []
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
