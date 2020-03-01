@@ -6711,11 +6711,6 @@ fs-minipass@^1.2.5:
   dependencies:
     minipass "^2.6.0"
 
-fs-monkey@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fs-monkey/-/fs-monkey-1.0.0.tgz#b1fe36b2d8a78463fd0b8fd1463b355952743bd0"
-  integrity sha512-nxkkzQ5Ga+ETriXxIof4TncyMSzrV9jFIF+kGN16nw5CiAdWAnG/2FgM7CHhRenW1EBiDx+r1tf/P78HGKCgnA==
-
 fs-write-stream-atomic@^1.0.8:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/fs-write-stream-atomic/-/fs-write-stream-atomic-1.0.10.tgz#b47df53493ef911df75731e70a9ded0189db40c9"
@@ -9844,13 +9839,6 @@ mem-fs@^1.1.0:
     through2 "^2.0.0"
     vinyl "^1.1.0"
     vinyl-file "^2.0.0"
-
-memfs@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/memfs/-/memfs-3.1.1.tgz#3a23799a783102d40b13595cb25a7b39605bbcd0"
-  integrity sha512-A6QWLLH6HolvLeACaEc6WAAxU7c7iAvVgeyp1iDwzSIbwfGUjR4x9bAFUVq3YtSVFCYQAx4Nw2o4TEYAfH+lAg==
-  dependencies:
-    fs-monkey "1.0.0"
 
 memory-fs@^0.4.1:
   version "0.4.1"
