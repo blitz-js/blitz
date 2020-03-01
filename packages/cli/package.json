@@ -6,10 +6,9 @@
   "scripts": {
     "b": "./bin/run",
     "version": "oclif-dev readme && git add README.md",
-    "build": "oclif-dev pack",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postpack": "rm -f oclif.manifest.json",
-    "test": "jest --coverage"
+    "build": "pkg . --out-path dist",
+    "prebuild": "rimraf lib && tsc -b && oclif-dev readme",
+    "test": "nyc --extension .ts jest"
   },
   "author": "Mina Abadir @mabadir",
   "main": "lib/index.js",
@@ -28,16 +27,20 @@
     "@oclif/config": "^1.14.0",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
-    "yeoman-environment": "^2.8.0",
-    "yeoman-generator": "^4.5.0"
+    "enquirer": "^2.3.4",
+    "make-dir": "^3.0.2",
+    "mem-fs": "^1.1.3",
+    "mem-fs-editor": "^6.0.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@types/yeoman-environment": "^2.3.2",
-    "@types/yeoman-generator": "^3.1.4",
+    "@types/mem-fs": "^1.1.2",
+    "@types/mem-fs-editor": "^5.1.1",
     "chai": "^4.2.0",
     "globby": "^11.0.0",
+    "pkg": "^4.4.3",
+    "rimraf": "^3.0.2",
     "ts-node": "^8.6.2"
   },
   "oclif": {
@@ -46,6 +49,19 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
+    ]
+  },
+  "pkg": {
+    "scripts": [
+      "./lib/**/*.js"
+    ],
+    "assets": [
+      "./templates/**/*"
+    ],
+    "targets": [
+      "node12-linux-x64",
+      "node12-macos-x64",
+      "node12-win-x64"
     ]
   },
   "engines": {

@@ -1,5 +1,6 @@
+import * as path from 'path'
 import {Command, flags} from '@oclif/command'
-import yeoman = require('yeoman-environment')
+import AppGenerator from '../generators/app'
 const debug = require('debug')('blitz:new')
 
 export interface Flags {
@@ -33,12 +34,21 @@ export default class New extends Command {
     const {args, flags} = this.parse(New)
     debug('args: ', args)
     debug('flags: ', flags)
-    const env = yeoman.createEnv()
 
-    env.register(require.resolve('../generators/app'), 'generate:app')
-    env.run(['generate:app', args.path], flags as Flags, (err: Error | null) => {
-      if (err) this.error(err) // Maybe tell a bit more...
-      this.log('App created!') // This needs some sparkles ✨
+    const destinationRoot = args[0] ? path.resolve(args[0]) : process.cwd()
+    const appName = path.basename(destinationRoot)
+
+    const generator = new AppGenerator({
+      sourceRoot: path.join(__dirname, '../../templates/app'),
+      destinationRoot,
+      appName,
     })
+
+    try {
+      await generator.run()
+      this.log('App Created!')
+    } catch (err) {
+      this.error(err)
+    }
   }
 }
