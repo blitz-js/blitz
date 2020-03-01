@@ -3,13 +3,12 @@
   "description": "Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management",
   "version": "0.0.1",
   "license": "MIT",
-  "engines": {
-    "yarn": "^1.19.1",
-    "node": ">=12.16.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/blitz-js/blitz"
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch",
+    "lint": "tsdx lint"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -29,21 +28,22 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
-    "lint": "tsdx lint"
-  },
-  "peerDependencies": {
-    "@prisma/client": "^2.0.0-preview021",
-    "next": "^9.2.2-canary.21"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
     }
+  },
+  "engines": {
+    "yarn": "^1.19.1",
+    "node": ">=12.16.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz"
+  },
+  "peerDependencies": {
+    "@prisma/client": "^2.0.0-preview021",
+    "next": "^9.2.2-canary.21"
   },
   "devDependencies": {
     "@types/react": "16.9.23",
