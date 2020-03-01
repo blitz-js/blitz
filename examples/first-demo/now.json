@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "env": {
+    "DATABASE_URL": "@blitz-demo-db"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@blitz-demo-db"
+    }
+  }
+}
