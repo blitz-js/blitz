@@ -9,7 +9,7 @@
     "build": "oclif-dev pack",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
-    "test": "nyc --extension .ts jest"
+    "test": "jest --coverage"
   },
   "author": "Mina Abadir @mabadir",
   "main": "lib/index.js",
