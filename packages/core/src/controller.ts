@@ -38,6 +38,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
   res: NextApiResponse,
 ) => {
   const startTime = new Date().getTime()
+  console.log('')
   console.log(
     `Started ${req.method} "${req.url}" for ${req.socket?.remoteAddress || 'unknown'} at ${new Date()}`,
   )
