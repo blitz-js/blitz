@@ -1,5 +1,5 @@
 import {Controller} from '@blitzjs/core'
-import alex from 'alex'
+import {validContent} from '../utils/contentFilter'
 
 export const CommentsController = Controller(({db}) => ({
   name: 'CommentsController',
@@ -7,8 +7,8 @@ export const CommentsController = Controller(({db}) => ({
   permit: ['content'],
 
   async create(params, newData) {
-    if (alex(newData.content).messages.length || newData.content?.toLowerCase().includes('4chan')) {
-      newData.content = 'Be nice'
+    if (!validContent(newData.content)) {
+      newData.content = 'Fruit'
     }
 
     const data = await db.comment.create({

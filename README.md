@@ -16,6 +16,10 @@ The initial Blitz demo is live at [first-demo.blitzjs.com](https://first-demo.bl
 
 It's source code is at [examples/first-demo](https://github.com/blitz-js/blitz/blob/canary/examples/first-demo). NOTE: The API is very alpha, and will change.
 
+## Sponsors
+
+_Sponsor Blitz and display your logo and hiring status here. [See options on Open Collective](https://opencollective.com/blitzjs)_
+
 ## I invite you to join me — let’s build the future of web dev together. 🤝
 
 If you’re interested in helping or just want to keep a pulse on the project, [drop your email here 👉 Blitzjs.com](https://blitzjs.com)
