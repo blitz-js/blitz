@@ -1,14 +1,24 @@
 # The Blitz Community Code of Conduct
 
-The Blitz core members take this CoC **very** serious. All members, contributors and volunteers in this community are required to act according to the following Code of Conduct. You are required to follow these guidelines to keep Blitz a positive, growing project and community and help us provide and ensure a safe environment for everyone.
+The Blitz core members take this CoC very serious. All members, contributors and volunteers in this community are required to act according to the following Code of Conduct to keep Blitz a positive, growing project and community and help us provide and ensure a safe environment for everyone.
 
-## Responsibility and Enforcement
+The Blitz community 
 
-If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact us immediately: contact Brandon Bayer ([Twitter](https://twitter.com/flybayer) | [Email](mailto:b@bayer.ws)). We are here to help you. Your reports will be taken seriously and not dismissed or argued with.
+## When Something Happens
+If you see a Code of Conduct violation, follow these steps:
+
+1. Let the person know that what they did is not appropriate and ask them to stop and/or edit their message(s).
+2. That person should immediately stop the behavior and correct the issue.
+3. If this doesn’t happen, or if you’re uncomfortable speaking up, contact Brandon Bayer ([Twitter](https://twitter.com/flybayer) | [Email](mailto:b@bayer.ws)).
+
+When reporting, please include any relevant details, links, screenshots, context, or other information that may be used to better understand and resolve the situation.
+
+The core members will prioritize the well-being and comfort of the recipients of the violation over the comfort of the violator.
 
 ## What We Believe and How We Act
 
 - We are committed to providing a friendly, safe and welcoming environment for everyone, regardless of age, body size, culture, ethnicity, gender expression, gender identity, level of experience, nationality, personal ability or disability, physical appearance, physical or mental difference, race, religion, set of skills, sexual orientation, socio-economic status, and subculture. We welcome people regardless of these or other attributes.
+- We are better together. We are more alike than different.
 - Our community is based on mutual respect, tolerance, and encouragement.
 - We believe that a diverse community where people treat each other with respect is stronger, more vibrant and has more potential contributors and more sources for ideas. We aim for more diversity.
 - We are kind, welcoming and courteous to everyone.
@@ -16,6 +26,7 @@ If you are being harassed, notice that someone else is being harassed, or have a
 - We’re attentive in our communications, whether in person or online, and we’re tactful when approaching differing views.
 - We are aware that language shapes reality. Thus, we use inclusive, gender-neutral language in the documents we provide and when we talk to people. When referring to a group of people, we aim to use gender-neutral terms like “team”, “folks”, “everyone”. (For details, we recommend [this post](https://modelviewculture.com/pieces/gendered-language-feature-or-bug-in-software-documentation)).
 - We respect that people have differences of opinion and criticize constructively.
+- We value people over code.
 
 ## Don'ts
 
@@ -32,7 +43,7 @@ If you are being harassed, notice that someone else is being harassed, or have a
 
 ## Consequences for Violations to this Code of Conduct
 
-If a participant engages in any behavior violating this Code of Conduct, the core members of this community will take any action they deem appropriate, including warning the offender or expulsion from the community, exclusion from any interaction and loss of all rights in this community.
+If a participant engages in any behavior violating this Code of Conduct, the core members of this community will take any action they deem appropriate, starting with a gentle warning and then escalating as needed to expulsion from the community, exclusion from any interaction and loss of all rights in this community.
 
 ## Decisions About Consequences of Violations
 
@@ -45,3 +56,4 @@ If you have any questions or feedback on this Code of Conduct, we’re happy to 
 ## Thanks for the Inspiration To
 
 - [Hood.ie](http://hood.ie/code-of-conduct/)
+- [WeAllJS](https://wealljs.org/code-of-conduct)
