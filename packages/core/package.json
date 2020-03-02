@@ -33,6 +33,11 @@
       "pre-commit": "tsdx lint"
     }
   },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
+  },
   "engines": {
     "yarn": "^1.19.1",
     "node": ">=12.16.1"
@@ -46,6 +51,8 @@
     "next": "^9.2.2-canary.21"
   },
   "devDependencies": {
+    "@testing-library/react": "9.4.1",
+    "@testing-library/jest-dom": "5.1.1",
     "@types/react": "16.9.23",
     "next": "9.2.3-canary.8",
     "prisma2": "2.0.0-preview022"

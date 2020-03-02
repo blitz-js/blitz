@@ -1,9 +1,9 @@
-import {NextApiRequest, NextApiResponse} from 'next'
 import {PrismaClient} from '@prisma/client'
-import prettyMs from 'pretty-ms'
+import {NextApiRequest, NextApiResponse} from 'next'
 import permit from 'permit-params'
-import {isServer} from './utils'
+import prettyMs from 'pretty-ms'
 import {ControllerInput, ControllerInstance} from '../types/controller'
+import {isServer} from './utils'
 
 export {default as Form} from './components/Form'
 
