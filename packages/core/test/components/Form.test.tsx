@@ -1,11 +1,25 @@
-import React from 'react'
+import {fireEvent, render, RenderResult, wait} from '@testing-library/react'
 import Router from 'next/router'
-import {render, wait, fireEvent} from '@testing-library/react'
+import React, {FC} from 'react'
 import Form from '../../src/components/Form'
 jest.mock('next/router')
 
+/**
+ * Creates a mock implementation of fetch which will resolve asynchronously with the provided `res` param
+ * @param res The response that will be sent back
+ */
+function mockFetch(res: any = {ok: true}) {
+  Object.assign(global, {
+    fetch: jest.fn().mockImplementation(async () => res),
+  })
+}
+
 describe('Form', () => {
-  const TestHarness = () => (
+  beforeAll(() => {
+    mockFetch()
+  })
+
+  const TestHarness: FC = () => (
     <Form>
       <label htmlFor="title">Title</label>
       <input id="title" name="title" type="text" defaultValue="test" />
@@ -13,18 +27,12 @@ describe('Form', () => {
     </Form>
   )
 
-  const mockFetch = (res: any = {ok: true}) => {
-    ;(global as any).fetch = jest.fn().mockImplementation(async () => res)
-  }
-
-  const submitForm = async (page: any) => {
+  const submitForm = async (page: RenderResult) => {
     const form = await page.findByRole('form')
     const button = await page.findByRole('button')
     fireEvent.click(button, {target: form})
     await wait()
   }
-
-  beforeEach(() => mockFetch())
 
   it('renders', async () => {
     const page = await render(<TestHarness />)
@@ -32,7 +40,7 @@ describe('Form', () => {
   })
 
   describe('with redirect', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       const headers = {Location: 'location', 'x-as': 'xas'} as any
       mockFetch({
         ok: true,

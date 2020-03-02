@@ -1,5 +1,5 @@
-import React from 'react'
 import Router from 'next/router'
+import React from 'react'
 
 export default function({children, action, method, ...props}: {[index: string]: any}) {
   const [i, setI] = React.useState(0)
@@ -22,10 +22,9 @@ export default function({children, action, method, ...props}: {[index: string]: 
         const form = event.target as HTMLFormElement
         const data = new URLSearchParams()
 
-        for (const pair of new FormData(form).entries()) {
-          console.log(pair[0], pair[1])
+        for (const [key, value] of new FormData(form).entries()) {
           // TODO: handle file types
-          data.append(pair[0], pair[1] as string)
+          data.append(key, value.toString())
         }
 
         const res = await fetch(action, {
