@@ -6,3 +6,5 @@ node_modules
 reports
 *.log
 **/.env*
+.nyc_output
+**/coverage

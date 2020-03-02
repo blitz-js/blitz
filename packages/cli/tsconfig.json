@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "types", "test"],
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    }
-  }
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "lib",
+    "types": []
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
