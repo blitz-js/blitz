@@ -28,6 +28,7 @@
     "@oclif/config": "^1.14.0",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
+    "has-yarn": "^2.1.0",
     "yeoman-environment": "^2.8.0",
     "yeoman-generator": "^4.5.0"
   },
