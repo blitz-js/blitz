@@ -57,6 +57,7 @@
     "next": "9.2.3-canary.8",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.0.2",
+    "null-loader": "3.0.0",
     "prisma2": "2.0.0-preview022"
   },
   "dependencies": {

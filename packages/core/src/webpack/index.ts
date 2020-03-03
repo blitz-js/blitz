@@ -8,12 +8,17 @@ export default function(nextConfig: Record<any, any> = {}) {
     plugins.push(withTM)
   }
 
-  return Object.assign(
-    {},
-    nextConfig,
-    withPlugins(plugins, {
+  return withPlugins(
+    plugins,
+    Object.assign({}, nextConfig, {
       webpack(config: any, options: Record<any, any>) {
-        // Stuff goes here
+        if (!options.isServer) {
+          // Ensure prisma client is not included in the client bundle
+          config.module.rules.push({
+            test: /@prisma\/client/,
+            use: 'null-loader',
+          })
+        }
 
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
