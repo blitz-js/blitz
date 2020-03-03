@@ -1,7 +1,7 @@
+const {withBlitz} = require('@blitzjs/core')
 const path = require('path')
-// NOTE: This is ONLY needed in this Blitz monorepo so that package hot reloading works properly
-const withTM = require('next-transpile-modules')(['@blitzjs/core'])
-module.exports = withTM({
+
+module.exports = withBlitz({
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     if (!isServer) {
       // Noop resolution of @prisma/client in the browser
