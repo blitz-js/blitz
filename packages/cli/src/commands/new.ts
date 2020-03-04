@@ -35,7 +35,7 @@ export default class New extends Command {
     debug('args: ', args)
     debug('flags: ', flags)
 
-    const destinationRoot = args[0] ? path.resolve(args[0]) : process.cwd()
+    const destinationRoot = args.path ? path.resolve(args.path) : process.cwd()
     const appName = path.basename(destinationRoot)
 
     const generator = new AppGenerator({
