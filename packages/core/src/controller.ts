@@ -45,7 +45,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
 
   const stringId = req.query && (Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
   delete req.query.id
-  const id = isNaN(parseInt(stringId)) ? null : parseInt(stringId)
+  const id = stringId ? (isNaN(Number(stringId)) ? stringId : parseInt(stringId)) : null
 
   const params = {id, query: req.query}
   const data = req.body || {}
