@@ -54,7 +54,7 @@
     "@testing-library/jest-dom": "5.1.1",
     "@testing-library/react": "9.4.1",
     "@types/react": "16.9.23",
-    "next": "9.2.3-canary.8",
+    "next": "9.2.3-canary.13",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.0.2",
     "null-loader": "3.0.0",
