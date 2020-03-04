@@ -26,6 +26,16 @@ If you’re interested in helping or just want to keep a pulse on the project, [
 
 ### How to Get Started With Blitz Framework Development
 
+#### Onboarding
+
+1. If you want to help, [contact Brandon](mailto:b@bayer.ws) and he'll add you to the Blitz Slack
+2. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
+3. View open issues and their progress by [on the Zenhub repo tab](https://github.com/blitz-js/blitz#workspaces/blitz-5e4dcfb36c3c6a4c02bf070f/board?repos=241215865)
+4. Find an unassigned issue with the label `ready to work on | help wanted` that you want to work on
+5. Comment on that issue that you are working on it, work ok it, and submit a PR with your changes. Please ask any clarification questions you have!
+
+#### Repo Setup
+
 **1.** Clone the repo
 
 ```
