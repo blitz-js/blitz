@@ -23,6 +23,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
 
   protected readonly fs: Editor
   protected readonly enquirer: Enquirer
+  makeDir: (path: fs.PathLike, options?: string | number | fs.MakeDirectoryOptions | null | undefined) => void
 
   constructor(protected readonly options: T) {
     super()
@@ -30,6 +31,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     this.store = createStore()
     this.fs = createEditor(this.store)
     this.enquirer = new Enquirer()
+    this.makeDir = fs.mkdirSync
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
@@ -51,7 +53,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   // TODO: Handle errors
   async run() {
     if (!fs.existsSync(this.options.destinationRoot!)) {
-      fs.mkdirSync(this.options.destinationRoot!, { recursive: true })
+      this.makeDir(this.options.destinationRoot!, {recursive: true})
     }
     process.chdir(this.options.destinationRoot!)
 
