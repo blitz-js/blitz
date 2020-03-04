@@ -7,7 +7,6 @@ export default function({children, action, method, ...props}: {[index: string]: 
 
   React.useEffect(() => {
     // Warm the lamba
-    // TODO: not sure if this is working correctly
     // TODO: Only do this once per route
     fetch(action, {method: 'HEAD'})
   }, [])
@@ -23,7 +22,6 @@ export default function({children, action, method, ...props}: {[index: string]: 
         const data = new URLSearchParams()
 
         for (const [key, value] of new FormData(form).entries()) {
-          // TODO: handle file types
           data.append(key, value.toString())
         }
 
