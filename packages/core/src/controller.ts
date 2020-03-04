@@ -16,16 +16,21 @@ if (isServer) {
   db.connect()
 }
 
+const actionNotFound = () => ({
+  status: 404,
+  data: {},
+})
+
 export function Controller(getController: ControllerInput) {
   const controller = getController({db})
   return {
     name: controller.name,
     permit: controller.permit || [],
-    index: controller.index,
-    show: controller.show,
-    create: controller.create,
-    update: controller.update,
-    delete: controller.delete,
+    index: controller.index || actionNotFound,
+    show: controller.show || actionNotFound,
+    create: controller.create || actionNotFound,
+    update: controller.update || actionNotFound,
+    delete: controller.delete || actionNotFound,
   } as ControllerInstance
 }
 
