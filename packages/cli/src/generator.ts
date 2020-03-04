@@ -51,7 +51,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   // TODO: Handle errors
   async run() {
     if (!fs.existsSync(this.options.destinationRoot!)) {
-      makeDir.sync(this.options.destinationRoot!)
+      fs.mkdirSync(this.options.destinationRoot!, {recursive: true})
     }
     process.chdir(this.options.destinationRoot!)
 
