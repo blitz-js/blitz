@@ -45,6 +45,16 @@ const RedirectController = Controller(() => ({
   },
 }))
 
+export const SpyController = Controller(() => ({
+  name: 'SpyController',
+  index: jest.fn(),
+  show: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  delete: jest.fn(),
+}))
+
 export const unstable_getSimpleServerProps = harnessServerProps(SimpleController)
 export const unstable_getEmptyServerProps = harnessServerProps(EmptyController)
 export const unstable_getRedirectServerProps = harnessServerProps(RedirectController)
+export const unstable_getSpyServerProps = harnessServerProps(SpyController)

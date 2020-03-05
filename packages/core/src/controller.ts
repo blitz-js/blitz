@@ -50,6 +50,9 @@ export const harnessController = (Controller: ControllerInstance) => async (
 
   const stringId = req.query && (Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
   delete req.query.id
+
+  // We need to check which attribute type for ID is used (cuid, uuid, autoincrement)
+  // It could be a string, number of null
   const id = stringId ? (isNaN(Number(stringId)) ? stringId : parseInt(stringId)) : null
 
   const params = {id, query: req.query}

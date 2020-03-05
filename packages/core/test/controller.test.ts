@@ -5,9 +5,10 @@ describe('controller', () => {
     query: {},
     ...opts,
     req: {method: 'GET', url: '/', socket: {remoteAddress: 'testAddress'}, ...opts.req},
-    res: {status: jest.fn(), ...opts.res},
+    res: {status: jest.fn(), end: jest.fn(), ...opts.res},
   })
 
+  const createSpyRequest = (ctx: any) => fixtures.unstable_getSpyServerProps(ctx)
   const createSimpleRequest = (ctx: any) => fixtures.unstable_getSimpleServerProps(ctx)
   const createRedirectRequest = (ctx: any) => fixtures.unstable_getRedirectServerProps(ctx)
 
@@ -23,6 +24,24 @@ describe('controller', () => {
     const returning = (await createSimpleRequest(ctx)) as {props: any}
     expect(returning.props).toMatchObject({message: 'shown'})
     expect(ctx.res.status).toBeCalledWith(200)
+  })
+
+  it('simple show response with autoincrement', async () => {
+    const ctx = createContext({query: {id: 123}})
+    await createSpyRequest(ctx)
+    expect(fixtures.SpyController.show).toBeCalledWith({id: 123, query: {}}, {})
+  })
+
+  it('simple show response with cuid', async () => {
+    const ctx = createContext({query: {id: 'cjld2cjxh0000qzrmn831i7rn'}})
+    await createSpyRequest(ctx)
+    expect(fixtures.SpyController.show).toBeCalledWith({id: 'cjld2cjxh0000qzrmn831i7rn', query: {}}, {})
+  })
+
+  it('simple show response with uuid', async () => {
+    const ctx = createContext({query: {id: '786d378b-9296-4d32-9379-7d4dedd9c7fc'}})
+    await createSpyRequest(ctx)
+    expect(fixtures.SpyController.show).toBeCalledWith({id: '786d378b-9296-4d32-9379-7d4dedd9c7fc', query: {}}, {})
   })
 
   it('simple create response', async () => {
