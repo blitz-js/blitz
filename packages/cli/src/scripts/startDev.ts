@@ -63,7 +63,6 @@ const createRemoveHandler = (fileRoot: string) => async (path: string) => {
 function startNext(opts: {root: string}) {
   // As node_modules is from the outer source folder
   // we need to reference the bin from there
-
   spawn('../node_modules/.bin/next', ['dev'], {
     cwd: opts.root,
     stdio: 'inherit',
