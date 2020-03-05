@@ -28,6 +28,8 @@
     "@oclif/config": "^1.14.0",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
+    "chokidar": "^3.3.1",
+    "fs-extra": "^8.1.0",
     "has-yarn": "^2.1.0",
     "yeoman-environment": "^2.8.0",
     "yeoman-generator": "^4.5.0"
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
+    "@types/fs-extra": "^8.1.0",
     "@types/yeoman-environment": "^2.3.2",
     "@types/yeoman-generator": "^3.1.4",
     "chai": "^4.2.0",
