@@ -1,7 +1,7 @@
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
 
-export default function(nextConfig: Record<any, any> = {}) {
+export function withBlitz(nextConfig: Record<any, any> = {}) {
   const plugins = []
   if (process.env.NODE_ENV === 'development') {
     // This is needed during monorepo development so that examples auto reload when packages change

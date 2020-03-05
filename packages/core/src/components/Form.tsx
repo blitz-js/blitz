@@ -9,7 +9,7 @@ export default function({children, action, method, ...props}: {[index: string]: 
     // Warm the lamba
     // TODO: Only do this once per route
     fetch(action, {method: 'HEAD'})
-  }, [])
+  }, [action])
 
   return (
     <form
