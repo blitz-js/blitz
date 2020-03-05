@@ -73,4 +73,38 @@ describe('controller', () => {
     expect(ctx.res.setHeader).toBeCalledWith('Location', 'href')
     expect(ctx.res.setHeader).toBeCalledWith('x-as', 'as')
   })
+
+  describe('actions not defined', () => {
+    const createEmptyRequest = (ctx: any) => fixtures.unstable_getEmptyServerProps(ctx)
+
+    it('index returns 404', async () => {
+      const ctx = createContext()
+      await createEmptyRequest(ctx)
+      expect(ctx.res.status).toBeCalledWith(404)
+    })
+
+    it('show returns 404', async () => {
+      const ctx = createContext({query: {id: 123}})
+      await createEmptyRequest(ctx)
+      expect(ctx.res.status).toBeCalledWith(404)
+    })
+
+    it('create returns 404', async () => {
+      const ctx = createContext({req: {method: 'POST'}})
+      await createEmptyRequest(ctx)
+      expect(ctx.res.status).toBeCalledWith(404)
+    })
+
+    it('update returns 404', async () => {
+      const ctx = createContext({req: {method: 'PATCH'}})
+      await createEmptyRequest(ctx)
+      expect(ctx.res.status).toBeCalledWith(404)
+    })
+
+    it('delete returns 404', async () => {
+      const ctx = createContext({req: {method: 'DELETE'}})
+      await createEmptyRequest(ctx)
+      expect(ctx.res.status).toBeCalledWith(404)
+    })
+  })
 })
