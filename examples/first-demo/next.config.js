@@ -1,3 +1,3 @@
-const {withBlitz} = require('@blitzjs/core')
+const {withBlitz} = require('@blitzjs/webpack')
 
 module.exports = withBlitz({})
