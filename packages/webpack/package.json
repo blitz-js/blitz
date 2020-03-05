@@ -34,7 +34,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "next-compose-plugins": "^2.2.0",
-    "next-transpile-modules": "^3.0.2"
+    "next-compose-plugins": "2.2.0",
+    "next-transpile-modules": "3.0.2"
   }
 }
