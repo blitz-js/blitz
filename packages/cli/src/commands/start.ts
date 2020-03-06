@@ -6,6 +6,6 @@ export default class Start extends Command {
   static aliases = ['s']
 
   async run() {
-    spawn('next', ['start'], {stdio: 'inherit'})
+    spawn('next', ['dev'], {stdio: 'inherit'})
   }
 }

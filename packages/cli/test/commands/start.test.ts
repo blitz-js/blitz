@@ -11,6 +11,6 @@ describe('Start command', () => {
   it('runs next start', async () => {
     await StartCmd.prototype.run()
 
-    expect(childProcess.spawn).toBeCalledWith('next', ['start'], {stdio: 'inherit'})
+    expect(childProcess.spawn).toBeCalledWith('next', ['dev'], {stdio: 'inherit'})
   })
 })
