@@ -8,7 +8,7 @@ describe('Start command', () => {
     jest.resetAllMocks()
   })
 
-  it('runs next start', async () => {
+  it('runs next dev', async () => {
     await StartCmd.prototype.run()
 
     expect(childProcess.spawn).toBeCalledWith('next', ['dev'], {stdio: 'inherit'})
