@@ -30,7 +30,7 @@ describe('Start command', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks()
-    watcher = await dev({root, persistent: true})
+    watcher = await dev({root})
   })
 
   afterEach(async () => {

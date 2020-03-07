@@ -4,14 +4,13 @@ import {ensureDir, copy, unlink} from 'fs-extra'
 import {watch, FSWatcher} from 'chokidar'
 import {reporter} from './reporter'
 
-type StartConfig = {root: string; persistent?: boolean}
-export async function dev({root, persistent = true}: StartConfig): Promise<FSWatcher> {
+export async function dev({root}: {root: string}): Promise<FSWatcher> {
   const srcRoot = resolve(root)
   const destRoot = resolve(root, '.blitz')
-  return await synchronizeNextJsFiles(srcRoot, destRoot, persistent)
+  return await synchronizeNextJsFiles(srcRoot, destRoot)
 }
 
-async function synchronizeNextJsFiles(srcRoot: string, destRoot: string, persistent: boolean) {
+async function synchronizeNextJsFiles(srcRoot: string, destRoot: string) {
   await ensureDir(destRoot)
 
   const watchPaths = ['**/*']
@@ -34,7 +33,6 @@ async function synchronizeNextJsFiles(srcRoot: string, destRoot: string, persist
 
   const watchConfig = {
     ignored,
-    persistent,
     cwd: srcRoot,
   }
 
