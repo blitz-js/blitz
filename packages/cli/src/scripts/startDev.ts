@@ -2,14 +2,16 @@ import {resolve, dirname} from 'path'
 import {spawn} from 'child_process'
 import {ensureDir, copy, unlink} from 'fs-extra'
 import {watch} from 'chokidar'
+import {reporter} from './reporter'
 
-export async function startDev(paths: {root: string}) {
-  const srcRoot = resolve(paths.root)
-  const destRoot = resolve(paths.root, '.blitz')
-  await synchronizeNextJsFiles(srcRoot, destRoot)
+type StartConfig = {root: string; persistent?: boolean}
+export async function startDev({root, persistent = true}: StartConfig) {
+  const srcRoot = resolve(root)
+  const destRoot = resolve(root, '.blitz')
+  return await synchronizeNextJsFiles(srcRoot, destRoot, persistent)
 }
 
-async function synchronizeNextJsFiles(srcRoot: string, destRoot: string) {
+async function synchronizeNextJsFiles(srcRoot: string, destRoot: string, persistent: boolean) {
   await ensureDir(destRoot)
 
   const watchPaths = ['**/*']
@@ -30,13 +32,22 @@ async function synchronizeNextJsFiles(srcRoot: string, destRoot: string) {
   const copyHandler = createCopyHandler(srcRoot, destRoot)
   const removeHandler = createRemoveHandler(destRoot)
 
-  watch(watchPaths, {ignored})
-    .on('change', copyHandler)
-    .on('add', copyHandler)
-    .on('unlink', removeHandler)
-    .on('ready', () => {
-      startNext({root: destRoot})
-    })
+  const watchConfig = {
+    ignored,
+    persistent,
+    cwd: srcRoot,
+  }
+
+  return new Promise(res => {
+    const watcher = watch(watchPaths, watchConfig)
+      .on('change', copyHandler)
+      .on('add', copyHandler)
+      .on('unlink', removeHandler)
+      .on('ready', () => {
+        startNext({root: destRoot})
+        res(watcher)
+      })
+  })
 }
 
 const createCopyHandler = (srcRoot: string, destRoot: string) => async (path: string) => {
@@ -69,17 +80,6 @@ function startNext(opts: {root: string}) {
   }).on('close', function() {
     process.exit(0)
   })
-}
-
-// TODO: Eventually use a proper reporting mechanism
-const reporter = {
-  copy(fileRoot: string, srcPath: string, destPath: string) {
-    console.log(`${resolve(fileRoot, srcPath)} => ${resolve(srcPath, destPath)}`)
-  },
-
-  remove(fileRoot: string, filePath: string) {
-    console.log(`DELETE: ${resolve(fileRoot, filePath)}`)
-  },
 }
 
 // Rules list
