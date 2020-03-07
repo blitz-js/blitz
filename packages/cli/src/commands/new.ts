@@ -4,6 +4,8 @@ import Command from '../command'
 import AppGenerator from '../generators/app'
 const debug = require('debug')('blitz:new')
 
+import PromptAbortedError from '../errors/prompt-aborted'
+
 export interface Flags {
   ts: boolean
   yarn: boolean
@@ -25,9 +27,10 @@ export default class New extends Command {
     ts: flags.boolean({
       char: 't',
       description: 'generate a TypeScript project',
+      default: true,
       allowNo: true,
     }),
-    yarn: flags.boolean({description: 'use Yarn as the package manager'}),
+    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
   }
 
   async run() {
@@ -35,7 +38,7 @@ export default class New extends Command {
     debug('args: ', args)
     debug('flags: ', flags)
 
-    const destinationRoot = args[0] ? path.resolve(args[0]) : process.cwd()
+    const destinationRoot = args?.path ? path.resolve(args?.path) : process.cwd()
     const appName = path.basename(destinationRoot)
 
     const generator = new AppGenerator({
@@ -48,6 +51,8 @@ export default class New extends Command {
       await generator.run()
       this.log('App Created!')
     } catch (err) {
+      if (err instanceof PromptAbortedError) this.exit(0)
+
       this.error(err)
     }
   }

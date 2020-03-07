@@ -1,15 +1,17 @@
-import * as fs from 'fs'
+import * as fs from 'fs-extra'
 import * as path from 'path'
 import {EventEmitter} from 'events'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer = require('enquirer')
 
+import ConflictChecker from './transforms/conflict-checker'
+
 export interface GeneratorOptions {
   sourceRoot: string
   destinationRoot?: string
   yarn?: boolean
-  skipInstall?: boolean
+  install?: boolean
   dryRun?: boolean
 }
 
@@ -43,22 +45,29 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   }
 
   // TODO: Install all the packages with npm or yarn
-  install() {}
+  async install() {}
 
   // TODO: Check for conflicts with stream transforms
   // TODO: Handle dry run
-  // TODO: Handle errors
   async run() {
-    if (!fs.existsSync(this.options.destinationRoot!)) {
-      fs.mkdirSync(this.options.destinationRoot!, {recursive: true})
-    }
+    await fs.ensureDir(this.options.destinationRoot!)
     process.chdir(this.options.destinationRoot!)
 
     await this.write()
 
-    this.fs.commit(err => {
-      console.log(err)
+    await new Promise((resolve, reject) => {
+      const conflictChecker = new ConflictChecker()
+      conflictChecker.on('error', err => {
+        reject(err)
+      })
+
+      this.fs.commit([conflictChecker], err => {
+        if (err) reject(err)
+        resolve()
+      })
     })
+
+    if (this.options.install) await this.install()
   }
 }
 
