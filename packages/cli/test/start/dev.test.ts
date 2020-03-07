@@ -15,20 +15,22 @@ const reporterMock = {
 
 jest.doMock('child_process', () => childProcessMock)
 jest.doMock('fs-extra', () => fsExtraMock)
-jest.doMock('../../src/scripts/reporter', () => reporterMock)
+jest.doMock('../../src/start/reporter', () => reporterMock)
 
 // Import with mocks applied
-import {startDev} from '../../src/scripts/startDev'
+import {dev} from '../../src/start/dev'
 import {resolve} from 'path'
 import {FSWatcher} from 'chokidar'
 
 describe('Start command', () => {
   let watcher: FSWatcher
-  const root = resolve(__dirname, './startDev')
+
+  const root = resolve(__dirname, './dev-fixtures')
+  const blitzRoot = resolve(root, '.blitz')
 
   beforeEach(async () => {
     jest.clearAllMocks()
-    watcher = await startDev({root, persistent: true})
+    watcher = await dev({root, persistent: true})
   })
 
   afterEach(async () => {
@@ -38,9 +40,9 @@ describe('Start command', () => {
   it('copies each file to the .blitz folder', () => {
     const copyOpts = {dereference: true}
     expect(fsExtraMock.copy.mock.calls).toEqual([
-      // .now should be ignored
-      [resolve(root, 'one'), resolve(root, '.blitz/one'), copyOpts],
-      [resolve(root, 'two'), resolve(root, '.blitz/two'), copyOpts],
+      // NOTE: .now should be ignored
+      [resolve(root, 'one'), resolve(blitzRoot, 'one'), copyOpts],
+      [resolve(root, 'two'), resolve(blitzRoot, 'two'), copyOpts],
     ])
   })
 
@@ -51,7 +53,7 @@ describe('Start command', () => {
 
   it('calls spawn with the next cli bin', () => {
     expect(childProcessMock.spawn).toHaveBeenCalledWith('../node_modules/.bin/next', ['dev'], {
-      cwd: resolve(__dirname, './startDev/.blitz'),
+      cwd: blitzRoot,
       stdio: 'inherit',
     })
   })

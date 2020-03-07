@@ -1,5 +1,5 @@
 import {Command} from '@oclif/command'
-import {startDev} from '../scripts/startDev'
+import {dev} from '../start/dev'
 
 export default class Start extends Command {
   static description = 'Start development server'
@@ -7,6 +7,6 @@ export default class Start extends Command {
 
   async run() {
     const root = process.cwd()
-    return await startDev({root})
+    return await dev({root})
   }
 }

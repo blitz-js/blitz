@@ -1,6 +1,6 @@
-const startDev = jest.fn(() => {})
+const dev = jest.fn(() => {})
 
-jest.mock('../../src/scripts/startDev', () => ({startDev}))
+jest.mock('../../src/start/dev', () => ({dev}))
 
 import StartCmd from '../../src/commands/start'
 
@@ -9,8 +9,8 @@ describe('Start command', () => {
     jest.resetAllMocks()
   })
 
-  it('runs the startDev script', async () => {
+  it('runs the dev script', async () => {
     await StartCmd.prototype.run()
-    expect(startDev).toBeCalled()
+    expect(dev).toBeCalled()
   })
 })

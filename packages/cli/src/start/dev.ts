@@ -5,7 +5,7 @@ import {watch, FSWatcher} from 'chokidar'
 import {reporter} from './reporter'
 
 type StartConfig = {root: string; persistent?: boolean}
-export async function startDev({root, persistent = true}: StartConfig): Promise<FSWatcher> {
+export async function dev({root, persistent = true}: StartConfig): Promise<FSWatcher> {
   const srcRoot = resolve(root)
   const destRoot = resolve(root, '.blitz')
   return await synchronizeNextJsFiles(srcRoot, destRoot, persistent)
