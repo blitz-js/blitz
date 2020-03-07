@@ -28,15 +28,16 @@ describe('Start command', () => {
 
   it('copies each file to the .blitz folder', () => {
     const root = resolve(__dirname, './startDev')
-    expect(reporterMock.reporter.copy.mock.calls).toEqual([
+    const copyOpts = {dereference: true}
+    expect(fsExtraMock.copy.mock.calls).toEqual([
       // .now should be ignored
-      [root, resolve(root, 'one'), resolve(root, '.blitz/one')],
-      [root, resolve(root, 'two'), resolve(root, '.blitz/two')],
+      [resolve(root, 'one'), resolve(root, '.blitz/one'), copyOpts],
+      [resolve(root, 'two'), resolve(root, '.blitz/two'), copyOpts],
     ])
   })
 
   it('calls spawn with the next cli bin', () => {
-    expect(childProcessMock.spawn).toBeCalledWith('../node_modules/.bin/next', ['dev'], {
+    expect(childProcessMock.spawn).toHaveBeenCalledWith('../node_modules/.bin/next', ['dev'], {
       cwd: resolve(__dirname, './startDev/.blitz'),
       stdio: 'inherit',
     })
