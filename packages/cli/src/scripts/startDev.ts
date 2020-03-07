@@ -1,11 +1,11 @@
-import {resolve, dirname} from 'path'
+import {resolve, relative, dirname} from 'path'
 import {spawn} from 'child_process'
 import {ensureDir, copy, unlink} from 'fs-extra'
-import {watch} from 'chokidar'
+import {watch, FSWatcher} from 'chokidar'
 import {reporter} from './reporter'
 
 type StartConfig = {root: string; persistent?: boolean}
-export async function startDev({root, persistent = true}: StartConfig) {
+export async function startDev({root, persistent = true}: StartConfig): Promise<FSWatcher> {
   const srcRoot = resolve(root)
   const destRoot = resolve(root, '.blitz')
   return await synchronizeNextJsFiles(srcRoot, destRoot, persistent)
@@ -30,7 +30,7 @@ async function synchronizeNextJsFiles(srcRoot: string, destRoot: string, persist
   ]
 
   const copyHandler = createCopyHandler(srcRoot, destRoot)
-  const removeHandler = createRemoveHandler(destRoot)
+  const removeHandler = createRemoveHandler(srcRoot, destRoot)
 
   const watchConfig = {
     ignored,
@@ -38,7 +38,7 @@ async function synchronizeNextJsFiles(srcRoot: string, destRoot: string, persist
     cwd: srcRoot,
   }
 
-  return new Promise(res => {
+  return new Promise<FSWatcher>(res => {
     const watcher = watch(watchPaths, watchConfig)
       .on('change', copyHandler)
       .on('add', copyHandler)
@@ -65,10 +65,11 @@ const createCopyHandler = (srcRoot: string, destRoot: string) => async (path: st
   await copy(srcPath, destPath, {dereference: true})
 }
 
-const createRemoveHandler = (fileRoot: string) => async (path: string) => {
-  const filePath = resolve(fileRoot, path)
+const createRemoveHandler = (srcRoot: string, destRoot: string) => async (path: string) => {
+  const relativePath = relative(srcRoot, path)
+  const filePath = resolve(destRoot, relativePath)
   await unlink(filePath)
-  reporter.remove(fileRoot, filePath)
+  reporter.remove(destRoot, filePath)
 }
 
 function startNext(opts: {root: string}) {
