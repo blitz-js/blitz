@@ -31,6 +31,7 @@ export const PostsController = Controller(({db}) => ({
     }
 
     const data = await db.post.create({
+      //@ts-ignore
       data: newData,
     })
 

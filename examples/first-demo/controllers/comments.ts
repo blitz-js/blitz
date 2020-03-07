@@ -12,6 +12,7 @@ export const CommentsController = Controller(({db}) => ({
     }
 
     const data = await db.comment.create({
+      // @ts-ignore
       data: {
         ...newData,
         post: {
