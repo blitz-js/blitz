@@ -1,6 +1,6 @@
 {
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/posts/[...id].js"],
-  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", ".blitz"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
