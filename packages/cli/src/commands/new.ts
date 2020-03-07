@@ -1,5 +1,6 @@
 import * as path from 'path'
-import {Command, flags} from '@oclif/command'
+import {flags} from '@oclif/command'
+import Command from '../command'
 import AppGenerator from '../generators/app'
 const debug = require('debug')('blitz:new')
 
@@ -24,10 +25,9 @@ export default class New extends Command {
     ts: flags.boolean({
       char: 't',
       description: 'generate a TypeScript project',
-      default: true,
       allowNo: true,
     }),
-    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
+    yarn: flags.boolean({description: 'use Yarn as the package manager'}),
   }
 
   async run() {

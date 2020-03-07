@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import {EventEmitter} from 'events'
-import makeDir from 'make-dir'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer = require('enquirer')
