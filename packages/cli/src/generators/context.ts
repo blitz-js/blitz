@@ -19,7 +19,6 @@ class ContextGenerator extends Generator<ContextGeneratorOptions> {
 
   async write() {
     const filePrefix = this.createFilePrefix()
-    console.log('filePrefix :', filePrefix)
 
     this.fs.copyTpl(
       this.sourcePath('controller.js.ejs'),
