@@ -1,7 +1,7 @@
 import * as path from 'path'
 import {Command, flags} from '@oclif/command'
 import ContextGenerator from '../generators/context'
-const { MultiSelect } = require('enquirer')
+const {MultiSelect} = require('enquirer')
 const debug = require('debug')('blitz:new')
 
 export interface Flags {
@@ -9,7 +9,9 @@ export interface Flags {
   yarn: boolean
 }
 
-interface InitialMethodOption { name: string }
+interface InitialMethodOption {
+  name: string
+}
 
 export default class NewEntity extends Command {
   static description = 'Generate a new Blitz entity'
@@ -23,24 +25,24 @@ export default class NewEntity extends Command {
   ]
 
   static flags = {
-    help: flags.help({char: 'h'})
+    help: flags.help({char: 'h'}),
   }
 
   static initialControllerMethodOptions: InitialMethodOption[] = [
-    { name: 'ALL' },
-    { name: 'index' },
-    { name: 'show' },
-    { name: 'create' },
-    { name: 'update' },
-    { name: 'delete' }
+    {name: 'ALL'},
+    {name: 'index'},
+    {name: 'show'},
+    {name: 'create'},
+    {name: 'update'},
+    {name: 'delete'},
   ]
 
-  async requestInitialControllerMethods() :Promise<string[]> {
+  async requestInitialControllerMethods(): Promise<string[]> {
     try {
       const prompt = new MultiSelect({
         message: 'Select initial methods',
-        choices: NewEntity.initialControllerMethodOptions
-      });
+        choices: NewEntity.initialControllerMethodOptions,
+      })
 
       const result = await prompt.run()
       return result
@@ -49,26 +51,30 @@ export default class NewEntity extends Command {
     }
   }
 
-  transformArguments(contextArg: string) :{contextPath: string, contextName: string, entityName: string} {
-    const splitArg = contextArg.split('/')
-    const [contextName] = [...splitArg].slice(-2);
-    const contextPath = splitArg.join('/')
+  transformArguments(contextArg: string): {contextPath: string; contextName: string; entityName: string} {
+    const splitPath = contextArg.split('/')
+    const [contextName] = [...splitPath].slice(-2)
+    const contextPath = splitPath.join('/')
 
     return {
       contextPath: contextPath,
       contextName,
-      entityName: splitArg[splitArg.length - 1]
+      entityName: splitPath[splitPath.length - 1],
     }
   }
 
   async run() {
-    const {args, args: {contextArg}, flags} = this.parse(NewEntity)
+    const {
+      args,
+      args: {contextArg},
+      flags,
+    } = this.parse(NewEntity)
     debug('args: ', args)
     debug('flags: ', flags)
 
     const {contextPath, contextName, entityName} = this.transformArguments(contextArg)
 
-    const destinationRoot = process.cwd() + `/${contextPath}` 
+    const destinationRoot = process.cwd() + `/${contextPath}`
 
     const generator = new ContextGenerator({
       sourceRoot: path.join(__dirname, '../../templates/entity'),

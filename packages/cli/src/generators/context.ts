@@ -12,11 +12,14 @@ class ContextGenerator extends Generator<ContextGeneratorOptions> {
   }
 
   createFilePrefix(): string {
-    return this.capitalizeStr(this.options.contextName) + this.capitalizeStr(this.options.entityName)
+    if (this.options.contextPath.split('/').length > 1)
+      return this.capitalizeStr(this.options.contextName) + this.capitalizeStr(this.options.entityName)
+    else return this.capitalizeStr(this.options.entityName)
   }
 
   async write() {
     const filePrefix = this.createFilePrefix()
+    console.log('filePrefix :', filePrefix)
 
     this.fs.copyTpl(
       this.sourcePath('controller.js.ejs'),
