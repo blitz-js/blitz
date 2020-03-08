@@ -4,6 +4,7 @@ import {Form} from '@blitzjs/core'
 // TEST: Importing and using a thing from core should not spit the dummy
 console.log(Form.name)
 
+// TEST: Typical server rendering from params example
 export const unstable_getServerProps = (ctx: any) => {
   const {res} = ctx
 
