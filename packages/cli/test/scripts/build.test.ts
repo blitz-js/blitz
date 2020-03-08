@@ -5,6 +5,7 @@ const fsExtraMock = {
   unlink: jest.fn(),
   ensureDir: jest.fn(),
   move: jest.fn(),
+  pathExists: jest.fn(),
 }
 
 const nextUtilsMock = {

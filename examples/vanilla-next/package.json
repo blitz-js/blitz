@@ -6,7 +6,8 @@
   "author": "BlitzJS",
   "license": "MIT",
   "scripts": {
-    "start": "blitz start"
+    "start": "blitz start",
+    "build": "blitz build"
   },
   "dependencies": {
     "@blitzjs/cli": "^0.0.1",

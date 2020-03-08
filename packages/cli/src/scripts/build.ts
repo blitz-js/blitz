@@ -1,6 +1,6 @@
 import {resolve} from 'path'
 import {synchronizeFiles} from './synchronizer'
-import {move, unlink} from 'fs-extra'
+import {move, unlink, pathExists} from 'fs-extra'
 import {Config, enhance} from './config'
 import {nextBuild} from './next-utils'
 
@@ -17,6 +17,6 @@ export async function build(config: Config) {
 
   const rootNextFolder = resolve(rootFolder, '.next')
   const buildNextFolder = resolve(buildFolder, '.next')
-  await unlink(rootNextFolder)
+  if (await pathExists(rootNextFolder)) await unlink(rootNextFolder)
   await move(buildNextFolder, rootNextFolder)
 }
