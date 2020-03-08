@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Rudi Yardley",
+  "author": "BlitzJS",
   "license": "MIT",
   "scripts": {
     "start": "blitz start"
