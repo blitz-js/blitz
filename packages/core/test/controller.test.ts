@@ -1,5 +1,7 @@
 import * as fixtures from './controller-fixtures'
 
+console.log = jest.fn()
+
 describe('controller', () => {
   const createContext = (opts: any = {}) => ({
     query: {},
@@ -41,7 +43,10 @@ describe('controller', () => {
   it('simple show response with uuid', async () => {
     const ctx = createContext({query: {id: '786d378b-9296-4d32-9379-7d4dedd9c7fc'}})
     await createSpyRequest(ctx)
-    expect(fixtures.SpyController.show).toBeCalledWith({id: '786d378b-9296-4d32-9379-7d4dedd9c7fc', query: {}}, {})
+    expect(fixtures.SpyController.show).toBeCalledWith(
+      {id: '786d378b-9296-4d32-9379-7d4dedd9c7fc', query: {}},
+      {},
+    )
   })
 
   it('simple create response', async () => {
