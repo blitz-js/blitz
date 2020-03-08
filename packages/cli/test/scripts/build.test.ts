@@ -43,7 +43,7 @@ describe('Build command', () => {
     ])
   })
 
-  it('calls spawn with the next cli bin', () => {
+  it('calls nextBuild', () => {
     expect(nextUtilsMock.nextBuild).toHaveBeenCalledWith(
       resolve(rootFolder, './node_modules/.bin/next'),
       buildFolder,
