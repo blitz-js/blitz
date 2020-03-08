@@ -5,6 +5,7 @@
     "module": "commonjs",
     "rootDir": "src",
     "outDir": "lib",
+    "composite": true,
     "types": []
   },
   "include": ["src/**/*"],
