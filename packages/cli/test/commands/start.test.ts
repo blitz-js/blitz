@@ -1,16 +1,36 @@
-import childProcess from 'child_process'
-import StartCmd from '../../src/commands/start'
+let onSpy: jest.Mock;
+const spawn = jest.fn(() => {
+  onSpy = jest.fn(function on(_: string, callback: (_:number) => {}) {
+    callback(0);
+  });
+  return { on: onSpy };
+});
 
-jest.mock('child_process')
+jest.doMock('child_process', () => ({spawn}))
+
+import StartCmd from '../../src/commands/start'
 
 describe('Start command', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.clearAllMocks()
   })
 
   it('runs next dev', async () => {
-    await StartCmd.prototype.run()
+    await StartCmd.run();
 
-    expect(childProcess.spawn).toBeCalledWith('next', ['dev'], {stdio: 'inherit'})
+    expect(spawn).toHaveBeenCalledWith('next', ['dev'], {stdio: 'inherit'})
+  })
+
+  it('runs next build && next start', async () => {
+    await StartCmd.run(['--production']);
+
+    expect(spawn).toBeCalledWith('next', ['build'], {stdio: 'inherit'})
+    expect(spawn.mock.calls.length).toBe(2);
+
+    // TODO: following expection is not working
+    //expect(onSpy).toHaveBeenCalledWith(0);
+    
+    expect(spawn).toBeCalledWith('next', ['start'], {stdio: 'inherit'})
+    
   })
 })
