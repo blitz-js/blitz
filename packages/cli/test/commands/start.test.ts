@@ -27,7 +27,7 @@ describe('Start command', () => {
     expect(spawn).toBeCalledWith('next', ['build'], {stdio: 'inherit'})
     expect(spawn.mock.calls.length).toBe(2);
 
-    // TODO: following expection is not working
+    // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
     
     expect(spawn).toBeCalledWith('next', ['start'], {stdio: 'inherit'})
