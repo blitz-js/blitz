@@ -18,7 +18,7 @@ export default class Start extends Command {
   async run() {
     const {flags} = this.parse(Start)
     if (flags.production) {
-      var cp = spawn('next', ['build'], {stdio: 'inherit'})
+      const cp = spawn('next', ['build'], {stdio: 'inherit'})
       cp.on('exit', (code:number) => {
         if (code == 0)
           spawn('next', ['start'], {stdio: 'inherit'})
