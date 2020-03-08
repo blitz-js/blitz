@@ -25,12 +25,13 @@ import {FSWatcher} from 'chokidar'
 describe('Start command', () => {
   let watcher: FSWatcher
 
-  const root = resolve(__dirname, './dev-fixtures')
-  const blitzRoot = resolve(root, '.blitz')
+  const rootFolder = resolve(__dirname, './dev-fixtures')
+  const buildFolder = resolve(rootFolder, '.blitz')
+  const devFolder = resolve(rootFolder, '.blitz')
 
   beforeEach(async () => {
     jest.clearAllMocks()
-    watcher = await dev({root})
+    watcher = await dev({rootFolder, buildFolder, devFolder})
   })
 
   afterEach(async () => {
@@ -41,20 +42,24 @@ describe('Start command', () => {
     const copyOpts = {dereference: true}
     expect(fsExtraMock.copy.mock.calls).toEqual([
       // NOTE: .now should be ignored
-      [resolve(root, 'one'), resolve(blitzRoot, 'one'), copyOpts],
-      [resolve(root, 'two'), resolve(blitzRoot, 'two'), copyOpts],
+      [resolve(rootFolder, 'one'), resolve(devFolder, 'one'), copyOpts],
+      [resolve(rootFolder, 'two'), resolve(devFolder, 'two'), copyOpts],
     ])
   })
 
   it('deletes files', async () => {
-    watcher.emit('unlink', resolve(root, '.now'), {})
-    expect(fsExtraMock.unlink.mock.calls).toEqual([[resolve(root, '.blitz/.now')]])
+    watcher.emit('unlink', resolve(rootFolder, '.now'), {})
+    expect(fsExtraMock.unlink.mock.calls).toEqual([[resolve(rootFolder, '.blitz/.now')]])
   })
 
   it('calls spawn with the next cli bin', () => {
-    expect(childProcessMock.spawn).toHaveBeenCalledWith('../node_modules/.bin/next', ['dev'], {
-      cwd: blitzRoot,
-      stdio: 'inherit',
-    })
+    expect(childProcessMock.spawn).toHaveBeenCalledWith(
+      resolve(rootFolder, './node_modules/.bin/next'),
+      ['dev'],
+      {
+        cwd: devFolder,
+        stdio: 'inherit',
+      },
+    )
   })
 })
