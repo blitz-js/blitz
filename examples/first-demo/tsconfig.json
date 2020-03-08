@@ -29,6 +29,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "types": ["cypress", "@types/testing-library__cypress"]
   }
 }
