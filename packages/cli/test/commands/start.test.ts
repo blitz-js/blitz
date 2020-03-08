@@ -1,7 +1,7 @@
 const dev = jest.fn(() => {})
 const prod = jest.fn(() => {})
-jest.mock('../../src/start/dev', () => ({dev}))
-jest.mock('../../src/start/prod', () => ({prod}))
+jest.mock('../../src/scripts/dev', () => ({dev}))
+jest.mock('../../src/scripts/prod', () => ({prod}))
 
 import StartCmd from '../../src/commands/start'
 import {resolve} from 'path'
@@ -22,7 +22,7 @@ describe('Start command', () => {
     expect(dev).toBeCalledWith(options)
   })
 
-  it('runs the dev script', async () => {
+  it('runs the prod script when passed the production flag', async () => {
     await StartCmd.run(['--production'])
     expect(prod).toBeCalledWith(options)
   })

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "blitz start",
     "migrate": "prisma2 generate && prisma2 migrate up --experimental",
-    "build": "prisma2 generate && next build",
+    "build": "prisma2 generate && blitz build",
     "now-start": "next start"
   },
   "dependencies": {

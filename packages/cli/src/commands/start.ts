@@ -1,12 +1,17 @@
 import {Command, flags} from '@oclif/command'
-import {dev} from '../start/dev'
-import {prod} from '../start/prod'
+import {dev} from '../scripts/dev'
+import {prod} from '../scripts/prod'
 
 export default class Start extends Command {
-  static description = 'Start development server'
+  static description = 'Start a development server'
   static aliases = ['s']
 
-  static flags = {production: flags.boolean({char: 'p'})}
+  static flags = {
+    production: flags.boolean({
+      char: 'p',
+      description: 'Create and start a production server',
+    }),
+  }
 
   async run() {
     const {flags} = this.parse(Start)

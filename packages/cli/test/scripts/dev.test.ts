@@ -15,10 +15,10 @@ const reporterMock = {
 
 jest.doMock('child_process', () => childProcessMock)
 jest.doMock('fs-extra', () => fsExtraMock)
-jest.doMock('../../src/start/reporter', () => reporterMock)
+jest.doMock('../../src/scripts/reporter', () => reporterMock)
 
 // Import with mocks applied
-import {dev} from '../../src/start/dev'
+import {dev} from '../../src/scripts/dev'
 import {resolve} from 'path'
 import {FSWatcher} from 'chokidar'
 
