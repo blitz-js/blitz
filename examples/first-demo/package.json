@@ -6,7 +6,8 @@
     "start": "blitz start",
     "migrate": "prisma2 generate && prisma2 migrate up --experimental",
     "build": "prisma2 generate && blitz build",
-    "now-start": "next start"
+    "now-start": "next start",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@blitzjs/cli": "^0.0.1",
@@ -20,9 +21,12 @@
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "2.1.0",
+    "@testing-library/cypress": "^5.3.0",
     "@types/node": "13.7.6",
     "@types/react": "16.9.23",
+    "@types/testing-library__cypress": "^5.0.3",
     "autoprefixer": "9.7.4",
+    "cypress": "^4.1.0",
     "prisma2": "2.0.0-alpha.833",
     "typescript": "3.8.2"
   },
