@@ -16,7 +16,7 @@ describe('Start command', () => {
   })
 
   it('runs next dev', async () => {
-    await StartCmd.run();
+    await StartCmd.run([]);
 
     expect(spawn).toHaveBeenCalledWith('next', ['dev'], {stdio: 'inherit'})
   })
