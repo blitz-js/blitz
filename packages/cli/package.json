@@ -9,7 +9,8 @@
     "build": "oclif-dev pack",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "author": "Mina Abadir @mabadir",
   "main": "lib/index.js",
