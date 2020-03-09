@@ -1,7 +1,7 @@
 import {PrismaClient} from '@prisma/client'
 
 export interface ControllerParams extends Record<any, any> {
-  id: number | null
+  id: number | string | null
   query: Record<any, any>
 }
 
