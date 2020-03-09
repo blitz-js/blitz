@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "next-compose-plugins": "2.2.0",
-    "next-transpile-modules": "3.0.2"
+    "next-transpile-modules": "3.0.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }

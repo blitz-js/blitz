@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "next dev",
+    "start": "blitz start",
     "migrate": "prisma2 generate && prisma2 migrate up --experimental",
-    "build": "prisma2 generate && next build",
+    "build": "prisma2 generate && blitz build",
     "now-start": "next start",
     "cy:open": "cypress open"
   },
   "dependencies": {
+    "@blitzjs/cli": "^0.0.1",
     "@blitzjs/core": "*",
     "@prisma/client": "2.0.0-alpha.836",
     "alex": "8.1.1",

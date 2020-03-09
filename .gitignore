@@ -10,3 +10,4 @@ reports
 **/coverage
 .yarn
 .yarnrc
+tsconfig.tsbuildinfo
