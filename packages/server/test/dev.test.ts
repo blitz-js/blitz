@@ -52,9 +52,9 @@ describe('Start command', () => {
     expect(fsExtraMock.unlink.mock.calls).toEqual([[resolve(rootFolder, '.blitz/.now')]])
   })
 
-  it('calls spawn with the next cli bin', () => {
+  it('calls spawn with the patched next cli bin', () => {
     expect(childProcessMock.spawn).toHaveBeenCalledWith(
-      resolve(rootFolder, './node_modules/.bin/next'),
+      resolve(rootFolder, './node_modules/.bin/next-patched'),
       ['dev'],
       {
         cwd: devFolder,

@@ -1,2 +1,5 @@
 #!/usr/bin/env node
-console.log('Hello')
+'use strict'
+
+require('@blitzjs/server/register')
+require('next/dist/bin/next')
