@@ -18,7 +18,7 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "@blitzjs/webpack",
+  "name": "@blitzjs/server",
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",

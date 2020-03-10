@@ -12,7 +12,7 @@
   "dependencies": {
     "@blitzjs/cli": "^0.0.1",
     "@blitzjs/core": "^0.0.1",
-    "@blitzjs/webpack": "^0.1.0",
+    "@blitzjs/server": "^0.1.0",
     "next": "9.2.3-canary.13",
     "react": "16.12.0",
     "react-dom": "16.12.0"
