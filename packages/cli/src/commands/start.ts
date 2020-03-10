@@ -1,6 +1,5 @@
 import {Command, flags} from '@oclif/command'
-import {dev} from '../scripts/dev'
-import {prod} from '../scripts/prod'
+import {dev, prod} from '@blitzjs/server'
 
 export default class Start extends Command {
   static description = 'Start a development server'

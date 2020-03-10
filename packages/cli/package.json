@@ -25,6 +25,7 @@
     "/oclif.manifest.json"
   ],
   "dependencies": {
+    "@blitzjs/server": "^0.1.0",
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.14.0",
     "@oclif/plugin-help": "^2.2.3",

@@ -19,15 +19,15 @@ const reporterMock = {
 
 // jest.doMock('child_process', () => childProcessMock)
 jest.doMock('fs-extra', () => fsExtraMock)
-jest.doMock('../../src/scripts/reporter', () => reporterMock)
-jest.doMock('../../src/scripts/next-utils', () => nextUtilsMock)
+jest.doMock('../src/lib/reporter', () => reporterMock)
+jest.doMock('../src/lib/next-utils', () => nextUtilsMock)
 
 // Import with mocks applied
-import {build} from '../../src/scripts/build'
+import {build} from '../src/build'
 import {resolve} from 'path'
 
 describe('Build command', () => {
-  const rootFolder = resolve(__dirname, './dev-fixtures')
+  const rootFolder = resolve(__dirname, './fixtures/dev')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')
 

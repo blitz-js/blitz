@@ -15,17 +15,17 @@ const reporterMock = {
 
 jest.doMock('child_process', () => childProcessMock)
 jest.doMock('fs-extra', () => fsExtraMock)
-jest.doMock('../../src/scripts/reporter', () => reporterMock)
+jest.doMock('../src/lib/reporter', () => reporterMock)
 
 // Import with mocks applied
-import {dev} from '../../src/scripts/dev'
+import {dev} from '../src/dev'
 import {resolve} from 'path'
 import {FSWatcher} from 'chokidar'
 
 describe('Start command', () => {
   let watcher: FSWatcher
 
-  const rootFolder = resolve(__dirname, './dev-fixtures')
+  const rootFolder = resolve(__dirname, './fixtures/dev')
   const buildFolder = resolve(rootFolder, '.blitz')
   const devFolder = resolve(rootFolder, '.blitz')
 
