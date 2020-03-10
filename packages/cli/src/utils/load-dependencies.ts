@@ -1,4 +1,5 @@
 import * as path from 'path'
+import {forceRequire} from './module'
 
 const modulePath = (module: string) => {
   try {
@@ -19,21 +20,13 @@ const functionModuleName = (moduleName: string, fun: Function) => {
   return toCamelCase(moduleName)
 }
 
-const invalidateCache = (module: string) => {
-  delete require.cache[require.resolve(module)]
-}
-const requireFromDisk = (module: string) => {
-  invalidateCache(module)
-  return require(module)
-}
-
 export const loadDependencies = (pkgRoot: string) => {
-  const pkg = requireFromDisk(path.join(pkgRoot, 'package.json'))
+  const pkg = forceRequire(path.join(pkgRoot, 'package.json'))
 
-  return Object.keys(pkg.dependencies || {})
+  const modules = Object.keys(pkg.dependencies || {})
     .map((name) => [name, modulePath(name)])
     .filter(([_name, path]) => path !== null)
-    .map(([name, path]) => [name, requireFromDisk(path)])
+    .map(([name, path]) => [name, forceRequire(path)])
     .map(([name, module]) => {
       if (isFunction(module)) return {[functionModuleName(name, module)]: module}
       const defaultExport = module.default
@@ -43,4 +36,5 @@ export const loadDependencies = (pkgRoot: string) => {
         [toCamelCase(defaultExport)]: defaultExport,
       }
     })
+  return Object.assign({}, ...modules)
 }
