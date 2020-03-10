@@ -2,6 +2,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
+  "bin": {
+    "next-patched": "./bin/next-patched"
+  },
   "files": [
     "dist"
   ],
