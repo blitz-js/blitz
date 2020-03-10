@@ -25,6 +25,8 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   protected readonly fs: Editor
   protected readonly enquirer: Enquirer
 
+  private performedActions: string[] = []
+
   constructor(protected readonly options: T) {
     super()
 
@@ -47,24 +49,33 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   // TODO: Install all the packages with npm or yarn
   async install() {}
 
-  // TODO: Check for conflicts with stream transforms
-  // TODO: Handle dry run
   async run() {
-    await fs.ensureDir(this.options.destinationRoot!)
-    process.chdir(this.options.destinationRoot!)
+    if (!this.options.dryRun) {
+      await fs.ensureDir(this.options.destinationRoot!)
+      process.chdir(this.options.destinationRoot!)
+    }
 
     await this.write()
 
     await new Promise((resolve, reject) => {
-      const conflictChecker = new ConflictChecker()
+      const conflictChecker = new ConflictChecker({
+        dryRun: this.options.dryRun,
+      })
       conflictChecker.on('error', err => {
         reject(err)
+      })
+      conflictChecker.on('fileStatus', (data: string) => {
+        this.performedActions.push(data)
       })
 
       this.fs.commit([conflictChecker], err => {
         if (err) reject(err)
         resolve()
       })
+    })
+
+    this.performedActions.forEach(action => {
+      console.log(action)
     })
 
     if (this.options.install) await this.install()

@@ -31,6 +31,7 @@ export default class New extends Command {
       allowNo: true,
     }),
     yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
+    'dry-run': flags.boolean({description: 'show what files will be created without writing them to disk'}),
   }
 
   async run() {
@@ -45,6 +46,7 @@ export default class New extends Command {
       sourceRoot: path.join(__dirname, '../../templates/app'),
       destinationRoot,
       appName,
+      dryRun: flags['dry-run'],
     })
 
     try {

@@ -12,31 +12,42 @@ interface PromptAnswer {
   action: 'overwrite' | 'skip' | 'show'
 }
 
-type PromptActions = 'overwrite' | 'skip' | 'identical'
+type PromptActions = 'create' | 'overwrite' | 'skip' | 'identical'
+
+interface ConflictCheckerOptions {
+  dryRun?: boolean
+}
 
 export default class ConflictChecker extends Transform {
   private _destroyed = false
 
-  constructor() {
+  constructor(private readonly options?: ConflictCheckerOptions) {
     super({
       objectMode: true,
     })
   }
 
   _transform(file: File, _encoding: string, cb: TransformCallback): void {
-    if (file.state === null) cb()
+    if (file.state === null) {
+      cb()
+      return
+    }
 
-    // If the file doesn't exists yet there isn't any diff
+    // If the file doesn't exists yet there isn't any diff to perform
     const filePath = path.resolve(file.path)
     if (!fs.existsSync(filePath)) {
-      this.push(file)
+      this.handlePush(file, 'create')
       cb()
       return
     }
 
     this.checkDiff(file)
       .then(status => {
-        if (status !== 'skip') this.push(file)
+        if (status !== 'skip') {
+          this.handlePush(file, status)
+        } else {
+          this.fileStatusString(file, status)
+        }
 
         cb()
       })
@@ -56,6 +67,12 @@ export default class ConflictChecker extends Transform {
       if (err) this.emit('err', err)
       this.emit('close')
     })
+  }
+
+  handlePush(file: File, status: PromptActions): void {
+    if (!this.options?.dryRun) this.push(file)
+
+    this.emit('fileStatus', this.fileStatusString(file, status))
   }
 
   private async checkDiff(file: File): Promise<PromptActions> {
@@ -90,6 +107,7 @@ export default class ConflictChecker extends Transform {
   }
 
   private printDiff(diff: Change[]) {
+    console.log('\n')
     diff.forEach(line => {
       const value = line.value.replace('\n', '')
       if (line.added) {
@@ -100,5 +118,25 @@ export default class ConflictChecker extends Transform {
         console.log(value)
       }
     })
+    console.log('\n')
+  }
+
+  private fileStatusString(file: File, status: PromptActions) {
+    let statusLog = null
+    switch (status) {
+      case 'create':
+        statusLog = chalk.green('CREATE   ')
+        break
+      case 'overwrite':
+        statusLog = chalk.cyan('OVERWRITE')
+        break
+      case 'skip':
+        statusLog = chalk.blue('SKIP     ')
+        break
+      case 'identical':
+        statusLog = chalk.gray('IDENTICAL')
+    }
+
+    return `${statusLog} ${file.relative}`
   }
 }
