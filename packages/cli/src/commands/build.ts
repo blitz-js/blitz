@@ -1,5 +1,5 @@
 import {Command} from '@oclif/command'
-import {build} from '../scripts/build'
+import {build} from '@blitzjs/server'
 
 export default class Build extends Command {
   static description = 'Create a production build'

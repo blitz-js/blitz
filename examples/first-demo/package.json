@@ -12,6 +12,7 @@
   "dependencies": {
     "@blitzjs/cli": "^0.0.1",
     "@blitzjs/core": "*",
+    "@blitzjs/server": "*",
     "@prisma/client": "2.0.0-alpha.836",
     "alex": "8.1.1",
     "next": "9.2.3-canary.13",

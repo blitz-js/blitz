@@ -1,5 +1,5 @@
 const build = jest.fn(() => {})
-jest.mock('../../src/scripts/build', () => ({build}))
+jest.mock('@blitzjs/server', () => ({build}))
 
 import BuildCmd from '../../src/commands/build'
 import {resolve} from 'path'

@@ -1,7 +1,7 @@
 const dev = jest.fn(() => {})
 const prod = jest.fn(() => {})
-jest.mock('../../src/scripts/dev', () => ({dev}))
-jest.mock('../../src/scripts/prod', () => ({prod}))
+
+jest.mock('@blitzjs/server', () => ({dev, prod}))
 
 import StartCmd from '../../src/commands/start'
 import {resolve} from 'path'

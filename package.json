@@ -15,6 +15,7 @@
     "build": "lerna run build --scope @blitzjs/* --stream",
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
+    "pretest": "lerna run build --scope @blitzjs/server --scope @blitzjs/core",
     "test": "lerna run test --parallel"
   },
   "devDependencies": {

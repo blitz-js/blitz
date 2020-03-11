@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -18,14 +18,14 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "name": "@blitzjs/webpack",
+  "name": "@blitzjs/server",
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
   "module": "dist/webpack.esm.js",
-  "typings": "dist/packages/webpack/src",
+  "types": "dist/packages/server/src/index.d.ts",
   "devDependencies": {
     "@types/jest": "^25.1.3",
     "husky": "^4.2.3",

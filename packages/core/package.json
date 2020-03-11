@@ -24,7 +24,7 @@
   ],
   "main": "dist/index.js",
   "module": "dist/core.esm.js",
-  "typings": "dist/packages/core/src/index.d.ts",
+  "types": "dist/packages/core/src/index.d.ts",
   "files": [
     "dist"
   ],
