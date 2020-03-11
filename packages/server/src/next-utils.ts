@@ -7,27 +7,12 @@ function transformOutput(data: any) {
   process.stdout.write(data.toString().replace('.blitz/caches/dev/', ''))
 }
 
-function getSpawnFn(nextBin: string, cwd: string, transformer: (data: any) => void) {
-  // tty was causing CI to stall
-  if (process.env.CI) {
-    return spawn(nextBin, ['dev'], {
-      cwd,
-    })
-      .on('error', err => {
-        console.error(err)
-      })
-      .on('data', transformer)
-  }
-
-  return pty
+export async function nextStartDev(nextBin: string, cwd: string) {
+  const cb = pty
     .spawn(nextBin, ['dev'], {
       cwd,
     })
-    .on('data', transformer)
-}
-
-export async function nextStartDev(nextBin: string, cwd: string) {
-  const cb = getSpawnFn(nextBin, cwd, transformOutput)
+    .on('data', transformOutput)
 
   return Promise.resolve(cb)
 }
