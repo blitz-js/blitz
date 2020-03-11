@@ -4,7 +4,8 @@
 
 Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management
 
-### [👉View The Blitz Announcement Here👈](https://twitter.com/flybayer/status/1229425878481793024)
+- [👉**View the Announcement**](https://twitter.com/flybayer/status/1229425878481793024)
+- [👉**Read the Manifesto**](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md)
 
 ## Welcome to the Blitz Community 👋
 
@@ -18,7 +19,7 @@ It's source code is at [examples/first-demo](https://github.com/blitz-js/blitz/b
 
 ## Sponsors
 
-_Sponsor Blitz and display your logo and hiring status here. [See options on Open Collective](https://opencollective.com/blitzjs)_
+_Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters! [See options on Open Collective](https://opencollective.com/blitzjs)_
 
 ## I invite you to join me — let’s build the future of web dev together. 🤝
 
