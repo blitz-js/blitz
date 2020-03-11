@@ -1,14 +1,20 @@
 import {spawn} from 'child_process'
+import * as pty from 'node-pty'
+
+function transformOutput(data: any) {
+  // HACK: The following is temporary until we have a build
+  //       manifest to lookup on a per file basis
+  process.stdout.write(data.toString().replace('.blitz/caches/dev/', ''))
+}
 
 export async function nextStartDev(nextBin: string, cwd: string) {
-  return Promise.resolve(
-    spawn(nextBin, ['dev'], {
+  const cb = pty
+    .spawn(nextBin, ['dev'], {
       cwd,
-      stdio: 'inherit',
-    }).on('error', err => {
-      console.error(err)
-    }),
-  )
+    })
+    .on('data', transformOutput)
+
+  return Promise.resolve(cb)
 }
 
 export async function nextBuild(nextBin: string, cwd: string) {

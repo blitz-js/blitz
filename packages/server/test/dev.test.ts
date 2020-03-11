@@ -1,8 +1,4 @@
 // Setup mocks
-const childProcessMock = {
-  spawn: jest.fn().mockReturnValue({on: () => {}}),
-}
-
 const fsExtraMock = {
   copy: jest.fn(),
   unlink: jest.fn(),
@@ -13,8 +9,12 @@ const reporterMock = {
   reporter: {copy: jest.fn(), remove: jest.fn()},
 }
 
-jest.doMock('child_process', () => childProcessMock)
+const nextUtilsMock = {
+  nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
+}
+
 jest.doMock('fs-extra', () => fsExtraMock)
+jest.doMock('../src/next-utils', () => nextUtilsMock)
 jest.doMock('../src/reporter', () => reporterMock)
 
 // Import with mocks applied
@@ -52,14 +52,10 @@ describe('Start command', () => {
     expect(fsExtraMock.unlink.mock.calls).toEqual([[resolve(rootFolder, '.blitz/.now')]])
   })
 
-  it('calls spawn with the next cli bin', () => {
-    expect(childProcessMock.spawn).toHaveBeenCalledWith(
-      resolve(rootFolder, './node_modules/.bin/next'),
-      ['dev'],
-      {
-        cwd: devFolder,
-        stdio: 'inherit',
-      },
+  it('calls spawn with the patched next cli bin', () => {
+    expect(nextUtilsMock.nextStartDev).toHaveBeenCalledWith(
+      resolve(rootFolder, './node_modules/.bin/next-patched'),
+      devFolder,
     )
   })
 })

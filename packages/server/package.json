@@ -2,6 +2,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
+  "bin": {
+    "next-patched": "./bin/next-patched"
+  },
   "files": [
     "dist"
   ],
@@ -9,8 +12,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "lint": "tsdx lint"
   },
   "peerDependencies": {},
   "husky": {
@@ -36,6 +38,8 @@
   "dependencies": {
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.0.2",
+    "node-pty": "^0.9.0",
+    "pirates": "^4.0.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   }
 }
