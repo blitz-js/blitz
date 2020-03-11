@@ -1,19 +1,35 @@
 import {spawn} from 'child_process'
 import pty from 'node-pty'
 
-export async function nextStartDev(nextBin: string, cwd: string) {
-  const cp = pty
-    .spawn(nextBin, ['dev'], {
-      name: 'xterm-color',
+function transformOutput(data: any) {
+  // HACK: The following is temporary until we have a build
+  //       manifest to lookup on a per file basis
+  process.stdout.write(data.toString().replace('.blitz/caches/dev/', ''))
+}
+
+function getSpawnFn(nextBin: string, cwd: string, transformer: (data: any) => void) {
+  // tty was causing CI to stall
+  if (process.env.CI) {
+    return spawn(nextBin, ['dev'], {
       cwd,
     })
-    .on('data', data => {
-      // HACK: The following is temporary until we have a build
-      //       manifest to lookup on a per file basis
-      process.stdout.write(data.toString().replace('.blitz/caches/dev/', ''))
-    })
+      .on('error', err => {
+        console.error(err)
+      })
+      .on('data', transformer)
+  }
 
-  return Promise.resolve(cp)
+  return pty
+    .spawn(nextBin, ['dev'], {
+      cwd,
+    })
+    .on('data', transformer)
+}
+
+export async function nextStartDev(nextBin: string, cwd: string) {
+  const cb = getSpawnFn(nextBin, cwd, transformOutput)
+
+  return Promise.resolve(cb)
 }
 
 export async function nextBuild(nextBin: string, cwd: string) {
