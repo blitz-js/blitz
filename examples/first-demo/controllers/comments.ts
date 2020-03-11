@@ -16,7 +16,7 @@ export const CommentsController = Controller(({db}) => ({
       data: {
         ...newData,
         post: {
-          connect: {id: params.query.postId},
+          connect: {id: parseInt(params.query.postId)},
         },
       },
     })

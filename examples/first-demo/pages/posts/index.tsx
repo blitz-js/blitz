@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {harnessServerProps} from '@blitzjs/core'
 import {PostsController} from '../../controllers/posts'
 
-export const unstable_getServerProps = harnessServerProps(PostsController)
+export const getServerSideProps = harnessServerProps(PostsController)
 
 export default Page
 function Page({posts}) {

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {harnessServerProps, Form} from '@blitzjs/core'
 import {PostsController} from '../../controllers/posts'
 
-export const unstable_getServerProps = harnessServerProps(PostsController)
+export const getServerSideProps = harnessServerProps(PostsController)
 
 export default Page
 function Page({post}) {
@@ -50,7 +50,9 @@ function Page({post}) {
       ))}
       <Form action={`/api/posts/${post.id}/comments`} method="POST" className="min-w-full mt-6">
         <div className="mb-4">
-          <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">New Comment</label>
+          <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">
+            New Comment
+          </label>
           <input
             name="content"
             id="content"

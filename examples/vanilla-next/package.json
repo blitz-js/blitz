@@ -13,7 +13,7 @@
     "@blitzjs/cli": "*",
     "@blitzjs/core": "*",
     "@blitzjs/server": "*",
-    "next": "9.2.3-canary.13",
+    "next": "^9.3.0",
     "react": "16.12.0",
     "react-dom": "16.12.0"
   }
