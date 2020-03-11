@@ -1,5 +1,4 @@
 import {spawn} from 'child_process'
-import pty from 'node-pty'
 
 function transformOutput(data: any) {
   // HACK: The following is temporary until we have a build
@@ -19,7 +18,7 @@ function getSpawnFn(nextBin: string, cwd: string, transformer: (data: any) => vo
       .on('data', transformer)
   }
 
-  return pty
+  return require('node-pty')
     .spawn(nextBin, ['dev'], {
       cwd,
     })
