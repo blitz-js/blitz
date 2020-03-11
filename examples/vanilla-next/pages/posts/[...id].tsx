@@ -5,7 +5,7 @@ import {Form} from '@blitzjs/core'
 console.log(Form.name)
 
 // TEST: Typical server rendering from params example
-export const unstable_getServerProps = (ctx: any) => {
+export const getServerSideProps = (ctx: any) => {
   const {res} = ctx
 
   const stringId = ctx.query && (Array.isArray(ctx.query.id) ? ctx.query.id[0] : ctx.query.id)

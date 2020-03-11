@@ -133,7 +133,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
 //   return (page: NextPage<any>) => {
 //     const Page = page
 //
-//     // ;(Page as any).unstable_getServerProps = harnessController(controller)
+//     // ;(Page as any).getServerSideProps = harnessController(controller)
 //
 //     return Page
 //   }

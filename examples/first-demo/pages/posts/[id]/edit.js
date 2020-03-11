@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {harnessServerProps, Form} from '@blitzjs/core'
 import {PostsController} from '../../../controllers/posts'
 
-export const unstable_getServerProps = harnessServerProps(PostsController)
+export const getServerSideProps = harnessServerProps(PostsController)
 
 export default Page
 function Page({post}) {
@@ -21,7 +21,9 @@ function Page({post}) {
 
       <Form action={`/api/posts/${post.id}`} method="PATCH" className="min-w-full">
         <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700 text-sm font-bold mb-2">Title</label>
+          <label htmlFor="title" className="block text-gray-700 text-sm font-bold mb-2">
+            Title
+          </label>
           <input
             name="title"
             id="title"
@@ -30,7 +32,9 @@ function Page({post}) {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">Content</label>
+          <label htmlFor="content" className="block text-gray-700 text-sm font-bold mb-2">
+            Content
+          </label>
           <input
             name="content"
             id="content"
