@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "files": [
@@ -25,7 +25,7 @@
     "url": "https://twitter.com/flybayer"
   },
   "module": "dist/webpack.esm.js",
-  "typings": "dist/packages/server/src",
+  "types": "dist/packages/server/src/index.d.ts",
   "devDependencies": {
     "@types/jest": "^25.1.3",
     "husky": "^4.2.3",

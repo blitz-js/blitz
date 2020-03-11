@@ -15,7 +15,7 @@ const reporterMock = {
 
 jest.doMock('child_process', () => childProcessMock)
 jest.doMock('fs-extra', () => fsExtraMock)
-jest.doMock('../src/lib/reporter', () => reporterMock)
+jest.doMock('../src/reporter', () => reporterMock)
 
 // Import with mocks applied
 import {dev} from '../src/dev'
