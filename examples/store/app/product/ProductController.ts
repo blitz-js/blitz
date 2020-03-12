@@ -55,7 +55,7 @@ export const ProductController = Controller(({}) => ({
       }
     } else (error) {
       return {
-        data: error.messages,
+        data: error.payload,
         status: 400,
       }
     }

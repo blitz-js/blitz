@@ -8,7 +8,7 @@ export const ProductImportController = Controller(({}) => ({
   async create(ctx) {
     const {success, error} = await importProducts({
       user: ctx.user,
-      items: ctx.payload,
+      products: ctx.payload,
       query: ctx.query,
     })
 
@@ -21,7 +21,7 @@ export const ProductImportController = Controller(({}) => ({
       }
     } else {
       return {
-        data: error.messages,
+        data: error.payload,
         status: 400,
       }
     }

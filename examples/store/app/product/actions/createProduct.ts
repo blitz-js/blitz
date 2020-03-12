@@ -1,25 +1,30 @@
-import {ActionResult, UserContext} from '@blitzjs/core/types'
-import {ProductModel, Product, validateProduct} from 'app/product/ProductModel'
+import {ActionInput, ActionResult} from '@blitzjs/core/types'
+import {Product, ProductAttrs, ProductModel} from 'app/product/ProductModel'
 import db from 'prisma/db'
 
-type CreateProductInput = {
-  user: UserContext
-  query: any
-  attrs: Product
+type CreateProductInput = ActionInput & {
+  attrs: ProductAttrs
 }
 
 export async function createProduct(input: CreateProductInput): Promise<ActionResult<ProductModel>> {
   try {
-    validateProduct(input.attrs)
+    if (!Product.authorize('create', input)) {
+      return {error: {type: 'AuthorizationError'}}
+    }
+
+    const result = Product.validate(input.attrs)
+    if (!result.valid) {
+      return {error: {type: 'ValidationError', payload: result.errors}}
+    }
 
     // Can do any pre-processing here or trigger events
 
-    const result = await db().product.create({data: input.attrs})
+    const product = await db.product.create({data: input.attrs})
 
     // Can do any post-processing here or trigger events
 
-    return {success: {payload: ProductModel(result)}}
+    return {success: {payload: Product.model(product)}}
   } catch (error) {
-    return {error: {messages: error.messages}}
+    return {error: {type: 'PersistanceError', payload: error.message}}
   }
 }

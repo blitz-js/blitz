@@ -1,3 +1,11 @@
+import {UserContext} from './identity'
+
+export type ActionInput = {
+  user: UserContext
+  query: Record<string, any>
+  attrs?: Record<string, any>
+}
+
 export type ActionSuccess<T> = {
   success: {
     payload: T
@@ -9,7 +17,8 @@ export type ActionSuccess<T> = {
 export type ActionError = {
   success?: undefined
   error: {
-    messages: any[]
+    type: string
+    payload?: {}
   }
 }
 

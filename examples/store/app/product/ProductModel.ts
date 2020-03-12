@@ -1,23 +1,45 @@
-import type {Product} from '@prisma/client'
-export type {Product} from '@prisma/client'
+import {ModelDefinition, ValidationResult} from '@blitzjs/core/types'
+import {Product as DBProduct} from 'prisma/db'
 
-export type ProductModel = Product & {
+export type ProductAttrs = DBProduct
+export type ProductModel = ProductAttrs & {
   displaySlug?: string
 }
 
-export function validateProduct(attrs: Product) {
-  // Can/should we somehow do runtime validation based on the TS type?
+export const Product: ModelDefinition<ProductAttrs, ProductModel> = {
+  model(attrs) {
+    const model: ProductModel = Object.assign({}, attrs)
 
-  if (attrs.name && attrs.name.length < 4) throw new Error('Name must be longer than 4 characters')
+    // Computed fields
+    model.displaySlug = model.name?.toLowerCase().replace(' ', '-')
 
-  return Object.assign({}, attrs)
-}
+    return Object.freeze(model)
+  },
+  authorize(op, input) {
+    switch (op) {
+      case 'read':
+      case 'create':
+      case 'update':
+      case 'delete':
+        if (input.user.roles.includes('admin')) {
+          return true
+        }
+    }
+    return false
+  },
+  validate(attrs) {
+    const result: ValidationResult = {
+      valid: true,
+      errors: [],
+    }
 
-export function ProductModel(attrs: Product): Readonly<ProductModel> {
-  const model: ProductModel = validateProduct(attrs)
+    // Can/should we somehow do runtime validation based on the TS type?
 
-  // Computed fields
-  model.displaySlug = model.name?.toLowerCase().replace(' ', '-')
+    if (attrs.name && attrs.name.length < 4) {
+      result.valid = false
+      result.errors.push({field: 'name', message: 'Name must be longer than 4 characters'})
+    }
 
-  return Object.freeze(model)
+    return result
+  },
 }
