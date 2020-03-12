@@ -2,7 +2,9 @@
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 
-Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management
+Framework for building monolithic, full-stack React apps with zero data-fetching and zero client-side state management.
+
+The developer experience is like Ruby on Rails (SSR so you don’t have to build an API with client-side data fetching), but the end-user experience is like an SPA (client side transitions, each page has a real URL, dynamic UI, etc). 100% Javascript and React. Can deploy as an entirely serverless app or to a traditional server.
 
 - [👉**View the Announcement**](https://twitter.com/flybayer/status/1229425878481793024)
 - [👉**Read the Manifesto**](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md)
