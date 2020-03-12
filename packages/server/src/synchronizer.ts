@@ -7,37 +7,24 @@ type SynchronizeFilesArgs = {
   src: string
   dest: string
   watch: boolean
+  ignoredPaths: string[]
+  includePaths: string[]
 }
 export async function synchronizeFiles(opts: SynchronizeFilesArgs) {
-  const {dest, src} = opts
+  const {dest, src, includePaths} = opts
   await ensureDir(dest)
-
-  const watchPaths = ['**/*']
-  const ignored = [
-    './build',
-    '.blitz',
-    '.DS_Store',
-    '.git',
-    '.next',
-    '*.log',
-    '.now',
-    '*.pnp.js',
-    '/coverage',
-    '/dist',
-    'node_modules',
-  ]
 
   const copyHandler = createCopyHandler(src, dest)
   const removeHandler = createRemoveHandler(src, dest)
 
   const watchConfig = {
-    ignored,
+    ignored: opts.ignoredPaths,
     persistent: opts.watch,
     cwd: src,
   }
 
   return new Promise<FSWatcher>(res => {
-    const watcher = watch(watchPaths, watchConfig)
+    const watcher = watch(includePaths, watchConfig)
       .on('change', copyHandler)
       .on('add', copyHandler)
       .on('unlink', removeHandler)

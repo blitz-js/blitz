@@ -1,16 +1,18 @@
 import {resolve} from 'path'
 import {synchronizeFiles} from './synchronizer'
 import {move, remove, pathExists} from 'fs-extra'
-import {Config, enhance} from './config'
+import {ServerConfig, enhance} from './config'
 import {nextBuild} from './next-utils'
 
-export async function build(config: Config) {
-  const {rootFolder, buildFolder, nextBin} = enhance(config)
+export async function build(config: ServerConfig) {
+  const {rootFolder, buildFolder, nextBin, ignoredPaths, includePaths} = enhance(config)
 
   await synchronizeFiles({
     src: rootFolder,
     dest: buildFolder,
     watch: false,
+    ignoredPaths,
+    includePaths,
   })
 
   await nextBuild(nextBin, buildFolder)
