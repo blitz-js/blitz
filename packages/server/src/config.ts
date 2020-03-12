@@ -2,6 +2,8 @@ import {resolve} from 'path'
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean
+  devFolder?: string
+  buildFolder?: string
 }
 
 const defaults = {
@@ -26,8 +28,8 @@ const defaults = {
 }
 
 export function enhance(config: ServerConfig) {
-  const devFolder = resolve(config.rootFolder, defaults.devFolder)
-  const buildFolder = resolve(config.rootFolder, defaults.buildFolder)
+  const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
+  const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
   const nextBin = resolve(
     config.rootFolder,
     config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,

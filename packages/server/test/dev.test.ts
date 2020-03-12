@@ -22,7 +22,7 @@ import {dev} from '../src/dev'
 import {resolve} from 'path'
 import {FSWatcher} from 'chokidar'
 
-describe('Start command', () => {
+describe.skip('Start command', () => {
   let watcher: FSWatcher
 
   const rootFolder = resolve(__dirname, './fixtures/dev')

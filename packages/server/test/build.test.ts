@@ -26,7 +26,7 @@ jest.doMock('../src/next-utils', () => nextUtilsMock)
 import {build} from '../src/build'
 import {resolve} from 'path'
 
-describe('Build command', () => {
+describe.skip('Build command', () => {
   const rootFolder = resolve(__dirname, './fixtures/dev')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')

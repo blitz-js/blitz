@@ -1,10 +1,10 @@
 import {resolve} from 'path'
 import {synchronizeFiles} from './synchronizer'
 import {ServerConfig, enhance} from './config'
-import {nextStartDev} from './next-utils'
+// import {nextStartDev} from './next-utils'
 
 export async function dev(config: ServerConfig) {
-  const {rootFolder, nextBin, devFolder, ignoredPaths, includePaths} = enhance({
+  const {rootFolder, /*nextBin,*/ devFolder, ignoredPaths, includePaths} = enhance({
     ...config,
     interceptNextErrors: true,
   })
@@ -19,7 +19,7 @@ export async function dev(config: ServerConfig) {
     includePaths,
   })
 
-  nextStartDev(nextBin, dest)
+  // nextStartDev(nextBin, dest)
 
   return fileWatcher
 }
