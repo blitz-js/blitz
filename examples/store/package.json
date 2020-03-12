@@ -1,0 +1,23 @@
+{
+  "name": "store",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "BlitzJS",
+  "license": "MIT",
+  "scripts": {
+    "start": "blitz start",
+    "migrate": "prisma2 generate && prisma2 migrate up --experimental",
+    "build": "blitz build"
+  },
+  "dependencies": {
+    "@blitzjs/cli": "*",
+    "@blitzjs/core": "*",
+    "@blitzjs/server": "*",
+    "@prisma/client": "2.0.0-alpha.903",
+    "next": "^9.3.0",
+    "prisma2": "2.0.0-alpha.903",
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
+  }
+}

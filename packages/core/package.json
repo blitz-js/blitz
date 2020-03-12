@@ -47,8 +47,8 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "peerDependencies": {
-    "next": "^9.3.0",
-    "@prisma/client": "^2.0.0-preview021"
+    "@prisma/client": "^2.0.0-preview021",
+    "next": "^9.3.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.1.1",

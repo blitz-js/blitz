@@ -5,3 +5,5 @@ declare module '@prisma/client' {
 }
 
 export * from './controller'
+export * from './action'
+export * from './identity'

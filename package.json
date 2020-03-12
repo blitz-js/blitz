@@ -4,6 +4,9 @@
     "packages": [
       "packages/*",
       "examples/*"
+    ],
+    "nohoist": [
+      "@prisma/client"
     ]
   },
   "engines": {

@@ -2292,6 +2292,11 @@
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.836.tgz#673c75c0a7a09d8d58f9da38348f59cd3c59a110"
   integrity sha512-LRO4dz50M7iPrBJx9N0+IcSeNmniKkQ5BAaj6irYB6TzBMNnv6WwwQ8lzNKvKm0vtPIhuBcd22ZoilZiIUWuhg==
 
+"@prisma/client@2.0.0-alpha.903":
+  version "2.0.0-alpha.903"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.903.tgz#93bc0f8a25c757a9be5260e00c5d3c980509409b"
+  integrity sha512-Y0lyeol4/0od8Ea0WomTqU/F0EpVKzFuKHI3Hhb0bqCapuSBCp6goND/dh4CUIYgYq7+MM5XTotOJ4/Sh9iAZg==
+
 "@rollup/plugin-commonjs@^11.0.0":
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-11.0.2.tgz#837cc6950752327cb90177b608f0928a4e60b582"
@@ -11554,6 +11559,11 @@ prisma2@2.0.0-alpha.833:
   version "2.0.0-alpha.833"
   resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-alpha.833.tgz#f62ac2096efa63a1e7b084c8f7c5bea1c5bb0ec6"
   integrity sha512-vO8UDdrcZh60xfU48RbvC/5Y1QsnUwFaY3Q8MRXzNj8ATMQlDwpMNF/QNSLHYEzP8Djb422dU6Agpf/NHgEoRw==
+
+prisma2@2.0.0-alpha.903:
+  version "2.0.0-alpha.903"
+  resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-alpha.903.tgz#3932f5541cea54ede99828b61dfffcb8160c4768"
+  integrity sha512-sWorm61CrQWQmv3JmYGbZ0YOpd/de1hDgmblyXXLcBaUc6h6LXpSM6dFPrmsT+WaDeAKGJqXXEhborNfohDsiw==
 
 prisma2@2.0.0-preview022:
   version "2.0.0-preview022"
