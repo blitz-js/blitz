@@ -15,6 +15,7 @@ interface InitialMethodOption {
 
 export default class NewEntity extends Command {
   static description = 'Generate a new Blitz entity'
+  static aliases = ['g']
 
   static args = [
     {
