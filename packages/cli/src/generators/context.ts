@@ -33,8 +33,6 @@ class ContextGenerator extends Generator<ContextGeneratorOptions> {
     })
 
     this.makeDir(`${this.options.destinationRoot!}/pages`)
-
-    //TODO: figure out how to make directory from this class to generate /pages folder
   }
 }
 
