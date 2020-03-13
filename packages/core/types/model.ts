@@ -7,8 +7,8 @@ export type ValidationResult = {
 
 export type ModelOperation = 'create' | 'read' | 'update' | 'delete'
 
-export interface ModelDefinition<T, C> {
-  model: (attrs: T) => Readonly<C>
+export interface ModelDefinition<A, M, U> {
+  model: (attrs: A) => Readonly<M>
   authorize: (op: ModelOperation, input: ActionInput) => boolean
-  validate: (attrs: T) => ValidationResult
+  validate: (attrs: U) => ValidationResult
 }

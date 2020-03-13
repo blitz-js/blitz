@@ -1,9 +1,9 @@
 import {ActionInput, ActionResult} from '@blitzjs/core/types'
-import {Product, ProductAttrs, ProductModel} from 'app/product/ProductModel'
-import db from 'prisma/db'
+import {Product, ProductModel} from 'app/product/ProductModel'
+import db, {ProductCreateInput} from 'prisma/db'
 
 type CreateProductInput = ActionInput & {
-  attrs: ProductAttrs
+  attrs: ProductCreateInput
 }
 
 export async function createProduct(input: CreateProductInput): Promise<ActionResult<ProductModel>> {

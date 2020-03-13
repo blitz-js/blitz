@@ -7,7 +7,6 @@
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "../../",
     "baseUrl": "./",
     "strict": true,
     "strictNullChecks": true,

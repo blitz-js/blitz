@@ -8,7 +8,9 @@
   "scripts": {
     "start": "blitz start",
     "migrate": "prisma2 generate && prisma2 migrate up --experimental",
-    "build": "blitz build"
+    "build": "blitz build",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@blitzjs/cli": "*",
@@ -19,5 +21,9 @@
     "prisma2": "2.0.0-alpha.903",
     "react": "16.12.0",
     "react-dom": "16.12.0"
+  },
+  "devDependencies": {
+    "jest": "25.1.0",
+    "ts-jest": "25.2.1"
   }
 }

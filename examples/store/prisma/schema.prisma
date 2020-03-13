@@ -35,3 +35,9 @@ model Product {
   price    Int?
 }
 
+model User {
+  id    Int     @id @default(autoincrement())
+  email: String
+  roles: String @default('')
+}
+

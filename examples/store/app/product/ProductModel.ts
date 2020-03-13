@@ -1,12 +1,12 @@
 import {ModelDefinition, ValidationResult} from '@blitzjs/core/types'
-import {Product as DBProduct} from 'prisma/db'
+import {Product as DBProduct, ProductUpdateInput} from 'prisma/db'
 
 export type ProductAttrs = DBProduct
 export type ProductModel = ProductAttrs & {
   displaySlug?: string
 }
 
-export const Product: ModelDefinition<ProductAttrs, ProductModel> = {
+export const Product: ModelDefinition<ProductAttrs, ProductModel, ProductUpdateInput> = {
   model(attrs) {
     const model: ProductModel = Object.assign({}, attrs)
 
