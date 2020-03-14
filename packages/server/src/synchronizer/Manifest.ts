@@ -2,35 +2,47 @@ import through2 from 'through2'
 import File from 'vinyl'
 
 export class Manifest {
-  private origin: {[k: string]: string} = {}
-  private destination: {[k: string]: string} = {}
+  private key: {[k: string]: string} = {}
+  private inverse: {[k: string]: string} = {}
+  private events: string[] = []
 
-  getDestination(origin: string) {
-    return this.origin[origin]
-  }
-  getOrigin(destination: string) {
-    return this.destination[destination]
+  getByKey(key: string) {
+    return this.key[key]
   }
 
-  setEntry(origin: string, dest: string) {
-    this.origin[origin] = dest
-    this.destination[dest] = origin
+  getByValue(value: string) {
+    return this.inverse[value]
   }
 
-  removeEntry(origin: string) {
-    const dest = this.getOrigin(origin)
-    if (dest) {
-      delete this.origin[origin]
-      delete this.destination[dest]
+  setEntry(key: string, dest: string) {
+    this.key[key] = dest
+    this.inverse[dest] = key
+    this.events.push(`set:${dest}`)
+  }
+
+  removeKey(key: string) {
+    const dest = this.getByKey(key)
+    if (!dest) {
+      throw new Error(`Key "${key}" returns`)
     }
+    delete this.inverse[dest]
+    delete this.key[key]
+    this.events.push(`del:${key}`)
+    return dest
   }
+
+  getEvents() {
+    return this.events
+  }
+
   toJson(compact = false) {
     return JSON.stringify(this.toObject(), null, compact ? undefined : 2)
   }
+
   toObject() {
     return {
-      origin: this.origin,
-      destination: this.destination,
+      keys: this.key,
+      values: this.inverse,
     }
   }
 
@@ -39,20 +51,23 @@ export class Manifest {
   }
 }
 
-export const toManifestFile = (manifest: Manifest, fileName: string, pretty: boolean = true) =>
+export const toManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) =>
   through2.obj((file, _, done) => {
     const [origin] = file.history
     const dest = file.path
+
     if (file.event === 'add' || file.event === 'change') {
       manifest.setEntry(origin, dest)
     }
 
     if (file.event === 'unlink' || file.event === 'unlinkDir') {
-      manifest.removeEntry(origin)
+      manifest.removeKey(origin)
     }
+
     const manifestFile = new File({
       path: fileName,
-      contents: Buffer.from(JSON.stringify(manifest.toObject(), null, pretty ? 2 : undefined)),
+      contents: Buffer.from(manifest.toJson(compact)),
     })
+
     done(null, manifestFile)
   })

@@ -1,9 +1,8 @@
-import watch from 'gulp-watch'
-
 import {dest} from './dest'
 import vfs from 'vinyl-fs'
 import {transformPage} from './transformPage'
-import {Manifest, toManifestFile} from './Manifest'
+import {Manifest, toManifestFile} from './manifest'
+import {watch} from './watch'
 
 type SynchronizeFilesArgs = {
   src: string
