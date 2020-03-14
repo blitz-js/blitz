@@ -1,3 +1,5 @@
+/* eslint-disable import/first */
+
 // Setup mocks
 
 const fsExtraMock = {
