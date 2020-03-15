@@ -4,12 +4,14 @@ export type ServerConfig = {
   interceptNextErrors?: boolean
   devFolder?: string
   buildFolder?: string
+  manifestPath?: string
+  writeManifestFile?: boolean
 }
 
 const defaults = {
   ignoredPaths: [
     './build',
-    '.blitz',
+    '/.blitz*',
     '.DS_Store',
     '.git',
     '.next',
@@ -25,11 +27,17 @@ const defaults = {
   buildFolder: '.blitz/caches/build',
   nextBin: './node_modules/.bin/next',
   nextBinPatched: './node_modules/.bin/next-patched',
+  manifestPath: '_manifest.json',
+  writeManifestFile: true,
 }
 
 export function enhance(config: ServerConfig) {
   const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
   const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
+  const manifestPath = resolve(devFolder, config.manifestPath || defaults.manifestPath)
+  const writeManifestFile =
+    typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
+
   const nextBin = resolve(
     config.rootFolder,
     config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,
@@ -39,8 +47,10 @@ export function enhance(config: ServerConfig) {
     ...config,
     ignoredPaths: defaults.ignoredPaths,
     includePaths: defaults.includePaths,
+    manifestPath,
     nextBin,
     buildFolder,
     devFolder,
+    writeManifestFile,
   }
 }

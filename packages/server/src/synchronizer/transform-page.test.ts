@@ -1,4 +1,4 @@
-import {createPathTransformer} from './transformPage'
+import {createPathTransformer} from './transform-page'
 
 describe('page transformer path', () => {
   const tests = [
@@ -29,19 +29,18 @@ describe('page transformer path', () => {
       expected: 'routes/one/two/three.tsx',
     },
     {
-      sourceFolder: '/User/foo/bar',
+      folderName: 'routes',
       name: 'extracts paths folder to the root in a basic transformation',
-      input: 'app/users/routes/one/two/three.tsx',
+      input: '/User/foo/bar/app/users/routes/one/two/three.tsx',
       expected: 'routes/one/two/three.tsx',
     },
   ]
 
-  tests.forEach(({name, input, expected, sourceFolder = '', folderName = 'pages'}) => {
+  tests.forEach(({name, input, expected, folderName = 'pages'}) => {
     it(name, () => {
       const transformer = createPathTransformer({
         appFolder: 'app',
         folderName,
-        sourceFolder,
       })
       expect(transformer(input)).toEqual(expected)
     })

@@ -5,12 +5,22 @@ import {ServerConfig, enhance} from './config'
 import {nextBuild} from './next-utils'
 
 export async function build(config: ServerConfig) {
-  const {rootFolder, buildFolder, nextBin, ignoredPaths, includePaths} = enhance(config)
+  const {
+    rootFolder,
+    buildFolder,
+    nextBin,
+    ignoredPaths,
+    manifestPath,
+    writeManifestFile,
+    includePaths,
+  } = enhance(config)
 
   await synchronizeFiles({
     src: rootFolder,
     dest: buildFolder,
     watch: false,
+    manifestPath,
+    writeManifestFile,
     ignoredPaths,
     includePaths,
   })
@@ -19,6 +29,12 @@ export async function build(config: ServerConfig) {
 
   const rootNextFolder = resolve(rootFolder, '.next')
   const buildNextFolder = resolve(buildFolder, '.next')
-  if (await pathExists(rootNextFolder)) await remove(rootNextFolder)
-  await move(buildNextFolder, rootNextFolder)
+
+  if (await pathExists(rootNextFolder)) {
+    await remove(rootNextFolder)
+  }
+
+  if (await pathExists(buildNextFolder)) {
+    await move(buildNextFolder, rootNextFolder)
+  }
 }

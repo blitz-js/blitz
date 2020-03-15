@@ -1,18 +1,37 @@
 import {spawn} from 'child_process'
 import * as pty from 'node-pty'
+import {Manifest} from 'synchronizer/manifest'
+// import chalk from 'chalk'
 
-function transformOutput(data: any) {
-  // HACK: The following is temporary until we have a build
-  //       manifest to lookup on a per file basis
-  process.stdout.write(data.toString().replace('.blitz/caches/dev/', ''))
+function transformOutput(_manifest: Manifest, _devFolder: string) {
+  return (data: any) => {
+    const dataStr = data.toString()
+
+    const buildError = `ERROR\\sin\\s(${_devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`
+
+    const matches = new RegExp(buildError, 'g').exec(dataStr)
+
+    if (matches) {
+      const [, filepath] = matches
+
+      if (filepath) {
+        const matchedPath = _manifest.getByValue(filepath)
+        if (matchedPath) {
+          process.stdout.write(data.replace(filepath, matchedPath))
+          return
+        }
+      }
+    }
+    process.stdout.write(data)
+  }
 }
 
-export async function nextStartDev(nextBin: string, cwd: string) {
+export async function nextStartDev(nextBin: string, cwd: string, manifest: Manifest, devFolder: string) {
   const cb = pty
     .spawn(nextBin, ['dev'], {
       cwd,
     })
-    .on('data', transformOutput)
+    .on('data', transformOutput(manifest, devFolder))
 
   return Promise.resolve(cb)
 }

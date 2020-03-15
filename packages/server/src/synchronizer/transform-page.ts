@@ -3,7 +3,7 @@ import File from 'vinyl'
 import {relative, resolve} from 'path'
 
 type PathTransformerOpts = {
-  sourceFolder: string
+  sourceFolder?: string
   appFolder: string
   folderName: string
 }
@@ -18,7 +18,7 @@ export function createPathTransformer(opts: PathTransformerOpts) {
 export function transformPage(opts: PathTransformerOpts) {
   const pathTransform = createPathTransformer(opts)
   return transform((file: File) => {
-    file.path = resolve(opts.sourceFolder, pathTransform(relative(opts.sourceFolder, file.path)))
+    file.path = resolve(opts.sourceFolder || '', pathTransform(relative(opts.sourceFolder || '', file.path)))
     return file
   })
 }

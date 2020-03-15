@@ -1,22 +1,34 @@
 import through2 from 'through2'
 import File from 'vinyl'
 
+type ManifestVO = {
+  keys: {[k: string]: string}
+  values: {[k: string]: string}
+}
+
 export class Manifest {
-  private key: {[k: string]: string} = {}
-  private inverse: {[k: string]: string} = {}
+  private keys: {[k: string]: string} = {}
+  private values: {[k: string]: string} = {}
   private events: string[] = []
 
+  constructor(obj?: ManifestVO) {
+    if (obj) {
+      this.keys = obj.keys
+      this.values = obj.values
+    }
+  }
+
   getByKey(key: string) {
-    return this.key[key]
+    return this.keys[key]
   }
 
   getByValue(value: string) {
-    return this.inverse[value]
+    return this.values[value]
   }
 
   setEntry(key: string, dest: string) {
-    this.key[key] = dest
-    this.inverse[dest] = key
+    this.keys[key] = dest
+    this.values[dest] = key
     this.events.push(`set:${dest}`)
   }
 
@@ -25,8 +37,8 @@ export class Manifest {
     if (!dest) {
       throw new Error(`Key "${key}" returns`)
     }
-    delete this.inverse[dest]
-    delete this.key[key]
+    delete this.values[dest]
+    delete this.keys[key]
     this.events.push(`del:${key}`)
     return dest
   }
@@ -41,17 +53,17 @@ export class Manifest {
 
   toObject() {
     return {
-      keys: this.key,
-      values: this.inverse,
+      keys: this.keys,
+      values: this.values,
     }
   }
 
-  static create() {
-    return new Manifest()
+  static create(obj?: ManifestVO) {
+    return new Manifest(obj)
   }
 }
 
-export const toManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) =>
+export const setManifestEntry = (manifest: Manifest) =>
   through2.obj((file, _, done) => {
     const [origin] = file.history
     const dest = file.path
@@ -64,6 +76,11 @@ export const toManifestFile = (manifest: Manifest, fileName: string, compact: bo
       manifest.removeKey(origin)
     }
 
+    done(null, file)
+  })
+
+export const createManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) =>
+  through2.obj((_, __, done) => {
     const manifestFile = new File({
       path: fileName,
       contents: Buffer.from(manifest.toJson(compact)),
