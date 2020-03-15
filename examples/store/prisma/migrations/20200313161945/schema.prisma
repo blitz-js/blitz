@@ -7,11 +7,11 @@
 // Learn more about connection strings for your DB: https://pris.ly/d/connection-strings
 datasource db {
   provider = "sqlite" // other options are: "mysql" and "sqlite"
-  url      = "file:../tmp/db.sqlite"
+  url = "***"
 }
 // Other examples for connection strings are:
-// SQLite: url = "sqlite:./dev.db"
-// MySQL:  url = "mysql://johndoe:johndoe@localhost:3306/mydb"
+// SQLite: url = "***"
+// MySQL:  url = "***"
 // You can also use environment variables to specify the connection string: https://pris.ly/d/prisma-schema#using-environment-variables
 
 // By adding the `generator` block, you specify that you want to generate Prisma's DB client.

@@ -11,3 +11,4 @@ reports
 .yarn
 .yarnrc
 tsconfig.tsbuildinfo
+tmp

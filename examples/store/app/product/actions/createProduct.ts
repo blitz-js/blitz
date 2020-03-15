@@ -25,6 +25,6 @@ export async function createProduct(input: CreateProductInput): Promise<ActionRe
 
     return {success: {payload: Product.model(product)}}
   } catch (error) {
-    return {error: {type: 'PersistanceError', payload: error.message}}
+    return {error: {type: 'PersistanceError', payload: JSON.stringify(error)}}
   }
 }

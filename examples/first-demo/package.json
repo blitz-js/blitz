@@ -13,7 +13,7 @@
     "@blitzjs/cli": "^0.0.1",
     "@blitzjs/core": "*",
     "@blitzjs/server": "*",
-    "@prisma/client": "2.0.0-alpha.836",
+    "@prisma/client": "2.0.0-preview024",
     "alex": "8.1.1",
     "next": "^9.3.0",
     "react": "16.12.0",

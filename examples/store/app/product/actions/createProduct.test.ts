@@ -1,15 +1,16 @@
 import {createProduct} from '.'
-import db from 'prisma/db'
 
-const AnonymousUser = {id: null, roles: []}
-
-jest.mock('prisma/db')
+// const AnonymousUser = {id: null, roles: []}
+const AdminUser = {id: null, roles: ['admin']}
 
 it('creates a product', async () => {
-  // ts-ignore
-  db.product.create.mockResolvedValue({id: 1, name: 'Green Shirt', description: null, price: null})
+  const result = await createProduct({user: AdminUser, query: {}, attrs: {name: 'Green Shirt'}})
 
-  const result = await createProduct({user: AnonymousUser, query: {}, attrs: {name: 'Green Shirt'}})
-
-  expect(result).toBe('blue-hat')
+  expect(result.success?.payload).toStrictEqual({
+    description: null,
+    displaySlug: 'green-shirt',
+    id: 5,
+    name: 'Green Shirt',
+    price: null,
+  })
 })

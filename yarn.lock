@@ -2477,15 +2477,10 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@prisma/client@2.0.0-alpha.836":
-  version "2.0.0-alpha.836"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.836.tgz#673c75c0a7a09d8d58f9da38348f59cd3c59a110"
-  integrity sha512-LRO4dz50M7iPrBJx9N0+IcSeNmniKkQ5BAaj6irYB6TzBMNnv6WwwQ8lzNKvKm0vtPIhuBcd22ZoilZiIUWuhg==
-
-"@prisma/client@2.0.0-alpha.903":
-  version "2.0.0-alpha.903"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-alpha.903.tgz#93bc0f8a25c757a9be5260e00c5d3c980509409b"
-  integrity sha512-Y0lyeol4/0od8Ea0WomTqU/F0EpVKzFuKHI3Hhb0bqCapuSBCp6goND/dh4CUIYgYq7+MM5XTotOJ4/Sh9iAZg==
+"@prisma/client@2.0.0-preview024":
+  version "2.0.0-preview024"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.0.0-preview024.tgz#020f7c2d12e8c56fa7f096a83bc736f10a1d44a5"
+  integrity sha512-HnJxSvEY8cQgGf0xZuMh9fv85QxlKzIbieUZPfG+30WtDKD5CxmPkatZnAj+Z5CciK7WxeQNutTGZk2eEop+ZQ==
 
 "@rollup/plugin-commonjs@^11.0.0":
   version "11.0.2"
@@ -12275,15 +12270,15 @@ prisma2@2.0.0-alpha.833:
   resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-alpha.833.tgz#f62ac2096efa63a1e7b084c8f7c5bea1c5bb0ec6"
   integrity sha512-vO8UDdrcZh60xfU48RbvC/5Y1QsnUwFaY3Q8MRXzNj8ATMQlDwpMNF/QNSLHYEzP8Djb422dU6Agpf/NHgEoRw==
 
-prisma2@2.0.0-alpha.903:
-  version "2.0.0-alpha.903"
-  resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-alpha.903.tgz#3932f5541cea54ede99828b61dfffcb8160c4768"
-  integrity sha512-sWorm61CrQWQmv3JmYGbZ0YOpd/de1hDgmblyXXLcBaUc6h6LXpSM6dFPrmsT+WaDeAKGJqXXEhborNfohDsiw==
-
 prisma2@2.0.0-preview022:
   version "2.0.0-preview022"
   resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-preview022.tgz#959770a89696004411785cfb27a76ebc3eb889aa"
   integrity sha512-esfFlVwGr/q5AoZFT+mf5FF+4bKYLIoqgfTNsrsodKzWnYR/JoTme2rO7FjM1U1jp80rCiX8RbcAvl6o/TG5zg==
+
+prisma2@2.0.0-preview024:
+  version "2.0.0-preview024"
+  resolved "https://registry.yarnpkg.com/prisma2/-/prisma2-2.0.0-preview024.tgz#6d2004c5a0d2f58e09c5d9eabe1c5eb8d9b2d7e2"
+  integrity sha512-hQJjD0/Wv7evgH2XzHN1pSJPiVgZd8QI0cDyP+1mECUs4NBCUCrxPao7eNF5g8HGsjs30YR2/ree6i6TuwmfiQ==
 
 private@^0.1.6, private@^0.1.8:
   version "0.1.8"

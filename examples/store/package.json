@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "blitz start",
-    "migrate": "prisma2 generate && prisma2 migrate up --experimental",
+    "db:setup": "prisma2 generate && prisma2 migrate up --experimental",
+    "db:migrate": "prisma2 migrate save --experimental && prisma2 migrate up --experimental",
     "build": "blitz build",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
@@ -16,9 +17,9 @@
     "@blitzjs/cli": "*",
     "@blitzjs/core": "*",
     "@blitzjs/server": "*",
-    "@prisma/client": "2.0.0-alpha.903",
+    "@prisma/client": "2.0.0-preview024",
     "next": "^9.3.0",
-    "prisma2": "2.0.0-alpha.903",
+    "prisma2": "2.0.0-preview024",
     "react": "16.12.0",
     "react-dom": "16.12.0"
   },
