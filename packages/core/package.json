@@ -24,7 +24,7 @@
   ],
   "main": "dist/index.js",
   "module": "dist/core.esm.js",
-  "typings": "dist/packages/core/src/index.d.ts",
+  "types": "dist/packages/core/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -47,14 +47,14 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "peerDependencies": {
-    "@prisma/client": "^2.0.0-preview021",
-    "next": "^9.2.2-canary.21"
+    "next": "^9.3.0",
+    "@prisma/client": "^2.0.0-preview021"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.1.1",
     "@testing-library/react": "9.4.1",
     "@types/react": "16.9.23",
-    "next": "9.2.3-canary.13",
+    "next": "^9.3.0",
     "null-loader": "3.0.0",
     "prisma2": "2.0.0-preview022"
   },

@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+'use strict'
+
+require('@blitzjs/server/register')
+require('next/dist/bin/next')

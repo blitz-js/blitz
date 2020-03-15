@@ -54,7 +54,7 @@ export const SpyController = Controller(() => ({
   delete: jest.fn(),
 }))
 
-export const unstable_getSimpleServerProps = harnessServerProps(SimpleController)
-export const unstable_getEmptyServerProps = harnessServerProps(EmptyController)
-export const unstable_getRedirectServerProps = harnessServerProps(RedirectController)
-export const unstable_getSpyServerProps = harnessServerProps(SpyController)
+export const getSimpleServerProps = harnessServerProps(SimpleController)
+export const getEmptyServerProps = harnessServerProps(EmptyController)
+export const getRedirectServerProps = harnessServerProps(RedirectController)
+export const getSpyServerProps = harnessServerProps(SpyController)

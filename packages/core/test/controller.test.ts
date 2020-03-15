@@ -1,5 +1,7 @@
 import * as fixtures from './controller-fixtures'
 
+console.log = jest.fn()
+
 describe('controller', () => {
   const createContext = (opts: any = {}) => ({
     query: {},
@@ -8,9 +10,9 @@ describe('controller', () => {
     res: {status: jest.fn(), end: jest.fn(), ...opts.res},
   })
 
-  const createSpyRequest = (ctx: any) => fixtures.unstable_getSpyServerProps(ctx)
-  const createSimpleRequest = (ctx: any) => fixtures.unstable_getSimpleServerProps(ctx)
-  const createRedirectRequest = (ctx: any) => fixtures.unstable_getRedirectServerProps(ctx)
+  const createSpyRequest = (ctx: any) => fixtures.getSpyServerProps(ctx)
+  const createSimpleRequest = (ctx: any) => fixtures.getSimpleServerProps(ctx)
+  const createRedirectRequest = (ctx: any) => fixtures.getRedirectServerProps(ctx)
 
   it('simple index response', async () => {
     const ctx = createContext()
@@ -41,7 +43,10 @@ describe('controller', () => {
   it('simple show response with uuid', async () => {
     const ctx = createContext({query: {id: '786d378b-9296-4d32-9379-7d4dedd9c7fc'}})
     await createSpyRequest(ctx)
-    expect(fixtures.SpyController.show).toBeCalledWith({id: '786d378b-9296-4d32-9379-7d4dedd9c7fc', query: {}}, {})
+    expect(fixtures.SpyController.show).toBeCalledWith(
+      {id: '786d378b-9296-4d32-9379-7d4dedd9c7fc', query: {}},
+      {},
+    )
   })
 
   it('simple create response', async () => {
@@ -94,7 +99,7 @@ describe('controller', () => {
   })
 
   describe('actions not defined', () => {
-    const createEmptyRequest = (ctx: any) => fixtures.unstable_getEmptyServerProps(ctx)
+    const createEmptyRequest = (ctx: any) => fixtures.getEmptyServerProps(ctx)
 
     it('index returns 404', async () => {
       const ctx = createContext()

@@ -1,1 +1,0 @@
-export {withBlitz} from './withBlitz'

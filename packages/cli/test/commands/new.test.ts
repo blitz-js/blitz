@@ -1,3 +1,3 @@
 jest.mock('fs')
 
-test.todo('Mock inquirer.js and test the command')
+test('Mock inquirer.js and test the command', () => {})

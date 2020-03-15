@@ -12,10 +12,11 @@ export const CommentsController = Controller(({db}) => ({
     }
 
     const data = await db.comment.create({
+      // @ts-ignore TODO: fix type issues
       data: {
         ...newData,
         post: {
-          connect: {id: params.query.postId},
+          connect: {id: parseInt(params.query.postId)},
         },
       },
     })

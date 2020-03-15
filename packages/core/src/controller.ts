@@ -8,12 +8,15 @@ import {isServer} from './utils'
 export {default as Form} from './components/Form'
 
 let db: PrismaClient
-if (isServer) {
-  db = new PrismaClient({log: ['info', 'query']})
-  // const Client = eval("require('@prisma/client')").PrismaClient
-  // db = new Client({log: ['info', 'query']})
-  // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
-  db.connect()
+function ensurePrismaClient() {
+  if (isServer) {
+    db = new PrismaClient({log: ['info', 'query']})
+    // const Client = eval("require('@prisma/client')").PrismaClient
+    // db = new Client({log: ['info', 'query']})
+    // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
+    db.connect()
+  }
+  return db
 }
 
 const actionNotFound = () => ({
@@ -22,7 +25,7 @@ const actionNotFound = () => ({
 })
 
 export function Controller(getController: ControllerInput) {
-  const controller = getController({db})
+  const controller = getController({db: ensurePrismaClient()})
   return {
     name: controller.name,
     permit: controller.permit || [],
@@ -130,7 +133,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
 //   return (page: NextPage<any>) => {
 //     const Page = page
 //
-//     // ;(Page as any).unstable_getServerProps = harnessController(controller)
+//     // ;(Page as any).getServerSideProps = harnessController(controller)
 //
 //     return Page
 //   }

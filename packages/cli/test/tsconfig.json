@@ -2,7 +2,8 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["jest"]
+    "types": ["jest"],
+    "target": "es6"
   },
   "references": [{"path": ".."}]
 }

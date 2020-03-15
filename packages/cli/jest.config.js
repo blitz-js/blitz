@@ -6,6 +6,7 @@ module.exports = {
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['/templates/'],
+  modulePathIgnorePatterns: ['tmp', 'lib'],
   testPathIgnorePatterns: ['src/commands/test.ts'],
   // TODO enable threshold
   // coverageThreshold: {
@@ -16,6 +17,7 @@ module.exports = {
   //     statements: 100,
   //   },
   // },
+
   globals: {
     'ts-jest': {
       tsConfig: 'test/tsconfig.json',
