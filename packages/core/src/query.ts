@@ -54,7 +54,7 @@ export function createQuery<I, O>({handler}: CreateQueryInput<I, O>) {
 
       return nextPage
     },
-    local: handler,
+    handler,
     remote,
     serverHandler,
   }

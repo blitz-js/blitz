@@ -13,18 +13,18 @@ export type MutationOutput<O> = {
 }
 
 type CreateMutationInput<I, O> = {
-  validateInput: ValidationFn<I>
+  validateInput?: ValidationFn<I>
   handler: (input: MutationInput<I>) => Promise<O>
 }
 
-export function createMutation<I, O>({handler, validateInput}: CreateMutationInput<I, O>) {
+export function createMutation<I, O>({handler, validateInput = () => ({})}: CreateMutationInput<I, O>) {
   const validHandler = createValidHandler<MutationInput<I>, O>(handler, validateInput)
 
   // serverHandler is used to properly execute a handler server side (will be used by RPC)
   const serverHandler = createServerHandler<I, MutationInput<I>, O>(validHandler)
 
   return {
-    local: validHandler,
+    handler: validHandler,
     serverHandler,
     validateInput,
     remote: async (input: I): Promise<MutationOutput<O>> => {
