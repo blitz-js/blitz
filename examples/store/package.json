@@ -18,6 +18,7 @@
     "@blitzjs/core": "*",
     "@blitzjs/server": "*",
     "@prisma/client": "2.0.0-preview024",
+    "formik": "2.1.4",
     "next": "^9.3.0",
     "prisma2": "2.0.0-preview024",
     "react": "16.12.0",

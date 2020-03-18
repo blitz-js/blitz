@@ -1,4 +1,4 @@
-import {ModelDefinition, ValidationResult} from '@blitzjs/core/types'
+import {ModelDefinition} from '@blitzjs/core/types'
 import {Product as DBProduct, ProductUpdateInput} from 'prisma/db'
 
 export type ProductAttrs = DBProduct
@@ -28,18 +28,14 @@ export const Product: ModelDefinition<ProductAttrs, ProductModel, ProductUpdateI
     return false
   },
   validate(attrs) {
-    const result: ValidationResult = {
-      valid: true,
-      errors: [],
-    }
+    const errors: Record<string, any> = {}
 
     // Can/should we somehow do runtime validation based on the TS type?
 
     if (attrs.name && attrs.name.length < 4) {
-      result.valid = false
-      result.errors.push({field: 'name', message: 'Name must be longer than 4 characters'})
+      errors.name = 'Name must be longer than 4 characters'
     }
 
-    return result
+    return errors
   },
 }
