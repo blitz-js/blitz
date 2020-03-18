@@ -4,9 +4,9 @@ import {createProduct} from '.'
 const AdminUser = {id: null, roles: ['admin']}
 
 it('creates a product', async () => {
-  const result = await createProduct({user: AdminUser, query: {}, attrs: {name: 'Green Shirt'}})
+  const result = await createProduct.handler({user: AdminUser, data: {name: 'Green Shirt'}})
 
-  expect(result.success?.payload).toStrictEqual({
+  expect(result).toStrictEqual({
     description: null,
     displaySlug: 'green-shirt',
     id: 5,
