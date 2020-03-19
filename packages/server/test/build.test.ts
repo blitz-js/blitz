@@ -21,7 +21,11 @@ describe('Build command', () => {
   const rootFolder = resolve(__dirname, './fixtures/build')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')
-
+  console.log('Debugging CI failures:', {
+    rootFolder,
+    buildFolder,
+    devFolder,
+  })
   beforeEach(async () => {
     jest.clearAllMocks()
     await build({rootFolder, buildFolder, devFolder, writeManifestFile: false})
