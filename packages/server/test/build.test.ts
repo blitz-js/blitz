@@ -18,7 +18,7 @@ import {remove, pathExists} from 'fs-extra'
 import directoryTree from 'directory-tree'
 
 describe('Build command', () => {
-  const rootFolder = resolve(__dirname, './fixtures/dev')
+  const rootFolder = resolve(__dirname, './fixtures/build')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')
 
@@ -87,7 +87,7 @@ describe('Build command', () => {
           type: 'file',
         },
       ],
-      name: 'dev',
+      name: 'build',
       path: `${rootFolder}`,
       size: 18,
       type: 'directory',
