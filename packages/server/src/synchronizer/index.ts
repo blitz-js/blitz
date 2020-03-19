@@ -33,7 +33,14 @@ async function clean(path: string) {
   return await ensureDir(path)
 }
 
-export function synchronizeFiles({
+function countStream(stream: NodeJS.WritableStream, cb: (count: number) => void) {
+  let count = 0
+  return stream.on('data', () => {
+    cb(++count)
+  })
+}
+
+export async function synchronizeFiles({
   dest: destPath,
   src: srcPath,
   includePaths,
@@ -57,11 +64,11 @@ export function synchronizeFiles({
 
   const entries = fg.sync(includePaths, {ignore: options.ignored, cwd: options.cwd})
   const manifest = Manifest.create()
-  const watcher = watch(includePaths, options)
+  const {stream, watcher} = watch(includePaths, options)
 
   const createStream = () =>
     pipeline(
-      watcher.stream,
+      stream,
       transformPage({
         sourceFolder: srcPath,
         appFolder: 'app',
@@ -73,19 +80,18 @@ export function synchronizeFiles({
       gulpIf(writeManifestFile, dest(srcPath)),
     )
 
-  return clean(destPath).then(() => {
-    return new Promise(resolve => {
-      // TODO: add timeout/error?
-      let count = 0
-      createStream().on('data', () => {
-        count++
-        if (count === entries.length) {
-          resolve({
-            ...watcher,
-            manifest: manifest,
-          })
-        }
-      })
+  await clean(destPath)
+
+  return await new Promise(resolve => {
+    // TODO: add timeout/error?
+    countStream(createStream(), count => {
+      if (count >= entries.length) {
+        resolve({
+          stream,
+          watcher,
+          manifest,
+        })
+      }
     })
   })
 }
