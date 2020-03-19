@@ -8,6 +8,7 @@ import {Readable, pipeline} from 'readable-stream'
 import gulpIf from 'gulp-if'
 import File from 'vinyl'
 import fg from 'fast-glob'
+import {remove, pathExists, ensureDir} from 'fs-extra'
 
 type SynchronizeFilesInput = {
   src: string
@@ -23,6 +24,13 @@ type SynchronizeFilesOutput = {
   watcher: FSWatcher
   stream: Readable
   manifest: Manifest
+}
+
+async function clean(path: string) {
+  if (await pathExists(path)) {
+    await remove(path)
+  }
+  return await ensureDir(path)
 }
 
 export function synchronizeFiles({
@@ -41,7 +49,7 @@ export function synchronizeFiles({
     cwd: srcPath,
   }
 
-  // TODO: manifest loaded (possibly corrupted out of sync)
+  // TODO: handle files possibly corrupted out of sync
   //          * how can I know that an entry is out of sync?
   //            * add stat info modified date in the manifest
   //            * stat the entry for modified date ahead of time
@@ -51,30 +59,33 @@ export function synchronizeFiles({
   const manifest = Manifest.create()
   const watcher = watch(includePaths, options)
 
-  const stream = pipeline(
-    watcher.stream,
-    transformPage({
-      sourceFolder: srcPath,
-      appFolder: 'app',
-      folderName: 'pages',
-    }),
-    gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),
-    setManifestEntry(manifest),
-    createManifestFile(manifest, manifestPath),
-    gulpIf(writeManifestFile, dest(srcPath)),
-  )
+  const createStream = () =>
+    pipeline(
+      watcher.stream,
+      transformPage({
+        sourceFolder: srcPath,
+        appFolder: 'app',
+        folderName: 'pages',
+      }),
+      gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),
+      setManifestEntry(manifest),
+      createManifestFile(manifest, manifestPath),
+      gulpIf(writeManifestFile, dest(srcPath)),
+    )
 
-  return new Promise(resolve => {
-    // TODO: add timeout/error?
-    let count = 0
-    stream.on('data', () => {
-      count++
-      if (count === entries.length) {
-        resolve({
-          ...watcher,
-          manifest: manifest,
-        })
-      }
+  return clean(destPath).then(() => {
+    return new Promise(resolve => {
+      // TODO: add timeout/error?
+      let count = 0
+      createStream().on('data', () => {
+        count++
+        if (count === entries.length) {
+          resolve({
+            ...watcher,
+            manifest: manifest,
+          })
+        }
+      })
     })
   })
 }
