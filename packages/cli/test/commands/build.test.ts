@@ -10,8 +10,6 @@ describe('Build command', () => {
   })
 
   const options = {
-    buildFolder: '.blitz/caches/build',
-    devFolder: '.blitz/caches/dev',
     rootFolder: resolve(__dirname, '../../'),
   }
 

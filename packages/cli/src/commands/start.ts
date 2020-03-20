@@ -17,8 +17,6 @@ export default class Start extends Command {
 
     const config = {
       rootFolder: process.cwd(),
-      devFolder: '.blitz/caches/dev',
-      buildFolder: '.blitz/caches/build',
     }
 
     if (flags.production) {
