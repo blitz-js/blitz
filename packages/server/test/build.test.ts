@@ -44,7 +44,7 @@ describe('Build command', () => {
   })
 
   it('should copy the correct files to the build folder', async () => {
-    const tree = directoryTree(rootFolder, {normalizePath: true})
+    const tree = directoryTree(rootFolder)
     expect(tree).toEqual({
       children: [
         {
