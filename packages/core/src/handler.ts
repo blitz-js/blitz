@@ -8,7 +8,7 @@ export function createValidHandler<HI extends ActionInput, O>(
 ): (input: HI) => Promise<O> {
   return function(input) {
     // TODO: make this work with an async validationFn
-    const errors = validateInput(input.data)
+    /*const errors =*/ validateInput(input.data)
 
     // TODO: if errors, return errors instead of handler
 

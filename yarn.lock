@@ -11689,6 +11689,11 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+pdsl@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/pdsl/-/pdsl-5.0.3.tgz#3be8e0b5dbd8ca87606bd32d8b16de0e9c447b4a"
+  integrity sha512-MFS7HXNaf6bw0D5pdFDOG9d+tnv32qJ4TIW/HGA1kMfwYZMFHwIEpjUM6X64B+1c9VjT1BiZ0VpJ0TbwJfAAbA==
+
 pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"

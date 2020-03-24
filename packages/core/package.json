@@ -59,6 +59,7 @@
     "prisma2": "2.0.0-preview022"
   },
   "dependencies": {
+    "pdsl": "5.0.3",
     "permit-params": "1.0.0",
     "pretty-ms": "6.0.0"
   }

@@ -6,18 +6,12 @@ export type MutationInput<I> = ActionInput & {
   data: I
 }
 
-export type MutationOutput<O> = {
-  ok: boolean
-  result: O
-  errors: any[]
-}
-
-type CreateMutationInput<I, O> = {
+type CreateMutationInput<I> = {
   validateInput?: ValidationFn<I>
-  handler: (input: MutationInput<I>) => Promise<O>
+  handler: (input: MutationInput<I>) => Promise<any>
 }
 
-export function createMutation<I, O>({handler, validateInput = () => ({})}: CreateMutationInput<I, O>) {
+export function createMutation<I>({handler, validateInput = () => ({})}: CreateMutationInput<I>) {
   const validHandler = createValidHandler<MutationInput<I>, O>(handler, validateInput)
 
   // serverHandler is used to properly execute a handler server side (will be used by RPC)
@@ -27,7 +21,7 @@ export function createMutation<I, O>({handler, validateInput = () => ({})}: Crea
     handler: validHandler,
     serverHandler,
     validateInput,
-    remote: async (input: I): Promise<MutationOutput<O>> => {
+    remote: async (input: I): Promise<ReturnType<typeof handler>> => {
       //TODO: replace with proper RPC call
       const res = await fetch('/TODO', {
         method: 'POST',
