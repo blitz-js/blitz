@@ -1,10 +1,10 @@
 import db from 'prisma/db'
 import {Product} from './ProductModel'
 
+console.log = jest.fn()
+
 const AnonymousUser = {id: null, roles: []}
 const AdminUser = {id: null, roles: ['admin']}
-
-console.log = jest.fn()
 
 describe('ProductModel', () => {
   it('can manually authorize', () => {

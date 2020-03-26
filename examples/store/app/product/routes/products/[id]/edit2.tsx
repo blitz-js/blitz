@@ -1,11 +1,13 @@
 import Router from 'next/router'
 import {useQuery} from '@blitzjs/core'
 import {Product} from 'app/product/ProductModel'
+import getProduct from 'app/product/queries/getProduct'
 import updateProduct from 'app/product/mutations/updateProduct'
 import {Formik} from 'formik'
 
 export default function({id}) {
-  const product = useQuery(Product.findOne({where: {id}}))
+  // status = 'loading' | 'error' | 'success'
+  const [product, {status, error}] = useQuery(getProduct, {where: {id}})
 
   return (
     <div>

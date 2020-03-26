@@ -1,20 +1,13 @@
-import {createMutation} from '@blitzjs/core'
-import {Product, ProductModel} from 'app/product/ProductModel'
-import db, {ProductUpdateInput} from 'prisma/db'
+// import {createMutation} from '@blitzjs/core'
+import {UserContext} from '@blitzjs/core/types'
+import {Product, ProductUpdateInput} from 'app/product/ProductModel'
 
-export const updateProduct = createMutation<ProductUpdateInput, ProductModel>({
-  validateInput: Product.validate,
-  handler: async input => {
-    if (!Product.authorize('create', input)) {
-      throw new Error('AuthorizationError')
-    }
+export default async function(data: ProductUpdateInput, user?: UserContext) {
+  // Can do any pre-processing here or trigger events
 
-    // Can do any pre-processing here or trigger events
+  const product = await Product.user(user).update({where: {id: data.id}, data})
 
-    const product = await db.product.create({data: input.data})
+  // Can do any post-processing here or trigger events
 
-    // Can do any post-processing here or trigger events
-
-    return Product.model(product)
-  },
-})
+  return product
+}

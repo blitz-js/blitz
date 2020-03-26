@@ -1,24 +1,12 @@
-import {createQuery} from '@blitzjs/core'
-import {ProductModel} from 'app/product/ProductModel'
-import db from 'prisma/db'
+import {UserContext} from '@blitzjs/core/types'
+import {Product, FindOneProductArgs} from 'app/product/ProductModel'
 
-export type GetProductInput = {
-  id: number
+export default async function(args: FindOneProductArgs, user?: UserContext) {
+  // Can do any pre-processing here or trigger events
+
+  const product = await Product.user(user).findOne(args)
+
+  // Can do any post-processing here or trigger events
+
+  return product
 }
-export type GetProductOutput = {
-  product: ProductModel
-}
-
-export const getProduct = createQuery<GetProductInput, GetProductOutput>({
-  handler: async input => {
-    const product = await db.product.findOne({where: {id: input.data.id}})
-
-    if (!product) {
-      throw new Error('Not found')
-    }
-
-    return {
-      product,
-    }
-  },
-})

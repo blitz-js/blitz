@@ -26,7 +26,7 @@ type AuthFn<M> = (context: AuthorizationInput<M>) => boolean
 type GetModel<D extends PrismaDelegate> = NonNullable<PromiseReturnType<D['findOne']>>
 
 export type BlitzModelConfig<D extends PrismaDelegate> = {
-  delegate?: D
+  delegate: D
   // validate: (data: GetModel<D>) => any
   validate: any
   authorize: AuthFn<GetModel<D>>
@@ -36,7 +36,7 @@ export type BlitzModelConfig<D extends PrismaDelegate> = {
 }
 
 export type BlitzModel<D extends PrismaDelegate> = D & {
-  user: (user: UserContext) => BlitzModel<D>
+  user: (user?: UserContext) => BlitzModel<D>
   authorize: AuthFn<GetModel<D>>
   validate: any
 }
@@ -164,5 +164,5 @@ export function model<D extends PrismaDelegate>(config: BlitzModelConfig<D>) {
   return new Proxy(
     {...config.delegate, ...config, validate: config.validate.validate},
     handler,
-  ) as BlitzModel<D>
+  ) as BlitzModel<typeof config.delegate>
 }

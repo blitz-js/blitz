@@ -1,24 +1,21 @@
-import {createMutation} from '@blitzjs/core'
+import {UserContext} from '@blitzjs/core/types'
+import {ProductCreateInput} from 'app/product/ProductModel'
 import {createProduct} from '.'
-import {ProductCreateInput} from 'prisma/db'
 
-export const importProducts = createMutation<
-  ProductCreateInput[],
-  {createdProducts: number; errors: string[]}
->({
-  handler: async input => {
-    let createdProducts = 0
-    let errors: any[] = []
+export default async function(data: ProductCreateInput[], user: UserContext) {
+  let numberOfCreatedProducts = 0
+  let errors: any[] = []
 
-    for (let product of input.data) {
-      try {
-        await createProduct.handler({user: input.user, data: product})
-        createdProducts++
-      } catch (error) {
-        errors.push({name: product.name, error})
-      }
+  for (let product of data) {
+    try {
+      await createProduct(data, user)
+      numberOfCreatedProducts++
+    } catch (error) {
+      errors.push({name: product.name, error})
     }
+  }
 
-    return {createdProducts, errors}
-  },
-})
+  if (errors) throw new Error(errors)
+
+  return numberOfCreatedProducts
+}
