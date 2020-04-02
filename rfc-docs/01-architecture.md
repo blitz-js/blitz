@@ -291,7 +291,7 @@ export default async function special(data: any, ctx?: SpecialContext) {
 
 ## 5. File Structure and Routing
 
-[Blitz file structure and routing are detailed in a separate RFC](https://github.com/blitz-js/drafts/pull/3). We'd love your feedback on that too!
+[Blitz file structure and routing are detailed in a separate RFC](https://github.com/blitz-js/blitz/pull/74). We'd love your feedback on that too!
 
 ## 6. Authentication
 
