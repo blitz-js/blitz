@@ -82,8 +82,8 @@ export async function synchronizeFiles({
 
   await clean(destPath)
 
-  return await new Promise(resolve => {
-    // TODO: add timeout/error?
+  return await new Promise((resolve, reject) => {
+    setTimeout(() => reject(`Synchroniser did not synchronise all files: \n\n${manifest.toJson()}`), 10000)
     countStream(createStream(), count => {
       if (count >= entries.length) {
         resolve({
