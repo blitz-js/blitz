@@ -2,7 +2,8 @@
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-blueviolet.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END --> [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END --> [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 <!-- prettier-ignore-end -->
 
 Framework for building monolithic, full-stack React apps without building an API.
@@ -74,12 +75,12 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   <tr>
     <td align="center"><a href="https://corey-brown.com"><img src="https://avatars1.githubusercontent.com/u/12791148?v=4" width="100px;" alt=""/><br /><sub><b>Corey Brown</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=coreybrown89" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/aej11a"><img src="https://avatars2.githubusercontent.com/u/10066422?v=4" width="100px;" alt=""/><br /><sub><b>aej11a</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=aej11a" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/marcoseoane"><img src="https://avatars0.githubusercontent.com/u/28088807?v=4" width="100px;" alt=""/><br /><sub><b>marcoseoane</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=marcoseoane" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
