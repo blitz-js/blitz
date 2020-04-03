@@ -156,7 +156,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rishabhpoddar",
+      "name": "Rishabh Poddar",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2976287?v=4",
+      "profile": "https://www.linkedin.com/in/rishabh-poddar-b64b7312",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
