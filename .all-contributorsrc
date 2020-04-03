@@ -40,6 +40,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "toddgeist",
+      "name": "Todd Geist",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/316792?v=4",
+      "profile": "http://www.geistinteractive.com",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7
