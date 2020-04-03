@@ -49,6 +49,15 @@
       "contributions": [
         "financial"
       ]
+    },
+    {
+      "login": "quirk0o",
+      "name": "Beata Obrok",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5123725?v=4",
+      "profile": "https://github.com/quirk0o",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
