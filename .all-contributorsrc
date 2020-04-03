@@ -165,6 +165,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "lorenzorapetti",
+      "name": "Lorenzo Rapetti",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2632174?v=4",
+      "profile": "https://github.com/lorenzorapetti",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -76,6 +76,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://corey-brown.com"><img src="https://avatars1.githubusercontent.com/u/12791148?v=4" width="100px;" alt=""/><br /><sub><b>Corey Brown</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=coreybrown89" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/aej11a"><img src="https://avatars2.githubusercontent.com/u/10066422?v=4" width="100px;" alt=""/><br /><sub><b>aej11a</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=aej11a" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/aem"><img src="https://avatars0.githubusercontent.com/u/1909883?v=4" width="100px;" alt=""/><br /><sub><b>Adam Markon</b></sub></a><br /><a href="#ideas-aem" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/lorenzorapetti"><img src="https://avatars1.githubusercontent.com/u/2632174?v=4" width="100px;" alt=""/><br /><sub><b>Lorenzo Rapetti</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lorenzorapetti" title="Code">💻</a></td>
   </tr>
 </table>
 
