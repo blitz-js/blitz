@@ -1,10 +1,11 @@
 # Blitz ⚡️
 
+<!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-
-[![Financial Contributors on Open Collective](https://opencollective.com/blitzjs/all/badge.svg?label=financial+contributors)](https://opencollective.com/blitzjs) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+<!-- prettier-ignore-end -->
 
 Framework for building monolithic, full-stack React apps without building an API.
 
@@ -73,6 +74,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
