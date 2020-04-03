@@ -1,6 +1,9 @@
-# Blitz ⚡️
+# Blitz.js ⚡️
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+<!-- prettier-ignore-start -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-16-blueviolet.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END --> [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+<!-- prettier-ignore-end -->
 
 Framework for building monolithic, full-stack React apps without building an API.
 
@@ -28,67 +31,55 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
 
-## Sponsors
+### You are invited to join us — let’s build the future of web dev together! 🤝
+
+1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
+2. If you're interested in helping, read [The Contributing Guide](CONTRIBUTING.md)
+
+## Sponsors and Donations
+
+- Contribute via [GitHub Sponsors](https://github.com/sponsors/blitz-js)
+- Contribute via [PayPal](https://paypal.me/thebayers)
+- Contribute via [Open Collective](https://opencollective.com/blitzjs)
+- Contribute via [Patreon](https://patreon.com/flybayer)
 
 _Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters! [See options on Open Collective](https://opencollective.com/blitzjs)_
 
-## I invite you to join us — let’s build the future of web dev together. 🤝
+## Contributors ✨
 
-[Join the Blitz Slack Community](https://slack.blitzjs.com) if you’re interested in helping or just want to keep a pulse on the project.
+Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-### How to Get Started With Blitz Framework Development
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=flybayer" title="Code">💻</a> <a href="#content-flybayer" title="Content">🖋</a> <a href="#ideas-flybayer" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Aflybayer" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://fabulas.io"><img src="https://avatars1.githubusercontent.com/u/14793389?v=4" width="100px;" alt=""/><br /><sub><b>Michael Edelman </b></sub></a><br /><a href="#infra-medelman17" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://medium.com/@ryardley"><img src="https://avatars0.githubusercontent.com/u/1256409?v=4" width="100px;" alt=""/><br /><sub><b>Rudi Yardley</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ryardley" title="Code">💻</a> <a href="#ideas-ryardley" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://www.geistinteractive.com"><img src="https://avatars2.githubusercontent.com/u/316792?v=4" width="100px;" alt=""/><br /><sub><b>Todd Geist</b></sub></a><br /><a href="#financial-toddgeist" title="Financial">💵</a></td>
+    <td align="center"><a href="https://github.com/quirk0o"><img src="https://avatars3.githubusercontent.com/u/5123725?v=4" width="100px;" alt=""/><br /><sub><b>Beata Obrok</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=quirk0o" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/tsawan"><img src="https://avatars3.githubusercontent.com/u/3263082?v=4" width="100px;" alt=""/><br /><sub><b>Tahir Awan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tsawan" title="Code">💻</a></td>
+    <td align="center"><a href="https://raluce.com"><img src="https://avatars1.githubusercontent.com/u/2454632?v=4" width="100px;" alt=""/><br /><sub><b>Camilo Gonzalez</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=camilo86" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://da.nielkempner.com"><img src="https://avatars3.githubusercontent.com/u/2532112?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Kempner</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dkempner" title="Code">💻</a></td>
+    <td align="center"><a href="http://gielcobben.com"><img src="https://avatars0.githubusercontent.com/u/2663212?v=4" width="100px;" alt=""/><br /><sub><b>Giel</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=gielcobben" title="Code">💻</a></td>
+    <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=MrLeebo" title="Code">💻</a></td>
+    <td align="center"><a href="https://jimthedev.com"><img src="https://avatars0.githubusercontent.com/u/108938?v=4" width="100px;" alt=""/><br /><sub><b>Jim Cummins</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jimthedev" title="Code">💻</a></td>
+    <td align="center"><a href="http://kristinamatuska.com/"><img src="https://media-exp1.licdn.com/dms/image/C5603AQHVPAjV21gw9g/profile-displayphoto-shrink_200_200/0?e=1591228800&v=beta&t=0MlbmiYhNvGv1xjLD_fOhOFjVDZ7ltNwfGNeJ4DHedQ" width="100px;" alt=""/><br /><sub><b>Kristina Matuška</b></sub></a><br /><a href="#design" title="Design">🎨</a></td>
+    <td align="center"><a href="http://robdrosenberg.com"><img src="https://avatars0.githubusercontent.com/u/20813991?v=4" width="100px;" alt=""/><br /><sub><b>Robert Rosenberg</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=robdrosenberg" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jasonblalock"><img src="https://avatars0.githubusercontent.com/u/5899929?v=4" width="100px;" alt=""/><br /><sub><b>Jason Blalock</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jasonblalock" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://corey-brown.com"><img src="https://avatars1.githubusercontent.com/u/12791148?v=4" width="100px;" alt=""/><br /><sub><b>Corey Brown</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=coreybrown89" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/aej11a"><img src="https://avatars2.githubusercontent.com/u/10066422?v=4" width="100px;" alt=""/><br /><sub><b>aej11a</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=aej11a" title="Code">💻</a></td>
+  </tr>
+</table>
 
-#### Onboarding
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 
-1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
-2. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
-3. View open issues and their progress [on the Zenhub repo tab](https://github.com/blitz-js/blitz#workspaces/blitz-5e4dcfb36c3c6a4c02bf070f/board?repos=241215865)
-4. Find an unassigned issue with the label `ready to work on | help wanted` that you want to work on
-5. Comment on that issue that you are working on it, work on it, and submit a PR with your changes. Please ask any clarification questions you have!
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
-#### Repo Setup
-
-**1.** Clone the repo
-
-```
-git clone git@github.com:blitz-js/blitz.git
-cd blitz
-```
-
-**2.** Install dependencies
-
-```
-yarn
-```
-
-**3.** Start the package server. This must be running for any package development or example development
-
-```
-yarn dev
-```
-
-#### Develop a Blitz `package`
-
-**1.** Change to a package directory
-
-```
-cd packages/core
-```
-
-**2.** Start the test runner
-
-```
-yarn test:watch
-```
-
-#### Run a Blitz `example`
-
-**NOTE:** There are currently no examples for the new architecture in the pending RFC.
-
-**1.** Change to an example directory
-
-```
-cd examples/first-demo
-```
-
-**2.** Follow instructions in the example's README
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
