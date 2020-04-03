@@ -1,7 +1,7 @@
 # Blitz ⚡️
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Financial Contributors on Open Collective](https://opencollective.com/blitzjs/all/badge.svg?label=financial+contributors)](https://opencollective.com/blitzjs) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
@@ -61,6 +61,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://www.geistinteractive.com"><img src="https://avatars2.githubusercontent.com/u/316792?v=4" width="100px;" alt=""/><br /><sub><b>Todd Geist</b></sub></a><br /><a href="#financial-toddgeist" title="Financial">💵</a></td>
     <td align="center"><a href="https://github.com/quirk0o"><img src="https://avatars3.githubusercontent.com/u/5123725?v=4" width="100px;" alt=""/><br /><sub><b>Beata Obrok</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=quirk0o" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/tsawan"><img src="https://avatars3.githubusercontent.com/u/3263082?v=4" width="100px;" alt=""/><br /><sub><b>Tahir Awan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tsawan" title="Code">💻</a></td>
+    <td align="center"><a href="https://raluce.com"><img src="https://avatars1.githubusercontent.com/u/2454632?v=4" width="100px;" alt=""/><br /><sub><b>Camilo Gonzalez</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=camilo86" title="Code">💻</a></td>
   </tr>
 </table>
 
