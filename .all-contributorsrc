@@ -156,7 +156,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "marcoseoane",
+      "name": "marcoseoane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/28088807?v=4",
+      "profile": "https://github.com/marcoseoane",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
