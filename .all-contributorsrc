@@ -76,6 +76,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dkempner",
+      "name": "Daniel Kempner",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2532112?v=4",
+      "profile": "http://da.nielkempner.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
