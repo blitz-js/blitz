@@ -1,7 +1,7 @@
 # Blitz ⚡️
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Financial Contributors on Open Collective](https://opencollective.com/blitzjs/all/badge.svg?label=financial+contributors)](https://opencollective.com/blitzjs) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
@@ -67,6 +67,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://da.nielkempner.com"><img src="https://avatars3.githubusercontent.com/u/2532112?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Kempner</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dkempner" title="Code">💻</a></td>
     <td align="center"><a href="http://gielcobben.com"><img src="https://avatars0.githubusercontent.com/u/2663212?v=4" width="100px;" alt=""/><br /><sub><b>Giel</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=gielcobben" title="Code">💻</a></td>
     <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=MrLeebo" title="Code">💻</a></td>
+    <td align="center"><a href="https://jimthedev.com"><img src="https://avatars0.githubusercontent.com/u/108938?v=4" width="100px;" alt=""/><br /><sub><b>Jim Cummins</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jimthedev" title="Code">💻</a></td>
   </tr>
 </table>
 
