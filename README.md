@@ -1,5 +1,9 @@
 # Blitz ⚡️
 
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 [![Financial Contributors on Open Collective](https://opencollective.com/blitzjs/all/badge.svg?label=financial+contributors)](https://opencollective.com/blitzjs) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 
 Framework for building monolithic, full-stack React apps without building an API.
@@ -28,97 +32,35 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
 
-## Sponsors
+### You are invited to join us — let’s build the future of web dev together! 🤝
+
+1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
+2. If you're interested in helping, read [The Contributing Guide](CONTRIBUTING.md)
+
+## Sponsors and Donations
+
+- Contribute via [GitHub Sponsors](https://github.com/sponsors/blitz-js)
+- Contribute via [PayPal](https://paypal.me/thebayers)
+- Contribute via [Open Collective](https://opencollective.com/blitzjs)
+- Contribute via [Patreon](https://patreon.com/flybayer)
 
 _Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters! [See options on Open Collective](https://opencollective.com/blitzjs)_
 
-## I invite you to join us — let’s build the future of web dev together. 🤝
+## Contributors ✨
 
-[Join the Blitz Slack Community](https://slack.blitzjs.com) if you’re interested in helping or just want to keep a pulse on the project.
+Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-### How to Get Started With Blitz Framework Development
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=flybayer" title="Code">💻</a> <a href="#content-flybayer" title="Content">🖋</a> <a href="#ideas-flybayer" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Aflybayer" title="Reviewed Pull Requests">👀</a></td>
+  </tr>
+</table>
 
-#### Onboarding
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
-1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
-2. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
-3. View open issues and their progress [on the Zenhub repo tab](https://github.com/blitz-js/blitz#workspaces/blitz-5e4dcfb36c3c6a4c02bf070f/board?repos=241215865)
-4. Find an unassigned issue with the label `ready to work on | help wanted` that you want to work on
-5. Comment on that issue that you are working on it, work on it, and submit a PR with your changes. Please ask any clarification questions you have!
-
-#### Repo Setup
-
-**1.** Clone the repo
-
-```
-git clone git@github.com:blitz-js/blitz.git
-cd blitz
-```
-
-**2.** Install dependencies
-
-```
-yarn
-```
-
-**3.** Start the package server. This must be running for any package development or example development
-
-```
-yarn dev
-```
-
-#### Develop a Blitz `package`
-
-**1.** Change to a package directory
-
-```
-cd packages/core
-```
-
-**2.** Start the test runner
-
-```
-yarn test:watch
-```
-
-#### Run a Blitz `example`
-
-**NOTE:** There are currently no examples for the new architecture in the pending RFC.
-
-**1.** Change to an example directory
-
-```
-cd examples/first-demo
-```
-
-**2.** Follow instructions in the example's README
-
-## Contributors
-
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/blitz-js/blitz/graphs/contributors"><img src="https://opencollective.com/blitzjs/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/blitzjs/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/blitzjs"><img src="https://opencollective.com/blitzjs/individuals.svg?width=890"></a>
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/blitzjs/contribute)]
-
-<a href="https://opencollective.com/blitzjs/organization/0/website"><img src="https://opencollective.com/blitzjs/organization/0/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/1/website"><img src="https://opencollective.com/blitzjs/organization/1/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/2/website"><img src="https://opencollective.com/blitzjs/organization/2/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/3/website"><img src="https://opencollective.com/blitzjs/organization/3/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/4/website"><img src="https://opencollective.com/blitzjs/organization/4/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/5/website"><img src="https://opencollective.com/blitzjs/organization/5/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/6/website"><img src="https://opencollective.com/blitzjs/organization/6/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/7/website"><img src="https://opencollective.com/blitzjs/organization/7/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/8/website"><img src="https://opencollective.com/blitzjs/organization/8/avatar.svg"></a>
-<a href="https://opencollective.com/blitzjs/organization/9/website"><img src="https://opencollective.com/blitzjs/organization/9/avatar.svg"></a>
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
