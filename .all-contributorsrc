@@ -120,6 +120,15 @@
       "contributions": [
         "design"
       ]
+    },
+    {
+      "login": "robdrosenberg",
+      "name": "Robert Rosenberg",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20813991?v=4",
+      "profile": "http://robdrosenberg.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
