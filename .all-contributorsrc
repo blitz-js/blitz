@@ -21,6 +21,15 @@
         "ideas",
         "review"
       ]
+    },
+    {
+      "login": "medelman17",
+      "name": "Michael Edelman ",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14793389?v=4",
+      "profile": "https://fabulas.io",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7
