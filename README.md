@@ -1,7 +1,7 @@
 # Blitz ⚡️
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Financial Contributors on Open Collective](https://opencollective.com/blitzjs/all/badge.svg?label=financial+contributors)](https://opencollective.com/blitzjs) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
@@ -57,6 +57,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   <tr>
     <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=flybayer" title="Code">💻</a> <a href="#content-flybayer" title="Content">🖋</a> <a href="#ideas-flybayer" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Aflybayer" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://fabulas.io"><img src="https://avatars1.githubusercontent.com/u/14793389?v=4" width="100px;" alt=""/><br /><sub><b>Michael Edelman </b></sub></a><br /><a href="#infra-medelman17" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://medium.com/@ryardley"><img src="https://avatars0.githubusercontent.com/u/1256409?v=4" width="100px;" alt=""/><br /><sub><b>Rudi Yardley</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ryardley" title="Code">💻</a> <a href="#ideas-ryardley" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

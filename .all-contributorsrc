@@ -30,6 +30,16 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "ryardley",
+      "name": "Rudi Yardley",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
+      "profile": "https://medium.com/@ryardley",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7
