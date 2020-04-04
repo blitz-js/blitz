@@ -87,7 +87,7 @@ export async function synchronizeFiles({
     // TODO: add timeout/error?
     countStream(createStream(), count => {
       if (count >= entries.length) {
-        ciLog('Files have finished. Manifest', manifest.toObject())
+        ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
 
         resolve({
           stream,
