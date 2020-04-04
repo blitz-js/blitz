@@ -14,6 +14,7 @@ const defaults = {
   ignoredPaths: [
     './build',
     '/.blitz*',
+    '/.blitz-build',
     '.DS_Store',
     '.git',
     '.next',
