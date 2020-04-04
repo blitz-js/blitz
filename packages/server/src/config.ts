@@ -31,6 +31,13 @@ const defaults = {
   writeManifestFile: true,
 }
 
+function ciLog(name: string, obj: any) {
+  if (process.env.CI) {
+    console.log(name, JSON.stringify(obj, null, 2))
+  }
+  return obj
+}
+
 export function enhance(config: ServerConfig) {
   const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
   const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
@@ -43,7 +50,7 @@ export function enhance(config: ServerConfig) {
     config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,
   )
 
-  return {
+  return ciLog('enhanced config', {
     ...config,
     ignoredPaths: defaults.ignoredPaths,
     includePaths: defaults.includePaths,
@@ -52,5 +59,5 @@ export function enhance(config: ServerConfig) {
     buildFolder,
     devFolder,
     writeManifestFile,
-  }
+  })
 }
