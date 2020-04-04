@@ -33,7 +33,12 @@ const defaults = {
 
 function ciLog(name: string, obj: any) {
   if (process.env.CI) {
+    console.log('')
+    console.log(
+      'Logging the following to understand what is happening in our CI environment and investigate why we have been getting random CI test failures. This will be temporary.',
+    )
     console.log(name, JSON.stringify(obj, null, 2))
+    console.log('')
   }
   return obj
 }
