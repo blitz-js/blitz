@@ -32,13 +32,8 @@ const defaults = {
 }
 
 function ciLog(name: string, obj: any) {
-  if (process.env.CI) {
-    console.log('')
-    console.log(
-      'Logging the following to understand what is happening in our CI environment and investigate why we have been getting random CI test failures. This will be temporary.',
-    )
-    console.log(name, JSON.stringify(obj, null, 2))
-    console.log('')
+  if (process.env.JEST_WORKER_ID !== undefined) {
+    console.log(name + '\n' + JSON.stringify(obj, null, 2) + '\n')
   }
   return obj
 }
@@ -55,14 +50,21 @@ export function enhance(config: ServerConfig) {
     config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,
   )
 
-  return ciLog('enhanced config', {
-    ...config,
-    ignoredPaths: defaults.ignoredPaths,
-    includePaths: defaults.includePaths,
-    manifestPath,
-    nextBin,
-    buildFolder,
-    devFolder,
-    writeManifestFile,
-  })
+  return ciLog(
+    `
+Logging the following to understand what is happening in our CI environment 
+and investigate why we have been getting random CI test failures. 
+This will be temporary.
+`,
+    {
+      ...config,
+      ignoredPaths: defaults.ignoredPaths,
+      includePaths: defaults.includePaths,
+      manifestPath,
+      nextBin,
+      buildFolder,
+      devFolder,
+      writeManifestFile,
+    },
+  )
 }
