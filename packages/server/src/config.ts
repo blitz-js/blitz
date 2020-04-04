@@ -1,4 +1,6 @@
 import {resolve} from 'path'
+import {ciLog} from './ciLog'
+
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean
@@ -29,13 +31,6 @@ const defaults = {
   nextBinPatched: './node_modules/.bin/next-patched',
   manifestPath: '_manifest.json',
   writeManifestFile: true,
-}
-
-function ciLog(name: string, obj: any) {
-  if (process.env.JEST_WORKER_ID !== undefined) {
-    console.log(name + '\n' + JSON.stringify(obj, null, 2) + '\n')
-  }
-  return obj
 }
 
 export function enhance(config: ServerConfig) {
