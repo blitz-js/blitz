@@ -14,7 +14,7 @@ jest.doMock('../src/next-utils', () => nextUtilsMock)
 // Import with mocks applied
 import {build} from '../src/build'
 import {resolve} from 'path'
-import {remove, pathExists, FSWatcher} from 'fs-extra'
+import {remove, pathExists} from 'fs-extra'
 import directoryTree from 'directory-tree'
 
 describe('Build command', () => {
