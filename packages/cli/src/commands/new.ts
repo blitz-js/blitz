@@ -30,7 +30,7 @@ export default class New extends Command {
       default: true,
       allowNo: true,
     }),
-    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
+    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true, allowNo: true}),
     'dry-run': flags.boolean({description: 'show what files will be created without writing them to disk'}),
   }
 
