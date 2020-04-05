@@ -47,6 +47,8 @@ export default class New extends Command {
       destinationRoot,
       appName,
       dryRun: flags['dry-run'],
+      install: true,
+      yarn: flags.yarn,
     })
 
     try {

@@ -4,6 +4,7 @@ import {EventEmitter} from 'events'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer = require('enquirer')
+import execa = require('execa')
 
 import ConflictChecker from './transforms/conflict-checker'
 
@@ -46,8 +47,9 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     return path.join(this.options.destinationRoot!, ...paths)
   }
 
-  // TODO: Install all the packages with npm or yarn
-  async install() {}
+  async install() {
+    await execa(this.options.yarn ? 'yarn' : 'npm', ['install'])
+  }
 
   async run() {
     if (!this.options.dryRun) {
@@ -78,7 +80,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
       console.log(action)
     })
 
-    if (this.options.install) await this.install()
+    if (this.options.install && !this.options.dryRun) await this.install()
   }
 }
 

@@ -1,16 +1,4 @@
-// import {execSync} from 'child_process'
-// import * as path from 'path'
-// import * as fs from 'fs'
 import Generator, {GeneratorOptions} from '../generator'
-// const debug = require('debug')('blitz:generate-app')
-
-// import {Flags} from '../commands/new'
-
-// let hasYarn = false
-// try {
-//   execSync('yarn -v', {stdio: 'ignore'})
-//   hasYarn = true
-// } catch {}
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
