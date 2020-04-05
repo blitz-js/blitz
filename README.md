@@ -1,9 +1,8 @@
 # Blitz.js ⚡️
 
 <!-- prettier-ignore-start -->
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END --> [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 <!-- prettier-ignore-end -->
 
 Framework for building monolithic, full-stack React apps without building an API.
