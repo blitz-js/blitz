@@ -15,6 +15,7 @@
     "build": "lerna run build --scope @blitzjs/* --stream",
     "lerna": "lerna",
     "lerna-prepare": "lerna run prepare",
+    "pretest": "lerna run build --scope @blitzjs/server --scope @blitzjs/core",
     "test": "lerna run test --parallel"
   },
   "devDependencies": {
@@ -24,7 +25,7 @@
     "cross-env": "^7.0.0",
     "debug": "^4.1.1",
     "husky": "^4.2.3",
-    "jest": "^25.1.0",
+    "jest": "24.9.0",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
     "npm-run-all": "^4.1.5",
@@ -41,5 +42,8 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "resolutions": {
+    "tsdx/jest": "24.9.0"
   }
 }

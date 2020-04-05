@@ -1,5 +1,5 @@
-import React from 'react'
 import Router from 'next/router'
+import React from 'react'
 
 export default function({children, action, method, ...props}: {[index: string]: any}) {
   const [i, setI] = React.useState(0)
@@ -7,10 +7,9 @@ export default function({children, action, method, ...props}: {[index: string]: 
 
   React.useEffect(() => {
     // Warm the lamba
-    // TODO: not sure if this is working correctly
     // TODO: Only do this once per route
     fetch(action, {method: 'HEAD'})
-  }, [])
+  }, [action])
 
   return (
     <form
@@ -22,10 +21,8 @@ export default function({children, action, method, ...props}: {[index: string]: 
         const form = event.target as HTMLFormElement
         const data = new URLSearchParams()
 
-        for (const pair of new FormData(form).entries()) {
-          console.log(pair[0], pair[1])
-          // TODO: handle file types
-          data.append(pair[0], pair[1] as string)
+        for (const [key, value] of new FormData(form).entries()) {
+          data.append(key, value.toString())
         }
 
         const res = await fetch(action, {

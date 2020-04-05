@@ -1,6 +1,14 @@
 name: Continuous Integration
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - canary
+  pull_request:
+    branches:
+      - master
+      - canary
 
 jobs:
   build_and_test:

@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+# blitz
+/.blitz/
+
 # production
 /build
 

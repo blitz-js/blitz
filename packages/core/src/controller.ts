@@ -1,31 +1,39 @@
-import {NextApiRequest, NextApiResponse} from 'next'
 import {PrismaClient} from '@prisma/client'
-import prettyMs from 'pretty-ms'
+import {NextApiRequest, NextApiResponse} from 'next'
 import permit from 'permit-params'
-import {isServer} from './utils'
+import prettyMs from 'pretty-ms'
 import {ControllerInput, ControllerInstance} from '../types/controller'
+import {isServer} from './utils'
 
 export {default as Form} from './components/Form'
 
 let db: PrismaClient
-if (isServer) {
-  db = new PrismaClient({log: ['info', 'query']})
-  // const Client = eval("require('@prisma/client')").PrismaClient
-  // db = new Client({log: ['info', 'query']})
-  // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
-  db.connect()
+function ensurePrismaClient() {
+  if (isServer) {
+    db = new PrismaClient({log: ['info', 'query']})
+    // const Client = eval("require('@prisma/client')").PrismaClient
+    // db = new Client({log: ['info', 'query']})
+    // Go ahead and connect to the DB so that HEAD requests can warm the lambda and db connection
+    db.connect()
+  }
+  return db
 }
 
+const actionNotFound = () => ({
+  status: 404,
+  data: {},
+})
+
 export function Controller(getController: ControllerInput) {
-  const controller = getController({db})
+  const controller = getController({db: ensurePrismaClient()})
   return {
     name: controller.name,
     permit: controller.permit || [],
-    index: controller.index,
-    show: controller.show,
-    create: controller.create,
-    update: controller.update,
-    delete: controller.delete,
+    index: controller.index || actionNotFound,
+    show: controller.show || actionNotFound,
+    create: controller.create || actionNotFound,
+    update: controller.update || actionNotFound,
+    delete: controller.delete || actionNotFound,
   } as ControllerInstance
 }
 
@@ -45,7 +53,10 @@ export const harnessController = (Controller: ControllerInstance) => async (
 
   const stringId = req.query && (Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
   delete req.query.id
-  const id = isNaN(parseInt(stringId)) ? null : parseInt(stringId)
+
+  // We need to check which attribute type for ID is used (cuid, uuid, autoincrement)
+  // It could be a string, number of null
+  const id = stringId ? (isNaN(Number(stringId)) ? stringId : parseInt(stringId)) : null
 
   const params = {id, query: req.query}
   const data = req.body || {}
@@ -122,7 +133,7 @@ export const harnessController = (Controller: ControllerInstance) => async (
 //   return (page: NextPage<any>) => {
 //     const Page = page
 //
-//     // ;(Page as any).unstable_getServerProps = harnessController(controller)
+//     // ;(Page as any).getServerSideProps = harnessController(controller)
 //
 //     return Page
 //   }
