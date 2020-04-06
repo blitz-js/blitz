@@ -21,16 +21,14 @@ Run `yarn` from the monorepo root
 `yarn build`
 
 <!-- toc -->
-
-- [blitz-cli](#blitz-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+* [blitz-cli](#blitz-cli)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @blitzjs/cli
 $ blitz COMMAND
@@ -42,15 +40,13 @@ USAGE
   $ blitz COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`blitz help [COMMAND]`](#blitz-help-command)
-- [`blitz new [PATH]`](#blitz-new-path)
+* [`blitz help [COMMAND]`](#blitz-help-command)
+* [`blitz new [PATH]`](#blitz-new-path)
 
 ## `blitz help [COMMAND]`
 
@@ -83,9 +79,9 @@ ARGUMENTS
 OPTIONS
   -h, --help     show CLI help
   -t, --[no-]ts  generate a TypeScript project
+  --dry-run      show what files will be created without writing them to disk
   --yarn         use Yarn as the package manager
 ```
 
 _See code: [lib/commands/new.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/new.js)_
-
 <!-- commandsstop -->
