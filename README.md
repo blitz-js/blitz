@@ -27,6 +27,11 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 [The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
 
+
+### 👉 [View the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) for exact details on what a Blitz app looks like 👈
+
+---
+
 ## Welcome to the Blitz Community 👋
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
