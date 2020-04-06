@@ -78,6 +78,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/rishabhpoddar"><img src="https://avatars2.githubusercontent.com/u/2976287?v=4" width="100px;" alt=""/><br /><sub><b>Rishabh Poddar</b></sub></a><br /><a href="#ideas-rishabhpoddar" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/aem"><img src="https://avatars0.githubusercontent.com/u/1909883?v=4" width="100px;" alt=""/><br /><sub><b>Adam Markon</b></sub></a><br /><a href="#ideas-aem" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/lorenzorapetti"><img src="https://avatars1.githubusercontent.com/u/2632174?v=4" width="100px;" alt=""/><br /><sub><b>Lorenzo Rapetti</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lorenzorapetti" title="Code">💻</a></td>
+    <td align="center"><a href="https://merelinguist.me"><img src="https://avatars3.githubusercontent.com/u/24858006?v=4" width="100px;" alt=""/><br /><sub><b>Dylan Brookes</b></sub></a><br /><a href="#ideas-merelinguist" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Amerelinguist" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
