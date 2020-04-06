@@ -32,6 +32,16 @@
       ]
     },
     {
+      "login": "merelinguist",
+      "name": "Dylan Brookes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
+      "profile": "https://merelinguist.me",
+      "contributions": [
+        "ideas",
+        "review"
+      ]
+    },
+    {
       "login": "ryardley",
       "name": "Rudi Yardley",
       "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
@@ -191,16 +201,6 @@
       "profile": "https://github.com/lorenzorapetti",
       "contributions": [
         "code"
-      ]
-    },
-    {
-      "login": "merelinguist",
-      "name": "Dylan Brookes",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
-      "profile": "https://merelinguist.me",
-      "contributions": [
-        "ideas",
-        "review"
       ]
     }
   ],
