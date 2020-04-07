@@ -15,7 +15,7 @@ export async function build(config: ServerConfig) {
     includePaths,
   } = enhance(config)
 
-  await synchronizeFiles({
+  const synchronizer = await synchronizeFiles({
     src: rootFolder,
     dest: buildFolder,
     watch: false,
@@ -24,6 +24,8 @@ export async function build(config: ServerConfig) {
     ignoredPaths,
     includePaths,
   })
+
+  synchronizer.watcher.close()
 
   await nextBuild(nextBin, buildFolder)
 
