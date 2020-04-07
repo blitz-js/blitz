@@ -1,6 +1,10 @@
-import {Command, flags} from '@oclif/command'
-import yeoman = require('yeoman-environment')
+import * as path from 'path'
+import {flags} from '@oclif/command'
+import Command from '../command'
+import AppGenerator from '../generators/app'
 const debug = require('debug')('blitz:new')
+
+import PromptAbortedError from '../errors/prompt-aborted'
 
 export interface Flags {
   ts: boolean
@@ -26,19 +30,34 @@ export default class New extends Command {
       default: true,
       allowNo: true,
     }),
-    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true}),
+    yarn: flags.boolean({description: 'use Yarn as the package manager', default: true, allowNo: true}),
+    'dry-run': flags.boolean({description: 'show what files will be created without writing them to disk'}),
   }
 
   async run() {
     const {args, flags} = this.parse(New)
     debug('args: ', args)
     debug('flags: ', flags)
-    const env = yeoman.createEnv()
 
-    env.register(require.resolve('../generators/app'), 'generate:app')
-    env.run(['generate:app', args.path], flags as Flags, (err: Error | null) => {
-      if (err) this.error(err) // Maybe tell a bit more...
-      this.log('App created!') // This needs some sparkles ✨
+    const destinationRoot = args?.path ? path.resolve(args?.path) : process.cwd()
+    const appName = path.basename(destinationRoot)
+
+    const generator = new AppGenerator({
+      sourceRoot: path.join(__dirname, '../../templates/app'),
+      destinationRoot,
+      appName,
+      dryRun: flags['dry-run'],
+      install: true,
+      yarn: flags.yarn,
     })
+
+    try {
+      await generator.run()
+      this.log('App Created!')
+    } catch (err) {
+      if (err instanceof PromptAbortedError) this.exit(0)
+
+      this.error(err)
+    }
   }
 }
