@@ -9,6 +9,7 @@ import gulpIf from 'gulp-if'
 import File from 'vinyl'
 import fg from 'fast-glob'
 import {remove, pathExists, ensureDir} from 'fs-extra'
+import {ciLog} from '../ciLog'
 
 type SynchronizeFilesInput = {
   src: string
@@ -86,6 +87,8 @@ export async function synchronizeFiles({
     // TODO: add timeout/error?
     countStream(createStream(), count => {
       if (count >= entries.length) {
+        ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
+
         resolve({
           stream,
           watcher,

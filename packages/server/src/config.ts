@@ -1,4 +1,6 @@
 import {resolve} from 'path'
+import {ciLog} from './ciLog'
+
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean
@@ -11,15 +13,15 @@ export type ServerConfig = {
 const defaults = {
   ignoredPaths: [
     './build',
-    '/.blitz*',
+    './.blitz*',
     '.DS_Store',
     '.git',
     '.next',
     '*.log',
     '.now',
     '*.pnp.js',
-    '/coverage',
-    '/dist',
+    './coverage',
+    './dist',
     'node_modules',
   ],
   includePaths: ['**/*'],
@@ -43,14 +45,21 @@ export function enhance(config: ServerConfig) {
     config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,
   )
 
-  return {
-    ...config,
-    ignoredPaths: defaults.ignoredPaths,
-    includePaths: defaults.includePaths,
-    manifestPath,
-    nextBin,
-    buildFolder,
-    devFolder,
-    writeManifestFile,
-  }
+  return ciLog(
+    `
+Logging the following to understand what is happening in our CI environment 
+and investigate why we have been getting random CI test failures. 
+This will be temporary.
+`,
+    {
+      ...config,
+      ignoredPaths: defaults.ignoredPaths,
+      includePaths: defaults.includePaths,
+      manifestPath,
+      nextBin,
+      buildFolder,
+      devFolder,
+      writeManifestFile,
+    },
+  )
 }

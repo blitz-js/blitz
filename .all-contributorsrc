@@ -32,6 +32,16 @@
       ]
     },
     {
+      "login": "merelinguist",
+      "name": "Dylan Brookes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
+      "profile": "https://merelinguist.me",
+      "contributions": [
+        "ideas",
+        "review"
+      ]
+    },
+    {
       "login": "ryardley",
       "name": "Rudi Yardley",
       "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
@@ -170,7 +180,7 @@
       "login": "rishabhpoddar",
       "name": "Rishabh Poddar",
       "avatar_url": "https://avatars2.githubusercontent.com/u/2976287?v=4",
-      "profile": "https://www.linkedin.com/in/rishabh-poddar-b64b7312",
+      "profile": "https://github.com/rishabhpoddar",
       "contributions": [
         "ideas"
       ]
