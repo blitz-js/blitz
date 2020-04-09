@@ -5,9 +5,11 @@
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 <!-- prettier-ignore-end -->
 
-Framework for building monolithic, full-stack React apps without building an API.
+Blitz is a Rails-like framework for monolithic, full-stack React apps without an API.
 
-The central thesis for Blitz is most apps don't need a REST or GraphQL API. Blitz brings back the simplicity of server rendered frameworks like Ruby on Rails while preserving everything we love about React.
+The central thesis is that most apps don’t need a REST or GraphQL API. Blitz brings back the simplicity of server rendered frameworks like Ruby on Rails while preserving everything we love about React.
+
+Additionally, Blitz is bringing other Rails goodness that’s missing in the React ecosystem like file structure and routing conventions, a really nice console REPL, intelligent code-scaffolding, and a fine-tuned out-of-the-box setup with Prettier, Typescript, ESlint, Jest, Cypress, etc.
 
 ### What is Blitz Designed For?
 
