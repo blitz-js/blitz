@@ -35,7 +35,7 @@ describe('Db command', () => {
     await DbCmd.run(['migrate'])
 
     expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn.mock.calls.length).toBe(3)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
@@ -47,7 +47,7 @@ describe('Db command', () => {
     await DbCmd.run(['m'])
 
     expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn.mock.calls.length).toBe(3)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
