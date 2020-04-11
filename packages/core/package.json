@@ -50,11 +50,11 @@
     "next": "^9.3.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.1.1",
-    "@testing-library/react": "9.4.1",
+    "@testing-library/jest-dom": "5.5.0",
+    "@testing-library/react": "10.0.2",
     "@types/jest": "^25.1.3",
     "@types/node": "^13.7.4",
-    "@types/react": "16.9.23",
+    "@types/react": "16.9.34",
     "cross-env": "^7.0.0",
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
@@ -62,6 +62,6 @@
     "ts-jest": "^25.2.1"
   },
   "dependencies": {
-    "pretty-ms": "6.0.0"
+    "pretty-ms": "6.0.1"
   }
 }
