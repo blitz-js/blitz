@@ -1,4 +1,4 @@
-import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
+import {BlitzApiRequest, BlitzApiResponse} from '.'
 import {serializeError, deserializeError} from 'serialize-error'
 
 export async function rpc(url: string, params: any) {
