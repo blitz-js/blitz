@@ -46,9 +46,6 @@
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
   },
-  "peerDependencies": {
-    "next": "^9.3.0"
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "5.1.1",
     "@testing-library/react": "9.4.1",

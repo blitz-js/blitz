@@ -44,6 +44,7 @@
   "dependencies": {
     "fast-glob": "^3.2.2",
     "gulp-if": "^3.0.0",
+    "next": "9.3.4",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.0.2",
     "node-pty": "^0.9.0",
