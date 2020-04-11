@@ -11,7 +11,7 @@ type PathTransformerOpts = {
 export function createPathTransformer(opts: PathTransformerOpts) {
   return (path: string) => {
     const regex = new RegExp(`(?:\\/?${opts.appFolder}\\/.*?\\/)(${opts.folderName}\\/.+)$`)
-    return (regex.exec(path) || [])[1] || path
+    return ((regex.exec(path) || [])[1] || path).replace(opts.folderName, 'pages')
   }
 }
 

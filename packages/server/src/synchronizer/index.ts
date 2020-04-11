@@ -73,7 +73,7 @@ export async function synchronizeFiles({
       transformPage({
         sourceFolder: srcPath,
         appFolder: 'app',
-        folderName: 'pages',
+        folderName: 'routes',
       }),
       gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),
       setManifestEntry(manifest),

@@ -26,13 +26,13 @@ describe('page transformer path', () => {
       folderName: 'routes',
       name: 'extracts paths folder to the root in a basic transformation',
       input: 'app/users/routes/one/two/three.tsx',
-      expected: 'routes/one/two/three.tsx',
+      expected: 'pages/one/two/three.tsx',
     },
     {
       folderName: 'routes',
       name: 'extracts paths folder to the root in a basic transformation',
       input: '/User/foo/bar/app/users/routes/one/two/three.tsx',
-      expected: 'routes/one/two/three.tsx',
+      expected: 'pages/one/two/three.tsx',
     },
   ]
 
