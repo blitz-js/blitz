@@ -1,22 +1,8 @@
-import {deserializeError} from 'serialize-error'
+import {rpc} from '@blitzjs/core'
 import createProduct from './createProduct'
 
-export default (async function(params) {
-  const result = await fetch('/api/products/mutations/createProduct', {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    body: JSON.stringify({params}),
-  })
+const url = '/api/products/mutations/createProduct'
+const rpcFn = (params: any) => rpc(url, params)
+rpcFn.cacheKey = url
 
-  const json = await result.json()
-
-  if (json.result) {
-    return json.result
-  } else {
-    throw deserializeError(json.error)
-  }
-} as typeof createProduct)
+export default rpcFn as typeof createProduct

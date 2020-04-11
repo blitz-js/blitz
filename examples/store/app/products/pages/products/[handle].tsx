@@ -26,7 +26,8 @@ const Page: BlitzPage<StaticProps> = function({product}) {
   return (
     <div>
       <h1>{product.name}</h1>
-      <div>description goes here</div>
+      <p>{product.description}</p>
+      <p>Price: ${product.price}</p>
 
       <Link href="/products">
         <a>All Products</a>

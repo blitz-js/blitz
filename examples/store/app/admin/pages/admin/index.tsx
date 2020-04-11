@@ -6,8 +6,8 @@ export default function() {
       <h1>Store Admin</h1>
       <div>
         <p>
-          <Link href="/admin/products/new">
-            <a>Create Product</a>
+          <Link href="/admin/products">
+            <a>Manage Products</a>
           </Link>
         </p>
       </div>

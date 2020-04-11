@@ -1,5 +1,3 @@
-// todo
-
 export {
   GetStaticProps,
   GetStaticPaths,
@@ -11,3 +9,6 @@ export {
 
 export {default as Link} from 'next/link'
 export {default as Router, useRouter, withRouter} from 'next/router'
+
+export * from './useQuery'
+export * from './rpc'

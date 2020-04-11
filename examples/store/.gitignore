@@ -12,6 +12,7 @@
 /.next/
 /out/
 /.blitz/
+*.sqlite
 
 # production
 /build

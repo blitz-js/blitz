@@ -59,6 +59,10 @@
     "ts-jest": "^25.2.1"
   },
   "dependencies": {
-    "pretty-ms": "6.0.0"
+    "@types/react-query": "1.1.2",
+    "@types/serialize-error": "4.0.1",
+    "pretty-ms": "6.0.0",
+    "react-query": "1.2.1",
+    "serialize-error": "6.0.0"
   }
 }

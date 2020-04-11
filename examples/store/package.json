@@ -2,10 +2,7 @@
   "name": "store",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "blitz start",
-    "build": "blitz build"
-  },
+  "scripts": {},
   "dependencies": {
     "@blitzjs/cli": "*",
     "@blitzjs/core": "*",
@@ -16,7 +13,6 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-final-form": "6.4.0",
-    "serialize-error": "6.0.0",
     "typescript": "3.8.3"
   }
 }
