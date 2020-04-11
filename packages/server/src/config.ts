@@ -13,7 +13,8 @@ export type ServerConfig = {
 const defaults = {
   ignoredPaths: [
     './build',
-    './.blitz*',
+    '.blitz-*/**/*',
+    '.blitz/**/*',
     '.DS_Store',
     '.git',
     '.next',

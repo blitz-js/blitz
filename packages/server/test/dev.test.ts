@@ -31,10 +31,10 @@ describe('Dev command', () => {
   })
 
   afterEach(async () => {
+    watcher.close()
     if (await pathExists(devFolder)) {
       await remove(devFolder)
     }
-    watcher.close()
   })
 
   it('should copy the correct files to the dev folder', async () => {
