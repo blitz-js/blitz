@@ -2,7 +2,7 @@ import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
 import {serializeError, deserializeError} from 'serialize-error'
 
 export async function rpc(url: string, params: any) {
-  const result = await fetch(url, {
+  const result = await window.fetch(url, {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
@@ -18,6 +18,12 @@ export async function rpc(url: string, params: any) {
     return json.result
   } else {
     throw deserializeError(json.error)
+  }
+}
+
+rpc.warm = (url: string) => {
+  if (typeof window !== 'undefined') {
+    window.fetch(url, {method: 'HEAD'})
   }
 }
 
