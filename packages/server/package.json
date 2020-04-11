@@ -37,7 +37,7 @@
     "@types/vinyl-fs": "^2.4.11",
     "directory-tree": "^2.2.4",
     "husky": "^4.2.3",
-    "tsdx": "^0.12.3",
+    "tsdx": "^0.13.1",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
@@ -46,7 +46,7 @@
     "gulp-if": "^3.0.0",
     "next": "9.3.4",
     "next-compose-plugins": "2.2.0",
-    "next-transpile-modules": "3.0.2",
+    "next-transpile-modules": "3.2.0",
     "node-pty": "^0.9.0",
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
