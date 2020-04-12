@@ -12,7 +12,7 @@ const ensureArray = (a: any) => (Array.isArray(a) ? a : [a])
 export function createPathTransformer(opts: PathTransformerOpts) {
   const folderNameRegex = `(?:${ensureArray(opts.folderName).join('|')})`
   return (path: string) => {
-    const regex = new RegExp(`(?:\\/?${opts.appFolder}\\/.*?\\/)(${folderNameRegex}\\/.+)$`)
+    const regex = new RegExp(`(?:\\/?${opts.appFolder}\\/.*?\\/?)(${folderNameRegex}\\/.+)$`)
     const subPath = (regex.exec(path) || [])[1] || path
     const pagesPath = subPath.replace(new RegExp(folderNameRegex), 'pages')
     return pagesPath

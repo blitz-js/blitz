@@ -52,6 +52,18 @@ describe('page transformer path', () => {
       input: 'app/users/routes/one/routes/two/three.tsx',
       expected: 'pages/one/routes/two/three.tsx',
     },
+    {
+      folderName: ['routes', 'pages'],
+      name: 'Routes folder without context',
+      input: 'app/routes/one/two/three.tsx',
+      expected: 'pages/one/two/three.tsx',
+    },
+    {
+      folderName: ['routes', 'pages'],
+      name: 'Routes folder without context and nested routes folder',
+      input: 'app/routes/one/routes/two/three.tsx',
+      expected: 'pages/one/routes/two/three.tsx',
+    },
   ]
 
   tests.forEach(({name, input, expected, folderName = 'pages'}) => {
