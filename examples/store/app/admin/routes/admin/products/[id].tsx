@@ -1,5 +1,5 @@
 import {Link, useRouter, useQuery} from '@blitzjs/core'
-import getProduct from 'app/products/queries/getProduct_rpc'
+import getProduct from 'app/products/queries/getProduct'
 import ProductForm from 'app/products/components/ProductForm'
 
 export default function() {

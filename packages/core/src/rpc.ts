@@ -2,6 +2,7 @@ import {BlitzApiRequest, BlitzApiResponse} from '.'
 import {serializeError, deserializeError} from 'serialize-error'
 
 export async function rpc(url: string, params: any) {
+  if (typeof window === 'undefined') return
   const result = await window.fetch(url, {
     method: 'POST',
     credentials: 'same-origin',
@@ -27,13 +28,27 @@ rpc.warm = (url: string) => {
   }
 }
 
+export function isomorphicRpc(resolver: any, cacheKey: string) {
+  if (typeof window !== 'undefined') {
+    const url = cacheKey.replace(/^app\/_rpc/, '/api')
+    const rpcFn: any = (params: any) => rpc(url, params)
+    rpcFn.cacheKey = url
+
+    // Warm the lambda
+    rpc.warm(url)
+    return rpcFn
+  } else {
+    return resolver
+  }
+}
+
 export function rpcHandler(
   type: string,
   name: string,
   resolver: (...args: any) => Promise<any>,
   connectDb?: () => any,
 ) {
-  return async function(req: BlitzApiRequest, res: BlitzApiResponse) {
+  return async function (req: BlitzApiRequest, res: BlitzApiResponse) {
     const logPrefix = `[${type}:${name}]`
     console.log(`${logPrefix} ${req.method} ${JSON.stringify(req.body)} `)
 

@@ -1,6 +1,7 @@
 import {unlink} from './unlink'
 import {dest} from 'vinyl-fs'
 import {createPagesFolderRule} from './rules/pages-folder'
+import {createRpcRule} from './rules/rpc'
 import {Manifest, createManifestFile, setManifestEntry} from './manifest'
 import {watch} from './watch'
 import {FSWatcher} from 'chokidar'
@@ -70,10 +71,11 @@ export async function synchronizeFiles({
   // Configure rules
 
   const pagesFolder = createPagesFolderRule({
-    sourceFolder: srcPath,
+    srcPath,
     appFolder: 'app',
     folderName: ['routes', 'pages'],
   })
+  const rpc = createRpcRule({srcPath})
 
   await clean(destPath)
 
@@ -83,6 +85,7 @@ export async function synchronizeFiles({
 
       // Rules
       pagesFolder,
+      rpc,
 
       // File sync
       gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),

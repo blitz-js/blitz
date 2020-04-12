@@ -48,6 +48,7 @@
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.2.0",
     "node-pty": "^0.9.0",
+    "null-loader": "^3.0.0",
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
     "readable-stream": "^3.6.0",

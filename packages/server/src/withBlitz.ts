@@ -15,9 +15,16 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
         jsconfigPaths: true,
       },
       webpack(config: any, options: Record<any, any>) {
+        if (!options.isServer) {
+          config.module = config.module || {}
+          config.module.rules = config.module.rules || []
+          config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
+        }
+
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
         }
+
         return config
       },
     }),

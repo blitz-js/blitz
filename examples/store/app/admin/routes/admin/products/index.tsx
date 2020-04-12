@@ -1,5 +1,5 @@
 import {useQuery, Link} from '@blitzjs/core'
-import getProducts from 'app/products/queries/getProducts_rpc'
+import getProducts from 'app/products/queries/getProducts'
 
 export default function() {
   const [products, {status, error}] = useQuery(getProducts)
