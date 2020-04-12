@@ -1,6 +1,6 @@
 import {unlink} from './unlink'
 import {dest} from 'vinyl-fs'
-import {transformPage} from './transform-page'
+import {createPagesFolderRule} from './rules/pages-folder'
 import {Manifest, createManifestFile, setManifestEntry} from './manifest'
 import {watch} from './watch'
 import {FSWatcher} from 'chokidar'
@@ -67,25 +67,35 @@ export async function synchronizeFiles({
   const manifest = Manifest.create()
   const {stream, watcher} = watch(includePaths, options)
 
+  // Configure rules
+
+  const pagesFolder = createPagesFolderRule({
+    sourceFolder: srcPath,
+    appFolder: 'app',
+    folderName: ['routes', 'pages'],
+  })
+
+  await clean(destPath)
+
   const createStream = () =>
     pipeline(
       stream,
-      transformPage({
-        sourceFolder: srcPath,
-        appFolder: 'app',
-        folderName: ['routes', 'pages'],
-      }),
+
+      // Rules
+      pagesFolder,
+
+      // File sync
       gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),
+
+      // Maintain build manifest
       setManifestEntry(manifest),
       createManifestFile(manifest, manifestPath),
       gulpIf(writeManifestFile, dest(srcPath)),
     )
 
-  await clean(destPath)
-
-  return await new Promise(resolve => {
+  return await new Promise((resolve) => {
     // TODO: add timeout/error?
-    countStream(createStream(), count => {
+    countStream(createStream(), (count) => {
       if (count >= entries.length) {
         ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
 

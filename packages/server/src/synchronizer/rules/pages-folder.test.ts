@@ -1,6 +1,6 @@
-import {createPathTransformer} from './transform-page'
+import {createPathTransformer} from './pages-folder'
 
-describe('page transformer path', () => {
+describe('createPathTransformer', () => {
   const tests = [
     {
       name: 'extracts paths folder to the root in a basic transformation',
@@ -68,11 +68,12 @@ describe('page transformer path', () => {
 
   tests.forEach(({name, input, expected, folderName = 'pages'}) => {
     it(name, () => {
-      const transformer = createPathTransformer({
-        appFolder: 'app',
-        folderName,
-      })
-      expect(transformer(input)).toEqual(expected)
+      expect(
+        createPathTransformer({
+          appFolder: 'app',
+          folderName,
+        })(input),
+      ).toEqual(expected)
     })
   })
 })

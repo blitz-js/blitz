@@ -1,4 +1,4 @@
-import {transform} from './transform'
+import {transform} from '../transform'
 import File from 'vinyl'
 import {relative, resolve} from 'path'
 
@@ -19,10 +19,14 @@ export function createPathTransformer(opts: PathTransformerOpts) {
   }
 }
 
-export function transformPage(opts: PathTransformerOpts) {
+export function createPagesFolderRule(opts: PathTransformerOpts) {
   const pathTransform = createPathTransformer(opts)
   return transform((file: File) => {
-    file.path = resolve(opts.sourceFolder || '', pathTransform(relative(opts.sourceFolder || '', file.path)))
+    const {sourceFolder = ''} = opts
+    const startingPath = relative(sourceFolder, file.path)
+    const transformedPath = pathTransform(startingPath)
+    const absolutePath = resolve(sourceFolder, transformedPath)
+    file.path = absolutePath
     return file
   })
 }
