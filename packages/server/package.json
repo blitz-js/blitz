@@ -51,6 +51,7 @@
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
     "readable-stream": "^3.6.0",
+    "resolve-bin": "^0.4.0",
     "through2": "^3.0.1",
     "vinyl": "^2.2.0",
     "vinyl-file": "^3.0.0",
