@@ -38,18 +38,6 @@ function extractTemplateVars(importPath: string) {
   }
 }
 
-// function resolveRpcImports(file: File) {
-//   const contents = file.contents?.toString() || ''
-
-//   const rpcImport = new RegExp(`from \\s*["'](` + isRpcPathRegexString + `)["']`, 'g')
-
-//   const newContents = contents.replace(rpcImport, (...args) => {
-//     return `from "${clientPath(args[1])}"`
-//   })
-
-//   return new File({path: file.path, contents: Buffer.from(newContents)})
-// }
-
 function clientPath(path: string) {
   return path.replace(/^app/, 'app/_rpc')
 }
@@ -62,7 +50,6 @@ export function createRpcRule({srcPath}: {srcPath: string}) {
   const getRpcHandlerPath = absolutePathTransform(srcPath, handlerPath)
 
   return transform((file: File) => {
-    // const parsedFile = resolveRpcImports(file)
     if (!isRpcPath(file.path)) return [file]
 
     const importPath = clientPath(resolutionPath(srcPath, file.path))
