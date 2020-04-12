@@ -1,33 +1,33 @@
 import File from 'vinyl'
-import {Readable, Transform} from 'readable-stream'
+import {Readable, Writable} from 'readable-stream'
 import {transform} from './transform'
 
 function getStream() {
-  const stream = new Readable({objectMode: true})
+  const stream = new Readable({
+    objectMode: true,
+  })
   stream._read = () => {}
+
   return stream
 }
 
 function getCollector(output: any[]) {
-  const stream = new Transform({objectMode: true})
-
-  return stream.on('data', (data: File) => {
-    output.push(data)
+  const stream = new Writable({
+    objectMode: true,
   })
+
+  stream._write = (data, _, cb) => {
+    output.push(data)
+    cb()
+  }
+
+  return stream
 }
 
 it('transforms the file', () => {
   const stream = getStream()
   const output: File[] = []
   const collector = getCollector(output)
-
-  stream
-    .pipe(
-      transform((file) => {
-        return [file, new File({path: file.path + '_rpc', contents: file.contents})]
-      }),
-    )
-    .pipe(collector)
 
   stream.push(
     new File({
@@ -47,6 +47,17 @@ it('transforms the file', () => {
       contents: Buffer.from('File 3'),
     }),
   )
+  stream
+    .pipe(
+      transform((file) => {
+        return [file, new File({path: file.path + '_rpc', contents: file.contents})]
+      }),
+    )
+    .pipe(collector)
+
+  stream.read()
+  stream.read()
+  stream.read()
 
   expect(
     output.map(({path, contents}) => ({
