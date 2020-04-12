@@ -34,6 +34,24 @@ describe('page transformer path', () => {
       input: '/User/foo/bar/app/users/routes/one/two/three.tsx',
       expected: 'pages/one/two/three.tsx',
     },
+    {
+      folderName: ['routes', 'pages'],
+      name: 'Array folderNames',
+      input: 'app/users/routes/one/two/three.tsx',
+      expected: 'pages/one/two/three.tsx',
+    },
+    {
+      folderName: ['routes', 'pages'],
+      name: 'Array folder names with nested pages folder',
+      input: 'app/users/routes/one/pages/two/three.tsx',
+      expected: 'pages/one/pages/two/three.tsx',
+    },
+    {
+      folderName: ['routes', 'pages'],
+      name: 'Array folder names with nested routes folder',
+      input: 'app/users/routes/one/routes/two/three.tsx',
+      expected: 'pages/one/routes/two/three.tsx',
+    },
   ]
 
   tests.forEach(({name, input, expected, folderName = 'pages'}) => {
