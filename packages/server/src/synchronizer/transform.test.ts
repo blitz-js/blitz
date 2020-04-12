@@ -47,9 +47,6 @@ it('transforms the file', () => {
       contents: Buffer.from('File 3'),
     }),
   )
-  // stream.read()
-  // stream.read()
-  // stream.read()
 
   expect(
     output.map(({path, contents}) => ({
