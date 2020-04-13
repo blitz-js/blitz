@@ -15,7 +15,7 @@ export const checkNestedApi = (entries: string[]) => {
       console.log(`- ${route}`)
     })
 
-    console.log(chalk.yellow('\n All api routes should be in their own directory.'))
+    console.log(chalk.yellow('\nAll api routes should be in their own directory.'))
 
     process.exit(0)
   }
