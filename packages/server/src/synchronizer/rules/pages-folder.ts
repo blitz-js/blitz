@@ -8,7 +8,7 @@ type Args = {
   folderName?: string | string[]
 }
 
-export default function pagesFolder(opts: Args): Rule {
+export function pagesFolder(opts: Args): Rule {
   const filePathTransformer = absolutePathTransform(opts.srcPath)
   const pagesPathTransformer = filePathTransformer(createPagesPathTransformer(opts))
   return (file: File, _encoding?: string) => {

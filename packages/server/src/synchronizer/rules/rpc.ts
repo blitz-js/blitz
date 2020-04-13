@@ -5,7 +5,7 @@ import {Rule} from '../types'
 
 type Args = {srcPath: string}
 
-export default function rpc({srcPath}: Args): Rule {
+export function rpc({srcPath}: Args): Rule {
   const fileTransformer = absolutePathTransform(srcPath)
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
