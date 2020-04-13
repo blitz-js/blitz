@@ -88,7 +88,7 @@ export async function synchronizeFiles({
       setManifestEntry(manifest),
       createManifestFile(manifest, manifestPath),
       gulpIf(writeManifestFile, dest(srcPath)),
-      countStream((count) => {
+      countStream(count => {
         if (count >= entries.length) {
           ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
 
@@ -99,7 +99,7 @@ export async function synchronizeFiles({
           })
         }
       }),
-      (err) => {
+      err => {
         reject(err)
       },
     )

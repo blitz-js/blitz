@@ -59,7 +59,7 @@ export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => 
 `
 
 function removeExt(filePath: string) {
-  return filePath.replace(/\.[^\.\/]+$/, '')
+  return filePath.replace(/[.][^./\s]+$/, '')
 }
 
 function resolutionPath(srcPath: string, filePath: string) {

@@ -24,10 +24,10 @@ function getCollector(write: (data: any) => void) {
   return stream
 }
 
-it('transforms the file', (done) => {
+it('transforms the file', done => {
   const stream = getReadable()
   const output: File[] = []
-  const collector = getCollector((data) => output.push(data))
+  const collector = getCollector(data => output.push(data))
 
   stream.push(
     new File({
@@ -52,7 +52,7 @@ it('transforms the file', (done) => {
 
   stream
     .pipe(
-      runRule((file) => {
+      runRule(file => {
         return [file, new File({path: file.path + '_rpc', contents: file.contents})]
       }),
     )
