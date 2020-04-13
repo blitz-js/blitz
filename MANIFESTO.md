@@ -12,7 +12,7 @@ Hence the creation of Blitz.
 
 ## What is Blitz For?
 
-Blitz is for building tiny to large fullstack database-backed applications that have one or more graphical user interfaces like web or mobile apps. 
+Blitz is for building tiny to large fullstack database-backed applications that have one or more graphical user interfaces like web or mobile apps.
 
 ## Foundational Principles
 
@@ -30,7 +30,7 @@ A fullstack, monolithic application is simpler than an application where fronten
 
 ### 2. API Not Required
 
-Until now, choosing React for your view layer required you to have a REST or GraphQL API even if it wasn't used by third-parties. This additional complexity is a significant drawback not shared by traditional server rendered apps like Ruby on Rails. 
+Until now, choosing React for your view layer required you to have a REST or GraphQL API even if it wasn't used by third-parties. This additional complexity is a significant drawback not shared by traditional server rendered apps like Ruby on Rails.
 
 Contrary to popular opinion, most apps don't need an API! If you are building a unicorn startup, then yes you'll need an API at some point. But unicorn startups are 1% of all applications. Most applications are much smaller, faithfully serving a constrained set of use cases for small to medium businesses that don't need Internet Scale.
 

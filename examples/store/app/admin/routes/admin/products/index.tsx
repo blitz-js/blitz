@@ -1,7 +1,7 @@
 import {useQuery, Link} from '@blitzjs/core'
 import getProducts from 'app/products/queries/getProducts'
 
-export default function() {
+export default function () {
   const [products, {status, error}] = useQuery(getProducts)
 
   if (status === 'loading') {
@@ -24,7 +24,7 @@ export default function() {
       </p>
 
       <ul>
-        {products.map(product => (
+        {products.map((product) => (
           <li key={product.id}>
             <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
               <a>{product.name}</a>

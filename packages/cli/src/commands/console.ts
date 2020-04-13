@@ -41,7 +41,7 @@ Type ".help" for more information.`
 
     repl
       .on('reset', () => Console.loadModules(repl))
-      .on('exit', () => watchers.forEach(watcher => watcher.close()))
+      .on('exit', () => watchers.forEach((watcher) => watcher.close()))
   }
 
   private static initializeRepl() {

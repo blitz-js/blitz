@@ -1,6 +1,6 @@
 import {Link} from '@blitzjs/core'
 
-export default function() {
+export default function () {
   return (
     <div>
       <h1>Store Admin</h1>

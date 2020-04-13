@@ -2,7 +2,7 @@ import {Link, useRouter, useQuery} from '@blitzjs/core'
 import getProduct from 'app/products/queries/getProduct'
 import ProductForm from 'app/products/components/ProductForm'
 
-export default function() {
+export default function () {
   const router = useRouter()
   const [product, {status, error}] = useQuery(getProduct, {where: {id: parseInt(router.query.id as string)}})
 

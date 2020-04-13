@@ -9,11 +9,13 @@ const modulePath = (module: string) => {
   }
 }
 
-const isFunction = (functionToCheck: any): functionToCheck is Function => typeof functionToCheck === 'function'
+const isFunction = (functionToCheck: any): functionToCheck is Function =>
+  typeof functionToCheck === 'function'
 
-const toCamelCase = (name: string) => name
-  .replace(/[_-]([a-z])/g, (_match: string, group: string) => group.toUpperCase())
-  .replace(/@[a-z]+\//, '')
+const toCamelCase = (name: string) =>
+  name
+    .replace(/[_-]([a-z])/g, (_match: string, group: string) => group.toUpperCase())
+    .replace(/@[a-z]+\//, '')
 
 const functionModuleName = (moduleName: string, fun: Function) => {
   if (fun.name && fun.name !== 'anonymous') return fun.name

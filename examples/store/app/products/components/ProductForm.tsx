@@ -15,7 +15,7 @@ type ProductFormProps = {
   onSuccess: (product: Product) => any
 }
 
-export default function({product, style, onSuccess, ...props}: ProductFormProps) {
+export default function ({product, style, onSuccess, ...props}: ProductFormProps) {
   return (
     <Form
       initialValues={product || {name: null, handle: null, description: null, price: null}}
@@ -62,7 +62,7 @@ export default function({product, style, onSuccess, ...props}: ProductFormProps)
           <div style={{marginBottom: 16}}>
             <label style={{display: 'flex', flexDirection: 'column'}}>
               Price
-              <Field name="price" component="input" parse={value => (value ? parseInt(value) : null)} />
+              <Field name="price" component="input" parse={(value) => (value ? parseInt(value) : null)} />
             </label>
           </div>
 

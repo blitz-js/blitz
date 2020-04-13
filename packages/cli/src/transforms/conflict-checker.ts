@@ -42,7 +42,7 @@ export default class ConflictChecker extends Transform {
     }
 
     this.checkDiff(file)
-      .then(status => {
+      .then((status) => {
         if (status !== 'skip') {
           this.handlePush(file, status)
         } else {
@@ -51,7 +51,7 @@ export default class ConflictChecker extends Transform {
 
         cb()
       })
-      .catch(err => {
+      .catch((err) => {
         // If the error is an empty string, it means that the user has
         // stopped the prompt with ctrl-c so we return PromptAbortedError
         // to end the program without writing anything to disk
@@ -81,7 +81,7 @@ export default class ConflictChecker extends Transform {
 
     const diff = diffLines(oldFileContents, newFileContents)
 
-    const conflict = diff.some(line => line.added || line.removed)
+    const conflict = diff.some((line) => line.added || line.removed)
 
     if (conflict) {
       let answer = null
@@ -108,7 +108,7 @@ export default class ConflictChecker extends Transform {
 
   private printDiff(diff: Change[]) {
     console.log('\n')
-    diff.forEach(line => {
+    diff.forEach((line) => {
       const value = line.value.replace('\n', '')
       if (line.added) {
         console.log(chalk.green(`+ ${value}`))

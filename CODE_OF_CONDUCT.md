@@ -2,9 +2,10 @@
 
 The Blitz core members take this CoC very serious. All members, contributors and volunteers in this community are required to act according to the following Code of Conduct to keep Blitz a positive, growing project and community and help us provide and ensure a safe environment for everyone.
 
-The Blitz community 
+The Blitz community
 
 ## When Something Happens
+
 If you see a Code of Conduct violation, follow these steps:
 
 1. Let the person know that what they did is not appropriate and ask them to stop and/or edit their message(s).

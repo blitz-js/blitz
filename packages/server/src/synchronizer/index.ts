@@ -73,7 +73,7 @@ export async function synchronizeFiles({
       setManifestEntry(manifest),
       createManifestFile(manifest, manifestPath),
       gulpIf(writeManifestFile, dest(srcPath)),
-      countStream(count => {
+      countStream((count) => {
         // TODO: How we know when a static build is finished and to return the promise needs attention
         if (count >= entries.length) {
           ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
@@ -91,7 +91,7 @@ export async function synchronizeFiles({
           })
         }
       }),
-      err => {
+      (err) => {
         reject(err)
       },
     )
