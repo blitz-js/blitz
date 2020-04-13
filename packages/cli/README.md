@@ -69,8 +69,6 @@ ALIASES
   $ blitz b
 ```
 
-_See code: [lib/commands/build.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/build.js)_
-
 ## `blitz console`
 
 Run project REPL
@@ -96,8 +94,6 @@ USAGE
 ARGUMENTS
   COMMAND  Run specific db command
 ```
-
-_See code: [lib/commands/db.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/db.js)_
 
 ## `blitz help [COMMAND]`
 
@@ -134,8 +130,6 @@ OPTIONS
   --[no-]yarn    use Yarn as the package manager
 ```
 
-_See code: [lib/commands/new.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/new.js)_
-
 ## `blitz start`
 
 Start a development server
@@ -150,8 +144,6 @@ OPTIONS
 ALIASES
   $ blitz s
 ```
-
-_See code: [lib/commands/start.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/start.js)_
 
 ## `blitz test [WATCH]`
 
