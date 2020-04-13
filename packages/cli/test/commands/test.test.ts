@@ -5,8 +5,8 @@ import TestCmd from '../../src/commands/test'
 jest.mock('child_process')
 jest.mock('has-yarn')
 
-const testParams = [ ['test'], {stdio: 'inherit'}]
-const testWatchParams = [ ['test:watch'], {stdio: 'inherit'}]
+const testParams = [['test'], {stdio: 'inherit'}]
+const testWatchParams = [['test:watch'], {stdio: 'inherit'}]
 
 describe('Test command', () => {
   beforeEach(() => {
@@ -52,5 +52,4 @@ describe('Test command', () => {
 
     expect(childProcess.spawn).toBeCalledWith('yarn', ...testParams)
   })
-
 })

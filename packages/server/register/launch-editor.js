@@ -5,13 +5,13 @@ const ManifestLoader = require('@blitzjs/server').ManifestLoader
 const resolve = require('path').resolve
 
 module.exports = {
-  enhance: function(launchEditor) {
-    return function(file, specifiedEditor, onErrorCallback) {
+  enhance: function (launchEditor) {
+    return function (file, specifiedEditor, onErrorCallback) {
       // This location needs to be driven from the config instead of cwd()
       const manifestLocation = resolve(process.cwd(), '_manifest.json')
 
       ManifestLoader.load(manifestLocation)
-        .then(manifest => {
+        .then((manifest) => {
           // extract filename
           const [filename, row, col] = file.split(':')
 
@@ -26,7 +26,7 @@ module.exports = {
 
           return launchEditor(editorAddress, specifiedEditor, onErrorCallback)
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err)
         })
     }

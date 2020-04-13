@@ -12,7 +12,7 @@ export async function dev(config: ServerConfig) {
     manifestPath,
     writeManifestFile,
     includePaths,
-  } = enhance({
+  } = await enhance({
     ...config,
     interceptNextErrors: true,
   })

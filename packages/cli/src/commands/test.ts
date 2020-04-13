@@ -10,21 +10,19 @@ export default class Test extends Command {
     {
       name: 'watch',
       description: 'Run test:watch',
-    }
+    },
   ]
 
   async run() {
     const {args} = this.parse(Test)
-    let watchMode: boolean = false;
-    const watch = args['watch'];
+    let watchMode: boolean = false
+    const watch = args['watch']
     if (watch) {
-      watchMode = (watch === 'watch' || watch === 'w')
+      watchMode = watch === 'watch' || watch === 'w'
     }
     const packageManager = hasYarn() ? 'yarn' : 'npm'
 
-    if (watchMode)
-    spawn(packageManager, ['test:watch'], {stdio: 'inherit'})
-    else 
-      spawn(packageManager, ['test'], {stdio: 'inherit'})
+    if (watchMode) spawn(packageManager, ['test:watch'], {stdio: 'inherit'})
+    else spawn(packageManager, ['test'], {stdio: 'inherit'})
   }
 }

@@ -10,9 +10,9 @@ jest.doMock('child_process', () => ({spawn}))
 
 import DbCmd from '../../src/commands/db'
 
-const initParams = ['prisma2', ['init'], {stdio: 'inherit'}]
-const migrateSaveParams = ['prisma2', ['migrate', 'save', '--experimental'], {stdio: 'inherit'}]
-const migrateUpParams = ['prisma2', ['migrate', 'up', '--experimental'], {stdio: 'inherit'}]
+const initParams = ['prisma', ['init'], {stdio: 'inherit'}]
+const migrateSaveParams = ['prisma', ['migrate', 'save', '--experimental'], {stdio: 'inherit'}]
+const migrateUpParams = ['prisma', ['migrate', 'up', '--experimental'], {stdio: 'inherit'}]
 
 describe('Db command', () => {
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Db command', () => {
     await DbCmd.run(['migrate'])
 
     expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn.mock.calls.length).toBe(3)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
@@ -47,7 +47,7 @@ describe('Db command', () => {
     await DbCmd.run(['m'])
 
     expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn.mock.calls.length).toBe(3)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);

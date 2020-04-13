@@ -11,3 +11,6 @@ reports
 .yarn
 .yarnrc
 tsconfig.tsbuildinfo
+.blitz
+.next
+dist

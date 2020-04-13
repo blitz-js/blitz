@@ -1,6 +1,5 @@
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 export function withBlitz(nextConfig: Record<any, any> = {}) {
   const plugins = []
@@ -12,24 +11,20 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
   return withPlugins(
     plugins,
     Object.assign({}, nextConfig, {
+      experimental: {
+        jsconfigPaths: true,
+      },
       webpack(config: any, options: Record<any, any>) {
-        // Allows Next.js to use fancy paths from user's tsconfig.json
-        // see https://github.com/zeit/next.js/issues/7935
-        config.resolve = config.resolve || {}
-        config.resolve.plugins = config.resolve.plugins || []
-        config.resolve.plugins.push(new TsconfigPathsPlugin())
-
         if (!options.isServer) {
-          // Ensure prisma client is not included in the client bundle
-          config.module.rules.push({
-            test: /@prisma\/client/,
-            use: 'null-loader',
-          })
+          config.module = config.module || {}
+          config.module.rules = config.module.rules || []
+          config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
         }
 
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
         }
+
         return config
       },
     }),

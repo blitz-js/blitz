@@ -1,6 +1,6 @@
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
-
+import {resolveBinAsync} from './resolve-bin-async'
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean
@@ -34,16 +34,18 @@ const defaults = {
   writeManifestFile: true,
 }
 
-export function enhance(config: ServerConfig) {
+export async function enhance(config: ServerConfig) {
   const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
   const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
   const manifestPath = resolve(devFolder, config.manifestPath || defaults.manifestPath)
   const writeManifestFile =
     typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
 
+  const nextBinOrig = await resolveBinAsync('next')
+
   const nextBin = resolve(
     config.rootFolder,
-    config.interceptNextErrors ? defaults.nextBinPatched : defaults.nextBin,
+    config.interceptNextErrors ? defaults.nextBinPatched : nextBinOrig,
   )
 
   return ciLog(

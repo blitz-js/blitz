@@ -52,7 +52,7 @@ export async function nextStart(nextBin: string, cwd: string) {
     spawn(nextBin, ['start'], {
       cwd,
       stdio: 'inherit',
-    }).on('error', err => {
+    }).on('error', (err) => {
       console.error(err)
     }),
   )

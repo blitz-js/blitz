@@ -4,6 +4,11 @@
     "packages": [
       "packages/*",
       "examples/*"
+    ],
+    "nohoist": [
+      "husky",
+      "**/@prisma",
+      "**/@prisma/**"
     ]
   },
   "engines": {
@@ -25,13 +30,13 @@
     "cross-env": "^7.0.0",
     "debug": "^4.1.1",
     "husky": "^4.2.3",
-    "jest": "25.3.0",
+    "jest": "24.9.0",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "pretty-quick": "2.0.1",
-    "ts-jest": "^25.2.1",
+    "ts-jest": "24.3.0",
     "tsdx": "^0.13.1",
     "tslib": "^1.10.0",
     "typescript": "^3.7.5"
@@ -43,6 +48,7 @@
     }
   },
   "resolutions": {
-    "tsdx/jest": "24.9.0"
+    "jest": "24.9.0",
+    "ts-jest": "24.3.0"
   }
 }

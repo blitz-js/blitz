@@ -5,21 +5,21 @@ import {BLITZ_MODULE_PATHS} from '../../src/utils/load-blitz'
 import {REPLServer} from 'repl'
 import {FSWatcher} from 'chokidar'
 
-const mockRepl = {
+const mockRepl = ({
   defineCommand: jest.fn(),
   on: jest.fn(),
-  context: {}
-} as any as REPLServer
-const mockWatcher = {
-  on: jest.fn()
-}as any as FSWatcher
+  context: {},
+} as any) as REPLServer
+const mockWatcher = ({
+  on: jest.fn(),
+} as any) as FSWatcher
 
 jest.mock('repl')
 jest.mock('chokidar')
 jest.mock(`${process.cwd()}/package.json`, () => ({
   dependencies: {
-    ramda: '1.0.0'
-  }
+    ramda: '1.0.0',
+  },
 }))
 jest.mock('../../src/utils/load-dependencies')
 jest.mock('../../src/utils/load-blitz')

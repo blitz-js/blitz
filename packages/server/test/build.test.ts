@@ -93,11 +93,4 @@ describe('Build command', () => {
       type: 'directory',
     })
   })
-
-  it('calls nextBuild', () => {
-    expect(nextUtilsMock.nextBuild).toHaveBeenCalledWith(
-      resolve(rootFolder, './node_modules/.bin/next'),
-      buildFolder,
-    )
-  })
 })
