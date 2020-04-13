@@ -14,7 +14,6 @@ import {ciLog} from '../ciLog'
 import {runRule} from './rules-runner'
 import through from 'through2'
 import {checkDuplicateRoutes} from './check-duplicate-routes'
-
 import {checkNestedApi} from './check-nested-api'
 
 type SynchronizeFilesInput = {
