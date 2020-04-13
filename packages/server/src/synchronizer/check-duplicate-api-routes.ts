@@ -22,6 +22,4 @@ export const checkDuplicateApiRoutes = (entries: string[]) => {
 
     process.exit(0)
   }
-
-  process.exit(0)
 }
