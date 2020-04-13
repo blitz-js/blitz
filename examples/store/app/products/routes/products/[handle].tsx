@@ -7,8 +7,8 @@ type StaticProps = {
   product: Product
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async ctx => {
-  const product = await getProduct({where: {handle: ctx.params?.handle as string}})
+export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
+  const product = await getProduct({where: {handle: ctx.params.handle as string}})
 
   return {
     props: {product},
@@ -18,11 +18,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = (await getProducts()).map(({handle}) => ({params: {handle}}))
   return {
     paths,
-    fallback: true,
+    fallback: false,
   }
 }
 
-const Page: BlitzPage<StaticProps> = function({product}) {
+const Page: BlitzPage<StaticProps> = function ({product}) {
   return (
     <div>
       <h1>{product.name}</h1>

@@ -14,12 +14,12 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   }
 }
 
-const Page: BlitzPage<StaticProps> = function({products}) {
+const Page: BlitzPage<StaticProps> = function ({products}) {
   return (
     <div>
       <h1>Products</h1>
       <div>
-        {products.map(product => (
+        {products.map((product) => (
           <p key={product.id}>
             <Link href="/products/[handle]" as={`/products/${product.handle}`}>
               <a>{product.name}</a>
