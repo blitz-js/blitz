@@ -1,7 +1,7 @@
 import File from 'vinyl'
 import {absolutePathTransform} from '../utils'
 import {Rule} from '../types'
-import {fileDecorator} from '../pipeline'
+import {fileTransformStream} from '../pipeline'
 
 export default function configure(opts: {srcPath?: string}): Rule {
   const filePathTransformer = absolutePathTransform(opts.srcPath)
@@ -9,7 +9,7 @@ export default function configure(opts: {srcPath?: string}): Rule {
 
   return (stream) =>
     stream.pipe(
-      fileDecorator((file: File) => {
+      fileTransformStream((file: File) => {
         file.path = transformer(file.path)
         return file
       }),

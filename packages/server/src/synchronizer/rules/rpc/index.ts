@@ -2,7 +2,7 @@ import File from 'vinyl'
 import {absolutePathTransform} from '../utils'
 import {Rule} from '../types'
 import {relative} from 'path'
-import {fileDecorator} from '../pipeline'
+import {fileTransformStream} from '../pipeline'
 
 type Args = {srcPath: string}
 
@@ -13,7 +13,7 @@ export default function configure({srcPath}: Args): Rule {
 
   return (stream) =>
     stream.pipe(
-      fileDecorator((file: File) => {
+      fileTransformStream((file: File) => {
         if (!isRpcPath(file.path)) return [file]
 
         const importPath = rpcPath(resolutionPath(srcPath, file.path))

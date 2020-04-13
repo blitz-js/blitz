@@ -3,7 +3,7 @@ import through from 'through2'
 import File from 'vinyl'
 import {Readable, Transform} from 'readable-stream'
 
-export function fileDecorator(fn: FileTransform) {
+export function fileTransformStream(fn: FileTransform) {
   return through.obj(function (file: File, encoding, done) {
     const ret = fn(file, encoding)
     const files = Array.isArray(ret) ? ret : [ret]

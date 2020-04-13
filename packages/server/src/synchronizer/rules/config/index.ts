@@ -2,7 +2,6 @@ import File from 'vinyl'
 import {resolve} from 'path'
 import {pathExists} from 'fs-extra'
 import {Rule} from '../types'
-import {fileDecorator} from '../pipeline'
 const deafultNextConfig = `module.exports = {}`
 
 type Args = {
@@ -23,6 +22,6 @@ export default function configure({destPath, srcPath}: Args): Rule {
       }
     })
 
-    return stream.pipe(fileDecorator((fil) => fil))
+    return stream
   }
 }
