@@ -1,41 +1,45 @@
 import File from 'vinyl'
-import {absolutePathTransform} from './path-utils'
-import {relative} from 'path'
+import {absolutePathTransform} from '../utils'
 import {Rule} from '../types'
+import {relative} from 'path'
+import {fileDecorator} from '../pipeline'
 
 type Args = {srcPath: string}
 
-export function rpc({srcPath}: Args): Rule {
+export default function configure({srcPath}: Args): Rule {
   const fileTransformer = absolutePathTransform(srcPath)
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
 
-  return (file: File) => {
-    if (!isRpcPath(file.path)) return [file]
+  return (stream) =>
+    stream.pipe(
+      fileDecorator((file: File) => {
+        if (!isRpcPath(file.path)) return [file]
 
-    const importPath = rpcPath(resolutionPath(srcPath, file.path))
-    const {resolverType, resolverName} = extractTemplateVars(importPath)
+        const importPath = rpcPath(resolutionPath(srcPath, file.path))
+        const {resolverType, resolverName} = extractTemplateVars(importPath)
 
-    return [
-      // Original function -> _rpc path
-      new File({
-        path: getRpcPath(file.path),
-        contents: file.contents,
+        return [
+          // Original function -> _rpc path
+          new File({
+            path: getRpcPath(file.path),
+            contents: file.contents,
+          }),
+
+          // Replace function with Rpc Client
+          new File({
+            path: file.path,
+            contents: Buffer.from(isomorphicRpcTemplate(importPath)),
+          }),
+
+          // Create Rpc Route Handler
+          new File({
+            path: getRpcHandlerPath(file.path),
+            contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
+          }),
+        ]
       }),
-
-      // Replace function with Rpc Client
-      new File({
-        path: file.path,
-        contents: Buffer.from(isomorphicRpcTemplate(importPath)),
-      }),
-
-      // Create Rpc Route Handler
-      new File({
-        path: getRpcHandlerPath(file.path),
-        contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
-      }),
-    ]
-  }
+    )
 }
 
 export function isRpcPath(filePath: string) {
