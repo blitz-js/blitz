@@ -1,7 +1,7 @@
 {
   "name": "vanilla-next",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.1-canary.0",
   "main": "index.js",
   "author": "BlitzJS",
   "license": "MIT",
@@ -10,9 +10,9 @@
     "build": "blitz build"
   },
   "dependencies": {
-    "@blitzjs/cli": "*",
-    "@blitzjs/core": "*",
-    "@blitzjs/server": "*",
+    "@blitzjs/cli": "0.0.1-canary.0",
+    "@blitzjs/core": "0.0.1-canary.0",
+    "@blitzjs/server": "0.0.1-canary.0",
     "next": "^9.3.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"

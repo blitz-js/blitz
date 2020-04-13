@@ -36,7 +36,7 @@ $ npm install -g @blitzjs/cli
 $ blitz COMMAND
 running command...
 $ blitz (-v|--version|version)
-@blitzjs/cli/0.0.1 darwin-x64 node-v12.16.1
+@blitzjs/cli/0.0.1-canary.0 darwin-x64 node-v12.16.1
 $ blitz --help [COMMAND]
 USAGE
   $ blitz COMMAND
