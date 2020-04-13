@@ -13,8 +13,8 @@ import {remove, pathExists, ensureDir} from 'fs-extra'
 import {ciLog} from '../ciLog'
 import {runRule} from './rules-runner'
 import through from 'through2'
-import {checkDuplicateApiRoutes} from './check-duplicate-api-routes'
-import {checkDuplicatePages} from './check-duplicate-pages'
+import {checkDuplicateRoutes} from './check-duplicate-routes'
+
 import {checkNestedApi} from './check-nested-api'
 
 type SynchronizeFilesInput = {
@@ -58,8 +58,7 @@ export async function synchronizeFiles({
   const entries = fg.sync(includePaths, {ignore: options.ignored, cwd: options.cwd})
 
   checkNestedApi(entries)
-  checkDuplicateApiRoutes(entries)
-  checkDuplicatePages(entries)
+  checkDuplicateRoutes(entries)
 
   const manifest = Manifest.create()
   const {stream, watcher} = watch(includePaths, options)
