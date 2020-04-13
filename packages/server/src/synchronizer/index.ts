@@ -60,7 +60,7 @@ export async function synchronizeFiles({
 
   return await new Promise((resolve, reject) => {
     const errorHandler = (err: any) => err && reject(err)
-    const rulesConfig = {srcPath, destPath, errorHandler}
+    const rulesConfig = {srcPath, destPath, entries, errorHandler}
     const decoratedStream = rulesDecorator(rulesConfig)(stream)
 
     pipeline(

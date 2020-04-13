@@ -1,27 +1,50 @@
 import File from 'vinyl'
 import {resolve} from 'path'
-import {pathExists} from 'fs-extra'
 import {Rule} from '../types'
-const deafultNextConfig = `module.exports = {}`
+import {fileTransformStream} from '../pipeline'
 
 type Args = {
   srcPath: string
-  destPath: string
+  entries: string[]
 }
 
-export default function configure({destPath, srcPath}: Args): Rule {
-  return (stream) => {
-    pathExists(resolve(srcPath, 'next.config.js')).then((hasNextConfig: boolean) => {
-      if (!hasNextConfig) {
-        stream.push(
-          new File({
-            path: resolve(destPath, 'next.config.js'),
-            contents: Buffer.from(deafultNextConfig),
-          }),
-        )
-      }
-    })
+function createStubNextConfig(path: string) {
+  return new File({
+    path: resolve(path, 'next.config.js'),
+    contents: Buffer.from(`module.exports = {}`),
+  })
+}
 
-    return stream
+function createBlitzConfigLoader(path: string) {
+  const blitzConfigLoader = `
+const {withBlitz} = require('@blitzjs/server');
+const config = require('./blitz.config.js');
+module.exports = withBlitz(config);  
+`
+  return new File({
+    path: resolve(path, 'next.config.js'),
+    contents: Buffer.from(blitzConfigLoader),
+  })
+}
+
+const isConfigFileRx = /(next|blitz)\.config\.js$/
+
+export default function configure({srcPath, entries}: Args): Rule {
+  return (stream) => {
+    // XXX: invariant - cannot have two config files
+
+    const configNotFound = !entries.find((entry) => isConfigFileRx.test(entry))
+
+    if (configNotFound) {
+      stream.push(createStubNextConfig(srcPath))
+    }
+
+    return stream.pipe(
+      fileTransformStream((file) => {
+        if (!isConfigFileRx.test(file.path)) return file
+        file.path = file.path.replace(isConfigFileRx, 'blitz.config.js')
+        return [file, createBlitzConfigLoader(srcPath)]
+      }),
+    )
   }
 }

@@ -7,6 +7,8 @@ export default function configure(opts: {srcPath?: string}): Rule {
   const filePathTransformer = absolutePathTransform(opts.srcPath)
   const transformer = filePathTransformer(pathTransformer)
 
+  // add path invariants here
+
   return (stream) =>
     stream.pipe(
       fileTransformStream((file: File) => {

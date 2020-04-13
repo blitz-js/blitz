@@ -7,6 +7,7 @@ import {rulesPipeline} from './pipeline'
 type Config = {
   srcPath: string
   destPath: string
+  entries: string[]
   errorHandler: (a: any) => void
 }
 
