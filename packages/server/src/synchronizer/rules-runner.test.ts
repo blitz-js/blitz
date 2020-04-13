@@ -1,6 +1,6 @@
 import File from 'vinyl'
 import {Readable, Writable} from 'readable-stream'
-import {transform} from './transform'
+import {runRule} from './rules-runner'
 
 function getReadable() {
   const stream = new Readable({
@@ -52,7 +52,7 @@ it('transforms the file', (done) => {
 
   stream
     .pipe(
-      transform((file) => {
+      runRule((file) => {
         return [file, new File({path: file.path + '_rpc', contents: file.contents})]
       }),
     )

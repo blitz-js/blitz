@@ -1,7 +1,7 @@
 import {unlink} from './unlink'
 import {dest} from 'vinyl-fs'
-import {createPagesFolderRule} from './rules/pages-folder'
-import {createRpcRule} from './rules/rpc'
+import pagesFolder from './rules/pages-folder'
+import rpc from './rules/rpc'
 import {Manifest, createManifestFile, setManifestEntry} from './manifest'
 import {watch} from './watch'
 import {FSWatcher} from 'chokidar'
@@ -11,6 +11,8 @@ import File from 'vinyl'
 import fg from 'fast-glob'
 import {remove, pathExists, ensureDir} from 'fs-extra'
 import {ciLog} from '../ciLog'
+import {runRule} from './rules-runner'
+import through from 'through2'
 
 type SynchronizeFilesInput = {
   src: string
@@ -35,12 +37,19 @@ async function clean(path: string) {
   return await ensureDir(path)
 }
 
-function countStream(stream: NodeJS.WritableStream, cb: (count: number) => void) {
+const countStream = (cb: (count: number) => void) => {
   let count = 0
-  return stream.on('data', () => {
+  return through.obj((_, __, next) => {
     cb(++count)
+    next()
   })
 }
+
+// TODO: handle files possibly corrupted out of sync
+//          * how can I know that an entry is out of sync?
+//            * add stat info modified date in the manifest
+//            * stat the entry for modified date ahead of time
+//            * if the dates are different then the entry is invalid and should be waited on
 
 export async function synchronizeFiles({
   dest: destPath,
@@ -58,34 +67,19 @@ export async function synchronizeFiles({
     cwd: srcPath,
   }
 
-  // TODO: handle files possibly corrupted out of sync
-  //          * how can I know that an entry is out of sync?
-  //            * add stat info modified date in the manifest
-  //            * stat the entry for modified date ahead of time
-  //            * if the dates are different then the entry is invalid and should be waited on
-
   const entries = fg.sync(includePaths, {ignore: options.ignored, cwd: options.cwd})
   const manifest = Manifest.create()
-  const {stream, watcher} = watch(includePaths, options)
-
-  // Configure rules
-
-  const pagesFolder = createPagesFolderRule({
-    srcPath,
-    appFolder: 'app',
-    folderName: ['routes', 'pages'],
-  })
-  const rpc = createRpcRule({srcPath})
+  const {stream: watchStream, watcher} = watch(includePaths, options)
 
   await clean(destPath)
 
-  const createStream = () =>
+  return await new Promise((resolve, reject) => {
     pipeline(
-      stream,
+      watchStream,
 
       // Rules
-      pagesFolder,
-      rpc,
+      runRule(pagesFolder({srcPath})),
+      runRule(rpc({srcPath})),
 
       // File sync
       gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),
@@ -94,21 +88,21 @@ export async function synchronizeFiles({
       setManifestEntry(manifest),
       createManifestFile(manifest, manifestPath),
       gulpIf(writeManifestFile, dest(srcPath)),
+      countStream((count) => {
+        if (count >= entries.length) {
+          ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
+
+          resolve({
+            stream: watchStream,
+            watcher,
+            manifest,
+          })
+        }
+      }),
+      (err) => {
+        reject(err)
+      },
     )
-
-  return await new Promise((resolve) => {
-    // TODO: add timeout/error?
-    countStream(createStream(), (count) => {
-      if (count >= entries.length) {
-        ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
-
-        resolve({
-          stream,
-          watcher,
-          manifest,
-        })
-      }
-    })
   })
 }
 

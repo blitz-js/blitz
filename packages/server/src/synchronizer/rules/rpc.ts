@@ -1,8 +1,46 @@
 import File from 'vinyl'
-import {transform} from '../transform'
-import {absolutePathTransform} from '../path-utils'
+import {absolutePathTransform} from './path-utils'
 import {relative} from 'path'
-import {isRpcPath} from '../rpc-utils'
+import {Rule} from '../types'
+
+type Args = {srcPath: string}
+
+export default function rpc({srcPath}: Args): Rule {
+  const fileTransformer = absolutePathTransform(srcPath)
+  const getRpcPath = fileTransformer(rpcPath)
+  const getRpcHandlerPath = fileTransformer(handlerPath)
+
+  return (file: File) => {
+    if (!isRpcPath(file.path)) return [file]
+
+    const importPath = rpcPath(resolutionPath(srcPath, file.path))
+    const {resolverType, resolverName} = extractTemplateVars(importPath)
+
+    return [
+      // Original function -> _rpc path
+      new File({
+        path: getRpcPath(file.path),
+        contents: file.contents,
+      }),
+
+      // Replace function with Rpc Client
+      new File({
+        path: file.path,
+        contents: Buffer.from(isomorphicRpcTemplate(importPath)),
+      }),
+
+      // Create Rpc Route Handler
+      new File({
+        path: getRpcHandlerPath(file.path),
+        contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
+      }),
+    ]
+  }
+}
+
+export function isRpcPath(filePath: string) {
+  return new RegExp('(?:app\\/).*(?:queries|mutations)\\/.+').exec(filePath)
+}
 
 const isomorphicRpcTemplate = (resolverPath: string) => `
 import {isomorphicRpc} from '@blitzjs/core'
@@ -38,41 +76,10 @@ function extractTemplateVars(importPath: string) {
   }
 }
 
-function clientPath(path: string) {
+function rpcPath(path: string) {
   return path.replace(/^app/, 'app/_rpc')
 }
 
 function handlerPath(path: string) {
   return path.replace(/^app/, 'pages/api')
-}
-export function createRpcRule({srcPath}: {srcPath: string}) {
-  const getRpcClientPath = absolutePathTransform(srcPath, clientPath)
-  const getRpcHandlerPath = absolutePathTransform(srcPath, handlerPath)
-
-  return transform((file: File) => {
-    if (!isRpcPath(file.path)) return [file]
-
-    const importPath = clientPath(resolutionPath(srcPath, file.path))
-    const {resolverType, resolverName} = extractTemplateVars(importPath)
-
-    return [
-      // Move file to rpc path
-      new File({
-        path: getRpcClientPath(file.path),
-        contents: file.contents,
-      }),
-
-      // Rpc Client
-      new File({
-        path: file.path,
-        contents: Buffer.from(isomorphicRpcTemplate(importPath)),
-      }),
-
-      // Rpc Handler
-      new File({
-        path: getRpcHandlerPath(file.path),
-        contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
-      }),
-    ]
-  })
 }
