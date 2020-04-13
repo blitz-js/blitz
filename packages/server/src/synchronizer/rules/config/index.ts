@@ -30,9 +30,8 @@ module.exports = withBlitz(config);
 const isConfigFileRx = /(next|blitz)\.config\.js$/
 
 export default function configure({srcPath, entries}: Args): Rule {
+  // XXX: invariant - cannot have two config files
   return (stream) => {
-    // XXX: invariant - cannot have two config files
-
     const configNotFound = !entries.find((entry) => isConfigFileRx.test(entry))
 
     if (configNotFound) {

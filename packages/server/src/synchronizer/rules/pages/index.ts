@@ -7,7 +7,7 @@ export default function configure(opts: {srcPath?: string}): Rule {
   const filePathTransformer = absolutePathTransform(opts.srcPath)
   const transformer = filePathTransformer(pathTransformer)
 
-  // add path invariants here
+  // XXX: invariant - cannot have multiple paths
 
   return (stream) =>
     stream.pipe(
