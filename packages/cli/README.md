@@ -36,7 +36,7 @@ $ npm install -g @blitzjs/cli
 $ blitz COMMAND
 running command...
 $ blitz (-v|--version|version)
-@blitzjs/cli/0.0.1-canary.1 darwin-x64 node-v13.9.0
+@blitzjs/cli/0.0.1-canary.1 darwin-x64 node-v12.16.1
 $ blitz --help [COMMAND]
 USAGE
   $ blitz COMMAND
@@ -92,8 +92,6 @@ USAGE
 ARGUMENTS
   COMMAND  Run specific db command
 ```
-
-_See code: [lib/commands/db.js](https://github.com/blitz-js/blitz/blob/v0.0.1-canary.1/lib/commands/db.js)_
 
 ## `blitz help [COMMAND]`
 

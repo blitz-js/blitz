@@ -16,14 +16,10 @@ export default class Db extends Command {
     const {args} = this.parse(Db)
     const command = args['command']
     if (command === 'migrate' || command === 'm') {
-      const cp = spawn('prisma', ['migrate', 'save', '--experimental'], {
-        stdio: 'inherit',
-      })
+      const cp = spawn('prisma', ['migrate', 'save', '--experimental'], {stdio: 'inherit'})
       cp.on('exit', (code: number) => {
         if (code == 0) {
-          const cp = spawn('prisma', ['migrate', 'up', '--experimental'], {
-            stdio: 'inherit',
-          })
+          const cp = spawn('prisma', ['migrate', 'up', '--experimental'], {stdio: 'inherit'})
           cp.on('exit', (code: number) => {
             if (code == 0) {
               spawn('prisma', ['generate'], {stdio: 'inherit'})
