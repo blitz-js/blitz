@@ -81,8 +81,6 @@ ALIASES
   $ blitz c
 ```
 
-_See code: [lib/commands/console.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/console.js)_
-
 ## `blitz db COMMAND`
 
 Run project tests
@@ -159,7 +157,5 @@ ARGUMENTS
 ALIASES
   $ blitz t
 ```
-
-_See code: [lib/commands/test.js](https://github.com/blitz-js/blitz/blob/v0.0.1/lib/commands/test.js)_
 
 <!-- commandsstop -->

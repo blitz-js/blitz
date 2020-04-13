@@ -2,5 +2,15 @@
   "version": "0.0.0",
   "packages": ["packages/*"],
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "command": {
+    "version": {
+      "exact": true
+    },
+    "publish": {
+      "npmClient": "npm",
+      "allowBranch": ["master", "canary"],
+      "registry": "https://registry.npmjs.org/"
+    }
+  }
 }
