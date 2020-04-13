@@ -30,21 +30,6 @@ type SynchronizeFilesOutput = {
   manifest: Manifest
 }
 
-async function clean(path: string) {
-  if (await pathExists(path)) {
-    await remove(path)
-  }
-  return await ensureDir(path)
-}
-
-const countStream = (cb: (count: number) => void) => {
-  let count = 0
-  return through.obj((_, __, next) => {
-    cb(++count)
-    next()
-  })
-}
-
 // TODO: handle files possibly corrupted out of sync
 //          * how can I know that an entry is out of sync?
 //            * add stat info modified date in the manifest
@@ -69,13 +54,13 @@ export async function synchronizeFiles({
 
   const entries = fg.sync(includePaths, {ignore: options.ignored, cwd: options.cwd})
   const manifest = Manifest.create()
-  const {stream: watchStream, watcher} = watch(includePaths, options)
+  const {stream, watcher} = watch(includePaths, options)
 
   await clean(destPath)
 
   return await new Promise((resolve, reject) => {
     pipeline(
-      watchStream,
+      stream,
 
       // Rules
       runRule(pagesFolder({srcPath})),
@@ -93,7 +78,7 @@ export async function synchronizeFiles({
           ciLog('Stream files have been created. Here is a manifest.', manifest.toObject())
 
           resolve({
-            stream: watchStream,
+            stream,
             watcher,
             manifest,
           })
@@ -107,3 +92,18 @@ export async function synchronizeFiles({
 }
 
 const isUnlinkFile = (file: File) => file.event === 'unlink' || file.event === 'unlinkDir'
+
+async function clean(path: string) {
+  if (await pathExists(path)) {
+    await remove(path)
+  }
+  return await ensureDir(path)
+}
+
+const countStream = (cb: (count: number) => void) => {
+  let count = 0
+  return through.obj((_, __, next) => {
+    cb(++count)
+    next()
+  })
+}
