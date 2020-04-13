@@ -1,6 +1,5 @@
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
-const merge = require('lodash.merge')
 
 export function withBlitz(nextConfig: Record<any, any> = {}) {
   const plugins = []
@@ -17,11 +16,9 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
       },
       webpack(config: any, options: Record<any, any>) {
         if (!options.isServer) {
-          merge(config, {
-            module: {
-              rules: [{test: /_rpc/, loader: require.resolve('null-loader')}],
-            },
-          })
+          config.module = config.module || {}
+          config.module.rules = config.module.rules || []
+          config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
         }
 
         if (typeof nextConfig.webpack === 'function') {
