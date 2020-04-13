@@ -1,6 +1,5 @@
 {
   "name": "store",
-  "version": "0.0.1-canary.0",
   "private": true,
   "scripts": {},
   "dependencies": {

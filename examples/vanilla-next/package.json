@@ -1,7 +1,6 @@
 {
   "name": "vanilla-next",
   "private": true,
-  "version": "0.0.1-canary.0",
   "main": "index.js",
   "author": "BlitzJS",
   "license": "MIT",

@@ -56,5 +56,6 @@
     "vinyl": "^2.2.0",
     "vinyl-file": "^3.0.0",
     "vinyl-fs": "^3.0.3"
-  }
+  },
+  "gitHead": "ae99dc4a551753ccf8af8f8b7e37a9c0b7a4a8b4"
 }

@@ -87,5 +87,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
-  }
+  },
+  "gitHead": "ae99dc4a551753ccf8af8f8b7e37a9c0b7a4a8b4"
 }
