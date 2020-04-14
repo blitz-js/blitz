@@ -86,11 +86,13 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/aem"><img src="https://avatars0.githubusercontent.com/u/1909883?v=4" width="100px;" alt=""/><br /><sub><b>Adam Markon</b></sub></a><br /><a href="#ideas-aem" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/lorenzorapetti"><img src="https://avatars1.githubusercontent.com/u/2632174?v=4" width="100px;" alt=""/><br /><sub><b>Lorenzo Rapetti</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lorenzorapetti" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/wKovacs64"><img src="https://avatars1.githubusercontent.com/u/1288694?v=4" width="100px;" alt=""/><br /><sub><b>Justin Hall</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=wKovacs64" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
