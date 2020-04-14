@@ -18,7 +18,14 @@ export default class Db extends Command {
     const {args} = this.parse(Db)
     const command = args['command']
 
-    const prismaBinary = platform() === 'win32' ? 'prisma.cmd' : 'prisma'
+    const prismaBinaryName = platform() === 'win32' ? 'prisma.cmd' : 'prisma'
+    const prismaBinary = path.join(process.cwd(), 'node_modules/.bin', prismaBinaryName)
+
+    // console.log('trying...')
+    // const res = require.resolve('@prisma/cli', {paths: [process.cwd()]})
+    // const res = resolve('@prisma/cli')
+    // console.log('DEBUG', res)
+
     const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
 
     if (command === 'migrate' || command === 'm') {

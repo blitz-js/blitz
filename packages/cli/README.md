@@ -21,41 +21,37 @@ Run `yarn` from the monorepo root
 `yarn build`
 
 <!-- toc -->
-
-- [blitz-cli](#blitz-cli)
-- [Usage](#usage)
-- [Commands](#commands)
+* [blitz-cli](#blitz-cli)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @blitzjs/cli
 $ blitz COMMAND
 running command...
 $ blitz (-v|--version|version)
-@blitzjs/cli/0.0.1-canary.1 darwin-x64 node-v13.9.0
+@blitzjs/cli/0.0.1-canary.1 darwin-x64 node-v12.16.1
 $ blitz --help [COMMAND]
 USAGE
   $ blitz COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`blitz build`](#blitz-build)
-- [`blitz console`](#blitz-console)
-- [`blitz db COMMAND`](#blitz-db-command)
-- [`blitz help [COMMAND]`](#blitz-help-command)
-- [`blitz new [PATH]`](#blitz-new-path)
-- [`blitz start`](#blitz-start)
-- [`blitz test [WATCH]`](#blitz-test-watch)
+* [`blitz build`](#blitz-build)
+* [`blitz console`](#blitz-console)
+* [`blitz db COMMAND`](#blitz-db-command)
+* [`blitz help [COMMAND]`](#blitz-help-command)
+* [`blitz new [PATH]`](#blitz-new-path)
+* [`blitz start`](#blitz-start)
+* [`blitz test [WATCH]`](#blitz-test-watch)
 
 ## `blitz build`
 
@@ -83,7 +79,7 @@ ALIASES
 
 ## `blitz db COMMAND`
 
-Run project tests
+Run project database commands
 
 ```
 USAGE
@@ -160,4 +156,5 @@ ALIASES
   $ blitz t
 ```
 
+_See code: [lib/commands/test.js](https://github.com/blitz-js/blitz/blob/v0.0.1-canary.1/lib/commands/test.js)_
 <!-- commandsstop -->
