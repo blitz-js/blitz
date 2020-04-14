@@ -19,7 +19,7 @@
     "dev": "lerna run start --scope @blitzjs/* --stream --parallel",
     "build": "lerna run build --scope @blitzjs/* --stream",
     "prepublishOnly": "lerna run build --scope @blitzjs/* && lerna run test --parallel",
-    "pretest": "lerna run build --scope @blitzjs/server --scope @blitzjs/core",
+    "pretest": "lerna run build --scope @blitzjs/*",
     "test": "lerna run test --parallel"
   },
   "devDependencies": {
