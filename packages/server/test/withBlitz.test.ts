@@ -7,6 +7,9 @@ describe('withBlitz', () => {
     // const newWebpack = newNext.webpack({module: {rules: []}}, {})
     const newNextWithoutWebpack = Object.assign({}, newNext, {webpack: null})
 
-    expect(newNextWithoutWebpack).toStrictEqual({experimental: {jsconfigPaths: true}, webpack: null})
+    expect(newNextWithoutWebpack).toStrictEqual({
+      experimental: {jsconfigPaths: true, reactMode: 'concurrent'},
+      webpack: null,
+    })
   })
 })
