@@ -11,6 +11,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 
   return {
     props: {products},
+    revalidate: 1,
   }
 }
 

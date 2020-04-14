@@ -12,17 +12,22 @@ export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
 
   return {
     props: {product},
+    revalidate: 1,
   }
 }
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = (await getProducts()).map(({handle}) => ({params: {handle}}))
   return {
     paths,
-    fallback: false,
+    fallback: true,
   }
 }
 
 const Page: BlitzPage<StaticProps> = function ({product}) {
+  if (!product) {
+    return <div>Building Page...</div>
+  }
+
   return (
     <div>
       <h1>{product.name}</h1>

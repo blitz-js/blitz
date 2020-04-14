@@ -1,12 +1,19 @@
 ## Getting Started
 
-1. Setup your database
+1. Ensure you have Postgres installed locally
+2. Set the `DATABASE_URL` environment variable, something like this:
+
+```
+DATABASE_URL=postgresql://<your_computer_username>@localhost:5432/blitz-example-store
+```
+
+3. DB migrate
 
 ```
 yarn blitz db migrate
 ```
 
-2. Start the dev server
+4. Start the dev server
 
 ```
 yarn blitz start

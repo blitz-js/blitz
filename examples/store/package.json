@@ -2,7 +2,9 @@
   "name": "store",
   "version": "0.0.2-alpha.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "blitz db migrate && blitz build"
+  },
   "dependencies": {
     "@blitzjs/cli": "0.0.2-alpha.0",
     "@blitzjs/core": "0.0.2-alpha.0",
@@ -14,5 +16,9 @@
     "react-dom": "16.13.1",
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"
+  },
+  "NOTE": "Next.js dependency is only required for deploying to zeit, for now",
+  "devDependencies": {
+    "next": "9.3.4"
   }
 }
