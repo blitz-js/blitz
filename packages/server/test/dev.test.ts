@@ -14,7 +14,7 @@ const originalLog = console.log
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {resolve} from 'path'
+import {join, resolve} from 'path'
 import {remove, pathExists} from 'fs-extra'
 import {directoryTree} from './utils/tree-utils'
 import * as pkgDir from 'pkg-dir'
@@ -80,8 +80,10 @@ describe('Dev command', () => {
     })
 
     it('calls spawn with the patched next cli bin', () => {
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(`${pkgDir.sync(__dirname)}/bin/next-patched`)
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(`${rootFolder}/.blitz-dev`)
+      const nextPatched = join(String(pkgDir.sync(__dirname)), 'bin', 'next-patched')
+      const blitzDev = join(rootFolder, '.blitz-dev')
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)
     })
   })
 })
