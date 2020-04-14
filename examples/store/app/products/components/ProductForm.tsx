@@ -1,5 +1,5 @@
 import {Form, Field} from 'react-final-form'
-import {Product, ProductCreateInput, ProductUpdateInput} from 'prisma'
+import {Product, ProductCreateInput, ProductUpdateInput} from 'db'
 import createProduct from 'app/products/mutations/createProduct'
 import updateProduct from 'app/products/mutations/updateProduct'
 

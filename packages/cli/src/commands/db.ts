@@ -1,6 +1,7 @@
 import {platform} from 'os'
 import {spawn} from 'child_process'
 import {Command} from '@oclif/command'
+import * as path from 'path'
 
 export default class Db extends Command {
   static description = 'Run project database commands'
@@ -16,15 +17,22 @@ export default class Db extends Command {
   async run() {
     const {args} = this.parse(Db)
     const command = args['command']
+
     const prismaBinary = platform() === 'win32' ? 'prisma.cmd' : 'prisma'
+    const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+
     if (command === 'migrate' || command === 'm') {
-      const cp = spawn(prismaBinary, ['migrate', 'save', '--experimental'], {stdio: 'inherit'})
+      const cp = spawn(prismaBinary, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+        stdio: 'inherit',
+      })
       cp.on('exit', (code: number) => {
         if (code == 0) {
-          const cp = spawn(prismaBinary, ['migrate', 'up', '--experimental'], {stdio: 'inherit'})
+          const cp = spawn(prismaBinary, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+            stdio: 'inherit',
+          })
           cp.on('exit', (code: number) => {
             if (code == 0) {
-              spawn(prismaBinary, ['generate'], {stdio: 'inherit'})
+              spawn(prismaBinary, ['generate', schemaArg], {stdio: 'inherit'})
             }
           })
         }

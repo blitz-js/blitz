@@ -14,3 +14,4 @@ tsconfig.tsbuildinfo
 .blitz
 .next
 dist
+.now
