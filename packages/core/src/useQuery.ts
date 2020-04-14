@@ -16,8 +16,9 @@ export function useQuery<T extends QueryFn>(
   options: any = {},
 ): [PromiseReturnType<T>, Record<any, any>] {
   const {data, ...rest} = useReactQuery([(queryFn as any).cacheKey, params], (_, params) => queryFn(params), {
+    suspense: true,
+    retry: process.env.NODE_ENV === 'production' ? 3 : false,
     ...options,
-    suspense: false,
   })
 
   return [data as PromiseReturnType<T>, rest]
