@@ -1,8 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource db {
-  provider = "sqlite"
+datasource postgresql {
+  provider = "postgresql"
   url = "***"
 }
 
