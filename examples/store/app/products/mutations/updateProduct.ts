@@ -1,4 +1,4 @@
-import db, {ProductUpdateArgs} from 'prisma'
+import db, {ProductUpdateArgs} from 'db'
 
 export default async function updateProduct(args: ProductUpdateArgs) {
   // Don't allow updating ID

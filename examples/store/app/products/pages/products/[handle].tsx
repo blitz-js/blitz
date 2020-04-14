@@ -1,7 +1,7 @@
 import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from '@blitzjs/core'
 import getProduct from 'app/products/queries/getProduct'
 import getProducts from 'app/products/queries/getProducts'
-import {Product} from 'prisma'
+import {Product} from 'db'
 
 type StaticProps = {
   product: Product
