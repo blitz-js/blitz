@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
-    "build": "rimraf lib && tsc && cp -r templates lib/templates",
+    "build": "rimraf lib && tsc && cpy --parents templates lib",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
@@ -48,6 +48,7 @@
     "@types/mem-fs-editor": "^5.1.1",
     "@types/vinyl": "^2.0.4",
     "chai": "^4.2.0",
+    "cpy-cli": "^3.1.0",
     "globby": "^11.0.0",
     "rimraf": "^3.0.2",
     "ts-node": "^8.6.2"
