@@ -1,27 +1,26 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz CLI",
-  "version": "0.0.1-canary.1",
+  "version": "0.0.1-canary.3",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
-    "version": "oclif-dev readme && git add README.md",
-    "build": "pkg . --out-path dist",
-    "prebuild": "rimraf lib && tsc -b && oclif-dev readme",
+    "build": "rimraf lib && tsc && cp -r templates lib/templates",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
-  "author": "Mina Abadir @mabadir",
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
   "main": "lib/index.js",
   "bin": {
     "blitz": "./bin/run"
   },
-  "types": "lib/index.d.ts",
   "files": [
     "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/lib"
   ],
   "dependencies": {
     "@blitzjs/server": "0.0.1-canary.1",
@@ -49,31 +48,16 @@
     "@types/mem-fs-editor": "^5.1.1",
     "@types/vinyl": "^2.0.4",
     "chai": "^4.2.0",
-    "chokidar": "^3.3.1",
     "globby": "^11.0.0",
-    "pkg": "^4.4.3",
     "rimraf": "^3.0.2",
     "ts-node": "^8.6.2"
   },
   "oclif": {
-    "commands": "./lib/commands",
+    "commands": "./lib/src/commands",
     "bin": "blitz",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
-  },
-  "pkg": {
-    "scripts": [
-      "./lib/**/*.js"
-    ],
-    "assets": [
-      "./templates/**/*"
-    ],
-    "targets": [
-      "node12-linux-x64",
-      "node12-macos-x64",
-      "node12-win-x64"
     ]
   },
   "engines": {

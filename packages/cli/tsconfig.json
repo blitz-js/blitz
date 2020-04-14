@@ -4,9 +4,10 @@
     "target": "es2015",
     "baseUrl": "./",
     "module": "commonjs",
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "lib",
-    "composite": true,
+    "declaration": false,
+    "sourceMap": false,
     "types": []
   },
   "include": ["src/**/*"],
