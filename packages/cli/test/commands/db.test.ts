@@ -1,3 +1,5 @@
+import * as path from 'path'
+
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {
   onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
@@ -10,9 +12,18 @@ jest.doMock('child_process', () => ({spawn}))
 
 import DbCmd from '../../src/commands/db'
 
+const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
 const initParams = ['prisma', ['init'], {stdio: 'inherit'}]
-const migrateSaveParams = ['prisma', ['migrate', 'save', '--experimental'], {stdio: 'inherit'}]
-const migrateUpParams = ['prisma', ['migrate', 'up', '--experimental'], {stdio: 'inherit'}]
+const migrateSaveParams = [
+  'prisma',
+  ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
+  {stdio: 'inherit'},
+]
+const migrateUpParams = [
+  'prisma',
+  ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
+  {stdio: 'inherit'},
+]
 
 describe('Db command', () => {
   beforeEach(() => {
