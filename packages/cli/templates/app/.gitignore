@@ -1,3 +1,4 @@
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -8,18 +9,21 @@
 # testing
 /coverage
 
-# next.js
+# blitz.js
+/.blitz/
 /.next/
 /out/
+*.sqlite
 
 # production
 /build
+.now
 
 # misc
 .DS_Store
-.env*
 
 # debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.log
+
+# local env files
+.env*

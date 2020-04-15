@@ -8,6 +8,7 @@
     "outDir": "lib",
     "declaration": false,
     "sourceMap": false,
+    "esModuleInterop": true,
     "types": []
   },
   "include": ["src/**/*"],
