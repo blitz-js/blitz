@@ -1,5 +1,5 @@
 import {Suspense} from 'react'
-import {useQuery, Link} from '@blitzjs/core'
+import {useQuery, Link} from 'blitz'
 import getProducts from 'app/products/queries/getProducts'
 
 function ProductsList() {

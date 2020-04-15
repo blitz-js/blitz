@@ -1,4 +1,4 @@
-import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from '@blitzjs/core'
+import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from 'blitz'
 import getProduct from 'app/products/queries/getProduct'
 import getProducts from 'app/products/queries/getProducts'
 import {Product} from 'db'

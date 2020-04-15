@@ -1,5 +1,5 @@
 import {Suspense} from 'react'
-import {Link, useRouter, useQuery} from '@blitzjs/core'
+import {Link, useRouter, useQuery} from 'blitz'
 import getProduct from 'app/products/queries/getProduct'
 import ProductForm from 'app/products/components/ProductForm'
 
