@@ -6,6 +6,7 @@
   "files": [
     "README.md"
   ],
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors-)",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
