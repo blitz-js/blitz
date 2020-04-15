@@ -1,4 +1,4 @@
-import {Link, useRouter} from 'blitz'
+import {Link, useRouter} from '@blitzjs/core'
 import ProductForm from 'app/products/components/ProductForm'
 
 export default function () {
