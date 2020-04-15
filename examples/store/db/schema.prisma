@@ -8,6 +8,8 @@ datasource postgresql {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./.generated-prisma-client"
+  binaryTargets = ["native"]
 }
 
 

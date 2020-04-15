@@ -10,9 +10,8 @@
 /coverage
 
 # blitz.js
-/.blitz/
-/.next/
-/out/
+.blitz
+.next
 *.sqlite
 
 # production
