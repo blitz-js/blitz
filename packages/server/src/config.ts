@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
@@ -42,11 +43,14 @@ export async function enhance(config: ServerConfig) {
     typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
 
   const nextBinOrig = await resolveBinAsync('next')
+  const nextBinPatchedPath = resolve(config.rootFolder, defaults.nextBinPatched)
 
-  const nextBin = resolve(
-    config.rootFolder,
-    config.interceptNextErrors ? defaults.nextBinPatched : nextBinOrig,
-  )
+  let nextBin: string
+  if (fs.existsSync(nextBinPatchedPath) && config.interceptNextErrors) {
+    nextBin = nextBinPatchedPath
+  } else {
+    nextBin = nextBinOrig
+  }
 
   return ciLog(
     `
