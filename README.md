@@ -2,8 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
 <!-- prettier-ignore-end -->
 
@@ -31,7 +30,9 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 [The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
 
-### 👉 [View the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) for exact details on what a Blitz app looks like 👈
+## Initial Alpha Release Coming Soon
+
+We expert an initial alpha release to be out around April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
 
 ---
 
