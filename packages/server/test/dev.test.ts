@@ -92,7 +92,7 @@ describe('Dev command', () => {
     })
   })
 
-  it('calls spawn with the patched next cli bin', () => {
+  it.skip('calls spawn with the patched next cli bin', () => {
     expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(`${rootFolder}/node_modules/.bin/next-patched`)
     expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(`${rootFolder}/.blitz-dev`)
   })
