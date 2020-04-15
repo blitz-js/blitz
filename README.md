@@ -32,7 +32,7 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 ## Initial Alpha Release Coming Soon
 
-We expert an initial alpha release to be out around April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
+We expect an initial alpha release to be out around April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
 
 ---
 
