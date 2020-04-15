@@ -8,8 +8,9 @@
     "outDir": "lib",
     "declaration": false,
     "sourceMap": false,
+    "esModuleInterop": true,
     "types": []
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "types"],
   "exclude": ["node_modules"]
 }

@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "lerna run start --scope @blitzjs/* --stream --parallel",
+    "postinstall": "npm rebuild husky",
     "build": "lerna run build --scope @blitzjs/* --stream",
     "prepublishOnly": "lerna run build --scope @blitzjs/* && lerna run test --parallel",
     "pretest": "lerna run build --scope @blitzjs/*",

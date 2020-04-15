@@ -1,34 +1,37 @@
 import Generator, {GeneratorOptions} from '../generator'
+import readDirRecursive from 'fs-readdir-recursive'
+import spawn from 'cross-spawn'
+import chalk from 'chalk'
+
+const themeColor = '6700AB'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
+  yarn: boolean
 }
 
 class AppGenerator extends Generator<AppGeneratorOptions> {
-  packageJson() {
-    return {
+  async write() {
+    const templateValues = {
       name: this.options.appName,
-      version: '0.0.1',
-      private: true,
-      scripts: {
-        dev: 'next dev',
-        build: 'next build',
-        start: 'next start',
-      },
+    }
+
+    const paths = readDirRecursive(this.sourcePath())
+
+    for (let path of paths) {
+      this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path), templateValues)
     }
   }
 
-  async write() {
-    this.fs.copyTpl(this.sourcePath('README.md.ejs'), this.destinationPath('README.md'), {
-      name: 'Hello',
-    })
-    this.fs.copyTpl(this.sourcePath('pages/index.js.ejs'), this.destinationPath('pages/index.js'), {
-      name: 'Hello',
-    })
+  async postWrite() {
+    console.log('\n' + chalk.hex(themeColor)('Installing dependencies...'))
 
-    this.fs.writeJSON(this.destinationPath('package.json'), this.packageJson())
+    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
+    if (result.status !== 0) {
+      throw new Error()
+    }
 
-    this.fs.copy(this.sourcePath('gitignore'), this.destinationPath('.gitignore'))
+    console.log(chalk.hex(themeColor)('Dependencies installed.'))
   }
 }
 

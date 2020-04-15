@@ -4,15 +4,12 @@ import {EventEmitter} from 'events'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer = require('enquirer')
-import execa = require('execa')
 
 import ConflictChecker from './transforms/conflict-checker'
 
 export interface GeneratorOptions {
   sourceRoot: string
   destinationRoot?: string
-  yarn?: boolean
-  install?: boolean
   dryRun?: boolean
 }
 
@@ -38,6 +35,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   }
 
   abstract async write(): Promise<void>
+  abstract async postWrite(): Promise<void>
 
   sourcePath(...paths: string[]): string {
     return path.join(this.options.sourceRoot, ...paths)
@@ -45,10 +43,6 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
 
   destinationPath(...paths: string[]): string {
     return path.join(this.options.destinationRoot!, ...paths)
-  }
-
-  async install() {
-    await execa(this.options.yarn ? 'yarn' : 'npm', ['install'])
   }
 
   async run() {
@@ -63,24 +57,26 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
       const conflictChecker = new ConflictChecker({
         dryRun: this.options.dryRun,
       })
-      conflictChecker.on('error', (err) => {
+      conflictChecker.on('error', err => {
         reject(err)
       })
       conflictChecker.on('fileStatus', (data: string) => {
         this.performedActions.push(data)
       })
 
-      this.fs.commit([conflictChecker], (err) => {
+      this.fs.commit([conflictChecker], err => {
         if (err) reject(err)
         resolve()
       })
     })
 
-    this.performedActions.forEach((action) => {
+    this.performedActions.forEach(action => {
       console.log(action)
     })
 
-    if (this.options.install && !this.options.dryRun) await this.install()
+    if (!this.options.dryRun) {
+      await this.postWrite()
+    }
   }
 }
 
