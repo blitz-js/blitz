@@ -16,11 +16,11 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "dev": "lerna run start --scope @blitzjs/* --stream --parallel",
+    "dev": "lerna run start --scope blitz --scope @blitzjs/* --stream --parallel",
     "postinstall": "npm rebuild husky",
-    "build": "lerna run build --scope @blitzjs/* --stream",
-    "prepublishOnly": "lerna run build --scope @blitzjs/* && lerna run test --parallel",
-    "pretest": "lerna run build --scope @blitzjs/*",
+    "build": "lerna run build --scope blitz --scope @blitzjs/* --stream",
+    "prepublishOnly": "lerna run build --scope blitz --scope @blitzjs/* && lerna run test --parallel",
+    "pretest": "lerna run build --scope blitz --scope @blitzjs/*",
     "test": "lerna run test --parallel"
   },
   "devDependencies": {

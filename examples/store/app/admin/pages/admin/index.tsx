@@ -1,4 +1,4 @@
-import {Link} from '@blitzjs/core'
+import {Link} from 'blitz'
 
 export default function () {
   return (
