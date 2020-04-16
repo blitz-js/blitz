@@ -83,7 +83,7 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
-- All React components inside a `pages/` folder are accessible at a URL corrosponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
+- All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
 
 <br>
 
@@ -210,7 +210,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 Blitz.js custom API routes are exactly the same as Next.js custom API routes. If you need, read [the Next.js API route documentation](https://nextjs.org/docs/api-routes/introduction)
 
 - Unlike Next.js, your `api/` folder must be a sibling of `pages/` instead of being nested inside.
-- All React components inside an `api/` folder are accessible at a URL corrosponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
+- All React components inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
 
 <br>
 
