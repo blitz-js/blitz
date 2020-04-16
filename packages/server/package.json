@@ -28,6 +28,7 @@
   "module": "dist/webpack.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "devDependencies": {
+    "@types/cross-spawn": "^6.0.1",
     "@types/gulp-if": "^0.0.33",
     "@types/jest": "^25.1.3",
     "@types/path-is-absolute": "^1.0.0",
@@ -41,6 +42,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "cross-spawn": "^7.0.2",
     "fast-glob": "^3.2.2",
     "gulp-if": "^3.0.0",
     "next": "9.3.4",

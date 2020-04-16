@@ -1,5 +1,4 @@
-import {platform} from 'os'
-import {spawn} from 'child_process'
+import {spawn} from 'cross-spawn'
 import {Command} from '@oclif/command'
 import hasYarn from 'has-yarn'
 
@@ -21,9 +20,7 @@ export default class Test extends Command {
     if (watch) {
       watchMode = watch === 'watch' || watch === 'w'
     }
-    const yarnBinary = platform() === 'win32' ? 'yarn.cmd' : 'yarn'
-    const npmBinary = platform() === 'win32' ? 'npm.cmd' : 'npm'
-    const packageManager = hasYarn() ? yarnBinary : npmBinary
+    const packageManager = hasYarn() ? 'yarn' : 'npm'
 
     if (watchMode) spawn(packageManager, ['test:watch'], {stdio: 'inherit'})
     else spawn(packageManager, ['test'], {stdio: 'inherit'})

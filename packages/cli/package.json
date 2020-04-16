@@ -30,6 +30,7 @@
     "@oclif/plugin-not-found": "^1.2.3",
     "chalk": "^4.0.0",
     "chokidar": "^3.3.1",
+    "cross-spawn": "^7.0.2",
     "diff": "^4.0.2",
     "enquirer": "^2.3.4",
     "fs-extra": "^9.0.0",
@@ -43,7 +44,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@types/cross-spawn": "6.0.1",
+    "@types/cross-spawn": "^6.0.1",
     "@types/diff": "^4.0.2",
     "@types/fs-extra": "^8.1.0",
     "@types/fs-readdir-recursive": "1.0.0",

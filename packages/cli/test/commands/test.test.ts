@@ -1,8 +1,8 @@
-import childProcess from 'child_process'
+import crossSpawn from 'cross-spawn'
 import hasYarn from 'has-yarn'
 import TestCmd from '../../src/commands/test'
 
-jest.mock('child_process')
+jest.mock('cross-spawn')
 jest.mock('has-yarn')
 
 const testParams = [['test'], {stdio: 'inherit'}]
@@ -18,7 +18,7 @@ describe('Test command', () => {
 
     await TestCmd.run([])
 
-    expect(childProcess.spawn).toBeCalledWith('yarn', ...testParams)
+    expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testParams)
   })
 
   it('runs npm test script', async () => {
@@ -26,7 +26,7 @@ describe('Test command', () => {
 
     await TestCmd.run([])
 
-    expect(childProcess.spawn).toBeCalledWith('npm', ...testParams)
+    expect(crossSpawn.spawn).toBeCalledWith('npm', ...testParams)
   })
 
   it('runs yarn test:watch script', async () => {
@@ -34,7 +34,7 @@ describe('Test command', () => {
 
     await TestCmd.run(['watch'])
 
-    expect(childProcess.spawn).toBeCalledWith('yarn', ...testWatchParams)
+    expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testWatchParams)
   })
 
   it('runs yarn test:watch script with alias', async () => {
@@ -42,7 +42,7 @@ describe('Test command', () => {
 
     await TestCmd.run(['w'])
 
-    expect(childProcess.spawn).toBeCalledWith('yarn', ...testWatchParams)
+    expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testWatchParams)
   })
 
   it('runs yarn test and ignores invalid argument', async () => {
@@ -50,6 +50,6 @@ describe('Test command', () => {
 
     await TestCmd.run(['invalid'])
 
-    expect(childProcess.spawn).toBeCalledWith('yarn', ...testParams)
+    expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testParams)
   })
 })
