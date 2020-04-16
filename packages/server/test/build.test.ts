@@ -46,23 +46,37 @@ describe('Build command', () => {
         {
           children: [
             {
+              extension: '.js',
+              name: 'blitz.config.js',
+              path: `${buildFolder}/blitz.config.js`,
+              size: 20,
+              type: 'file',
+            },
+            {
+              extension: '.js',
+              name: 'next.config.js',
+              path: `${buildFolder}/next.config.js`,
+              size: 130,
+              type: 'file',
+            },
+            {
               extension: '',
               name: 'one',
-              path: `${rootFolder}/.blitz-build/one`,
+              path: `${buildFolder}/one`,
               size: 0,
               type: 'file',
             },
             {
               extension: '',
               name: 'two',
-              path: `${rootFolder}/.blitz-build/two`,
+              path: `${buildFolder}/two`,
               size: 0,
               type: 'file',
             },
           ],
           name: '.blitz-build',
-          path: `${rootFolder}/.blitz-build`,
-          size: 0,
+          path: `${buildFolder}`,
+          size: 150,
           type: 'directory',
         },
         {
@@ -89,7 +103,7 @@ describe('Build command', () => {
       ],
       name: 'build',
       path: `${rootFolder}`,
-      size: 18,
+      size: 168,
       type: 'directory',
     })
   })
