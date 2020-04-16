@@ -44,23 +44,37 @@ describe('Dev command', () => {
         {
           children: [
             {
+              extension: '.js',
+              name: 'blitz.config.js',
+              path: `${devFolder}/blitz.config.js`,
+              size: 20,
+              type: 'file',
+            },
+            {
+              extension: '.js',
+              name: 'next.config.js',
+              path: `${devFolder}/next.config.js`,
+              size: 130,
+              type: 'file',
+            },
+            {
               extension: '',
               name: 'one',
-              path: `${rootFolder}/.blitz-dev/one`,
+              path: `${devFolder}/one`,
               size: 0,
               type: 'file',
             },
             {
               extension: '',
               name: 'two',
-              path: `${rootFolder}/.blitz-dev/two`,
+              path: `${devFolder}/two`,
               size: 0,
               type: 'file',
             },
           ],
           name: '.blitz-dev',
-          path: `${rootFolder}/.blitz-dev`,
-          size: 0,
+          path: `${devFolder}`,
+          size: 150,
           type: 'directory',
         },
         {
@@ -87,7 +101,7 @@ describe('Dev command', () => {
       ],
       name: 'dev',
       path: `${rootFolder}`,
-      size: 18,
+      size: 168,
       type: 'directory',
     })
   })
