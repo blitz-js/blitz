@@ -3,25 +3,25 @@ import {resolve} from 'path'
 import File from 'vinyl'
 import {Rule} from '../types'
 
-const isBlitzConfig = (p: string) => /(blitz|next)\.config\.(js|ts)/.test(p)
+const isBlitzConfig = (p: string) => /blitz\.config\.(js|ts)/.test(p)
+const isNextConfig = (p: string) => /next\.config\.(js|ts)/.test(p)
 
 export async function copyConfig(entries: string[], srcPath: string, destPath: string) {
-  const configFiles = entries.filter(isBlitzConfig)
+  const hasBlitzConfig = !!entries.find(isBlitzConfig)
+  const hasNextConfig = !!entries.find(isNextConfig)
 
-  if (configFiles.length > 1) {
-    // TODO: make a nice error catcher
+  if (hasNextConfig) {
+    // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
     const err = new Error(
-      'Blitz cannot process two configuration files. Please only provide either a blitz.config.js or a next.config.js',
+      'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
     )
     err.name = 'ConfigurationError'
     throw err
   }
 
-  const [existingConfig] = configFiles
-
-  const fileContents = !existingConfig
+  const fileContents = !hasBlitzConfig
     ? 'module.exports = {};'
-    : await readFile(resolve(srcPath, existingConfig))
+    : await readFile(resolve(srcPath, 'blitz.config.js'))
 
   await writeFile(resolve(destPath, 'blitz.config.js'), Buffer.from(fileContents))
 
