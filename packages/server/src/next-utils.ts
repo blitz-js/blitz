@@ -1,4 +1,4 @@
-import {spawn} from 'child_process'
+import {spawn} from 'cross-spawn'
 import * as pty from 'node-pty'
 import {Manifest} from 'synchronizer/manifest'
 // import chalk from 'chalk'
