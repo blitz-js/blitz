@@ -1,5 +1,4 @@
 import * as path from 'path'
-import {platform} from 'os'
 
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {
@@ -9,22 +8,20 @@ const spawn = jest.fn(() => {
   return {on: onSpy}
 })
 
-jest.doMock('child_process', () => ({spawn}))
+jest.doMock('cross-spawn', () => ({spawn}))
 
 import DbCmd from '../../src/commands/db'
 
-const prismaBinaryName = platform() === 'win32' ? 'prisma.cmd' : 'prisma'
-const prismaBinary = path.join(process.cwd(), 'node_modules/.bin', prismaBinaryName)
 const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
 
-const initParams = [prismaBinary, ['init'], {stdio: 'inherit'}]
+const initParams = ['prisma', ['init'], {stdio: 'inherit'}]
 const migrateSaveParams = [
-  prismaBinary,
+  'prisma',
   ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
   {stdio: 'inherit'},
 ]
 const migrateUpParams = [
-  prismaBinary,
+  'prisma',
   ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
   {stdio: 'inherit'},
 ]
