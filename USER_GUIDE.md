@@ -4,7 +4,7 @@
 
 Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can start building things with it! 
 
-If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to u
+If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to us.
 
 <br>
 
@@ -20,7 +20,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 
 ## Blitz App Development
 
-### Setting Up Your Computer
+### Set Up Your Computer
 
 - [ ] You need Node.js 12 or newer
 - [ ] You need Postgres installed and running.
@@ -34,13 +34,13 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
-5. View your app at [https://localhost:3000](https://localhost:3000)
+5. View your baby app at [https://localhost:3000](https://localhost:3000)
 
 <br>
 
 ### Set Up Your Database
 
-By default, Blitz uses Prisma 2 which is a strongly typed database client (not an ORM). You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction). _Note, Prisma 2 is not required for Blitz. You can use anything you want, such as TypeORM._
+By default, Blitz uses Prisma 2 which is a strongly typed database client. You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction). _Note, Prisma 2 is not required for Blitz. The only Prisma-Blitz integration is the `blitz db` cli command. You can use anything you want, such as Mongo, TypeORM, etc._
 
 1. Open `db/prisma.schema` and add the following:
 
@@ -216,9 +216,40 @@ Blitz.js custom API routes are exactly the same as Next.js custom API routes. If
 
 ### Deploy to Production
 
-TODO
+1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
+2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
+   1. [Read the Digitial Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
+   2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
+3. Lastly, you need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
+   1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
+
+#### Serverless
+
+Assuming you already have a Zeit account and the `now` cli installed, you can do the following:
+
+1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
+2. Add a `now.json` at your project root with
+```json
+{
+  "env": {
+    "DATABASE_URL": "@database-url"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@database-url"
+    }
+  }
+}
+```
+3. Run `now`
 
 Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested. 
+
+#### Traditional, Long-Running Server
+
+You can deploy a Blitz app like a regular Node or Express project.
+
+`blitz start --production` will start your app in production mode. Make sure you provide the `DATABASE_URL` environment variable for your production database.
 
 <br>
 
@@ -252,4 +283,4 @@ Here's the list of big things that are currently missing from Blitz but are top 
 
 <br>
 
-We hope to see you in the [Blitz slack community](https://slack.blitzjs.com)!
+That's all for now. We hope to see you in the [Blitz slack community](https://slack.blitzjs.com)!
