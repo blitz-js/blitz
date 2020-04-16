@@ -273,13 +273,17 @@ Here's the list of big things that are currently missing from Blitz but are top 
 
 <br>
 
-## How You Can Help
+## You are invited to help — let’s build the future of web dev together! 🤝
 
-1. Tell others about Blitz! 
+Blitz is just getting started, and it's going to take an entire community to bring it to fruition!
+
+How you can help:
+
+1. Tell others about Blitz
 2. Report bugs by opening an issue here on GitHub
 3. Send us feedback in the [Blitz slack](https://slack.blitzjs.com).
 4. Contribute code. We have a lot of issues that are ready to work on! Start by reading [The Contributing Guide](https://github.com/blitz-js/blitz/blob/canary/CONTRIBUTING.md). Let us know if you need help.
-5. Any way you want! We totally appreciate any type of contribution, such as documentation, videos, blog posts, etc.
+5. Any way you want! We totally appreciate any type of contribution, such as documentation, videos, blog posts, etc. If you have a crazy idea, feel free to run it past us in Slack! :)
 
 <br>
 
