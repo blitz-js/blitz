@@ -16,11 +16,6 @@ Blitz is a Rails-like framework for building monolithic, fullstack React apps. T
 
 Blitz is built on Next.js, so if you are familiar with that, you will feel right at home.
 
-### Core Differences Between Blitz.js and Next.js
-
-- Next.js requires one pages folder, but in Blitz you can have multiple pages folders anywhere inside `app/`. All your pages are merged together at build time.
-- For custom API routes, Next.js uses `pages/api/` but Blitz uses a top level `api/` folder.
-
 <br>
 
 ## Blitz App Development
@@ -31,6 +26,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 - [ ] You need Postgres installed and running.
   - On macOS, you can use `brew install postgres` or install [Postgres.app](https://postgresapp.com/)
   
+<br>
 
 ### Create Your Blitz App
 
@@ -40,6 +36,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 4. `blitz start`
 5. View your app at [https://localhost:3000](https://localhost:3000)
 
+<br>
 
 ### Set Up Your Database
 
@@ -64,34 +61,37 @@ model Task {
 
 2. Run `blitz db migrate`
    - If this fails, you need to change the `DATABASE_URL` value in `.env` to whatever is required by your Postgres installation.
-   
+
+<br>
    
 ### Generate the CRUD Files
 
 _CRUD = create, read, update, delete_
 
 1. Run `blitz generate crud project`
-2. Run `blitz generate crud project task`
+2. Run `blitz generate crud task --parent project`
 3. Open [https://localhost:3000/projects](https://localhost:3000/projects) to see the default project list page
+
+<br>
 
 ### Pages
 
 Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Next.js Page documentation](https://nextjs.org/docs/basic-features/pages)
 
 
-- Unlike Next.js, you can have have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this: 
+- Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this: 
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
 - All React components inside a `pages/` folder are accessible at a URL corrosponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
 
+<br>
 
-
-### Intro to Queries & Mutations
+### Writing Queries & Mutations
 
 Blitz queries and mutations are plain, asynchronous Javascript functions that always run on the server.
 
-Blitz automatically aliases the root of your project, so `import db from 'db'` is importing `<project_root>/db/index.ts`
+We automatically alias the root of your project, so `import db from 'db'` is importing `<project_root>/db/index.ts`
 
 **Example Query:**
 
@@ -125,9 +125,85 @@ export default async function createProduct(args: ProductCreateArgs) {
 }
 ```
 
-### Mutations
+<br>
+
+### Using Queries
 
 
+#### In a React Component
+
+Blitz provides a `useQuery` hook, which is built on [`react-query`](https://github.com/tannerlinsley/react-query). The first argument is a query function. The second argument is the input to the query function. The third argument is any valid react-query configuration item.
+
+At build time, the direct function import is swapped out for a function that executes a network call to run the query serverside.
+
+```tsx
+import {useQuery} from 'blitz'
+import getProduct from '/app/products/queries/getProduct'
+
+export default function(props: {query: {id: number}}) {
+  const [product] = useQuery(getProduct, {where: {id: props.query.id}})
+  
+  return <div>{product.name}</div>
+}
+```
+
+#### On the Server
+
+In `getStaticProps`, a query function can be called directly without `useQuery`
+
+```tsx
+import getProduct from '/app/products/queries/getProduct'
+
+export const getStaticProps = async context => {
+  const product = await getProduct({where: {id: context.params?.id}})
+  return {props: {product}}
+}
+
+export default function({product}) {
+  return <div>{product.name}</div>
+}
+```
+
+In `getServerSideProps`, TODO
+
+
+For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)
+
+<br>
+
+### Using Mutations
+
+Mutations are called directly, like a regular asynchronous function. 
+
+At build time, the direct function import is swapped out for a function that executes a network call to run the mutation server-side.
+
+```tsx
+import {useQuery} from 'blitz'
+import getProduct from '/app/products/queries/getProduct'
+import updateProduct from '/app/products/mutations/updateProduct'
+
+function (props) {
+  const [product] = useQuery(getProduct, {where: {id: props.id}})
+
+  return (
+    <Formik
+      initialValues={product}
+      onSubmit={async values => {
+        try {
+          const product = await updateProduct(values)
+        } catch (error) {
+          alert('Error saving product')
+        }
+      }}>
+      {/* ... */}
+    </Formik>
+  )
+}
+```
+
+For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)
+
+<br>
 
 ### Custom API Routes
 
@@ -136,8 +212,11 @@ Blitz.js custom API routes are exactly the same as Next.js custom API routes. If
 - Unlike Next.js, your `api/` folder must be a sibling of `pages/` instead of being nested inside.
 - All React components inside an `api/` folder are accessible at a URL corrosponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
 
+<br>
 
 ### Deploy to Production
+
+TODO
 
 Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested. 
 
@@ -165,5 +244,12 @@ Here's the list of big things that are currently missing from Blitz but are top 
 
 ## How You Can Help
 
-1. Tell others about Blitz!
-2. Contribute code! Get started by reading [The Contributing Guide](https://github.com/blitz-js/blitz/blob/canary/CONTRIBUTING.md)
+1. Tell others about Blitz! 
+2. Report bugs by opening an issue here on GitHub
+3. Send us feedback in the [Blitz slack](https://slack.blitzjs.com).
+4. Contribute code. We have a lot of issues that are ready to work on! Start by reading [The Contributing Guide](https://github.com/blitz-js/blitz/blob/canary/CONTRIBUTING.md). Let us know if you need help.
+5. Any way you want! We totally appreciate any type of contribution, such as documentation, videos, blog posts, etc.
+
+<br>
+
+We hope to see you in the [Blitz slack community](https://slack.blitzjs.com)!
