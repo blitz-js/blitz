@@ -7,9 +7,16 @@ const isBlitzConfig = (p: string) => /(blitz|next)\.config\.(js|ts)/.test(p)
 
 export async function copyConfig(entries: string[], srcPath: string, destPath: string) {
   const configFiles = entries.filter(isBlitzConfig)
+
   if (configFiles.length > 1) {
-    throw new Error('Blitz needs either a next.config.js or a blitz.config.js but not both')
+    // TODO: make a nice error catcher
+    const err = new Error(
+      'Blitz cannot process two configuration files. Please only provide either a blitz.config.js or a next.config.js',
+    )
+    err.name = 'ConfigurationError'
+    throw err
   }
+
   const [existingConfig] = configFiles
 
   const fileContents = !existingConfig
