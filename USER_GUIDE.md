@@ -85,6 +85,8 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
 - All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
 
+The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
+ 
 <br>
 
 ### Writing Queries & Mutations
@@ -136,14 +138,32 @@ Blitz provides a `useQuery` hook, which is built on [`react-query`](https://gith
 
 At build time, the direct function import is swapped out for a function that executes a network call to run the query serverside.
 
-```tsx
-import {useQuery} from 'blitz'
-import getProduct from '/app/products/queries/getProduct'
+**React Concurrent Mode is enabled by default for Blitz apps.** So the `<Suspense>` component is used for loading states and `<ErrorBoundary>` is used to display errors. If you need, you can read the [React Concurrent Mode Docs](https://reactjs.org/docs/concurrent-mode-intro.html).
 
-export default function(props: {query: {id: number}}) {
+```tsx
+import {Suspense} from 'react'
+import {useRouter, useQuery} from 'blitz'
+import getProduct from '/app/products/queries/getProduct'
+import ErrorBoundary from 'app/components/ErrorBoundary'
+
+function Product() {
+  const router = useRouter()
+  const id = parseInt(router.query.id as string)
   const [product] = useQuery(getProduct, {where: {id: props.query.id}})
   
   return <div>{product.name}</div>
+}
+
+export default function() {
+  return (
+   <div>
+     <ErrorBoundary fallback={error => <div>Error: {JSON.stringify(error)}</div>}>
+       <Suspense fallback={<div>Loading...</div>}>
+         <Product />
+       </Suspense>
+     </ErrorBoundary>
+   </div>
+ )
 }
 ```
 
@@ -164,8 +184,21 @@ export default function({product}) {
 }
 ```
 
-In `getServerSideProps`, TODO
+In `getServerSideProps`, pass a query function to `ssrQuery` which will ensure appropriate middleware is run before/after your query function.
 
+```tsx
+import {ssrQuery} from 'blitz'
+import getProduct from '/app/products/queries/getProduct'
+
+export const getServerSideProps = async ({params, req, res}) => {
+  const product = await ssrQuery(getProduct, {where: {id: params.id}}, {req, res}))
+  return {props: {product}}
+}
+
+export default function({product}) {
+  return <div>{product.name}</div>
+}
+```
 
 For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)
 
@@ -214,6 +247,12 @@ Blitz.js custom API routes are exactly the same as Next.js custom API routes. If
 
 <br>
 
+### Customize the Webpack Config
+
+Blitz uses the `blitz.config.js` config file at the root of your project. This is exactly the same as `next.config.js`. Read [the Next.js docs on customizing webpack](https://nextjs.org/docs/api-reference/next.config.js/custom-webpack-config).
+
+<br>
+
 ### Deploy to Production
 
 1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
@@ -257,6 +296,7 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 - Read the [Architecture RFC](https://github.com/blitz-js/blitz/pull/73) for more details on the architecture, our decision making, and how queries/mutations work under the hood
 - Read the [File Structure & Routing RFC](https://github.com/blitz-js/blitz/pull/74) for more details about the file structure and routing conventions.
+- View an example Blitz app at [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
 
 <br>
 
