@@ -32,6 +32,7 @@
     "chokidar": "^3.3.1",
     "cross-spawn": "^7.0.2",
     "diff": "^4.0.2",
+    "dotenv": "8.2.0",
     "enquirer": "^2.3.4",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "1.1.0",
