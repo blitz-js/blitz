@@ -292,6 +292,38 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 <br>
 
+## Blitz CLI Commands
+
+#### `blitz new NAME`
+
+Generate a new blitz project at `<current_folder>./NAME`
+
+#### `blitz start`
+
+Start your app in development mode
+
+#### `blitz start --production`
+
+Start your app in production mode
+
+#### `blitz db migrate`
+
+Run any needed migrations via Prisma 2 and generate Prisma Client
+
+#### `blitz db studio`
+
+Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so you can easily see and change data in your database.
+
+#### `blitz generate crud MODEL [--parent MODEL]`
+
+Generate all the CRUD files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+
+#### `blitz console`
+
+TODO CURRENTLY BROKEN
+
+<br>
+
 ## More Information
 
 - Read the [Architecture RFC](https://github.com/blitz-js/blitz/pull/73) for more details on the architecture, our decision making, and how queries/mutations work under the hood
