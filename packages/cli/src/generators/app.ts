@@ -2,6 +2,7 @@ import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
+import username from 'username'
 
 const themeColor = '6700AB'
 
@@ -14,24 +15,28 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   async write() {
     const templateValues = {
       name: this.options.appName,
+      username: await username(),
     }
 
-    const paths = readDirRecursive(this.sourcePath())
+    const paths = readDirRecursive(this.sourcePath(), () => true)
 
     for (let path of paths) {
       this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path), templateValues)
     }
+
+    this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }
 
   async postWrite() {
-    console.log('\n' + chalk.hex(themeColor)('Installing dependencies...'))
+    console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
+    console.log('Scary warning messages during this part, are unfortunately normal.\n')
 
     const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
     if (result.status !== 0) {
       throw new Error()
     }
 
-    console.log(chalk.hex(themeColor)('Dependencies installed.'))
+    console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
   }
 }
 
