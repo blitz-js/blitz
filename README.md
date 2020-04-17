@@ -19,7 +19,7 @@
 
 <br>
 
-**Blitz is a Rails-like framework for monolithic, full-stack React apps without an API.**
+### Blitz is a Rails-like framework for monolithic, full-stack React apps without an API.
 
 <br>
 
