@@ -1,8 +1,8 @@
-# Blitz Alpha User Guide
+![Blitz Alpha User Guide](https://files-mgangy3vm.now.sh/alpha-user-guide.png)
 
 <br>
 
-Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can start building things with it! 
+Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build! 
 
 If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to us.
 
