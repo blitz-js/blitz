@@ -5,7 +5,6 @@ lib
 node_modules
 reports
 *.log
-**/.env*
 .nyc_output
 **/coverage
 .yarn
@@ -15,3 +14,10 @@ tsconfig.tsbuildinfo
 .next
 dist
 .now
+# local env files
+**/.envrc
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
