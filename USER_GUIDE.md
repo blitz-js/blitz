@@ -310,6 +310,10 @@ Start your app in production mode
 
 Run any needed migrations via Prisma 2 and generate Prisma Client
 
+#### `blitz db introspect`
+
+Will introspect the database defined in `db/schema.prisma` and automatically generate a complete `schema.prisma` file for you. Lastly, it'll generate Prisma Client.
+
 #### `blitz db studio`
 
 Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so you can easily see and change data in your database.
