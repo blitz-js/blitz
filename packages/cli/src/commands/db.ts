@@ -30,15 +30,48 @@ export default class Db extends Command {
           })
           cp.on('exit', (code: number) => {
             if (code == 0) {
-              spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'})
+              spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+                if (code !== 0) {
+                  process.exit(1)
+                }
+              })
+            } else {
+              process.exit(1)
             }
           })
+        } else {
+          process.exit(1)
         }
       })
-    } else if (command === 'init' || command === 'i') {
-      spawn('prisma', ['init'], {stdio: 'inherit'})
+    } else if (command === 'introspect') {
+      const cp = spawn('prisma', ['introspect', schemaArg], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code: number) => {
+        if (code == 0) {
+          spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+            if (code !== 0) {
+              process.exit(1)
+            }
+          })
+        } else {
+          process.exit(1)
+        }
+      })
+    } else if (command === 'studio') {
+      const cp = spawn('prisma', ['studio', schemaArg, '--experimental'], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code: number) => {
+        if (code == 0) {
+        } else {
+          process.exit(1)
+        }
+      })
     } else {
-      this.log('Missing command')
+      this.log("\nUh oh, we don't support that command.")
+      this.log('You can try running a prisma command directly with:')
+      this.log('\n  `npm run prisma COMMAND` or `yarn prisma COMMAND`\n')
     }
   }
 }
