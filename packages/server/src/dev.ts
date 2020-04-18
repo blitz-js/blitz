@@ -14,7 +14,7 @@ export async function dev(config: ServerConfig) {
     includePaths,
   } = await enhance({
     ...config,
-    interceptNextErrors: true,
+    interceptNextErrors: false,
   })
   const src = resolve(rootFolder)
   const dest = resolve(rootFolder, devFolder)

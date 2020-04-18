@@ -6,9 +6,14 @@
       "examples/*"
     ],
     "nohoist": [
-      "husky",
       "**/@prisma",
-      "**/@prisma/**"
+      "**/@prisma/**",
+      "**/react",
+      "**/react-dom",
+      "**/next",
+      "**/react-query",
+      "**/use-subscription",
+      "**/styled-jsx"
     ]
   },
   "engines": {
