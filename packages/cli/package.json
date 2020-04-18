@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz CLI",
-  "version": "0.0.2-canary.1",
+  "version": "0.0.2-canary.1.2",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -23,7 +23,6 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/server": "0.0.2-canary.1",
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.14.0",
     "@oclif/plugin-help": "^2.2.3",
@@ -44,6 +43,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
+    "@blitzjs/server": "0.0.2-canary.1.4",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@types/cross-spawn": "^6.0.1",

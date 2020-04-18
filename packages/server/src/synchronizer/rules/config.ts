@@ -1,4 +1,4 @@
-import {readFile, writeFile} from 'fs-extra'
+import {readFile, writeFile, rename} from 'fs-extra'
 import {resolve} from 'path'
 import File from 'vinyl'
 import {Rule} from '../types'
@@ -10,7 +10,7 @@ export async function copyConfig(entries: string[], srcPath: string, destPath: s
   const hasBlitzConfig = !!entries.find(isBlitzConfig)
   const hasNextConfig = !!entries.find(isNextConfig)
 
-  if (hasNextConfig) {
+  if (hasNextConfig && !process.env.NOW_BUILDER) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
     const err = new Error(
       'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
@@ -25,7 +25,20 @@ export async function copyConfig(entries: string[], srcPath: string, destPath: s
 
   await writeFile(resolve(destPath, 'blitz.config.js'), Buffer.from(fileContents))
 
-  const nextConfigShellTpl = `
+  // Zeit now adds configuration needed for Now, like serverless target,
+  // so we need to keep and use that
+  if (process.env.NOW_BUILDER) {
+    rename(resolve(srcPath, 'next.config.js'), resolve(destPath, 'next-zeit.config.js'))
+  }
+
+  const nextConfigShellTpl = process.env.NOW_BUILDER
+    ? `
+const {withBlitz} = require('@blitzjs/server');
+const zeitConfig = require('./next-zeit.config.js');
+const config = require('./blitz.config.js');
+module.exports = withBlitz({...config, ...zeitConfig});
+`
+    : `
 const {withBlitz} = require('@blitzjs/server');
 const config = require('./blitz.config.js');
 module.exports = withBlitz(config);
