@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2-canary.0",
+  "version": "0.0.2-canary.1",
   "name": "vanilla-next",
   "private": true,
   "main": "index.js",
@@ -10,9 +10,9 @@
     "build": "blitz build"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.0.2-canary.0",
-    "@blitzjs/core": "0.0.2-canary.0",
-    "@blitzjs/server": "0.0.2-canary.0",
+    "@blitzjs/cli": "0.0.2-canary.1",
+    "@blitzjs/core": "0.0.2-canary.1",
+    "@blitzjs/server": "0.0.2-canary.1",
     "next": "^9.3.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
