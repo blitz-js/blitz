@@ -34,6 +34,7 @@ const lib = {
     file: pkg['main'],
     exports: 'named',
     sourcemap: 'true',
+    format: 'cjs',
   },
   ...common,
 }

@@ -23,9 +23,7 @@
     "dist"
   ],
   "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
+    "hooks": {}
   },
   "jest": {
     "setupFilesAfterEnv": [

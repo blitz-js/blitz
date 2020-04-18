@@ -17,7 +17,9 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "dev": "lerna run start --scope blitz --scope @blitzjs/* --stream --parallel",
+    "dev": "concurrently \"yarn dev-packages\"",
+    "dev-packages": "lerna run start --scope @blitzjs/* --stream --parallel",
+    "dev-blitz": "yarn workspace blitz start",
     "postinstall": "npm rebuild husky",
     "build": "lerna run build --scope blitz --scope @blitzjs/* --stream",
     "prepublishOnly": "lerna run build --scope blitz --scope @blitzjs/* && lerna run test --parallel",
@@ -31,6 +33,7 @@
     "@wessberg/cjs-to-esm-transformer": "^0.0.19",
     "@wessberg/rollup-plugin-ts": "^1.2.24",
     "chalk": "^4.0.0",
+    "concurrently": "^5.1.0",
     "cross-env": "^7.0.0",
     "debug": "^4.1.1",
     "husky": "^4.2.3",
