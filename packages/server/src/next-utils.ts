@@ -42,7 +42,9 @@ export async function nextBuild(nextBin: string, cwd: string) {
       cwd,
       stdio: 'inherit',
     })
-      .on('exit', res)
+      .on('exit', (code) => {
+        code === 0 ? res() : rej(`Failed with status code: ${code}`)
+      })
       .on('error', rej)
   })
 }

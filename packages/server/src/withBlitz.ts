@@ -1,5 +1,6 @@
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
+const resolveCwd = require('resolve-cwd')
 
 export function withBlitz(nextConfig: Record<any, any> = {}) {
   const plugins = []
@@ -20,6 +21,13 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
           config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
+        }
+
+        if (options.isServer) {
+          config.externals = config.externals || []
+          config.externals.push({
+            '.generated-prisma-client': resolveCwd('./.generated-prisma-client'),
+          })
         }
 
         if (typeof nextConfig.webpack === 'function') {

@@ -10,10 +10,10 @@
 /coverage
 
 # blitz.js
-/.blitz/
-/.next/
-/out/
+.blitz
+.next
 *.sqlite
+.generated-prisma-client
 
 # production
 /build

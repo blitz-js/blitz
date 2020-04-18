@@ -8,11 +8,11 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-/.blitz/
+# blitz.js
+.next
+.blitz
 *.sqlite
+.generated-prisma-client
 
 # production
 /build
