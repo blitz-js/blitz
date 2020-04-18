@@ -61,9 +61,5 @@
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   },
-  "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
-  },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }

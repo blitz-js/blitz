@@ -1,6 +1,5 @@
 const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
-const resolveCwd = require('resolve-cwd')
 
 export function withBlitz(nextConfig: Record<any, any> = {}) {
   const plugins = []
@@ -22,8 +21,6 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
           config.module.rules = config.module.rules || []
           config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
         }
-
-        config.resolve.alias.react = resolveCwd('react')
 
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
