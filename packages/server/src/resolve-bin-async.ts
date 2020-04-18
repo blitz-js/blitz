@@ -1,4 +1,3 @@
-// import resolveBin from 'resolve-bin'
 import resolveCwd from 'resolve-cwd'
 import findParentDir from 'find-parent-dir'
 import path from 'path'
