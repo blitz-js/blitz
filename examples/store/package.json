@@ -8,8 +8,9 @@
   "dependencies": {
     "@blitzjs/cli": "0.0.2-canary.1.2",
     "@blitzjs/core": "0.0.2-canary.1",
-    "@blitzjs/server": "0.0.2-canary.1.4",
-    "@prisma/client": "2.0.0-beta.2",
+    "@blitzjs/server": "0.0.2-canary.1.5",
+    "@prisma/cli": "2.0.0-alpha.1107",
+    "@prisma/client": "2.0.0-alpha.1107",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
@@ -18,8 +19,8 @@
   },
   "NOTE": "Next.js dependency is only required for deploying to zeit, for now",
   "devDependencies": {
-    "@types/react": "16.9.34",
     "@prisma/cli": "2.0.0-beta.2",
+    "@types/react": "16.9.34",
     "next": "9.3.4"
   }
 }
