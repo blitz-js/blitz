@@ -1,9 +1,22 @@
 import {spawn} from 'cross-spawn'
+import {flags} from '@oclif/command'
 import {Command} from '@oclif/command'
+import chalk from 'chalk'
 import * as path from 'path'
 
 export default class Db extends Command {
-  static description = 'Run database commands'
+  static description = `Run database commands
+
+${chalk.bold('migrate')}   Run any needed migrations via Prisma 2 and generate Prisma Client.
+
+${chalk.bold(
+  'introspect',
+)}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it\'ll generate Prisma Client.
+
+${chalk.bold(
+  'studio',
+)}   Open the Prisma Studio UI at http://localhost:5555 so you can easily see and change data in your database.
+`
 
   static args = [
     {
@@ -12,6 +25,10 @@ export default class Db extends Command {
       required: true,
     },
   ]
+
+  static flags = {
+    help: flags.help({char: 'h'}),
+  }
 
   async run() {
     const {args} = this.parse(Db)
