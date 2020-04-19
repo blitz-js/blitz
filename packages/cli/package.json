@@ -8,7 +8,7 @@
     "predev": "wait-on -d 500 ../server/dist/packages/server/src/index.d.ts",
     "dev": "rimraf lib && cpy --parents templates lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc && cpy --parents templates lib",
-    "test": "jest --coverage",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {
