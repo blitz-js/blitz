@@ -36,7 +36,7 @@ describe('Dev command', () => {
     if (await pathExists(devFolder)) {
       await remove(devFolder)
     }
-    watcher.close()
+    watcher?.close()
   })
 
   it('should copy the correct files to the dev folder', async () => {
@@ -108,6 +108,8 @@ describe('Build command ZEIT', () => {
     if (await pathExists(buildFolder)) {
       await remove(buildFolder)
     }
+
+    await remove(resolve(rootFolder, 'next.config.js'))
   })
 
   it('should copy the correct files to the build folder', async () => {
@@ -134,7 +136,7 @@ describe('Build command ZEIT', () => {
           extension: '.js',
           name: 'next.config.js',
           path: `${buildFolder}/next.config.js`,
-          size: 203,
+          size: 61,
           type: 'file',
         },
         {
@@ -160,7 +162,7 @@ describe('Build command ZEIT', () => {
           type: 'directory',
         },
       ],
-      size: 404,
+      size: 262,
       type: 'directory',
     })
   })

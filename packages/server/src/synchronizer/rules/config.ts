@@ -1,4 +1,4 @@
-import {readFile, writeFile, rename} from 'fs-extra'
+import {readFile, writeFile, copyFile} from 'fs-extra'
 import {resolve} from 'path'
 import File from 'vinyl'
 import {Rule} from '../types'
@@ -28,7 +28,7 @@ export async function copyConfig(entries: string[], srcPath: string, destPath: s
   // Zeit now adds configuration needed for Now, like serverless target,
   // so we need to keep and use that
   if (process.env.NOW_BUILDER) {
-    rename(resolve(srcPath, 'next.config.js'), resolve(destPath, 'next-zeit.config.js'))
+    await copyFile(resolve(srcPath, 'next.config.js'), resolve(destPath, 'next-zeit.config.js'))
   }
 
   const nextConfigShellTpl = process.env.NOW_BUILDER
