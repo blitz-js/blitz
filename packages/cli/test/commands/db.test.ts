@@ -13,14 +13,15 @@ jest.doMock('cross-spawn', () => ({spawn}))
 import DbCmd from '../../src/commands/db'
 
 const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+const prismaBin = path.join(process.cwd(), 'node_modules/.bin/prisma')
 
 const migrateSaveParams = [
-  'prisma',
+  prismaBin,
   ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
   {stdio: 'inherit'},
 ]
 const migrateUpParams = [
-  'prisma',
+  prismaBin,
   ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
   {stdio: 'inherit'},
 ]

@@ -2,9 +2,9 @@ import resolveCwd from 'resolve-cwd'
 import findParentDir from 'find-parent-dir'
 import path from 'path'
 
-function resolveBin(name: string, cb: Function) {
-  var executable = name
-
+// This code originally from https://github.com/thlorenz/resolve-bin
+// It's inlined here because we need to use resolveCwd
+function resolveBin(name: string, executable: string, cb: Function) {
   var mod
   try {
     mod = resolveCwd(name)
@@ -26,9 +26,9 @@ function resolveBin(name: string, cb: Function) {
   })
 }
 
-export function resolveBinAsync(pkg: string) {
+export function resolveBinAsync(pkg: string, executable = pkg) {
   return new Promise<string>((resolve, reject) => {
-    resolveBin(pkg, (err: any, bin: string) => {
+    resolveBin(pkg, executable, (err: any, bin: string) => {
       if (err) {
         reject(err)
       }

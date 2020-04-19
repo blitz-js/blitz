@@ -19,7 +19,6 @@
     "postinstall": "npm rebuild husky",
     "dev": "lerna run dev --no-private --stream --parallel",
     "build": "lerna run build --no-private --stream",
-    "pretest": "yarn run build",
     "test": "lerna run test --parallel",
     "prepublishOnly": "yarn run build && yarn run test"
   },
@@ -58,7 +57,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "yarn test"
+      "pre-push": "yarn build && yarn test"
     }
   },
   "resolutions": {

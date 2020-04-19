@@ -39,6 +39,7 @@
     "null-loader": "^3.0.0",
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
+    "pkg-dir": "4.2.0",
     "readable-stream": "^3.6.0",
     "resolve-cwd": "3.0.0",
     "through2": "^3.0.1",

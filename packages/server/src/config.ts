@@ -1,4 +1,3 @@
-import * as fs from 'fs'
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
@@ -30,7 +29,6 @@ const defaults = {
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',
   buildFolder: '.blitz/caches/build',
-  nextBin: './node_modules/.bin/next',
   nextBinPatched: './node_modules/.bin/next-patched',
   manifestPath: '_manifest.json',
   writeManifestFile: true,
@@ -44,14 +42,9 @@ export async function enhance(config: ServerConfig) {
     typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
 
   const nextBinOrig = await resolveBinAsync('next')
-  const nextBinPatchedPath = resolve(config.rootFolder, defaults.nextBinPatched)
+  const nextBinPatched = await resolveBinAsync('@blitzjs/server', 'next-patched')
 
-  let nextBin: string
-  if (fs.existsSync(nextBinPatchedPath) && config.interceptNextErrors) {
-    nextBin = nextBinPatchedPath
-  } else {
-    nextBin = nextBinOrig
-  }
+  const nextBin = resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig)
 
   return ciLog(
     `
