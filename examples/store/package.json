@@ -6,9 +6,9 @@
     "build": "blitz db migrate && blitz build"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.0.2-canary.1",
+    "@blitzjs/cli": "0.0.2-canary.1.2",
     "@blitzjs/core": "0.0.2-canary.1",
-    "@blitzjs/server": "0.0.2-canary.1",
+    "@blitzjs/server": "0.0.2-canary.1.4",
     "@prisma/cli": "2.0.0-beta.2",
     "@prisma/client": "2.0.0-beta.2",
     "final-form": "4.19.1",
