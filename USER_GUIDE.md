@@ -345,6 +345,8 @@ Here's the list of big things that are currently missing from Blitz but are top 
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
 - `blitz new` including set up for testing, Prettier, ESLint, styling system (Tailwind, CSS-in-JS, etc)
+- React-Native support
+- GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
 
 <br>
