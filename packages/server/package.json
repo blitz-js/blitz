@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2-canary.1.4",
+  "version": "0.0.2-canary.1.6",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsdx watch",
+    "dev": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint"

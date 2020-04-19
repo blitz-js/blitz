@@ -92,3 +92,7 @@ cd examples/store
 ```
 
 **2.** Follow instructions in the example's README
+
+## Troubleshooting
+
+If you run into issues that should be documented here, please submit a PR! ❤️

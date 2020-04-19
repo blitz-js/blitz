@@ -4,9 +4,9 @@
   "version": "0.0.2-canary.0",
   "license": "MIT",
   "scripts": {
-    "start": "yarn dev",
-    "build": "rollup -c rollup.config.js",
-    "dev": "rollup -c rollup.config.js --watch"
+    "predev": "wait-on ../core/dist/packages/core/src/index.d.ts",
+    "dev": "rollup -c rollup.config.js --watch",
+    "build": "rollup -c rollup.config.js"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -31,7 +31,7 @@
     ]
   },
   "engines": {
-    "yarn": "^1.19.1",
+    "yarn": "^1.18.0",
     "node": ">=12.16.1"
   },
   "repository": {
@@ -39,9 +39,10 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.0.2-canary.0",
-    "@blitzjs/core": "0.0.2-canary.0",
-    "@blitzjs/server": "0.0.2-canary.0"
+    "@blitzjs/cli": "0.0.2-canary.1.2",
+    "@blitzjs/core": "0.0.2-canary.1",
+    "@blitzjs/server": "0.0.2-canary.1.6",
+    "cross-spawn": "7.0.2"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",

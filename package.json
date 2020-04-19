@@ -7,7 +7,6 @@
       "examples/*"
     ],
     "nohoist": [
-      "husky",
       "**/@prisma",
       "**/@prisma/**"
     ]
@@ -17,14 +16,12 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "dev": "concurrently \"yarn dev-packages\"",
-    "dev-packages": "lerna run start --scope @blitzjs/* --stream --parallel",
-    "dev-blitz": "yarn workspace blitz start",
     "postinstall": "npm rebuild husky",
-    "build": "lerna run build --scope blitz --scope @blitzjs/* --stream",
-    "prepublishOnly": "lerna run build --scope blitz --scope @blitzjs/* && lerna run test --parallel",
-    "pretest": "lerna run build --scope blitz --scope @blitzjs/*",
-    "test": "lerna run test --parallel"
+    "dev": "lerna run dev --no-private --stream --parallel",
+    "build": "lerna run build --no-private --stream",
+    "pretest": "yarn run build",
+    "test": "lerna run test --parallel",
+    "prepublishOnly": "yarn run build && yarn run test"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
@@ -55,7 +52,8 @@
     "ts-jest": "24.3.0",
     "tsdx": "^0.13.1",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "wait-on": "4.0.2"
   },
   "husky": {
     "hooks": {

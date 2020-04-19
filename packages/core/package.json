@@ -4,7 +4,7 @@
   "version": "0.0.2-canary.1",
   "license": "MIT",
   "scripts": {
-    "start": "tsdx watch",
+    "dev": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch",

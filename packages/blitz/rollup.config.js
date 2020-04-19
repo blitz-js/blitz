@@ -11,13 +11,14 @@ const common = {
     ...Object.keys(pkg.peerDependencies || {}),
     'react',
     'react-dom',
-    // '@prisma/client',
     'next',
+    'fs',
+    'path',
   ],
   plugins: [
     json(),
     external(),
-    resolve(),
+    resolve({preferBuiltins: true}),
     typescript({
       transformers: [],
     }),

@@ -1,11 +1,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {spawn} from 'child_process'
+import {spawn} from 'cross-spawn'
 
 const options = require('minimist')(process.argv.slice(2))
 
 const getCliPath = function() {
-  return [path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli'), path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli')]
+  return [
+    path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli'),
+    path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli'),
+  ]
 }
 
 const getBlitzCorePkgJsonPath = function() {
@@ -16,18 +19,17 @@ if (options._.length === 0 && (options.v || options.version)) {
   printVersionAndExit(getBlitzCorePkgJsonPath())
 }
 
-let cli; 
+let cli
 const [normal, monorepo] = getCliPath()
 
-
-if(fs.existsSync(normal)) {
+if (fs.existsSync(normal)) {
   console.log('BlitzJS/CLI installed locally...using that')
   cli = require(normal)
 } else if (fs.existsSync(monorepo)) {
   console.log('BlitzJS/CLI found locally (hoisted)...using that')
   cli = require(path.resolve('../../node_modules/@blitzjs/cli'))
 }
-const commands = options._; 
+const commands = options._
 
 if (cli) {
   cli.run()
@@ -40,13 +42,12 @@ if (cli) {
   })
 
   cli.stdout?.on('data', function(data) {
-    console.log('stdout' +  data.toString())
-  })
-  
-  cli.on('exit', (code) => {
-    console.log(`Blitz exited with code: ${code}`)
+    console.log('stdout' + data.toString())
   })
 
+  cli.on('exit', code => {
+    console.log(`Blitz exited with code: ${code}`)
+  })
 }
 
 function printVersionAndExit(blitzPath: string) {
