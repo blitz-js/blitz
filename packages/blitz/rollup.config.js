@@ -41,7 +41,7 @@ const lib = {
 }
 
 const cli = {
-  input: './src/bin/index.ts',
+  input: './src/bin/cli.ts',
   output: {
     file: './dist/cli.js',
     exports: 'named',

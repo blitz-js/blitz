@@ -54,8 +54,8 @@ export async function enhance(config: ServerConfig) {
 
   return ciLog(
     `
-Logging the following to understand what is happening in our CI environment 
-and investigate why we have been getting random CI test failures. 
+Logging the following to understand what is happening in our CI environment
+and investigate why we have been getting random CI test failures.
 This will be temporary.
 `,
     {

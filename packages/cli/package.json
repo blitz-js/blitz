@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
+    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
+    "dev": "rimraf lib && cpy --parents templates lib && tsc --watch",
     "build": "rimraf lib && tsc && cpy --parents templates lib",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
