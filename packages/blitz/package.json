@@ -41,7 +41,9 @@
   "dependencies": {
     "@blitzjs/cli": "0.0.2-canary.1.2",
     "@blitzjs/core": "0.0.2-canary.1",
-    "@blitzjs/server": "0.0.2-canary.1.6"
+    "@blitzjs/server": "0.0.2-canary.1.6",
+    "pkg-dir": "4.2.0",
+    "resolve-global": "1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",

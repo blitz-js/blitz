@@ -35,19 +35,20 @@ ${chalk.bold(
     const command = args['command']
 
     const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+    const prismaBin = path.join(process.cwd(), 'node_modules/.bin/prisma')
 
     if (command === 'migrate' || command === 'm') {
-      const cp = spawn('prisma', ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+      const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
         stdio: 'inherit',
       })
       cp.on('exit', (code: number) => {
         if (code == 0) {
-          const cp = spawn('prisma', ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+          const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
             stdio: 'inherit',
           })
           cp.on('exit', (code: number) => {
             if (code == 0) {
-              spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+              spawn(prismaBin, ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
                 if (code !== 0) {
                   process.exit(1)
                 }
@@ -61,12 +62,12 @@ ${chalk.bold(
         }
       })
     } else if (command === 'introspect') {
-      const cp = spawn('prisma', ['introspect', schemaArg], {
+      const cp = spawn(prismaBin, ['introspect', schemaArg], {
         stdio: 'inherit',
       })
       cp.on('exit', (code: number) => {
         if (code == 0) {
-          spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+          spawn(prismaBin, ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
             if (code !== 0) {
               process.exit(1)
             }
@@ -76,7 +77,7 @@ ${chalk.bold(
         }
       })
     } else if (command === 'studio') {
-      const cp = spawn('prisma', ['studio', schemaArg, '--experimental'], {
+      const cp = spawn(prismaBin, ['studio', schemaArg, '--experimental'], {
         stdio: 'inherit',
       })
       cp.on('exit', (code: number) => {

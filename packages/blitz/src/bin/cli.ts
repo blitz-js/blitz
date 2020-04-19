@@ -1,61 +1,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
-// import {spawn} from 'cross-spawn'
+const resolveGlobal = require('resolve-global')
+const pkgDir = require('pkg-dir')
 
-let usageType: 'local' | 'monorepo' | 'global'
+let usageType: 'local' | 'monorepo' | 'global' | 'global-linked'
 
-const localCLIPackagePath = path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli')
-const monorepoCLIPackagePath = path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli')
-
-if (fs.existsSync(localCLIPackagePath)) {
-  usageType = 'local'
-  console.log('BlitzJS/CLI installed locally...using that')
-} else if (fs.existsSync(monorepoCLIPackagePath)) {
-  usageType = 'monorepo'
-  console.log('BlitzJS/CLI found locally (hoisted)...using that')
-} else {
-  usageType = 'global'
-}
-
-let cli
-switch (usageType) {
-  case 'local':
-    cli = require(localCLIPackagePath)
-    break
-  case 'monorepo':
-    cli = require(monorepoCLIPackagePath)
-    break
-  case 'global':
-    break
-}
-
-const options = require('minimist')(process.argv.slice(2))
-
-if (options._.length === 0 && (options.v || options.version)) {
-  printVersionAndExit()
-}
-
-// const commands = options._
-
-if (cli) {
-  cli.run()
-} else {
-  // TODO: don't spawn. Instead, just require files
-  console.log('BlitzJS/CLI not found locally; trying global...')
-  // cli = spawn('blitz', [commands[0]], {stdio: 'inherit'})
-  //
-  // cli.stderr?.on('data', function (data) {
-  //   console.log('err' + data.toString())
-  // })
-  //
-  // cli.stdout?.on('data', function (data) {
-  //   console.log('stdout' + data.toString())
-  // })
-  //
-  // cli.on('exit', (code) => {
-  //   console.log(`Blitz exited with code: ${code}`)
-  // })
-}
+const localCLIPkgPath = path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli')
+const monorepoCLIPkgPath = path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli')
+const globalCLIPkgPath = resolveGlobal.silent('@blitzjs/cli') as string
+const globalLinkedCLIPkgPath = path.resolve(pkgDir.sync(__dirname), '../cli')
 
 function getBlitzPkgJsonPath() {
   switch (usageType) {
@@ -64,19 +17,45 @@ function getBlitzPkgJsonPath() {
     case 'monorepo':
       return path.join(process.cwd(), '../../node_modules/blitz/package.json')
     case 'global':
-      console.log('ERROR: global getBlitzPkgJsonPath not handled')
-      return ''
+      return path.join(resolveGlobal.silent('blitz') || '', 'package.json')
+    case 'global-linked':
+      return path.join(pkgDir.sync(__dirname), 'package.json')
   }
 }
 
-function printVersionAndExit() {
+let pkgPath
+if (fs.existsSync(localCLIPkgPath)) {
+  usageType = 'local'
+  pkgPath = localCLIPkgPath
+} else if (fs.existsSync(monorepoCLIPkgPath)) {
+  usageType = 'monorepo'
+  pkgPath = monorepoCLIPkgPath
+} else if (fs.existsSync(globalCLIPkgPath)) {
+  usageType = 'global'
+  pkgPath = globalCLIPkgPath
+} else {
+  usageType = 'global-linked'
+  pkgPath = globalLinkedCLIPkgPath
+}
+
+// TODO: remove
+console.log('DEBUG:', usageType)
+console.log('Path:', pkgPath)
+
+const cli = require(pkgPath as string)
+
+const options = require('minimist')(process.argv.slice(2))
+if (options._.length === 0 && (options.v || options.version)) {
   try {
-    // TODO: always print global BlitzPkg version.
-    // AND if local exists, print that version too
-    console.log(`blitz: ${require(getBlitzPkgJsonPath()).version}`)
-    console.log('Usage type:', usageType)
+    const globalVersion = path.join(resolveGlobal.silent('blitz') || pkgDir.sync(__dirname), 'package.json')
+    console.log(`blitz: ${require(globalVersion).version} (global)`)
+    if (!usageType.includes('global')) {
+      console.log(`blitz: ${require(getBlitzPkgJsonPath()).version} (local)`)
+    }
   } catch (e) {
     console.log('blitz error', e)
   }
   process.exit(0)
+} else {
+  cli.run()
 }

@@ -22,10 +22,11 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
           config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
         }
 
+        config.resolve.alias.blitz = '@blitzjs/core'
+
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
         }
-
         return config
       },
     }),
