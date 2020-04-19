@@ -8,6 +8,7 @@ reports
 .nyc_output
 **/coverage
 .yarn
+.yarnrc
 tsconfig.tsbuildinfo
 .blitz
 .next
