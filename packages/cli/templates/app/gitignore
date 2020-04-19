@@ -26,4 +26,9 @@
 *.log
 
 # local env files
-.env*
+.env
+.envrc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

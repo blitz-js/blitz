@@ -1,4 +1,4 @@
-import Document, {Html, Head, Main, NextScript, DocumentContext} from 'next/document'
+import {Document, Html, DocumentHead, Main, NextScript, DocumentContext} from '@blitzjs/core'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -9,7 +9,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <DocumentHead />
         <body>
           <Main />
           <NextScript />

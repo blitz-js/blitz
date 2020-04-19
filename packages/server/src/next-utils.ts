@@ -1,4 +1,4 @@
-import {spawn} from 'child_process'
+import {spawn} from 'cross-spawn'
 import * as pty from 'node-pty'
 import {Manifest} from 'synchronizer/manifest'
 // import chalk from 'chalk'
@@ -42,7 +42,9 @@ export async function nextBuild(nextBin: string, cwd: string) {
       cwd,
       stdio: 'inherit',
     })
-      .on('exit', res)
+      .on('exit', (code: number) => {
+        code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+      })
       .on('error', rej)
   })
 }

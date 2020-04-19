@@ -6,7 +6,7 @@
   "files": [
     "README.md"
   ],
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors-)",
+  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
@@ -29,7 +29,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/14793389?v=4",
       "profile": "https://fabulas.io",
       "contributions": [
-        "infra"
+        "infra",
+        "code"
       ]
     },
     {
@@ -210,6 +211,15 @@
       "name": "Justin Hall",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1288694?v=4",
       "profile": "https://github.com/wKovacs64",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sijad",
+      "name": "Sajjad Hashemian",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7693001?v=4",
+      "profile": "https://github.com/sijad",
       "contributions": [
         "code"
       ]

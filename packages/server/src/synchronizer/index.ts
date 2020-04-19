@@ -10,6 +10,7 @@ import gulpIf from 'gulp-if'
 import File from 'vinyl'
 import fg from 'fast-glob'
 import {remove, pathExists, ensureDir} from 'fs-extra'
+import configRule, {copyConfig} from './rules/config'
 import {ciLog} from '../ciLog'
 import {runRule} from './rules-runner'
 import through from 'through2'
@@ -32,12 +33,6 @@ type SynchronizeFilesOutput = {
   manifest: Manifest
 }
 
-// TODO: handle files possibly corrupted out of sync
-//          * how can I know that an entry is out of sync?
-//            * add stat info modified date in the manifest
-//            * stat the entry for modified date ahead of time
-//            * if the dates are different then the entry is invalid and should be waited on
-
 export async function synchronizeFiles({
   dest: destPath,
   src: srcPath,
@@ -54,15 +49,23 @@ export async function synchronizeFiles({
     cwd: srcPath,
   }
 
+  // HACK: we can get a faster build
+  // more paralellism and memory efficiency if we
+  // stream entry files and collect in an analysis phase
+  // instead of sequential async functions
   const entries = fg.sync(includePaths, {ignore: options.ignored, cwd: options.cwd})
 
   checkNestedApi(entries)
   checkDuplicateRoutes(entries)
 
+  // HACK: cleaning the dev folder on every restart means we do more work than necessary
+  // TODO: remove this clean and devise a way to resolve differences in stream
+  await clean(destPath)
+
+  await copyConfig(entries, srcPath, destPath)
+
   const manifest = Manifest.create()
   const {stream, watcher} = watch(includePaths, options)
-
-  await clean(destPath)
 
   return await new Promise((resolve, reject) => {
     pipeline(
@@ -71,6 +74,7 @@ export async function synchronizeFiles({
       // Rules
       runRule(pagesFolder({srcPath})),
       runRule(rpc({srcPath})),
+      runRule(configRule()),
 
       // File sync
       gulpIf(isUnlinkFile, unlink(destPath), dest(destPath)),

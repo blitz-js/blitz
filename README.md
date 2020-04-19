@@ -1,22 +1,41 @@
-# Blitz.js ⚡️
+[![Blitz.js](https://raw.githubusercontent.com/blitz-js/art/master/github-cover-photo.png)](https://blitzjs.com)
 
 <!-- prettier-ignore-start -->
+<p align="center">
+  <a aria-label="Join our Slack Community" href="https://slack.blitzjs.com">
+    <img alt="" src="https://img.shields.io/badge/Join%20our%20community-6700EB.svg?style=for-the-badge&labelColor=000000&logoWidth=20&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQ9SURBVHgB7d3dVdtAEIbhcSpICUoH0IEogQqSVBBSAU4FSSpIOoAORAfQgSghHXzZ1U/YcMD4R9rZmf2ec3y448LyiNf27iLiGIAmPLrweC9Un3DhrzG6EarLNP09nlwJ1SOZ/lQr5N80/S/p2QMVCBf5N17XCfm1Y/rBHqjAG9PPHvBsz+mf9WAP+HLA9M/YA14cOP2payH7jpj+VCtk1wnTP+vj7xCy6cTpn7EHLMLp059iD1iD8eveJbVCNsSLheX1YA/YgOWnf8YeKB3Wmf7Ud6Fy4f/FHmtpxbl3YlC4MJ/Cj0bWdwPnPbARg+L0S54XQHS32WwuxClzd4CM0z9rPfeAuTtA5ulPXYQ7wZ04Y+oOoDD9KZc9YOoOoDj9s4dwFzgXR6w1wIPoOvPWA9buAHEJ173o3gWiy3AnuBUHLEbgmYwvAk1/wuM8vAgexThzbwPDkx7/DHwVXfFOxP2GmsKd4Ab6zPeAyU8CI7AHFmH2BRCBPXAyk18GzUrqAXCTiR4ssyj0VFw/oCU8+e+RZ33AWz6KMaYbIIWxB+JSLs1bsbkeMN0AqakHvoku9oA2sAfqBvbAQdw0QArsgb25aYBUQT3QgT2gB+yBuqGcHij2UCqXDZACe2Anlw2QYg/QAOyBuoE98CL3DZDCuK4/rh/Q7oGL6U+TOvcNkJoijN8X1C48+T+g75eQDrAH/qmqAVJgDwyqaoAUe4AGYA/UDZX3QLUNkEIZPRCd5+6BahsgVUgPROwBTSijB7jpVAvGHriHvmw9wAZ4BpX1ABvgmakHtPcbRuwBTWAPULgAV9D/jKDY9YRvwvgEaurD44uQHvAol7qBW7WKluVtIHiUS7GyvA0s6CiXDnxrpQfsgbqBS7GKk/2jYHCrVlGyfxTMrVo0ALdq1Q3sgSKofh0M9oA61a+D2QM0AHugbmAPqClmSRjK2apVVQ8UsySsoK1aHdgDesCtWnUDeyCrIpeFg1u3sylyWTi3btMA7IG6gT2wuuK3hoE9sKrit4YVslWLPaAN7IG6ocKt2zmY2h4O9sDiTG0PZw/QANy6XTewBxZj9ogYVHy025LMHhEz9cBn0We6B0yfERReBLfhx0/R1YQHPx/QBPbA0VwcEwf2wNFcHBPHHjiem3MC2QPHcXdSaJjA+KfgTPQ8hhfjBzHC40mhlzJ+Xq9lK4a4PCs43AVaGTed5mZq+iOXZwWHi3AnOj2wFWNcnxYe7gTxLtBKHuamP/J+Wnh8a5irB7ZC5Yk9gPX1QuXC+usHWqGyhYvUYR0a7zboUOFCNVhnk0krZAOW7wFOvzXhom2xnEbIHizTA1wEYhWW6YFGyC6c1gOcfg9wfA80Qj7g8B7g9HuCww+haIR8wf49wOn3Cvv9k8tGyC/s7gFOv3fY3QONkH+v9MBWqB7PeqDn9FcIT//kcitUn6kHOu/T/xfWzlQy3dEHhwAAAABJRU5ErkJggg==">
+  </a>  
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fblitz-js%2Fblitz%2Fbadge%3Fref%3Dcanary&style=flat-square)](https://actions-badge.atrox.dev/blitz-js/blitz/goto?ref=canary)
+<a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-23-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
+<!-- ALL-CONTRIBUTORS-BADGE:END -->  
+  <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/canary/LICENSE">
+    <img alt="" src="https://img.shields.io/npm/l/blitz.svg?style=for-the-badge&labelColor=000000&color=blue">
+  </a>
+  <a aria-label="NPM version" href="https://www.npmjs.com/package/blitz">
+    <img alt="" src="https://img.shields.io/npm/v/blitz.svg?style=for-the-badge&labelColor=000000&color=E65528">
+  </a>  
+</p>
 <!-- prettier-ignore-end -->
 
-Blitz is a Rails-like framework for monolithic, full-stack React apps without an API.
+<br>
 
-The central thesis is that most apps don’t need a REST or GraphQL API. Blitz brings back the simplicity of server rendered frameworks like Ruby on Rails while preserving everything we love about React.
+### Blitz is a Rails-like framework for monolithic, full-stack React apps.
+
+<br>
+
+The central thesis is that most apps don’t need a REST or GraphQL API. Blitz brings back the simplicity of server rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering.
 
 Additionally, Blitz is bringing other Rails goodness that’s missing in the React ecosystem like file structure and routing conventions, a really nice console REPL, intelligent code-scaffolding, and a fine-tuned out-of-the-box setup with Prettier, Typescript, ESlint, Jest, Cypress, etc.
+
+<br>
 
 ### What is Blitz Designed For?
 
 Blitz is designed for tiny to large database-backed applications that have one or more graphical user interfaces.
 
 Web support will be released first, followed by React Native. We are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
+
+<br>
 
 ### What are the Foundational Principles?
 
@@ -30,11 +49,14 @@ Web support will be released first, followed by React Native. We are pursuing th
 
 [The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
 
+<br>
+
 ## Initial Alpha Release Coming Soon
 
-We expect an initial alpha release to be out around April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
+We expect an initial alpha release to be ready the week of April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
 
----
+
+<br>
 
 ## Welcome to the Blitz Community 👋
 
@@ -45,6 +67,8 @@ The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, a
 1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
 2. If you're interested in helping, read [The Contributing Guide](CONTRIBUTING.md)
 
+<br>
+
 ## Sponsors and Donations
 
 - Contribute via [GitHub Sponsors](https://github.com/sponsors/blitz-js)
@@ -53,6 +77,8 @@ The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, a
 - Contribute via [Patreon](https://patreon.com/flybayer)
 
 _Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters! [See options on Open Collective](https://opencollective.com/blitzjs)_
+
+<br>
 
 ## Contributors ✨
 
@@ -64,7 +90,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 <table>
   <tr>
     <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=flybayer" title="Code">💻</a> <a href="#content-flybayer" title="Content">🖋</a> <a href="#ideas-flybayer" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Aflybayer" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://fabulas.io"><img src="https://avatars1.githubusercontent.com/u/14793389?v=4" width="100px;" alt=""/><br /><sub><b>Michael Edelman </b></sub></a><br /><a href="#infra-medelman17" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    <td align="center"><a href="https://fabulas.io"><img src="https://avatars1.githubusercontent.com/u/14793389?v=4" width="100px;" alt=""/><br /><sub><b>Michael Edelman </b></sub></a><br /><a href="#infra-medelman17" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/blitz-js/blitz/commits?author=medelman17" title="Code">💻</a></td>
     <td align="center"><a href="https://merelinguist.now.sh"><img src="https://avatars3.githubusercontent.com/u/24858006?v=4" width="100px;" alt=""/><br /><sub><b>Dylan Brookes</b></sub></a><br /><a href="#ideas-merelinguist" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Amerelinguist" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/blitz-js/blitz/commits?author=merelinguist" title="Code">💻</a></td>
     <td align="center"><a href="https://medium.com/@ryardley"><img src="https://avatars0.githubusercontent.com/u/1256409?v=4" width="100px;" alt=""/><br /><sub><b>Rudi Yardley</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ryardley" title="Code">💻</a> <a href="#ideas-ryardley" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://www.geistinteractive.com"><img src="https://avatars2.githubusercontent.com/u/316792?v=4" width="100px;" alt=""/><br /><sub><b>Todd Geist</b></sub></a><br /><a href="#financial-toddgeist" title="Financial">💵</a></td>
@@ -91,6 +117,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/wKovacs64"><img src="https://avatars1.githubusercontent.com/u/1288694?v=4" width="100px;" alt=""/><br /><sub><b>Justin Hall</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=wKovacs64" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/sijad"><img src="https://avatars3.githubusercontent.com/u/7693001?v=4" width="100px;" alt=""/><br /><sub><b>Sajjad Hashemian</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=sijad" title="Code">💻</a></td>
   </tr>
 </table>
 

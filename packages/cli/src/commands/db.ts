@@ -1,10 +1,22 @@
-import {platform} from 'os'
-import {spawn} from 'child_process'
+import {spawn} from 'cross-spawn'
+import {flags} from '@oclif/command'
 import {Command} from '@oclif/command'
+import chalk from 'chalk'
 import * as path from 'path'
 
 export default class Db extends Command {
-  static description = 'Run project database commands'
+  static description = `Run database commands
+
+${chalk.bold('migrate')}   Run any needed migrations via Prisma 2 and generate Prisma Client.
+
+${chalk.bold(
+  'introspect',
+)}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it\'ll generate Prisma Client.
+
+${chalk.bold(
+  'studio',
+)}   Open the Prisma Studio UI at http://localhost:5555 so you can easily see and change data in your database.
+`
 
   static args = [
     {
@@ -14,35 +26,69 @@ export default class Db extends Command {
     },
   ]
 
+  static flags = {
+    help: flags.help({char: 'h'}),
+  }
+
   async run() {
     const {args} = this.parse(Db)
     const command = args['command']
 
-    const prismaBinaryName = platform() === 'win32' ? 'prisma.cmd' : 'prisma'
-    const prismaBinary = path.join(process.cwd(), 'node_modules/.bin', prismaBinaryName)
-
     const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
 
     if (command === 'migrate' || command === 'm') {
-      const cp = spawn(prismaBinary, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+      const cp = spawn('prisma', ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
         stdio: 'inherit',
       })
       cp.on('exit', (code: number) => {
         if (code == 0) {
-          const cp = spawn(prismaBinary, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+          const cp = spawn('prisma', ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
             stdio: 'inherit',
           })
           cp.on('exit', (code: number) => {
             if (code == 0) {
-              spawn(prismaBinary, ['generate', schemaArg], {stdio: 'inherit'})
+              spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+                if (code !== 0) {
+                  process.exit(1)
+                }
+              })
+            } else {
+              process.exit(1)
             }
           })
+        } else {
+          process.exit(1)
         }
       })
-    } else if (command === 'init' || command === 'i') {
-      spawn(prismaBinary, ['init'], {stdio: 'inherit'})
+    } else if (command === 'introspect') {
+      const cp = spawn('prisma', ['introspect', schemaArg], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code: number) => {
+        if (code == 0) {
+          spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+            if (code !== 0) {
+              process.exit(1)
+            }
+          })
+        } else {
+          process.exit(1)
+        }
+      })
+    } else if (command === 'studio') {
+      const cp = spawn('prisma', ['studio', schemaArg, '--experimental'], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code: number) => {
+        if (code == 0) {
+        } else {
+          process.exit(1)
+        }
+      })
     } else {
-      this.log('Missing command')
+      this.log("\nUh oh, we don't support that command.")
+      this.log('You can try running a prisma command directly with:')
+      this.log('\n  `npm run prisma COMMAND` or `yarn prisma COMMAND`\n')
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "store",
-  "version": "0.0.2-canary.0",
+  "version": "0.0.2-canary.1",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build"
