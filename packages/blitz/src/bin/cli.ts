@@ -40,6 +40,7 @@ const commands = options._
 if (cli) {
   cli.run()
 } else {
+  // TODO: don't spawn. Instead, just require files
   console.log('BlitzJS/CLI not found locally; trying global...')
   cli = spawn('blitz', [commands[0]], {stdio: 'inherit'})
 

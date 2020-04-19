@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
+
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean

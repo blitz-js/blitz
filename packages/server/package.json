@@ -27,8 +27,28 @@
   },
   "module": "dist/webpack.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
+  "dependencies": {
+    "cross-spawn": "^7.0.2",
+    "fast-glob": "^3.2.2",
+    "find-parent-dir": "0.3.0",
+    "gulp-if": "^3.0.0",
+    "next": "9.3.4",
+    "next-compose-plugins": "2.2.0",
+    "next-transpile-modules": "3.2.0",
+    "node-pty": "^0.9.0",
+    "null-loader": "^3.0.0",
+    "path-is-absolute": "^2.0.0",
+    "pirates": "^4.0.1",
+    "readable-stream": "^3.6.0",
+    "resolve-cwd": "3.0.0",
+    "through2": "^3.0.1",
+    "vinyl": "^2.2.0",
+    "vinyl-file": "^3.0.0",
+    "vinyl-fs": "^3.0.3"
+  },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.1",
+    "@types/find-parent-dir": "0.3.0",
     "@types/gulp-if": "^0.0.33",
     "@types/jest": "^25.1.3",
     "@types/path-is-absolute": "^1.0.0",
@@ -40,24 +60,6 @@
     "tsdx": "^0.13.1",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
-  },
-  "dependencies": {
-    "cross-spawn": "^7.0.2",
-    "fast-glob": "^3.2.2",
-    "gulp-if": "^3.0.0",
-    "next": "9.3.4",
-    "next-compose-plugins": "2.2.0",
-    "next-transpile-modules": "3.2.0",
-    "node-pty": "^0.9.0",
-    "null-loader": "^3.0.0",
-    "path-is-absolute": "^2.0.0",
-    "pirates": "^4.0.1",
-    "readable-stream": "^3.6.0",
-    "resolve-bin": "^0.4.0",
-    "through2": "^3.0.1",
-    "vinyl": "^2.2.0",
-    "vinyl-file": "^3.0.0",
-    "vinyl-fs": "^3.0.3"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }

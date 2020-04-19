@@ -15,8 +15,9 @@
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"
   },
-  "NOTE": "Next.js dependency is only required for deploying to zeit, for now",
+  "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
+    "@types/react": "16.9.34",
     "next": "9.3.4"
   }
 }
