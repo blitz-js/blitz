@@ -10,9 +10,7 @@
     "build": "blitz build"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.0.2-canary.0",
-    "@blitzjs/core": "0.0.2-canary.0",
-    "@blitzjs/server": "0.0.2-canary.0",
+    "blitz": "*",
     "next": "^9.3.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"

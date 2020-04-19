@@ -4,16 +4,17 @@
   "version": "0.0.2-canary.0",
   "license": "MIT",
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
-    "lint": "tsdx lint"
+    "start": "yarn dev",
+    "build": "rollup -c rollup.config.js",
+    "dev": "rollup -c rollup.config.js --watch"
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
+  },
+  "bin": {
+    "blitz": "./bin/blitz"
   },
   "main": "dist/index.js",
   "module": "dist/blitz.esm.js",
@@ -22,9 +23,7 @@
     "dist"
   ],
   "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
+    "hooks": {}
   },
   "jest": {
     "setupFilesAfterEnv": [
