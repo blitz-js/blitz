@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import {spawn} from 'cross-spawn'
+// import {spawn} from 'cross-spawn'
 
 let usageType: 'local' | 'monorepo' | 'global'
 
@@ -35,26 +35,26 @@ if (options._.length === 0 && (options.v || options.version)) {
   printVersionAndExit()
 }
 
-const commands = options._
+// const commands = options._
 
 if (cli) {
   cli.run()
 } else {
   // TODO: don't spawn. Instead, just require files
   console.log('BlitzJS/CLI not found locally; trying global...')
-  cli = spawn('blitz', [commands[0]], {stdio: 'inherit'})
-
-  cli.stderr?.on('data', function (data) {
-    console.log('err' + data.toString())
-  })
-
-  cli.stdout?.on('data', function (data) {
-    console.log('stdout' + data.toString())
-  })
-
-  cli.on('exit', (code) => {
-    console.log(`Blitz exited with code: ${code}`)
-  })
+  // cli = spawn('blitz', [commands[0]], {stdio: 'inherit'})
+  //
+  // cli.stderr?.on('data', function (data) {
+  //   console.log('err' + data.toString())
+  // })
+  //
+  // cli.stdout?.on('data', function (data) {
+  //   console.log('stdout' + data.toString())
+  // })
+  //
+  // cli.on('exit', (code) => {
+  //   console.log(`Blitz exited with code: ${code}`)
+  // })
 }
 
 function getBlitzPkgJsonPath() {
@@ -68,24 +68,13 @@ function getBlitzPkgJsonPath() {
       return ''
   }
 }
-function getCLIPkgJsonPath() {
-  switch (usageType) {
-    case 'local':
-      return path.join(localCLIPackagePath, 'package.json')
-    case 'monorepo':
-      return path.join(monorepoCLIPackagePath, 'package.json')
-    case 'global':
-      console.log('ERROR: global getCLIPkgJsonPath not handled')
-      return ''
-  }
-}
 
 function printVersionAndExit() {
   try {
-    console.log(`blitz (global): ${require(getBlitzPkgJsonPath()).version}`)
-    if (usageType !== 'global') {
-      console.log(`blitz (local):  ${require(getCLIPkgJsonPath()).version}`)
-    }
+    // TODO: always print global BlitzPkg version.
+    // AND if local exists, print that version too
+    console.log(`blitz: ${require(getBlitzPkgJsonPath()).version}`)
+    console.log('Usage type:', usageType)
   } catch (e) {
     console.log('blitz error', e)
   }

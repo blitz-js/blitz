@@ -41,8 +41,7 @@
   "dependencies": {
     "@blitzjs/cli": "0.0.2-canary.1.2",
     "@blitzjs/core": "0.0.2-canary.1",
-    "@blitzjs/server": "0.0.2-canary.1.6",
-    "cross-spawn": "7.0.2"
+    "@blitzjs/server": "0.0.2-canary.1.6"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",
