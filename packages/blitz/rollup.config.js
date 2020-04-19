@@ -14,7 +14,6 @@ const common = {
     'next',
     'fs',
     'path',
-    'child_process',
   ],
   plugins: [
     json(),

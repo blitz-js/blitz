@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "tsdx watch",
+    "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint"
