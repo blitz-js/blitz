@@ -69,7 +69,10 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
+    ],
+    "hooks": {
+      "command_not_found": "./src/hooks/commandNotFound"
+    }
   },
   "engines": {
     "yarn": "^1.19.1",
