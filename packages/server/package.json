@@ -6,7 +6,8 @@
     "next-patched": "./bin/next-patched"
   },
   "files": [
-    "dist"
+    "dist",
+    "register"
   ],
   "scripts": {
     "dev": "tsdx watch --verbose",
