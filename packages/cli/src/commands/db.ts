@@ -4,6 +4,34 @@ import {Command} from '@oclif/command'
 import chalk from 'chalk'
 import * as path from 'path'
 
+export const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+
+export const runMigrate = (schemaArg: string) => {
+  const cp = spawn('prisma', ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+    stdio: 'inherit',
+  })
+  cp.on('exit', (code: number) => {
+    if (code == 0) {
+      const cp = spawn('prisma', ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code: number) => {
+        if (code == 0) {
+          spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
+            if (code !== 0) {
+              process.exit(1)
+            }
+          })
+        } else {
+          process.exit(1)
+        }
+      })
+    } else {
+      process.exit(1)
+    }
+  })
+}
+
 export default class Db extends Command {
   static description = `Run database commands
 
@@ -34,32 +62,8 @@ ${chalk.bold(
     const {args} = this.parse(Db)
     const command = args['command']
 
-    const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
-
     if (command === 'migrate' || command === 'm') {
-      const cp = spawn('prisma', ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
-        stdio: 'inherit',
-      })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
-          const cp = spawn('prisma', ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
-            stdio: 'inherit',
-          })
-          cp.on('exit', (code: number) => {
-            if (code == 0) {
-              spawn('prisma', ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
-                if (code !== 0) {
-                  process.exit(1)
-                }
-              })
-            } else {
-              process.exit(1)
-            }
-          })
-        } else {
-          process.exit(1)
-        }
-      })
+      runMigrate(schemaArg)
     } else if (command === 'introspect') {
       const cp = spawn('prisma', ['introspect', schemaArg], {
         stdio: 'inherit',
