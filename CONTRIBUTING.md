@@ -74,10 +74,8 @@ yarn dev
 The following will link the development CLI as a local binary so you can use it anywhere for testing.
 
 ```
-cd packages/blitz
-yarn link
-
-// `yarn unlink` will undo this
+yarn link-cli
+// `yarn unlink-cli`  will unlink
 ```
 
 #### Develop a Blitz `package`
