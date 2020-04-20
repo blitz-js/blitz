@@ -6,8 +6,9 @@
   "scripts": {
     "b": "./bin/run",
     "predev": "wait-on -d 500 ../server/dist/packages/server/src/index.d.ts",
-    "dev": "rimraf lib && cpy --parents templates lib && tsc --watch --preserveWatchOutput",
-    "build": "rimraf lib && tsc && cpy --parents templates lib",
+    "dev": "rimraf lib && yarn build:templates && tsc --watch --preserveWatchOutput",
+    "build": "rimraf lib && tsc && yarn build:templates",
+    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
     "test": "jest",
     "test:watch": "jest --watch"
   },
