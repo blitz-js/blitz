@@ -9,6 +9,8 @@ const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
 
+// Prisma client generation will fail if no model is defined in the schema.
+// So the silent option is here to ignore that failure
 export const runPrismaGeneration = async ({silent = false} = {}) => {
   const prismaBin = await getPrismaBin()
 
