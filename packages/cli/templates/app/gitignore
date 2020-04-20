@@ -1,29 +1,20 @@
-
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+node_modules
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+.npm
+web_modules/
 
-# testing
-/coverage
-
-# blitz.js
+# blitz
 /.blitz/
 /.next/
-/out/
 *.sqlite
-
-# production
-/build
 .now
 
 # misc
 .DS_Store
-
-# debug
-*.log
 
 # local env files
 .env
@@ -32,3 +23,31 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Testing
+coverage
+*.lcov
+.nyc_output
+lib-cov
+
+# Caches
+*.tsbuildinfo
+.eslintcache
+.node_repl_history
+.yarn-integrity
+
+# Serverless directories
+.serverless/
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
