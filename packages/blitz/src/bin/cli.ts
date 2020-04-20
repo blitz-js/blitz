@@ -39,19 +39,27 @@ if (fs.existsSync(localCLIPkgPath)) {
 }
 
 // TODO: remove
-console.log('DEBUG:', usageType)
-console.log('Path:', pkgPath)
+console.log('debug:', usageType)
+console.log('debug: pkgPath:', pkgPath)
+console.log('')
 
 const cli = require(pkgPath as string)
 
 const options = require('minimist')(process.argv.slice(2))
 if (options._.length === 0 && (options.v || options.version)) {
   try {
-    const globalVersion = path.join(resolveGlobal.silent('blitz') || pkgDir.sync(__dirname), 'package.json')
+    let globalInstallPath
+    if (usageType === 'global-linked') {
+      globalInstallPath = pkgDir.sync(__dirname)
+    } else {
+      globalInstallPath = pkgDir.sync(resolveGlobal('blitz'))
+    }
+    const globalVersion = path.join(globalInstallPath, 'package.json')
     console.log(`blitz: ${require(globalVersion).version} (global)`)
     if (!usageType.includes('global')) {
       console.log(`blitz: ${require(getBlitzPkgJsonPath()).version} (local)`)
     }
+    console.log('') // One last new line
   } catch (e) {
     console.log('blitz error', e)
   }
