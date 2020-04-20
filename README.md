@@ -19,13 +19,42 @@
 
 <br>
 
-### Blitz is a Rails-like framework for monolithic, full-stack React apps.
+<h2 align="center">Blitz is a Rails-like framework for monolithic, full-stack React apps</h2>
 
 <br>
 
-The central thesis is that most apps don’t need a REST or GraphQL API. Blitz brings back the simplicity of server rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering.
+Blitz brings back the **simplicity and conventions** of server rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering! 
 
-Additionally, Blitz is bringing other Rails goodness that’s missing in the React ecosystem like file structure and routing conventions, a really nice console REPL, intelligent code-scaffolding, and a fine-tuned out-of-the-box setup with Prettier, Typescript, ESlint, Jest, Cypress, etc.
+Blitz is the framework for the 99% of us at companies with <100 employees. This means **we don't force you to use advanced technologies like GraphQL**. We let you add advanced technologies on your terms and at your pace.
+
+Blitz **maximizes your productivity** both when starting an app and when scaling it to lots of code and users.
+
+<br>
+
+**Features:**<br>
+⚡️ Built on Next.js<br>
+⚡️ Don't have to build an API for client-side rendering<br>
+⚡️ Client-side rendering, Server-side rendering, and fully static pages all in the same app<br>
+⚡️ Full Typescript support with static, end-to-end typing (no code generation step needed like with GraphQL)<br>
+⚡️ React Concurrent Mode enabled<br>
+⚡️ Database/ORM agnostic, but Prisma 2 is default<br>
+⚡️ CLI with code scaffolding, Rails-style console REPL, etc<br>
+⚡️ GraphQL Ready<br>
+⚡️ Deploy serverless or serverful<br>
+
+**Other key features coming:**<br>
+⚡️ Highly secure authentication <br>
+⚡️ Authorization you can use on both server and client<br>
+⚡️ Model validation you can use on both server and client<br>
+⚡️ Plugins for easily adding libaries like Tailwind, CSS-in-JS, etc.<br>
+⚡️ React native support<br>
+⚡️ GUI so you don't have to use the CLI<br>
+
+<br>
+
+### Initial Alpha Release Coming Soon
+
+We expect an initial alpha release to be ready the week of April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
 
 <br>
 
@@ -33,7 +62,7 @@ Additionally, Blitz is bringing other Rails goodness that’s missing in the Rea
 
 Blitz is designed for tiny to large database-backed applications that have one or more graphical user interfaces.
 
-Web support will be released first, followed by React Native. We are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
+While we currently only support web, we are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
 
 <br>
 
@@ -48,13 +77,6 @@ Web support will be released first, followed by React Native. We are pursuing th
 7. Community over Code
 
 [The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
-
-<br>
-
-## Initial Alpha Release Coming Soon
-
-We expect an initial alpha release to be ready the week of April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
-
 
 <br>
 
