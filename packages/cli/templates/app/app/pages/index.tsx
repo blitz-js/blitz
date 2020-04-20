@@ -3,14 +3,39 @@ import {Head} from '@blitzjs/core'
 const Home = () => (
   <div className="container">
     <Head>
-      <title><%= name %></title>
+      <title>testApp</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
     <main>
+      <div className="logo">
+        <img src="/logo.png" alt="blitz icon" height="72" width="72" />
+      </div>
       <h1 className="title" style={{marginBottom: 24}}>
         Welcome to Blitz.js
       </h1>
+      <p>
+        Get started by editing this page.{' '}
+        <pre>
+          <code>/app/pages/index.tsx</code>
+        </pre>
+      </p>
+      <div className="buttons">
+        <a
+          className="button"
+          href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+          target="_blank"
+          rel="noopener noreferrer">
+          Documentation
+        </a>
+        <a
+          className="button-outline"
+          href="https://github.com/blitz-js/blitz"
+          target="_blank"
+          rel="noopener noreferrer">
+          Github Repo
+        </a>
+      </div>
     </main>
 
     <footer>
@@ -25,7 +50,6 @@ const Home = () => (
     <style jsx>{`
       .container {
         min-height: 100vh;
-        padding: 0 0.5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -48,6 +72,7 @@ const Home = () => (
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #45009d;
       }
 
       footer img {
@@ -61,7 +86,7 @@ const Home = () => (
       }
 
       a {
-        color: #0070f3;
+        color: #f4f4f4;
         text-decoration: none;
       }
 
@@ -73,8 +98,9 @@ const Home = () => (
 
       .title {
         margin: 0;
-        line-height: 1.15;
-        font-size: 4rem;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #000000;
       }
 
       .title,
@@ -85,6 +111,45 @@ const Home = () => (
       .description {
         line-height: 1.5;
         font-size: 1.5rem;
+      }
+
+      .logo {
+        margin-bottom: 2rem;
+      }
+
+      .logo img {
+        width: 72px;
+        height: 72px;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      a.button {
+        background-color: #6700eb;
+        padding: 1rem 2rem;
+        color: #f4f4f4;
+        text-align: center;
+      }
+
+      a.button:hover {
+        background-color: #45009d;
+      }
+
+      a.button-outline {
+        border: 2px solid #6700eb;
+        padding: 1rem 2rem;
+        color: #6700eb;
+        text-align: center;
+      }
+
+      a.button-outline:hover {
+        border-color: #45009d;
+        color: #45009d;
       }
 
       code {
@@ -115,15 +180,18 @@ const Home = () => (
     `}</style>
 
     <style jsx global>{`
+      @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;700&display=swap');
+
       html,
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
-          Droid Sans, Helvetica Neue, sans-serif;
+        font-family: 'Libre Franklin', sans-serif;
       }
 
       * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
         box-sizing: border-box;
       }
     `}</style>
