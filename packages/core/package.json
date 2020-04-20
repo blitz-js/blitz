@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management",
-  "version": "0.0.2-canary.1",
+  "version": "0.0.2-canary.2",
   "license": "MIT",
   "scripts": {
     "dev": "tsdx watch --verbose",
