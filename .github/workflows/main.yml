@@ -35,6 +35,10 @@ jobs:
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
+      - name: Build Blitz Packages
+        run: yarn build
+        env:
+          CI: true
       - name: Test Blitz Packages
         run: yarn test
         env:

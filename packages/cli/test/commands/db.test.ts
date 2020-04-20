@@ -1,4 +1,5 @@
 import * as path from 'path'
+import {resolveBinAsync} from '@blitzjs/server'
 
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {
@@ -12,18 +13,25 @@ jest.doMock('cross-spawn', () => ({spawn}))
 
 import DbCmd from '../../src/commands/db'
 
-const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+let schemaArg: string
+let prismaBin: string
+let migrateSaveParams: any[]
+let migrateUpParams: any[]
+beforeAll(async () => {
+  schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+  prismaBin = await resolveBinAsync('@prisma/cli', 'prisma')
 
-const migrateSaveParams = [
-  'prisma',
-  ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
-  {stdio: 'inherit'},
-]
-const migrateUpParams = [
-  'prisma',
-  ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
-  {stdio: 'inherit'},
-]
+  migrateSaveParams = [
+    prismaBin,
+    ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
+    {stdio: 'inherit'},
+  ]
+  migrateUpParams = [
+    prismaBin,
+    ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
+    {stdio: 'inherit'},
+  ]
+})
 
 describe('Db command', () => {
   beforeEach(() => {

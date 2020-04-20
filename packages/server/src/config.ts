@@ -1,6 +1,7 @@
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
+
 export type ServerConfig = {
   rootFolder: string
   interceptNextErrors?: boolean
@@ -28,7 +29,6 @@ const defaults = {
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',
   buildFolder: '.blitz/caches/build',
-  nextBin: './node_modules/.bin/next',
   nextBinPatched: './node_modules/.bin/next-patched',
   manifestPath: '_manifest.json',
   writeManifestFile: true,
@@ -42,16 +42,14 @@ export async function enhance(config: ServerConfig) {
     typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
 
   const nextBinOrig = await resolveBinAsync('next')
+  const nextBinPatched = await resolveBinAsync('@blitzjs/server', 'next-patched')
 
-  const nextBin = resolve(
-    config.rootFolder,
-    config.interceptNextErrors ? defaults.nextBinPatched : nextBinOrig,
-  )
+  const nextBin = resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig)
 
   return ciLog(
     `
-Logging the following to understand what is happening in our CI environment 
-and investigate why we have been getting random CI test failures. 
+Logging the following to understand what is happening in our CI environment
+and investigate why we have been getting random CI test failures.
 This will be temporary.
 `,
     {

@@ -40,7 +40,7 @@ The Blitzjs.com website and documentation repo also has issues with [`ready to w
 - Improved logging (i.e. more clear, more beautiful)
 - Educational content like blogs, videos, courses
 
-If there's some other way you'd like to contribute, just ask us about it in slack! 
+If there's some other way you'd like to contribute, just ask us about it in slack!
 
 After you contribute in any way, please add yourself as a contributor via the [@all-contributors bot](https://allcontributors.org/docs/en/bot/usage)!
 
@@ -69,6 +69,15 @@ yarn
 yarn dev
 ```
 
+#### Link the Blitz CLI (Optional)
+
+The following will link the development CLI as a local binary so you can use it anywhere for testing.
+
+```
+yarn link-cli
+// `yarn unlink-cli`  will unlink
+```
+
 #### Develop a Blitz `package`
 
 **1.** Change to a package directory
@@ -85,7 +94,6 @@ yarn test:watch
 
 #### Develop a Blitz `example`
 
-
 **1.** Change to an example directory
 
 ```
@@ -93,3 +101,7 @@ cd examples/store
 ```
 
 **2.** Follow instructions in the example's README
+
+## Troubleshooting
+
+If you run into issues that should be documented here, please submit a PR! ❤️

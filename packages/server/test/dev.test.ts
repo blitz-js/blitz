@@ -17,6 +17,7 @@ import {resolve} from 'path'
 import {FSWatcher} from 'chokidar'
 import {remove, pathExists} from 'fs-extra'
 import directoryTree from 'directory-tree'
+import * as pkgDir from 'pkg-dir'
 
 describe('Dev command', () => {
   let watcher: FSWatcher
@@ -132,7 +133,7 @@ describe('Dev command', () => {
     })
 
     it('calls spawn with the patched next cli bin', () => {
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(`${rootFolder}/node_modules/.bin/next-patched`)
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(`${pkgDir.sync(__dirname)}/bin/next-patched`)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(`${rootFolder}/.blitz-dev`)
     })
   })

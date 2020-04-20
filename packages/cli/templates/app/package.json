@@ -14,7 +14,7 @@
     "@prisma/cli": "latest",
     "@prisma/client": "latest"
   },
-  "NOTE": "Next.js dependency is only required for deploying to zeit, for now",
+  "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
     "next": "9.3.4"
   },

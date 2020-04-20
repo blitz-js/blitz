@@ -1,7 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import {dev, prod} from '@blitzjs/server'
 
-import {runMigrate, schemaArg} from './db'
+import {runMigrate} from './db'
 
 export default class Start extends Command {
   static description = 'Start a development server'
@@ -28,7 +28,7 @@ export default class Start extends Command {
       await prod(config)
     } else {
       if (!args.noMigrate) {
-        runMigrate(schemaArg)
+        await runMigrate()
       }
       await dev(config)
     }
