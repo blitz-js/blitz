@@ -5,3 +5,19 @@ lib
 node_modules
 reports
 *.log
+.nyc_output
+**/coverage
+.yarn
+.yarnrc
+tsconfig.tsbuildinfo
+.blitz
+.next
+dist
+.now
+# local env files
+**/.envrc
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local

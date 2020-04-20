@@ -1,0 +1,10 @@
+{
+  "env": {
+    "DATABASE_URL": "@store-example-db"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@store-example-db"
+    }
+  }
+}

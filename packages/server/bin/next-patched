@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+'use strict'
+
+// This monkey patches Next so that the open editor command opens the original files
+// instead of the files inside .blitz/
+
+require('@blitzjs/server/register')
+require('next/dist/bin/next')

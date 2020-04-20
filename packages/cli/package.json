@@ -1,44 +1,87 @@
 {
   "name": "@blitzjs/cli",
-  "description": "Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management",
-  "version": "0.0.1",
+  "description": "Blitz CLI",
+  "version": "0.5.0-canary.5",
   "license": "MIT",
-  "engines": {
-    "yarn": "^1.19.1",
-    "node": ">=12.16.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/blitz-js/blitz"
+  "scripts": {
+    "b": "./bin/run",
+    "predev": "wait-on -d 500 ../server/dist/packages/server/src/index.d.ts",
+    "dev": "rimraf lib && yarn build:templates && tsc --watch --preserveWatchOutput",
+    "build": "rimraf lib && tsc && yarn build:templates",
+    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "contributors": [
-    {
-      "name": "Michael Edelman",
-      "email": "michael@fabulas.io",
-      "url": "https://twitter.com/edelman215"
-    }
-  ],
-  "main": "dist/index.js",
-  "module": "dist/testtsdx.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint"
+  "main": "lib/src/index.js",
+  "bin": {
+    "blitz": "./bin/run"
   },
-  "peerDependencies": {},
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  }
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "dependencies": {
+    "@oclif/command": "^1.5.19",
+    "@oclif/config": "^1.14.0",
+    "@oclif/plugin-help": "^2.2.3",
+    "@oclif/plugin-not-found": "^1.2.3",
+    "chalk": "^4.0.0",
+    "chokidar": "^3.3.1",
+    "cross-spawn": "^7.0.2",
+    "diff": "^4.0.2",
+    "dotenv": "8.2.0",
+    "enquirer": "^2.3.4",
+    "fs-extra": "^9.0.0",
+    "fs-readdir-recursive": "1.1.0",
+    "has-yarn": "^2.1.0",
+    "hasbin": "1.2.3",
+    "mem-fs": "^1.1.3",
+    "mem-fs-editor": "^6.0.0",
+    "username": "5.1.0",
+    "vinyl": "^2.2.0"
+  },
+  "devDependencies": {
+    "@blitzjs/server": "0.5.0-canary.1",
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
+    "@prisma/cli": "2.0.0-beta.2",
+    "@types/cross-spawn": "^6.0.1",
+    "@types/diff": "^4.0.2",
+    "@types/fs-extra": "^8.1.0",
+    "@types/fs-readdir-recursive": "1.0.0",
+    "@types/mem-fs": "^1.1.2",
+    "@types/mem-fs-editor": "^5.1.1",
+    "@types/vinyl": "^2.0.4",
+    "chai": "^4.2.0",
+    "cpy-cli": "^3.1.0",
+    "globby": "^11.0.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.6.2"
+  },
+  "oclif": {
+    "commands": "./lib/src/commands",
+    "bin": "blitz",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-not-found"
+    ]
+  },
+  "engines": {
+    "yarn": "^1.19.1",
+    "node": ">=12.16.1"
+  },
+  "keywords": [
+    "blitz",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blitz-js/blitz"
+  },
+  "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }

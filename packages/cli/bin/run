@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+
+require('@blitzjs/cli').run()

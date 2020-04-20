@@ -1,6 +1,14 @@
 name: Continuous Integration
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - canary
+  pull_request:
+    branches:
+      - master
+      - canary
 
 jobs:
   build_and_test:
@@ -25,6 +33,10 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
+      - name: Build Blitz Packages
+        run: yarn build
         env:
           CI: true
       - name: Test Blitz Packages
