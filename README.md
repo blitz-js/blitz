@@ -84,10 +84,9 @@ While we currently only support web, we are pursuing the dream of a single monol
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
 
-### You are invited to join us — let’s build the future of web dev together! 🤝
+[Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where collaborate on building Blitz itself.
 
-1. [Join the Blitz Slack Community](https://slack.blitzjs.com)
-2. If you're interested in helping, read [The Contributing Guide](CONTRIBUTING.md)
+There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is the [The Contributing Guide](CONTRIBUTING.md).
 
 <br>
 
