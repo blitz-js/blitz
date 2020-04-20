@@ -23,7 +23,8 @@
     "build": "lerna run build --no-private --stream",
     "test": "lerna run test --parallel",
     "prepublishOnly": "yarn run build && yarn run test",
-    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary"
+    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary",
+    "publish-alpha": "lerna publish --preid alpha"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
