@@ -5,34 +5,53 @@ import chalk from 'chalk'
 import * as path from 'path'
 import {resolveBinAsync} from '@blitzjs/server'
 
-const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
+const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
+
+export const runPrismaGeneration = async ({silent = false} = {}) => {
+  const prismaBin = await getPrismaBin()
+
+  return new Promise((resolve) => {
+    spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on(
+      'exit',
+      (code: number) => {
+        if (code === 0) {
+          resolve()
+        } else if (silent) {
+          resolve()
+        } else {
+          process.exit(1)
+        }
+      },
+    )
+  })
+}
 
 export const runMigrate = async () => {
   const prismaBin = await getPrismaBin()
 
-  const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
-    stdio: 'inherit',
-  })
-  cp.on('exit', (code: number) => {
-    if (code == 0) {
-      const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
-        stdio: 'inherit',
-      })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
-          spawn(prismaBin, ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
-            if (code !== 0) {
-              process.exit(1)
-            }
-          })
-        } else {
-          process.exit(1)
-        }
-      })
-    } else {
-      process.exit(1)
-    }
+  return new Promise((resolve) => {
+    const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+      stdio: 'inherit',
+    })
+    cp.on('exit', (code: number) => {
+      if (code == 0) {
+        const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+          stdio: 'inherit',
+        })
+        cp.on('exit', async (code: number) => {
+          if (code == 0) {
+            await runPrismaGeneration()
+            resolve()
+          } else {
+            process.exit(1)
+          }
+        })
+      } else {
+        process.exit(1)
+      }
+    })
   })
 }
 

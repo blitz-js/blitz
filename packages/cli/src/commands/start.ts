@@ -1,7 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import {dev, prod} from '@blitzjs/server'
 
-import {runMigrate} from './db'
+import {runPrismaGeneration} from './db'
 
 export default class Start extends Command {
   static description = 'Start a development server'
@@ -14,11 +14,8 @@ export default class Start extends Command {
     }),
   }
 
-  static args = [{name: 'noMigrate', description: 'Disable automatic database migration'}]
-
   async run() {
     const {flags} = this.parse(Start)
-    const {args} = this.parse(Start)
 
     const config = {
       rootFolder: process.cwd(),
@@ -27,9 +24,7 @@ export default class Start extends Command {
     if (flags.production) {
       await prod(config)
     } else {
-      if (!args.noMigrate) {
-        await runMigrate()
-      }
+      await runPrismaGeneration({silent: true})
       await dev(config)
     }
   }
