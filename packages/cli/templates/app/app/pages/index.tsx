@@ -3,7 +3,7 @@ import {Head} from '@blitzjs/core'
 const Home = () => (
   <div className="container">
     <Head>
-      <title>testApp</title>
+      <title><%= name %></title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
