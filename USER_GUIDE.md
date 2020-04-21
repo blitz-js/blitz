@@ -341,6 +341,7 @@ TODO CURRENTLY BROKEN
 Here's the list of big things that are currently missing from Blitz but are top priority for us:
 
 - A real Blitzjs.com website and documentation
+- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
 - Authentication 
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
@@ -348,6 +349,13 @@ Here's the list of big things that are currently missing from Blitz but are top 
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
+
+<br>
+
+## FAQ
+
+- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. You can add new files with JS and/or convert the generated files to JS. There's an [open issue for generating vanilla JS files](https://github.com/blitz-js/blitz/issues/160) that needs help.
+- **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>
 
