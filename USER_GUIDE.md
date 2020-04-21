@@ -30,7 +30,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 
 ### Create Your Blitz App
 
-1. `npm install -g blitz` or `yarn global install blitz`
+1. `npm install -g blitz` or `yarn global add blitz`
 2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
