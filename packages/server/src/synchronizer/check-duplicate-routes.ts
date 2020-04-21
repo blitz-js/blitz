@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import {error, variable} from '../log'
 
 const getDuplicatePaths = (entries: string[], type: string) => {
   const allRoutes = entries.filter((route) => route.includes(type))
@@ -15,14 +15,14 @@ const getDuplicatePaths = (entries: string[], type: string) => {
 }
 
 const buildErrorMessage = (path: string, type: string) =>
-  `- ${path.split(`${type}/`)[0]}${type}/${chalk.bold.redBright(path.split(`${type}/`)[1])}`
+  `- ${path.split(`${type}/`)[0]}${type}/${variable(path.split(`${type}/`)[1])}`
 
 export const checkDuplicateRoutes = (entries: string[]) => {
   const duplicateApiRoutesPaths = getDuplicatePaths(entries, 'api')
   const duplicatePagesPaths = getDuplicatePaths(entries, 'pages')
 
   if (duplicateApiRoutesPaths.length > 0) {
-    console.log(chalk.yellow('Warning: You have created conflicting api routes: \n'))
+    error('Warning: You have created conflicting api routes:')
 
     duplicateApiRoutesPaths.forEach((route) => {
       route.forEach((path) => console.log(buildErrorMessage(path, 'api')))
@@ -30,7 +30,7 @@ export const checkDuplicateRoutes = (entries: string[]) => {
   }
 
   if (duplicatePagesPaths.length > 0) {
-    console.log(chalk.yellow('\n Warning: You have created conflicting pages: \n'))
+    error('Warning: You have created conflicting pages:')
 
     duplicatePagesPaths.forEach((page) => {
       page.forEach((path) => console.log(buildErrorMessage(path, 'pages')))
