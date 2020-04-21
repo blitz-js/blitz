@@ -11,7 +11,8 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 
   return {
     props: {products},
-    revalidate: 1,
+    // Unstable beacuse revalidate is still under RFC: https://nextjs.link/issg
+    unstable_revalidate: 1,
   }
 }
 
