@@ -4,7 +4,7 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
-    "packages/blitz/README.md"
+    "README.md"
   ],
   "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
@@ -222,6 +222,33 @@
       "profile": "https://github.com/sijad",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "ETLopes",
+      "name": "Eduardo Lopes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/34959471?v=4",
+      "profile": "https://github.com/ETLopes",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mattleff",
+      "name": "Matthew Leffler",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/120155?v=4",
+      "profile": "https://github.com/mattleff",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "hew",
+      "name": "Matt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3103241?v=4",
+      "profile": "https://hew.tools",
+      "contributions": [
+        "doc"
       ]
     }
   ],

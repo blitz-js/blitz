@@ -32,7 +32,7 @@ A fullstack, monolithic application is simpler than an application where fronten
 
 Until now, choosing React for your view layer required you to have a REST or GraphQL API even if it wasn't used by third-parties. This additional complexity is a significant drawback not shared by traditional server rendered apps like Ruby on Rails.
 
-Blitz is a framework for the 99% of us at companies with <100 employees. The vast majority of these apps don't acutally need an API, at least not until years down the road when you have the time and resources to build one. 
+Blitz is a framework for the 99% of us at companies with <100 employees. The vast majority of these apps don't actually need an API, at least not until years down the road when you have the time and resources to build one. 
 
 ### 3. Convention over Configuration
 
