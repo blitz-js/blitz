@@ -17,8 +17,8 @@ assignees: ''
 
 
 **Versions:**
+ - Blitz: [e.g. 0.5.1.-alpha]
  - OS: [e.g. macOS]
- - Blitz version [e.g. 0.5.1.-alpha]
 
 
 **Supporting Documentation**
