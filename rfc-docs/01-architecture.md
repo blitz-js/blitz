@@ -363,7 +363,7 @@ We will be exploring ways to make this super easy for serverless environments.
 
 Blitz currently has no plan for integrated websocket support because they aren't well supported in serverless environments and aren't currently supported by Prisma 2.
 
-The reccomended approach for live updates is to use polling. Polling is a first-class Blitz feature.
+The recommended approach for live updates is to use polling. Polling is a first-class Blitz feature.
 
 Alternatively, you can use a third-party service like Pusher.com for high performance websockets.
 
