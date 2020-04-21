@@ -3,8 +3,6 @@
 Please check if your PR fulfills the following requirements:
 
 - [ ] Tests for the changes have been added (for bug fixes / features)
-- [ ] Build (`yarn build`) was run locally and any changes were pushed
-- [ ] Lint has passed locally and any fixes were made for failures
 - [ ] Code Coverage stayed the same or increased
 
 ## Pull request type
@@ -15,20 +13,19 @@ Please check if your PR fulfills the following requirements:
 
 :boom: Please check the type of change your PR introduces :boom: :
 
-- [ ] Bugfix
 - [ ] Feature
-- [ ] Code style update (formatting, renaming)
+- [ ] Bug fix
+- [ ] Performance improvement
 - [ ] Refactoring (no functional changes, no api changes)
 - [ ] Build related changes
 - [ ] Tests related changes
-- [ ] Documentation content changes
 - [ ] Other (please describe):
 
 ## What is the current behavior? :bar_chart:
 
 <!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
 
-Issue Number: N/A
+Closes: N/A
 
 ## What is the new behavior? :tada:
 
