@@ -1,48 +1,35 @@
-## Pull request checklist
-
-Please check if your PR fulfills the following requirements:
-
-- [ ] Tests for the changes have been added (for bug fixes / features)
-- [ ] Added terminal logging uses our logging utility at `packages/server/src/log.ts`
-- [ ] Code Coverage stayed the same or increased
-
-## Pull request type
-
-<!-- Please do not submit updates to dependencies unless it fixes an issue. -->
+### Pull Request Type
 
 <!-- Please try to limit your pull request to one type, submit multiple pull requests if needed. -->
 
-:boom: Please check the type of change your PR introduces :boom: :
-
 - [ ] Feature
 - [ ] Bug fix
-- [ ] Performance improvement
 - [ ] Refactoring (no functional changes, no api changes)
 - [ ] Build related changes
 - [ ] Tests related changes
-- [ ] Other (please describe):
+- [ ] Other (please describe): Dependency updates
 
-## What is the current behavior? :bar_chart:
+### Checklist
 
-<!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
+<!-- Please ensure your PR fulfills the following: -->
 
-Closes: N/A
+- [ ] Tests added for changes (or N/A)
+- [ ] Any added terminal logging uses `packages/server/src/log.ts` (or N/A)
+- [ ] Code Coverage stayed the same or increased
 
-## What is the new behavior? :tada:
+### What's the reason for the change? :question:
 
-<!-- Please describe the behavior or changes that are being added by this PR. -->
+<!-- Closes: ISSUE_NUMBER -->
 
-Ex: Adding a new cool button at home screen
+### What are the changes and their implications? :gear:
 
-<!-- Describe the change(s) made -->
-
-## Does this introduce a breaking change? :gear:
+### Does this introduce a breaking change? :warning:
 
 - [ ] Yes
-- [ ] No
+- [x] No
 
-<!-- If this introduces a breaking change, please describe the impact and migration path for existing applications below. -->
+<!-- If yes, describe the impact and migration path for existing apps-->
 
-## Other information :clipboard:
+### Other information
 
-<!-- Any other information that is important to this PR such as screenshots of how the component looks before and after the change. -->
+<!-- Before/after screenshots, etc. -->
