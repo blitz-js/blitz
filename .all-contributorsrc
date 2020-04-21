@@ -250,6 +250,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "sonnypgs",
+      "name": "Sonny",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1431300?v=4",
+      "profile": "https://github.com/sonnypgs",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
