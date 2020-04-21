@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJSONSync} from 'fs-extra'
 import {join} from 'path'
-import fetch from 'node-fetch'
+import {fetchRetry} from '../utils/fetch-retry'
 
 const themeColor = '6700AB'
 
@@ -45,13 +45,20 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const pkgDependencies = Object.keys(pkg.dependencies)
     const latestVersions = await Promise.all(
       pkgDependencies.map(async (dependency) => {
-        const res = await fetch(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`)
-        const json = await res.json()
-        return json.latest as string
+        const res = await fetchRetry(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`, 5)
+        if (res.ok) {
+          const json = await res.json()
+          return json.latest as string
+        }
+        return
       }),
     )
     pkg.dependencies = pkgDependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
     writeJSONSync(join(this.destinationPath(), 'package.json'), pkg)
+    if (latestVersions) {
+      pkg.dependencies = pkgDependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
+      writeJSONSync(join(this.destinationPath(), 'package.json'), pkg)
+    }
 
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
