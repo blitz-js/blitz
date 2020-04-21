@@ -3,6 +3,7 @@
 Please check if your PR fulfills the following requirements:
 
 - [ ] Tests for the changes have been added (for bug fixes / features)
+- [ ] Added terminal logging uses our logging utility at `packages/server/src/log.ts`
 - [ ] Code Coverage stayed the same or increased
 
 ## Pull request type
