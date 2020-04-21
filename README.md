@@ -19,7 +19,7 @@
 
 <br>
 
-<h2 align="center">Blitz is a Rails-like framework for monolithic, full-stack React apps</h2>
+<h3 align="center">Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js</h3>
 
 <br>
 
