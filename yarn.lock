@@ -4984,7 +4984,7 @@ cpy-cli@^3.1.0:
     cpy "^8.0.0"
     meow "^5.0.0"
 
-cpy@^8.0.0:
+cpy@8.1.0, cpy@^8.0.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/cpy/-/cpy-8.1.0.tgz#e8ac07f3caeb0113bd55326e5cda052c19fa6c60"
   integrity sha512-XwlImkjPxMr01qXqC564VD4rfcDQ2eKtYmFlCy0ixsLRJ1cwYVUBh+v47jsQTO1IrmvdjqO813VpDQ0JiTuOdA==
@@ -11667,7 +11667,7 @@ rimraf@2.x.x, rimraf@^2.5.4, rimraf@^2.6.2, rimraf@^2.6.3:
   dependencies:
     glob "^7.1.3"
 
-rimraf@^3.0.2:
+rimraf@3.0.2, rimraf@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
   integrity sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
