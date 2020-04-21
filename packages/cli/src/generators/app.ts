@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJSONSync} from 'fs-extra'
 import {join} from 'path'
-import {fetchRetry} from '../utils/fetch-retry'
+import {getLatestVersion} from '../utils/get-latest-version'
 
 const themeColor = '6700AB'
 
@@ -43,20 +43,20 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     // Overwrite dependency versions just before installing
     const pkg = readJSONSync(join(this.destinationPath(), 'package.json'))
     const pkgDependencies = Object.keys(pkg.dependencies)
+
     const latestVersions = await Promise.all(
       pkgDependencies.map(async (dependency) => {
-        const res = await fetchRetry(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`, 2)
-        if (res.ok) {
-          const json = await res.json()
-          return json.latest as string
+        const templateVersion = pkg.dependencies[dependency]
+        if (templateVersion.match(/\d.x/)) {
+          return await getLatestVersion(dependency, templateVersion.replace('.x', ''))
+        } else {
+          return templateVersion
         }
-        return
       }),
     )
-    if (!latestVersions.includes(undefined)) {
-      pkg.dependencies = pkgDependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
-      writeJSONSync(join(this.destinationPath(), 'package.json'), pkg)
-    }
+
+    pkg.dependencies = pkgDependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
+    writeJSONSync(join(this.destinationPath(), 'package.json'), pkg)
 
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
