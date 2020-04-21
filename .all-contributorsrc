@@ -241,6 +241,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "hew",
+      "name": "Matt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3103241?v=4",
+      "profile": "https://hew.tools",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
