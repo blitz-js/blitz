@@ -53,5 +53,16 @@
     "lint-staged": "^10.0.8",
     "ts-jest": "24.3.0"
   },
+  "keywords": [
+    "blitz",
+    "blitzjs",
+    "blitz.js",
+    "next",
+    "next.js",
+    "react",
+    "framework",
+    "fullstack",
+    "node"
+  ],
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
