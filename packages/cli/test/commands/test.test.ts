@@ -1,9 +1,9 @@
+jest.mock('cross-spawn')
+jest.mock('has-yarn')
+
 import crossSpawn from 'cross-spawn'
 import hasYarn from 'has-yarn'
 import TestCmd from '../../src/commands/test'
-
-jest.mock('cross-spawn')
-jest.mock('has-yarn')
 
 const testParams = [['test'], {stdio: 'inherit'}]
 const testWatchParams = [['test:watch'], {stdio: 'inherit'}]

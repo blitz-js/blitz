@@ -57,20 +57,20 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
       const conflictChecker = new ConflictChecker({
         dryRun: this.options.dryRun,
       })
-      conflictChecker.on('error', err => {
+      conflictChecker.on('error', (err) => {
         reject(err)
       })
       conflictChecker.on('fileStatus', (data: string) => {
         this.performedActions.push(data)
       })
 
-      this.fs.commit([conflictChecker], err => {
+      this.fs.commit([conflictChecker], (err) => {
         if (err) reject(err)
         resolve()
       })
     })
 
-    this.performedActions.forEach(action => {
+    this.performedActions.forEach((action) => {
       console.log(action)
     })
 

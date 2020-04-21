@@ -1,10 +1,10 @@
 {
   "name": "@blitzjs/core",
   "description": "Framework for building monolithic, full-stack, serverless React apps with zero data-fetching and zero client-side state management",
-  "version": "0.0.2-canary.0",
+  "version": "0.5.0-canary.1",
   "license": "MIT",
   "scripts": {
-    "start": "tsdx watch",
+    "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch",
@@ -46,6 +46,13 @@
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
   },
+  "dependencies": {
+    "@types/react-query": "1.1.2",
+    "@types/serialize-error": "4.0.1",
+    "pretty-ms": "6.0.1",
+    "react-query": "1.2.1",
+    "serialize-error": "6.0.0"
+  },
   "devDependencies": {
     "@prisma/client": "2.0.0-beta.2",
     "@testing-library/jest-dom": "5.5.0",
@@ -58,13 +65,6 @@
     "lint-staged": "^10.0.8",
     "next": "^9.3.0",
     "ts-jest": "24.3.0"
-  },
-  "dependencies": {
-    "@types/react-query": "1.1.2",
-    "@types/serialize-error": "4.0.1",
-    "pretty-ms": "6.0.1",
-    "react-query": "1.2.1",
-    "serialize-error": "6.0.0"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }

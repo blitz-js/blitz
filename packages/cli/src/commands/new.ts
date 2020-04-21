@@ -63,7 +63,8 @@ export default class New extends Command {
       await generator.run()
       this.log('\n' + chalk.hex(themeColor).bold('Your new Blitz app is ready! Next steps:') + '\n')
       this.log(chalk.yellow(`   1. cd ${args.name}`))
-      this.log(chalk.yellow(`   2. blitz start\n`))
+      this.log(chalk.yellow(`   2. blitz start`))
+      this.log(chalk.yellow(`   3. You create new pages by placing components inside app/pages/\n`))
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 

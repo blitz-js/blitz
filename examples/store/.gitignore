@@ -13,6 +13,7 @@
 /out/
 /.blitz/
 *.sqlite
+.generated-prisma-client
 
 # production
 /build
@@ -27,6 +28,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.envrc
+.env
 .env.local
 .env.development.local
 .env.test.local

@@ -1,5 +1,4 @@
-import Head from 'next/head'
-import {Link} from '@blitzjs/core'
+import {Head, Link} from 'blitz'
 
 const Home = () => (
   <div className="container">

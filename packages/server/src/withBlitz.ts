@@ -22,10 +22,16 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
           config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
         }
 
+        // This is needed because, for an unknown reason, the next build fails when
+        // importing directly from the `blitz` package, complaining about child_processs
+        // Somehow our server code is getting into the next build that way.
+        // This alias eliminates that problem.
+        // Anyone is welcome to investigate this further sometime
+        config.resolve.alias.blitz = '@blitzjs/core'
+
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options)
         }
-
         return config
       },
     }),

@@ -32,15 +32,13 @@ A fullstack, monolithic application is simpler than an application where fronten
 
 Until now, choosing React for your view layer required you to have a REST or GraphQL API even if it wasn't used by third-parties. This additional complexity is a significant drawback not shared by traditional server rendered apps like Ruby on Rails.
 
-Contrary to popular opinion, most apps don't need an API! If you are building a unicorn startup, then yes you'll need an API at some point. But unicorn startups are 1% of all applications. Most applications are much smaller, faithfully serving a constrained set of use cases for small to medium businesses that don't need Internet Scale.
-
-This is akin to the microservices vs monolith debate. Huge companies are absolutely going to need a more microservice oriented architecture, but the vast majority of apps are much better served by a single monolith.
+Blitz is a framework for the 99% of us at companies with <100 employees. The vast majority of these apps don't acutally need an API, at least not until years down the road when you have the time and resources to build one. 
 
 ### 3. Convention over Configuration
 
 Starting a new fullstack React app is currently too hard. You have to spend days on things like configuring eslint, prettier, husky, jest, cypress, typescript, deciding on a file structure, setting up a database, adding authentication and authorization, setting up a router, defining routing conventions, and setting up your styling library.
 
-Blitz will make as many decisions and do as much work for you as possible. This makes it lightning fast to start real development. It also greatly benefits the community. Common project structure and architectural patterns make it easy to move from Blitz app to Blitz app and immediately feel at home.
+Blitz makes as many decisions and does as much work for you as possible. This makes it lightning fast to start real development. It also greatly benefits the community. Common project structure and architectural patterns make it easy to move from Blitz app to Blitz app and immediately feel at home.
 
 Convention over configuration doesn't mean no configuration. It means configuration is optional. Blitz will provide all the escape hatches you need for bespoke customization.
 
@@ -48,7 +46,7 @@ Convention over configuration doesn't mean no configuration. It means configurat
 
 Blitz is opinionated. The out-of-the-box experience guides you on a path perfect for most applications. However, Blitz isn't arrogant. It understands there are very good reasons for deviating from convention, and it allows you to do so. For example, Blitz has a conventional file structure, but, with few exceptions, doesn't _enforce_ it.
 
-And when there's not community consensus, `blitz new` will prompt you to choose.
+And when there's not community consensus, `blitz new` prompts you to choose.
 
 ### 5. Easy to Start, Easy to Scale
 

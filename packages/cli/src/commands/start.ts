@@ -1,6 +1,8 @@
 import {Command, flags} from '@oclif/command'
 import {dev, prod} from '@blitzjs/server'
 
+import {runPrismaGeneration} from './db'
+
 export default class Start extends Command {
   static description = 'Start a development server'
   static aliases = ['s']
@@ -22,6 +24,7 @@ export default class Start extends Command {
     if (flags.production) {
       await prod(config)
     } else {
+      await runPrismaGeneration({silent: true})
       await dev(config)
     }
   }

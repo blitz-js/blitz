@@ -1,4 +1,5 @@
 import * as path from 'path'
+import {resolveBinAsync} from '@blitzjs/server'
 
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {
@@ -12,35 +13,29 @@ jest.doMock('cross-spawn', () => ({spawn}))
 
 import DbCmd from '../../src/commands/db'
 
-const schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+let schemaArg: string
+let prismaBin: string
+let migrateSaveParams: any[]
+let migrateUpParams: any[]
+beforeAll(async () => {
+  schemaArg = `--schema=${path.join(process.cwd(), 'db', 'schema.prisma')}`
+  prismaBin = await resolveBinAsync('@prisma/cli', 'prisma')
 
-const initParams = ['prisma', ['init'], {stdio: 'inherit'}]
-const migrateSaveParams = [
-  'prisma',
-  ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
-  {stdio: 'inherit'},
-]
-const migrateUpParams = [
-  'prisma',
-  ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
-  {stdio: 'inherit'},
-]
+  migrateSaveParams = [
+    prismaBin,
+    ['migrate', 'save', schemaArg, '--create-db', '--experimental'],
+    {stdio: 'inherit'},
+  ]
+  migrateUpParams = [
+    prismaBin,
+    ['migrate', 'up', schemaArg, '--create-db', '--experimental'],
+    {stdio: 'inherit'},
+  ]
+})
 
 describe('Db command', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-  })
-
-  it('runs db init', async () => {
-    await DbCmd.run(['init'])
-
-    expect(spawn).toHaveBeenCalledWith(...initParams)
-  })
-
-  it('runs db init (alias)', async () => {
-    await DbCmd.run(['i'])
-
-    expect(spawn).toHaveBeenCalledWith(...initParams)
   })
 
   it('runs db migrate', async () => {
@@ -65,6 +60,18 @@ describe('Db command', () => {
     //expect(onSpy).toHaveBeenCalledWith(0);
 
     expect(spawn).toBeCalledWith(...migrateUpParams)
+  })
+
+  it('runs db introspect', async () => {
+    await DbCmd.run(['introspect'])
+
+    expect(spawn).toHaveBeenCalled()
+  })
+
+  it('runs db studio', async () => {
+    await DbCmd.run(['studio'])
+
+    expect(spawn).toHaveBeenCalled()
   })
 
   it('does not run db in case of invalid command', async () => {

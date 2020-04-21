@@ -1,24 +1,23 @@
 {
   "name": "store",
-  "version": "0.0.2-canary.0",
+  "version": "0.5.0-canary.5",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.0.2-canary.0",
-    "@blitzjs/core": "0.0.2-canary.0",
-    "@blitzjs/server": "0.0.2-canary.0",
     "@prisma/cli": "2.0.0-beta.2",
     "@prisma/client": "2.0.0-beta.2",
+    "blitz": "0.5.0-canary.5",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"
   },
-  "NOTE": "Next.js dependency is only required for deploying to zeit, for now",
+  "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
+    "@types/react": "16.9.34",
     "next": "9.3.4"
   }
 }
