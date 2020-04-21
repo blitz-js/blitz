@@ -28,14 +28,16 @@ rpc.warm = (url: string) => {
   }
 }
 
-export function isomorphicRpc(resolver: any, cacheKey: string) {
+export function isomorphicRpc(resolver: any, cacheKey: string, serverless?: boolean) {
   if (typeof window !== 'undefined') {
     const url = cacheKey.replace(/^app\/_rpc/, '/api')
     const rpcFn: any = (params: any) => rpc(url, params)
     rpcFn.cacheKey = url
 
     // Warm the lambda
-    rpc.warm(url)
+    if (serverless) {
+      rpc.warm(url)
+    }
     return rpcFn
   } else {
     return resolver

@@ -25,6 +25,7 @@ type SynchronizeFilesInput = {
   ignoredPaths: string[]
   includePaths: string[]
   writeManifestFile: boolean
+  serverless?: boolean
 }
 
 type SynchronizeFilesOutput = {
@@ -73,7 +74,7 @@ export async function synchronizeFiles({
 
       // Rules
       runRule(pagesFolder({srcPath})),
-      runRule(rpc({srcPath})),
+      runRule(rpc({srcPath, serverless: opts.serverless})),
       runRule(configRule()),
 
       // File sync

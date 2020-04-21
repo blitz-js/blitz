@@ -3,9 +3,9 @@ import {absolutePathTransform} from './path-utils'
 import {relative} from 'path'
 import {Rule} from '../types'
 
-type Args = {srcPath: string}
+type Args = {srcPath: string; serverless?: boolean}
 
-export default function rpc({srcPath}: Args): Rule {
+export default function rpc({srcPath, serverless}: Args): Rule {
   const fileTransformer = absolutePathTransform(srcPath)
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
@@ -26,7 +26,7 @@ export default function rpc({srcPath}: Args): Rule {
       // Replace function with Rpc Client
       new File({
         path: file.path,
-        contents: Buffer.from(isomorphicRpcTemplate(importPath)),
+        contents: Buffer.from(isomorphicRpcTemplate(importPath, serverless || false)),
       }),
 
       // Create Rpc Route Handler
@@ -42,12 +42,12 @@ export function isRpcPath(filePath: string) {
   return new RegExp('(?:app\\/).*(?:queries|mutations)\\/.+').exec(filePath)
 }
 
-const isomorphicRpcTemplate = (resolverPath: string) => `
+const isomorphicRpcTemplate = (resolverPath: string, serverless: boolean) => `
 import {isomorphicRpc} from '@blitzjs/core'
 
 import resolver from '${resolverPath}'
 
-export default isomorphicRpc(resolver, '${resolverPath}') as typeof resolver
+export default isomorphicRpc(resolver, '${resolverPath}', ${serverless}) as typeof resolver
 `
 
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `

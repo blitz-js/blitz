@@ -23,6 +23,7 @@ export async function build(config: ServerConfig) {
     writeManifestFile,
     ignoredPaths,
     includePaths,
+    serverless: config.serverless,
   })
 
   await nextBuild(nextBin, buildFolder)

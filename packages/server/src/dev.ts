@@ -27,6 +27,7 @@ export async function dev(config: ServerConfig) {
     includePaths,
     manifestPath,
     writeManifestFile,
+    serverless: true,
   })
 
   nextStartDev(nextBin, dest, manifest, devFolder)
