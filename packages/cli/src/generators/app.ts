@@ -3,6 +3,9 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
+import {readJSONSync, writeJSONSync} from 'fs-extra'
+import {join} from 'path'
+import fetch from 'node-fetch'
 
 const themeColor = '6700AB'
 
@@ -37,6 +40,19 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    // Overwrite dependency versions just before installing
+    const pkg = readJSONSync(join(this.destinationPath(), 'package.json'))
+    const pkgDependencies = Object.keys(pkg.dependencies)
+    const latestVersions = await Promise.all(
+      pkgDependencies.map(async (dependency) => {
+        const res = await fetch(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`)
+        const json = await res.json()
+        return json.latest as string
+      }),
+    )
+    pkg.dependencies = pkgDependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
+    writeJSONSync(join(this.destinationPath(), 'package.json'), pkg)
+
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
 
