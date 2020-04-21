@@ -4,13 +4,12 @@ about: Something new or better!
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 **What do you want and why do you want it?.**
 The more information the better!
 
-**Possible implementation**
+**Possible implementation(s)**
 How might we do this?
 
 **Additional context**
