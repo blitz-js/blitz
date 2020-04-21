@@ -3,27 +3,22 @@ import {Head} from '@blitzjs/core'
 const Home = () => (
   <div className="container">
     <Head>
-      <title><%= name %></title>
+      <title>yep</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
     <main>
       <div className="logo">
-        <img src="/logo.png" alt="blitz icon" height="72" width="72" />
+        <img src="/logo.png" alt="blitz.js" />
       </div>
-      <h1 className="title" style={{marginBottom: 24}}>
-        Welcome to Blitz.js
-      </h1>
-      <p>
-        Get started by editing this page.{' '}
-        <pre>
-          <code>/app/pages/index.tsx</code>
-        </pre>
-      </p>
+      <p>Get started by editing this page:</p>
+      <pre>
+        <code>/app/pages/index.tsx</code>
+      </pre>
       <div className="buttons">
         <a
           className="button"
-          href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+          href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
           target="_blank"
           rel="noopener noreferrer">
           Documentation
@@ -34,6 +29,13 @@ const Home = () => (
           target="_blank"
           rel="noopener noreferrer">
           Github Repo
+        </a>
+        <a
+          className="button-outline"
+          href="https://slack.blitzjs.com"
+          target="_blank"
+          rel="noopener noreferrer">
+          Slack Community
         </a>
       </div>
     </main>
@@ -67,16 +69,12 @@ const Home = () => (
 
       footer {
         width: 100%;
-        height: 100px;
+        height: 60px;
         border-top: 1px solid #eaeaea;
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: #45009d;
-      }
-
-      footer img {
-        margin-left: 0.5rem;
       }
 
       footer a {
@@ -90,43 +88,19 @@ const Home = () => (
         text-decoration: none;
       }
 
-      .title a:hover,
-      .title a:focus,
-      .title a:active {
-        text-decoration: underline;
-      }
-
-      .title {
-        margin: 0;
-        font-size: 2rem;
-        font-weight: 700;
-        color: #000000;
-      }
-
-      .title,
-      .description {
-        text-align: center;
-      }
-
-      .description {
-        line-height: 1.5;
-        font-size: 1.5rem;
-      }
-
       .logo {
         margin-bottom: 2rem;
       }
 
       .logo img {
-        width: 72px;
-        height: 72px;
+        width: 400px;
       }
 
       .buttons {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-gap: 0.5rem;
-        margin-top: 1rem;
+        margin-top: 6rem;
       }
 
       a.button {
@@ -186,7 +160,8 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: 'Libre Franklin', sans-serif;
+        font-family: 'Libre Franklin', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+          Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {
