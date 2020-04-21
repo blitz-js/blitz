@@ -18,6 +18,6 @@
   "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
     "@types/react": "16.9.34",
-    "next": "9.3.4"
+    "next": "9.3.5"
   }
 }
