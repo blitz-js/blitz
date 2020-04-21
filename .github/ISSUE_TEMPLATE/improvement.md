@@ -1,6 +1,6 @@
 ---
-name: Feature request
-about: Something new or better!
+name: Improvement
+about: Something needs improved.
 title: ''
 labels: ''
 assignees: ''
