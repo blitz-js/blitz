@@ -1,4 +1,5 @@
 import chalk from 'chalk'
+import readline from 'readline'
 
 export const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
@@ -13,6 +14,9 @@ export const withX = (str: string) => {
 }
 
 /**
+ * Logs a green success message to stdout.
+ *
+ * @param {string} msg
  * Console logs a branded (purple) success message
  */
 const themeColor = '6700AB'
@@ -28,29 +32,45 @@ export const success = (msg: string) => {
 }
 
 /**
- * Console logs a progress message
+ * Clears the line and optionally writes a message
+ * @param msg optional message to write
+ */
+export const clearLine = (msg?: string) => {
+  readline.clearLine(process.stdout, 0)
+  readline.cursorTo(process.stdout, 0)
+  msg && process.stdout.write(msg)
+}
+
+/**
+ * Logs a progress message to stdout.
+ *
+ * @param {string} msg
  */
 export const progress = (msg: string) => {
   console.log(withCaret(chalk.whiteBright(msg)))
 }
 
 /**
- * Console logs a subtle gray message
+ * Logs a subtle gray message to stdout.
+ *
+ * @param {string} msg
  */
 export const meta = (msg: string) => {
   console.log(withCaret(chalk.gray(msg)))
 }
 
 /**
- * Console errors a red error message
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
  */
 export const error = (msg: string) => {
   console.error(withX(chalk.red.bold(msg)))
 }
 
 /**
- * Sets the color of a variable for logging
+ * Colorizes a variable for display.
+ *
+ * @param {string} val
  */
-export const variable = (val: string) => {
-  return chalk.cyan.bold(`${val}`)
-}
+export const variable = (val: string) => chalk.cyan.bold(`${val}`)

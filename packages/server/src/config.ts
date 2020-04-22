@@ -9,22 +9,23 @@ export type ServerConfig = {
   buildFolder?: string
   manifestPath?: string
   writeManifestFile?: boolean
+  watch?: boolean
 }
 
 const defaults = {
   ignoredPaths: [
-    './build',
-    '.blitz-*/**/*',
-    '.blitz/**/*',
+    './build/**/*',
+    './.blitz-*/**/*',
+    './.blitz/**/*',
     '.DS_Store',
     '.git',
-    '.next',
+    '.next/**/*',
     '*.log',
     '.now',
     '*.pnp.js',
-    './coverage',
-    './dist',
-    'node_modules',
+    'coverage/**/*',
+    'dist/**/*',
+    'node_modules/**/*',
   ],
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',

@@ -20,7 +20,7 @@ import {remove, pathExists} from 'fs-extra'
 import {directoryTree} from './utils/tree-utils'
 
 describe('Dev command', () => {
-  const rootFolder = resolve(__dirname, './fixtures/rules')
+  const rootFolder = resolve(__dirname, './fixtures/api-routes')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-rules')
 
@@ -44,7 +44,7 @@ describe('Dev command', () => {
         {name: 'next.config.js'},
         {
           name: 'pages',
-          children: [{name: 'bar.tsx'}, {name: 'foo.tsx'}],
+          children: [{name: 'api', children: [{name: 'bar.ts'}, {name: 'foo.ts'}]}],
         },
       ],
     })

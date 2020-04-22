@@ -12,6 +12,7 @@ export async function dev(config: ServerConfig) {
     manifestPath,
     writeManifestFile,
     includePaths,
+    watch = true,
   } = await enhance({
     ...config,
     interceptNextErrors: true,
@@ -19,17 +20,14 @@ export async function dev(config: ServerConfig) {
   const src = resolve(rootFolder)
   const dest = resolve(rootFolder, devFolder)
 
-  const {watcher, manifest} = await synchronizeFiles({
+  const {manifest} = await synchronizeFiles({
     src,
     dest,
-    watch: true,
+    watch,
     ignoredPaths,
     includePaths,
     manifestPath,
     writeManifestFile,
   })
-
   nextStartDev(nextBin, dest, manifest, devFolder)
-
-  return watcher
 }

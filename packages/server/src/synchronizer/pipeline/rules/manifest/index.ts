@@ -1,5 +1,9 @@
-import through2 from 'through2'
 import File from 'vinyl'
+import {through, pipeline} from '../../../streams'
+import {dest} from 'vinyl-fs'
+import gulpIf from 'gulp-if'
+import {resolve} from 'path'
+import {Rule} from '../../../types'
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -63,11 +67,10 @@ export class Manifest {
   }
 }
 
-export const setManifestEntry = (manifest: Manifest) =>
-  through2.obj((file, _, done) => {
+const setManifestEntry = (manifest: Manifest) => {
+  const stream = through({objectMode: true}, (file: File, _, next) => {
     const [origin] = file.history
     const dest = file.path
-
     if (file.event === 'add' || file.event === 'change') {
       manifest.setEntry(origin, dest)
     }
@@ -76,15 +79,37 @@ export const setManifestEntry = (manifest: Manifest) =>
       manifest.removeKey(origin)
     }
 
-    done(null, file)
+    next(null, file)
   })
+  return {stream}
+}
 
-export const createManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) =>
-  through2.obj((_, __, done) => {
+const createManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) => {
+  const stream = through({objectMode: true}, (_, __, next) => {
     const manifestFile = new File({
       path: fileName,
       contents: Buffer.from(manifest.toJson(compact)),
     })
 
-    done(null, manifestFile)
+    next(null, manifestFile)
   })
+  return {stream}
+}
+
+/**
+ * Returns a rule to create and write the file error manifest so we can
+ * link to the correct files on a NextJS browser error.
+ */
+// TODO: Offload the file writing to later and write with all the other file writing
+const create: Rule = ({config}) => {
+  const manifest = Manifest.create()
+  const stream = pipeline(
+    setManifestEntry(manifest).stream,
+    createManifestFile(manifest, resolve(config.cwd, config.manifest.path)).stream,
+    gulpIf(config.manifest.write, dest(config.src)),
+  )
+
+  return {stream, manifest}
+}
+
+export default create
