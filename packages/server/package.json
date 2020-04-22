@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.5.0-canary.1",
+  "version": "0.5.0-canary.6",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -33,8 +33,8 @@
     "@types/pump": "^1.1.0",
     "cross-spawn": "^7.0.2",
     "fast-glob": "^3.2.2",
-    "from2": "^2.3.0",
     "find-parent-dir": "0.3.0",
+    "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "merge-stream": "^2.0.0",
     "next": "9.3.5",
@@ -45,8 +45,8 @@
     "parallel-transform": "^1.2.0",
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
-    "pumpify": "^2.0.1",
     "pkg-dir": "4.2.0",
+    "pumpify": "^2.0.1",
     "readable-stream": "^3.6.0",
     "resolve-cwd": "3.0.0",
     "through2": "^3.0.1",
@@ -54,6 +54,5 @@
     "vinyl-file": "^3.0.0",
     "vinyl-fs": "^3.0.3"
   },
-  "devDependencies": {},
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
