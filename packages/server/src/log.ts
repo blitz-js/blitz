@@ -14,7 +14,9 @@ export const withX = (str: string) => {
 }
 
 /**
- * Console logs a green success message
+ * Logs a green success message to stdout.
+ *
+ * @param {string} msg
  */
 export const success = (msg: string) => {
   console.log(withCheck(chalk.green(msg)))
@@ -31,29 +33,35 @@ export const clearLine = (msg?: string) => {
 }
 
 /**
- * Console logs a progress message
+ * Logs a progress message to stdout.
+ *
+ * @param {string} msg
  */
 export const progress = (msg: string) => {
   console.log(withCaret(chalk.whiteBright(msg)))
 }
 
 /**
- * Console logs a subtle gray message
+ * Logs a subtle gray message to stdout.
+ *
+ * @param {string} msg
  */
 export const meta = (msg: string) => {
   console.log(withCaret(chalk.gray(msg)))
 }
 
 /**
- * Console errors a red error message
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
  */
 export const error = (msg: string) => {
   console.error(withX(chalk.red.bold(msg)))
 }
 
 /**
- * Sets the color of a variable for logging
+ * Colorizes a variable for display.
+ *
+ * @param {string} val
  */
-export const variable = (val: string) => {
-  return chalk.cyan.bold(`${val}`)
-}
+export const variable = (val: string) => chalk.cyan.bold(`${val}`)
