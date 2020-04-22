@@ -65,6 +65,18 @@ pipeline(
 )
 ```
 
+# View rendering and error handling
+
+The cli view is provided by a [reporter](./reporter) stream which accepts Events which it manages and dispays. This is responsible for rendering stuff to the view.
+
+Secondly there is an [errors](./errors) stream which works a similar way but for Operational Errors.
+
+It is important to differentiate between Operational Errors and Exceptions. Expections are probably programmer errors where as operation errors are more likely a result of the user providing us with the wrong input/files.
+
+In this architecture we write operational errors to the error stream and catch Exceptions in stream error handlers. We should be able to drop Exceptions on the floor but by attaching a view to the end of the error stream we can print nice messages for our users.
+
+Because everything is streams we can get pretty creative with how we present stuff to the user and get realtime updates to it. This might make it easier to integrate with Reactive cli view frameworks at a later point.
+
 # Synchronizer Event Pipeline
 
 The main element within the file synchronizer is the [file transform pipeline](./pipeline/index.ts).
