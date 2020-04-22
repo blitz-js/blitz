@@ -4,6 +4,8 @@ import {run as oclifRun} from '@oclif/command'
 require('dotenv').config()
 
 export function run() {
-  // @ts-ignore (TS complains about using `catch`)
-  oclifRun().then(require('@oclif/command/flush')).catch(require('@oclif/errors/handle'))
+  oclifRun()
+    .then(require('@oclif/command/flush'))
+    // @ts-ignore (TS complains about using `catch`)
+    .catch(require('@oclif/errors/handle'))
 }

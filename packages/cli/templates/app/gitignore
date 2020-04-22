@@ -12,6 +12,7 @@ web_modules/
 /.next/
 *.sqlite
 .now
+.blitz-console-history
 
 # misc
 .DS_Store
