@@ -182,14 +182,14 @@ const stream = pipeline(
 import {through} from './streams'
 
 // Typical Rule
-export default ({config, input, error, getInputCache}) => {
+export default ({config, input, errors, getInputCache}) => {
   const service = createSomeService()
 
   // This is an incremental file cache that
   // gets built as Files are read
   const cache = getInputCache()
 
-  // Probing sync methods are probably ok here as this is effectively synchronous
+  // Probing sync methods are probably ok here as this is effectively synchronous and could be
   // considered bootstrapping and runs first but you should not write to the file system
   // Use input.write() instead.
   if (!pathExistsSync(resolve(config.src, 'blitz.config.js'))) {
@@ -207,10 +207,10 @@ export default ({config, input, error, getInputCache}) => {
     // process file in some way
     file.path = file.path.toUpperCase()
 
-    // you can push to the stream output
+    // you can push to the stream output (note you cannot use arrow fns)
     this.push(file)
 
-    // send file onwards
+    // or send file onwards to be written this does the same thing as this.push()
     next(null, file)
   })
 
