@@ -38,15 +38,13 @@ if (fs.existsSync(localCLIPkgPath)) {
   pkgPath = globalLinkedCLIPkgPath
 }
 
-// TODO: remove
-console.log('debug:', usageType)
-console.log('debug: pkgPath:', pkgPath)
-console.log('')
-
 const cli = require(pkgPath as string)
 
 const options = require('minimist')(process.argv.slice(2))
 if (options._.length === 0 && (options.v || options.version)) {
+  // TODO: remove
+  console.log('debug:', usageType)
+  console.log('debug: pkgPath:', pkgPath)
   try {
     let globalInstallPath
     let localButGlobalLinked = usageType === 'local' && fs.existsSync(globalLinkedCLIPkgPath)

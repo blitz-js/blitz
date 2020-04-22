@@ -55,7 +55,6 @@
     "cross-env": "^7.0.0",
     "debug": "^4.1.1",
     "directory-tree": "^2.2.4",
-    "globby": "^11.0.0",
     "husky": "^4.2.3",
     "jest": "24.9.0",
     "lerna": "^3.20.2",
