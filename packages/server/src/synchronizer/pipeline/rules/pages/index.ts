@@ -10,7 +10,9 @@ import {DuplicatePathError, NestedRouteError} from '../../../errors'
  */
 const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   const {src} = config
-  const transformer = absolutePathTransform(src)(pathTransformer)
+
+  const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
+  const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
   const stream = through.obj((file: File, _, next) => {
     const entries = getInputCache().toPaths()
@@ -57,7 +59,8 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
       return next(err)
     }
 
-    file.path = transformer(file.path)
+    file.path = apiTransformer(pagesTransformer(file.path))
+
     next(null, file)
   })
 
@@ -66,7 +69,14 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
 
 export default createRulePages
 
-export function pathTransformer(path: string) {
+export function pagesPathTransformer(path: string) {
   const regex = new RegExp(`(?:\\/?app\\/.*?\\/?)(pages\\/.+)$`)
   return (regex.exec(path) || [])[1] || path
+}
+
+export function apiPathTransformer(path: string) {
+  const regex = new RegExp(`(?:\\/?app\\/.*?\\/?)(api\\/.+)$`)
+  const matchedPath = (regex.exec(path) || [])[1]
+
+  return matchedPath ? `pages/${matchedPath}` : path
 }

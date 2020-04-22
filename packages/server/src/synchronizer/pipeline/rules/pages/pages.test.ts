@@ -1,4 +1,4 @@
-import {pathTransformer} from '.'
+import {pagesPathTransformer} from '.'
 
 describe('createPagesPathTransformer', () => {
   const tests = [
@@ -24,24 +24,14 @@ describe('createPagesPathTransformer', () => {
     },
     {
       name: 'extracts paths folder to the root in a basic transformation',
-      input: 'app/users/pages/one/two/three.tsx',
-      expected: 'pages/one/two/three.tsx',
-    },
-    {
-      name: 'extracts paths folder to the root in a basic transformation',
       input: '/User/foo/bar/app/users/pages/one/two/three.tsx',
-      expected: 'pages/one/two/three.tsx',
-    },
-    {
-      name: 'Array folderNames',
-      input: 'app/users/pages/one/two/three.tsx',
       expected: 'pages/one/two/three.tsx',
     },
   ]
 
   tests.forEach(({name, input, expected}) => {
     it(name, () => {
-      expect(pathTransformer(input)).toEqual(expected)
+      expect(pagesPathTransformer(input)).toEqual(expected)
     })
   })
 })
