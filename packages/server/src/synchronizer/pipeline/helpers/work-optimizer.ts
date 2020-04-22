@@ -5,9 +5,10 @@ import {through} from '../../streams'
 import File from 'vinyl'
 
 /**
- * Returns streams that help handling work optimisation in the file transform stream
+ * Returns streams that help handling work optimisation in the file transform stream.
  */
-// TODO: This needs quite a bit of work before we can manage a dirty start
+// TODO:  This needs quite a bit of work before we can manage a dirty start
+//        Currently this does not do much aside from guard against repeated work
 export default () => {
   const todo: Array<string> = []
   const done: Array<string> = []

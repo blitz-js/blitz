@@ -28,7 +28,7 @@ export default function createPipeline(
   reporter: Writable,
 ) {
   // Helper streams don't account for business rules
-  const workOptimizer = createWorkOptimizer()
+  const optimizer = createWorkOptimizer()
   const enrichFiles = createFileEnricher()
   const srcCache = createFileCache(isSourceFile)
   const readyHandler = createReadyHandler(ready)
@@ -56,7 +56,7 @@ export default function createPipeline(
     // Preparing files
     enrichFiles.stream,
     srcCache.stream,
-    workOptimizer.triage,
+    optimizer.triage,
 
     // Run business rules
     rulePages.stream,
@@ -65,7 +65,7 @@ export default function createPipeline(
     ruleWrite.stream,
 
     // Tidy up
-    workOptimizer.reportComplete,
+    optimizer.reportComplete,
 
     // TODO: try and move this up to business rules section
     ruleManifest.stream,

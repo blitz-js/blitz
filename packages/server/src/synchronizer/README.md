@@ -18,6 +18,23 @@ Initially blitz will be used by people with small projects however as the number
 
 RxJS could be a good match for streaming architectures and introduces some really powerful tools for managing stream operations. As we are using object streams it would also possibly simplify some of the boilerplate using RxJS. However, certain operators in RxJS can be inapproachable for newer developers and tend to encourage too much abstraction. It is also an extra dependency that increases the learning surface of the codebase and as we are stuck with understanding basic node streams in any case it makes sense to avoid RxJS until absolutely necessary.
 
+# Broad Architecture
+
+Our architecture is a big file transform pipeline. Every business concern is colocated in a rule which basically exports a stream. There are rules for general business concerns such as:
+
+- Blitz Config
+- Compiling Routes
+- RPC Generation
+- File lookup table generation
+
+## File Transform Pipeline
+
+<img src="diagram-file-transform.png" />
+
+## View and Error Rendering
+
+<img src="diagram-error-and-view.png" />
+
 # Stream helpers
 
 So Node streams are a little incompatable on old versions of Node and there are a few compatability libs we are using to help us work with streams.
@@ -206,7 +223,7 @@ export default ({config, input, error, getInputCache}) => {
 }
 ```
 
-# Dirty Sync
+# Future thinking
 
 So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically we want Blitz to do as little work as possible. At this point we are blowing away blitz folders when we start but it would be smarter to analyse the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
 
