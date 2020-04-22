@@ -5,15 +5,17 @@ import {watch} from 'chokidar'
 
 import {loadDependencies} from '../utils/load-dependencies'
 import {BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
+import {runPrismaGeneration} from './db'
 
 export default class Console extends Command {
   static description = 'Run project REPL'
   static aliases = ['c']
-  static message = `Welcome to Blitz.js v0.0.1
-Type ".help" for more information.`
+  static message = `Welcome to the Blitz.js console
+Type ".help" for more information.
+`
 
   static replOptions = {
-    prompt: '⚡️>',
+    prompt: '⚡️> ',
     useColors: true,
   }
 
@@ -31,6 +33,8 @@ Type ".help" for more information.`
 
   async run() {
     this.log(Console.message)
+
+    await runPrismaGeneration({silent: true})
 
     const repl = Console.initializeRepl()
 
