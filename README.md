@@ -97,7 +97,7 @@ There's still a lot of work to do, so you are especially invited to join us in b
 - Contribute via [Open Collective](https://opencollective.com/blitzjs)
 - Contribute via [Patreon](https://patreon.com/flybayer)
 
-_Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters! [See options on Open Collective](https://opencollective.com/blitzjs)_
+_Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters!_
 
 <br>
 
