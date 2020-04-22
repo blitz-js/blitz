@@ -6,7 +6,7 @@ import {through} from '../../../streams'
 import {Rule} from '../../../types'
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
-
+const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
 /**
  * Returns a Rule that manages converting from blitz.config.js to next.config.js
  */
@@ -15,7 +15,7 @@ const create: Rule = ({config, input}) => {
   const hasNextConfig = pathExistsSync(resolve(config.src, 'next.config.js'))
   const hasBlitzConfig = pathExistsSync(resolve(config.src, 'blitz.config.js'))
 
-  if (hasNextConfig && !process.env.NOW_BUILDER) {
+  if (hasNextConfig && !isNowBuild()) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
     const err = new Error(
       'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
@@ -54,7 +54,7 @@ module.exports = withBlitz(config);
     if (!isNextConfigPath(file.path)) return next(null, file)
     // Zeit now adds configuration needed for Now, like serverless target,
     // so we need to keep and use that
-    if (process.env.NOW_BUILDER) {
+    if (isNowBuild()) {
       // Assume we have a next.config.js if NOW_BUILDER is true as the cli creates one
 
       // Divert next.config to next-zeit.config.js
