@@ -44,8 +44,10 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const pkgDependencies = Object.keys(pkg.dependencies)
     const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
-    await replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies')
-    await replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies')
+    await Promise.all([
+      replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies'),
+      replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies'),
+    ])
 
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
