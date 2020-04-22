@@ -21,6 +21,7 @@ export default function createReporter() {
       case FILE_WRITTEN: {
         const filePath = event.payload.history[0].replace(process.cwd(), '')
         clearLine(filePath)
+        setTimeout(clearLine, 100)
         break
       }
 

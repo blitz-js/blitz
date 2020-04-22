@@ -11,7 +11,7 @@ export default (handler: Function) => {
 
   function resetTimeout() {
     destroyTimeout()
-    timeout = setTimeout(handler, 2000)
+    timeout = setTimeout(handler, 500)
   }
 
   function destroyTimeout() {
