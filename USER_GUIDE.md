@@ -140,7 +140,7 @@ At build time, the direct function import is swapped out for a function that exe
 ```tsx
 import {Suspense} from 'react'
 import {useRouter, useQuery} from 'blitz'
-import getProduct from '/app/products/queries/getProduct'
+import getProduct from 'app/products/queries/getProduct'
 import ErrorBoundary from 'app/components/ErrorBoundary'
 
 function Product() {
