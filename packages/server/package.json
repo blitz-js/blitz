@@ -36,7 +36,7 @@
     "from2": "^2.3.0",
     "find-parent-dir": "0.3.0",
     "gulp-if": "^3.0.0",
-    "merge-stream": "^2.0.0",    
+    "merge-stream": "^2.0.0",
     "next": "9.3.5",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.2.0",
@@ -54,24 +54,6 @@
     "vinyl-file": "^3.0.0",
     "vinyl-fs": "^3.0.3"
   },
-  "devDependencies": {
-    "@types/cross-spawn": "^6.0.1",
-    "@types/find-parent-dir": "0.3.0",
-    "@types/from2": "^2.3.0",
-    "@types/gulp-if": "^0.0.33",
-    "@types/jest": "^25.1.3",
-    "@types/merge-stream": "^1.1.2",
-    "@types/parallel-transform": "^1.1.0",
-    "@types/path-is-absolute": "^1.0.0",
-    "@types/pumpify": "^1.4.1",
-    "@types/readable-stream": "^2.3.5",
-    "@types/through2": "^2.0.34",
-    "@types/vinyl-fs": "^2.4.11",
-    "directory-tree": "^2.2.4",
-    "husky": "^4.2.3",
-    "tsdx": "^0.13.1",
-    "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
-  },
+  "devDependencies": {},
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
