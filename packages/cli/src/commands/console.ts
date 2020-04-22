@@ -40,9 +40,6 @@ export default class Console extends Command {
     console.log(chalk.yellow('      - Use your db like this: await db.user.findMany()'))
     console.log(chalk.yellow('      - Use your queries/mutations like this: await getUsers()'))
 
-    // Make the REPL work with `baseUrl`
-    require('tsconfig-paths/register')
-
     await runPrismaGeneration({silent: true})
 
     const repl = Console.initializeRepl()

@@ -5,6 +5,9 @@ import pkgDir from 'pkg-dir'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
+require('tsconfig-paths/register')
+require('ts-node').register({compilerOptions: {module: 'commonjs'}})
+
 export const BLITZ_MODULE_PATHS = [
   ...globby.sync(
     [
@@ -27,11 +30,16 @@ export const loadBlitz = () => {
         const dirs = path.dirname(modulePath).split(path.sep)
         name = dirs[dirs.length - 1]
       }
-      const module = forceRequire(modulePath)
-      const contextObj = module.default || module
-      //TODO: include all exports here, not just default
-      return {
-        [name]: contextObj,
+
+      try {
+        const module = forceRequire(modulePath)
+        const contextObj = module.default || module
+        //TODO: include all exports here, not just default
+        return {
+          [name]: contextObj,
+        }
+      } catch (e) {
+        return {}
       }
     }),
   )
