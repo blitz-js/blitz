@@ -266,10 +266,10 @@ const complete = {
 Has this file hash been processed?
 
 ```ts
-const hash => !output[hash];
+const hash => !!output[hash];
 ```
 
-Which files do I still need to delete?
+Which files do I need to delete based on input?
 
 ```ts
 const deleteHashes = Object.keys(output).filter((hash) => input[hash])
