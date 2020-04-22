@@ -69,6 +69,12 @@ yarn
 yarn dev
 ```
 
+**4.** Run tests
+
+```
+yarn test
+```
+
 #### Link the Blitz CLI (Optional)
 
 The following will link the development CLI as a local binary so you can use it anywhere for testing.
