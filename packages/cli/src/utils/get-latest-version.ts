@@ -2,19 +2,32 @@ import fetch from 'node-fetch'
 
 const fetchAllVersions = async (dependency: string) => {
   const res = await fetch(`https://registry.npmjs.org/${dependency}`)
-  const json = await res.json()
-  return json.versions as string[]
+  if (res.ok) {
+    const json = await res.json()
+    return json.versions as string[]
+  } else {
+    return
+  }
 }
 
 const fetchLatestDistVersion = async (dependency: string) => {
   const res = await fetch(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`)
-  const json = await res.json()
-  return json.latest as string
+  if (res.ok) {
+    const json = await res.json()
+    return json.latest as string
+  } else {
+    return
+  }
 }
 
-export const getLatestVersion = async (dependency: string, major: string) => {
+export const getLatestVersion = async (dependency: string, templateVersion: string) => {
+  const major = templateVersion.replace('.x', '')
   const allVersions = await fetchAllVersions(dependency)
   const latestDistVersion = await fetchLatestDistVersion(dependency)
+
+  if (!allVersions || !latestDistVersion) {
+    return templateVersion
+  }
 
   const latestVersion = Object.keys(allVersions)
     .filter((version) => version.startsWith(major))
