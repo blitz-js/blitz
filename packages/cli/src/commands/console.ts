@@ -11,9 +11,6 @@ import chalk from 'chalk'
 import {BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
 import {runPrismaGeneration} from './db'
 
-// Make the REPL work with `baseUrl`
-require('tsconfig-paths/register')
-
 const projectRoot = pkgDir.sync() || process.cwd()
 
 export default class Console extends Command {
@@ -42,6 +39,9 @@ export default class Console extends Command {
     console.log(chalk.yellow('Tips: - Exit by typing .exit or pressing Ctrl-D'))
     console.log(chalk.yellow('      - Use your db like this: await db.user.findMany()'))
     console.log(chalk.yellow('      - Use your queries/mutations like this: await getUsers()'))
+
+    // Make the REPL work with `baseUrl`
+    require('tsconfig-paths/register')
 
     await runPrismaGeneration({silent: true})
 
