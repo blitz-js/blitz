@@ -13,12 +13,13 @@ export async function build(config: ServerConfig) {
     manifestPath,
     writeManifestFile,
     includePaths,
+    watch = false,
   } = await enhance(config)
 
   await synchronizeFiles({
     src: rootFolder,
     dest: buildFolder,
-    watch: false,
+    watch,
     manifestPath,
     writeManifestFile,
     ignoredPaths,

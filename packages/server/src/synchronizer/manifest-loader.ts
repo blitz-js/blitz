@@ -1,5 +1,5 @@
 import {readFile} from 'fs'
-import {Manifest} from './manifest'
+import {Manifest} from './pipeline/rules/manifest'
 
 export const ManifestLoader = {
   async load(filename: string) {

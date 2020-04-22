@@ -2480,6 +2480,13 @@
   resolved "https://registry.yarnpkg.com/@types/diff/-/diff-4.0.2.tgz#2e9bb89f9acc3ab0108f0f3dc4dbdcf2fff8a99c"
   integrity sha512-mIenTfsIe586/yzsyfql69KRnA75S8SVXQbTLpDejRrjH0QSJcpu3AUOi/Vjnt9IOsXKxPhJfGpQUNMueIU1fQ==
 
+"@types/duplexify@*":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@types/duplexify/-/duplexify-3.6.0.tgz#dfc82b64bd3a2168f5bd26444af165bf0237dcd8"
+  integrity sha512-5zOA53RUlzN74bvrSGwjudssD9F3a797sDZQkiYpUOxW+WHaXTCPz4/d5Dgi6FKnOqZ2CpaTo0DhgIfsXAOE/A==
+  dependencies:
+    "@types/node" "*"
+
 "@types/ejs@*":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@types/ejs/-/ejs-3.0.2.tgz#b2eb8ac59af7057da7d93a37c54fee763e17b9bd"
@@ -2514,6 +2521,13 @@
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@types/find-parent-dir/-/find-parent-dir-0.3.0.tgz#0a8e9b1eb4fa77e6761d7a078daaed92ad2868f1"
   integrity sha512-jz1cHlySrflg1Xf6fhy8xe/Bc//eO7wkg7OQePQei4vIYHm9IIQs0Ed8pakV6qVuihTnmy+Le+xUYDardq7yNg==
+
+"@types/from2@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@types/from2/-/from2-2.3.0.tgz#5a3dd8d9db0363bc1ee6b98e0538fe0ae356ac3a"
+  integrity sha512-WIURl4GQOp6wqa/suhVjtMh9Lgb7nnOsykAPYvwInDLbwu/hCLQcBvF57zQdEterX5sZtKQIHrSFZijvd6FDjA==
+  dependencies:
+    "@types/node" "*"
 
 "@types/fs-extra@^8.1.0":
   version "8.1.0"
@@ -2615,6 +2629,13 @@
     "@types/node" "*"
     "@types/vinyl" "*"
 
+"@types/merge-stream@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/merge-stream/-/merge-stream-1.1.2.tgz#a880ff66b1fbbb5eef4958d015c5947a9334dbb1"
+  integrity sha512-7faLmaE99g/yX0Y9pF1neh2IUqOf/fXMOWCVzsXjqI1EJ91lrgXmaBKf6bRWM164lLyiHxHt6t/ZO/cIzq61XA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/minimatch@*", "@types/minimatch@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
@@ -2635,6 +2656,13 @@
   resolved "https://registry.yarnpkg.com/@types/object-path/-/object-path-0.11.0.tgz#0b744309b2573dc8bf867ef589b6288be998e602"
   integrity sha512-/tuN8jDbOXcPk+VzEVZzzAgw1Byz7s/itb2YI10qkSyy6nykJH02DuhfrflxVdAdE7AZ91h5X6Cn0dmVdFw2TQ==
 
+"@types/parallel-transform@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/parallel-transform/-/parallel-transform-1.1.0.tgz#1695643fa80184058a1746274bb9282a5c961770"
+  integrity sha512-IPMr/HWSgLQBpDqPs4BpZWqkEd5WMPLceNOQPq2hlC3zfo/lUCT0m9xvJqR1bGen9geB2DiMvs5ibJ+gyt/fTQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -2649,6 +2677,21 @@
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
+
+"@types/pump@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/pump/-/pump-1.1.0.tgz#ed5214af511da32b6ee85c8d33ad3d59bb79ad8f"
+  integrity sha512-YGGbsqf5o7sF8gGANP8ZYxgaRGlFgEAImx5tCvA4YKRCfqbsDQZO48UmWynZzSjbhn0ZWSlsWOcb5NwvOx8KcQ==
+  dependencies:
+    "@types/node" "*"
+
+"@types/pumpify@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@types/pumpify/-/pumpify-1.4.1.tgz#5a0650f39a3f8f077c7e544d0c5ae2899b28394c"
+  integrity sha512-l7u/Dnh1OG9T7VH6TvulR0g8oE8hgIW5409mSUKi8Vxw2+JV18aTa06Sv5bvNjrD0zbsB/cuZ/iTFQgFNfzIuw==
+  dependencies:
+    "@types/duplexify" "*"
+    "@types/node" "*"
 
 "@types/q@^1.5.1":
   version "1.5.2"
@@ -6348,7 +6391,7 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-from2@^2.1.0:
+from2@^2.1.0, from2@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/from2/-/from2-2.3.0.tgz#8bfb5502bde4a4d36cfdeea007fcca21d7e382af"
   integrity sha1-i/tVAr3kpNNs/e6gB/zKIdfjgq8=
@@ -9843,7 +9886,7 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
 
-parallel-transform@^1.1.0:
+parallel-transform@^1.1.0, parallel-transform@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.2.0.tgz#9049ca37d6cb2182c3b1d2c720be94d14a5814fc"
   integrity sha512-P2vSmIu38uIlvdcU7fDkyrxj33gTUy/ABO5ZUbGowxNCopBq/OoD42bP4UmMrJoPyk4Uqf0mu3mtWBhHCZD8yg==
@@ -10709,6 +10752,15 @@ pumpify@^1.3.3, pumpify@^1.3.5:
     duplexify "^3.6.0"
     inherits "^2.0.3"
     pump "^2.0.0"
+
+pumpify@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/pumpify/-/pumpify-2.0.1.tgz#abfc7b5a621307c728b551decbbefb51f0e4aa1e"
+  integrity sha512-m7KOje7jZxrmutanlkS1daj1dS6z6BgslzOXmcSEpIlCxM3VJH7lG5QLeck/6hgF6F4crFf01UtQmNsJfweTAw==
+  dependencies:
+    duplexify "^4.1.1"
+    inherits "^2.0.3"
+    pump "^3.0.0"
 
 punycode@1.3.2:
   version "1.3.2"
@@ -12906,7 +12958,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.8.3, typescript@^3.7.3, typescript@^3.7.5:
+typescript@3.8.3, typescript@^3.7.3, typescript@^3.7.5, typescript@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==

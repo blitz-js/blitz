@@ -9,6 +9,10 @@ function getDestPath(folder: string, file: File) {
   return resolve(folder, relative(cwd, firstPath))
 }
 
+/**
+ * Deletes a file in the stream from the filesystem
+ * @param folder The destination folder
+ */
 export function unlink(folder: string) {
   return through.obj(async (file: File, _encoding, done) => {
     if (file.event === 'unlink' || file.event === 'unlinkDir') {

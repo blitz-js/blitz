@@ -1,4 +1,5 @@
 import chalk from 'chalk'
+import readline from 'readline'
 
 export const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
@@ -17,6 +18,16 @@ export const withX = (str: string) => {
  */
 export const success = (msg: string) => {
   console.log(withCheck(chalk.green(msg)))
+}
+
+/**
+ * Clears the line and optionally writes a message
+ * @param msg optional message to write
+ */
+export const clearLine = (msg?: string) => {
+  readline.clearLine(process.stdout, 0)
+  readline.cursorTo(process.stdout, 0)
+  msg && process.stdout.write(msg)
 }
 
 /**

@@ -10,6 +10,10 @@ export default class Build extends Command {
       rootFolder: process.cwd(),
     }
 
-    await build(config)
+    try {
+      await build(config)
+    } catch (err) {
+      process.exit(1) // clean up?
+    }
   }
 }

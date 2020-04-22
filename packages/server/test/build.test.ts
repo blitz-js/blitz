@@ -15,7 +15,7 @@ jest.doMock('../src/next-utils', () => nextUtilsMock)
 import {build} from '../src/build'
 import {resolve} from 'path'
 import {remove, pathExists} from 'fs-extra'
-import directoryTree from 'directory-tree'
+import {directoryTree} from './utils/tree-utils'
 
 describe('Build command', () => {
   const rootFolder = resolve(__dirname, './fixtures/build')
@@ -44,67 +44,14 @@ describe('Build command', () => {
     expect(tree).toEqual({
       children: [
         {
-          children: [
-            {
-              extension: '.js',
-              name: 'blitz.config.js',
-              path: `${buildFolder}/blitz.config.js`,
-              size: 20,
-              type: 'file',
-            },
-            {
-              extension: '.js',
-              name: 'next.config.js',
-              path: `${buildFolder}/next.config.js`,
-              size: 130,
-              type: 'file',
-            },
-            {
-              extension: '',
-              name: 'one',
-              path: `${buildFolder}/one`,
-              size: 0,
-              type: 'file',
-            },
-            {
-              extension: '',
-              name: 'two',
-              path: `${buildFolder}/two`,
-              size: 0,
-              type: 'file',
-            },
-          ],
+          children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
           name: '.blitz-build',
-          path: `${buildFolder}`,
-          size: 150,
-          type: 'directory',
         },
-        {
-          extension: '',
-          name: '.now',
-          path: `${rootFolder}/.now`,
-          size: 18,
-          type: 'file',
-        },
-        {
-          extension: '',
-          name: 'one',
-          path: `${rootFolder}/one`,
-          size: 0,
-          type: 'file',
-        },
-        {
-          extension: '',
-          name: 'two',
-          path: `${rootFolder}/two`,
-          size: 0,
-          type: 'file',
-        },
+        {name: '.now'},
+        {name: 'one'},
+        {name: 'two'},
       ],
       name: 'build',
-      path: `${rootFolder}`,
-      size: 168,
-      type: 'directory',
     })
   })
 })

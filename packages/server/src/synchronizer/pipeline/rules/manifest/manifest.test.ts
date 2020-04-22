@@ -1,4 +1,4 @@
-import {Manifest} from './manifest'
+import {Manifest} from '.'
 
 describe('Manifest', () => {
   it('should be work', () => {
