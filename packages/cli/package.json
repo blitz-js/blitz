@@ -42,6 +42,7 @@
     "hasbin": "1.2.3",
     "mem-fs": "^1.1.3",
     "mem-fs-editor": "^6.0.0",
+    "node-fetch": "^2.6.0",
     "username": "5.1.0",
     "vinyl": "^2.2.0",
     "minimist": "^1.2.5"

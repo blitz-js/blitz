@@ -3,6 +3,9 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
+import {readJSONSync} from 'fs-extra'
+import {join} from 'path'
+import {replaceDependencies} from '../utils/replace-dependencies'
 
 const themeColor = '6700AB'
 
@@ -37,6 +40,13 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    const pkg = readJSONSync(join(this.destinationPath(), 'package.json'))
+    const pkgDependencies = Object.keys(pkg.dependencies)
+    const pkgDevDependencies = Object.keys(pkg.devDependencies)
+
+    await replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies')
+    await replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies')
+
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
 
