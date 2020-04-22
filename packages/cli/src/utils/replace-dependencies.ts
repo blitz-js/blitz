@@ -21,7 +21,7 @@ export const replaceDependencies = async (
     )
 
     pkg[key] = dependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
-    writeJSONSync(join(desinationPath, 'package.json'), pkg)
+    writeJSONSync(join(desinationPath, 'package.json'), pkg, {spaces: 2})
   } catch {
     return
   }
