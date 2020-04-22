@@ -1,4 +1,4 @@
-# Synchronizer Refactor
+# Synchronizer
 
 Design goals
 
@@ -8,12 +8,21 @@ Design goals
 - Paralell processing
 - Cleaner Architecture for Dirty restart functionality
 - Agnostic input file watcher / glob
-- Simplify tests (Later PR)
+- Simplify tests
 
-# Node stream based
+# Why Streams?
+
+Initially blitz will be used by people with small projects however as the number files and throughput increases we will need to use an architecture that allows for large paralell throughput with low memory consumption. Node is built on streams as a primitive so it makes sense to utilize what is available. The Gulp ecosystems provides several tools to managing streams of files so that makes sense to use those tools when available. Because refactoring to streams later would be extremely difficult and painful not starting with streams would be a design mistake.
+
+# Why not RxJS?
+
+RxJS could be a good match for streaming architectures and introduces some really powerful tools for managing stream operations. As we are using object streams it would also possibly simplify some of the boilerplate using RxJS. However, certain operators in RxJS can be inapproachable for newer developers and tend to encourage too much abstraction. It is also an extra dependency that increases the learning surface of the codebase and as we are stuck with understanding basic node streams in any case it makes sense to avoid RxJS until absolutely necessary.
+
+# Stream helpers
+
+So Node streams are a little incompatable on old versions of Node and there are a few compatability libs we are using to help us work with streams.
 
 https://www.freecodecamp.org/news/rxjs-and-node-8f4e0acebc7c/
-Need to use streams for speed paralellisation and to keep memory footprint low also allows us to utilise gulp api to manage stream logic.
 
 Helper Libs
 
@@ -24,43 +33,47 @@ Helper Libs
 - Parallel - [parallel-transform](https://npmjs.com/package/parallel-transform)
 - Node Compat - [readable-stream](https://npmjs.com/package/readable-stream)
 
-# Rules |
+# A good way to work with streams
 
-Rules will be of the format:
+A pattern we have found that works well is using a constructor function to accept connectors and return a stream as well as any shared data you need to provide to other components connectors. You will see this alot around the synchronizer.
 
 ```ts
-type RuleArgs = {
-  // Config object passed in to pipeline
-  config: {
-    src: string
-    dest: string
-    cwd: string
-    manifest: {
-      path: string
-      write: boolean
-    }
-  }
-
-  // Errors stream to push errors to so they are displayed nicely
-  errors: Transform
-
-  // Pipeline input stream to push new files to
-  input: Transform
-
-  // Returns the input cache for analytical in stream processes
-  getInputCache(): FileCache
-}
-
-type Rule = (
-  a: RuleArgs,
-) => {
-  stream: Transform
-}
+type CreatorFn = ConnectionsOrConfig => StreamAsWellAsSharedData
 ```
+
+An example might look like this:
+
+```ts
+// Config -> Merged Glob && FileWatcher
+const source = agnosticSource({cwd: src, include, ignore, watch})
+
+// you can then pipe the stream to a pipeline
+pipe(source.stream, fileTransformPipeline)
+```
+
+The reason we don't just return a stream is that often we need to return other data and share it elsewhere for example to analyse input file structure in the pages rule we use a file cache.
+
+```ts
+// Here
+const fileCache = createFileCache(config)
+const pageRule = createPageRule(fileCache.cache)
+
+pipeline(
+  fileCache.stream, // manages the fileCache to be used by other streams
+  // ...
+  pageRule.stream, // has access to the fileCache
+)
+```
+
+# Synchronizer Event Pipeline
+
+The main element within the file synchronizer is the [file transform pipeline](./pipeline/index.ts).
+
+This is a big stream pipeline that handles the transformation and writing of files. The concept is that you can write an [evented vinyl file object](#evented-vinyl-files) to it and it will run a series of transformations on that file and write it to disk or delete it at the end.
 
 # Evented Vinyl Files
 
-Evented Vinyl Files are vinyl files with events attached to them
+Evented Vinyl Files are [Vinyl Files](https://github.com/gulpjs/vinyl) with events attached to them
 
 ```ts
 const isDelete = (file) => file.isNull() && file.event === 'unlink'
@@ -84,13 +97,11 @@ new Vinyl({
 
 # Input agnostic
 
-Pipeline should be input agnostic ie. it should not matter if it comes from watch or a folder glob
+Pipeline should be input agnostic ie. it should not matter if it comes from watch or a folder glob so to help with that we have created an agnostic input stream that takes glob config and returns a file stream. It consumes input from both chokidar and vinyl-fs.
 
-# Input
+# Optimization
 
-Input manages inputting of evented vinyl file.
-Files that have already been processed or are currently being processed should not be processed again.
-Manage a running list of input table indexed by hash
+Input manages inputting of evented vinyl file. Files that have already been processed or are currently being processed should not be processed again. Here we try and manage a running list of files to work on based on the hash of their filename and mtime.
 
 # Analysis
 
@@ -98,9 +109,11 @@ Some types of analysis needs a list of all the files other types do not
 
 Analysis needs to be done in stream as new information comes in. Eg. when someone renames a file that file goes to the analysis engine which works out invariants as they occur without requiring a sweep of the entire file system.
 
+For this we can create file caches which represent projections of the file system and update based on input file events.
+
 # Rules
 
-Rule streams should take a file and process it
+Rule streams represent Blitz specific rules we need the synchronizer to do
 
 Possible things it can do:
 
@@ -116,6 +129,10 @@ They can hold state in a closure.
 They should be managed in a list.
 
 The entire chain can be a list of streams.
+
+# Examples
+
+Some code examples
 
 ```ts
 // Rules represent business rules
@@ -179,9 +196,9 @@ export default ({config, input, error, getInputCache}) => {
 
 # Dirty Sync
 
-Yet to be implemented. This is how we can provide a dirty sync
-experience. Eg. stop dev and start again without having to
-blow the whole folder away
+So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically we want Blitz to do as little work as possible. At this point we are blowing away blitz folders when we start but it would be smarter to analyse the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
+
+The following is a rough plan for how to do this. (Likely to change/improve at a later point)
 
 - Encode vinyl files + stats
 
@@ -195,6 +212,8 @@ file.hash = hash
 ```
 
 - Use those hashes to index file details in the following structures:
+
+Following
 
 ```ts
 // reduced to as the first step during input
