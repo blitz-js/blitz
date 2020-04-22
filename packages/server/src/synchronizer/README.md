@@ -31,10 +31,6 @@ Our architecture is a big file transform pipeline. Every business concern is col
 
 <img src="diagram-file-transform.png" />
 
-## View and Error Rendering
-
-<img src="diagram-error-and-view.png" />
-
 # Stream helpers
 
 So Node streams are a little incompatable on old versions of Node and there are a few compatability libs we are using to help us work with streams.
@@ -93,6 +89,8 @@ It is important to differentiate between Operational Errors and Exceptions. Expe
 In this architecture we write operational errors to the error stream and catch Exceptions in stream error handlers. We should be able to drop Exceptions on the floor but by attaching a view to the end of the error stream we can print nice messages for our users.
 
 Because everything is streams we can get pretty creative with how we present stuff to the user and get realtime updates to it. This might make it easier to integrate with Reactive cli view frameworks at a later point.
+
+<img src="diagram-error-and-view.png" />
 
 # Synchronizer Event Pipeline
 
