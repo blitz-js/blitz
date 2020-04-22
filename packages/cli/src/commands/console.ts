@@ -1,21 +1,27 @@
 import {Command} from '@oclif/command'
 import * as REPL from 'repl'
+import path from 'path'
 import {REPLCommand, REPLServer} from 'repl'
 import {watch} from 'chokidar'
+import pkgDir from 'pkg-dir'
+import {log} from '@blitzjs/server'
+import chalk from 'chalk'
 
-import {loadDependencies} from '../utils/load-dependencies'
+// import {loadDependencies} from '../utils/load-dependencies'
 import {BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
 import {runPrismaGeneration} from './db'
 
+// Make the REPL work with `baseUrl`
+require('tsconfig-paths/register')
+
+const projectRoot = pkgDir.sync() || process.cwd()
+
 export default class Console extends Command {
-  static description = 'Run project REPL'
+  static description = 'Run the Blitz console REPL'
   static aliases = ['c']
-  static message = `Welcome to the Blitz.js console
-Type ".help" for more information.
-`
 
   static replOptions = {
-    prompt: '⚡️> ',
+    prompt: '⚡️ > ',
     useColors: true,
   }
 
@@ -32,14 +38,17 @@ Type ".help" for more information.
   }
 
   async run() {
-    this.log(Console.message)
+    log.branded('You have entered the Blitz console')
+    console.log(chalk.yellow('Tips: - Exit by typing .exit or pressing Ctrl-D'))
+    console.log(chalk.yellow('      - Use your db like this: await db.user.findMany()'))
+    console.log(chalk.yellow('      - Use your queries/mutaions like this: await getUsers()'))
 
     await runPrismaGeneration({silent: true})
 
     const repl = Console.initializeRepl()
 
     const watchers = [
-      watch('package.json').on('change', () => Console.loadDependencies(repl)),
+      // watch('package.json').on('change', () => Console.loadDependencies(repl)),
       watch(BLITZ_MODULE_PATHS).on('all', () => Console.loadBlitz(repl)),
     ]
 
@@ -52,6 +61,7 @@ Type ".help" for more information.
     const repl = REPL.start(Console.replOptions)
     Console.defineCommands(repl, Console.commands)
     Console.loadModules(repl)
+    repl.setupHistory(path.join(projectRoot, '.blitz-console-history'), () => {})
     return repl
   }
 
@@ -60,9 +70,9 @@ Type ".help" for more information.
     Console.loadBlitz(repl)
   }
 
-  private static loadDependencies(repl: REPLServer) {
-    Object.assign(repl.context, loadDependencies(process.cwd()))
-  }
+  // private static loadDependencies(repl: REPLServer) {
+  //   Object.assign(repl.context, loadDependencies(process.cwd()))
+  // }
 
   private static loadBlitz(repl: REPLServer) {
     Object.assign(repl.context, loadBlitz())

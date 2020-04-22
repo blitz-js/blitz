@@ -13,6 +13,14 @@ export const withX = (str: string) => {
 }
 
 /**
+ * Console logs a branded (purple) success message
+ */
+const themeColor = '6700AB'
+export const branded = (msg: string) => {
+  console.log(chalk.hex(themeColor).bold(msg))
+}
+
+/**
  * Console logs a green success message
  */
 export const success = (msg: string) => {

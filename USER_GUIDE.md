@@ -2,7 +2,7 @@
 
 <br>
 
-Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build! 
+Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build!
 
 If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to us.
 
@@ -24,8 +24,9 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 
 - [ ] You need Node.js 12 or newer
 - [ ] You need Postgres installed and running.
+
   - On macOS, you can use `brew install postgres` or install [Postgres.app](https://postgresapp.com/)
-  
+
 <br>
 
 ### Create Your Blitz App
@@ -78,15 +79,14 @@ _CRUD = create, read, update, delete_
 
 Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Next.js Page documentation](https://nextjs.org/docs/basic-features/pages)
 
-
-- Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this: 
+- Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this:
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
-- All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
+- All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
- 
+
 <br>
 
 ### Writing Queries & Mutations
@@ -102,7 +102,6 @@ We automatically alias the root of your project, so `import db from 'db'` is imp
 import db, {FindOneProductArgs} from 'db'
 
 export default async function getProduct(args: FindOneProductArgs) {
-
   // Can do any pre-processing or event triggers here
   const product = await db.product.findOne(args)
   // Can do any post-processing or event triggers here
@@ -118,11 +117,10 @@ export default async function getProduct(args: FindOneProductArgs) {
 import db, {ProductCreateArgs} from 'db'
 
 export default async function createProduct(args: ProductCreateArgs) {
-  
   // Can do any pre-processing or event triggers here
   const product = await db.product.create(args)
   // Can do any post-processing or event triggers here
-  
+
   return product
 }
 ```
@@ -130,7 +128,6 @@ export default async function createProduct(args: ProductCreateArgs) {
 <br>
 
 ### Using Queries
-
 
 #### In a React Component
 
@@ -150,20 +147,20 @@ function Product() {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
   const [product] = useQuery(getProduct, {where: {id: props.query.id}})
-  
+
   return <div>{product.name}</div>
 }
 
-export default function() {
+export default function () {
   return (
-   <div>
-     <ErrorBoundary fallback={error => <div>Error: {JSON.stringify(error)}</div>}>
-       <Suspense fallback={<div>Loading...</div>}>
-         <Product />
-       </Suspense>
-     </ErrorBoundary>
-   </div>
- )
+    <div>
+      <ErrorBoundary fallback={(error) => <div>Error: {JSON.stringify(error)}</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Product />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
+  )
 }
 ```
 
@@ -174,12 +171,12 @@ In `getStaticProps`, a query function can be called directly without `useQuery`
 ```tsx
 import getProduct from '/app/products/queries/getProduct'
 
-export const getStaticProps = async context => {
+export const getStaticProps = async (context) => {
   const product = await getProduct({where: {id: context.params?.id}})
   return {props: {product}}
 }
 
-export default function({product}) {
+export default function ({product}) {
   return <div>{product.name}</div>
 }
 ```
@@ -206,7 +203,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 
 ### Using Mutations
 
-Mutations are called directly, like a regular asynchronous function. 
+Mutations are called directly, like a regular asynchronous function.
 
 At build time, the direct function import is swapped out for a function that executes a network call to run the mutation server-side.
 
@@ -268,6 +265,7 @@ Assuming you already have a Zeit account and the `now` cli installed, you can do
 
 1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
 2. Add a `now.json` at your project root with
+
 ```json
 {
   "env": {
@@ -280,9 +278,10 @@ Assuming you already have a Zeit account and the `now` cli installed, you can do
   }
 }
 ```
+
 3. Run `now`
 
-Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested. 
+Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested.
 
 #### Traditional, Long-Running Server
 
@@ -342,7 +341,7 @@ Here's the list of big things that are currently missing from Blitz but are top 
 
 - A real Blitzjs.com website and documentation
 - Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
-- Authentication 
+- Authentication
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
 - `blitz new` including set up for testing, Prettier, ESLint, styling system (Tailwind, CSS-in-JS, etc)
