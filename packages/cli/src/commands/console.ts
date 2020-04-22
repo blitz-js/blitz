@@ -41,7 +41,7 @@ export default class Console extends Command {
     log.branded('You have entered the Blitz console')
     console.log(chalk.yellow('Tips: - Exit by typing .exit or pressing Ctrl-D'))
     console.log(chalk.yellow('      - Use your db like this: await db.user.findMany()'))
-    console.log(chalk.yellow('      - Use your queries/mutaions like this: await getUsers()'))
+    console.log(chalk.yellow('      - Use your queries/mutations like this: await getUsers()'))
 
     await runPrismaGeneration({silent: true})
 
