@@ -1,6 +1,8 @@
 import chalk from 'chalk'
 import readline from 'readline'
 
+const brandColor = '6700AB'
+
 const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
 }
@@ -64,7 +66,7 @@ const variable = (val: any) => {
  * @param {string} msg
  */
 const branded = (msg: string) => {
-  console.log(chalk.hex('6700AB').bold(msg))
+  console.log(chalk.hex('').bold(msg))
 }
 
 /**

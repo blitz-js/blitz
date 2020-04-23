@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.5.2-alpha",
+  "version": "0.6.0-canary.0",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -42,6 +42,7 @@
     "next-transpile-modules": "3.2.0",
     "node-pty": "^0.9.0",
     "null-loader": "^4.0.0",
+    "ora": "4.0.4",
     "parallel-transform": "^1.2.0",
     "path-is-absolute": "^2.0.0",
     "pirates": "^4.0.1",
