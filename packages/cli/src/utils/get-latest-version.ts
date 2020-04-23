@@ -11,7 +11,8 @@ export const getLatestVersion = async (dependency: string, templateVersion: stri
 
   const latestVersion = Object.keys(allVersions)
     .filter((version) => version.startsWith(major))
-    .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}))[0]
+    .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}))
+    .reverse()[0]
 
   // If the latest tagged version matches our pinned major, use that, otherwise use the
   // latest untagged which does
