@@ -1,5 +1,19 @@
 import chalk from 'chalk'
 import readline from 'readline'
+import ora from 'ora'
+
+const themeColor = '6700AB'
+
+export const spinner = (str: string) => {
+  return ora({
+    text: str,
+    color: 'blue',
+    spinner: {
+      interval: 120,
+      frames: ['◢', '◣', '◤', '◥'],
+    },
+  })
+}
 
 export const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
@@ -13,15 +27,18 @@ export const withX = (str: string) => {
   return `${chalk.red.bold('✕')} ${str}`
 }
 
+export const withBranded = (msg: string) => {
+  return chalk.hex(themeColor).bold(msg)
+}
+
 /**
  * Logs a green success message to stdout.
  *
  * @param {string} msg
  * Console logs a branded (purple) success message
  */
-const themeColor = '6700AB'
 export const branded = (msg: string) => {
-  console.log(chalk.hex(themeColor).bold(msg))
+  console.log(withBranded(msg))
 }
 
 /**

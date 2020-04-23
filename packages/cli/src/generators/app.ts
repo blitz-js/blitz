@@ -7,6 +7,7 @@ import {readJSONSync} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
+import {log} from '@blitzjs/server'
 
 const themeColor = '6700AB'
 
@@ -46,13 +47,18 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const pkgDependencies = Object.keys(pkg.dependencies)
     const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
+    console.log('') // New line needed
+    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
+
     await Promise.all([
       replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies'),
       replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies'),
       replaceBlitzDependency(pkg, this.destinationPath(), this.options.version),
     ])
 
-    console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
+    spinner.succeed()
+
+    console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
 
     const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
