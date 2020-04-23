@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.5.2-alpha",
+  "version": "0.6.0-canary.0",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
