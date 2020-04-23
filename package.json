@@ -21,11 +21,13 @@
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
     "build": "lerna run build --no-private --stream",
-    "test": "yarn run build && lerna run test --parallel",
+    "test": "yarn run build && yarn run testonly",
+    "testonly": "lerna run test --parallel",
     "prepublishOnly": "yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
-    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary",
+    "reset": "rimraf node_modules && git clean -xfd packages && yarn",
+    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary --no-push",
     "publish-alpha": "lerna publish --preid alpha"
   },
   "devDependencies": {
