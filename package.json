@@ -27,8 +27,9 @@
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary --no-push",
-    "publish-alpha": "lerna publish --preid alpha"
+    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary --no-push && yarn run danger:push-all",
+    "publish-alpha": "lerna publish --preid alpha && yarn run danger:push-all",
+    "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.5.0",
