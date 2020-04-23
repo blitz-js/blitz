@@ -9,7 +9,7 @@ const hook: Hook<'init'> = async function (options) {
   try {
     await readFile('blitz.config.js')
   } catch (err) {
-    this.error(`It appears that you're not running in a blitz directory`)
+    this.error(`It appears that you're not running in a blitz project`)
   }
 }
 
