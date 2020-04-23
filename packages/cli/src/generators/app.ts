@@ -3,7 +3,7 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
-import {readJSONSync} from 'fs-extra'
+import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
@@ -42,15 +42,22 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    const pkg = readJSONSync(join(this.destinationPath(), 'package.json'))
+    const pkgJsonLocation = join(this.destinationPath(), 'package.json')
+    const pkg = readJSONSync(pkgJsonLocation)
     const pkgDependencies = Object.keys(pkg.dependencies)
     const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
-    await Promise.all([
-      replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies'),
-      replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies'),
-      replaceBlitzDependency(pkg, this.destinationPath(), this.options.version),
+    const dependenciesArray = await Promise.all([
+      replaceDependencies(pkg, pkgDependencies, 'dependencies'),
+      replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
     ])
+
+    const dependencies = dependenciesArray.reduce((prev, {key, dependencies}) => {
+      prev[key] = replaceBlitzDependency(dependencies, this.options.version)
+      return prev
+    }, {} as Record<string, Record<string, string>>)
+
+    await writeJson(pkgJsonLocation, {...pkg, ...dependencies}, {spaces: 2})
 
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
