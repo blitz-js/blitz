@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.5.0-canary.7",
+  "version": "0.5.0-canary.8",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
