@@ -1,5 +1,6 @@
-import {through} from '../../../streams'
+import {join} from 'path'
 import File from 'vinyl'
+import {through} from '../../../streams'
 import {getDuplicatePaths, absolutePathTransform} from '../../utils'
 import {RuleArgs} from '../../../types'
 import {DuplicatePathError, NestedRouteError} from '../../../errors'
@@ -70,13 +71,13 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
 export default createRulePages
 
 export function pagesPathTransformer(path: string) {
-  const regex = new RegExp(`(?:\\/?app\\/.*?\\/?)(pages\\/.+)$`)
+  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(pages[\\\/].+)$/
   return (regex.exec(path) || [])[1] || path
 }
 
 export function apiPathTransformer(path: string) {
-  const regex = new RegExp(`(?:\\/?app\\/.*?\\/?)(api\\/.+)$`)
+  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(api[\\\/].+)$/
   const matchedPath = (regex.exec(path) || [])[1]
 
-  return matchedPath ? `pages/${matchedPath}` : path
+  return matchedPath ? join('pages', matchedPath) : path
 }
