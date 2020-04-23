@@ -6,12 +6,14 @@ import username from 'username'
 import {readJSONSync} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
+import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
 
 const themeColor = '6700AB'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   yarn: boolean
+  version: string
 }
 
 const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
@@ -47,6 +49,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     await Promise.all([
       replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies'),
       replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies'),
+      replaceBlitzDependency(pkg, this.destinationPath(), this.options.version),
     ])
 
     console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
