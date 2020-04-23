@@ -54,6 +54,7 @@ export default class New extends Command {
       appName,
       dryRun: flags['dry-run'],
       yarn: flags.yarn,
+      version: this.config.version,
     })
 
     const themeColor = '6700AB'
