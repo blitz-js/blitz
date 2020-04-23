@@ -51,14 +51,15 @@ export function rpcHandler(
 ) {
   return async function (req: BlitzApiRequest, res: BlitzApiResponse) {
     const logPrefix = `${name} ${type}`
-    log.progress(`Running ${logPrefix} ${req.method} ${JSON.stringify(req.body)} `)
+    if (req.method === 'POST') {
+      log.progress(`Running ${logPrefix} ${JSON.stringify(req.body)} `)
+    }
 
     if (req.method === 'HEAD') {
       // Warm the lamda and connect to DB
       if (typeof connectDb === 'function') {
         connectDb()
       }
-      log.success(`${logPrefix} ran successfully`)
       return res.status(200).end()
     } else if (req.method === 'POST') {
       // Handle RPC call
@@ -75,7 +76,7 @@ export function rpcHandler(
       try {
         const result = await resolver(req.body.params)
 
-        log.success(`${logPrefix} fetched ${log.variable(JSON.stringify(result))}`)
+        log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result))}`)
         return res.json({
           result,
           error: null,
