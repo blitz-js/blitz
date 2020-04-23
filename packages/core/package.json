@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.5.0-canary.7",
+  "version": "0.5.0-canary.9",
   "license": "MIT",
   "scripts": {
     "dev": "tsdx watch --verbose",
