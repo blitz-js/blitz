@@ -323,7 +323,7 @@ Generate all the CRUD files for a model. Your model input can be singular or plu
 
 #### `blitz console`
 
-TODO CURRENTLY BROKEN
+Start a Node.js REPL that's preloaded with your `db` object and all your queries and mutations. This is awesome for quickly trying your code without running the app.
 
 <br>
 
