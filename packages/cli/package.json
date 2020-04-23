@@ -65,10 +65,6 @@
       "@oclif/plugin-not-found"
     ]
   },
-  "engines": {
-    "yarn": "^1.19.1",
-    "node": ">=12.16.1"
-  },
   "keywords": [
     "blitz",
     "cli"

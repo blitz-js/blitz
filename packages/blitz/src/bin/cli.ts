@@ -1,13 +1,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
 const resolveGlobal = require('resolve-global')
+const resolveFrom = require('resolve-from')
 const pkgDir = require('pkg-dir')
 
 let usageType: 'local' | 'monorepo' | 'global' | 'global-linked'
 
 const localCLIPkgPath = path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli')
 const monorepoCLIPkgPath = path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli')
-const globalCLIPkgPath = resolveGlobal.silent('@blitzjs/cli') as string
+const globalCLIPkgPath = resolveFrom(__dirname, '@blitzjs/cli')
 const globalLinkedCLIPkgPath = path.resolve(pkgDir.sync(__dirname), '../cli')
 
 function getBlitzPkgJsonPath() {
@@ -30,12 +31,12 @@ if (fs.existsSync(localCLIPkgPath)) {
 } else if (fs.existsSync(monorepoCLIPkgPath)) {
   usageType = 'monorepo'
   pkgPath = monorepoCLIPkgPath
-} else if (fs.existsSync(globalCLIPkgPath)) {
-  usageType = 'global'
-  pkgPath = globalCLIPkgPath
-} else {
+} else if (fs.existsSync(globalLinkedCLIPkgPath)) {
   usageType = 'global-linked'
   pkgPath = globalLinkedCLIPkgPath
+} else {
+  usageType = 'global'
+  pkgPath = globalCLIPkgPath
 }
 
 const cli = require(pkgPath as string)
@@ -44,14 +45,16 @@ const options = require('minimist')(process.argv.slice(2))
 if (options._.length === 0 && (options.v || options.version)) {
   // TODO: remove
   console.log('debug:', usageType)
-  console.log('debug: pkgPath:', pkgPath)
+  console.log('debug: pkgPath:', pkgPath, '\n')
   try {
+    console.log(`env: ${process.platform}-${process.arch} node-${process.version}`)
+
     let globalInstallPath
     let localButGlobalLinked = usageType === 'local' && fs.existsSync(globalLinkedCLIPkgPath)
     if (usageType === 'global-linked' || usageType === 'monorepo' || localButGlobalLinked) {
       globalInstallPath = pkgDir.sync(__dirname)
     } else {
-      globalInstallPath = pkgDir.sync(resolveGlobal('blitz'))
+      globalInstallPath = pkgDir.sync(resolveFrom(__dirname, 'blitz'))
     }
     const globalVersion = path.join(globalInstallPath, 'package.json')
     console.log(`blitz: ${require(globalVersion).version} (global)`)

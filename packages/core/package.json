@@ -38,10 +38,6 @@
       "<rootDir>/jest.setup.js"
     ]
   },
-  "engines": {
-    "yarn": "^1.19.1",
-    "node": ">=12.16.1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
