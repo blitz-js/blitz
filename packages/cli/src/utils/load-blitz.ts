@@ -2,11 +2,18 @@ import {forceRequire} from './module'
 import path from 'path'
 import globby from 'globby'
 import pkgDir from 'pkg-dir'
+import {REGISTER_INSTANCE} from 'ts-node'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
-require('tsconfig-paths/register')
-require('ts-node').register({compilerOptions: {module: 'commonjs'}})
+export const setupTsnode = () => {
+  if (!process[REGISTER_INSTANCE]) {
+    // During blitz interal dev, oclif automaticaly sets up ts-node so we have to check
+    // require('ts-node').register({compilerOptions: {module: 'commonjs'}})
+    require('ts-node').register()
+  }
+  require('tsconfig-paths/register')
+}
 
 export const BLITZ_MODULE_PATHS = [
   ...globby.sync(

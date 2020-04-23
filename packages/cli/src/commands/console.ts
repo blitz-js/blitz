@@ -8,7 +8,7 @@ import {log} from '@blitzjs/server'
 import chalk from 'chalk'
 
 // import {loadDependencies} from '../utils/load-dependencies'
-import {BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
+import {setupTsnode, BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
 import {runPrismaGeneration} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
@@ -40,6 +40,7 @@ export default class Console extends Command {
     console.log(chalk.yellow('      - Use your db like this: await db.user.findMany()'))
     console.log(chalk.yellow('      - Use your queries/mutations like this: await getUsers()'))
 
+    setupTsnode()
     await runPrismaGeneration({silent: true})
 
     const repl = Console.initializeRepl()
