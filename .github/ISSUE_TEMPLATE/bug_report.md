@@ -17,5 +17,9 @@ assignees: ''
 - Blitz: [e.g. 0.5.1.-alpha]
 - OS: [e.g. macOS]
 
+```
+[Add the output of `blitz -v` here]
+```
+
 **Supporting Documentation**
 Please include applicable logs and screenshots that show your problem.
