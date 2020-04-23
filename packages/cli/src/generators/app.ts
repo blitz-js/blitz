@@ -56,12 +56,12 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
       replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
     ])
 
-    const dependencies = dependenciesArray.reduce((prev, {key, dependencies}) => {
-      prev[key] = replaceBlitzDependency(dependencies, this.options.version)
-      return prev
-    }, {} as Record<string, Record<string, string>>)
+    for (let i = 0; i < dependenciesArray.length; i++) {
+      const {key, dependencies} = dependenciesArray[i]
+      pkg[key] = replaceBlitzDependency(dependencies, this.options.version)
+    }
 
-    await writeJson(pkgJsonLocation, {...pkg, ...dependencies}, {spaces: 2})
+    await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
     spinner.succeed()
 
