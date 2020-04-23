@@ -13,8 +13,7 @@ export const replaceBlitzDependency = async (pkg: any, desinationPath: string, c
   // `blitz new` from a global install of `blitz@latest` will result in `"blitz": "latest"` in package.json
   // `blitz new` from a global install of `blitz@canary` will result in `"blitz": "canary"` in package.json
   // Otherwise, fall back on canary
-  const newVersion =
-    cliVersion === distTags.latest ? 'latest' : cliVersion === distTags.canary ? 'canary' : 'canary'
+  const newVersion = newVersion = cliVersion.includes('canary') ? 'canary' : 'latest'
 
   pkg.dependencies.blitz = newVersion
   writeJSONSync(join(desinationPath, 'package.json'), pkg, {spaces: 2})
