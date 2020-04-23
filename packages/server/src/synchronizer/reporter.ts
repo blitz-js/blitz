@@ -1,6 +1,7 @@
 import {through} from './streams'
 import File from 'vinyl'
-import {success, clearLine} from '../log'
+import * as log from '../log'
+import chalk from 'chalk'
 
 export type Event<T> = {type: string; payload: T}
 
@@ -16,28 +17,26 @@ export const READY = 'READY'
 export default function createReporter() {
   let lastEvent: Event<any> = {type: INIT, payload: null}
 
+  let spinner = log.spinner('Preparing for launch').start()
+
   const stream = through({objectMode: true}, (event: Event<File>, _, next) => {
     switch (event.type) {
       case FILE_WRITTEN: {
         const filePath = event.payload.history[0].replace(process.cwd(), '')
-        clearLine(filePath)
-        setTimeout(clearLine, 100)
+        spinner.text = filePath
         break
       }
 
       case ERROR_THROWN: {
         // Tidy up if operational error is encountered
         if (lastEvent.type === FILE_WRITTEN) {
-          clearLine()
+          spinner.fail('Uh oh something broke')
         }
         break
       }
 
       case READY: {
-        if (lastEvent.type === FILE_WRITTEN) {
-          clearLine()
-        }
-        success('Blitz is ready')
+        spinner.succeed(chalk.green.bold('Prepped for launch'))
         break
       }
     }
