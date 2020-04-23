@@ -9,8 +9,7 @@ const projectRoot = pkgDir.sync() || process.cwd()
 export const setupTsnode = () => {
   if (!process[REGISTER_INSTANCE]) {
     // During blitz interal dev, oclif automaticaly sets up ts-node so we have to check
-    // require('ts-node').register({compilerOptions: {module: 'commonjs'}})
-    require('ts-node').register()
+    require('ts-node').register({compilerOptions: {module: 'commonjs'}})
   }
   require('tsconfig-paths/register')
 }
