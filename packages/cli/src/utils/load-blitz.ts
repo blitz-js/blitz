@@ -2,8 +2,18 @@ import {forceRequire} from './module'
 import path from 'path'
 import globby from 'globby'
 import pkgDir from 'pkg-dir'
+import {REGISTER_INSTANCE} from 'ts-node'
 
 const projectRoot = pkgDir.sync() || process.cwd()
+
+export const setupTsnode = () => {
+  if (!process[REGISTER_INSTANCE]) {
+    // During blitz interal dev, oclif automaticaly sets up ts-node so we have to check
+    // require('ts-node').register({compilerOptions: {module: 'commonjs'}})
+    require('ts-node').register()
+  }
+  require('tsconfig-paths/register')
+}
 
 export const BLITZ_MODULE_PATHS = [
   ...globby.sync(
@@ -27,11 +37,16 @@ export const loadBlitz = () => {
         const dirs = path.dirname(modulePath).split(path.sep)
         name = dirs[dirs.length - 1]
       }
-      const module = forceRequire(modulePath)
-      const contextObj = module.default || module
-      //TODO: include all exports here, not just default
-      return {
-        [name]: contextObj,
+
+      try {
+        const module = forceRequire(modulePath)
+        const contextObj = module.default || module
+        //TODO: include all exports here, not just default
+        return {
+          [name]: contextObj,
+        }
+      } catch (e) {
+        return {}
       }
     }),
   )
