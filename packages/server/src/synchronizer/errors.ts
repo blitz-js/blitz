@@ -1,4 +1,4 @@
-import {error, variable} from '../log'
+import {log} from '../log'
 import {through} from './streams'
 import {Writable} from 'stream'
 import {ERROR_THROWN} from './reporter'
@@ -40,10 +40,10 @@ export class DuplicatePathError extends Error {
 const removeCwd = (path: string) => path.replace(process.cwd(), '')
 
 const renderErrorMessage = (path: string, type: string) =>
-  `- ${path.split(`${type}/`)[0]}${type}/${variable(path.split(`${type}/`)[1])}`
+  `- ${path.split(`${type}/`)[0]}${type}/${log.variable(path.split(`${type}/`)[1])}`
 
 export function renderDuplicatePathError(err: DuplicatePathError) {
-  error(err.message)
+  log.error(err.message)
 
   err.paths.forEach((page) => {
     page.forEach((path) => console.log(renderErrorMessage(removeCwd(path), err.pathType)))
@@ -58,7 +58,7 @@ export class NestedRouteError extends Error {
 }
 
 export function renderNestedRouteError(err: NestedRouteError) {
-  error(err.message)
+  log.error(err.message)
 
   process.stdout.write('\n')
 
@@ -68,5 +68,5 @@ export function renderNestedRouteError(err: NestedRouteError) {
 
   process.stdout.write('\n')
 
-  error(err.secondary)
+  log.error(err.secondary)
 }

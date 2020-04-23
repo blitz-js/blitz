@@ -1,15 +1,15 @@
 import chalk from 'chalk'
 import readline from 'readline'
 
-export const withCaret = (str: string) => {
+const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
 }
 
-export const withCheck = (str: string) => {
+const withCheck = (str: string) => {
   return `${chalk.green('✔')} ${str}`
 }
 
-export const withX = (str: string) => {
+const withX = (str: string) => {
   return `${chalk.red.bold('✕')} ${str}`
 }
 
@@ -17,28 +17,9 @@ export const withX = (str: string) => {
  * Logs a green success message to stdout.
  *
  * @param {string} msg
- * Console logs a branded (purple) success message
  */
-const themeColor = '6700AB'
-export const branded = (msg: string) => {
-  console.log(chalk.hex(themeColor).bold(msg))
-}
-
-/**
- * Console logs a green success message
- */
-export const success = (msg: string) => {
+const success = (msg: string) => {
   console.log(withCheck(chalk.green(msg)))
-}
-
-/**
- * Clears the line and optionally writes a message
- * @param msg optional message to write
- */
-export const clearLine = (msg?: string) => {
-  readline.clearLine(process.stdout, 0)
-  readline.cursorTo(process.stdout, 0)
-  msg && process.stdout.write(msg)
 }
 
 /**
@@ -46,7 +27,7 @@ export const clearLine = (msg?: string) => {
  *
  * @param {string} msg
  */
-export const progress = (msg: string) => {
+const progress = (msg: string) => {
   console.log(withCaret(chalk.whiteBright(msg)))
 }
 
@@ -55,7 +36,7 @@ export const progress = (msg: string) => {
  *
  * @param {string} msg
  */
-export const meta = (msg: string) => {
+const meta = (msg: string) => {
   console.log(withCaret(chalk.gray(msg)))
 }
 
@@ -64,7 +45,7 @@ export const meta = (msg: string) => {
  *
  * @param {string} msg
  */
-export const error = (msg: string) => {
+const error = (msg: string) => {
   console.error(withX(chalk.red.bold(msg)))
 }
 
@@ -73,4 +54,28 @@ export const error = (msg: string) => {
  *
  * @param {string} val
  */
-export const variable = (val: string) => chalk.cyan.bold(`${val}`)
+const variable = (val: any) => {
+  return chalk.cyan.bold(`${val}`)
+}
+
+/**
+ * Logs a branded purple message to stdout.
+ *
+ * @param {string} msg
+ */
+const branded = (msg: string) => {
+  console.log(chalk.hex('6700AB').bold(msg))
+}
+
+/**
+ * Clears the line and optionally log a message to stdout.
+ *
+ * @param {string} msg
+ */
+const clearLine = (msg?: string) => {
+  readline.clearLine(process.stdout, 0)
+  readline.cursorTo(process.stdout, 0)
+  msg && process.stdout.write(msg)
+}
+
+export const log = {success, progress, meta, error, variable, branded, clearLine}

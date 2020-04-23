@@ -1,6 +1,6 @@
 import {through} from './streams'
 import File from 'vinyl'
-import {success, clearLine} from '../log'
+import {log} from '../log'
 
 export type Event<T> = {type: string; payload: T}
 
@@ -20,24 +20,24 @@ export default function createReporter() {
     switch (event.type) {
       case FILE_WRITTEN: {
         const filePath = event.payload.history[0].replace(process.cwd(), '')
-        clearLine(filePath)
-        setTimeout(clearLine, 100)
+        log.clearLine(filePath)
+        setTimeout(log.clearLine, 100)
         break
       }
 
       case ERROR_THROWN: {
         // Tidy up if operational error is encountered
         if (lastEvent.type === FILE_WRITTEN) {
-          clearLine()
+          log.clearLine()
         }
         break
       }
 
       case READY: {
         if (lastEvent.type === FILE_WRITTEN) {
-          clearLine()
+          log.clearLine()
         }
-        success('Blitz is ready')
+        log.success('Blitz is ready')
         break
       }
     }
