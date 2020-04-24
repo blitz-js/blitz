@@ -53,5 +53,8 @@
     "vinyl-file": "^3.0.0",
     "vinyl-fs": "^3.0.3"
   },
+  "devDependencies": {
+    "@blitzjs/core": "0.5.1-alpha"
+  },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
