@@ -1,16 +1,16 @@
 import {Head} from '@blitzjs/core'
 
-const View<%= name %> = () => (
+const Show<%= ModelName %>Page = () => (
   <div className="container">
     <Head>
-      <title><%= pluralName %></title>
+      <title><%= ModelName %></title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
     <main>
-      <h1>Place the detail view for a single <%= name %> here</h1>
+      <h1>Place the detail view for a single <%= ModelName %> here</h1>
     </main>
   </div>
 )
 
-export default View<%= name %>
+export default Show<%= ModelName %>Page

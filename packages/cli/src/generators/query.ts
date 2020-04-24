@@ -2,22 +2,24 @@ import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
 import {log} from '@blitzjs/server'
 
-export interface AppGeneratorOptions extends GeneratorOptions {
-  name: string
-  pluralName: string
+export interface QueryMutationGeneratorOptions extends GeneratorOptions {
+  ModelName: string
+  ModelNames: string
+  modelName: string
+  modelNames: string
   fileContext: string
 }
 
-class QueryGenerator extends Generator<AppGeneratorOptions> {
+class QueryGenerator extends Generator<QueryMutationGeneratorOptions> {
   static subdirectory = 'queries'
   static template = 'query'
 
   async write() {
     const templateValues = {
-      lowerCaseName: this.options.name.toLocaleLowerCase(),
-      lowerCasePluralName: this.options.pluralName.toLocaleLowerCase(),
-      name: this.options.name,
-      pluralName: this.options.pluralName,
+      modelName: this.options.modelName,
+      modelNames: this.options.modelNames,
+      ModelName: this.options.ModelName,
+      ModelNames: this.options.ModelNames,
     }
 
     const paths = readDirRecursive(this.sourcePath())
@@ -37,7 +39,7 @@ class QueryGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    log.success(`Successfully created queries for ${this.options.pluralName.toLocaleLowerCase()}`)
+    // log.success(`Successfully created queries for ${this.options.pluralName.toLocaleLowerCase()}`)
   }
 }
 

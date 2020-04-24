@@ -1,16 +1,16 @@
 import {Head} from '@blitzjs/core'
 
-const Edit<%= name %> = () => (
+const Edit<%= ModelName %>Page = () => (
   <div className="container">
     <Head>
-      <title><%= pluralName %></title>
+      <title>Edit <%= ModelName %></title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
     <main>
-      <h1>Place the UI for editing a <%= name %> here</h1>
+      <h1>Place the UI for editing a <%= ModelName %> here</h1>
     </main>
   </div>
 )
 
-export default Edit<%= name %>
+export default Edit<%= ModelName %>Page

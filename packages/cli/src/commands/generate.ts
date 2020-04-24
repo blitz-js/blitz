@@ -8,16 +8,19 @@ import PageGenerator from '../generators/page'
 import MutationGenerator from '../generators/mutation'
 import PromptAbortedError from '../errors/prompt-aborted'
 import QueryGenerator from '../generators/query'
-import ModelGenerator from '../generators/model'
+// import ModelGenerator from '../generators/model'
 import {log} from '@blitzjs/server'
+import camelCase from 'camelcase'
 const debug = require('debug')('blitz:generate')
+
+const pascalCase = (str: string) => camelCase(str, {pascalCase: true})
 
 enum ResourceType {
   All = 'all',
   Crud = 'crud',
-  Mutation = 'mutation',
-  Page = 'page',
-  Query = 'query',
+  Mutation = 'mutations',
+  Page = 'pages',
+  Query = 'queries',
   Resource = 'resource',
 }
 
@@ -28,28 +31,37 @@ interface Flags {
 
 interface Args {
   type: ResourceType
-  name: string
+  model: string
 }
 
 function pluralize(input: string): string {
-  return (_pluralize.isPlural(input) ? input : _pluralize.plural(input)).toLocaleLowerCase()
+  return _pluralize.isPlural(input) ? input : _pluralize.plural(input)
 }
 
 function singular(input: string): string {
-  return (_pluralize.isSingular(input) ? input : _pluralize.singular(input)).toLocaleLowerCase()
+  return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
 }
 
-function capitalize(input: string): string {
-  return `${input.slice(0, 1).toLocaleUpperCase()}${input.slice(1)}`
+function modelName(input: string) {
+  return camelCase(singular(input))
+}
+function modelNames(input: string) {
+  return camelCase(pluralize(input))
+}
+function ModelName(input: string) {
+  return pascalCase(singular(input))
+}
+function ModelNames(input: string) {
+  return pascalCase(pluralize(input))
 }
 
 const generatorMap = {
-  [ResourceType.All]: [ModelGenerator, PageGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, QueryGenerator, MutationGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
   [ResourceType.Page]: [PageGenerator],
   [ResourceType.Query]: [QueryGenerator],
-  [ResourceType.Resource]: [ModelGenerator, QueryGenerator, MutationGenerator],
+  // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
 }
 
 export default class Generate extends Command {
@@ -61,10 +73,10 @@ export default class Generate extends Command {
     {
       name: 'type',
       required: true,
-      description: 'Type of files to generate',
+      description: 'What files to generate',
       options: [
         ResourceType.All,
-        ResourceType.Resource,
+        // ResourceType.Resource,
         ResourceType.Crud,
         ResourceType.Query,
         ResourceType.Mutation,
@@ -72,19 +84,19 @@ export default class Generate extends Command {
       ],
     },
     {
-      name: 'name',
+      name: 'model',
       required: true,
-      description: 'Namespace for generated files (e.g. [name]Query.ts).',
+      description: 'The name of your model, like "user". Can be singular or plural - same result',
     },
   ]
 
   static flags = {
     help: flags.help({char: 'h'}),
-    context: flags.string({
-      char: 'c',
-      description:
-        'The parent folder for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
-    }),
+    // context: flags.string({
+    //   char: 'c',
+    //   description:
+    //     'The parent folder for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
+    // }),
     'dry-run': flags.boolean({
       char: 'd',
       description: 'Show what files will be created without writing them to disk',
@@ -92,17 +104,12 @@ export default class Generate extends Command {
   }
 
   static examples = [
-    `# We can just generate a single file type, for example queries. In this case,
-# the generator will ask any questions necessary to generate the proper files.
-blitz generate query task
+    `# The 'crud' type will generate all queries & mutations for a model
+> blitz generate crud productVariant
     `,
-    `# Or, we can generate a full set of models, mutations, pages, etc.
-blitz generate all task
+    `# The 'all' generator will scaffold out everything possible for a model
+> blitz generate all products
     `,
-    `# We can specify where the files belong with the context flag, this allows you
-# to generate nested routes automatically. The example below would generate a route
-# for https://myapp.com/taskManager/task.
-blitz generate page task -c=taskManager`,
   ]
 
   async promptForTargetDirectory(paths: string[]): Promise<string> {
@@ -154,12 +161,12 @@ blitz generate page task -c=taskManager`,
       let nestedContextPaths: string[] = []
       // otherwise, validate the provided path, prompting the user if it's absent or invalid
       if (!flags.context) {
-        if (fs.existsSync(path.resolve('app', pluralize(args.name)))) {
-          singularRootContext = singular(args.name)
-          fileRoot = pluralRootContext = pluralize(args.name)
+        if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
+          singularRootContext = modelName(args.model)
+          fileRoot = pluralRootContext = modelNames(args.model)
         } else {
-          singularRootContext = singular(args.name)
-          fileRoot = pluralRootContext = pluralize(args.name)
+          singularRootContext = modelName(args.model)
+          fileRoot = pluralRootContext = modelNames(args.model)
         }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
@@ -167,18 +174,18 @@ blitz generate page task -c=taskManager`,
         if (contextParts.length === 0) {
           await this.handleNoContext(
             `Couldn't determine context from context flag. Would you like to create a new context folder under /app for '${pluralize(
-              args.name,
+              args.model,
             )}'?`,
           )
-          singularRootContext = singular(args.name)
-          fileRoot = pluralRootContext = pluralize(args.name)
+          singularRootContext = modelName(args.model)
+          fileRoot = pluralRootContext = modelNames(args.model)
         } else {
           // @ts-ignore shift can technically return undefined, but we already know the array isn't empty
           // so we can bypass the check
-          fileRoot = pluralize(contextParts.shift())
-          singularRootContext = singular(args.name)
-          pluralRootContext = pluralize(args.name)
-          nestedContextPaths = [...contextParts, pluralize(args.name)]
+          fileRoot = modelNames(contextParts.shift())
+          singularRootContext = modelName(args.model)
+          pluralRootContext = modelNames(args.model)
+          nestedContextPaths = [...contextParts, pluralize(args.model)]
         }
       }
 
@@ -187,8 +194,10 @@ blitz generate page task -c=taskManager`,
         const generator = new GeneratorClass({
           sourceRoot: path.join(__dirname, `../../templates/${GeneratorClass.template}`),
           destinationRoot: path.resolve(),
-          name: capitalize(singularRootContext),
-          pluralName: capitalize(pluralRootContext),
+          modelName: modelName(singularRootContext),
+          modelNames: modelNames(singularRootContext),
+          ModelName: ModelName(singularRootContext),
+          ModelNames: ModelNames(singularRootContext),
           dryRun: flags['dry-run'],
           // provide the file context as a relative path to the current directory (with a slash appended)
           // to generate files without changing the current directory. This allows yeoman to print out the
@@ -201,6 +210,8 @@ blitz generate page task -c=taskManager`,
         })
         await generator.run()
       }
+
+      console.log(' ') // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 

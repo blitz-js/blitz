@@ -1,7 +1,0 @@
-import db, {FindMany<%= name %>Args} from 'db'
-
-export default async function get<%= pluralName %>(args: FindMany<%= name %>Args) {
-  const <%= lowerCasePluralName %> = await db.<%= lowerCaseName %>.findMany(args)
-
-  return <%= lowerCasePluralName %>
-}
