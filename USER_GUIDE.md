@@ -146,7 +146,7 @@ import ErrorBoundary from 'app/components/ErrorBoundary'
 function Product() {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id: props.query.id}})
+  const [product] = useQuery(getProduct, { where: { id }})
 
   return <div>{product.name}</div>
 }
