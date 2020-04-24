@@ -23,7 +23,7 @@
 
 <br>
 
-Blitz brings back the **simplicity and conventions** of server rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering! 
+Blitz brings back the **simplicity and conventions** of server-rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering! 
 
 Blitz is the framework for the 99% of us at companies with <100 employees. This means **we don't force you to use advanced technologies like GraphQL**. We let you add advanced technologies on your terms and at your pace.
 
@@ -46,7 +46,7 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 ⚡️ Highly secure authentication <br>
 ⚡️ Authorization you can use on both server and client<br>
 ⚡️ Model validation you can use on both server and client<br>
-⚡️ Plugins for easily adding libaries like Tailwind, CSS-in-JS, etc.<br>
+⚡️ Plugins for easily adding libraries like Tailwind, CSS-in-JS, etc.<br>
 ⚡️ React native support<br>
 ⚡️ GUI so you don't have to use the CLI<br>
 
@@ -86,9 +86,9 @@ While we currently only support web, we are pursuing the dream of a single monol
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
 
-[Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where collaborate on building Blitz itself.
+[Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
 
-There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is the [The Contributing Guide](CONTRIBUTING.md).
+There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](CONTRIBUTING.md).
 
 <br>
 

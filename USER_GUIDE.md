@@ -4,13 +4,13 @@
 
 Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build!
 
-If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually it will be because this is very important to us.
+If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
 <br>
 
 ## Introduction
 
-Blitz is a Rails-like framework for building monolithic, fullstack React apps. The idea is that Blitz makes you extremely productive by doing as much set up and grunt work for you.
+Blitz is a Rails-like framework for building monolithic, full-stack React apps. The idea is that Blitz makes you extremely productive by doing as much set up and grunt work for you.
 
 **When building a Blitz app, you don’t have to think about “building an API” or “fetching data from your API”**. You only think about writing functions that get and change data. And to use those functions in your component, you simply import and call them like a regular function.
 
@@ -83,7 +83,7 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
-- All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
+- All React components inside a `pages/` folder are accessible at a URL corresponding to its path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
 
@@ -281,7 +281,7 @@ Assuming you already have a Zeit account and the `now` cli installed, you can do
 
 3. Run `now`
 
-Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested.
+Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle-tested.
 
 #### Traditional, Long-Running Server
 
@@ -337,7 +337,7 @@ Start a Node.js REPL that's preloaded with your `db` object and all your queries
 
 ## What's Next for Blitz.js?
 
-Here's the list of big things that are currently missing from Blitz but are top priority for us:
+Here's the list of big things that are currently missing from Blitz but are a top priority for us:
 
 - A real Blitzjs.com website and documentation
 - Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
