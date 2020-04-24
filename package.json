@@ -18,7 +18,7 @@
   "scripts": {
     "postinstall": "npm rebuild husky",
     "dev": "lerna run dev --no-private --stream --parallel",
-    "link-cli": "yarn global remove blitz && yarn workspace blitz link",
+    "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
     "build": "lerna run build --no-private --stream",
     "test": "yarn run build && yarn run testonly",
