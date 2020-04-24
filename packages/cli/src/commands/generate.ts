@@ -22,7 +22,7 @@ enum ResourceType {
 }
 
 interface Flags {
-  parent?: string
+  context?: string
   'dry-run'?: boolean
 }
 
@@ -64,11 +64,11 @@ export default class Generate extends Command {
       description: 'Type of files to generate',
       options: [
         ResourceType.All,
+        ResourceType.Resource,
         ResourceType.Crud,
+        ResourceType.Query,
         ResourceType.Mutation,
         ResourceType.Page,
-        ResourceType.Query,
-        ResourceType.Resource,
       ],
     },
     {
@@ -80,10 +80,10 @@ export default class Generate extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    parent: flags.string({
-      char: 'p',
+    context: flags.string({
+      char: 'c',
       description:
-        'The parent context for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
+        'The parent folder for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
     }),
     'dry-run': flags.boolean({
       char: 'd',
@@ -99,7 +99,7 @@ blitz generate query task
     `# Or, we can generate a full set of models, mutations, pages, etc.
 blitz generate all task
     `,
-    `# We can specify where the files belong with the parent flag, this allows you
+    `# We can specify where the files belong with the context flag, this allows you
 # to generate nested routes automatically. The example below would generate a route
 # for https://myapp.com/taskManager/task.
 blitz generate page task -c=taskManager`,
@@ -144,6 +144,7 @@ blitz generate page task -c=taskManager`,
 
     if (!isInRoot) {
       log.error('No blitz.config.js found. `generate` must be run from the root of the project.')
+      this.exit(1)
     }
 
     try {
@@ -152,25 +153,20 @@ blitz generate page task -c=taskManager`,
       let pluralRootContext: string
       let nestedContextPaths: string[] = []
       // otherwise, validate the provided path, prompting the user if it's absent or invalid
-      if (!flags.parent) {
+      if (!flags.context) {
         if (fs.existsSync(path.resolve('app', pluralize(args.name)))) {
           singularRootContext = singular(args.name)
           fileRoot = pluralRootContext = pluralize(args.name)
         } else {
-          await this.handleNoContext(
-            `No parent flag (--parent, -p) was found. Would you like to create a new context folder under /app for '${pluralize(
-              args.name,
-            )}'?`,
-          )
           singularRootContext = singular(args.name)
           fileRoot = pluralRootContext = pluralize(args.name)
         }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
-        const contextParts = flags.parent.split(/[\\/]/)
+        const contextParts = flags.context.split(/[\\/]/)
         if (contextParts.length === 0) {
           await this.handleNoContext(
-            `Couldn't determine context from parent flag. Would you like to create a new context folder under /app for '${pluralize(
+            `Couldn't determine context from context flag. Would you like to create a new context folder under /app for '${pluralize(
               args.name,
             )}'?`,
           )
@@ -201,6 +197,7 @@ blitz generate page task -c=taskManager`,
       if (err instanceof PromptAbortedError) this.exit(0)
 
       log.error(err)
+      this.exit(1)
     }
   }
 }
