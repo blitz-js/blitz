@@ -23,7 +23,7 @@ const New<%= ModelName %>Page = () => {
             alert('Error creating <%= modelName %> ' + JSON.stringify(error, null, 2))
           }
         }}>
-          <div>Put your form fields here</div>
+          <div>Put your form fields here. But for now, just click submit</div>
           <button>Submit</button>
         </form>
 

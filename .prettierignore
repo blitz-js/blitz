@@ -16,3 +16,4 @@ reports
 tsconfig.tsbuildinfo
 dist
 bin
+packages/cli/templates/**
