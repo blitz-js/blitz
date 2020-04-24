@@ -40,7 +40,6 @@
     "next": "9.3.5",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.2.0",
-    "node-pty": "^0.9.0",
     "null-loader": "^4.0.0",
     "ora": "4.0.4",
     "parallel-transform": "^1.2.0",
