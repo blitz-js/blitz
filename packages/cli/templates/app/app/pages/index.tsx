@@ -22,9 +22,12 @@ const Home = () => (
 }`}
         </code>
       </pre>
-      <p>2. Run this command in your terminal:</p>
+      <p>2. Run these commands in your terminal:</p>
       <pre>
-        <code>blitz generate all user</code>
+        <code>
+          {`$ blitz db migrate
+$ blitz generate all user`}
+        </code>
       </pre>
 
       <p>
