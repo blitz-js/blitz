@@ -50,7 +50,6 @@
     "serialize-error": "6.0.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.5.2-alpha",
     "@prisma/client": "2.0.0-beta.2"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
