@@ -3,7 +3,8 @@
   "version": "0.6.0-canary.0",
   "private": true,
   "scripts": {
-    "build": "blitz db migrate && blitz build"
+    "build": "blitz db migrate && blitz build",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.2",
@@ -18,6 +19,8 @@
   "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
     "@types/react": "16.9.34",
-    "next": "9.3.5"
+    "next": "9.3.5",
+    "cypress": "^4.4.1",
+    "eslint-plugin-cypress": "2.10.3"
   }
 }
