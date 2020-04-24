@@ -20,7 +20,7 @@ const Page: BlitzPage<StaticProps> = function ({products}) {
   return (
     <div>
       <h1>Products</h1>
-      <div>
+      <div id="products">
         {products.map((product) => (
           <p key={product.id}>
             <Link href="/products/[handle]" as={`/products/${product.handle}`}>
