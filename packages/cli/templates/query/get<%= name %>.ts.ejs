@@ -1,0 +1,7 @@
+import db, {FindOne<%= name %>Args} from 'db'
+
+export default async function get<%= name %>(args: FindOne<%= name %>Args) {
+  const <%= lowerCaseName %> = await db.<%= lowerCaseName %>.findOne(args)
+
+  return <%= lowerCaseName %>
+}

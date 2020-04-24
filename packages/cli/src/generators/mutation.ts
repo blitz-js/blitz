@@ -7,7 +7,10 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   pluralName: string
 }
 
-class Mutation extends Generator<AppGeneratorOptions> {
+class MutationGenerator extends Generator<AppGeneratorOptions> {
+  static subdirectory = 'mutations'
+  static template = 'mutation'
+
   async write() {
     const templateValues = {
       name: this.options.name,
@@ -33,4 +36,4 @@ class Mutation extends Generator<AppGeneratorOptions> {
   }
 }
 
-export default Mutation
+export default MutationGenerator

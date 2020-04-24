@@ -7,12 +7,14 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   pluralName: string
 }
 
-class PageGenerator extends Generator<AppGeneratorOptions> {
-  static subdirectory = 'pages'
-  static template = 'page'
+class QueryGenerator extends Generator<AppGeneratorOptions> {
+  static subdirectory = 'queries'
+  static template = 'query'
 
   async write() {
     const templateValues = {
+      lowerCaseName: this.options.name.toLocaleLowerCase(),
+      lowerCasePluralName: this.options.pluralName.toLocaleLowerCase(),
       name: this.options.name,
       pluralName: this.options.pluralName,
     }
@@ -21,11 +23,7 @@ class PageGenerator extends Generator<AppGeneratorOptions> {
 
     for (let path of paths) {
       try {
-        this.fs.copyTpl(
-          this.sourcePath(path),
-          this.destinationPath(path.replace('.ejs', '').replace('__id__', '[id]')),
-          templateValues,
-        )
+        this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
       } catch (error) {
         console.log('Error generating', path)
         throw error
@@ -34,8 +32,10 @@ class PageGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    console.log(chalk.green(`Successfully created pages for ${this.options.pluralName.toLocaleLowerCase()}`))
+    console.log(
+      chalk.green(`Successfully created queries for ${this.options.pluralName.toLocaleLowerCase()}`),
+    )
   }
 }
 
-export default PageGenerator
+export default QueryGenerator

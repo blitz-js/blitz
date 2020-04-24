@@ -7,8 +7,9 @@ import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
 import PageGenerator from '../generators/page'
 import MutationGenerator from '../generators/mutation'
-import Generator from '../generator'
 import PromptAbortedError from '../errors/prompt-aborted'
+import QueryGenerator from '../generators/query'
+import ModelGenerator from '../generators/model'
 const debug = require('debug')('blitz:generate')
 
 enum ResourceType {
@@ -42,15 +43,13 @@ function capitalize(input: string): string {
   return `${input.slice(0, 1).toLocaleUpperCase()}${input.slice(1)}`
 }
 
-type GeneratorConfig<T extends Generator<any>> = {
-  subdir: string
-  generator: T
-}
-
-// @ts-ignore
-const generators: {[key in ResourceType]: GeneratorConfig<any>} = {
-  [ResourceType.Mutation]: {subdir: 'mutations', generator: MutationGenerator},
-  [ResourceType.Page]: {subdir: 'pages', generator: PageGenerator},
+const generatorMap = {
+  [ResourceType.All]: [],
+  [ResourceType.Crud]: [ModelGenerator, MutationGenerator, QueryGenerator],
+  [ResourceType.Mutation]: [MutationGenerator],
+  [ResourceType.Page]: [PageGenerator],
+  [ResourceType.Query]: [QueryGenerator],
+  [ResourceType.Resource]: [QueryGenerator, MutationGenerator],
 }
 
 export default class Generate extends Command {
@@ -185,20 +184,21 @@ blitz generate resource task -c=taskManager`,
         }
       }
 
-      const generatorConfig = generators[args.type]
-      const generator = new generatorConfig.generator({
-        sourceRoot: path.join(__dirname, `../../templates/${args.type}`),
-        destinationRoot: path.resolve('app', fileRoot, generatorConfig.subdir, ...nestedContextPaths),
-        name: capitalize(singularRootContext),
-        pluralName: capitalize(pluralRootContext),
-        context: nestedContextPaths,
-      })
-      await generator.run()
+      const generators = generatorMap[args.type]
+      for (const GeneratorClass of generators) {
+        const generator = new GeneratorClass({
+          sourceRoot: path.join(__dirname, `../../templates/${GeneratorClass.template}`),
+          destinationRoot: path.resolve('app', fileRoot, GeneratorClass.subdirectory, ...nestedContextPaths),
+          name: capitalize(singularRootContext),
+          pluralName: capitalize(pluralRootContext),
+          dryRun: flags['dry-run'],
+        })
+        await generator.run()
+      }
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
       this.error(err)
     }
-    this.logTheme('Generator completed successfully 🎉✅')
   }
 }
