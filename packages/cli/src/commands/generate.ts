@@ -2,7 +2,6 @@ import Command from '../command'
 import {flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
-import chalk from 'chalk'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
 import PageGenerator from '../generators/page'
@@ -10,6 +9,7 @@ import MutationGenerator from '../generators/mutation'
 import PromptAbortedError from '../errors/prompt-aborted'
 import QueryGenerator from '../generators/query'
 import ModelGenerator from '../generators/model'
+import {log} from '@blitzjs/server'
 const debug = require('debug')('blitz:generate')
 
 enum ResourceType {
@@ -44,12 +44,12 @@ function capitalize(input: string): string {
 }
 
 const generatorMap = {
-  [ResourceType.All]: [],
-  [ResourceType.Crud]: [ModelGenerator, MutationGenerator, QueryGenerator],
+  [ResourceType.All]: [ModelGenerator, PageGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
   [ResourceType.Page]: [PageGenerator],
   [ResourceType.Query]: [QueryGenerator],
-  [ResourceType.Resource]: [QueryGenerator, MutationGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueryGenerator, MutationGenerator],
 }
 
 export default class Generate extends Command {
@@ -128,7 +128,7 @@ blitz generate resource task -c=taskManager`,
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      this.log('Could not determine proper location for files. Aborting.')
+      log.error('Could not determine proper location for files. Aborting.')
       this.exit(0)
     }
   }
@@ -141,7 +141,7 @@ blitz generate resource task -c=taskManager`,
     const isInRoot = fs.existsSync(path.resolve('blitz.config.js'))
 
     if (!isInRoot) {
-      this.error(chalk.red('No blitz.config.js found. `generate` must be run from the root of the project.'))
+      log.error('No blitz.config.js found. `generate` must be run from the root of the project.')
     }
 
     try {
@@ -198,7 +198,7 @@ blitz generate resource task -c=taskManager`,
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
-      this.error(err)
+      log.error(err)
     }
   }
 }

@@ -1,6 +1,6 @@
 import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
-import chalk from 'chalk'
+import {log} from '@blitzjs/server'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   name: string
@@ -25,16 +25,14 @@ class QueryGenerator extends Generator<AppGeneratorOptions> {
       try {
         this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
       } catch (error) {
-        console.log('Error generating', path)
+        log.error('Error generating' + path)
         throw error
       }
     }
   }
 
   async postWrite() {
-    console.log(
-      chalk.green(`Successfully created queries for ${this.options.pluralName.toLocaleLowerCase()}`),
-    )
+    log.success(`Successfully created queries for ${this.options.pluralName.toLocaleLowerCase()}`)
   }
 }
 

@@ -1,7 +1,7 @@
 import Generator, {GeneratorOptions} from '../generator'
-import chalk from 'chalk'
 import enquirer from 'enquirer'
 import path from 'path'
+import {log} from '@blitzjs/server'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   name: string
@@ -15,7 +15,6 @@ class ModelGenerator extends Generator<AppGeneratorOptions> {
 
   async write() {
     try {
-      console.log(path.resolve('db/schema.prisma'))
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
         throw new Error('Prisma schema file was not found')
       }
@@ -41,7 +40,7 @@ Modifiers can be denoted with a trailing '?' (e.g. 'lastname:string?' or 'users:
   }
 
   async postWrite() {
-    console.log(chalk.green(`Successfully created prisma model for ${this.options.name.toLocaleLowerCase()}`))
+    log.success(`Successfully created prisma model for ${this.options.name.toLocaleLowerCase()}`)
   }
 }
 

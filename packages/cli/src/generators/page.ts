@@ -1,6 +1,6 @@
 import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
-import chalk from 'chalk'
+import {log} from '@blitzjs/server'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   name: string
@@ -27,14 +27,14 @@ class PageGenerator extends Generator<AppGeneratorOptions> {
           templateValues,
         )
       } catch (error) {
-        console.log('Error generating', path)
+        log.error('Error generating' + path)
         throw error
       }
     }
   }
 
   async postWrite() {
-    console.log(chalk.green(`Successfully created pages for ${this.options.pluralName.toLocaleLowerCase()}`))
+    log.success(`Successfully created pages for ${this.options.pluralName.toLocaleLowerCase()}`)
   }
 }
 
