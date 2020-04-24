@@ -27,8 +27,8 @@
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary --no-push && yarn run danger:push-all",
-    "publish-alpha": "lerna publish --preid alpha ---no-push --force-publish && yarn run danger:push-all",
+    "publish-canary": "lerna publish --preid canary --pre-dist-tag canary --no-push && yarn run danger:push-all && release --pre",
+    "publish-alpha": "lerna publish --preid alpha ---no-push --force-publish && yarn run danger:push-all && release",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {
@@ -70,6 +70,7 @@
     "prettier": "^2.0.4",
     "pretty-quick": "2.0.1",
     "prompt": "^1.0.0",
+    "release": "6.1.0",
     "rimraf": "3.0.2",
     "rollup": "^2.6.1",
     "rollup-plugin-commonjs": "^10.1.0",
