@@ -6,6 +6,7 @@ import chalk from 'chalk'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
 import PageGenerator from '../generators/page'
+import MutationGenerator from '../generators/mutation'
 import Generator from '../generator'
 import PromptAbortedError from '../errors/prompt-aborted'
 const debug = require('debug')('blitz:generate')
@@ -30,11 +31,11 @@ interface Args {
 }
 
 function pluralize(input: string): string {
-  return _pluralize.isPlural(input) ? input : _pluralize.plural(input)
+  return (_pluralize.isPlural(input) ? input : _pluralize.plural(input)).toLocaleLowerCase()
 }
 
 function singular(input: string): string {
-  return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
+  return (_pluralize.isSingular(input) ? input : _pluralize.singular(input)).toLocaleLowerCase()
 }
 
 function capitalize(input: string): string {
@@ -48,6 +49,7 @@ type GeneratorConfig<T extends Generator<any>> = {
 
 // @ts-ignore
 const generators: {[key in ResourceType]: GeneratorConfig<any>} = {
+  [ResourceType.Mutation]: {subdir: 'mutations', generator: MutationGenerator},
   [ResourceType.Page]: {subdir: 'pages', generator: PageGenerator},
 }
 
@@ -73,8 +75,7 @@ export default class Generate extends Command {
     {
       name: 'name',
       required: true,
-      description:
-        'Namespace for generated files (e.g. [name]Query.ts). If this is a nested resource the context can be supplied as a path here (e.g. store/product). Windows path separators are supported.',
+      description: 'Namespace for generated files (e.g. [name]Query.ts).',
     },
   ]
 
@@ -98,7 +99,7 @@ blitz generate query task
     `# Or, we can generate a full set of models, mutations, pages, etc.
 blitz generate all task
     `,
-    `# We can specify where the files belong with the context flag. If no flag is provided Blitz
+    `# We can specify where the files belong with the parent flag. If no flag is provided Blitz
 # will give you the option to create a new top-level context directory.
 blitz generate resource task -c=taskManager`,
   ]
@@ -151,19 +152,24 @@ blitz generate resource task -c=taskManager`,
       let nestedContextPaths: string[] = []
       // otherwise, validate the provided path, prompting the user if it's absent or invalid
       if (!flags.parent) {
-        await this.handleNoContext(
-          `No context flag (--context, -c) was found. Would you like to create a new context folder under /app for '${pluralize(
-            args.name,
-          )}'?`,
-        )
-        singularRootContext = singular(args.name)
-        fileRoot = pluralRootContext = pluralize(args.name)
+        if (fs.existsSync(path.resolve('app', pluralize(args.name)))) {
+          singularRootContext = singular(args.name)
+          fileRoot = pluralRootContext = pluralize(args.name)
+        } else {
+          await this.handleNoContext(
+            `No parent flag (--parent, -p) was found. Would you like to create a new context folder under /app for '${pluralize(
+              args.name,
+            )}'?`,
+          )
+          singularRootContext = singular(args.name)
+          fileRoot = pluralRootContext = pluralize(args.name)
+        }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
         const contextParts = flags.parent.split(/[\\/]/)
         if (contextParts.length === 0) {
           await this.handleNoContext(
-            `Couldn't determine context from context flag. Would you like to create a new context folder under /app for '${pluralize(
+            `Couldn't determine context from parent flag. Would you like to create a new context folder under /app for '${pluralize(
               args.name,
             )}'?`,
           )

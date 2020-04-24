@@ -1,0 +1,7 @@
+import db, {<%= name %>DeleteArgs} from 'db'
+
+export default async function delete<%= name %>(args: <%= name %>DeleteArgs) {
+  const <%= lowerCaseName %> = await db.<%= lowerCaseName %>.delete(args)
+
+  return <%= lowerCaseName %>
+}

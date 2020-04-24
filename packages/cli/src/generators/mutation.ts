@@ -7,22 +7,18 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   pluralName: string
 }
 
-class PageGenerator extends Generator<AppGeneratorOptions> {
+class Mutation extends Generator<AppGeneratorOptions> {
   async write() {
     const templateValues = {
       name: this.options.name,
-      pluralName: this.options.pluralName,
+      lowerCaseName: this.options.name.toLocaleLowerCase(),
     }
 
     const paths = readDirRecursive(this.sourcePath())
 
     for (let path of paths) {
       try {
-        this.fs.copyTpl(
-          this.sourcePath(path),
-          this.destinationPath(path.replace('.ejs', '').replace('__id__', '[id]')),
-          templateValues,
-        )
+        this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
       } catch (error) {
         console.log('Error generating', path)
         throw error
@@ -31,8 +27,10 @@ class PageGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    console.log(chalk.green(`Successfully created pages for ${this.options.pluralName.toLocaleLowerCase()}`))
+    console.log(
+      chalk.green(`Successfully created mutations for ${this.options.pluralName.toLocaleLowerCase()}`),
+    )
   }
 }
 
-export default PageGenerator
+export default Mutation

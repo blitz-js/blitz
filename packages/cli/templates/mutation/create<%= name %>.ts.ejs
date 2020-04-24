@@ -1,0 +1,7 @@
+import db, {<%= name %>CreateArgs} from 'db'
+
+export default async function create<%= name %>(args: <%= name %>CreateArgs) {
+  const <%= lowerCaseName %> = await db.<%= lowerCaseName %>.create(args)
+
+  return <%= lowerCaseName %>
+}
