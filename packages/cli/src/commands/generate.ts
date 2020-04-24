@@ -92,15 +92,17 @@ export default class Generate extends Command {
   }
 
   static examples = [
-    `# We can just generate a single file type, for example a query:
+    `# We can just generate a single file type, for example queries. In this case,
+# the generator will ask any questions necessary to generate the proper files.
 blitz generate query task
     `,
     `# Or, we can generate a full set of models, mutations, pages, etc.
 blitz generate all task
     `,
-    `# We can specify where the files belong with the parent flag. If no flag is provided Blitz
-# will give you the option to create a new top-level context directory.
-blitz generate resource task -c=taskManager`,
+    `# We can specify where the files belong with the parent flag, this allows you
+# to generate nested routes automatically. The example below would generate a route
+# for https://myapp.com/taskManager/task.
+blitz generate page task -c=taskManager`,
   ]
 
   async promptForTargetDirectory(paths: string[]): Promise<string> {
