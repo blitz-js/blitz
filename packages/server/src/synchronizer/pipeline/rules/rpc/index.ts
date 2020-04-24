@@ -64,7 +64,7 @@ export default isomorphicRpc(resolver, '${resolverPath}') as typeof resolver
 `
 
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
-import {rpcHandler} from '@blitzjs/core'
+import {rpcHandler} from '@blitzjs/server'
 import resolver from '${resolverPath}'
 import db from 'db'
 export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => db.connect())

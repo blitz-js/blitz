@@ -1,7 +1,14 @@
 import {useQuery as useReactQuery} from 'react-query'
-import {PromiseReturnType} from '@prisma/client'
-// TODO: why doesn't the type work properly from ../types?
-// import {PromiseReturnType} from '../types'
+
+/**
+ * Get the type of the value, that the Promise holds.
+ */
+export declare type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
+
+/**
+ * Get the return type of a function which returns a Promise.
+ */
+export declare type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
 
 type QueryFn = (...args: any) => Promise<any>
 

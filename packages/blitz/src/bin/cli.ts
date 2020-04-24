@@ -3,6 +3,15 @@ import * as path from 'path'
 const resolveGlobal = require('resolve-global')
 const resolveFrom = require('resolve-from')
 const pkgDir = require('pkg-dir')
+const chalk = require('chalk')
+
+console.log(
+  chalk.yellow(
+    `You are using alpha software - if you have any problems, please open an issue here:
+  https://github.com/blitz-js/blitz/issues/new/choose
+Also, this CLI may be slow as it's not yet optimized for speed\n`,
+  ),
+)
 
 let usageType: 'local' | 'monorepo' | 'global' | 'global-linked'
 
@@ -47,7 +56,8 @@ if (options._.length === 0 && (options.v || options.version)) {
   console.log('debug:', usageType)
   console.log('debug: pkgPath:', pkgPath, '\n')
   try {
-    console.log(`env: ${process.platform}-${process.arch} node-${process.version}`)
+    const osName = require('os-name')
+    console.log(`${osName()} ${process.platform}-${process.arch} node-${process.version}\n`)
 
     let globalInstallPath
     let localButGlobalLinked = usageType === 'local' && fs.existsSync(globalLinkedCLIPkgPath)

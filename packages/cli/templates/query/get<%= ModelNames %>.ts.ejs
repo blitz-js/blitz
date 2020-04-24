@@ -1,0 +1,7 @@
+import db, {FindMany<%= ModelName %>Args} from 'db'
+
+export default async function get<%= ModelNames %>(args: FindMany<%= ModelName %>Args) {
+  const <%= modelNames %> = await db.<%= modelName %>.findMany(args)
+
+  return <%= modelNames %>
+}

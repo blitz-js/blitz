@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.6.0-canary.0",
+  "version": "0.6.0-canary.3",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -30,6 +30,7 @@
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
+    "camelcase": "6.0.0",
     "chalk": "^4.0.0",
     "chokidar": "^3.3.1",
     "cross-spawn": "^7.0.2",
@@ -46,16 +47,18 @@
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.0",
     "pkg-dir": "4.2.0",
+    "pluralize": "^8.0.0",
     "ts-node": "8.9.0",
     "tsconfig-paths": "3.9.0",
     "username": "5.1.0",
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.6.0-canary.0",
+    "@blitzjs/server": "0.6.0-canary.3",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@prisma/cli": "2.0.0-beta.2"
+    "@prisma/cli": "2.0.0-beta.2",
+    "@types/pluralize": "^0.0.29"
   },
   "oclif": {
     "commands": "./lib/src/commands",

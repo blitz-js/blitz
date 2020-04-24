@@ -1,13 +1,6 @@
-import {writeJSONSync} from 'fs-extra'
-import {join} from 'path'
 import {getLatestVersion} from '../utils/get-latest-version'
 
-export const replaceDependencies = async (
-  pkg: any,
-  desinationPath: string,
-  dependencies: string[],
-  key: string,
-) => {
+export const replaceDependencies = async (pkg: any, dependencies: string[], key: string) => {
   const latestVersions = await Promise.all(
     dependencies.map(async (dependency) => {
       const templateVersion = pkg[key][dependency]
@@ -19,6 +12,5 @@ export const replaceDependencies = async (
     }),
   )
 
-  pkg[key] = dependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})
-  writeJSONSync(join(desinationPath, 'package.json'), pkg, {spaces: 2})
+  return {key, dependencies: dependencies.reduce((o, k, i) => ({...o, [k]: latestVersions[i]}), {})}
 }
