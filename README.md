@@ -52,9 +52,11 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 
 <br>
 
-### Initial Alpha Release Coming Soon
+### :tada: Alpha Release Now Available :tada:
 
-We expect an initial alpha release to be ready the week of April 20, 2020. In the meantime, [check out the Architecture RFC](https://github.com/blitz-js/blitz/pull/73) and view the example app here: [`examples/store`](https://github.com/blitz-js/blitz/tree/canary/examples/store)
+1. `npm i -g blitz`
+2. `blitz new myapp`
+3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
 <br>
 
