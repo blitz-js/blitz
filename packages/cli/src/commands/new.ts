@@ -57,15 +57,15 @@ export default class New extends Command {
       version: this.config.version,
     })
 
+    const themeColor = '6700AB'
+
     try {
-      this.logTheme('Hang tight while we set up your new Blitz app!', {pad: true})
+      this.log('\n' + chalk.hex(themeColor).bold('Hang tight while we set up your new Blitz app!') + '\n')
       await generator.run()
-      this.logTheme('Your new Blitz app is ready! Next steps:', {pad: true})
-      this.setLogIndent()
-      this.log(chalk.yellow(`1. cd ${args.name}`))
-      this.log(chalk.yellow(`2. blitz start`))
-      this.log(chalk.yellow(`3. You create new pages by placing components inside app/pages/\n`))
-      this.stopLogIndent()
+      this.log('\n' + chalk.hex(themeColor).bold('Your new Blitz app is ready! Next steps:') + '\n')
+      this.log(chalk.yellow(`   1. cd ${args.name}`))
+      this.log(chalk.yellow(`   2. blitz start`))
+      this.log(chalk.yellow(`   3. You create new pages by placing components inside app/pages/\n`))
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
