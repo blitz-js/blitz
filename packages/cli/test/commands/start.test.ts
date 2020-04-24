@@ -27,7 +27,7 @@ describe('Start command', () => {
 
   it('runs the dev script', async () => {
     await StartCmd.run([])
-    expect(dev).toBeCalledWith(options)
+    expect(dev).toBeCalledWith(options, Promise.resolve())
   })
 
   it('runs the prod script when passed the production flag', async () => {
