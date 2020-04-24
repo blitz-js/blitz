@@ -1,14 +1,15 @@
-describe('index page', () => {
+describe('products#index page', () => {
+  it('Has H1', () => {
+    cy.visit('/products')
+    cy.contains('h1', 'Products')
+  })
+})
+
+describe('products#show page', () => {
   beforeEach(() => {
     cy.visit('/products')
   })
 
-  // index
-  it('Has H1', () => {
-    cy.contains('h1', 'Products')
-  })
-
-  // [handle]
   it('goes to product page', () => {
     cy.get('#products > p > a').first().click()
     cy.location('pathname').should('match', /\/products\/\S+$/)
