@@ -41,7 +41,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 
 ### Set Up Your Database
 
-By default, Blitz uses Prisma 2 which is a strongly typed database client. You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction). _Note, Prisma 2 is not required for Blitz. The only Prisma-Blitz integration is the `blitz db` cli command. You can use anything you want, such as Mongo, TypeORM, etc._
+By default, Blitz uses Prisma 2 which is a strongly typed database client. **You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction).** _Note, Prisma 2 is not required for Blitz. The only Prisma-Blitz integration is the `blitz db` cli command. You can use anything you want, such as Mongo, TypeORM, etc._
 
 1. Open `db/prisma.schema` and add the following:
 
