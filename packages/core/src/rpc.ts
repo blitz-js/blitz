@@ -14,10 +14,10 @@ export async function rpc(url: string, params: any) {
 
   const json = await result.json()
 
-  if (json.result) {
-    return json.result
-  } else {
+  if (json.error) {
     throw deserializeError(json.error)
+  } else {
+    return json.result
   }
 }
 

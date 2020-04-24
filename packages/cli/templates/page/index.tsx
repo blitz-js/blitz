@@ -1,16 +1,49 @@
-import {Head} from '@blitzjs/core'
+import {Suspense} from 'react'
+import {Head, Link, useQuery} from 'blitz'
+import get<%= ModelNames %> from 'app/<%= modelNames %>/queries/get<%= ModelNames %>'
 
-const <%= ModelNames %>Page = () => (
-  <div className="container">
-    <Head>
-      <title><%= ModelNames %></title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+export const <%= ModelNames %>List = () => {
+  const [<%= modelNames %>] = useQuery(get<%= ModelNames %>)
 
-    <main>
-      <h1>Place the listing view for multiple <%= ModelNames %> here</h1>
-    </main>
-  </div>
-)
+  return (
+    <ul>
+      {<%= modelNames %>.map((<%= modelName %>) => (
+        <li key={<%= modelName %>.id}>
+          <Link href="/<%= modelNames %>/[id]" as={`/<%= modelNames %>/${<%= modelName %>.id}`}>
+            <a>{<%= modelName %>.name}</a>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+const <%= ModelNames %>Page = () => {
+  return (
+    <div className="container">
+      <Head>
+        <title><%= ModelNames %></title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <h1><%= ModelNames %></h1>
+
+        <p>
+          <Link href="/<%= modelNames %>/new">
+            <a>Create <%= ModelName %></a>
+          </Link>
+        </p>
+
+        <Suspense fallback={<div>Loading...</div>}>
+          <<%= ModelNames %>List />
+        </Suspense>
+      </main>
+    </div>
+  )
+}
 
 export default <%= ModelNames %>Page
+
+
+
