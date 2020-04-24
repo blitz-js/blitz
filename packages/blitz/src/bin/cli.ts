@@ -3,6 +3,15 @@ import * as path from 'path'
 const resolveGlobal = require('resolve-global')
 const resolveFrom = require('resolve-from')
 const pkgDir = require('pkg-dir')
+const chalk = require('chalk')
+
+console.log(
+  chalk.yellow(
+    `You are using alpha software - if you have any problems, please open an issue here:
+  https://github.com/blitz-js/blitz/issues/new/choose
+Also, this CLI may be slow as it's not yet optimized for speed`,
+  ),
+)
 
 let usageType: 'local' | 'monorepo' | 'global' | 'global-linked'
 
