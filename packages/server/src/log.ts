@@ -64,7 +64,7 @@ const meta = (msg: string) => {
  * @param {string} msg
  */
 const progress = (msg: string) => {
-  console.log(withCaret(chalk.whiteBright(msg)))
+  console.log(withCaret(chalk.bold(msg)))
 }
 
 const spinner = (str: string) => {

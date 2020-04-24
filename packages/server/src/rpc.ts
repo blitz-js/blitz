@@ -3,16 +3,13 @@ import {log} from './log'
 import {serializeError} from 'serialize-error'
 
 export function rpcHandler(
-  type: string,
+  _: string,
   name: string,
   resolver: (...args: any) => Promise<any>,
   connectDb?: () => any,
 ) {
   return async function (req: BlitzApiRequest, res: BlitzApiResponse) {
-    const logPrefix = `${name} ${type}`
-    if (req.method === 'POST') {
-      log.progress(`Running ${logPrefix} ${JSON.stringify(req.body)} `)
-    }
+    const logPrefix = `${name}`
 
     if (req.method === 'HEAD') {
       // Warm the lamda and connect to DB
@@ -22,10 +19,12 @@ export function rpcHandler(
       return res.status(200).end()
     } else if (req.method === 'POST') {
       // Handle RPC call
+      console.log('') // New line
+      log.progress(`Running ${logPrefix}(${JSON.stringify(req.body?.params, null, 2)})`)
 
       if (typeof req.body.params === 'undefined') {
         const error = {message: 'Request body is missing the `params` key'}
-        log.error(`${logPrefix} failed: ${JSON.stringify(error)}`)
+        log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
         return res.status(400).json({
           result: null,
           error,
@@ -35,13 +34,13 @@ export function rpcHandler(
       try {
         const result = await resolver(req.body.params)
 
-        log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result))}`)
+        log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
         return res.json({
           result,
           error: null,
         })
       } catch (error) {
-        log.error(`${logPrefix} failed unexpectedly: ${error}`)
+        log.error(`${logPrefix} failed: ${error}\n`)
         return res.json({
           result: null,
           error: serializeError(error),
@@ -49,7 +48,7 @@ export function rpcHandler(
       }
     } else {
       // Everything else is error
-      log.error(`${logPrefix} not found`)
+      log.error(`${logPrefix} not found\n`)
       return res.status(404).end()
     }
   }
