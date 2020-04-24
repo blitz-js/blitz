@@ -9,7 +9,7 @@ import MutationGenerator from '../generators/mutation'
 import PromptAbortedError from '../errors/prompt-aborted'
 import QueryGenerator from '../generators/query'
 // import ModelGenerator from '../generators/model'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/utils'
 import camelCase from 'camelcase'
 const debug = require('debug')('blitz:generate')
 

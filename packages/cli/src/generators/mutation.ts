@@ -1,6 +1,6 @@
 import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/utils'
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
   ModelName: string

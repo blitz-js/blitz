@@ -7,7 +7,7 @@ import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/utils'
 
 const themeColor = '6700AB'
 

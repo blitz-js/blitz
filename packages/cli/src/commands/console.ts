@@ -4,7 +4,7 @@ import path from 'path'
 import {REPLCommand, REPLServer} from 'repl'
 import {watch} from 'chokidar'
 import pkgDir from 'pkg-dir'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/utils'
 import chalk from 'chalk'
 
 // import {loadDependencies} from '../utils/load-dependencies'
