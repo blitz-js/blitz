@@ -16,7 +16,7 @@ function createOutputTransformer(manifest: Manifest, devFolder: string) {
       if (filepath) {
         const matchedPath = manifest.getByValue(filepath)
         if (matchedPath) {
-          process.stdout.write(data.replace(filepath, matchedPath))
+          next(null, data.replace(filepath, matchedPath))
           return
         }
       }
