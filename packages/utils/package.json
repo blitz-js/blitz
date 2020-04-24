@@ -26,11 +26,6 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
