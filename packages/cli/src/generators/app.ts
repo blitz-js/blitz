@@ -3,7 +3,7 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
-import {readJSONSync} from 'fs-extra'
+import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
@@ -43,18 +43,25 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    const pkg = readJSONSync(join(this.destinationPath(), 'package.json'))
+    const pkgJsonLocation = join(this.destinationPath(), 'package.json')
+    const pkg = readJSONSync(pkgJsonLocation)
     const pkgDependencies = Object.keys(pkg.dependencies)
     const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
     console.log('') // New line needed
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
-    await Promise.all([
-      replaceDependencies(pkg, this.destinationPath(), pkgDependencies, 'dependencies'),
-      replaceDependencies(pkg, this.destinationPath(), pkgDevDependencies, 'devDependencies'),
-      replaceBlitzDependency(pkg, this.destinationPath(), this.options.version),
+    const dependenciesArray = await Promise.all([
+      replaceDependencies(pkg, pkgDependencies, 'dependencies'),
+      replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
     ])
+
+    for (let i = 0; i < dependenciesArray.length; i++) {
+      const {key, dependencies} = dependenciesArray[i]
+      pkg[key] = replaceBlitzDependency(dependencies, this.options.version)
+    }
+
+    await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
     spinner.succeed()
 
