@@ -1,6 +1,6 @@
 {
   "name": "blitz",
-  "description": "Rails-like framework for monolithic, full-stack React apps without an API",
+  "description": "Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js",
   "version": "0.6.1",
   "license": "MIT",
   "scripts": {
