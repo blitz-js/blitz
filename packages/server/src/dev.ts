@@ -3,7 +3,7 @@ import {synchronizeFiles} from './synchronizer'
 import {ServerConfig, enhance} from './config'
 import {nextStartDev} from './next-utils'
 
-export async function dev(config: ServerConfig) {
+export async function dev(config: ServerConfig, readyForNextDev: Promise<any>) {
   const {
     rootFolder,
     nextBin,
@@ -20,14 +20,18 @@ export async function dev(config: ServerConfig) {
   const src = resolve(rootFolder)
   const dest = resolve(rootFolder, devFolder)
 
-  const {manifest} = await synchronizeFiles({
-    src,
-    dest,
-    watch,
-    ignoredPaths,
-    includePaths,
-    manifestPath,
-    writeManifestFile,
-  })
+  const [{manifest}] = await Promise.all([
+    synchronizeFiles({
+      src,
+      dest,
+      watch,
+      ignoredPaths,
+      includePaths,
+      manifestPath,
+      writeManifestFile,
+    }),
+    readyForNextDev,
+  ])
+
   nextStartDev(nextBin, dest, manifest, devFolder)
 }
