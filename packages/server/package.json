@@ -33,7 +33,6 @@
     "@types/pump": "^1.1.0",
     "cross-spawn": "^7.0.2",
     "fast-glob": "^3.2.2",
-    "find-parent-dir": "0.3.0",
     "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "merge-stream": "^2.0.0",
