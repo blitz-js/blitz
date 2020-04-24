@@ -3,7 +3,7 @@ import {synchronizeFiles} from './synchronizer'
 import {ServerConfig, enhance} from './config'
 import {nextStartDev} from './next-utils'
 
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any>) {
+export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
   const {
     rootFolder,
     nextBin,
