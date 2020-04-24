@@ -47,7 +47,8 @@ if (options._.length === 0 && (options.v || options.version)) {
   console.log('debug:', usageType)
   console.log('debug: pkgPath:', pkgPath, '\n')
   try {
-    console.log(`env: ${process.platform}-${process.arch} node-${process.version}`)
+    const osName = require('os-name')
+    console.log(`${osName()} ${process.platform}-${process.arch} node-${process.version}\n`)
 
     let globalInstallPath
     let localButGlobalLinked = usageType === 'local' && fs.existsSync(globalLinkedCLIPkgPath)

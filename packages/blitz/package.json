@@ -41,6 +41,7 @@
     "@blitzjs/cli": "0.6.0-canary.0",
     "@blitzjs/core": "0.5.2-alpha",
     "@blitzjs/server": "0.6.0-canary.0",
+    "os-name": "3.1.0",
     "pkg-dir": "4.2.0",
     "resolve-from": "5.0.0",
     "resolve-global": "1.0.0"
