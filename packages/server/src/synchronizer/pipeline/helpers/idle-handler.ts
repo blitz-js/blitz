@@ -1,10 +1,10 @@
 import {through} from '../../streams'
 
 /**
- * Ready handler is used to close the promise and will run when
+ * Idle handler is used to close the promise and will run when
  * The input stream does not have input for a set time
  * This is asssumed to happen only during watch mode.
- * Note the ready event will continually fire if the threshold is not met
+ * Note the idle event will continually fire if the threshold is not met
  */
 export default (handler: Function) => {
   let timeout: number
