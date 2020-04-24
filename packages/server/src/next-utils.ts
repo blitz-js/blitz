@@ -1,12 +1,12 @@
 import {spawn} from 'cross-spawn'
-import * as pty from 'node-pty'
 import {Manifest} from './synchronizer/pipeline/rules/manifest'
+import {through} from './synchronizer/streams'
 
-function transformOutput(_manifest: Manifest, _devFolder: string) {
-  return (data: any) => {
+function createOutputTransformer(manifest: Manifest, devFolder: string) {
+  const stream = through((data, _, next) => {
     const dataStr = data.toString()
 
-    const buildError = `ERROR\\sin\\s(${_devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`
+    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`
 
     const matches = new RegExp(buildError, 'g').exec(dataStr)
 
@@ -14,25 +14,32 @@ function transformOutput(_manifest: Manifest, _devFolder: string) {
       const [, filepath] = matches
 
       if (filepath) {
-        const matchedPath = _manifest.getByValue(filepath)
+        const matchedPath = manifest.getByValue(filepath)
         if (matchedPath) {
-          process.stdout.write(data.replace(filepath, matchedPath))
+          next(null, data.replace(filepath, matchedPath))
           return
         }
       }
     }
-    process.stdout.write(data)
-  }
+    next(null, data)
+  })
+
+  return {stream}
 }
 
 export async function nextStartDev(nextBin: string, cwd: string, manifest: Manifest, devFolder: string) {
-  const cb = pty
-    .spawn(nextBin, ['dev'], {
-      cwd,
-    })
-    .on('data', transformOutput(manifest, devFolder))
+  const transform = createOutputTransformer(manifest, devFolder).stream
 
-  return Promise.resolve(cb)
+  return new Promise((res, rej) => {
+    spawn(nextBin, ['dev'], {
+      cwd,
+      stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+    })
+      .on('exit', (code: number) => {
+        code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+      })
+      .on('error', rej)
+  })
 }
 
 export async function nextBuild(nextBin: string, cwd: string) {

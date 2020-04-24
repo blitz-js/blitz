@@ -1,6 +1,6 @@
 import {through} from './streams'
 import File from 'vinyl'
-import * as log from '../log'
+import {log} from '../log'
 import chalk from 'chalk'
 
 export type Event<T> = {type: string; payload: T}

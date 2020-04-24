@@ -1,9 +1,7 @@
-import {writeJSONSync} from 'fs-extra'
-import {join} from 'path'
+export const replaceBlitzDependency = (depends: Record<string, string>, cliVersion: string) => {
+  if (depends.blitz) {
+    depends.blitz = cliVersion.includes('canary') ? 'canary' : 'latest'
+  }
 
-export const replaceBlitzDependency = async (pkg: any, desinationPath: string, cliVersion: string) => {
-  const newVersion = cliVersion.includes('canary') ? 'canary' : 'latest'
-
-  pkg.dependencies.blitz = newVersion
-  writeJSONSync(join(desinationPath, 'package.json'), pkg, {spaces: 2})
+  return depends
 }

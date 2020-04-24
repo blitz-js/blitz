@@ -4,7 +4,7 @@
 
 Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build!
 
-If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to us.
+If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually it will be because this is very important to us.
 
 <br>
 
@@ -35,7 +35,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
-5. View your baby app at [https://localhost:3000](https://localhost:3000)
+5. View your baby app at [http://localhost:3000](http://localhost:3000)
 
 <br>
 
@@ -56,7 +56,7 @@ model Task {
   id          Int      @default(autoincrement()) @id
   name        String
   project     Project  @relation(fields: [projectId], references: [id])
-  projectId   Id
+  projectId   Int
 }
 ```
 
@@ -65,13 +65,13 @@ model Task {
 
 <br>
    
-### Generate the CRUD Files
+### Scaffold out all the files your basic CRUD actions
 
 _CRUD = create, read, update, delete_
 
-1. Run `blitz generate crud project`
-2. Run `blitz generate crud task --parent project`
-3. Open [https://localhost:3000/projects](https://localhost:3000/projects) to see the default project list page
+1. Run `blitz generate all project` to generate fully working queries, mutations, and pages
+2. Open [http://localhost:3000/projects](http://localhost:3000/projects) to see the default project list page
+3. Explore the generated pages and view, create, update, and delete projects.
 
 <br>
 
@@ -317,13 +317,13 @@ Will introspect the database defined in `db/schema.prisma` and automatically gen
 
 Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so you can easily see and change data in your database.
 
-#### `blitz generate crud MODEL [--parent MODEL]`
+#### `blitz generate -h`
 
-Generate all the CRUD files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+Generate different types of files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
 
 #### `blitz console`
 
-Start a Node.js REPL that's preloaded with your `db` object and all your queries and mutations. This is awesome for quickly trying your code without running the app.
+Start a Node.js REPL that's preloaded with your `db` object and all your queries and mutations. This is awesome for quickly trying your code without running the app!
 
 <br>
 
@@ -344,7 +344,6 @@ Here's the list of big things that are currently missing from Blitz but are top 
 - Authentication
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
-- `blitz new` including set up for testing, Prettier, ESLint, styling system (Tailwind, CSS-in-JS, etc)
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
@@ -369,6 +368,7 @@ How you can help:
 3. Send us feedback in the [Blitz slack](https://slack.blitzjs.com).
 4. Contribute code. We have a lot of issues that are ready to work on! Start by reading [The Contributing Guide](https://github.com/blitz-js/blitz/blob/canary/CONTRIBUTING.md). Let us know if you need help.
 5. Any way you want! We totally appreciate any type of contribution, such as documentation, videos, blog posts, etc. If you have a crazy idea, feel free to run it past us in Slack! :)
+6. [Sponsorships & donations](https://github.com/blitz-js/blitz#sponsors-and-donations)
 
 <br>
 
