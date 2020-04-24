@@ -5,6 +5,7 @@ import {log} from '@blitzjs/server'
 export interface AppGeneratorOptions extends GeneratorOptions {
   name: string
   pluralName: string
+  fileContext: string
 }
 
 class PageGenerator extends Generator<AppGeneratorOptions> {
@@ -23,7 +24,7 @@ class PageGenerator extends Generator<AppGeneratorOptions> {
       try {
         this.fs.copyTpl(
           this.sourcePath(path),
-          this.destinationPath(path.replace('.ejs', '').replace('__id__', '[id]')),
+          this.destinationPath(this.options.fileContext + path.replace('.ejs', '').replace('__id__', '[id]')),
           templateValues,
         )
       } catch (error) {

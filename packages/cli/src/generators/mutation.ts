@@ -5,6 +5,7 @@ import {log} from '@blitzjs/server'
 export interface AppGeneratorOptions extends GeneratorOptions {
   name: string
   pluralName: string
+  fileContext: string
 }
 
 class MutationGenerator extends Generator<AppGeneratorOptions> {
@@ -21,7 +22,12 @@ class MutationGenerator extends Generator<AppGeneratorOptions> {
 
     for (let path of paths) {
       try {
-        this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
+        console.log(this.options.fileContext, path)
+        this.fs.copyTpl(
+          this.sourcePath(path),
+          this.destinationPath(this.options.fileContext + path.replace('.ejs', '')),
+          templateValues,
+        )
       } catch (error) {
         log.error('Error generating' + path)
         throw error

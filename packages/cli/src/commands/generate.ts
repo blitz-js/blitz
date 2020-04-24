@@ -186,10 +186,18 @@ blitz generate page task -c=taskManager`,
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           sourceRoot: path.join(__dirname, `../../templates/${GeneratorClass.template}`),
-          destinationRoot: path.resolve('app', fileRoot, GeneratorClass.subdirectory, ...nestedContextPaths),
+          destinationRoot: path.resolve(),
           name: capitalize(singularRootContext),
           pluralName: capitalize(pluralRootContext),
           dryRun: flags['dry-run'],
+          // provide the file context as a relative path to the current directory (with a slash appended)
+          // to generate files without changing the current directory. This allows yeoman to print out the
+          // full file path rather than the current path
+          fileContext:
+            path.relative(
+              path.resolve(),
+              path.resolve('app', fileRoot, GeneratorClass.subdirectory, ...nestedContextPaths),
+            ) + '/',
         })
         await generator.run()
       }
