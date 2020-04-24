@@ -1,7 +1,6 @@
 import Generator, {GeneratorOptions} from '../generator'
 import enquirer from 'enquirer'
 import path from 'path'
-import {log} from '@blitzjs/server'
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   ModelName: string

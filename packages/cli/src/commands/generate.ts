@@ -21,7 +21,7 @@ enum ResourceType {
   Mutation = 'mutations',
   Page = 'pages',
   Query = 'queries',
-  Resource = 'resource',
+  // Resource = 'resource',
 }
 
 interface Flags {
@@ -157,16 +157,16 @@ export default class Generate extends Command {
     try {
       let fileRoot: string
       let singularRootContext: string
-      let pluralRootContext: string
+      // let pluralRootContext: string
       let nestedContextPaths: string[] = []
       // otherwise, validate the provided path, prompting the user if it's absent or invalid
       if (!flags.context) {
         if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
           singularRootContext = modelName(args.model)
-          fileRoot = pluralRootContext = modelNames(args.model)
+          fileRoot = modelNames(args.model)
         } else {
           singularRootContext = modelName(args.model)
-          fileRoot = pluralRootContext = modelNames(args.model)
+          fileRoot = modelNames(args.model)
         }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
@@ -178,13 +178,13 @@ export default class Generate extends Command {
             )}'?`,
           )
           singularRootContext = modelName(args.model)
-          fileRoot = pluralRootContext = modelNames(args.model)
+          fileRoot = modelNames(args.model)
         } else {
           // @ts-ignore shift can technically return undefined, but we already know the array isn't empty
           // so we can bypass the check
           fileRoot = modelNames(contextParts.shift())
           singularRootContext = modelName(args.model)
-          pluralRootContext = modelNames(args.model)
+          // pluralRootContext = modelNames(args.model)
           nestedContextPaths = [...contextParts, pluralize(args.model)]
         }
       }
