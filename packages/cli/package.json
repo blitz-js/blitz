@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.6.0-alpha",
+  "version": "0.6.0",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -54,7 +54,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.6.0-alpha",
+    "@blitzjs/server": "0.6.0",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.2",
