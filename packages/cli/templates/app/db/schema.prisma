@@ -15,7 +15,7 @@ generator client {
 
 //model User {
 //  id      Int      @default(autoincrement()) @id
-//  email   String   @unique
+//  email   String?   @unique
 //  name    String?
 //}
 
