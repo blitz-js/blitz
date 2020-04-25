@@ -31,6 +31,14 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 
 <br>
 
+### :tada: Alpha Release Now Available :tada:
+
+1. `npm i -g blitz`
+2. `blitz new myapp`
+3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
+
+<br>
+
 **Features:**<br>
 ⚡️ Built on Next.js<br>
 ⚡️ Don't have to build an API for client-side rendering<br>
@@ -49,14 +57,6 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 ⚡️ Plugins for easily adding libraries like Tailwind, CSS-in-JS, etc.<br>
 ⚡️ React native support<br>
 ⚡️ GUI so you don't have to use the CLI<br>
-
-<br>
-
-### :tada: Alpha Release Now Available :tada:
-
-1. `npm i -g blitz`
-2. `blitz new myapp`
-3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
 <br>
 
