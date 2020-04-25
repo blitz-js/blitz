@@ -55,6 +55,7 @@ After you contribute in any way, please add yourself as a contributor via the [@
 **1.** Clone the repo
 
 ```sh
+# If you didn't fork the repo use blitz-js as the USERNAME
 git clone git@github.com:USERNAME/blitz.git
 cd blitz
 ```
