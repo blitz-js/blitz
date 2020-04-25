@@ -1,5 +1,5 @@
 import * as path from 'path'
-import {resolveBinAsync} from '@blitzjs/server'
+import {resolveBinAsync} from '@blitzjs/utils'
 
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {

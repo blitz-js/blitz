@@ -1,5 +1,5 @@
 import File from 'vinyl'
-import {through, pipeline} from '../../../streams'
+import {streams} from '@blitzjs/utils'
 import {dest} from 'vinyl-fs'
 import gulpIf from 'gulp-if'
 import {resolve} from 'path'
@@ -68,7 +68,7 @@ export class Manifest {
 }
 
 const setManifestEntry = (manifest: Manifest) => {
-  const stream = through({objectMode: true}, (file: File, _, next) => {
+  const stream = streams.through({objectMode: true}, (file: File, _, next) => {
     const [origin] = file.history
     const dest = file.path
     if (file.event === 'add' || file.event === 'change') {
@@ -85,7 +85,7 @@ const setManifestEntry = (manifest: Manifest) => {
 }
 
 const createManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) => {
-  const stream = through({objectMode: true}, (_, __, next) => {
+  const stream = streams.through({objectMode: true}, (_, __, next) => {
     const manifestFile = new File({
       path: fileName,
       contents: Buffer.from(manifest.toJson(compact)),
@@ -103,7 +103,7 @@ const createManifestFile = (manifest: Manifest, fileName: string, compact: boole
 // TODO: Offload the file writing to later and write with all the other file writing
 const create: Rule = ({config}) => {
   const manifest = Manifest.create()
-  const stream = pipeline(
+  const stream = streams.pipeline(
     setManifestEntry(manifest).stream,
     createManifestFile(manifest, resolve(config.cwd, config.manifest.path)).stream,
     gulpIf(config.manifest.write, dest(config.src)),

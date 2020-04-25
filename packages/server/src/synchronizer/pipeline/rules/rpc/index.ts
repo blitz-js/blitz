@@ -1,7 +1,7 @@
 import File from 'vinyl'
 import {absolutePathTransform} from '../../utils'
 import {relative} from 'path'
-import {through} from '../../../streams'
+import {streams} from '@blitzjs/utils'
 import {Rule} from '../../../types'
 
 /**
@@ -13,7 +13,7 @@ const create: Rule = function configure({config: {src}}) {
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
 
-  const stream = through({objectMode: true}, function (file, _, next) {
+  const stream = streams.through({objectMode: true}, function (file, _, next) {
     if (!isRpcPath(file.path)) {
       next(null, file)
       return

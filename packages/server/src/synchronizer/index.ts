@@ -1,5 +1,5 @@
 import {Manifest} from './pipeline/rules/manifest'
-import {pipe} from './streams'
+import {streams} from '@blitzjs/utils'
 import createPipeline from './pipeline'
 import agnosticSource from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
@@ -66,7 +66,7 @@ export async function synchronizeFiles({
     const source = agnosticSource({cwd: src, include, ignore, watch})
     const fileTransformPipeline = createPipeline(config, readyHandler, errors.stream, reporter.stream)
 
-    pipe(source.stream, fileTransformPipeline.stream, catchErrors)
+    streams.pipe(source.stream, fileTransformPipeline.stream, catchErrors)
   })
 }
 

@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {streams} from '@blitzjs/utils'
 
 /**
  * Ready handler is used to close the promise and will run when
@@ -18,7 +18,7 @@ export default (handler: Function) => {
     clearTimeout(timeout)
   }
 
-  const stream = through({objectMode: true}, function (f, _, next) {
+  const stream = streams.through({objectMode: true}, function (f, _, next) {
     resetTimeout()
     next(null, f)
   })

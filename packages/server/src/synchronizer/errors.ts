@@ -1,5 +1,5 @@
 import {log} from '@blitzjs/utils'
-import {through} from './streams'
+import {streams} from '@blitzjs/utils'
 import {Writable} from 'stream'
 import {ERROR_THROWN} from './reporter'
 
@@ -11,7 +11,7 @@ type Error = DuplicatePathError | NestedRouteError
  * Returns an object with a stream that takes operational errors and prepares them for the console.
  */
 export default function createErrorsStream(reporter: Writable) {
-  const stream = through({objectMode: true}, (err: Error, _, next) => {
+  const stream = streams.through({objectMode: true}, (err: Error, _, next) => {
     reporter.write({type: ERROR_THROWN, payload: err})
 
     if (err instanceof DuplicatePathError) {

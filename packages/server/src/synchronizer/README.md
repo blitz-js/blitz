@@ -179,7 +179,7 @@ const stream = pipeline(
 ```
 
 ```ts
-import {through} from './streams'
+import {through} from '@blitzjs/utils'
 
 // Typical Rule
 export default ({config, input, errors, getInputCache}) => {

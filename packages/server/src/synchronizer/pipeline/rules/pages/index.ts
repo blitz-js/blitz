@@ -1,6 +1,6 @@
 import {join} from 'path'
 import File from 'vinyl'
-import {through} from '../../../streams'
+import {streams} from '@blitzjs/utils'
 import {getDuplicatePaths, absolutePathTransform} from '../../utils'
 import {RuleArgs} from '../../../types'
 import {DuplicatePathError, NestedRouteError} from '../../../errors'
@@ -15,7 +15,7 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
-  const stream = through.obj((file: File, _, next) => {
+  const stream = streams.through.obj((file: File, _, next) => {
     const entries = getInputCache().toPaths()
 
     // Check for duplicate pages entries

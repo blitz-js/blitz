@@ -1,6 +1,6 @@
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
-import {resolveBinAsync} from './resolve-bin-async'
+import {resolveBinAsync} from '@blitzjs/utils'
 
 export type ServerConfig = {
   rootFolder: string

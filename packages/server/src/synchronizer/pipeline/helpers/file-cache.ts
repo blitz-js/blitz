@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {streams} from '@blitzjs/utils'
 import File from 'vinyl'
 
 type FileCacheEntry = {path: string}
@@ -55,7 +55,7 @@ export class FileCache {
 export default (filter: (a: File) => boolean = () => true) => {
   const cache = FileCache.create()
 
-  const stream = through({objectMode: true, highWaterMark: 1}, (file, _, next) => {
+  const stream = streams.through({objectMode: true, highWaterMark: 1}, (file, _, next) => {
     // Don't cache files that dont match the filter
     if (!filter(file)) {
       return next(null, file)

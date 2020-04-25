@@ -1,6 +1,6 @@
 // Mostly concerned with solving the Dirty Sync problem
 
-import {through} from '../../streams'
+import {streams} from '@blitzjs/utils'
 
 import File from 'vinyl'
 
@@ -15,12 +15,12 @@ export default () => {
 
   const stats = {todo, done}
 
-  const reportComplete = through({objectMode: true}, (file: File, _, next) => {
+  const reportComplete = streams.through({objectMode: true}, (file: File, _, next) => {
     done.push(file.hash)
     next(null, file)
   })
 
-  const triage = through({objectMode: true}, function (file: File, _, next) {
+  const triage = streams.through({objectMode: true}, function (file: File, _, next) {
     // Dont send files that have already been done or have already been added
     if (done.includes(file.hash) || todo.includes(file.hash)) {
       process.env.DEBUG && console.log('Rejecting because this job has been done before: ' + file.path)

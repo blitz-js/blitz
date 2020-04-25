@@ -1,6 +1,5 @@
-import {through} from './streams'
 import File from 'vinyl'
-import {log} from '@blitzjs/utils'
+import {log, streams} from '@blitzjs/utils'
 import chalk from 'chalk'
 
 export type Event<T> = {type: string; payload: T}
@@ -19,7 +18,7 @@ export default function createReporter() {
 
   let spinner = log.spinner('Preparing for launch').start()
 
-  const stream = through({objectMode: true}, (event: Event<File>, _, next) => {
+  const stream = streams.through({objectMode: true}, (event: Event<File>, _, next) => {
     switch (event.type) {
       case FILE_WRITTEN: {
         const filePath = event.payload.history[0].replace(process.cwd(), '')

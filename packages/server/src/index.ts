@@ -5,6 +5,5 @@ export {prod} from './prod'
 export {Manifest} from './synchronizer/pipeline/rules/manifest'
 export {ManifestLoader} from './synchronizer/manifest-loader'
 export {enhance} from './config'
-export {resolveBinAsync} from './resolve-bin-async'
 
 export * from './rpc'

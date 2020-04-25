@@ -2,7 +2,7 @@ import {pathExistsSync} from 'fs-extra'
 import {resolve} from 'path'
 import File from 'vinyl'
 
-import {through} from '../../../streams'
+import {streams} from '@blitzjs/utils'
 import {Rule} from '../../../types'
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
@@ -50,7 +50,7 @@ module.exports = withBlitz(config);
   }
 
   // No need to filter yet
-  const stream = through({objectMode: true}, (file: File, _, next) => {
+  const stream = streams.through({objectMode: true}, (file: File, _, next) => {
     if (!isNextConfigPath(file.path)) return next(null, file)
     // Zeit now adds configuration needed for Now, like serverless target,
     // so we need to keep and use that

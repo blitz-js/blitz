@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {streams} from '@blitzjs/utils'
 import crypto from 'crypto'
 
 /**
@@ -8,7 +8,7 @@ import crypto from 'crypto'
  * way files are handled and optimized
  */
 export default () => {
-  const stream = through({objectMode: true}, (file, _, next) => {
+  const stream = streams.through({objectMode: true}, (file, _, next) => {
     // Don't send directories
     if (file.isDirectory()) {
       return next()

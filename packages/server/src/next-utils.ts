@@ -1,9 +1,9 @@
 import {spawn} from 'cross-spawn'
 import {Manifest} from './synchronizer/pipeline/rules/manifest'
-import {through} from './synchronizer/streams'
+import {streams} from '@blitzjs/utils'
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
-  const stream = through((data, _, next) => {
+  const stream = streams.through((data, _, next) => {
     const dataStr = data.toString()
 
     const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`

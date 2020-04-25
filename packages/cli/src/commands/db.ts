@@ -3,7 +3,7 @@ import {flags} from '@oclif/command'
 import {Command} from '@oclif/command'
 import chalk from 'chalk'
 import * as path from 'path'
-import {resolveBinAsync} from '@blitzjs/server'
+import {resolveBinAsync} from '@blitzjs/utils'
 
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`

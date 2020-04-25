@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {streams} from '@blitzjs/utils'
 import vfs from 'vinyl-fs'
 import mergeStream from 'merge-stream'
 // import chokidar from 'chokidar'
@@ -18,7 +18,7 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
     return resolve(options.cwd || process.cwd(), filepath)
   }
 
-  const stream = through({objectMode: true}, () => {})
+  const stream = streams.through({objectMode: true}, () => {})
 
   function processEvent(evt: string) {
     return async (filepath: string, _stat: Stats) => {
@@ -51,7 +51,7 @@ type SourceConfig = {cwd: string; include: string[]; ignore: string[]; watch: bo
  * @param config Config object
  */
 export default function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
-  const noop = through({objectMode: true}, () => {})
+  const noop = streams.through({objectMode: true}, () => {})
 
   const vinylFsStream = vfs.src([...include, ...ignore.map((a) => '!' + a)], {
     buffer: true,

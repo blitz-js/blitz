@@ -1,4 +1,4 @@
-import {pipeline, through} from '../streams'
+import {streams} from '@blitzjs/utils'
 import {RuleConfig, RuleArgs} from '../types'
 import createFileEnricher from './helpers/enrich-files'
 import createFileCache from './helpers/file-cache'
@@ -12,7 +12,7 @@ import createRuleWrite from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
 
-const input = through({objectMode: true}, (f, _, next) => next(null, f))
+const input = streams.through({objectMode: true}, (f, _, next) => next(null, f))
 
 /**
  * Creates a pipeline stream that transforms files.
@@ -50,7 +50,7 @@ export default function createPipeline(
   const ruleWrite = createRuleWrite(api)
   const ruleManifest = createRuleManifest(api)
 
-  const stream = pipeline(
+  const stream = streams.pipeline(
     input,
 
     // Preparing files
