@@ -14,7 +14,7 @@ Blitz is built by and for the community. There's no large company sponsoring dev
 
 ### Our Codebase is a Garden
 
-The Blitz codebase is like a community garden. There's a lot of beautiful plants and vegitables, but it won't take long until you find some weeds! When you find weeds, please remove them :) Minor refactoring is always encouraged. If you'd like to do some major refactoring, it's best to first either open an issue or check with us in Slack. Most likely we'll agree with you.
+The Blitz codebase is like a community garden. There's a lot of beautiful plants and vegetables, but it won't take long until you find some weeds! When you find weeds, please remove them :) Minor refactoring is always encouraged. If you'd like to do some major refactoring, it's best to first either open an issue or check with us in Slack. Most likely we'll agree with you.
 
 <br>
 
