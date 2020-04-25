@@ -1,3 +1,25 @@
-#!/usr/bin/env node
+#!/bin/bash
+# copied from https://github.com/nxtep-io/ts-framework-cli/blob/master/bin/ts-framework
 
-require('../dist/cli')
+set +x;
+set -e;
+opts="--experimental-repl-await"
+
+SOURCE="${BASH_SOURCE[0]}"
+
+# Resolve $SOURCE until the file is no longer a symlink
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+
+  # if $SOURCE was a relative symlink, we need to resolve it relative
+  # to the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" #
+done
+
+# Prepare script paths
+parent_path="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+base_path=$( expr "$parent_path" : "\(.*\)\/bin" );
+
+# Run node with experimental REPL await flag for interactive console
+node $(echo $opts) "$base_path/bin/bin" $@
