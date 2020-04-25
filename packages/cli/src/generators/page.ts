@@ -24,8 +24,6 @@ class PageGenerator extends Generator<PageGeneratorOptions> {
     }
 
     const paths = readDirRecursive(this.sourcePath())
-    console.log(this.options.fileContext)
-    console.log(paths)
 
     for (let path of paths) {
       try {

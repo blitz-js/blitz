@@ -1,4 +1,4 @@
-import {Head} from '@blitzjs/core'
+import {Head, Link} from 'blitz'
 
 const Home = () => (
   <div className="container">
@@ -11,10 +11,31 @@ const Home = () => (
       <div className="logo">
         <img src="/logo.png" alt="blitz.js" />
       </div>
-      <p>Get started by editing this page:</p>
+      <p>
+        1. Add this code to <strong>db/schema.prisma</strong>:
+      </p>
       <pre>
-        <code>/app/pages/index.tsx</code>
+        <code>
+          {`model User {
+  id      Int      @default(autoincrement()) @id
+  name    String?
+}`}
+        </code>
       </pre>
+      <p>2. Run these commands in your terminal:</p>
+      <pre>
+        <code>
+          {`$ blitz db migrate
+$ blitz generate all user`}
+        </code>
+      </pre>
+
+      <p>
+        3. Go to{' '}
+        <Link href="/users">
+          <a>/users</a>
+        </Link>
+      </p>
       <div className="buttons">
         <a
           className="button"
@@ -67,6 +88,10 @@ const Home = () => (
         align-items: center;
       }
 
+      main p {
+        font-size: 1.2rem;
+      }
+
       footer {
         width: 100%;
         height: 60px;
@@ -83,7 +108,7 @@ const Home = () => (
         align-items: center;
       }
 
-      a {
+      footer a {
         color: #f4f4f4;
         text-decoration: none;
       }
@@ -93,7 +118,7 @@ const Home = () => (
       }
 
       .logo img {
-        width: 400px;
+        width: 300px;
       }
 
       .buttons {
@@ -126,11 +151,13 @@ const Home = () => (
         color: #45009d;
       }
 
-      code {
+      pre {
         background: #fafafa;
         border-radius: 5px;
         padding: 0.75rem;
-        font-size: 1.1rem;
+      }
+      code {
+        font-size: 0.9rem;
         font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
           Bitstream Vera Sans Mono, Courier New, monospace;
       }
