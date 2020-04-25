@@ -50,10 +50,12 @@ After you contribute in any way, please add yourself as a contributor via the [@
 
 #### Repo Setup
 
+**0.** Fork the repo
+
 **1.** Clone the repo
 
-```
-git clone git@github.com:blitz-js/blitz.git
+```sh
+git clone git@github.com:USERNAME/blitz.git
 cd blitz
 ```
 
@@ -73,6 +75,13 @@ yarn dev
 
 ```
 yarn test
+```
+
+#### Sync your fork
+
+```sh
+./scripts/fetchRemote.sh
+git merge upstream/canary
 ```
 
 #### Link the Blitz CLI (Optional)
