@@ -8,6 +8,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['/templates/'],
   modulePathIgnorePatterns: ['tmp', 'lib'],
   testPathIgnorePatterns: ['src/commands/test.ts'],
+  testTimeout: 10000,
   // TODO enable threshold
   // coverageThreshold: {
   //   global: {
