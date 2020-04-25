@@ -1,3 +1,3 @@
-#!/usr/bin/env node --experimental-repl-await
+#!/usr/bin/env node
 
 require('@blitzjs/cli').run()
