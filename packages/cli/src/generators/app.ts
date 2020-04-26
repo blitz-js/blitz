@@ -5,9 +5,9 @@ import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
-import {replaceDependencies} from '../utils/replace-dependencies'
-import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
+import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
+import { getBlitzDependencyVersion } from 'src/utils/get-blitz-dependency-version'
 
 const themeColor = '6700AB'
 
@@ -45,21 +45,14 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   async postWrite() {
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
-    const pkgDependencies = Object.keys(pkg.dependencies)
-    const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
     console.log('') // New line needed
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
-    const dependenciesArray = await Promise.all([
-      replaceDependencies(pkg, pkgDependencies, 'dependencies'),
-      replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
-    ])
+    pkg.dependencies = await fetchLatestVersionsFor(pkg.dependencies);
+    pkg.devDependencies = await fetchLatestVersionsFor(pkg.devDependencies);
 
-    for (let i = 0; i < dependenciesArray.length; i++) {
-      const {key, dependencies} = dependenciesArray[i]
-      pkg[key] = replaceBlitzDependency(dependencies, this.options.version)
-    }
+    pkg.dependencies.blitz = getBlitzDependencyVersion(this.options.version);
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
