@@ -1,4 +1,4 @@
-import {through} from '../../../streams'
+import {streams} from '@blitzjs/utils'
 import File from 'vinyl'
 import {Rule} from '../../../types'
 import path from 'path'
@@ -8,7 +8,7 @@ import path from 'path'
  * Returns a Rule that converts relative files paths to absolute
  */
 const create: Rule = () => {
-  const stream = through({objectMode: true}, (file: File, _, next) => {
+  const stream = streams.through({objectMode: true}, (file: File, _, next) => {
     const cwd = process.cwd()
     const filecontents = file.contents
     const filepath = file.path
