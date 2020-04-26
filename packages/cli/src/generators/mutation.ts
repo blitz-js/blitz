@@ -1,6 +1,7 @@
 import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
 import {log} from '@blitzjs/server'
+import {join} from 'path'
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -28,7 +29,15 @@ class MutationGenerator extends Generator<MutationGeneratorOptions> {
       try {
         this.fs.copyTpl(
           this.sourcePath(path),
-          this.destinationPath(this.options.fileContext + path.replace('.ejs', '')),
+          this.destinationPath(
+            join(
+              this.options.fileContext,
+              path
+                .replace('.ejs', '')
+                .replace('__ModelName__', this.options.ModelName)
+                .replace('__ModelNames__', this.options.ModelNames),
+            ),
+          ),
           templateValues,
         )
       } catch (error) {

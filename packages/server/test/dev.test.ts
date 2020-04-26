@@ -16,6 +16,7 @@ const originalLog = console.log
 import {dev} from '../src/dev'
 import {join, resolve} from 'path'
 import {remove, pathExists} from 'fs-extra'
+import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import * as pkgDir from 'pkg-dir'
 
@@ -33,9 +34,37 @@ describe('Dev command', () => {
 
   afterEach(async () => {
     console.log = originalLog
+
     if (await pathExists(devFolder)) {
       await remove(devFolder)
     }
+  })
+
+  describe('throw in nextStartDev', () => {
+    beforeEach(() => {
+      nextUtilsMock.nextStartDev.mockRejectedValue('pow')
+    })
+
+    afterEach(() => {
+      nextUtilsMock.nextStartDev.mockReturnValue(Promise.resolve())
+    })
+
+    it('should blow up', (done) => {
+      const mockSynchronizer = () => Promise.resolve({manifest: Manifest.create()})
+      ;(async () => {
+        try {
+          await dev({
+            synchronizer: mockSynchronizer,
+            rootFolder: '',
+            writeManifestFile: false,
+            watch: false,
+          })
+        } catch (err) {
+          expect(err).toBe('pow')
+          done()
+        }
+      })()
+    })
   })
 
   describe('when with next.config', () => {

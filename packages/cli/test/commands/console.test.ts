@@ -1,7 +1,7 @@
 import * as repl from 'repl'
 import * as chokidar from 'chokidar'
 import ConsoleCmd from '../../src/commands/console'
-import {BLITZ_MODULE_PATHS} from '../../src/utils/load-blitz'
+import {getBlitzModulePaths} from '../../src/utils/load-blitz'
 import {REPLServer} from 'repl'
 import {FSWatcher} from 'chokidar'
 
@@ -43,6 +43,6 @@ describe('Console command', () => {
     expect(mockRepl.defineCommand).toBeCalledWith('reload', ConsoleCmd.commands.reload)
 
     // expect(chokidar.watch).toBeCalledWith('package.json')
-    expect(chokidar.watch).toBeCalledWith(BLITZ_MODULE_PATHS)
+    expect(chokidar.watch).toBeCalledWith(getBlitzModulePaths())
   })
 })
