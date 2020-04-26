@@ -23,8 +23,8 @@ interface Options<T> extends QueryOptions<T> {
 }
 
 type RestReactQueryResult<T extends QueryFn, O extends Options<any>> = O['paginated'] extends true
-  ? Omit<PaginatedQueryResult<T>, 'resolvedData'>
-  : Omit<QueryResult<T>, 'data'>
+  ? Omit<PaginatedQueryResult<PromiseReturnType<T>>, 'resolvedData'>
+  : Omit<QueryResult<PromiseReturnType<T>>, 'data'>
 
 export function useQuery<T extends QueryFn, O extends Options<T>>(
   queryFn: T,
