@@ -1,5 +1,5 @@
 import {resolve} from 'path'
-import {synchronizeFiles} from './synchronizer'
+import {synchronizeFiles as defaultSynchronizer} from './synchronizer'
 import {ServerConfig, enhance} from './config'
 import {nextStartDev} from './next-utils'
 
@@ -12,6 +12,7 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     manifestPath,
     writeManifestFile,
     includePaths,
+    synchronizer: synchronizeFiles = defaultSynchronizer,
     watch = true,
   } = await enhance({
     ...config,
