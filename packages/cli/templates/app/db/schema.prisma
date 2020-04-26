@@ -13,9 +13,8 @@ generator client {
 
 // --------------------------------------
 
-//model User {
-//  id      Int      @default(autoincrement()) @id
-//  email   String?   @unique
-//  name    String?
+//model Project {
+//  id        Int      @default(autoincrement()) @id
+//  name      String
 //}
 
