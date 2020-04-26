@@ -3,7 +3,7 @@ import {Head, Link} from 'blitz'
 const Home = () => (
   <div className="container">
     <Head>
-      <title><%= name %></title>
+      <title>__name__</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 

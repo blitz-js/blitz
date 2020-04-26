@@ -3914,6 +3914,19 @@ bl@^4.0.1:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+blitz@latest:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/blitz/-/blitz-0.6.6.tgz#28943722cf11f8c554e3c90de5c0f4a2b79585f2"
+  integrity sha512-oeNw2NJmO1NP9VteZhD1UpJG0YNVe19HDyh7QOSNnkjtnSBJds5hKdetfiRmgryQbgoiCUJfWw6qd0in5Xpq8g==
+  dependencies:
+    "@blitzjs/cli" "0.6.6"
+    "@blitzjs/core" "0.6.6"
+    "@blitzjs/server" "0.6.6"
+    os-name "^3.1.0"
+    pkg-dir "^4.2.0"
+    resolve-from "^5.0.0"
+    resolve-global "^1.0.0"
+
 bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"

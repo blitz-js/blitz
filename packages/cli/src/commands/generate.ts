@@ -185,7 +185,7 @@ export default class Generate extends Command {
           fileRoot = modelNames(contextParts.shift())
           singularRootContext = modelName(args.model)
           // pluralRootContext = modelNames(args.model)
-          nestedContextPaths = [...contextParts, pluralize(args.model)]
+          nestedContextPaths = [...contextParts, modelNames(args.model)]
         }
       }
 
@@ -205,7 +205,7 @@ export default class Generate extends Command {
           fileContext:
             path.relative(
               path.resolve(),
-              path.resolve('app', fileRoot, GeneratorClass.subdirectory, ...nestedContextPaths),
+              path.resolve('app', fileRoot, GeneratorClass.subdirectory, fileRoot, ...nestedContextPaths),
             ) + '/',
         })
         await generator.run()
