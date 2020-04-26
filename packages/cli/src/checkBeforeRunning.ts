@@ -1,15 +1,36 @@
 import {Hook} from '@oclif/config'
-import {readFile} from 'fs-extra'
+import isBlitzRoot, {IsBlitzRootError} from './utils/is-blitz-root'
+import chalk from 'chalk'
 
 const whitelistGlobal = ['new']
 
 const hook: Hook<'init'> = async function (options) {
   if (options.id && whitelistGlobal.includes(options.id)) return
 
-  try {
-    await readFile('blitz.config.js')
-  } catch (err) {
-    this.error(`It appears that you're not running in a blitz project`)
+  const {err, message, depth} = await isBlitzRoot()
+
+  if (err) {
+    switch (message) {
+      case IsBlitzRootError.notBlitz:
+        this.log(
+          `You are not inside a Blitz project, so this command won't work.\nYou can create a new app with ${chalk.bold(
+            'blitz new myapp',
+          )} or see help with ${chalk.bold('')}`,
+        )
+        return this.error('Not in correct folder')
+      case IsBlitzRootError.notRoot:
+        const help = depth
+          ? `\nUse ${chalk.bold('cd ' + '../'.repeat(depth))} to get to the root of your project`
+          : ''
+
+        return this.error(
+          `You are currently in a sub-folder of your Blitz app, but this command must be used from the root of your project.${help}`,
+        )
+      case IsBlitzRootError.badPackageJson:
+        return this.error(`Reading package.json file`)
+      default:
+        return this.error(`An error occurred`)
+    }
   }
 }
 
