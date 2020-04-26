@@ -4,6 +4,7 @@ import {
   PaginatedQueryResult,
   QueryResult,
   QueryOptions,
+  AnyQueryKey,
 } from 'react-query'
 
 /**
@@ -22,40 +23,29 @@ interface Options<T> extends QueryOptions<T> {
   paginated?: boolean
 }
 
-type RestReactQueryResult<O extends Options<any>> = O['paginated'] extends true
-  ? Omit<PaginatedQueryResult<O>, 'resolvedData'>
-  : Omit<QueryResult<O>, 'data'>
-
-// interface QueryFn {
-//   (...args: any): Promise<any>
-//   cacheKey: string
-// }
+type RestReactQueryResult<T extends QueryFn, O extends Options<any>> = O['paginated'] extends true
+  ? Omit<PaginatedQueryResult<T>, 'resolvedData'>
+  : Omit<QueryResult<T>, 'data'>
 
 export function useQuery<T extends QueryFn, O extends Options<T>>(
   queryFn: T,
   params?: any,
   options?: O,
-): [PromiseReturnType<T>, RestReactQueryResult<O>] {
-  const config = {
+): [PromiseReturnType<T>, RestReactQueryResult<T, O>] {
+  const queryKey: [string, any] = [(queryFn as any).cacheKey, params]
+  const queryFunction = (_: any, params: any) => queryFn(params)
+  const queryOptions = {
     suspense: true,
     retry: process.env.NODE_ENV === 'production' ? 3 : false,
     ...options,
   }
 
   if (options?.paginated) {
-    const {resolvedData, ...rest} = usePaginatedReactQuery(
-      [(queryFn as any).cacheKey, params],
-      (_, params) => queryFn(params),
-      config,
-    )
-    return [resolvedData as PromiseReturnType<T>, rest as any]
+    const {resolvedData, ...rest} = usePaginatedReactQuery(queryKey, queryFunction, queryOptions)
+    return [resolvedData as PromiseReturnType<T>, rest as RestReactQueryResult<T, O>]
   }
 
-  const {data, ...rest} = useReactQuery(
-    [(queryFn as any).cacheKey, params],
-    (_, params) => queryFn(params),
-    config,
-  )
+  const {data, ...rest} = useReactQuery(queryKey, queryFunction, queryOptions)
 
-  return [data as PromiseReturnType<T>, rest as any]
+  return [data as PromiseReturnType<T>, rest as RestReactQueryResult<T, O>]
 }
