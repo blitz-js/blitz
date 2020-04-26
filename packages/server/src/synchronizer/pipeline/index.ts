@@ -49,7 +49,7 @@ export default function createPipeline(
   const ruleRpc = createRuleRpc(api)
   const ruleConfig = createRuleConfig(api)
   const ruleRelative = createRuleRelative(api)
-  const ruleWrite = createRuleWrite(api) // TODO: Why is this a rule
+  const ruleWrite = createRuleWrite(api)
   const ruleManifest = createRuleManifest(api)
 
   const stream = pipeline(
