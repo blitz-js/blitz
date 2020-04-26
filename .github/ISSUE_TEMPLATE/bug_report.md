@@ -6,17 +6,19 @@ labels: ''
 assignees: ''
 ---
 
-**What is the problem?**
+#### What is the problem?
 
-**Steps to Reproduce:**
 
-1. 2.
+#### Steps to Reproduce:
 
-**Versions:**
+1.
+2.
+
+#### Versions:
 
 ```
-[Add the output of `blitz -v` here]
+[Add the output of `blitz --version --verbose` here]
 ```
 
-**Supporting Documentation**
+#### Supporting Documentation
 Please include applicable logs and screenshots that show your problem.
