@@ -8,7 +8,10 @@ const Products = () => {
   const [page, setPage] = useState(0)
   const [products] = useQuery(
     getProducts,
-    {skip: ITEMS_PER_PAGE * page, first: ITEMS_PER_PAGE},
+    {
+      skip: ITEMS_PER_PAGE * page,
+      first: ITEMS_PER_PAGE,
+    },
     {paginated: true},
   )
 

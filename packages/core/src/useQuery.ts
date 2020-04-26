@@ -4,7 +4,6 @@ import {
   PaginatedQueryResult,
   QueryResult,
   QueryOptions,
-  AnyQueryKey,
 } from 'react-query'
 
 /**
@@ -32,8 +31,8 @@ export function useQuery<T extends QueryFn, O extends Options<T>>(
   params?: any,
   options?: O,
 ): [PromiseReturnType<T>, RestReactQueryResult<T, O>] {
-  const queryKey: [string, any] = [(queryFn as any).cacheKey, params]
-  const queryFunction = (_: any, params: any) => queryFn(params)
+  const queryKey: [string, {}] = [(queryFn as any).cacheKey, params]
+  const queryFunction = (_: string, params: {}) => queryFn(params)
   const queryOptions = {
     suspense: true,
     retry: process.env.NODE_ENV === 'production' ? 3 : false,
@@ -46,6 +45,5 @@ export function useQuery<T extends QueryFn, O extends Options<T>>(
   }
 
   const {data, ...rest} = useReactQuery(queryKey, queryFunction, queryOptions)
-
   return [data as PromiseReturnType<T>, rest as RestReactQueryResult<T, O>]
 }
