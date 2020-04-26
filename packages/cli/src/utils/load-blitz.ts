@@ -14,23 +14,25 @@ export const setupTsnode = () => {
   require('tsconfig-paths/register')
 }
 
-export const BLITZ_MODULE_PATHS = [
-  ...globby.sync(
-    [
-      'app/**/{queries,mutations}/*.{js,ts,tsx}',
-      '**/utils/*.{js,ts,tsx}',
-      'jobs/**/*.{js,ts,tsx}',
-      'integrations/**/*.{js,ts,tsx}',
-    ],
-    {cwd: projectRoot, gitignore: true},
-  ),
-  'db',
-].map((p) => path.join(projectRoot, p))
+export function getBlitzModulePaths() {
+  return [
+    ...globby.sync(
+      [
+        'app/**/{queries,mutations}/*.{js,ts,tsx}',
+        '**/utils/*.{js,ts,tsx}',
+        'jobs/**/*.{js,ts,tsx}',
+        'integrations/**/*.{js,ts,tsx}',
+      ],
+      {cwd: projectRoot, gitignore: true},
+    ),
+    'db',
+  ].map((p) => path.join(projectRoot, p))
+}
 
 export const loadBlitz = () => {
   return Object.assign(
     {},
-    ...BLITZ_MODULE_PATHS.map((modulePath) => {
+    ...getBlitzModulePaths().map((modulePath) => {
       let name = path.parse(modulePath).name
       if (name === 'index') {
         const dirs = path.dirname(modulePath).split(path.sep)

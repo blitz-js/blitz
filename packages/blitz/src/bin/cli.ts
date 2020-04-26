@@ -8,8 +8,7 @@ const chalk = require('chalk')
 console.log(
   chalk.yellow(
     `You are using alpha software - if you have any problems, please open an issue here:
-  https://github.com/blitz-js/blitz/issues/new/choose
-Also, this CLI may be slow as it's not yet optimized for speed\n`,
+  https://github.com/blitz-js/blitz/issues/new/choose\n`,
   ),
 )
 
