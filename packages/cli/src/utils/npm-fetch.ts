@@ -10,12 +10,17 @@ export const fetchAllVersions = async (dependency: string) => {
   }
 }
 
-export const fetchLatestDistVersion = async (dependency: string) => {
+export const fetchDistTags = async (dependency: string) => {
   const res = await fetch(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`)
   if (res.ok) {
     const json = await res.json()
-    return json.latest as string
+    return json;
   } else {
     return
   }
+}
+
+export const fetchLatestDistVersion = async (dependency: string) => {
+  const res = await fetchDistTags(dependency);
+  return res?.latest;
 }

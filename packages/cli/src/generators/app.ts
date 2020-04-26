@@ -7,7 +7,7 @@ import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
-import { getBlitzDependencyVersion } from 'src/utils/get-blitz-dependency-version'
+import { getBlitzDependencyVersion } from '../utils/get-blitz-dependency-version'
 
 const themeColor = '6700AB'
 
@@ -52,7 +52,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     pkg.dependencies = await fetchLatestVersionsFor(pkg.dependencies);
     pkg.devDependencies = await fetchLatestVersionsFor(pkg.devDependencies);
 
-    pkg.dependencies.blitz = getBlitzDependencyVersion(this.options.version);
+    pkg.dependencies.blitz = await getBlitzDependencyVersion(this.options.version);
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
