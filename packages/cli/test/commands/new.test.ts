@@ -2,6 +2,7 @@ import NewCmd from "../../src/commands/new";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
+const cliPackageJson = require("../../package");
 
 function makeTempDir() {
   const tmpDirPath = path.join(
@@ -34,7 +35,7 @@ describe("`new` command", () => {
       );
       const packageJson = JSON.parse(packageJsonFile);
       const { dependencies: { blitz: blitzVersion } } = packageJson;
-      expect(blitzVersion).toBe("canary");
+      expect(blitzVersion).toEqual(cliPackageJson.version);
     });
 
   })

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "noEmit": true,
     "types": ["jest"],
-    "target": "es6"
+    "target": "es6",
+    "resolveJsonModule": true
   },
   "references": [{"path": ".."}]
 }
