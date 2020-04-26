@@ -2,7 +2,13 @@ import NewCmd from "../../src/commands/new";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
-const cliPackageJson = require("../../package");
+import fetch from "node-fetch";
+
+async function getLatestBlitzVersion() {
+  const response = await fetch("https://registry.npmjs.org/-/package/blitz/dist-tags");
+  const { latest } = await response.json();
+  return latest;
+}
 
 function makeTempDir() {
   const tmpDirPath = path.join(
@@ -28,14 +34,15 @@ describe("`new` command", () => {
       fs.rmdirSync(tempDir);
     });
 
-    it("pins Blitz to the current version", () => {
+    it("pins Blitz to the current version", async () => {
       const packageJsonFile = fs.readFileSync(
         path.join(tempDir, "package.json"),
         { encoding: "utf8", flag: "r" }
       );
       const packageJson = JSON.parse(packageJsonFile);
       const { dependencies: { blitz: blitzVersion } } = packageJson;
-      expect(blitzVersion).toEqual(cliPackageJson.version);
+
+      expect(blitzVersion).toEqual(await getLatestBlitzVersion());
     });
 
   })
