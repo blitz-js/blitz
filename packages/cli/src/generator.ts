@@ -6,6 +6,13 @@ import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer = require('enquirer')
 import {log} from '@blitzjs/server'
 import readDirRecursive from 'fs-readdir-recursive'
+import * as babel from '@babel/core'
+// @ts-ignore
+import babelTransformTypescript from '@babel/plugin-transform-typescript'
+// @ts-ignore
+import babelTransformJsx from '@babel/plugin-syntax-jsx'
+// @ts-ignore
+import babelSyntaxObjectSpread from '@babel/plugin-syntax-object-rest-spread'
 
 import ConflictChecker from './transforms/conflict-checker'
 
@@ -13,11 +20,13 @@ export interface GeneratorOptions {
   sourceRoot: string
   destinationRoot?: string
   dryRun?: boolean
+  useTs?: boolean
   fileContext?: string
 }
 
 const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
+const tsExtension = /\.(tsx?)$/
 
 /**
  * The base generator class.
@@ -30,6 +39,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   protected readonly enquirer: Enquirer
 
   private performedActions: string[] = []
+  private useTs: boolean
 
   constructor(protected readonly options: T) {
     super()
@@ -37,10 +47,18 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     this.store = createStore()
     this.fs = createEditor(this.store)
     this.enquirer = new Enquirer()
+    this.useTs =
+      typeof this.options.useTs === 'undefined'
+        ? fs.existsSync(path.resolve('tsconfig.json'))
+        : this.options.useTs
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
   abstract async getTemplateValues(): Promise<any>
+
+  filesToIgnore(): string[] {
+    return []
+  }
 
   replaceTemplateValues(input: string | Buffer, templateValues: any) {
     let result = typeof input === 'string' ? input : input.toString('utf-8')
@@ -53,9 +71,24 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     return result
   }
 
+  process(input: Buffer, pathEnding: string, templateValues: any): string | Buffer {
+    if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
+      return input
+    }
+    const templatedFile = this.replaceTemplateValues(input, templateValues)
+    if (!this.useTs && tsExtension.test(pathEnding)) {
+      return (
+        babel.transform(templatedFile, {
+          plugins: [[babelTransformTypescript, {isTSX: true}]],
+        })?.code || ''
+      )
+    }
+    return templatedFile
+  }
+
   async write(): Promise<void> {
     const paths = readDirRecursive(this.sourcePath(), (name) => {
-      return !ignoredNames.includes(name)
+      return ![...ignoredNames, ...this.filesToIgnore()].includes(name)
     })
 
     for (let filePath of paths) {
@@ -69,11 +102,14 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
         pathEnding = this.replaceTemplateValues(pathEnding, templateValues)
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathEnding), {
-          process: (input) =>
-            new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)
-              ? input
-              : this.replaceTemplateValues(input, templateValues),
+          process: (input) => this.process(input, pathEnding, templateValues),
         })
+        if (!this.useTs && tsExtension.test(this.destinationPath(pathEnding))) {
+          this.fs.move(
+            this.destinationPath(pathEnding),
+            this.destinationPath(pathEnding.replace(tsExtension, '.js')),
+          )
+        }
       } catch (error) {
         log.error(`Error generating ${filePath}`)
         throw error
