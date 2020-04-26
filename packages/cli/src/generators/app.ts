@@ -25,6 +25,8 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
+
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
     const pkgDependencies = Object.keys(pkg.dependencies)
