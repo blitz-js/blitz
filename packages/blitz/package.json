@@ -41,10 +41,10 @@
     "@blitzjs/cli": "0.6.4",
     "@blitzjs/core": "0.6.4",
     "@blitzjs/server": "0.6.4",
-    "os-name": "3.1.0",
-    "pkg-dir": "4.2.0",
-    "resolve-from": "5.0.0",
-    "resolve-global": "1.0.0"
+    "os-name": "^3.1.0",
+    "pkg-dir": "^4.2.0",
+    "resolve-from": "^5.0.0",
+    "resolve-global": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.3",
