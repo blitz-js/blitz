@@ -36,7 +36,7 @@ export async function nextStartDev(nextBin: string, cwd: string, manifest: Manif
       stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
     })
       .on('exit', (code: number) => {
-        code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+        code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
       })
       .on('error', rej)
   })
