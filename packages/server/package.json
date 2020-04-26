@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -54,7 +54,7 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.6.4"
+    "@blitzjs/core": "0.6.5"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
