@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "license": "MIT",
   "scripts": {
     "dev": "tsdx watch --verbose",
