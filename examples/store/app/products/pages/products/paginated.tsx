@@ -1,17 +1,16 @@
+import {Suspense, useState} from 'react'
 import {Link, BlitzPage, useQuery} from 'blitz'
 import getProducts from 'app/products/queries/getProducts'
-import {Product} from 'db'
-import {Suspense, useState} from 'react'
-
-type StaticProps = {
-  products: Product[]
-}
 
 const ITEMS_PER_PAGE = 3
 
 const Products = () => {
   const [page, setPage] = useState(0)
-  const [products] = useQuery(getProducts, {skip: ITEMS_PER_PAGE * page, first: 3}, {paginated: true})
+  const [products] = useQuery(
+    getProducts,
+    {skip: ITEMS_PER_PAGE * page, first: ITEMS_PER_PAGE},
+    {paginated: true},
+  )
 
   return (
     <div>
@@ -32,7 +31,7 @@ const Products = () => {
   )
 }
 
-const Page: BlitzPage<StaticProps> = function () {
+const Page: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Paginated</h1>
