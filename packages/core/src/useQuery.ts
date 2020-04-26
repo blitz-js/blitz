@@ -1,4 +1,5 @@
 import {useQuery as useReactQuery} from 'react-query'
+import {InferUnaryParam} from '../types'
 
 /**
  * Get the type of the value, that the Promise holds.
@@ -19,7 +20,7 @@ type QueryFn = (...args: any) => Promise<any>
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
-  params?: any,
+  params?: InferUnaryParam<T>,
   options: any = {},
 ): [PromiseReturnType<T>, Record<any, any>] {
   const {data, ...rest} = useReactQuery([(queryFn as any).cacheKey, params], (_, params) => queryFn(params), {
