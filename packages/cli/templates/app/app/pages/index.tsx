@@ -16,9 +16,9 @@ const Home = () => (
       </p>
       <pre>
         <code>
-          {`model User {
+          {`model Project {
   id      Int      @default(autoincrement()) @id
-  name    String?
+  name    String
 }`}
         </code>
       </pre>
@@ -26,14 +26,14 @@ const Home = () => (
       <pre>
         <code>
           {`$ blitz db migrate
-$ blitz generate all user`}
+$ blitz generate all project`}
         </code>
       </pre>
 
       <p>
         3. Go to{' '}
-        <Link href="/users">
-          <a>/users</a>
+        <Link href="/projects">
+          <a>/projects</a>
         </Link>
       </p>
       <div className="buttons">

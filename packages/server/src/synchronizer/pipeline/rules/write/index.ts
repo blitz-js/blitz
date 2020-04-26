@@ -18,7 +18,7 @@ const create: Rule = ({config, reporter}) => {
     }),
   )
 
-  return {stream, reporter}
+  return {stream}
 }
 
 export default create

@@ -1,6 +1,7 @@
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from '@blitzjs/utils'
+import {synchronizeFiles} from './synchronizer'
 
 export type ServerConfig = {
   rootFolder: string
@@ -10,6 +11,7 @@ export type ServerConfig = {
   manifestPath?: string
   writeManifestFile?: boolean
   watch?: boolean
+  synchronizer?: typeof synchronizeFiles
 }
 
 const defaults = {

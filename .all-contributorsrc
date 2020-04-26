@@ -266,7 +266,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/3064377?v=4",
       "profile": "https://github.com/Zeko369",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -276,6 +277,43 @@
       "profile": "http://twitter.com/JanBaykara",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "mikeattara",
+      "name": "Mike Perry Y Attara",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31483629?v=4",
+      "profile": "https://mikeattara.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "DevanB",
+      "name": "Devan",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/354652?v=4",
+      "profile": "https://devanthe.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jclancy93",
+      "name": "Jack Clancy",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7850202?v=4",
+      "profile": "https://github.com/jclancy93",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ntgussoni",
+      "name": "Nicolas Torres",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10161067?v=4",
+      "profile": "https://github.com/ntgussoni",
+      "contributions": [
+        "test",
+        "code"
       ]
     }
   ],
