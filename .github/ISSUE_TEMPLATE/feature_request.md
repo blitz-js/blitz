@@ -6,11 +6,14 @@ labels: ''
 assignees: ''
 ---
 
-**What do you want and why do you want it?.**
+## What do you want and why?
+
 The more information the better!
 
-**Possible implementation(s)**
+## Possible implementation(s)
+
 How might we do this?
 
-**Additional context**
+## Additional context
+
 Add any other context or screenshots about the feature request here.
