@@ -43,11 +43,11 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@types/react-query": "1.1.2",
-    "@types/serialize-error": "4.0.1",
-    "pretty-ms": "6.0.1",
-    "react-query": "1.2.9",
-    "serialize-error": "6.0.0"
+    "@types/react-query": "^1.1.2",
+    "@types/serialize-error": "^4.0.1",
+    "pretty-ms": "^6.0.1",
+    "react-query": "^1.2.9",
+    "serialize-error": "^6.0.0"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
