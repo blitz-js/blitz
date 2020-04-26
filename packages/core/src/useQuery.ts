@@ -1,5 +1,4 @@
 import {useQuery as useReactQuery} from 'react-query'
-import {InferUnaryParam} from '../types'
 
 /**
  * Get the type of the value, that the Promise holds.
@@ -17,6 +16,11 @@ type QueryFn = (...args: any) => Promise<any>
 //   (...args: any): Promise<any>
 //   cacheKey: string
 // }
+
+/**
+ * Infer the type of the parameter from function that takes a single argument
+ */
+type InferUnaryParam<F extends Function> = F extends (args: infer A) => any ? A : never
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
