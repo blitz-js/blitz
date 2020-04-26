@@ -8,7 +8,7 @@ import {log} from '@blitzjs/server'
 import chalk from 'chalk'
 
 // import {loadDependencies} from '../utils/load-dependencies'
-import {setupTsnode, BLITZ_MODULE_PATHS, loadBlitz} from '../utils/load-blitz'
+import {setupTsnode, getBlitzModulePaths, loadBlitz} from '../utils/load-blitz'
 import {runPrismaGeneration} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
@@ -50,7 +50,7 @@ export default class Console extends Command {
 
     const watchers = [
       // watch('package.json').on('change', () => Console.loadDependencies(repl)),
-      watch(BLITZ_MODULE_PATHS).on('all', () => Console.loadBlitz(repl)),
+      watch(getBlitzModulePaths()).on('all', () => Console.loadBlitz(repl)),
     ]
 
     repl

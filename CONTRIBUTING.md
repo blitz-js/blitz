@@ -48,31 +48,39 @@ After you contribute in any way, please add yourself as a contributor via the [@
 
 ## Development Setup
 
-#### Repo Setup
+**1.** Fork this repo
 
-**1.** Clone the repo
+**2.** Clone your fork repo
 
-```
-git clone git@github.com:blitz-js/blitz.git
+```sh
+# If you didn't fork the repo use blitz-js as the USERNAME
+git clone git@github.com:USERNAME/blitz.git
 cd blitz
 ```
 
-**2.** Install dependencies
+**3.** Install dependencies
 
 ```
 yarn
 ```
 
-**3.** Start the package server. This must be running for any package development or example development
+**4.** Start the package server. This must be running for any package development or example development
 
 ```
 yarn dev
 ```
 
-**4.** Run tests
+**5.** Run tests
 
 ```
 yarn test
+```
+
+#### Sync your fork
+
+```sh
+./scripts/fetchRemote.sh
+git merge upstream/canary
 ```
 
 #### Link the Blitz CLI (Optional)
