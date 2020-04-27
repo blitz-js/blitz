@@ -64,7 +64,7 @@ export const runMigrate = async () => {
 	})
 }
 
-export const ResetPostgres = async () => {
+export const resetPostgres = async () => {
 	const client = new Client({
 		connectionString: dbUrl
 	});
@@ -79,7 +79,7 @@ export const ResetPostgres = async () => {
 	}
 }
 
-export const ResetMysql = async () => {
+export const resetMysql = async () => {
 	const client = await mysql.createConnection(dbUrl)
 	const dbUrlParts = dbUrl!.split('/')
 	const dbName = dbUrlParts[dbUrlParts.length - 1]
@@ -93,7 +93,7 @@ export const ResetMysql = async () => {
 	}
 }
 
-export const ResetSqlite = async () => {
+export const resetSqlite = async () => {
 	const dbPath = `db/${dbUrl?.split('file:./').pop()}`;
 	const db = new sqlite3.Database(dbPath);
 	db.run("CREATE TABLE lorem (info TEXT)")
