@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import * as path from 'path'
 import { resolveBinAsync } from '@blitzjs/server'
 import { Client } from "pg"
+var mysql = require('mysql2');
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -66,16 +67,25 @@ export const ResetPostgres = async () => {
 	const client = new Client({
 		connectionString: dbUrl
 	});
-	client.connect();
-	client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public",
-		(err: Error, res) => {
-			if (err) {
-				process.exit(1)
-			} else {
-				runMigrate();
-			}
-			client.end();
-		})
+	await client.connect();
+	try {
+		await client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public");
+	} catch (err) {
+		process.exit(1)
+	} finally {
+		client.end();
+		runMigrate();
+	}
+}
+
+export const ResetMysql = async () => {
+	const client = mysql.createConnection(dbUrl);
+	client.connect((err: Error) => {
+		if (err) {
+			console.log(err)
+		}
+	})
+	console.log("connected with mysql")
 }
 
 export default class Db extends Command {
@@ -93,7 +103,7 @@ ${chalk.bold(
 
 ${chalk.bold(
 		'reset',
-	)}   Reset the database and run a fresh migration
+	)}   Reset the database and run a fresh migration via Prisma 2.
 `
 
 	static args = [
@@ -145,6 +155,8 @@ ${chalk.bold(
 			if (typeof dbUrl !== "undefined") {
 				if (dbUrl.includes("postgresql")) {
 					await ResetPostgres()
+				} else if (dbUrl.includes("mysql")) {
+					await ResetMysql();
 				} else {
 					this.log("The database url is not valid.")
 				}
