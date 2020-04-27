@@ -1,32 +1,56 @@
-import {useQuery as useReactQuery} from 'react-query'
-
-/**
- * Get the type of the value, that the Promise holds.
- */
-export declare type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
-
-/**
- * Get the return type of a function which returns a Promise.
- */
-export declare type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
+import {
+  useQuery as useReactQuery,
+  usePaginatedQuery as usePaginatedReactQuery,
+  PaginatedQueryResult,
+  QueryResult,
+  QueryOptions,
+} from 'react-query'
+import {PromiseReturnType, InferUnaryParam} from './types'
 
 type QueryFn = (...args: any) => Promise<any>
 
-// interface QueryFn {
-//   (...args: any): Promise<any>
-//   cacheKey: string
-// }
+interface Options<T> extends QueryOptions<T> {
+  paginated?: boolean
+}
 
-export function useQuery<T extends QueryFn>(
+/**
+ * Get useQuery result without "data"
+ */
+type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, 'data'>
+
+/**
+ * Get usePaginatedQuery result without "resolvedData"
+ */
+type RestPaginatedQueryResult<T extends QueryFn> = Omit<
+  PaginatedQueryResult<PromiseReturnType<T>>,
+  'resolvedData'
+>
+
+/**
+ * Get "rest" object return value based on paginated option
+ */
+type RestReturnType<T extends QueryFn, O extends Options<T>> = O['paginated'] extends true
+  ? RestPaginatedQueryResult<T>
+  : RestQueryResult<T>
+
+export function useQuery<T extends QueryFn, O extends Options<T>>(
   queryFn: T,
-  params?: any,
-  options: any = {},
-): [PromiseReturnType<T>, Record<any, any>] {
-  const {data, ...rest} = useReactQuery([(queryFn as any).cacheKey, params], (_, params) => queryFn(params), {
+  params?: InferUnaryParam<T>,
+  options?: O,
+): [PromiseReturnType<T>, RestReturnType<T, O>] {
+  const queryKey: [string, any] = [(queryFn as any).cacheKey, params]
+  const queryFunction = (_: string, params: {}) => queryFn(params)
+  const queryOptions = {
     suspense: true,
     retry: process.env.NODE_ENV === 'production' ? 3 : false,
     ...options,
-  })
+  }
 
-  return [data as PromiseReturnType<T>, rest]
+  if (options?.paginated) {
+    const {resolvedData, ...rest} = usePaginatedReactQuery(queryKey, queryFunction, queryOptions)
+    return [resolvedData as PromiseReturnType<T>, rest as RestReturnType<T, O>]
+  }
+
+  const {data, ...rest} = useReactQuery(queryKey, queryFunction, queryOptions)
+  return [data as PromiseReturnType<T>, rest as RestReturnType<T, O>]
 }
