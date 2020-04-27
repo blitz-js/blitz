@@ -5,10 +5,10 @@ import chalk from 'chalk'
 import * as path from 'path'
 import { resolveBinAsync } from '@blitzjs/server'
 import { Client } from "pg"
-import * as mysql from 'mysql2'
-import * as fs from "fs";
-import { prompt } from "enquirer";
-import { promisify } from 'util';
+import * as mysql from 'mysql2/promise'
+import * as fs from "fs"
+import { prompt } from "enquirer"
+import { promisify } from 'util'
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -16,7 +16,7 @@ require('dotenv').config({ path: envPath })
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
-const dbUrl = process.env.DATABASE_URL;
+const dbUrl = process.env.DATABASE_URL
 
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
@@ -67,46 +67,48 @@ export const runMigrate = async () => {
 }
 
 export async function resetPostgres(): Promise<void> {
+	const dbUrlParts: string[] = dbUrl!.split('/')
+	const dbName: string = dbUrlParts[dbUrlParts.length - 1]
 	const client: Client = new Client({
 		connectionString: dbUrl
-	});
+	})
 	await client.connect()
 	try {
+		// close all other connections
+		await client.query(`select pg_terminate_backend(pid) from pg_stat_activity where pid <> pg_backend_pid() and datname='${dbName}'`)
 		// currently assuming the public schema is being used
-		await client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public");
+		await client.query("drop schema public cascade; create schema public; grant all on schema public to postgres; grant all on schema public to public")
+		await runMigrate()
 	} catch (err) {
 		process.exit(1)
 	} finally {
 		await client.end()
-		await runMigrate()
 	}
 }
 
 export async function resetMysql(): Promise<void> {
-	const client = await mysql.createConnection(dbUrl)
 	const dbUrlParts: string[] = dbUrl!.split('/')
 	const dbName: string = dbUrlParts[dbUrlParts.length - 1]
+	const client = await mysql.createConnection(dbUrl)
 	try {
 		await client.query(`DROP DATABASE \`${dbName}\``)
+		await runMigrate()
 	} catch (err) {
-		console.log(err)
+		process.exit(1)
 	} finally {
-		await client.end();
-		await runMigrate();
+		await client.end()
 	}
 }
 
 export async function resetSqlite(): Promise<void> {
 	// currently assuming the database is located at the db folder
-	const dbPath: string = `db${dbUrl?.split('file:.').pop()}`;
+	const dbPath: string = `db${dbUrl?.split('file:.').pop()}`
 	const unlink = promisify(fs.unlink)
 	try {
 		await unlink(dbPath)
+		await runMigrate()
 	} catch (err) {
-		console.log(err)
-	} finally {
-		runMigrate()
-
+		process.exit(1)
 	}
 }
 
@@ -184,9 +186,9 @@ ${chalk.bold(
 						if (dbUrl.includes('postgresql')) {
 							resetPostgres()
 						} else if (dbUrl.includes('mysql')) {
-							resetMysql();
+							resetMysql()
 						} else if (dbUrl.includes('file:')) {
-							resetSqlite();
+							resetSqlite()
 						} else {
 							this.log("The database url is not valid.")
 						}
