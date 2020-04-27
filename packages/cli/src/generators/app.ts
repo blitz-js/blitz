@@ -3,7 +3,7 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
-import {readJSONSync, writeJson} from 'fs-extra'
+import {readJSONSync, writeJson, writeSync, openSync, closeSync} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
@@ -65,15 +65,24 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     spinner.succeed()
 
-    console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
-    console.log('Scary warning messages during this part are unfortunately normal.\n')
+    const installSpinner = log.spinner(log.withBranded('Installing those dependencies...'))
+    installSpinner.start()
 
-    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
+    const logFile = openSync(this.destinationPath('blitz-log.log'), 'a')
+    writeSync(logFile, `\n[START: ${new Date().toISOString()}]\n`)
+
+    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {
+      stdio: ['inherit', logFile, logFile],
+    })
     if (result.status !== 0) {
       throw new Error()
     }
 
-    console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+    installSpinner.text = chalk.hex(themeColor).bold('Dependencies successfully installed.')
+    installSpinner.succeed()
+
+    writeSync(logFile, `[END: ${new Date().toISOString()}]\n`)
+    closeSync(logFile)
 
     // Ensure the generated files are formatted with the installed prettier version
     const prettierResult = spawn.sync(
