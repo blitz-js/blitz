@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import * as path from 'path'
 import { resolveBinAsync } from '@blitzjs/server'
 import { Client } from "pg"
-var mysql = require('mysql2');
+var mysql = require('mysql2/promise');
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -67,25 +67,29 @@ export const ResetPostgres = async () => {
 	const client = new Client({
 		connectionString: dbUrl
 	});
-	await client.connect();
+	await client.connect()
 	try {
 		await client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public");
 	} catch (err) {
 		process.exit(1)
 	} finally {
-		client.end();
-		runMigrate();
+		client.end()
+		runMigrate()
 	}
 }
 
 export const ResetMysql = async () => {
-	const client = mysql.createConnection(dbUrl);
-	client.connect((err: Error) => {
-		if (err) {
-			console.log(err)
-		}
-	})
-	console.log("connected with mysql")
+	const client = await mysql.createConnection(dbUrl)
+	const dbUrlParts = dbUrl!.split('/')
+	const dbName = dbUrlParts[dbUrlParts.length - 1]
+	try {
+		await client.query(`DROP DATABASE \`${dbName}\``)
+	} catch (err) {
+		console.log(err)
+	} finally {
+		client.end();
+		runMigrate();
+	}
 }
 
 export default class Db extends Command {
