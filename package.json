@@ -22,7 +22,7 @@
     "unlink-cli": "yarn workspace blitz unlink",
     "build": "lerna run build --no-private --stream",
     "test": "yarn run build && yarn run testonly",
-    "testonly": "lerna run test --parallel",
+    "testonly": "lerna run test --stream --parallel",
     "prepublishOnly": "yarn run reset && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
