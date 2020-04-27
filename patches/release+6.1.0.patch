@@ -1,23 +1,25 @@
-diff --git a/node_modules/release/lib/definitions.js b/node_modules/release/lib/definitions.js
-index ce5ece4..50374e7 100644
---- a/node_modules/release/lib/definitions.js
-+++ b/node_modules/release/lib/definitions.js
-@@ -1,6 +1,18 @@
- exports.type = (text, changeTypes) => {
- 	const list = [
- 		...changeTypes,
-+    {
-+      handle: 'example',
-+      name: 'Example App',
-+      pluralName: 'Changes to Example Apps',
-+      description: 'change to example app',
-+    },
-+    {
-+      handle: 'meta',
-+      name: 'Meta',
-+      pluralName: 'Internal Meta Changes',
-+      description: 'Blitz meta change',
-+    },
- 		{
- 			handle: 'ignore'
- 		}
+diff --git a/node_modules/release/bin/release.js b/node_modules/release/bin/release.js
+index a5ab985..675ece7 100755
+--- a/node_modules/release/bin/release.js
++++ b/node_modules/release/bin/release.js
+@@ -69,7 +69,19 @@ const changeTypes = [
+ 		name: 'Patch',
+ 		pluralName: 'Patches',
+ 		description: 'backwards-compatible bug fix'
+-	}
++	},
++  {
++    handle: 'example',
++    name: 'Example App',
++    pluralName: 'Changes to Example Apps',
++    description: 'change to example app',
++  },
++  {
++    handle: 'meta',
++    name: 'Meta',
++    pluralName: 'Internal Meta Changes',
++    description: 'internal meta change',
++  },
+ ];
+ 
+ const getReleaseURL = (release, edit = false) => {
