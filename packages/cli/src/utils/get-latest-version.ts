@@ -1,24 +1,26 @@
 import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
 
-export const getLatestVersion = async (dependency: string, templateVersion: string = "") => {
+export const getLatestVersion = async (dependency: string, templateVersion: string = '') => {
   const major = templateVersion.replace('.x', '')
-  const allVersions = await fetchAllVersions(dependency)
-  const latestDistVersion = await fetchLatestDistVersion(dependency)
 
-  if (!allVersions || !latestDistVersion) {
-    return templateVersion
-  }
+  try {
+    const allVersions = await fetchAllVersions(dependency)
+    const latestDistVersion = await fetchLatestDistVersion(dependency)
 
-  const latestVersion = Object.keys(allVersions)
-    .filter((version) => version.startsWith(major))
-    .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}))
-    .reverse()[0]
+    const latestVersion = Object.keys(allVersions)
+      .filter((version) => version.startsWith(major))
+      .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}))
+      .reverse()[0]
 
-  // If the latest tagged version matches our pinned major, use that, otherwise use the
-  // latest untagged which does
-  if (latestDistVersion.startsWith(major)) {
-    return latestDistVersion
-  } else {
-    return latestVersion
+    // If the latest tagged version matches our pinned major, use that, otherwise use the
+    // latest untagged which does
+    if (latestDistVersion.startsWith(major)) {
+      return latestDistVersion
+    } else {
+      return latestVersion
+    }
+  } catch (error) {
+    const fallback = templateVersion
+    return fallback
   }
 }
