@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.6.0-canary.1",
+  "version": "0.7.0",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -9,7 +9,7 @@
     "dev": "rimraf lib && yarn build:templates && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc && yarn build:templates",
     "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
-    "test": "jest || jest",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {
@@ -30,32 +30,35 @@
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
+    "camelcase": "^6.0.0",
     "chalk": "^4.0.0",
     "chokidar": "^3.3.1",
     "cross-spawn": "^7.0.2",
     "diff": "^4.0.2",
-    "dotenv": "8.2.0",
+    "dotenv": "^8.2.0",
     "enquirer": "^2.3.4",
     "fs-extra": "^9.0.0",
-    "fs-readdir-recursive": "1.1.0",
-    "globby": "11.0.0",
+    "fs-readdir-recursive": "^1.1.0",
+    "globby": "^11.0.0",
     "has-yarn": "^2.1.0",
-    "hasbin": "1.2.3",
+    "hasbin": "^1.2.3",
     "mem-fs": "^1.1.3",
     "mem-fs-editor": "^6.0.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.0",
-    "pkg-dir": "4.2.0",
-    "ts-node": "8.9.0",
-    "tsconfig-paths": "3.9.0",
-    "username": "5.1.0",
+    "pkg-dir": "^4.2.0",
+    "pluralize": "^8.0.0",
+    "ts-node": "^8.9.0",
+    "tsconfig-paths": "^3.9.0",
+    "username": "^5.1.0",
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.6.0-canary.1",
+    "@blitzjs/server": "0.7.0",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@prisma/cli": "2.0.0-beta.2"
+    "@prisma/cli": "2.0.0-beta.3",
+    "@types/pluralize": "^0.0.29"
   },
   "oclif": {
     "commands": "./lib/src/commands",

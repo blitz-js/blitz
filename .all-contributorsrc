@@ -266,6 +266,90 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/3064377?v=4",
       "profile": "https://github.com/Zeko369",
       "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "janbaykara",
+      "name": "Jan Baykara",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/237556?v=4",
+      "profile": "http://twitter.com/JanBaykara",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mikeattara",
+      "name": "Mike Perry Y Attara",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31483629?v=4",
+      "profile": "https://mikeattara.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "DevanB",
+      "name": "Devan",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/354652?v=4",
+      "profile": "https://devanthe.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jclancy93",
+      "name": "Jack Clancy",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7850202?v=4",
+      "profile": "https://github.com/jclancy93",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ntgussoni",
+      "name": "Nicolas Torres",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10161067?v=4",
+      "profile": "https://github.com/ntgussoni",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "skn0tt",
+      "name": "Simon Knott",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14912729?v=4",
+      "profile": "http://simonknott.de",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "kandros",
+      "name": "Jaga Santagostino",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4562878?v=4",
+      "profile": "http://jagascript.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LoriKarikari",
+      "name": "Lori Karikari",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7902980?v=4",
+      "profile": "https://github.com/LoriKarikari",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "eliasjohansson",
+      "name": "Elias Johansson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
+      "profile": "https://twitter.com/GeggsElias",
+      "contributions": [
         "code"
       ]
     }

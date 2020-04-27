@@ -1,4 +1,5 @@
 import {IncomingMessage, OutgoingMessage} from 'http'
+import {InferUnaryParam} from './types'
 
 type QueryFn = (...args: any) => Promise<any>
 
@@ -9,7 +10,7 @@ type SsrQueryContext = {
 
 export async function ssrQuery<T extends QueryFn>(
   queryFn: T,
-  params: any,
+  params: InferUnaryParam<T>,
   // @ts-ignore unused
   context: SsrQueryContext,
 ): Promise<ReturnType<T>> {
