@@ -15,6 +15,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   yarn: boolean
   version: string
+  skipInstall: boolean
 }
 
 const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
@@ -70,25 +71,27 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
 
-    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
-    if (result.status !== 0) {
-      throw new Error()
+    if (!this.options.skipInstall) {
+      const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
+      if (result.status !== 0) {
+        throw new Error()
+      }
+  
+      console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+
+      // Ensure the generated files are formatted with the installed prettier version
+      const prettierResult = spawn.sync(
+        this.options.yarn ? 'yarn' : 'npm',
+        'run prettier --loglevel silent --write .'.split(' '),
+        {
+          stdio: 'ignore',
+        },
+      )
+      if (prettierResult.status !== 0) {
+        throw new Error('Failed running prettier')
+      }
     }
-
-    console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
-
-    // Ensure the generated files are formatted with the installed prettier version
-    const prettierResult = spawn.sync(
-      this.options.yarn ? 'yarn' : 'npm',
-      'run prettier --loglevel silent --write .'.split(' '),
-      {
-        stdio: 'ignore',
-      },
-    )
-    if (prettierResult.status !== 0) {
-      throw new Error('Failed running prettier')
-    }
-
+    
     // TODO: someone please clean up this ugly code :D
     // Currently aren't failing the generation process if git repo creation fails
     const gitResult1 = spawn.sync('git', ['init'], {

@@ -27,7 +27,7 @@ describe("`new` command", () => {
     let tempDir: string;
     beforeAll(async () => {
       tempDir = makeTempDir();
-      await NewCmd.run([tempDir]);
+      await NewCmd.run([tempDir, "--skip-install"]);
     });
 
     afterAll(() => {
