@@ -11,8 +11,6 @@ export enum IsBlitzRootError {
 const checkParent = async (): Promise<false | number> => {
   const rootDir = await pkgDir('./')
 
-  console.log(rootDir)
-
   if (rootDir) {
     const file = await readJSON(resolve(rootDir, 'package.json'))
 
