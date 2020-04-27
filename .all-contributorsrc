@@ -325,6 +325,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "kandros",
+      "name": "Jaga Santagostino",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4562878?v=4",
+      "profile": "http://jagascript.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
