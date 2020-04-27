@@ -8,6 +8,7 @@ import { Client } from "pg"
 import * as mysql from 'mysql2'
 import * as fs from "fs";
 import { prompt } from "enquirer";
+import { promisify } from 'util';
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -65,43 +66,48 @@ export const runMigrate = async () => {
 	})
 }
 
-export const resetPostgres = async () => {
-	const client = new Client({
+export async function resetPostgres(): Promise<void> {
+	const client: Client = new Client({
 		connectionString: dbUrl
 	});
 	await client.connect()
 	try {
+		// currently assuming the public schema is being used
 		await client.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres; GRANT ALL ON SCHEMA public TO public");
 	} catch (err) {
 		process.exit(1)
 	} finally {
-		client.end()
-		runMigrate()
+		await client.end()
+		await runMigrate()
 	}
 }
 
-export const resetMysql = async () => {
+export async function resetMysql(): Promise<void> {
 	const client = await mysql.createConnection(dbUrl)
-	const dbUrlParts = dbUrl!.split('/')
-	const dbName = dbUrlParts[dbUrlParts.length - 1]
+	const dbUrlParts: string[] = dbUrl!.split('/')
+	const dbName: string = dbUrlParts[dbUrlParts.length - 1]
 	try {
 		await client.query(`DROP DATABASE \`${dbName}\``)
 	} catch (err) {
 		console.log(err)
 	} finally {
-		client.end();
+		await client.end();
 		await runMigrate();
 	}
 }
 
-export const resetSqlite = async () => {
-	const dbPath = `db${dbUrl?.split('file:.').pop()}`;
-	fs.unlink(dbPath, (err) => {
-		if (err) {
-			return console.log(err)
-		}
+export async function resetSqlite(): Promise<void> {
+	// currently assuming the database is located at the db folder
+	const dbPath: string = `db${dbUrl?.split('file:.').pop()}`;
+	const unlink = promisify(fs.unlink)
+	try {
+		await unlink(dbPath)
+	} catch (err) {
+		console.log(err)
+	} finally {
 		runMigrate()
-	})
+
+	}
 }
 
 export default class Db extends Command {
