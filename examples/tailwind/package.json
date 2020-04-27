@@ -29,8 +29,8 @@
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
     "blitz": "0.6.6",
-    "react": "experimental",
-    "react-dom": "experimental",
+    "react": "0.0.0-experimental-e5d06e34b",
+    "react-dom": "0.0.0-experimental-e5d06e34b",
     "typescript": "3.8.3"
   },
   "NOTE": "Next.js dependency is currently only required for deploying to zeit",
