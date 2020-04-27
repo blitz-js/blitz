@@ -11,16 +11,28 @@ const Home = () => (
       <h1 className="title" style={{marginBottom: 24}}>
         Blitz Store Example
       </h1>
-      <p>
-        <Link href="/products">
-          <a>View Static Public Product Listings</a>
-        </Link>
-      </p>
-      <p>
-        <Link href="/admin">
-          <a>View Dynamic Admin Section</a>
-        </Link>
-      </p>
+      <ul>
+        <li>
+          <Link href="/products">
+            <a>Static Product Listings</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/products/ssr">
+            <a>SSR Product Listings</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/products/paginated">
+            <a>Paginated Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/products">
+            <a>Admin Section (client-rendered)</a>
+          </Link>
+        </li>
+      </ul>
     </main>
 
     <footer>
@@ -75,6 +87,10 @@ const Home = () => (
         text-decoration: none;
       }
 
+      li + li {
+        margin-top: 0.5rem;
+      }
+
       .title a:hover,
       .title a:focus,
       .title a:active {
@@ -84,7 +100,7 @@ const Home = () => (
       .title {
         margin: 0;
         line-height: 1.15;
-        font-size: 4rem;
+        font-size: 3rem;
       }
 
       .title,
