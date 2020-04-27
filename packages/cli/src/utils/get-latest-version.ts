@@ -4,8 +4,13 @@ export const getLatestVersion = async (dependency: string, templateVersion: stri
   const major = templateVersion.replace('.x', '')
 
   try {
-    const allVersions = await fetchAllVersions(dependency)
-    const latestDistVersion = await fetchLatestDistVersion(dependency)
+    const [
+      allVersions,
+      latestDistVersion
+    ] = await Promise.all([
+      fetchAllVersions(dependency),
+      fetchLatestDistVersion(dependency)
+    ]);
 
     const latestVersion = Object.keys(allVersions)
       .filter((version) => version.startsWith(major))
