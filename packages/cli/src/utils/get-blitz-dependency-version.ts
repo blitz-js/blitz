@@ -1,11 +1,16 @@
 import { fetchDistTags } from './npm-fetch';
 
 export const getBlitzDependencyVersion = async (cliVersion: string) => {
-  const { latest, canary } = await fetchDistTags("blitz");
+  try {
+    const { latest, canary } = await fetchDistTags("blitz");
   
-  if (cliVersion.includes("canary")) {
-    return canary;
-  }
+    if (cliVersion.includes("canary")) {
+      return canary;
+    }
 
-  return latest;
+    return latest;
+  } catch (error) {
+    const fallback = "latest";
+    return fallback;
+  }
 }
