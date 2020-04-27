@@ -1,4 +1,5 @@
 import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
+import { log } from '@blitzjs/server';
 
 export const getLatestVersion = async (dependency: string, templateVersion: string = '') => {
   const major = templateVersion.replace('.x', '')
@@ -26,6 +27,7 @@ export const getLatestVersion = async (dependency: string, templateVersion: stri
     }
   } catch (error) {
     const fallback = templateVersion
+    log.error(`Failed to fetch latest version of '${dependency}', falling back to '${fallback}'.`);
     return fallback
   }
 }
