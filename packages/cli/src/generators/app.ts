@@ -65,24 +65,27 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     spinner.succeed()
 
-    const installSpinner = log.spinner(log.withBranded('Installing those dependencies...'))
-    installSpinner.start()
-
     const logFile = openSync(this.destinationPath('blitz-log.log'), 'a')
-    writeSync(logFile, `\n[START: ${new Date().toISOString()}]\n`)
+    writeSync(logFile, `[START: ${new Date().toISOString()}]\n`)
 
-    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {
-      stdio: ['inherit', logFile, logFile],
+    const installSpinner = log.spinner(log.withBranded('Installing those dependencies...')).start()
+
+    const installStatus = await new Promise((resolve) => {
+      const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install'], {
+        stdio: ['inherit', logFile, logFile],
+      })
+      cp.on('exit', resolve)
     })
-    if (result.status !== 0) {
-      throw new Error()
+
+    writeSync(logFile, `[END: ${new Date().toISOString()}]\n\n`)
+    closeSync(logFile)
+
+    if (installStatus !== 0) {
+      installSpinner.fail()
+      throw new Error('Failed to install dependencies.\nCheck blitz-log.log for more information.')
     }
 
-    installSpinner.text = chalk.hex(themeColor).bold('Dependencies successfully installed.')
     installSpinner.succeed()
-
-    writeSync(logFile, `[END: ${new Date().toISOString()}]\n`)
-    closeSync(logFile)
 
     // Ensure the generated files are formatted with the installed prettier version
     const prettierResult = spawn.sync(
