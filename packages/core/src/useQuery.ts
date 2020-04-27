@@ -1,14 +1,5 @@
 import {useQuery as useReactQuery} from 'react-query'
-
-/**
- * Get the type of the value, that the Promise holds.
- */
-export declare type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
-
-/**
- * Get the return type of a function which returns a Promise.
- */
-export declare type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
+import {PromiseReturnType, InferUnaryParam} from './types'
 
 type QueryFn = (...args: any) => Promise<any>
 
@@ -19,7 +10,7 @@ type QueryFn = (...args: any) => Promise<any>
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
-  params?: any,
+  params?: InferUnaryParam<T>,
   options: any = {},
 ): [PromiseReturnType<T>, Record<any, any>] {
   const {data, ...rest} = useReactQuery([(queryFn as any).cacheKey, params], (_, params) => queryFn(params), {
