@@ -1,15 +1,12 @@
 import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
-import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJson, writeSync, openSync, closeSync} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
 import {log} from '@blitzjs/server'
-
-const themeColor = '6700AB'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
