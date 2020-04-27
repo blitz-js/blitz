@@ -1,5 +1,5 @@
 import {Link, BlitzPage, GetStaticProps} from 'blitz'
-import getProducts from 'app/products/queries/getProducts'
+import getProducts from '../../queries/getProducts'
 import {Product} from 'db'
 
 type StaticProps = {
