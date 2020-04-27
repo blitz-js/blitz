@@ -22,6 +22,15 @@ const checkParent = async (): Promise<false | number> => {
   return false
 }
 
+/**
+ * @name isBlitzRoot
+ * @returns IsBlitzRootError enum
+ * notBlitz -> when can't find package.json in current folder and first found in parent
+ *             doesn't have blitz in dependencies
+ * notRoot -> if in a nested folder of blitz project (found blitz as depend in a parent package.json)
+ * badPackageJson -> an error occurred while reading local package.json
+ */
+
 const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError; depth?: number}> => {
   try {
     const local = await readJSON('./package.json')
