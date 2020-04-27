@@ -1,7 +1,10 @@
 import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
 import { log } from '@blitzjs/server';
 
-export const getLatestVersion = async (dependency: string, templateVersion: string = '') => {
+/**
+ * @example const [ version, isFallback ] = await getLatestVersion("blitz", "2.x");
+ */
+export const getLatestVersion = async (dependency: string, templateVersion: string = ''): Promise<[ string, boolean ]> => {
   const major = templateVersion.replace('.x', '')
 
   try {
@@ -21,13 +24,13 @@ export const getLatestVersion = async (dependency: string, templateVersion: stri
     // If the latest tagged version matches our pinned major, use that, otherwise use the
     // latest untagged which does
     if (latestDistVersion.startsWith(major)) {
-      return latestDistVersion
+      return [ latestDistVersion, false ]
     } else {
-      return latestVersion
+      return [ latestVersion, false ]
     }
   } catch (error) {
     const fallback = templateVersion
     log.error(`Failed to fetch latest version of '${dependency}', falling back to '${fallback}'.`);
-    return fallback
+    return [ fallback, true ]
   }
 }

@@ -7,7 +7,7 @@ import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
-import { getBlitzDependencyVersion } from '../utils/get-blitz-dependency-version'
+import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
 
 const themeColor = '6700AB'
 
@@ -49,24 +49,46 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     console.log('') // New line needed
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
-    pkg.dependencies = await fetchLatestVersionsFor(pkg.dependencies);
-    pkg.devDependencies = await fetchLatestVersionsFor(pkg.devDependencies);
+    const [
+      [newDependencies, dependenciesUsedFallback],
+      [newDevDependencies, devDependenciesUsedFallback],
+      [blitzDependencyVersion, blitzUsedFallback],
+    ] = await Promise.all([
+      fetchLatestVersionsFor(pkg.dependencies),
+      fetchLatestVersionsFor(pkg.devDependencies),
+      getBlitzDependencyVersion(this.options.version),
+    ])
+    pkg.dependencies = newDependencies
+    pkg.devDependencies = newDevDependencies
+    pkg.dependencies.blitz = blitzDependencyVersion
 
-    pkg.dependencies.blitz = await getBlitzDependencyVersion(this.options.version);
+    const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback || blitzUsedFallback
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
     spinner.succeed()
 
-    console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
-    console.log('Scary warning messages during this part are unfortunately normal.\n')
+    if (!fallbackUsed) {
+      console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
+      console.log('Scary warning messages during this part are unfortunately normal.\n')
 
-    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
-    if (result.status !== 0) {
-      throw new Error()
+      const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
+      if (result.status !== 0) {
+        throw new Error()
+      }
+
+      console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+    } else {
+      console.log(
+        chalk
+          .hex(themeColor)
+          .bold(
+            `\nThere seems to be some problem with your network. We'll skip installing your dependencies for now, make sure to compensate by running ${
+              this.options.yarn ? "'yarn'" : "'npm install'"
+            } once your connection is working again.`,
+          ),
+      )
     }
-
-    console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
 
     // Ensure the generated files are formatted with the installed prettier version
     const prettierResult = spawn.sync(

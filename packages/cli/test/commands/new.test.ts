@@ -12,29 +12,21 @@ nock("https://registry.npmjs.org")
 
 nock.restore();
 
-async function getLatestBlitzVersion() {
-  const response = await fetch("https://registry.npmjs.org/-/package/blitz/dist-tags");
-  const { latest } = await response.json();
-  return latest;
-}
-
-function makeTempDir() {
-  const tmpDirPath = path.join(
-    os.tmpdir(),
-    "blitzjs-test-"
-  );
-
-  return fs.mkdtempSync(tmpDirPath);
-}
+jest.setTimeout(60 * 1000);
 
 describe("`new` command", () => {
   describe("when scaffolding new project", () => {
 
-    
-
-    jest.setTimeout(60 * 1000);
-
     async function withNewApp(test: (dirName: string, packageJson: any) => Promise<void> | void) {
+      function makeTempDir() {
+        const tmpDirPath = path.join(
+          os.tmpdir(),
+          "blitzjs-test-"
+        );
+      
+        return fs.mkdtempSync(tmpDirPath);
+      }
+
       const tempDir = makeTempDir();
       await NewCmd.run([tempDir]);
 
@@ -49,7 +41,13 @@ describe("`new` command", () => {
       fs.rmdirSync(tempDir);
     }
 
-    it("pins Blitz to the current version", () => withNewApp(async (_, packageJson) => {
+    it("pins Blitz to the current version", async () => await withNewApp(async (_, packageJson) => {
+      async function getLatestBlitzVersion() {
+        const response = await fetch("https://registry.npmjs.org/-/package/blitz/dist-tags");
+        const { latest } = await response.json();
+        return latest;
+      }
+
       const { dependencies: { blitz: blitzVersion } } = packageJson;
 
       expect(blitzVersion).toEqual(await getLatestBlitzVersion());
@@ -58,7 +56,7 @@ describe("`new` command", () => {
     describe("with network trouble", () => {
       it("uses template versions", async () => {
         nock.activate();
-        await withNewApp((_, packageJson) => {
+        await withNewApp(async (_, packageJson) => {
           const { dependencies } = packageJson;
           expect(dependencies.blitz).toBe("latest");
         })
