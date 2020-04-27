@@ -1,14 +1,28 @@
 import File from 'vinyl'
+import {relative, resolve} from 'path'
+import {pathExistsSync} from 'fs-extra'
+
 import {absolutePathTransform} from '../../utils'
-import {relative} from 'path'
 import {through} from '../../../streams'
 import {Rule} from '../../../types'
+
+const configFiles = ['next.config.js', 'blitz.config.js']
 
 /**
  * Returns a Rule that manages generating the internal RPC commands and handlers
  */
 const create: Rule = function configure({config: {src}}) {
   const fileTransformer = absolutePathTransform(src)
+
+  let serverless = false
+  for (const configFile of configFiles) {
+    if (pathExistsSync(resolve(src, configFile))) {
+      const config = require(resolve(src, configFile))
+      if (Object.keys(config).includes('target') && config.target.includes('serverless')) {
+        serverless = true
+      }
+    }
+  }
 
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
@@ -42,7 +56,7 @@ const create: Rule = function configure({config: {src}}) {
 
     // Isomorphic RPC client
     const rpcFile = file.clone()
-    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath))
+    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, serverless))
     this.push(rpcFile)
 
     next()
@@ -60,7 +74,7 @@ export function isRpcPath(filePath: string) {
 const isomorphicRpcTemplate = (resolverPath: string, serverless: boolean) => `
 import {isomorphicRpc} from '@blitzjs/core'
 import resolver from '${resolverPath}'
-export default isomorphicRpc(resolver, '${resolverPath}') as typeof resolver
+export default isomorphicRpc(resolver, '${resolverPath}', ${serverless || false}) as typeof resolver
 `
 
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `

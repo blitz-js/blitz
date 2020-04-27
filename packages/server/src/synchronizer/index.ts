@@ -14,7 +14,6 @@ type SynchronizeFilesInput = {
   ignoredPaths: string[]
   includePaths: string[]
   writeManifestFile: boolean
-  serverless?: boolean
 }
 
 type SynchronizeFilesOutput = {

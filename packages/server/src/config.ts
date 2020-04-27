@@ -10,7 +10,6 @@ export type ServerConfig = {
   buildFolder?: string
   manifestPath?: string
   writeManifestFile?: boolean
-  serverless?: boolean
   watch?: boolean
   synchronizer?: typeof synchronizeFiles
 }
