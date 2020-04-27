@@ -5,8 +5,9 @@ import chalk from 'chalk'
 import * as path from 'path'
 import { resolveBinAsync } from '@blitzjs/server'
 import { Client } from "pg"
-var mysql = require('mysql2/promise');
+import * as mysql from 'mysql2'
 import * as fs from "fs";
+import { prompt } from "enquirer";
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -89,7 +90,7 @@ export const resetMysql = async () => {
 		console.log(err)
 	} finally {
 		client.end();
-		runMigrate();
+		await runMigrate();
 	}
 }
 
@@ -99,7 +100,7 @@ export const resetSqlite = async () => {
 		if (err) {
 			return console.log(err)
 		}
-		return runMigrate()
+		runMigrate()
 	})
 }
 
@@ -168,15 +169,23 @@ ${chalk.bold(
 			})
 		} else if (command === 'reset') {
 			if (typeof dbUrl !== "undefined") {
-				if (dbUrl.includes('postgresql')) {
-					await resetPostgres()
-				} else if (dbUrl.includes('mysql')) {
-					await resetMysql();
-				} else if (dbUrl.includes('file:')) {
-					await resetSqlite();
-				} else {
-					this.log("The database url is not valid.")
-				}
+				await prompt<{ confirm: string }>({
+					type: 'confirm',
+					name: 'confirm',
+					message: 'Are you sure you want to reset your database?'
+				}).then(res => {
+					if (res.confirm) {
+						if (dbUrl.includes('postgresql')) {
+							resetPostgres()
+						} else if (dbUrl.includes('mysql')) {
+							resetMysql();
+						} else if (dbUrl.includes('file:')) {
+							resetSqlite();
+						} else {
+							this.log("The database url is not valid.")
+						}
+					}
+				})
 			} else {
 				this.log("Add a database url to your .env file.")
 			}
