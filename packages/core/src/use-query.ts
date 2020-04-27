@@ -47,10 +47,14 @@ export function useQuery<T extends QueryFn, O extends Options<T>>(
   }
 
   if (options?.paginated) {
+    // TODO: this could be an issue, unless we assume the `paginated` option will always be constant when it's called
+    // alternatively consider separating this in `useQuery` and `usePaginatedQuery`
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const {resolvedData, ...rest} = usePaginatedReactQuery(queryKey, queryFunction, queryOptions)
     return [resolvedData as PromiseReturnType<T>, rest as RestReturnType<T, O>]
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {data, ...rest} = useReactQuery(queryKey, queryFunction, queryOptions)
   return [data as PromiseReturnType<T>, rest as RestReturnType<T, O>]
 }

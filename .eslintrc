@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "import/no-default-export": ["warn"],
+    "unicorn/filename-case": ["warn", {
+      "case": "kebabCase"
+    }],
+    "import/first": 0
+  },
+  "plugins": ["unicorn"]
+}
