@@ -49,10 +49,19 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     console.log('') // New line needed
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
-    pkg.dependencies = await fetchLatestVersionsFor(pkg.dependencies);
-    pkg.devDependencies = await fetchLatestVersionsFor(pkg.devDependencies);
+    const [
+      newDependencies,
+      newDevDependencies,
+      newBlitzVersion
+    ] = await Promise.all([
+      fetchLatestVersionsFor(pkg.dependencies),
+      fetchLatestVersionsFor(pkg.devDependencies),
+      getBlitzDependencyVersion(this.options.version)
+    ]);
 
-    pkg.dependencies.blitz = await getBlitzDependencyVersion(this.options.version);
+    pkg.dependencies = newDependencies;
+    pkg.devDependencies = newDevDependencies
+    pkg.dependencies.blitz = newBlitzVersion;
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
