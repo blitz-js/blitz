@@ -6,7 +6,7 @@ import * as path from 'path'
 import { resolveBinAsync } from '@blitzjs/server'
 import { Client } from "pg"
 var mysql = require('mysql2/promise');
-var sqlite3 = require('sqlite3').verbose();
+import * as fs from "fs";
 
 const envPath = path.join(process.cwd(), '.env')
 require('dotenv').config({ path: envPath })
@@ -94,9 +94,13 @@ export const resetMysql = async () => {
 }
 
 export const resetSqlite = async () => {
-	const dbPath = `db/${dbUrl?.split('file:./').pop()}`;
-	const db = new sqlite3.Database(dbPath);
-	db.run("CREATE TABLE lorem (info TEXT)")
+	const dbPath = `db${dbUrl?.split('file:.').pop()}`;
+	fs.unlink(dbPath, (err) => {
+		if (err) {
+			return console.log(err)
+		}
+		return runMigrate()
+	})
 }
 
 export default class Db extends Command {
@@ -165,11 +169,11 @@ ${chalk.bold(
 		} else if (command === 'reset') {
 			if (typeof dbUrl !== "undefined") {
 				if (dbUrl.includes('postgresql')) {
-					await ResetPostgres()
+					await resetPostgres()
 				} else if (dbUrl.includes('mysql')) {
-					await ResetMysql();
+					await resetMysql();
 				} else if (dbUrl.includes('file:')) {
-					await ResetSqlite();
+					await resetSqlite();
 				} else {
 					this.log("The database url is not valid.")
 				}
