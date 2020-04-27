@@ -40,6 +40,7 @@
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "globby": "^11.0.0",
+    "got": "^11.0.2",
     "has-yarn": "^2.1.0",
     "hasbin": "^1.2.3",
     "mem-fs": "^1.1.3",
