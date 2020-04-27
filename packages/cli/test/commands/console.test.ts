@@ -1,7 +1,7 @@
 import * as repl from 'repl'
 import * as chokidar from 'chokidar'
 import ConsoleCmd from '../../src/commands/console'
-import {BLITZ_MODULE_PATHS} from '../../src/utils/load-blitz'
+import {getBlitzModulePaths} from '../../src/utils/load-blitz'
 import {REPLServer} from 'repl'
 import {FSWatcher} from 'chokidar'
 
@@ -9,6 +9,7 @@ const mockRepl = ({
   defineCommand: jest.fn(),
   on: jest.fn(),
   context: {},
+  setupHistory: jest.fn(),
 } as any) as REPLServer
 const mockWatcher = ({
   on: jest.fn(),
@@ -34,16 +35,14 @@ describe('Console command', () => {
     jest.spyOn(repl, 'start').mockReturnValue(mockRepl)
     jest.spyOn(chokidar, 'watch').mockReturnValue(mockWatcher)
     jest.spyOn(mockRepl, 'on').mockReturnValue(mockRepl)
+    jest.spyOn(mockRepl, 'setupHistory').mockReturnValue()
 
     await ConsoleCmd.prototype.run()
 
     expect(repl.start).toBeCalledWith(ConsoleCmd.replOptions)
     expect(mockRepl.defineCommand).toBeCalledWith('reload', ConsoleCmd.commands.reload)
 
-    expect(chokidar.watch).toBeCalledWith('package.json')
-    expect(chokidar.watch).toBeCalledWith(BLITZ_MODULE_PATHS)
-
-    expect(ConsoleCmd.prototype.log).toHaveBeenCalledWith(`Welcome to Blitz.js v0.0.1
-Type ".help" for more information.`)
+    // expect(chokidar.watch).toBeCalledWith('package.json')
+    expect(chokidar.watch).toBeCalledWith(getBlitzModulePaths())
   })
 })

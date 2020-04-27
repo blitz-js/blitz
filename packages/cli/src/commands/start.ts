@@ -24,8 +24,11 @@ export default class Start extends Command {
     if (flags.production) {
       await prod(config)
     } else {
-      await runPrismaGeneration({silent: true})
-      await dev(config)
+      try {
+        await dev(config, runPrismaGeneration({silent: true}))
+      } catch (err) {
+        process.exit(1) // clean up?
+      }
     }
   }
 }

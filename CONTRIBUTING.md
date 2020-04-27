@@ -14,7 +14,7 @@ Blitz is built by and for the community. There's no large company sponsoring dev
 
 ### Our Codebase is a Garden
 
-The Blitz codebase is like a community garden. There's a lot of beautiful plants and vegitables, but it won't take long until you find some weeds! When you find weeds, please remove them :) Minor refactoring is always encouraged. If you'd like to do some major refactoring, it's best to first either open an issue or check with us in Slack. Most likely we'll agree with you.
+The Blitz codebase is like a community garden. There's a lot of beautiful plants and vegetables, but it won't take long until you find some weeds! When you find weeds, please remove them :) Minor refactoring is always encouraged. If you'd like to do some major refactoring, it's best to first either open an issue or check with us in Slack. Most likely we'll agree with you.
 
 <br>
 
@@ -48,25 +48,39 @@ After you contribute in any way, please add yourself as a contributor via the [@
 
 ## Development Setup
 
-#### Repo Setup
+**1.** Fork this repo
 
-**1.** Clone the repo
+**2.** Clone your fork repo
 
-```
-git clone git@github.com:blitz-js/blitz.git
+```sh
+# If you didn't fork the repo use blitz-js as the USERNAME
+git clone git@github.com:USERNAME/blitz.git
 cd blitz
 ```
 
-**2.** Install dependencies
+**3.** Install dependencies
 
 ```
 yarn
 ```
 
-**3.** Start the package server. This must be running for any package development or example development
+**4.** Start the package server. This must be running for any package development or example development
 
 ```
 yarn dev
+```
+
+**5.** Run tests
+
+```
+yarn test
+```
+
+#### Sync your fork
+
+```sh
+./scripts/fetchRemote.sh
+git merge upstream/canary
 ```
 
 #### Link the Blitz CLI (Optional)

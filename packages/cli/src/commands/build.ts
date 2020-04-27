@@ -12,6 +12,10 @@ export default class Build extends Command {
       serverless: true,
     }
 
-    await build(config)
+    try {
+      await build(config)
+    } catch (err) {
+      process.exit(1) // clean up?
+    }
   }
 }

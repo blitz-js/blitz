@@ -3,12 +3,18 @@ import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
+import {readJSONSync, writeJson} from 'fs-extra'
+import {join} from 'path'
+import {replaceDependencies} from '../utils/replace-dependencies'
+import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
+import {log} from '@blitzjs/server'
 
 const themeColor = '6700AB'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   yarn: boolean
+  version: string
 }
 
 const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
@@ -37,7 +43,29 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    console.log(chalk.hex(themeColor).bold('\nInstalling dependencies...'))
+    const pkgJsonLocation = join(this.destinationPath(), 'package.json')
+    const pkg = readJSONSync(pkgJsonLocation)
+    const pkgDependencies = Object.keys(pkg.dependencies)
+    const pkgDevDependencies = Object.keys(pkg.devDependencies)
+
+    console.log('') // New line needed
+    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
+
+    const dependenciesArray = await Promise.all([
+      replaceDependencies(pkg, pkgDependencies, 'dependencies'),
+      replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
+    ])
+
+    for (let i = 0; i < dependenciesArray.length; i++) {
+      const {key, dependencies} = dependenciesArray[i]
+      pkg[key] = replaceBlitzDependency(dependencies, this.options.version)
+    }
+
+    await writeJson(pkgJsonLocation, pkg, {spaces: 2})
+
+    spinner.succeed()
+
+    console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
     console.log('Scary warning messages during this part are unfortunately normal.\n')
 
     const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})

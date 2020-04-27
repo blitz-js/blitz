@@ -10,30 +10,61 @@ jest.doMock('../src/reporter', () => ({
 
 // Assume next works
 jest.doMock('../src/next-utils', () => nextUtilsMock)
+const originalLog = console.log
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {resolve} from 'path'
-import {FSWatcher} from 'chokidar'
+import {join, resolve} from 'path'
 import {remove, pathExists} from 'fs-extra'
-import directoryTree from 'directory-tree'
+import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
+import {directoryTree} from './utils/tree-utils'
 import * as pkgDir from 'pkg-dir'
 
 describe('Dev command', () => {
-  let watcher: FSWatcher
   let rootFolder: string
   let buildFolder: string
   let devFolder: string
+  let consoleOutput: string[] = []
+  const mockedLog = (output: string) => consoleOutput.push(output)
 
   beforeEach(() => {
+    console.log = mockedLog
     jest.clearAllMocks()
   })
 
   afterEach(async () => {
+    console.log = originalLog
+
     if (await pathExists(devFolder)) {
       await remove(devFolder)
     }
-    watcher?.close()
+  })
+
+  describe('throw in nextStartDev', () => {
+    beforeEach(() => {
+      nextUtilsMock.nextStartDev.mockRejectedValue('pow')
+    })
+
+    afterEach(() => {
+      nextUtilsMock.nextStartDev.mockReturnValue(Promise.resolve())
+    })
+
+    it('should blow up', (done) => {
+      const mockSynchronizer = () => Promise.resolve({manifest: Manifest.create()})
+      ;(async () => {
+        try {
+          await dev({
+            synchronizer: mockSynchronizer,
+            rootFolder: '',
+            writeManifestFile: false,
+            watch: false,
+          })
+        } catch (err) {
+          expect(err).toBe('pow')
+          done()
+        }
+      })()
+    })
   })
 
   describe('when with next.config', () => {
@@ -43,15 +74,13 @@ describe('Dev command', () => {
       devFolder = resolve(rootFolder, '.blitz')
     })
 
-    it('should fail when passed a next.config.js', (done) => {
-      dev({rootFolder, buildFolder, devFolder, writeManifestFile: false})
-        .then((w) => {
-          watcher = w
-        })
-        .catch((err) => {
-          expect(err.name).toBe('ConfigurationError')
-          done()
-        })
+    it('should fail when passed a next.config.js', async () => {
+      try {
+        await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+      } catch (_e) {}
+      consoleOutput.includes(
+        'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
+      )
     })
   })
 
@@ -60,7 +89,7 @@ describe('Dev command', () => {
       rootFolder = resolve(__dirname, './fixtures/dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
-      watcher = await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false})
+      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
     })
 
     it('should copy the correct files to the dev folder', async () => {
@@ -68,73 +97,22 @@ describe('Dev command', () => {
       expect(tree).toEqual({
         children: [
           {
-            children: [
-              {
-                extension: '.js',
-                name: 'blitz.config.js',
-                path: `${devFolder}/blitz.config.js`,
-                size: 20,
-                type: 'file',
-              },
-              {
-                extension: '.js',
-                name: 'next.config.js',
-                path: `${devFolder}/next.config.js`,
-                size: 130,
-                type: 'file',
-              },
-              {
-                extension: '',
-                name: 'one',
-                path: `${devFolder}/one`,
-                size: 0,
-                type: 'file',
-              },
-              {
-                extension: '',
-                name: 'two',
-                path: `${devFolder}/two`,
-                size: 0,
-                type: 'file',
-              },
-            ],
+            children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
             name: '.blitz-dev',
-            path: `${devFolder}`,
-            size: 150,
-            type: 'directory',
           },
-          {
-            extension: '',
-            name: '.now',
-            path: `${rootFolder}/.now`,
-            size: 18,
-            type: 'file',
-          },
-          {
-            extension: '',
-            name: 'one',
-            path: `${rootFolder}/one`,
-            size: 0,
-            type: 'file',
-          },
-          {
-            extension: '',
-            name: 'two',
-            path: `${rootFolder}/two`,
-            size: 0,
-            type: 'file',
-          },
+          {name: '.now'},
+          {name: 'one'},
+          {name: 'two'},
         ],
         name: 'dev',
-        path: `${rootFolder}`,
-        size: 168,
-        type: 'directory',
       })
     })
 
     it('calls spawn with the patched next cli bin', () => {
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(`${pkgDir.sync(__dirname)}/bin/next-patched`)
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(`${rootFolder}/.blitz-dev`)
+      const nextPatched = join(String(pkgDir.sync(__dirname)), 'bin', 'next-patched')
+      const blitzDev = join(rootFolder, '.blitz-dev')
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)
     })
   })
 })

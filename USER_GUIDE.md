@@ -2,15 +2,15 @@
 
 <br>
 
-Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build! 
+Before getting started, you should know **this is alpha software**. Blitz is incomplete. There are rough spots and bugs. APIs may change. But you can build an app and deploy it to production. We're excited to see what you build!
 
-If you have any issues at all, please join the [Blitz slack](https://slack.blitzjs.com) and tell us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. Eventually it will be because this is very important to us.
+If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
 <br>
 
 ## Introduction
 
-Blitz is a Rails-like framework for building monolithic, fullstack React apps. The idea is that Blitz makes you extremely productive by doing as much set up and grunt work for you.
+Blitz is a Rails-like framework for building monolithic, full-stack React apps. The idea is that Blitz makes you extremely productive by doing as much set up and grunt work for you.
 
 **When building a Blitz app, you don’t have to think about “building an API” or “fetching data from your API”**. You only think about writing functions that get and change data. And to use those functions in your component, you simply import and call them like a regular function.
 
@@ -23,9 +23,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Set Up Your Computer
 
 - [ ] You need Node.js 12 or newer
-- [ ] You need Postgres installed and running.
-  - On macOS, you can use `brew install postgres` or install [Postgres.app](https://postgresapp.com/)
-  
+
 <br>
 
 ### Create Your Blitz App
@@ -34,15 +32,15 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
-5. View your baby app at [https://localhost:3000](https://localhost:3000)
+5. View your baby app at [http://localhost:3000](http://localhost:3000)
 
 <br>
 
 ### Set Up Your Database
 
-By default, Blitz uses Prisma 2 which is a strongly typed database client. You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction). _Note, Prisma 2 is not required for Blitz. The only Prisma-Blitz integration is the `blitz db` cli command. You can use anything you want, such as Mongo, TypeORM, etc._
+By default, Blitz uses Prisma 2 which is a strongly typed database client. **You probably want to read [the Prisma 2 documentation](https://www.prisma.io/docs/understand-prisma/introduction).** _Note, Prisma 2 is not required for Blitz. The only Prisma-Blitz integration is the `blitz db` cli command. You can use anything you want, such as Mongo, TypeORM, etc._
 
-1. Open `db/prisma.schema` and add the following:
+1. Open `db/schema.prisma` and add the following:
 
 ```prisma
 model Project {
@@ -55,7 +53,7 @@ model Task {
   id          Int      @default(autoincrement()) @id
   name        String
   project     Project  @relation(fields: [projectId], references: [id])
-  projectId   Id
+  projectId   Int
 }
 ```
 
@@ -63,14 +61,14 @@ model Task {
    - If this fails, you need to change the `DATABASE_URL` value in `.env` to whatever is required by your Postgres installation.
 
 <br>
-   
-### Generate the CRUD Files
+
+### Scaffold out all the files your basic CRUD actions
 
 _CRUD = create, read, update, delete_
 
-1. Run `blitz generate crud project`
-2. Run `blitz generate crud task --parent project`
-3. Open [https://localhost:3000/projects](https://localhost:3000/projects) to see the default project list page
+1. Run `blitz generate all project` to generate fully working queries, mutations, and pages
+2. Open [http://localhost:3000/projects](http://localhost:3000/projects) to see the default project list page
+3. Explore the generated pages and view, create, update, and delete projects.
 
 <br>
 
@@ -78,15 +76,14 @@ _CRUD = create, read, update, delete_
 
 Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Next.js Page documentation](https://nextjs.org/docs/basic-features/pages)
 
-
-- Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this: 
+- Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this:
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
   - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
-- All React components inside a `pages/` folder are accessible at a URL corresponding to it's path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.  
+- All React components inside a `pages/` folder are accessible at a URL corresponding to its path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
- 
+
 <br>
 
 ### Writing Queries & Mutations
@@ -102,7 +99,6 @@ We automatically alias the root of your project, so `import db from 'db'` is imp
 import db, {FindOneProductArgs} from 'db'
 
 export default async function getProduct(args: FindOneProductArgs) {
-
   // Can do any pre-processing or event triggers here
   const product = await db.product.findOne(args)
   // Can do any post-processing or event triggers here
@@ -118,11 +114,10 @@ export default async function getProduct(args: FindOneProductArgs) {
 import db, {ProductCreateArgs} from 'db'
 
 export default async function createProduct(args: ProductCreateArgs) {
-  
   // Can do any pre-processing or event triggers here
   const product = await db.product.create(args)
   // Can do any post-processing or event triggers here
-  
+
   return product
 }
 ```
@@ -130,7 +125,6 @@ export default async function createProduct(args: ProductCreateArgs) {
 <br>
 
 ### Using Queries
-
 
 #### In a React Component
 
@@ -143,27 +137,27 @@ At build time, the direct function import is swapped out for a function that exe
 ```tsx
 import {Suspense} from 'react'
 import {useRouter, useQuery} from 'blitz'
-import getProduct from '/app/products/queries/getProduct'
+import getProduct from 'app/products/queries/getProduct'
 import ErrorBoundary from 'app/components/ErrorBoundary'
 
 function Product() {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id: props.query.id}})
-  
+  const [product] = useQuery(getProduct, {where: {id}})
+
   return <div>{product.name}</div>
 }
 
-export default function() {
+export default function () {
   return (
-   <div>
-     <ErrorBoundary fallback={error => <div>Error: {JSON.stringify(error)}</div>}>
-       <Suspense fallback={<div>Loading...</div>}>
-         <Product />
-       </Suspense>
-     </ErrorBoundary>
-   </div>
- )
+    <div>
+      <ErrorBoundary fallback={(error) => <div>Error: {JSON.stringify(error)}</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Product />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
+  )
 }
 ```
 
@@ -174,12 +168,12 @@ In `getStaticProps`, a query function can be called directly without `useQuery`
 ```tsx
 import getProduct from '/app/products/queries/getProduct'
 
-export const getStaticProps = async context => {
+export const getStaticProps = async (context) => {
   const product = await getProduct({where: {id: context.params?.id}})
   return {props: {product}}
 }
 
-export default function({product}) {
+export default function ({product}) {
   return <div>{product.name}</div>
 }
 ```
@@ -206,7 +200,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 
 ### Using Mutations
 
-Mutations are called directly, like a regular asynchronous function. 
+Mutations are called directly, like a regular asynchronous function.
 
 At build time, the direct function import is swapped out for a function that executes a network call to run the mutation server-side.
 
@@ -259,8 +253,9 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
    1. [Read the Digitial Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
-3. Lastly, you need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
+3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
+4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
 
 #### Serverless
 
@@ -268,6 +263,7 @@ Assuming you already have a Zeit account and the `now` cli installed, you can do
 
 1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
 2. Add a `now.json` at your project root with
+
 ```json
 {
   "env": {
@@ -280,9 +276,10 @@ Assuming you already have a Zeit account and the `now` cli installed, you can do
   }
 }
 ```
+
 3. Run `now`
 
-Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle tested. 
+Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle-tested.
 
 #### Traditional, Long-Running Server
 
@@ -318,13 +315,13 @@ Will introspect the database defined in `db/schema.prisma` and automatically gen
 
 Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so you can easily see and change data in your database.
 
-#### `blitz generate crud MODEL [--parent MODEL]`
+#### `blitz generate -h`
 
-Generate all the CRUD files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+Generate different types of files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
 
 #### `blitz console`
 
-TODO CURRENTLY BROKEN
+Start a Node.js REPL that's preloaded with your `db` object and all your queries and mutations. This is awesome for quickly trying your code without running the app!
 
 <br>
 
@@ -338,14 +335,13 @@ TODO CURRENTLY BROKEN
 
 ## What's Next for Blitz.js?
 
-Here's the list of big things that are currently missing from Blitz but are top priority for us:
+Here's the list of big things that are currently missing from Blitz but are a top priority for us:
 
 - A real Blitzjs.com website and documentation
 - Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
-- Authentication 
+- Authentication
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
-- `blitz new` including set up for testing, Prettier, ESLint, styling system (Tailwind, CSS-in-JS, etc)
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
@@ -370,6 +366,7 @@ How you can help:
 3. Send us feedback in the [Blitz slack](https://slack.blitzjs.com).
 4. Contribute code. We have a lot of issues that are ready to work on! Start by reading [The Contributing Guide](https://github.com/blitz-js/blitz/blob/canary/CONTRIBUTING.md). Let us know if you need help.
 5. Any way you want! We totally appreciate any type of contribution, such as documentation, videos, blog posts, etc. If you have a crazy idea, feel free to run it past us in Slack! :)
+6. [Sponsorships & donations](https://github.com/blitz-js/blitz#sponsors-and-donations)
 
 <br>
 

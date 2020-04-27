@@ -1,38 +1,16 @@
 import resolveCwd from 'resolve-cwd'
-import findParentDir from 'find-parent-dir'
+import pkgDir from 'pkg-dir'
 import path from 'path'
 
-// This code originally from https://github.com/thlorenz/resolve-bin
-// It's inlined here because we need to use resolveCwd
-function resolveBin(name: string, executable: string, cb: Function) {
-  var mod
-  try {
-    mod = resolveCwd(name)
-  } catch (err) {
-    return cb(err)
-  }
+export async function resolveBinAsync(pkg: string, executable = pkg) {
+  const packageDir = await pkgDir(resolveCwd(pkg))
 
-  findParentDir(mod, 'package.json', function (err, dir) {
-    if (err) return cb(err)
+  if (!packageDir) throw new Error(`Could not find package.json for '${pkg}'`)
 
-    var pack = require(path.join(dir as string, 'package.json'))
-    var binfield = pack.bin
+  const {bin} = require(path.join(packageDir, 'package.json'))
+  const binPath = typeof bin === 'object' ? bin[executable] : bin
 
-    var binpath = typeof binfield === 'object' ? binfield[executable] : binfield
-    if (!binpath) return cb(new Error('No bin `' + executable + '` in module `' + name + '`'))
+  if (!binPath) throw new Error(`No bin '${executable}' in module '${pkg}'`)
 
-    var bin = path.join(dir as string, binpath)
-    cb(null, bin)
-  })
-}
-
-export function resolveBinAsync(pkg: string, executable = pkg) {
-  return new Promise<string>((resolve, reject) => {
-    resolveBin(pkg, executable, (err: any, bin: string) => {
-      if (err) {
-        reject(err)
-      }
-      resolve(bin)
-    })
-  })
+  return path.join(packageDir, binPath)
 }

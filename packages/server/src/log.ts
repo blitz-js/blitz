@@ -1,48 +1,112 @@
 import chalk from 'chalk'
+import ora from 'ora'
+import readline from 'readline'
 
-export const withCaret = (str: string) => {
+const brandColor = '6700AB'
+
+const withBranded = (str: string) => {
+  return chalk.hex(brandColor).bold(str)
+}
+
+const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
 }
 
-export const withCheck = (str: string) => {
+const withCheck = (str: string) => {
   return `${chalk.green('✔')} ${str}`
 }
 
-export const withX = (str: string) => {
+const withX = (str: string) => {
   return `${chalk.red.bold('✕')} ${str}`
 }
 
 /**
- * Console logs a green success message
+ * Logs a branded purple message to stdout.
+ *
+ * @param {string} msg
  */
-export const success = (msg: string) => {
-  console.log(withCheck(chalk.green(msg)))
+const branded = (msg: string) => {
+  console.log(chalk.hex(brandColor).bold(msg))
 }
 
 /**
- * Console logs a progress message
+ * Clears the line and optionally log a message to stdout.
+ *
+ * @param {string} msg
  */
-export const progress = (msg: string) => {
-  console.log(withCaret(chalk.whiteBright(msg)))
+const clearLine = (msg?: string) => {
+  readline.clearLine(process.stdout, 0)
+  readline.cursorTo(process.stdout, 0)
+  msg && process.stdout.write(msg)
 }
 
 /**
- * Console logs a subtle gray message
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
  */
-export const meta = (msg: string) => {
-  console.log(withCaret(chalk.gray(msg)))
-}
-
-/**
- * Console errors a red error message
- */
-export const error = (msg: string) => {
+const error = (msg: string) => {
   console.error(withX(chalk.red.bold(msg)))
 }
 
 /**
- * Sets the color of a variable for logging
+ * Logs a subtle gray message to stdout.
+ *
+ * @param {string} msg
  */
-export const variable = (val: string) => {
+const meta = (msg: string) => {
+  console.log(withCaret(chalk.gray(msg)))
+}
+
+/**
+ * Logs a progress message to stdout.
+ *
+ * @param {string} msg
+ */
+const progress = (msg: string) => {
+  console.log(withCaret(chalk.bold(msg)))
+}
+
+const spinner = (str: string) => {
+  return ora({
+    text: str,
+    color: 'blue',
+    spinner: {
+      interval: 120,
+      frames: ['◢', '◣', '◤', '◥'],
+    },
+  })
+}
+
+/**
+ * Logs a green success message to stdout.
+ *
+ * @param {string} msg
+ */
+const success = (msg: string) => {
+  console.log(withCheck(chalk.green(msg)))
+}
+
+/**
+ * Colorizes a variable for display.
+ *
+ * @param {string} val
+ */
+const variable = (val: any) => {
   return chalk.cyan.bold(`${val}`)
+}
+
+export const log = {
+  withBranded,
+  withCaret,
+  withCheck,
+  withX,
+  branded,
+  clearLine,
+  error,
+  meta,
+  progress,
+  spinner,
+  success,
+  variable,
 }

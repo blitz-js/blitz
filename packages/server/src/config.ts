@@ -1,6 +1,7 @@
 import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
+import {synchronizeFiles} from './synchronizer'
 
 export type ServerConfig = {
   rootFolder: string
@@ -10,22 +11,24 @@ export type ServerConfig = {
   manifestPath?: string
   writeManifestFile?: boolean
   serverless?: boolean
+  watch?: boolean
+  synchronizer?: typeof synchronizeFiles
 }
 
 const defaults = {
   ignoredPaths: [
-    './build',
-    '.blitz-*/**/*',
-    '.blitz/**/*',
+    './build/**/*',
+    './.blitz-*/**/*',
+    './.blitz/**/*',
     '.DS_Store',
     '.git',
-    '.next',
+    '.next/**/*',
     '*.log',
     '.now',
     '*.pnp.js',
-    './coverage',
-    './dist',
-    'node_modules',
+    'coverage/**/*',
+    'dist/**/*',
+    'node_modules/**/*',
   ],
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',
