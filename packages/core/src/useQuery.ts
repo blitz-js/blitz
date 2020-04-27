@@ -5,22 +5,13 @@ import {
   QueryResult,
   QueryOptions,
 } from 'react-query'
+import {PromiseReturnType, InferUnaryParam} from './types'
 
 type QueryFn = (...args: any) => Promise<any>
 
 interface Options<T> extends QueryOptions<T> {
   paginated?: boolean
 }
-
-/**
- * Get the type of the value, that the Promise holds.
- */
-export declare type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
-
-/**
- * Get the return type of a function which returns a Promise.
- */
-export declare type PromiseReturnType<T extends QueryFn> = PromiseType<ReturnType<T>>
 
 /**
  * Get useQuery result without "data"
@@ -44,10 +35,10 @@ type RestReturnType<T extends QueryFn, O extends Options<T>> = O['paginated'] ex
 
 export function useQuery<T extends QueryFn, O extends Options<T>>(
   queryFn: T,
-  params?: any,
+  params?: InferUnaryParam<T>,
   options?: O,
 ): [PromiseReturnType<T>, RestReturnType<T, O>] {
-  const queryKey: [string, {}] = [(queryFn as any).cacheKey, params]
+  const queryKey: [string, any] = [(queryFn as any).cacheKey, params]
   const queryFunction = (_: string, params: {}) => queryFn(params)
   const queryOptions = {
     suspense: true,
