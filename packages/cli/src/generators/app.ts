@@ -26,6 +26,11 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
   async postWrite() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
+    const commitError = await new Promise((res, rej) => this.fs.commit((err) => (err ? rej(err) : res())))
+    if (commitError) {
+      // if we failed here, retry silently with `spawn`
+      spawn.sync('mv gitignore .gitignore')
+    }
 
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
