@@ -37,7 +37,6 @@
     "diff": "^4.0.2",
     "dotenv": "^8.2.0",
     "enquirer": "^2.3.4",
-    "find-package-json": "^1.2.0",
     "fs-extra": "^9.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "globby": "^11.0.0",
@@ -59,8 +58,7 @@
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
-    "@types/pluralize": "^0.0.29",
-    "@types/find-package-json": "^1.1.1"
+    "@types/pluralize": "^0.0.29"
   },
   "oclif": {
     "commands": "./lib/src/commands",

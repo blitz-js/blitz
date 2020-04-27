@@ -1,5 +1,6 @@
-import finder from 'find-package-json'
 import {readJSON} from 'fs-extra'
+import pkgDir from 'pkg-dir'
+import {resolve} from 'path'
 
 export enum IsBlitzRootError {
   notBlitz,
@@ -7,12 +8,17 @@ export enum IsBlitzRootError {
   badPackageJson,
 }
 
-const checkParent = () => {
-  const f = finder('.')
-  const file = f.next()
+const checkParent = async (): Promise<false | number> => {
+  const rootDir = await pkgDir('./')
 
-  if (Object.keys(file.value?.dependencies || {}).includes('blitz')) {
-    return process.cwd().slice(file.filename?.indexOf('/package.json')).split('/').length - 1
+  console.log(rootDir)
+
+  if (rootDir) {
+    const file = await readJSON(resolve(rootDir, 'package.json'))
+
+    if (file && Object.keys(file.dependencies || {}).includes('blitz')) {
+      return process.cwd().slice(rootDir.length).split('/').length - 1
+    }
   }
 
   return false
@@ -35,11 +41,9 @@ const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError;
   } catch (err) {
     // No local package.json
     if (err.code === 'ENOENT') {
-      console.log('No local pkg json, looking in parent')
-      const out = checkParent()
+      const out = await checkParent()
 
       if (out === false) {
-        console.error('No parent package.json')
         return {
           err: true,
           message: IsBlitzRootError.notBlitz,
