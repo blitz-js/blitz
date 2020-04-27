@@ -6,6 +6,7 @@ import createReadyHandler from './helpers/ready-handler'
 import createWorkOptimizer from './helpers/work-optimizer'
 import createRuleConfig from './rules/config'
 import createRuleManifest from './rules/manifest'
+import createRuleRelative from './rules/relative'
 import createRulePages from './rules/pages'
 import createRuleRpc from './rules/rpc'
 import createRuleWrite from './rules/write'
@@ -47,6 +48,7 @@ export default function createPipeline(
   const rulePages = createRulePages(api)
   const ruleRpc = createRuleRpc(api)
   const ruleConfig = createRuleConfig(api)
+  const ruleRelative = createRuleRelative(api)
   const ruleWrite = createRuleWrite(api)
   const ruleManifest = createRuleManifest(api)
 
@@ -59,6 +61,7 @@ export default function createPipeline(
     optimizer.triage,
 
     // Run business rules
+    ruleRelative.stream,
     rulePages.stream,
     ruleRpc.stream,
     ruleConfig.stream,
