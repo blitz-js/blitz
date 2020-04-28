@@ -1,31 +1,31 @@
 import {Suspense} from 'react'
 import {Head, Link, useRouter, useQuery} from 'blitz'
-import get<%= ModelName %> from 'app/<%= modelNames %>/queries/get<%= ModelName %>'
-import update<%= ModelName %> from 'app/<%= modelNames %>/mutations/update<%= ModelName %>'
+import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
+import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName__'
 
-export const Edit<%= ModelName %> = () => {
+export const Edit__ModelName__ = () => {
   const router = useRouter()
   const id = parseInt(router?.query.id as string)
-  const [<%= modelName %>] = useQuery(get<%= ModelName %>, {where: {id}})
+  const [__modelName__] = useQuery(get__ModelName__, {where: {id}})
 
   return (
     <div>
-      <h1>Edit <%= ModelName %> {<%= modelName %>.id}</h1>
+      <h1>Edit __ModelName__ {__modelName__.id}</h1>
       <pre>
-        {JSON.stringify(<%= modelName %>)}
+        {JSON.stringify(__modelName__)}
       </pre>
 
       <form onSubmit={async (event) => {
         event.preventDefault()
         try {
-          const updated = await update<%= ModelName %>({
-            where: {id: <%= modelName %>.id},
+          const updated = await update__ModelName__({
+            where: {id: __modelName__.id},
             data: {name: 'MyNewName'},
           })
           alert('Success!' + JSON.stringify(updated))
-          router.push('/<%= modelNames %>/[id]', `/<%= modelNames %>/${updated.id}`)
+          router.push('/__modelNames__/[id]', `/__modelNames__/${updated.id}`)
         } catch (error) {
-          alert('Error creating <%= modelName %> ' + JSON.stringify(error, null, 2))
+          alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
         }
       }}>
         <div>Put your form fields here. But for now, just click submit</div>
@@ -35,22 +35,22 @@ export const Edit<%= ModelName %> = () => {
   )
 }
 
-const Edit<%= ModelName %>Page = () => {
+const Edit__ModelName__Page = () => {
   return (
     <div className="container">
       <Head>
-        <title>Edit <%= ModelName %></title>
+        <title>Edit __ModelName__</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <Suspense fallback={<div>Loading...</div>}>
-          <Edit<%= ModelName %> />
+          <Edit__ModelName__ />
         </Suspense>
 
         <p>
-          <Link href="/<%= modelNames %>">
-            <a><%= ModelNames %></a>
+          <Link href="/__modelNames__">
+            <a>__ModelNames__</a>
           </Link>
         </p>
       </main>
@@ -58,5 +58,5 @@ const Edit<%= ModelName %>Page = () => {
   )
 }
 
-export default Edit<%= ModelName %>Page
+export default Edit__ModelName__Page
 
