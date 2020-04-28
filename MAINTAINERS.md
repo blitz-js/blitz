@@ -1,0 +1,75 @@
+# Blitz Maintainers
+
+Aside from the core team, there are two levels of maintainers, described below.
+
+## Becoming a Maintainer
+
+We always need more level 1 maintainers! The main requirement is that you can show empathy when communicating online. We'll train you as needed on the other specifics.
+
+Level 2 maintainers have a much higher responsibility, so usually you will spend time as a level 1 maintainer before moving to level 2.
+
+Please DM a core team member (Brandon Bayer, Rudi Yardley, or Dylan Brookes) in Slack if you're interested in becoming an official maintainer!
+
+## Level 1 Maintainers
+
+Level 1 maintainers are critical for a healthy Blitz community and project. They take a lot of burden off the core team and level 2 maintainers so they can focus on higher level things with longer term impact.
+
+The primary responsibilities of level 1 maintainers are:
+
+- Being a friendly, welcoming voice for the Blitz community
+- Issue triage
+- Pull request triage
+- Community encouragement
+- Community moderation
+- Tracking and ensuring progress of key issues
+
+## Level 2 Maintainers
+
+Level 2 maintainers are the backbone of the project. They are watchdogs over the code, ensuring code quality, correctness, and security. They also facilitate a rapid pace of progress.
+
+The primary responsibilities of level 2 maintainers are:
+
+- Code ownership over specific parts of the project
+- Maintaining and improving the architecture of what they own
+- Final pull request reviews
+- Merging pull requests
+- Tracking and ensuring progress of open pull requests
+
+## Issue Triage
+
+#### If a bug report:
+
+- Does it have enough information? Versions? Logs? Some way to reproduce?
+- Has this already been fixed in a previous release?
+- Is there already an existing issue for this?
+
+### If a feature/change request:
+
+- Is it clear what the request is and what the benefit will be?
+- Is this an obvious win for Blitz? Then accept it
+- If not obvious, then pull in a core team member or level 2 maintainer for more review
+
+### Actions
+
+1. Add tags:
+   - Add a `kind/*` tag
+   - Add a `scope/*` tag
+   - Add a `status/*` tag
+   - Add a good first/second issue tag if appropriate
+
+## Pull Request Triage
+
+- Are the changes covered by tests?
+- Do the changes look ok? Make sure there's no obvious issues
+
+### Actions
+
+1. Kindly request any changes if needed
+2. Else add a Github approval so that level 2 maintainers know it's already had an initial review
+
+## Final PR Review & Merging (Level 2 maintainers)
+
+As a level 2 maintainer, it is your responsibility to make sure broken code and regressions never reach the canary branch.
+
+- Ensure the PR'ed code fully works as intended and that there are no regressions in related code
+  - If not fully covered by automated tests, you need to pull down the code locally and manually verify everything (the Github CLI helps with this!)
