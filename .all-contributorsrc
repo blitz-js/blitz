@@ -325,6 +325,33 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "kandros",
+      "name": "Jaga Santagostino",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4562878?v=4",
+      "profile": "http://jagascript.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LoriKarikari",
+      "name": "Lori Karikari",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7902980?v=4",
+      "profile": "https://github.com/LoriKarikari",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "eliasjohansson",
+      "name": "Elias Johansson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
+      "profile": "https://twitter.com/GeggsElias",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

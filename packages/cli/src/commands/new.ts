@@ -11,6 +11,7 @@ import PromptAbortedError from '../errors/prompt-aborted'
 export interface Flags {
   ts: boolean
   yarn: boolean
+  'skip-install': boolean
 }
 
 export default class New extends Command {
@@ -37,6 +38,11 @@ export default class New extends Command {
       default: hasbin.sync('yarn'),
       allowNo: true,
     }),
+    'skip-install': flags.boolean({
+      description: 'Skip package installation',
+      default: false,
+      allowNo: true,
+    }),
     'dry-run': flags.boolean({description: 'show what files will be created without writing them to disk'}),
   }
 
@@ -55,6 +61,7 @@ export default class New extends Command {
       dryRun: flags['dry-run'],
       yarn: flags.yarn,
       version: this.config.version,
+      skipInstall: flags['skip-install'],
     })
 
     const themeColor = '6700AB'

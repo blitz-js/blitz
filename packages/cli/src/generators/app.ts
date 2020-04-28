@@ -15,6 +15,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   yarn: boolean
   version: string
+  skipInstall: boolean
 }
 
 const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
@@ -58,6 +59,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
       fetchLatestVersionsFor(pkg.devDependencies),
       getBlitzDependencyVersion(this.options.version),
     ])
+
     pkg.dependencies = newDependencies
     pkg.devDependencies = newDevDependencies
     pkg.dependencies.blitz = blitzDependencyVersion
@@ -68,7 +70,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     spinner.succeed()
 
-    if (!fallbackUsed) {
+    if (!fallbackUsed && !this.options.skipInstall) {
       console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
       console.log('Scary warning messages during this part are unfortunately normal.\n')
 
@@ -78,6 +80,18 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+
+      // Ensure the generated files are formatted with the installed prettier version
+      const prettierResult = spawn.sync(
+        this.options.yarn ? 'yarn' : 'npm',
+        'run prettier --loglevel silent --write .'.split(' '),
+        {
+          stdio: 'ignore',
+        },
+      )
+      if (prettierResult.status !== 0) {
+        throw new Error('Failed running prettier')
+      }
     } else {
       console.log(
         chalk
@@ -88,18 +102,6 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
             } once your connection is working again.`,
           ),
       )
-    }
-
-    // Ensure the generated files are formatted with the installed prettier version
-    const prettierResult = spawn.sync(
-      this.options.yarn ? 'yarn' : 'npm',
-      'run prettier --loglevel silent --write .'.split(' '),
-      {
-        stdio: 'ignore',
-      },
-    )
-    if (prettierResult.status !== 0) {
-      throw new Error('Failed running prettier')
     }
 
     // TODO: someone please clean up this ugly code :D
