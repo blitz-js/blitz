@@ -3,5 +3,5 @@
 * @flybayer
 *.md @merelinguist
 
-packages/server/* @ryardley
-packages/cli/* @aem
+packages/server/**/* @ryardley
+packages/cli/**/* @aem

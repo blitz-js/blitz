@@ -30,7 +30,9 @@ describe('relativeToAbsolute', () => {
   ]
   tests.forEach(({name, input: {filename, relativeImport}, expected}) => {
     it(name, () => {
-      expect(relativeToAbsolute('/projects/blitz/blitz', filename)(relativeImport)).toEqual(expected)
+      expect(relativeToAbsolute(normalize('/projects/blitz/blitz'), filename)(relativeImport)).toEqual(
+        expected,
+      )
     })
   })
 })
