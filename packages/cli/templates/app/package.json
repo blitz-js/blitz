@@ -1,5 +1,5 @@
 {
-  "name": "<%= name %>",
+  "name": "__name__",
   "version": "1.0.0",
   "scripts": {
     "start": "blitz start",
