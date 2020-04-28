@@ -17,7 +17,7 @@ model Project {
 blitz db migrate
 ```
 
-2. Start the dev server
+3. Start the dev server
 
 ```
 blitz start
