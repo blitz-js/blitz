@@ -5,7 +5,9 @@ import chalk from 'chalk'
 const whitelistGlobal = ['new']
 
 const hook: Hook<'init'> = async function (options) {
-  if (options.id && whitelistGlobal.includes(options.id)) return
+  // Bug with oclif
+  const id = (options as any).Command.id
+  if (id && whitelistGlobal.includes(id)) return
 
   const {err, message, depth} = await isBlitzRoot()
 
