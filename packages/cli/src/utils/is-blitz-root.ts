@@ -3,9 +3,9 @@ import pkgDir from 'pkg-dir'
 import {resolve} from 'path'
 
 export enum IsBlitzRootError {
-  notBlitz,
-  notRoot,
-  badPackageJson,
+  NotBlitz,
+  NotRoot,
+  BadPackageJson,
 }
 
 const checkParent = async (): Promise<false | number> => {
@@ -24,7 +24,7 @@ const checkParent = async (): Promise<false | number> => {
 
 /**
  * @name isBlitzRoot
- * @returns IsBlitzRootError enum
+ * @returns {IsBlitzRootError}
  * notBlitz -> when can't find package.json in current folder and first found in parent
  *             doesn't have blitz in dependencies
  * notRoot -> if in a nested folder of blitz project (found blitz as depend in a parent package.json)
@@ -40,11 +40,11 @@ const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError;
       } else {
         return {
           err: true,
-          message: IsBlitzRootError.notBlitz,
+          message: IsBlitzRootError.NotBlitz,
         }
       }
     }
-    return {err: true, message: IsBlitzRootError.badPackageJson}
+    return {err: true, message: IsBlitzRootError.BadPackageJson}
   } catch (err) {
     // No local package.json
     if (err.code === 'ENOENT') {
@@ -53,12 +53,12 @@ const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError;
       if (out === false) {
         return {
           err: true,
-          message: IsBlitzRootError.notBlitz,
+          message: IsBlitzRootError.NotBlitz,
         }
       } else {
         return {
           err: true,
-          message: IsBlitzRootError.notRoot,
+          message: IsBlitzRootError.NotRoot,
           depth: out,
         }
       }
