@@ -1,4 +1,4 @@
-# <%= name %>
+# __name__
 
 ## Getting Started
 

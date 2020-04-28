@@ -1,5 +1,5 @@
 {
-  "name": "<%= name %>",
+  "name": "__name__",
   "version": "1.0.0",
   "scripts": {
     "start": "blitz start",
@@ -31,8 +31,7 @@
     "@prisma/client": "2.x",
     "blitz": "canary",
     "react": "experimental",
-    "react-dom": "experimental",
-    "typescript": "3.x"
+    "react-dom": "experimental"
   },
   "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
@@ -51,7 +50,8 @@
     "lint-staged": "10.x",
     "next": "9.x",
     "prettier": "2.x",
-    "pretty-quick": "2.x"
+    "pretty-quick": "2.x",
+    "typescript": "3.x"
   },
   "private": true
 }
