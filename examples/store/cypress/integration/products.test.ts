@@ -36,4 +36,22 @@ describe('products#show page', () => {
   })
 })
 
+describe('products#ssr page', () => {
+  beforeEach(() => {
+    cy.visit('/products/ssr')
+  })
+
+  it('has title', () => {
+    cy.get('h1').contains('Products')
+  })
+
+  it('goes to back to products page', () => {
+    cy.get('#products > p > a').first().click()
+    cy.location('pathname').should('not.match', /\/products\/ssr$/)
+
+    cy.get('a').click()
+    cy.location('pathname').should('equal', '/products')
+  })
+})
+
 export {}
