@@ -7,12 +7,8 @@ import Enquirer = require('enquirer')
 import {log} from '@blitzjs/server'
 import readDirRecursive from 'fs-readdir-recursive'
 import * as babel from '@babel/core'
-// @ts-ignore
+// @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
-// @ts-ignore
-import babelTransformJsx from '@babel/plugin-syntax-jsx'
-// @ts-ignore
-import babelSyntaxObjectSpread from '@babel/plugin-syntax-object-rest-spread'
 
 import ConflictChecker from './transforms/conflict-checker'
 
