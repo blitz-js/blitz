@@ -60,7 +60,7 @@
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
     "@types/pluralize": "^0.0.29",
-    "nock": "^12.0.3"
+    "nock": "13.0.0-beta.3"
   },
   "oclif": {
     "commands": "./lib/src/commands",

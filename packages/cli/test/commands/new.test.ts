@@ -5,13 +5,6 @@ import * as os from 'os'
 import fetch from 'node-fetch'
 import nock from 'nock'
 
-nock('https://registry.npmjs.org')
-  .persist()
-  .get(() => true)
-  .reply(408)
-
-nock.restore()
-
 jest.setTimeout(60 * 1000)
 
 describe('`new` command', () => {
@@ -36,7 +29,7 @@ describe('`new` command', () => {
 
       await test(tempDir, packageJson)
 
-      fs.rmdirSync(tempDir, { recursive: true })
+      fs.rmdirSync(tempDir, {recursive: true})
     }
 
     it('pins Blitz to the current version', async () =>
@@ -56,11 +49,13 @@ describe('`new` command', () => {
 
     describe('with network trouble', () => {
       it('uses template versions', async () => {
-        nock.activate()
+        nock('https://registry.npmjs.org').get(/.*/).reply(500).persist()
+
         await withNewApp(async (_, packageJson) => {
           const {dependencies} = packageJson
           expect(dependencies.blitz).toBe('latest')
         })
+
         nock.restore()
       })
     })
