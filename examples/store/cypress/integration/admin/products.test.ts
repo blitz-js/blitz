@@ -21,8 +21,8 @@ describe('admin/products page', () => {
 })
 
 const fields = [
-  {label: 'Product Name', type: 'input|'},
-  {label: 'Handle', type: 'input|'},
+  {label: 'Product Name', type: 'input|', uniq: true},
+  {label: 'Handle', type: 'input|', uniq: true},
   {label: 'Description', type: 'textarea|'},
   {label: 'Price', type: 'input|'}, // TODO: Add input type here input|number
 ]
@@ -39,43 +39,38 @@ describe('admin/products/new page', () => {
     cy.location('pathname').should('equal', '/admin/products')
   })
 
-  it('Has all fields and labels', () => {
+  it('Fills fields and creates product', () => {
     cy.get('form > div > label').as('inputs')
     cy.get('@inputs').should('have.length', 4)
 
+    const random = Math.round(Math.random() * 100000).toString()
+
     const count = {}
     for (let i = 0; i < data.length; i++) {
-      const {type, label} = fields[i]
+      const {label, type, uniq} = fields[i]
       const [element, inputType] = type.split('|')
+      let item = data[i]
 
       if (count[element] === undefined) count[element] = 0
-
-      cy.get('@inputs').eq(i).contains(label)
-
       if (inputType) {
         cy.get('@inputs').get(element).eq(count[element]).should('have.attr', 'type', inputType)
       }
 
-      count[element]++
-    }
-  })
+      if (uniq) {
+        item += random
+      }
 
-  it('Fills fields', () => {
-    cy.get('form > div > label').as('inputs')
-    cy.get('@inputs').should('have.length', 4)
-
-    const count = {}
-    for (let i = 0; i < data.length; i++) {
-      const [element] = fields[i].type.split('|')
-      const item = data[i]
-
-      if (count[element] === undefined) count[element] = 0
-
+      cy.get('@inputs').eq(i).contains(label)
       cy.get('@inputs').eq(i).type(item)
       cy.get('@inputs').get(element).eq(count[element]).should('have.value', item)
 
       count[element]++
     }
+
+    cy.get('button').click()
+
+    cy.location('pathname').should('equal', '/admin/products')
+    cy.get('ul > li:last-child').contains(data[0] + random)
   })
 })
 
