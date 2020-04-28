@@ -24,14 +24,11 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
-  async postWrite() {
+  async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
-    const commitError = await new Promise((res, rej) => this.fs.commit((err) => (err ? rej(err) : res())))
-    if (commitError) {
-      // if we failed here, retry silently with `spawn`
-      spawn.sync('mv gitignore .gitignore')
-    }
+  }
 
+  async postWrite() {
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
     const pkgDependencies = Object.keys(pkg.dependencies)

@@ -81,6 +81,10 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     }
   }
 
+  async preCommit(): Promise<void> {
+    // expose precommit hook, no default implementation
+  }
+
   async postWrite(): Promise<void> {
     // expose postWrite hook, no default implementation
   }
@@ -100,6 +104,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     }
 
     await this.write()
+    await this.preCommit()
 
     await new Promise((resolve, reject) => {
       const conflictChecker = new ConflictChecker({
