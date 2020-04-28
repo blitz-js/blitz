@@ -93,22 +93,22 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
 
     for (let filePath of paths) {
       try {
-        let pathEnding = filePath
-        // if context was provided, prepent the context;
+        let pathSuffix = filePath
+        // if context was provided, prepend the context;
         if (this.options.fileContext) {
-          pathEnding = path.join(this.options.fileContext, pathEnding)
+          pathSuffix = path.join(this.options.fileContext, pathSuffix)
         }
         const templateValues = await this.getTemplateValues()
-        pathEnding = this.replaceTemplateValues(pathEnding, templateValues)
 
-        this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathEnding), {
-          process: (input) => this.process(input, pathEnding, templateValues),
+        this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
+          process: (input) => this.process(input, pathSuffix, templateValues),
         })
-        if (!this.useTs && tsExtension.test(this.destinationPath(pathEnding))) {
-          this.fs.move(
-            this.destinationPath(pathEnding),
-            this.destinationPath(pathEnding.replace(tsExtension, '.js')),
-          )
+        let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+        if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
+          templatedPathSuffix = templatedPathSuffix.replace(tsExtension, '.js')
+        }
+        if (templatedPathSuffix !== pathSuffix) {
+          this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
         }
       } catch (error) {
         log.error(`Error generating ${filePath}`)
