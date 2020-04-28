@@ -1,6 +1,6 @@
 import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
 
-export const getLatestVersion = async (dependency: string, templateVersion: string = "") => {
+export const getLatestVersion = async (dependency: string, templateVersion: string = '') => {
   const major = templateVersion.replace('.x', '')
   const allVersions = await fetchAllVersions(dependency)
   const latestDistVersion = await fetchLatestDistVersion(dependency)

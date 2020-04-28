@@ -7,7 +7,7 @@ import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
-import { getBlitzDependencyVersion } from '../utils/get-blitz-dependency-version'
+import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
 
 const themeColor = '6700AB'
 
@@ -50,19 +50,15 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     console.log('') // New line needed
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
-    const [
-      newDependencies,
-      newDevDependencies,
-      newBlitzVersion
-    ] = await Promise.all([
+    const [newDependencies, newDevDependencies, newBlitzVersion] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
-      getBlitzDependencyVersion(this.options.version)
-    ]);
+      getBlitzDependencyVersion(this.options.version),
+    ])
 
-    pkg.dependencies = newDependencies;
+    pkg.dependencies = newDependencies
     pkg.devDependencies = newDevDependencies
-    pkg.dependencies.blitz = newBlitzVersion;
+    pkg.dependencies.blitz = newBlitzVersion
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
@@ -76,7 +72,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
       if (result.status !== 0) {
         throw new Error()
       }
-  
+
       console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
 
       // Ensure the generated files are formatted with the installed prettier version
@@ -91,7 +87,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
         throw new Error('Failed running prettier')
       }
     }
-    
+
     // TODO: someone please clean up this ugly code :D
     // Currently aren't failing the generation process if git repo creation fails
     const gitResult1 = spawn.sync('git', ['init'], {
