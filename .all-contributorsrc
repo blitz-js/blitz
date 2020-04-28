@@ -6,7 +6,7 @@
   "files": [
     "README.md"
   ],
-  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 5 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
+  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 7 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
@@ -283,15 +283,6 @@
         "code"
       ]
     },
-    {
-      "login": "eliasjohansson",
-      "name": "Elias Johansson",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
-      "profile": "https://twitter.com/GeggsElias",
-      "contributions": [
-        "code"
-      ]
-    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true

@@ -148,6 +148,7 @@ We need level 1 maintainers! See [MAINTAINERS.md](https://github.com/blitz-js/bl
 <table>
   <tr>
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=skn0tt" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Askn0tt" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://twitter.com/GeggsElias"><img src="https://avatars3.githubusercontent.com/u/22719177?v=4" width="100px;" alt=""/><br /><sub><b>Elias Johansson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=eliasjohansson" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Aeliasjohansson" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
@@ -203,12 +204,12 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   <tr>
     <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/LoriKarikari"><img src="https://avatars1.githubusercontent.com/u/7902980?v=4" width="100px;" alt=""/><br /><sub><b>Lori Karikari</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=LoriKarikari" title="Code">💻</a></td>
-    <td align="center"><a href="https://twitter.com/GeggsElias"><img src="https://avatars3.githubusercontent.com/u/22719177?v=4" width="100px;" alt=""/><br /><sub><b>Elias Johansson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=eliasjohansson" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
