@@ -19,6 +19,7 @@ The primary responsibilities of level 1 maintainers are:
 - Being a friendly, welcoming voice for the Blitz community
 - Issue triage
 - Pull request triage
+- Monitor and answer the `#-help` slack channel
 - Community encouragement
 - Community moderation
 - Tracking and ensuring progress of key issues
@@ -71,5 +72,13 @@ The primary responsibilities of level 2 maintainers are:
 
 As a level 2 maintainer, it is your responsibility to make sure broken code and regressions never reach the canary branch.
 
-- Ensure the PR'ed code fully works as intended and that there are no regressions in related code
-  - If not fully covered by automated tests, you need to pull down the code locally and manually verify everything (the Github CLI helps with this!)
+1. Ensure the PR'ed code fully works as intended and that there are no regressions in related code
+   1. If not fully covered by automated tests, you need to pull down the code locally and manually verify everything (the Github CLI helps with this!)
+2. During squash & merge:
+   1. Change the commit title to be public friendly - this exact text will go in the release notes
+   2. Add the commit type in the description, in parenthesis like `(patch)`. Commit types:
+      - `major` - major breaking change
+      - `minor` - minor feature addition
+      - `patch` - patches, bug fixes, perf improvements, etc
+      - `example` - change to an example app
+      - `meta` - internal meta change related to the Blitz repo/project

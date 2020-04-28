@@ -8,4 +8,4 @@ However we will move away from BDFL to something that looks more like Ember.js. 
 
 I would love some mentorship from people with experience in large open-source projects on making this transition.
 
-Also, I will likely create one or more business around Blitz, perhaps similar to how Taylor Otwell has around Laravel, but Blitz itself will always remain a separate community-run project.
+Also, it's possible I will create one or more business around Blitz, perhaps similar to how Taylor Otwell has around Laravel, but Blitz itself will always remain a separate community-run project.
