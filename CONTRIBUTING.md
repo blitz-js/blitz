@@ -20,12 +20,34 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 
 ### First Things First
 
-1. Familiarize yourself with the [Blitz Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md)
-2. Join the [Blitz Slack Community](https://slack.blitzjs.com)
-3. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
-4. View open issues and their progress [on the Zenhub repo tab](https://github.com/blitz-js/blitz#zenhub)
+1. New to open source? take a look at [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+2. Familiarize yourself with the [Blitz Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md)
+3. Join the [Blitz Slack Community](https://slack.blitzjs.com)
+4. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
+5. View open issues and their progress [on the Zenhub repo tab](https://github.com/blitz-js/blitz#zenhub)
 
 <br>
+
+### Weekly Contributors video call
+
+Every week Blitz contributors meet in a video call to discuss progress and ideas.
+
+While the contributor video call is mainly for those contributing or want to start contributing. However anyone is welcome to join and listen!
+
+#### The timezone
+
+We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accomodate different regions
+
+- 9am UTC. Staring May 6 and every other week after that
+- 1am UTC. starting May 12 and every other week after that
+
+### How to join
+
+Zoom link will be posted in slack `#-announcements` channel before the call
+
+#### Recording
+
+Recordings of previous calls can be found [here](https://www.youtube.com/playlist?list=PLvm6NqxNNnBLFxZux5OHraTAcIBJz2FvR)
 
 ### What to Work On?
 
