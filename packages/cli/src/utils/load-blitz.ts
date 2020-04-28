@@ -1,4 +1,4 @@
-import {forceRequire} from './module'
+import {forceRequire} from '../utils/module'
 import path from 'path'
 import globby from 'globby'
 import pkgDir from 'pkg-dir'

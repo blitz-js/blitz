@@ -1,0 +1,49 @@
+{
+  "name": "@blitzjs/generator",
+  "version": "0.8.1",
+  "description": "File generation for the Blitz CLI",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "rimraf lib && yarn build:templates && tsc --watch --preserveWatchOutput",
+    "build": "rimraf lib && tsc && yarn build:templates",
+    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "lib/src/index.js",
+  "files": [
+    "/lib"
+  ],
+  "keywords": [
+    "blitz",
+    "generator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-typescript": "^7.9.4",
+    "chalk": "^4.0.0",
+    "cross-spawn": "^7.0.2",
+    "diff": "^4.0.2",
+    "enquirer": "^2.3.5",
+    "fs-extra": "^9.0.0",
+    "fs-readdir-recursive": "^1.1.0",
+    "mem-fs": "^1.1.3",
+    "mem-fs-editor": "^6.0.0",
+    "node-fetch": "^2.6.0",
+    "username": "^5.1.0",
+    "vinyl": "^2.2.0"
+  },
+  "devDependencies": {
+    "@blitzjs/server": "0.8.1"
+  }
+}

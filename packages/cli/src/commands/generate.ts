@@ -4,11 +4,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
-import PageGenerator from '../generators/page'
-import MutationGenerator from '../generators/mutation'
+import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} from '@blitzjs/generator'
 import PromptAbortedError from '../errors/prompt-aborted'
-import QueryGenerator from '../generators/query'
-// import ModelGenerator from '../generators/model'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
 const debug = require('debug')('blitz:generate')
@@ -192,7 +189,6 @@ export default class Generate extends Command {
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
-          sourceRoot: path.join(__dirname, `../../templates/${GeneratorClass.template}`),
           destinationRoot: path.resolve(),
           modelName: modelName(singularRootContext),
           modelNames: modelNames(singularRootContext),
