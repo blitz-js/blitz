@@ -201,13 +201,12 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://devanthe.dev"><img src="https://avatars0.githubusercontent.com/u/354652?v=4" width="100px;" alt=""/><br /><sub><b>Devan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=DevanB" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/jclancy93"><img src="https://avatars2.githubusercontent.com/u/7850202?v=4" width="100px;" alt=""/><br /><sub><b>Jack Clancy</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jclancy93" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ntgussoni"><img src="https://avatars0.githubusercontent.com/u/10161067?v=4" width="100px;" alt=""/><br /><sub><b>Nicolas Torres</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Code">💻</a></td>
-    <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a></td>
+    <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Documentation">📖</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
