@@ -4,7 +4,7 @@ Aside from the core team, there are two levels of maintainers, described below.
 
 ## Becoming a Maintainer
 
-We always need more level 1 maintainers! The main requirement is that you can show empathy when communicating online. We'll train you as needed on the other specifics.
+We always need more level 1 maintainers! The main requirement is that you can show empathy when communicating online. We'll train you as needed on the other specifics. **This is a great role if you have limited time, because you can spend just as much time as you have without any ongoing responsibilities (unlike level 2)**
 
 Level 2 maintainers have a much higher responsibility, so usually you will spend time as a level 1 maintainer before moving to level 2.
 
