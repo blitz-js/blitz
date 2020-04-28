@@ -16,8 +16,6 @@ describe('admin/products page', () => {
     cy.get('p > a').last().contains('Admin').click()
     cy.location('pathname').should('equal', '/admin')
   })
-
-  // TODO: Add tests for items
 })
 
 const fields = [
@@ -27,6 +25,41 @@ const fields = [
   {label: 'Price', type: 'input|'}, // TODO: Add input type here input|number
 ]
 const data = ['Apples', 'apples', 'Fresh apples', '32']
+
+const insert = () => {
+  cy.visit('/admin/products/new')
+  cy.get('form > div > label').as('inputs')
+  cy.get('@inputs').should('have.length', 4)
+
+  const random = Math.round(Math.random() * 100000).toString()
+
+  const count = {}
+  for (let i = 0; i < data.length; i++) {
+    const {label, type, uniq} = fields[i]
+    const [element, inputType] = type.split('|')
+    let item = data[i]
+
+    if (count[element] === undefined) count[element] = 0
+    if (inputType) {
+      cy.get('@inputs').get(element).eq(count[element]).should('have.attr', 'type', inputType)
+    }
+
+    if (uniq) {
+      item += random
+    }
+
+    cy.get('@inputs').eq(i).contains(label)
+    cy.get('@inputs').eq(i).type(item)
+    cy.get('@inputs').get(element).eq(count[element]).should('have.value', item)
+
+    count[element]++
+  }
+
+  cy.get('button').click()
+
+  cy.location('pathname').should('equal', '/admin/products')
+  cy.get('ul > li:first-child').contains(data[0] + random)
+}
 
 describe('admin/products/new page', () => {
   beforeEach(() => {
@@ -40,42 +73,14 @@ describe('admin/products/new page', () => {
   })
 
   it('Fills fields and creates product', () => {
-    cy.get('form > div > label').as('inputs')
-    cy.get('@inputs').should('have.length', 4)
-
-    const random = Math.round(Math.random() * 100000).toString()
-
-    const count = {}
-    for (let i = 0; i < data.length; i++) {
-      const {label, type, uniq} = fields[i]
-      const [element, inputType] = type.split('|')
-      let item = data[i]
-
-      if (count[element] === undefined) count[element] = 0
-      if (inputType) {
-        cy.get('@inputs').get(element).eq(count[element]).should('have.attr', 'type', inputType)
-      }
-
-      if (uniq) {
-        item += random
-      }
-
-      cy.get('@inputs').eq(i).contains(label)
-      cy.get('@inputs').eq(i).type(item)
-      cy.get('@inputs').get(element).eq(count[element]).should('have.value', item)
-
-      count[element]++
-    }
-
-    cy.get('button').click()
-
-    cy.location('pathname').should('equal', '/admin/products')
-    cy.get('ul > li:last-child').contains(data[0] + random)
+    insert()
   })
 })
 
 describe('admin/products/[handle] page', () => {
   beforeEach(() => {
+    insert()
+
     cy.visit('/admin/products')
     cy.get('ul > li:last-child a').click()
   })
