@@ -20,7 +20,7 @@ export interface GeneratorOptions {
   fileContext?: string
 }
 
-const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
+const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
 
@@ -53,6 +53,9 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   abstract async getTemplateValues(): Promise<any>
 
   filesToIgnore(): string[] {
+    // allow subclasses to conditionally ignore certain template files
+    // for example, ignoring tsconfig.json in the app generator when
+    // generating a plain JS project
     return []
   }
 
@@ -84,7 +87,8 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
 
   async write(): Promise<void> {
     const paths = readDirRecursive(this.sourcePath(), (name) => {
-      return ![...ignoredNames, ...this.filesToIgnore()].includes(name)
+      const additionalFilesToIgnore = this.filesToIgnore()
+      return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
 
     for (let filePath of paths) {
