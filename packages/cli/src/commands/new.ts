@@ -27,7 +27,6 @@ export default class New extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     ts: flags.boolean({
-      char: 't',
       description: 'generate a TypeScript project',
       default: true,
       allowNo: true,
