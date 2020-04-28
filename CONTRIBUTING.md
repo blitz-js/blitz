@@ -41,7 +41,7 @@ We are literally all over the globe, so the weekly contributors call alternates 
 - 9am UTC. Staring May 6 and every other week after that
 - 1am UTC. starting May 12 and every other week after that
 
-### How to join
+#### How to join
 
 Zoom link will be posted in slack `#-announcements` channel before the call
 
