@@ -3,7 +3,7 @@ import {useQuery, Link} from 'blitz'
 import getProducts from 'app/products/queries/getProducts'
 
 function ProductsList() {
-  const [products] = useQuery((args) => getProducts({...args, orderBy: {id: 'desc'}}))
+  const [products] = useQuery(getProducts, {orderBy: {id: 'desc'}})
 
   return (
     <ul>
