@@ -2,7 +2,7 @@ import Generator, {GeneratorOptions} from '../generator'
 import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import username from 'username'
-import {readJSONSync, writeJson, writeSync, openSync, closeSync} from 'fs-extra'
+import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
 import {replaceDependencies} from '../utils/replace-dependencies'
 import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
@@ -62,27 +62,51 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     spinner.succeed()
 
-    const logFile = openSync(this.destinationPath('blitz-log.log'), 'a')
-    writeSync(logFile, `[START: ${new Date().toISOString()}]\n`)
+    await new Promise((resolve) => {
+      const spinners: any[] = []
+      const logFlag = this.options.yarn ? '--json' : '--silent'
+      const stdio = this.options.yarn ? 'pipe' : 'inherit'
 
-    const installSpinner = log.spinner(log.withBranded('Installing those dependencies...')).start()
-
-    const installStatus = await new Promise((resolve) => {
-      const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install'], {
-        stdio: ['inherit', logFile, logFile],
+      const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install', logFlag], {
+        stdio: ['inherit', stdio, stdio],
       })
+
+      const getJSON = (data: string) => {
+        try {
+          return JSON.parse(data)
+        } catch {
+          return null
+        }
+      }
+
+      if (this.options.yarn) {
+        cp.stdout?.setEncoding('utf8')
+        cp.stderr?.setEncoding('utf8')
+
+        cp.stdout?.on('data', (data) => {
+          let json = getJSON(data)
+          if (json && json.type === 'step') {
+            spinners[spinners.length - 1]?.succeed()
+            const spinner = log.spinner(log.withBranded(json.data.message)).start()
+            spinners.push(spinner)
+          }
+          if (json && json.type === 'success') {
+            spinners[spinners.length - 1]?.succeed()
+          }
+        })
+        cp.stderr?.on('data', (data) => {
+          let json = getJSON(data)
+          if (json && json.type === 'error') {
+            spinners[spinners.length - 1]?.fail()
+            console.error(json.data)
+          }
+        })
+      } else {
+        console.log(log.withBranded('Installing those dependencies...'))
+      }
+
       cp.on('exit', resolve)
     })
-
-    writeSync(logFile, `[END: ${new Date().toISOString()}]\n\n`)
-    closeSync(logFile)
-
-    if (installStatus !== 0) {
-      installSpinner.fail()
-      throw new Error('Failed to install dependencies.\nCheck blitz-log.log for more information.')
-    }
-
-    installSpinner.succeed()
 
     // Ensure the generated files are formatted with the installed prettier version
     const prettierResult = spawn.sync(
