@@ -6,7 +6,7 @@
   "files": [
     "README.md"
   ],
-  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 8 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
+  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 9 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
@@ -106,15 +106,6 @@
       "name": "Jason Blalock",
       "avatar_url": "https://avatars0.githubusercontent.com/u/5899929?v=4",
       "profile": "https://github.com/jasonblalock",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "coreybrown89",
-      "name": "Corey Brown",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/12791148?v=4",
-      "profile": "https://corey-brown.com",
       "contributions": [
         "code"
       ]
