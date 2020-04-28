@@ -121,7 +121,7 @@ _Sponsor Blitz and display your logo and hiring status here. This is a great way
 
 ## Maintainers (Level 2) ✨
 
-_Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md))
+_Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -138,9 +138,9 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
 
 ## Maintainers (Level 1) ✨
 
-_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md))
+_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
-We need level 1 maintainers! See [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md) for what this entails
+We need level 1 maintainers! See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
 
 
 <!-- prettier-ignore-start -->
