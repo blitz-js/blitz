@@ -9,13 +9,13 @@ describe('index page', () => {
   })
 
   it('goes to products page', () => {
-    cy.contains('a', 'View Static Public Product Listings').click()
+    cy.contains('a', 'Static Product Listings').click()
     cy.location('pathname').should('equal', '/products')
   })
 
   it('goes to admin page', () => {
-    cy.contains('a', 'View Dynamic Admin Section').click()
-    cy.location('pathname').should('equal', '/admin')
+    cy.contains('a', 'Admin Section (client-rendered)').click()
+    cy.location('pathname').should('equal', '/admin/products')
   })
 })
 
