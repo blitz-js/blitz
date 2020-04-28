@@ -29,7 +29,7 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 
 ### What to Work On?
 
-Issues with the label [`ready to work on | help wanted`](https://github.com/blitz-js/blitz/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22ready+to+work+on+%7C+help+wanted%22) are the best place to start. If you find one that looks interesting and no one else is already working on it, comment in the issue that you are going to work on it. Please ask as many questions as you need, either directly in the issue or in Slack. We're happy to help!
+Issues with the label [`status/ready-to-work-on`](https://github.com/blitz-js/blitz/labels/status%2Fready-to-work-on) are the best place to start. If you find one that looks interesting and no one else is already working on it, comment in the issue that you are going to work on it. Please ask as many questions as you need, either directly in the issue or in Slack. We're happy to help!
 
 The Blitzjs.com website and documentation repo also has issues with [`ready to work on | help wanted`](https://github.com/blitz-js/blitzjs.com/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22ready+to+work+on+%7C+help+wanted%22).
 

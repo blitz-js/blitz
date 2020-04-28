@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -35,7 +35,7 @@
     "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "merge-stream": "^2.0.0",
-    "next": "9.3.6-canary.11",
+    "next": "9.3.6-canary.13",
     "next-compose-plugins": "^2.2.0",
     "next-transpile-modules": "^3.2.0",
     "null-loader": "^4.0.0",
@@ -54,7 +54,7 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.6.6"
+    "@blitzjs/core": "0.7.0"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
