@@ -147,6 +147,13 @@ export default class Generate extends Command {
     debug('args: ', args)
     debug('flags: ', flags)
 
+    const isInRoot = fs.existsSync(path.resolve('blitz.config.js'))
+
+    if (!isInRoot) {
+      log.error('No blitz.config.js found. `generate` must be run from the root of the project.')
+      this.exit(1)
+    }
+
     try {
       let fileRoot: string
       let singularRootContext: string
