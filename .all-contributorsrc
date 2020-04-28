@@ -6,23 +6,11 @@
   "files": [
     "README.md"
   ],
-  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
+  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 5 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
   "contributors": [
-    {
-      "login": "flybayer",
-      "name": "Brandon Bayer",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/8813276?v=4",
-      "profile": "https://twitter.com/flybayer",
-      "contributions": [
-        "code",
-        "content",
-        "ideas",
-        "review"
-      ]
-    },
     {
       "login": "medelman17",
       "name": "Michael Edelman ",
@@ -31,27 +19,6 @@
       "contributions": [
         "infra",
         "code"
-      ]
-    },
-    {
-      "login": "merelinguist",
-      "name": "Dylan Brookes",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
-      "profile": "https://merelinguist.now.sh",
-      "contributions": [
-        "ideas",
-        "review",
-        "code"
-      ]
-    },
-    {
-      "login": "ryardley",
-      "name": "Rudi Yardley",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
-      "profile": "https://medium.com/@ryardley",
-      "contributions": [
-        "code",
-        "ideas"
       ]
     },
     {
@@ -135,15 +102,6 @@
       ]
     },
     {
-      "login": "robdrosenberg",
-      "name": "Robert Rosenberg",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/20813991?v=4",
-      "profile": "http://robdrosenberg.com",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
       "login": "jasonblalock",
       "name": "Jason Blalock",
       "avatar_url": "https://avatars0.githubusercontent.com/u/5899929?v=4",
@@ -184,15 +142,6 @@
       "name": "Rishabh Poddar",
       "avatar_url": "https://avatars2.githubusercontent.com/u/2976287?v=4",
       "profile": "https://github.com/rishabhpoddar",
-      "contributions": [
-        "ideas"
-      ]
-    },
-    {
-      "login": "aem",
-      "name": "Adam Markon",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1909883?v=4",
-      "profile": "https://github.com/aem",
       "contributions": [
         "ideas"
       ]
