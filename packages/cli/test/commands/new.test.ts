@@ -36,7 +36,7 @@ describe('`new` command', () => {
 
       await test(tempDir, packageJson)
 
-      fs.rmdirSync(tempDir)
+      fs.rmdirSync(tempDir, { recursive: true })
     }
 
     it('pins Blitz to the current version', async () =>
