@@ -37,6 +37,10 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 2. `blitz new myapp`
 3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
+or
+
+3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
+
 <br>
 
 **Features:**<br>
@@ -207,6 +211,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
