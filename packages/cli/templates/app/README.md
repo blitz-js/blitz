@@ -1,21 +1,23 @@
-# <%= name %>
+# __name__
 
 ## Getting Started
 
-1. Ensure you have Postgres installed locally
-2. Set the `DATABASE_URL` environment variable, something like this:
+1. Add this code to db/schema.prisma:
 
 ```
-DATABASE_URL=postgresql://<your_computer_username>@localhost:5432/blitz-example-store
+model Project {
+  id      Int      @default(autoincrement()) @id
+  name    String
+}
 ```
 
-3. DB migrate
+2. DB migrate
 
 ```
 blitz db migrate
 ```
 
-4. Start the dev server
+3. Start the dev server
 
 ```
 blitz start

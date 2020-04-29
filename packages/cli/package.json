@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.7.0",
+  "version": "0.7.1-canary.1",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -26,6 +26,7 @@
     "/lib"
   ],
   "dependencies": {
+    "@babel/plugin-transform-typescript": "^7.9.4",
     "@oclif/command": "^1.5.20",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
@@ -54,7 +55,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.7.0",
+    "@blitzjs/server": "0.7.1-canary.1",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
