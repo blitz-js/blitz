@@ -30,7 +30,7 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 
 Every week Blitz contributors meet in a video call to discuss progress and ideas.
 
-While the contributor video call is mainly for those contributing or want to start contributing. However anyone is welcome to join and listen!
+The contributor video call is mainly for those contributing or want to start contributing. However anyone is welcome to join and listen!
 
 #### The timezone
 
