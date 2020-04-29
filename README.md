@@ -208,6 +208,8 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Documentation">📖</a></td>
   </tr>
   <tr>
+    <td align="center"><a href="http://www.joaoportela.com"><img src="https://avatars0.githubusercontent.com/u/1010018?v=4" width="100px;" alt=""/><br /><sub><b>João Portela</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jportela" title="Code">💻</a></td>
+    <td align="center"><a href="http://dajin.dev"><img src="https://avatars0.githubusercontent.com/u/7122182?v=4" width="100px;" alt=""/><br /><sub><b>Da-Jin Chu</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dajinchu" title="Code">💻</a></td>
     <td align="center"><a href="https://shinyaigeek.dev/"><img src="https://avatars1.githubusercontent.com/u/42742053?v=4" width="100px;" alt=""/><br /><sub><b>Shinobu Hayashi</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=Shinyaigeek" title="Code">💻</a></td>
   </tr>
 </table>
