@@ -76,8 +76,10 @@ export async function resetPostgres(connectionString: string): Promise<void> {
     await db.raw('GRANT ALL ON schema public TO public;')
     // run migration
     await runMigrate()
+    console.log('Your database has been reset.')
     process.exit(0)
   } catch (err) {
+    console.log(err)
     process.exit(1)
   }
 }
@@ -85,24 +87,32 @@ export async function resetPostgres(connectionString: string): Promise<void> {
 export async function resetMysql(connectionString: string): Promise<void> {
   const dbName: string = getDbName(connectionString)
   try {
+    // delete database
     await db.raw(`DROP DATABASE \`${dbName}\``)
-    // await runMigrate()
+    // run migration
+    await runMigrate()
+    console.log('Your database has been reset.')
     process.exit(0)
   } catch (err) {
+    console.log(err)
     process.exit(1)
   }
 }
 
-export async function resetSqlite(): Promise<void> {
-  // // currently assuming the database is located at the db folder
-  // const dbPath: string = `db${dbUrl?.split('file:.').pop()}`
-  // const unlink = promisify(fs.unlink)
-  // try {
-  //   await unlink(dbPath)
-  //   await runMigrate()
-  // } catch (err) {
-  //   process.exit(1)
-  // }
+export async function resetSqlite(connectionString: string): Promise<void> {
+  const dbPath: string = connectionString.replace(/^(?:\.\.\/)+/, '')
+  const unlink = promisify(fs.unlink)
+  try {
+    // delete database from folder
+    await unlink(dbPath)
+    // run migration
+    await runMigrate()
+    console.log('Your database has been reset.')
+    process.exit(0)
+  } catch (err) {
+    console.log(err)
+    process.exit(1)
+  }
 }
 
 export function getDbName(connectionString: string): string {
@@ -187,7 +197,7 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
           } else if (connectorType === 'mysql') {
             resetMysql(connectionString)
           } else if (connectorType === 'sqlite') {
-            resetSqlite()
+            resetSqlite(connectionString)
           } else {
             this.log('Could not find a valid database configuration')
           }
