@@ -2905,7 +2905,7 @@
     regexpp "^3.0.0"
     tsutils "^3.17.1"
 
-"@typescript-eslint/eslint-plugin@2.30.0", "@typescript-eslint/eslint-plugin@^2.12.0":
+"@typescript-eslint/eslint-plugin@^2.12.0":
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-2.30.0.tgz#312a37e80542a764d96e8ad88a105316cdcd7b05"
   integrity sha512-PGejii0qIZ9Q40RB2jIHyUpRWs1GJuHP1pkoCiaeicfwO9z7Fx03NQzupuyzAmv+q9/gFNHu7lo1ByMXe8PNyg==
@@ -2945,7 +2945,7 @@
     "@typescript-eslint/typescript-estree" "2.29.0"
     eslint-visitor-keys "^1.1.0"
 
-"@typescript-eslint/parser@2.30.0", "@typescript-eslint/parser@^2.12.0":
+"@typescript-eslint/parser@^2.12.0":
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-2.30.0.tgz#7681c305a6f4341ae2579f5e3a75846c29eee9ce"
   integrity sha512-9kDOxzp0K85UnpmPJqUzdWaCNorYYgk1yZmf4IKzpeTlSAclnFsrLjfwD9mQExctLoLoGAUXq1co+fbr+3HeFw==
@@ -3968,19 +3968,6 @@ bl@^4.0.1:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
-
-blitz@latest:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/blitz/-/blitz-0.7.0.tgz#ec2e10a4f96dd8b2f5e330a12505a93248780a5d"
-  integrity sha512-lGRQZmCdSxWVMosWxhE4RbTJzG8GWtt8U7Hehb1JmRjaqI/K10t9qll+sCumigmUYCcHYHdkdnzjFCBRS9TgRA==
-  dependencies:
-    "@blitzjs/cli" "0.7.0"
-    "@blitzjs/core" "0.7.0"
-    "@blitzjs/server" "0.7.0"
-    os-name "^3.1.0"
-    pkg-dir "^4.2.0"
-    resolve-from "^5.0.0"
-    resolve-global "^1.0.0"
 
 bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.7.2"
@@ -9032,7 +9019,7 @@ lint-staged@10.1.7:
     string-argv "0.3.1"
     stringify-object "^3.3.0"
 
-lint-staged@10.2.0, lint-staged@^10.0.8:
+lint-staged@^10.0.8:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.2.0.tgz#e0356ab593ddc2cd4205d7f880c2205bb01f5e48"
   integrity sha512-4Dw2XMtEOGpICl0wvicE5KT/eFlt/kmwMmpNS4v09I/ywRWuR5udbMWjdfZez24jE6r0bQmPpkLZ1+wUGE1S+w==
@@ -9991,10 +9978,10 @@ next@9.3.5:
     webpack "4.42.1"
     webpack-sources "1.4.3"
 
-next@9.3.6, next@^9.3.0:
-  version "9.3.6"
-  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6.tgz#2bfd76f835606db3840adf07b51b052514ef3709"
-  integrity sha512-b46i+qw2SYMVTOObc7GqUizt1zH1fB3T5qcOiCpl9utD7/LcWZkSxSPe7ZJtpAdFnl8V/7A58ADSvU1oxDDWug==
+next@9.3.6-canary.13:
+  version "9.3.6-canary.13"
+  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6-canary.13.tgz#787734a42ec7b8b2fe68a36d5d9fdba5af8642b5"
+  integrity sha512-Gl1qyrZHyRMR7VJ/o9zAN4rWInrGkH65aofRQ5D0FoxkB1Yx1nzZ1B5SCSIQHOkEIu2O8c4FQZT95SPf4Pcnbg==
   dependencies:
     "@ampproject/toolbox-optimizer" "2.2.0"
     "@babel/core" "7.7.2"
@@ -10012,7 +9999,7 @@ next@9.3.6, next@^9.3.0:
     "@babel/preset-react" "7.7.0"
     "@babel/preset-typescript" "7.7.2"
     "@babel/runtime" "7.7.2"
-    "@next/react-refresh-utils" "9.3.6"
+    "@next/react-refresh-utils" "9.3.6-canary.13"
     babel-plugin-syntax-jsx "6.18.0"
     babel-plugin-transform-define "2.0.0"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
@@ -10040,10 +10027,10 @@ next@9.3.6, next@^9.3.0:
     webpack "4.43.0"
     webpack-sources "1.4.3"
 
-next@9.3.6-canary.13:
-  version "9.3.6-canary.13"
-  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6-canary.13.tgz#787734a42ec7b8b2fe68a36d5d9fdba5af8642b5"
-  integrity sha512-Gl1qyrZHyRMR7VJ/o9zAN4rWInrGkH65aofRQ5D0FoxkB1Yx1nzZ1B5SCSIQHOkEIu2O8c4FQZT95SPf4Pcnbg==
+next@^9.3.0:
+  version "9.3.6"
+  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6.tgz#2bfd76f835606db3840adf07b51b052514ef3709"
+  integrity sha512-b46i+qw2SYMVTOObc7GqUizt1zH1fB3T5qcOiCpl9utD7/LcWZkSxSPe7ZJtpAdFnl8V/7A58ADSvU1oxDDWug==
   dependencies:
     "@ampproject/toolbox-optimizer" "2.2.0"
     "@babel/core" "7.7.2"
@@ -10061,7 +10048,7 @@ next@9.3.6-canary.13:
     "@babel/preset-react" "7.7.0"
     "@babel/preset-typescript" "7.7.2"
     "@babel/runtime" "7.7.2"
-    "@next/react-refresh-utils" "9.3.6-canary.13"
+    "@next/react-refresh-utils" "9.3.6"
     babel-plugin-syntax-jsx "6.18.0"
     babel-plugin-transform-define "2.0.0"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
@@ -12168,7 +12155,7 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@0.0.0-experimental-e5d06e34b, react-dom@experimental:
+react-dom@0.0.0-experimental-e5d06e34b:
   version "0.0.0-experimental-e5d06e34b"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-e5d06e34b.tgz#e90fd8a1f5ac18045798f276734feecdf107442e"
   integrity sha512-E2jMRRCHs69jfI5YMnUEFEdWLv1FthDE52xDP67luRVGBU+Hc2xq06Eu+ukiHgCevgwAqBM4Q9HeYbQrcBvFdg==
@@ -12208,7 +12195,7 @@ react-refresh@0.8.1:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.1.tgz#5500506ad6fc891fdd057d0bf3581f9310abc6a2"
   integrity sha512-xZIKi49RtLUUSAZ4a4ut2xr+zr4+glOD5v0L413B55MPvlg4EQ6Ctx8PD4CmjlPGoAWmSCTmmkY59TErizNsow==
 
-react@0.0.0-experimental-e5d06e34b, react@experimental:
+react@0.0.0-experimental-e5d06e34b:
   version "0.0.0-experimental-e5d06e34b"
   resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-e5d06e34b.tgz#bfdbe2b228e1d1967330fc18b9e05331818f610d"
   integrity sha512-2WUOtH5VE3cSyg22XxavfDoMQDIc51Pyudr/mrU1I1GcWIDKVg7QA/1dh5DlKyIvyWlM44pkwqz7V7gYHFzf2A==
