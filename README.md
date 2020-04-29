@@ -39,7 +39,7 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 
 or
 
-3. Start with the [Biltz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
+3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
 
 <br>
 
