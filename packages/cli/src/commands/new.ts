@@ -40,6 +40,7 @@ export default class New extends Command {
     }),
     'skip-install': flags.boolean({
       description: 'Skip package installation',
+      hidden: true,
       default: false,
       allowNo: true,
     }),
