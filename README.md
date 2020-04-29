@@ -121,7 +121,7 @@ _Sponsor Blitz and display your logo and hiring status here. This is a great way
 
 ## Maintainers (Level 2) ✨
 
-_Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md))
+_Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -138,9 +138,9 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
 
 ## Maintainers (Level 1) ✨
 
-_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md))
+_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
-We need level 1 maintainers! See [MAINTAINERS.md](https://github.com/blitz-js/blitz/blob/maintain/MAINTAINERS.md) for what this entails
+We need level 1 maintainers! See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
 
 
 <!-- prettier-ignore-start -->
@@ -201,13 +201,12 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://devanthe.dev"><img src="https://avatars0.githubusercontent.com/u/354652?v=4" width="100px;" alt=""/><br /><sub><b>Devan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=DevanB" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/jclancy93"><img src="https://avatars2.githubusercontent.com/u/7850202?v=4" width="100px;" alt=""/><br /><sub><b>Jack Clancy</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jclancy93" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ntgussoni"><img src="https://avatars0.githubusercontent.com/u/10161067?v=4" width="100px;" alt=""/><br /><sub><b>Nicolas Torres</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Code">💻</a></td>
-    <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a></td>
+    <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=kandros" title="Documentation">📖</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
