@@ -84,7 +84,7 @@ The cli view is provided by a [reporter](./reporter) stream which accepts Events
 
 Secondly there is an [errors](./errors) stream which works a similar way but for Operational Errors.
 
-It is important to differentiate between Operational Errors and Exceptions. Expections are probably programmer errors where as operation errors are more likely a result of the user providing us with the wrong input/files.
+It is important to differentiate between Operational Errors and Exceptions. Exceptions are probably programmer errors where as operation errors are more likely a result of the user providing us with the wrong input/files.
 
 In this architecture we write operational errors to the error stream and catch Exceptions in stream error handlers. We should be able to drop Exceptions on the floor but by attaching a view to the end of the error stream we can print nice messages for our users.
 
