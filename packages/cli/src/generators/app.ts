@@ -51,9 +51,9 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
     const [
-      [newDependencies, dependenciesUsedFallback],
-      [newDevDependencies, devDependenciesUsedFallback],
-      [blitzDependencyVersion, blitzUsedFallback],
+      {value: newDependencies, isFallback: dependenciesUsedFallback},
+      {value: newDevDependencies, isFallback: devDependenciesUsedFallback},
+      {value: blitzDependencyVersion, isFallback: blitzUsedFallback},
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),

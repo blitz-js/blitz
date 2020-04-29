@@ -1,6 +1,9 @@
 import {getLatestVersion} from './get-latest-version'
+import {Fallbackable} from './fallbackable'
 
-export const fetchLatestVersionsFor = async (dependencies: Record<string, string>) => {
+export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
+  dependencies: T,
+): Promise<Fallbackable<T>> => {
   const entries = Object.entries(dependencies)
 
   let fallbackUsed = false
@@ -8,7 +11,7 @@ export const fetchLatestVersionsFor = async (dependencies: Record<string, string
   const updated = await Promise.all(
     entries.map(async ([dep, version]) => {
       if (version.match(/\d.x/)) {
-        const [latestVersion, isFallback] = await getLatestVersion(dep, version)
+        const {value: latestVersion, isFallback} = await getLatestVersion(dep, version)
 
         if (isFallback) {
           fallbackUsed = true
@@ -21,5 +24,8 @@ export const fetchLatestVersionsFor = async (dependencies: Record<string, string
     }),
   )
 
-  return [Object.fromEntries(updated), fallbackUsed]
+  return {
+    isFallback: fallbackUsed,
+    value: Object.fromEntries(updated),
+  }
 }
