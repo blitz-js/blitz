@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.7.1-canary.0",
+  "version": "0.7.1-canary.1",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -54,7 +54,7 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.7.0",
+    "@blitzjs/core": "0.7.1-canary.1",
     "@types/mock-fs": "^4.10.0",
     "mock-fs": "^4.12.0"
   },
