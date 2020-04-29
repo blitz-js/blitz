@@ -265,6 +265,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "dajinchu",
+      "name": "Da-Jin Chu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7122182?v=4",
+      "profile": "http://dajin.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
