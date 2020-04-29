@@ -97,9 +97,9 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
         chalk
           .hex(themeColor)
           .bold(
-            `\nThere seems to be some problem with your network. We'll skip installing your dependencies for now, make sure to compensate by running ${
+            `\nWe had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${
               this.options.yarn ? "'yarn'" : "'npm install'"
-            } once your connection is working again.`,
+            } once you're connected again.`,
           ),
       )
     }
