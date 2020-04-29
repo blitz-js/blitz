@@ -36,7 +36,7 @@ The contributor video call is mainly for those contributing or want to start con
 
 We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accomodate different regions
 
-- Even weeks of the year: **Tuesday at 1am UTC**
+- Even weeks of the year: **Tuesday at 1am UTC** (Note: this is Monday evening in the USA)
 - Odd weeks of the year: **Wednesday at 9am UTC** 
 - Use this link to see [the current week of the year](https://whatweekisit.com)
 
@@ -48,6 +48,8 @@ Zoom link will be posted in slack `#-announcements` channel before the call
 
 Recordings of previous calls can be found [here](https://www.youtube.com/playlist?list=PLvm6NqxNNnBLFxZux5OHraTAcIBJz2FvR)
 
+<br>
+
 ### What to Work On?
 
 Issues with the label [`status/ready-to-work-on`](https://github.com/blitz-js/blitz/labels/status%2Fready-to-work-on) are the best place to start. If you find one that looks interesting and no one else is already working on it, comment in the issue that you are going to work on it. Please ask as many questions as you need, either directly in the issue or in Slack. We're happy to help!
@@ -56,9 +58,11 @@ The Blitzjs.com website and documentation repo also has issues with [`ready to w
 
 #### Things that are ALWAYS welcome
 
+- Adding tests
 - Improved documentation
 - Improved error messages
 - Improved logging (i.e. more clear, more beautiful)
+- Performance or security improvements
 - Educational content like blogs, videos, courses
 
 If there's some other way you'd like to contribute, just ask us about it in slack!
