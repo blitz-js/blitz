@@ -18,7 +18,7 @@ function ProductsList() {
   )
 }
 
-export default function () {
+function AdminProducts() {
   return (
     <div>
       <h1>Products</h1>
@@ -38,3 +38,5 @@ export default function () {
     </div>
   )
 }
+
+export default AdminProducts
