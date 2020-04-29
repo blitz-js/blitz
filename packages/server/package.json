@@ -54,7 +54,9 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.7.0"
+    "@blitzjs/core": "0.7.0",
+    "@types/mock-fs": "^4.10.0",
+    "mock-fs": "^4.12.0"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
