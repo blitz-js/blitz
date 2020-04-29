@@ -267,6 +267,15 @@
       ]
     },
     {
+      "login": "jportela",
+      "name": "João Portela",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1010018?v=4",
+      "profile": "http://www.joaoportela.com",
+      "contributions": [
+        "code"
+      ]
+     },
+     {
       "login": "dajinchu",
       "name": "Da-Jin Chu",
       "avatar_url": "https://avatars0.githubusercontent.com/u/7122182?v=4",
@@ -274,6 +283,7 @@
       "contributions": [
         "code"
       ]
+     }
     }
   ],
   "contributorsPerLine": 7,
