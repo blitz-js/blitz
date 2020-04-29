@@ -12,29 +12,41 @@ jest.doMock('../src/reporter', () => ({
 // Assume next works
 jest.doMock('../src/next-utils', () => nextUtilsMock)
 
+// Mock where the next bin is
+jest.doMock('../src/resolve-bin-async', () => ({
+  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+}))
+
 // Import with mocks applied
 import {build} from '../src/build'
 import {resolve} from 'path'
 
-import {remove, pathExists} from 'fs-extra'
 import {directoryTree} from './utils/tree-utils'
 
+import mockfs from 'mock-fs'
+
 describe('Build command ZEIT', () => {
-  const rootFolder = resolve(__dirname, './fixtures/zeit-now')
+  const rootFolder = '/'
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-dev')
 
   beforeEach(async () => {
     process.env.NOW_BUILDER = '1'
+    mockfs(
+      {
+        '/app/posts/pages/foo.tsx': '',
+        '/pages/bar.tsx': '',
+        '/next.config.js': 'module.exports = {target: "experimental-serverless-trace"}',
+      },
+      {createCwd: false, createTmp: false},
+    )
     jest.clearAllMocks()
     await build({rootFolder, buildFolder, devFolder, writeManifestFile: false})
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     delete process.env.NOW_BUILDER
-    if (await pathExists(buildFolder)) {
-      await remove(buildFolder)
-    }
+    mockfs.restore()
   })
 
   it('should copy the correct files to the build folder', async () => {
