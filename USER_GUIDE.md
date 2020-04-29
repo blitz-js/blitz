@@ -148,7 +148,7 @@ function Product() {
   return <div>{product.name}</div>
 }
 
-export default function () {
+function WrappedProduct() {
   return (
     <div>
       <ErrorBoundary fallback={(error) => <div>Error: {JSON.stringify(error)}</div>}>
@@ -159,6 +159,8 @@ export default function () {
     </div>
   )
 }
+
+export default WrappedProduct
 ```
 
 #### On the Server
@@ -173,9 +175,11 @@ export const getStaticProps = async (context) => {
   return {props: {product}}
 }
 
-export default function ({product}) {
+function ProductPage({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 In `getServerSideProps`, pass a query function to `ssrQuery` which will ensure appropriate middleware is run before/after your query function.
@@ -189,9 +193,11 @@ export const getServerSideProps = async ({params, req, res}) => {
   return {props: {product}}
 }
 
-export default function({product}) {
+function ProductPage ({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)
