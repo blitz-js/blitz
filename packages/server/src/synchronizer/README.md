@@ -12,7 +12,7 @@ Design goals
 
 # Why Streams?
 
-Initially, blitz will be used by people with small projects however as the number files and throughput increases we will need to use an architecture that allows for large parallel throughput with low memory consumption. Node is built on streams as a primitive so it makes sense to utilize what is available. The Gulp ecosystems provide several tools for managing streams of files so that makes sense to use those tools when available. Because refactoring to streams later would be extremely difficult and painful not starting with streams would be a design mistake.
+Initially, Blitz will be used by people with small projects however as the number files and throughput increases we will need to use an architecture that allows for large parallel throughput with low memory consumption. Node is built on streams as a primitive so it makes sense to utilize what is available. The Gulp ecosystems provide several tools for managing streams of files so that makes sense to use those tools when available. Because refactoring to streams later would be extremely difficult and painful not starting with streams would be a design mistake.
 
 # Why not RxJS?
 
@@ -223,7 +223,7 @@ export default ({config, input, errors, getInputCache}) => {
 
 # Future thinking
 
-So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically, we want Blitz to do as little work as possible. At this point, we are blowing away blitz folders when we start but it would be smarter to analyze the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
+So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically, we want Blitz to do as little work as possible. At this point, we are blowing away Blitz folders when we start but it would be smarter to analyze the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
 
 The following is a rough plan for how to do this. (Likely to change/improve at a later point)
 
