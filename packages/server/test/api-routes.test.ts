@@ -12,27 +12,44 @@ jest.doMock('../src/reporter', () => ({
 // Assume next works
 jest.doMock('../src/next-utils', () => nextUtilsMock)
 
+// Mock where the next bin is
+jest.doMock('../src/resolve-bin-async', () => ({
+  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+}))
+
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {resolve} from 'path'
-
-import {remove, pathExists} from 'fs-extra'
 import {directoryTree} from './utils/tree-utils'
 
+import mockfs from 'mock-fs'
+
 describe('Dev command', () => {
-  const rootFolder = resolve(__dirname, './fixtures/api-routes')
-  const buildFolder = resolve(rootFolder, '.blitz-build')
-  const devFolder = resolve(rootFolder, '.blitz-rules')
+  const rootFolder = '/'
+  const buildFolder = '/.blitz-build'
+  const devFolder = '/.blitz-rules'
 
   beforeEach(async () => {
+    mockfs(
+      {
+        '/app': {
+          api: {
+            'bar.ts': 'test',
+          },
+          foo: {
+            api: {
+              'foo.ts': 'test',
+            },
+          },
+        },
+      },
+      {createCwd: false, createTmp: false},
+    )
     jest.clearAllMocks()
     await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
   })
 
-  afterEach(async () => {
-    if (await pathExists(devFolder)) {
-      await remove(devFolder)
-    }
+  afterEach(() => {
+    mockfs.restore()
   })
 
   it('should copy the correct files to the dev folder', async () => {

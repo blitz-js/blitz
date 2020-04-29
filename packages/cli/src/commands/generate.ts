@@ -207,6 +207,7 @@ export default class Generate extends Command {
               path.resolve(),
               path.resolve('app', fileRoot, GeneratorClass.subdirectory, fileRoot, ...nestedContextPaths),
             ) + '/',
+          useTs: fs.existsSync(path.resolve('tsconfig.json')),
         })
         await generator.run()
       }
