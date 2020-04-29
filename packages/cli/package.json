@@ -30,7 +30,6 @@
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
     "@oclif/plugin-not-found": "^1.2.3",
-    "@prisma/client": "^2.0.0-beta.3",
     "camelcase": "^6.0.0",
     "chalk": "^4.0.0",
     "chokidar": "^3.3.1",
