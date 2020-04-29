@@ -23,15 +23,11 @@ const Home = () => (
         1. Add this code to <strong>db/schema.prisma</strong>:
       </p>
       <pre>
-        <code>
-          {modelSnippet}
-        </code>
+        <code>{modelSnippet}</code>
       </pre>
       <p>2. Run these commands in your terminal:</p>
       <pre>
-        <code>
-          {migrateSnippet}
-        </code>
+        <code>{migrateSnippet}</code>
       </pre>
 
       <p>

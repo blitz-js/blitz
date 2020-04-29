@@ -4,14 +4,9 @@
   "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": "./",
-    "module": "commonjs",
-    "rootDir": ".",
-    "outDir": "lib",
+    "declarationDir": "./dist",
+    "declaration": true,
     "downlevelIteration": true,
-    "sourceMap": false,
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    },
-    "types": []
+    "esModuleInterop": true
   }
 }

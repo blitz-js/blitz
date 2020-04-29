@@ -3,7 +3,7 @@ import * as path from 'path'
 import {EventEmitter} from 'events'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
-import Enquirer = require('enquirer')
+import Enquirer from 'enquirer'
 import {log} from '@blitzjs/server'
 import readDirRecursive from 'fs-readdir-recursive'
 import * as babel from '@babel/core'

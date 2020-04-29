@@ -3,8 +3,8 @@ import * as path from 'path'
 import File from 'vinyl'
 import {diffLines, Change} from 'diff'
 import * as fs from 'fs-extra'
-import chalk = require('chalk')
-import enquirer = require('enquirer')
+import chalk from 'chalk'
+import enquirer from 'enquirer'
 import PromptAbortedError from './errors/prompt-aborted'
 
 interface PromptAnswer {

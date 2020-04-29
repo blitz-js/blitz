@@ -4,22 +4,29 @@
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
+  "files": [
+    "dist",
+    "register"
+  ],
   "scripts": {
-    "dev": "rimraf lib && yarn build:templates && tsc --watch --preserveWatchOutput",
-    "build": "rimraf lib && tsc && yarn build:templates",
-    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "main": "lib/src/index.js",
-  "files": [
-    "/lib"
-  ],
+  "main": "dist/index.js",
+  "module": "dist/generator.esm.js",
+  "types": "dist/packages/generator/src/index.d.ts",
   "keywords": [
     "blitz",
     "generator"
