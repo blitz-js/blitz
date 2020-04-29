@@ -265,6 +265,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "jportela",
+      "name": "João Portela",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1010018?v=4",
+      "profile": "http://www.joaoportela.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
