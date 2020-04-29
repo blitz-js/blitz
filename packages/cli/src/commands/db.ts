@@ -1,22 +1,17 @@
-import {spawn} from 'cross-spawn'
-import {flags} from '@oclif/command'
-import {Command} from '@oclif/command'
-import chalk from 'chalk'
-import * as path from 'path'
 import {resolveBinAsync} from '@blitzjs/server'
-import {Client} from 'pg'
-import * as mysql from 'mysql2/promise'
-import * as fs from 'fs'
+import {Command, flags} from '@oclif/command'
+import chalk from 'chalk'
+import {spawn} from 'cross-spawn'
 import {prompt} from 'enquirer'
+import * as fs from 'fs'
+import * as path from 'path'
 import {promisify} from 'util'
-
-const envPath = path.join(process.cwd(), '.env')
-require('dotenv').config({path: envPath})
+import {loadBlitz} from '../utils/load-blitz'
 
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
-const dbUrl = process.env.DATABASE_URL
+const {db} = loadBlitz()
 
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
@@ -66,54 +61,54 @@ export const runMigrate = async () => {
   })
 }
 
-export async function resetPostgres(): Promise<void> {
-  const dbUrlParts: string[] = dbUrl!.split('/')
-  const dbName: string = dbUrlParts[dbUrlParts.length - 1]
-  const client: Client = new Client({
-    connectionString: dbUrl,
-  })
-  await client.connect()
+export async function resetPostgres(connectionString: string): Promise<void> {
+  const dbName: string = getDbName(connectionString)
   try {
     // close all other connections
-    await client.query(
-      `select pg_terminate_backend(pid) from pg_stat_activity where pid <> pg_backend_pid() and datname='${dbName}'`,
+    await db.raw(
+      `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname='${dbName};'`,
     )
     // currently assuming the public schema is being used
-    await client.query(
-      'drop schema public cascade; create schema public; grant all on schema public to postgres; grant all on schema public to public',
-    )
+    // delete schema and recreate with the appropriate privileges
+    await db.raw('DROP SCHEMA public cascade;')
+    await db.raw('CREATE SCHEMA public;')
+    await db.raw('GRANT ALL ON schema public TO postgres;')
+    await db.raw('GRANT ALL ON schema public TO public;')
+    // run migration
     await runMigrate()
+    process.exit(0)
   } catch (err) {
     process.exit(1)
-  } finally {
-    await client.end()
   }
 }
 
-export async function resetMysql(): Promise<void> {
-  const dbUrlParts: string[] = dbUrl!.split('/')
-  const dbName: string = dbUrlParts[dbUrlParts.length - 1]
-  const client = await mysql.createConnection(dbUrl)
+export async function resetMysql(connectionString: string): Promise<void> {
+  const dbName: string = getDbName(connectionString)
   try {
-    await client.query(`DROP DATABASE \`${dbName}\``)
-    await runMigrate()
+    await db.raw(`DROP DATABASE \`${dbName}\``)
+    // await runMigrate()
+    process.exit(0)
   } catch (err) {
     process.exit(1)
-  } finally {
-    await client.end()
   }
 }
 
 export async function resetSqlite(): Promise<void> {
-  // currently assuming the database is located at the db folder
-  const dbPath: string = `db${dbUrl?.split('file:.').pop()}`
-  const unlink = promisify(fs.unlink)
-  try {
-    await unlink(dbPath)
-    await runMigrate()
-  } catch (err) {
-    process.exit(1)
-  }
+  // // currently assuming the database is located at the db folder
+  // const dbPath: string = `db${dbUrl?.split('file:.').pop()}`
+  // const unlink = promisify(fs.unlink)
+  // try {
+  //   await unlink(dbPath)
+  //   await runMigrate()
+  // } catch (err) {
+  //   process.exit(1)
+  // }
+}
+
+export function getDbName(connectionString: string): string {
+  const dbUrlParts: string[] = connectionString!.split('/')
+  const dbName: string = dbUrlParts[dbUrlParts.length - 1]
+  return dbName
 }
 
 export default class Db extends Command {
@@ -178,27 +173,26 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
         }
       })
     } else if (command === 'reset') {
-      if (typeof dbUrl !== 'undefined') {
-        await prompt<{confirm: string}>({
-          type: 'confirm',
-          name: 'confirm',
-          message: 'Are you sure you want to reset your database?',
-        }).then((res) => {
-          if (res.confirm) {
-            if (dbUrl.includes('postgresql')) {
-              resetPostgres()
-            } else if (dbUrl.includes('mysql')) {
-              resetMysql()
-            } else if (dbUrl.includes('file:')) {
-              resetSqlite()
-            } else {
-              this.log('The database url is not valid.')
-            }
+      await prompt<{confirm: string}>({
+        type: 'confirm',
+        name: 'confirm',
+        message: 'Are you sure you want to reset your database?',
+      }).then((res) => {
+        if (res.confirm) {
+          const dataSource: any = db.internalDatasources[0]
+          const connectorType: string = dataSource.connectorType
+          const connectionString: string = dataSource.url.value
+          if (connectorType === 'postgresql') {
+            resetPostgres(connectionString)
+          } else if (connectorType === 'mysql') {
+            resetMysql(connectionString)
+          } else if (connectorType === 'sqlite') {
+            resetSqlite()
+          } else {
+            this.log('Could not find a valid database configuration')
           }
-        })
-      } else {
-        this.log('Add a database url to your .env file.')
-      }
+        }
+      })
     } else {
       this.log("\nUh oh, we don't support that command.")
       this.log('You can try running a prisma command directly with:')
