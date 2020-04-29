@@ -23,8 +23,6 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 1. New to open source? take a look at [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 2. Familiarize yourself with the [Blitz Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md)
 3. Join the [Blitz Slack Community](https://slack.blitzjs.com)
-4. Install the [Zenhub browser extension](https://www.zenhub.com/extension)
-5. View open issues and their progress [on the Zenhub repo tab](https://github.com/blitz-js/blitz#zenhub)
 
 <br>
 
