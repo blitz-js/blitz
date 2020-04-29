@@ -27,7 +27,7 @@ export default class New extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
     js: flags.boolean({
-      description: 'Generates a JS project. Omitting this flag will TypeScript as the default language.',
+      description: 'Generates a JS project. TypeScript is the default unless you add this flag.',
       default: false,
     }),
     yarn: flags.boolean({
