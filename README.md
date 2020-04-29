@@ -37,6 +37,10 @@ Blitz **maximizes your productivity** both when starting an app and when scaling
 2. `blitz new myapp`
 3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
+or
+
+3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
+
 <br>
 
 **Features:**<br>
@@ -205,11 +209,13 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="http://www.joaoportela.com"><img src="https://avatars0.githubusercontent.com/u/1010018?v=4" width="100px;" alt=""/><br /><sub><b>João Portela</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jportela" title="Code">💻</a></td>
+    <td align="center"><a href="http://dajin.dev"><img src="https://avatars0.githubusercontent.com/u/7122182?v=4" width="100px;" alt=""/><br /><sub><b>Da-Jin Chu</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dajinchu" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

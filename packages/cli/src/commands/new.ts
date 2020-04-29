@@ -26,12 +26,10 @@ export default class New extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // ts: flags.boolean({
-    //   char: 't',
-    //   description: 'generate a TypeScript project',
-    //   default: true,
-    //   allowNo: true,
-    // }),
+    js: flags.boolean({
+      description: 'Generates a JS project. TypeScript is the default unless you add this flag.',
+      default: false,
+    }),
     yarn: flags.boolean({
       description: 'use Yarn as the package manager',
       default: hasbin.sync('yarn'),
@@ -53,6 +51,7 @@ export default class New extends Command {
       destinationRoot,
       appName,
       dryRun: flags['dry-run'],
+      useTs: !flags.js,
       yarn: flags.yarn,
       version: this.config.version,
     })
