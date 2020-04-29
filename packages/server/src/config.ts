@@ -28,6 +28,7 @@ const defaults = {
     'coverage/**/*',
     'dist/**/*',
     'node_modules/**/*',
+    'cypress/**/*',
   ],
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',
