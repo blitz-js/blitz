@@ -63,12 +63,9 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     spinner.succeed()
 
     await new Promise((resolve) => {
-      const spinners: any[] = []
-      const logFlag = this.options.yarn ? '--json' : '--silent'
-      const stdio = this.options.yarn ? 'pipe' : 'inherit'
-
+      const logFlag = this.options.yarn ? '--json' : ''
       const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install', logFlag], {
-        stdio: ['inherit', stdio, stdio],
+        stdio: ['inherit', 'pipe', 'pipe'],
       })
 
       const getJSON = (data: string) => {
@@ -79,10 +76,11 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
         }
       }
 
+      const spinners: any[] = []
+
       if (this.options.yarn) {
         cp.stdout?.setEncoding('utf8')
         cp.stderr?.setEncoding('utf8')
-
         cp.stdout?.on('data', (data) => {
           let json = getJSON(data)
           if (json && json.type === 'step') {
@@ -102,10 +100,18 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
           }
         })
       } else {
-        console.log(log.withBranded('Installing those dependencies...'))
+        const spinner = log.spinner(log.withBranded('Installing those dependencies...')).start()
+        spinners.push(spinner)
       }
 
-      cp.on('exit', resolve)
+      cp.on('exit', (code) => {
+        if (!this.options.yarn) {
+          if (code !== 0) spinners[spinners.length - 1].fail()
+          else spinners[spinners.length - 1].succeed()
+        }
+
+        resolve()
+      })
     })
 
     // Ensure the generated files are formatted with the installed prettier version
