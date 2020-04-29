@@ -28,45 +28,36 @@ Let’s look at what `blitz new` created:
 
 ```
 mysite
-|   .babelrc.js
-|   .env
-|   .eslintrc.js
-|   .gitignore
-|   .npmrc
-|   .prettierignore
-|   blitz.config.js
-|   package.json
-|   README.md
-|   tsconfig.json
-|   yarn.lock
-|
-+---app
-|   +---components
-|   |       ErrorBoundary.tsx
-|   |
-|   +---layouts
-|   |
-|   \---pages
-|           index.tsx
-|           _app.tsx
-|           _document.tsx
-|
-+---db
-|   |   index.ts
-|   |   schema.prisma
-|   |
-|   \---migrations
-|
-+---integrations
-|
-+---jobs
-|
-+---node_modules
-+---public
-|       favicon.ico
-|       logo.png
-|
-\---utils
+├── app
+│   ├── components
+│   │   └── ErrorBoundary.tsx
+│   ├── layouts
+│   └── pages
+│       ├── _app.tsx
+│       ├── _document.tsx
+│       └── index.tsx
+├── db
+│   ├── migrations
+│   ├── index.ts
+│   └── schema.prisma
+├── integrations
+├── jobs
+├── node_modules
+├── public
+│   ├── favicon.ico
+│   └── logo.png
+├── utils
+├── .babelrc.js
+├── .env
+├── .eslintrc.js
+├── .gitignore
+├── .npmrc
+├── .prettierignore
+├── README.md
+├── blitz.config.js
+├── package.json
+├── tsconfig.json
+└── yarn.lock
 ```
 
 These files are:
