@@ -6,6 +6,8 @@ Before getting started, you should know **this is alpha software**. Blitz is inc
 
 If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
+If you’re looking for a slower, more guided start to Blitz, read the [Biltz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md).
+
 <br>
 
 ## Introduction
