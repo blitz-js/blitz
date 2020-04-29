@@ -283,8 +283,16 @@
       "contributions": [
         "code"
       ]
+     },
+     {
+      "login": "Shinyaigeek",
+      "name": "Shinobu Hayashi",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/42742053?v=4",
+      "profile": "https://shinyaigeek.dev/",
+      "contributions": [
+        "code"
+      ]
      }
-    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true
