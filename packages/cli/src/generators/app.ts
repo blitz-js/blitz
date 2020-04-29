@@ -12,11 +12,19 @@ const themeColor = '6700AB'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
+  useTs: boolean
   yarn: boolean
   version: string
 }
 
 class AppGenerator extends Generator<AppGeneratorOptions> {
+  filesToIgnore() {
+    if (!this.options.useTs) {
+      return ['tsconfig.json']
+    }
+    return []
+  }
+
   async getTemplateValues() {
     return {
       name: this.options.appName,
