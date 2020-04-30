@@ -34,7 +34,7 @@
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "typescript": "3.8.3"
   },
-  "NOTE": "Next.js dependency is currently only required for deploying to vercel",
+  "NOTE": "Next.js dependency is currently only required for deploying to Vercel",
   "devDependencies": {
     "@types/react": "16.9.34",
     "@typescript-eslint/eslint-plugin": "2.29.0",
