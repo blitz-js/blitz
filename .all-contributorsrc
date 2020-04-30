@@ -274,8 +274,8 @@
       "contributions": [
         "code"
       ]
-     },
-     {
+    },
+    {
       "login": "dajinchu",
       "name": "Da-Jin Chu",
       "avatar_url": "https://avatars0.githubusercontent.com/u/7122182?v=4",
@@ -283,8 +283,8 @@
       "contributions": [
         "code"
       ]
-     },
-     {
+    },
+    {
       "login": "Shinyaigeek",
       "name": "Shinobu Hayashi",
       "avatar_url": "https://avatars1.githubusercontent.com/u/42742053?v=4",
@@ -292,7 +292,19 @@
       "contributions": [
         "code"
       ]
-     }
+    },
+    {
+      "login": "flybayer",
+      "name": "Brandon Bayer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8813276?v=4",
+      "profile": "https://twitter.com/flybayer",
+      "contributions": [
+        "code",
+        "content",
+        "ideas",
+        "review"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true
