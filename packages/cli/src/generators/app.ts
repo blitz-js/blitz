@@ -57,7 +57,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     spinner.succeed()
 
     await new Promise((resolve) => {
-      const logFlag = this.options.yarn ? '--json' : ''
+      const logFlag = this.options.yarn ? '--json' : '--loglevel=error'
       const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install', logFlag], {
         stdio: ['inherit', 'pipe', 'pipe'],
       })
@@ -72,10 +72,15 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
       const spinners: any[] = []
 
-      if (this.options.yarn) {
-        cp.stdout?.setEncoding('utf8')
-        cp.stderr?.setEncoding('utf8')
-        cp.stdout?.on('data', (data) => {
+      if (!this.options.yarn) {
+        const spinner = log.spinner(log.withBranded('Installing those dependencies...')).start()
+        spinners.push(spinner)
+      }
+
+      cp.stdout?.setEncoding('utf8')
+      cp.stderr?.setEncoding('utf8')
+      cp.stdout?.on('data', (data) => {
+        if (this.options.yarn) {
           let json = getJSON(data)
           if (json && json.type === 'step') {
             spinners[spinners.length - 1]?.succeed()
@@ -85,25 +90,26 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
           if (json && json.type === 'success') {
             spinners[spinners.length - 1]?.succeed()
           }
-        })
-        cp.stderr?.on('data', (data) => {
+        }
+      })
+      cp.stderr?.on('data', (data) => {
+        if (this.options.yarn) {
           let json = getJSON(data)
           if (json && json.type === 'error') {
             spinners[spinners.length - 1]?.fail()
             console.error(json.data)
           }
-        })
-      } else {
-        const spinner = log.spinner(log.withBranded('Installing those dependencies...')).start()
-        spinners.push(spinner)
-      }
-
-      cp.on('exit', (code) => {
-        if (!this.options.yarn) {
-          if (code !== 0) spinners[spinners.length - 1].fail()
-          else spinners[spinners.length - 1].succeed()
+        } else {
+          console.error(`\n${data}`)
         }
-
+      })
+      cp.on('exit', (code) => {
+        if (!this.options.yarn && spinners[spinners.length - 1].isSpinning) {
+          if (code !== 0) spinners[spinners.length - 1].fail()
+          else {
+            spinners[spinners.length - 1].succeed()
+          }
+        }
         resolve()
       })
     })
