@@ -350,6 +350,16 @@
         "code",
         "review"
       ]
+    },
+    {
+      "login": "eliasjohansson",
+      "name": "Elias Johansson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
+      "profile": "https://twitter.com/GeggsElias",
+      "contributions": [
+        "code",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
