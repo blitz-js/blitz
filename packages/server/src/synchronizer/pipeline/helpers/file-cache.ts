@@ -52,7 +52,7 @@ export class FileCache {
  * The cache can be used elsewhere in the stream for dynamic analysis
  * of multiple files.
  */
-export default (filter: (a: File) => boolean = () => true) => {
+const fileCache = (filter: (a: File) => boolean = () => true) => {
   const cache = FileCache.create()
 
   const stream = through({objectMode: true, highWaterMark: 1}, (file, _, next) => {
@@ -72,3 +72,5 @@ export default (filter: (a: File) => boolean = () => true) => {
 
   return {stream, cache}
 }
+
+export default fileCache

@@ -11,7 +11,7 @@ function Product() {
   return <ProductForm product={product} onSuccess={() => router.push('/admin/products')} />
 }
 
-export default function () {
+function EditProductPage() {
   return (
     <div>
       <h1>Edit Product</h1>
@@ -28,3 +28,5 @@ export default function () {
     </div>
   )
 }
+
+export default EditProductPage

@@ -182,7 +182,7 @@ const stream = pipeline(
 import {through} from './streams'
 
 // Typical Rule
-export default ({config, input, errors, getInputCache}) => {
+export default SERVICE_NAME({config, input, errors, getInputCache}) => {
   const service = createSomeService()
 
   // This is an incremental file cache that
