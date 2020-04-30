@@ -55,7 +55,7 @@ describe('Build command ZEIT', () => {
       name: '.blitz-build',
       children: [
         {name: 'blitz.config.js'},
-        {name: 'next-zeit.config.js'},
+        {name: 'next-vercel.config.js'},
         {name: 'next.config.js'},
         {
           name: 'pages',
