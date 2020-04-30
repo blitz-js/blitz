@@ -328,6 +328,18 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "aem",
+      "name": "Adam Markon",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1909883?v=4",
+      "profile": "https://github.com/aem",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
