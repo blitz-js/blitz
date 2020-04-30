@@ -18,21 +18,15 @@ const input = through({objectMode: true}, (f, _, next) => next(null, f))
 /**
  * Creates a pipeline stream that transforms files.
  * @param config Config object containing basic information for the file pipeline
- * @param ready Ready handlerto run when ready event is fired
  * @param errors Stream that takes care of all operational error rendering
  * @param reporter Stream that takes care of all view rendering
  */
-export default function createPipeline(
-  config: RuleConfig,
-  ready: () => void,
-  errors: Writable,
-  reporter: Writable,
-) {
+export default function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
   // Helper streams don't account for business rules
   const optimizer = createWorkOptimizer()
   const enrichFiles = createFileEnricher()
   const srcCache = createFileCache(isSourceFile)
-  const idleHandler = createIdleHandler(ready)
+  const idleHandler = createIdleHandler(reporter)
 
   // Send this DI object to every rule
   const api: RuleArgs = {

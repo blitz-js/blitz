@@ -3,19 +3,21 @@ import {READY, IDLE} from '../../events'
 import {Writable} from 'stream'
 
 /**
- * Idle handler is used to close the promise and will run when
- * The input stream does not have input for a set time
- * This is asssumed to happen only during watch mode.
- * Note the idle event will continually fire if the threshold is not met
+ * Idle handler will fire events when the stream is idle
+ * for a certain amount of time.
+ *
+ * The first time it fires it will also fire a ready event
  */
-const readyHandler = (reporter: Writable) => {
+const idleHandler = (reporter: Writable) => {
   let timeout: NodeJS.Timeout
   let firstTime = true
 
   const handler = () => {
     if (firstTime) {
       reporter.write({type: READY})
+      firstTime = false
     }
+
     reporter.write({type: IDLE})
   }
 
@@ -41,4 +43,4 @@ const readyHandler = (reporter: Writable) => {
   return {stream}
 }
 
-export default readyHandler
+export default idleHandler

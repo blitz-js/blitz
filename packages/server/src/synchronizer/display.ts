@@ -5,10 +5,10 @@ import chalk from 'chalk'
 import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from './events'
 
 /**
- * Reporter is a stream that converts build status events and prepares them for the console.
+ * Display is a stream that converts build status events and prepares them for the console.
  * A good way to think about this is as the root of the "view" component of the application.
  */
-export default function createReporter() {
+export default function createDisplay() {
   let lastEvent: Event<any> = {type: INIT, payload: null}
 
   let spinner = log.spinner('Preparing for launch').start()

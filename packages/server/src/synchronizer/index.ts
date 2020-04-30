@@ -3,8 +3,10 @@ import {pipe} from './streams'
 import createPipeline from './pipeline'
 import agnosticSource from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
-import createReporter, {READY, IDLE} from './reporter'
+import {through} from './streams'
+import createDisplay from './display'
 import createErrors from './errors'
+import {READY} from './events'
 
 type SynchronizeFilesInput = {
   src: string
@@ -38,9 +40,14 @@ export async function synchronizeFiles({
   // TODO: remove this clean and devise a way to resolve differences in stream
   await clean(dest)
 
-  const reporter = createReporter()
-  const errors = createErrors(reporter.stream)
+  const reporter = {
+    stream: through({objectMode: true}, (event, __, next) => {
+      next(null, event)
+    }),
+  }
 
+  const errors = createErrors(reporter.stream)
+  const display = createDisplay()
   return new Promise((resolve, reject) => {
     const config = {
       cwd: src,
@@ -52,22 +59,26 @@ export async function synchronizeFiles({
       },
     }
 
-    const readyHandler = () => {
-      reporter.stream.write({type: IDLE, payload: null})
-      reporter.stream.write({type: READY, payload: null})
-      resolve({
-        manifest: fileTransformPipeline.manifest,
-      })
-    }
+    reporter.stream.on('data', ({type}) => {
+      if (type === READY) {
+        resolve({
+          manifest: fileTransformer.manifest,
+        })
+      }
+    })
 
     const catchErrors = (err: any) => {
       if (err) reject(err)
     }
 
     const source = agnosticSource({cwd: src, include, ignore, watch})
-    const fileTransformPipeline = createPipeline(config, readyHandler, errors.stream, reporter.stream)
+    const fileTransformer = createPipeline(config, errors.stream, reporter.stream)
 
-    pipe(source.stream, fileTransformPipeline.stream, catchErrors)
+    // Send source to fileTransformer
+    pipe(source.stream, fileTransformer.stream, catchErrors)
+
+    // Send reporter events to display
+    pipe(reporter.stream, display.stream, catchErrors)
   })
 }
 
