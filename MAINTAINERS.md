@@ -36,6 +36,17 @@ The primary responsibilities of level 2 maintainers are:
 - Merging pull requests
 - Tracking and ensuring progress of open pull requests
 
+## Fundamentals
+
+Maintainers are the face of the project and the front-line touch point for the community. Therefore maintainers have the very important responsibility of making people feel welcome, valued, understood, and appreciated.
+
+**Please take time to read and understand everything outlined in this [guide on building welcoming communities](https://opensource.guide/building-community)**
+
+Two especially important points:
+
+- Immediately expressing gratitude when someone opens an issue or PR. This takes effort/time and we appreciate it
+- Responsiveness. During issue/PR triage, even if we can’t do a full review right away, leave a comment thanking them and saying we’ll review it soon
+
 ## Issue Triage
 
 #### If a bug report:
