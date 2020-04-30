@@ -6,11 +6,89 @@
   "files": [
     "README.md"
   ],
-  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length + 9 %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
+  "badgeTemplate": "<a aria-label=\"All Contributors\" href=\"#contributors-\"><img alt=\"\" src=\"https://img.shields.io/badge/all_contributors-<%= contributors.length %>-17BB8A.svg?style=for-the-badge&labelColor=000000\"></a>",
   "imageSize": 100,
   "commit": true,
   "commitConvention": "none",
   "contributors": [
+    {
+      "login": "flybayer",
+      "name": "Brandon Bayer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8813276?v=4",
+      "profile": "https://twitter.com/flybayer",
+      "contributions": [
+        "code",
+        "content",
+        "ideas",
+        "review"
+      ]
+    },
+    {
+      "login": "ryardley",
+      "name": "Rudi Yardley",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
+      "profile": "https://medium.com/@ryardley",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "merelinguist",
+      "name": "Dylan Brookes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
+      "profile": "https://merelinguist.me",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "aem",
+      "name": "Adam Markon",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1909883?v=4",
+      "profile": "https://github.com/aem",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "coreybrown89",
+      "name": "Corey Brown",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12791148?v=4",
+      "profile": "https://corey-brown.com",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "LoriKarikari",
+      "name": "Lori Karikari",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7902980?v=4",
+      "profile": "https://github.com/LoriKarikari",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "eliasjohansson",
+      "name": "Elias Johansson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
+      "profile": "https://twitter.com/GeggsElias",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
     {
       "login": "medelman17",
       "name": "Michael Edelman ",
@@ -152,7 +230,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/1288694?v=4",
       "profile": "https://github.com/wKovacs64",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -274,8 +353,8 @@
       "contributions": [
         "code"
       ]
-     },
-     {
+    },
+    {
       "login": "dajinchu",
       "name": "Da-Jin Chu",
       "avatar_url": "https://avatars0.githubusercontent.com/u/7122182?v=4",
@@ -283,8 +362,8 @@
       "contributions": [
         "code"
       ]
-     },
-     {
+    },
+    {
       "login": "Shinyaigeek",
       "name": "Shinobu Hayashi",
       "avatar_url": "https://avatars1.githubusercontent.com/u/42742053?v=4",
@@ -292,7 +371,25 @@
       "contributions": [
         "code"
       ]
-     }
+    },
+    {
+      "login": "karankiri",
+      "name": "Karan Kiri",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/19989161?v=4",
+      "profile": "http://karankiri.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fullmetalengineer",
+      "name": "Alan Long",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5294903?v=4",
+      "profile": "https://github.com/fullmetalengineer",
+      "contributions": [
+        "doc"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true

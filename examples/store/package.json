@@ -14,6 +14,7 @@
     "@prisma/client": "2.0.0-beta.3",
     "blitz": "0.7.1-canary.1",
     "final-form": "4.19.1",
+    "next": "9.3.6",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "react-final-form": "6.4.0",

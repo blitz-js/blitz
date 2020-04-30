@@ -35,7 +35,7 @@
     "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "merge-stream": "^2.0.0",
-    "next": "9.3.6-canary.13",
+    "next": "9.3.6",
     "next-compose-plugins": "^2.2.0",
     "next-transpile-modules": "^3.2.0",
     "null-loader": "^4.0.0",
