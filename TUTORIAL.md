@@ -188,7 +188,7 @@ Promise { <pending> }
 
 # See the entire object
 ⚡ > q
-{ id: 1, text: 'What’s new?', publishedAt: 2020-04-24T22:08:17.307Z }
+{ id: 1, text: "What’s new?", publishedAt: 2020-04-24T22:08:17.307Z }
 
 # Or access individual values on the object.
 ⚡ > q.text
