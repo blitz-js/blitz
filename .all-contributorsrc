@@ -379,6 +379,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "fullmetalengineer",
+      "name": "Alan Long",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5294903?v=4",
+      "profile": "https://github.com/fullmetalengineer",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
