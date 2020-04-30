@@ -1,6 +1,6 @@
 import parseGitignore from 'parse-gitignore'
 import fs from 'fs'
-import _ from 'lodash'
+import {partition} from 'lodash'
 import fastGlob from 'fast-glob'
 
 function getAllGitIgnores(rootFolder: string) {
@@ -18,7 +18,7 @@ export function chokidarRulesFromGitignore({gitIgnore, prefix}: {gitIgnore: stri
   const rules = parseGitignore(gitIgnore)
 
   const isInclusionRule = (rule: string) => rule.startsWith('!')
-  const [includePaths, ignoredPaths] = _.partition(rules, isInclusionRule)
+  const [includePaths, ignoredPaths] = partition(rules, isInclusionRule)
 
   const trimExclamationMark = (rule: string) => rule.substring(1)
   const prefixPath = (_rule: string) => {
