@@ -1,5 +1,4 @@
 import Generator, {GeneratorOptions} from '../generator'
-import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import username from 'username'
 import {readJSONSync, writeJson} from 'fs-extra'
@@ -10,32 +9,27 @@ import {log} from '@blitzjs/server'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
+  useTs: boolean
   yarn: boolean
   version: string
 }
 
-const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
-
 class AppGenerator extends Generator<AppGeneratorOptions> {
-  async write() {
-    const templateValues = {
+  filesToIgnore() {
+    if (!this.options.useTs) {
+      return ['tsconfig.json']
+    }
+    return []
+  }
+
+  async getTemplateValues() {
+    return {
       name: this.options.appName,
       username: await username(),
     }
+  }
 
-    const paths = readDirRecursive(this.sourcePath(), (name) => {
-      return !ignoredNames.includes(name)
-    })
-
-    for (let path of paths) {
-      try {
-        this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
-      } catch (error) {
-        console.log('Error generating', path)
-        throw error
-      }
-    }
-
+  async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }
 

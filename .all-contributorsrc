@@ -24,6 +24,72 @@
       ]
     },
     {
+      "login": "ryardley",
+      "name": "Rudi Yardley",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
+      "profile": "https://medium.com/@ryardley",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "merelinguist",
+      "name": "Dylan Brookes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
+      "profile": "https://merelinguist.me",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "aem",
+      "name": "Adam Markon",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1909883?v=4",
+      "profile": "https://github.com/aem",
+      "contributions": [
+        "code",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "coreybrown89",
+      "name": "Corey Brown",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12791148?v=4",
+      "profile": "https://corey-brown.com",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "LoriKarikari",
+      "name": "Lori Karikari",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7902980?v=4",
+      "profile": "https://github.com/LoriKarikari",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
+      "login": "eliasjohansson",
+      "name": "Elias Johansson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
+      "profile": "https://twitter.com/GeggsElias",
+      "contributions": [
+        "code",
+        "review"
+      ]
+    },
+    {
       "login": "medelman17",
       "name": "Michael Edelman ",
       "avatar_url": "https://avatars1.githubusercontent.com/u/14793389?v=4",
@@ -31,27 +97,6 @@
       "contributions": [
         "infra",
         "code"
-      ]
-    },
-    {
-      "login": "merelinguist",
-      "name": "Dylan Brookes",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/24858006?v=4",
-      "profile": "https://merelinguist.now.sh",
-      "contributions": [
-        "ideas",
-        "review",
-        "code"
-      ]
-    },
-    {
-      "login": "ryardley",
-      "name": "Rudi Yardley",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1256409?v=4",
-      "profile": "https://medium.com/@ryardley",
-      "contributions": [
-        "code",
-        "ideas"
       ]
     },
     {
@@ -135,28 +180,10 @@
       ]
     },
     {
-      "login": "robdrosenberg",
-      "name": "Robert Rosenberg",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/20813991?v=4",
-      "profile": "http://robdrosenberg.com",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
       "login": "jasonblalock",
       "name": "Jason Blalock",
       "avatar_url": "https://avatars0.githubusercontent.com/u/5899929?v=4",
       "profile": "https://github.com/jasonblalock",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "coreybrown89",
-      "name": "Corey Brown",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/12791148?v=4",
-      "profile": "https://corey-brown.com",
       "contributions": [
         "code"
       ]
@@ -189,15 +216,6 @@
       ]
     },
     {
-      "login": "aem",
-      "name": "Adam Markon",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/1909883?v=4",
-      "profile": "https://github.com/aem",
-      "contributions": [
-        "ideas"
-      ]
-    },
-    {
       "login": "lorenzorapetti",
       "name": "Lorenzo Rapetti",
       "avatar_url": "https://avatars1.githubusercontent.com/u/2632174?v=4",
@@ -212,7 +230,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/1288694?v=4",
       "profile": "https://github.com/wKovacs64",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -317,40 +336,58 @@
       ]
     },
     {
-      "login": "skn0tt",
-      "name": "Simon Knott",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/14912729?v=4",
-      "profile": "http://simonknott.de",
-      "contributions": [
-        "code",
-        "test"
-      ]
-    },
-    {
       "login": "kandros",
       "name": "Jaga Santagostino",
       "avatar_url": "https://avatars0.githubusercontent.com/u/4562878?v=4",
       "profile": "http://jagascript.com",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
-      "login": "LoriKarikari",
-      "name": "Lori Karikari",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/7902980?v=4",
-      "profile": "https://github.com/LoriKarikari",
+      "login": "jportela",
+      "name": "João Portela",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1010018?v=4",
+      "profile": "http://www.joaoportela.com",
       "contributions": [
         "code"
       ]
     },
     {
-      "login": "eliasjohansson",
-      "name": "Elias Johansson",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/22719177?v=4",
-      "profile": "https://twitter.com/GeggsElias",
+      "login": "dajinchu",
+      "name": "Da-Jin Chu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7122182?v=4",
+      "profile": "http://dajin.dev",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "Shinyaigeek",
+      "name": "Shinobu Hayashi",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/42742053?v=4",
+      "profile": "https://shinyaigeek.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "karankiri",
+      "name": "Karan Kiri",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/19989161?v=4",
+      "profile": "http://karankiri.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fullmetalengineer",
+      "name": "Alan Long",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5294903?v=4",
+      "profile": "https://github.com/fullmetalengineer",
+      "contributions": [
+        "doc"
       ]
     }
   ],

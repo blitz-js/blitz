@@ -5,18 +5,18 @@ Design goals
 - Rules: Related logic needs to live together
 - Everything is a rule
 - Efficiency
-- Paralell processing
+- Parallel processing
 - Cleaner Architecture for Dirty restart functionality
 - Agnostic input file watcher / glob
 - Simplify tests
 
 # Why Streams?
 
-Initially blitz will be used by people with small projects however as the number files and throughput increases we will need to use an architecture that allows for large paralell throughput with low memory consumption. Node is built on streams as a primitive so it makes sense to utilize what is available. The Gulp ecosystems provides several tools to managing streams of files so that makes sense to use those tools when available. Because refactoring to streams later would be extremely difficult and painful not starting with streams would be a design mistake.
+Initially, Blitz will be used by people with small projects however as the number files and throughput increases we will need to use an architecture that allows for large parallel throughput with low memory consumption. Node is built on streams as a primitive so it makes sense to utilize what is available. The Gulp ecosystems provide several tools for managing streams of files so that makes sense to use those tools when available. Because refactoring to streams later would be extremely difficult and painful not starting with streams would be a design mistake.
 
 # Why not RxJS?
 
-RxJS could be a good match for streaming architectures and introduces some really powerful tools for managing stream operations. As we are using object streams it would also possibly simplify some of the boilerplate using RxJS. However, certain operators in RxJS can be inapproachable for newer developers and tend to encourage too much abstraction. It is also an extra dependency that increases the learning surface of the codebase and as we are stuck with understanding basic node streams in any case it makes sense to avoid RxJS until absolutely necessary.
+RxJS could be a good match for streaming architectures and introduces some really powerful tools for managing stream operations. As we are using object streams it would also possibly simplify some of the boilerplate using RxJS. However, certain operators in RxJS can be inapproachable for newer developers and tend to encourage too much abstraction. It is also an extra dependency that increases the learning surface of the codebase and as we are stuck with understanding basic node streams, in any case, it makes sense to avoid RxJS until absolutely necessary.
 
 # Broad Architecture
 
@@ -33,7 +33,7 @@ Our architecture is a big file transform pipeline. Every business concern is col
 
 # Stream helpers
 
-So Node streams are a little incompatable on old versions of Node and there are a few compatability libs we are using to help us work with streams.
+So Node streams are a little incompatible on old versions of Node and there are a few compatibility libs we are using to help us work with streams.
 
 https://www.freecodecamp.org/news/rxjs-and-node-8f4e0acebc7c/
 
@@ -48,7 +48,7 @@ Helper Libs
 
 # A good way to work with streams
 
-A pattern we have found that works well is using a constructor function to accept connectors and return a stream as well as any shared data you need to provide to other components connectors. You will see this alot around the synchronizer.
+A pattern we have found that works well is using a constructor function to accept connectors and return a stream as well as any shared data you need to provide to other components connectors. You will see this a lot around the synchronizer.
 
 ```ts
 type CreatorFn = ConnectionsOrConfig => StreamAsWellAsSharedData
@@ -64,7 +64,7 @@ const source = agnosticSource({cwd: src, include, ignore, watch})
 pipe(source.stream, fileTransformPipeline)
 ```
 
-The reason we don't just return a stream is that often we need to return other data and share it elsewhere for example to analyse input file structure in the pages rule we use a file cache.
+The reason we don't just return a stream is that often we need to return other data and share it elsewhere, for example, to analyze input file structure in the pages rule we use a file cache.
 
 ```ts
 // Here
@@ -80,13 +80,13 @@ pipeline(
 
 # View rendering and error handling
 
-The cli view is provided by a [reporter](./reporter) stream which accepts Events which it manages and dispays. This is responsible for rendering stuff to the view.
+The cli view is provided by a [reporter](./reporter) stream which accepts Events which it manages and displays. This is responsible for rendering stuff to the view.
 
 Secondly there is an [errors](./errors) stream which works a similar way but for Operational Errors.
 
-It is important to differentiate between Operational Errors and Exceptions. Expections are probably programmer errors where as operation errors are more likely a result of the user providing us with the wrong input/files.
+It is important to differentiate between Operational Errors and Exceptions. Exceptions are probably programmer errors whereas operation errors are more likely a result of the user providing us with the wrong input/files.
 
-In this architecture we write operational errors to the error stream and catch Exceptions in stream error handlers. We should be able to drop Exceptions on the floor but by attaching a view to the end of the error stream we can print nice messages for our users.
+In this architecture, we write operational errors to the error stream and catch Exceptions in stream error handlers. We should be able to drop Exceptions on the floor but by attaching a view to the end of the error stream we can print nice messages for our users.
 
 Because everything is streams we can get pretty creative with how we present stuff to the user and get realtime updates to it. This might make it easier to integrate with Reactive cli view frameworks at a later point.
 
@@ -132,11 +132,11 @@ Input manages inputting of evented vinyl file. Files that have already been proc
 
 # Analysis
 
-Some types of analysis needs a list of all the files other types do not
+Some types of analysis need a list of all the files other types do not
 
 Analysis needs to be done in stream as new information comes in. Eg. when someone renames a file that file goes to the analysis engine which works out invariants as they occur without requiring a sweep of the entire file system.
 
-For this we can create file caches which represent projections of the file system and update based on input file events.
+For this, we can create file caches which represent projections of the file system and update based on input file events.
 
 # Rules
 
@@ -223,7 +223,7 @@ export default ({config, input, errors, getInputCache}) => {
 
 # Future thinking
 
-So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically we want Blitz to do as little work as possible. At this point we are blowing away blitz folders when we start but it would be smarter to analyse the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
+So one future issue we have been trying to account for here is how to solve the dirty sync problem with streams. Basically, we want Blitz to do as little work as possible. At this point, we are blowing away Blitz folders when we start but it would be smarter to analyze the source and destination folders and only manipulate the files that are actually required to be changed. This is not required as of now but will be a consideration as we try and get this thing faster and faster to live up to its name. To prepare for this we have setup a work optimizer that checks the hash of the input file and guards against new work being done
 
 The following is a rough plan for how to do this. (Likely to change/improve at a later point)
 
