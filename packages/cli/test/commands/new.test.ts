@@ -6,6 +6,12 @@ import fetch from 'node-fetch'
 import nock from 'nock'
 
 jest.setTimeout(60 * 1000)
+const blitzCliPackageJson = require('../../package.json')
+
+async function getBlitzDistTags() {
+  const response = await fetch('https://registry.npmjs.org/-/package/blitz/dist-tags')
+  return await response.json()
+}
 
 describe('`new` command', () => {
   describe('when scaffolding new project', () => {
@@ -34,17 +40,16 @@ describe('`new` command', () => {
 
     it('pins Blitz to the current version', async () =>
       await withNewApp(async (_, packageJson) => {
-        async function getLatestBlitzVersion() {
-          const response = await fetch('https://registry.npmjs.org/-/package/blitz/dist-tags')
-          const {latest} = await response.json()
-          return latest
-        }
-
         const {
           dependencies: {blitz: blitzVersion},
         } = packageJson
 
-        expect(blitzVersion).toEqual(await getLatestBlitzVersion())
+        const {latest, canary} = await getBlitzDistTags()
+        if (blitzCliPackageJson.version.includes('canary')) {
+          expect(blitzVersion).toEqual(canary)
+        } else {
+          expect(blitzVersion).toEqual(latest)
+        }
       }))
 
     describe('with network trouble', () => {
