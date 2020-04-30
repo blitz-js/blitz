@@ -3,11 +3,11 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
 import fetch from 'node-fetch'
+const blitzCliPackageJson = require('../../package.json')
 
-async function getLatestBlitzVersion() {
+async function getBlitzDistTags() {
   const response = await fetch('https://registry.npmjs.org/-/package/blitz/dist-tags')
-  const {latest} = await response.json()
-  return latest
+  return await response.json()
 }
 
 function makeTempDir() {
@@ -40,7 +40,12 @@ describe('`new` command', () => {
         dependencies: {blitz: blitzVersion},
       } = packageJson
 
-      expect(blitzVersion).toEqual(await getLatestBlitzVersion())
+      const {latest, canary} = await getBlitzDistTags()
+      if (blitzCliPackageJson.version.includes('canary')) {
+        expect(blitzVersion).toEqual(canary)
+      } else {
+        expect(blitzVersion).toEqual(latest)
+      }
     })
   })
 })
