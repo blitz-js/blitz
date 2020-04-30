@@ -340,6 +340,16 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "coreybrown89",
+      "name": "Corey Brown",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12791148?v=4",
+      "profile": "https://corey-brown.com",
+      "contributions": [
+        "code",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
