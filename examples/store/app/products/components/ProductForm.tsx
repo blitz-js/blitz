@@ -15,7 +15,7 @@ type ProductFormProps = {
   onSuccess: (product: Product) => any
 }
 
-export default function ({product, style, onSuccess, ...props}: ProductFormProps) {
+function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
   return (
     <Form
       initialValues={product || {name: null, handle: null, description: null, price: null}}
@@ -72,3 +72,5 @@ export default function ({product, style, onSuccess, ...props}: ProductFormProps
     />
   )
 }
+
+export default ProductForm

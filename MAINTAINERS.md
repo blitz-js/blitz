@@ -1,4 +1,4 @@
-# Blitz Maintainers
+# ❤️ Blitz Maintainers
 
 Aside from the core team, there are two levels of maintainers, described below.
 
@@ -36,16 +36,18 @@ The primary responsibilities of level 2 maintainers are:
 - Merging pull requests
 - Tracking and ensuring progress of open pull requests
 
-## Fundamentals
+## ⚠️ Fundamentals
 
 Maintainers are the face of the project and the front-line touch point for the community. Therefore maintainers have the very important responsibility of making people feel welcome, valued, understood, and appreciated.
 
 **Please take time to read and understand everything outlined in this [guide on building welcoming communities](https://opensource.guide/building-community)**
 
-Two especially important points:
+Some especially important points:
 
-- Immediately expressing gratitude when someone opens an issue or PR. This takes effort/time and we appreciate it
-- Responsiveness. During issue/PR triage, even if we can’t do a full review right away, leave a comment thanking them and saying we’ll review it soon
+- **Gratitude:** immediately express gratitude when someone opens an issue or PR. This takes effort/time and we appreciate it
+- **Responsiveness:** during issue/PR triage, even if we can’t do a full review right away, leave a comment thanking them and saying we’ll review it soon
+- **Understanding:** it's critical to ensure you understand exactly what someone is saying before you respond. Ask plenty of questions if needed. It's very bad if someone has to reply to your response and say "actually I was asking about X"
+    - In fact, at least one question is almost always required before you can respond appropriately  — whether in Github or in Slack
 
 ## Issue Triage
 
