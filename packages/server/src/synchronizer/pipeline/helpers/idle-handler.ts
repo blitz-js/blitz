@@ -8,7 +8,7 @@ import {Writable} from 'stream'
  *
  * The first time it fires it will also fire a ready event
  */
-const idleHandler = (reporter: Writable) => {
+const idleHandler = (reporter: Writable, delay: number = 500) => {
   let timeout: NodeJS.Timeout
   let firstTime = true
 
@@ -23,7 +23,7 @@ const idleHandler = (reporter: Writable) => {
 
   function resetTimeout() {
     destroyTimeout()
-    timeout = setTimeout(handler, 500)
+    timeout = setTimeout(handler, delay)
   }
 
   function destroyTimeout() {
