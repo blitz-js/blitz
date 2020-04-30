@@ -1,27 +1,40 @@
 import parseGitignore from 'parse-gitignore'
 import fs from 'fs'
-import {resolve} from 'path'
 import _ from 'lodash'
+import fastGlob from 'fast-glob'
 
 function getAllGitIgnores(rootFolder: string) {
-  function getGitIgnoresRecursively(folder: string, prefix: string): {gitIgnore: string; prefix: string}[] {
-    const entries = fs.readdirSync(folder, {withFileTypes: true})
-    const gitIgnoreFile = entries.find((dirent) => dirent.isFile() && dirent.name === '.gitignore')
-    const gitIgnore = !!gitIgnoreFile && fs.readFileSync(resolve(folder, '.gitignore'), {encoding: 'utf8'})
+  const files = fastGlob.sync('**/.gitignore', {cwd: rootFolder})
+  return files.map((file) => {
+    const [prefix] = file.split('.gitignore')
+    return {
+      gitIgnore: fs.readFileSync(file, {encoding: 'utf8'}),
+      prefix,
+    }
+  })
+}
 
-    const subdirs = entries.filter((e) => e.isDirectory()).map((e) => e.name)
-    const gitIgnoresInSubDirs = subdirs.flatMap((subdir) =>
-      getGitIgnoresRecursively(resolve(folder, subdir), resolve(prefix, subdir)),
-    )
+export function chokidarRulesFromGitignore({gitIgnore, prefix}: {gitIgnore: string; prefix: string}) {
+  const rules = parseGitignore(gitIgnore)
 
-    if (gitIgnore) {
-      return gitIgnoresInSubDirs.concat({gitIgnore, prefix})
+  const isInclusionRule = (rule: string) => rule.startsWith('!')
+  const [includePaths, ignoredPaths] = _.partition(rules, isInclusionRule)
+
+  const trimExclamationMark = (rule: string) => rule.substring(1)
+  const prefixPath = (_rule: string) => {
+    const rule = _rule.startsWith('/') ? _rule.substring(1) : _rule
+
+    if (!prefix) {
+      return rule
     } else {
-      return gitIgnoresInSubDirs
+      return prefix + '/' + rule
     }
   }
 
-  return getGitIgnoresRecursively(rootFolder, '')
+  return {
+    includePaths: includePaths.map(trimExclamationMark).map(prefixPath),
+    ignoredPaths: ignoredPaths.map(prefixPath),
+  }
 }
 
 export function parseChokidarRulesFromGitignore(rootFolder: string) {
@@ -30,26 +43,12 @@ export function parseChokidarRulesFromGitignore(rootFolder: string) {
     ignoredPaths: [],
   }
 
-  for (const {gitIgnore, prefix} of getAllGitIgnores(rootFolder)) {
-    const rules = parseGitignore(gitIgnore)
-
-    const isInclusionRule = (rule: string) => rule.startsWith('!')
-    const [includePaths, ignoredPaths] = _.partition(rules, isInclusionRule)
-
-    const trimExclamationMark = (rule: string) => rule.substring(1)
-    const prefixPath = (_rule: string) => {
-      const rule = _rule.startsWith('/') ? _rule.substring(1) : _rule
-
-      if (!prefix) {
-        return rule
-      } else {
-        return prefix + '/' + rule
-      }
-    }
-
-    result.includePaths.push(...includePaths.map(trimExclamationMark).map(prefixPath))
-    result.ignoredPaths.push(...ignoredPaths.map(prefixPath))
-  }
+  getAllGitIgnores(rootFolder)
+    .map(chokidarRulesFromGitignore)
+    .forEach(({ignoredPaths, includePaths}) => {
+      result.includePaths.push(...includePaths)
+      result.ignoredPaths.push(...ignoredPaths)
+    })
 
   return result
 }
