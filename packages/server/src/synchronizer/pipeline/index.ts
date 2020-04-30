@@ -2,7 +2,7 @@ import {pipeline, through} from '../streams'
 import {RuleConfig, RuleArgs} from '../types'
 import createFileEnricher from './helpers/enrich-files'
 import createFileCache from './helpers/file-cache'
-import createReadyHandler from './helpers/ready-handler'
+import createIdleHandler from './helpers/idle-handler'
 import createWorkOptimizer from './helpers/work-optimizer'
 import createRuleConfig from './rules/config'
 import createRuleManifest from './rules/manifest'
@@ -32,7 +32,7 @@ export default function createPipeline(
   const optimizer = createWorkOptimizer()
   const enrichFiles = createFileEnricher()
   const srcCache = createFileCache(isSourceFile)
-  const readyHandler = createReadyHandler(ready)
+  const idleHandler = createIdleHandler(ready)
 
   // Send this DI object to every rule
   const api: RuleArgs = {
@@ -73,7 +73,7 @@ export default function createPipeline(
     // TODO: try and move this up to business rules section
     ruleManifest.stream,
 
-    readyHandler.stream,
+    idleHandler.stream,
   )
 
   return {stream, manifest: ruleManifest.manifest}

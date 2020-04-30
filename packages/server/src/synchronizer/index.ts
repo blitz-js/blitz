@@ -3,7 +3,7 @@ import {pipe} from './streams'
 import createPipeline from './pipeline'
 import agnosticSource from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
-import createReporter, {READY} from './reporter'
+import createReporter, {READY, IDLE} from './reporter'
 import createErrors from './errors'
 
 type SynchronizeFilesInput = {
@@ -53,6 +53,7 @@ export async function synchronizeFiles({
     }
 
     const readyHandler = () => {
+      reporter.stream.write({type: IDLE, payload: null})
       reporter.stream.write({type: READY, payload: null})
       resolve({
         manifest: fileTransformPipeline.manifest,
