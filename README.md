@@ -144,7 +144,7 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
 
 _Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
-We need level 1 maintainers! See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
+We need level 1 maintainers who identify as a woman. See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
 
 
 <!-- prettier-ignore-start -->
@@ -156,6 +156,7 @@ We need level 1 maintainers! See [MAINTAINERS.md](./MAINTAINERS.md) for what thi
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/GeggsElias"><img src="https://avatars3.githubusercontent.com/u/22719177?v=4" width="100px;" alt=""/><br /><sub><b>Elias Johansson</b></sub></a></td>
     <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></td>
+    <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
@@ -228,6 +229,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
