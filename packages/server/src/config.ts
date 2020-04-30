@@ -2,7 +2,6 @@ import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
 import {synchronizeFiles} from './synchronizer'
-import _ from 'lodash'
 import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
 
 export type ServerConfig = {

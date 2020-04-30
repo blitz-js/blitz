@@ -1,6 +1,6 @@
 import parseGitignore from 'parse-gitignore'
 import fs from 'fs'
-import {partition} from 'lodash'
+import partition from 'lodash/partition'
 import fastGlob from 'fast-glob'
 
 function getAllGitIgnores(rootFolder: string) {
