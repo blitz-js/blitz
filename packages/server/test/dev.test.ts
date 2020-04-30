@@ -2,6 +2,7 @@
 
 const nextUtilsMock = {
   nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
+  nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
 }
 // Quieten reporter
 jest.doMock('../src/reporter', () => ({
@@ -12,13 +13,17 @@ jest.doMock('../src/reporter', () => ({
 jest.doMock('../src/next-utils', () => nextUtilsMock)
 const originalLog = console.log
 
+// Mock where the next bin is
+jest.doMock('../src/resolve-bin-async', () => ({
+  resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
+}))
+
 // Import with mocks applied
 import {dev} from '../src/dev'
 import {join, resolve} from 'path'
-import {remove, pathExists} from 'fs-extra'
 import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
-import * as pkgDir from 'pkg-dir'
+import mockfs from 'mock-fs'
 
 describe('Dev command', () => {
   let rootFolder: string
@@ -34,10 +39,6 @@ describe('Dev command', () => {
 
   afterEach(async () => {
     console.log = originalLog
-
-    if (await pathExists(devFolder)) {
-      await remove(devFolder)
-    }
   })
 
   describe('throw in nextStartDev', () => {
@@ -67,32 +68,57 @@ describe('Dev command', () => {
     })
   })
 
-  describe('when with next.config', () => {
+  describe.skip('when with next.config', () => {
     beforeEach(async () => {
-      rootFolder = resolve(__dirname, './fixtures/bad-config')
+      rootFolder = '/bad'
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz')
+      mockfs(
+        {
+          '/bad/next.config.js': 'yo',
+        },
+        {createCwd: false, createTmp: false},
+      )
+    })
+    afterEach(() => {
+      mockfs.restore()
     })
 
     it('should fail when passed a next.config.js', async () => {
-      try {
-        await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
-      } catch (_e) {}
-      consoleOutput.includes(
-        'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
-      )
+      debugger
+      expect.assertions(2)
+      await expect(
+        dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false}),
+      ).rejects.toThrowError('Blitz does not support')
+
+      expect(
+        consoleOutput.includes(
+          'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
+        ),
+      ).toBeTruthy()
     })
   })
 
   describe('when run normally', () => {
     beforeEach(async () => {
-      rootFolder = resolve(__dirname, './fixtures/dev')
+      rootFolder = '/dev'
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
-      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+    })
+    afterEach(() => {
+      mockfs.restore()
     })
 
     it('should copy the correct files to the dev folder', async () => {
+      mockfs(
+        {
+          '/dev/.now': '',
+          '/dev/one': '',
+          '/dev/two': '',
+        },
+        {createCwd: false, createTmp: false},
+      )
+      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
       const tree = directoryTree(rootFolder)
       expect(tree).toEqual({
         children: [
@@ -108,8 +134,15 @@ describe('Dev command', () => {
       })
     })
 
-    it('calls spawn with the patched next cli bin', () => {
-      const nextPatched = join(String(pkgDir.sync(__dirname)), 'bin', 'next-patched')
+    it('calls spawn with the patched next cli bin', async () => {
+      mockfs(
+        {
+          '/dev/@blitzjs/server/next-patched': '',
+        },
+        {createCwd: false, createTmp: false},
+      )
+      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+      const nextPatched = resolve(rootFolder, '@blitzjs/server', 'next-patched')
       const blitzDev = join(rootFolder, '.blitz-dev')
       expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)

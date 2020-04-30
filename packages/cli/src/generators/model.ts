@@ -15,6 +15,8 @@ class ModelGenerator extends Generator<ModelGeneratorOptions> {
   static subdirectory = '../..'
   static template = ''
 
+  async getTemplateValues() {}
+
   async write() {
     try {
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
@@ -39,10 +41,6 @@ Modifiers can be denoted with a trailing '?' (e.g. 'lastname:string?' or 'users:
     } catch (error) {
       throw error
     }
-  }
-
-  async postWrite() {
-    // log.success(`Successfully created prisma model for ${this.options.name.toLocaleLowerCase()}`)
   }
 }
 

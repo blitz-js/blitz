@@ -1,7 +1,0 @@
-import db, {FindOne<%= ModelName %>Args} from 'db'
-
-export default async function get<%= ModelName %>(args: FindOne<%= ModelName %>Args) {
-  const <%= modelName %> = await db.<%= modelName %>.findOne(args)
-
-  return <%= modelName %>
-}
