@@ -6,7 +6,7 @@ import {through} from '../../streams'
  * This is asssumed to happen only during watch mode.
  * Note the ready event will continually fire if the threshold is not met
  */
-export default (handler: Function) => {
+const readyHandler = (handler: Function) => {
   let timeout: number
 
   function resetTimeout() {
@@ -30,3 +30,5 @@ export default (handler: Function) => {
 
   return {stream}
 }
+
+export default readyHandler
