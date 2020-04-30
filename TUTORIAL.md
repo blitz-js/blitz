@@ -192,8 +192,8 @@ Once you’re in the console, explore the Database API:
 ⚡ > q = db.question.update({where: {id: 1}, data: {text: 'What’s up?'}}).then(console.log)
 { id: 1, text: 'What’s up?', publishedAt: 2020-04-24T22:08:17.307Z }
 
-# db.questions.findMany() displays all the questions in the database.
-⚡ > db.questions.findMany().then(console.log)
+# db.question.findMany() displays all the questions in the database.
+⚡ > db.question.findMany().then(console.log)
 [
   { id: 1, text: 'What’s up?', publishedAt: 2020-04-24T22:08:17.307Z }
 ]
