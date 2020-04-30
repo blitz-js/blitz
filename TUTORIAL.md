@@ -128,7 +128,7 @@ By default, the apps is created with SQLite. If you’re new to databases, or yo
 
 ## Creating models
 
-Now we’ll define your models—essentially, your database layout, with additional metadata.
+Now we’ll define your models — essentially your database layout — with additional metadata.
 
 In `schema.prisma`, we’ll create two models: `Question`, and `Choice`. A `Question` has a question and a publication date. A `Choice` has two fields: the text of the choice and a vote count. Each has an id, and each `Choice` is associated with a `Question`.
 
@@ -180,14 +180,17 @@ Once you’re in the console, explore the Database API:
 []
 
 # Create a new Question.
-⚡ > q = db.question.create({data: {text: 'What’s new?', publishedAt: new Date()}}).then(console.log)
+⚡ > let q
+undefined
+
+⚡ > db.question.create({data: {text: 'What’s new?', publishedAt: new Date()}}).then(res => q = res)
+Promise { <pending> }
+
+# See the entire object
+⚡ > q
 { id: 1, text: 'What’s new?', publishedAt: 2020-04-24T22:08:17.307Z }
 
-# Now it has an ID.
-⚡ > q.id
-1
-
-# Access model field values via JavaScript attributes.
+# Or access individual values on the object.
 ⚡ > q.text
 "What’s new?"
 
@@ -195,7 +198,11 @@ Once you’re in the console, explore the Database API:
 2020-04-24T22:08:17.307Z
 
 # Change values by using the update function
-⚡ > q = db.question.update({where: {id: 1}, data: {text: 'What’s up?'}}).then(console.log)
+⚡ > db.question.update({where: {id: 1}, data: {text: 'What’s up?'}}).then(res => q = res)
+Promise { <pending> }
+
+# See the result
+⚡ > q
 { id: 1, text: 'What’s up?', publishedAt: 2020-04-24T22:08:17.307Z }
 
 # db.questions.findMany() displays all the questions in the database.
