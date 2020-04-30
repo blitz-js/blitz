@@ -17,6 +17,12 @@ describe('`new` command', () => {
   describe('when scaffolding new project', () => {
     jest.setTimeout(60 * 1000)
 
+    async function whileStayingInCWD(task: () => PromiseLike<void>) {
+      const oldCWD = process.cwd()
+      await task()
+      process.chdir(oldCWD)
+    }
+
     async function withNewApp(test: (dirName: string, packageJson: any) => Promise<void> | void) {
       function makeTempDir() {
         const tmpDirPath = path.join(os.tmpdir(), 'blitzjs-test-')
@@ -25,7 +31,8 @@ describe('`new` command', () => {
       }
 
       const tempDir = makeTempDir()
-      await NewCmd.run([tempDir, '--skip-install'])
+
+      await whileStayingInCWD(() => NewCmd.run([tempDir, '--skip-install']))
 
       const packageJsonFile = fs.readFileSync(path.join(tempDir, 'package.json'), {
         encoding: 'utf8',
