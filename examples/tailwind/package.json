@@ -50,6 +50,7 @@
     "husky": "4.2.5",
     "lint-staged": "10.1.7",
     "postcss-preset-env": "6.7.0",
+    "next": "9.3.5",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "tailwindcss": "1.4.0"
