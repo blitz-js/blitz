@@ -1,4 +1,6 @@
 import {through} from '../../streams'
+import {READY, IDLE} from '../../events'
+import {Writable} from 'stream'
 
 /**
  * Idle handler is used to close the promise and will run when
@@ -6,8 +8,16 @@ import {through} from '../../streams'
  * This is asssumed to happen only during watch mode.
  * Note the idle event will continually fire if the threshold is not met
  */
-const readyHandler = (handler: Function) => {
-  let timeout: number
+const readyHandler = (reporter: Writable) => {
+  let timeout: NodeJS.Timeout
+  let firstTime = true
+
+  const handler = () => {
+    if (firstTime) {
+      reporter.write({type: READY})
+    }
+    reporter.write({type: IDLE})
+  }
 
   function resetTimeout() {
     destroyTimeout()

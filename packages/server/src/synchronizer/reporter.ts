@@ -2,14 +2,7 @@ import {through} from './streams'
 import File from 'vinyl'
 import {log} from '../log'
 import chalk from 'chalk'
-
-export type Event<T> = {type: string; payload: T}
-
-export const IDLE = 'IDLE'
-export const INIT = 'INIT'
-export const FILE_WRITTEN = 'FILE_WRITTEN'
-export const ERROR_THROWN = 'ERROR_THROWN'
-export const READY = 'READY'
+import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from './events'
 
 /**
  * Reporter is a stream that converts build status events and prepares them for the console.
