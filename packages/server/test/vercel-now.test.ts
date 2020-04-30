@@ -25,7 +25,7 @@ import {directoryTree} from './utils/tree-utils'
 
 import mockfs from 'mock-fs'
 
-describe('Build command ZEIT', () => {
+describe('Build command Vercel', () => {
   const rootFolder = '/'
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-dev')
