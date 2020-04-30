@@ -75,9 +75,11 @@ function getPathRules(rootFolder: string) {
     const [includePaths, ignoredPaths] = _.partition(rules, isInclusionRule)
 
     const trimExclamationMark = (rule: string) => rule.substring(1)
-    const prefixPath = (rule: string) => {
-      if (rule.startsWith('/')) {
-        return prefix + rule
+    const prefixPath = (_rule: string) => {
+      const rule = _rule.startsWith('/') ? _rule.substring(1) : _rule
+
+      if (!prefix) {
+        return rule
       } else {
         return prefix + '/' + rule
       }
