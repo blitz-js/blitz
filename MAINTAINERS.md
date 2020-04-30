@@ -47,6 +47,7 @@ Some especially important points:
 - **Gratitude:** immediately express gratitude when someone opens an issue or PR. This takes effort/time and we appreciate it
 - **Responsiveness:** during issue/PR triage, even if we can’t do a full review right away, leave a comment thanking them and saying we’ll review it soon
 - **Understanding:** it's critical to ensure you understand exactly what someone is saying before you respond. Ask plenty of questions if needed. It's very bad if someone has to reply to your response and say "actually I was asking about X"
+    - In fact, at least one question is almost always required before you can respond appropriately  — whether in Github or in Slack
 
 ## Issue Triage
 
