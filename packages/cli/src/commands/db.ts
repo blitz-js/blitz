@@ -1,4 +1,4 @@
-import {resolveBinAsync} from '@blitzjs/server'
+import {resolveBinAsync, log} from '@blitzjs/server'
 import {Command, flags} from '@oclif/command'
 import chalk from 'chalk'
 import {spawn} from 'cross-spawn'
@@ -6,12 +6,11 @@ import {prompt} from 'enquirer'
 import * as fs from 'fs'
 import * as path from 'path'
 import {promisify} from 'util'
-import {loadBlitz} from '../utils/load-blitz'
+import {projectRoot} from '../utils/get-project-root'
 
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
-const {db} = loadBlitz()
 
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
@@ -61,7 +60,7 @@ export const runMigrate = async () => {
   })
 }
 
-export async function resetPostgres(connectionString: string): Promise<void> {
+export async function resetPostgres(connectionString: string, db: any): Promise<void> {
   const dbName: string = getDbName(connectionString)
   try {
     // close all other connections
@@ -75,26 +74,28 @@ export async function resetPostgres(connectionString: string): Promise<void> {
     await db.raw('GRANT ALL ON schema public TO postgres;')
     await db.raw('GRANT ALL ON schema public TO public;')
     // run migration
-    await runMigrate()
-    console.log('Your database has been reset.')
+    //await runMigrate()
+    log.success('Your database has been reset.')
     process.exit(0)
   } catch (err) {
-    console.log(err)
+    log.error(`Resetting the database has failed with an error from the database: `)
+    log.error(err)
     process.exit(1)
   }
 }
 
-export async function resetMysql(connectionString: string): Promise<void> {
+export async function resetMysql(connectionString: string, db: any): Promise<void> {
   const dbName: string = getDbName(connectionString)
   try {
     // delete database
     await db.raw(`DROP DATABASE \`${dbName}\``)
     // run migration
     await runMigrate()
-    console.log('Your database has been reset.')
+    log.success('Your database has been reset.')
     process.exit(0)
   } catch (err) {
-    console.log(err)
+    log.error(`Resetting the database has failed with an error from the database: `)
+    log.error(err)
     process.exit(1)
   }
 }
@@ -107,10 +108,11 @@ export async function resetSqlite(connectionString: string): Promise<void> {
     await unlink(dbPath)
     // run migration
     await runMigrate()
-    console.log('Your database has been reset.')
+    log.success('Your database has been reset.')
     process.exit(0)
   } catch (err) {
-    console.log(err)
+    log.error(`Resetting the database has failed with an error from the file system: `)
+    log.error(err)
     process.exit(1)
   }
 }
@@ -189,13 +191,14 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
         message: 'Are you sure you want to reset your database?',
       }).then((res) => {
         if (res.confirm) {
+          const db = require(path.join(projectRoot, 'db')).default
           const dataSource: any = db.internalDatasources[0]
           const connectorType: string = dataSource.connectorType
           const connectionString: string = dataSource.url.value
           if (connectorType === 'postgresql') {
-            resetPostgres(connectionString)
+            resetPostgres(connectionString, db)
           } else if (connectorType === 'mysql') {
-            resetMysql(connectionString)
+            resetMysql(connectionString, db)
           } else if (connectorType === 'sqlite') {
             resetSqlite(connectionString)
           } else {
