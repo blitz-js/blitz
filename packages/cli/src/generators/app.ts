@@ -36,11 +36,15 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    const gitInitResult = spawn.sync('git', ['init'], {
+      stdio: 'ignore',
+    })
+
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
 
     console.log('') // New line needed
-    const spinner = log.spinner(log.withBrand('Retrieving the freshest of dependencies')).start()
+    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
 
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
@@ -81,7 +85,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
         if (!this.options.yarn) {
           const spinner = log
-            .spinner(log.withBrand('Installing those dependencies (this will take a few minutes)'))
+            .spinner(log.withBranded('Installing those dependencies (this will take a few minutes)'))
             .start()
           spinners.push(spinner)
         }
@@ -93,7 +97,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
             let json = getJSON(data)
             if (json && json.type === 'step') {
               spinners[spinners.length - 1]?.succeed()
-              const spinner = log.spinner(log.withBrand(json.data.message)).start()
+              const spinner = log.spinner(log.withBranded(json.data.message)).start()
               spinners.push(spinner)
             }
             if (json && json.type === 'success') {
@@ -151,27 +155,25 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
-    // TODO: someone please clean up this ugly code :D
     // Currently aren't failing the generation process if git repo creation fails
-    const gitResult1 = spawn.sync('git', ['init'], {
-      stdio: 'ignore',
-    })
-    if (gitResult1.status === 0) {
-      const gitResult2 = spawn.sync('git', ['add', '.'], {
-        stdio: 'ignore',
-      })
-      if (gitResult2.status === 0) {
-        const gitResult3 = spawn.sync('git', ['commit', '-m', 'New baby Blitz app!'], {
-          stdio: 'ignore',
-        })
-        if (gitResult3.status !== 0) {
-          console.error('Failed to run git commit')
-        }
-      } else {
-        console.error('Failed to run git add')
-      }
+    if (gitInitResult.status === 0) {
+      this.commitChanges()
     } else {
-      console.error('Failed to run git init')
+      log.error('Failed to run git init.')
+    }
+  }
+
+  commitChanges() {
+    const commands: Array<[string, string[], object]> = [
+      ['git', ['add', '.'], {stdio: 'ignore'}],
+      ['git', ['commit', '-m', 'New baby Blitz app!'], {stdio: 'ignore'}],
+    ]
+    for (let command of commands) {
+      const result = spawn.sync(...command)
+      if (result.status !== 0) {
+        log.error(`Failed to run command ${command[0]} with ${command[1].join(' ')} options.`)
+        break
+      }
     }
   }
 }
