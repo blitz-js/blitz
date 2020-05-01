@@ -38,23 +38,24 @@ export function useQuery<T extends QueryFn, O extends Options<T>>(
   params?: InferUnaryParam<T>,
   options?: O,
 ): [PromiseReturnType<T>, RestReturnType<T, O>] {
-  const queryKey: [string, any] = [(queryFn as any).cacheKey, params]
-  const queryFunction = (_: string, params: {}) => queryFn(params)
   const queryOptions = {
     suspense: true,
     retry: process.env.NODE_ENV === 'production' ? 3 : false,
     ...options,
   }
 
-  if (options?.paginated) {
-    // TODO: this could be an issue, unless we assume the `paginated` option will always be constant when it's called
-    // alternatively consider separating this in `useQuery` and `usePaginatedQuery`
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const {resolvedData, ...rest} = usePaginatedReactQuery(queryKey, queryFunction, queryOptions)
-    return [resolvedData as PromiseReturnType<T>, rest as RestReturnType<T, O>]
-  }
+  const {resolvedData: paginatedData, ...paginatedRest} = usePaginatedReactQuery(
+    [(queryFn as any).cacheKey + 'Paginated', !!options?.paginated, params],
+    (_: string, paginated: boolean, params: any) => (!paginated ? Promise.resolve(null) : queryFn(params)),
+    queryOptions,
+  )
+  const {data, ...rest} = useReactQuery(
+    [(queryFn as any).cacheKey, !!options?.paginated, params],
+    (_: string, paginated: boolean, params: any) => (paginated ? Promise.resolve(null) : queryFn(params)),
+    queryOptions,
+  )
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const {data, ...rest} = useReactQuery(queryKey, queryFunction, queryOptions)
-  return [data as PromiseReturnType<T>, rest as RestReturnType<T, O>]
+  return options?.paginated
+    ? [paginatedData as PromiseReturnType<T>, paginatedRest as RestReturnType<T, O>]
+    : [data as PromiseReturnType<T>, rest as RestReturnType<T, O>]
 }
