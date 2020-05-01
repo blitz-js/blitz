@@ -12,6 +12,10 @@ export default class Start extends Command {
       char: 'p',
       description: 'Create and start a production server',
     }),
+    port: flags.integer({
+      description: 'Set port number',
+      default: 3000,
+    }),
   }
 
   async run() {
@@ -19,6 +23,7 @@ export default class Start extends Command {
 
     const config = {
       rootFolder: process.cwd(),
+      port: flags.port,
     }
 
     if (flags.production) {
