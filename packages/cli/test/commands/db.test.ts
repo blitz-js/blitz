@@ -38,9 +38,7 @@ describe('Db command', () => {
     jest.clearAllMocks()
   })
 
-  it('runs db migrate', async () => {
-    await DbCmd.run(['migrate'])
-
+  function expectDbMigrateOutcome() {
     expect(spawn).toBeCalledWith(...migrateSaveParams)
     expect(spawn.mock.calls.length).toBe(3)
 
@@ -48,18 +46,16 @@ describe('Db command', () => {
     //expect(onSpy).toHaveBeenCalledWith(0);
 
     expect(spawn).toBeCalledWith(...migrateUpParams)
+  }
+
+  it('runs db migrate', async () => {
+    await DbCmd.run(['migrate'])
+    expectDbMigrateOutcome()
   })
 
   it('runs db migrate (alias)', async () => {
     await DbCmd.run(['m'])
-
-    expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(3)
-
-    // following expection is not working
-    //expect(onSpy).toHaveBeenCalledWith(0);
-
-    expect(spawn).toBeCalledWith(...migrateUpParams)
+    expectDbMigrateOutcome()
   })
 
   it('runs db introspect', async () => {
