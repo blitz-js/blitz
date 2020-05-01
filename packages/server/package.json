@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.8.0-canary.0",
+  "version": "0.8.0-canary.3",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -57,7 +57,7 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.8.0-canary.0"
+    "@blitzjs/core": "0.8.0-canary.3"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }

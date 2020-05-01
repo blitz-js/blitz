@@ -1,6 +1,6 @@
 {
   "name": "tailwind",
-  "version": "0.8.0-canary.0",
+  "version": "0.8.0-canary.3",
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
@@ -28,13 +28,11 @@
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
-    "blitz": "0.8.0-canary.0",
-    "next": "9.3.6",
+    "blitz": "0.8.0-canary.3",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "typescript": "3.8.3"
   },
-  "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
     "@types/react": "16.9.34",
     "@typescript-eslint/eslint-plugin": "2.29.0",
@@ -49,7 +47,6 @@
     "eslint-plugin-react-hooks": "3.0.0",
     "husky": "4.2.5",
     "lint-staged": "10.1.7",
-    "next": "9.3.5",
     "postcss-preset-env": "6.7.0",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
