@@ -3,9 +3,17 @@ import fs from 'fs'
 import partition from 'lodash/partition'
 import fastGlob from 'fast-glob'
 
+export function isControlledByUser(file: string) {
+  if (file.startsWith('node_modules')) {
+    return false
+  }
+
+  return true
+}
+
 function getAllGitIgnores(rootFolder: string) {
   const files = fastGlob.sync('**/.gitignore', {cwd: rootFolder})
-  return files.map((file) => {
+  return files.filter(isControlledByUser).map((file) => {
     const [prefix] = file.split('.gitignore')
     return {
       gitIgnore: fs.readFileSync(file, {encoding: 'utf8'}),
@@ -27,7 +35,7 @@ export function chokidarRulesFromGitignore({gitIgnore, prefix}: {gitIgnore: stri
     if (!prefix) {
       return rule
     } else {
-      return prefix + '/' + rule
+      return prefix + rule
     }
   }
 
