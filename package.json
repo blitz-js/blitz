@@ -24,12 +24,12 @@
     "lint": "lerna run lint --stream --parallel",
     "test": "yarn run lint && yarn run build && yarn run testonly",
     "testonly": "lerna run test --stream",
-    "prepublishOnly": "yarn run reset && yarn run test",
+    "reset": "rimraf node_modules && git clean -xfd packages && yarn",
+    "publish-prep": "yarn run reset && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
-    "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-canary": "lerna publish --force-publish --preid canary --pre-dist-tag canary && yarn run danger:push-all && release --pre",
-    "publish-latest": "lerna publish --force-publish && yarn run danger:push-all && release",
+    "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary && release --pre",
+    "publish-latest": "yarn run publish-prep && lerna publish --force-publish && release",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {
