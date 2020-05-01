@@ -1,7 +1,7 @@
 import {log} from '../log'
 import {through} from './streams'
 import {Writable} from 'stream'
-import {ERROR_THROWN} from './events'
+import {ERROR_THROWN} from './reporter'
 
 export type Event<T> = {type: string; payload: T}
 

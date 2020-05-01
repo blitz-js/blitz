@@ -22,6 +22,7 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
 
   function processEvent(evt: string) {
     return async (filepath: string, _stat: Stats) => {
+      console.log('Processing file...' + filepath)
       filepath = resolveFilepath(filepath)
 
       const fileOpts = Object.assign({}, options, {path: filepath})

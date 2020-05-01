@@ -2,7 +2,7 @@ import {pipeline, through} from '../streams'
 import {RuleConfig, RuleArgs} from '../types'
 import createFileEnricher from './helpers/enrich-files'
 import createFileCache from './helpers/file-cache'
-import createIdleHandler from './helpers/idle-handler'
+import createReadyHandler from './helpers/ready-handler'
 import createWorkOptimizer from './helpers/work-optimizer'
 import createRuleConfig from './rules/config'
 import createRuleManifest from './rules/manifest'
@@ -18,15 +18,21 @@ const input = through({objectMode: true}, (f, _, next) => next(null, f))
 /**
  * Creates a pipeline stream that transforms files.
  * @param config Config object containing basic information for the file pipeline
+ * @param ready Ready handlerto run when ready event is fired
  * @param errors Stream that takes care of all operational error rendering
  * @param reporter Stream that takes care of all view rendering
  */
-export default function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
+export default function createPipeline(
+  config: RuleConfig,
+  ready: () => void,
+  errors: Writable,
+  reporter: Writable,
+) {
   // Helper streams don't account for business rules
   const optimizer = createWorkOptimizer()
   const enrichFiles = createFileEnricher()
   const srcCache = createFileCache(isSourceFile)
-  const idleHandler = createIdleHandler(reporter)
+  const readyHandler = createReadyHandler(ready)
 
   // Send this DI object to every rule
   const api: RuleArgs = {
@@ -67,7 +73,7 @@ export default function createPipeline(config: RuleConfig, errors: Writable, rep
     // TODO: try and move this up to business rules section
     ruleManifest.stream,
 
-    idleHandler.stream,
+    readyHandler.stream,
   )
 
   return {stream, manifest: ruleManifest.manifest}
