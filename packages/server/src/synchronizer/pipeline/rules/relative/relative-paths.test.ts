@@ -1,15 +1,21 @@
 import {relativeToAbsolute, replaceRelativeImports} from './index'
 
 describe('relativeToAbsolute', () => {
+  // I don't like this one bit, but Node's path module behaves so differently
+  // based on the runtime platform that it's just easier to test paths as they
+  // would be on the platform currently executing the test suite. Tests should
+  // be run on both platforms, so both test paths will be executed - just not
+  // during the same run.
+  const isWindows = process.platform === 'win32'
   const tests = [
     {
       name: 'Provides an absolute path within app',
       input: {
         relativeImport: '../components/three',
-        filename: '/projects/blitz/blitz/app/users/pages.ts',
-        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
-        cwd: '/projects/blitz/blitz',
-        cwdWindows: 'C:\\projects\\blitz\\blitz',
+        filename: isWindows
+          ? 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts'
+          : '/projects/blitz/blitz/app/users/pages.ts',
+        cwd: isWindows ? 'C:\\projects\\blitz\\blitz' : '/projects/blitz/blitz',
       },
       expected: 'app/components/three',
     },
@@ -17,10 +23,10 @@ describe('relativeToAbsolute', () => {
       name: 'Works outside app',
       input: {
         relativeImport: '../../extras/foo',
-        filename: '/projects/blitz/blitz/app/users/pages.ts',
-        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
-        cwd: '/projects/blitz/blitz',
-        cwdWindows: 'C:\\projects\\blitz\\blitz',
+        filename: isWindows
+          ? 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts'
+          : '/projects/blitz/blitz/app/users/pages.ts',
+        cwd: isWindows ? 'C:\\projects\\blitz\\blitz' : '/projects/blitz/blitz',
       },
       expected: 'extras/foo',
     },
@@ -28,28 +34,18 @@ describe('relativeToAbsolute', () => {
       name: 'Leaves absolute paths alone',
       input: {
         relativeImport: 'app/one/two',
-        filename: '/projects/blitz/blitz/app/users/pages.ts',
-        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
-        cwd: '/projects/blitz/blitz',
-        cwdWindows: 'C:\\projects\\blitz\\blitz',
+        filename: isWindows
+          ? 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts'
+          : '/projects/blitz/blitz/app/users/pages.ts',
+        cwd: isWindows ? 'C:\\projects\\blitz\\blitz' : '/projects/blitz/blitz',
       },
       expected: 'app/one/two',
     },
   ]
 
-  describe('macOS and Linux', () => {
-    tests.forEach(({name, input: {cwd, filename, relativeImport}, expected}) => {
-      it(name, () => {
-        expect(relativeToAbsolute(cwd, filename)(relativeImport)).toEqual(expected)
-      })
-    })
-  })
-
-  describe('Windows', () => {
-    tests.forEach(({name, input: {cwdWindows, filenameWindows, relativeImport}, expected}) => {
-      it(name, () => {
-        expect(relativeToAbsolute(cwdWindows, filenameWindows)(relativeImport)).toEqual(expected)
-      })
+  tests.forEach(({name, input: {cwd, filename, relativeImport}, expected}) => {
+    it(name, () => {
+      expect(relativeToAbsolute(cwd, filename)(relativeImport)).toEqual(expected)
     })
   })
 })
