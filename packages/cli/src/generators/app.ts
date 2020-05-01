@@ -44,7 +44,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const pkg = readJSONSync(pkgJsonLocation)
 
     console.log('') // New line needed
-    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
+    const spinner = log.spinner(log.withBrand('Retrieving the freshest of dependencies')).start()
 
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
@@ -85,7 +85,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
         if (!this.options.yarn) {
           const spinner = log
-            .spinner(log.withBranded('Installing those dependencies (this will take a few minutes)'))
+            .spinner(log.withBrand('Installing those dependencies (this will take a few minutes)'))
             .start()
           spinners.push(spinner)
         }
@@ -97,7 +97,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
             let json = getJSON(data)
             if (json && json.type === 'step') {
               spinners[spinners.length - 1]?.succeed()
-              const spinner = log.spinner(log.withBranded(json.data.message)).start()
+              const spinner = log.spinner(log.withBrand(json.data.message)).start()
               spinners.push(spinner)
             }
             if (json && json.type === 'success') {
