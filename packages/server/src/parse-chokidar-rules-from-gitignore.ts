@@ -35,7 +35,7 @@ export function chokidarRulesFromGitignore({gitIgnore, prefix}: {gitIgnore: stri
     if (!prefix) {
       return rule
     } else {
-      return prefix + '/' + rule
+      return prefix + rule
     }
   }
 
