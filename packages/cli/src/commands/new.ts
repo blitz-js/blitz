@@ -4,6 +4,7 @@ import Command from '../command'
 import AppGenerator from '../generators/app'
 import chalk from 'chalk'
 import hasbin from 'hasbin'
+import {log} from '@blitzjs/server'
 const debug = require('debug')('blitz:new')
 
 import PromptAbortedError from '../errors/prompt-aborted'
@@ -11,6 +12,7 @@ import PromptAbortedError from '../errors/prompt-aborted'
 export interface Flags {
   ts: boolean
   yarn: boolean
+  'skip-install': boolean
 }
 
 export default class New extends Command {
@@ -35,6 +37,12 @@ export default class New extends Command {
       default: hasbin.sync('yarn'),
       allowNo: true,
     }),
+    'skip-install': flags.boolean({
+      description: 'Skip package installation',
+      hidden: true,
+      default: false,
+      allowNo: true,
+    }),
     'dry-run': flags.boolean({description: 'show what files will be created without writing them to disk'}),
   }
 
@@ -54,14 +62,13 @@ export default class New extends Command {
       useTs: !flags.js,
       yarn: flags.yarn,
       version: this.config.version,
+      skipInstall: flags['skip-install'],
     })
 
-    const themeColor = '6700AB'
-
     try {
-      this.log('\n' + chalk.hex(themeColor).bold('Hang tight while we set up your new Blitz app!') + '\n')
+      this.log('\n' + log.withBrand('Hang tight while we set up your new Blitz app!') + '\n')
       await generator.run()
-      this.log('\n' + chalk.hex(themeColor).bold('Your new Blitz app is ready! Next steps:') + '\n')
+      this.log('\n' + log.withBrand('Your new Blitz app is ready! Next steps:') + '\n')
       this.log(chalk.yellow(`   1. cd ${args.name}`))
       this.log(chalk.yellow(`   2. blitz start`))
       this.log(chalk.yellow(`   3. You create new pages by placing components inside app/pages/\n`))
