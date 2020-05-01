@@ -43,7 +43,7 @@ export function relativeToAbsolute(_cwd: string, _filename: string) {
   return (filePath: string) => {
     if (filePath.indexOf('.') !== 0) return filePath
 
-    return slash(path.join(path.dirname(_filename), filePath)).replace(_cwd + '/', '')
+    return slash(path.join(path.dirname(_filename), filePath)).replace(slash(_cwd + path.sep), '')
   }
 }
 

@@ -7,6 +7,9 @@ describe('relativeToAbsolute', () => {
       input: {
         relativeImport: '../components/three',
         filename: '/projects/blitz/blitz/app/users/pages.ts',
+        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
+        cwd: '/projects/blitz/blitz',
+        cwdWindows: 'C:\\projects\\blitz\\blitz',
       },
       expected: 'app/components/three',
     },
@@ -15,6 +18,9 @@ describe('relativeToAbsolute', () => {
       input: {
         relativeImport: '../../extras/foo',
         filename: '/projects/blitz/blitz/app/users/pages.ts',
+        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
+        cwd: '/projects/blitz/blitz',
+        cwdWindows: 'C:\\projects\\blitz\\blitz',
       },
       expected: 'extras/foo',
     },
@@ -23,13 +29,27 @@ describe('relativeToAbsolute', () => {
       input: {
         relativeImport: 'app/one/two',
         filename: '/projects/blitz/blitz/app/users/pages.ts',
+        filenameWindows: 'C:\\projects\\blitz\\blitz\\app\\users\\pages.ts',
+        cwd: '/projects/blitz/blitz',
+        cwdWindows: 'C:\\projects\\blitz\\blitz',
       },
       expected: 'app/one/two',
     },
   ]
-  tests.forEach(({name, input: {filename, relativeImport}, expected}) => {
-    it(name, () => {
-      expect(relativeToAbsolute('/projects/blitz/blitz', filename)(relativeImport)).toEqual(expected)
+
+  describe('macOS and Linux', () => {
+    tests.forEach(({name, input: {cwd, filename, relativeImport}, expected}) => {
+      it(name, () => {
+        expect(relativeToAbsolute(cwd, filename)(relativeImport)).toEqual(expected)
+      })
+    })
+  })
+
+  describe('Windows', () => {
+    tests.forEach(({name, input: {cwdWindows, filenameWindows, relativeImport}, expected}) => {
+      it(name, () => {
+        expect(relativeToAbsolute(cwdWindows, filenameWindows)(relativeImport)).toEqual(expected)
+      })
     })
   })
 })
