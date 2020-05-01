@@ -11,6 +11,7 @@ describe('Build command', () => {
 
   const options = {
     rootFolder: resolve(__dirname, '../../'),
+    port: 3000,
   }
 
   it('runs the build script', async () => {
