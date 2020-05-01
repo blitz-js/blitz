@@ -3,7 +3,7 @@ import fs from 'fs'
 import partition from 'lodash/partition'
 import fastGlob from 'fast-glob'
 
-function isControlledByUser(file: string) {
+export function isControlledByUser(file: string) {
   if (file.startsWith('node_modules')) {
     return false
   }
