@@ -32,6 +32,7 @@
   "dependencies": {
     "cross-spawn": "^7.0.2",
     "fast-glob": "^3.2.2",
+    "flush-write-stream": "^2.0.0",
     "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "lodash": "^4.17.15",
