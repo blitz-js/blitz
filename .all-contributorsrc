@@ -390,6 +390,34 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "developerfred",
+      "name": "codingsh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/57037080?v=4",
+      "profile": "http://codingsh.xyz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "peaonunes",
+      "name": "Rafael Nunes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3356720?v=4",
+      "profile": "http://twitter.com/peaonunes",
+      "contributions": [
+        "review",
+        "code"
+      ]
+    },
+    {
+      "login": "simonpeterdebbarma",
+      "name": "Simon Debbarma",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/31207418?v=4",
+      "profile": "https://simonpeterdebbarma.com",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,

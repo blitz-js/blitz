@@ -1,6 +1,6 @@
 {
   "name": "tailwind",
-  "version": "0.7.1-canary.1",
+  "version": "0.8.0",
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
@@ -28,8 +28,7 @@
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
-    "blitz": "0.7.1-canary.1",
-    "next": "9.3.6",
+    "blitz": "0.8.0",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "typescript": "3.8.3"
@@ -50,7 +49,6 @@
     "husky": "4.2.5",
     "lint-staged": "10.1.7",
     "postcss-preset-env": "6.7.0",
-    "next": "9.3.5",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "tailwindcss": "1.4.0"

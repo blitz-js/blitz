@@ -1,21 +1,27 @@
-import fetch from 'node-fetch'
+import got from 'got'
+
+type PackageInformation = any
+type NpmDepResponse = {versions: Record<string, PackageInformation>}
 
 export const fetchAllVersions = async (dependency: string) => {
-  const res = await fetch(`https://registry.npmjs.org/${dependency}`)
-  if (res.ok) {
-    const json = await res.json()
-    return json.versions as string[]
-  } else {
-    return
-  }
+  const res = await got(`https://registry.npmjs.org/${dependency}`, {
+    retry: {limit: 3},
+    responseType: 'json',
+  }).json<NpmDepResponse>()
+  return Object.keys(res.versions)
+}
+
+type NpmDistTagsResponse = {latest: string; canary: string}
+
+export const fetchDistTags = async (dependency: string) => {
+  const res = await got(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`, {
+    retry: {limit: 3},
+    responseType: 'json',
+  }).json<NpmDistTagsResponse>()
+  return res
 }
 
 export const fetchLatestDistVersion = async (dependency: string) => {
-  const res = await fetch(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`)
-  if (res.ok) {
-    const json = await res.json()
-    return json.latest as string
-  } else {
-    return
-  }
+  const res = await fetchDistTags(dependency)
+  return res.latest
 }
