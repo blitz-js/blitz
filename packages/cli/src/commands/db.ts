@@ -185,10 +185,13 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
         }
       })
     } else if (command === 'reset') {
+      const spinner = log.spinner('Loading your database').start()
+      await runPrismaGeneration({silent: true})
+      spinner.succeed()
       await prompt<{confirm: string}>({
         type: 'confirm',
         name: 'confirm',
-        message: 'Are you sure you want to reset your database?',
+        message: 'Are you sure you want to reset your database and erase ALL data?',
       }).then((res) => {
         if (res.confirm) {
           const db = require(path.join(projectRoot, 'db')).default
