@@ -20,7 +20,7 @@ import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import * as pkgDir from 'pkg-dir'
 
-describe('Dev command', () => {
+describe.only('Dev command', () => {
   let rootFolder: string
   let buildFolder: string
   let devFolder: string
@@ -58,6 +58,7 @@ describe('Dev command', () => {
             rootFolder: '',
             writeManifestFile: false,
             watch: false,
+            port: 3000,
           })
         } catch (err) {
           expect(err).toBe('pow')
@@ -76,7 +77,7 @@ describe('Dev command', () => {
 
     it('should fail when passed a next.config.js', async () => {
       try {
-        await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+        await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false, port: 3000})
       } catch (_e) {}
       consoleOutput.includes(
         'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
@@ -89,7 +90,7 @@ describe('Dev command', () => {
       rootFolder = resolve(__dirname, './fixtures/dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
-      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false, port: 3000})
     })
 
     it('should copy the correct files to the dev folder', async () => {
@@ -108,11 +109,13 @@ describe('Dev command', () => {
       })
     })
 
-    it('calls spawn with the patched next cli bin', () => {
+    it.only('calls spawn with the patched next cli bin', () => {
       const nextPatched = join(String(pkgDir.sync(__dirname)), 'bin', 'next-patched')
       const blitzDev = join(rootFolder, '.blitz-dev')
+      expect(nextUtilsMock.nextStartDev.mock.calls[0].length).toBe(5)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][4]).toBe(3000)
     })
   })
 })
