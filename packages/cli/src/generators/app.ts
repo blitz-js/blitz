@@ -72,14 +72,16 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
       log.branded('\nDependencies successfully installed.')
 
+      const runLocalNodeCLI = (command: string) => {
+        if (this.options.yarn) {
+          return spawn.sync('yarn', ['run', ...command.split(' ')])
+        } else {
+          return spawn.sync('npx', command.split(' '))
+        }
+      }
+
       // Ensure the generated files are formatted with the installed prettier version
-      const prettierResult = spawn.sync(
-        this.options.yarn ? 'yarn' : 'npm',
-        'run prettier --loglevel silent --write .'.split(' '),
-        {
-          stdio: 'ignore',
-        },
-      )
+      const prettierResult = runLocalNodeCLI('prettier --loglevel silent --write .')
       if (prettierResult.status !== 0) {
         throw new Error('Failed running prettier')
       }
