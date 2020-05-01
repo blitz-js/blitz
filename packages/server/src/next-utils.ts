@@ -1,4 +1,5 @@
 import {spawn} from 'cross-spawn'
+import detect from 'detect-port'
 import {Manifest} from './synchronizer/pipeline/rules/manifest'
 import {through} from './synchronizer/streams'
 
@@ -27,11 +28,18 @@ function createOutputTransformer(manifest: Manifest, devFolder: string) {
   return {stream}
 }
 
-export async function nextStartDev(nextBin: string, cwd: string, manifest: Manifest, devFolder: string) {
+export async function nextStartDev(
+  nextBin: string,
+  cwd: string,
+  manifest: Manifest,
+  devFolder: string,
+  port: number,
+) {
   const transform = createOutputTransformer(manifest, devFolder).stream
+  const availablePort = await detect(port)
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ['dev'], {
+    spawn(nextBin, ['dev', '-p', `${availablePort}`], {
       cwd,
       stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
     })
