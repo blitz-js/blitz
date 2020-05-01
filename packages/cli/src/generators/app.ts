@@ -8,8 +8,6 @@ import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
 import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
 
-const themeColor = '6700AB'
-
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   useTs: boolean
@@ -42,7 +40,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
     const pkg = readJSONSync(pkgJsonLocation)
 
     console.log('') // New line needed
-    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
+    const spinner = log.spinner(log.withBrand('Retrieving the freshest of dependencies')).start()
 
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
@@ -62,10 +60,9 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
-    spinner.succeed()
-
     if (!fallbackUsed && !this.options.skipInstall) {
-      console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
+      spinner.succeed()
+      log.branded('\nInstalling those dependencies...')
       console.log('Scary warning messages during this part are unfortunately normal.\n')
 
       const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
@@ -73,7 +70,7 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
         throw new Error()
       }
 
-      console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+      log.branded('\nDependencies successfully installed.')
 
       // Ensure the generated files are formatted with the installed prettier version
       const prettierResult = spawn.sync(
@@ -87,14 +84,13 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
         throw new Error('Failed running prettier')
       }
     } else {
-      console.log(
-        chalk
-          .hex(themeColor)
-          .bold(
-            `\nWe had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${
-              this.options.yarn ? "'yarn'" : "'npm install'"
-            } once you're connected again.`,
-          ),
+      console.log('') // New line needed
+      spinner.fail(
+        chalk.red.bold(
+          `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${
+            this.options.yarn ? "'yarn'" : "'npm install'"
+          } once you're connected again.`,
+        ),
       )
     }
 

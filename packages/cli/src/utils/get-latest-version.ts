@@ -1,6 +1,17 @@
 import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
 import {log} from '@blitzjs/server'
 import {Fallbackable} from './fallbackable'
+import chalk from 'chalk'
+
+export const logFailedVersionFetch = (dependency: string, fallback: string) => {
+  log.clearLine(
+    log.withWarning(
+      `Failed to fetch latest version of '${chalk.bold(dependency)}', falling back to '${chalk.bold(
+        fallback,
+      )}'.\n`,
+    ),
+  )
+}
 
 export const getLatestVersion = async (
   dependency: string,
@@ -28,7 +39,7 @@ export const getLatestVersion = async (
     }
   } catch (error) {
     const fallback = templateVersion
-    log.error(`Failed to fetch latest version of '${dependency}', falling back to '${fallback}'.`)
+    logFailedVersionFetch(dependency, fallback)
     return {value: fallback, isFallback: false}
   }
 }

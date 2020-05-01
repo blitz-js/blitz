@@ -1,6 +1,6 @@
 import {fetchDistTags} from './npm-fetch'
-import {log} from '@blitzjs/server'
 import {Fallbackable} from './fallbackable'
+import {logFailedVersionFetch} from './get-latest-version'
 
 export const getBlitzDependencyVersion = async (cliVersion: string): Promise<Fallbackable<string>> => {
   try {
@@ -13,7 +13,7 @@ export const getBlitzDependencyVersion = async (cliVersion: string): Promise<Fal
     return {value: latest, isFallback: false}
   } catch (error) {
     const fallback = 'latest'
-    log.error(`Failed to fetch latest version of Blitz, falling back to '${fallback}'.`)
+    logFailedVersionFetch('blitz', fallback)
     return {value: fallback, isFallback: true}
   }
 }
