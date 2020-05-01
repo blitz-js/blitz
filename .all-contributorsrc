@@ -399,6 +399,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "peaonunes",
+      "name": "Rafael Nunes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3356720?v=4",
+      "profile": "http://twitter.com/peaonunes",
+      "contributions": [
+        "review",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
