@@ -62,15 +62,70 @@ class AppGenerator extends Generator<AppGeneratorOptions> {
 
     if (!fallbackUsed && !this.options.skipInstall) {
       spinner.succeed()
-      log.branded('\nInstalling those dependencies...')
-      console.log('Scary warning messages during this part are unfortunately normal.\n')
 
-      const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
-      if (result.status !== 0) {
-        throw new Error()
-      }
+      await new Promise((resolve) => {
+        const logFlag = this.options.yarn ? '--json' : '--loglevel=error'
+        const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install', logFlag], {
+          stdio: ['inherit', 'pipe', 'pipe'],
+        })
 
-      log.branded('\nDependencies successfully installed.')
+        const getJSON = (data: string) => {
+          try {
+            return JSON.parse(data)
+          } catch {
+            return null
+          }
+        }
+
+        const spinners: any[] = []
+
+        if (!this.options.yarn) {
+          const spinner = log
+            .spinner(log.withBrand('Installing those dependencies (this will take a few minutes)'))
+            .start()
+          spinners.push(spinner)
+        }
+
+        cp.stdout?.setEncoding('utf8')
+        cp.stderr?.setEncoding('utf8')
+        cp.stdout?.on('data', (data) => {
+          if (this.options.yarn) {
+            let json = getJSON(data)
+            if (json && json.type === 'step') {
+              spinners[spinners.length - 1]?.succeed()
+              const spinner = log.spinner(log.withBrand(json.data.message)).start()
+              spinners.push(spinner)
+            }
+            if (json && json.type === 'success') {
+              spinners[spinners.length - 1]?.succeed()
+            }
+          }
+        })
+        cp.stderr?.on('data', (data) => {
+          if (this.options.yarn) {
+            let json = getJSON(data)
+            if (json && json.type === 'error') {
+              spinners[spinners.length - 1]?.fail()
+              console.error(json.data)
+            }
+          } else {
+            // Hide the annoying Prisma warning about not finding the schema file
+            // because we generate the client ourselves
+            if (!data.includes('schema.prisma')) {
+              console.error(`\n${data}`)
+            }
+          }
+        })
+        cp.on('exit', (code) => {
+          if (!this.options.yarn && spinners[spinners.length - 1].isSpinning) {
+            if (code !== 0) spinners[spinners.length - 1].fail()
+            else {
+              spinners[spinners.length - 1].succeed()
+            }
+          }
+          resolve()
+        })
+      })
 
       const runLocalNodeCLI = (command: string) => {
         if (this.options.yarn) {
