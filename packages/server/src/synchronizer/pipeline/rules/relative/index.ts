@@ -2,7 +2,7 @@ import {through} from '../../../streams'
 import File from 'vinyl'
 import {Rule} from '../../../types'
 import path from 'path'
-// import {relative} from 'path'
+import slash from 'slash'
 
 /**
  * Returns a Rule that converts relative files paths to absolute
@@ -43,7 +43,7 @@ export function relativeToAbsolute(_cwd: string, _filename: string) {
   return (filePath: string) => {
     if (filePath.indexOf('.') !== 0) return filePath
 
-    return path.join(path.dirname(_filename), filePath).replace(_cwd + path.sep, '')
+    return slash(path.join(path.dirname(_filename), filePath)).replace(_cwd + '/', '')
   }
 }
 

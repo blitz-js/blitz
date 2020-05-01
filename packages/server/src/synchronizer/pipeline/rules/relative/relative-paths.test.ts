@@ -1,38 +1,35 @@
 import {relativeToAbsolute, replaceRelativeImports} from './index'
-import {normalize} from 'path'
 
 describe('relativeToAbsolute', () => {
   const tests = [
     {
       name: 'Provides an absolute path within app',
       input: {
-        relativeImport: normalize('../components/three'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: '../components/three',
+        filename: '/projects/blitz/blitz/app/users/pages.ts',
       },
-      expected: normalize('app/components/three'),
+      expected: 'app/components/three',
     },
     {
       name: 'Works outside app',
       input: {
-        relativeImport: normalize('../../extras/foo'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: '../../extras/foo',
+        filename: '/projects/blitz/blitz/app/users/pages.ts',
       },
-      expected: normalize('extras/foo'),
+      expected: 'extras/foo',
     },
     {
       name: 'Leaves absolute paths alone',
       input: {
-        relativeImport: normalize('app/one/two'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: 'app/one/two',
+        filename: '/projects/blitz/blitz/app/users/pages.ts',
       },
-      expected: normalize('app/one/two'),
+      expected: 'app/one/two',
     },
   ]
   tests.forEach(({name, input: {filename, relativeImport}, expected}) => {
     it(name, () => {
-      expect(relativeToAbsolute(normalize('/projects/blitz/blitz'), filename)(relativeImport)).toEqual(
-        expected,
-      )
+      expect(relativeToAbsolute('/projects/blitz/blitz', filename)(relativeImport)).toEqual(expected)
     })
   })
 })
