@@ -409,6 +409,15 @@
         "review",
         "code"
       ]
+    },
+    {
+      "login": "simonpeterdebbarma",
+      "name": "Simon Debbarma",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/31207418?v=4",
+      "profile": "https://simonpeterdebbarma.com",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
