@@ -3,10 +3,8 @@ import {pipe} from './streams'
 import createPipeline from './pipeline'
 import agnosticSource from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
-import {through} from './streams'
-import createDisplay from './display'
+import createReporter, {READY} from './reporter'
 import createErrors from './errors'
-import {READY} from './events'
 
 type SynchronizeFilesInput = {
   src: string
@@ -40,14 +38,9 @@ export async function synchronizeFiles({
   // TODO: remove this clean and devise a way to resolve differences in stream
   await clean(dest)
 
-  const reporter = {
-    stream: through({objectMode: true}, (event, __, next) => {
-      next(null, event)
-    }),
-  }
-
+  const reporter = createReporter()
   const errors = createErrors(reporter.stream)
-  const display = createDisplay()
+
   return new Promise((resolve, reject) => {
     const config = {
       cwd: src,
@@ -59,26 +52,21 @@ export async function synchronizeFiles({
       },
     }
 
-    reporter.stream.on('data', ({type}) => {
-      if (type === READY) {
-        resolve({
-          manifest: fileTransformer.manifest,
-        })
-      }
-    })
+    const readyHandler = () => {
+      reporter.stream.write({type: READY, payload: null})
+      resolve({
+        manifest: fileTransformPipeline.manifest,
+      })
+    }
 
     const catchErrors = (err: any) => {
       if (err) reject(err)
     }
 
     const source = agnosticSource({cwd: src, include, ignore, watch})
-    const fileTransformer = createPipeline(config, errors.stream, reporter.stream)
+    const fileTransformPipeline = createPipeline(config, readyHandler, errors.stream, reporter.stream)
 
-    // Send source to fileTransformer
-    pipe(source.stream, fileTransformer.stream, catchErrors)
-
-    // Send reporter events to display
-    pipe(reporter.stream, display.stream, catchErrors)
+    pipe(source.stream, fileTransformPipeline.stream, catchErrors)
   })
 }
 
