@@ -3,6 +3,7 @@ import {dev, prod} from '@blitzjs/server'
 
 import {runPrismaGeneration} from './db'
 
+// eslint-disable-next-line import/no-default-export
 export default class Start extends Command {
   static description = 'Start a development server'
   static aliases = ['s']
@@ -21,14 +22,15 @@ export default class Start extends Command {
       rootFolder: process.cwd(),
     }
 
-    if (flags.production) {
-      await prod(config)
-    } else {
-      try {
+    try {
+      if (flags.production) {
+        await prod(config)
+      } else {
         await dev(config, runPrismaGeneration({silent: true}))
-      } catch (err) {
-        process.exit(1) // clean up?
       }
+    } catch (err) {
+      console.error(err)
+      process.exit(1) // clean up?
     }
   }
 }
