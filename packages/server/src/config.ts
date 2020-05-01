@@ -2,6 +2,7 @@ import {resolve} from 'path'
 import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
 import {synchronizeFiles} from './synchronizer'
+import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
 
 export type ServerConfig = {
   rootFolder: string
@@ -50,6 +51,10 @@ export async function enhance(config: ServerConfig) {
 
   const nextBin = resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig)
 
+  const {ignoredPaths: gitIgnoredPaths, includePaths: gitIncludePaths} = parseChokidarRulesFromGitignore(
+    resolve(process.cwd(), config.rootFolder),
+  )
+
   return ciLog(
     `
 Logging the following to understand what is happening in our CI environment
@@ -58,8 +63,8 @@ This will be temporary.
 `,
     {
       ...config,
-      ignoredPaths: defaults.ignoredPaths,
-      includePaths: defaults.includePaths,
+      ignoredPaths: defaults.ignoredPaths.concat(gitIgnoredPaths),
+      includePaths: defaults.includePaths.concat(gitIncludePaths),
       manifestPath,
       nextBin,
       buildFolder,
