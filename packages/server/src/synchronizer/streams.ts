@@ -1,3 +1,6 @@
+// The following are a loose collaction of stream
+// helpers based on the missisippi library
+
 import {Stream} from 'stream'
 
 import pipe from 'pump'
@@ -8,7 +11,17 @@ export {through}
 
 export {default as parallel} from 'parallel-transform'
 
-export {default as from} from 'from2'
+// Fix issues with interop
+import from2 from 'from2'
+type From2 = typeof from2
+const from: From2 = require('from2')
+export {from}
+
+// Fix issues with interop
+import flushWriteStream from 'flush-write-stream'
+type FlushWriteStream = typeof flushWriteStream
+const to: FlushWriteStream = require('flush-write-stream')
+export {to}
 
 import pumpify from 'pumpify'
 

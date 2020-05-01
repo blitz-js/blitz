@@ -32,6 +32,7 @@
   "dependencies": {
     "cross-spawn": "^7.0.2",
     "fast-glob": "^3.2.2",
+    "flush-write-stream": "^2.0.0",
     "from2": "^2.3.0",
     "gulp-if": "^3.0.0",
     "merge-stream": "^2.0.0",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@blitzjs/core": "0.7.1-canary.1",
+    "@types/flush-write-stream": "^1.0.0",
     "@types/mock-fs": "^4.10.0",
     "mock-fs": "^4.12.0"
   },
