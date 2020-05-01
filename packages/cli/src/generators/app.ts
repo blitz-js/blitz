@@ -1,90 +1,154 @@
 import Generator, {GeneratorOptions} from '../generator'
-import readDirRecursive from 'fs-readdir-recursive'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJson} from 'fs-extra'
 import {join} from 'path'
-import {replaceDependencies} from '../utils/replace-dependencies'
-import {replaceBlitzDependency} from '../utils/replace-blitz-dependency'
+import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
-
-const themeColor = '6700AB'
+import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
+  useTs: boolean
   yarn: boolean
   version: string
+  skipInstall: boolean
 }
 
-const ignoredNames = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
-
 class AppGenerator extends Generator<AppGeneratorOptions> {
-  async write() {
-    const templateValues = {
+  filesToIgnore() {
+    if (!this.options.useTs) {
+      return ['tsconfig.json']
+    }
+    return []
+  }
+
+  async getTemplateValues() {
+    return {
       name: this.options.appName,
       username: await username(),
     }
+  }
 
-    const paths = readDirRecursive(this.sourcePath(), (name) => {
-      return !ignoredNames.includes(name)
-    })
-
-    for (let path of paths) {
-      try {
-        this.fs.copyTpl(this.sourcePath(path), this.destinationPath(path.replace('.ejs', '')), templateValues)
-      } catch (error) {
-        console.log('Error generating', path)
-        throw error
-      }
-    }
-
+  async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }
 
   async postWrite() {
     const pkgJsonLocation = join(this.destinationPath(), 'package.json')
     const pkg = readJSONSync(pkgJsonLocation)
-    const pkgDependencies = Object.keys(pkg.dependencies)
-    const pkgDevDependencies = Object.keys(pkg.devDependencies)
 
     console.log('') // New line needed
-    const spinner = log.spinner(log.withBranded('Retrieving the freshest of dependencies')).start()
+    const spinner = log.spinner(log.withBrand('Retrieving the freshest of dependencies')).start()
 
-    const dependenciesArray = await Promise.all([
-      replaceDependencies(pkg, pkgDependencies, 'dependencies'),
-      replaceDependencies(pkg, pkgDevDependencies, 'devDependencies'),
+    const [
+      {value: newDependencies, isFallback: dependenciesUsedFallback},
+      {value: newDevDependencies, isFallback: devDependenciesUsedFallback},
+      {value: blitzDependencyVersion, isFallback: blitzUsedFallback},
+    ] = await Promise.all([
+      fetchLatestVersionsFor(pkg.dependencies),
+      fetchLatestVersionsFor(pkg.devDependencies),
+      getBlitzDependencyVersion(this.options.version),
     ])
 
-    for (let i = 0; i < dependenciesArray.length; i++) {
-      const {key, dependencies} = dependenciesArray[i]
-      pkg[key] = replaceBlitzDependency(dependencies, this.options.version)
-    }
+    pkg.dependencies = newDependencies
+    pkg.devDependencies = newDevDependencies
+    pkg.dependencies.blitz = blitzDependencyVersion
+
+    const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback || blitzUsedFallback
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
-    spinner.succeed()
+    if (!fallbackUsed && !this.options.skipInstall) {
+      spinner.succeed()
 
-    console.log(chalk.hex(themeColor).bold('\nInstalling those dependencies...'))
-    console.log('Scary warning messages during this part are unfortunately normal.\n')
+      await new Promise((resolve) => {
+        const logFlag = this.options.yarn ? '--json' : '--loglevel=error'
+        const cp = spawn(this.options.yarn ? 'yarn' : 'npm', ['install', logFlag], {
+          stdio: ['inherit', 'pipe', 'pipe'],
+        })
 
-    const result = spawn.sync(this.options.yarn ? 'yarn' : 'npm', ['install'], {stdio: 'inherit'})
-    if (result.status !== 0) {
-      throw new Error()
-    }
+        const getJSON = (data: string) => {
+          try {
+            return JSON.parse(data)
+          } catch {
+            return null
+          }
+        }
 
-    console.log(chalk.hex(themeColor).bold('\nDependencies successfully installed.'))
+        const spinners: any[] = []
 
-    // Ensure the generated files are formatted with the installed prettier version
-    const prettierResult = spawn.sync(
-      this.options.yarn ? 'yarn' : 'npm',
-      'run prettier --loglevel silent --write .'.split(' '),
-      {
-        stdio: 'ignore',
-      },
-    )
-    if (prettierResult.status !== 0) {
-      throw new Error('Failed running prettier')
+        if (!this.options.yarn) {
+          const spinner = log
+            .spinner(log.withBrand('Installing those dependencies (this will take a few minutes)'))
+            .start()
+          spinners.push(spinner)
+        }
+
+        cp.stdout?.setEncoding('utf8')
+        cp.stderr?.setEncoding('utf8')
+        cp.stdout?.on('data', (data) => {
+          if (this.options.yarn) {
+            let json = getJSON(data)
+            if (json && json.type === 'step') {
+              spinners[spinners.length - 1]?.succeed()
+              const spinner = log.spinner(log.withBrand(json.data.message)).start()
+              spinners.push(spinner)
+            }
+            if (json && json.type === 'success') {
+              spinners[spinners.length - 1]?.succeed()
+            }
+          }
+        })
+        cp.stderr?.on('data', (data) => {
+          if (this.options.yarn) {
+            let json = getJSON(data)
+            if (json && json.type === 'error') {
+              spinners[spinners.length - 1]?.fail()
+              console.error(json.data)
+            }
+          } else {
+            // Hide the annoying Prisma warning about not finding the schema file
+            // because we generate the client ourselves
+            if (!data.includes('schema.prisma')) {
+              console.error(`\n${data}`)
+            }
+          }
+        })
+        cp.on('exit', (code) => {
+          if (!this.options.yarn && spinners[spinners.length - 1].isSpinning) {
+            if (code !== 0) spinners[spinners.length - 1].fail()
+            else {
+              spinners[spinners.length - 1].succeed()
+            }
+          }
+          resolve()
+        })
+      })
+
+      const runLocalNodeCLI = (command: string) => {
+        if (this.options.yarn) {
+          return spawn.sync('yarn', ['run', ...command.split(' ')])
+        } else {
+          return spawn.sync('npx', command.split(' '))
+        }
+      }
+
+      // Ensure the generated files are formatted with the installed prettier version
+      const prettierResult = runLocalNodeCLI('prettier --loglevel silent --write .')
+      if (prettierResult.status !== 0) {
+        throw new Error('Failed running prettier')
+      }
+    } else {
+      console.log('') // New line needed
+      spinner.fail(
+        chalk.red.bold(
+          `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${
+            this.options.yarn ? "'yarn'" : "'npm install'"
+          } once you're connected again.`,
+        ),
+      )
     }
 
     // TODO: someone please clean up this ugly code :D

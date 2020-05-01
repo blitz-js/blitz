@@ -6,6 +6,8 @@ Before getting started, you should know **this is alpha software**. Blitz is inc
 
 If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
+If you’re looking for a slower, more guided start to Blitz, read the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md).
+
 <br>
 
 ## Introduction
@@ -148,7 +150,7 @@ function Product() {
   return <div>{product.name}</div>
 }
 
-export default function () {
+function WrappedProduct() {
   return (
     <div>
       <ErrorBoundary fallback={(error) => <div>Error: {JSON.stringify(error)}</div>}>
@@ -159,6 +161,8 @@ export default function () {
     </div>
   )
 }
+
+export default WrappedProduct
 ```
 
 #### On the Server
@@ -173,9 +177,11 @@ export const getStaticProps = async (context) => {
   return {props: {product}}
 }
 
-export default function ({product}) {
+function ProductPage({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 In `getServerSideProps`, pass a query function to `ssrQuery` which will ensure appropriate middleware is run before/after your query function.
@@ -189,9 +195,11 @@ export const getServerSideProps = async ({params, req, res}) => {
   return {props: {product}}
 }
 
-export default function({product}) {
+function ProductPage ({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)

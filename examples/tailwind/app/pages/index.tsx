@@ -1,6 +1,6 @@
 import Nav from "app/components/nav"
 
-export default () => {
+const TailWindExamplePage = () => {
   return (
     <div>
       <Nav />
@@ -10,3 +10,5 @@ export default () => {
     </div>
   )
 }
+
+export default TailWindExamplePage

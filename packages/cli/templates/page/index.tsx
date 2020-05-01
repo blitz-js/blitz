@@ -1,16 +1,16 @@
 import {Suspense} from 'react'
 import {Head, Link, useQuery} from 'blitz'
-import get<%= ModelNames %> from 'app/<%= modelNames %>/queries/get<%= ModelNames %>'
+import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
 
-export const <%= ModelNames %>List = () => {
-  const [<%= modelNames %>] = useQuery(get<%= ModelNames %>)
+export const __ModelNames__List = () => {
+  const [__modelNames__] = useQuery(get__ModelNames__)
 
   return (
     <ul>
-      {<%= modelNames %>.map((<%= modelName %>) => (
-        <li key={<%= modelName %>.id}>
-          <Link href="/<%= modelNames %>/[id]" as={`/<%= modelNames %>/${<%= modelName %>.id}`}>
-            <a>{<%= modelName %>.name}</a>
+      {__modelNames__.map((__modelName__) => (
+        <li key={__modelName__.id}>
+          <Link href="/__modelNames__/[id]" as={`/__modelNames__/${__modelName__.id}`}>
+            <a>{__modelName__.name}</a>
           </Link>
         </li>
       ))}
@@ -18,32 +18,32 @@ export const <%= ModelNames %>List = () => {
   )
 }
 
-const <%= ModelNames %>Page = () => {
+const __ModelNames__Page = () => {
   return (
     <div className="container">
       <Head>
-        <title><%= ModelNames %></title>
+        <title>__ModelNames__</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1><%= ModelNames %></h1>
+        <h1>__ModelNames__</h1>
 
         <p>
-          <Link href="/<%= modelNames %>/new">
-            <a>Create <%= ModelName %></a>
+          <Link href="/__modelNames__/new">
+            <a>Create __ModelName__</a>
           </Link>
         </p>
 
         <Suspense fallback={<div>Loading...</div>}>
-          <<%= ModelNames %>List />
+          <__ModelNames__List />
         </Suspense>
       </main>
     </div>
   )
 }
 
-export default <%= ModelNames %>Page
+export default __ModelNames__Page
 
 
 
