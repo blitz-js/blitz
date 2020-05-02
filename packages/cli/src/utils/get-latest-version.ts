@@ -25,7 +25,7 @@ export const getLatestVersion = async (
       fetchLatestDistVersion(dependency),
     ])
 
-    const latestVersion = Object.keys(allVersions)
+    const latestVersion = allVersions
       .filter((version) => version.startsWith(major))
       .sort((a, b) => a.localeCompare(b, undefined, {numeric: true}))
       .reverse()[0]
