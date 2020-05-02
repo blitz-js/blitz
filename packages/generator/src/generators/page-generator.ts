@@ -11,7 +11,7 @@ export interface PageGeneratorOptions extends GeneratorOptions {
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = 'pages'
-  sourceRoot = join(__dirname, '../../templates/page')
+  sourceRoot = join(__dirname, './templates/page')
 
   async getTemplateValues() {
     return {

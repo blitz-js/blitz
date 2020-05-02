@@ -3,7 +3,7 @@ import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
 import {readJSONSync, writeJson} from 'fs-extra'
-import {join} from 'path'
+import {resolve, join} from 'path'
 import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
 import {log} from '@blitzjs/server'
 import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
@@ -17,7 +17,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: string = join(__dirname, '../../templates/app')
+  sourceRoot: string = resolve(__dirname, './templates/app')
 
   filesToIgnore() {
     if (!this.options.useTs) {

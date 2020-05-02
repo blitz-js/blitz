@@ -126,6 +126,7 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
   }
 
   sourcePath(...paths: string[]): string {
+    console.log(path.join(this.sourceRoot, ...paths))
     return path.join(this.sourceRoot, ...paths)
   }
 

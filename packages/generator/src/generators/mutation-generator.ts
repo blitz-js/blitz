@@ -11,7 +11,7 @@ export interface MutationGeneratorOptions extends GeneratorOptions {
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
   static subdirectory = 'mutations'
-  sourceRoot = join(__dirname, '../../templates/mutation')
+  sourceRoot = join(__dirname, './templates/mutation')
 
   async getTemplateValues() {
     return {

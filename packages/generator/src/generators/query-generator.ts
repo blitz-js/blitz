@@ -11,7 +11,7 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   static subdirectory = 'queries'
-  sourceRoot = join(__dirname, '../../templates/query')
+  sourceRoot = join(__dirname, './templates/query')
 
   async getTemplateValues() {
     return {
