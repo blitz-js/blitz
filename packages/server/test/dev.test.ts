@@ -59,6 +59,7 @@ describe.only('Dev command', () => {
             writeManifestFile: false,
             watch: false,
             port: 3000,
+            hostname: 'localhost',
           })
         } catch (err) {
           expect(err).toBe('pow')
@@ -77,7 +78,15 @@ describe.only('Dev command', () => {
 
     it('should fail when passed a next.config.js', async () => {
       try {
-        await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false, port: 3000})
+        await dev({
+          rootFolder,
+          buildFolder,
+          devFolder,
+          writeManifestFile: false,
+          watch: false,
+          port: 3000,
+          hostname: 'localhost',
+        })
       } catch (_e) {}
       consoleOutput.includes(
         'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
@@ -90,7 +99,15 @@ describe.only('Dev command', () => {
       rootFolder = resolve(__dirname, './fixtures/dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
-      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false, port: 3000})
+      await dev({
+        rootFolder,
+        buildFolder,
+        devFolder,
+        writeManifestFile: false,
+        watch: false,
+        port: 3000,
+        hostname: 'localhost',
+      })
     })
 
     it('should copy the correct files to the dev folder', async () => {
