@@ -3,8 +3,7 @@ import {dev, prod} from '@blitzjs/server'
 
 import {runPrismaGeneration} from './db'
 
-// eslint-disable-next-line import/no-default-export
-export default class Start extends Command {
+export class Start extends Command {
   static description = 'Start a development server'
   static aliases = ['s']
 

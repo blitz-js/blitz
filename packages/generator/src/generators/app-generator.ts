@@ -1,4 +1,4 @@
-import Generator, {GeneratorOptions} from '../generator'
+import {Generator, GeneratorOptions} from '../generator'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'

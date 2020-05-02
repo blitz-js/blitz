@@ -2,7 +2,7 @@ import {spawn} from 'cross-spawn'
 import {Command} from '@oclif/command'
 import hasYarn from 'has-yarn'
 
-export default class Test extends Command {
+export class Test extends Command {
   static description = 'Run project tests'
   static aliases = ['t']
 

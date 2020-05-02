@@ -1,4 +1,4 @@
-import Generator, {GeneratorOptions} from '../generator'
+import {Generator, GeneratorOptions} from '../generator'
 import enquirer from 'enquirer'
 import path from 'path'
 

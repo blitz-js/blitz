@@ -101,7 +101,7 @@ const createManifestFile = (manifest: Manifest, fileName: string, compact: boole
  * link to the correct files on a NextJS browser error.
  */
 // TODO: Offload the file writing to later and write with all the other file writing
-const create: Rule = ({config}) => {
+export const createRuleManifest: Rule = ({config}) => {
   const manifest = Manifest.create()
   const stream = pipeline(
     setManifestEntry(manifest).stream,
@@ -111,5 +111,3 @@ const create: Rule = ({config}) => {
 
   return {stream, manifest}
 }
-
-export default create

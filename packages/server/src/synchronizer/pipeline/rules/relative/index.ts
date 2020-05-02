@@ -7,7 +7,7 @@ import slash from 'slash'
 /**
  * Returns a Rule that converts relative files paths to absolute
  */
-const create: Rule = () => {
+export const createRuleRelative: Rule = () => {
   const stream = through({objectMode: true}, (file: File, _, next) => {
     const cwd = process.cwd()
     const filecontents = file.contents
@@ -30,7 +30,7 @@ const create: Rule = () => {
 
 const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, '').indexOf('app') === 0
 
-export const patternRelativeImport = /(from\s+(?:[\'\"]))(\.[^\'\"]+)([\'\"])/g
+export const patternRelativeImport = /(from\s+(?:['"]))(\.[^'"]+)(['"])/g
 
 export function replaceRelativeImports(content: string, replacer: (s: string) => string) {
   return content.replace(patternRelativeImport, (...args) => {
@@ -46,5 +46,3 @@ export function relativeToAbsolute(_cwd: string, _filename: string) {
     return slash(path.join(path.dirname(_filename), filePath).replace(_cwd + path.sep, ''))
   }
 }
-
-export default create
