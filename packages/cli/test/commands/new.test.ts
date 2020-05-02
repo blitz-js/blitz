@@ -1,4 +1,5 @@
 import NewCmd from '../../src/commands/new'
+import {getLatestVersion} from '../../src/utils/get-latest-version'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
@@ -58,6 +59,26 @@ describe('`new` command', () => {
           expect(blitzVersion).toEqual(latest)
         }
       }))
+
+    it('fetches latest version from template', async () => {
+      const expectedVersion = '3.0.0'
+      const templatePackage = {name: 'eslint-plugin-react-hooks', version: '3.x'}
+
+      nock('https://registry.npmjs.org')
+        .get(`/${templatePackage.name}`)
+        .reply(200, {versions: {'4.0.0': {}, '3.0.0': {}}})
+        .persist()
+
+      nock('https://registry.npmjs.org')
+        .get(`/-/package/${templatePackage.name}/dist-tags`)
+        .reply(200, {
+          latest: '4.0.0',
+        })
+        .persist()
+
+      const {value: latestVersion} = await getLatestVersion(templatePackage.name, templatePackage.version)
+      expect(latestVersion).toBe(expectedVersion)
+    })
 
     describe('with network trouble', () => {
       it('uses template versions', async () => {
