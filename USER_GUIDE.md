@@ -259,7 +259,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
 2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
-   1. [Read the Digitial Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
+   1. [Read the Digital Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
@@ -267,7 +267,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 #### Serverless
 
-Assuming you already have a Zeit account and the `now` cli installed, you can do the following:
+Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
 
 1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
 2. Add a `now.json` at your project root with

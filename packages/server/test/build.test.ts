@@ -23,21 +23,18 @@ import mockfs from 'mock-fs'
 import {resolve} from 'path'
 
 describe('Build command', () => {
-  const rootFolder = '/build'
+  const rootFolder = resolve('build')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')
 
   beforeEach(async () => {
-    mockfs(
-      {
-        '/build': {
-          '.now': '',
-          one: '',
-          two: '',
-        },
+    mockfs({
+      build: {
+        '.now': '',
+        one: '',
+        two: '',
       },
-      {createCwd: false, createTmp: false},
-    )
+    })
     jest.clearAllMocks()
     await build({rootFolder, buildFolder, devFolder, writeManifestFile: false})
   })
