@@ -22,28 +22,26 @@ import {dev} from '../src/dev'
 import {directoryTree} from './utils/tree-utils'
 
 import mockfs from 'mock-fs'
+import {resolve} from 'path'
 
 describe('Dev command', () => {
-  const rootFolder = '/'
-  const buildFolder = '/.blitz-build'
-  const devFolder = '/.blitz-rules'
+  const rootFolder = resolve('')
+  const buildFolder = resolve(rootFolder, '.blitz-build')
+  const devFolder = resolve(rootFolder, '.blitz-rules')
 
   beforeEach(async () => {
-    mockfs(
-      {
-        '/app': {
+    mockfs({
+      app: {
+        api: {
+          'bar.ts': 'test',
+        },
+        foo: {
           api: {
-            'bar.ts': 'test',
-          },
-          foo: {
-            api: {
-              'foo.ts': 'test',
-            },
+            'foo.ts': 'test',
           },
         },
       },
-      {createCwd: false, createTmp: false},
-    )
+    })
     jest.clearAllMocks()
     await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
   })

@@ -70,15 +70,12 @@ describe('Dev command', () => {
 
   describe.skip('when with next.config', () => {
     beforeEach(async () => {
-      rootFolder = '/bad'
+      rootFolder = resolve('bad')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz')
-      mockfs(
-        {
-          '/bad/next.config.js': 'yo',
-        },
-        {createCwd: false, createTmp: false},
-      )
+      mockfs({
+        'bad/next.config.js': 'yo',
+      })
     })
     afterEach(() => {
       mockfs.restore()
@@ -101,7 +98,7 @@ describe('Dev command', () => {
 
   describe('when run normally', () => {
     beforeEach(async () => {
-      rootFolder = '/dev'
+      rootFolder = resolve('dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
     })
@@ -110,14 +107,11 @@ describe('Dev command', () => {
     })
 
     it('should copy the correct files to the dev folder', async () => {
-      mockfs(
-        {
-          '/dev/.now': '',
-          '/dev/one': '',
-          '/dev/two': '',
-        },
-        {createCwd: false, createTmp: false},
-      )
+      mockfs({
+        'dev/.now': '',
+        'dev/one': '',
+        'dev/two': '',
+      })
       await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
       const tree = directoryTree(rootFolder)
       expect(tree).toEqual({
@@ -137,7 +131,7 @@ describe('Dev command', () => {
     it('calls spawn with the patched next cli bin', async () => {
       mockfs(
         {
-          '/dev/@blitzjs/server/next-patched': '',
+          'dev/@blitzjs/server/next-patched': '',
         },
         {createCwd: false, createTmp: false},
       )

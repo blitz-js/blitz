@@ -26,20 +26,17 @@ import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'
 
 describe('Build command Vercel', () => {
-  const rootFolder = '/'
+  const rootFolder = resolve('')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-dev')
 
   beforeEach(async () => {
     process.env.NOW_BUILDER = '1'
-    mockfs(
-      {
-        '/app/posts/pages/foo.tsx': '',
-        '/pages/bar.tsx': '',
-        '/next.config.js': 'module.exports = {target: "experimental-serverless-trace"}',
-      },
-      {createCwd: false, createTmp: false},
-    )
+    mockfs({
+      'app/posts/pages/foo.tsx': '',
+      'pages/bar.tsx': '',
+      'next.config.js': 'module.exports = {target: "experimental-serverless-trace"}',
+    })
     jest.clearAllMocks()
     await build({rootFolder, buildFolder, devFolder, writeManifestFile: false})
   })
