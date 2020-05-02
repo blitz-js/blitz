@@ -9,7 +9,7 @@ import File from 'vinyl'
  */
 // TODO:  This needs quite a bit of work before we can manage a dirty start
 //        Currently this does not do much aside from guard against repeated work
-export default () => {
+const workOptimizer = () => {
   const todo: Array<string> = []
   const done: Array<string> = []
 
@@ -36,3 +36,5 @@ export default () => {
 
   return {triage, reportComplete, stats}
 }
+
+export default workOptimizer

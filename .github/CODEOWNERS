@@ -1,5 +1,7 @@
 # https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
 * @flybayer
+*.md @merelinguist
 
-packages/server/* @ryardley
+packages/server/**/* @ryardley
+packages/cli/**/* @aem

@@ -2,10 +2,18 @@ import chalk from 'chalk'
 import ora from 'ora'
 import readline from 'readline'
 
-const brandColor = '6700AB'
+// const blitzTrueBrandColor = '6700AB'
+const blitzBrightBrandColor = '8a3df0'
 
-const withBranded = (str: string) => {
+// Using brigh brand color so it's better for dark terminals
+const brandColor = blitzBrightBrandColor
+
+const withBrand = (str: string) => {
   return chalk.hex(brandColor).bold(str)
+}
+
+const withWarning = (str: string) => {
+  return `⚠️  ${chalk.yellow(str)}`
 }
 
 const withCaret = (str: string) => {
@@ -38,6 +46,15 @@ const clearLine = (msg?: string) => {
   readline.clearLine(process.stdout, 0)
   readline.cursorTo(process.stdout, 0)
   msg && process.stdout.write(msg)
+}
+
+/**
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
+ */
+const warning = (msg: string) => {
+  console.log(withCaret(withWarning(msg)))
 }
 
 /**
@@ -97,13 +114,15 @@ const variable = (val: any) => {
 }
 
 export const log = {
-  withBranded,
+  withBrand,
+  withWarning,
   withCaret,
   withCheck,
   withX,
   branded,
   clearLine,
   error,
+  warning,
   meta,
   progress,
   spinner,

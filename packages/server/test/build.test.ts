@@ -11,18 +11,30 @@ jest.doMock('../src/reporter', () => ({
 // Assume next works
 jest.doMock('../src/next-utils', () => nextUtilsMock)
 
+// Mock where the next bin is
+jest.doMock('../src/resolve-bin-async', () => ({
+  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+}))
+
 // Import with mocks applied
 import {build} from '../src/build'
-import {resolve} from 'path'
-import {remove, pathExists} from 'fs-extra'
 import {directoryTree} from './utils/tree-utils'
+import mockfs from 'mock-fs'
+import {resolve} from 'path'
 
 describe('Build command', () => {
-  const rootFolder = resolve(__dirname, './fixtures/build')
+  const rootFolder = resolve('build')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz')
 
   beforeEach(async () => {
+    mockfs({
+      build: {
+        '.now': '',
+        one: '',
+        two: '',
+      },
+    })
     jest.clearAllMocks()
     await build({
       rootFolder,
@@ -34,16 +46,8 @@ describe('Build command', () => {
     })
   })
 
-  afterEach(async () => {
-    const nextFolder = resolve(rootFolder, '.next')
-
-    if (await pathExists(nextFolder)) {
-      await remove(nextFolder)
-    }
-
-    if (await pathExists(buildFolder)) {
-      await remove(buildFolder)
-    }
+  afterEach(() => {
+    mockfs.restore()
   })
 
   it('should copy the correct files to the build folder', async () => {
