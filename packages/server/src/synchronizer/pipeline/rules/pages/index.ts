@@ -52,9 +52,8 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
           ? 'Warning: You have tried to put an api route inside a pages directory:'
           : 'Warning: You have tried to put api routes inside a pages directory:'
 
-      const secondary = `Api routes should be in their own directory (outside of pages folders):
-- Context-specific routes can be nested in a context directory (app/products/api)
-- Global Api routes such as webhooks can be at root level (app/api)
+      const secondary = `API routes should be in their own 'api/' folder as a sibling of 'pages/':
+- Examples: app/api/, app/products/api/
 `
 
       const err = new NestedRouteError(message, secondary, nestedApiRoutes)
