@@ -24,6 +24,7 @@ describe('Start command', () => {
   const options = {
     rootFolder: resolve(__dirname, '../../'),
     port: 3000,
+    hostname: 'localhost',
   }
 
   it('runs the dev script', async () => {

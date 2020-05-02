@@ -5,5 +5,5 @@ import {build} from './build'
 export async function prod(config: ServerConfig) {
   const {rootFolder, nextBin} = await enhance(config)
   await build(config)
-  await nextStart(nextBin, rootFolder)
+  await nextStart(nextBin, rootFolder, config)
 }

@@ -7,8 +7,14 @@ export default class Build extends Command {
 
   static flags = {
     port: flags.integer({
+      char: 'p',
       description: 'Set port number',
       default: 3000,
+    }),
+    hostname: flags.string({
+      char: 'H',
+      description: 'Set server hostname',
+      default: 'localhost',
     }),
   }
 
@@ -18,6 +24,7 @@ export default class Build extends Command {
     const config = {
       rootFolder: process.cwd(),
       port: flags.port,
+      hostname: flags.hostname,
     }
 
     try {

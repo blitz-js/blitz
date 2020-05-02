@@ -34,5 +34,5 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     readyForNextDev,
   ])
 
-  await nextStartDev(nextBin, dest, manifest, devFolder, config.port)
+  await nextStartDev(nextBin, dest, manifest, devFolder, config)
 }

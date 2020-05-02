@@ -6,6 +6,7 @@ import {synchronizeFiles} from './synchronizer'
 export type ServerConfig = {
   rootFolder: string
   port: number
+  hostname: string
   interceptNextErrors?: boolean
   devFolder?: string
   buildFolder?: string

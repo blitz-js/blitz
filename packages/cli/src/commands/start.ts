@@ -9,12 +9,17 @@ export default class Start extends Command {
 
   static flags = {
     production: flags.boolean({
-      char: 'p',
       description: 'Create and start a production server',
     }),
     port: flags.integer({
+      char: 'p',
       description: 'Set port number',
       default: 3000,
+    }),
+    hostname: flags.string({
+      char: 'H',
+      description: 'Set server hostname',
+      default: 'localhost',
     }),
   }
 
@@ -24,6 +29,7 @@ export default class Start extends Command {
     const config = {
       rootFolder: process.cwd(),
       port: flags.port,
+      hostname: flags.hostname,
     }
 
     if (flags.production) {

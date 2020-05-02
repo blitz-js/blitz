@@ -2,6 +2,7 @@ import {spawn} from 'cross-spawn'
 import detect from 'detect-port'
 import {Manifest} from './synchronizer/pipeline/rules/manifest'
 import {through} from './synchronizer/streams'
+import {ServerConfig} from 'config'
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {
@@ -33,13 +34,13 @@ export async function nextStartDev(
   cwd: string,
   manifest: Manifest,
   devFolder: string,
-  port: number,
+  config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const availablePort = await detect(port)
+  const availablePort = await detect({port: config.port, hostname: config.hostname})
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ['dev', '-p', `${availablePort}`], {
+    spawn(nextBin, ['dev', '-p', `${availablePort}`, '-H', config.hostname], {
       cwd,
       stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
     })
@@ -63,9 +64,10 @@ export async function nextBuild(nextBin: string, cwd: string) {
   })
 }
 
-export async function nextStart(nextBin: string, cwd: string) {
+export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
+  const availablePort = await detect({port: config.port, hostname: config.hostname})
   return Promise.resolve(
-    spawn(nextBin, ['start'], {
+    spawn(nextBin, ['start', '-p', `${availablePort}`, '-H', config.hostname], {
       cwd,
       stdio: 'inherit',
     }).on('error', (err) => {
