@@ -64,12 +64,14 @@ describe('`new` command', () => {
       const expectedVersion = '3.0.0'
       const templatePackage = {name: 'eslint-plugin-react-hooks', version: '3.x'}
 
-      nock('https://registry.npmjs.org')
+      const scope = nock('https://registry.npmjs.org')
+
+      scope
         .get(`/${templatePackage.name}`)
         .reply(200, {versions: {'4.0.0': {}, '3.0.0': {}}})
         .persist()
 
-      nock('https://registry.npmjs.org')
+      scope
         .get(`/-/package/${templatePackage.name}/dist-tags`)
         .reply(200, {
           latest: '4.0.0',
