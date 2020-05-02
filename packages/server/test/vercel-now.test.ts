@@ -25,7 +25,7 @@ import {directoryTree} from './utils/tree-utils'
 
 import mockfs from 'mock-fs'
 
-describe('Build command ZEIT', () => {
+describe('Build command Vercel', () => {
   const rootFolder = '/'
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-dev')
@@ -55,7 +55,7 @@ describe('Build command ZEIT', () => {
       name: '.blitz-build',
       children: [
         {name: 'blitz.config.js'},
-        {name: 'next-zeit.config.js'},
+        {name: 'next-vercel.config.js'},
         {name: 'next.config.js'},
         {
           name: 'pages',
