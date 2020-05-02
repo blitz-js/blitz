@@ -16,5 +16,5 @@ reports
 tsconfig.tsbuildinfo
 dist
 bin
-packages/cli/templates/**
+packages/generator/templates/**
 .github/ISSUE_TEMPLATE/bug_report.md

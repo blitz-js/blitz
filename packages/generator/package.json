@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "dev": "tsdx watch --verbose",
-    "build": "tsdx build",
+    "build": "tsdx build && yarn build:templates",
+    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates lib",
     "test": "tsdx test",
     "lint": "tsdx lint"
   },
