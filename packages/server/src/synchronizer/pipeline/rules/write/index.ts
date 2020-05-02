@@ -4,7 +4,7 @@ import {unlink} from '../../helpers/unlink'
 import {dest} from 'vinyl-fs'
 import File from 'vinyl'
 import {Rule} from '../../../types'
-import {FILE_WRITTEN} from '../../../reporter'
+import {FILE_WRITTEN} from '../../../events'
 
 /**
  * Returns a Rule that writes files to the destination path

@@ -26,18 +26,15 @@ import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'
 
 describe('Dev command', () => {
-  const rootFolder = '/'
+  const rootFolder = resolve('')
   const buildFolder = resolve(rootFolder, '.blitz-build')
   const devFolder = resolve(rootFolder, '.blitz-rules')
 
   beforeEach(async () => {
-    mockfs(
-      {
-        '/app/posts/pages/foo.tsx': '',
-        '/pages/bar.tsx': '',
-      },
-      {createCwd: false, createTmp: false},
-    )
+    mockfs({
+      'app/posts/pages/foo.tsx': '',
+      'pages/bar.tsx': '',
+    })
     jest.clearAllMocks()
     await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
   })

@@ -1,6 +1,6 @@
 {
   "name": "store",
-  "version": "0.7.1-canary.1",
+  "version": "0.8.1",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
@@ -12,19 +12,17 @@
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
-    "blitz": "0.7.1-canary.1",
+    "blitz": "0.8.1",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"
   },
-  "NOTE": "Next.js dependency is currently only required for deploying to zeit",
   "devDependencies": {
     "@types/react": "16.9.34",
     "cypress": "^4.4.1",
     "eslint-plugin-cypress": "2.10.3",
-    "next": "9.3.5",
     "start-server-and-test": "1.11.0"
   }
 }
