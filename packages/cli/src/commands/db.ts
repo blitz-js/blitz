@@ -142,7 +142,7 @@ ${chalk.bold('👉 reset')}   Reset the database and run a fresh migration via P
   static args = [
     {
       name: 'Commands',
-      description: this.description,
+      description: Db.description,
       required: true,
     },
   ]
