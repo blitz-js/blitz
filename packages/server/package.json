@@ -51,6 +51,7 @@
     "readable-stream": "^3.6.0",
     "resolve-cwd": "^3.0.0",
     "serialize-error": "^6.0.0",
+    "slash": "^3.0.0",
     "through2": "^3.0.1",
     "vinyl": "^2.2.0",
     "vinyl-file": "^3.0.0",
