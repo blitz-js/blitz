@@ -31,7 +31,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Create Your Blitz App
 
 1. `npm install -g blitz` or `yarn global add blitz`
-2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
+2. Run `blitz new myAppName` to create a new TypeScript blitz app in the `myAppName` directory. Alternatively, run `blitz new myAppName --js` to create a JavaScript blitz app
 3. `cd myAppName`
 4. `blitz start`
 5. View your baby app at [http://localhost:3000](http://localhost:3000)
@@ -358,7 +358,6 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
-- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. You can add new files with JS and/or convert the generated files to JS. There's an [open issue for generating vanilla JS files](https://github.com/blitz-js/blitz/issues/160) that needs help.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>
