@@ -16,6 +16,10 @@ const withWarning = (str: string) => {
   return `⚠️  ${chalk.yellow(str)}`
 }
 
+const withPointing = (str: string) => {
+  return `👉  ${chalk.yellow(str)}`
+}
+
 const withCaret = (str: string) => {
   return `${chalk.gray('>')} ${str}`
 }
@@ -128,4 +132,5 @@ export const log = {
   spinner,
   success,
   variable,
+  withPointing,
 }
