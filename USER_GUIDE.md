@@ -301,7 +301,11 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 #### `blitz new NAME`
 
-Generate a new blitz project at `<current_folder>./NAME`
+Generate a new TypeScript blitz project at `<current_folder>./NAME`
+
+#### `blitz new NAME --js`
+
+Generate a new JavaScript blitz project at `<current_folder>./NAME`
 
 #### `blitz start`
 
