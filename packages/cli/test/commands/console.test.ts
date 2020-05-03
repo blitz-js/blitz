@@ -22,7 +22,7 @@ jest.mock(`${process.cwd()}/package.json`, () => ({
     ramda: '1.0.0',
   },
 }))
-jest.mock('../../src/utils/load-dependencies')
+jest.mock('@blitzjs/generator/src/utils/load-dependencies')
 jest.mock('../../src/utils/load-blitz')
 
 describe('Console command', () => {
