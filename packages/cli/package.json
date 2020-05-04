@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.8.2-canary.0",
+  "version": "0.8.2-canary.1",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -46,8 +46,8 @@
     "ts-node": "^8.9.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.8.2-canary.0",
-    "@blitzjs/server": "0.8.2-canary.0",
+    "@blitzjs/generator": "0.8.2-canary.1",
+    "@blitzjs/server": "0.8.2-canary.1",
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
@@ -70,5 +70,5 @@
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
   },
-  "gitHead": "9c54cfaef19b63c30a7e41447541c7cc30b5c6d4"
+  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.8.2-canary.0",
+  "version": "0.8.2-canary.1",
   "license": "MIT",
   "scripts": {
     "dev": "tsdx watch --verbose",
@@ -49,5 +49,5 @@
     "react-query": "^1.2.9",
     "serialize-error": "^6.0.0"
   },
-  "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
+  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }
