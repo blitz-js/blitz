@@ -13,7 +13,7 @@ const spawn = jest.fn(() => {
 
 jest.doMock('cross-spawn', () => ({spawn}))
 
-import StartCmd from '../../src/commands/start'
+import {Start} from '../../src/commands/start'
 import {resolve} from 'path'
 
 describe('Start command', () => {
@@ -28,12 +28,12 @@ describe('Start command', () => {
   }
 
   it('runs the dev script', async () => {
-    await StartCmd.run([])
+    await Start.run([])
     expect(dev).toBeCalledWith(options, Promise.resolve())
   })
 
   it('runs the prod script when passed the production flag', async () => {
-    await StartCmd.run(['--production'])
+    await Start.run(['--production'])
     expect(prod).toBeCalledWith(options)
   })
 })

@@ -9,7 +9,7 @@ import {DuplicatePathError, NestedRouteError} from '../../../errors'
  * Returns a Rule to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
+export const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   const {src} = config
 
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
@@ -70,15 +70,13 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   return {stream}
 }
 
-export default createRulePages
-
 export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(pages[\\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+)$/
   return (regex.exec(path) || [])[1] || path
 }
 
 export function apiPathTransformer(path: string) {
-  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(api[\\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
   const matchedPath = (regex.exec(path) || [])[1]
 
   return matchedPath ? join('pages', matchedPath) : path

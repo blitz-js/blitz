@@ -1,5 +1,7 @@
 /* eslint-disable import/first */
 
+import {join, resolve} from 'path'
+
 const nextUtilsMock = {
   nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
   nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
@@ -20,7 +22,6 @@ jest.doMock('../src/resolve-bin-async', () => ({
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {join, resolve} from 'path'
 import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'

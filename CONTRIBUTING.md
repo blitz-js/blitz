@@ -144,3 +144,11 @@ cd examples/store
 ## Troubleshooting
 
 If you run into issues that should be documented here, please submit a PR! ❤️
+
+**#### Windows Subsystem for Linux**
+
+`node-pty` error when running `yarn`. Fix by installing `node-pty dependencies`
+
+```
+sudo apt install -y make python build-essential
+```

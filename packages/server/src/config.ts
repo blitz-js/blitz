@@ -1,5 +1,5 @@
 import {resolve} from 'path'
-import {ciLog} from './ciLog'
+import {ciLog} from './ci-log'
 import {resolveBinAsync} from './resolve-bin-async'
 import {synchronizeFiles} from './synchronizer'
 import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'

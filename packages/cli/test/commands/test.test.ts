@@ -3,7 +3,7 @@ jest.mock('has-yarn')
 
 import crossSpawn from 'cross-spawn'
 import hasYarn from 'has-yarn'
-import TestCmd from '../../src/commands/test'
+import {Test} from '../../src/commands/test'
 
 const testParams = [['test'], {stdio: 'inherit'}]
 const testWatchParams = [['test:watch'], {stdio: 'inherit'}]
@@ -16,7 +16,7 @@ describe('Test command', () => {
   it('runs yarn test script', async () => {
     jest.spyOn(hasYarn, 'default').mockReturnValue(true)
 
-    await TestCmd.run([])
+    await Test.run([])
 
     expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testParams)
   })
@@ -24,7 +24,7 @@ describe('Test command', () => {
   it('runs npm test script', async () => {
     jest.spyOn(hasYarn, 'default').mockReturnValue(false)
 
-    await TestCmd.run([])
+    await Test.run([])
 
     expect(crossSpawn.spawn).toBeCalledWith('npm', ...testParams)
   })
@@ -32,7 +32,7 @@ describe('Test command', () => {
   it('runs yarn test:watch script', async () => {
     jest.spyOn(hasYarn, 'default').mockReturnValue(true)
 
-    await TestCmd.run(['watch'])
+    await Test.run(['watch'])
 
     expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testWatchParams)
   })
@@ -40,7 +40,7 @@ describe('Test command', () => {
   it('runs yarn test:watch script with alias', async () => {
     jest.spyOn(hasYarn, 'default').mockReturnValue(true)
 
-    await TestCmd.run(['w'])
+    await Test.run(['w'])
 
     expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testWatchParams)
   })
@@ -48,7 +48,7 @@ describe('Test command', () => {
   it('runs yarn test and ignores invalid argument', async () => {
     jest.spyOn(hasYarn, 'default').mockReturnValue(true)
 
-    await TestCmd.run(['invalid'])
+    await Test.run(['invalid'])
 
     expect(crossSpawn.spawn).toBeCalledWith('yarn', ...testParams)
   })

@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -13,7 +13,8 @@
     "build": "tsdx build && yarn build:templates",
     "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "test:watch": "tsdx test --watch"
   },
   "husky": {
     "hooks": {
@@ -52,6 +53,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.8.1"
-  }
+    "@blitzjs/server": "0.8.2"
+  },
+  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }
