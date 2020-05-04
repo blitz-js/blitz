@@ -43,7 +43,15 @@ describe('Dev command', () => {
       },
     })
     jest.clearAllMocks()
-    await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+    await dev({
+      rootFolder,
+      buildFolder,
+      devFolder,
+      writeManifestFile: false,
+      watch: false,
+      port: 3000,
+      hostname: 'localhost',
+    })
   })
 
   afterEach(() => {

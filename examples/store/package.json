@@ -6,7 +6,7 @@
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start -p",
+    "test:start": "blitz db migrate && blitz start --production",
     "test": "start-server-and-test test:start http://localhost:3000 cy:run"
   },
   "dependencies": {

@@ -30,7 +30,6 @@
   "module": "dist/webpack.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@types/detect-port": "^1.1.0",
     "cross-spawn": "^7.0.2",
     "detect-port": "^1.3.0",
     "fast-glob": "^3.2.2",
@@ -60,7 +59,8 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.8.1"
+    "@blitzjs/core": "0.8.1",
+    "@types/detect-port": "^1.3.0"
   },
   "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
 }
