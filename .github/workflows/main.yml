@@ -39,3 +39,9 @@ jobs:
         run: yarn test
         env:
           CI: true
+      - name: Test Install time
+        run: |
+          cd ../ && mkdir test && cd test
+          yarn cache clean
+          yarn add file:../blitz/packages/blitz --non-interactive | tee out.txt
+          cat out.txt | ../blitz/.github/checkInstallTime.js
