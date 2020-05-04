@@ -5,3 +5,4 @@
 
 packages/server/**/* @ryardley
 packages/cli/**/* @aem
+packages/generator/**/* @aem

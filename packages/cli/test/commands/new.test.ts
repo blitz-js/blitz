@@ -1,5 +1,5 @@
 import NewCmd from '../../src/commands/new'
-import {getLatestVersion} from '../../src/utils/get-latest-version'
+import {getLatestVersion} from '@blitzjs/generator/src/utils/get-latest-version'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'

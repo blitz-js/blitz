@@ -1,7 +1,7 @@
 import * as path from 'path'
 import {flags} from '@oclif/command'
 import Command from '../command'
-import AppGenerator from '../generators/app'
+import {AppGenerator} from '@blitzjs/generator'
 import chalk from 'chalk'
 import hasbin from 'hasbin'
 import {log} from '@blitzjs/server'
@@ -55,7 +55,6 @@ export default class New extends Command {
     const appName = path.basename(destinationRoot)
 
     const generator = new AppGenerator({
-      sourceRoot: path.join(__dirname, '../../templates/app'),
       destinationRoot,
       appName,
       dryRun: flags['dry-run'],
