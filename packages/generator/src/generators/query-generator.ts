@@ -6,7 +6,6 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
   ModelNames: string
   modelName: string
   modelNames: string
-  fileContext: string
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
@@ -20,5 +19,9 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
     }
+  }
+
+  getTargetDirectory() {
+    return `app/${this.options.modelNames}/queries`
   }
 }

@@ -15,7 +15,6 @@ export interface GeneratorOptions {
   destinationRoot?: string
   dryRun?: boolean
   useTs?: boolean
-  fileContext?: string
 }
 
 const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
@@ -51,6 +50,8 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
   }
 
   abstract async getTemplateValues(): Promise<any>
+
+  abstract getTargetDirectory(): string
 
   filesToIgnore(): string[] {
     // allow subclasses to conditionally ignore certain template files
@@ -94,10 +95,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     for (let filePath of paths) {
       try {
         let pathSuffix = filePath
-        // if context was provided, prepend the context;
-        if (this.options.fileContext) {
-          pathSuffix = path.join(this.options.fileContext, pathSuffix)
-        }
+        pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {

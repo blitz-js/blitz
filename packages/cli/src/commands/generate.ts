@@ -152,18 +152,13 @@ export class Generate extends Command {
     }
 
     try {
-      let fileRoot: string
       let singularRootContext: string
-      // let pluralRootContext: string
-      let nestedContextPaths: string[] = []
-      // otherwise, validate the provided path, prompting the user if it's absent or invalid
+
       if (!flags.context) {
         if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         } else {
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
@@ -175,14 +170,8 @@ export class Generate extends Command {
             )}'?`,
           )
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         } else {
-          // @ts-ignore shift can technically return undefined, but we already know the array isn't empty
-          // so we can bypass the check
-          fileRoot = modelNames(contextParts.shift())
           singularRootContext = modelName(args.model)
-          // pluralRootContext = modelNames(args.model)
-          nestedContextPaths = [...contextParts, modelNames(args.model)]
         }
       }
 
@@ -195,14 +184,6 @@ export class Generate extends Command {
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
           dryRun: flags['dry-run'],
-          // provide the file context as a relative path to the current directory (with a slash appended)
-          // to generate files without changing the current directory. This allows yeoman to print out the
-          // full file path rather than the current path
-          fileContext:
-            path.relative(
-              path.resolve(),
-              path.resolve('app', fileRoot, GeneratorClass.subdirectory, fileRoot, ...nestedContextPaths),
-            ) + '/',
           useTs: fs.existsSync(path.resolve('tsconfig.json')),
         })
         await generator.run()

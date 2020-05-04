@@ -33,6 +33,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
+  getTargetDirectory() {
+    return ''
+  }
+
   async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }
