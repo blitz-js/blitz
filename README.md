@@ -157,7 +157,7 @@ We need more woman & nonbinary level 1 maintainers. See [MAINTAINERS.md](./MAINT
     <td align="center"><a href="https://twitter.com/GeggsElias"><img src="https://avatars3.githubusercontent.com/u/22719177?v=4" width="100px;" alt=""/><br /><sub><b>Elias Johansson</b></sub></a></td>
     <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></td>
     <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a></td>
-    <td align="center"><a href="https://simonpeterdebbarma.com"><img src="https://avatars3.githubusercontent.com/u/31207418?v=4" width="100px;" alt=""/><br /><sub><b>Simon Debbarma</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/pulls?q=is%3Apr+reviewed-by%3Asimonpeterdebbarma" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://simonpeterdebbarma.com"><img src="https://avatars3.githubusercontent.com/u/31207418?v=4" width="100px;" alt=""/><br /><sub><b>Simon Debbarma</b></sub></a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
