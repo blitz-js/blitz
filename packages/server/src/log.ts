@@ -17,7 +17,7 @@ const withWarning = (str: string) => {
 }
 
 const withPointing = (str: string) => {
-  return `👉  ${chalk.yellow(str)}`
+  return `${chalk.yellow('👉')} ${str}`
 }
 
 const withCaret = (str: string) => {
@@ -66,7 +66,7 @@ const warning = (msg: string) => {
  * @param {string} msg
  */
 const pointing = (msg: string) => {
-  console.log(withCaret(withPointing(msg)))
+  console.log(withPointing(msg))
 }
 
 /**
@@ -141,4 +141,5 @@ export const log = {
   success,
   variable,
   withPointing,
+  pointing,
 }
