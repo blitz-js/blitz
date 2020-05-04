@@ -144,7 +144,7 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
 
 _Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
 
-We need level 1 maintainers who identify as a woman. See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
+We need more woman & nonbinary level 1 maintainers. See [MAINTAINERS.md](./MAINTAINERS.md) for what this entails
 
 
 <!-- prettier-ignore-start -->
