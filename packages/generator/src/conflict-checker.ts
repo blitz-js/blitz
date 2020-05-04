@@ -5,7 +5,7 @@ import {diffLines, Change} from 'diff'
 import * as fs from 'fs-extra'
 import chalk from 'chalk'
 import enquirer from 'enquirer'
-import PromptAbortedError from './errors/prompt-aborted'
+import {PromptAbortedError} from './errors/prompt-aborted'
 
 interface PromptAnswer {
   action: 'overwrite' | 'skip' | 'show'
@@ -17,7 +17,7 @@ interface ConflictCheckerOptions {
   dryRun?: boolean
 }
 
-export default class ConflictChecker extends Transform {
+export class ConflictChecker extends Transform {
   private _destroyed = false
 
   constructor(private readonly options?: ConflictCheckerOptions) {

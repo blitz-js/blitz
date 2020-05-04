@@ -11,7 +11,7 @@ const spawn = jest.fn(() => {
 
 jest.doMock('cross-spawn', () => ({spawn}))
 
-import DbCmd from '../../src/commands/db'
+import {Db} from '../../src/commands/db'
 
 let schemaArg: string
 let prismaBin: string
@@ -49,29 +49,29 @@ describe('Db command', () => {
   }
 
   it('runs db migrate', async () => {
-    await DbCmd.run(['migrate'])
+    await Db.run(['migrate'])
     expectDbMigrateOutcome()
   })
 
   it('runs db migrate (alias)', async () => {
-    await DbCmd.run(['m'])
+    await Db.run(['m'])
     expectDbMigrateOutcome()
   })
 
   it('runs db introspect', async () => {
-    await DbCmd.run(['introspect'])
+    await Db.run(['introspect'])
 
     expect(spawn).toHaveBeenCalled()
   })
 
   it('runs db studio', async () => {
-    await DbCmd.run(['studio'])
+    await Db.run(['studio'])
 
     expect(spawn).toHaveBeenCalled()
   })
 
   it('does not run db in case of invalid command', async () => {
-    await DbCmd.run(['invalid'])
+    await Db.run(['invalid'])
 
     expect(spawn.mock.calls.length).toBe(0)
   })

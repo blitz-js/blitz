@@ -1,12 +1,13 @@
 {
   "name": "blitz",
   "description": "Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "license": "MIT",
   "scripts": {
     "predev": "wait-on -d 500 ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
     "dev": "rollup -c rollup.config.js --watch",
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js",
+    "lint": "tsdx lint"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -38,9 +39,10 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.8.1",
-    "@blitzjs/core": "0.8.1",
-    "@blitzjs/server": "0.8.1",
+    "@blitzjs/cli": "0.8.2",
+    "@blitzjs/core": "0.8.2",
+    "@blitzjs/generator": "0.8.2",
+    "@blitzjs/server": "0.8.2",
     "os-name": "^3.1.0",
     "pkg-dir": "^4.2.0",
     "resolve-from": "^5.0.0",
@@ -65,5 +67,5 @@
     "fullstack",
     "node"
   ],
-  "gitHead": "9c54cfaef19b63c30a7e41447541c7cc30b5c6d4"
+  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }

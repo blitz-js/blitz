@@ -1,8 +1,7 @@
 import {Command} from '@oclif/command'
 import {build} from '@blitzjs/server'
 
-// eslint-disable-next-line import/no-default-export
-export default class Build extends Command {
+export class Build extends Command {
   static description = 'Create a production build'
   static aliases = ['b']
 

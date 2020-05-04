@@ -19,18 +19,15 @@ export const runPrismaGeneration = async ({silent = false} = {}) => {
   const prismaBin = await getPrismaBin()
 
   return new Promise((resolve) => {
-    spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on(
-      'exit',
-      (code: number) => {
-        if (code === 0) {
-          resolve()
-        } else if (silent) {
-          resolve()
-        } else {
-          process.exit(1)
-        }
-      },
-    )
+    spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on('exit', (code) => {
+      if (code === 0) {
+        resolve()
+      } else if (silent) {
+        resolve()
+      } else {
+        process.exit(1)
+      }
+    })
   })
 }
 
@@ -41,13 +38,13 @@ export const runMigrate = async () => {
     const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
       stdio: 'inherit',
     })
-    cp.on('exit', (code: number) => {
-      if (code == 0) {
+    cp.on('exit', (code) => {
+      if (code === 0) {
         const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
           stdio: 'inherit',
         })
-        cp.on('exit', async (code: number) => {
-          if (code == 0) {
+        cp.on('exit', async (code) => {
+          if (code === 0) {
             await runPrismaGeneration()
             resolve()
           } else {
@@ -124,6 +121,7 @@ export function getDbName(connectionString: string): string {
   return dbName
 }
 
+
 export default class Db extends Command {
   static description = `Run database
 
@@ -137,7 +135,7 @@ ${chalk.bold(
   log.withPointing('studio',
 ))}    Open the Prisma Studio UI at http://localhost:5555 so you can easily see and\n change data in your database.
 
-${chalk.bold(log.withPointing('reset'))}  Reset the database and run a fresh migration via Prisma 2.
+${chalk.bold(log.withPointing('reset'))}   Reset the database and run a fresh migration via Prisma 2.
 `
 
   static args = [
@@ -164,8 +162,8 @@ ${chalk.bold(log.withPointing('reset'))}  Reset the database and run a fresh mig
       const cp = spawn(prismaBin, ['introspect', schemaArg], {
         stdio: 'inherit',
       })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
+      cp.on('exit', (code) => {
+        if (code === 0) {
           spawn(prismaBin, ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
             if (code !== 0) {
               process.exit(1)
@@ -179,8 +177,8 @@ ${chalk.bold(log.withPointing('reset'))}  Reset the database and run a fresh mig
       const cp = spawn(prismaBin, ['studio', schemaArg, '--experimental'], {
         stdio: 'inherit',
       })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
+      cp.on('exit', (code) => {
+        if (code === 0) {
         } else {
           process.exit(1)
         }

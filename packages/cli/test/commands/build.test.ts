@@ -1,7 +1,7 @@
 const build = jest.fn(() => {})
 jest.mock('@blitzjs/server', () => ({build}))
 
-import BuildCmd from '../../src/commands/build'
+import {Build} from '../../src/commands/build'
 import {resolve} from 'path'
 
 describe('Build command', () => {
@@ -14,7 +14,7 @@ describe('Build command', () => {
   }
 
   it('runs the build script', async () => {
-    await BuildCmd.run([])
+    await Build.run([])
     expect(build).toBeCalledWith(options)
   })
 })
