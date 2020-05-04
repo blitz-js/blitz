@@ -19,6 +19,7 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
           config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
+          config.module.rules.push({test: /@prisma\/client/, loader: require.resolve('null-loader')})
         }
 
         // This is needed because, for an unknown reason, the next build fails when
