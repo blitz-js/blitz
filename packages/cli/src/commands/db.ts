@@ -137,7 +137,7 @@ ${chalk.bold(
   log.withPointing('studio',
 ))}    Open the Prisma Studio UI at http://localhost:5555 so you can easily see and\n change data in your database.
 
-${chalk.bold(log.withPointing('reset'))}   Reset the database and run a fresh migration via Prisma 2.
+${chalk.bold(log.withPointing('reset'))}  Reset the database and run a fresh migration via Prisma 2.
 `
 
   static args = [
