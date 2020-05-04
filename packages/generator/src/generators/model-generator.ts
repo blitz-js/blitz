@@ -7,7 +7,6 @@ export interface ModelGeneratorOptions extends GeneratorOptions {
   ModelNames: string
   modelName: string
   modelNames: string
-  fileContext: string
 }
 
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
@@ -16,6 +15,10 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   sourceRoot: string = ''
 
   async getTemplateValues() {}
+
+  getTargetDirectory() {
+    return ''
+  }
 
   async write() {
     try {

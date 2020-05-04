@@ -6,7 +6,6 @@ export interface MutationGeneratorOptions extends GeneratorOptions {
   ModelNames: string
   modelName: string
   modelNames: string
-  fileContext: string
 }
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
@@ -20,5 +19,9 @@ export class MutationGenerator extends Generator<MutationGeneratorOptions> {
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
     }
+  }
+
+  getTargetDirectory() {
+    return `app/${this.options.modelNames}/mutations`
   }
 }

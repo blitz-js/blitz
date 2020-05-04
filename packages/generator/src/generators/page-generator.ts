@@ -6,7 +6,6 @@ export interface PageGeneratorOptions extends GeneratorOptions {
   ModelNames: string
   modelName: string
   modelNames: string
-  fileContext: string
 }
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
@@ -21,5 +20,9 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
     }
+  }
+
+  getTargetDirectory() {
+    return `app/${this.options.modelNames}/pages/${this.options.modelNames}`
   }
 }
