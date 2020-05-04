@@ -6,7 +6,7 @@ import * as os from 'os'
 import fetch from 'node-fetch'
 import nock from 'nock'
 
-jest.setTimeout(60 * 1000)
+jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require('../../package.json')
 
 async function getBlitzDistTags() {
@@ -16,7 +16,7 @@ async function getBlitzDistTags() {
 
 describe('`new` command', () => {
   describe('when scaffolding new project', () => {
-    jest.setTimeout(60 * 1000)
+    jest.setTimeout(120 * 1000)
 
     async function whileStayingInCWD(task: () => PromiseLike<void>) {
       const oldCWD = process.cwd()
