@@ -1,4 +1,4 @@
-import Generator, {GeneratorOptions} from '../generator'
+import {Generator, GeneratorOptions} from '../generator'
 import {join} from 'path'
 
 export interface PageGeneratorOptions extends GeneratorOptions {

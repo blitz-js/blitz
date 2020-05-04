@@ -1,11 +1,11 @@
-import Command from '../command'
+import {Command} from '../command'
 import {flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
 import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} from '@blitzjs/generator'
-import PromptAbortedError from '../errors/prompt-aborted'
+import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
 const debug = require('debug')('blitz:generate')
@@ -61,7 +61,7 @@ const generatorMap = {
   // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
 }
 
-export default class Generate extends Command {
+export class Generate extends Command {
   static description = 'Generate new files for your Blitz project'
 
   static aliases = ['g']

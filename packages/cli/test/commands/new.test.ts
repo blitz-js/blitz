@@ -1,4 +1,4 @@
-import NewCmd from '../../src/commands/new'
+import {New} from '../../src/commands/new'
 import {getLatestVersion} from '@blitzjs/generator/src/utils/get-latest-version'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -33,7 +33,7 @@ describe('`new` command', () => {
 
       const tempDir = makeTempDir()
 
-      await whileStayingInCWD(() => NewCmd.run([tempDir, '--skip-install']))
+      await whileStayingInCWD(() => New.run([tempDir, '--skip-install']))
 
       const packageJsonFile = fs.readFileSync(path.join(tempDir, 'package.json'), {
         encoding: 'utf8',

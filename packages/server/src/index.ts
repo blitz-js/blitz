@@ -1,4 +1,4 @@
-export {withBlitz} from './withBlitz'
+export {withBlitz} from './with-blitz'
 export {build} from './build'
 export {dev} from './dev'
 export {prod} from './prod'

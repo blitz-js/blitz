@@ -10,7 +10,7 @@ type Error = DuplicatePathError | NestedRouteError
 /**
  * Returns an object with a stream that takes operational errors and prepares them for the console.
  */
-export default function createErrorsStream(reporter: Writable) {
+export function createErrorsStream(reporter: Writable) {
   const stream = through({objectMode: true}, (err: Error, _, next) => {
     reporter.write({type: ERROR_THROWN, payload: err})
 

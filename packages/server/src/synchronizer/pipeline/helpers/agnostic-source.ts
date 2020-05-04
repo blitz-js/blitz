@@ -49,7 +49,7 @@ type SourceConfig = {cwd: string; include: string[]; ignore: string[]; watch: bo
  * set to true it will also provide a file watcher.
  * @param config Config object
  */
-export default function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
+export function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
   const noop = through({objectMode: true}, () => {})
 
   const vinylFsStream = vfs.src([...include, ...ignore.map((a) => '!' + a)], {

@@ -1,11 +1,11 @@
 import {Manifest} from './pipeline/rules/manifest'
 import {pipe} from './streams'
-import createPipeline from './pipeline'
-import agnosticSource from './pipeline/helpers/agnostic-source'
+import {createPipeline} from './pipeline'
+import {agnosticSource} from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
 import {through} from './streams'
-import createDisplay from './display'
-import createErrors from './errors'
+import {createDisplay} from './display'
+import {createErrorsStream} from './errors'
 import {READY} from './events'
 
 type SynchronizeFilesInput = {
@@ -46,7 +46,7 @@ export async function synchronizeFiles({
     }),
   }
 
-  const errors = createErrors(reporter.stream)
+  const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
   return new Promise((resolve, reject) => {
     const config = {

@@ -9,7 +9,7 @@ import readDirRecursive from 'fs-readdir-recursive'
 import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
-import ConflictChecker from './conflict-checker'
+import {ConflictChecker} from './conflict-checker'
 
 export interface GeneratorOptions {
   destinationRoot?: string
@@ -26,7 +26,7 @@ const tsExtension = /\.(tsx?)$/
  * The base generator class.
  * Every generator must extend this class.
  */
-abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends EventEmitter {
+export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends EventEmitter {
   private readonly store: Store
 
   protected readonly fs: Editor
@@ -168,5 +168,3 @@ abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends 
     }
   }
 }
-
-export default Generator
