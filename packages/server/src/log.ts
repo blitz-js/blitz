@@ -60,6 +60,14 @@ const clearLine = (msg?: string) => {
 const warning = (msg: string) => {
   console.log(withCaret(withWarning(msg)))
 }
+/**
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
+ */
+const pointing = (msg: string) => {
+  console.log(withCaret(withPointing(msg)))
+}
 
 /**
  * Logs a red error message to stderr.
