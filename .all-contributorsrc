@@ -428,6 +428,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "tmns",
+      "name": "tmns",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/35785003?v=4",
+      "profile": "https://dev.to/tmns",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
