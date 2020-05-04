@@ -13,7 +13,8 @@
     "build": "tsdx build && yarn build:templates",
     "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "test:watch": "tsdx test --watch"
   },
   "husky": {
     "hooks": {
