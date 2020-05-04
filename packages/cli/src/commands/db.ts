@@ -7,7 +7,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {promisify} from 'util'
 import {projectRoot} from '../utils/get-project-root'
-import {log} from '@blitzjs/server'
+
 
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
