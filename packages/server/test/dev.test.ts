@@ -25,7 +25,7 @@ import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'
 
-describe.only('Dev command', () => {
+describe('Dev command', () => {
   let rootFolder: string
   let buildFolder: string
   let devFolder: string
