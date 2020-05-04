@@ -1,4 +1,4 @@
-import Generator, {GeneratorOptions} from '../generator'
+import {Generator, GeneratorOptions} from '../generator'
 import spawn from 'cross-spawn'
 import chalk from 'chalk'
 import username from 'username'
@@ -31,6 +31,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       name: this.options.appName,
       username: await username(),
     }
+  }
+
+  getTargetDirectory() {
+    return ''
   }
 
   async preCommit() {

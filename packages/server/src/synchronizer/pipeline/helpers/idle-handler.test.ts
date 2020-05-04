@@ -1,4 +1,4 @@
-import createIdleHandler from './idle-handler'
+import {createIdleHandler} from './idle-handler'
 
 import {to, pipeline, through} from '../../streams'
 

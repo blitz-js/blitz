@@ -8,7 +8,7 @@ import {Writable} from 'stream'
  *
  * The first time it fires it will also fire a ready event
  */
-const idleHandler = (reporter: Writable, delay: number = 500) => {
+export const createIdleHandler = (reporter: Writable, delay: number = 500) => {
   let timeout: NodeJS.Timeout
   let firstTime = true
 
@@ -42,5 +42,3 @@ const idleHandler = (reporter: Writable, delay: number = 500) => {
 
   return {stream}
 }
-
-export default idleHandler
