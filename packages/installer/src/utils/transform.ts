@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra'
 import {parse, print, types} from 'recast'
 import {builders} from 'ast-types/gen/builders'
+import {namedTypes, NamedTypes} from 'ast-types/gen/namedTypes'
 import * as babel from 'recast/parsers/babel'
 import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
 
@@ -22,7 +23,7 @@ export interface TransformResult {
   filename: string
   error?: Error
 }
-export type Transformer = (ast: types.ASTNode, builder: builders) => types.ASTNode
+export type Transformer = (ast: types.ASTNode, builder: builders, types: NamedTypes) => types.ASTNode
 
 export function transform(transformerFn: Transformer, targetFilePaths: string[]): TransformResult[] {
   const results: TransformResult[] = []
@@ -38,7 +39,7 @@ export function transform(transformerFn: Transformer, targetFilePaths: string[])
       const fileBuffer = fs.readFileSync(filePath)
       const fileSource = fileBuffer.toString('utf-8')
       const ast = parse(fileSource, {parser: customTsParser})
-      const transformedCode = print(transformerFn(ast, types.builders)).code
+      const transformedCode = print(transformerFn(ast, types.builders, namedTypes)).code
       fs.writeFileSync(filePath, transformedCode)
       results.push({
         status: TransformStatus.Success,
