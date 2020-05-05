@@ -1,12 +1,12 @@
-import NewCmd from '../../src/commands/new'
-import {getLatestVersion} from '../../src/utils/get-latest-version'
+import {New} from '../../src/commands/new'
+import {getLatestVersion} from '@blitzjs/generator/src/utils/get-latest-version'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as os from 'os'
 import fetch from 'node-fetch'
 import nock from 'nock'
 
-jest.setTimeout(60 * 1000)
+jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require('../../package.json')
 
 async function getBlitzDistTags() {
@@ -16,7 +16,7 @@ async function getBlitzDistTags() {
 
 describe('`new` command', () => {
   describe('when scaffolding new project', () => {
-    jest.setTimeout(60 * 1000)
+    jest.setTimeout(120 * 1000)
 
     async function whileStayingInCWD(task: () => PromiseLike<void>) {
       const oldCWD = process.cwd()
@@ -33,7 +33,7 @@ describe('`new` command', () => {
 
       const tempDir = makeTempDir()
 
-      await whileStayingInCWD(() => NewCmd.run([tempDir, '--skip-install']))
+      await whileStayingInCWD(() => New.run([tempDir, '--skip-install']))
 
       const packageJsonFile = fs.readFileSync(path.join(tempDir, 'package.json'), {
         encoding: 'utf8',

@@ -1,5 +1,7 @@
 /* eslint-disable import/first */
 
+import {join, resolve} from 'path'
+
 const nextUtilsMock = {
   nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
   nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
@@ -20,7 +22,6 @@ jest.doMock('../src/resolve-bin-async', () => ({
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {join, resolve} from 'path'
 import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'
@@ -59,6 +60,8 @@ describe('Dev command', () => {
             rootFolder: '',
             writeManifestFile: false,
             watch: false,
+            port: 3000,
+            hostname: 'localhost',
           })
         } catch (err) {
           expect(err).toBe('pow')
@@ -82,10 +85,17 @@ describe('Dev command', () => {
     })
 
     it('should fail when passed a next.config.js', async () => {
-      debugger
       expect.assertions(2)
       await expect(
-        dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false}),
+        dev({
+          rootFolder,
+          buildFolder,
+          devFolder,
+          writeManifestFile: false,
+          watch: false,
+          port: 3000,
+          hostname: 'localhost',
+        }),
       ).rejects.toThrowError('Blitz does not support')
 
       expect(
@@ -112,7 +122,15 @@ describe('Dev command', () => {
         'dev/one': '',
         'dev/two': '',
       })
-      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+      await dev({
+        rootFolder,
+        buildFolder,
+        devFolder,
+        writeManifestFile: false,
+        watch: false,
+        port: 3000,
+        hostname: 'localhost',
+      })
       const tree = directoryTree(rootFolder)
       expect(tree).toEqual({
         children: [
@@ -135,11 +153,22 @@ describe('Dev command', () => {
         },
         {createCwd: false, createTmp: false},
       )
-      await dev({rootFolder, buildFolder, devFolder, writeManifestFile: false, watch: false})
+      await dev({
+        rootFolder,
+        buildFolder,
+        devFolder,
+        writeManifestFile: false,
+        watch: false,
+        port: 3000,
+        hostname: 'localhost',
+      })
       const nextPatched = resolve(rootFolder, '@blitzjs/server', 'next-patched')
       const blitzDev = join(rootFolder, '.blitz-dev')
+      expect(nextUtilsMock.nextStartDev.mock.calls[0].length).toBe(5)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
       expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][4]).toHaveProperty('port')
+      expect(nextUtilsMock.nextStartDev.mock.calls[0][4]).toHaveProperty('hostname')
     })
   })
 })

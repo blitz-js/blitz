@@ -13,7 +13,7 @@ import {runPrismaGeneration} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
-export default class Console extends Command {
+export class Console extends Command {
   static description = 'Run the Blitz console REPL'
   static aliases = ['c']
 

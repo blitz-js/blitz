@@ -1,13 +1,13 @@
 import * as path from 'path'
 import {flags} from '@oclif/command'
-import Command from '../command'
-import AppGenerator from '../generators/app'
+import {Command} from '../command'
+import {AppGenerator} from '@blitzjs/generator'
 import chalk from 'chalk'
 import hasbin from 'hasbin'
 import {log} from '@blitzjs/server'
 const debug = require('debug')('blitz:new')
 
-import PromptAbortedError from '../errors/prompt-aborted'
+import {PromptAbortedError} from '../errors/prompt-aborted'
 
 export interface Flags {
   ts: boolean
@@ -15,7 +15,7 @@ export interface Flags {
   'skip-install': boolean
 }
 
-export default class New extends Command {
+export class New extends Command {
   static description = 'Create a new Blitz project'
 
   static args = [
@@ -55,7 +55,6 @@ export default class New extends Command {
     const appName = path.basename(destinationRoot)
 
     const generator = new AppGenerator({
-      sourceRoot: path.join(__dirname, '../../templates/app'),
       destinationRoot,
       appName,
       dryRun: flags['dry-run'],

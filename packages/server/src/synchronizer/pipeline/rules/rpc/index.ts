@@ -7,7 +7,7 @@ import {Rule} from '../../../types'
 /**
  * Returns a Rule that manages generating the internal RPC commands and handlers
  */
-const create: Rule = function configure({config: {src}}) {
+export const createRuleRpc: Rule = function configure({config: {src}}) {
   const fileTransformer = absolutePathTransform(src)
 
   const getRpcPath = fileTransformer(rpcPath)
@@ -50,8 +50,6 @@ const create: Rule = function configure({config: {src}}) {
 
   return {stream}
 }
-
-export default create
 
 export function isRpcPath(filePath: string) {
   return new RegExp('(?:app\\/)(?!_rpc).*(?:queries|mutations)\\/.+').exec(filePath)

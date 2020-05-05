@@ -6,7 +6,7 @@ Before getting started, you should know **this is alpha software**. Blitz is inc
 
 If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
-If you’re looking for a slower, more guided start to Blitz, read the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md).
+If you’re looking for a slower, more guided start to Blitz, read the **[Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)**.
 
 <br>
 
@@ -31,7 +31,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Create Your Blitz App
 
 1. `npm install -g blitz` or `yarn global add blitz`
-2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
+2. Run `blitz new myAppName` to create a new TypeScript blitz app in the `myAppName` directory. Alternatively, run `blitz new myAppName --js` to create a JavaScript blitz app
 3. `cd myAppName`
 4. `blitz start`
 5. View your baby app at [http://localhost:3000](http://localhost:3000)
@@ -301,7 +301,11 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 #### `blitz new NAME`
 
-Generate a new blitz project at `<current_folder>./NAME`
+Generate a new TypeScript blitz project at `<current_folder>./NAME`
+
+#### `blitz new NAME --js`
+
+Generate a new JavaScript blitz project at `<current_folder>./NAME`
 
 #### `blitz start`
 
@@ -358,7 +362,6 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
-- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. You can add new files with JS and/or convert the generated files to JS. There's an [open issue for generating vanilla JS files](https://github.com/blitz-js/blitz/issues/160) that needs help.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>

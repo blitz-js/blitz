@@ -416,7 +416,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/31207418?v=4",
       "profile": "https://simonpeterdebbarma.com",
       "contributions": [
-        "review"
+        "review",
+        "doc"
       ]
     },
     {
@@ -424,6 +425,16 @@
       "name": "0xflotus",
       "avatar_url": "https://avatars3.githubusercontent.com/u/26602940?v=4",
       "profile": "https://github.com/0xflotus",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "tmns",
+      "name": "tmns",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/35785003?v=4",
+      "profile": "https://dev.to/tmns",
       "contributions": [
         "code",
         "doc"

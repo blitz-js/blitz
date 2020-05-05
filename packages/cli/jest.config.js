@@ -5,7 +5,6 @@ module.exports = {
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: ['/templates/'],
   modulePathIgnorePatterns: ['<rootDir>/tmp', '<rootDir>/lib'],
   testPathIgnorePatterns: ['src/commands/test.ts'],
   // TODO enable threshold
