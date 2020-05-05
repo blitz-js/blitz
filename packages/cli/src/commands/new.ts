@@ -34,7 +34,7 @@ export class New extends Command {
     }),
     npm: flags.boolean({
       description: 'Use npm as the package manager. Yarn is the default if installed',
-      default: hasbin.sync('yarn'),
+      default: !hasbin.sync('yarn'),
       allowNo: true,
     }),
     'skip-install': flags.boolean({
