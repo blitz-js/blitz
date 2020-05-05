@@ -49,5 +49,8 @@
     "react-query": "1.2.9",
     "serialize-error": "^6.0.0"
   },
+  "devDependencies": {
+    "@rollup/pluginutils": "^3.0.8"
+  },
   "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }
