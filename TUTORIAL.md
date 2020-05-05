@@ -22,7 +22,7 @@ From the command line, `cd` into the directory where you’d like to store your 
 blitz new mysite
 ```
 
-*Note, you can create a JavaScript blitz project instead by running `blitz new mysite --js`; however, this tutorial assumes a TypeScript project.*
+_Note, you can create a JavaScript blitz project instead by running `blitz new mysite --js`; however, this tutorial assumes a TypeScript project._
 
 This should create a `mysite` directory in your current directory.
 
