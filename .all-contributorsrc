@@ -466,6 +466,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "is2ei",
+      "name": "Horie Issei #hashtagtest",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3948353?v=4",
+      "profile": "http://is2ei.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
