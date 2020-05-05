@@ -46,7 +46,7 @@
     "@types/react-query": "^1.1.2",
     "@types/serialize-error": "^4.0.1",
     "pretty-ms": "^6.0.1",
-    "react-query": "^1.2.9",
+    "react-query": "1.2.9",
     "serialize-error": "^6.0.0"
   },
   "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
