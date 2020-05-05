@@ -1,5 +1,5 @@
 {
-  "name": "@example/tailwind",
+  "name": "tailwind",
   "version": "0.8.2",
   "scripts": {
     "build": "blitz db migrate && blitz build",

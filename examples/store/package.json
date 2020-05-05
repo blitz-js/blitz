@@ -1,5 +1,5 @@
 {
-  "name": "@example/store",
+  "name": "store",
   "version": "0.8.2",
   "private": true,
   "scripts": {
