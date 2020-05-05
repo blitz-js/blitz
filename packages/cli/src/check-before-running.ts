@@ -1,11 +1,11 @@
 import {Hook} from '@oclif/config'
 import chalk from 'chalk'
 
-import isBlitzRoot, {IsBlitzRootError} from './utils/is-blitz-root'
+import {isBlitzRoot, IsBlitzRootError} from './utils/is-blitz-root'
 
 const whitelistGlobal = ['new']
 
-const hook: Hook<'init'> = async function (options) {
+export const hook: Hook<'init'> = async function (options) {
   // Bug with oclif
   const id = (options as any).Command.id
   if (id && whitelistGlobal.includes(id)) return
@@ -15,12 +15,11 @@ const hook: Hook<'init'> = async function (options) {
   if (err) {
     switch (message) {
       case IsBlitzRootError.NotBlitz:
-        this.log(
+        return this.error(
           `You are not inside a Blitz project, so this command won't work.\nYou can create a new app with ${chalk.bold(
             'blitz new myapp',
-          )} or see help with ${chalk.bold('')}`,
+          )} or see help with ${chalk.bold('blitz help')}`,
         )
-        return this.error('Not in correct folder')
       case IsBlitzRootError.NotRoot:
         const help = depth
           ? `\nUse ${chalk.bold('cd ' + '../'.repeat(depth))} to get to the root of your project`
@@ -36,5 +35,3 @@ const hook: Hook<'init'> = async function (options) {
     }
   }
 }
-
-export default hook

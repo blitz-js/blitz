@@ -31,7 +31,7 @@ const checkParent = async (): Promise<false | number> => {
  * badPackageJson -> an error occurred while reading local package.json
  */
 
-const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError; depth?: number}> => {
+export const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError; depth?: number}> => {
   try {
     const local = await readJSON('./package.json')
     if (local) {
@@ -66,5 +66,3 @@ const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError;
   }
   return {err: true}
 }
-
-export default isBlitzRoot

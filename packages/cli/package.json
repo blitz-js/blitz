@@ -63,7 +63,7 @@
     ],
     "hooks": {
       "prerun": [
-        "./src/checkBeforeRunning"
+        "./src/check-before-running"
       ]
     }
   },
