@@ -5,15 +5,15 @@
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "files": [
-    "dist",
-    "register"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf dist",
     "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
-    "dev": "tsdx watch --verbose",
+    "dev": "run-p watch build:templates",
+    "watch": "tsdx watch --verbose",
     "build": "tsdx build && yarn build:templates",
-    "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
+    "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "test:watch": "tsdx test --watch"
