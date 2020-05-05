@@ -32,8 +32,9 @@ export async function addDependencyExecutor(executor: AddDependencyExecutor, cli
   const packagesToInstall = getExecutorArgument(executor.packages, cliArgs)
   for (const pkg of packagesToInstall) {
     const args: string[] = ['add']
-    // if devDep flag isn't specified we install as a devDep
-    if (pkg.isDevDep !== false) {
+    // if devDep flag isn't specified we install as a regular dependency, so
+    // we need to explicitly check for `true`
+    if (pkg.isDevDep === true) {
       args.push(packageManager === 'yarn' ? '-D' : '--save-dev')
     }
     pkg.version ? args.push(`${pkg.name}@${pkg.version}`) : args.push(pkg.name)
