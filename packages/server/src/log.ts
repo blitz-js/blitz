@@ -17,7 +17,7 @@ const withWarning = (str: string) => {
 }
 
 const withPointing = (str: string) => {
-  return `👉 ${chalk.yellow(str)}`
+  return `${chalk.yellow('👉')} ${str}`
 }
 
 const withCaret = (str: string) => {
@@ -60,14 +60,7 @@ const clearLine = (msg?: string) => {
 const warning = (msg: string) => {
   console.log(withCaret(withWarning(msg)))
 }
-/**
- * Logs a red error message to stderr.
- *
- * @param {string} msg
- */
-const pointing = (msg: string) => {
-  console.log(withPointing(msg))
-}
+
 /**
  * Logs a red error message to stderr.
  *
@@ -139,6 +132,6 @@ export const log = {
   spinner,
   success,
   variable,
-  pointing,
+  withPointing,
 
 }
