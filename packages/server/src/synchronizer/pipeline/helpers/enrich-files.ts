@@ -7,7 +7,7 @@ import crypto from 'crypto'
  * This is used by the work optimizer and elsewhere to manage the
  * way files are handled and optimized
  */
-export default () => {
+export function createEnrichFiles() {
   const stream = through({objectMode: true}, (file, _, next) => {
     // Don't send directories
     if (file.isDirectory()) {

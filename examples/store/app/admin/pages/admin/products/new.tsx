@@ -1,7 +1,7 @@
 import {Link, useRouter} from 'blitz'
 import ProductForm from 'app/products/components/ProductForm'
 
-export default function () {
+function AdminNewProductPage() {
   const router = useRouter()
   return (
     <div>
@@ -17,3 +17,5 @@ export default function () {
     </div>
   )
 }
+
+export default AdminNewProductPage

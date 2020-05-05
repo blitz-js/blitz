@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.7.0",
+  "version": "0.8.2",
   "license": "MIT",
   "scripts": {
     "dev": "tsdx watch --verbose",
@@ -46,8 +46,8 @@
     "@types/react-query": "^1.1.2",
     "@types/serialize-error": "^4.0.1",
     "pretty-ms": "^6.0.1",
-    "react-query": "^1.2.9",
+    "react-query": "1.2.9",
     "serialize-error": "^6.0.0"
   },
-  "gitHead": "6719104cb3e78948e7f06aa948ff72bbb84cb682"
+  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }

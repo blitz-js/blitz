@@ -13,7 +13,7 @@ import {runPrismaGeneration} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
-export default class Console extends Command {
+export class Console extends Command {
   static description = 'Run the Blitz console REPL'
   static aliases = ['c']
 
@@ -43,8 +43,10 @@ export default class Console extends Command {
       chalk.yellow('      - Top level `await` support coming: https://github.com/blitz-js/blitz/issues/230'),
     )
 
+    const spinner = log.spinner('Loading your code').start()
     setupTsnode()
     await runPrismaGeneration({silent: true})
+    spinner.succeed()
 
     const repl = Console.initializeRepl()
 

@@ -1,38 +1,47 @@
 import {relativeToAbsolute, replaceRelativeImports} from './index'
-import {normalize} from 'path'
+
+// I don't like this one bit, but Node's path module behaves so differently
+// based on the runtime platform that it's just easier to test paths as they
+// would be on the platform currently executing the test suite. Tests should
+// be run on both platforms, so both test paths will be executed - just not
+// during the same run.
+const platformSensitiveAbsolutePath = (p: string) =>
+  process.platform === 'win32' ? 'C:' + p.split('/').join('\\') : p
 
 describe('relativeToAbsolute', () => {
   const tests = [
     {
       name: 'Provides an absolute path within app',
       input: {
-        relativeImport: normalize('../components/three'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: '../components/three',
+        filename: platformSensitiveAbsolutePath('/projects/blitz/blitz/app/users/pages.ts'),
+        cwd: platformSensitiveAbsolutePath('/projects/blitz/blitz'),
       },
-      expected: normalize('app/components/three'),
+      expected: 'app/components/three',
     },
     {
       name: 'Works outside app',
       input: {
-        relativeImport: normalize('../../extras/foo'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: '../../extras/foo',
+        filename: platformSensitiveAbsolutePath('/projects/blitz/blitz/app/users/pages.ts'),
+        cwd: platformSensitiveAbsolutePath('/projects/blitz/blitz'),
       },
-      expected: normalize('extras/foo'),
+      expected: 'extras/foo',
     },
     {
       name: 'Leaves absolute paths alone',
       input: {
-        relativeImport: normalize('app/one/two'),
-        filename: normalize('/projects/blitz/blitz/app/users/pages.ts'),
+        relativeImport: 'app/one/two',
+        filename: platformSensitiveAbsolutePath('/projects/blitz/blitz/app/users/pages.ts'),
+        cwd: platformSensitiveAbsolutePath('/projects/blitz/blitz'),
       },
-      expected: normalize('app/one/two'),
+      expected: 'app/one/two',
     },
   ]
-  tests.forEach(({name, input: {filename, relativeImport}, expected}) => {
+
+  tests.forEach(({name, input: {cwd, filename, relativeImport}, expected}) => {
     it(name, () => {
-      expect(relativeToAbsolute(normalize('/projects/blitz/blitz'), filename)(relativeImport)).toEqual(
-        expected,
-      )
+      expect(relativeToAbsolute(cwd, filename)(relativeImport)).toEqual(expected)
     })
   })
 })

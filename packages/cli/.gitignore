@@ -11,5 +11,3 @@ tmp
 
 # good directory to use for testing app generation
 _app
-
-!templates/**/.env

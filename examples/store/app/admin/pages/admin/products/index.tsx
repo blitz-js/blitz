@@ -3,7 +3,7 @@ import {useQuery, Link} from 'blitz'
 import getProducts from 'app/products/queries/getProducts'
 
 function ProductsList() {
-  const [products] = useQuery(getProducts)
+  const [products] = useQuery(getProducts, {orderBy: {id: 'desc'}})
 
   return (
     <ul>
@@ -18,7 +18,7 @@ function ProductsList() {
   )
 }
 
-export default function () {
+function AdminProducts() {
   return (
     <div>
       <h1>Products</h1>
@@ -38,3 +38,5 @@ export default function () {
     </div>
   )
 }
+
+export default AdminProducts

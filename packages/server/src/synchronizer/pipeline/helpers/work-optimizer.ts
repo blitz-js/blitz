@@ -9,7 +9,7 @@ import File from 'vinyl'
  */
 // TODO:  This needs quite a bit of work before we can manage a dirty start
 //        Currently this does not do much aside from guard against repeated work
-export default () => {
+export function createWorkOptimizer() {
   const todo: Array<string> = []
   const done: Array<string> = []
 

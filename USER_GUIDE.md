@@ -6,6 +6,8 @@ Before getting started, you should know **this is alpha software**. Blitz is inc
 
 If you have any issues at all, please [open an issue](https://github.com/blitz-js/blitz/issues/new/choose) or join the [Blitz slack](https://slack.blitzjs.com) and talk to us in the **#help** channel. If you get stuck and frustrated, please don't blame yourself. This user guide, and Blitz in general, is not yet fine-tuned for those with less experience. But eventually, it will be because this is very important to us.
 
+If you’re looking for a slower, more guided start to Blitz, read the **[Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)**.
+
 <br>
 
 ## Introduction
@@ -29,7 +31,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Create Your Blitz App
 
 1. `npm install -g blitz` or `yarn global add blitz`
-2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
+2. Run `blitz new myAppName` to create a new TypeScript blitz app in the `myAppName` directory. Alternatively, run `blitz new myAppName --js` to create a JavaScript blitz app
 3. `cd myAppName`
 4. `blitz start`
 5. View your baby app at [http://localhost:3000](http://localhost:3000)
@@ -148,7 +150,7 @@ function Product() {
   return <div>{product.name}</div>
 }
 
-export default function () {
+function WrappedProduct() {
   return (
     <div>
       <ErrorBoundary fallback={(error) => <div>Error: {JSON.stringify(error)}</div>}>
@@ -159,6 +161,8 @@ export default function () {
     </div>
   )
 }
+
+export default WrappedProduct
 ```
 
 #### On the Server
@@ -173,9 +177,11 @@ export const getStaticProps = async (context) => {
   return {props: {product}}
 }
 
-export default function ({product}) {
+function ProductPage({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 In `getServerSideProps`, pass a query function to `ssrQuery` which will ensure appropriate middleware is run before/after your query function.
@@ -189,9 +195,11 @@ export const getServerSideProps = async ({params, req, res}) => {
   return {props: {product}}
 }
 
-export default function({product}) {
+function ProductPage ({product}) {
   return <div>{product.name}</div>
 }
+
+export default ProductPage
 ```
 
 For more details, read the comprehensive [Query & Mutation Usage Issue](https://github.com/blitz-js/blitz/issues/89)
@@ -251,7 +259,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
 2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
-   1. [Read the Digitial Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
+   1. [Read the Digital Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
@@ -259,7 +267,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 #### Serverless
 
-Assuming you already have a Zeit account and the `now` cli installed, you can do the following:
+Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
 
 1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
 2. Add a `now.json` at your project root with
@@ -293,7 +301,11 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 #### `blitz new NAME`
 
-Generate a new blitz project at `<current_folder>./NAME`
+Generate a new TypeScript blitz project at `<current_folder>./NAME`
+
+#### `blitz new NAME --js`
+
+Generate a new JavaScript blitz project at `<current_folder>./NAME`
 
 #### `blitz start`
 
@@ -350,7 +362,6 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
-- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. You can add new files with JS and/or convert the generated files to JS. There's an [open issue for generating vanilla JS files](https://github.com/blitz-js/blitz/issues/160) that needs help.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>

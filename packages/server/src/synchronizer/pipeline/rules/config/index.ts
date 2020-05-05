@@ -10,7 +10,7 @@ const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
 /**
  * Returns a Rule that manages converting from blitz.config.js to next.config.js
  */
-const create: Rule = ({config, input}) => {
+export const createRuleConfig: Rule = ({config, input}) => {
   // Preconditions
   const hasNextConfig = pathExistsSync(resolve(config.src, 'next.config.js'))
   const hasBlitzConfig = pathExistsSync(resolve(config.src, 'blitz.config.js'))
@@ -52,25 +52,25 @@ module.exports = withBlitz(config);
   // No need to filter yet
   const stream = through({objectMode: true}, (file: File, _, next) => {
     if (!isNextConfigPath(file.path)) return next(null, file)
-    // Zeit now adds configuration needed for Now, like serverless target,
+    // Vercel now adds configuration needed for Now, like serverless target,
     // so we need to keep and use that
     if (isNowBuild()) {
       // Assume we have a next.config.js if NOW_BUILDER is true as the cli creates one
 
-      // Divert next.config to next-zeit.config.js
+      // Divert next.config to next-vercel.config.js
       input.write(
         new File({
           cwd: config.src,
-          path: resolve(config.src, 'next-zeit.config.js'),
+          path: resolve(config.src, 'next-vercel.config.js'),
           contents: file.contents,
         }),
       )
 
       file.contents = Buffer.from(`
 const {withBlitz} = require('@blitzjs/server');
-const zeitConfig = require('./next-zeit.config.js');
+const vercelConfig = require('./next-vercel.config.js');
 const config = require('./blitz.config.js');
-module.exports = withBlitz({...config, ...zeitConfig});
+module.exports = withBlitz({...config, ...vercelConfig});
       `)
     }
 
@@ -79,4 +79,3 @@ module.exports = withBlitz({...config, ...zeitConfig});
 
   return {stream}
 }
-export default create

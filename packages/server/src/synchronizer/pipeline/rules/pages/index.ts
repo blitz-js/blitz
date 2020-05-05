@@ -9,7 +9,7 @@ import {DuplicatePathError, NestedRouteError} from '../../../errors'
  * Returns a Rule to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
+export const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   const {src} = config
 
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
@@ -52,7 +52,9 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
           ? 'Warning: You have tried to put an api route inside a pages directory:'
           : 'Warning: You have tried to put api routes inside a pages directory:'
 
-      const secondary = 'All api routes should be in their own directory.'
+      const secondary = `API routes should be in their own 'api/' folder as a sibling of 'pages/':
+- Examples: app/api/, app/products/api/
+`
 
       const err = new NestedRouteError(message, secondary, nestedApiRoutes)
 
@@ -68,15 +70,13 @@ const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
   return {stream}
 }
 
-export default createRulePages
-
 export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(pages[\\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+)$/
   return (regex.exec(path) || [])[1] || path
 }
 
 export function apiPathTransformer(path: string) {
-  const regex = /(?:[\\\/]?app[\\\/].*?[\\\/]?)(api[\\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
   const matchedPath = (regex.exec(path) || [])[1]
 
   return matchedPath ? join('pages', matchedPath) : path
