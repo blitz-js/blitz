@@ -65,6 +65,14 @@ const warning = (msg: string) => {
  *
  * @param {string} msg
  */
+const pointing = (msg: string) => {
+  console.log(withPointing(msg))
+}
+/**
+ * Logs a red error message to stderr.
+ *
+ * @param {string} msg
+ */
 const error = (msg: string) => {
   console.error(withX(chalk.red.bold(msg)))
 }
@@ -131,6 +139,6 @@ export const log = {
   spinner,
   success,
   variable,
-  withPointing,
+  pointing,
 
 }
