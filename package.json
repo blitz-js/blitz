@@ -29,7 +29,7 @@
     "publish-prep": "yarn run reset && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
-    "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary && release --pre",
+    "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
