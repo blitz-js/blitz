@@ -6,8 +6,8 @@
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production",
-    "test": "start-server-and-test test:start http://localhost:3000 cy:run"
+    "test:start": "blitz db migrate && blitz start --production -p 3099",
+    "test": "start-server-and-test test:start http://localhost:3099 cy:run"
   },
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.3",
