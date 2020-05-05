@@ -60,7 +60,12 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
+    ],
+    "hooks": {
+      "prerun": [
+        "./src/check-before-running"
+      ]
+    }
   },
   "keywords": [
     "blitz",
