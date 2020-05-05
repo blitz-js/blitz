@@ -222,7 +222,7 @@ Let’s create some more pages. Blitz provides a handy utility for scaffolding o
 $ blitz generate all question
 ```
 
-Great! Before running the app again, we need to customise some of these pages which have just been generated. Open your text editor and look at `app/questions/pages/index.tsx`. Notice that a `QuestionsList` component has been generated for you:
+Great! Before running the app again, we need to customise some of these pages which have just been generated. Open your text editor and look at `app/questions/pages/questions/index.tsx`. Notice that a `QuestionsList` component has been generated for you:
 
 ```jsx
 export const QuestionsList = () => {
