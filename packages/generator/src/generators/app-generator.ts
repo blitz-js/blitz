@@ -23,7 +23,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!this.options.useTs) {
       return ['tsconfig.json']
     }
-    return []
+    return ['jsconfig.json']
   }
 
   async getTemplateValues() {
