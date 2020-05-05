@@ -24,7 +24,7 @@
     "build": "lerna run build --no-private --stream",
     "lint": "lerna run lint --stream --parallel",
     "test": "yarn run lint && yarn run build && yarn run testonly",
-    "testonly": "lerna run test --stream",
+    "testonly": "lerna run test --stream --no-private && lerna run test --stream --scope @example/*",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
     "publish-prep": "yarn run reset && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
