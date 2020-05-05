@@ -4,7 +4,8 @@
   "version": "0.8.2",
   "license": "MIT",
   "scripts": {
-    "predev": "wait-on -d 500 ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
+    "clean": "rimraf dist",
+    "predev": "wait-on ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
     "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js",
     "lint": "tsdx lint"
