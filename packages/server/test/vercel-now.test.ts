@@ -38,7 +38,14 @@ describe('Build command Vercel', () => {
       'next.config.js': 'module.exports = {target: "experimental-serverless-trace"}',
     })
     jest.clearAllMocks()
-    await build({rootFolder, buildFolder, devFolder, writeManifestFile: false})
+    await build({
+      rootFolder,
+      buildFolder,
+      devFolder,
+      writeManifestFile: false,
+      port: 3000,
+      hostname: 'localhost',
+    })
   })
 
   afterEach(() => {

@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
-    "predev": "wait-on -d 500 ../server/dist/packages/server/src/index.d.ts",
+    "clean": "rimraf lib",
+    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts && wait-on ../generator/dist/packages/generator/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "lint": "tsdx lint",
@@ -43,7 +44,8 @@
     "minimist": "^1.2.5",
     "pkg-dir": "^4.2.0",
     "pluralize": "^8.0.0",
-    "ts-node": "^8.9.0"
+    "ts-node": "^8.9.0",
+    "tsconfig-paths": "3.9.0"
   },
   "devDependencies": {
     "@blitzjs/generator": "0.8.2",
@@ -51,6 +53,7 @@
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
+    "@rollup/pluginutils": "^3.0.8",
     "@types/pluralize": "^0.0.29",
     "nock": "13.0.0-beta.3"
   },
@@ -60,7 +63,12 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
+    ],
+    "hooks": {
+      "prerun": [
+        "./src/check-before-running"
+      ]
+    }
   },
   "keywords": [
     "blitz",

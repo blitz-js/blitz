@@ -4,6 +4,7 @@
   "version": "0.8.2",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf dist",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
@@ -46,8 +47,11 @@
     "@types/react-query": "^1.1.2",
     "@types/serialize-error": "^4.0.1",
     "pretty-ms": "^6.0.1",
-    "react-query": "^1.2.9",
+    "react-query": "1.2.9",
     "serialize-error": "^6.0.0"
+  },
+  "devDependencies": {
+    "@rollup/pluginutils": "^3.0.8"
   },
   "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }
