@@ -17,7 +17,7 @@ const withWarning = (str: string) => {
 }
 
 const withPointing = (str: string) => {
-  return `${chalk.yellow('👉')} ${str}`
+  return `👉  ${chalk.yellow(str)}`
 }
 
 const withCaret = (str: string) => {
