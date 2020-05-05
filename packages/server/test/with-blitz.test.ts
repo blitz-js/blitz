@@ -8,7 +8,10 @@ describe('withBlitz', () => {
     const newNextWithoutWebpack = Object.assign({}, newNext, {webpack: null})
 
     expect(newNextWithoutWebpack).toStrictEqual({
-      experimental: {reactMode: 'concurrent'},
+      experimental: {
+        reactMode: 'concurrent',
+        reactRefresh: true,
+      },
       webpack: null,
     })
   })
