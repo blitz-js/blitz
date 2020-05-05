@@ -9,6 +9,7 @@
     "register"
   ],
   "scripts": {
+    "predev": "wait-on -d 500 ../server/dist/packages/server/src/index.d.ts",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build && yarn build:templates",
     "build:templates": "rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
