@@ -28,8 +28,6 @@ async function getPackageManager(): Promise<'yarn' | 'npm'> {
 }
 
 export async function addDependencyExecutor(executor: AddDependencyExecutor, cliArgs: any): Promise<void> {
-  log.branded(`[Add Dependency Step] ${executor.stepName}`)
-  log.info(executor.explanation)
   const packageManager = await getPackageManager()
   const packagesToInstall = getExecutorArgument(executor.packages, cliArgs)
   for (const pkg of packagesToInstall) {
@@ -44,5 +42,5 @@ export async function addDependencyExecutor(executor: AddDependencyExecutor, cli
       stdio: ['inherit', 'pipe', 'pipe'],
     })
   }
-  log.success('Dependency addition complete')
+  log.progress(`${packagesToInstall.length} packages installed successfully`)
 }

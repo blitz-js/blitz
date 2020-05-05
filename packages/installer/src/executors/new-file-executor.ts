@@ -4,9 +4,9 @@ import {log} from '@blitzjs/server/src/log'
 import {waitForConfirmation} from '../utils/wait-for-confirmation'
 
 export interface NewFileExecutor extends BaseExecutor {
+  targetDirectory?: executorArgument<string>
   templatePath: executorArgument<string>
   templateValues: executorArgument<{[key: string]: string}>
-  destinationRoot?: executorArgument<string>
   destinationPathPrompt?: executorArgument<string>
 }
 
@@ -15,31 +15,36 @@ export function isNewFileExecutor(executor: BaseExecutor): executor is NewFileEx
 }
 
 interface TempGeneratorOptions extends GeneratorOptions {
+  targetDirectory?: string
   templateRoot: string
   templateValues: any
 }
 
 class TempGenerator extends Generator<TempGeneratorOptions> {
   sourceRoot: string
+  targetDirectory: string
   templateValues: any
 
   constructor(options: TempGeneratorOptions) {
     super(options)
     this.sourceRoot = options.templateRoot
     this.templateValues = options.templateValues
+    this.targetDirectory = options.targetDirectory || '.'
   }
 
   getTemplateValues() {
     return this.templateValues
   }
+
+  getTargetDirectory() {
+    return this.targetDirectory
+  }
 }
 
 export async function newFileExecutor(executor: NewFileExecutor, cliArgs: any): Promise<void> {
-  log.branded(`[Create Files Step] ${executor.stepName}`)
-  log.info(executor.explanation)
   const generatorArgs = {
     destinationRoot: '.',
-    fileContext: getExecutorArgument(executor.destinationRoot, cliArgs) || '',
+    targetDirectory: getExecutorArgument(executor.targetDirectory, cliArgs),
     templateRoot: getExecutorArgument(executor.templatePath, cliArgs),
     templateValues: getExecutorArgument(executor.templateValues, cliArgs),
   }
@@ -50,6 +55,6 @@ export async function newFileExecutor(executor: NewFileExecutor, cliArgs: any): 
   const commitGenerator = new TempGenerator(generatorArgs)
   log.progress("First we'll do a dry-run. Here's a list of files that would be created:")
   await dryRunGenerator.run()
-  await waitForConfirmation('To commit the changes, press any key to confirm. Press Ctrl+C to abort')
+  await waitForConfirmation('To commit the changes, press enter. Press Ctrl+C to abort')
   await commitGenerator.run()
 }
