@@ -73,7 +73,7 @@
     "jest": "24.9.0",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
-    "next": "^9.3.7",
+    "next": "9.3.7-canary.10",
     "npm-run-all": "^4.1.5",
     "patch-package": "^6.2.2",
     "postinstall-postinstall": "^2.1.0",
