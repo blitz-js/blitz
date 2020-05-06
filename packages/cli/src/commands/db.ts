@@ -8,7 +8,6 @@ import * as path from 'path'
 import {promisify} from 'util'
 import {projectRoot} from '../utils/get-project-root'
 
-
 const schemaPath = path.join(process.cwd(), 'db', 'schema.prisma')
 const schemaArg = `--schema=${schemaPath}`
 const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
@@ -124,9 +123,7 @@ export function getDbName(connectionString: string): string {
 
 export default class Db extends Command {
   static description = `Run database
-
-${chalk.bold(log.withPointing('migrate'))}   Run any needed migrations via Prisma 2 and generate Prisma Client.
-
+${chalk.bold(log.withPointing('migrate'),)}   Run any needed migrations via Prisma 2 and generate Prisma Client.
 ${chalk.bold(
   log.withPointing('introspect',
 ))}   Will introspect the database defined in db/schema.prisma and automatically \ngenerate a complete schema.prisma file for you. Lastly, it\'ll generate Prisma Client.
