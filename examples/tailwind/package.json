@@ -10,8 +10,8 @@
     "defaults"
   ],
   "prettier": {
-    "semi": false,
-    "printWidth": 110
+    "editorconfig": true,
+    "semi": false
   },
   "husky": {
     "hooks": {
