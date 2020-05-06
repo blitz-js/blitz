@@ -1,12 +1,13 @@
 import {ASTNode} from 'ast-types'
 import {NamedTypes} from 'ast-types/gen/namedTypes'
 import {builders} from 'ast-types/gen/builders'
+import {types} from 'recast'
 
 export function addImport(
   ast: ASTNode,
   __b: builders,
   t: NamedTypes,
-  importToAdd: NamedTypes['ImportDeclaration'],
+  importToAdd: types.namedTypes.ImportDeclaration,
 ) {
   if (!t.File.check(ast) || !t.ImportDeclaration.check(importToAdd)) return
   const statements = ast.program.body

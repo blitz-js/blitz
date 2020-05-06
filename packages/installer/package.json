@@ -5,6 +5,7 @@
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
+    "predev": "wait-on ../generator/dist/packages/generator/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",

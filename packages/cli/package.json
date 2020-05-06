@@ -6,7 +6,7 @@
   "scripts": {
     "b": "./bin/run",
     "clean": "rimraf lib",
-    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts && wait-on ../generator/dist/packages/generator/src/index.d.ts",
+    "predev": "wait-on ../installer/dist/packages/installer/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts && wait-on ../generator/dist/packages/generator/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "lint": "tsdx lint",
