@@ -10,6 +10,7 @@ import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
 import {ConflictChecker} from './conflict-checker'
+import prettier from 'prettier'
 
 export interface GeneratorOptions {
   destinationRoot?: string
@@ -20,6 +21,7 @@ export interface GeneratorOptions {
 const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
+const prettierExtensions = /\.(tsx?|jsx?)$/
 
 /**
  * The base generator class.
@@ -91,6 +93,10 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
+    const prettierConfig = (await prettier.resolveConfig(this.sourcePath())) || {
+      semi: false,
+      printWidth: 110,
+    }
 
     for (let filePath of paths) {
       try {
@@ -99,7 +105,16 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) => this.process(input, pathSuffix, templateValues),
+          process: (input) => {
+            let formattedData = this.process(input, pathSuffix, templateValues)
+
+            if (prettierExtensions.test(pathSuffix) && typeof formattedData === 'string') {
+              log.progress(`Formatting file ${pathSuffix}`)
+              formattedData = prettier.format(formattedData, prettierConfig)
+            }
+
+            return formattedData
+          },
         })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {

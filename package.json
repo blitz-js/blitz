@@ -54,6 +54,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/parallel-transform": "^1.1.0",
     "@types/path-is-absolute": "^1.0.0",
+    "@types/prettier": "^2.0.0",
     "@types/pump": "^1.1.0",
     "@types/pumpify": "^1.4.1",
     "@types/react": "^16.9.34",
