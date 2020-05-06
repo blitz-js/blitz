@@ -63,6 +63,7 @@
     "@types/vinyl-fs": "^2.4.11",
     "@wessberg/cjs-to-esm-transformer": "^0.0.19",
     "@wessberg/rollup-plugin-ts": "^1.2.24",
+    "all-contributors-cli": "^6.14.2",
     "cpy-cli": "^3.1.0",
     "cross-env": "^7.0.0",
     "debug": "^4.1.1",
