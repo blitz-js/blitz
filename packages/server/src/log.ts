@@ -133,5 +133,4 @@ export const log = {
   success,
   variable,
   withPointing,
-
 }
