@@ -64,7 +64,15 @@ export class Console extends Command {
     const repl = REPL.start(Console.replOptions)
     Console.defineCommands(repl, Console.commands)
     Console.loadModules(repl)
-    repl.setupHistory(path.join(projectRoot, '.blitz-console-history'), () => {})
+
+    function setupHistoryIfAvailable(repl: any) {
+      if (repl.setupHistory) {
+        repl.setupHistory(path.join(projectRoot, '.blitz-console-history'), () => {})
+      }
+    }
+
+    setupHistoryIfAvailable(repl)
+
     return repl
   }
 
