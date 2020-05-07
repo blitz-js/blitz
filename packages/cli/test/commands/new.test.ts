@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as os from 'os'
 import fetch from 'node-fetch'
 import nock from 'nock'
-import rimfraf from 'rimraf'
+import rimraf from 'rimraf'
 
 jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require('../../package.json')
@@ -44,7 +44,7 @@ describe('`new` command', () => {
 
       await test(tempDir, packageJson)
 
-      rimfraf.sync(tempDir)
+      rimraf.sync(tempDir)
     }
 
     it('pins Blitz to the current version', async () =>
