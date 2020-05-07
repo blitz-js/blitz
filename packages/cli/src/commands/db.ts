@@ -139,12 +139,12 @@ ${chalk.bold(log.withPointing('reset'))}   Reset the database and run a fresh mi
       description: Db.description,
       required: true,
     },
-    ]
+      ]
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
-
+  
   async run() {
     const {args} = this.parse(Db)
     const command = args['command']
