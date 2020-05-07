@@ -1,10 +1,11 @@
 {
   "name": "blitz",
   "description": "Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "license": "MIT",
   "scripts": {
-    "predev": "wait-on -d 500 ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
+    "clean": "rimraf dist",
+    "predev": "wait-on ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts && wait-on ../generator/dist/packages/generator/src/index.d.ts && wait-on ../cli/lib/src/index.js",
     "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js",
     "lint": "tsdx lint"
@@ -39,10 +40,10 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.8.2",
-    "@blitzjs/core": "0.8.2",
-    "@blitzjs/generator": "0.8.2",
-    "@blitzjs/server": "0.8.2",
+    "@blitzjs/cli": "0.9.0",
+    "@blitzjs/core": "0.9.0",
+    "@blitzjs/generator": "0.9.0",
+    "@blitzjs/server": "0.9.0",
     "os-name": "^3.1.0",
     "pkg-dir": "^4.2.0",
     "resolve-from": "^5.0.0",

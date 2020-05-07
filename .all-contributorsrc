@@ -57,7 +57,8 @@
         "code",
         "ideas",
         "review",
-        "test"
+        "test",
+        "maintenance"
       ]
     },
     {
@@ -67,7 +68,8 @@
       "profile": "https://corey-brown.com",
       "contributions": [
         "code",
-        "review"
+        "review",
+        "maintenance"
       ]
     },
     {
@@ -77,7 +79,8 @@
       "profile": "https://github.com/LoriKarikari",
       "contributions": [
         "code",
-        "review"
+        "review",
+        "maintenance"
       ]
     },
     {
@@ -87,7 +90,8 @@
       "profile": "https://twitter.com/GeggsElias",
       "contributions": [
         "code",
-        "review"
+        "review",
+        "maintenance"
       ]
     },
     {
@@ -107,6 +111,17 @@
       "profile": "http://www.geistinteractive.com",
       "contributions": [
         "financial"
+      ]
+    },
+    {
+      "login": "robdrosenberg",
+      "name": "Robert Rosenberg",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20813991?v=4",
+      "profile": "http://robdrosenberg.com",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc"
       ]
     },
     {
@@ -160,7 +175,9 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/2754163?v=4",
       "profile": "http://jeremyliberman.com/",
       "contributions": [
-        "code"
+        "code",
+        "maintenance",
+        "test"
       ]
     },
     {
@@ -337,13 +354,25 @@
       ]
     },
     {
+      "login": "skn0tt",
+      "name": "Simon Knott",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/14912729?v=4",
+      "profile": "http://simonknott.de",
+      "contributions": [
+        "code",
+        "test",
+        "maintenance"
+      ]
+    },
+    {
       "login": "kandros",
       "name": "Jaga Santagostino",
       "avatar_url": "https://avatars0.githubusercontent.com/u/4562878?v=4",
       "profile": "http://jagascript.com",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "maintenance"
       ]
     },
     {
@@ -411,12 +440,13 @@
       ]
     },
     {
-      "login": "simonpeterdebbarma",
+      "login": "0ww",
       "name": "Simon Debbarma",
       "avatar_url": "https://avatars3.githubusercontent.com/u/31207418?v=4",
       "profile": "https://simonpeterdebbarma.com",
       "contributions": [
-        "review",
+        "design",
+        "maintenance",
         "doc"
       ]
     },
@@ -438,6 +468,42 @@
       "contributions": [
         "code",
         "doc"
+      ]
+    },
+    {
+      "login": "harris1717",
+      "name": "Jru Harris",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8636691?v=4",
+      "profile": "http://jruharris.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ivandevp",
+      "name": "Ivan Medina",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9284690?v=4",
+      "profile": "https://twitter.com/ivandevp",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dwightwatson",
+      "name": "Dwight Watson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1100408?v=4",
+      "profile": "https://www.dwightwatson.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "is2ei",
+      "name": "Horie Issei #hashtagtest",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3948353?v=4",
+      "profile": "http://is2ei.com/",
+      "contributions": [
+        "code"
       ]
     }
   ],

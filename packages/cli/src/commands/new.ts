@@ -32,9 +32,9 @@ export class New extends Command {
       description: 'Generates a JS project. TypeScript is the default unless you add this flag.',
       default: false,
     }),
-    yarn: flags.boolean({
-      description: 'use Yarn as the package manager',
-      default: hasbin.sync('yarn'),
+    npm: flags.boolean({
+      description: 'Use npm as the package manager. Yarn is the default if installed',
+      default: !hasbin.sync('yarn'),
       allowNo: true,
     }),
     'skip-install': flags.boolean({
@@ -59,7 +59,7 @@ export class New extends Command {
       appName,
       dryRun: flags['dry-run'],
       useTs: !flags.js,
-      yarn: flags.yarn,
+      yarn: !flags.npm,
       version: this.config.version,
       skipInstall: flags['skip-install'],
     })
