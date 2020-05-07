@@ -73,17 +73,26 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     return result
   }
 
-  process(input: Buffer, pathEnding: string, templateValues: any): string | Buffer {
+  process(
+    input: Buffer,
+    pathEnding: string,
+    templateValues: any,
+    prettierOptions: prettier.Options,
+  ): string | Buffer {
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
     }
-    const templatedFile = this.replaceTemplateValues(input, templateValues)
+    let templatedFile = this.replaceTemplateValues(input, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
         babel.transform(templatedFile, {
           plugins: [[babelTransformTypescript, {isTSX: true}]],
         })?.code || ''
       )
+    }
+
+    if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string') {
+      templatedFile = prettier.format(templatedFile, prettierOptions)
     }
     return templatedFile
   }
@@ -93,7 +102,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-    const prettierConfig = (await prettier.resolveConfig(this.sourcePath())) || {
+    const prettierOptions = (await prettier.resolveConfig(this.sourcePath())) || {
       semi: false,
       printWidth: 110,
     }
@@ -105,16 +114,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) => {
-            let formattedData = this.process(input, pathSuffix, templateValues)
-
-            if (prettierExtensions.test(pathSuffix) && typeof formattedData === 'string') {
-              log.progress(`Formatting file ${pathSuffix}`)
-              formattedData = prettier.format(formattedData, prettierConfig)
-            }
-
-            return formattedData
-          },
+          process: (input) => this.process(input, pathSuffix, templateValues, prettierOptions),
         })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
