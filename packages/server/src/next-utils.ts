@@ -2,7 +2,7 @@ import {spawn} from 'cross-spawn'
 import detect from 'detect-port'
 import {Manifest} from './synchronizer/pipeline/rules/manifest'
 import {through} from './synchronizer/streams'
-import {ServerConfig} from 'config'
+import {ServerConfig} from './config'
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {
