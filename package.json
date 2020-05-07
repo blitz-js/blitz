@@ -50,7 +50,7 @@
     "@types/mem-fs-editor": "^5.1.1",
     "@types/merge-stream": "^1.1.2",
     "@types/mock-fs": "^4.10.0",
-    "@types/node": "^10.17.21",
+    "@types/node": "^13.13.2",
     "@types/node-fetch": "^2.5.7",
     "@types/parallel-transform": "^1.1.0",
     "@types/path-is-absolute": "^1.0.0",
