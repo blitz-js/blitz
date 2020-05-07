@@ -84,6 +84,10 @@ const progress = (msg: string) => {
   console.log(withCaret(chalk.bold(msg)))
 }
 
+const info = (msg: string) => {
+  console.log(chalk.bold(msg))
+}
+
 const spinner = (str: string) => {
   return ora({
     text: str,
@@ -128,4 +132,5 @@ export const log = {
   spinner,
   success,
   variable,
+  info,
 }
