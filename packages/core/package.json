@@ -46,7 +46,7 @@
   "dependencies": {
     "@types/serialize-error": "^4.0.1",
     "pretty-ms": "^6.0.1",
-    "react-query": "^1.2.9",
+    "react-query": "1.3.3",
     "serialize-error": "^6.0.0"
   },
   "devDependencies": {

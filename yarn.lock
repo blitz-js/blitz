@@ -12847,7 +12847,7 @@ react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-query@^1.2.9:
+react-query@1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.3.3.tgz#41d349e4ab951251dcbaacacf1fd2d9f7bbeed1d"
   integrity sha512-hamNWxLHycMv0hYIlUK/GSQUkXiQML4sUjeqxYJ3W4FO6TLXxqTgtj/r0W7CYQ0VYGvmU3CmbaP6gESxRdkbuw==
