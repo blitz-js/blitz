@@ -134,7 +134,7 @@ ${chalk.bold(
 `
 
   static args = [
-    {
+  {
       name: 'Commands',
       description: Db.description,
       required: true,
