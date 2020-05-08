@@ -19,12 +19,12 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
         if (!options.isServer) {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
-          config.module.rules.push({test: /_rpc/, loader: require.resolve('null-loader')})
-          config.module.rules.push({test: /@prisma\/client/, loader: require.resolve('null-loader')})
+          config.module.rules.push({test: /_rpc/, use: {loader: 'null-loader'}})
+          config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: 'null-loader'}})
         }
 
         // This is needed because, for an unknown reason, the next build fails when
-        // importing directly from the `blitz` package, complaining about child_processs
+        // importing directly from the `blitz` package, complaining about child_process
         // Somehow our server code is getting into the next build that way.
         // This alias eliminates that problem.
         // Anyone is welcome to investigate this further sometime
