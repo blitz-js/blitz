@@ -1,5 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {build} from '@blitzjs/server'
+import {ensureCompatibleNext} from '../utils/ensure-compatible-next'
 
 export class Build extends Command {
   static description = 'Create a production build'
