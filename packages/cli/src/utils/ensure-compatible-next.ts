@@ -6,7 +6,7 @@ import {installNext} from './install-next'
 export function ensureCompatibleNext() {
   return {
     async or(onFailure: () => void) {
-      const supportedVersion = '>=9.3.5' // TODO: Should this come from the `blitz` package peer dependency field?
+      const supportedVersion = '>=9.3' // TODO: Should this come from the `blitz` package peer dependency field?
 
       const [isUsableNext, currentVersion] = packageInRange('next', supportedVersion)
 
