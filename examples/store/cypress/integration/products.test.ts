@@ -49,7 +49,7 @@ describe('products#ssr page', () => {
     cy.get('#products > p > a').first().click()
     cy.location('pathname').should('not.match', /\/products\/ssr$/)
 
-    cy.get('a').click()
+    cy.get('a').first().click()
     cy.location('pathname').should('equal', '/products')
   })
 })
