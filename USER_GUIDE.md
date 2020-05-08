@@ -264,6 +264,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
 4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
+5. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
 
 #### Serverless
 
