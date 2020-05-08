@@ -10,7 +10,8 @@ export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
 
   const updated = await Promise.all(
     entries.map(async ([dep, version]) => {
-      if (version.match(/\d.x/)) {
+      // We pin experimental versions to ensure they work, so don't auto update experimental
+      if (version.match(/\d.x/) && !version.match(/experimental/)) {
         const {value: latestVersion, isFallback} = await getLatestVersion(dep, version)
 
         if (isFallback) {
