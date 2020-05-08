@@ -358,7 +358,7 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
-- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. You can add new files with JS and/or convert the generated files to JS. There's an [open issue for generating vanilla JS files](https://github.com/blitz-js/blitz/issues/160) that needs help.
+- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. We are actively working on this. It mostly works, but we have a few major bugs to fix before it's ready for prime time.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>
