@@ -77,7 +77,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     input: Buffer,
     pathEnding: string,
     templateValues: any,
-    prettierOptions: prettier.Options,
+    prettierOptions: prettier.Options | undefined,
   ): string | Buffer {
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
@@ -102,10 +102,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-    const prettierOptions = (await prettier.resolveConfig(this.sourcePath())) || {
-      semi: false,
-      printWidth: 110,
-    }
+    const prettierOptions = await prettier.resolveConfig(this.sourcePath())
 
     for (let filePath of paths) {
       try {
@@ -114,7 +111,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) => this.process(input, pathSuffix, templateValues, prettierOptions),
+          process: (input) => this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
         })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
