@@ -31,7 +31,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Create Your Blitz App
 
 1. `npm install -g blitz` or `yarn global add blitz`
-2. Run `blitz new myAppName` to create a new TypeScript blitz app in the `myAppName` directory. Alternatively, run `blitz new myAppName --js` to create a JavaScript blitz app
+2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
 5. View your baby app at [http://localhost:3000](http://localhost:3000)
@@ -264,6 +264,7 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
 4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
+5. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
 
 #### Serverless
 
@@ -301,11 +302,7 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 #### `blitz new NAME`
 
-Generate a new TypeScript blitz project at `<current_folder>./NAME`
-
-#### `blitz new NAME --js`
-
-Generate a new JavaScript blitz project at `<current_folder>./NAME`
+Generate a new blitz project at `<current_folder>./NAME`
 
 #### `blitz start`
 
@@ -362,6 +359,7 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
+- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. We are actively working on this. It mostly works, but we have a few major bugs to fix before it's ready for prime time.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>
