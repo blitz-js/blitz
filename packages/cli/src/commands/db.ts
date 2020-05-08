@@ -123,14 +123,14 @@ export function getDbName(connectionString: string): string {
 
 export default class Db extends Command {
   static description = `Run database
-${chalk.bold(log.withPointing('migrate'))}   
+${chalk.bold('migrate')}   
   Run any needed migrations via Prisma 2 and generate Prisma Client.
-${chalk.bold(log.withPointing('introspect'))}   
+${chalk.bold('introspect')}   
   Will introspect the database defined in db/schema.prisma and automatically \ngenerate a complete schema.prisma file for you. Lastly, it'll generate Prisma Client.
 ${chalk.bold(
-  log.withPointing('studio'),
+ 'studio',
 )}  Open the Prisma Studio UI at http://localhost:5555 so you can easily see and\n change data in your database.
-${chalk.bold(log.withPointing('reset'))}   Reset the database and run a fresh migration via Prisma 2.
+${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma 2.
 `
 
   static args = [
