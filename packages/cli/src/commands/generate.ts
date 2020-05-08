@@ -1,11 +1,11 @@
-import Command from '../command'
+import {Command} from '../command'
 import {flags} from '@oclif/command'
 import * as fs from 'fs'
 import * as path from 'path'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
 import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} from '@blitzjs/generator'
-import PromptAbortedError from '../errors/prompt-aborted'
+import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
 const debug = require('debug')('blitz:generate')
@@ -61,7 +61,7 @@ const generatorMap = {
   // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
 }
 
-export default class Generate extends Command {
+export class Generate extends Command {
   static description = 'Generate new files for your Blitz project'
 
   static aliases = ['g']
@@ -144,26 +144,14 @@ export default class Generate extends Command {
     debug('args: ', args)
     debug('flags: ', flags)
 
-    const isInRoot = fs.existsSync(path.resolve('blitz.config.js'))
-
-    if (!isInRoot) {
-      log.error('No blitz.config.js found. `generate` must be run from the root of the project.')
-      this.exit(1)
-    }
-
     try {
-      let fileRoot: string
       let singularRootContext: string
-      // let pluralRootContext: string
-      let nestedContextPaths: string[] = []
-      // otherwise, validate the provided path, prompting the user if it's absent or invalid
+
       if (!flags.context) {
         if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         } else {
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         }
       } else {
         // use [\\/] as the separator to match UNIX and Windows path formats
@@ -175,14 +163,8 @@ export default class Generate extends Command {
             )}'?`,
           )
           singularRootContext = modelName(args.model)
-          fileRoot = modelNames(args.model)
         } else {
-          // @ts-ignore shift can technically return undefined, but we already know the array isn't empty
-          // so we can bypass the check
-          fileRoot = modelNames(contextParts.shift())
           singularRootContext = modelName(args.model)
-          // pluralRootContext = modelNames(args.model)
-          nestedContextPaths = [...contextParts, modelNames(args.model)]
         }
       }
 
@@ -195,14 +177,6 @@ export default class Generate extends Command {
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
           dryRun: flags['dry-run'],
-          // provide the file context as a relative path to the current directory (with a slash appended)
-          // to generate files without changing the current directory. This allows yeoman to print out the
-          // full file path rather than the current path
-          fileContext:
-            path.relative(
-              path.resolve(),
-              path.resolve('app', fileRoot, GeneratorClass.subdirectory, fileRoot, ...nestedContextPaths),
-            ) + '/',
           useTs: fs.existsSync(path.resolve('tsconfig.json')),
         })
         await generator.run()

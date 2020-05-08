@@ -1,15 +1,15 @@
 import {pipeline, through} from '../streams'
 import {RuleConfig, RuleArgs} from '../types'
-import createFileEnricher from './helpers/enrich-files'
-import createFileCache from './helpers/file-cache'
-import createIdleHandler from './helpers/idle-handler'
-import createWorkOptimizer from './helpers/work-optimizer'
-import createRuleConfig from './rules/config'
-import createRuleManifest from './rules/manifest'
-import createRuleRelative from './rules/relative'
-import createRulePages from './rules/pages'
-import createRuleRpc from './rules/rpc'
-import createRuleWrite from './rules/write'
+import {createEnrichFiles} from './helpers/enrich-files'
+import {createFileCache} from './helpers/file-cache'
+import {createIdleHandler} from './helpers/idle-handler'
+import {createWorkOptimizer} from './helpers/work-optimizer'
+import {createRuleConfig} from './rules/config'
+import {createRuleManifest} from './rules/manifest'
+import {createRuleRelative} from './rules/relative'
+import {createRulePages} from './rules/pages'
+import {createRuleRpc} from './rules/rpc'
+import {createRuleWrite} from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
 
@@ -21,10 +21,10 @@ const input = through({objectMode: true}, (f, _, next) => next(null, f))
  * @param errors Stream that takes care of all operational error rendering
  * @param reporter Stream that takes care of all view rendering
  */
-export default function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
+export function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
   // Helper streams don't account for business rules
   const optimizer = createWorkOptimizer()
-  const enrichFiles = createFileEnricher()
+  const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
   const idleHandler = createIdleHandler(reporter)
 

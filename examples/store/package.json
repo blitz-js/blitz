@@ -1,18 +1,18 @@
 {
   "name": "store",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start -p",
-    "test": "start-server-and-test test:start http://localhost:3000 cy:run"
+    "test:start": "blitz db migrate && blitz start --production -p 3099",
+    "test": "start-server-and-test test:start http://localhost:3099 cy:run"
   },
   "dependencies": {
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
-    "blitz": "0.8.1",
+    "blitz": "0.9.0",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-e5d06e34b",
     "react-dom": "0.0.0-experimental-e5d06e34b",

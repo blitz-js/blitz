@@ -15,12 +15,11 @@ const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
 export const runPrismaGeneration = async ({silent = false} = {}) => {
-  const prismaBin = await getPrismaBin()
+  try {
+    const prismaBin = await getPrismaBin()
 
-  return new Promise((resolve) => {
-    spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on(
-      'exit',
-      (code: number) => {
+    return new Promise((resolve) => {
+      spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on('exit', (code) => {
         if (code === 0) {
           resolve()
         } else if (silent) {
@@ -28,9 +27,12 @@ export const runPrismaGeneration = async ({silent = false} = {}) => {
         } else {
           process.exit(1)
         }
-      },
-    )
-  })
+      })
+    })
+  } catch (error) {
+    if (silent) return
+    throw new Error("Oops, we can't find Prisma Client. Please make sure it's installed in your project")
+  }
 }
 
 export const runMigrate = async () => {
@@ -40,13 +42,13 @@ export const runMigrate = async () => {
     const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
       stdio: 'inherit',
     })
-    cp.on('exit', (code: number) => {
-      if (code == 0) {
+    cp.on('exit', (code) => {
+      if (code === 0) {
         const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
           stdio: 'inherit',
         })
-        cp.on('exit', async (code: number) => {
-          if (code == 0) {
+        cp.on('exit', async (code) => {
+          if (code === 0) {
             await runPrismaGeneration()
             resolve()
           } else {
@@ -123,14 +125,14 @@ export function getDbName(connectionString: string): string {
   return dbName
 }
 
-export default class Db extends Command {
+export class Db extends Command {
   static description = `Run database commands
 
 ${chalk.bold('migrate')}   Run any needed migrations via Prisma 2 and generate Prisma Client.
 
 ${chalk.bold(
   'introspect',
-)}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it\'ll generate Prisma Client.
+)}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it'll generate Prisma Client.
 
 ${chalk.bold(
   'studio',
@@ -163,8 +165,8 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
       const cp = spawn(prismaBin, ['introspect', schemaArg], {
         stdio: 'inherit',
       })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
+      cp.on('exit', (code) => {
+        if (code === 0) {
           spawn(prismaBin, ['generate', schemaArg], {stdio: 'inherit'}).on('exit', (code: number) => {
             if (code !== 0) {
               process.exit(1)
@@ -178,8 +180,8 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
       const cp = spawn(prismaBin, ['studio', schemaArg, '--experimental'], {
         stdio: 'inherit',
       })
-      cp.on('exit', (code: number) => {
-        if (code == 0) {
+      cp.on('exit', (code) => {
+        if (code === 0) {
         } else {
           process.exit(1)
         }

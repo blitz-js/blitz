@@ -20,7 +20,7 @@ export const __ModelName__ = () => {
       <button
         type="button"
         onClick={async () => {
-          if (confirm('This will be deleted')) {
+          if (window.confirm('This will be deleted')) {
             await delete__ModelName__({where: {id: __modelName__.id}})
             router.push('/__modelNames__')
           }

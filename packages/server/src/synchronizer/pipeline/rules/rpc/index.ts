@@ -1,4 +1,5 @@
 import File from 'vinyl'
+import slash from 'slash'
 import {absolutePathTransform} from '../../utils'
 import {relative} from 'path'
 import {through} from '../../../streams'
@@ -7,7 +8,7 @@ import {Rule} from '../../../types'
 /**
  * Returns a Rule that manages generating the internal RPC commands and handlers
  */
-const create: Rule = function configure({config: {src}}) {
+export const createRuleRpc: Rule = function configure({config: {src}}) {
   const fileTransformer = absolutePathTransform(src)
 
   const getRpcPath = fileTransformer(rpcPath)
@@ -51,10 +52,8 @@ const create: Rule = function configure({config: {src}}) {
   return {stream}
 }
 
-export default create
-
 export function isRpcPath(filePath: string) {
-  return new RegExp('(?:app\\/)(?!_rpc).*(?:queries|mutations)\\/.+').exec(filePath)
+  return /(?:app[\\/])(?!_rpc).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
 const isomorphicRpcTemplate = (resolverPath: string) => `
@@ -75,7 +74,7 @@ function removeExt(filePath: string) {
 }
 
 function resolutionPath(srcPath: string, filePath: string) {
-  return removeExt(relative(srcPath, filePath))
+  return removeExt(slash(relative(srcPath, filePath)))
 }
 
 function extractTemplateVars(importPath: string) {

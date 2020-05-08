@@ -26,6 +26,8 @@ export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
 
   return {
     isFallback: fallbackUsed,
-    value: Object.fromEntries(updated),
+    value: updated.reduce((result, [key, value]) => {
+      return Object.assign({}, result, {[key]: value})
+    }, {} as T),
   }
 }

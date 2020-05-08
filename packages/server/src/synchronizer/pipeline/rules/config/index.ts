@@ -10,7 +10,7 @@ const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
 /**
  * Returns a Rule that manages converting from blitz.config.js to next.config.js
  */
-const create: Rule = ({config, input}) => {
+export const createRuleConfig: Rule = ({config, input}) => {
   // Preconditions
   const hasNextConfig = pathExistsSync(resolve(config.src, 'next.config.js'))
   const hasBlitzConfig = pathExistsSync(resolve(config.src, 'blitz.config.js'))
@@ -79,4 +79,3 @@ module.exports = withBlitz({...config, ...vercelConfig});
 
   return {stream}
 }
-export default create

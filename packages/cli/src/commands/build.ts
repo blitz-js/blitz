@@ -1,14 +1,30 @@
-import {Command} from '@oclif/command'
+import {Command, flags} from '@oclif/command'
 import {build} from '@blitzjs/server'
 
-// eslint-disable-next-line import/no-default-export
-export default class Build extends Command {
+export class Build extends Command {
   static description = 'Create a production build'
   static aliases = ['b']
 
+  static flags = {
+    port: flags.integer({
+      char: 'p',
+      description: 'Set port number',
+      default: 3000,
+    }),
+    hostname: flags.string({
+      char: 'H',
+      description: 'Set server hostname',
+      default: 'localhost',
+    }),
+  }
+
   async run() {
+    const {flags} = this.parse(Build)
+
     const config = {
       rootFolder: process.cwd(),
+      port: flags.port,
+      hostname: flags.hostname,
     }
 
     try {
