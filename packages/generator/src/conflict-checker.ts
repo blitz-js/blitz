@@ -45,7 +45,7 @@ export class ConflictChecker extends Transform {
         if (status !== 'skip') {
           this.handlePush(file, status)
         } else {
-          this.fileStatusString(file, status)
+          this.fileStatusString(file, status, this.options?.dryRun)
         }
 
         cb()
@@ -71,7 +71,7 @@ export class ConflictChecker extends Transform {
   handlePush(file: File, status: PromptActions): void {
     if (!this.options?.dryRun) this.push(file)
 
-    this.emit('fileStatus', this.fileStatusString(file, status))
+    this.emit('fileStatus', this.fileStatusString(file, status, this.options?.dryRun))
   }
 
   private async checkDiff(file: File): Promise<PromptActions> {
@@ -120,14 +120,14 @@ export class ConflictChecker extends Transform {
     console.log('\n')
   }
 
-  private fileStatusString(file: File, status: PromptActions) {
+  private fileStatusString(file: File, status: PromptActions, dryRun: boolean = false) {
     let statusLog = null
     switch (status) {
       case 'create':
-        statusLog = chalk.green('CREATE   ')
+        statusLog = chalk.green(`${dryRun ? 'Would create' : 'CREATE'}   `)
         break
       case 'overwrite':
-        statusLog = chalk.cyan('OVERWRITE')
+        statusLog = chalk.cyan(`${dryRun ? 'Would overwrite' : 'OVERWRITE'}   `)
         break
       case 'skip':
         statusLog = chalk.blue('SKIP     ')
