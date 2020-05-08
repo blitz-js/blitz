@@ -28,6 +28,9 @@ export class Build extends Command {
     }
 
     try {
+      // NOTE:  Running this in a hook means ctrl+c on enquirer
+      //        does not cancel the process so running here
+      await ensureCompatibleNext().or(() => process.exit(0))
       await build(config)
     } catch (err) {
       console.error(err)

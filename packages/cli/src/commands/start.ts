@@ -1,6 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {dev, prod} from '@blitzjs/server'
-
+import {ensureCompatibleNext} from '../utils/ensure-compatible-next'
 import {runPrismaGeneration} from './db'
 
 export class Start extends Command {
@@ -33,6 +33,10 @@ export class Start extends Command {
     }
 
     try {
+      // NOTE:  Running this in a hook means ctrl+c on enquirer
+      //        does not cancel the process so running here
+      await ensureCompatibleNext().or(() => process.exit(0))
+
       if (flags.production) {
         await prod(config)
       } else {
