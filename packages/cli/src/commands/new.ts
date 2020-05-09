@@ -31,6 +31,7 @@ export class New extends Command {
     js: flags.boolean({
       description: 'Generates a JS project. TypeScript is the default unless you add this flag.',
       default: false,
+      hidden: true,
     }),
     npm: flags.boolean({
       description: 'Use npm as the package manager. Yarn is the default if installed',
