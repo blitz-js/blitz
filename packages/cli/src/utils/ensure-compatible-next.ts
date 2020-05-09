@@ -10,7 +10,7 @@ export function ensureCompatibleNext() {
 
       const [isUsableNext, currentVersion] = packageInRange('next', supportedVersion)
 
-      if (isUsableNext) return true // All good lets bail
+      if (isUsableNext) return // All good lets bail
 
       log.warning(
         currentVersion
