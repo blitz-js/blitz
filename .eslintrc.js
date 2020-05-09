@@ -1,10 +1,5 @@
 module.exports = {
-  extends: [
-    'react-app',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
-    'plugin:node/recommended-module',
-  ],
+  extends: ['react-app', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
   rules: {
     'import/first': 0,
     'import/no-default-export': ['error'],
@@ -14,15 +9,6 @@ module.exports = {
         case: 'kebabCase',
       },
     ],
-    'node/no-extraneous-import': 'off',
-    'node/no-unsupported-features/es-syntax': 'off',
-    'node/no-unsupported-features/node-builtins': 'error',
-    'no-process-exit': 'off',
   },
   plugins: ['unicorn'],
-  settings: {
-    node: {
-      tryExtensions: ['.ts', '.tsx', '.js', '.jsx'],
-    },
-  },
 }
