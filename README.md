@@ -105,6 +105,8 @@ There's still a lot of work to do, so you are especially invited to join us in b
 
 _Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters!_
 
+[View our Bronze Sponsors](https://github.com/blitz-js/blitz/blob/canary/BACKERS.md)
+
 <br>
 
 ## Core Team ✨
@@ -245,6 +247,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

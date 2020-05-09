@@ -8,9 +8,13 @@ import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} f
 import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
+import pkgDir from 'pkg-dir'
 const debug = require('debug')('blitz:generate')
 
 const pascalCase = (str: string) => camelCase(str, {pascalCase: true})
+
+const projectRoot = pkgDir.sync() || process.cwd()
+const isTypescript = fs.existsSync(path.join(projectRoot, 'tsconfig.json'))
 
 enum ResourceType {
   All = 'all',
@@ -177,7 +181,7 @@ export class Generate extends Command {
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
           dryRun: flags['dry-run'],
-          useTs: fs.existsSync(path.resolve('tsconfig.json')),
+          useTs: isTypescript,
         })
         await generator.run()
       }
