@@ -16,13 +16,11 @@ If Blitz is installed, you should see the version of your installation. If it is
 
 If this is your first time using Blitz, you’ll have to begin with some initial setup. We provide a command which takes care of all this for you, generating the configuration and code you need to get started.
 
-From the command line, `cd` into the directory where you’d like to store your code, and then run the following command to create a new TypeScript blitz project:
+From the command line, `cd` into the directory where you’d like to store your code, and then run the following command:
 
 ```sh
 blitz new mysite
 ```
-
-_Note, you can create a JavaScript blitz project instead by running `blitz new mysite --js`; however, this tutorial assumes a TypeScript project._
 
 This should create a `mysite` directory in your current directory.
 
