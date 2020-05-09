@@ -10,7 +10,6 @@ import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
 import {ConflictChecker} from './conflict-checker'
-import prettier from 'prettier'
 
 export interface GeneratorOptions {
   destinationRoot?: string
@@ -35,6 +34,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
 
   private performedActions: string[] = []
   private useTs: boolean
+  private prettier: typeof import('prettier') | undefined
 
   abstract sourceRoot: string
 
@@ -77,7 +77,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     input: Buffer,
     pathEnding: string,
     templateValues: any,
-    prettierOptions: prettier.Options | undefined,
+    prettierOptions: import('prettier').Options | undefined,
   ): string | Buffer {
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
@@ -91,8 +91,8 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       )
     }
 
-    if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string') {
-      templatedFile = prettier.format(templatedFile, prettierOptions)
+    if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string' && this.prettier) {
+      templatedFile = this.prettier.format(templatedFile, prettierOptions)
     }
     return templatedFile
   }
@@ -102,7 +102,10 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-    const prettierOptions = await prettier.resolveConfig(this.sourcePath())
+    try {
+      this.prettier = await import('prettier')
+    } catch {}
+    const prettierOptions = await this.prettier?.resolveConfig(this.sourcePath())
 
     for (let filePath of paths) {
       try {
