@@ -40,6 +40,7 @@ enum InstallerType {
 
 interface InstallerMeta {
   path: string
+  subdirectory?: string
   type: InstallerType
 }
 
@@ -69,12 +70,14 @@ export default class Install extends Command {
     const isGitHubShorthandInstaller = /^([\w-_]*)\/([\w-_]*)$/.test(installerArg)
     if (isNavtiveInstaller || isUrlInstaller || isGitHubShorthandInstaller) {
       let repoUrl
+      let subdirectory
       switch (true) {
         case isUrlInstaller:
           repoUrl = installerArg
           break
         case isNavtiveInstaller:
           repoUrl = `${GH_ROOT}blitz-js/blitz`
+          subdirectory = `installers/${installerArg}`
           break
         case isGitHubShorthandInstaller:
           repoUrl = `${GH_ROOT}${installerArg}`
@@ -84,6 +87,7 @@ export default class Install extends Command {
       }
       return {
         path: repoUrl,
+        subdirectory,
         type: InstallerType.Remote,
       }
     } else {
@@ -99,22 +103,31 @@ export default class Install extends Command {
    * @param repoFullName username and repository name in the form {{user}}/{{repo}}
    * @param defaultBranch the name of the repository's default branch
    */
-  private async cloneRepo(repoFullName: string, defaultBranch: string): Promise<string> {
-    const tempDir = path.resolve(
+  private async cloneRepo(
+    repoFullName: string,
+    defaultBranch: string,
+    subdirectory?: string,
+  ): Promise<string> {
+    const installerDir = path.resolve(
       // os.tmpdir(),
       `blitz-installer-${repoFullName.replace('/', '-')}`,
     )
     // clean up from previous run in case of error
-    rimraf.sync(tempDir)
-    mkdirSync(tempDir)
-    process.chdir(tempDir)
+    rimraf.sync(installerDir)
+    mkdirSync(installerDir)
+    process.chdir(installerDir)
 
+    const repoName = repoFullName.split('/')[1]
+    // `tar` top-level filder is `${repoName}-${defaultBranch}`, and then we want to get our installer path
+    // within that folder
+    const extractPath = subdirectory ? [`${repoName}-${defaultBranch}/${subdirectory}`] : undefined
+    const depth = subdirectory ? subdirectory.split('/').length + 1 : 1
     await pipeline(
       _got.stream(`${CODE_ROOT}${repoFullName}/tar.gz/${defaultBranch}`),
-      tar.extract({cwd: tempDir, strip: 1}),
+      tar.extract({strip: depth}, extractPath),
     )
 
-    return tempDir
+    return installerDir
   }
 
   private async runInstallerAtPath(installerPath: string) {
@@ -147,7 +160,11 @@ export default class Install extends Command {
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
-        const installerRepoPath = await this.cloneRepo(repoInfo.full_name, repoInfo.default_branch)
+        const installerRepoPath = await this.cloneRepo(
+          repoInfo.full_name,
+          repoInfo.default_branch,
+          installerInfo.subdirectory,
+        )
 
         spawn.sync(pkgManager, ['install'])
 
