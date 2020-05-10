@@ -116,11 +116,17 @@ describe('Dev command', () => {
       mockfs.restore()
     })
 
-    it('should copy the correct files to the dev folder', async () => {
+    it('should skip Typescript compilation', async () => {
       mockfs({
         'dev/.now': '',
         'dev/one': '',
         'dev/two': '',
+        'dev/test.ts': `
+        import {isomorphicRpc} from '@blitzjs/core'
+        import resolver from 'app/_rpc/products/queries/getProducts'
+        export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
+        `,
+        'dev/tsconfig.ts': '',
       })
       await dev({
         rootFolder,
@@ -135,11 +141,62 @@ describe('Dev command', () => {
       expect(tree).toEqual({
         children: [
           {
-            children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
+            children: [
+              {name: 'blitz.config.js'},
+              {name: 'next.config.js'},
+              {name: 'one'},
+              {name: 'test.ts'},
+              {name: 'tsconfig.ts'},
+              {name: 'two'},
+            ],
             name: '.blitz-dev',
           },
           {name: '.now'},
           {name: 'one'},
+          {name: 'test.ts'},
+          {name: 'tsconfig.ts'},
+          {name: 'two'},
+        ],
+        name: 'dev',
+      })
+    })
+
+    it('should compile ts to js', async () => {
+      mockfs({
+        'dev/.now': '',
+        'dev/one': '',
+        'dev/two': '',
+        'dev/test.ts': `
+        import {isomorphicRpc} from '@blitzjs/core'
+        import resolver from 'app/_rpc/products/queries/getProducts'
+        export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
+        `,
+      })
+      await dev({
+        rootFolder,
+        buildFolder,
+        devFolder,
+        writeManifestFile: false,
+        watch: false,
+        port: 3000,
+        hostname: 'localhost',
+      })
+      const tree = directoryTree(rootFolder)
+      expect(tree).toEqual({
+        children: [
+          {
+            children: [
+              {name: 'blitz.config.js'},
+              {name: 'next.config.js'},
+              {name: 'one'},
+              {name: 'test.js'},
+              {name: 'two'},
+            ],
+            name: '.blitz-dev',
+          },
+          {name: '.now'},
+          {name: 'one'},
+          {name: 'test.ts'},
           {name: 'two'},
         ],
         name: 'dev',
