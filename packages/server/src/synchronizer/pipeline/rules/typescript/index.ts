@@ -27,7 +27,7 @@ export const createRuleTypescript: Rule = ({config, reporter}) => {
       },
     })
 
-    file.contents = Buffer.from(Buffer.from(compiledFile.outputText))
+    file.contents = Buffer.from(compiledFile.outputText)
 
     reporter.write({type: FILE_COMPILED, payload: file})
     next(null, file)
