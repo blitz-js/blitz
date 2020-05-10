@@ -25,6 +25,7 @@ import {dev} from '../src/dev'
 import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
 import mockfs from 'mock-fs'
+import fs from 'fs'
 
 describe('Dev command', () => {
   let rootFolder: string
@@ -116,16 +117,48 @@ describe('Dev command', () => {
       mockfs.restore()
     })
 
-    it('should skip Typescript compilation', async () => {
+    it('should copy the correct files to the dev folder', async () => {
       mockfs({
         'dev/.now': '',
         'dev/one': '',
         'dev/two': '',
-        'dev/test.ts': `
-        import {isomorphicRpc} from '@blitzjs/core'
-        import resolver from 'app/_rpc/products/queries/getProducts'
-        export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
-        `,
+      })
+      await dev({
+        rootFolder,
+        buildFolder,
+        devFolder,
+        writeManifestFile: false,
+        watch: false,
+        port: 3000,
+        hostname: 'localhost',
+      })
+      const tree = directoryTree(rootFolder)
+      expect(tree).toEqual({
+        children: [
+          {
+            children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
+            name: '.blitz-dev',
+          },
+          {name: '.now'},
+          {name: 'one'},
+          {name: 'two'},
+        ],
+        name: 'dev',
+      })
+    })
+
+    it('should skip Typescript compilation', async () => {
+      const uncompiledFileContent = `
+      import {isomorphicRpc} from '@blitzjs/core'
+      import resolver from 'app/_rpc/products/queries/getProducts'
+      export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
+      `
+
+      mockfs({
+        'dev/.now': '',
+        'dev/one': '',
+        'dev/two': '',
+        'dev/test.ts': uncompiledFileContent,
         'dev/tsconfig.ts': '',
       })
       await dev({
@@ -138,18 +171,13 @@ describe('Dev command', () => {
         hostname: 'localhost',
       })
       const tree = directoryTree(rootFolder)
+      const file = fs.readFileSync(resolve(devFolder, 'test.ts'))
       expect(tree).toEqual({
+        name: 'dev',
         children: [
           {
-            children: [
-              {name: 'blitz.config.js'},
-              {name: 'next.config.js'},
-              {name: 'one'},
-              {name: 'test.ts'},
-              {name: 'tsconfig.ts'},
-              {name: 'two'},
-            ],
             name: '.blitz-dev',
+            children: [{name: 'one'}, {name: 'test.ts'}, {name: 'tsconfig.ts'}, {name: 'two'}],
           },
           {name: '.now'},
           {name: 'one'},
@@ -157,20 +185,25 @@ describe('Dev command', () => {
           {name: 'tsconfig.ts'},
           {name: 'two'},
         ],
-        name: 'dev',
       })
+      expect(file.toString().replace(/\s/g, '')).toEqual(uncompiledFileContent.replace(/\s/g, ''))
     })
 
-    it('should compile ts to js', async () => {
+    it('should compile Ts to Js', async () => {
+      const uncompiledFileContent = `
+      import {isomorphicRpc} from '@blitzjs/core'
+      import resolver from 'app/_rpc/products/queries/getProducts'
+      export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
+      `
+      const compiledFileContent = `import { isomorphicRpc } from '@blitzjs/core';
+      import resolver from 'app/_rpc/products/queries/getProducts';
+      export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts');
+      `
       mockfs({
         'dev/.now': '',
         'dev/one': '',
         'dev/two': '',
-        'dev/test.ts': `
-        import {isomorphicRpc} from '@blitzjs/core'
-        import resolver from 'app/_rpc/products/queries/getProducts'
-        export default isomorphicRpc(resolver, 'app/_rpc/products/queries/getProducts') as typeof resolver
-        `,
+        'dev/test.js': uncompiledFileContent,
       })
       await dev({
         rootFolder,
@@ -182,9 +215,12 @@ describe('Dev command', () => {
         hostname: 'localhost',
       })
       const tree = directoryTree(rootFolder)
+      const file = fs.readFileSync(resolve(devFolder, 'test.js'))
       expect(tree).toEqual({
+        name: 'dev',
         children: [
           {
+            name: '.blitz-dev',
             children: [
               {name: 'blitz.config.js'},
               {name: 'next.config.js'},
@@ -192,15 +228,14 @@ describe('Dev command', () => {
               {name: 'test.js'},
               {name: 'two'},
             ],
-            name: '.blitz-dev',
           },
           {name: '.now'},
           {name: 'one'},
-          {name: 'test.ts'},
+          {name: 'test.js'},
           {name: 'two'},
         ],
-        name: 'dev',
       })
+      expect(file.toString().replace(/\s/g, '')).toEqual(compiledFileContent.replace(/\s/g, ''))
     })
 
     it('calls spawn with the patched next cli bin', async () => {

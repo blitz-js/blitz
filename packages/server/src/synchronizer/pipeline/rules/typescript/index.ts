@@ -13,8 +13,7 @@ export const createRuleTypescript: Rule = ({config, reporter}) => {
     // Skip file if is not a js file or it is a Typescript project.
     if (config.isTsProject || file.extname !== '.js') return next(null, file)
 
-    const fileContent = file.contents
-    const compiledFile = ts.transpileModule(fileContent!.toString(), {
+    const compiledFile = ts.transpileModule(file.contents!.toString(), {
       compilerOptions: {
         module: ts.ModuleKind.ESNext,
         jsx: ts.JsxEmit.Preserve,
@@ -28,13 +27,10 @@ export const createRuleTypescript: Rule = ({config, reporter}) => {
       },
     })
 
-    const newFile = new File({
-      path: file.path,
-      contents: new Buffer(compiledFile.outputText),
-    })
+    file.contents = Buffer.from(Buffer.from(compiledFile.outputText))
 
     reporter.write({type: FILE_COMPILED, payload: file})
-    next(null, newFile)
+    next(null, file)
   })
 
   return {stream}
