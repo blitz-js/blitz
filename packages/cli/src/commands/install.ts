@@ -1,6 +1,47 @@
 import {Command} from '../command'
 import * as path from 'path'
 import {Installer} from '@blitzjs/installer'
+import _got from 'got'
+import {log} from '@blitzjs/server'
+import {dedent} from '../utils/dedent'
+import {Stream} from 'stream'
+import {promisify} from 'util'
+import tar from 'tar'
+import {mkdirSync, readFileSync, existsSync} from 'fs-extra'
+import rimraf from 'rimraf'
+import spawn from 'cross-spawn'
+
+const pipeline = promisify(Stream.pipeline)
+
+async function got(url: string) {
+  return _got(url).catch((e) => Boolean(console.error(e)) || e)
+}
+
+async function gotJSON(url: string) {
+  return JSON.parse((await got(url)).body)
+}
+
+async function isUrlValid(url: string) {
+  return (await got(url).catch((e) => e)).statusCode === 200
+}
+
+function requireJSON(file: string) {
+  return JSON.parse(readFileSync(file).toString('utf-8'))
+}
+
+const GH_ROOT = 'https://github.com/'
+const API_ROOT = 'https://api.github.com/repos/'
+const CODE_ROOT = 'https://codeload.github.com/'
+
+enum InstallerType {
+  Local,
+  Remote,
+}
+
+interface InstallerMeta {
+  path: string
+  type: InstallerType
+}
 
 // eslint-disable-next-line import/no-default-export
 export default class Install extends Command {
@@ -22,21 +63,104 @@ export default class Install extends Command {
     },
   ]
 
+  private normalizeInstallerPath(installerArg: string): InstallerMeta {
+    const isNavtiveInstaller = /^([\w]*)$/.test(installerArg)
+    const isUrlInstaller = installerArg.startsWith(GH_ROOT)
+    const isGitHubShorthandInstaller = /^([\w-_]*)\/([\w-_]*)$/.test(installerArg)
+    if (isNavtiveInstaller || isUrlInstaller || isGitHubShorthandInstaller) {
+      let repoUrl
+      switch (true) {
+        case isUrlInstaller:
+          repoUrl = installerArg
+          break
+        case isNavtiveInstaller:
+          repoUrl = `${GH_ROOT}blitz-js/blitz`
+          break
+        case isGitHubShorthandInstaller:
+          repoUrl = `${GH_ROOT}${installerArg}`
+          break
+        default:
+          throw new Error('should be impossible, the 3 cases are the only way to get into this switch')
+      }
+      return {
+        path: repoUrl,
+        type: InstallerType.Remote,
+      }
+    } else {
+      return {
+        path: installerArg,
+        type: InstallerType.Local,
+      }
+    }
+  }
+
+  /**
+   * Clones the repository into a temp directory, returning the path to the new directory
+   * @param repoFullName username and repository name in the form {{user}}/{{repo}}
+   * @param defaultBranch the name of the repository's default branch
+   */
+  private async cloneRepo(repoFullName: string, defaultBranch: string): Promise<string> {
+    const tempDir = path.resolve(
+      // os.tmpdir(),
+      `blitz-installer-${repoFullName.replace('/', '-')}`,
+    )
+    // clean up from previous run in case of error
+    rimraf.sync(tempDir)
+    mkdirSync(tempDir)
+    process.chdir(tempDir)
+
+    await pipeline(
+      _got.stream(`${CODE_ROOT}${repoFullName}/tar.gz/${defaultBranch}`),
+      tar.extract({cwd: tempDir, strip: 1}),
+    )
+
+    return tempDir
+  }
+
+  private async runInstallerAtPath(installerPath: string) {
+    const installer = require(installerPath).default as Installer<any>
+    const installerArgs = this.argv.reduce(
+      (acc, arg) => ({
+        ...acc,
+        [arg.split('=')[0].replace(/--/g, '')]: JSON.parse(`"${arg.split('=')[1]}"` || String(true)), // if no value is provided, assume it's a boolean flag
+      }),
+      {},
+    )
+    await installer.run(installerArgs)
+  }
+
   async run() {
     const {args} = this.parse(Install)
-    const isNavtiveInstaller = /^([\w]*)$/.test(args.installer)
-    if (isNavtiveInstaller) {
+    const pkgManager = existsSync(path.resolve('yarn.lock')) ? 'yarn' : 'npm'
+    const originalCwd = process.cwd()
+    const installerInfo = this.normalizeInstallerPath(args.installer)
+
+    if (installerInfo.type === InstallerType.Remote) {
+      const apiUrl = installerInfo.path.replace(GH_ROOT, API_ROOT)
+      const packageJsonPath = `${apiUrl}/contents/package.json`
+
+      if (!(await isUrlValid(packageJsonPath))) {
+        log.error(dedent`[blitz install] Installer path "${args.installer}" isn't valid. Please provide:
+          1. The name of a dependency to install (e.g. "tailwind"),
+          2. A shorthand path to a GitHub repository which has an installer as the default export of the "main" file in its package.json (e.g. "blitz-js/example-installer"), or
+          3. A full URL to a Github repository which has an installer as the default export of the "main" file in its package.json (e.g. "https://github.com/blitz-js/example-installer").`)
+      } else {
+        const repoInfo = await gotJSON(apiUrl)
+
+        const installerRepoPath = await this.cloneRepo(repoInfo.full_name, repoInfo.default_branch)
+
+        spawn.sync(pkgManager, ['install'])
+
+        const installerPackageMain = requireJSON('./package.json').main
+        const installerEntry = path.resolve(installerPackageMain)
+        process.chdir(originalCwd)
+
+        await this.runInstallerAtPath(installerEntry)
+
+        rimraf.sync(installerRepoPath)
+      }
     } else {
-      const installerPath = path.resolve(args.installer)
-      const installer = require(installerPath).default as Installer<any>
-      const installerArgs = this.argv.reduce(
-        (acc, arg) => ({
-          ...acc,
-          [arg.split('=')[0]]: JSON.parse(arg.split('=')[1] || String(true)), // if no value is provided, assume it's a boolean flag
-        }),
-        {},
-      )
-      await installer.run(installerArgs)
+      await this.runInstallerAtPath(path.resolve(args.installer))
     }
   }
 }

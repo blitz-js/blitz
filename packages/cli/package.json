@@ -44,6 +44,8 @@
     "minimist": "^1.2.5",
     "pkg-dir": "^4.2.0",
     "pluralize": "^8.0.0",
+    "rimraf": "^3.0.2",
+    "tar": "^6.0.2",
     "ts-node": "^8.9.0",
     "tsconfig-paths": "3.9.0"
   },
@@ -56,6 +58,8 @@
     "@prisma/cli": "2.0.0-beta.3",
     "@rollup/pluginutils": "^3.0.8",
     "@types/pluralize": "^0.0.29",
+    "@types/rimraf": "^3.0.0",
+    "@types/tar": "^4.0.3",
     "nock": "13.0.0-beta.3"
   },
   "oclif": {
