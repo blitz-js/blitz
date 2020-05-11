@@ -22,6 +22,7 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    return `app/${this.options.modelNames}/queries`
+    const context = this.options.context ? `${this.options.context}/` : ''
+    return `app/${context}${this.options.modelNames}/queries`
   }
 }
