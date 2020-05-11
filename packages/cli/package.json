@@ -55,10 +55,7 @@
     "@oclif/test": "^1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
     "@rollup/pluginutils": "^3.0.8",
-    "@types/pluralize": "^0.0.29",
-    "@types/rimraf": "^3.0.0",
-    "nock": "13.0.0-beta.3",
-    "rimraf": "^3.0.2"
+    "@types/pluralize": "^0.0.29"
   },
   "oclif": {
     "commands": "./lib/src/commands",
