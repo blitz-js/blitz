@@ -160,13 +160,20 @@ export class Install extends Command {
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
+        let spinner = log.spinner(`Cloning GitHub repository for ${args.installer}`).start()
         const installerRepoPath = await this.cloneRepo(
           repoInfo.full_name,
           repoInfo.default_branch,
           installerInfo.subdirectory,
         )
+        spinner.stop()
 
-        spawn.sync(pkgManager, ['install'])
+        spinner = log.spinner('Installing package.json dependencies').start()
+        await new Promise((resolve) => {
+          const installProcess = spawn(pkgManager, ['install'])
+          installProcess.on('exit', resolve)
+        })
+        spinner.stop()
 
         const installerPackageMain = requireJSON('./package.json').main
         const installerEntry = path.resolve(installerPackageMain)
