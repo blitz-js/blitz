@@ -28,6 +28,7 @@ enum ResourceType {
 interface Flags {
   context?: string
   'dry-run'?: boolean
+  parent?: string
 }
 
 interface Args {
@@ -43,16 +44,16 @@ function singular(input: string): string {
   return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
 }
 
-function modelName(input: string) {
+function modelName(input: string = '') {
   return camelCase(singular(input))
 }
-function modelNames(input: string) {
+function modelNames(input: string = '') {
   return camelCase(pluralize(input))
 }
-function ModelName(input: string) {
+function ModelName(input: string = '') {
   return pascalCase(singular(input))
 }
-function ModelNames(input: string) {
+function ModelNames(input: string = '') {
   return pascalCase(pluralize(input))
 }
 
@@ -98,6 +99,11 @@ export class Generate extends Command {
       description:
         "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
     }),
+    parent: flags.string({
+      char: 'p',
+      description:
+        'Specify a parent model to be used for generating nested routes for dependent data when generating pages. This flag has no effect when generating files other than pages.',
+    }),
     'dry-run': flags.boolean({
       char: 'd',
       description: 'Show what files will be created without writing them to disk',
@@ -116,6 +122,11 @@ export class Generate extends Command {
     `,
     `# Context can also be supplied in the model name directly
 > blitz generate pages admin/projects
+    `,
+    `# To generate nested routes, specify a parent model when generating pages.
+# For example, this command generates pages under
+# app/tasks/pages/projects/[projectId]/tasks/
+> blitz generate pages tasks --parent=projects
     `,
   ]
 
@@ -181,6 +192,8 @@ export class Generate extends Command {
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
+          parentModel: modelName(flags.parent),
+          parentModels: modelNames(flags.parent),
           dryRun: flags['dry-run'],
           context: context,
           useTs: isTypescript,
