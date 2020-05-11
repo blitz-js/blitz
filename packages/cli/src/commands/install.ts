@@ -10,6 +10,7 @@ import tar from 'tar'
 import {mkdirSync, readFileSync, existsSync} from 'fs-extra'
 import rimraf from 'rimraf'
 import spawn from 'cross-spawn'
+import * as os from 'os'
 
 const pipeline = promisify(Stream.pipeline)
 
@@ -33,7 +34,7 @@ const GH_ROOT = 'https://github.com/'
 const API_ROOT = 'https://api.github.com/repos/'
 const CODE_ROOT = 'https://codeload.github.com/'
 
-enum InstallerType {
+export enum InstallerType {
   Local,
   Remote,
 }
@@ -44,8 +45,7 @@ interface InstallerMeta {
   type: InstallerType
 }
 
-// eslint-disable-next-line import/no-default-export
-export default class Install extends Command {
+export class Install extends Command {
   static description = 'Install a third-party package into your Blitz app'
   static aliases = ['i']
   static strict = false
@@ -64,8 +64,9 @@ export default class Install extends Command {
     },
   ]
 
-  private normalizeInstallerPath(installerArg: string): InstallerMeta {
-    const isNavtiveInstaller = /^([\w]*)$/.test(installerArg)
+  // exposed for testing
+  normalizeInstallerPath(installerArg: string): InstallerMeta {
+    const isNavtiveInstaller = /^([\w\-_]*)$/.test(installerArg)
     const isUrlInstaller = installerArg.startsWith(GH_ROOT)
     const isGitHubShorthandInstaller = /^([\w-_]*)\/([\w-_]*)$/.test(installerArg)
     if (isNavtiveInstaller || isUrlInstaller || isGitHubShorthandInstaller) {
@@ -100,18 +101,14 @@ export default class Install extends Command {
 
   /**
    * Clones the repository into a temp directory, returning the path to the new directory
+   *
+   * Exposed for unit testing
+   *
    * @param repoFullName username and repository name in the form {{user}}/{{repo}}
    * @param defaultBranch the name of the repository's default branch
    */
-  private async cloneRepo(
-    repoFullName: string,
-    defaultBranch: string,
-    subdirectory?: string,
-  ): Promise<string> {
-    const installerDir = path.resolve(
-      // os.tmpdir(),
-      `blitz-installer-${repoFullName.replace('/', '-')}`,
-    )
+  async cloneRepo(repoFullName: string, defaultBranch: string, subdirectory?: string): Promise<string> {
+    const installerDir = path.join(os.tmpdir(), `blitz-installer-${repoFullName.replace('/', '-')}`)
     // clean up from previous run in case of error
     rimraf.sync(installerDir)
     mkdirSync(installerDir)
@@ -132,10 +129,12 @@ export default class Install extends Command {
 
   private async runInstallerAtPath(installerPath: string) {
     const installer = require(installerPath).default as Installer<any>
-    const installerArgs = this.argv.reduce(
+    const installerArgs = this.argv.slice(1).reduce(
       (acc, arg) => ({
         ...acc,
-        [arg.split('=')[0].replace(/--/g, '')]: JSON.parse(`"${arg.split('=')[1]}"` || String(true)), // if no value is provided, assume it's a boolean flag
+        [arg.split('=')[0].replace(/--/g, '')]: arg.split('=')[1]
+          ? JSON.parse(`"${arg.split('=')[1]}"`)
+          : true, // if no value is provided, assume it's a boolean flag
       }),
       {},
     )
@@ -155,8 +154,9 @@ export default class Install extends Command {
       if (!(await isUrlValid(packageJsonPath))) {
         log.error(dedent`[blitz install] Installer path "${args.installer}" isn't valid. Please provide:
           1. The name of a dependency to install (e.g. "tailwind"),
-          2. A shorthand path to a GitHub repository which has an installer as the default export of the "main" file in its package.json (e.g. "blitz-js/example-installer"), or
-          3. A full URL to a Github repository which has an installer as the default export of the "main" file in its package.json (e.g. "https://github.com/blitz-js/example-installer").`)
+          2. The full name of a GitHub repository (e.g. "blitz-js/example-installer"),
+          3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-installer"), or
+          4. A file path to a locally-written installer.`)
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
