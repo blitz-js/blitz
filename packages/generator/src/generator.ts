@@ -20,6 +20,7 @@ export interface GeneratorOptions {
 const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
+const prettierExtensions = /\.(tsx?|jsx?)$/
 
 /**
  * The base generator class.
@@ -33,6 +34,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
 
   private performedActions: string[] = []
   private useTs: boolean
+  private prettier: typeof import('prettier') | undefined
 
   abstract sourceRoot: string
 
@@ -71,17 +73,26 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     return result
   }
 
-  process(input: Buffer, pathEnding: string, templateValues: any): string | Buffer {
+  process(
+    input: Buffer,
+    pathEnding: string,
+    templateValues: any,
+    prettierOptions: import('prettier').Options | undefined,
+  ): string | Buffer {
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
     }
-    const templatedFile = this.replaceTemplateValues(input, templateValues)
+    let templatedFile = this.replaceTemplateValues(input, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
         babel.transform(templatedFile, {
           plugins: [[babelTransformTypescript, {isTSX: true}]],
         })?.code || ''
       )
+    }
+
+    if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string' && this.prettier) {
+      templatedFile = this.prettier.format(templatedFile, prettierOptions)
     }
     return templatedFile
   }
@@ -91,6 +102,10 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
+    try {
+      this.prettier = await import('prettier')
+    } catch {}
+    const prettierOptions = await this.prettier?.resolveConfig(this.sourcePath())
 
     for (let filePath of paths) {
       try {
@@ -99,7 +114,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) => this.process(input, pathSuffix, templateValues),
+          process: (input) => this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
         })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
