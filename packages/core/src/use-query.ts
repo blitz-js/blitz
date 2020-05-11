@@ -33,16 +33,13 @@ type RestReturnType<T extends QueryFn, O extends Options<T>> = O['paginated'] ex
   ? RestPaginatedQueryResult<T>
   : RestQueryResult<T>
 
-export function useQuery<T extends QueryFn, O extends Options<T>>(
+export function useQuery<T extends QueryFn, O extends Options<T>, A extends InferUnaryParam<T>>(
   queryFn: T,
-  params?: InferUnaryParam<T> | (() => InferUnaryParam<T>),
+  params?: A | (() => A),
   options?: O,
 ): [PromiseReturnType<T>, RestReturnType<T, O>] {
   const queryKey: () => [string, any] = () => {
-    return [
-      (queryFn as any).cacheKey,
-      (typeof params === 'function' ? (params as () => InferUnaryParam<T>)() : params) as InferUnaryParam<T>,
-    ]
+    return [(queryFn as any).cacheKey, (typeof params === 'function' ? (params as Function)() : params) as A]
   }
   const queryFunction = (_: string, params: {}) => queryFn(params)
   const queryOptions = {

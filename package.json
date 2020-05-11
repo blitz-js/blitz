@@ -73,6 +73,7 @@
     "husky": "^4.2.3",
     "isomorphic-unfetch": "^3.0.0",
     "jest": "24.9.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
     "mock-fs": "^4.12.0",

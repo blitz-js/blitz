@@ -7,8 +7,8 @@
     "clean": "rimraf dist",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
+    "test": "tsdx test --env=jest-environment-jsdom-sixteen",
+    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen",
     "lint": "tsdx lint"
   },
   "author": {
