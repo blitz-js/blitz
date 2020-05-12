@@ -92,7 +92,10 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     }
 
     if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string' && this.prettier) {
-      templatedFile = this.prettier.format(templatedFile, prettierOptions)
+      templatedFile = this.prettier.format(templatedFile, {
+        parser: 'babel-ts',
+        ...prettierOptions,
+      })
     }
     return templatedFile
   }
