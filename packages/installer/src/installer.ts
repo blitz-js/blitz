@@ -1,36 +1,3 @@
-/*
-
-An installer is a package that has a single index.(ts|js) file with a single
-default export. Its type is
-
-class Installer<Options extends InstallerOptions> {
-  steps: InstallerStep[]
-  options: Options
-}
-
-The Installer class is, at its core, a flexible step execution framework for
-clients. It's likely that much of this code can be reused for plugins when
-the time comes.
-
-The client exporting its own instance of Installer allows installers authored
-in TypeScript to ensure thier installer conforms to the Installer's interface.
-In the Blitz CLI, the `install` command will know how to fetch installers from
-the Blitz-hosted installer set. Alternatively, you could supply a relative
-filesystem path to an installer or an absolute URL to a GitHub repo that houses
-an installer.
-
-The `install` command will read the package, execute the script steps, guiding
-the user through the installation step-by-step based on the `steps` config.
-Any extra CLI args passed will be parsed into a JS object and passed directly
-to each installer step and lifecycle method.
-
-We'll begin by supporting three step types, or executors: transform files, add
-files, and add dependencies. These steps are each strongly typed and have
-strict validation, including requirements for explanations of the changes
-provided. We'll use these fields to create the wizard for the end user.
-
-*/
-
 import {
   AddDependencyExecutor,
   isAddDependencyExecutor,
