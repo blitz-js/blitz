@@ -11,7 +11,6 @@ const Home = () => (
       <h1 className="title" style={{marginBottom: 24}}>
         Blitz Store Example
       </h1>
-      <button onClick={() => console.log('Hello world')}>Button</button>
       <ul>
         <li>
           <Link href="/products">
