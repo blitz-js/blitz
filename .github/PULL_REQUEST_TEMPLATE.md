@@ -1,8 +1,6 @@
 Closes: ??
 
-### What are the changes and their implications? :gear:
-
-??
+### What are the changes and their implications?
 
 ### Checklist
 

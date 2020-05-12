@@ -8,16 +8,16 @@ assignees: ''
 
 ### What is the problem?
 
-### Steps to Reproduce: <!-- if you can, link to a repo with the failing code -->
+### Steps to Reproduce
 
-1. 2.
+1.
 
-### Versions:
+### Versions
 
 ```
-[Add the output of `blitz --version --verbose` here]
+output of `blitz --version --verbose`
 ```
 
-### Supporting Documentation
+### Other
 
 Please include applicable logs and screenshots that show your problem.
