@@ -1,5 +1,3 @@
-### Type: ?? <!-- feature, bug fix, refactor, tests, etc -->
-
 Closes: ??
 
 ### What are the changes and their implications? :gear:
@@ -9,14 +7,10 @@ Closes: ??
 ### Checklist
 
 - [ ] Tests added for changes
-- [ ] Any added terminal logging uses `packages/server/src/log.ts`
+- [ ] User facing changes documented
 
-### Breaking change: ?? <!-- yes or no -->
-
-<!-- If yes, describe the impact and migration path for existing apps-->
+### Breaking change: yes/no
 
 ### Other information
-
-<!-- Before/after screenshots, etc. -->
 
 <!-- IMPORTANT: Make sure to check the "Allow edits from maintainers" box below this window -->
