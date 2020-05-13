@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.9.1",
+  "version": "0.9.2-canary.1",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",

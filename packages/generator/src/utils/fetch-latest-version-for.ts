@@ -15,22 +15,29 @@ export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
   let fallbackUsed = false
 
   const updated = await Promise.all(
-    entries.map(
-      async ([dep, version]): Promise<[string, string]> => {
-        // We pin experimental versions to ensure they work, so don't auto update experimental
-        if (version.match(/\d.x/) && !version.match(/experimental/)) {
-          const {value: latestVersion, isFallback} = await getLatestVersion(dep, version)
+    entries.map(async ([dep, version]): Promise<[string, string]> => {
+      let skipFetch = false
 
-          if (isFallback) {
-            fallbackUsed = true
-          }
+      if (!version.match(/\d.x/)) skipFetch = true
 
-          return [dep, latestVersion]
-        } else {
-          return [dep, version]
+      // We pin experimental versions to ensure they work, so don't auto update experimental
+      if (version.match(/experimental/)) skipFetch = true
+
+      // TODO: remove once 2.32.1+ is released
+      if (version.match(/typescript-eslint/)) skipFetch = true
+
+      if (skipFetch) {
+        return [dep, version]
+      } else {
+        const {value: latestVersion, isFallback} = await getLatestVersion(dep, version)
+
+        if (isFallback) {
+          fallbackUsed = true
         }
-      },
-    ),
+        
+        return [dep, latestVersion]
+      }
+    })
   )
 
   return {
