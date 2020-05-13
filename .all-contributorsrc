@@ -340,7 +340,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/7850202?v=4",
       "profile": "https://github.com/jclancy93",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -485,7 +486,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/9284690?v=4",
       "profile": "https://twitter.com/ivandevp",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -499,7 +501,7 @@
     },
     {
       "login": "is2ei",
-      "name": "Horie Issei #hashtagtest",
+      "name": "Horie Issei",
       "avatar_url": "https://avatars3.githubusercontent.com/u/3948353?v=4",
       "profile": "http://is2ei.com/",
       "contributions": [

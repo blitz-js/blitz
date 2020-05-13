@@ -1,4 +1,4 @@
-![Blitz Contributing Guide](https://files-m3haypbo7.now.sh/contributing.png)
+![Blitz Contributing Guide](https://raw.githubusercontent.com/blitz-js/art/master/contributing-guide.png)
 
 <br>
 
