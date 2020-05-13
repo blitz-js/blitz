@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/react": "16.9.34",
-    "cypress": "4.4.1",
+    "cypress": "4.5.0",
     "eslint-plugin-cypress": "2.10.3",
     "start-server-and-test": "1.11.0"
   }
