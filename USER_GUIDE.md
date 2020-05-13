@@ -1,4 +1,4 @@
-![Blitz Alpha User Guide](https://files-mgangy3vm.now.sh/alpha-user-guide.png)
+![Blitz Alpha User Guide](https://raw.githubusercontent.com/blitz-js/art/master/alpha-user-guide.png)
 
 <br>
 
