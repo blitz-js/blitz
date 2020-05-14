@@ -13,7 +13,6 @@ export function withBlitz(nextConfig: Record<any, any> = {}) {
     Object.assign({}, nextConfig, {
       experimental: {
         reactMode: 'concurrent',
-        reactRefresh: true,
       },
       webpack(config: any, options: Record<any, any>) {
         if (!options.isServer) {
