@@ -5,7 +5,7 @@
     "start": "blitz start",
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "blitz build"
+    "test": "yarn run build"
   },
   "browserslist": [
     "defaults"
