@@ -13,6 +13,7 @@ export async function build(config: ServerConfig) {
     manifestPath,
     writeManifestFile,
     includePaths,
+    isTsProject,
     watch = false,
   } = await enhance(config)
 
@@ -24,6 +25,7 @@ export async function build(config: ServerConfig) {
     writeManifestFile,
     ignoredPaths,
     includePaths,
+    isTsProject,
   })
 
   await nextBuild(nextBin, buildFolder)
