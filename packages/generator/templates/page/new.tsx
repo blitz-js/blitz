@@ -4,7 +4,7 @@ import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName_
 const New__ModelName__Page = () => {
   const router = useRouter()
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>New __ModelName__</title>
         <link rel="icon" href="/favicon.ico" />

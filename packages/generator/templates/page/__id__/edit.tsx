@@ -36,7 +36,7 @@ export const Edit__ModelName__ = () => {
 
 const Edit__ModelName__Page = () => {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>Edit __ModelName__</title>
         <link rel="icon" href="/favicon.ico" />

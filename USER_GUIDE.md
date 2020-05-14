@@ -60,7 +60,6 @@ model Task {
 ```
 
 2. Run `blitz db migrate`
-   - If this fails, you need to change the `DATABASE_URL` value in `.env` to whatever is required by your Postgres installation.
 
 <br>
 
@@ -245,7 +244,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 Blitz.js custom API routes are exactly the same as Next.js custom API routes. If you need, read [the Next.js API route documentation](https://nextjs.org/docs/api-routes/introduction)
 
 - Unlike Next.js, your `api/` folder must be a sibling of `pages/` instead of being nested inside.
-- All React components inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
+- All files inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.ts` will be at `localhost:3000/api/webhook`.
 
 <br>
 
@@ -326,7 +325,7 @@ Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so y
 
 #### `blitz generate -h`
 
-Generate different types of files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+Scaffold files for a model so you don't have to write them by hand
 
 #### `blitz console`
 
@@ -347,10 +346,10 @@ Start a Node.js REPL that's preloaded with your `db` object and all your queries
 Here's the list of big things that are currently missing from Blitz but are a top priority for us:
 
 - A real Blitzjs.com website and documentation
-- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
-- Authentication
+- Authentication ([See the Session Management RFC](https://github.com/blitz-js/blitz/pull/475))
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
+- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
