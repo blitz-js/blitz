@@ -318,7 +318,7 @@ const NewQuestionPage = () => {
   const router = useRouter()
 
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>New Question</title>
         <link rel="icon" href="/favicon.ico" />
@@ -552,7 +552,7 @@ export const Question = () => {
 
 const ShowQuestionPage = () => {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>Question</title>
         <link rel="icon" href="/favicon.ico" />
