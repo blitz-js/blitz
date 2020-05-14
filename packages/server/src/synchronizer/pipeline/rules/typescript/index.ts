@@ -1,14 +1,19 @@
-import * as ts from 'typescript'
 import File from 'vinyl'
 
 import {through} from '../../../streams'
 import {Rule} from '../../../types'
 import {FILE_COMPILED} from '../../../events'
 
+let ts: typeof import('typescript')
+
 /**
  * Returns a Rule that compiles TS files to JS.
  */
 export const createRuleTypescript: Rule = ({config, reporter}) => {
+  if (!ts) {
+    ts = require('typescript')
+  }
+
   const stream = through({objectMode: true}, function (file: File, _, next) {
     // Skip file if is not a js file or it is a Typescript project.
     if (config.isTsProject || file.extname !== '.js') return next(null, file)
