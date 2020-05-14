@@ -10,7 +10,7 @@
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "lint": "tsdx lint",
-    "test": "tsdx test",
+    "test": "jest || jest",
     "test:watch": "jest --watch"
   },
   "author": {
