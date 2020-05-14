@@ -12,6 +12,7 @@ type SynchronizeFilesInput = {
   src: string
   dest: string
   watch: boolean
+  isTsProject: boolean
   manifestPath: string
   ignoredPaths: string[]
   includePaths: string[]
@@ -35,6 +36,7 @@ export async function synchronizeFiles({
   includePaths: include,
   ignoredPaths: ignore,
   writeManifestFile,
+  isTsProject,
 }: SynchronizeFilesInput): Promise<SynchronizeFilesOutput> {
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
   // TODO: remove this clean and devise a way to resolve differences in stream
@@ -53,6 +55,7 @@ export async function synchronizeFiles({
       cwd: src,
       src: src,
       dest: dest,
+      isTsProject,
       manifest: {
         path: manifestPath,
         write: writeManifestFile,
