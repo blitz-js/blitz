@@ -29,8 +29,8 @@ async function executeWithDiff(transformFn: Transformer, filePath: string) {
           .split('\n')
           .slice(2)
           .forEach((line) => {
-            if (line[0] === '-') console.log(chalk.bold.red(line))
-            else if (line[0] === '+') console.log(chalk.bold.green(line))
+            if (line.startsWith('-') && !line.startsWith('---')) console.log(chalk.bold.red(line))
+            else if (line.startsWith('+') && !line.startsWith('+++')) console.log(chalk.bold.green(line))
             else console.log(line)
           })
         res(path)

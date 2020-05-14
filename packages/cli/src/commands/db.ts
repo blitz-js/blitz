@@ -76,7 +76,7 @@ export async function resetPostgres(connectionString: string, db: any): Promise<
     await db.raw('GRANT ALL ON schema public TO postgres;')
     await db.raw('GRANT ALL ON schema public TO public;')
     // run migration
-    //await runMigrate()
+    await runMigrate()
     log.success('Your database has been reset.')
     process.exit(0)
   } catch (err) {
@@ -103,7 +103,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 }
 
 export async function resetSqlite(connectionString: string): Promise<void> {
-  const dbPath: string = connectionString.replace(/^(?:\.\.\/)+/, '')
+  const dbPath: string = connectionString.replace(/^(?:\.\.[\\/])+/, '')
   const unlink = promisify(fs.unlink)
   try {
     // delete database from folder
@@ -196,7 +196,9 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
         message: 'Are you sure you want to reset your database and erase ALL data?',
       }).then((res) => {
         if (res.confirm) {
-          const db = require(path.join(projectRoot, 'db')).default
+          const prismaClientPath = require.resolve('@prisma/client', {paths: [projectRoot]})
+          const {PrismaClient} = require(prismaClientPath)
+          const db = new PrismaClient()
           const dataSource: any = db.internalDatasources[0]
           const connectorType: string = dataSource.connectorType
           const connectionString: string = dataSource.url.value

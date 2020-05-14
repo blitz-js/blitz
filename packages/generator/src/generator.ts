@@ -36,6 +36,8 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
   private useTs: boolean
   private prettier: typeof import('prettier') | undefined
 
+  prettierDisabled: boolean = false
+
   abstract sourceRoot: string
 
   constructor(protected readonly options: T) {
@@ -91,8 +93,17 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       )
     }
 
-    if (prettierExtensions.test(pathEnding) && typeof templatedFile === 'string' && this.prettier) {
-      templatedFile = this.prettier.format(templatedFile, prettierOptions)
+    if (
+      prettierExtensions.test(pathEnding) &&
+      typeof templatedFile === 'string' &&
+      this.prettier &&
+      !this.prettierDisabled
+    ) {
+      const options: Record<any, any> = {...prettierOptions}
+      if (this.useTs) {
+        options.parser = 'babel-ts'
+      }
+      templatedFile = this.prettier.format(templatedFile, options)
     }
     return templatedFile
   }

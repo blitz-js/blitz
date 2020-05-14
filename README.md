@@ -161,6 +161,10 @@ We need more woman & nonbinary level 1 maintainers. See [MAINTAINERS.md](./MAINT
     <td align="center"><a href="http://jagascript.com"><img src="https://avatars0.githubusercontent.com/u/4562878?v=4" width="100px;" alt=""/><br /><sub><b>Jaga Santagostino</b></sub></a></td>
     <td align="center"><a href="https://simonpeterdebbarma.com"><img src="https://avatars3.githubusercontent.com/u/31207418?v=4" width="100px;" alt=""/><br /><sub><b>Simon Debbarma</b></sub></a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/jclancy93"><img src="https://avatars2.githubusercontent.com/u/7850202?v=4" width="100px;" alt=""/><br /><sub><b>Jack Clancy</b></sub></a></td>
+    <td align="center"><a href="https://twitter.com/ivandevp"><img src="https://avatars3.githubusercontent.com/u/9284690?v=4" width="100px;" alt=""/><br /><sub><b>Ivan Medina</b></sub></a></td>
+  </tr>
 </table>
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
@@ -218,7 +222,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://twitter.com/JanBaykara"><img src="https://avatars2.githubusercontent.com/u/237556?v=4" width="100px;" alt=""/><br /><sub><b>Jan Baykara</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=janbaykara" title="Documentation">📖</a></td>
     <td align="center"><a href="https://mikeattara.com"><img src="https://avatars1.githubusercontent.com/u/31483629?v=4" width="100px;" alt=""/><br /><sub><b>Mike Perry Y Attara</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=mikeattara" title="Documentation">📖</a></td>
     <td align="center"><a href="https://devanthe.dev"><img src="https://avatars0.githubusercontent.com/u/354652?v=4" width="100px;" alt=""/><br /><sub><b>Devan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=DevanB" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/jclancy93"><img src="https://avatars2.githubusercontent.com/u/7850202?v=4" width="100px;" alt=""/><br /><sub><b>Jack Clancy</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jclancy93" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/jclancy93"><img src="https://avatars2.githubusercontent.com/u/7850202?v=4" width="100px;" alt=""/><br /><sub><b>Jack Clancy</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jclancy93" title="Code">💻</a> <a href="#maintenance-jclancy93" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/ntgussoni"><img src="https://avatars0.githubusercontent.com/u/10161067?v=4" width="100px;" alt=""/><br /><sub><b>Nicolas Torres</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=ntgussoni" title="Code">💻</a></td>
   </tr>
   <tr>
@@ -237,17 +241,18 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/0xflotus"><img src="https://avatars3.githubusercontent.com/u/26602940?v=4" width="100px;" alt=""/><br /><sub><b>0xflotus</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=0xflotus" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=0xflotus" title="Documentation">📖</a></td>
     <td align="center"><a href="https://dev.to/tmns"><img src="https://avatars3.githubusercontent.com/u/35785003?v=4" width="100px;" alt=""/><br /><sub><b>tmns</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tmns" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=tmns" title="Documentation">📖</a></td>
     <td align="center"><a href="http://jruharris.com"><img src="https://avatars1.githubusercontent.com/u/8636691?v=4" width="100px;" alt=""/><br /><sub><b>Jru Harris</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=harris1717" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://twitter.com/ivandevp"><img src="https://avatars3.githubusercontent.com/u/9284690?v=4" width="100px;" alt=""/><br /><sub><b>Ivan Medina</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ivandevp" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/ivandevp"><img src="https://avatars3.githubusercontent.com/u/9284690?v=4" width="100px;" alt=""/><br /><sub><b>Ivan Medina</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ivandevp" title="Code">💻</a> <a href="#maintenance-ivandevp" title="Maintenance">🚧</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://www.dwightwatson.com"><img src="https://avatars3.githubusercontent.com/u/1100408?v=4" width="100px;" alt=""/><br /><sub><b>Dwight Watson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dwightwatson" title="Code">💻</a></td>
-    <td align="center"><a href="http://is2ei.com/"><img src="https://avatars3.githubusercontent.com/u/3948353?v=4" width="100px;" alt=""/><br /><sub><b>Horie Issei #hashtagtest</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=is2ei" title="Code">💻</a></td>
+    <td align="center"><a href="http://is2ei.com/"><img src="https://avatars3.githubusercontent.com/u/3948353?v=4" width="100px;" alt=""/><br /><sub><b>Horie Issei</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=is2ei" title="Code">💻</a></td>
     <td align="center"><a href="https://twitter.com/lednhatkhanh"><img src="https://avatars2.githubusercontent.com/u/9303093?v=4" width="100px;" alt=""/><br /><sub><b>Nhat Khanh</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lednhatkhanh" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
