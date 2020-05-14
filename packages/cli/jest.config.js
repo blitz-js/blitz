@@ -7,6 +7,7 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.ts'],
   modulePathIgnorePatterns: ['<rootDir>/tmp', '<rootDir>/lib'],
   testPathIgnorePatterns: ['src/commands/test.ts'],
+  testTimeout: 30000,
   // TODO enable threshold
   // coverageThreshold: {
   //   global: {
@@ -20,6 +21,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       tsConfig: 'test/tsconfig.json',
+      isolatedModules: true,
     },
   },
 }

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -44,13 +44,13 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@types/serialize-error": "^4.0.1",
-    "pretty-ms": "^6.0.1",
+    "@types/serialize-error": "4.0.1",
+    "pretty-ms": "6.0.1",
     "react-query": "1.3.3",
-    "serialize-error": "^6.0.0"
+    "serialize-error": "6.0.0"
   },
   "devDependencies": {
-    "@rollup/pluginutils": "^3.0.8"
+    "@rollup/pluginutils": "3.0.8"
   },
   "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }

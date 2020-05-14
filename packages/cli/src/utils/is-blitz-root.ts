@@ -35,7 +35,7 @@ export const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRoo
   try {
     const local = await readJSON('./package.json')
     if (local) {
-      if (Object.keys(local.dependencies || {}).includes('blitz')) {
+      if (local.dependencies['blitz'] || local.devDependencies['blitz']) {
         return {err: false}
       } else {
         return {

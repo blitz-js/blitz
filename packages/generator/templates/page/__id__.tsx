@@ -33,7 +33,7 @@ export const __ModelName__ = () => {
 
 const Show__ModelName__Page = () => {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>__ModelName__</title>
         <link rel="icon" href="/favicon.ico" />

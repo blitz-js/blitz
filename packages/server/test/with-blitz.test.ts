@@ -1,7 +1,7 @@
 import {withBlitz} from '../src'
 
 describe('withBlitz', () => {
-  it('alters the webpack config as expeted', () => {
+  it('alters the webpack config as expected', () => {
     const nextConfigFn = withBlitz({})
     const newNext = nextConfigFn('', {defaultConfig: {}})
     // const newWebpack = newNext.webpack({module: {rules: []}}, {})
@@ -10,7 +10,6 @@ describe('withBlitz', () => {
     expect(newNextWithoutWebpack).toStrictEqual({
       experimental: {
         reactMode: 'concurrent',
-        reactRefresh: true,
       },
       webpack: null,
     })
