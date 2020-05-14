@@ -24,9 +24,6 @@ export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
         // We pin experimental versions to ensure they work, so don't auto update experimental
         if (version.match(/experimental/)) skipFetch = true
 
-        // TODO: remove once 2.32.1+ is released
-        if (version.match(/typescript-eslint/)) skipFetch = true
-
         if (skipFetch) {
           return [dep, version]
         } else {
