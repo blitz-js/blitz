@@ -12,10 +12,6 @@ describe('`generate` command', () => {
       model: 'tasks',
       context: 'admin',
     })
-    expect(getModelNameAndContext('admin\tasks')).toEqual({
-      model: 'tasks',
-      context: 'admin',
-    })
     expect(getModelNameAndContext('admin/projects/tasks')).toEqual({
       model: 'tasks',
       context: path.join('admin', 'projects'),
