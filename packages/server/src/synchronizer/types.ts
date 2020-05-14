@@ -8,7 +8,6 @@ export type RuleConfig = {
   src: string
   dest: string
   cwd: string
-  isTsProject: boolean
   manifest: {
     path: string
     write: boolean

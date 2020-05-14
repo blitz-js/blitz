@@ -1,9 +1,8 @@
-import {resolve, join} from 'path'
+import {resolve} from 'path'
 import {ciLog} from './ci-log'
 import {resolveBinAsync} from './resolve-bin-async'
 import {synchronizeFiles} from './synchronizer'
 import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
-import {pathExists} from 'fs-extra'
 
 export type ServerConfig = {
   rootFolder: string
@@ -58,8 +57,6 @@ export async function enhance(config: ServerConfig) {
     resolve(process.cwd(), config.rootFolder),
   )
 
-  const isTsProject = await pathExists(join(config.rootFolder, 'tsconfig.ts'))
-
   return ciLog(
     `
 Logging the following to understand what is happening in our CI environment
@@ -68,7 +65,6 @@ This will be temporary.
 `,
     {
       ...config,
-      isTsProject,
       ignoredPaths: defaults.ignoredPaths.concat(gitIgnoredPaths),
       includePaths: defaults.includePaths.concat(gitIncludePaths),
       manifestPath,

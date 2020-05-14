@@ -12,7 +12,6 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     manifestPath,
     writeManifestFile,
     includePaths,
-    isTsProject,
     synchronizer: synchronizeFiles = defaultSynchronizer,
     watch = true,
   } = await enhance({
@@ -31,7 +30,6 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
       includePaths,
       manifestPath,
       writeManifestFile,
-      isTsProject,
     }),
     readyForNextDev,
   ])

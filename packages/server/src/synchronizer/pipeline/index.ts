@@ -9,7 +9,6 @@ import {createRuleManifest} from './rules/manifest'
 import {createRuleRelative} from './rules/relative'
 import {createRulePages} from './rules/pages'
 import {createRuleRpc} from './rules/rpc'
-import {createRuleTypescript} from './rules/typescript'
 import {createRuleWrite} from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
@@ -44,7 +43,6 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
   const ruleRpc = createRuleRpc(api)
   const ruleConfig = createRuleConfig(api)
   const ruleRelative = createRuleRelative(api)
-  const ruleTypescript = createRuleTypescript(api)
   const ruleWrite = createRuleWrite(api)
   const ruleManifest = createRuleManifest(api)
 
@@ -61,7 +59,6 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     rulePages.stream,
     ruleRpc.stream,
     ruleConfig.stream,
-    ruleTypescript.stream,
     ruleWrite.stream,
 
     // Tidy up

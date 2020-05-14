@@ -17,7 +17,6 @@
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
     "lint": "tsdx lint"
   },
   "husky": {
