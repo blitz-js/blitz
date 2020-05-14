@@ -104,6 +104,7 @@ yarn test
 #### Sync your fork
 
 ```sh
+git remote add upstream git@github.com:blitz-js/blitz.git
 ./scripts/fetchRemote.sh
 git merge upstream/canary
 ```
