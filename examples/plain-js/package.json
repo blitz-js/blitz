@@ -1,0 +1,55 @@
+{
+  "name": "plain-js",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "blitz start",
+    "build": "blitz db migrate && blitz build",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "yarn run build"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "prettier": {
+    "semi": false,
+    "printWidth": 110
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && pretty-quick --staged",
+      "pre-push": "blitz test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "@prisma/cli": "2.0.0-beta.3",
+    "@prisma/client": "2.0.0-beta.3",
+    "blitz": "0.10.0-canary.0",
+    "react": "0.0.0-experimental-33c3af284",
+    "react-dom": "0.0.0-experimental-33c3af284"
+  },
+  "devDependencies": {
+    "@types/react": "16.9.35",
+    "@typescript-eslint/eslint-plugin": "2.31.0",
+    "@typescript-eslint/parser": "2.31.0",
+    "babel-eslint": "10.1.0",
+    "eslint": "6.8.0",
+    "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-flowtype": "4.7.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-react-hooks": "3.0.0",
+    "husky": "4.2.5",
+    "lint-staged": "10.2.2",
+    "prettier": "2.0.5",
+    "pretty-quick": "2.0.1",
+    "typescript": "3.9.2"
+  },
+  "private": true
+}
