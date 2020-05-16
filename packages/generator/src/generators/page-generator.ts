@@ -21,6 +21,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     return {
       id: '[id]',
       parentModelParam: this.getParentIdParam(),
+      hasParent: this.options.parentModel !== undefined,
       modelName: this.options.modelName,
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,

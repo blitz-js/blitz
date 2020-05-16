@@ -10,6 +10,21 @@ import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
 import {ConflictChecker} from './conflict-checker'
+import {parse, print} from 'recast'
+import {namedTypes} from 'ast-types/gen/namedTypes'
+import * as babelParser from 'recast/parsers/babel'
+import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
+import {ASTNode, visit} from 'ast-types'
+import {StatementKind} from 'ast-types/gen/kinds'
+
+export const customTsParser = {
+  parse(source: string, options?: Overrides) {
+    const babelOptions = getBabelOptions(options)
+    babelOptions.plugins.push('typescript')
+    babelOptions.plugins.push('jsx')
+    return babelParser.parser.parse(source, babelOptions)
+  },
+}
 
 export interface GeneratorOptions {
   context?: string
@@ -22,6 +37,15 @@ const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
 const prettierExtensions = /\.(tsx?|jsx?)$/
+const templateMatch = /__([A-Za-z_-]*)__/
+
+function getInnerStatements(s?: StatementKind): StatementKind[] {
+  if (!s) return []
+  if (namedTypes.BlockStatement.check(s)) {
+    return s.body
+  }
+  return [s]
+}
 
 /**
  * The base generator class.
@@ -65,8 +89,35 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     return []
   }
 
-  replaceTemplateValues(input: string | Buffer, templateValues: any) {
-    let result = typeof input === 'string' ? input : input.toString('utf-8')
+  replaceConditionals(input: string, templateValues: any): string {
+    let ast: ASTNode = parse(input, {parser: customTsParser})
+    visit(ast, {
+      visitIfStatement(this, path) {
+        const statement = path.node
+        if (namedTypes.MemberExpression.check(statement.test)) {
+          if (
+            namedTypes.Identifier.check(statement.test.object) &&
+            statement.test.object.name === 'process' &&
+            namedTypes.Identifier.check(statement.test.property) &&
+            templateMatch.test(statement.test.property.name)
+          ) {
+            const derivedCondition =
+              templateValues[statement.test.property.name.match(templateMatch)![1] ?? '']
+            if (derivedCondition) {
+              path.replace(...getInnerStatements(statement.consequent))
+            } else {
+              path.replace(...getInnerStatements(statement.alternate || undefined))
+            }
+          }
+        }
+        this.traverse(path)
+      },
+    })
+    return print(ast).code
+  }
+
+  replaceTemplateValues(input: string, templateValues: any) {
+    let result = input
     for (let templateKey in templateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
@@ -85,7 +136,12 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
     }
-    let templatedFile = this.replaceTemplateValues(input, templateValues)
+    const inputStr = input.toString('utf-8')
+    let templatedFile = this.replaceConditionals(inputStr, templateValues)
+    if (pathEnding.includes('index')) {
+      console.log(inputStr, templatedFile)
+    }
+    templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
         babel.transform(templatedFile, {

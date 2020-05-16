@@ -5,6 +5,10 @@ import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
 export const __ModelNames__List = () => {
   const [__modelNames__] = useQuery(get__ModelNames__)
 
+  if (process.__hasParent__) {
+    console.log('has parent!')
+  }
+
   return (
     <ul>
       {__modelNames__.map((__modelName__) => (
