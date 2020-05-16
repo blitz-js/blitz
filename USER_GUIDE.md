@@ -265,6 +265,51 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
 5. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
 
+#### Server
+
+1. Add one of the render.yaml files shown below
+2. Push code to your github repo
+3. Log in to [Render.com](https://render.com)
+4. Click on the "YAML" menu item, then click the "New from YAML" button
+5. Connect your github account then select your blitz app repo
+6. Click approve
+7. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
+
+Without database:
+
+```yaml
+// render.yaml
+services:
+  - type: web
+    name: blitz-on-render
+    env: node
+    plan: starter
+    buildCommand: yarn
+    startCommand: yarn blitz start --production -H 0.0.0.0
+```
+
+With postgres database:
+
+```yaml
+// render.yaml
+services:
+  - type: web
+    name: blitz-on-render
+    env: node
+    plan: starter
+    buildCommand: yarn; blitz db migrate
+    startCommand: yarn blitz start --production -H 0.0.0.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: blitz-on-render-db
+          property: connectionString
+
+databases:
+  - name: blitz-on-render-db
+    plan: starter
+```
+
 #### Serverless
 
 Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
@@ -285,15 +330,10 @@ Assuming you already have a Vercel account and the `now` cli installed, you can 
 }
 ```
 
-3. Run `now`
+3. Add `next` as a devDependency at the same version that Blitz includes (this is a temporary workaround until Blitz has first class support (very soon!))
+4. Run `now`
 
 Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle-tested.
-
-#### Traditional, Long-Running Server
-
-You can deploy a Blitz app like a regular Node or Express project.
-
-`blitz start --production` will start your app in production mode. Make sure you provide the `DATABASE_URL` environment variable for your production database.
 
 <br>
 
