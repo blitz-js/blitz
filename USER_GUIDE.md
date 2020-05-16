@@ -285,7 +285,7 @@ Without database:
 // render.yaml
 services:
   - type: web
-    name: blitz-on-render
+    name: myapp
     env: node
     plan: starter
     buildCommand: yarn
@@ -298,7 +298,7 @@ With postgres database:
 // render.yaml
 services:
   - type: web
-    name: blitz-on-render
+    name: myapp
     env: node
     plan: starter
     buildCommand: yarn; blitz db migrate
@@ -306,11 +306,11 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: blitz-on-render-db
+          name: myapp-db
           property: connectionString
 
 databases:
-  - name: blitz-on-render-db
+  - name: myapp-db
     plan: starter
 ```
 
