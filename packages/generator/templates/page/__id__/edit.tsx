@@ -6,6 +6,9 @@ import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName_
 export const Edit__ModelName__ = () => {
   const router = useRouter()
   const id = parseInt(router?.query.id as string)
+  if (process.env.parentModel) {
+    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+  }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id}})
 
   return (
@@ -22,8 +25,16 @@ export const Edit__ModelName__ = () => {
               data: {name: 'MyNewName'},
             })
             alert('Success!' + JSON.stringify(updated))
-            router.push('/__modelNames__/[id]', `/__modelNames__/${updated.id}`)
+            router.push(
+              process.env.parentModel
+                ? '/__parentModels__/__parentModelParam__/__modelNames__/[id]'
+                : '/__modelNames__/[id]',
+              process.env.parentModel
+                ? `/__parentModels__/${__parentModelId__}/__modelNames__/${updated.id}`
+                : `/__modelNames__/${updated.id}`
+            )
           } catch (error) {
+            console.log(error)
             alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
           }
         }}>
@@ -35,6 +46,23 @@ export const Edit__ModelName__ = () => {
 }
 
 const Edit__ModelName__Page = () => {
+  const router = useRouter()
+  if (process.env.parentModel) {
+    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+  }
+
+  const indexLink = process.env.parentModel
+    ? (
+      <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+        <a>__ModelNames__</a>
+      </Link>
+    )
+    : (
+      <Link href="/__modelNames__">
+        <a>__ModelNames__</a>
+      </Link>
+    )
+
   return (
     <div>
       <Head>
@@ -48,9 +76,7 @@ const Edit__ModelName__Page = () => {
         </Suspense>
 
         <p>
-          <Link href="/__modelNames__">
-            <a>__ModelNames__</a>
-          </Link>
+          {indexLink}
         </p>
       </main>
     </div>

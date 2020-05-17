@@ -4,12 +4,12 @@ import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName_
 const New__ModelName__Page = () => {
   const router = useRouter()
   if (process.env.parentModel) {
-    const parentId = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
   const indexLink = process.env.parentModel
     ? (
-      <Link href={`/__parentModels__/${parentId}/__modelNames__`}>
+      <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
         <a>__ModelNames__</a>
       </Link>
     )
@@ -34,7 +34,7 @@ const New__ModelName__Page = () => {
             event.preventDefault()
             try {
               const createArgs = process.env.parentModel
-                ? {data: {name: 'MyName', __ParentModel__: {connect: {id: parentId}}}}
+                ? {data: {name: 'MyName', __ParentModel__: {connect: {id: __parentModelId__}}}}
                 : {data: {name: 'MyName'}}
               const __modelName__ = await create__ModelName__(createArgs)
               alert('Success!' + JSON.stringify(__modelName__))
@@ -43,7 +43,7 @@ const New__ModelName__Page = () => {
                   ? '/__parentModels__/__parentModelParam__/__modelNames__/[id]'
                   : '/__modelNames__/[id]',
                 process.env.parentModel
-                  ? `/__parentModels__/${parentId}/__modelNames__/${__modelName__.id}`
+                  ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
                   : `/__modelNames__/${__modelName__.id}`)
             } catch (error) {
               alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))

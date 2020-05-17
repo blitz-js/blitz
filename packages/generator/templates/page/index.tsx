@@ -9,8 +9,8 @@ import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
 export const __ModelNames__List = () => {
   if (process.env.parentModel) {
     const router = useRouter()
-    const parentId = parseInt(router?.query.__parentModelId__ as string)
-    const [__modelNames__] = useQuery(get__ModelNames__, {where: {__ParentModel__: {id: parentId}}})
+    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const [__modelNames__] = useQuery(get__ModelNames__, {where: {__ParentModel__: {id: __parentModelId__}}})
 
     return (
       <ul>
@@ -18,7 +18,7 @@ export const __ModelNames__List = () => {
           <li key={__modelName__.id}>
             <Link
               href="/__parentModels__/__parentModelParam__/__modelNames__/[id]"
-              as={`/__parentModels__/${parentId}/__modelNames__/${__modelName__.id}`}
+              as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
             >
               <a>{__modelName__.name}</a>
             </Link>
@@ -47,12 +47,12 @@ export const __ModelNames__List = () => {
 const __ModelNames__Page = () => {
   if (process.env.parentModel) {
     const router = useRouter()
-    const parentId = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
   const createLink = process.env.parentModel
     ? (
-      <Link href={`/__parentModels__/${parentId}/__modelNames__/new`}>
+      <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
         <a>Create __ModelName__</a>
       </Link>
     )
@@ -61,6 +61,7 @@ const __ModelNames__Page = () => {
         <a>Create __ModelName__</a>
       </Link>
     )
+
   return (
     <div>
       <Head>
