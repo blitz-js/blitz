@@ -1,0 +1,69 @@
+import * as repl from 'repl'
+import * as chokidar from 'chokidar'
+import {REPLServer} from 'repl'
+import {FSWatcher} from 'chokidar'
+
+import * as loadBlitzFunctions from '../src/utils/load-blitz'
+import {runConsole} from '../src/console'
+
+jest.spyOn(global.console, 'log').mockImplementation()
+
+const mockRepl = ({
+  defineCommand: jest.fn(),
+  on: jest.fn(),
+  context: {},
+} as any) as REPLServer
+
+const mockWatcher = ({
+  on: jest.fn(),
+} as any) as FSWatcher
+
+jest.mock('repl')
+jest.mock('chokidar')
+jest.mock(`${process.cwd()}/package.json`, () => ({
+  dependencies: {
+    ramda: '1.0.0',
+  },
+}))
+
+const pathToModulesMock = ['/module', 'module2']
+const loadBlitzMock = {blitz: 'app'}
+
+describe('Console command', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+    jest.spyOn(repl, 'start').mockReturnValue(mockRepl)
+    jest.spyOn(chokidar, 'watch').mockReturnValue(mockWatcher)
+    jest.spyOn(mockRepl, 'on').mockReturnValue(mockRepl)
+    jest.spyOn(loadBlitzFunctions, 'getBlitzModulePaths').mockReturnValue(pathToModulesMock)
+    jest.spyOn(loadBlitzFunctions, 'loadBlitz').mockReturnValue(loadBlitzMock)
+  })
+
+  it('starts REPL', async () => {
+    const options = {prompt: '> running'}
+    await runConsole(options)
+
+    expect(repl.start).toBeCalledWith(options)
+  })
+
+  it('defines reload command', async () => {
+    await runConsole({})
+    expect(mockRepl.defineCommand).toBeCalledWith(
+      'reload',
+      expect.objectContaining({
+        help: 'Reload all modules',
+      }),
+    )
+  })
+
+  it('watches for modules changes', async () => {
+    await runConsole({})
+    expect(loadBlitzFunctions.getBlitzModulePaths).toBeCalled()
+    expect(chokidar.watch).toBeCalledWith(pathToModulesMock)
+  })
+
+  it('calls loadBlitz', async () => {
+    await runConsole({})
+    expect(loadBlitzFunctions.loadBlitz).toBeCalled()
+  })
+})

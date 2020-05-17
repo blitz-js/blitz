@@ -39,7 +39,6 @@
   "dependencies": {
     "pkg-dir": "4.2.0",
     "chokidar": "3.3.1",
-    "globby": "11.0.0",
-    "ts-node": "8.9.0"
+    "globby": "11.0.0"
   }
 }
