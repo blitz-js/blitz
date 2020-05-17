@@ -9,7 +9,8 @@
     "declaration": false,
     "sourceMap": false,
     "esModuleInterop": true,
-    "types": []
+    "types": [],
+    "lib": ["dom", "dom.iterable", "ES2018"]
   },
   "include": ["src/**/*", "types"],
   "exclude": ["node_modules"]

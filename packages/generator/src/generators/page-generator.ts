@@ -23,6 +23,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    return `app/${this.options.modelNames}/pages/${this.options.modelNames}`
+    const context = this.options.context ? `${this.options.context}/` : ''
+    return `app/${context}${this.options.modelNames}/pages/${this.options.modelNames}`
   }
 }

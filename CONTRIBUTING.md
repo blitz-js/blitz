@@ -1,4 +1,4 @@
-![Blitz Contributing Guide](https://files-m3haypbo7.now.sh/contributing.png)
+![Blitz Contributing Guide](https://raw.githubusercontent.com/blitz-js/art/master/contributing-guide.png)
 
 <br>
 
@@ -104,6 +104,7 @@ yarn test
 #### Sync your fork
 
 ```sh
+git remote add upstream git@github.com:blitz-js/blitz.git
 ./scripts/fetchRemote.sh
 git merge upstream/canary
 ```

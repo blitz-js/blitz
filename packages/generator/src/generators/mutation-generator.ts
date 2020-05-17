@@ -22,6 +22,7 @@ export class MutationGenerator extends Generator<MutationGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    return `app/${this.options.modelNames}/mutations`
+    const context = this.options.context ? `${this.options.context}/` : ''
+    return `app/${context}${this.options.modelNames}/mutations`
   }
 }

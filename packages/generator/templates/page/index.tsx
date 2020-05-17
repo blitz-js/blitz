@@ -20,7 +20,7 @@ export const __ModelNames__List = () => {
 
 const __ModelNames__Page = () => {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>__ModelNames__</title>
         <link rel="icon" href="/favicon.ico" />

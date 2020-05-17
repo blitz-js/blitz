@@ -12,6 +12,7 @@ import babelTransformTypescript from '@babel/plugin-transform-typescript'
 import {ConflictChecker} from './conflict-checker'
 
 export interface GeneratorOptions {
+  context?: string
   destinationRoot?: string
   dryRun?: boolean
   useTs?: boolean

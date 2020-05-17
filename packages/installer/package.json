@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/installer",
-  "version": "0.9.2-canary.1",
+  "version": "0.10.0",
   "description": "Package installation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -39,9 +39,10 @@
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/generator": "0.9.2-canary.1",
-    "@blitzjs/server": "0.9.2-canary.1",
+    "@blitzjs/generator": "0.10.0",
+    "@blitzjs/server": "0.10.0",
     "ast-types": "0.13.3",
+    "chokidar": "3.3.1",
     "cross-spawn": "7.0.2",
     "diff": "4.0.2",
     "enquirer": "2.3.5",
