@@ -69,7 +69,7 @@
       "@oclif/plugin-not-found"
     ],
     "hooks": {
-      "prerun": [
+      "init": [
         "./lib/src/check-before-running"
       ]
     }
