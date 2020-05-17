@@ -93,11 +93,11 @@ export class Generate extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // context: flags.string({
-    //   char: 'c',
-    //   description:
-    //     'The parent folder for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
-    // }),
+    context: flags.string({
+      char: 'c',
+      description:
+        "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
+    }),
     'dry-run': flags.boolean({
       char: 'd',
       description: 'Show what files will be created without writing them to disk',
@@ -110,6 +110,12 @@ export class Generate extends Command {
     `,
     `# The 'all' generator will scaffold out everything possible for a model
 > blitz generate all products
+    `,
+    `# The '--context' flag will allow you to generate files in a nested folder
+> blitz generate pages projects --admin
+    `,
+    `# Context can also be supplied in the model name directly
+> blitz generate pages admin/projects
     `,
   ]
 
@@ -143,44 +149,40 @@ export class Generate extends Command {
     }
   }
 
+  getModelNameAndContext(modelName: string, context?: string): {model: string; context: string} {
+    const modelSegments = modelName.split(/[\\/]/)
+    const contextSegments = (context || '').split(/[\\/]/)
+    if (modelSegments.length > 1) {
+      return {
+        model: modelSegments[modelSegments.length - 1],
+        context: path.join(...modelSegments.slice(0, modelSegments.length - 1)),
+      }
+    }
+    return {
+      model: modelName,
+      context: path.join(...contextSegments),
+    }
+  }
+
   async run() {
     const {args, flags}: {args: Args; flags: Flags} = this.parse(Generate)
     debug('args: ', args)
     debug('flags: ', flags)
 
     try {
-      let singularRootContext: string
-
-      if (!flags.context) {
-        if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
-          singularRootContext = modelName(args.model)
-        } else {
-          singularRootContext = modelName(args.model)
-        }
-      } else {
-        // use [\\/] as the separator to match UNIX and Windows path formats
-        const contextParts = flags.context.split(/[\\/]/)
-        if (contextParts.length === 0) {
-          await this.handleNoContext(
-            `Couldn't determine context from context flag. Would you like to create a new context folder under /app for '${pluralize(
-              args.model,
-            )}'?`,
-          )
-          singularRootContext = modelName(args.model)
-        } else {
-          singularRootContext = modelName(args.model)
-        }
-      }
+      const {model, context} = this.getModelNameAndContext(args.model, flags.context)
+      const singularRootContext = modelName(model)
 
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: path.resolve(),
-          modelName: modelName(singularRootContext),
+          modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
           dryRun: flags['dry-run'],
+          context: context,
           useTs: isTypescript,
         })
         await generator.run()

@@ -60,7 +60,6 @@ model Task {
 ```
 
 2. Run `blitz db migrate`
-   - If this fails, you need to change the `DATABASE_URL` value in `.env` to whatever is required by your Postgres installation.
 
 <br>
 
@@ -245,7 +244,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 Blitz.js custom API routes are exactly the same as Next.js custom API routes. If you need, read [the Next.js API route documentation](https://nextjs.org/docs/api-routes/introduction)
 
 - Unlike Next.js, your `api/` folder must be a sibling of `pages/` instead of being nested inside.
-- All React components inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
+- All files inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.ts` will be at `localhost:3000/api/webhook`.
 
 <br>
 
@@ -257,21 +256,77 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 ### Deploy to Production
 
+You first need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
+
+```diff
+-datasource sqlite {
+-  provider = "sqlite"
+- url      = "file:./db.sqlite"
+-
++datasource postgresql {
++  provider = "postgresql"
++  url      = env("DATABASE_URL")
++}
+```
+
+#### Server
+
+1. Add one of the render.yaml files shown below
+2. Push code to your github repo
+3. Log in to [Render.com](https://render.com)
+4. Click on the "YAML" menu item, then click the "New from YAML" button
+5. Connect your github account then select your blitz app repo
+6. Click approve
+7. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
+
+Without database:
+
+```yaml
+// render.yaml
+services:
+  - type: web
+    name: myapp
+    env: node
+    plan: starter
+    buildCommand: yarn
+    startCommand: yarn blitz start --production -H 0.0.0.0
+```
+
+With postgres database:
+
+```yaml
+// render.yaml
+services:
+  - type: web
+    name: myapp
+    env: node
+    plan: starter
+    buildCommand: yarn; blitz db migrate
+    startCommand: yarn blitz start --production -H 0.0.0.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myapp-db
+          property: connectionString
+
+databases:
+  - name: myapp-db
+    plan: starter
+```
+
+#### Serverless
+
+Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
+
 1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
 2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
    1. [Read the Digital Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
-4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
-5. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
-
-#### Serverless
-
-Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
-
-1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
-2. Add a `now.json` at your project root with
+4. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
+5. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
+6. Add a `now.json` at your project root with
 
 ```json
 {
@@ -286,15 +341,10 @@ Assuming you already have a Vercel account and the `now` cli installed, you can 
 }
 ```
 
-3. Run `now`
+7. Add `next` as a devDependency at the same version that Blitz includes (this is a temporary workaround until Blitz has first class support (very soon!))
+8. Run `now`
 
 Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle-tested.
-
-#### Traditional, Long-Running Server
-
-You can deploy a Blitz app like a regular Node or Express project.
-
-`blitz start --production` will start your app in production mode. Make sure you provide the `DATABASE_URL` environment variable for your production database.
 
 <br>
 
@@ -326,7 +376,7 @@ Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so y
 
 #### `blitz generate -h`
 
-Generate different types of files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+Scaffold files for a model so you don't have to write them by hand
 
 #### `blitz console`
 
@@ -347,10 +397,10 @@ Start a Node.js REPL that's preloaded with your `db` object and all your queries
 Here's the list of big things that are currently missing from Blitz but are a top priority for us:
 
 - A real Blitzjs.com website and documentation
-- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
-- Authentication
+- Authentication ([See the Session Management RFC](https://github.com/blitz-js/blitz/pull/475))
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
+- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
