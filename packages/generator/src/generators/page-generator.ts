@@ -8,20 +8,30 @@ export interface PageGeneratorOptions extends GeneratorOptions {
   modelNames: string
   parentModel?: string
   parentModels?: string
+  ParentModel?: string
+  ParentModels?: string
 }
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = 'pages'
   sourceRoot = join(__dirname, './templates/page')
 
+  private getParentId() {
+    return `${this.options.parentModel}Id`
+  }
+
   private getParentIdParam() {
-    return `[${this.options.parentModel}Id]`
+    return `[${this.getParentId()}]`
   }
   async getTemplateValues() {
     return {
       id: '[id]',
+      parentModelId: this.getParentId(),
       parentModelParam: this.getParentIdParam(),
-      hasParent: this.options.parentModel !== undefined,
+      parentModel: this.options.parentModel,
+      parentModels: this.options.parentModels,
+      ParentModel: this.options.ParentModel,
+      ParentModels: this.options.ParentModels,
       modelName: this.options.modelName,
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,

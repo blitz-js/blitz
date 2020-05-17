@@ -194,6 +194,8 @@ export class Generate extends Command {
           ModelNames: ModelNames(singularRootContext),
           parentModel: modelName(flags.parent),
           parentModels: modelNames(flags.parent),
+          ParentModel: ModelName(flags.parent),
+          ParentModels: ModelNames(flags.parent),
           dryRun: flags['dry-run'],
           context: context,
           useTs: isTypescript,

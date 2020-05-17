@@ -15,7 +15,9 @@ import {namedTypes} from 'ast-types/gen/namedTypes'
 import * as babelParser from 'recast/parsers/babel'
 import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
 import {ASTNode, visit} from 'ast-types'
-import {StatementKind} from 'ast-types/gen/kinds'
+import {StatementKind, ExpressionKind} from 'ast-types/gen/kinds'
+import {Context} from 'ast-types/lib/path-visitor'
+import {NodePath} from 'ast-types/lib/node-path'
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
@@ -36,15 +38,49 @@ export interface GeneratorOptions {
 const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
-const prettierExtensions = /\.(tsx?|jsx?)$/
-const templateMatch = /__([A-Za-z_-]*)__/
+const codeFileExtensions = /\.(tsx?|jsx?)$/
 
-function getInnerStatements(s?: StatementKind): StatementKind[] {
+function getInnerStatements(s?: StatementKind | ExpressionKind): Array<StatementKind | ExpressionKind> {
   if (!s) return []
   if (namedTypes.BlockStatement.check(s)) {
     return s.body
   }
   return [s]
+}
+
+// process any template expressions that access process.env, but bypass any
+// expressions that aren't targeting templateValues so templates can include
+// checks for other env variables
+function conditionalExpressionVisitor(
+  this: Context,
+  path: NodePath<namedTypes.IfStatement | namedTypes.ConditionalExpression, any>,
+  templateValues: any,
+): void {
+  const statement = path.node
+  // only enter if the condition is a compount statement, otherwise
+  // it's definitely not a valid template condition
+  if (namedTypes.MemberExpression.check(statement.test)) {
+    if (
+      // condition statement starts with `process.` and has a second accessor
+      namedTypes.MemberExpression.check(statement.test.object) &&
+      namedTypes.Identifier.check(statement.test.object.object) &&
+      statement.test.object.object.name === 'process' &&
+      // condition statement continues with `env.`
+      namedTypes.Identifier.check(statement.test.object.property) &&
+      statement.test.object.property.name === 'env' &&
+      // condition ends with valid templateVariable
+      namedTypes.Identifier.check(statement.test.property) &&
+      Object.keys(templateValues).includes(statement.test.property.name)
+    ) {
+      const derivedCondition = templateValues[statement.test.property.name]
+      if (derivedCondition) {
+        path.replace(...getInnerStatements(statement.consequent))
+      } else {
+        path.replace(...getInnerStatements(statement.alternate || undefined))
+      }
+    }
+  }
+  this.traverse(path)
 }
 
 /**
@@ -91,26 +127,14 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
 
   replaceConditionals(input: string, templateValues: any): string {
     let ast: ASTNode = parse(input, {parser: customTsParser})
+    // reassign `this` since recast depends on a bound `this` context
+    // in visitors
     visit(ast, {
       visitIfStatement(this, path) {
-        const statement = path.node
-        if (namedTypes.MemberExpression.check(statement.test)) {
-          if (
-            namedTypes.Identifier.check(statement.test.object) &&
-            statement.test.object.name === 'process' &&
-            namedTypes.Identifier.check(statement.test.property) &&
-            templateMatch.test(statement.test.property.name)
-          ) {
-            const derivedCondition =
-              templateValues[statement.test.property.name.match(templateMatch)![1] ?? '']
-            if (derivedCondition) {
-              path.replace(...getInnerStatements(statement.consequent))
-            } else {
-              path.replace(...getInnerStatements(statement.alternate || undefined))
-            }
-          }
-        }
-        this.traverse(path)
+        conditionalExpressionVisitor.call(this, path, templateValues)
+      },
+      visitConditionalExpression(this, path) {
+        conditionalExpressionVisitor.call(this, path, templateValues)
       },
     })
     return print(ast).code
@@ -137,9 +161,9 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       return input
     }
     const inputStr = input.toString('utf-8')
-    let templatedFile = this.replaceConditionals(inputStr, templateValues)
-    if (pathEnding.includes('index')) {
-      console.log(inputStr, templatedFile)
+    let templatedFile = inputStr
+    if (codeFileExtensions.test(pathEnding)) {
+      templatedFile = this.replaceConditionals(inputStr, templateValues)
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
@@ -151,7 +175,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     }
 
     if (
-      prettierExtensions.test(pathEnding) &&
+      codeFileExtensions.test(pathEnding) &&
       typeof templatedFile === 'string' &&
       this.prettier &&
       !this.prettierDisabled
