@@ -102,7 +102,7 @@ export class Generate extends Command {
     parent: flags.string({
       char: 'p',
       description:
-        'Specify a parent model to be used for generating nested routes for dependent data when generating pages. This flag has no effect when generating files other than pages.',
+        'Specify a parent model to be used for generating nested routes for dependent data when generating pages. The generated pages will automatically support the nested data model, including all CRUD operations passing the proper variables to queries and mutations. This flag has no effect when generating files other than pages.',
     }),
     'dry-run': flags.boolean({
       char: 'd',
@@ -123,9 +123,9 @@ export class Generate extends Command {
     `# Context can also be supplied in the model name directly
 > blitz generate pages admin/projects
     `,
-    `# To generate nested routes, specify a parent model when generating pages.
-# For example, this command generates pages under
-# app/tasks/pages/projects/[projectId]/tasks/
+    `# To generate nested routes for dependent models (e.g. Projects that contain
+# Tasks), specify a parent model when generating pages. For example, this command
+# generates pages under app/tasks/pages/projects/[projectId]/tasks/
 > blitz generate pages tasks --parent=projects
     `,
   ]
