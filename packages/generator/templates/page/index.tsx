@@ -52,7 +52,9 @@ const __ModelNames__Page = () => {
 
   const createLink = process.env.parentModel
     ? (
-      <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+      <Link
+        as="/__parentModels__/__parentModelId__/__modelNames__/new"
+        href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
         <a>Create __ModelName__</a>
       </Link>
     )
