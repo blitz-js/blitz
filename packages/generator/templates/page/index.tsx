@@ -48,18 +48,6 @@ const __ModelNames__Page = () => {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
-  const createLink = process.env.parentModel ? (
-    <Link
-      href="/__parentModels__/__parentModelId__/__modelNames__/new"
-      as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
-      <a>Create __ModelName__</a>
-    </Link>
-  ) : (
-    <Link href="/__modelNames__/new">
-      <a>Create __ModelName__</a>
-    </Link>
-  )
-
   return (
     <div>
       <Head>
@@ -70,7 +58,19 @@ const __ModelNames__Page = () => {
       <main>
         <h1>__ModelNames__</h1>
 
-        <p>{createLink}</p>
+        <p>
+          {process.env.parentModel ? (
+            <Link
+              href="/__parentModels__/__parentModelId__/__modelNames__/new"
+              as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+              <a>Create __ModelName__</a>
+            </Link>
+          ) : (
+            <Link href="/__modelNames__/new">
+              <a>Create __ModelName__</a>
+            </Link>
+          )}
+        </p>
 
         <Suspense fallback={<div>Loading...</div>}>
           <__ModelNames__List />

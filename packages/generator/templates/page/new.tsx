@@ -7,18 +7,6 @@ const New__ModelName__Page = () => {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
-  const indexLink = process.env.parentModel ? (
-    <Link
-      as="/__parentModels__/__parentModelId__/__modelNames__"
-      href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
-      <a>__ModelNames__</a>
-    </Link>
-  ) : (
-    <Link href="/__modelNames__">
-      <a>__ModelNames__</a>
-    </Link>
-  )
-
   return (
     <div>
       <Head>
@@ -54,7 +42,19 @@ const New__ModelName__Page = () => {
           <button>Submit</button>
         </form>
 
-        <p>{indexLink}</p>
+        <p>
+          {process.env.parentModel ? (
+            <Link
+              as="/__parentModels__/__parentModelId__/__modelNames__"
+              href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+              <a>__ModelNames__</a>
+            </Link>
+          ) : (
+            <Link href="/__modelNames__">
+              <a>__ModelNames__</a>
+            </Link>
+          )}
+        </p>
       </main>
     </div>
   )

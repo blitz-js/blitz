@@ -31,7 +31,7 @@ export const Edit__ModelName__ = () => {
                 : '/__modelNames__/__modelIdParam__',
               process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${updated.id}`
-                : `/__modelNames__/${updated.id}`
+                : `/__modelNames__/${updated.id}`,
             )
           } catch (error) {
             console.log(error)
@@ -51,20 +51,6 @@ const Edit__ModelName__Page = () => {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
-  const indexLink = process.env.parentModel
-    ? (
-      <Link
-        as="/__parentModels__/__parentModelId__/__modelNames__"
-        href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
-        <a>__ModelNames__</a>
-      </Link>
-    )
-    : (
-      <Link href="/__modelNames__">
-        <a>__ModelNames__</a>
-      </Link>
-    )
-
   return (
     <div>
       <Head>
@@ -78,7 +64,17 @@ const Edit__ModelName__Page = () => {
         </Suspense>
 
         <p>
-          {indexLink}
+          {process.env.parentModel ? (
+            <Link
+              as="/__parentModels__/__parentModelId__/__modelNames__"
+              href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+              <a>__ModelNames__</a>
+            </Link>
+          ) : (
+            <Link href="/__modelNames__">
+              <a>__ModelNames__</a>
+            </Link>
+          )}
         </p>
       </main>
     </div>
