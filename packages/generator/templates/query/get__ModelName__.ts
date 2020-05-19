@@ -2,7 +2,7 @@ import db, {FindOne__ModelName__Args} from 'db'
 
 type Get__ModelName__Input = {
   where: FindOne__ModelName__Args['where']
-  include: FindOne__ModelName__Args['include']
+  include?: FindOne__ModelName__Args['include']
 }
 
 export default async function get__ModelName__({where, include}: Get__ModelName__Input) {

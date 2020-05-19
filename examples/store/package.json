@@ -9,9 +9,13 @@
     "test:start": "blitz db migrate && blitz start --production -p 3099",
     "test": "start-server-and-test test:start http://localhost:3099 cy:run"
   },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
   "dependencies": {
-    "@prisma/cli": "2.0.0-beta.3",
-    "@prisma/client": "2.0.0-beta.3",
+    "@prisma/cli": "2.0.0-beta.5",
+    "@prisma/client": "2.0.0-beta.5",
     "blitz": "0.10.0",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-33c3af284",

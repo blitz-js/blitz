@@ -1,6 +1,7 @@
 import React from 'react'
 import {Head, Link, useRouter} from 'blitz'
 import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName__'
+import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
 
 const New__ModelName__Page: React.FC = () => {
   const router = useRouter()
@@ -18,9 +19,9 @@ const New__ModelName__Page: React.FC = () => {
       <main>
         <h1>Create New __ModelName__ </h1>
 
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault()
+        <__ModelName__Form
+          initialValues={{}}
+          onSubmit={async () => {
             try {
               const __modelName__ = await create__ModelName__(
                 process.env.parentModel
@@ -39,10 +40,8 @@ const New__ModelName__Page: React.FC = () => {
             } catch (error) {
               alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
             }
-          }}>
-          <div>Put your form fields here. But for now, just click submit</div>
-          <button>Submit</button>
-        </form>
+          }}
+        />
 
         <p>
           {process.env.parentModel ? (

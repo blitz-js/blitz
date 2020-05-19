@@ -4,7 +4,12 @@ import * as fs from 'fs'
 import * as path from 'path'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
-import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} from '@blitzjs/generator'
+import {
+  PageGenerator,
+  MutationGenerator,
+  QueryGenerator,
+  FormGenerator /* ModelGenerator */,
+} from '@blitzjs/generator'
 import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
@@ -58,10 +63,10 @@ function ModelNames(input: string = '') {
 }
 
 const generatorMap = {
-  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
-  [ResourceType.Page]: [PageGenerator],
+  [ResourceType.Page]: [PageGenerator, FormGenerator],
   [ResourceType.Query]: [QueryGenerator],
   // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
 }

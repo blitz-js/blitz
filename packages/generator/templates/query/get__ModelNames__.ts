@@ -2,13 +2,13 @@ import db, {FindMany__ModelName__Args} from 'db'
 
 type Get__ModelNames__Input = {
   where: FindMany__ModelName__Args['where']
-  include: FindMany__ModelName__Args['include']
-  orderBy: FindMany__ModelName__Args['orderBy']
-  skip: FindMany__ModelName__Args['skip']
-  after: FindMany__ModelName__Args['after']
-  before: FindMany__ModelName__Args['before']
-  first: FindMany__ModelName__Args['first']
-  last: FindMany__ModelName__Args['last']
+  include?: FindMany__ModelName__Args['include']
+  orderBy?: FindMany__ModelName__Args['orderBy']
+  skip?: FindMany__ModelName__Args['skip']
+  after?: FindMany__ModelName__Args['after']
+  before?: FindMany__ModelName__Args['before']
+  first?: FindMany__ModelName__Args['first']
+  last?: FindMany__ModelName__Args['last']
 }
 
 export default async function get__ModelNames__({

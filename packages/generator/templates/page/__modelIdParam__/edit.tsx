@@ -2,6 +2,7 @@ import React, {Suspense} from 'react'
 import {Head, Link, useRouter, useQuery} from 'blitz'
 import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
 import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName__'
+import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
 
 export const Edit__ModelName__: React.FC = () => {
   const router = useRouter()
@@ -16,9 +17,9 @@ export const Edit__ModelName__: React.FC = () => {
       <h1>Edit __ModelName__ {__modelName__.id}</h1>
       <pre>{JSON.stringify(__modelName__)}</pre>
 
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault()
+      <__ModelName__Form
+        initialValues={__modelName__}
+        onSubmit={async () => {
           try {
             const updated = await update__ModelName__({
               where: {id: __modelName__.id},
@@ -37,17 +38,15 @@ export const Edit__ModelName__: React.FC = () => {
             console.log(error)
             alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
           }
-        }}>
-        <div>Put your form fields here. But for now, just click submit</div>
-        <button>Submit</button>
-      </form>
+        }}
+      />
     </div>
   )
 }
 
 const Edit__ModelName__Page: React.FC = () => {
-  const router = useRouter()
   if (process.env.parentModel) {
+    const router = useRouter()
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
