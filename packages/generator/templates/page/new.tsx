@@ -21,10 +21,11 @@ const New__ModelName__Page = () => {
           onSubmit={async (event) => {
             event.preventDefault()
             try {
-              const createArgs = process.env.parentModel
-                ? {data: {name: 'MyName', __parentModel__: {connect: {id: __parentModelId__}}}}
-                : {data: {name: 'MyName'}}
-              const __modelName__ = await create__ModelName__(createArgs)
+              const __modelName__ = await create__ModelName__(
+                process.env.parentModel
+                  ? {data: {name: 'MyName', __parentModel__: {connect: {id: __parentModelId__}}}}
+                  : {data: {name: 'MyName'}},
+              )
               alert('Success!' + JSON.stringify(__modelName__))
               router.push(
                 process.env.parentModel
