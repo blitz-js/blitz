@@ -4,7 +4,7 @@ This package houses all files related to Blitz codegen. In the main `src` direct
 
 Creating a new generator requires a new `Generator` subclass inside of `src/generators`, and potentially a new template in `templates` if the generator generates net-new files. For templates, we use our own templating language. Each variable in a template surrounded by `__` (e.g. `__modelName__`) will be replaced with the corresponding value in the object returned from `Generator::getTemplateValues`. This type of replacement works in filenames as well.
 
-The generator framework also supports conditional code generation, similar to other common templating languages like handlebars. All model variables are exposed via `process.env` and can be used in conditional statements. The generator wil not evaluate any expressions in the conditional, so the condition must be evaluated in the generator class and passed as a variable to the template. Both `if else` and ternary statements are supported, and for `if` statements no `else` is required:
+The generator framework also supports conditional code generation, similar to other common templating languages like handlebars. All model variables are exposed via `process.env` and can be used in conditional statements. The generator will not evaluate any expressions in the conditional, so the condition must be evaluated in the generator class and passed as a variable to the template. Both `if else` and ternary statements are supported, and for `if` statements no `else` is required:
 
 ```js
 // VALID
