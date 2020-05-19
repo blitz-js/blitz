@@ -17,7 +17,7 @@ export const __ModelNames__List = () => {
         {__modelNames__.map((__modelName__) => (
           <li key={__modelName__.id}>
             <Link
-              href="/__parentModels__/__parentModelParam__/__modelNames__/[id]"
+              href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
               as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
             >
               <a>{__modelName__.name}</a>
@@ -33,7 +33,7 @@ export const __ModelNames__List = () => {
       <ul>
         {__modelNames__.map((__modelName__) => (
           <li key={__modelName__.id}>
-            <Link href="/__modelNames__/[id]" as={`/__modelNames__/${__modelName__.id}`}>
+            <Link href="/__modelNames__/__modelIdParam__" as={`/__modelNames__/${__modelName__.id}`}>
               <a>{__modelName__.name}</a>
             </Link>
           </li>

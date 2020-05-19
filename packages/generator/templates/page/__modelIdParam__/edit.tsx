@@ -5,11 +5,11 @@ import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName_
 
 export const Edit__ModelName__ = () => {
   const router = useRouter()
-  const id = parseInt(router?.query.id as string)
+  const __modelId__ = parseInt(router?.query.__modelId__ as string)
   if (process.env.parentModel) {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
-  const [__modelName__] = useQuery(get__ModelName__, {where: {id}})
+  const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
   return (
     <div>
@@ -27,8 +27,8 @@ export const Edit__ModelName__ = () => {
             alert('Success!' + JSON.stringify(updated))
             router.push(
               process.env.parentModel
-                ? '/__parentModels__/__parentModelParam__/__modelNames__/[id]'
-                : '/__modelNames__/[id]',
+                ? '/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__'
+                : '/__modelNames__/__modelIdParam__',
               process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${updated.id}`
                 : `/__modelNames__/${updated.id}`

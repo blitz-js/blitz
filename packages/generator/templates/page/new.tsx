@@ -42,8 +42,8 @@ const New__ModelName__Page = () => {
               alert('Success!' + JSON.stringify(__modelName__))
               router.push(
                 process.env.parentModel
-                  ? '/__parentModels__/__parentModelParam__/__modelNames__/[id]'
-                  : '/__modelNames__/[id]',
+                  ? '/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__'
+                  : '/__modelNames__/__modelIdParam__',
                 process.env.parentModel
                   ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
                   : `/__modelNames__/${__modelName__.id}`)

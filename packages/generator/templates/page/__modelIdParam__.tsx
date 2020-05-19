@@ -5,23 +5,23 @@ import delete__ModelName__ from 'app/__modelNames__/mutations/delete__ModelName_
 
 export const __ModelName__ = () => {
   const router = useRouter()
-  const id = parseInt(router?.query.id as string)
+  const __modelId__ = parseInt(router?.query.__modelId__ as string)
   if (process.env.parentModel) {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
-  const [__modelName__] = useQuery(get__ModelName__, {where: {id}})
+  const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
   const editLink = process.env.parentModel
     ? (
       <Link
-        href="/__parentModels__/__parentModelParam__/__modelNames__/[id]/edit"
+        href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
         as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
       >
         <a>Edit</a>
       </Link>
     )
     : (
-      <Link href="/__modelNames__/[id]/edit" as={`/__modelNames__/${__modelName__.id}/edit`}>
+      <Link href="/__modelNames__/__modelIdParam__/edit" as={`/__modelNames__/${__modelName__.id}/edit`}>
         <a>Edit</a>
       </Link>
     )
