@@ -10,7 +10,7 @@
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "lint": "tsdx lint",
-    "test": "jest || jest",
+    "test": "tsdx test",
     "test:watch": "jest --watch"
   },
   "author": {
@@ -69,7 +69,7 @@
       "@oclif/plugin-not-found"
     ],
     "hooks": {
-      "prerun": [
+      "init": [
         "./lib/src/check-before-running"
       ]
     }
