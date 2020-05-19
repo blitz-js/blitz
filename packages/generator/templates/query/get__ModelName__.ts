@@ -1,7 +1,12 @@
 import db, {FindOne__ModelName__Args} from 'db'
 
-export default async function get__ModelName__(args: FindOne__ModelName__Args) {
-  const __modelName__ = await db.__modelName__.findOne(args)
+type Get__ModelName__Input = {
+  where: FindOne__ModelName__Args['where']
+  include: FindOne__ModelName__Args['include']
+}
+
+export default async function get__ModelName__({where, include}: Get__ModelName__Input) {
+  const __modelName__ = await db.__modelName__.findOne({where, include})
 
   return __modelName__
 }

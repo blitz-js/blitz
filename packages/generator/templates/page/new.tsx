@@ -24,7 +24,7 @@ const New__ModelName__Page: React.FC = () => {
             try {
               const __modelName__ = await create__ModelName__(
                 process.env.parentModel
-                  ? {data: {name: 'MyName', __parentModelId__}}
+                  ? {data: {name: 'MyName'}, __parentModelId__}
                   : {data: {name: 'MyName'}},
               )
               alert('Success!' + JSON.stringify(__modelName__))

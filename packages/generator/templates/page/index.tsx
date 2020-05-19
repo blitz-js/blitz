@@ -26,7 +26,7 @@ export const __ModelNames__List: React.FC = () => {
       </ul>
     )
   } else {
-    const [__modelNames__] = useQuery(get__ModelNames__)
+    const [__modelNames__] = useQuery(get__ModelNames__, {})
 
     return (
       <ul>
