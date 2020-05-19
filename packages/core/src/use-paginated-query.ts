@@ -1,15 +1,15 @@
-import {useQuery as useReactQuery, QueryResult, QueryOptions} from 'react-query'
+import {usePaginatedQuery as usePaginatedReactQuery, PaginatedQueryResult, QueryOptions} from 'react-query'
 import {PromiseReturnType, InferUnaryParam} from './types'
 
 type QueryFn = (...args: any) => Promise<any>
-type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, 'data'>
+type RestQueryResult<T extends QueryFn> = Omit<PaginatedQueryResult<PromiseReturnType<T>>, 'resolvedData'>
 
-export function useQuery<T extends QueryFn>(
+export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
   params?: InferUnaryParam<T>,
   options?: QueryOptions<T>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
-  const {data, ...rest} = useReactQuery({
+  const {resolvedData, ...rest} = usePaginatedReactQuery({
     queryKey: [(queryFn as any).cacheKey, params],
     queryFn: (_: string, params) => queryFn(params),
     config: {
@@ -18,5 +18,5 @@ export function useQuery<T extends QueryFn>(
       ...options,
     },
   })
-  return [data as PromiseReturnType<T>, rest as RestQueryResult<T>]
+  return [resolvedData as PromiseReturnType<T>, rest as RestQueryResult<T>]
 }
