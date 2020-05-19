@@ -1,7 +1,8 @@
+import React from 'react'
 import {Head, Link, useRouter} from 'blitz'
 import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName__'
 
-const New__ModelName__Page = () => {
+const New__ModelName__Page: React.FC = () => {
   const router = useRouter()
   if (process.env.parentModel) {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
@@ -23,7 +24,7 @@ const New__ModelName__Page = () => {
             try {
               const __modelName__ = await create__ModelName__(
                 process.env.parentModel
-                  ? {data: {name: 'MyName', __parentModel__: {connect: {id: __parentModelId__}}}}
+                  ? {data: {name: 'MyName', __parentModelId__}}
                   : {data: {name: 'MyName'}},
               )
               alert('Success!' + JSON.stringify(__modelName__))

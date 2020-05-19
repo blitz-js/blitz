@@ -1,9 +1,9 @@
-import {Suspense} from 'react'
+import React, {Suspense} from 'react'
 import {Head, Link, useRouter, useQuery} from 'blitz'
 import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
 import delete__ModelName__ from 'app/__modelNames__/mutations/delete__ModelName__'
 
-export const __ModelName__ = () => {
+export const __ModelName__: React.FC = () => {
   const router = useRouter()
   const __modelId__ = parseInt(router?.query.__modelId__ as string)
   if (process.env.parentModel) {
@@ -49,7 +49,7 @@ export const __ModelName__ = () => {
   )
 }
 
-const Show__ModelName__Page = () => {
+const Show__ModelName__Page: React.FC = () => {
   if (process.env.parentModel) {
     const router = useRouter()
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
