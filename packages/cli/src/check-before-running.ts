@@ -6,8 +6,7 @@ import {isBlitzRoot, IsBlitzRootError} from './utils/is-blitz-root'
 const whitelistGlobal = ['new']
 
 export const hook: Hook<'init'> = async function (options) {
-  // Bug with oclif
-  const id = (options as any).Command.id
+  const {id} = options
   if (id && whitelistGlobal.includes(id)) return
 
   const {err, message, depth} = await isBlitzRoot()
