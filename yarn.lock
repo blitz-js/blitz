@@ -981,95 +981,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@blitzjs/cli@0.10.0-canary.1":
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@blitzjs/cli/-/cli-0.10.0-canary.1.tgz#eb8bfeb7537c1920e4c988d27c2f18232dc4572c"
-  integrity sha512-QLtG6ssi2q/6y5de0oF8z1D+t0rIzqKApeOU6zba3PU0GGdikc+Uc5t1N853d9lqfNzw/aakPyV7s8+cMbbTIQ==
-  dependencies:
-    "@oclif/command" "1.5.20"
-    "@oclif/config" "1.15.1"
-    "@oclif/plugin-help" "2.2.3"
-    "@oclif/plugin-not-found" "1.2.3"
-    camelcase "6.0.0"
-    chalk "4.0.0"
-    chokidar "3.3.1"
-    cross-spawn "7.0.2"
-    dotenv "8.2.0"
-    enquirer "2.3.4"
-    globby "11.0.0"
-    got "11.1.3"
-    has-yarn "2.1.0"
-    hasbin "1.2.3"
-    minimist "1.2.5"
-    pkg-dir "4.2.0"
-    pluralize "8.0.0"
-    rimraf "3.0.2"
-    tar "6.0.2"
-    ts-node "8.9.0"
-    tsconfig-paths "3.9.0"
-
-"@blitzjs/core@0.10.0-canary.1":
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@blitzjs/core/-/core-0.10.0-canary.1.tgz#006b79be05f71a0fedb01dfaba39663df09883e0"
-  integrity sha512-ayafTsy7W+1F8CGnNw9pcseRUvtPYqw3f2wnL8iHkkIxFaEfQ6a7X5uQinh+uHRql796oFHV/QpcG+afS4zfaQ==
-  dependencies:
-    "@types/serialize-error" "4.0.1"
-    pretty-ms "6.0.1"
-    react-query "1.3.3"
-    serialize-error "6.0.0"
-
-"@blitzjs/generator@0.10.0-canary.1":
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.10.0-canary.1.tgz#fe62ba094b241c05f90680190323f6c535d24591"
-  integrity sha512-wHnhcw2jvQfT939kRkRRYU9XkTZgPPL/wgctvwSgebydHwcJueYRq1dAPBM0yf0USJMwBzEwEgNKBqjmX6YmEQ==
-  dependencies:
-    "@babel/core" "7.9.0"
-    "@babel/plugin-transform-typescript" "7.9.4"
-    chalk "4.0.0"
-    cross-spawn "7.0.2"
-    diff "4.0.2"
-    enquirer "2.3.5"
-    fs-extra "9.0.0"
-    fs-readdir-recursive "1.1.0"
-    mem-fs "1.1.3"
-    mem-fs-editor "6.0.0"
-    node-fetch "2.6.0"
-    username "5.1.0"
-    vinyl "2.2.0"
-
-"@blitzjs/server@0.10.0-canary.1":
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@blitzjs/server/-/server-0.10.0-canary.1.tgz#95e1e02f5d8f116421b58b33d31a726b86b02082"
-  integrity sha512-OAzHlptDxJyPSJ9i8Lgl4X9HtASWu0ROKI4rbf2667e9FZGF0JwNOZn7npHiuQhbd7gP/UYewW6ZSqPaTGggmQ==
-  dependencies:
-    cross-spawn "7.0.2"
-    detect-port "1.3.0"
-    fast-glob "3.2.2"
-    flush-write-stream "2.0.0"
-    from2 "2.3.0"
-    gulp-if "3.0.0"
-    lodash "4.17.15"
-    merge-stream "2.0.0"
-    next "9.4.0"
-    next-compose-plugins "2.2.0"
-    next-transpile-modules "3.2.0"
-    null-loader "4.0.0"
-    ora "4.0.4"
-    parallel-transform "1.2.0"
-    parse-gitignore "1.0.1"
-    path-is-absolute "2.0.0"
-    pirates "4.0.1"
-    pkg-dir "4.2.0"
-    pumpify "2.0.1"
-    readable-stream "3.6.0"
-    resolve-cwd "3.0.0"
-    serialize-error "6.0.0"
-    slash "3.0.0"
-    through2 "3.0.1"
-    vinyl "2.2.0"
-    vinyl-file "3.0.0"
-    vinyl-fs "3.0.3"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -4319,20 +4230,6 @@ bl@^4.0.1:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
-
-blitz@0.10.0-canary.1:
-  version "0.10.0-canary.1"
-  resolved "https://registry.yarnpkg.com/blitz/-/blitz-0.10.0-canary.1.tgz#6faf893fbe8834b26739e49264e6a55b475e5374"
-  integrity sha512-kkjOKekBxvJxEi9u9VpYEn1fPW6IoLygjd6yE64c2/EV/mltGZUmzjbs68DRYcbIo25fz5isBjzx33M1K2to8w==
-  dependencies:
-    "@blitzjs/cli" "0.10.0-canary.1"
-    "@blitzjs/core" "0.10.0-canary.1"
-    "@blitzjs/generator" "0.10.0-canary.1"
-    "@blitzjs/server" "0.10.0-canary.1"
-    os-name "3.1.0"
-    pkg-dir "4.2.0"
-    resolve-from "5.0.0"
-    resolve-global "1.0.0"
 
 bluebird@3.7.2, bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.7.2"

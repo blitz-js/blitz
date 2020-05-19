@@ -7,19 +7,17 @@ const New__ModelName__Page = () => {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
-  const indexLink = process.env.parentModel
-    ? (
-      <Link
-        as="/__parentModels__/__parentModelId__/__modelNames__"
-        href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
-        <a>__ModelNames__</a>
-      </Link>
-    )
-    : (
-      <Link href="/__modelNames__">
-        <a>__ModelNames__</a>
-      </Link>
-    )
+  const indexLink = process.env.parentModel ? (
+    <Link
+      as="/__parentModels__/__parentModelId__/__modelNames__"
+      href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+      <a>__ModelNames__</a>
+    </Link>
+  ) : (
+    <Link href="/__modelNames__">
+      <a>__ModelNames__</a>
+    </Link>
+  )
 
   return (
     <div>
@@ -36,7 +34,7 @@ const New__ModelName__Page = () => {
             event.preventDefault()
             try {
               const createArgs = process.env.parentModel
-                ? {data: {name: 'MyName', __ParentModel__: {connect: {id: __parentModelId__}}}}
+                ? {data: {name: 'MyName', __parentModel__: {connect: {id: __parentModelId__}}}}
                 : {data: {name: 'MyName'}}
               const __modelName__ = await create__ModelName__(createArgs)
               alert('Success!' + JSON.stringify(__modelName__))
@@ -46,7 +44,8 @@ const New__ModelName__Page = () => {
                   : '/__modelNames__/__modelIdParam__',
                 process.env.parentModel
                   ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
-                  : `/__modelNames__/${__modelName__.id}`)
+                  : `/__modelNames__/${__modelName__.id}`,
+              )
             } catch (error) {
               alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
             }
@@ -55,9 +54,7 @@ const New__ModelName__Page = () => {
           <button>Submit</button>
         </form>
 
-        <p>
-          {indexLink}
-        </p>
+        <p>{indexLink}</p>
       </main>
     </div>
   )

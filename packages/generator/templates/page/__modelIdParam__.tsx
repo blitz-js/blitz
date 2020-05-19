@@ -11,20 +11,17 @@ export const __ModelName__ = () => {
   }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
-  const editLink = process.env.parentModel
-    ? (
-      <Link
-        href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
-        as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
-      >
-        <a>Edit</a>
-      </Link>
-    )
-    : (
-      <Link href="/__modelNames__/__modelIdParam__/edit" as={`/__modelNames__/${__modelName__.id}/edit`}>
-        <a>Edit</a>
-      </Link>
-    )
+  const editLink = process.env.parentModel ? (
+    <Link
+      href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
+      as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}>
+      <a>Edit</a>
+    </Link>
+  ) : (
+    <Link href="/__modelNames__/__modelIdParam__/edit" as={`/__modelNames__/${__modelName__.id}/edit`}>
+      <a>Edit</a>
+    </Link>
+  )
 
   return (
     <div>
@@ -41,7 +38,7 @@ export const __ModelName__ = () => {
             if (process.env.parentModel) {
               router.push(
                 '/__parentModels__/__parentModelParam__/__modelNames__',
-                `/__parentModels__/${__parentModelId__}/__modelNames__`
+                `/__parentModels__/${__parentModelId__}/__modelNames__`,
               )
             } else {
               router.push('/__modelNames__')
@@ -60,19 +57,17 @@ const Show__ModelName__Page = () => {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
 
-  const indexLink = process.env.parentModel
-    ? (
-      <Link
-        as="/__parentModels__/__parentModelId__/__modelNames__"
-        href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
-        <a>__ModelNames__</a>
-      </Link>
-    )
-    : (
-      <Link href="/__modelNames__">
-        <a>__ModelNames__</a>
-      </Link>
-    )
+  const indexLink = process.env.parentModel ? (
+    <Link
+      href="/__parentModels__/__parentModelId__/__modelNames__"
+      as={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+      <a>__ModelNames__</a>
+    </Link>
+  ) : (
+    <Link href="/__modelNames__">
+      <a>__ModelNames__</a>
+    </Link>
+  )
 
   return (
     <div>
@@ -82,9 +77,7 @@ const Show__ModelName__Page = () => {
       </Head>
 
       <main>
-        <p>
-          {indexLink}
-        </p>
+        <p>{indexLink}</p>
 
         <Suspense fallback={<div>Loading...</div>}>
           <__ModelName__ />
