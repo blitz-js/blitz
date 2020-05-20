@@ -7,7 +7,7 @@ type RestQueryResult<T extends QueryFn> = Omit<PaginatedQueryResult<PromiseRetur
 export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T>,
-  options?: QueryOptions<T>,
+  options?: QueryOptions<PaginatedQueryResult<PromiseReturnType<T>>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === 'undefined') {
     throw new Error('usePaginatedQuery is missing the first argument - it must be a query function')
