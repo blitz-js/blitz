@@ -291,27 +291,27 @@ You first need to change the defined datasource in `db/schema.prisma` from SQLit
 Without database:
 
 ```yaml
-// render.yaml
+# render.yaml
 services:
   - type: web
     name: myapp
     env: node
     plan: starter
     buildCommand: yarn
-    startCommand: yarn blitz start --production -H 0.0.0.0
+    startCommand: blitz start --production -H 0.0.0.0
 ```
 
 With postgres database:
 
 ```yaml
-// render.yaml
+# render.yaml
 services:
   - type: web
     name: myapp
     env: node
     plan: starter
     buildCommand: yarn; blitz db migrate
-    startCommand: yarn blitz start --production -H 0.0.0.0
+    startCommand: blitz start --production -H 0.0.0.0
     envVars:
       - key: DATABASE_URL
         fromDatabase:
