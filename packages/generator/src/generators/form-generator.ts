@@ -1,7 +1,7 @@
 import {Generator, GeneratorOptions} from '../generator'
 import {join} from 'path'
 
-export interface QueryGeneratorOptions extends GeneratorOptions {
+export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
   ModelNames: string
   modelName: string
@@ -12,9 +12,9 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
   ParentModels?: string
 }
 
-export class QueryGenerator extends Generator<QueryGeneratorOptions> {
+export class FormGenerator extends Generator<FormGeneratorOptions> {
   static subdirectory = 'queries'
-  sourceRoot = join(__dirname, './templates/query')
+  sourceRoot = join(__dirname, './templates/form')
 
   private getId(input: string = '') {
     if (!input) return input
@@ -45,6 +45,6 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${this.options.context}/` : ''
-    return `app/${context}${this.options.modelNames}/queries`
+    return `app/${context}${this.options.modelNames}/components`
   }
 }

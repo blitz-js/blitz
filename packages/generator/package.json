@@ -40,6 +40,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "ast-types": "0.13.3",
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
     "chalk": "4.0.0",
@@ -51,6 +52,7 @@
     "mem-fs": "1.1.3",
     "mem-fs-editor": "6.0.0",
     "node-fetch": "2.6.0",
+    "recast": "0.19.1",
     "username": "5.1.0",
     "vinyl": "2.2.0"
   },
