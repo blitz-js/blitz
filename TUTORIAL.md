@@ -224,13 +224,13 @@ Great! Before running the app again, we need to customise some of these pages wh
 
 ```jsx
 export const QuestionsList = () => {
-  const [questions] = useQuery(getQuestions)
+  const [questions] = useQuery(getQuestions, {})
 
   return (
     <ul>
       {questions.map((question) => (
         <li key={question.id}>
-          <Link href="/questions/[id]" as={`/questions/${question.id}`}>
+          <Link href="/questions/[questionId]" as={`/questions/${question.id}`}>
             <a>{question.name}</a>
           </Link>
         </li>
@@ -244,13 +244,13 @@ This won’t work though! Remember that the `Question` model we created above do
 
 ```jsx
 export const QuestionsList = () => {
-  const [questions] = useQuery(getQuestions)
+  const [questions] = useQuery(getQuestions, {})
 
   return (
     <ul>
       {questions.map((question) => (
         <li key={question.id}>
-          <Link href="/questions/[id]" as={`/questions/${question.id}`}>
+          <Link href="/questions/[questionId]" as={`/questions/${question.id}`}>
             <a>{question.text}</a>
           </Link>
         </li>
@@ -274,7 +274,7 @@ const question = await createQuestion({
 })
 ```
 
-Finally, we just need to fix the edit page. Open `app/questions/pages/questions/[id]/edit.tsx` and replace
+Finally, we just need to fix the edit page. Open `app/questions/pages/questions/[questionId]/edit.tsx` and replace
 
 ```jsx
 const updated = await updateQuestion({
@@ -346,7 +346,7 @@ const NewQuestionPage = () => {
                 },
               })
               alert('Success!' + JSON.stringify(question))
-              router.push('/questions/[id]', `/questions/${question.id}`)
+              router.push('/questions/[questionId]', `/questions/${question.id}`)
             } catch (error) {
               alert('Error creating question ' + JSON.stringify(error, null, 2))
             }
@@ -415,7 +415,7 @@ Now hop back to our main questions page in your editor, and we can list the choi
 
 Magic! Let’s do one more thing–let people vote on these questions!
 
-Open `app/questions/pages/questions/[id].tsx` in your editor. First, we’re going to improve this page somewhat.
+Open `app/questions/pages/questions/[questionId].tsx` in your editor. First, we’re going to improve this page somewhat.
 
 1. Replace `<h1>Question {question.id}</h1>` with `<h1>{question.text}</h1>`.
 
@@ -452,7 +452,7 @@ export default async function updateChoice(args: ChoiceUpdateArgs) {
 }
 ```
 
-Back in `app/questions/pages/questions/[id].tsx`, we can now add a vote button.
+Back in `app/questions/pages/questions/[questionId].tsx`, we can now add a vote button.
 
 In our `li`, add a button like so:
 
@@ -504,8 +504,8 @@ import updateChoice from "app/questions/mutations/updateChoice"
 
 export const Question = () => {
   const router = useRouter()
-  const id = parseInt(router?.query.id as string)
-  const [question] = useQuery(getQuestion, { where: { id } })
+  const questionId = parseInt(router?.query.questionId as string)
+  const [question] = useQuery(getQuestion, { where: { id: questionId } })
 
   const handleVote = async (id, votes) => {
     try {
@@ -531,7 +531,7 @@ export const Question = () => {
         ))}
       </ul>
 
-      <Link href="/questions/[id]/edit" as={`/questions/${question.id}/edit`}>
+      <Link href="/questions/[questionId]/edit" as={`/questions/${question.id}/edit`}>
         <a>Edit</a>
       </Link>
 
