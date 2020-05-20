@@ -278,7 +278,7 @@ You first need to change the defined datasource in `db/schema.prisma` from SQLit
 +}
 ```
 
-#### Server
+#### Server (CURRENTLY NOT WORKING ON RENDER.COM)
 
 1. Add one of the render.yaml files shown below
 2. Push code to your github repo
