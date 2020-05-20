@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.10.0",
+  "version": "0.11.0-canary.0",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -40,9 +40,9 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "ast-types": "0.13.3",
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
+    "ast-types": "0.13.3",
     "chalk": "4.0.0",
     "cross-spawn": "7.0.2",
     "diff": "4.0.2",
@@ -57,7 +57,7 @@
     "vinyl": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.10.0"
+    "@blitzjs/server": "0.11.0-canary.0"
   },
   "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
 }
