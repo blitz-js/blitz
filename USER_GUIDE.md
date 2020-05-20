@@ -80,7 +80,7 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
 - Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this:
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
-  - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
+  - `app/tasks/pages/projects/[projectId]/tasks/[taskId].tsx`
 - All React components inside a `pages/` folder are accessible at a URL corresponding to its path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).

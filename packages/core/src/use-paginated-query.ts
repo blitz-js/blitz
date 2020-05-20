@@ -6,9 +6,19 @@ type RestQueryResult<T extends QueryFn> = Omit<PaginatedQueryResult<PromiseRetur
 
 export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
-  params?: InferUnaryParam<T>,
+  params: InferUnaryParam<T>,
   options?: QueryOptions<T>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
+  if (typeof queryFn === 'undefined') {
+    throw new Error('usePaginatedQuery is missing the first argument - it must be a query function')
+  }
+
+  if (typeof params === 'undefined') {
+    throw new Error(
+      "usePaginatedQuery is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
+    )
+  }
+
   const {resolvedData, ...rest} = usePaginatedReactQuery({
     queryKey: [(queryFn as any).cacheKey, params],
     queryFn: (_: string, params) => queryFn(params),

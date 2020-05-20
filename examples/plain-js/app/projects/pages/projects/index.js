@@ -1,8 +1,9 @@
 import { Suspense } from "react"
 import { Head, Link, useQuery } from "blitz"
 import getProjects from "app/projects/queries/getProjects"
+
 export const ProjectsList = () => {
-  const [projects] = useQuery(getProjects)
+  const [projects] = useQuery(getProjects, {})
   return (
     <ul>
       {projects.map((project) => (

@@ -10,7 +10,10 @@ export const __ModelNames__List: React.FC = () => {
   if (process.env.parentModel) {
     const router = useRouter()
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
-    const [__modelNames__] = useQuery(get__ModelNames__, {where: {__parentModel__: {id: __parentModelId__}}})
+    const [__modelNames__] = useQuery(get__ModelNames__, {
+      where: {__parentModel__: {id: __parentModelId__}},
+      orderBy: {id: 'desc'},
+    })
 
     return (
       <ul>
@@ -26,7 +29,7 @@ export const __ModelNames__List: React.FC = () => {
       </ul>
     )
   } else {
-    const [__modelNames__] = useQuery(get__ModelNames__, {})
+    const [__modelNames__] = useQuery(get__ModelNames__, {orderBy: {id: 'desc'}})
 
     return (
       <ul>
