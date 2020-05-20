@@ -70,6 +70,9 @@ _CRUD = create, read, update, delete_
 1. Run `blitz generate all project` to generate fully working queries, mutations, and pages
 2. Open [http://localhost:3000/projects](http://localhost:3000/projects) to see the default project list page
 3. Explore the generated pages and view, create, update, and delete projects.
+4. Create at least one project
+5. Run `blitz generate all task --parent project` to generate fully working queries, mutations, and pages
+6. Open [http://localhost:3000/projects/1/tasks](http://localhost:3000/projects/1/tasks) to see the default task list page
 
 <br>
 
@@ -97,14 +100,17 @@ We automatically alias the root of your project, so `import db from 'db'` is imp
 
 ```ts
 // app/products/queries/getProduct.tsx
-import db, {FindOneProductArgs} from 'db'
+import db, {FindOneProjectArgs} from 'db'
 
-export default async function getProduct(args: FindOneProductArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.findOne(args)
-  // Can do any post-processing or event triggers here
+type GetProjectInput = {
+  where: FindOneProjectArgs['where']
+  include?: FindOneProjectArgs['include']
+}
 
-  return product
+export default async function getProject({where, include}: GetProjectInput) {
+  const project = await db.project.findOne({where, include})
+
+  return project
 }
 ```
 
@@ -112,15 +118,18 @@ export default async function getProduct(args: FindOneProductArgs) {
 
 ```ts
 // app/products/mutations/createProduct.tsx
-import db, {ProductCreateArgs} from 'db'
+import db, { ProjectCreateArgs } from "db"
 
-export default async function createProduct(args: ProductCreateArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.create(args)
-  // Can do any post-processing or event triggers here
-
-  return product
+type CreateProjectInput = {
+  data: ProjectCreateArgs["data"]
 }
+
+export default async function createProject({ data }: CreateProjectInput) {
+  const project = await db.project.create({ data })
+
+  return project
+}
+
 ```
 
 <br>
@@ -143,8 +152,8 @@ import ErrorBoundary from 'app/components/ErrorBoundary'
 
 function Product() {
   const router = useRouter()
-  const id = parseInt(router.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id}})
+  const productId = parseInt(router.query.productId as string)
+  const [product] = useQuery(getProduct, {where: {id: productId}})
 
   return <div>{product.name}</div>
 }
@@ -172,7 +181,7 @@ In `getStaticProps`, a query function can be called directly without `useQuery`
 import getProduct from '/app/products/queries/getProduct'
 
 export const getStaticProps = async (context) => {
-  const product = await getProduct({where: {id: context.params?.id}})
+  const product = await getProduct({where: {id: context.params?.productId}})
   return {props: {product}}
 }
 
@@ -190,7 +199,7 @@ import {ssrQuery} from 'blitz'
 import getProduct from '/app/products/queries/getProduct'
 
 export const getServerSideProps = async ({params, req, res}) => {
-  const product = await ssrQuery(getProduct, {where: {id: params.id}}, {req, res}))
+  const product = await ssrQuery(getProduct, {where: {id: params.productId}}, {req, res}))
   return {props: {product}}
 }
 
