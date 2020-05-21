@@ -98,6 +98,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
   private prettier: typeof import('prettier') | undefined
 
   prettierDisabled: boolean = false
+  unsafe_disableConflictChecker = false
 
   abstract sourceRoot: string
 
@@ -247,22 +248,32 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     await this.write()
     await this.preCommit()
 
-    await new Promise((resolve, reject) => {
-      const conflictChecker = new ConflictChecker({
-        dryRun: this.options.dryRun,
+    if (this.unsafe_disableConflictChecker) {
+      await new Promise((resolve, reject) => {
+        try {
+          this.fs.commit(resolve)
+        } catch (err) {
+          reject(err)
+        }
       })
-      conflictChecker.on('error', (err) => {
-        reject(err)
-      })
-      conflictChecker.on('fileStatus', (data: string) => {
-        this.performedActions.push(data)
-      })
+    } else {
+      await new Promise((resolve, reject) => {
+        const conflictChecker = new ConflictChecker({
+          dryRun: this.options.dryRun,
+        })
+        conflictChecker.on('error', (err) => {
+          reject(err)
+        })
+        conflictChecker.on('fileStatus', (data: string) => {
+          this.performedActions.push(data)
+        })
 
-      this.fs.commit([conflictChecker], (err) => {
-        if (err) reject(err)
-        resolve()
+        this.fs.commit([conflictChecker], (err) => {
+          if (err) reject(err)
+          resolve()
+        })
       })
-    })
+    }
 
     this.performedActions.forEach((action) => {
       console.log(action)
