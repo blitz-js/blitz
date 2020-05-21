@@ -2,7 +2,7 @@ import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import spawn from 'cross-spawn'
-import {log} from '@blitzjs/server/src/log'
+import {log} from '@blitzjs/server'
 
 interface NpmPackage {
   name: string
