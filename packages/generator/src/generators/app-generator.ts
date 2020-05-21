@@ -18,12 +18,14 @@ export interface AppGeneratorOptions extends GeneratorOptions {
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: string = resolve(__dirname, './templates/app')
+  // Disable file-level prettier because we manually run prettier at the end
+  prettierDisabled = true
 
   filesToIgnore() {
     if (!this.options.useTs) {
       return ['tsconfig.json']
     }
-    return []
+    return ['jsconfig.json']
   }
 
   async getTemplateValues() {

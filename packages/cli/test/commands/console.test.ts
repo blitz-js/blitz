@@ -9,7 +9,6 @@ const mockRepl = ({
   defineCommand: jest.fn(),
   on: jest.fn(),
   context: {},
-  setupHistory: jest.fn(),
 } as any) as REPLServer
 const mockWatcher = ({
   on: jest.fn(),
@@ -35,7 +34,6 @@ describe('Console command', () => {
     jest.spyOn(repl, 'start').mockReturnValue(mockRepl)
     jest.spyOn(chokidar, 'watch').mockReturnValue(mockWatcher)
     jest.spyOn(mockRepl, 'on').mockReturnValue(mockRepl)
-    jest.spyOn(mockRepl, 'setupHistory').mockReturnValue()
 
     await Console.prototype.run()
 

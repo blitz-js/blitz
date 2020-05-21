@@ -1,4 +1,4 @@
-![Blitz Alpha User Guide](https://files-mgangy3vm.now.sh/alpha-user-guide.png)
+![Blitz Alpha User Guide](https://raw.githubusercontent.com/blitz-js/art/master/alpha-user-guide.png)
 
 <br>
 
@@ -31,7 +31,7 @@ Blitz is built on Next.js, so if you are familiar with that, you will feel right
 ### Create Your Blitz App
 
 1. `npm install -g blitz` or `yarn global add blitz`
-2. Run `blitz new myAppName` to create a new TypeScript blitz app in the `myAppName` directory. Alternatively, run `blitz new myAppName --js` to create a JavaScript blitz app
+2. Run `blitz new myAppName` to create a new blitz app in the `myAppName` directory
 3. `cd myAppName`
 4. `blitz start`
 5. View your baby app at [http://localhost:3000](http://localhost:3000)
@@ -60,7 +60,6 @@ model Task {
 ```
 
 2. Run `blitz db migrate`
-   - If this fails, you need to change the `DATABASE_URL` value in `.env` to whatever is required by your Postgres installation.
 
 <br>
 
@@ -71,6 +70,9 @@ _CRUD = create, read, update, delete_
 1. Run `blitz generate all project` to generate fully working queries, mutations, and pages
 2. Open [http://localhost:3000/projects](http://localhost:3000/projects) to see the default project list page
 3. Explore the generated pages and view, create, update, and delete projects.
+4. Create at least one project
+5. Run `blitz generate all task --parent project` to generate fully working queries, mutations, and pages
+6. Open [http://localhost:3000/projects/1/tasks](http://localhost:3000/projects/1/tasks) to see the default task list page
 
 <br>
 
@@ -81,7 +83,7 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
 - Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this:
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
-  - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
+  - `app/tasks/pages/projects/[projectId]/tasks/[taskId].tsx`
 - All React components inside a `pages/` folder are accessible at a URL corresponding to its path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
@@ -98,14 +100,17 @@ We automatically alias the root of your project, so `import db from 'db'` is imp
 
 ```ts
 // app/products/queries/getProduct.tsx
-import db, {FindOneProductArgs} from 'db'
+import db, {FindOneProjectArgs} from 'db'
 
-export default async function getProduct(args: FindOneProductArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.findOne(args)
-  // Can do any post-processing or event triggers here
+type GetProjectInput = {
+  where: FindOneProjectArgs['where']
+  include?: FindOneProjectArgs['include']
+}
 
-  return product
+export default async function getProject({where, include}: GetProjectInput) {
+  const project = await db.project.findOne({where, include})
+
+  return project
 }
 ```
 
@@ -113,15 +118,18 @@ export default async function getProduct(args: FindOneProductArgs) {
 
 ```ts
 // app/products/mutations/createProduct.tsx
-import db, {ProductCreateArgs} from 'db'
+import db, { ProjectCreateArgs } from "db"
 
-export default async function createProduct(args: ProductCreateArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.create(args)
-  // Can do any post-processing or event triggers here
-
-  return product
+type CreateProjectInput = {
+  data: ProjectCreateArgs["data"]
 }
+
+export default async function createProject({ data }: CreateProjectInput) {
+  const project = await db.project.create({ data })
+
+  return project
+}
+
 ```
 
 <br>
@@ -144,8 +152,8 @@ import ErrorBoundary from 'app/components/ErrorBoundary'
 
 function Product() {
   const router = useRouter()
-  const id = parseInt(router.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id}})
+  const productId = parseInt(router.query.productId as string)
+  const [product] = useQuery(getProduct, {where: {id: productId}})
 
   return <div>{product.name}</div>
 }
@@ -173,7 +181,7 @@ In `getStaticProps`, a query function can be called directly without `useQuery`
 import getProduct from '/app/products/queries/getProduct'
 
 export const getStaticProps = async (context) => {
-  const product = await getProduct({where: {id: context.params?.id}})
+  const product = await getProduct({where: {id: context.params?.productId}})
   return {props: {product}}
 }
 
@@ -191,7 +199,7 @@ import {ssrQuery} from 'blitz'
 import getProduct from '/app/products/queries/getProduct'
 
 export const getServerSideProps = async ({params, req, res}) => {
-  const product = await ssrQuery(getProduct, {where: {id: params.id}}, {req, res}))
+  const product = await ssrQuery(getProduct, {where: {id: params.productId}}, {req, res}))
   return {props: {product}}
 }
 
@@ -245,7 +253,7 @@ For more details, read the comprehensive [Query & Mutation Usage Issue](https://
 Blitz.js custom API routes are exactly the same as Next.js custom API routes. If you need, read [the Next.js API route documentation](https://nextjs.org/docs/api-routes/introduction)
 
 - Unlike Next.js, your `api/` folder must be a sibling of `pages/` instead of being nested inside.
-- All React components inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.tsx` will be at `localhost:3000/api/webhook`.
+- All files inside an `api/` folder are accessible at a URL corresponding to it's path inside `api/`. So `app/projects/api/webhook.ts` will be at `localhost:3000/api/webhook`.
 
 <br>
 
@@ -257,20 +265,77 @@ Blitz uses the `blitz.config.js` config file at the root of your project. This i
 
 ### Deploy to Production
 
+You first need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
+
+```diff
+-datasource sqlite {
+-  provider = "sqlite"
+- url      = "file:./db.sqlite"
+-
++datasource postgresql {
++  provider = "postgresql"
++  url      = env("DATABASE_URL")
++}
+```
+
+#### Server (CURRENTLY NOT WORKING ON RENDER.COM)
+
+1. Add one of the render.yaml files shown below
+2. Push code to your github repo
+3. Log in to [Render.com](https://render.com)
+4. Click on the "YAML" menu item, then click the "New from YAML" button
+5. Connect your github account then select your blitz app repo
+6. Click approve
+7. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
+
+Without database:
+
+```yaml
+# render.yaml
+services:
+  - type: web
+    name: myapp
+    env: node
+    plan: starter
+    buildCommand: yarn
+    startCommand: blitz start --production -H 0.0.0.0
+```
+
+With postgres database:
+
+```yaml
+# render.yaml
+services:
+  - type: web
+    name: myapp
+    env: node
+    plan: starter
+    buildCommand: yarn; blitz db migrate
+    startCommand: blitz start --production -H 0.0.0.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myapp-db
+          property: connectionString
+
+databases:
+  - name: myapp-db
+    plan: starter
+```
+
+#### Serverless
+
+Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
+
 1. You need a production Postgres database. It's easy to set this up on [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql/?refcode=466ad3d3063d).
 2. For deploying serverless, you also need a connection pool. This is also relatively easy to set up on Digital Ocean.
    1. [Read the Digital Ocean docs on setting up your connection pool](https://www.digitalocean.com/docs/databases/postgresql/how-to/manage-connection-pools/#creating-a-connection-pool?refcode=466ad3d3063d)
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
-4. You need to change the defined datasource in `db/schema.prisma` from SQLite to Postgres
-
-#### Serverless
-
-Assuming you already have a Vercel account and the `now` cli installed, you can do the following:
-
-1. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
-2. Add a `now.json` at your project root with
+4. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
+5. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
+6. Add a `now.json` at your project root with
 
 ```json
 {
@@ -285,15 +350,10 @@ Assuming you already have a Vercel account and the `now` cli installed, you can 
 }
 ```
 
-3. Run `now`
+7. Add `next` as a devDependency at the same version that Blitz includes (this is a temporary workaround until Blitz has first class support (very soon!))
+8. Run `now`
 
 Once working and deployed to production, your app should be very stable because it’s running Next.js which is already battle-tested.
-
-#### Traditional, Long-Running Server
-
-You can deploy a Blitz app like a regular Node or Express project.
-
-`blitz start --production` will start your app in production mode. Make sure you provide the `DATABASE_URL` environment variable for your production database.
 
 <br>
 
@@ -301,11 +361,7 @@ You can deploy a Blitz app like a regular Node or Express project.
 
 #### `blitz new NAME`
 
-Generate a new TypeScript blitz project at `<current_folder>./NAME`
-
-#### `blitz new NAME --js`
-
-Generate a new JavaScript blitz project at `<current_folder>./NAME`
+Generate a new blitz project at `<current_folder>./NAME`
 
 #### `blitz start`
 
@@ -329,7 +385,7 @@ Open the Prisma Studio UI at [http://localhost:5555](http://localhost:5555) so y
 
 #### `blitz generate -h`
 
-Generate different types of files for a model. Your model input can be singular or plural, but the generated files will be the same in both cases.
+Scaffold files for a model so you don't have to write them by hand
 
 #### `blitz console`
 
@@ -350,10 +406,10 @@ Start a Node.js REPL that's preloaded with your `db` object and all your queries
 Here's the list of big things that are currently missing from Blitz but are a top priority for us:
 
 - A real Blitzjs.com website and documentation
-- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
-- Authentication
+- Authentication ([See the Session Management RFC](https://github.com/blitz-js/blitz/pull/475))
 - Authorization (use auth rules both on server and client)
 - Model validation (use model validation both on server and client)
+- Translated documentation. If you're interested in helping, [comment in this issue](https://github.com/blitz-js/blitzjs.com/issues/20).
 - React-Native support
 - GUI for folks who prefer that over CLIs
 - ... and tons more 🙂
@@ -362,6 +418,7 @@ Here's the list of big things that are currently missing from Blitz but are a to
 
 ## FAQ
 
+- **Does Blitz support vanilla Javascript?** Yes, but `blitz new` generates all Typescript files right now. We are actively working on this. It mostly works, but we have a few major bugs to fix before it's ready for prime time.
 - **Will you support other ESLint configs for the `blitz new` app?** Yes, there's [an issue for this](https://github.com/blitz-js/blitz/issues/161)
 
 <br>

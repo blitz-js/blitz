@@ -15,19 +15,24 @@ const getPrismaBin = () => resolveBinAsync('@prisma/cli', 'prisma')
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
 export const runPrismaGeneration = async ({silent = false} = {}) => {
-  const prismaBin = await getPrismaBin()
+  try {
+    const prismaBin = await getPrismaBin()
 
-  return new Promise((resolve) => {
-    spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on('exit', (code) => {
-      if (code === 0) {
-        resolve()
-      } else if (silent) {
-        resolve()
-      } else {
-        process.exit(1)
-      }
+    return new Promise((resolve) => {
+      spawn(prismaBin, ['generate', schemaArg], {stdio: silent ? 'ignore' : 'inherit'}).on('exit', (code) => {
+        if (code === 0) {
+          resolve()
+        } else if (silent) {
+          resolve()
+        } else {
+          process.exit(1)
+        }
+      })
     })
-  })
+  } catch (error) {
+    if (silent) return
+    throw new Error("Oops, we can't find Prisma Client. Please make sure it's installed in your project")
+  }
 }
 
 export const runMigrate = async () => {
@@ -71,7 +76,7 @@ export async function resetPostgres(connectionString: string, db: any): Promise<
     await db.raw('GRANT ALL ON schema public TO postgres;')
     await db.raw('GRANT ALL ON schema public TO public;')
     // run migration
-    //await runMigrate()
+    await runMigrate()
     log.success('Your database has been reset.')
     process.exit(0)
   } catch (err) {
@@ -98,7 +103,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 }
 
 export async function resetSqlite(connectionString: string): Promise<void> {
-  const dbPath: string = connectionString.replace(/^(?:\.\.\/)+/, '')
+  const dbPath: string = connectionString.replace(/^(?:\.\.[\\/])+/, '')
   const unlink = promisify(fs.unlink)
   try {
     // delete database from folder
@@ -188,7 +193,9 @@ ${chalk.bold(log.withPointing('reset'))}   Reset the database and run a fresh mi
         message: 'Are you sure you want to reset your database and erase ALL data?',
       }).then((res) => {
         if (res.confirm) {
-          const db = require(path.join(projectRoot, 'db')).default
+          const prismaClientPath = require.resolve('@prisma/client', {paths: [projectRoot]})
+          const {PrismaClient} = require(prismaClientPath)
+          const db = new PrismaClient()
           const dataSource: any = db.internalDatasources[0]
           const connectorType: string = dataSource.connectorType
           const connectionString: string = dataSource.url.value

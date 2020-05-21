@@ -6,7 +6,8 @@ module.exports = {
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['/templates/'],
-  modulePathIgnorePatterns: ['<rootDie>/tmp', '<rootDir>/lib'],
+  modulePathIgnorePatterns: ['<rootDir>/tmp', '<rootDir>/dist'],
+  testTimeout: 30000,
   // TODO enable threshold
   // coverageThreshold: {
   //   global: {

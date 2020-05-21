@@ -4,13 +4,22 @@ import * as fs from 'fs'
 import * as path from 'path'
 import enquirer from 'enquirer'
 import _pluralize from 'pluralize'
-import {PageGenerator, MutationGenerator, QueryGenerator /* ModelGenerator */} from '@blitzjs/generator'
+import {
+  PageGenerator,
+  MutationGenerator,
+  QueryGenerator,
+  FormGenerator /* ModelGenerator */,
+} from '@blitzjs/generator'
 import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/server'
 import camelCase from 'camelcase'
+import pkgDir from 'pkg-dir'
 const debug = require('debug')('blitz:generate')
 
 const pascalCase = (str: string) => camelCase(str, {pascalCase: true})
+
+const projectRoot = pkgDir.sync() || process.cwd()
+const isTypescript = fs.existsSync(path.join(projectRoot, 'tsconfig.json'))
 
 enum ResourceType {
   All = 'all',
@@ -24,6 +33,7 @@ enum ResourceType {
 interface Flags {
   context?: string
   'dry-run'?: boolean
+  parent?: string
 }
 
 interface Args {
@@ -39,24 +49,24 @@ function singular(input: string): string {
   return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
 }
 
-function modelName(input: string) {
+function modelName(input: string = '') {
   return camelCase(singular(input))
 }
-function modelNames(input: string) {
+function modelNames(input: string = '') {
   return camelCase(pluralize(input))
 }
-function ModelName(input: string) {
+function ModelName(input: string = '') {
   return pascalCase(singular(input))
 }
-function ModelNames(input: string) {
+function ModelNames(input: string = '') {
   return pascalCase(pluralize(input))
 }
 
 const generatorMap = {
-  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
-  [ResourceType.Page]: [PageGenerator],
+  [ResourceType.Page]: [PageGenerator, FormGenerator],
   [ResourceType.Query]: [QueryGenerator],
   // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
 }
@@ -89,11 +99,16 @@ export class Generate extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // context: flags.string({
-    //   char: 'c',
-    //   description:
-    //     'The parent folder for nested generation. For example, generating `products` within a `store` would supply `-c store`. For nested contexts you may supply the full path.',
-    // }),
+    context: flags.string({
+      char: 'c',
+      description:
+        "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
+    }),
+    parent: flags.string({
+      char: 'p',
+      description:
+        "Specify a parent model to be used for generating nested routes for dependent data when generating pages, or to create hierarchical validation in queries and mutations. The code will be generated with the nested data model in mind. Most often this should be used in conjunction with 'blitz generate all'",
+    }),
     'dry-run': flags.boolean({
       char: 'd',
       description: 'Show what files will be created without writing them to disk',
@@ -106,6 +121,17 @@ export class Generate extends Command {
     `,
     `# The 'all' generator will scaffold out everything possible for a model
 > blitz generate all products
+    `,
+    `# The '--context' flag will allow you to generate files in a nested folder
+> blitz generate pages projects --admin
+    `,
+    `# Context can also be supplied in the model name directly
+> blitz generate pages admin/projects
+    `,
+    `# To generate nested routes for dependent models (e.g. Projects that contain
+# Tasks), specify a parent model. For example, this command generates pages under
+# app/tasks/pages/projects/[projectId]/tasks/
+> blitz generate all tasks --parent=projects
     `,
   ]
 
@@ -139,52 +165,45 @@ export class Generate extends Command {
     }
   }
 
+  getModelNameAndContext(modelName: string, context?: string): {model: string; context: string} {
+    const modelSegments = modelName.split(/[\\/]/)
+    const contextSegments = (context || '').split(/[\\/]/)
+    if (modelSegments.length > 1) {
+      return {
+        model: modelSegments[modelSegments.length - 1],
+        context: path.join(...modelSegments.slice(0, modelSegments.length - 1)),
+      }
+    }
+    return {
+      model: modelName,
+      context: path.join(...contextSegments),
+    }
+  }
+
   async run() {
     const {args, flags}: {args: Args; flags: Flags} = this.parse(Generate)
     debug('args: ', args)
     debug('flags: ', flags)
 
-    const isInRoot = fs.existsSync(path.resolve('blitz.config.js'))
-
-    if (!isInRoot) {
-      log.error('No blitz.config.js found. `generate` must be run from the root of the project.')
-      this.exit(1)
-    }
-
     try {
-      let singularRootContext: string
-
-      if (!flags.context) {
-        if (fs.existsSync(path.resolve('app', pluralize(args.model)))) {
-          singularRootContext = modelName(args.model)
-        } else {
-          singularRootContext = modelName(args.model)
-        }
-      } else {
-        // use [\\/] as the separator to match UNIX and Windows path formats
-        const contextParts = flags.context.split(/[\\/]/)
-        if (contextParts.length === 0) {
-          await this.handleNoContext(
-            `Couldn't determine context from context flag. Would you like to create a new context folder under /app for '${pluralize(
-              args.model,
-            )}'?`,
-          )
-          singularRootContext = modelName(args.model)
-        } else {
-          singularRootContext = modelName(args.model)
-        }
-      }
+      const {model, context} = this.getModelNameAndContext(args.model, flags.context)
+      const singularRootContext = modelName(model)
 
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: path.resolve(),
-          modelName: modelName(singularRootContext),
+          modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
+          parentModel: modelName(flags.parent),
+          parentModels: modelNames(flags.parent),
+          ParentModel: ModelName(flags.parent),
+          ParentModels: ModelNames(flags.parent),
           dryRun: flags['dry-run'],
-          useTs: fs.existsSync(path.resolve('tsconfig.json')),
+          context: context,
+          useTs: isTypescript,
         })
         await generator.run()
       }
