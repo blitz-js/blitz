@@ -8,6 +8,8 @@ type Get__ModelNames__Input = {
   last?: FindMany__ModelName__Args['last']
   after?: FindMany__ModelName__Args['after']
   before?: FindMany__ModelName__Args['before']
+  // Only available if a model relationship exists
+  // include?: FindMany__ModelName__Args['include']
 }
 
 export default async function get__ModelNames__({
