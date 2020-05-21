@@ -1,7 +1,7 @@
 import db, {FindMany__ModelName__Args} from 'db'
 
 type Get__ModelNames__Input = {
-  where: FindMany__ModelName__Args['where']
+  where?: FindMany__ModelName__Args['where']
   orderBy?: FindMany__ModelName__Args['orderBy']
   skip?: FindMany__ModelName__Args['skip']
   first?: FindMany__ModelName__Args['first']

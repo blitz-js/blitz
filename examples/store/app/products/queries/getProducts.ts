@@ -1,7 +1,7 @@
 import db, { FindManyProductArgs } from "db"
 
 type GetProductsInput = {
-  where: FindManyProductArgs["where"]
+  where?: FindManyProductArgs["where"]
   orderBy?: FindManyProductArgs["orderBy"]
   skip?: FindManyProductArgs["skip"]
   first?: FindManyProductArgs["first"]
