@@ -25,9 +25,13 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
         throw new Error('Prisma schema file was not found')
       }
+      const extraArgs =
+        this.options.extraArgs.length === 1 && this.options.extraArgs[0].includes(' ')
+          ? this.options.extraArgs[0].split(' ')
+          : this.options.extraArgs
       const modelDefinition = new Model(
         this.options.modelName,
-        this.options.extraArgs.flatMap((def) => Field.parse(def)),
+        extraArgs.flatMap((def) => Field.parse(def)),
       )
       // wrap in newlines to put a space below the previously generated model and
       // to preserve the EOF newline

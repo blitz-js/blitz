@@ -9,6 +9,16 @@ export enum FieldType {
   String = 'String',
 }
 
+export enum Relation {
+  hasOne,
+  hasMany,
+  belongsTo,
+}
+
+function isRelation(maybeRelation: string): maybeRelation is keyof typeof Relation {
+  return Object.keys(Relation).includes(maybeRelation)
+}
+
 interface FieldArgs {
   default?: any
   isId?: boolean
@@ -43,8 +53,8 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static parse(input: string): Field[] {
-    const [_modelName, _fieldType, attribute] = input.split(':')
-    let modelName = singleCamel(_modelName)
+    const [_fieldName, _fieldType, attribute] = input.split(':')
+    let fieldName = singleCamel(_fieldName)
     let fieldType = singlePascal(_fieldType)
     let isRequired = true
     let isList = false
@@ -60,31 +70,45 @@ export class Field {
     }
     if (fieldType.includes('[]')) {
       fieldType = fieldType.replace('[]', '')
-      modelName = pluralCamel(modelName)
+      fieldName = pluralCamel(fieldName)
       isList = true
     }
-    // modelName should just be the typename at this point, validate
-    if (!/^[A-Za-z]*$/.test(modelName)) {
-      throw new Error(`[Field.parse]: received unknown special character in field name: ${modelName}`)
+    // use original unmodified field name in case the list handling code
+    // has modified fieldName
+    if (isRelation(_fieldName)) {
+      // this field is an object type, not a scalar type
+      const relationType = Relation[_fieldName]
+      // translate the type into the name since they should stay in sync
+      fieldName = singleCamel(fieldType)
+      fieldType = singlePascal(fieldType)
+
+      switch (relationType) {
+        case Relation.hasOne:
+          // current model gets single `modelName ModelName` association field
+          isList = false
+          break
+        case Relation.hasMany:
+          // current model gets single `modelNames ModelName[]` association field
+          fieldName = pluralCamel(fieldName)
+          isList = true
+          isRequired = true
+          break
+        case Relation.belongsTo:
+          // current model gets two fields:
+          //   modelName    ModelName   @relation(fields: [modelNameId], references: [id])
+          //   modelNameId  ModelIdType
+          const idFieldName = `${fieldName}Id`
+          relationFromFields = [idFieldName]
+          relationToFields = ['id']
+          maybeIdField = new Field(idFieldName, {type: FieldType.Int, isRequired})
+          isList = false
+          break
+      }
     }
-    // @TODO: build out code for relations
-    // // assume, if not a scalar type, that it's a relation
-    // if (!Object.keys(FieldType).includes(fieldType)) {
-    //   // if it's a list, this model has many of the other type, we just need the single field
-    //   if (isList) {
-    //     relationToFields = ['id']
-    //   }
-    //   // if not, we need an additional ID field for the singular association
-    //   else {
-    //     const idName = `${singleCamel(fieldType)}Id`
-    //     relationFromFields = [idName]
-    //     relationToFields = ['id']
-    //     isRequired = false
-    //     maybeIdField = new Field(idName, {
-    //       type: 'Int?',
-    //     })
-    //   }
-    // }
+    if (!/^[A-Za-z]*$/.test(fieldName)) {
+      // modelName should be just alpha characters at this point, validate
+      throw new Error(`[Field.parse]: received unknown special character in field name: ${fieldName}`)
+    }
 
     if (/unique/i.test(attribute)) isUnique = true
     if (/updatedAt/i.test(attribute)) isUpdatedAt = true
@@ -94,7 +118,7 @@ export class Field {
         defaultValue = builtInGenerators.includes(_defaultValue) ? {name: _defaultValue} : _defaultValue
       }
     }
-    const parseResult = new Field(modelName, {
+    const parseResult = new Field(fieldName, {
       default: defaultValue,
       isId: false,
       isList,
@@ -173,7 +197,7 @@ export class Field {
 
     const toFields =
       this.relationToFields && this.relationToFields.length > 0
-        ? `fields: [${this.relationToFields.toString()}]`
+        ? `references: [${this.relationToFields.toString()}]`
         : ''
     return `@relation(${fromFields}${separator}${toFields})`
   }
@@ -184,8 +208,8 @@ export class Field {
 
   private getAttributes() {
     const possibleAttributes = [
-      this.getId(),
       this.getDefault(),
+      this.getId(),
       this.getIsUnique(),
       this.getIsUpdatedAt(),
       this.getRelation(),

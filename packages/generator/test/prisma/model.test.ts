@@ -7,11 +7,6 @@ describe('Prisma Model', () => {
       new Model(
         'user',
         [
-          new Field('id', {
-            type: 'Int',
-            isId: true,
-            default: {name: 'autoincrement'},
-          }),
           Field.parse('email:string:unique'),
           Field.parse('updated:dateTime:updatedAt'),
           Field.parse('recentLogins:dateTime[]'),

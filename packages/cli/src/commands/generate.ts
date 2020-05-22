@@ -29,7 +29,7 @@ enum ResourceType {
   Mutations = 'mutations',
   Pages = 'pages',
   Queries = 'queries',
-  // Resource = 'resource',
+  Resource = 'resource',
 }
 
 interface Flags {
@@ -65,13 +65,13 @@ function ModelNames(input: string = '') {
 }
 
 const generatorMap = {
-  [ResourceType.All]: [PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [PageGenerator, FormGenerator, QueryGenerator, MutationGenerator, ModelGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Model]: [ModelGenerator],
   [ResourceType.Mutations]: [MutationGenerator],
   [ResourceType.Pages]: [PageGenerator, FormGenerator],
   [ResourceType.Queries]: [QueryGenerator],
-  // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueryGenerator, MutationGenerator],
 }
 
 export class Generate extends Command {
@@ -83,7 +83,7 @@ export class Generate extends Command {
       name: 'type',
       required: true,
       description: 'What files to generate',
-      options: Object.keys(generatorMap),
+      options: Object.keys(generatorMap).map((s) => s.toLowerCase()),
     },
     {
       name: 'model',
@@ -127,6 +127,19 @@ export class Generate extends Command {
 # Tasks), specify a parent model. For example, this command generates pages under
 # app/tasks/pages/projects/[projectId]/tasks/
 > blitz generate all tasks --parent=projects
+    `,
+    `# Database models can also be generated directly from the CLI
+# Model fields can be specified with any generator that generates
+# a database model ("all", "model", "resource"). Both of the below
+# will generate the proper database model for a Task.
+> blitz generate model task \\
+    name:string \\
+    completed:boolean:default[false] \\
+    belongsTo:project?
+> blitz generate pages tasks \\
+    name:string \\
+    completed:boolean:default[false] \\
+    belongsTo:project?
     `,
   ]
 

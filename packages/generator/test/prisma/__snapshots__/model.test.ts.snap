@@ -2,7 +2,7 @@
 
 exports[`Prisma Model generates a proper model 1`] = `
 "model User {
-  id               Int        @id @default(autoincrement())
+  id               Int        @default(autoincrement()) @id
   email            String     @unique
   updated          DateTime   @updatedAt
   recentLogins     DateTime[] 

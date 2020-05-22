@@ -1,4 +1,4 @@
-import {Field} from './field'
+import {Field, FieldType} from './field'
 import {singlePascal} from '../utils/plurals'
 
 function stringifyFieldsForPrinting(fields: Field[]) {
@@ -30,8 +30,18 @@ export class Model {
     this.fields = fields
   }
 
+  private getIdField() {
+    return new Field('id', {
+      isRequired: true,
+      isList: false,
+      isId: true,
+      default: 'autoincrement()',
+      type: FieldType.Int,
+    })
+  }
+
   private getFields() {
-    return stringifyFieldsForPrinting(this.fields)
+    return stringifyFieldsForPrinting([this.getIdField(), ...this.fields])
       .map((field) => `\n  ${field}`)
       .join('')
   }

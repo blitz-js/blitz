@@ -50,4 +50,47 @@ describe('Field model', () => {
   it('requires a name', () => {
     expect(() => Field.parse(':int')).toThrow()
   })
+
+  it('handles hasOne relations', () => {
+    expect(Field.parse('hasOne:task').toString()).toMatchInlineSnapshot(`"task  Task"`)
+    expect(Field.parse('hasOne:tasks').toString()).toMatchInlineSnapshot(`"task  Task"`)
+    expect(Field.parse('hasOne:task?').toString()).toMatchInlineSnapshot(`"task  Task?"`)
+    expect(Field.parse('hasOne:tasks?').toString()).toMatchInlineSnapshot(`"task  Task?"`)
+    // list identifier should be ignored for singular relations
+    expect(Field.parse('hasOne:task[]').toString()).toMatchInlineSnapshot(`"task  Task"`)
+    expect(Field.parse('hasOne:tasks[]').toString()).toMatchInlineSnapshot(`"task  Task"`)
+  })
+
+  it('handles hasMany relations', () => {
+    expect(Field.parse('hasMany:task').toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
+    expect(Field.parse('hasMany:tasks').toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
+    expect(Field.parse('hasMany:task[]').toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
+    expect(Field.parse('hasMany:tasks[]').toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
+    // can't have optional lists, should erase optional param
+    expect(Field.parse('hasMany:task?').toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
+  })
+
+  it('handles belongsTo relations', () => {
+    expect(Field.parse('belongsTo:task').join('\n')).toMatchInlineSnapshot(`
+      "task  Task  @relation(fields: [taskId], references: [id])
+      taskId  Int"
+    `)
+    expect(Field.parse('belongsTo:tasks').join('\n')).toMatchInlineSnapshot(`
+      "task  Task  @relation(fields: [taskId], references: [id])
+      taskId  Int"
+    `)
+    expect(Field.parse('belongsTo:task?').join('\n')).toMatchInlineSnapshot(`
+      "task  Task?  @relation(fields: [taskId], references: [id])
+      taskId  Int?"
+    `)
+    expect(Field.parse('belongsTo:tasks?').join('\n')).toMatchInlineSnapshot(`
+      "task  Task?  @relation(fields: [taskId], references: [id])
+      taskId  Int?"
+    `)
+    // ignore list directives, not a valid relation type
+    expect(Field.parse('belongsTo:tasks[]').join('\n')).toMatchInlineSnapshot(`
+      "task  Task  @relation(fields: [taskId], references: [id])
+      taskId  Int"
+    `)
+  })
 })
