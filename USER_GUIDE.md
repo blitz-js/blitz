@@ -118,18 +118,17 @@ export default async function getProject({where, include}: GetProjectInput) {
 
 ```ts
 // app/products/mutations/createProduct.tsx
-import db, { ProjectCreateArgs } from "db"
+import db, {ProjectCreateArgs} from 'db'
 
 type CreateProjectInput = {
-  data: ProjectCreateArgs["data"]
+  data: ProjectCreateArgs['data']
 }
 
-export default async function createProject({ data }: CreateProjectInput) {
-  const project = await db.project.create({ data })
+export default async function createProject({data}: CreateProjectInput) {
+  const project = await db.project.create({data})
 
   return project
 }
-
 ```
 
 <br>
@@ -278,15 +277,29 @@ You first need to change the defined datasource in `db/schema.prisma` from SQLit
 +}
 ```
 
-#### Server (CURRENTLY NOT WORKING ON RENDER.COM)
+#### Server
 
-1. Add one of the render.yaml files shown below
-2. Push code to your github repo
-3. Log in to [Render.com](https://render.com)
-4. Click on the "YAML" menu item, then click the "New from YAML" button
-5. Connect your github account then select your blitz app repo
-6. Click approve
-7. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
+1. To use Postgres database on Render you need to add this model to your `db/schema.prisma` file:
+
+```
+model SpatialRefSy {
+  srid      Int     @id
+  authName  String? @map("auth_name")
+  authSrid  Int?    @map("auth_srid")
+  proj4text String?
+  srtext    String?
+
+  @@map("spatial_ref_sys")
+}
+```
+
+2. Add one of the render.yaml files shown below
+3. Push code to your github repo
+4. Log in to [Render.com](https://render.com)
+5. Click on the "YAML" menu item, then click the "New from YAML" button
+6. Connect your github account then select your blitz app repo
+7. Click approve
+8. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
 
 Without database:
 
@@ -297,8 +310,8 @@ services:
     name: myapp
     env: node
     plan: starter
-    buildCommand: yarn
-    startCommand: blitz start --production -H 0.0.0.0
+    buildCommand: yarn; blitz build
+    startCommand: yarn next start -H 0.0.0.0
 ```
 
 With postgres database:
@@ -310,8 +323,8 @@ services:
     name: myapp
     env: node
     plan: starter
-    buildCommand: yarn; blitz db migrate
-    startCommand: blitz start --production -H 0.0.0.0
+    buildCommand: yarn; blitz db migrate; blitz build
+    startCommand: yarn next start -H 0.0.0.0
     envVars:
       - key: DATABASE_URL
         fromDatabase:
