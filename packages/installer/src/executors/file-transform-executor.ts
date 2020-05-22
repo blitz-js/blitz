@@ -1,7 +1,7 @@
 import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
 import {filePrompt} from './file-prompt'
 import {transform, Transformer} from '../utils/transform'
-import {log} from '@blitzjs/server/src/log'
+import {log} from '@blitzjs/server'
 import {waitForConfirmation} from '../utils/wait-for-confirmation'
 import {createPatch} from 'diff'
 import chokidar from 'chokidar'
@@ -29,8 +29,8 @@ async function executeWithDiff(transformFn: Transformer, filePath: string) {
           .split('\n')
           .slice(2)
           .forEach((line) => {
-            if (line[0] === '-') console.log(chalk.bold.red(line))
-            else if (line[0] === '+') console.log(chalk.bold.green(line))
+            if (line.startsWith('-') && !line.startsWith('---')) console.log(chalk.bold.red(line))
+            else if (line.startsWith('+') && !line.startsWith('+++')) console.log(chalk.bold.green(line))
             else console.log(line)
           })
         res(path)

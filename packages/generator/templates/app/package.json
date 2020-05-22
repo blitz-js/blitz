@@ -12,7 +12,7 @@
   ],
   "prettier": {
     "semi": false,
-    "printWidth": 110
+    "printWidth": 100
   },
   "husky": {
     "hooks": {
@@ -30,8 +30,8 @@
     "@prisma/cli": "2.0.0-beta.3",
     "@prisma/client": "2.0.0-beta.3",
     "blitz": "canary",
-    "react": "0.0.0-experimental-e5d06e34b",
-    "react-dom": "0.0.0-experimental-e5d06e34b"
+    "react": "0.0.0-experimental-33c3af284",
+    "react-dom": "0.0.0-experimental-33c3af284"
   },
   "devDependencies": {
     "@types/react": "16.x",
