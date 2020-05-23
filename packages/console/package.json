@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/console",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Console package for Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz/packages/console/#readme",
   "license": "MIT",
