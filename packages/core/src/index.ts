@@ -1,4 +1,5 @@
 export * from './use-query'
+export * from './use-paginated-query'
 export * from './ssr-query'
 export * from './rpc'
 

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -52,10 +52,10 @@
     "tsconfig-paths": "3.9.0"
   },
   "devDependencies": {
-    "@blitzjs/console": "0.10.0",
-    "@blitzjs/generator": "0.10.0",
-    "@blitzjs/installer": "0.10.0",
-    "@blitzjs/server": "0.10.0",
+    "@blitzjs/console": "0.11.0",
+    "@blitzjs/generator": "0.11.0",
+    "@blitzjs/installer": "0.11.0",
+    "@blitzjs/server": "0.11.0",
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
@@ -72,7 +72,7 @@
       "@oclif/plugin-not-found"
     ],
     "hooks": {
-      "prerun": [
+      "init": [
         "./lib/src/check-before-running"
       ]
     }

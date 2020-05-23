@@ -9,7 +9,7 @@ import {
   isFileTransformExecutor,
   fileTransformExecutor,
 } from './executors/file-transform-executor'
-import {log} from '@blitzjs/server/src/log'
+import {log} from '@blitzjs/server'
 import {logExecutorFrontmatter} from './executors/executor'
 import {waitForConfirmation} from './utils/wait-for-confirmation'
 

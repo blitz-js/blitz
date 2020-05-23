@@ -1,4 +1,4 @@
-import {log} from '@blitzjs/server/src/log'
+import {log} from '@blitzjs/server'
 
 export interface BaseExecutor {
   stepId: string | number

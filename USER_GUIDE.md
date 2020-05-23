@@ -70,6 +70,9 @@ _CRUD = create, read, update, delete_
 1. Run `blitz generate all project` to generate fully working queries, mutations, and pages
 2. Open [http://localhost:3000/projects](http://localhost:3000/projects) to see the default project list page
 3. Explore the generated pages and view, create, update, and delete projects.
+4. Create at least one project
+5. Run `blitz generate all task --parent project` to generate fully working queries, mutations, and pages
+6. Open [http://localhost:3000/projects/1/tasks](http://localhost:3000/projects/1/tasks) to see the default task list page
 
 <br>
 
@@ -80,7 +83,7 @@ Blitz.js pages are exactly the same as Next.js pages. If you need, read [the Nex
 - Unlike Next.js, you can have many `pages/` folders nested inside `app/`. This way pages can be organized neatly, especially for larger projects. Like this:
   - `app/pages/about.tsx`
   - `app/projects/pages/projects/index.tsx`
-  - `app/tasks/pages/projects/[projectId]/tasks/[id].tsx`
+  - `app/tasks/pages/projects/[projectId]/tasks/[taskId].tsx`
 - All React components inside a `pages/` folder are accessible at a URL corresponding to its path inside `pages/`. So `pages/about.tsx` will be at `localhost:3000/about`.
 
 The Next.js router APIs are all exported from the `blitz` package: `useRouter()`, `withRouter()`, and `Router`. If you need, read [the Next.js Router documentation](https://nextjs.org/docs/api-reference/next/router).
@@ -97,14 +100,17 @@ We automatically alias the root of your project, so `import db from 'db'` is imp
 
 ```ts
 // app/products/queries/getProduct.tsx
-import db, {FindOneProductArgs} from 'db'
+import db, {FindOneProjectArgs} from 'db'
 
-export default async function getProduct(args: FindOneProductArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.findOne(args)
-  // Can do any post-processing or event triggers here
+type GetProjectInput = {
+  where: FindOneProjectArgs['where']
+  include?: FindOneProjectArgs['include']
+}
 
-  return product
+export default async function getProject({where, include}: GetProjectInput) {
+  const project = await db.project.findOne({where, include})
+
+  return project
 }
 ```
 
@@ -112,14 +118,16 @@ export default async function getProduct(args: FindOneProductArgs) {
 
 ```ts
 // app/products/mutations/createProduct.tsx
-import db, {ProductCreateArgs} from 'db'
+import db, {ProjectCreateArgs} from 'db'
 
-export default async function createProduct(args: ProductCreateArgs) {
-  // Can do any pre-processing or event triggers here
-  const product = await db.product.create(args)
-  // Can do any post-processing or event triggers here
+type CreateProjectInput = {
+  data: ProjectCreateArgs['data']
+}
 
-  return product
+export default async function createProject({data}: CreateProjectInput) {
+  const project = await db.project.create({data})
+
+  return project
 }
 ```
 
@@ -143,8 +151,8 @@ import ErrorBoundary from 'app/components/ErrorBoundary'
 
 function Product() {
   const router = useRouter()
-  const id = parseInt(router.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id}})
+  const productId = parseInt(router.query.productId as string)
+  const [product] = useQuery(getProduct, {where: {id: productId}})
 
   return <div>{product.name}</div>
 }
@@ -172,7 +180,7 @@ In `getStaticProps`, a query function can be called directly without `useQuery`
 import getProduct from '/app/products/queries/getProduct'
 
 export const getStaticProps = async (context) => {
-  const product = await getProduct({where: {id: context.params?.id}})
+  const product = await getProduct({where: {id: context.params?.productId}})
   return {props: {product}}
 }
 
@@ -190,7 +198,7 @@ import {ssrQuery} from 'blitz'
 import getProduct from '/app/products/queries/getProduct'
 
 export const getServerSideProps = async ({params, req, res}) => {
-  const product = await ssrQuery(getProduct, {where: {id: params.id}}, {req, res}))
+  const product = await ssrQuery(getProduct, {where: {id: params.productId}}, {req, res}))
   return {props: {product}}
 }
 
@@ -271,38 +279,52 @@ You first need to change the defined datasource in `db/schema.prisma` from SQLit
 
 #### Server
 
-1. Add one of the render.yaml files shown below
-2. Push code to your github repo
-3. Log in to [Render.com](https://render.com)
-4. Click on the "YAML" menu item, then click the "New from YAML" button
-5. Connect your github account then select your blitz app repo
-6. Click approve
-7. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
+1. To use Postgres database on Render you need to add this model to your `db/schema.prisma` file:
+
+```
+model SpatialRefSy {
+  srid      Int     @id
+  authName  String? @map("auth_name")
+  authSrid  Int?    @map("auth_srid")
+  proj4text String?
+  srtext    String?
+
+  @@map("spatial_ref_sys")
+}
+```
+
+2. Add one of the render.yaml files shown below
+3. Push code to your github repo
+4. Log in to [Render.com](https://render.com)
+5. Click on the "YAML" menu item, then click the "New from YAML" button
+6. Connect your github account then select your blitz app repo
+7. Click approve
+8. Your server + database will be automatically configured and started. Each git push will trigger a new deploy
 
 Without database:
 
 ```yaml
-// render.yaml
+# render.yaml
 services:
   - type: web
     name: myapp
     env: node
     plan: starter
-    buildCommand: yarn
-    startCommand: yarn blitz start --production -H 0.0.0.0
+    buildCommand: yarn; blitz build
+    startCommand: yarn next start -H 0.0.0.0
 ```
 
 With postgres database:
 
 ```yaml
-// render.yaml
+# render.yaml
 services:
   - type: web
     name: myapp
     env: node
     plan: starter
-    buildCommand: yarn; blitz db migrate
-    startCommand: yarn blitz start --production -H 0.0.0.0
+    buildCommand: yarn; blitz db migrate; blitz build
+    startCommand: yarn next start -H 0.0.0.0
     envVars:
       - key: DATABASE_URL
         fromDatabase:

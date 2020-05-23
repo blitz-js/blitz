@@ -10,6 +10,23 @@ import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from '@babel/plugin-transform-typescript'
 import {ConflictChecker} from './conflict-checker'
+import {parse, print} from 'recast'
+import {namedTypes} from 'ast-types/gen/namedTypes'
+import * as babelParser from 'recast/parsers/babel'
+import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
+import {ASTNode, visit} from 'ast-types'
+import {StatementKind, ExpressionKind} from 'ast-types/gen/kinds'
+import {Context} from 'ast-types/lib/path-visitor'
+import {NodePath} from 'ast-types/lib/node-path'
+
+export const customTsParser = {
+  parse(source: string, options?: Overrides) {
+    const babelOptions = getBabelOptions(options)
+    babelOptions.plugins.push('typescript')
+    babelOptions.plugins.push('jsx')
+    return babelParser.parser.parse(source, babelOptions)
+  },
+}
 
 export interface GeneratorOptions {
   context?: string
@@ -21,7 +38,50 @@ export interface GeneratorOptions {
 const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
 const ignoredExtensions = ['.ico', '.png', '.jpg']
 const tsExtension = /\.(tsx?)$/
-const prettierExtensions = /\.(tsx?|jsx?)$/
+const codeFileExtensions = /\.(tsx?|jsx?)$/
+
+function getInnerStatements(s?: StatementKind | ExpressionKind): Array<StatementKind | ExpressionKind> {
+  if (!s) return []
+  if (namedTypes.BlockStatement.check(s)) {
+    return s.body
+  }
+  return [s]
+}
+
+// process any template expressions that access process.env, but bypass any
+// expressions that aren't targeting templateValues so templates can include
+// checks for other env variables
+function conditionalExpressionVisitor(
+  this: Context,
+  path: NodePath<namedTypes.IfStatement | namedTypes.ConditionalExpression, any>,
+  templateValues: any,
+): void {
+  const statement = path.node
+  // only enter if the condition is a compount statement, otherwise
+  // it's definitely not a valid template condition
+  if (namedTypes.MemberExpression.check(statement.test)) {
+    if (
+      // condition statement starts with `process.` and has a second accessor
+      namedTypes.MemberExpression.check(statement.test.object) &&
+      namedTypes.Identifier.check(statement.test.object.object) &&
+      statement.test.object.object.name === 'process' &&
+      // condition statement continues with `env.`
+      namedTypes.Identifier.check(statement.test.object.property) &&
+      statement.test.object.property.name === 'env' &&
+      // condition ends with valid templateVariable
+      namedTypes.Identifier.check(statement.test.property) &&
+      Object.keys(templateValues).includes(statement.test.property.name)
+    ) {
+      const derivedCondition = templateValues[statement.test.property.name]
+      if (derivedCondition) {
+        path.replace(...getInnerStatements(statement.consequent))
+      } else {
+        path.replace(...getInnerStatements(statement.alternate || undefined))
+      }
+    }
+  }
+  this.traverse(path)
+}
 
 /**
  * The base generator class.
@@ -65,8 +125,23 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     return []
   }
 
-  replaceTemplateValues(input: string | Buffer, templateValues: any) {
-    let result = typeof input === 'string' ? input : input.toString('utf-8')
+  replaceConditionals(input: string, templateValues: any): string {
+    let ast: ASTNode = parse(input, {parser: customTsParser})
+    // reassign `this` since recast depends on a bound `this` context
+    // in visitors
+    visit(ast, {
+      visitIfStatement(this, path) {
+        conditionalExpressionVisitor.call(this, path, templateValues)
+      },
+      visitConditionalExpression(this, path) {
+        conditionalExpressionVisitor.call(this, path, templateValues)
+      },
+    })
+    return print(ast).code
+  }
+
+  replaceTemplateValues(input: string, templateValues: any) {
+    let result = input
     for (let templateKey in templateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
@@ -85,7 +160,12 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
       return input
     }
-    let templatedFile = this.replaceTemplateValues(input, templateValues)
+    const inputStr = input.toString('utf-8')
+    let templatedFile = inputStr
+    if (codeFileExtensions.test(pathEnding)) {
+      templatedFile = this.replaceConditionals(inputStr, templateValues)
+    }
+    templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
         babel.transform(templatedFile, {
@@ -95,7 +175,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     }
 
     if (
-      prettierExtensions.test(pathEnding) &&
+      codeFileExtensions.test(pathEnding) &&
       typeof templatedFile === 'string' &&
       this.prettier &&
       !this.prettierDisabled
