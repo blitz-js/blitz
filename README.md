@@ -21,7 +21,7 @@
 
 <h1 align="center">The Fullstack React Framework</h1>
 
-<h3 align="center">Built on Next.js | Inspired by Ruby on Rails | New Fullstack Data Layer</h3>
+<h3 align="center">Built on Next.js — Inspired by Ruby on Rails — New Fullstack Data Layer</h3>
 
 <br>
 
