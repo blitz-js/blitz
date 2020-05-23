@@ -214,9 +214,11 @@ ${chalk.bold('reset')}   Reset the database and run a fresh migration via Prisma
         }
       })
     } else {
-      this.log("\nUh oh, we don't support that command.")
+      this.log('\nUh oh, Blitz does not support that command.')
       this.log('You can try running a prisma command directly with:')
       this.log('\n  `npm run prisma COMMAND` or `yarn prisma COMMAND`\n')
+      this.log('Or you can list available db commands with with:')
+      this.log('\n  `npm run blitz db --help` or `yarn blitz db --help`\n')
     }
   }
 }
