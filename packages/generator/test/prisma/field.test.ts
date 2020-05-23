@@ -12,6 +12,7 @@ describe('Field model', () => {
 
   it('serializes list types, pluralizing fields', () => {
     expect(Field.parse('users:int[]').toString()).toMatchInlineSnapshot(`"users  Int[]"`)
+    expect(Field.parse('user:int[]').toString()).toMatchInlineSnapshot(`"users  Int[]"`)
   })
 
   it('pluralizes lists and makes single fields singular', () => {
