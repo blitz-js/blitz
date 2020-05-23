@@ -27,7 +27,7 @@
 
 New “no-API” data layer **lets you import server code into your React components** instead of having to fetch from an API.
 
-Includes everything you need for production apps. **Everything from the database to the frontend.**
+Includes everything you need for production apps. **Everything end-to-end from the database to the frontend.**
 
 Blitz brings back the **simplicity and conventions** of server-rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering!
 
