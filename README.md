@@ -19,7 +19,7 @@
 
 <br>
 
-<h2 align="center">Blitz is The Fullstack React Framework</h2>
+<h1 align="center">The Fullstack React Framework</h1>
 
 <h3 align="center">Built on Next.js | Inspired by Ruby on Rails | New fullstack data layer</h3>
 
