@@ -1,4 +1,5 @@
 import {deserializeError} from 'serialize-error'
+import {queryCache} from 'react-query'
 
 export async function rpc(url: string, params: any) {
   if (typeof window === 'undefined') return
@@ -17,6 +18,7 @@ export async function rpc(url: string, params: any) {
   if (json.error) {
     throw deserializeError(json.error)
   } else {
+    queryCache.setQueryData(url, json.result)
     return json.result
   }
 }
