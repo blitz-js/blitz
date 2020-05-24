@@ -1,7 +1,6 @@
 import {through} from '../../streams'
 import vfs from 'vinyl-fs'
 import mergeStream from 'merge-stream'
-// import chokidar from 'chokidar'
 
 import File from 'vinyl'
 import chokidar from 'chokidar'
