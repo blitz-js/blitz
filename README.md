@@ -19,15 +19,17 @@
 
 <br>
 
-<h3 align="center">Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js</h3>
+<h1 align="center">The Fullstack React Framework</h1>
+
+<h3 align="center">Built on Next.js — Inspired by Ruby on Rails — New Fullstack Data Layer</h3>
 
 <br>
 
+New “no-API” data layer **lets you import server code into your React components** instead of having to fetch from an API.
+
+Includes everything you need for production apps. **Everything end-to-end from the database to the frontend.**
+
 Blitz brings back the **simplicity and conventions** of server-rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering!
-
-Blitz is the framework for the 99% of us at companies with <100 employees. This means **we don't force you to use advanced technologies like GraphQL**. We let you add advanced technologies on your terms and at your pace.
-
-Blitz **maximizes your productivity** both when starting an app and when scaling it to lots of code and users.
 
 <br>
 
@@ -64,15 +66,8 @@ or
 
 <br>
 
-### What is Blitz Designed For?
 
-Blitz is designed for tiny to large database-backed applications that have one or more graphical user interfaces.
-
-While we currently only support web, we are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
-
-<br>
-
-### What are the Foundational Principles?
+### The Foundational Principles
 
 1. Fullstack & Monolithic
 2. API Not Required
@@ -83,6 +78,14 @@ While we currently only support web, we are pursuing the dream of a single monol
 7. Community over Code
 
 [The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
+
+<br>
+
+### What is Blitz Designed For?
+
+Blitz is designed for tiny to large database-backed applications that have one or more graphical user interfaces.
+
+While we currently only support web, we are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
 
 <br>
 
