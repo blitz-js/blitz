@@ -30,7 +30,7 @@ All props are optional. If included multiple times, the tags from the last
 instance will be used.
 
 ## Prior art:
-
+- https://github.com/hackclub/theme/tree/master/packages/meta
 - https://realfavicongenerator.net/
 - https://joshwcomeau.com/snippets/html/html-skeleton
 - https://github.com/garmeeh/next-seo
