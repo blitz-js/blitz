@@ -48,6 +48,10 @@
     "enquirer": "2.3.5",
     "fs-extra": "9.0.0",
     "globby": "11.0.0",
+    "ink": "2.7.1",
+    "ink-link": "1.1.0",
+    "ink-spinner": "3.0.1",
+    "react": "16.13.1",
     "recast": "0.19.1",
     "ts-node": "8.9.1"
   },

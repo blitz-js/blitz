@@ -1,4 +1,4 @@
-import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
+import {ExecutorConfig, executorArgument, getExecutorArgument} from './executor'
 import {filePrompt} from './file-prompt'
 import {transform, Transformer} from '../utils/transform'
 import {log} from '@blitzjs/display'
@@ -8,15 +8,19 @@ import chokidar from 'chokidar'
 import * as fs from 'fs-extra'
 import chalk from 'chalk'
 
-export interface FileTransformExecutor extends BaseExecutor {
+export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
   singleFileSearch?: executorArgument<string>
   transform: Transformer
 }
 
-export function isFileTransformExecutor(executor: BaseExecutor): executor is FileTransformExecutor {
-  return (executor as FileTransformExecutor).transform !== undefined
+export function isFileTransformExecutor(executor: ExecutorConfig): executor is Config {
+  return (executor as Config).transform !== undefined
 }
+
+export const type = 'file-transform'
+export const Propose = () => null
+export const Commit = () => null
 
 async function executeWithDiff(transformFn: Transformer, filePath: string) {
   await new Promise((res, rej) => {
@@ -43,7 +47,7 @@ async function executeWithDiff(transformFn: Transformer, filePath: string) {
   })
 }
 
-export async function fileTransformExecutor(executor: FileTransformExecutor, cliArgs: any): Promise<void> {
+export async function fileTransformExecutor(executor: Config, cliArgs: any): Promise<void> {
   const fileToTransform: string = await filePrompt({
     context: cliArgs,
     globFilter: getExecutorArgument(executor.singleFileSearch, cliArgs),

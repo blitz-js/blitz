@@ -1,18 +1,22 @@
-import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
+import {ExecutorConfig, executorArgument, getExecutorArgument} from './executor'
 import {Generator, GeneratorOptions} from '@blitzjs/generator'
 import {log} from '@blitzjs/display'
 import {waitForConfirmation} from '../utils/wait-for-confirmation'
 
-export interface NewFileExecutor extends BaseExecutor {
+export interface Config extends ExecutorConfig {
   targetDirectory?: executorArgument<string>
   templatePath: executorArgument<string>
   templateValues: executorArgument<{[key: string]: string}>
   destinationPathPrompt?: executorArgument<string>
 }
 
-export function isNewFileExecutor(executor: BaseExecutor): executor is NewFileExecutor {
-  return (executor as NewFileExecutor).templatePath !== undefined
+export function isNewFileExecutor(executor: ExecutorConfig): executor is Config {
+  return (executor as Config).templatePath !== undefined
 }
+
+export const type = 'new-file'
+export const Propose = () => null
+export const Commit = () => null
 
 interface TempGeneratorOptions extends GeneratorOptions {
   targetDirectory?: string
@@ -41,7 +45,7 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
   }
 }
 
-export async function newFileExecutor(executor: NewFileExecutor, cliArgs: any): Promise<void> {
+export async function newFileExecutor(executor: Config, cliArgs: any): Promise<void> {
   const generatorArgs = {
     destinationRoot: '.',
     targetDirectory: getExecutorArgument(executor.targetDirectory, cliArgs),

@@ -1,4 +1,4 @@
-import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
+import {ExecutorConfig, executorArgument, getExecutorArgument} from './executor'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import spawn from 'cross-spawn'
@@ -12,12 +12,17 @@ interface NpmPackage {
   isDevDep?: boolean
 }
 
-export interface AddDependencyExecutor extends BaseExecutor {
+export interface Config extends ExecutorConfig {
   packages: executorArgument<NpmPackage[]>
 }
 
-export function isAddDependencyExecutor(executor: BaseExecutor): executor is AddDependencyExecutor {
-  return (executor as AddDependencyExecutor).packages !== undefined
+export const type = 'add-dependency'
+
+export const Propose = () => null
+export const Commit = () => null
+
+export function isAddDependencyExecutor(executor: ExecutorConfig): executor is Config {
+  return (executor as Config).packages !== undefined
 }
 
 async function getPackageManager(): Promise<'yarn' | 'npm'> {
@@ -27,7 +32,7 @@ async function getPackageManager(): Promise<'yarn' | 'npm'> {
   return 'yarn'
 }
 
-export async function addDependencyExecutor(executor: AddDependencyExecutor, cliArgs: any): Promise<void> {
+export async function addDependencyExecutor(executor: Config, cliArgs: any): Promise<void> {
   const packageManager = await getPackageManager()
   const packagesToInstall = getExecutorArgument(executor.packages, cliArgs)
   for (const pkg of packagesToInstall) {

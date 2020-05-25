@@ -1,8 +1,9 @@
 import {log} from '@blitzjs/display'
 
-export interface BaseExecutor {
+export interface ExecutorConfig {
   stepId: string | number
   stepName: string
+  stepType: string
   // a bit to display to the user to give context to the change
   explanation: string
 }
@@ -15,7 +16,7 @@ function isDynamicExecutorArgument<T>(input: executorArgument<T>): input is dyna
 
 export type executorArgument<T> = T | dynamicExecutorArgument<T>
 
-export function logExecutorFrontmatter(executor: BaseExecutor) {
+export function logExecutorFrontmatter(executor: ExecutorConfig) {
   console.log()
   const lineLength = executor.stepName.length + 6
   const verticalBorder = `+${new Array(lineLength).fill('–').join('')}+`
