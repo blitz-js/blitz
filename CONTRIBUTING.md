@@ -40,7 +40,7 @@ The contributor video call is mainly for those contributing or want to start con
 
 #### The timezone
 
-We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accomodate different regions
+We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accommodate different regions
 
 - Even weeks of the year: **Tuesday at 1am UTC** (Note: this is Monday evening in the USA)
 - Odd weeks of the year: **Wednesday at 9am UTC**
