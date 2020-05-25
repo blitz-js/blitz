@@ -26,6 +26,12 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 
 <br>
 
+### Video Overview of Our Codebase
+
+[Watch this video](https://www.youtube.com/watch?v=RBAkhDrVRiA&feature=youtu.be) for a walkthrough the entire Blitz codebase. This is a great way to get an overview of the various parts and how they fit together!
+
+<br>
+
 ### Weekly Contributors video call
 
 Every week Blitz contributors meet in a video call to discuss progress and ideas.
