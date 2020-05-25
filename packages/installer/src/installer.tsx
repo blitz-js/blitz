@@ -3,10 +3,12 @@ import * as NewFileExecutor from './executors/new-file-executor'
 import * as FileTransformExecutor from './executors/file-transform-executor'
 import {log} from '@blitzjs/display'
 // import {logExecutorFrontmatter} from './executors/executor'
-import {waitForConfirmation} from './utils/wait-for-confirmation'
 import {REGISTER_INSTANCE} from 'ts-node'
 import * as React from 'react'
-import {render, Box, Text, Color, useApp} from 'ink'
+import {render, Box, Text, useApp, useInput} from 'ink'
+import {Executor, Frontmatter} from './executors/executor'
+import {Newline} from './components/newline'
+import {Branded} from './components/branded'
 
 export const setupTsNode = () => {
   if (!process[REGISTER_INSTANCE]) {
@@ -14,12 +16,6 @@ export const setupTsNode = () => {
     require('ts-node').register({compilerOptions: {module: 'commonjs'}})
   }
   require('tsconfig-paths/register')
-}
-
-interface Executor {
-  type: String
-  Propose: React.FC<{step: ExecutorConfig; onProposeComplete: (msg: string) => void}>
-  Commit: React.FC<{step: ExecutorConfig; onChangeCommitted: (msg: string) => void}>
 }
 
 const ExecutorMap: {[key: string]: Executor} = {
@@ -30,7 +26,7 @@ const ExecutorMap: {[key: string]: Executor} = {
 
 type ExecutorConfig = AddDependencyExecutor.Config | FileTransformExecutor.Config | NewFileExecutor.Config
 
-interface InstallerOptions {
+interface RecipeMeta {
   packageName: string
   packageDescription: string
   packageOwner: string
@@ -43,6 +39,7 @@ interface InstallerOptions {
 }
 
 enum Action {
+  SkipStep,
   ProposeChange,
   ApplyChange,
   CommitApproved,
@@ -68,64 +65,58 @@ const initialState: State = {
 }
 
 function installerState(state = initialState, action: {type: Action; data?: any}) {
+  const newState = {...state}
   switch (action.type) {
     case Action.ProposeChange:
-      state.steps[state.current].status = Status.Proposed
+      newState.steps[newState.current].status = Status.Proposed
       break
     case Action.CommitApproved:
-      state.steps[state.current].status = Status.ReadyToCommit
+      newState.steps[newState.current].status = Status.ReadyToCommit
       break
     case Action.ApplyChange:
-      state.steps[state.current].status = Status.Committing
+      newState.steps[newState.current].status = Status.Committing
       break
     case Action.CompleteChange:
-      state.steps[state.current].status = Status.Committed
-      state.current += 1
+      newState.steps[newState.current].status = Status.Committed
+      newState.current += 1
+      break
+    case Action.SkipStep:
+      newState.current += 1
       break
   }
-  return state
+  return newState
 }
 
-interface InstallerProps {
+interface RecipeProps {
+  cliArgs: any
   steps: ExecutorConfig[]
-  recipeMeta: InstallerOptions
-}
-
-const Brand: React.FC = ({children}) => (
-  <Color hex="8a3df0" bold={true}>
-    {children}
-  </Color>
-)
-
-function Newline({count = 1}) {
-  return <Text>{'\n'.repeat(count)}</Text>
+  recipeMeta: RecipeMeta
 }
 
 const DispatchContext = React.createContext<React.Dispatch<{type: Action; data?: any}>>(() => {})
 
-function WelcomeMessage({recipeMeta}: {recipeMeta: InstallerOptions}) {
+function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
-    <Box marginBottom={2}>
-      <Brand>
-        Welcome to the recipe for {recipeMeta.packageName}
-        <Newline />
-        {recipeMeta.packageDescription}
-        <Newline />
-        <Text bold={false}>
-          This recipe is authored and supported by {recipeMeta.packageOwner}. For additional documentation and
-          support please visit {recipeMeta.packageRepoLink}
-        </Text>
-        <Newline />
-      </Brand>
+    <Box flexDirection="column">
+      <Branded>
+        <Box flexDirection="column">
+          <Text>Welcome to the recipe for {recipeMeta.packageName}</Text>
+          <Text>{recipeMeta.packageDescription}</Text>
+        </Box>
+      </Branded>
+      <Text bold={false}>This recipe is authored and supported by {recipeMeta.packageOwner}.</Text>
+      <Text>For additional documentation and support please visit {recipeMeta.packageRepoLink}</Text>
+      <Newline />
+      <Text>Press ENTER to begin the recipe</Text>
     </Box>
   )
 }
 
-function StepExecutor({step, status}: {step: ExecutorConfig; status: Status}) {
+function StepExecutor({cliArgs, step, status}: {step: ExecutorConfig; status: Status; cliArgs: any}) {
   const {Propose, Commit}: Executor = ExecutorMap[step.stepType]
   const dispatch = React.useContext(DispatchContext)
 
-  const handleProposeComplete = React.useCallback(
+  const handleProposalAccepted = React.useCallback(
     (msg) => {
       dispatch({type: Action.CommitApproved, data: msg})
     },
@@ -146,17 +137,41 @@ function StepExecutor({step, status}: {step: ExecutorConfig; status: Status}) {
     }
   }, [dispatch, status])
 
-  if (status === Status.Pending) {
-    return <Propose step={step} onProposeComplete={handleProposeComplete} />
-  }
-  if (status === Status.ReadyToCommit) {
-    return <Commit step={step} onChangeCommitted={handleChangeCommitted} />
-  }
-
-  return <Box />
+  return (
+    <Box flexDirection="column">
+      <Frontmatter executor={step} />
+      {[Status.Pending, Status.Proposed].includes(status) && (
+        <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
+      )}
+      {[Status.ReadyToCommit, Status.Committing].includes(status) && (
+        <Commit cliArgs={cliArgs} step={step} onChangeCommitted={handleChangeCommitted} />
+      )}
+    </Box>
+  )
 }
 
-function InstallerRenderer({steps, recipeMeta}: InstallerProps) {
+class EB extends React.Component<{}, {error?: Error; errorInfo?: any}> {
+  state = {
+    error: undefined,
+    errorInfo: undefined,
+  }
+
+  static getDerivedStateFromError(error: Error, errorInfo: any) {
+    return {error, errorInfo}
+  }
+  render() {
+    return this.state.error || this.state.errorInfo ? (
+      <Box>
+        {this.state.error}
+        {this.state.errorInfo}
+      </Box>
+    ) : (
+      this.props.children
+    )
+  }
+}
+
+function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   const {exit} = useApp()
   const [state, dispatch] = React.useReducer(installerState, {
     ...initialState,
@@ -167,23 +182,33 @@ function InstallerRenderer({steps, recipeMeta}: InstallerProps) {
     exit()
   }
 
-  React.useEffect(() => {
-    const t = setTimeout(exit, 5000)
-    return () => clearTimeout(t)
-  }, [exit])
+  useInput((_input, key) => {
+    if (key.return) {
+      if (state.current === -1) {
+        // force the executor into the first step
+        dispatch({type: Action.SkipStep})
+      }
+    }
+  })
 
   if (state.current === -1) {
     return <WelcomeMessage recipeMeta={recipeMeta} />
   }
 
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <StepExecutor step={state.steps[state.current].executor} status={state.steps[state.current].status} />
-    </DispatchContext.Provider>
+    <EB>
+      <DispatchContext.Provider value={dispatch}>
+        <StepExecutor
+          cliArgs={cliArgs}
+          step={state.steps[state.current].executor}
+          status={state.steps[state.current].status}
+        />
+      </DispatchContext.Provider>
+    </EB>
   )
 }
 
-export class Installer<Options extends InstallerOptions> {
+export class Installer<Options extends RecipeMeta> {
   private readonly steps: ExecutorConfig[]
   private readonly options: Options
 
@@ -209,14 +234,14 @@ export class Installer<Options extends InstallerOptions> {
     if (this.options.postInstall) return this.options.postInstall()
   }
 
-  async displayFrontmatter() {
-    log.branded(`Welcome to the installer for ${this.options.packageName}`)
-    log.branded(this.options.packageDescription)
-    log.info(`This package is authored and supported by ${this.options.packageOwner}`)
-    log.info(`For additional documentation and support please visit ${this.options.packageRepoLink}`)
-    console.log()
-    await waitForConfirmation('Press enter to begin installation')
-  }
+  // async displayFrontmatter() {
+  //   log.branded(`Welcome to the installer for ${this.options.packageName}`)
+  //   log.branded(this.options.packageDescription)
+  //   log.info(`This package is authored and supported by ${this.options.packageOwner}`)
+  //   log.info(`For additional documentation and support please visit ${this.options.packageRepoLink}`)
+  //   console.log()
+  //   await waitForConfirmation('Press enter to begin installation')
+  // }
 
   async run(cliArgs: {}): Promise<void> {
     try {
@@ -226,10 +251,17 @@ export class Installer<Options extends InstallerOptions> {
       return
     }
     await this.preInstall()
-    const {waitUntilExit} = render(<InstallerRenderer steps={this.steps} recipeMeta={this.options} />, {
-      experimental: true,
-    })
-    await waitUntilExit()
+    try {
+      const {waitUntilExit} = render(
+        <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
+        {
+          experimental: true,
+        },
+      )
+      await waitUntilExit()
+    } catch (e) {
+      console.error(e)
+    }
     // await this.displayFrontmatter()
     // for (const step of this.steps) {
     //   console.log() // newline
