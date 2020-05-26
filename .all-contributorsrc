@@ -543,6 +543,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "enzoferey",
+      "name": "Enzo Ferey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10673347?v=4",
+      "profile": "http://enzoferey.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
