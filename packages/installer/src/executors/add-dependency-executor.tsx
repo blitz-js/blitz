@@ -3,9 +3,10 @@ import * as fs from 'fs-extra'
 import * as path from 'path'
 import {spawn} from 'cross-spawn'
 import * as React from 'react'
-import {Box, Text, useInput} from 'ink'
+import {Box, Text} from 'ink'
 import {Newline} from '../components/newline'
 import Spinner from 'ink-spinner'
+import {useEnterToContinue} from '../utils/use-enter-to-continue'
 
 interface NpmPackage {
   name: string
@@ -68,11 +69,8 @@ const DependencyList = ({
 }
 
 export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}) => {
-  useInput((_input, key) => {
-    if (key.return) {
-      onProposalAccepted()
-    }
-  })
+  useEnterToContinue(onProposalAccepted)
+
   if (!isAddDependencyExecutor(step)) {
     onProposalAccepted()
     return null
@@ -114,11 +112,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) =
   const [depsInstalled, setDepsInstalled] = React.useState(false)
   const [devDepsInstalled, setDevDepsInstalled] = React.useState(false)
 
-  useInput((_input, key) => {
-    if (depsInstalled && devDepsInstalled && key.return) {
-      onChangeCommitted()
-    }
-  })
+  useEnterToContinue(onChangeCommitted, depsInstalled && devDepsInstalled)
 
   React.useEffect(() => {
     async function installDeps() {

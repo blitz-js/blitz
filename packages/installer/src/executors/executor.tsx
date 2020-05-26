@@ -13,8 +13,13 @@ export interface ExecutorConfig {
 
 export interface Executor {
   type: String
-  Propose: React.FC<{step: ExecutorConfig; onProposalAccepted: (msg?: string) => void; cliArgs: any}>
-  Commit: React.FC<{step: ExecutorConfig; onChangeCommitted: (msg?: string) => void; cliArgs: any}>
+  Propose: React.FC<{step: ExecutorConfig; onProposalAccepted: (data?: any) => void; cliArgs: any}>
+  Commit: React.FC<{
+    step: ExecutorConfig
+    proposalData?: any
+    onChangeCommitted: (data?: any) => void
+    cliArgs: any
+  }>
 }
 
 type dynamicExecutorArgument<T> = (cliArgs: any) => T

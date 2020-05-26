@@ -5,10 +5,11 @@ import {log} from '@blitzjs/display'
 // import {logExecutorFrontmatter} from './executors/executor'
 import {REGISTER_INSTANCE} from 'ts-node'
 import * as React from 'react'
-import {render, Box, Text, useApp, useInput} from 'ink'
+import {render, Box, Text, useApp} from 'ink'
 import {Executor, Frontmatter} from './executors/executor'
 import {Newline} from './components/newline'
 import {Branded} from './components/branded'
+import {useEnterToContinue} from './utils/use-enter-to-continue'
 
 export const setupTsNode = () => {
   if (!process[REGISTER_INSTANCE]) {
@@ -33,8 +34,6 @@ interface RecipeMeta {
   packageRepoLink: string
   validateArgs?(args: {}): Promise<void>
   preInstall?(): Promise<void>
-  beforeEach?(stepId: string | number): Promise<void>
-  afterEach?(stepId: string | number): Promise<void>
   postInstall?(): Promise<void>
 }
 
@@ -55,7 +54,7 @@ enum Status {
 }
 
 interface State {
-  steps: {executor: ExecutorConfig; status: Status}[]
+  steps: {executor: ExecutorConfig; status: Status; proposalData?: any}[]
   current: number
 }
 
@@ -72,13 +71,14 @@ function installerState(state = initialState, action: {type: Action; data?: any}
       break
     case Action.CommitApproved:
       newState.steps[newState.current].status = Status.ReadyToCommit
+      newState.steps[newState.current].proposalData = action.data
       break
     case Action.ApplyChange:
       newState.steps[newState.current].status = Status.Committing
       break
     case Action.CompleteChange:
       newState.steps[newState.current].status = Status.Committed
-      newState.current += 1
+      newState.current = Math.min(newState.current + 1, newState.steps.length - 1)
       break
     case Action.SkipStep:
       newState.current += 1
@@ -112,7 +112,17 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   )
 }
 
-function StepExecutor({cliArgs, step, status}: {step: ExecutorConfig; status: Status; cliArgs: any}) {
+function StepExecutor({
+  cliArgs,
+  proposalData,
+  step,
+  status,
+}: {
+  step: ExecutorConfig
+  status: Status
+  cliArgs: any
+  proposalData?: any
+}) {
   const {Propose, Commit}: Executor = ExecutorMap[step.stepType]
   const dispatch = React.useContext(DispatchContext)
 
@@ -144,31 +154,15 @@ function StepExecutor({cliArgs, step, status}: {step: ExecutorConfig; status: St
         <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
       )}
       {[Status.ReadyToCommit, Status.Committing].includes(status) && (
-        <Commit cliArgs={cliArgs} step={step} onChangeCommitted={handleChangeCommitted} />
+        <Commit
+          cliArgs={cliArgs}
+          proposalData={proposalData}
+          step={step}
+          onChangeCommitted={handleChangeCommitted}
+        />
       )}
     </Box>
   )
-}
-
-class EB extends React.Component<{}, {error?: Error; errorInfo?: any}> {
-  state = {
-    error: undefined,
-    errorInfo: undefined,
-  }
-
-  static getDerivedStateFromError(error: Error, errorInfo: any) {
-    return {error, errorInfo}
-  }
-  render() {
-    return this.state.error || this.state.errorInfo ? (
-      <Box>
-        {this.state.error}
-        {this.state.errorInfo}
-      </Box>
-    ) : (
-      this.props.children
-    )
-  }
 }
 
 function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
@@ -178,16 +172,11 @@ function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
     steps: steps.map((e) => ({executor: e, status: Status.Pending})),
   })
 
-  if (state.current === state.steps.length && state.steps[state.current].status === Status.Committed) {
-    exit()
-  }
+  useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
 
-  useInput((_input, key) => {
-    if (key.return) {
-      if (state.current === -1) {
-        // force the executor into the first step
-        dispatch({type: Action.SkipStep})
-      }
+  React.useEffect(() => {
+    if (state.current === state.steps.length - 1 && state.steps[state.current].status === Status.Committed) {
+      exit()
     }
   })
 
@@ -196,15 +185,14 @@ function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   }
 
   return (
-    <EB>
-      <DispatchContext.Provider value={dispatch}>
-        <StepExecutor
-          cliArgs={cliArgs}
-          step={state.steps[state.current].executor}
-          status={state.steps[state.current].status}
-        />
-      </DispatchContext.Provider>
-    </EB>
+    <DispatchContext.Provider value={dispatch}>
+      <StepExecutor
+        cliArgs={cliArgs}
+        proposalData={state.steps[state.current]?.proposalData}
+        step={state.steps[state.current]?.executor}
+        status={state.steps[state.current]?.status}
+      />
+    </DispatchContext.Provider>
   )
 }
 
@@ -224,24 +212,9 @@ export class Installer<Options extends RecipeMeta> {
   private async preInstall(): Promise<void> {
     if (this.options.preInstall) return this.options.preInstall()
   }
-  // private async beforeEach(stepId: string | number): Promise<void> {
-  //   if (this.options.beforeEach) return this.options.beforeEach(stepId)
-  // }
-  // private async afterEach(stepId: string | number): Promise<void> {
-  //   if (this.options.afterEach) return this.options.afterEach(stepId)
-  // }
   private async postInstall(): Promise<void> {
     if (this.options.postInstall) return this.options.postInstall()
   }
-
-  // async displayFrontmatter() {
-  //   log.branded(`Welcome to the installer for ${this.options.packageName}`)
-  //   log.branded(this.options.packageDescription)
-  //   log.info(`This package is authored and supported by ${this.options.packageOwner}`)
-  //   log.info(`For additional documentation and support please visit ${this.options.packageRepoLink}`)
-  //   console.log()
-  //   await waitForConfirmation('Press enter to begin installation')
-  // }
 
   async run(cliArgs: {}): Promise<void> {
     try {
@@ -262,28 +235,11 @@ export class Installer<Options extends RecipeMeta> {
     } catch (e) {
       console.error(e)
     }
-    // await this.displayFrontmatter()
-    // for (const step of this.steps) {
-    //   console.log() // newline
-
-    //   await this.beforeEach(step.stepId)
-
-    //   logExecutorFrontmatter(step)
-
-    //   // using if instead of a switch allows us to strongly type the executors
-    //   if (isFileTransformExecutor(step)) {
-    //     await fileTransformExecutor(step, cliArgs)
-    //   } else if (isAddDependencyExecutor(step)) {
-    //     await addDependencyExecutor(step, cliArgs)
-    //   } else if (isNewFileExecutor(step)) {
-    //     await newFileExecutor(step, cliArgs)
-    //   }
-
-    //   await this.afterEach(step.stepId)
-    // }
     await this.postInstall()
 
     console.log()
-    log.success(`Installer complete, ${this.options.packageName} is now be configured for your app!`)
+    log.success(
+      `The recipe for ${this.options.packageName} completed successfully! Its functionality is now fully configured in your Blitz app.`,
+    )
   }
 }
