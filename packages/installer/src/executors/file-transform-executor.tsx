@@ -1,10 +1,7 @@
 import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from './executor'
 import {filePrompt} from './file-prompt'
 import {processFile, transform, Transformer, TransformStatus} from '../utils/transform'
-import {log} from '@blitzjs/display'
-import {waitForConfirmation} from '../utils/wait-for-confirmation'
 import {createPatch} from 'diff'
-import chokidar from 'chokidar'
 import * as fs from 'fs-extra'
 import * as React from 'react'
 import Spinner from 'ink-spinner'
@@ -106,36 +103,4 @@ export const Commit: Executor['Commit'] = ({onChangeCommitted, proposalData: fil
       <Text>📝 File changes applied! Press ENTER to continue</Text>
     </Box>
   )
-}
-
-async function executeWithDiff(transformFn: Transformer, filePath: string) {
-  await new Promise((res, rej) => {
-    const watcher = chokidar.watch(filePath)
-    const originalFileContents = fs.readFileSync(filePath).toString('utf-8')
-    watcher.on('change', (path) => {
-      watcher.close().then(() => {
-        const patch = createPatch(path, originalFileContents, fs.readFileSync(path).toString('utf-8'))
-        patch.split('\n').slice(2)
-        res(path)
-      })
-    })
-    watcher.on('error', (error) => {
-      rej(error)
-    })
-    transform(transformFn, [filePath])
-  })
-}
-
-export async function fileTransformExecutor(executor: Config, cliArgs: any): Promise<void> {
-  const fileToTransform: string = await filePrompt({
-    context: cliArgs,
-    globFilter: getExecutorArgument(executor.singleFileSearch, cliArgs),
-    getChoices: executor.selectTargetFiles,
-  })
-  try {
-    await executeWithDiff(executor.transform, fileToTransform)
-    await waitForConfirmation('The above changes were applied. Press enter to continue')
-  } catch (err) {
-    log.error(`Failed to transform ${fileToTransform}`)
-  }
 }
