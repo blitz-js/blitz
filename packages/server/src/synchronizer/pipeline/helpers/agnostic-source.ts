@@ -1,18 +1,16 @@
 import {through} from '../../streams'
 import vfs from 'vinyl-fs'
 import mergeStream from 'merge-stream'
-// import chokidar from 'chokidar'
 
 import File from 'vinyl'
 import chokidar from 'chokidar'
 import vinyl from 'vinyl-file'
 import {Stats} from 'fs'
-import {normalize, resolve} from 'path'
-import pathIsAbsolute from 'path-is-absolute'
+import {normalize, resolve, isAbsolute} from 'path'
 
 export const watch = (includePaths: string[] | string, options: chokidar.WatchOptions) => {
   function resolveFilepath(filepath: string) {
-    if (pathIsAbsolute(filepath)) {
+    if (isAbsolute(filepath)) {
       return normalize(filepath)
     }
     return resolve(options.cwd || process.cwd(), filepath)
