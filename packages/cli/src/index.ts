@@ -1,6 +1,6 @@
 import {run as oclifRun} from '@oclif/command'
 
-// Load the .env environment variable so it's avaiable for all commands
+// Load the .env environment variable so it's available for all commands
 require('dotenv').config()
 
 export function run() {
