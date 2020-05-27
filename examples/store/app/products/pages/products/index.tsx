@@ -1,22 +1,22 @@
-import {Link, BlitzPage, GetStaticProps} from 'blitz'
-import getProducts from '../../queries/getProducts'
-import {Product} from 'db'
+import { Link, BlitzPage, GetStaticProps } from "blitz"
+import getProducts from "../../queries/getProducts"
+import { Product } from "db"
 
 type StaticProps = {
   products: Product[]
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const products = await getProducts()
+  const products = await getProducts({ orderBy: { id: "desc" } })
 
   return {
-    props: {products},
+    props: { products },
     // Unstable because revalidate is still under RFC: https://nextjs.link/issg
     unstable_revalidate: 1,
   }
 }
 
-const Page: BlitzPage<StaticProps> = function ({products}) {
+const Page: BlitzPage<StaticProps> = function ({ products }) {
   return (
     <div>
       <h1>Products</h1>
