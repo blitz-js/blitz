@@ -1,4 +1,4 @@
-import {runConsole} from '@blitzjs/console'
+import {runRepl} from '@blitzjs/repl'
 import {Command} from '@oclif/command'
 import path from 'path'
 import fs from 'fs'
@@ -38,6 +38,6 @@ export class Console extends Command {
     await runPrismaGeneration({silent: true})
     spinner.succeed()
 
-    runConsole(Console.replOptions)
+    runRepl(Console.replOptions)
   }
 }

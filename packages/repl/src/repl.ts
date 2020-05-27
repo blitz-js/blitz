@@ -23,7 +23,7 @@ const commands = {
   },
 }
 
-const runConsole = async (replOptions: REPL.ReplOptions) => {
+const runRepl = async (replOptions: REPL.ReplOptions) => {
   const repl = initializeRepl(replOptions)
 
   const watchers = [
@@ -92,4 +92,4 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
   repl.on('exit', onExit)
 }
 
-export {runConsole}
+export {runRepl}

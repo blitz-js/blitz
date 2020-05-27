@@ -4,7 +4,7 @@ import {REPLServer} from 'repl'
 import {FSWatcher} from 'chokidar'
 
 import * as loadBlitzFunctions from '../src/utils/load-blitz'
-import {runConsole} from '../src/console'
+import {runRepl} from '../src/repl'
 
 jest.spyOn(global.console, 'log').mockImplementation()
 
@@ -41,13 +41,13 @@ describe('Console command', () => {
 
   it('starts REPL', async () => {
     const options = {prompt: '> running'}
-    await runConsole(options)
+    await runRepl(options)
 
     expect(repl.start).toBeCalledWith(options)
   })
 
   it('defines reload command', async () => {
-    await runConsole({})
+    await runRepl({})
     expect(mockRepl.defineCommand).toBeCalledWith(
       'reload',
       expect.objectContaining({
@@ -57,13 +57,13 @@ describe('Console command', () => {
   })
 
   it('watches for modules changes', async () => {
-    await runConsole({})
+    await runRepl({})
     expect(loadBlitzFunctions.getBlitzModulePaths).toBeCalled()
     expect(chokidar.watch).toBeCalledWith(pathToModulesMock)
   })
 
   it('calls loadBlitz', async () => {
-    await runConsole({})
+    await runRepl({})
     expect(loadBlitzFunctions.loadBlitz).toBeCalled()
   })
 })

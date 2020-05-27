@@ -1,6 +1,6 @@
 import {Console} from '../../src/commands/console'
 
-import * as console from '@blitzjs/console'
+import * as repl from '@blitzjs/repl'
 import * as db from '../../src/commands/db'
 
 jest.spyOn(global.console, 'log').mockImplementation()
@@ -28,10 +28,10 @@ jest.mock(`${process.cwd()}/package.json`, () => ({
 }))
 
 jest.mock(
-  '@blitzjs/console',
+  '@blitzjs/repl',
   jest.fn(() => {
     return {
-      runConsole: jest.fn(),
+      runRepl: jest.fn(),
     }
   }),
 )
@@ -60,13 +60,13 @@ describe('Console command', () => {
     expect(db.runPrismaGeneration).toHaveBeenCalledWith({silent: true})
   })
 
-  it('runs console', async () => {
+  it('runs repl', async () => {
     await Console.prototype.run()
-    expect(console.runConsole).toHaveBeenCalled()
+    expect(repl.runRepl).toHaveBeenCalled()
   })
 
-  it('runs console with replOptions', async () => {
+  it('runs repl with replOptions', async () => {
     await Console.prototype.run()
-    expect(console.runConsole).toHaveBeenCalledWith(Console.replOptions)
+    expect(repl.runRepl).toHaveBeenCalledWith(Console.replOptions)
   })
 })
