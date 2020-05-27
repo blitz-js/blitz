@@ -534,6 +534,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lachlanjc",
+      "name": "Lachlan Campbell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5074763?v=4",
+      "profile": "https://lachlanjc.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "enzoferey",
+      "name": "Enzo Ferey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10673347?v=4",
+      "profile": "http://enzoferey.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pgrimaud",
+      "name": "Pierre Grimaud",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1866496?v=4",
+      "profile": "https://github.com/pgrimaud",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jletey",
+      "name": "John Letey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/62398724?v=4",
+      "profile": "https://github.com/jletey",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

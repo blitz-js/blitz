@@ -18,7 +18,7 @@ module.exports = {
           const originalPath = manifest.getByValue(filename)
 
           if (!originalPath) {
-            throw new Error('Manifest did not yeild original path from ' + filename)
+            throw new Error('Manifest did not yield original path from ' + filename)
           }
 
           // Use sourcemaps eventually

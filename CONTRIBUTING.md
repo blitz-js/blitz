@@ -26,6 +26,12 @@ The Blitz codebase is like a community garden. There's a lot of beautiful plants
 
 <br>
 
+### Video Overview of Our Codebase
+
+[Watch this video](https://www.youtube.com/watch?v=RBAkhDrVRiA&feature=youtu.be) for a walkthrough the entire Blitz codebase. This is a great way to get an overview of the various parts and how they fit together!
+
+<br>
+
 ### Weekly Contributors video call
 
 Every week Blitz contributors meet in a video call to discuss progress and ideas.
@@ -34,7 +40,7 @@ The contributor video call is mainly for those contributing or want to start con
 
 #### The timezone
 
-We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accomodate different regions
+We are literally all over the globe, so the weekly contributors call alternates timezones every other week to accommodate different regions
 
 - Even weeks of the year: **Tuesday at 1am UTC** (Note: this is Monday evening in the USA)
 - Odd weeks of the year: **Wednesday at 9am UTC**

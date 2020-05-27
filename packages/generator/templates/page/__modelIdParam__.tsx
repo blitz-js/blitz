@@ -14,7 +14,7 @@ export const __ModelName__: React.FC = () => {
   return (
     <div>
       <h1>__ModelName__ {__modelName__.id}</h1>
-      <pre>{JSON.stringify(__modelName__)}</pre>
+      <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
       {process.env.parentModel ? (
         <Link
