@@ -1,14 +1,14 @@
-import {Suspense} from 'react'
-import {Link, useRouter, useQuery} from 'blitz'
-import getProduct from 'app/products/queries/getProduct'
-import ProductForm from 'app/products/components/ProductForm'
+import { Suspense } from "react"
+import { Link, useRouter, useQuery, useRouterParams } from "blitz"
+import getProduct from "app/products/queries/getProduct"
+import ProductForm from "app/products/components/ProductForm"
 
 function Product() {
   const router = useRouter()
-  const id = parseInt(router?.query.id as string)
-  const [product] = useQuery(getProduct, {where: {id}})
+  const { id } = useRouterParams()
+  const [product] = useQuery(getProduct, { where: { id: Number(id) } })
 
-  return <ProductForm product={product} onSuccess={() => router.push('/admin/products')} />
+  return <ProductForm product={product} onSuccess={() => router.push("/admin/products")} />
 }
 
 function EditProductPage() {
