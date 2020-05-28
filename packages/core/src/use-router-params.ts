@@ -1,14 +1,13 @@
 import {useRouter} from 'next/router'
-import {parse} from 'url'
-import {getRouteRegex, getRouteMatcher} from 'next/dist/next-server/lib/router/utils'
+import {useRouterQuery} from './use-router-query'
 
 export function useRouterParams() {
   const router = useRouter()
-  const {pathname} = parse(router.asPath)
-  const params = getRouteMatcher(getRouteRegex(router.route))(pathname)
-  if (params) {
-    return params
-  }
+  const query = useRouterQuery()
 
-  return {}
+  return Object.fromEntries(
+    Object.entries(router.query).filter(
+      ([key, value]) => typeof query[key] === 'undefined' || query[key] !== value,
+    ),
+  )
 }
