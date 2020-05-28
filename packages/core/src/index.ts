@@ -1,5 +1,7 @@
 export * from './use-query'
 export * from './use-paginated-query'
+export * from './use-router-params'
+export * from './use-router-query'
 export * from './ssr-query'
 export * from './rpc'
 
