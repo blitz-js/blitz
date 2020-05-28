@@ -1,0 +1,44 @@
+{
+  "name": "@blitzjs/repl",
+  "version": "0.11.0",
+  "description": "Repl package for Blitz CLI",
+  "homepage": "https://github.com/blitz-js/blitz/packages/repl/#readme",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf dist",
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "lint": "tsdx lint",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "dist/index.js",
+  "module": "dist/repl.esm.js",
+  "types": "dist/packages/repl/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "blitz",
+    "repl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "dependencies": {
+    "pkg-dir": "4.2.0",
+    "chokidar": "3.3.1",
+    "globby": "11.0.0"
+  }
+}
