@@ -43,7 +43,11 @@ or
 
 3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
 
-<br>
+<br><br>
+
+![Architecture diagram](https://blitzjs.now.sh/img/architecture-diagram.png)
+
+<br><br>
 
 **Features:**<br>
 ⚡️ Built on Next.js<br>
