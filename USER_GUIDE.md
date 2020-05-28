@@ -346,6 +346,7 @@ Assuming you already have a Vercel account and the `now` cli installed, you can 
    2. Ensure you set your "Pool Mode" to be "Session" instead of "Transaction" (because of a bug in Prisma)
 3. You need your entire database connection string. If you need, [read the Prisma docs on this](https://www.prisma.io/docs/reference/database-connectors/postgresql#connection-details).
    1. If deploying to serverless with a connection pool, make sure you get the connection string to your connection pool, not directly to the DB.
+   2. If using pgBouncer (default connection pool on Digital Ocean), you must add `?pgbouncer=true` to the end of your connection string for Prisma to work correctly.
 4. Change your build script in package.json to be `blitz db migrate && blitz build` so that the production DB will be migrated on each deploy
 5. Add your DB url as a secret environment variable by running `now secrets add @database-url "DATABASE_CONNECTION_STRING"`
 6. Add a `now.json` at your project root with
