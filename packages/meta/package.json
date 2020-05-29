@@ -14,8 +14,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "lint": "tsdx lint"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -40,5 +39,6 @@
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.2"
-  }
+  },
+  "gitHead": "5c434e3b3ee60e75cc10707d61b7c0e1ff2101b8"
 }

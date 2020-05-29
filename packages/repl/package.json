@@ -40,5 +40,6 @@
     "chokidar": "3.3.1",
     "globby": "11.0.0",
     "pkg-dir": "4.2.0"
-  }
+  },
+  "gitHead": "5c434e3b3ee60e75cc10707d61b7c0e1ff2101b8"
 }
