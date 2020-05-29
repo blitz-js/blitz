@@ -1,5 +1,5 @@
 {
-  "version": "0.12.0-canary.2",
+  "version": "0.12.0-canary.3",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -40,5 +40,5 @@
     "tslib": "^2.0.0",
     "typescript": "^3.9.2"
   },
-  "gitHead": "5d0531d35ac5d6b8fafaa33602bed49882c20b1a"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

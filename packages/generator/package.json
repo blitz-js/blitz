@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.12.0-canary.2",
+  "version": "0.12.0-canary.3",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -57,7 +57,7 @@
     "vinyl": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/server": "0.12.0-canary.2"
+    "@blitzjs/server": "0.12.0-canary.3"
   },
-  "gitHead": "5d0531d35ac5d6b8fafaa33602bed49882c20b1a"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
