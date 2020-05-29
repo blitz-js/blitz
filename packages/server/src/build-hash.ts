@@ -1,11 +1,11 @@
 import {hashElement} from 'folder-hash'
 import {pathExists, readFile, writeFile} from 'fs-extra'
-import {resolve, relative} from 'path'
+import {resolve} from 'path'
 
-export async function getInputArtefactsHash(buildFolder: string = '.blitz/caches') {
+export async function getInputArtefactsHash() {
   const options = {
     algo: 'md5',
-    folders: {exclude: ['node_modules', relative(process.cwd(), buildFolder), '.blitz', 'cypress', '.next']},
+    folders: {exclude: ['node_modules', '.blitz-build', '.blitz', 'cypress', '.next']},
   }
   const tree = await hashElement('.', options)
   return tree.hash
@@ -17,7 +17,7 @@ export async function alreadyBuilt(buildFolder: string = '.blitz/caches') {
 
   try {
     const buffer = await readFile(hashStore)
-    const hash = await getInputArtefactsHash(buildFolder)
+    const hash = await getInputArtefactsHash()
     const read = buffer.toString().replace('\n', '')
     return read === hash
   } catch (err) {
@@ -27,6 +27,6 @@ export async function alreadyBuilt(buildFolder: string = '.blitz/caches') {
 
 export async function saveBuild(buildFolder: string = '.blitz/caches') {
   const hashStore = resolve(buildFolder, 'last-build')
-  const hash = await getInputArtefactsHash(buildFolder)
+  const hash = await getInputArtefactsHash()
   await writeFile(hashStore, hash)
 }
