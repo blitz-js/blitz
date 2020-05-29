@@ -59,6 +59,7 @@ describe('Build command Vercel', () => {
       name: '.blitz-build',
       children: [
         {name: 'blitz.config.js'},
+        {name: 'last-build'},
         {name: 'next-vercel.config.js'},
         {name: 'next.config.js'},
         {

@@ -55,7 +55,13 @@ describe('Build command', () => {
     expect(tree).toEqual({
       children: [
         {
-          children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
+          children: [
+            {name: 'blitz.config.js'},
+            {name: 'last-build'},
+            {name: 'next.config.js'},
+            {name: 'one'},
+            {name: 'two'},
+          ],
           name: '.blitz-build',
         },
         {name: '.now'},
