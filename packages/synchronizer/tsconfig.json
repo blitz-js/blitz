@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src"],
+  "include": ["src", "types", "test"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "baseUrl": "./",

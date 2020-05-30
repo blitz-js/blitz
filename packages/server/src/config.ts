@@ -1,7 +1,7 @@
 import {resolve} from 'path'
 import {ciLog} from './ci-log'
 import {resolveBinAsync} from './resolve-bin-async'
-import {synchronizeFiles} from './synchronizer'
+import {synchronizeFiles} from '@blitzjs/synchronizer'
 import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
 
 export type ServerConfig = {

@@ -1,5 +1,5 @@
 import {resolve} from 'path'
-import {synchronizeFiles} from './synchronizer'
+import {synchronizeFiles} from '@blitzjs/synchronizer'
 import {move, remove, pathExists} from 'fs-extra'
 import {ServerConfig, enhance} from './config'
 import {nextBuild} from './next-utils'

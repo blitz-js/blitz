@@ -1,5 +1,5 @@
 import {resolve} from 'path'
-import {synchronizeFiles as defaultSynchronizer} from './synchronizer'
+import {synchronizeFiles as defaultSynchronizer} from '@blitzjs/synchronizer'
 import {ServerConfig, enhance} from './config'
 import {nextStartDev} from './next-utils'
 
