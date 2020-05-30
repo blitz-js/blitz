@@ -1,7 +1,7 @@
-import {exportRouterParams} from '@blitzjs/core'
+import {extractRouterParams} from '@blitzjs/core'
 
 describe('useRouterParams', () => {
-  describe('exportRouterParams', () => {
+  describe('extractRouterParams', () => {
     it('returns proper params', () => {
       const routerQuery = {
         id: '1',
@@ -17,7 +17,7 @@ describe('useRouterParams', () => {
         queryArray: ['1', '123', ''],
       }
 
-      const params = exportRouterParams(routerQuery, query)
+      const params = extractRouterParams(routerQuery, query)
       expect(params).toEqual({
         id: '1',
         cat: 'category',

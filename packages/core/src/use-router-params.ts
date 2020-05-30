@@ -30,7 +30,7 @@ function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQuery
   return value1 === value2
 }
 
-export function exportRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUrlQuery) {
+export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUrlQuery) {
   return Object.fromEntries(
     Object.entries(routerQuery).filter(
       ([key, value]) => typeof query[key] === 'undefined' || !areQueryValuesEqual(value, query[key]),
@@ -42,5 +42,5 @@ export function useRouterParams() {
   const router = useRouter()
   const query = useRouterQuery()
 
-  return exportRouterParams(router.query, query)
+  return extractRouterParams(router.query, query)
 }
