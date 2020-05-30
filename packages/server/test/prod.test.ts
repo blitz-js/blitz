@@ -1,26 +1,24 @@
 /* eslint-disable import/first */
 
-const nextUtilsMock = {
-  nextStart: jest.fn().mockReturnValue(Promise.resolve()),
-  nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
-}
+import {multiMock} from './utils/multi-mock'
+import {resolve} from 'path'
 
-// Assume next works
-jest.doMock('../src/next-utils', () => nextUtilsMock)
-
-// Assume build works
-const buildMock = {build: jest.fn().mockReturnValue(Promise.resolve())}
-jest.doMock('../src/build', () => buildMock)
-
-// Mock where the next bin is
-jest.doMock('../src/resolve-bin-async', () => ({
-  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
-}))
+const mocks = multiMock(
+  {
+    build: {build: jest.fn().mockReturnValue(Promise.resolve())},
+    'next-utils': {
+      nextStart: jest.fn().mockReturnValue(Promise.resolve()),
+      nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+    },
+    'resolve-bin-async': {
+      resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+    },
+  },
+  resolve(__dirname, '../src'),
+)
 
 // Import with mocks applied
 import {prod} from '../src/prod'
-import mockfs from 'mock-fs'
-import {resolve} from 'path'
 import {ensureDir, writeFile} from 'fs-extra'
 import {getInputArtefactsHash} from '../src/build-hash'
 
@@ -38,7 +36,7 @@ describe('Prod command', () => {
   }
 
   beforeEach(async () => {
-    mockfs({
+    mocks.mockFs({
       build: {
         '.now': '',
         one: '',
@@ -49,13 +47,13 @@ describe('Prod command', () => {
   })
 
   afterEach(() => {
-    mockfs.restore()
+    mocks.mockFs.restore()
   })
 
   describe('When not already built', () => {
     it('should trigger build step', async () => {
       await prod(prodArgs)
-      expect(buildMock.build.mock.calls).toEqual([[prodArgs]])
+      expect(mocks.build.build.mock.calls).toEqual([[prodArgs]])
     })
   })
 
@@ -64,7 +62,7 @@ describe('Prod command', () => {
       ensureDir(buildFolder)
       await writeFile(`${buildFolder}/last-build`, await getInputArtefactsHash())
       await prod(prodArgs)
-      expect(buildMock.build.mock.calls).toEqual([])
+      expect(mocks.build.build.mock.calls).toEqual([])
     })
   })
 })
