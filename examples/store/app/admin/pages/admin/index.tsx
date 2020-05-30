@@ -1,4 +1,4 @@
-import {Link} from 'blitz'
+import { Link } from "blitz"
 
 function StoreAdminPage() {
   return (

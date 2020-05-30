@@ -1,26 +1,22 @@
 /* eslint-disable import/first */
+import {multiMock} from './utils/multi-mock'
+import {resolve} from 'path'
 
-const nextUtilsMock = {
-  nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
-}
-// Quieten reporter
-jest.doMock('../src/reporter', () => ({
-  reporter: {copy: jest.fn(), remove: jest.fn()},
-}))
-
-// Assume next works
-jest.doMock('../src/next-utils', () => nextUtilsMock)
-
-// Mock where the next bin is
-jest.doMock('../src/resolve-bin-async', () => ({
-  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
-}))
+const mocks = multiMock(
+  {
+    'next-utils': {
+      nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+    },
+    'resolve-bin-async': {
+      resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+    },
+  },
+  resolve(__dirname, '../src'),
+)
 
 // Import with mocks applied
 import {build} from '../src/build'
 import {directoryTree} from './utils/tree-utils'
-import mockfs from 'mock-fs'
-import {resolve} from 'path'
 
 describe('Build command', () => {
   const rootFolder = resolve('build')
@@ -28,7 +24,7 @@ describe('Build command', () => {
   const devFolder = resolve(rootFolder, '.blitz')
 
   beforeEach(async () => {
-    mockfs({
+    mocks.mockFs({
       build: {
         '.now': '',
         one: '',
@@ -47,12 +43,11 @@ describe('Build command', () => {
   })
 
   afterEach(() => {
-    mockfs.restore()
+    mocks.mockFs.restore()
   })
 
   it('should copy the correct files to the build folder', async () => {
-    const tree = directoryTree(rootFolder)
-    expect(tree).toEqual({
+    expect(directoryTree(rootFolder)).toEqual({
       children: [
         {
           children: [
