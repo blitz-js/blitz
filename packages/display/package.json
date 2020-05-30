@@ -17,7 +17,7 @@
     "url": "https://twitter.com/flybayer"
   },
   "main": "dist/index.js",
-  "module": "dist/installer.esm.js",
+  "module": "dist/display.esm.js",
   "types": "dist/packages/display/src/index.d.ts",
   "files": [
     "dist"
