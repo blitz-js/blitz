@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
 import {multiMock} from './utils/multi-mock'
-import {resolve} from 'path'
+import {resolve, join} from 'path'
 const mocks = multiMock(
   {
     'next-utils': {
@@ -19,7 +19,6 @@ const mocks = multiMock(
 import {dev} from '../src/dev'
 import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
 import {directoryTree} from './utils/tree-utils'
-import {join} from 'path'
 
 const originalLog = console.log
 describe('Dev command', () => {
