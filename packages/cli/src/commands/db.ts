@@ -1,4 +1,5 @@
-import {resolveBinAsync, log} from '@blitzjs/server'
+import {resolveBinAsync} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import {Command, flags} from '@oclif/command'
 import chalk from 'chalk'
 import {spawn} from 'cross-spawn'

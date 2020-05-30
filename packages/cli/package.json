@@ -31,6 +31,7 @@
     "/lib"
   ],
   "dependencies": {
+    "@blitzjs/display": "0.12.0",
     "@blitzjs/repl": "0.12.0",
     "@oclif/command": "1.5.20",
     "@oclif/config": "1.15.1",

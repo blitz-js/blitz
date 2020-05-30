@@ -1,7 +1,7 @@
 import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
 import {filePrompt} from './file-prompt'
 import {transform, Transformer} from '../utils/transform'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import {waitForConfirmation} from '../utils/wait-for-confirmation'
 import {createPatch} from 'diff'
 import chokidar from 'chokidar'

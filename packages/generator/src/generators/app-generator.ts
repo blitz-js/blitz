@@ -5,7 +5,7 @@ import username from 'username'
 import {readJSONSync, writeJson} from 'fs-extra'
 import {resolve, join} from 'path'
 import {fetchLatestVersionsFor} from '../utils/fetch-latest-version-for'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import {getBlitzDependencyVersion} from '../utils/get-blitz-dependency-version'
 
 export interface AppGeneratorOptions extends GeneratorOptions {
