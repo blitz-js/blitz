@@ -15,6 +15,7 @@ describe('useRouterParams', () => {
         cat: 'somethingelse',
         slug: ['query-slug'],
         queryArray: ['1', '123', ''],
+        onlyInQuery: 'onlyInQuery',
       }
 
       const params = extractRouterParams(routerQuery, query)
