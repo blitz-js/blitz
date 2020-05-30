@@ -28,6 +28,11 @@ const Home = () => (
           </Link>
         </li>
         <li>
+          <Link href="/products/infinite">
+            <a>Infinite Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
           <Link href="/admin/products">
             <a>Admin Section (client-rendered)</a>
           </Link>
