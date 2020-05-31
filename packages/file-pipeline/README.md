@@ -5,7 +5,7 @@
 ### Design goals
 
 - Stages: Related logic needs to live together
-- Everything is a rule
+- Everything is a stream
 - Efficiency
 - Parallel processing
 - Cleaner Architecture for Dirty restart functionality
