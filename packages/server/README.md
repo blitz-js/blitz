@@ -23,3 +23,5 @@ import {prod} from '@blitzjs/server'
 
 await prod(serverConfig)
 ```
+
+_This readme needs more work. If you want to help out please submit a PR_
