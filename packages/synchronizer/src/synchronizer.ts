@@ -7,6 +7,12 @@ import {createDisplay} from './display'
 import {createErrorsStream} from './errors'
 import {READY} from './events'
 
+import {createRuleConfig} from './pipeline/rules/config'
+import {createRuleManifest} from './pipeline/rules/manifest'
+import {createRuleRelative} from './pipeline/rules/relative'
+import {createRulePages} from './pipeline/rules/pages'
+import {createRuleRpc} from './pipeline/rules/rpc'
+
 type SynchronizeFilesInput = {
   src: string
   dest: string
@@ -71,7 +77,19 @@ export async function synchronizeFiles({
       if (err) reject(err)
     }
 
-    const fileTransformer = createPipeline(config, errors.stream, reporter.stream)
+    const fileTransformer = createPipeline(
+      config,
+      [
+        // Order is important
+        createRuleRelative,
+        createRulePages,
+        createRuleRpc,
+        createRuleConfig,
+        createRuleManifest,
+      ],
+      errors.stream,
+      reporter.stream,
+    )
 
     // Send source to fileTransformer
     fileTransformer.stream.on('error', catchErrors)

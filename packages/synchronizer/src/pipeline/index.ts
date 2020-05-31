@@ -1,14 +1,9 @@
 import {pipeline, through} from '../streams'
-import {RuleConfig, RuleArgs} from '../types'
+import {RuleConfig, RuleArgs, Rule} from '../types'
 import {createEnrichFiles} from './helpers/enrich-files'
 import {createFileCache} from './helpers/file-cache'
 import {createIdleHandler} from './helpers/idle-handler'
 import {createWorkOptimizer} from './helpers/work-optimizer'
-import {createRuleConfig} from './rules/config'
-import {createRuleManifest} from './rules/manifest'
-import {createRuleRelative} from './rules/relative'
-import {createRulePages} from './rules/pages'
-import {createRuleRpc} from './rules/rpc'
 import {createWrite} from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
@@ -17,10 +12,11 @@ import {agnosticSource} from './helpers/agnostic-source'
 /**
  * Creates a pipeline stream that transforms files.
  * @param config Config object containing basic information for the file pipeline
+ * @param rules Array of rules to apply to each file
  * @param errors Stream that takes care of all operational error rendering
  * @param reporter Stream that takes care of all view rendering
  */
-export function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
+export function createPipeline(config: RuleConfig, rules: Rule[], errors: Writable, reporter: Writable) {
   // Helper streams don't account for business rules
   const source = agnosticSource(config)
   const input = through({objectMode: true}, (f, _, next) => next(null, f))
@@ -39,13 +35,8 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     getInputCache: () => srcCache.cache,
   }
 
-  // Rules represent business rules
-  // Perhaps if it makes sense we can iterate over rules passed in
-  const rulePages = createRulePages(api)
-  const ruleRpc = createRuleRpc(api)
-  const ruleConfig = createRuleConfig(api)
-  const ruleRelative = createRuleRelative(api)
-  const ruleManifest = createRuleManifest(api)
+  // Initialize each rule
+  const initializedRules = rules.map((rule) => rule(api))
 
   const stream = pipeline(
     source.stream, // files come from file system
@@ -57,11 +48,7 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     optimizer.triage,
 
     // Run business rules
-    ruleRelative.stream,
-    rulePages.stream,
-    ruleRpc.stream,
-    ruleConfig.stream,
-    ruleManifest.stream,
+    ...initializedRules.map((rule) => rule.stream),
 
     // Tidy up
     writer.stream,
@@ -70,14 +57,7 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     idleHandler.stream,
   )
 
-  const ready = Object.assign(
-    {},
-    ruleRelative.ready,
-    rulePages.ready,
-    ruleRpc.ready,
-    ruleConfig.ready,
-    ruleManifest.ready,
-  )
+  const ready = Object.assign({}, ...initializedRules.map((rule) => rule.ready))
 
   return {stream, ready}
 }
