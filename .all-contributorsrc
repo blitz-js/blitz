@@ -534,6 +534,78 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lachlanjc",
+      "name": "Lachlan Campbell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5074763?v=4",
+      "profile": "https://lachlanjc.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "enzoferey",
+      "name": "Enzo Ferey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10673347?v=4",
+      "profile": "http://enzoferey.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pgrimaud",
+      "name": "Pierre Grimaud",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1866496?v=4",
+      "profile": "https://github.com/pgrimaud",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jletey",
+      "name": "John Letey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/62398724?v=4",
+      "profile": "https://github.com/jletey",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pixelmord",
+      "name": "Andreas Adam",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/224168?v=4",
+      "profile": "https://pixelmord.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kevotovar",
+      "name": "Kevin Tovar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/15717067?v=4",
+      "profile": "https://kevo.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "anteprimorac",
+      "name": "Ante Primorac",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/972083?v=4",
+      "profile": "http://anteprimorac.com.hr",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MykalMachon",
+      "name": "Mykal Machon",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7844994?v=4",
+      "profile": "http://mykalmachon.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

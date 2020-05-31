@@ -1,6 +1,6 @@
 import {through} from './streams'
 import File from 'vinyl'
-import {log} from '../log'
+import {log} from '@blitzjs/display'
 import chalk from 'chalk'
 import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from './events'
 

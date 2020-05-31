@@ -1,7 +1,10 @@
-import db, {ProductCreateArgs} from 'db'
+import db, { ProductCreateArgs } from "db"
 
-export default async function createProduct(args: ProductCreateArgs) {
-  const product = await db.product.create(args)
+type CreateProductInput = {
+  data: ProductCreateArgs["data"]
+}
+export default async function createProduct({ data }: CreateProductInput) {
+  const product = await db.product.create({ data })
 
   return product
 }

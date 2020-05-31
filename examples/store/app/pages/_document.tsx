@@ -1,9 +1,9 @@
-import {Document, Html, DocumentHead, Main, NextScript, DocumentContext} from '@blitzjs/core'
+import { Document, Html, DocumentHead, Main, NextScript, DocumentContext } from "@blitzjs/core"
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx)
-    return {...initialProps}
+    return { ...initialProps }
   }
 
   render() {

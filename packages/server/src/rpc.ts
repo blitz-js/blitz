@@ -1,5 +1,5 @@
 import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
-import {log} from './log'
+import {log} from '@blitzjs/display'
 import {serializeError} from 'serialize-error'
 
 export function rpcHandler(

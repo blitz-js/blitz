@@ -1,14 +1,14 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
+    "test": "tsdx test --env=jest-environment-jsdom-sixteen",
+    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen",
     "lint": "tsdx lint"
   },
   "author": {
@@ -44,13 +44,13 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@types/serialize-error": "4.0.1",
     "pretty-ms": "6.0.1",
     "react-query": "1.3.3",
     "serialize-error": "6.0.0"
   },
   "devDependencies": {
-    "@rollup/pluginutils": "3.0.8"
+    "@rollup/pluginutils": "3.0.8",
+    "jest-environment-jsdom-sixteen": "1.0.3"
   },
-  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

@@ -1,4 +1,4 @@
-import {log} from '../log'
+import {log} from '@blitzjs/display'
 import {through} from './streams'
 import {Writable} from 'stream'
 import {ERROR_THROWN} from './events'
