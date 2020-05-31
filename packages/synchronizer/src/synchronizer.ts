@@ -4,7 +4,7 @@ import {pathExists, ensureDir, remove} from 'fs-extra'
 import {through} from './streams'
 import {createDisplay} from './display'
 import {READY, ERROR_THROWN} from './events'
-import {Rule} from 'types'
+import {Rule} from './types'
 
 type SynchronizeFilesInput = {
   src: string
