@@ -3,15 +3,15 @@ import gulpIf from 'gulp-if'
 import {unlink} from '../../helpers/unlink'
 import {dest} from 'vinyl-fs'
 import File from 'vinyl'
-import {Rule} from '../../../types'
 import {FILE_WRITTEN} from '../../../events'
+import {Writable} from 'stream'
 
 /**
  * Returns a Rule that writes files to the destination path
  */
-export const createRuleWrite: Rule = ({config, reporter}) => {
+export const createWrite = (destination: string, reporter: Writable) => {
   const stream = pipeline(
-    gulpIf(isUnlinkFile, unlink(config.dest), dest(config.dest)),
+    gulpIf(isUnlinkFile, unlink(destination), dest(destination)),
     through({objectMode: true}, (file: File, _, next) => {
       reporter.write({type: FILE_WRITTEN, payload: file})
       next(null, file)

@@ -1,8 +1,6 @@
 import File from 'vinyl'
-import {through, pipeline} from '../../../streams'
-import {dest} from 'vinyl-fs'
-import gulpIf from 'gulp-if'
-import {resolve} from 'path'
+import {through} from '../../../streams'
+
 import {Rule} from '../../../types'
 
 type ManifestVO = {
@@ -67,10 +65,19 @@ export class Manifest {
   }
 }
 
-const setManifestEntry = (manifest: Manifest) => {
-  const stream = through({objectMode: true}, (file: File, _, next) => {
+/**
+ * Returns a rule to create and write the file error manifest so we can
+ * link to the correct files on a NextJS browser error.
+ */
+export const createRuleManifest: Rule = ({config}) => {
+  const manifest = Manifest.create()
+
+  const stream = through({objectMode: true}, function (file: File, _, next) {
+    this.push(file) // Send file on through to be written
+
     const [origin] = file.history
     const dest = file.path
+
     if (file.event === 'add' || file.event === 'change') {
       manifest.setEntry(origin, dest)
     }
@@ -79,35 +86,18 @@ const setManifestEntry = (manifest: Manifest) => {
       manifest.removeKey(origin)
     }
 
-    next(null, file)
+    if (config.manifest.write) {
+      this.push(
+        new File({
+          // NOTE:  no need to for hash because this is a manifest
+          //        and doesn't count as work
+          path: '_manifest.json',
+          contents: Buffer.from(manifest.toJson(false)),
+        }),
+      )
+    }
+    next()
   })
-  return {stream}
-}
-
-const createManifestFile = (manifest: Manifest, fileName: string, compact: boolean = false) => {
-  const stream = through({objectMode: true}, (_, __, next) => {
-    const manifestFile = new File({
-      path: fileName,
-      contents: Buffer.from(manifest.toJson(compact)),
-    })
-
-    next(null, manifestFile)
-  })
-  return {stream}
-}
-
-/**
- * Returns a rule to create and write the file error manifest so we can
- * link to the correct files on a NextJS browser error.
- */
-// TODO: Offload the file writing to later and write with all the other file writing
-export const createRuleManifest: Rule = ({config}) => {
-  const manifest = Manifest.create()
-  const stream = pipeline(
-    setManifestEntry(manifest).stream,
-    createManifestFile(manifest, resolve(config.cwd, config.manifest.path)).stream,
-    gulpIf(config.manifest.write, dest(config.src)),
-  )
 
   return {stream, manifest}
 }

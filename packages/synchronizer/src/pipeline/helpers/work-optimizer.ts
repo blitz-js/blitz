@@ -16,11 +16,16 @@ export function createWorkOptimizer() {
   const stats = {todo, done}
 
   const reportComplete = through({objectMode: true}, (file: File, _, next) => {
-    done.push(file.hash)
+    if (file.hash) {
+      done.push(file.hash)
+    }
     next(null, file)
   })
 
   const triage = through({objectMode: true}, function (file: File, _, next) {
+    if (!file.hash) {
+      console.log('File does not have hash! ' + file.path)
+    }
     // Dont send files that have already been done or have already been added
     if (done.includes(file.hash) || todo.includes(file.hash)) {
       process.env.DEBUG && console.log('Rejecting because this job has been done before: ' + file.path)

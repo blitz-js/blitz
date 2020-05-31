@@ -9,7 +9,7 @@ import {createRuleManifest} from './rules/manifest'
 import {createRuleRelative} from './rules/relative'
 import {createRulePages} from './rules/pages'
 import {createRuleRpc} from './rules/rpc'
-import {createRuleWrite} from './rules/write'
+import {createWrite} from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
 import {agnosticSource} from './helpers/agnostic-source'
@@ -28,6 +28,7 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
   const idleHandler = createIdleHandler(reporter)
+  const writer = createWrite(config.dest, reporter)
 
   // Send this DI object to every rule
   const api: RuleArgs = {
@@ -44,7 +45,6 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
   const ruleRpc = createRuleRpc(api)
   const ruleConfig = createRuleConfig(api)
   const ruleRelative = createRuleRelative(api)
-  const ruleWrite = createRuleWrite(api)
   const ruleManifest = createRuleManifest(api)
 
   const stream = pipeline(
@@ -61,13 +61,11 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     rulePages.stream,
     ruleRpc.stream,
     ruleConfig.stream,
-    ruleWrite.stream,
+    ruleManifest.stream,
 
     // Tidy up
+    writer.stream,
     optimizer.reportComplete,
-
-    // TODO: try and move this up to business rules section
-    ruleManifest.stream,
 
     idleHandler.stream,
   )
