@@ -1,8 +1,9 @@
 import {useQuery as useReactQuery, QueryResult, QueryOptions} from 'react-query'
-import {PromiseReturnType, InferUnaryParam} from './types'
+import {PromiseReturnType, InferUnaryParam, QueryFn} from './types'
+import {QueryCacheFunctions, queryCacheFunctions} from './utils/query-cache'
 
-type QueryFn = (...args: any) => Promise<any>
-type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, 'data'>
+type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, 'data'> &
+  QueryCacheFunctions<PromiseReturnType<T>>
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
@@ -19,7 +20,7 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const {data, ...rest} = useReactQuery({
+  const {data, ...queryRest} = useReactQuery({
     queryKey: () => [
       (queryFn as any).cacheKey,
       typeof params === 'function' ? (params as Function)() : params,
@@ -31,5 +32,11 @@ export function useQuery<T extends QueryFn>(
       ...options,
     },
   })
+
+  const rest = {
+    ...queryRest,
+    ...queryCacheFunctions((queryFn as any).cacheKey),
+  }
+
   return [data as PromiseReturnType<T>, rest as RestQueryResult<T>]
 }
