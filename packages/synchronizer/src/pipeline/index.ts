@@ -1,13 +1,17 @@
+import {Writable} from 'stream'
+import File from 'vinyl'
 import {pipeline, through} from '../streams'
-import {RuleConfig, RuleArgs, Rule} from '../types'
+import {Rule, RuleArgs, RuleConfig} from '../types'
+import {agnosticSource} from './helpers/agnostic-source'
 import {createEnrichFiles} from './helpers/enrich-files'
 import {createFileCache} from './helpers/file-cache'
 import {createIdleHandler} from './helpers/idle-handler'
 import {createWorkOptimizer} from './helpers/work-optimizer'
-import {createWrite} from './rules/write'
-import {isSourceFile} from './utils'
-import {Writable} from 'stream'
-import {agnosticSource} from './helpers/agnostic-source'
+import {createWrite} from './helpers/writer'
+
+export function isSourceFile(file: File) {
+  return file.hash.indexOf(':') === -1
+}
 
 /**
  * Creates a pipeline stream that transforms files.
@@ -16,7 +20,7 @@ import {agnosticSource} from './helpers/agnostic-source'
  * @param errors Stream that takes care of all operational error rendering
  * @param reporter Stream that takes care of all view rendering
  */
-export function createPipeline(config: RuleConfig, rules: Rule[], errors: Writable, reporter: Writable) {
+export function createPipeline(config: RuleConfig, rules: Rule[], reporter: Writable) {
   // Helper streams don't account for business rules
   const source = agnosticSource(config)
   const input = through({objectMode: true}, (f, _, next) => next(null, f))
@@ -31,7 +35,6 @@ export function createPipeline(config: RuleConfig, rules: Rule[], errors: Writab
     config,
     input,
     reporter,
-    errors,
     getInputCache: () => srcCache.cache,
   }
 

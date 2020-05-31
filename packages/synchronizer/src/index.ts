@@ -1,2 +1,3 @@
 export {synchronizeFiles} from './synchronizer'
-export {Manifest} from './pipeline/rules/manifest'
+export {Rule} from './types'
+export * from './events'

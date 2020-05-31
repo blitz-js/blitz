@@ -1,33 +1,25 @@
 import {log} from '@blitzjs/display'
-import {through} from './streams'
 import {Writable} from 'stream'
-import {ERROR_THROWN} from './events'
+import {ERROR_THROWN} from '@blitzjs/synchronizer'
 
 export type Event<T> = {type: string; payload: T}
 
 type Error = DuplicatePathError | NestedRouteError
 
-/**
- * Returns an object with a stream that takes operational errors and prepares them for the console.
- */
-export function createErrorsStream(reporter: Writable) {
-  const stream = through({objectMode: true}, (err: Error, _, next) => {
-    reporter.write({type: ERROR_THROWN, payload: err})
-
+export function handleErrors(reporter: Writable) {
+  reporter.on('data', (event: Event<Error>) => {
+    if (event.type !== ERROR_THROWN) return
+    const err = event.payload as Error
     if (err instanceof DuplicatePathError) {
       renderDuplicatePathError(err)
-      return next()
+      return
     }
 
     if (err instanceof NestedRouteError) {
       renderNestedRouteError(err)
-      return next()
+      return
     }
-
-    next(err)
   })
-
-  return {stream}
 }
 
 export class DuplicatePathError extends Error {

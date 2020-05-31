@@ -1,9 +1,9 @@
-import {through, pipeline} from '../../../streams'
+import {through, pipeline} from '../../streams'
 import gulpIf from 'gulp-if'
-import {unlink} from '../../helpers/unlink'
+import {unlink} from './unlink'
 import {dest} from 'vinyl-fs'
 import File from 'vinyl'
-import {FILE_WRITTEN} from '../../../events'
+import {FILE_WRITTEN} from '../../events'
 import {Writable} from 'stream'
 
 /**

@@ -3,8 +3,9 @@
 
 import {Stream} from 'stream'
 
-import pipe from 'pump'
-export {pipe}
+// Remove error 'default' is imported from external module 'pump' but never used
+// import pipe from 'pump'
+// export {pipe}
 
 import through from 'through2'
 export {through}

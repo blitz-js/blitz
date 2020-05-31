@@ -1,7 +1,6 @@
 import File from 'vinyl'
-import {through} from '../../../streams'
-
-import {Rule} from '../../../types'
+import {through} from '../../streams'
+import {Rule} from '@blitzjs/synchronizer'
 
 type ManifestVO = {
   keys: {[k: string]: string}

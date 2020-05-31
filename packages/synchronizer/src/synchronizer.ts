@@ -1,22 +1,16 @@
-import {Manifest} from './pipeline/rules/manifest'
 import {pipe} from './streams'
 import {createPipeline} from './pipeline'
 import {pathExists, ensureDir, remove} from 'fs-extra'
 import {through} from './streams'
 import {createDisplay} from './display'
-import {createErrorsStream} from './errors'
-import {READY} from './events'
-
-import {createRuleConfig} from './pipeline/rules/config'
-import {createRuleManifest} from './pipeline/rules/manifest'
-import {createRuleRelative} from './pipeline/rules/relative'
-import {createRulePages} from './pipeline/rules/pages'
-import {createRuleRpc} from './pipeline/rules/rpc'
+import {READY, ERROR_THROWN} from './events'
+import {Rule} from 'types'
 
 type SynchronizeFilesInput = {
   src: string
   dest: string
   watch: boolean
+  rules: Rule[]
   manifestPath: string
   ignoredPaths: string[]
   includePaths: string[]
@@ -24,7 +18,7 @@ type SynchronizeFilesInput = {
 }
 
 type SynchronizeFilesOutput = {
-  manifest: Manifest
+  manifest: any //Manifest
 }
 
 /**
@@ -36,6 +30,7 @@ export async function synchronizeFiles({
   dest,
   src,
   manifestPath,
+  rules,
   watch,
   includePaths: include,
   ignoredPaths: ignore,
@@ -51,7 +46,7 @@ export async function synchronizeFiles({
     }),
   }
 
-  const errors = createErrorsStream(reporter.stream)
+  // const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
   return new Promise((resolve, reject) => {
     const config = {
@@ -73,29 +68,18 @@ export async function synchronizeFiles({
       }
     })
 
-    const catchErrors = (err: any) => {
-      if (err) reject(err)
-    }
-
-    const fileTransformer = createPipeline(
-      config,
-      [
-        // Order is important
-        createRuleRelative,
-        createRulePages,
-        createRuleRpc,
-        createRuleConfig,
-        createRuleManifest,
-      ],
-      errors.stream,
-      reporter.stream,
-    )
+    const fileTransformer = createPipeline(config, rules, reporter.stream)
 
     // Send source to fileTransformer
-    fileTransformer.stream.on('error', catchErrors)
+    fileTransformer.stream.on('error', (err) => {
+      reporter.stream.write({type: ERROR_THROWN, payload: err})
+      if (err) reject(err)
+    })
 
     // Send reporter events to display
-    pipe(reporter.stream, display.stream, catchErrors)
+    pipe(reporter.stream, display.stream, (err) => {
+      if (err) reject(err)
+    })
   })
 }
 

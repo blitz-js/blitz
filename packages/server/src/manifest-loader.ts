@@ -1,5 +1,5 @@
 import {readFile} from 'fs'
-import {Manifest} from '@blitzjs/synchronizer'
+import {Manifest} from './rules/manifest'
 
 export const ManifestLoader = {
   async load(filename: string) {

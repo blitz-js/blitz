@@ -1,6 +1,6 @@
-import {through} from '../../../streams'
 import File from 'vinyl'
-import {Rule} from '../../../types'
+import {through} from '../../streams'
+import {Rule} from '@blitzjs/synchronizer'
 import path from 'path'
 import slash from 'slash'
 

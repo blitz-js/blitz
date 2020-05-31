@@ -1,9 +1,9 @@
 import File from 'vinyl'
 import slash from 'slash'
-import {absolutePathTransform} from '../../utils'
+import {absolutePathTransform} from '../utils'
 import {relative} from 'path'
-import {through} from '../../../streams'
-import {Rule} from '../../../types'
+import {through} from '../../streams'
+import {Rule} from '@blitzjs/synchronizer'
 
 /**
  * Returns a Rule that manages generating the internal RPC commands and handlers

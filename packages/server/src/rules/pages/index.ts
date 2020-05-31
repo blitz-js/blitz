@@ -1,16 +1,18 @@
 import {join} from 'path'
 import File from 'vinyl'
-import {through} from '../../../streams'
-import {getDuplicatePaths, absolutePathTransform} from '../../utils'
-import {RuleArgs, Rule} from '../../../types'
-import {DuplicatePathError, NestedRouteError} from '../../../errors'
+import {getDuplicatePaths, absolutePathTransform} from '../utils'
+import {through} from '../../streams'
+import {Rule} from '@blitzjs/synchronizer'
+import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
 
 /**
  * Returns a Rule to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-export const createRulePages: Rule = ({config, errors, getInputCache}: RuleArgs) => {
+export const createRulePages: Rule = ({config, reporter, getInputCache}) => {
   const {src} = config
+
+  handleErrors(reporter)
 
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
@@ -27,7 +29,6 @@ export const createRulePages: Rule = ({config, errors, getInputCache}: RuleArgs)
         duplicatePages,
       )
 
-      errors.write(err)
       return next(err)
     }
 
@@ -40,7 +41,6 @@ export const createRulePages: Rule = ({config, errors, getInputCache}: RuleArgs)
         duplicateApi,
       )
 
-      errors.write(err)
       return next(err)
     }
 
@@ -58,7 +58,6 @@ export const createRulePages: Rule = ({config, errors, getInputCache}: RuleArgs)
 
       const err = new NestedRouteError(message, secondary, nestedApiRoutes)
 
-      errors.write(err)
       return next(err)
     }
 
