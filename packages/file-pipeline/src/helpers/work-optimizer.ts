@@ -1,6 +1,6 @@
 // Mostly concerned with solving the Dirty Sync problem
 
-import {through} from '../../streams'
+import {through} from '../streams'
 import {log} from '@blitzjs/display'
 import File from 'vinyl'
 

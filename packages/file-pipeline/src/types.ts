@@ -1,5 +1,5 @@
 import {Readable, Writable} from 'stream'
-import {FileCache} from './pipeline/helpers/file-cache'
+import {FileCache} from './helpers/file-cache'
 
 /**
  * Configuration for Stages

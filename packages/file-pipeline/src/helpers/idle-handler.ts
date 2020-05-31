@@ -1,5 +1,5 @@
-import {through} from '../../streams'
-import {READY, IDLE} from '../../events'
+import {through} from '../streams'
+import {READY, IDLE} from '../events'
 import {Writable} from 'stream'
 
 /**

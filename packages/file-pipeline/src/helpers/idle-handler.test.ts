@@ -1,6 +1,6 @@
 import {createIdleHandler} from './idle-handler'
 
-import {to, pipeline, through} from '../../streams'
+import {to, pipeline, through} from '../streams'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

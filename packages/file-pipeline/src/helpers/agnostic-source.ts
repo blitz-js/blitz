@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {through} from '../streams'
 import vfs from 'vinyl-fs'
 import mergeStream from 'merge-stream'
 

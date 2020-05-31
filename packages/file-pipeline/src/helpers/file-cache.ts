@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {through} from '../streams'
 import File from 'vinyl'
 
 type FileCacheEntry = {path: string}

@@ -1,4 +1,4 @@
-import {through} from '../../streams'
+import {through} from '../streams'
 import crypto from 'crypto'
 
 /**
