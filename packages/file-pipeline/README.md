@@ -1,6 +1,6 @@
-# File Transformation Pipeline
+# `@blitzjs/file-pipeline`
 
-## `@blitzjs/file-pipeline`
+## File Transformation Pipeline
 
 ### Design goals
 
