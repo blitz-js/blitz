@@ -58,8 +58,8 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
 
   return {
     ...config,
-    buildFolder: resolve(config.rootFolder, config.buildFolder || defaults.buildFolder),
-    devFolder: resolve(config.rootFolder, config.devFolder || defaults.devFolder),
+    buildFolder: resolve(config.rootFolder, config.buildFolder ?? defaults.buildFolder),
+    devFolder: resolve(config.rootFolder, config.devFolder ?? defaults.devFolder),
     ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
     include: defaults.includePaths.concat(git.includePaths),
     nextBin: resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig),
