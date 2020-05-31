@@ -1,5 +1,6 @@
 import {deserializeError} from 'serialize-error'
 import {queryCache} from 'react-query'
+import {getQueryKey} from './utils'
 
 export async function rpc(url: string, params: any) {
   if (typeof window === 'undefined') return
@@ -18,7 +19,8 @@ export async function rpc(url: string, params: any) {
   if (json.error) {
     throw deserializeError(json.error)
   } else {
-    queryCache.setQueryData(url, json.result)
+    const queryKey = getQueryKey(url, params)
+    queryCache.setQueryData(queryKey, json.result)
     return json.result
   }
 }
