@@ -1,4 +1,4 @@
-# Synchronizer
+# File Transformer
 
 Design goals
 

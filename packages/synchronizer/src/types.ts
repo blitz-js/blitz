@@ -8,6 +8,9 @@ export type RuleConfig = {
   src: string
   dest: string
   cwd: string
+  include: string[]
+  ignore: string[]
+  watch: boolean
   manifest: {
     path: string
     write: boolean

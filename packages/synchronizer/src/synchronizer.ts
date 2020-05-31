@@ -1,7 +1,6 @@
 import {Manifest} from './pipeline/rules/manifest'
 import {pipe} from './streams'
 import {createPipeline} from './pipeline'
-import {agnosticSource} from './pipeline/helpers/agnostic-source'
 import {pathExists, ensureDir, remove} from 'fs-extra'
 import {through} from './streams'
 import {createDisplay} from './display'
@@ -53,6 +52,9 @@ export async function synchronizeFiles({
       cwd: src,
       src: src,
       dest: dest,
+      include,
+      ignore,
+      watch,
       manifest: {
         path: manifestPath,
         write: writeManifestFile,
@@ -71,11 +73,10 @@ export async function synchronizeFiles({
       if (err) reject(err)
     }
 
-    const source = agnosticSource({cwd: src, include, ignore, watch})
     const fileTransformer = createPipeline(config, errors.stream, reporter.stream)
 
     // Send source to fileTransformer
-    pipe(source.stream, fileTransformer.stream, catchErrors)
+    fileTransformer.stream.on('error', catchErrors)
 
     // Send reporter events to display
     pipe(reporter.stream, display.stream, catchErrors)

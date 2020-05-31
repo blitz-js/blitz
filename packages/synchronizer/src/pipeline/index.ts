@@ -12,8 +12,7 @@ import {createRuleRpc} from './rules/rpc'
 import {createRuleWrite} from './rules/write'
 import {isSourceFile} from './utils'
 import {Writable} from 'stream'
-
-const input = through({objectMode: true}, (f, _, next) => next(null, f))
+import {agnosticSource} from './helpers/agnostic-source'
 
 /**
  * Creates a pipeline stream that transforms files.
@@ -23,6 +22,8 @@ const input = through({objectMode: true}, (f, _, next) => next(null, f))
  */
 export function createPipeline(config: RuleConfig, errors: Writable, reporter: Writable) {
   // Helper streams don't account for business rules
+  const source = agnosticSource(config)
+  const input = through({objectMode: true}, (f, _, next) => next(null, f))
   const optimizer = createWorkOptimizer()
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
@@ -47,7 +48,8 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
   const ruleManifest = createRuleManifest(api)
 
   const stream = pipeline(
-    input,
+    source.stream, // files come from file system
+    input, // files coming via internal API
 
     // Preparing files
     enrichFiles.stream,
