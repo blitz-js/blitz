@@ -11,7 +11,7 @@ import {
   FormGenerator /* ModelGenerator */,
 } from '@blitzjs/generator'
 import {PromptAbortedError} from '../errors/prompt-aborted'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import camelCase from 'camelcase'
 import pkgDir from 'pkg-dir'
 const debug = require('debug')('blitz:generate')

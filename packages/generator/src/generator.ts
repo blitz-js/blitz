@@ -4,7 +4,7 @@ import {EventEmitter} from 'events'
 import {create as createStore, Store} from 'mem-fs'
 import {create as createEditor, Editor} from 'mem-fs-editor'
 import Enquirer from 'enquirer'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import readDirRecursive from 'fs-readdir-recursive'
 import * as babel from '@babel/core'
 // @ts-ignore TS wants types for this module but none exist

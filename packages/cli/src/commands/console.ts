@@ -3,7 +3,7 @@ import {Command} from '@oclif/command'
 import path from 'path'
 import fs from 'fs'
 import pkgDir from 'pkg-dir'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import chalk from 'chalk'
 
 import {setupTsnode} from '../utils/setup-ts-node'
