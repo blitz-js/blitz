@@ -42,7 +42,7 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
 type SourceConfig = {cwd: string; include: string[]; ignore: string[]; watch: boolean}
 
 /**
- * A rule that will provide agnostic file input based on a set of globs.
+ * A stage that will provide agnostic file input based on a set of globs.
  * Initially it will start as a vinyl stream and if the watch config is
  * set to true it will also provide a file watcher.
  * @param config Config object

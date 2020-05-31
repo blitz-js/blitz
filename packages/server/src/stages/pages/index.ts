@@ -2,14 +2,14 @@ import {join} from 'path'
 import File from 'vinyl'
 import {getDuplicatePaths, absolutePathTransform} from '../utils'
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/file-pipeline'
+import {Stage} from '@blitzjs/file-pipeline'
 import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
 
 /**
- * Returns a Rule to assemble NextJS `/pages` folder from within
+ * Returns a Stage to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-export const createRulePages: Rule = ({config, bus, getInputCache}) => {
+export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   const {src} = config
 
   handleErrors(bus)

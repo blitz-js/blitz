@@ -17,7 +17,7 @@ const mocks = multiMock(
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {Manifest} from '../src/rules/manifest'
+import {Manifest} from '../src/stages/manifest'
 import {directoryTree} from './utils/tree-utils'
 
 const originalLog = console.log

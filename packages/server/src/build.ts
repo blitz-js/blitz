@@ -3,7 +3,7 @@ import {move, remove, pathExists} from 'fs-extra'
 import {ServerConfig, normalize} from './config'
 import {nextBuild} from './next-utils'
 import {saveBuild} from './build-hash'
-import {configureRules} from './rules'
+import {configureStages} from './stages'
 
 export async function build(config: ServerConfig) {
   const {
@@ -14,11 +14,11 @@ export async function build(config: ServerConfig) {
     ignore,
     include,
     watch,
-    ...rulesConfig
+    ...stageConfig
   } = await normalize(config)
 
   const src = rootFolder
-  const rules = configureRules(rulesConfig)
+  const stages = configureStages(stageConfig)
   const dest = buildFolder
   const options = {
     ignore,
@@ -26,7 +26,7 @@ export async function build(config: ServerConfig) {
     watch,
   }
 
-  await transformFiles(src, rules, dest, options)
+  await transformFiles(src, stages, dest, options)
   await nextBuild(nextBin, buildFolder)
 
   const rootNextFolder = resolve(rootFolder, '.next')

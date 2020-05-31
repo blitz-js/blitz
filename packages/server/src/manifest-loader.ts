@@ -1,5 +1,5 @@
 import {readFile} from 'fs'
-import {Manifest} from './rules/manifest'
+import {Manifest} from './stages/manifest'
 
 export const ManifestLoader = {
   async load(filename: string) {

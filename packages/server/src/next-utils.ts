@@ -1,6 +1,6 @@
 import {spawn} from 'cross-spawn'
 import detect from 'detect-port'
-import {Manifest} from './rules/manifest'
+import {Manifest} from './stages/manifest'
 import {through} from './streams'
 import {ServerConfig} from 'config'
 

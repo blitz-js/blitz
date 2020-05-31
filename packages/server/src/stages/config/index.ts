@@ -3,14 +3,14 @@ import {resolve} from 'path'
 import File from 'vinyl'
 
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/file-pipeline'
+import {Stage} from '@blitzjs/file-pipeline'
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
 /**
- * Returns a Rule that manages converting from blitz.config.js to next.config.js
+ * Returns a Stage that manages converting from blitz.config.js to next.config.js
  */
-export const createRuleConfig: Rule = ({config, input}) => {
+export const createStageConfig: Stage = ({config, input}) => {
   // Preconditions
   const hasNextConfig = pathExistsSync(resolve(config.src, 'next.config.js'))
   const hasBlitzConfig = pathExistsSync(resolve(config.src, 'blitz.config.js'))

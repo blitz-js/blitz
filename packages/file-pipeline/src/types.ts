@@ -2,9 +2,9 @@ import {Readable, Writable} from 'stream'
 import {FileCache} from './pipeline/helpers/file-cache'
 
 /**
- * Configuration for Rules
+ * Configuration for Stages
  */
-export type RuleConfig = {
+export type StageConfig = {
   src: string
   dest: string
   cwd: string
@@ -14,20 +14,20 @@ export type RuleConfig = {
 }
 
 /**
- * Arguments object for Rules
+ * Arguments object for Stages
  */
-export type RuleArgs = {
-  config: RuleConfig
+export type StageArgs = {
+  config: StageConfig
   input: Writable
   bus: Writable
   getInputCache: () => FileCache
 }
 
 /**
- * Basic template for Business rules modules
+ * Basic template for Pipeline Stages modules
  */
-export type Rule = (
-  a: RuleArgs,
+export type Stage = (
+  a: StageArgs,
 ) => {
   stream: Readable
   ready?: Record<string, any>

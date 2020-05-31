@@ -1,7 +1,7 @@
 import {Writable} from 'stream'
 import File from 'vinyl'
 import {pipeline, through} from '../streams'
-import {Rule, RuleArgs, RuleConfig} from '../types'
+import {Stage, StageArgs, StageConfig} from '../types'
 import {agnosticSource} from './helpers/agnostic-source'
 import {createEnrichFiles} from './helpers/enrich-files'
 import {createFileCache} from './helpers/file-cache'
@@ -16,12 +16,12 @@ export function isSourceFile(file: File) {
 /**
  * Creates a pipeline stream that transforms files.
  * @param config Config object containing basic information for the file pipeline
- * @param rules Array of rules to apply to each file
+ * @param stages Array of stages to apply to each file
  * @param errors Stream that takes care of all operational error rendering
  * @param bus Stream to pipe events to
  */
-export function createPipeline(config: RuleConfig, rules: Rule[], bus: Writable) {
-  // Helper streams don't account for business rules
+export function createPipeline(config: StageConfig, stages: Stage[], bus: Writable) {
+  // Helper streams don't account for business stages
   const source = agnosticSource(config)
   const input = through({objectMode: true}, (f, _, next) => next(null, f))
   const optimizer = createWorkOptimizer()
@@ -30,16 +30,16 @@ export function createPipeline(config: RuleConfig, rules: Rule[], bus: Writable)
   const idleHandler = createIdleHandler(bus)
   const writer = createWrite(config.dest, bus)
 
-  // Send this DI object to every rule
-  const api: RuleArgs = {
+  // Send this object to every stage
+  const api: StageArgs = {
     config,
     input,
     bus,
     getInputCache: () => srcCache.cache,
   }
 
-  // Initialize each rule
-  const initializedRules = rules.map((rule) => rule(api))
+  // Initialize each stage
+  const initializedStages = stages.map((stage) => stage(api))
 
   const stream = pipeline(
     source.stream, // files come from file system
@@ -50,8 +50,8 @@ export function createPipeline(config: RuleConfig, rules: Rule[], bus: Writable)
     srcCache.stream,
     optimizer.triage,
 
-    // Run business rules
-    ...initializedRules.map((rule) => rule.stream),
+    // Run business stages
+    ...initializedStages.map((stage) => stage.stream),
 
     // Tidy up
     writer.stream,
@@ -60,7 +60,7 @@ export function createPipeline(config: RuleConfig, rules: Rule[], bus: Writable)
     idleHandler.stream,
   )
 
-  const ready = Object.assign({}, ...initializedRules.map((rule) => rule.ready))
+  const ready = Object.assign({}, ...initializedStages.map((stage) => stage.ready))
 
   return {stream, ready}
 }

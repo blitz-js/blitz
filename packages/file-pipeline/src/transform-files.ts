@@ -4,7 +4,7 @@ import {pathExists, ensureDir, remove} from 'fs-extra'
 import {through} from './streams'
 import {createDisplay} from './display'
 import {READY, ERROR_THROWN} from './events'
-import {Rule} from './types'
+import {Stage} from './types'
 import {Transform} from 'stream'
 
 type SynchronizeFilesOptions = {
@@ -25,7 +25,7 @@ const defaultBus = through({objectMode: true}, (event, __, next) => {
  */
 export async function transformFiles(
   src: string,
-  rules: Rule[],
+  stages: Stage[],
   dest: string,
   options: SynchronizeFilesOptions,
 ): Promise<any> {
@@ -59,7 +59,7 @@ export async function transformFiles(
       }
     })
 
-    const fileTransformPipeline = createPipeline(config, rules, bus)
+    const fileTransformPipeline = createPipeline(config, stages, bus)
 
     // Send source to fileTransformPipeline
     fileTransformPipeline.stream.on('error', (err) => {

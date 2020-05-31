@@ -1,7 +1,7 @@
 import {resolve} from 'path'
 import {ServerConfig, normalize} from './config'
 import {nextStartDev} from './next-utils'
-import {configureRules} from './rules'
+import {configureStages} from './stages'
 
 export async function dev(
   {watch = true, ...config}: ServerConfig,
@@ -15,14 +15,14 @@ export async function dev(
     devFolder,
     ignore,
     include,
-    ...rulesConfig
+    ...stagesConfig
   } = await normalize({
     ...config,
     interceptNextErrors: true,
   })
 
   const src = resolve(rootFolder)
-  const rules = configureRules(rulesConfig)
+  const stages = configureStages(stagesConfig)
   const dest = resolve(rootFolder, devFolder)
   const options = {
     ignore,
@@ -31,7 +31,7 @@ export async function dev(
   }
 
   const [{manifest}] = await Promise.all([
-    transformFiles(src, rules, dest, options),
+    transformFiles(src, stages, dest, options),
     // Ensure next does not start until parallel processing completes
     readyForNextDev,
   ])

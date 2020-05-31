@@ -1,6 +1,6 @@
 import File from 'vinyl'
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/file-pipeline'
+import {Stage} from '@blitzjs/file-pipeline'
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -65,14 +65,14 @@ export class Manifest {
 }
 
 /**
- * Returns a rule to create and write the file error manifest so we can
+ * Returns a stage to create and write the file error manifest so we can
  * link to the correct files on a NextJS browser error.
  */
-export const createRuleManifest = (
+export const createStageManifest = (
   writeManifestFile: boolean = true,
   manifestPath: string = '_manifest.json',
 ) => {
-  const rule: Rule = () => {
+  const stage: Stage = () => {
     const manifest = Manifest.create()
 
     const stream = through({objectMode: true}, function (file: File, _, next) {
@@ -104,5 +104,5 @@ export const createRuleManifest = (
 
     return {stream, ready: {manifest}}
   }
-  return rule
+  return stage
 }

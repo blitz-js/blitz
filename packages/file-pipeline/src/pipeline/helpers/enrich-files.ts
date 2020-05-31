@@ -2,7 +2,7 @@ import {through} from '../../streams'
 import crypto from 'crypto'
 
 /**
- * Returns a rule that prepares files coming into the stream
+ * Returns a stage that prepares files coming into the stream
  * with correct event information as well as hash information
  * This is used by the work optimizer and elsewhere to manage the
  * way files are handled and optimized

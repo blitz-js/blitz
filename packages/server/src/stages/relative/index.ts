@@ -1,13 +1,13 @@
 import File from 'vinyl'
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/file-pipeline'
+import {Stage} from '@blitzjs/file-pipeline'
 import path from 'path'
 import slash from 'slash'
 
 /**
- * Returns a Rule that converts relative files paths to absolute
+ * Returns a Stage that converts relative files paths to absolute
  */
-export const createRuleRelative: Rule = () => {
+export const createStageRelative: Stage = () => {
   const stream = through({objectMode: true}, (file: File, _, next) => {
     const cwd = process.cwd()
     const filecontents = file.contents

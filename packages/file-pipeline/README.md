@@ -1,3 +1,3 @@
-# `display`
+# `file-pipeline`
 
-This package houses all files related to Blitz commandline output.
+This package provides a gulp based pipeline for transforming files from a source to a destination across a seriaes of stages.

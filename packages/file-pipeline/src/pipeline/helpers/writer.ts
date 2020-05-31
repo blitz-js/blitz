@@ -7,7 +7,7 @@ import {FILE_WRITTEN} from '../../events'
 import {Writable} from 'stream'
 
 /**
- * Returns a Rule that writes files to the destination path
+ * Returns a Stage that writes files to the destination path
  */
 export const createWrite = (destination: string, reporter: Writable) => {
   const stream = pipeline(
