@@ -1,7 +1,7 @@
 // Mostly concerned with solving the Dirty Sync problem
 
 import {through} from '../../streams'
-
+import {log} from '@blitzjs/display'
 import File from 'vinyl'
 
 /**
@@ -24,12 +24,12 @@ export function createWorkOptimizer() {
 
   const triage = through({objectMode: true}, function (file: File, _, next) {
     if (!file.hash) {
-      process.env.DEBUG && console.log('File does not have hash! ' + file.path)
+      log.debug('File does not have hash! ' + file.path)
       return next()
     }
     // Dont send files that have already been done or have already been added
     if (done.includes(file.hash) || todo.includes(file.hash)) {
-      process.env.DEBUG && console.log('Rejecting because this job has been done before: ' + file.path)
+      log.debug('Rejecting because this job has been done before: ' + file.path)
       return next()
     }
 
