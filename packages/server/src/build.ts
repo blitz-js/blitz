@@ -4,7 +4,7 @@ import {move, remove, pathExists} from 'fs-extra'
 import {ServerConfig, enhance} from './config'
 import {nextBuild} from './next-utils'
 import {saveBuild} from './build-hash'
-import {rules} from './rules'
+import {configureRules} from './rules'
 export async function build(config: ServerConfig) {
   const {
     rootFolder,
@@ -15,12 +15,12 @@ export async function build(config: ServerConfig) {
     includePaths: include,
     watch = false,
   } = await enhance(config)
-
+  const rules = configureRules({writeManifestFile})
   await synchronizeFiles({
     dest: buildFolder,
     ignore,
     include,
-    rules: rules({writeManifestFile}),
+    rules,
     src: rootFolder,
     watch,
   })

@@ -4,7 +4,7 @@ import {createRuleRpc} from './rpc'
 import {createRuleConfig} from './config'
 import {createRuleManifest} from './manifest'
 
-export const rules = (config: {writeManifestFile: boolean}) => [
+export const configureRules = (config: {writeManifestFile: boolean}) => [
   // Order is important
   createRuleRelative,
   createRulePages,
