@@ -35,4 +35,5 @@ export type Rule = (
   a: RuleArgs,
 ) => {
   stream: Readable
-} & Record<any, any>
+  ready?: Record<string, any>
+} & Record<string, any>

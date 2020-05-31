@@ -2,14 +2,14 @@ import {join} from 'path'
 import File from 'vinyl'
 import {through} from '../../../streams'
 import {getDuplicatePaths, absolutePathTransform} from '../../utils'
-import {RuleArgs} from '../../../types'
+import {RuleArgs, Rule} from '../../../types'
 import {DuplicatePathError, NestedRouteError} from '../../../errors'
 
 /**
  * Returns a Rule to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-export const createRulePages = ({config, errors, getInputCache}: RuleArgs) => {
+export const createRulePages: Rule = ({config, errors, getInputCache}: RuleArgs) => {
   const {src} = config
 
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)

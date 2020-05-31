@@ -24,7 +24,8 @@ export function createWorkOptimizer() {
 
   const triage = through({objectMode: true}, function (file: File, _, next) {
     if (!file.hash) {
-      console.log('File does not have hash! ' + file.path)
+      process.env.DEBUG && console.log('File does not have hash! ' + file.path)
+      return next()
     }
     // Dont send files that have already been done or have already been added
     if (done.includes(file.hash) || todo.includes(file.hash)) {

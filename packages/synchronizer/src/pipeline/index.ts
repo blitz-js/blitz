@@ -70,5 +70,14 @@ export function createPipeline(config: RuleConfig, errors: Writable, reporter: W
     idleHandler.stream,
   )
 
-  return {stream, manifest: ruleManifest.manifest}
+  const ready = Object.assign(
+    {},
+    ruleRelative.ready,
+    rulePages.ready,
+    ruleRpc.ready,
+    ruleConfig.ready,
+    ruleManifest.ready,
+  )
+
+  return {stream, ready}
 }

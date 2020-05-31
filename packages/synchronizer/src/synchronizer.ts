@@ -63,9 +63,7 @@ export async function synchronizeFiles({
 
     reporter.stream.on('data', ({type}) => {
       if (type === READY) {
-        resolve({
-          manifest: fileTransformer.manifest,
-        })
+        resolve(fileTransformer.ready)
       }
     })
 

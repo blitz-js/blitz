@@ -99,5 +99,5 @@ export const createRuleManifest: Rule = ({config}) => {
     next()
   })
 
-  return {stream, manifest}
+  return {stream, ready: {manifest}}
 }
