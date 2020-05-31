@@ -1,4 +1,4 @@
-import {Head, Link} from 'blitz'
+import { Head, Link } from "blitz"
 
 const Home = () => (
   <div className="container">
@@ -8,7 +8,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1 className="title" style={{marginBottom: 24}}>
+      <h1 className="title" style={{ marginBottom: 24 }}>
         Blitz Store Example
       </h1>
       <ul>
@@ -28,6 +28,11 @@ const Home = () => (
           </Link>
         </li>
         <li>
+          <Link href="/products/infinite">
+            <a>Infinite Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
           <Link href="/admin/products">
             <a>Admin Section (client-rendered)</a>
           </Link>
@@ -39,7 +44,8 @@ const Home = () => (
       <a
         href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
         target="_blank"
-        rel="noopener noreferrer">
+        rel="noopener noreferrer"
+      >
         Powered by Blitz.js
       </a>
     </footer>
@@ -175,8 +181,8 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
-          Droid Sans, Helvetica Neue, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+          Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {

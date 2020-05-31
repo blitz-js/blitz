@@ -6,7 +6,7 @@ type RestQueryResult<T extends QueryFn> = Omit<PaginatedQueryResult<PromiseRetur
 
 export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
-  params: InferUnaryParam<T>,
+  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
   options?: QueryOptions<PaginatedQueryResult<PromiseReturnType<T>>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === 'undefined') {
@@ -20,7 +20,10 @@ export function usePaginatedQuery<T extends QueryFn>(
   }
 
   const {resolvedData, ...rest} = usePaginatedReactQuery({
-    queryKey: [(queryFn as any).cacheKey, params],
+    queryKey: () => [
+      (queryFn as any).cacheKey,
+      typeof params === 'function' ? (params as Function)() : params,
+    ],
     queryFn: (_: string, params) => queryFn(params),
     config: {
       suspense: true,

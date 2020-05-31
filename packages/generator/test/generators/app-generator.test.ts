@@ -1,5 +1,5 @@
 import spawn from 'cross-spawn'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 
 import {AppGenerator} from '../../src/generators/app-generator'
 
@@ -8,7 +8,7 @@ jest.spyOn(process, 'chdir').mockImplementation(() => true)
 jest.spyOn(global.console, 'log').mockImplementation()
 // Mocks the log output
 jest.mock(
-  '@blitzjs/server',
+  '@blitzjs/display',
   jest.fn(() => {
     return {
       log: {

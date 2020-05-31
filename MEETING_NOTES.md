@@ -1,4 +1,4 @@
-# 2020-05-26 Blitz Contributor Call 
+# 2020-05-26 Blitz Contributor Call
 
 - Attending: Brandon Bayer, Robert Rosenberg, Adam Markon, Simon Debbarma
 - Brandon:

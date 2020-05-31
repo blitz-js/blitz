@@ -6,7 +6,7 @@ type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
-  params: InferUnaryParam<T>,
+  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
   options?: QueryOptions<QueryResult<PromiseReturnType<T>>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === 'undefined') {
@@ -20,7 +20,10 @@ export function useQuery<T extends QueryFn>(
   }
 
   const {data, ...rest} = useReactQuery({
-    queryKey: [(queryFn as any).cacheKey, params],
+    queryKey: () => [
+      (queryFn as any).cacheKey,
+      typeof params === 'function' ? (params as Function)() : params,
+    ],
     queryFn: (_: string, params) => queryFn(params),
     config: {
       suspense: true,

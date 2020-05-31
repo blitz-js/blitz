@@ -3,6 +3,7 @@ import {synchronizeFiles} from './synchronizer'
 import {move, remove, pathExists} from 'fs-extra'
 import {ServerConfig, enhance} from './config'
 import {nextBuild} from './next-utils'
+import {saveBuild} from './build-hash'
 
 export async function build(config: ServerConfig) {
   const {
@@ -38,4 +39,6 @@ export async function build(config: ServerConfig) {
   if (await pathExists(buildNextFolder)) {
     await move(buildNextFolder, rootNextFolder)
   }
+
+  await saveBuild(buildFolder)
 }

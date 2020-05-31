@@ -1,6 +1,6 @@
-import {Suspense, useState} from 'react'
-import {Link, BlitzPage, usePaginatedQuery} from 'blitz'
-import getProducts from 'app/products/queries/getProducts'
+import { Suspense, useState } from "react"
+import { Link, BlitzPage, usePaginatedQuery } from "blitz"
+import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
 
