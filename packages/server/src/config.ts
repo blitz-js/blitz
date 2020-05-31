@@ -1,6 +1,6 @@
 import {resolve} from 'path'
 import {resolveBinAsync} from './resolve-bin-async'
-import {transformFiles} from '@blitzjs/synchronizer'
+import {transformFiles} from '@blitzjs/file-pipeline'
 import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
 
 type Synchronizer = typeof transformFiles

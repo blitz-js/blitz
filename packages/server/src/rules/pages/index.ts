@@ -2,7 +2,7 @@ import {join} from 'path'
 import File from 'vinyl'
 import {getDuplicatePaths, absolutePathTransform} from '../utils'
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/synchronizer'
+import {Rule} from '@blitzjs/file-pipeline'
 import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
 
 /**

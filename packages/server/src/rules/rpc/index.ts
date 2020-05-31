@@ -3,7 +3,7 @@ import slash from 'slash'
 import {absolutePathTransform} from '../utils'
 import {relative} from 'path'
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/synchronizer'
+import {Rule} from '@blitzjs/file-pipeline'
 
 /**
  * Returns a Rule that manages generating the internal RPC commands and handlers

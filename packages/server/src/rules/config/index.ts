@@ -3,7 +3,7 @@ import {resolve} from 'path'
 import File from 'vinyl'
 
 import {through} from '../../streams'
-import {Rule} from '@blitzjs/synchronizer'
+import {Rule} from '@blitzjs/file-pipeline'
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER

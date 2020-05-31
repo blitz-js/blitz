@@ -1,5 +1,5 @@
 {
-  "name": "@blitzjs/synchronizer",
+  "name": "@blitzjs/file-pipeline",
   "version": "0.12.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
@@ -17,8 +17,8 @@
     "url": "https://twitter.com/flybayer"
   },
   "main": "dist/index.js",
-  "module": "dist/synchronizer.esm.js",
-  "types": "dist/packages/synchronizer/src/index.d.ts",
+  "module": "dist/file-pipeline.esm.js",
+  "types": "dist/packages/file-pipeline/src/index.d.ts",
   "files": [
     "dist"
   ],
