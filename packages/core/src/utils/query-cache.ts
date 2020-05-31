@@ -7,8 +7,6 @@ export interface QueryCacheFunctions<ReturnType> {
 export const queryCacheFunctions = (queryKey: string) => ({
   mutate: (updater: any) => {
     queryCache.setQueryData(queryKey, updater)
-    setTimeout(() => {
-      queryCache.refetchQueries(queryKey, {force: true})
-    }, 1000)
+    queryCache.refetchQueries(queryKey, {force: true})
   },
 })
