@@ -12,5 +12,7 @@ model Project {
   name        String
   description String
   path        String
-  lastActive  Int    @default(0)
+
+  // the following are stub values which are filled in by queries based on the filesystem state
+  lastActive Int
 }

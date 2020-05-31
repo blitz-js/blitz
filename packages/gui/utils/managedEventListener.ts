@@ -7,6 +7,7 @@ export const managedEventListener = <T extends EventTarget, K extends keyof Even
   options?: AddEventListenerOptions,
 ): (() => void) => {
   target.addEventListener(type, callback as EventListener, options)
+
   return (): void => {
     target.removeEventListener(type, callback as EventListener, options)
   }

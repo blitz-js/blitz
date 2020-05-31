@@ -6,7 +6,7 @@ import {
   CloudDownloadOutline,
   DocumentDuplicateOutline,
 } from 'heroicons-react'
-import {useState} from 'react'
+import {FC, useState} from 'react'
 
 import getCreateProjectStatus from 'app/queries/getCreateProjectStatus'
 import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
@@ -57,7 +57,7 @@ type CreateProjectStatusProps = {
   path: string
 }
 
-export const CreateProjectStatus = ({path}: CreateProjectStatusProps) => {
+export const CreateProjectStatus: FC<CreateProjectStatusProps> = ({path}) => {
   const [status] = useQuery(getCreateProjectStatus, path, {
     refetchInterval: 100,
   })
@@ -74,7 +74,7 @@ export const CreateProjectStatus = ({path}: CreateProjectStatusProps) => {
         {getStatusMeta(status).svg}
       </div>
       <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-        <h3 className="text-lg font-medium leading-6 text-gray-900" id="modal-headline">
+        <h3 className="text-lg font-medium leading-6" id="modal-headline">
           {getStatusMeta(status).name}
           {Array(dots).fill('.')}
         </h3>

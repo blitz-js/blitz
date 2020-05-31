@@ -1,6 +1,6 @@
 // based on https://gist.github.com/adamwathan/3b9f3ad1a285a2d1b482769aeb862467#gistcomment-3267666
 
-import {createContext, useContext, useEffect, useRef} from 'react'
+import {createContext, FC, useContext, useEffect, useRef} from 'react'
 import {CSSTransition as ReactCSSTransition} from 'react-transition-group'
 
 type TransitionContextProps = {
@@ -42,7 +42,7 @@ interface TransitionProps {
 
 type CSSTransitionProps = TransitionProps
 
-const CSSTransition = ({
+const CSSTransition: FC<CSSTransitionProps> = ({
   show,
   enter = '',
   enterFrom = '',
@@ -52,7 +52,7 @@ const CSSTransition = ({
   leaveTo = '',
   appear,
   children,
-}: CSSTransitionProps) => {
+}) => {
   const enterClasses = enter.split(' ').filter((s) => s.length)
   const enterFromClasses = enterFrom.split(' ').filter((s) => s.length)
   const enterToClasses = enterTo.split(' ').filter((s) => s.length)
@@ -101,7 +101,7 @@ const CSSTransition = ({
   )
 }
 
-export const Transition = ({show, appear, ...rest}: TransitionProps) => {
+export const Transition: FC<TransitionProps> = ({show, appear, ...rest}) => {
   const {parent} = useContext(TransitionContext)
   const isInitialRender = useIsInitialRender()
   const isChild = show === undefined

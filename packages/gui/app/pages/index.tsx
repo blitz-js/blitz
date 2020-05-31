@@ -3,18 +3,18 @@ import {homedir} from 'os'
 import {useState} from 'react'
 
 import {CreateProjectModal} from 'app/components/CreateProjectModal'
-import {Header} from 'app/components/Header'
+import {Greeting} from 'app/components/Greeting'
 import {Nav} from 'app/components/Nav'
 import {ProjectList} from 'app/components/ProjectList'
 import getProjects from 'app/queries/getProjects'
 import {Project} from 'db'
 
-type IndexPageProps = {
+type ProjectsPageProps = {
   projects: Project[]
   homedir: string
 }
 
-export const getServerSideProps: GetServerSideProps<IndexPageProps> = async () => {
+export const getServerSideProps: GetServerSideProps<ProjectsPageProps> = async () => {
   const projects = await getProjects({})
 
   return {
@@ -22,17 +22,17 @@ export const getServerSideProps: GetServerSideProps<IndexPageProps> = async () =
   }
 }
 
-const IndexPage: BlitzPage<IndexPageProps> = ({projects, homedir}) => {
+const ProjectPage: BlitzPage<ProjectsPageProps> = ({projects, homedir}) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
-      <Nav setIsModalOpen={setIsModalOpen} />
-      <Header />
-      <ProjectList projects={projects} />
       <CreateProjectModal isModalOpen={isModalOpen} homedir={homedir} setIsModalOpen={setIsModalOpen} />
+      <Nav setIsModalOpen={setIsModalOpen} />
+      <Greeting />
+      <ProjectList projects={projects} />
     </>
   )
 }
 
-export default IndexPage
+export default ProjectPage

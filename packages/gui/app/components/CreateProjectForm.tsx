@@ -1,5 +1,5 @@
 import {useRouter} from 'blitz'
-import {Dispatch, FormEvent, SetStateAction, Suspense, useState} from 'react'
+import {Dispatch, FC, FormEvent, SetStateAction, Suspense, useState} from 'react'
 
 import {CreateProjectInputs} from 'app/components/CreateProjectInputs'
 import {CreateProjectStatus} from 'app/components/CreateProjectStatus'
@@ -11,7 +11,7 @@ type CreateProjectFormProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export const CreateProjectForm = ({homedir, setIsModalOpen}: CreateProjectFormProps) => {
+export const CreateProjectForm: FC<CreateProjectFormProps> = ({homedir, setIsModalOpen}) => {
   const router = useRouter()
   const [name, setName] = useLocalStorage<string>('name', '')
   const [description, setDescription] = useLocalStorage<string>('description', '')
@@ -45,7 +45,7 @@ export const CreateProjectForm = ({homedir, setIsModalOpen}: CreateProjectFormPr
   return (
     <form
       onSubmit={handleSubmit}
-      className="overflow-hidden transition-all transform bg-white rounded-lg shadow-xl sm:max-w-xl sm:w-full"
+      className="overflow-hidden transition-all transform rounded-lg shadow-xl sm:max-w-xl sm:w-full"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-headline">

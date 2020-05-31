@@ -1,5 +1,6 @@
 import {Link} from 'blitz'
 import {ArrowRight, Calendar} from 'heroicons-react'
+import {FC} from 'react'
 
 import {Project} from 'db'
 import {timeDifference} from 'utils/timeDifference'
@@ -9,7 +10,7 @@ type ProjectCardProps = {
   i: number
 }
 
-export const ProjectCard = ({project, i}: ProjectCardProps) => {
+export const ProjectCard: FC<ProjectCardProps> = ({project, i}: ProjectCardProps) => {
   const isFirstCard = i === 0
 
   return (

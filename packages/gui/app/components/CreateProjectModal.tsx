@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction} from 'react'
+import {Dispatch, FC, SetStateAction} from 'react'
 
 import {CreateProjectForm} from 'app/components/CreateProjectForm'
 import {Transition} from 'app/components/Transition'
@@ -9,7 +9,7 @@ type CreateProjectModalProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export const CreateProjectModal = ({isModalOpen, homedir, setIsModalOpen}: CreateProjectModalProps) => (
+export const CreateProjectModal: FC<CreateProjectModalProps> = ({isModalOpen, homedir, setIsModalOpen}) => (
   <Transition show={isModalOpen} appear={true}>
     <div className="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
       <Transition
