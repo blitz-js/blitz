@@ -1,27 +1,32 @@
 import {resolve} from 'path'
-import {synchronizeFiles} from '@blitzjs/synchronizer'
 import {move, remove, pathExists} from 'fs-extra'
-import {ServerConfig, enhance} from './config'
+import {ServerConfig, normalize} from './config'
 import {nextBuild} from './next-utils'
 import {saveBuild} from './build-hash'
 import {configureRules} from './rules'
+
 export async function build(config: ServerConfig) {
   const {
     rootFolder,
+    transformFiles,
     buildFolder,
     nextBin,
-    ignoredPaths: ignore,
-    writeManifestFile,
-    includePaths: include,
-    watch = false,
-  } = await enhance(config)
-  const rules = configureRules({writeManifestFile})
-  await synchronizeFiles(rootFolder, rules, buildFolder, {
     ignore,
     include,
     watch,
-  })
+    ...rulesConfig
+  } = await normalize(config)
 
+  const src = rootFolder
+  const rules = configureRules(rulesConfig)
+  const dest = buildFolder
+  const options = {
+    ignore,
+    include,
+    watch,
+  }
+
+  await transformFiles(src, rules, dest, options)
   await nextBuild(nextBin, buildFolder)
 
   const rootNextFolder = resolve(rootFolder, '.next')

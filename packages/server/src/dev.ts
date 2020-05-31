@@ -1,31 +1,38 @@
 import {resolve} from 'path'
-import {synchronizeFiles as defaultSynchronizer} from '@blitzjs/synchronizer'
-import {ServerConfig, enhance} from './config'
+import {ServerConfig, normalize} from './config'
 import {nextStartDev} from './next-utils'
 import {configureRules} from './rules'
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
+
+export async function dev(
+  {watch = true, ...config}: ServerConfig,
+  readyForNextDev: Promise<any> = Promise.resolve(),
+) {
   const {
+    //
     rootFolder,
+    transformFiles,
     nextBin,
     devFolder,
-    writeManifestFile,
-    ignoredPaths: ignore,
-    includePaths: include,
-    synchronizer: synchronizeFiles = defaultSynchronizer,
-    watch = true,
-  } = await enhance({
+    ignore,
+    include,
+    ...rulesConfig
+  } = await normalize({
     ...config,
     interceptNextErrors: true,
   })
+
   const src = resolve(rootFolder)
+  const rules = configureRules(rulesConfig)
   const dest = resolve(rootFolder, devFolder)
-  const rules = configureRules({writeManifestFile})
+  const options = {
+    ignore,
+    include,
+    watch,
+  }
+
   const [{manifest}] = await Promise.all([
-    synchronizeFiles(src, rules, dest, {
-      ignore,
-      include,
-      watch,
-    }),
+    transformFiles(src, rules, dest, options),
+    // Ensure next does not start until parallel processing completes
     readyForNextDev,
   ])
 

@@ -47,11 +47,11 @@ describe('Dev command', () => {
     })
 
     it('should blow up', (done) => {
-      const mockSynchronizer = () => Promise.resolve({manifest: Manifest.create()})
+      const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
       ;(async () => {
         try {
           await dev({
-            synchronizer: mockSynchronizer,
+            transformFiles,
             rootFolder: '',
             writeManifestFile: false,
             watch: false,

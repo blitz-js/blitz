@@ -23,7 +23,7 @@ const defaultBus = through({objectMode: true}, (event, __, next) => {
  * can run in NextJS.
  * @param config Configuration object
  */
-export async function synchronizeFiles(
+export async function transformFiles(
   src: string,
   rules: Rule[],
   dest: string,
@@ -55,14 +55,14 @@ export async function synchronizeFiles(
 
     bus.on('data', ({type}) => {
       if (type === READY) {
-        resolve(fileTransformer.ready)
+        resolve(fileTransformPipeline.ready)
       }
     })
 
-    const fileTransformer = createPipeline(config, rules, bus)
+    const fileTransformPipeline = createPipeline(config, rules, bus)
 
-    // Send source to fileTransformer
-    fileTransformer.stream.on('error', (err) => {
+    // Send source to fileTransformPipeline
+    fileTransformPipeline.stream.on('error', (err) => {
       bus.write({type: ERROR_THROWN, payload: err})
       if (err) reject(err)
     })
