@@ -10,22 +10,19 @@ export async function build(config: ServerConfig) {
     rootFolder,
     buildFolder,
     nextBin,
-    ignoredPaths,
-    manifestPath,
+    ignoredPaths: ignore,
     writeManifestFile,
-    includePaths,
+    includePaths: include,
     watch = false,
   } = await enhance(config)
 
   await synchronizeFiles({
-    rules,
-    src: rootFolder,
     dest: buildFolder,
+    ignore,
+    include,
+    rules: rules({writeManifestFile}),
+    src: rootFolder,
     watch,
-    manifestPath,
-    writeManifestFile,
-    ignoredPaths,
-    includePaths,
   })
 
   await nextBuild(nextBin, buildFolder)

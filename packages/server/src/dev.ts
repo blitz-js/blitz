@@ -8,10 +8,9 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     rootFolder,
     nextBin,
     devFolder,
-    ignoredPaths,
-    manifestPath,
     writeManifestFile,
-    includePaths,
+    ignoredPaths: ignore,
+    includePaths: include,
     synchronizer: synchronizeFiles = defaultSynchronizer,
     watch = true,
   } = await enhance({
@@ -23,14 +22,12 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
 
   const [{manifest}] = await Promise.all([
     synchronizeFiles({
-      rules,
-      src,
       dest,
+      ignore,
+      include,
+      rules: rules({writeManifestFile}),
+      src,
       watch,
-      ignoredPaths,
-      includePaths,
-      manifestPath,
-      writeManifestFile,
     }),
     readyForNextDev,
   ])

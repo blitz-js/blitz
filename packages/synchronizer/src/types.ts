@@ -11,10 +11,6 @@ export type RuleConfig = {
   include: string[]
   ignore: string[]
   watch: boolean
-  manifest: {
-    path: string
-    write: boolean
-  }
 }
 
 /**

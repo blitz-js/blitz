@@ -7,14 +7,12 @@ import {READY, ERROR_THROWN} from './events'
 import {Rule} from './types'
 
 type SynchronizeFilesInput = {
-  src: string
   dest: string
-  watch: boolean
+  ignore: string[]
+  include: string[]
   rules: Rule[]
-  manifestPath: string
-  ignoredPaths: string[]
-  includePaths: string[]
-  writeManifestFile: boolean
+  src: string
+  watch: boolean
 }
 
 type SynchronizeFilesOutput = {
@@ -28,13 +26,11 @@ type SynchronizeFilesOutput = {
  */
 export async function synchronizeFiles({
   dest,
-  src,
-  manifestPath,
+  ignore,
+  include,
   rules,
+  src,
   watch,
-  includePaths: include,
-  ignoredPaths: ignore,
-  writeManifestFile,
 }: SynchronizeFilesInput): Promise<SynchronizeFilesOutput> {
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
   // TODO: remove this clean and devise a way to resolve differences in stream
@@ -56,10 +52,6 @@ export async function synchronizeFiles({
       include,
       ignore,
       watch,
-      manifest: {
-        path: manifestPath,
-        write: writeManifestFile,
-      },
     }
 
     reporter.stream.on('data', ({type}) => {

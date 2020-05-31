@@ -68,35 +68,41 @@ export class Manifest {
  * Returns a rule to create and write the file error manifest so we can
  * link to the correct files on a NextJS browser error.
  */
-export const createRuleManifest: Rule = ({config}) => {
-  const manifest = Manifest.create()
+export const createRuleManifest = (
+  writeManifestFile: boolean = true,
+  manifestPath: string = '_manifest.json',
+) => {
+  const rule: Rule = () => {
+    const manifest = Manifest.create()
 
-  const stream = through({objectMode: true}, function (file: File, _, next) {
-    this.push(file) // Send file on through to be written
+    const stream = through({objectMode: true}, function (file: File, _, next) {
+      this.push(file) // Send file on through to be written
 
-    const [origin] = file.history
-    const dest = file.path
+      const [origin] = file.history
+      const dest = file.path
 
-    if (file.event === 'add' || file.event === 'change') {
-      manifest.setEntry(origin, dest)
-    }
+      if (file.event === 'add' || file.event === 'change') {
+        manifest.setEntry(origin, dest)
+      }
 
-    if (file.event === 'unlink' || file.event === 'unlinkDir') {
-      manifest.removeKey(origin)
-    }
+      if (file.event === 'unlink' || file.event === 'unlinkDir') {
+        manifest.removeKey(origin)
+      }
 
-    if (config.manifest.write) {
-      this.push(
-        new File({
-          // NOTE:  no need to for hash because this is a manifest
-          //        and doesn't count as work
-          path: '_manifest.json',
-          contents: Buffer.from(manifest.toJson(false)),
-        }),
-      )
-    }
-    next()
-  })
+      if (writeManifestFile) {
+        this.push(
+          new File({
+            // NOTE:  no need to for hash because this is a manifest
+            //        and doesn't count as work
+            path: manifestPath,
+            contents: Buffer.from(manifest.toJson(false)),
+          }),
+        )
+      }
+      next()
+    })
 
-  return {stream, ready: {manifest}}
+    return {stream, ready: {manifest}}
+  }
+  return rule
 }
