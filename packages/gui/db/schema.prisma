@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./gui.db"
+}
+
+model Project {
+  id          String @default(cuid()) @id
+  name        String
+  description String
+  path        String
+  lastActive  Int    @default(0)
+}

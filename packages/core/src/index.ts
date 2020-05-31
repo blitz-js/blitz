@@ -12,6 +12,8 @@ export {
   NextApiResponse as BlitzApiResponse,
 } from 'next'
 
+export {AppProps} from 'next/app'
+
 export {default as Head} from 'next/head'
 
 export {default as Link} from 'next/link'
@@ -25,6 +27,7 @@ export {
   Main,
   NextScript,
   DocumentContext,
+  DocumentInitialProps,
 } from 'next/document'
 
 export {default as dynamic} from 'next/dynamic'
