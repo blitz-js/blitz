@@ -6,8 +6,8 @@ export type Event<T> = {type: string; payload: T}
 
 type Error = DuplicatePathError | NestedRouteError
 
-export function handleErrors(reporter: Writable) {
-  reporter.on('data', (event: Event<Error>) => {
+export function handleErrors(bus: Writable) {
+  bus.on('data', (event: Event<Error>) => {
     if (event.type !== ERROR_THROWN) return
     const err = event.payload as Error
     if (err instanceof DuplicatePathError) {

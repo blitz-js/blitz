@@ -21,12 +21,9 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
   const dest = resolve(rootFolder, devFolder)
   const rules = configureRules({writeManifestFile})
   const [{manifest}] = await Promise.all([
-    synchronizeFiles({
-      dest,
+    synchronizeFiles(src, rules, dest, {
       ignore,
       include,
-      rules,
-      src,
       watch,
     }),
     readyForNextDev,

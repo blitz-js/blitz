@@ -9,10 +9,10 @@ import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
  * Returns a Rule to assemble NextJS `/pages` folder from within
  * the BlitzJS folder structure
  */
-export const createRulePages: Rule = ({config, reporter, getInputCache}) => {
+export const createRulePages: Rule = ({config, bus, getInputCache}) => {
   const {src} = config
 
-  handleErrors(reporter)
+  handleErrors(bus)
 
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)

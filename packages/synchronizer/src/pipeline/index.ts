@@ -18,23 +18,23 @@ export function isSourceFile(file: File) {
  * @param config Config object containing basic information for the file pipeline
  * @param rules Array of rules to apply to each file
  * @param errors Stream that takes care of all operational error rendering
- * @param reporter Stream that takes care of all view rendering
+ * @param bus Stream to pipe events to
  */
-export function createPipeline(config: RuleConfig, rules: Rule[], reporter: Writable) {
+export function createPipeline(config: RuleConfig, rules: Rule[], bus: Writable) {
   // Helper streams don't account for business rules
   const source = agnosticSource(config)
   const input = through({objectMode: true}, (f, _, next) => next(null, f))
   const optimizer = createWorkOptimizer()
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
-  const idleHandler = createIdleHandler(reporter)
-  const writer = createWrite(config.dest, reporter)
+  const idleHandler = createIdleHandler(bus)
+  const writer = createWrite(config.dest, bus)
 
   // Send this DI object to every rule
   const api: RuleArgs = {
     config,
     input,
-    reporter,
+    bus,
     getInputCache: () => srcCache.cache,
   }
 

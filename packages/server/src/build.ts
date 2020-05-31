@@ -16,12 +16,9 @@ export async function build(config: ServerConfig) {
     watch = false,
   } = await enhance(config)
   const rules = configureRules({writeManifestFile})
-  await synchronizeFiles({
-    dest: buildFolder,
+  await synchronizeFiles(rootFolder, rules, buildFolder, {
     ignore,
     include,
-    rules,
-    src: rootFolder,
     watch,
   })
 

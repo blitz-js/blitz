@@ -19,7 +19,7 @@ export type RuleConfig = {
 export type RuleArgs = {
   config: RuleConfig
   input: Writable
-  reporter: Writable
+  bus: Writable
   getInputCache: () => FileCache
 }
 
