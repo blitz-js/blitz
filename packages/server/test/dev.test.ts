@@ -17,7 +17,7 @@ const mocks = multiMock(
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {Manifest} from '@blitzjs/synchronizer'
+import {Manifest} from '../src/rules/manifest'
 import {directoryTree} from './utils/tree-utils'
 
 const originalLog = console.log
