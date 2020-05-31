@@ -10,7 +10,7 @@ import {useState} from 'react'
 
 import getCreateProjectStatus from 'app/queries/getCreateProjectStatus'
 import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
-import {useInterval} from 'utils/useInterval'
+import {useInterval} from 'utils/hooks/web/useInterval'
 
 const getStatusMeta = (status: string) => {
   switch (status) {

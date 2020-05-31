@@ -39,6 +39,7 @@ export const CreateProjectInputs = ({
         </label>
         <div className="mt-1 rounded-md shadow-sm">
           <input
+            autoFocus
             id="name"
             className="block w-full form-input sm:text-sm sm:leading-5"
             placeholder="my-awesome-project"

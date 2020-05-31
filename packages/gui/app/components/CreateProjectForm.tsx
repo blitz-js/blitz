@@ -4,6 +4,7 @@ import {Dispatch, FormEvent, SetStateAction, Suspense, useState} from 'react'
 import {CreateProjectInputs} from 'app/components/CreateProjectInputs'
 import {CreateProjectStatus} from 'app/components/CreateProjectStatus'
 import createProject from 'app/mutations/createProject'
+import {useLocalStorage} from 'utils/hooks/web/useLocalStorage'
 
 type CreateProjectFormProps = {
   homedir: string
@@ -12,9 +13,9 @@ type CreateProjectFormProps = {
 
 export const CreateProjectForm = ({homedir, setIsModalOpen}: CreateProjectFormProps) => {
   const router = useRouter()
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [path, setPath] = useState('projects/')
+  const [name, setName] = useLocalStorage<string>('name', '')
+  const [description, setDescription] = useLocalStorage<string>('description', '')
+  const [path, setPath] = useLocalStorage<string>('path', 'projects/')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -27,6 +28,9 @@ export const CreateProjectForm = ({homedir, setIsModalOpen}: CreateProjectFormPr
       const project = await createProject({data})
 
       if (project) {
+        setName('')
+        setDescription('')
+        setPath('')
         router.push(`/projects/${project.id}`)
       } else {
         alert('Something went wrong')
@@ -66,7 +70,7 @@ export const CreateProjectForm = ({homedir, setIsModalOpen}: CreateProjectFormPr
         <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
           <button
             type="submit"
-            className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5"
+            className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5 disabled:opacity-50"
             disabled={isSubmitting}>
             Create
           </button>
