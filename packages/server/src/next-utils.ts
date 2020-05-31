@@ -1,7 +1,7 @@
 import {spawn} from 'cross-spawn'
 import detect from 'detect-port'
-import {Manifest} from './synchronizer/pipeline/rules/manifest'
-import {through} from './synchronizer/streams'
+import {Manifest} from './stages/manifest'
+import {through} from './streams'
 import {ServerConfig} from 'config'
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {

@@ -22,7 +22,7 @@ import {directoryTree} from './utils/tree-utils'
 describe('Dev command', () => {
   const rootFolder = resolve('')
   const buildFolder = resolve(rootFolder, '.blitz-build')
-  const devFolder = resolve(rootFolder, '.blitz-rules')
+  const devFolder = resolve(rootFolder, '.blitz-stages')
 
   beforeEach(async () => {
     mocks.mockFs({
@@ -47,7 +47,7 @@ describe('Dev command', () => {
 
   it('should copy the correct files to the dev folder', async () => {
     expect(directoryTree(devFolder)).toEqual({
-      name: '.blitz-rules',
+      name: '.blitz-stages',
       children: [
         {name: 'blitz.config.js'},
         {name: 'next.config.js'},
