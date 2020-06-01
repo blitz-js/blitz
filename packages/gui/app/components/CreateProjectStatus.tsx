@@ -59,7 +59,7 @@ type CreateProjectStatusProps = {
 
 export const CreateProjectStatus: FC<CreateProjectStatusProps> = ({path}) => {
   const [status] = useQuery(getCreateProjectStatus, path, {
-    refetchInterval: 100,
+    refetchInterval: 150,
   })
 
   const [dots, setDots] = useState(0)

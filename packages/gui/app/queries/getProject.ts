@@ -1,6 +1,7 @@
 import {existsSync, statSync} from 'fs'
 
 import db, {FindOneProjectArgs} from 'db'
+import {getDirMtime} from 'utils/getDirMtime'
 
 type GetProjectInput = {
   where: FindOneProjectArgs['where']
@@ -17,7 +18,7 @@ const getProject = async ({where}: GetProjectInput) => {
     return null
   }
 
-  project.lastActive = statSync(project.path).mtimeMs
+  project.lastActive = await getDirMtime(project.path)
 
   return project
 }

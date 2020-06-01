@@ -10,7 +10,7 @@ export const timeDifference = (current: number, previous: number): string => {
   let elapsed = current - previous
 
   if (elapsed < msPerMinute) {
-    return 'Just now'
+    return 'just now'
   } else if (elapsed < msPerHour) {
     const now = Math.round(elapsed / msPerMinute)
     if (now === 1) {
@@ -28,7 +28,7 @@ export const timeDifference = (current: number, previous: number): string => {
   } else if (elapsed < msPerMonth) {
     const now = Math.round(elapsed / msPerDay)
     if (now === 1) {
-      return 'Yesterday'
+      return 'yesterday'
     } else if (now >= 7 && now <= 13) {
       return '1 week ago'
     } else if (now >= 14 && now <= 20) {
