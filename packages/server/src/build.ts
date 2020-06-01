@@ -25,20 +25,8 @@ export async function build(config: ServerConfig, readyForNextBuild: Promise<any
     include,
     watch,
   }
-  await Promise.all([
-    synchronizeFiles({
-      src: rootFolder,
-      dest: buildFolder,
-      watch,
-      manifestPath,
-      writeManifestFile,
-      ignoredPaths,
-      includePaths,
-    }),
-    readyForNextBuild,
-  ])
+  await Promise.all([transformFiles(src, stages, dest, options), readyForNextBuild])
 
-  await transformFiles(src, stages, dest, options)
   await nextBuild(nextBin, buildFolder)
 
   const rootNextFolder = resolve(rootFolder, '.next')

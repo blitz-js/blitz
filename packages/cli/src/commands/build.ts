@@ -3,7 +3,6 @@ import {build} from '@blitzjs/server'
 import {runPrismaGeneration} from './db'
 
 export class Build extends Command {
-  // eslint-disable-next-line import/no-default-export
   static description = 'Create a production build'
   static aliases = ['b']
 
