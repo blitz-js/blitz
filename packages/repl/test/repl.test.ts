@@ -35,8 +35,8 @@ describe('Console command', () => {
     jest.spyOn(repl, 'start').mockReturnValue(mockRepl)
     jest.spyOn(chokidar, 'watch').mockReturnValue(mockWatcher)
     jest.spyOn(mockRepl, 'on').mockReturnValue(mockRepl)
-    jest.spyOn(loadBlitzFunctions, 'getBlitzModulePaths').mockReturnValue(pathToModulesMock)
-    jest.spyOn(loadBlitzFunctions, 'loadBlitz').mockReturnValue(loadBlitzMock)
+    jest.spyOn(loadBlitzFunctions, 'getBlitzModulePaths').mockResolvedValue(pathToModulesMock)
+    jest.spyOn(loadBlitzFunctions, 'loadBlitz').mockResolvedValue(loadBlitzMock)
   })
 
   it('starts REPL', async () => {
@@ -59,7 +59,7 @@ describe('Console command', () => {
   it('watches for modules changes', async () => {
     await runRepl({})
     expect(loadBlitzFunctions.getBlitzModulePaths).toBeCalled()
-    expect(chokidar.watch).toBeCalledWith(pathToModulesMock)
+    expect(chokidar.watch).toBeCalledWith(pathToModulesMock, {ignoreInitial: true})
   })
 
   it('calls loadBlitz', async () => {

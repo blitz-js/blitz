@@ -1,6 +1,6 @@
 import {BaseExecutor, executorArgument, getExecutorArgument} from './executor'
 import {Generator, GeneratorOptions} from '@blitzjs/generator'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 import {waitForConfirmation} from '../utils/wait-for-confirmation'
 
 export interface NewFileExecutor extends BaseExecutor {

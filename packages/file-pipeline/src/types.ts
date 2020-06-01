@@ -1,0 +1,34 @@
+import {Readable, Writable} from 'stream'
+import {FileCache} from './helpers/file-cache'
+
+/**
+ * Configuration for Stages
+ */
+export type StageConfig = {
+  src: string
+  dest: string
+  cwd: string
+  include: string[]
+  ignore: string[]
+  watch: boolean
+}
+
+/**
+ * Arguments object for Stages
+ */
+export type StageArgs = {
+  config: StageConfig
+  input: Writable
+  bus: Writable
+  getInputCache: () => FileCache
+}
+
+/**
+ * Basic template for Pipeline Stages modules
+ */
+export type Stage = (
+  a: StageArgs,
+) => {
+  stream: Readable
+  ready?: Record<string, any>
+} & Record<string, any>

@@ -17,7 +17,7 @@ const mocks = multiMock(
 
 // Import with mocks applied
 import {dev} from '../src/dev'
-import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
+import {Manifest} from '../src/stages/manifest'
 import {directoryTree} from './utils/tree-utils'
 
 const originalLog = console.log
@@ -47,11 +47,11 @@ describe('Dev command', () => {
     })
 
     it('should blow up', (done) => {
-      const mockSynchronizer = () => Promise.resolve({manifest: Manifest.create()})
+      const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
       ;(async () => {
         try {
           await dev({
-            synchronizer: mockSynchronizer,
+            transformFiles,
             rootFolder: '',
             writeManifestFile: false,
             watch: false,

@@ -13,7 +13,9 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "predev": "wait-on ../core/dist/packages/core/src/index.d.ts",
+    "wait:file-pipeline": "wait-on ../file-pipeline/dist/packages/file-pipeline/src/index.d.ts",
+    "wait:core": "wait-on ../core/dist/packages/core/src/index.d.ts",
+    "predev": "yarn wait:core && yarn wait:file-pipeline",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
@@ -32,6 +34,8 @@
   "module": "dist/webpack.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
+    "@blitzjs/display": "0.12.0",
+    "@blitzjs/file-pipeline": "0.12.0",
     "cross-spawn": "7.0.2",
     "detect-port": "1.3.0",
     "fast-glob": "3.2.2",

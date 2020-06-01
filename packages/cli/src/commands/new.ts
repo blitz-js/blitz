@@ -4,7 +4,7 @@ import {Command} from '../command'
 import {AppGenerator} from '@blitzjs/generator'
 import chalk from 'chalk'
 import hasbin from 'hasbin'
-import {log} from '@blitzjs/server'
+import {log} from '@blitzjs/display'
 const debug = require('debug')('blitz:new')
 
 import {PromptAbortedError} from '../errors/prompt-aborted'
