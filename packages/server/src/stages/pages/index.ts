@@ -44,8 +44,7 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
       return next(err)
     }
 
-    const allPages = entries.filter((page) => page.includes('pages'))
-    const nestedApiRoutes = allPages.filter((page) => page.includes('/pages/api'))
+    const nestedApiRoutes = getNestedApiRoutes(entries)
     if (nestedApiRoutes.length > 0) {
       const message =
         nestedApiRoutes.length === 1
@@ -67,6 +66,10 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   })
 
   return {stream}
+}
+
+export function getNestedApiRoutes(entries: string[]) {
+  return entries.filter((page) => page.match(/^(.*[\\/])?app[\\/](.*)pages[\\/]api[\\/]?/))
 }
 
 export function pagesPathTransformer(path: string) {
