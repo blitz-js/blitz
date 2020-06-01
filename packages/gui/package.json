@@ -1,9 +1,8 @@
 {
   "name": "@blitzjs/gui",
-  "version": "0.20.0",
+  "version": "0.12.0",
   "scripts": {
-    "start": "blitz start",
-    "build": "blitz build"
+    "start": "blitz start"
   },
   "dependencies": {
     "@blitzjs/generator": "0.12.0",
