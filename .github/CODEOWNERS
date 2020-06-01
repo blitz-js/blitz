@@ -4,6 +4,7 @@
 *.md @merelinguist
 
 packages/server/**/* @ryardley
+packages/file-pipeline/**/* @ryardley
 packages/cli/**/* @aem
 packages/generator/**/* @aem
 packages/installer/**/* @aem
