@@ -73,7 +73,7 @@ export const CreateProjectInputs: FC<CreateProjectInputsProps> = ({
           <input
             id="path"
             className="flex-1 block w-full rounded-none form-input sm:text-sm sm:leading-5 rounded-r-md"
-            placeholder="/User/Dylan"
+            placeholder="/projects/path"
             value={path}
             onChange={(e) => setPath(toKebabCase(e.target.value))}
           />
