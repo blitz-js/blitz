@@ -40,8 +40,33 @@ export class Model {
     })
   }
 
+  private getCreatedAtField() {
+    return new Field('createdAt', {
+      isRequired: true,
+      isList: false,
+      isId: false,
+      default: 'now()',
+      type: FieldType.DateTime,
+    })
+  }
+
+  private getUpdatedAtField() {
+    return new Field('updatedAt', {
+      isRequired: true,
+      isList: false,
+      isId: false,
+      isUpdatedAt: true,
+      type: FieldType.DateTime,
+    })
+  }
+
   private getFields() {
-    return stringifyFieldsForPrinting([this.getIdField(), ...this.fields])
+    return stringifyFieldsForPrinting([
+      this.getIdField(),
+      ...this.fields,
+      this.getCreatedAtField(),
+      this.getUpdatedAtField(),
+    ])
       .map((field) => `\n  ${field}`)
       .join('')
   }

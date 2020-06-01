@@ -2,6 +2,7 @@ import {Generator, GeneratorOptions} from '../generator'
 import path from 'path'
 import {Model} from '../prisma/model'
 import {Field} from '../prisma/field'
+import {log} from '@blitzjs/display'
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -36,6 +37,8 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
       // wrap in newlines to put a space below the previously generated model and
       // to preserve the EOF newline
       this.fs.append(path.resolve('db/schema.prisma'), `\n${modelDefinition.toString()}\n`)
+      log.success(`Model for '${this.options.modelName}' created successfully:\n`)
+      modelDefinition.toString().split('\n').map(log.progress)
     } catch (error) {
       throw error
     }
