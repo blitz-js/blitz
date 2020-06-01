@@ -5,7 +5,7 @@ import {nextBuild} from './next-utils'
 import {saveBuild} from './build-hash'
 import {configureStages} from './stages'
 
-export async function build(config: ServerConfig) {
+export async function build(config: ServerConfig, readyForNextBuild: Promise<any> = Promise.resolve()) {
   const {
     rootFolder,
     transformFiles,
@@ -25,6 +25,18 @@ export async function build(config: ServerConfig) {
     include,
     watch,
   }
+  await Promise.all([
+    synchronizeFiles({
+      src: rootFolder,
+      dest: buildFolder,
+      watch,
+      manifestPath,
+      writeManifestFile,
+      ignoredPaths,
+      includePaths,
+    }),
+    readyForNextBuild,
+  ])
 
   await transformFiles(src, stages, dest, options)
   await nextBuild(nextBin, buildFolder)
