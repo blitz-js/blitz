@@ -1,4 +1,4 @@
-import {existsSync, statSync} from 'fs'
+import {existsSync} from 'fs'
 
 import db, {FindOneProjectArgs} from 'db'
 import {getDirMtime} from 'utils/getDirMtime'
