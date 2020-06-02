@@ -4,7 +4,11 @@ import {join} from 'path'
 
 // glob all the files in a dir and get the latest mtime:
 export const getDirMtime = async (path: string) => {
-  const files = await glob(join(path, '{,!(node_modules|.blitz|.git)/**/}*.*'))
+  const files = await glob(
+    process.platform === 'win32'
+      ? join(path, '{,!(node_modules|.blitz|.git)/**/}*.*').replace(/\\/g, '/')
+      : join(path, '{,!(node_modules|.blitz|.git)/**/}*.*'),
+  )
 
   const orderedFiles = files
     .filter((f) => lstatSync(f).isFile())
