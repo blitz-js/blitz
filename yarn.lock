@@ -1310,7 +1310,7 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
-"@fullhuman/postcss-purgecss@2.2.0", "@fullhuman/postcss-purgecss@^2.1.2":
+"@fullhuman/postcss-purgecss@^2.1.2":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-2.2.0.tgz#2b3699287163ff515f25ccdae5b96a244eebb41a"
   integrity sha512-q4zYAn8L9olA5uneaLhxkHRBoug9dnAqytbdX9R5dbzSORobhYr1yGR2JN3Q1UMd5RB0apm1NvJekHaymal/BQ==
