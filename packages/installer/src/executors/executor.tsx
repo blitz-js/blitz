@@ -12,7 +12,7 @@ export interface ExecutorConfig {
 }
 
 export interface Executor {
-  type: String
+  type: string
   Propose: React.FC<{step: ExecutorConfig; onProposalAccepted: (data?: any) => void; cliArgs: any}>
   Commit: React.FC<{
     step: ExecutorConfig

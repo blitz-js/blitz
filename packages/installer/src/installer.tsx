@@ -5,7 +5,7 @@ import {log} from '@blitzjs/display'
 // import {logExecutorFrontmatter} from './executors/executor'
 import {REGISTER_INSTANCE} from 'ts-node'
 import * as React from 'react'
-import {render, Box, Text, useApp} from 'ink'
+import {render, Box, Text, useApp, Color, Static} from 'ink'
 import {Executor, Frontmatter} from './executors/executor'
 import {Newline} from './components/newline'
 import {Branded} from './components/branded'
@@ -54,7 +54,7 @@ enum Status {
 }
 
 interface State {
-  steps: {executor: ExecutorConfig; status: Status; proposalData?: any}[]
+  steps: {executor: ExecutorConfig; status: Status; proposalData?: any; successMsg: string}[]
   current: number
 }
 
@@ -78,6 +78,7 @@ function installerState(state = initialState, action: {type: Action; data?: any}
       break
     case Action.CompleteChange:
       newState.steps[newState.current].status = Status.Committed
+      newState.steps[newState.current].successMsg = action.data as string
       newState.current = Math.min(newState.current + 1, newState.steps.length - 1)
       break
     case Action.SkipStep:
@@ -149,7 +150,7 @@ function StepExecutor({
 
   return (
     <Box flexDirection="column">
-      <Frontmatter executor={step} />
+      {status !== Status.Committed && <Frontmatter executor={step} />}
       {[Status.Pending, Status.Proposed].includes(status) && (
         <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
       )}
@@ -169,7 +170,7 @@ function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   const {exit} = useApp()
   const [state, dispatch] = React.useReducer(installerState, {
     ...initialState,
-    steps: steps.map((e) => ({executor: e, status: Status.Pending})),
+    steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ''})),
   })
 
   useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
@@ -180,18 +181,28 @@ function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
     }
   })
 
-  if (state.current === -1) {
-    return <WelcomeMessage recipeMeta={recipeMeta} />
-  }
+  const messages = state.steps.map((step) => step.successMsg).filter((s) => s)
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <StepExecutor
-        cliArgs={cliArgs}
-        proposalData={state.steps[state.current]?.proposalData}
-        step={state.steps[state.current]?.executor}
-        status={state.steps[state.current]?.status}
-      />
+      <Static>
+        {messages.map((msg, idx) => (
+          <Color key={msg + idx + Math.random()} green>
+            <Text>
+              {msg === '\n' ? '' : '✅'} {msg}
+            </Text>
+          </Color>
+        ))}
+      </Static>
+      {state.current === -1 && <WelcomeMessage recipeMeta={recipeMeta} />}
+      {state.current > -1 && (
+        <StepExecutor
+          cliArgs={cliArgs}
+          proposalData={state.steps[state.current]?.proposalData}
+          step={state.steps[state.current]?.executor}
+          status={state.steps[state.current]?.status}
+        />
+      )}
     </DispatchContext.Provider>
   )
 }
@@ -238,8 +249,8 @@ export class Installer<Options extends RecipeMeta> {
     await this.postInstall()
 
     console.log()
-    log.success(
-      `The recipe for ${this.options.packageName} completed successfully! Its functionality is now fully configured in your Blitz app.`,
+    log.info(
+      `🎉 The recipe for ${this.options.packageName} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
     )
   }
 }

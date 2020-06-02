@@ -79,7 +79,12 @@ export const Commit: Executor['Commit'] = ({onChangeCommitted, proposalData: fil
   const transformFn = (step as Config).transform
 
   const [loading, setLoading] = React.useState(true)
-  useEnterToContinue(onChangeCommitted, !loading)
+
+  const handleChangeCommitted = React.useCallback(() => {
+    onChangeCommitted(`Modified 1 file: ${filePath}`)
+  }, [filePath, onChangeCommitted])
+
+  useEnterToContinue(handleChangeCommitted, !loading)
 
   React.useEffect(() => {
     const results = transform(transformFn, [filePath])

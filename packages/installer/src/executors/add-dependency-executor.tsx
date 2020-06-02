@@ -112,7 +112,13 @@ export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) =
   const [depsInstalled, setDepsInstalled] = React.useState(false)
   const [devDepsInstalled, setDevDepsInstalled] = React.useState(false)
 
-  useEnterToContinue(onChangeCommitted, depsInstalled && devDepsInstalled)
+  const handleChangeCommitted = React.useCallback(() => {
+    const packages = (step as Config).packages
+    const dependencies = packages.length === 1 ? 'dependency' : 'dependencies'
+    onChangeCommitted(`Installed ${packages.length} ${dependencies}`)
+  }, [onChangeCommitted, step])
+
+  useEnterToContinue(handleChangeCommitted, depsInstalled && devDepsInstalled)
 
   React.useEffect(() => {
     async function installDeps() {

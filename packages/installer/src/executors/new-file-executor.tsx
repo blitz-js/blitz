@@ -99,8 +99,12 @@ export const Commit: Executor['Commit'] = ({cliArgs, onChangeCommitted, step}) =
     }),
     [cliArgs, step],
   )
-  useEnterToContinue(onChangeCommitted)
   const [fileCreateOutput, setFileCreateOutput] = useState('')
+  const handleChangeCommitted = React.useCallback(() => {
+    onChangeCommitted(`Successfully created ${fileCreateOutput.split('\n').length} files`)
+  }, [fileCreateOutput, onChangeCommitted])
+
+  useEnterToContinue(handleChangeCommitted)
 
   useEffect(() => {
     async function createNewFiles() {
