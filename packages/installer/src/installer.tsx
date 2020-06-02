@@ -248,9 +248,8 @@ export class Installer<Options extends RecipeMeta> {
     }
     await this.postInstall()
 
-    console.log()
     log.info(
-      `🎉 The recipe for ${this.options.packageName} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
+      `\n🎉 The recipe for ${this.options.packageName} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
     )
   }
 }
