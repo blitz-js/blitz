@@ -1,6 +1,6 @@
 export * from './use-query'
 export * from './use-paginated-query'
-export * from './use-router-params'
+export * from './use-params'
 export * from './use-router-query'
 export * from './use-infinite-query'
 export * from './ssr-query'

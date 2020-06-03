@@ -1,6 +1,6 @@
 import {extractRouterParams} from '@blitzjs/core'
 
-describe('useRouterParams', () => {
+describe('useParams', () => {
   describe('extractRouterParams', () => {
     it('returns proper params', () => {
       const routerQuery = {

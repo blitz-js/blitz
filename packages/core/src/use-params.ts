@@ -38,7 +38,7 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUr
   )
 }
 
-export function useRouterParams() {
+export function useParams() {
   const router = useRouter()
   const query = useRouterQuery()
 
