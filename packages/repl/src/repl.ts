@@ -25,13 +25,7 @@ const commands = {
 
 const runRepl = async (replOptions: REPL.ReplOptions) => {
   const repl = initializeRepl(replOptions)
-
-  const watchers = [
-    // watch('package.json').on('change', () => Console.loadDependencies(repl)),
-    watch(getBlitzModulePaths()).on('all', () => loadBlitzModules(repl)),
-  ]
-
-  repl.on('reset', () => loadModules(repl)).on('exit', () => watchers.forEach((watcher) => watcher.close()))
+  await setupFileWatchers(repl)
 }
 
 const initializeRepl = (replOptions: REPL.ReplOptions) => {
@@ -48,13 +42,25 @@ const defineCommands = (repl: REPLServer, commands: Record<string, REPLCommand>)
   Object.entries(commands).forEach(([keyword, cmd]) => repl.defineCommand(keyword, cmd))
 }
 
-const loadModules = (repl: REPLServer) => {
+const loadModules = async (repl: REPLServer) => {
   // loadBlitzDependencies(repl)
-  loadBlitzModules(repl)
+  await loadBlitzModules(repl)
 }
 
-const loadBlitzModules = (repl: REPLServer) => {
-  Object.assign(repl.context, loadBlitz())
+const loadBlitzModules = async (repl: REPLServer) => {
+  Object.assign(repl.context, await loadBlitz())
+}
+
+const setupFileWatchers = async (repl: REPLServer) => {
+  const watchers = [
+    // watch('package.json').on('change', () => Console.loadDependencies(repl)),
+    watch(await getBlitzModulePaths(), {
+      ignoreInitial: true,
+    }).on('all', () => loadBlitzModules(repl)),
+  ]
+
+  repl.on('reset', () => loadModules(repl))
+  repl.on('exit', () => watchers.forEach((watcher) => watcher.close()))
 }
 
 // const loadBlitzDependencies = (repl: REPLServer) => {
