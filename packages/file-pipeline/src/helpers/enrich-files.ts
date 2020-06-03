@@ -1,6 +1,5 @@
-import {through} from '../streams'
 import crypto from 'crypto'
-
+import {transform} from '../transform'
 /**
  * Returns a stage that prepares files coming into the stream
  * with correct event information as well as hash information
@@ -8,10 +7,11 @@ import crypto from 'crypto'
  * way files are handled and optimized
  */
 export function createEnrichFiles() {
-  const stream = through({objectMode: true}, (file, _, next) => {
+  const stream = transform.file((file, {next}) => {
     // Don't send directories
     if (file.isDirectory()) {
-      return next()
+      next()
+      return
     }
 
     if (!file.event) {
@@ -27,7 +27,7 @@ export function createEnrichFiles() {
       file.hash = hash
     }
 
-    next(null, file)
+    return file
   })
   return {stream}
 }

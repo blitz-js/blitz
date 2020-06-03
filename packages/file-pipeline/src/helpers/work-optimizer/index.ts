@@ -1,8 +1,6 @@
 // Mostly concerned with solving the Dirty Sync problem
-
-import {through} from '../streams'
 import {log} from '@blitzjs/display'
-import File from 'vinyl'
+import {transform} from '../../transform'
 
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
@@ -15,14 +13,14 @@ export function createWorkOptimizer() {
 
   const stats = {todo, done}
 
-  const reportComplete = through({objectMode: true}, (file: File, _, next) => {
+  const reportComplete = transform.file((file) => {
     if (file.hash) {
       done.push(file.hash)
     }
-    next(null, file)
+    return file
   })
 
-  const triage = through({objectMode: true}, function (file: File, _, next) {
+  const triage = transform.file((file, {push, next}) => {
     if (!file.hash) {
       log.debug('File does not have hash! ' + file.path)
       return next()
@@ -35,7 +33,7 @@ export function createWorkOptimizer() {
 
     todo.push(file.hash)
 
-    this.push(file)
+    push(file)
 
     next()
   })

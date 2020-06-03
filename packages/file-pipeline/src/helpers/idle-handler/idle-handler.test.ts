@@ -1,11 +1,12 @@
-import {createIdleHandler} from './idle-handler'
-
-import {to, pipeline, through} from '../streams'
+import {createIdleHandler} from '.'
+import {pipeline, through} from '../../streams'
+import {testStreamItems} from '../../test-utils'
+import {IDLE, READY} from '../../events'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe('idlehander', () => {
-  it('should fire the idle event', async (done) => {
+  it('should fire the idle event', async () => {
     // TODO: work out a better way to tests streams
 
     // Setup an input stream
@@ -13,24 +14,12 @@ describe('idlehander', () => {
       next(null, ev)
     })
 
-    // Setup a logger
-    const log: string[] = []
-    const logger = to.obj(function (evt, _, next) {
-      // If end
-      if (evt === 'end') {
-        expect(log).toEqual([{type: 'READY'}, {type: 'IDLE'}, {type: 'IDLE'}])
-        done()
-        next()
-        return
-      }
-
-      // log the event
-      log.push(evt)
-      next()
+    const bus = through({objectMode: true}, (ev, __, next) => {
+      next(null, ev)
     })
 
     // setup the test pipeline
-    const idleHandler = createIdleHandler(logger, 100)
+    const idleHandler = createIdleHandler(bus, 100)
     pipeline(input, idleHandler.stream)
 
     const arr = [1, 2, 3, 4]
@@ -41,13 +30,12 @@ describe('idlehander', () => {
     for (const item of arr) {
       input.write(item)
     }
-
+    input.write('ready')
     await sleep(150)
     for (const item of arr) {
       input.write(item)
     }
 
-    input.end()
-    logger.write('end')
+    await testStreamItems(bus, [{type: IDLE}, {type: READY}, {type: IDLE}], (a) => a)
   })
 })
