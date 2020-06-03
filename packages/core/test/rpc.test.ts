@@ -1,4 +1,4 @@
-import {rpc, isomorphicRpc} from '@blitzjs/core'
+import {executeRpcCall, getIsomorphicRpcHandler} from '@blitzjs/core'
 
 declare global {
   namespace NodeJS {
@@ -12,7 +12,7 @@ describe('RPC', () => {
   describe('HEAD', () => {
     it('warms the endpoint', async () => {
       expect.assertions(1)
-      await rpc.warm('/api/endpoint')
+      executeRpcCall.warm('/api/endpoint')
       expect(global.fetch).toBeCalled()
     })
   })
@@ -26,7 +26,7 @@ describe('RPC', () => {
         .mockImplementationOnce(() => Promise.resolve({json: () => ({result: 'result', error: null})}))
 
       const resolverSpy = jest.fn()
-      const rpcFn = isomorphicRpc(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
 
       try {
         const result = await rpcFn('/api/endpoint', {paramOne: 1234})
@@ -46,7 +46,7 @@ describe('RPC', () => {
         )
 
       const resolverSpy = jest.fn()
-      const rpcFn = isomorphicRpc(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
 
       try {
         expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
