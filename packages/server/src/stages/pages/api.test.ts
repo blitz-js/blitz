@@ -20,8 +20,8 @@ describe('createPagesPathTransformer', () => {
     },
     {
       name: 'ignores files outside of app',
-      input: normalize('thing/users/pages/api/one/two/pages/three.tsx'),
-      expected: normalize('thing/users/pages/api/one/two/pages/three.tsx'),
+      input: normalize('thing/users/api/one/two/pages/three.tsx'),
+      expected: normalize('thing/users/api/one/two/pages/three.tsx'),
     },
     {
       name: 'Ignore absolute paths',
