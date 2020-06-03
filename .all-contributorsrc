@@ -597,6 +597,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "MykalMachon",
+      "name": "Mykal Machon",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7844994?v=4",
+      "profile": "http://mykalmachon.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

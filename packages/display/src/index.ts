@@ -117,6 +117,14 @@ const variable = (val: any) => {
   return chalk.cyan.bold(`${val}`)
 }
 
+/**
+ * If the DEBUG env var is set this will write to the console
+ * @param str msg
+ */
+const debug = (str: string) => {
+  process.env.DEBUG && console.log(str)
+}
+
 export const log = {
   withBrand,
   withWarning,
@@ -133,4 +141,5 @@ export const log = {
   success,
   variable,
   info,
+  debug,
 }

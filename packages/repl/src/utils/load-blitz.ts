@@ -5,25 +5,26 @@ import pkgDir from 'pkg-dir'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
-export function getBlitzModulePaths() {
-  return [
-    ...globby.sync(
-      [
-        'app/**/{queries,mutations}/*.{js,ts,tsx}',
-        '**/utils/*.{js,ts,tsx}',
-        'jobs/**/*.{js,ts,tsx}',
-        'integrations/**/*.{js,ts,tsx}',
-      ],
-      {cwd: projectRoot, gitignore: true},
-    ),
-    'db',
-  ].map((p) => path.join(projectRoot, p))
+export async function getBlitzModulePaths() {
+  const paths = await globby(
+    [
+      'app/**/{queries,mutations}/*.{js,ts,tsx}',
+      '**/utils/*.{js,ts,tsx}',
+      'jobs/**/*.{js,ts,tsx}',
+      'integrations/**/*.{js,ts,tsx}',
+    ],
+    {cwd: projectRoot, gitignore: true},
+  )
+  paths.push('db')
+
+  return [...paths.map((p) => path.join(projectRoot, p))]
 }
 
-export const loadBlitz = () => {
+export const loadBlitz = async () => {
+  const paths = await getBlitzModulePaths()
   return Object.assign(
     {},
-    ...getBlitzModulePaths().map((modulePath) => {
+    ...paths.map((modulePath) => {
       let name = path.parse(modulePath).name
       if (name === 'index') {
         const dirs = path.dirname(modulePath).split(path.sep)
