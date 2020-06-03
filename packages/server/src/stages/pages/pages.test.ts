@@ -1,38 +1,72 @@
-import {normalize} from 'path'
-import {pagesPathTransformer} from '.'
+import {createStagePages} from '.'
+import through2 from 'through2'
+import File from 'vinyl'
+import {FileCache} from '@blitzjs/file-pipeline'
+import {StageConfig, StageArgs} from '@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types'
+import {DuplicatePathError} from './errors'
 
-describe('createPagesPathTransformer', () => {
-  const tests = [
-    {
-      name: 'extracts paths folder to the root in a basic transformation',
-      input: normalize('app/users/pages/one/two/three.tsx'),
-      expected: normalize('pages/one/two/three.tsx'),
+function getStreamWithInputCache(entries: string[]) {
+  const config: StageConfig = {dest: '', cwd: '', ignore: [], include: [], src: '', watch: false}
+  const args: StageArgs = {
+    getInputCache() {
+      return ({
+        toPaths() {
+          return entries
+        },
+      } as any) as FileCache
     },
-    {
-      name: 'handles leading /',
-      input: normalize('/app/users/pages/one/two/three.tsx'),
-      expected: normalize('pages/one/two/three.tsx'),
-    },
-    {
-      name: 'handles nested pages folders',
-      input: normalize('app/users/pages/one/two/pages/three.tsx'),
-      expected: normalize('pages/one/two/pages/three.tsx'),
-    },
-    {
-      name: 'ignores files outside of app',
-      input: normalize('thing/users/pages/one/two/pages/three.tsx'),
-      expected: normalize('thing/users/pages/one/two/pages/three.tsx'),
-    },
-    {
-      name: 'extracts paths folder to the root in a basic transformation',
-      input: normalize('/User/foo/bar/app/users/pages/one/two/three.tsx'),
-      expected: normalize('pages/one/two/three.tsx'),
-    },
-  ]
+    bus: through2.obj(),
+    input: through2.obj(),
+    config,
+  }
+  return createStagePages(args).stream
+}
 
-  tests.forEach(({name, input, expected}) => {
-    it(name, () => {
-      expect(pagesPathTransformer(input)).toEqual(expected)
+describe('createStagePages', () => {
+  it('should throw an error when there are duplicates', (done) => {
+    const stream = getStreamWithInputCache(['app/api/foo', 'app/api/foo'])
+    stream.on('error', (err) => {
+      expect(err.message).toContain('conflicting api routes:')
+      done()
     })
+
+    // The check happens while files are being consumed so we need to pass a file
+    stream.write(new File({path: 'foo', content: 'bar'}))
+  })
+
+  it('should throw an error when there are duplicate pages', (done) => {
+    const stream = getStreamWithInputCache(['app/foo/pages/bar', 'app/pages/bar', 'pages/bar'])
+    stream.on('error', (err) => {
+      expect(err.message).toContain('conflicting page routes:')
+      expect(err.paths).toEqual([['app/foo/pages/bar', 'app/pages/bar', 'pages/bar']])
+      done()
+    })
+
+    // The check happens while files are being consumed so we need to pass a file
+    stream.write(new File({path: 'foo', content: 'bar'}))
+  })
+
+  it('should throw an error when there are duplicate api routes from both in pages and out', (done) => {
+    const stream = getStreamWithInputCache(['app/pages/api/bar', 'app/api/bar'])
+    stream.on('error', (err: DuplicatePathError) => {
+      expect(err.message).toContain('conflicting api routes:')
+      expect(err.paths).toEqual([['app/pages/api/bar', 'app/api/bar']])
+      done()
+    })
+
+    // The check happens while files are being consumed so we need to pass a file
+    stream.write(new File({path: 'foo', content: 'bar'}))
+  })
+
+  it('should not throw an error when there are nested api routes', (done) => {
+    const stream = getStreamWithInputCache(['app/pages/foo/api/bar', 'app/api/bar'])
+    stream.on('error', () => {
+      expect(true).toBe('This should not have been called')
+      done()
+    })
+
+    // The check happens while files are being consumed so we need to pass a file
+    stream.write(new File({path: 'foo', content: 'bar'}))
+    setImmediate(done)
   })
 })
