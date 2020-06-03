@@ -79,7 +79,7 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
-  const stream = through.obj((file: File, _, next) => {
+  const stream: NodeJS.ReadWriteStream = through.obj((file: File, _, next) => {
     const entries = getInputCache().toPaths()
 
     const duplicates = findDuplicates(entries, fullTransformer)
