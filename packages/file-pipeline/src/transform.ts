@@ -43,6 +43,7 @@ export type TransformFilesFn = (
 const defaultStreamOptions: DuplexOptions = {
   readableObjectMode: true,
   writableObjectMode: true,
+  objectMode: true,
 }
 
 const defaultTransformFn = (f: any) => f
@@ -52,7 +53,6 @@ export function transform(
   options: DuplexOptions = defaultStreamOptions,
 ) {
   const mergedOpts = Object.assign({}, defaultStreamOptions, options)
-
   return through(mergedOpts, async function (item: PipelineItem, _, next: StreamApi['next']) {
     processInput({transformFn, next, self: this, item})
   })
