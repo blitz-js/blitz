@@ -7,8 +7,6 @@ import {FILE_DELETED, FILE_WRITTEN} from '../../events'
 
 describe('writer', () => {
   it('should write files', async () => {
-    // TODO: work out a better way to tests streams
-
     // Setup an input stream
 
     const bus = through({objectMode: true})
