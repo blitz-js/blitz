@@ -4,7 +4,7 @@ import {ERROR_THROWN} from '@blitzjs/file-pipeline'
 
 export type Event<T> = {type: string; payload: T}
 
-type Error = DuplicatePathError | NestedRouteError
+type Error = DuplicatePathError
 
 export function handleErrors(bus: Writable) {
   bus.on('data', (event: Event<Error>) => {
@@ -12,11 +12,6 @@ export function handleErrors(bus: Writable) {
     const err = event.payload as Error
     if (err instanceof DuplicatePathError) {
       renderDuplicatePathError(err)
-      return
-    }
-
-    if (err instanceof NestedRouteError) {
-      renderNestedRouteError(err)
       return
     }
   })
@@ -40,25 +35,4 @@ export function renderDuplicatePathError(err: DuplicatePathError) {
   err.paths.forEach((page) => {
     page.forEach((path) => console.log(renderErrorMessage(removeCwd(path), err.pathType)))
   })
-}
-
-export class NestedRouteError extends Error {
-  name = 'NestedRouteError'
-  constructor(public message: string, public secondary: string, public routes: string[]) {
-    super(message)
-  }
-}
-
-export function renderNestedRouteError(err: NestedRouteError) {
-  log.error(err.message)
-
-  process.stdout.write('\n')
-
-  err.routes.forEach((route) => {
-    console.log(`- ${removeCwd(route)}`)
-  })
-
-  process.stdout.write('\n')
-
-  log.error(err.secondary)
 }

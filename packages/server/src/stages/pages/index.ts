@@ -3,7 +3,7 @@ import File from 'vinyl'
 import {getDuplicatePaths, absolutePathTransform} from '../utils'
 import {through} from '../../streams'
 import {Stage} from '@blitzjs/file-pipeline'
-import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
+import {handleErrors, DuplicatePathError} from './errors'
 
 /**
  * Returns a Stage to assemble NextJS `/pages` folder from within
@@ -44,32 +44,12 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
       return next(err)
     }
 
-    const nestedApiRoutes = getNestedApiRoutes(entries)
-    if (nestedApiRoutes.length > 0) {
-      const message =
-        nestedApiRoutes.length === 1
-          ? 'Warning: You have tried to put an api route inside a pages directory:'
-          : 'Warning: You have tried to put api routes inside a pages directory:'
-
-      const secondary = `API routes should be in their own 'api/' folder as a sibling of 'pages/':
-- Examples: app/api/, app/products/api/
-`
-
-      const err = new NestedRouteError(message, secondary, nestedApiRoutes)
-
-      return next(err)
-    }
-
     file.path = apiTransformer(pagesTransformer(file.path))
 
     next(null, file)
   })
 
   return {stream}
-}
-
-export function getNestedApiRoutes(entries: string[]) {
-  return entries.filter((page) => page.match(/^(.*[\\/])?app[\\/](.*)pages[\\/]api[\\/]?/))
 }
 
 export function pagesPathTransformer(path: string) {

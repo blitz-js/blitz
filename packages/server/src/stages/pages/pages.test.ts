@@ -1,5 +1,5 @@
 import {normalize} from 'path'
-import {pagesPathTransformer, getNestedApiRoutes} from '.'
+import {pagesPathTransformer} from '.'
 
 describe('createPagesPathTransformer', () => {
   const tests = [
@@ -34,26 +34,5 @@ describe('createPagesPathTransformer', () => {
     it(name, () => {
       expect(pagesPathTransformer(input)).toEqual(expected)
     })
-  })
-})
-
-describe('getNestedApiRoutes', () => {
-  it('should identify nested pages/api routes in entries', () => {
-    expect(getNestedApiRoutes(['/foo/bar/baz/app/buzz/api/thing'])).toEqual([])
-    expect(
-      getNestedApiRoutes([
-        '/foo/bar/baz/app/pages/buzz/api/thing',
-        '/foo/bar/baz/app/buzz/pages/thing',
-        '/foo/bar/baz/app/buzz/pages/api/thing',
-        '/foo/bar/baz/app/buzz/thing/pages/api/thing',
-      ]),
-    ).toEqual(['/foo/bar/baz/app/buzz/pages/api/thing', '/foo/bar/baz/app/buzz/thing/pages/api/thing'])
-
-    // Should not warn when /pages/api is not in /app folder
-    expect(getNestedApiRoutes(['/foo/bar/baz/pages/api/thing'])).toEqual([])
-    expect(getNestedApiRoutes(['app/pages/api/thing'])).toEqual(['app/pages/api/thing'])
-    expect(getNestedApiRoutes(['app/pages/thing/api/thing'])).toEqual([])
-    expect(getNestedApiRoutes(['/app/pages/api/thing'])).toEqual(['/app/pages/api/thing'])
-    expect(getNestedApiRoutes(['bapp/pages/api/thing'])).toEqual([])
   })
 })
