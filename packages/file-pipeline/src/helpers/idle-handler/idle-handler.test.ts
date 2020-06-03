@@ -7,8 +7,6 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe('idlehander', () => {
   it('should fire the idle event', async () => {
-    // TODO: work out a better way to tests streams
-
     // Setup an input stream
     const input = through({objectMode: true}, (ev, __, next) => {
       next(null, ev)

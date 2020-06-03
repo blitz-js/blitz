@@ -1,6 +1,4 @@
-// import {transformFiles} from '.'
 import through2 from 'through2'
-
 import {testStreamItems} from '../test-utils'
 import File from 'vinyl'
 import {transformFiles} from '.'

@@ -1,4 +1,3 @@
-// import {through} from '../streams'
 import {transform} from '../transform'
 import File from 'vinyl'
 import {isEvent} from '../utils'
