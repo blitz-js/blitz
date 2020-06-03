@@ -52,7 +52,6 @@ function toArray(nestedSet: Set<Set<string>>) {
 }
 
 // Retain rows where some items have yes and no items contain no
-// This can be shorter
 export function filterBy(entries: string[][], yes: string, no?: string) {
   return entries.filter((row) => {
     let rowContainsYes = false
