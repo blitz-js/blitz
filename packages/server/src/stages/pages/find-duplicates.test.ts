@@ -6,24 +6,20 @@ test('should filter by path', () => {
   expect(fullTransformer(normalize('app/foo/api/bar'))).toBe(normalize('pages/api/bar'))
 
   const dupes = findDuplicates(
-    [
-      normalize('app/foo/pages/api/bar'),
-      normalize('app/pages/api/bar'),
-      normalize('app/api/bar'),
-      normalize('pages/bar'),
-      normalize('app/ding/pages/bar'),
-    ],
+    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar', 'pages/bar', 'app/ding/pages/bar'].map(
+      normalize,
+    ),
     fullTransformer,
   )
 
   expect(dupes).toEqual([
-    [normalize('app/foo/pages/api/bar'), normalize('app/pages/api/bar'), normalize('app/api/bar')],
-    [normalize('pages/bar'), normalize('app/ding/pages/bar')],
+    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar'].map(normalize),
+    ['pages/bar', 'app/ding/pages/bar'].map(normalize),
   ])
   expect(filterBy(dupes, 'api')).toEqual([
-    [normalize('app/foo/pages/api/bar'), normalize('app/pages/api/bar'), normalize('app/api/bar')],
+    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar'].map(normalize),
   ])
-  expect(filterBy(dupes, 'pages', 'api')).toEqual([[normalize('pages/bar'), normalize('app/ding/pages/bar')]])
+  expect(filterBy(dupes, 'pages', 'api')).toEqual([['pages/bar', 'app/ding/pages/bar'].map(normalize)])
 })
 
 test('filterBy', () => {
