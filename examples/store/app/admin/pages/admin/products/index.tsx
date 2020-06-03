@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { useQuery, Link } from "blitz"
 import getProducts from "app/products/queries/getProducts"
+import getProduct from "app/products/queries/getProduct"
 
 function ProductsList() {
   const [products] = useQuery(getProducts, { orderBy: { id: "desc" } })
@@ -10,7 +11,7 @@ function ProductsList() {
       {products.map((product) => (
         <li key={product.id}>
           <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
-            <a>{product.name}</a>
+            <a onMouseEnter={() => getProduct({ where: { id: product.id } })}>{product.name}</a>
           </Link>
         </li>
       ))}

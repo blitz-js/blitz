@@ -57,9 +57,9 @@ export function isRpcPath(filePath: string) {
 }
 
 const isomorphicRpcTemplate = (resolverPath: string) => `
-import {isomorphicRpc} from '@blitzjs/core'
+import {getIsomorphicRpcHandler} from '@blitzjs/core'
 import resolver from '${resolverPath}'
-export default isomorphicRpc(resolver, '${resolverPath}') as typeof resolver
+export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof resolver
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
@@ -68,7 +68,7 @@ import {rpcHandler} from '@blitzjs/server'
 import resolver from '${resolverPath}'
 let db
 try {
-  db = require('db')
+  db = require('db').default
 }catch(err){}
 export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => db && db.connect())
 `
