@@ -1,8 +1,6 @@
 import {join} from 'path'
-import File from 'vinyl'
 import {absolutePathTransform} from '../utils'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 import {handleErrors, DuplicatePathError} from './errors'
 import flow from 'lodash/flow'
 
