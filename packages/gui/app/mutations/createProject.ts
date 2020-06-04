@@ -1,4 +1,5 @@
 import {existsSync} from 'fs'
+import hasbin from 'hasbin'
 
 import {AppGenerator} from '@blitzjs/generator'
 import db, {ProjectCreateArgs} from 'db'
@@ -20,7 +21,7 @@ const createProject = async ({data}: CreateProjectInput) => {
     appName: name,
     dryRun: false,
     useTs: true,
-    yarn: true,
+    yarn: hasbin.sync('yarn'),
     version: pkg.version,
     skipInstall: false,
   })
