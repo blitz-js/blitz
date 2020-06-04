@@ -12,3 +12,5 @@ export type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infe
  * Get the return type of a function which returns a Promise.
  */
 export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
+
+export type QueryFn = (...args: any) => Promise<any>

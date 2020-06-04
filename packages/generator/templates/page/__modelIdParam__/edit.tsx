@@ -10,7 +10,7 @@ export const Edit__ModelName__: React.FC = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
   }
-  const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [__modelName__, {mutate}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
   return (
     <div>
@@ -25,6 +25,7 @@ export const Edit__ModelName__: React.FC = () => {
               where: {id: __modelName__.id},
               data: {name: 'MyNewName'},
             })
+            mutate(updated)
             alert('Success!' + JSON.stringify(updated))
             router.push(
               process.env.parentModel
