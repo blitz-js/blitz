@@ -33,7 +33,7 @@ describe('agnosticSource', () => {
     })
   })
 
-  test('when watching = true', async () => {
+  test.skip('when watching = true', async () => {
     const expected = [resolve(cwd, 'one'), resolve(cwd, 'two'), 'ready', resolve(cwd, 'three')]
     const {stream} = agnosticSource({ignore: [], include: ['**/*'], cwd, watch: true})
 
