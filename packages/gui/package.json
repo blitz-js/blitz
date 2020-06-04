@@ -10,11 +10,11 @@
     "@prisma/client": "2.0.0-beta.7",
     "blitz": "0.12.0",
     "fast-glob": "3.2.2",
+    "hasbin": "1.2.3",
     "heroicons-react": "^1.0.15",
     "react": "experimental",
     "react-dom": "experimental",
-    "typescript": "3.9.3",
-    "hasbin": "1.2.3"
+    "typescript": "3.9.3"
   },
   "devDependencies": {
     "@tailwindcss/ui": "0.3.0",
