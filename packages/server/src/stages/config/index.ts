@@ -2,7 +2,7 @@ import {pathExistsSync} from 'fs-extra'
 import {resolve} from 'path'
 import File from 'vinyl'
 
-import {through} from '../../streams'
+import {transform} from '@blitzjs/file-pipeline'
 import {Stage} from '@blitzjs/file-pipeline'
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
@@ -50,8 +50,8 @@ module.exports = withBlitz(config);
   }
 
   // No need to filter yet
-  const stream = through({objectMode: true}, (file: File, _, next) => {
-    if (!isNextConfigPath(file.path)) return next(null, file)
+  const stream = transform.file((file) => {
+    if (!isNextConfigPath(file.path)) return file
     // Vercel now adds configuration needed for Now, like serverless target,
     // so we need to keep and use that
     if (isNowBuild()) {
@@ -74,7 +74,7 @@ module.exports = withBlitz({...config, ...vercelConfig});
       `)
     }
 
-    next(null, file)
+    return file
   })
 
   return {stream}

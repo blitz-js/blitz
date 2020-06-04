@@ -3,7 +3,7 @@ import chalk from 'chalk'
 
 import {isBlitzRoot, IsBlitzRootError} from './utils/is-blitz-root'
 
-const whitelistGlobal = ['new']
+const whitelistGlobal = ['-h', '--help', 'help', 'new']
 
 export const hook: Hook<'init'> = async function (options) {
   const {id} = options

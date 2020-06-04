@@ -1,5 +1,15 @@
-import {Readable, Writable} from 'stream'
+import {Writable} from 'stream'
 import {FileCache} from './helpers/file-cache'
+import File from 'vinyl'
+
+export type EventedFile = {
+  event: 'add' | 'change' | 'unlink' | 'unlinkDir'
+  hash: string
+} & File
+
+export type PipelineEvent = string
+
+export type PipelineItem = File | EventedFile | PipelineEvent
 
 /**
  * Configuration for Stages
@@ -29,6 +39,6 @@ export type StageArgs = {
 export type Stage = (
   a: StageArgs,
 ) => {
-  stream: Readable
+  stream: NodeJS.ReadWriteStream
   ready?: Record<string, any>
 } & Record<string, any>
