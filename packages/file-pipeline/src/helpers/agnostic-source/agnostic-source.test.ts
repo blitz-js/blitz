@@ -25,6 +25,7 @@ describe('agnosticSource', () => {
     const log: any[] = []
     stream.on('data', (data) => {
       if (data === 'ready') {
+        stream.end()
         expect(log).toEqual(expected)
         return done()
       }
@@ -43,5 +44,6 @@ describe('agnosticSource', () => {
     }, 800)
 
     await testStreamItems(stream, expected, logItem)
+    stream.end()
   })
 })
