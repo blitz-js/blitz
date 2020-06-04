@@ -1,6 +1,7 @@
-import {through} from '../streams'
-import {READY, IDLE} from '../events'
+import {through} from '../../streams'
+import {READY, IDLE} from '../../events'
 import {Writable} from 'stream'
+import {isEvent} from '../../utils'
 
 /**
  * Idle handler will fire events when the stream is idle
@@ -8,17 +9,11 @@ import {Writable} from 'stream'
  *
  * The first time it fires it will also fire a ready event
  */
-export const createIdleHandler = (reporter: Writable, delay: number = 500) => {
+export const createIdleHandler = (bus: Writable, delay: number = 500) => {
   let timeout: NodeJS.Timeout
-  let firstTime = true
 
   const handler = () => {
-    if (firstTime) {
-      reporter.write({type: READY})
-      firstTime = false
-    }
-
-    reporter.write({type: IDLE})
+    bus.write({type: IDLE})
   }
 
   function resetTimeout() {
@@ -31,6 +26,9 @@ export const createIdleHandler = (reporter: Writable, delay: number = 500) => {
   }
 
   const stream = through({objectMode: true}, function (f, _, next) {
+    if (isEvent(f) && f === 'ready') {
+      bus.write({type: READY})
+    }
     resetTimeout()
     next(null, f)
   })
