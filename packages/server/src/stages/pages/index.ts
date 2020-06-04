@@ -1,8 +1,6 @@
 import {join} from 'path'
-import File from 'vinyl'
 import {absolutePathTransform} from '../utils'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 import {handleErrors, DuplicatePathError} from './errors'
 import flow from 'lodash/flow'
 
@@ -78,7 +76,7 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
-  const stream: NodeJS.ReadWriteStream = through.obj((file: File, _, next) => {
+  const stream: NodeJS.ReadWriteStream = transform.file((file) => {
     const entries = getInputCache().toPaths()
 
     const duplicates = findDuplicates(entries, fullTransformer)
@@ -87,30 +85,22 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
     const duplicatePages = filterBy(duplicates, 'pages', 'api')
 
     if (duplicatePages.length > 0) {
-      const err = new DuplicatePathError(
+      return new DuplicatePathError(
         'Warning: You have created conflicting page routes:',
         'pages',
         duplicatePages,
       )
-
-      return next(err)
     }
 
     // Check for duplicate api entries
     const duplicateApi = filterBy(duplicates, 'api')
     if (duplicateApi.length > 0) {
-      const err = new DuplicatePathError(
-        'Warning: You have created conflicting api routes:',
-        'api',
-        duplicateApi,
-      )
-
-      return next(err)
+      return new DuplicatePathError('Warning: You have created conflicting api routes:', 'api', duplicateApi)
     }
 
     file.path = apiTransformer(pagesTransformer(file.path))
 
-    next(null, file)
+    return file
   })
 
   return {stream}
