@@ -4,7 +4,7 @@ import {
   InfiniteQueryOptions,
 } from 'react-query'
 import {PromiseReturnType, InferUnaryParam, QueryFn} from './types'
-import {queryCacheFunctions, QueryCacheFunctions} from './utils/query-cache'
+import {getQueryCacheFunctions, QueryCacheFunctions} from './utils/query-cache'
 import {RpcFunction} from './rpc'
 
 type RestQueryResult<T extends QueryFn> = Omit<
@@ -45,7 +45,7 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...queryCacheFunctions((queryFn as any).cacheKey),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn.cacheKey as string),
   }
 
   return [data as PromiseReturnType<T>[], rest as RestQueryResult<T>]

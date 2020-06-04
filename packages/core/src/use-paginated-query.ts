@@ -1,6 +1,6 @@
 import {usePaginatedQuery as usePaginatedReactQuery, PaginatedQueryResult, QueryOptions} from 'react-query'
 import {PromiseReturnType, InferUnaryParam, QueryFn} from './types'
-import {QueryCacheFunctions, queryCacheFunctions} from './utils/query-cache'
+import {QueryCacheFunctions, getQueryCacheFunctions} from './utils/query-cache'
 import {RpcFunction} from './rpc'
 
 type RestQueryResult<T extends QueryFn> = Omit<PaginatedQueryResult<PromiseReturnType<T>>, 'resolvedData'> &
@@ -38,7 +38,7 @@ export function usePaginatedQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...queryCacheFunctions((queryFn as any).cacheKey),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn.cacheKey as string),
   }
 
   return [resolvedData as PromiseReturnType<T>, rest as RestQueryResult<T>]

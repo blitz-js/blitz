@@ -13,6 +13,7 @@ function Product() {
       product={product}
       onSuccess={(updatedProduct) => {
         mutate(updatedProduct)
+        router.push("/admin/products")
       }}
     />
   )
