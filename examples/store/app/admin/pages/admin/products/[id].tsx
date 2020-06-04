@@ -6,7 +6,7 @@ import ProductForm from "app/products/components/ProductForm"
 function Product() {
   const router = useRouter()
   const { id } = useParams()
-  const [product { mutate }] = useQuery(getProduct, { where: { id: Number(id) } })
+  const [product, { mutate }] = useQuery(getProduct, { where: { id: Number(id) } })
 
   return (
     <ProductForm
