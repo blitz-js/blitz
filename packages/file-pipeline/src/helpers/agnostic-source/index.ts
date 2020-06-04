@@ -43,6 +43,23 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
 
 type SourceConfig = {cwd: string; include: string[]; ignore: string[]; watch: boolean}
 
+function getWatcher(watching: boolean, cwd: string, include: string[], ignore: string[]) {
+  if (watching) {
+    return watch(include, {
+      cwd,
+      ignored: ignore,
+      persistent: true,
+      ignoreInitial: true,
+      alwaysStat: true,
+    })
+  }
+
+  return {
+    stream: through.obj(),
+    fswatcher: {close() {}},
+  }
+}
+
 /**
  * A stage that will provide agnostic file input based on a set of globs.
  * Initially it will start as a vinyl stream and if the watch config is
@@ -50,24 +67,15 @@ type SourceConfig = {cwd: string; include: string[]; ignore: string[]; watch: bo
  * @param config Config object
  */
 export function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
-  const noop = through({objectMode: true}, () => {})
-
   const vinylFsStream = vfs.src([...include, ...ignore.map((a) => '!' + a)], {
     buffer: true,
     read: true,
     cwd,
   })
-  const watcher = watch(include, {
-    cwd,
-    ignored: ignore,
-    persistent: true,
-    ignoreInitial: true,
-    alwaysStat: true,
-  })
 
-  const watchStream = watching ? watcher.stream : noop
+  const watcher = getWatcher(watching, cwd, include, ignore)
 
-  const stream = mergeStream(vinylFsStream, watchStream) as NodeJS.ReadWriteStream
+  const stream = mergeStream(vinylFsStream, watcher.stream) as NodeJS.ReadWriteStream
 
   vinylFsStream.on('end', () => {
     // Send ready event when our initial scan of the folder is done
