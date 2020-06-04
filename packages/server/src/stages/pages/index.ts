@@ -1,8 +1,6 @@
 import {join} from 'path'
-import File from 'vinyl'
 import {getDuplicatePaths, absolutePathTransform} from '../utils'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
 
 /**
@@ -17,31 +15,23 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
-  const stream = through.obj((file: File, _, next) => {
+  const stream = transform.file((file) => {
     const entries = getInputCache().toPaths()
 
     // Check for duplicate pages entries
     const duplicatePages = getDuplicatePaths(entries, 'pages')
     if (duplicatePages.length > 0) {
-      const err = new DuplicatePathError(
+      return new DuplicatePathError(
         'Warning: You have created conflicting page routes:',
         'pages',
         duplicatePages,
       )
-
-      return next(err)
     }
 
     // Check for duplicate api entries
     const duplicateApi = getDuplicatePaths(entries, 'api')
     if (duplicateApi.length > 0) {
-      const err = new DuplicatePathError(
-        'Warning: You have created conflicting api routes:',
-        'api',
-        duplicateApi,
-      )
-
-      return next(err)
+      return new DuplicatePathError('Warning: You have created conflicting api routes:', 'api', duplicateApi)
     }
 
     const allPages = entries.filter((page) => page.includes('pages'))
@@ -58,12 +48,12 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
 
       const err = new NestedRouteError(message, secondary, nestedApiRoutes)
 
-      return next(err)
+      return err
     }
 
     file.path = apiTransformer(pagesTransformer(file.path))
 
-    next(null, file)
+    return file
   })
 
   return {stream}
