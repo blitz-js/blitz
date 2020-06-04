@@ -70,7 +70,7 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   const stream = mergeStream(vinylFsStream, watchStream) as NodeJS.ReadWriteStream
 
   vinylFsStream.on('end', () => {
-    if (watching) stream.write('ready')
+    stream.write('ready')
   })
 
   stream.on('end', () => {

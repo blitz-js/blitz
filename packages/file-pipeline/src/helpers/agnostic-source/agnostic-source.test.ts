@@ -19,10 +19,17 @@ describe('agnosticSource', () => {
     }
   })
 
-  test('when watching = false', async () => {
+  test('when watching = false', (done) => {
     const expected = [resolve(cwd, 'one'), resolve(cwd, 'two')]
     const {stream} = agnosticSource({ignore: [], include: ['**/*'], cwd, watch: false})
-    await testStreamItems(stream, expected, logItem)
+    const log: any[] = []
+    stream.on('data', (data) => {
+      if (data === 'ready') {
+        expect(log).toEqual(expected)
+        return done()
+      }
+      log.push(data.path)
+    })
   })
 
   test('when watching = true', async () => {
