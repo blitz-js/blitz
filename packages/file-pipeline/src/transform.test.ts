@@ -4,6 +4,8 @@ import {PipelineItem} from 'types'
 import {isFile, isEvent} from './utils'
 import File from 'vinyl'
 import through2 from 'through2'
+import {normalize} from 'path'
+
 describe('transform', () => {
   describe('when it uses the files filter', () => {
     const newFile = (path: string) => new File({event: 'add', path})
@@ -39,7 +41,7 @@ describe('transform', () => {
           {path: '/one', event: 'add'},
           {path: '/two', event: 'add'},
           {path: '/three', event: 'add'},
-        ],
+        ].map((obj) => ({...obj, path: normalize(obj.path)})), // vinyl on windoze...
         logger,
       )
     })

@@ -30,7 +30,8 @@ jobs:
     name: Build & Test
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        # os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -54,6 +55,6 @@ jobs:
         env:
           CI: true
       - name: Test Blitz Packages
-        run: yarn test
+        run: cd packages/file-pipeline && yarn test
         env:
           CI: true
