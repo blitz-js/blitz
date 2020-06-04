@@ -70,6 +70,7 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   const stream = mergeStream(vinylFsStream, watchStream) as NodeJS.ReadWriteStream
 
   vinylFsStream.on('end', () => {
+    // Send ready event when our initial scan of the folder is done
     stream.write('ready')
   })
 
