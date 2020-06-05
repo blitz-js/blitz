@@ -11,49 +11,63 @@ on:
       - canary
 
 jobs:
-  check_install_time:
-    name: Check install time
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.16.1'
-      - name: Test Install time
-        run: |
-          cd ../ && mkdir test && cd test
-          yarn add file:../blitz/packages/blitz --non-interactive | tee out.txt
-          cat out.txt | ../blitz/.github/checkInstallTime.js
+  # check_install_time:
+  #   name: Check install time
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.16.1"
+  #     - name: Test Install time
+  #       run: |
+  #         cd ../ && mkdir test && cd test
+  #         yarn add file:../blitz/packages/blitz --non-interactive | tee out.txt
+  #         cat out.txt | ../blitz/.github/checkInstallTime.js
 
-  build_and_test:
-    name: Build & Test
+  # build_and_test:
+  #   name: Build & Test
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.16.1"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - name: Cache Node.js modules
+  #       id: yarn-cache
+  #       uses: actions/cache@v1
+  #       with:
+  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile --silent
+  #       env:
+  #         CI: true
+  #     - name: Test Blitz Packages
+  #       run: yarn test
+  #       env:
+  #         CI: true
+  test_watcher:
+    name: Test Watchers
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: '12.16.1'
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
-        id: yarn-cache
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
-      - name: Test Blitz Packages
-        run: yarn test
-        env:
-          CI: true
+      - name: Check watchers
+        id: check-watchers
+        run: cat /etc/sysctl.conf
