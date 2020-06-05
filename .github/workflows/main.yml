@@ -54,10 +54,8 @@ jobs:
         env:
           CI: true
       - name: Setup kernel to increase watchers
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-          fi
+        if: matrix.os == 'windows-latest'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
         run: yarn test
         env:
