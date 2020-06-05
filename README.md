@@ -22,7 +22,7 @@
 <h1 align="center">The Fullstack React Framework</h1>
 
 <h3 align="center">Built on Next.js — Inspired by Ruby on Rails — New Fullstack Data Layer</h3>
-
+<h3 align="center"><a href="https://blitzjs.com" target="_blank">Read the Documentation</a></h3>
 <br>
 
 New “no-API” data layer **lets you import server code into your React components** instead of having to fetch from an API.
@@ -30,10 +30,6 @@ New “no-API” data layer **lets you import server code into your React compon
 Includes everything you need for production apps. **Everything end-to-end from the database to the frontend.**
 
 Blitz brings back the **simplicity and conventions** of server-rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering!
-
-<br>
-
-<h3 align="center"><a href="https://blitzjs.com" target="_blank">View the Documentation at Blitzjs.com</a></h3>
 
 <br>
 
