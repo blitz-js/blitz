@@ -34,8 +34,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Setup kernel to increase watchers
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -55,6 +53,8 @@ jobs:
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
+      - name: Setup kernel to increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
         run: yarn test
         env:
