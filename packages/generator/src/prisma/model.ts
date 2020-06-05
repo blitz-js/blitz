@@ -63,9 +63,9 @@ export class Model {
   private getFields() {
     return stringifyFieldsForPrinting([
       this.getIdField(),
-      ...this.fields,
       this.getCreatedAtField(),
       this.getUpdatedAtField(),
+      ...this.fields,
     ])
       .map((field) => `\n  ${field}`)
       .join('')

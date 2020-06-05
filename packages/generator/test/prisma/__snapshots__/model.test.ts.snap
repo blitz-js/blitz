@@ -3,12 +3,12 @@
 exports[`Prisma Model generates a proper model 1`] = `
 "model User {
   id               Int        @default(autoincrement()) @id
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
   email            String     @unique
   updated          DateTime   @updatedAt
   recentLogins     DateTime[] 
   twoFactorEnabled Boolean    
   twoFactorMethod  String?    
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
 }"
 `;
