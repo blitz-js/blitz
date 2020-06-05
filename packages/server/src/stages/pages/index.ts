@@ -1,9 +1,68 @@
 import {join} from 'path'
-import File from 'vinyl'
-import {getDuplicatePaths, absolutePathTransform} from '../utils'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
-import {handleErrors, DuplicatePathError, NestedRouteError} from './errors'
+import {absolutePathTransform} from '../utils'
+import {Stage, transform} from '@blitzjs/file-pipeline'
+import {handleErrors, DuplicatePathError} from './errors'
+import flow from 'lodash/flow'
+
+export function pagesPathTransformer(path: string) {
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+)$/
+  return (regex.exec(path) || [])[1] || path
+}
+
+export function apiPathTransformer(path: string) {
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
+  const matchedPath = (regex.exec(path) || [])[1]
+  return matchedPath ? join('pages', matchedPath) : path
+}
+
+export const fullTransformer = flow(pagesPathTransformer, apiPathTransformer)
+
+// Derived from
+// https://codereview.stackexchange.com/questions/203102/count-duplicates-in-a-javascript-array
+export function findDuplicates(original: string[], transformer: (a: string) => string = (a) => a) {
+  const uniqueItems = new Set<string>()
+  const duplicates = new Set<string>()
+  const inputMap = new Map<string, Set<string>>()
+  const duplicateInput = new Set<Set<string>>()
+
+  for (const value of original) {
+    const transformed = transformer(value)
+
+    if (!inputMap.has(transformed)) {
+      inputMap.set(transformed, new Set<string>())
+    }
+
+    const transformedLookup = inputMap.get(transformed)!
+    transformedLookup.add(value)
+
+    if (uniqueItems.has(transformed)) {
+      duplicates.add(transformed)
+      duplicateInput.add(transformedLookup)
+      uniqueItems.delete(transformed)
+    } else {
+      uniqueItems.add(transformed)
+    }
+  }
+  return toArray(duplicateInput)
+}
+function toArray(nestedSet: Set<Set<string>>) {
+  return Array.from(nestedSet).map((set) => Array.from(set))
+}
+
+// Retain rows where some items have yes and no items contain no
+export function filterBy(entries: string[][], yes: string, no?: string) {
+  return entries.filter((row) => {
+    let rowContainsYes = false
+    let rowContainsNo = false
+    for (let item of row) {
+      rowContainsYes = rowContainsYes || item.indexOf(yes) > -1
+      if (typeof no === 'string') {
+        rowContainsNo = rowContainsNo || item.indexOf(no) > -1
+      }
+    }
+    return rowContainsYes && !rowContainsNo
+  })
+}
 
 /**
  * Returns a Stage to assemble NextJS `/pages` folder from within
@@ -17,66 +76,32 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
   const pagesTransformer = absolutePathTransform(src)(pagesPathTransformer)
   const apiTransformer = absolutePathTransform(src)(apiPathTransformer)
 
-  const stream = through.obj((file: File, _, next) => {
+  const stream: NodeJS.ReadWriteStream = transform.file((file) => {
     const entries = getInputCache().toPaths()
 
+    const duplicates = findDuplicates(entries, fullTransformer)
+
     // Check for duplicate pages entries
-    const duplicatePages = getDuplicatePaths(entries, 'pages')
+    const duplicatePages = filterBy(duplicates, 'pages', 'api')
+
     if (duplicatePages.length > 0) {
-      const err = new DuplicatePathError(
+      return new DuplicatePathError(
         'Warning: You have created conflicting page routes:',
         'pages',
         duplicatePages,
       )
-
-      return next(err)
     }
 
     // Check for duplicate api entries
-    const duplicateApi = getDuplicatePaths(entries, 'api')
+    const duplicateApi = filterBy(duplicates, 'api')
     if (duplicateApi.length > 0) {
-      const err = new DuplicatePathError(
-        'Warning: You have created conflicting api routes:',
-        'api',
-        duplicateApi,
-      )
-
-      return next(err)
-    }
-
-    const allPages = entries.filter((page) => page.includes('pages'))
-    const nestedApiRoutes = allPages.filter((page) => page.includes('/pages/api'))
-    if (nestedApiRoutes.length > 0) {
-      const message =
-        nestedApiRoutes.length === 1
-          ? 'Warning: You have tried to put an api route inside a pages directory:'
-          : 'Warning: You have tried to put api routes inside a pages directory:'
-
-      const secondary = `API routes should be in their own 'api/' folder as a sibling of 'pages/':
-- Examples: app/api/, app/products/api/
-`
-
-      const err = new NestedRouteError(message, secondary, nestedApiRoutes)
-
-      return next(err)
+      return new DuplicatePathError('Warning: You have created conflicting api routes:', 'api', duplicateApi)
     }
 
     file.path = apiTransformer(pagesTransformer(file.path))
 
-    next(null, file)
+    return file
   })
 
   return {stream}
-}
-
-export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+)$/
-  return (regex.exec(path) || [])[1] || path
-}
-
-export function apiPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
-  const matchedPath = (regex.exec(path) || [])[1]
-
-  return matchedPath ? join('pages', matchedPath) : path
 }

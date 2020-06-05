@@ -1,5 +1,6 @@
-import {through} from '../streams'
+import {transform} from '../transform'
 import File from 'vinyl'
+import {isEvent} from '../utils'
 
 type FileCacheEntry = {path: string}
 
@@ -55,20 +56,24 @@ export class FileCache {
 export function createFileCache(filter: (a: File) => boolean = () => true) {
   const cache = FileCache.create()
 
-  const stream = through({objectMode: true, highWaterMark: 1}, (file, _, next) => {
-    // Don't cache files that dont match the filter
-    if (!filter(file)) {
-      return next(null, file)
-    }
+  const stream = transform.file(
+    (file, {next}) => {
+      if (isEvent(file)) return next(null, file)
+      // Don't cache files that dont match the filter
+      if (!filter(file)) {
+        return next(null, file)
+      }
 
-    if (file.event === 'unlink') {
-      cache.delete(file)
-    } else {
-      cache.add(file)
-    }
+      if (file.event === 'unlink') {
+        cache.delete(file)
+      } else {
+        cache.add(file)
+      }
 
-    next(null, file)
-  })
+      next(null, file)
+    },
+    {objectMode: true, highWaterMark: 1},
+  )
 
   return {stream, cache}
 }

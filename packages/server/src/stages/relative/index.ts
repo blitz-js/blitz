@@ -1,6 +1,4 @@
-import File from 'vinyl'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 import path from 'path'
 import slash from 'slash'
 
@@ -8,13 +6,13 @@ import slash from 'slash'
  * Returns a Stage that converts relative files paths to absolute
  */
 export const createStageRelative: Stage = () => {
-  const stream = through({objectMode: true}, (file: File, _, next) => {
+  const stream = transform.file((file) => {
     const cwd = process.cwd()
     const filecontents = file.contents
     const filepath = file.path
 
     if (!isInAppFolder(filepath, cwd) || filecontents === null) {
-      return next(null, file)
+      return file
     }
 
     const contents = filecontents.toString()
@@ -22,7 +20,7 @@ export const createStageRelative: Stage = () => {
     const newContents = replaceRelativeImports(contents, relativeToAbsolute(cwd, filepath))
     file.contents = Buffer.from(newContents)
 
-    next(null, file)
+    return file
   })
 
   return {stream}

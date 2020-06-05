@@ -1,6 +1,5 @@
 import File from 'vinyl'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -75,8 +74,8 @@ export const createStageManifest = (
   const stage: Stage = () => {
     const manifest = Manifest.create()
 
-    const stream = through({objectMode: true}, function (file: File, _, next) {
-      this.push(file) // Send file on through to be written
+    const stream = transform.file((file, {next, push}) => {
+      push(file) // Send file on through to be written
 
       const [origin] = file.history
       const dest = file.path
@@ -90,7 +89,7 @@ export const createStageManifest = (
       }
 
       if (writeManifestFile) {
-        this.push(
+        push(
           new File({
             // NOTE:  no need to for hash because this is a manifest
             //        and doesn't count as work

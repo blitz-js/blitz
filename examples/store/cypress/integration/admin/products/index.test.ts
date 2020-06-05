@@ -19,6 +19,17 @@ describe("admin/products page", () => {
     cy.location("pathname").should("equal", "/admin")
   })
 
+  it("shows ascending order", () => {
+    cy.get("ul > li")
+      .first()
+      .then(($li) => {
+        const title = $li.find("> a").text()
+
+        cy.visit("/admin/products?order=asc")
+        cy.get("ul > li").last().contains("a", title)
+      })
+  })
+
   // This is kind of redundant because this logic is handled in insert()
   it("shows latest created product", () => {
     const name = insert()

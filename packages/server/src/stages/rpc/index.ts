@@ -2,8 +2,7 @@ import File from 'vinyl'
 import slash from 'slash'
 import {absolutePathTransform} from '../utils'
 import {relative} from 'path'
-import {through} from '../../streams'
-import {Stage} from '@blitzjs/file-pipeline'
+import {Stage, transform} from '@blitzjs/file-pipeline'
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
@@ -14,17 +13,16 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
 
-  const stream = through({objectMode: true}, function (file, _, next) {
+  const stream = transform.file((file, {next, push}) => {
     if (!isRpcPath(file.path)) {
-      next(null, file)
-      return
+      return file
     }
 
     const importPath = rpcPath(resolutionPath(src, file.path))
     const {resolverType, resolverName} = extractTemplateVars(importPath)
 
     // Original function -> _rpc path
-    this.push(
+    push(
       new File({
         path: getRpcPath(file.path),
         contents: file.contents,
@@ -33,7 +31,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     )
 
     // File API route handler
-    this.push(
+    push(
       new File({
         path: getRpcHandlerPath(file.path),
         contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
@@ -44,9 +42,9 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     // Isomorphic RPC client
     const rpcFile = file.clone()
     rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath))
-    this.push(rpcFile)
+    push(rpcFile)
 
-    next()
+    return next()
   })
 
   return {stream}
@@ -57,9 +55,9 @@ export function isRpcPath(filePath: string) {
 }
 
 const isomorphicRpcTemplate = (resolverPath: string) => `
-import {isomorphicRpc} from '@blitzjs/core'
+import {getIsomorphicRpcHandler} from '@blitzjs/core'
 import resolver from '${resolverPath}'
-export default isomorphicRpc(resolver, '${resolverPath}') as typeof resolver
+export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof resolver
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
@@ -68,7 +66,7 @@ import {rpcHandler} from '@blitzjs/server'
 import resolver from '${resolverPath}'
 let db
 try {
-  db = require('db')
+  db = require('db').default
 }catch(err){}
 export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => db && db.connect())
 `

@@ -1,21 +1,30 @@
-import {through, pipeline} from '../streams'
+import {pipeline} from '../streams'
 import gulpIf from 'gulp-if'
 import {unlink} from './unlink'
 import {dest} from 'vinyl-fs'
 import File from 'vinyl'
-import {FILE_WRITTEN} from '../events'
+import {FILE_WRITTEN, FILE_DELETED} from '../events'
 import {Writable} from 'stream'
-
+import {isFile} from '../utils'
+import {transform} from '../transform'
 /**
  * Returns a Stage that writes files to the destination path
  */
-export const createWrite = (destination: string, reporter: Writable) => {
-  const stream = pipeline(
-    gulpIf(isUnlinkFile, unlink(destination), dest(destination)),
-    through({objectMode: true}, (file: File, _, next) => {
-      reporter.write({type: FILE_WRITTEN, payload: file})
-      next(null, file)
-    }),
+export const createWrite = (
+  destination: string,
+  reporter: Writable,
+  // Allow the writer to be overriden
+  writeStream = dest(destination),
+  unlinkStream = unlink(destination),
+) => {
+  const splitToBus = transform.file((file) => {
+    reporter.write({type: isUnlinkFile(file) ? FILE_DELETED : FILE_WRITTEN, payload: file})
+    return file
+  })
+
+  const stream = gulpIf(
+    isFile,
+    gulpIf(isUnlinkFile, pipeline(unlinkStream, splitToBus), pipeline(writeStream, splitToBus)),
   )
 
   return {stream}
