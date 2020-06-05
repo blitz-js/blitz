@@ -1,14 +1,14 @@
 {
   "name": "@blitzjs/gui",
-  "version": "0.12.0",
+  "version": "0.13.0-canary.2",
   "scripts": {
     "start": "blitz start"
   },
   "dependencies": {
-    "@blitzjs/generator": "0.12.0",
+    "@blitzjs/generator": "0.13.0-canary.2",
     "@prisma/cli": "2.0.0-beta.7",
     "@prisma/client": "2.0.0-beta.7",
-    "blitz": "0.12.0",
+    "blitz": "0.13.0-canary.2",
     "fast-glob": "3.2.2",
     "hasbin": "1.2.3",
     "heroicons-react": "^1.0.15",
