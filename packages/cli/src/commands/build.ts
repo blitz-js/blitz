@@ -1,5 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {build} from '@blitzjs/server'
+import {runPrismaGeneration} from './db'
 
 export class Build extends Command {
   static description = 'Create a production build'
@@ -28,7 +29,7 @@ export class Build extends Command {
     }
 
     try {
-      await build(config)
+      await build(config, runPrismaGeneration({silent: true}))
     } catch (err) {
       console.error(err)
       process.exit(1) // clean up?
