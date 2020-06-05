@@ -29,7 +29,7 @@ export function createPipeline(
   writer: {stream: NodeJS.ReadWriteStream} = createWrite(config.dest, bus),
 ) {
   // Helper streams don't account for business stages
-  const input = through({objectMode: true}, (f, _, next) => next(null, f))
+  const input = through.obj()
   const optimizer = createWorkOptimizer()
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)

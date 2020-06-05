@@ -9,7 +9,7 @@ describe('writer', () => {
   it('should write files', async () => {
     // Setup an input stream
 
-    const bus = through({objectMode: true})
+    const bus = through.obj()
     const destinationWriter = through({objectMode: true}, (f, _, next) => {
       if (typeof f === 'string') throw new Error('This should not happen because the writer wont allow it!')
       next(null, f)

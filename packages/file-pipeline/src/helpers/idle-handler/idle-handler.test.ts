@@ -8,13 +8,9 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 describe('idlehander', () => {
   it('should fire the idle event', async () => {
     // Setup an input stream
-    const input = through({objectMode: true}, (ev, __, next) => {
-      next(null, ev)
-    })
+    const input = through.obj()
 
-    const bus = through({objectMode: true}, (ev, __, next) => {
-      next(null, ev)
-    })
+    const bus = through.obj()
 
     // setup the test pipeline
     const idleHandler = createIdleHandler(bus, 100)

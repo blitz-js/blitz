@@ -19,9 +19,7 @@ type SynchronizeFilesOptions = {
   noclean?: boolean
 }
 
-const defaultBus = through({objectMode: true}, (event, __, next) => {
-  next(null, event)
-})
+const defaultBus = through.obj()
 
 /**
  * Assembles a file stranform pipeline to convert blitz source code to something that
