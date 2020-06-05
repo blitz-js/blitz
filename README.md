@@ -6,7 +6,7 @@
     <img alt="" src="https://img.shields.io/badge/Join%20our%20community-6700EB.svg?style=for-the-badge&labelColor=000000&logoWidth=20&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQ9SURBVHgB7d3dVdtAEIbhcSpICUoH0IEogQqSVBBSAU4FSSpIOoAORAfQgSghHXzZ1U/YcMD4R9rZmf2ec3y448LyiNf27iLiGIAmPLrweC9Un3DhrzG6EarLNP09nlwJ1SOZ/lQr5N80/S/p2QMVCBf5N17XCfm1Y/rBHqjAG9PPHvBsz+mf9WAP+HLA9M/YA14cOP2payH7jpj+VCtk1wnTP+vj7xCy6cTpn7EHLMLp059iD1iD8eveJbVCNsSLheX1YA/YgOWnf8YeKB3Wmf7Ud6Fy4f/FHmtpxbl3YlC4MJ/Cj0bWdwPnPbARg+L0S54XQHS32WwuxClzd4CM0z9rPfeAuTtA5ulPXYQ7wZ04Y+oOoDD9KZc9YOoOoDj9s4dwFzgXR6w1wIPoOvPWA9buAHEJ173o3gWiy3AnuBUHLEbgmYwvAk1/wuM8vAgexThzbwPDkx7/DHwVXfFOxP2GmsKd4Ab6zPeAyU8CI7AHFmH2BRCBPXAyk18GzUrqAXCTiR4ssyj0VFw/oCU8+e+RZ33AWz6KMaYbIIWxB+JSLs1bsbkeMN0AqakHvoku9oA2sAfqBvbAQdw0QArsgb25aYBUQT3QgT2gB+yBuqGcHij2UCqXDZACe2Anlw2QYg/QAOyBuoE98CL3DZDCuK4/rh/Q7oGL6U+TOvcNkJoijN8X1C48+T+g75eQDrAH/qmqAVJgDwyqaoAUe4AGYA/UDZX3QLUNkEIZPRCd5+6BahsgVUgPROwBTSijB7jpVAvGHriHvmw9wAZ4BpX1ABvgmakHtPcbRuwBTWAPULgAV9D/jKDY9YRvwvgEaurD44uQHvAol7qBW7WKluVtIHiUS7GyvA0s6CiXDnxrpQfsgbqBS7GKk/2jYHCrVlGyfxTMrVo0ALdq1Q3sgSKofh0M9oA61a+D2QM0AHugbmAPqClmSRjK2apVVQ8UsySsoK1aHdgDesCtWnUDeyCrIpeFg1u3sylyWTi3btMA7IG6gT2wuuK3hoE9sKrit4YVslWLPaAN7IG6ocKt2zmY2h4O9sDiTG0PZw/QANy6XTewBxZj9ogYVHy025LMHhEz9cBn0We6B0yfERReBLfhx0/R1YQHPx/QBPbA0VwcEwf2wNFcHBPHHjiem3MC2QPHcXdSaJjA+KfgTPQ8hhfjBzHC40mhlzJ+Xq9lK4a4PCs43AVaGTed5mZq+iOXZwWHi3AnOj2wFWNcnxYe7gTxLtBKHuamP/J+Wnh8a5irB7ZC5Yk9gPX1QuXC+usHWqGyhYvUYR0a7zboUOFCNVhnk0krZAOW7wFOvzXhom2xnEbIHizTA1wEYhWW6YFGyC6c1gOcfg9wfA80Qj7g8B7g9HuCww+haIR8wf49wOn3Cvv9k8tGyC/s7gFOv3fY3QONkH+v9MBWqB7PeqDn9FcIT//kcitUn6kHOu/T/xfWzlQy3dEHhwAAAABJRU5ErkJggg==">
   </a>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-63-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
+<a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-64-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/canary/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/blitz.svg?style=for-the-badge&labelColor=000000&color=blue">
@@ -22,7 +22,7 @@
 <h1 align="center">The Fullstack React Framework</h1>
 
 <h3 align="center">Built on Next.js — Inspired by Ruby on Rails — New Fullstack Data Layer</h3>
-
+<h3 align="center"><a href="https://blitzjs.com" target="_blank">Read the Documentation</a></h3>
 <br>
 
 New “no-API” data layer **lets you import server code into your React components** instead of having to fetch from an API.
@@ -33,15 +33,11 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 <br>
 
-### :tada: Alpha Release Now Available :tada:
+### Quick Start
 
 1. `npm i -g blitz`
 2. `blitz new myapp`
-3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
-or
-
-3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
 
 <br><br>
 
@@ -81,7 +77,7 @@ or
 6. Stability
 7. Community over Code
 
-[The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
+[The Blitz Manifesto](https://blitzjs.com/docs/manifesto) explains these principles in detail.
 
 <br>
 
@@ -95,11 +91,11 @@ While we currently only support web, we are pursuing the dream of a single monol
 
 ## Welcome to the Blitz Community 👋
 
-The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
+The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://blitzjs.com/docs/code-of-conduct).
 
 [Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
 
-There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](CONTRIBUTING.md).
+There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](https://blitzjs.com/docs/how-to-contribute).
 
 <br>
 
@@ -268,10 +264,14 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://mykalmachon.dev"><img src="https://avatars1.githubusercontent.com/u/7844994?v=4" width="100px;" alt=""/><br /><sub><b>Mykal Machon</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=MykalMachon" title="Code">💻</a></td>
     <td align="center"><a href="https://jamiedavenport.dev"><img src="https://avatars2.githubusercontent.com/u/1329874?v=4" width="100px;" alt=""/><br /><sub><b>Jamie Davenport</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jamiedavenport" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://cloudnweb.dev/"><img src="https://avatars0.githubusercontent.com/u/17050715?v=4" width="100px;" alt=""/><br /><sub><b>GaneshMani</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ganeshmani" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
