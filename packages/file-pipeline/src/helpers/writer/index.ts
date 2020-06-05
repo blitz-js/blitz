@@ -13,6 +13,7 @@ import {transform} from '../../transform'
 export const createWrite = (
   destination: string,
   reporter: Writable,
+  // Allow the writer to be overriden
   writeStream = dest(destination),
   unlinkStream = unlink(destination),
 ) => {
