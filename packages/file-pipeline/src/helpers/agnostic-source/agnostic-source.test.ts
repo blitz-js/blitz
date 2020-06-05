@@ -35,7 +35,7 @@ describe('agnosticSource', () => {
 
   test('when watching = true', async () => {
     const expected = [resolve(cwd, 'one'), resolve(cwd, 'two'), 'ready', resolve(cwd, 'three')]
-    const {stream} = agnosticSource({ignore: [], include: ['**/*'], cwd, watch: true})
+    const {stream, close} = agnosticSource({ignore: [], include: ['**/*'], cwd, watch: true})
 
     setTimeout(() => {
       // Wait
@@ -44,6 +44,6 @@ describe('agnosticSource', () => {
     }, 800)
 
     await testStreamItems(stream, expected, logItem)
-    stream.end()
+    await close()
   })
 })

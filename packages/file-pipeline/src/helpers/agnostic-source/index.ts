@@ -81,9 +81,11 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
     // Send ready event when our initial scan of the folder is done
     stream.write('ready')
   })
+  const close = () => watcher.fswatcher.close()
 
   stream.on('end', () => {
-    watcher.fswatcher.close()
+    close()
   })
-  return {stream}
+
+  return {stream, close}
 }
