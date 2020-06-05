@@ -52,15 +52,15 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const {spawnCommand, availablePort} = await createCommandAndPort(config, "dev")
+  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
 
   return new Promise((res, rej) => {
-    if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port}::port already in use`)
-    } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
-        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+    spawn(nextBin, ['dev', '-p', `${availablePort}`, '-H', config.hostname!], {
+      cwd,
+      stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+    })
+      .on('exit', (code: number) => {
+        code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
       })
         .on("exit", (code: number) => {
           code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
@@ -84,23 +84,13 @@ export function nextBuild(nextBin: string, cwd: string) {
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  const {spawnCommand, availablePort} = await createCommandAndPort(config, "start")
-
-  return new Promise((res, rej) => {
-    if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port} ::port already in use`)
-    } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
-        stdio: "inherit",
-      })
-        .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next start' failed with status code: ${code}`)
-        })
-        .on("error", (err) => {
-          console.error(err)
-          rej(err)
-        })
-    }
-  })
+  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
+  return Promise.resolve(
+    spawn(nextBin, ['start', '-p', `${availablePort}`, '-H', config.hostname!], {
+      cwd,
+      stdio: 'inherit',
+    }).on('error', (err) => {
+      console.error(err)
+    }),
+  )
 }
