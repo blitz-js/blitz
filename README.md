@@ -33,13 +33,13 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 <br>
 
-### Quick Start
+## Quick Start
 
 1. `npm i -g blitz`
 2. `blitz new myapp`
 
 
-### [Read the Documentation](https://blitzjs.com/docs/getting-started)
+<h3 align="center"><a href="https://blitzjs.com" target="_blank">View the Documentation at Blitzjs.com</a></h3>
 
 <br><br>
 
