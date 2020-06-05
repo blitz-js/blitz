@@ -1,17 +1,22 @@
-import {pipe} from './streams'
-import {createPipeline} from './pipeline'
+import {pipe} from '../streams'
+import {createPipeline} from '../pipeline'
 import {pathExists, ensureDir, remove} from 'fs-extra'
-import {through} from './streams'
-import {createDisplay} from './display'
-import {READY, ERROR_THROWN} from './events'
-import {Stage} from './types'
+import {through} from '../streams'
+import {createDisplay} from '../display'
+import {READY, ERROR_THROWN} from '../events'
+import {Stage} from '../types'
 import {Transform} from 'stream'
+
+type FSStreamer = {stream: NodeJS.ReadWriteStream}
 
 type SynchronizeFilesOptions = {
   ignore?: string[]
   include?: string[]
   watch?: boolean
   bus?: Transform
+  source?: FSStreamer
+  writer?: FSStreamer
+  noclean?: boolean
 }
 
 const defaultBus = through({objectMode: true}, (event, __, next) => {
@@ -35,11 +40,14 @@ export async function transformFiles(
     include = [],
     watch = false,
     bus = defaultBus,
+    source,
+    writer,
+    noclean = false,
   } = options
 
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
   // TODO: remove this clean and devise a way to resolve differences in stream
-  await clean(dest)
+  if (!noclean) await clean(dest)
 
   // const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
@@ -59,7 +67,7 @@ export async function transformFiles(
       }
     })
 
-    const fileTransformPipeline = createPipeline(config, stages, bus)
+    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     // Send source to fileTransformPipeline
     fileTransformPipeline.stream.on('error', (err) => {

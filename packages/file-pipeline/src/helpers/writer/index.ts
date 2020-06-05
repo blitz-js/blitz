@@ -1,19 +1,18 @@
-import {pipeline} from '../streams'
+import {pipeline} from '../../streams'
 import gulpIf from 'gulp-if'
-import {unlink} from './unlink'
+import {unlink} from '../unlink'
 import {dest} from 'vinyl-fs'
 import File from 'vinyl'
-import {FILE_WRITTEN, FILE_DELETED} from '../events'
+import {FILE_WRITTEN, FILE_DELETED} from '../../events'
 import {Writable} from 'stream'
-import {isFile} from '../utils'
-import {transform} from '../transform'
+import {isFile} from '../../utils'
+import {transform} from '../../transform'
 /**
  * Returns a Stage that writes files to the destination path
  */
 export const createWrite = (
   destination: string,
   reporter: Writable,
-  // Allow the writer to be overriden
   writeStream = dest(destination),
   unlinkStream = unlink(destination),
 ) => {

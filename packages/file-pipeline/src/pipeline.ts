@@ -20,15 +20,20 @@ export function isSourceFile(file: File) {
  * @param errors Stream that takes care of all operational error rendering
  * @param bus Stream to pipe events to
  */
-export function createPipeline(config: StageConfig, stages: Stage[], bus: Writable) {
+export function createPipeline(
+  config: StageConfig,
+  stages: Stage[],
+  bus: Writable,
+  // Initialise source and writer here so we can inject them in testing
+  source: {stream: NodeJS.ReadWriteStream} = agnosticSource(config),
+  writer: {stream: NodeJS.ReadWriteStream} = createWrite(config.dest, bus),
+) {
   // Helper streams don't account for business stages
-  const source = agnosticSource(config)
   const input = through({objectMode: true}, (f, _, next) => next(null, f))
   const optimizer = createWorkOptimizer()
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
   const idleHandler = createIdleHandler(bus)
-  const writer = createWrite(config.dest, bus)
 
   // Send this object to every stage
   const api: StageArgs = {
