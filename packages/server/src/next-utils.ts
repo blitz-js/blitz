@@ -37,10 +37,10 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const availablePort = await detect({port: config.port, hostname: config.hostname})
+  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ["dev", "-p", `${availablePort}`, "-H", config.hostname], {
+    spawn(nextBin, ["dev", "-p", `${availablePort}`, "-H", config.hostname!], {
       cwd,
       stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
     })
@@ -65,9 +65,9 @@ export function nextBuild(nextBin: string, cwd: string) {
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  const availablePort = await detect({port: config.port, hostname: config.hostname})
+  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
   return Promise.resolve(
-    spawn(nextBin, ["start", "-p", `${availablePort}`, "-H", config.hostname], {
+    spawn(nextBin, ["start", "-p", `${availablePort}`, "-H", config.hostname!], {
       cwd,
       stdio: "inherit",
     }).on("error", (err) => {
