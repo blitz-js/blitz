@@ -22,7 +22,7 @@
 <h1 align="center">The Fullstack React Framework</h1>
 
 <h3 align="center">Built on Next.js — Inspired by Ruby on Rails — New Fullstack Data Layer</h3>
-
+<h3 align="center"><a href="https://blitzjs.com" target="_blank">Read the Documentation</a></h3>
 <br>
 
 New “no-API” data layer **lets you import server code into your React components** instead of having to fetch from an API.
@@ -33,15 +33,11 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 <br>
 
-### :tada: Alpha Release Now Available :tada:
+### Quick Start
 
 1. `npm i -g blitz`
 2. `blitz new myapp`
-3. [Read the Alpha User Guide](https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md)
 
-or
-
-3. Start with the [Blitz Beginner Tutorial](https://github.com/blitz-js/blitz/blob/canary/TUTORIAL.md)
 
 <br><br>
 
@@ -81,7 +77,7 @@ or
 6. Stability
 7. Community over Code
 
-[The Blitz Manifesto](https://github.com/blitz-js/blitz/blob/canary/MANIFESTO.md) explains these principles in detail.
+[The Blitz Manifesto](https://blitzjs.com/docs/manifesto) explains these principles in detail.
 
 <br>
 
@@ -95,11 +91,11 @@ While we currently only support web, we are pursuing the dream of a single monol
 
 ## Welcome to the Blitz Community 👋
 
-The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://github.com/blitz-js/blitz/blob/canary/CODE_OF_CONDUCT.md).
+The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://blitzjs.com/docs/code-of-conduct).
 
 [Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
 
-There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](CONTRIBUTING.md).
+There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](https://blitzjs.com/docs/how-to-contribute).
 
 <br>
 
@@ -275,6 +271,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
