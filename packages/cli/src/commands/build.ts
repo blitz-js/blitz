@@ -7,8 +7,6 @@ export class Build extends Command {
   static aliases = ["b"]
 
   async run() {
-    // const {flags} = this.parse(Build)
-
     const config = {
       rootFolder: process.cwd(),
     }
