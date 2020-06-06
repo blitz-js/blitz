@@ -95,7 +95,7 @@ The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, a
 
 [Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
 
-There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](https://blitzjs.com/docs/how-to-contribute).
+There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](https://blitzjs.com/docs/contributing).
 
 <br>
 
