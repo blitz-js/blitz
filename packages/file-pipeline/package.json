@@ -9,7 +9,7 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint src"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -22,11 +22,6 @@
   "files": [
     "dist"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "keywords": [
     "blitz",
     "display"
