@@ -7,9 +7,12 @@ export * from './ssr-query'
 export * from './rpc'
 
 export {
+  AppProps,
   GetStaticProps,
   GetStaticPaths,
   GetServerSideProps,
+  InferGetStaticPropsType,
+  InferGetServerSidePropsType,
   NextPage as BlitzPage,
   NextApiRequest as BlitzApiRequest,
   NextApiResponse as BlitzApiResponse,
@@ -36,9 +39,3 @@ export {
 export {default as dynamic} from 'next/dynamic'
 
 export {Error} from 'next/error'
-
-export {AppProps} from 'next'
-
-export {InferGetStaticPropsType} from 'next'
-
-export {InferGetServerSidePropsType} from 'next'
