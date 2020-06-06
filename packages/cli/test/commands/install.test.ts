@@ -1,4 +1,4 @@
-import {Install, InstallerType} from '../../src/commands/install'
+import {Install, RecipeLocation} from '../../src/commands/install'
 import * as path from 'path'
 import tempInstaller from '../__fixtures__/installer'
 
@@ -16,19 +16,19 @@ describe('`install` command', () => {
   })
 
   it('properly parses remote installer args', () => {
-    const normalizePath = Install.prototype.normalizeInstallerPath
+    const normalizePath = Install.prototype.normalizeRecipePath
     expect(normalizePath('test-installer')).toEqual({
       path: 'https://github.com/blitz-js/blitz',
-      subdirectory: 'installers/test-installer',
-      type: InstallerType.Remote,
+      subdirectory: 'recipes/test-installer',
+      location: RecipeLocation.Remote,
     })
     expect(normalizePath('user/test-installer')).toEqual({
       path: 'https://github.com/user/test-installer',
-      type: InstallerType.Remote,
+      location: RecipeLocation.Remote,
     })
     expect(normalizePath('https://github.com/user/test-installer')).toEqual({
       path: 'https://github.com/user/test-installer',
-      type: InstallerType.Remote,
+      location: RecipeLocation.Remote,
     })
   })
 })

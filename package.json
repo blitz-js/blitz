@@ -55,7 +55,7 @@
     "@types/prettier": "2.0.0",
     "@types/pump": "1.1.0",
     "@types/pumpify": "1.4.1",
-    "@types/react": "16.9.35",
+    "@types/react": "16.9.34",
     "@types/readable-stream": "2.3.5",
     "@types/rimraf": "3.0.0",
     "@types/test-listen": "1.1.0",
@@ -111,6 +111,8 @@
   },
   "resolutions": {
     "jest": "24.9.0",
+    "@types/react": "16.9.34",
+    "@types/react-dom": "16.9.8",
     "ts-jest": "24.3.0"
   }
 }
