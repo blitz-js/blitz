@@ -1,4 +1,4 @@
-import { Document, Html, DocumentHead, Main, NextScript /*DocumentContext*/ } from "@blitzjs/core"
+import { Document, Html, DocumentHead, Main, BlitzScript /*DocumentContext*/ } from "@blitzjs/core"
 
 class MyDocument extends Document {
   // Only uncomment if you need to customize this behaviour
@@ -13,7 +13,7 @@ class MyDocument extends Document {
         <DocumentHead />
         <body>
           <Main />
-          <NextScript />
+          <BlitzScript />
         </body>
       </Html>
     )
