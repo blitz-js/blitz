@@ -44,3 +44,41 @@ export function useParams() {
 
   return extractRouterParams(router.query, query)
 }
+
+export function useParam(key: string): undefined | string | string[]
+export function useParam(key: string, returnType: 'string'): string
+export function useParam(key: string, returnType: 'number'): number
+export function useParam(key: string, returnType: 'array'): string[]
+export function useParam(
+  key: string,
+  returnType?: 'string' | 'number' | 'array',
+): undefined | number | string | string[] {
+  const params = useParams()
+  const rawValue = params[key]
+
+  if (returnType === 'number') {
+    return Number(rawValue)
+  }
+
+  if (returnType === 'string') {
+    if (typeof rawValue === 'undefined') {
+      return ''
+    }
+
+    return rawValue
+  }
+
+  if (returnType === 'array') {
+    if (typeof rawValue === 'undefined') {
+      return []
+    }
+
+    if (typeof rawValue === 'string') {
+      return [rawValue]
+    }
+
+    return rawValue
+  }
+
+  return rawValue
+}
