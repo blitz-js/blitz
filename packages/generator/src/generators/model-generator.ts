@@ -34,10 +34,14 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
         this.options.modelName,
         extraArgs.flatMap((def) => Field.parse(def)),
       )
-      // wrap in newlines to put a space below the previously generated model and
-      // to preserve the EOF newline
-      this.fs.append(path.resolve('db/schema.prisma'), `\n${modelDefinition.toString()}\n`)
-      log.success(`Model for '${this.options.modelName}' created successfully:\n`)
+      if (!this.options.dryRun) {
+        // wrap in newlines to put a space below the previously generated model and
+        // to preserve the EOF newline
+        this.fs.append(path.resolve('db/schema.prisma'), `\n${modelDefinition.toString()}\n`)
+      }
+      log.success(
+        `Model for '${this.options.modelName}'${this.options.dryRun ? '' : 'created successfully'}:\n`,
+      )
       modelDefinition.toString().split('\n').map(log.progress)
     } catch (error) {
       throw error

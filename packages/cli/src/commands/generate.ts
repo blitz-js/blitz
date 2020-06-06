@@ -65,7 +65,7 @@ function ModelNames(input: string = '') {
 }
 
 const generatorMap = {
-  [ResourceType.All]: [PageGenerator, FormGenerator, QueryGenerator, MutationGenerator, ModelGenerator],
+  [ResourceType.All]: [ModelGenerator, PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Model]: [ModelGenerator],
   [ResourceType.Mutations]: [MutationGenerator],
@@ -136,7 +136,7 @@ export class Generate extends Command {
     name:string \\
     completed:boolean:default[false] \\
     belongsTo:project?
-> blitz generate pages tasks \\
+> blitz generate all tasks \\
     name:string \\
     completed:boolean:default[false] \\
     belongsTo:project?

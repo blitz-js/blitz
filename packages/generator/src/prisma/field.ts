@@ -1,4 +1,5 @@
 import {singlePascal, singleCamel, pluralCamel} from '../utils/plurals'
+import {log} from '@blitzjs/display'
 
 export enum FieldType {
   Boolean = 'Boolean',
@@ -38,6 +39,8 @@ const fallbackIfUndef = <T extends any>(defaultValue: T, input?: T) => {
 
 const defaultValueTest = /\[([\w]+)\]/
 const builtInGenerators = ['autoincrement', 'now', 'uuid', 'cuid']
+
+class MissingFieldNameError extends Error {}
 
 export class Field {
   default?: any
@@ -118,26 +121,40 @@ export class Field {
         defaultValue = builtInGenerators.includes(_defaultValue) ? {name: _defaultValue} : _defaultValue
       }
     }
-    const parseResult = new Field(fieldName, {
-      default: defaultValue,
-      isId: false,
-      isList,
-      isRequired,
-      isUnique,
-      isUpdatedAt,
-      relationFromFields,
-      relationToFields,
-      type: fieldType,
-    })
-    return maybeIdField ? [parseResult, maybeIdField] : [parseResult]
+    try {
+      const parseResult = new Field(fieldName, {
+        default: defaultValue,
+        isId: false,
+        isList,
+        isRequired,
+        isUnique,
+        isUpdatedAt,
+        relationFromFields,
+        relationToFields,
+        type: fieldType,
+      })
+      return maybeIdField ? [parseResult, maybeIdField] : [parseResult]
+    } catch (err) {
+      if (err instanceof MissingFieldNameError) {
+        throw new Error(
+          `Each field in a model must have a name, but you supplied ${log.variable(
+            input,
+          )}. Try giving the field as a ${log.variable('name:type')} pair, such as ${log.variable(
+            'description:string',
+          )}.`,
+        )
+      }
+      throw err
+    }
   }
 
   constructor(name: string, options: FieldArgs) {
-    if (!name) throw new Error('[PrismaField]: no field name supplied')
+    if (!name) throw new MissingFieldNameError('[PrismaField]: A field name is required')
     if (!options.type) {
-      throw new Error(
-        '[PrismaField]: invalid field type supplied. Expected a model name or a scalar Prisma type',
+      log.warning(
+        `No field type specified for field ${log.variable(name)}, falling back to ${log.variable('String')}.`,
       )
+      options.type = FieldType.String
     }
     this.name = name
     this.isList = fallbackIfUndef(false, options.isList)
