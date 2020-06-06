@@ -34,3 +34,11 @@ export {
 } from 'next/document'
 
 export {default as dynamic} from 'next/dynamic'
+
+export {Error} from 'next/error'
+
+export {AppProps} from 'next'
+
+export {InferGetStaticPropsType} from 'next'
+
+export {InferGetServerSidePropsType} from 'next'
