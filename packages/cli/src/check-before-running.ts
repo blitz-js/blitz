@@ -3,11 +3,11 @@ import chalk from 'chalk'
 
 import {isBlitzRoot, IsBlitzRootError} from './utils/is-blitz-root'
 
-const whitelistGlobal = ['-h', '--help', 'help', 'new']
+const globalCommands = ['-h', '--help', 'help', 'new', 'gui']
 
 export const hook: Hook<'init'> = async function (options) {
   const {id} = options
-  if (id && whitelistGlobal.includes(id)) return
+  if (id && globalCommands.includes(id)) return
 
   const {err, message, depth} = await isBlitzRoot()
 
