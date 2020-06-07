@@ -7,7 +7,6 @@ export * from './ssr-query'
 export * from './rpc'
 
 export {
-  AppProps,
   GetStaticProps,
   GetStaticPaths,
   GetServerSideProps,
