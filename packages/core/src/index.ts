@@ -10,6 +10,8 @@ export {
   GetStaticProps,
   GetStaticPaths,
   GetServerSideProps,
+  InferGetStaticPropsType,
+  InferGetServerSidePropsType,
   NextPage as BlitzPage,
   NextApiRequest as BlitzApiRequest,
   NextApiResponse as BlitzApiResponse,
@@ -34,3 +36,5 @@ export {
 } from 'next/document'
 
 export {default as dynamic} from 'next/dynamic'
+
+export {default as Error} from 'next/error'
