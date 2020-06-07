@@ -3,7 +3,7 @@ import {
   Html,
   DocumentHead,
   Main,
-  NextScript,
+  BlitzScript,
   /*DocumentContext*/
 } from "blitz"
 
@@ -19,7 +19,7 @@ class MyDocument extends Document {
         <DocumentHead />
         <body>
           <Main />
-          <NextScript />
+          <BlitzScript />
         </body>
       </Html>
     )

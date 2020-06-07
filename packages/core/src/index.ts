@@ -28,7 +28,7 @@ export {
   Html,
   Head as DocumentHead,
   Main,
-  NextScript,
+  NextScript as BlitzScript,
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document'
