@@ -13,8 +13,6 @@ export class GUI extends Command {
       stdio: 'ignore',
     })
 
-    console.log(startGUIResult)
-
     if (startGUIResult.status !== 0) {
       log.warning('Failed to start Blitz GUI.')
     }
