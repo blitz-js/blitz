@@ -48,10 +48,15 @@
     "enquirer": "2.3.5",
     "fs-extra": "9.0.0",
     "globby": "11.0.0",
+    "ink": "2.7.1",
+    "ink-link": "1.1.0",
+    "ink-spinner": "3.0.1",
+    "react": "experimental",
     "recast": "0.19.1",
     "ts-node": "8.9.1"
   },
   "devDependencies": {
+    "@types/ink-spinner": "3.0.0",
     "@types/node": "13.13.4"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

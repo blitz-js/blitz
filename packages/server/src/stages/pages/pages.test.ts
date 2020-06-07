@@ -1,26 +1,11 @@
 import {createStagePages} from '.'
-import through2 from 'through2'
 import File from 'vinyl'
-import {FileCache} from '@blitzjs/file-pipeline'
-import {StageConfig, StageArgs} from '@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types'
 import {DuplicatePathError} from './errors'
 import {normalize} from 'path'
+import {mockStageArgs} from '../stage-test-utils'
 
 function getStreamWithInputCache(entries: string[]) {
-  const config: StageConfig = {dest: '', cwd: '', ignore: [], include: [], src: '', watch: false}
-  const args: StageArgs = {
-    getInputCache() {
-      return ({
-        toPaths() {
-          return entries
-        },
-      } as any) as FileCache
-    },
-    bus: through2.obj(),
-    input: through2.obj(),
-    config,
-  }
-  return createStagePages(args).stream
+  return createStagePages(mockStageArgs({entries})).stream
 }
 
 describe('createStagePages', () => {

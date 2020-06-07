@@ -24,7 +24,7 @@ export async function filePrompt(options: FilePromptOptions): Promise<string> {
   if (choices.length === 1) {
     return choices[0]
   }
-  const results = await enquirer({
+  const results: {file: string} = await enquirer({
     type: 'autocomplete',
     name: 'file',
     message: 'Select the target file',
