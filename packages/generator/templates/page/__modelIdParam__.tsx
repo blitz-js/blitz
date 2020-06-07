@@ -1,13 +1,13 @@
 import React, {Suspense} from 'react'
-import {Head, Link, useRouter, useQuery} from 'blitz'
+import {Head, Link, useRouter, useQuery, useParam} from 'blitz'
 import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
 import delete__ModelName__ from 'app/__modelNames__/mutations/delete__ModelName__'
 
 export const __ModelName__: React.FC = () => {
   const router = useRouter()
-  const __modelId__ = parseInt(router?.query.__modelId__ as string)
+  const __modelId__ = useParam('__modelId__', 'number')
   if (process.env.parentModel) {
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
@@ -51,8 +51,7 @@ export const __ModelName__: React.FC = () => {
 
 const Show__ModelName__Page: React.FC = () => {
   if (process.env.parentModel) {
-    const router = useRouter()
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
 
   return (
