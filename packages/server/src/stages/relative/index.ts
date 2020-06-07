@@ -5,13 +5,13 @@ import slash from 'slash'
 /**
  * Returns a Stage that converts relative files paths to absolute
  */
-export const createStageRelative: Stage = () => {
+export const createStageRelative: Stage = ({config: {cwd}}) => {
   const stream = transform.file((file) => {
-    const cwd = process.cwd()
+    // const cwd = process.cwd()
     const filecontents = file.contents
     const filepath = file.path
 
-    if (!isInAppFolder(filepath, cwd) || filecontents === null) {
+    if (!isJavaScriptFile(filepath) || !isInAppFolder(filepath, cwd) || filecontents === null) {
       return file
     }
 
@@ -25,6 +25,8 @@ export const createStageRelative: Stage = () => {
 
   return {stream}
 }
+
+const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
 
 const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, '').indexOf('app') === 0
 

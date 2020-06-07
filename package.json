@@ -111,6 +111,8 @@
   },
   "resolutions": {
     "jest": "24.9.0",
+    "@types/react": "16.9.34",
+    "@types/react-dom": "16.9.8",
     "ts-jest": "24.3.0"
   }
 }

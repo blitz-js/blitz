@@ -1,18 +1,19 @@
 import {Generator, GeneratorOptions} from '../generator'
-import enquirer from 'enquirer'
 import path from 'path'
+import {Model} from '../prisma/model'
+import {Field} from '../prisma/field'
+import {log} from '@blitzjs/display'
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
   modelName: string
-  modelNames: string
+  extraArgs: string[]
 }
 
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   // default subdirectory is /app/[name], we need to back out of there to generate the model
   static subdirectory = '../..'
   sourceRoot: string = ''
+  unsafe_disableConflictChecker = true
 
   async getTemplateValues() {}
 
@@ -25,22 +26,24 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
         throw new Error('Prisma schema file was not found')
       }
-      const {fields: fieldsString} = await enquirer.prompt({
-        name: 'fields',
-        type: 'input',
-        message: `Please input all fields which should exist on a ${this.options.ModelName} as a space-separated list of key:value pairs.
-An 'id' column will be auto-generated and should not be entered.
-Modifiers can be denoted with a trailing '?' (e.g. 'lastname:string?' or 'users:User[]')`,
-      })
-      const fields = fieldsString.split(' ')
-      let modelDefinition = `\nmodel ${this.options.ModelName} {
-  id      Int  @id @default(autoincrement())`
-      for (const field of fields) {
-        const [fieldName, fieldType] = field.split(':')
-        modelDefinition += `\n  ${fieldName}  ${fieldType}`
+      const extraArgs =
+        this.options.extraArgs.length === 1 && this.options.extraArgs[0].includes(' ')
+          ? this.options.extraArgs[0].split(' ')
+          : this.options.extraArgs
+      const modelDefinition = new Model(
+        this.options.modelName,
+        extraArgs.flatMap((def) => Field.parse(def)),
+      )
+      if (!this.options.dryRun) {
+        // wrap in newlines to put a space below the previously generated model and
+        // to preserve the EOF newline
+        this.fs.append(path.resolve('db/schema.prisma'), `\n${modelDefinition.toString()}\n`)
       }
-      modelDefinition += '\n}\n'
-      this.fs.append(path.resolve('db/schema.prisma'), modelDefinition)
+      log.success(
+        `Model for '${this.options.modelName}'${this.options.dryRun ? '' : 'created successfully'}:\n`,
+      )
+      modelDefinition.toString().split('\n').map(log.progress)
+      log.info('\nNow run ' + log.variable('blitz db migrate') + ' to add this model to your database\n')
     } catch (error) {
       throw error
     }

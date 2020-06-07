@@ -595,7 +595,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/972083?v=4",
       "profile": "http://anteprimorac.com.hr",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -621,6 +622,15 @@
       "name": "GaneshMani",
       "avatar_url": "https://avatars0.githubusercontent.com/u/17050715?v=4",
       "profile": "https://cloudnweb.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "reymon359",
+      "name": "reymon359",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/31936665?v=4",
+      "profile": "http://ramonmorcillo.com",
       "contributions": [
         "code"
       ]

@@ -34,15 +34,15 @@ const GH_ROOT = 'https://github.com/'
 const API_ROOT = 'https://api.github.com/repos/'
 const CODE_ROOT = 'https://codeload.github.com/'
 
-export enum InstallerType {
+export enum RecipeLocation {
   Local,
   Remote,
 }
 
-interface InstallerMeta {
+interface RecipeMeta {
   path: string
   subdirectory?: string
-  type: InstallerType
+  location: RecipeLocation
 }
 
 export class Install extends Command {
@@ -53,35 +53,35 @@ export class Install extends Command {
 
   static args = [
     {
-      name: 'installer',
+      name: 'recipe',
       required: true,
-      description: 'Name of a Blitz installer from @blitzjs/installers, or a file path to a local installer',
+      description:
+        'Name of a Blitz recipe from @blitzjs/blitz/recipes, or a file path to a local recipe definition',
     },
     {
-      name: 'installer-flags',
-      description:
-        'A list of flags to pass to the installer. Blitz will only parse these in the form key=value',
+      name: 'recipe-flags',
+      description: 'A list of flags to pass to the recipe. Blitz will only parse these in the form key=value',
     },
   ]
 
   // exposed for testing
-  normalizeInstallerPath(installerArg: string): InstallerMeta {
-    const isNavtiveInstaller = /^([\w\-_]*)$/.test(installerArg)
-    const isUrlInstaller = installerArg.startsWith(GH_ROOT)
-    const isGitHubShorthandInstaller = /^([\w-_]*)\/([\w-_]*)$/.test(installerArg)
-    if (isNavtiveInstaller || isUrlInstaller || isGitHubShorthandInstaller) {
+  normalizeRecipePath(recipeArg: string): RecipeMeta {
+    const isNavtiveRecipe = /^([\w\-_]*)$/.test(recipeArg)
+    const isUrlRecipe = recipeArg.startsWith(GH_ROOT)
+    const isGitHubShorthandRecipe = /^([\w-_]*)\/([\w-_]*)$/.test(recipeArg)
+    if (isNavtiveRecipe || isUrlRecipe || isGitHubShorthandRecipe) {
       let repoUrl
       let subdirectory
       switch (true) {
-        case isUrlInstaller:
-          repoUrl = installerArg
+        case isUrlRecipe:
+          repoUrl = recipeArg
           break
-        case isNavtiveInstaller:
+        case isNavtiveRecipe:
           repoUrl = `${GH_ROOT}blitz-js/blitz`
-          subdirectory = `installers/${installerArg}`
+          subdirectory = `recipes/${recipeArg}`
           break
-        case isGitHubShorthandInstaller:
-          repoUrl = `${GH_ROOT}${installerArg}`
+        case isGitHubShorthandRecipe:
+          repoUrl = `${GH_ROOT}${recipeArg}`
           break
         default:
           throw new Error('should be impossible, the 3 cases are the only way to get into this switch')
@@ -89,12 +89,12 @@ export class Install extends Command {
       return {
         path: repoUrl,
         subdirectory,
-        type: InstallerType.Remote,
+        location: RecipeLocation.Remote,
       }
     } else {
       return {
-        path: installerArg,
-        type: InstallerType.Local,
+        path: recipeArg,
+        location: RecipeLocation.Local,
       }
     }
   }
@@ -108,14 +108,14 @@ export class Install extends Command {
    * @param defaultBranch the name of the repository's default branch
    */
   async cloneRepo(repoFullName: string, defaultBranch: string, subdirectory?: string): Promise<string> {
-    const installerDir = path.join(os.tmpdir(), `blitz-installer-${repoFullName.replace('/', '-')}`)
+    const recipeDir = path.join(os.tmpdir(), `blitz-recipe-${repoFullName.replace('/', '-')}`)
     // clean up from previous run in case of error
-    rimraf.sync(installerDir)
-    mkdirSync(installerDir)
-    process.chdir(installerDir)
+    rimraf.sync(recipeDir)
+    mkdirSync(recipeDir)
+    process.chdir(recipeDir)
 
     const repoName = repoFullName.split('/')[1]
-    // `tar` top-level filder is `${repoName}-${defaultBranch}`, and then we want to get our installer path
+    // `tar` top-level filder is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
     // within that folder
     const extractPath = subdirectory ? [`${repoName}-${defaultBranch}/${subdirectory}`] : undefined
     const depth = subdirectory ? subdirectory.split('/').length + 1 : 1
@@ -124,12 +124,12 @@ export class Install extends Command {
       tar.extract({strip: depth}, extractPath),
     )
 
-    return installerDir
+    return recipeDir
   }
 
-  private async runInstallerAtPath(installerPath: string) {
-    const installer = require(installerPath).default as Installer<any>
-    const installerArgs = this.argv.slice(1).reduce(
+  private async installRecipeAtPath(recipePath: string) {
+    const installer = require(recipePath).default as Installer<any>
+    const recipeArgs = this.argv.slice(1).reduce(
       (acc, arg) => ({
         ...acc,
         [arg.split('=')[0].replace(/--/g, '')]: arg.split('=')[1]
@@ -138,33 +138,33 @@ export class Install extends Command {
       }),
       {},
     )
-    await installer.run(installerArgs)
+    await installer.run(recipeArgs)
   }
 
   async run() {
     const {args} = this.parse(Install)
     const pkgManager = existsSync(path.resolve('yarn.lock')) ? 'yarn' : 'npm'
     const originalCwd = process.cwd()
-    const installerInfo = this.normalizeInstallerPath(args.installer)
+    const recipeInfo = this.normalizeRecipePath(args.recipe)
 
-    if (installerInfo.type === InstallerType.Remote) {
-      const apiUrl = installerInfo.path.replace(GH_ROOT, API_ROOT)
+    if (recipeInfo.location === RecipeLocation.Remote) {
+      const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const packageJsonPath = `${apiUrl}/contents/package.json`
 
       if (!(await isUrlValid(packageJsonPath))) {
-        log.error(dedent`[blitz install] Installer path "${args.installer}" isn't valid. Please provide:
+        log.error(dedent`[blitz install] Recipe path "${args.recipe}" isn't valid. Please provide:
           1. The name of a dependency to install (e.g. "tailwind"),
-          2. The full name of a GitHub repository (e.g. "blitz-js/example-installer"),
-          3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-installer"), or
-          4. A file path to a locally-written installer.`)
+          2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
+          3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
+          4. A file path to a locally-written recipe.`)
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.installer}`).start()
-        const installerRepoPath = await this.cloneRepo(
+        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe}`).start()
+        const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
           repoInfo.default_branch,
-          installerInfo.subdirectory,
+          recipeInfo.subdirectory,
         )
         spinner.stop()
 
@@ -175,16 +175,16 @@ export class Install extends Command {
         })
         spinner.stop()
 
-        const installerPackageMain = requireJSON('./package.json').main
-        const installerEntry = path.resolve(installerPackageMain)
+        const recipePackageMain = requireJSON('./package.json').main
+        const recipeEntry = path.resolve(recipePackageMain)
         process.chdir(originalCwd)
 
-        await this.runInstallerAtPath(installerEntry)
+        await this.installRecipeAtPath(recipeEntry)
 
-        rimraf.sync(installerRepoPath)
+        rimraf.sync(recipeRepoPath)
       }
     } else {
-      await this.runInstallerAtPath(path.resolve(args.installer))
+      await this.installRecipeAtPath(path.resolve(args.recipe))
     }
   }
 }
