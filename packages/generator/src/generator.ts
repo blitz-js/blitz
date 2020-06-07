@@ -99,6 +99,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
 
   prettierDisabled: boolean = false
   unsafe_disableConflictChecker = false
+  returnResults: boolean = false
 
   abstract sourceRoot: string
 
@@ -239,7 +240,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     return path.join(this.options.destinationRoot!, ...paths)
   }
 
-  async run() {
+  async run(): Promise<string | void> {
     if (!this.options.dryRun) {
       await fs.ensureDir(this.options.destinationRoot!)
       process.chdir(this.options.destinationRoot!)
@@ -275,12 +276,18 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       })
     }
 
-    this.performedActions.forEach((action) => {
-      console.log(action)
-    })
+    if (!this.returnResults) {
+      this.performedActions.forEach((action) => {
+        console.log(action)
+      })
+    }
 
     if (!this.options.dryRun) {
       await this.postWrite()
+    }
+
+    if (this.returnResults) {
+      return this.performedActions.join('\n')
     }
   }
 }

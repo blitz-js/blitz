@@ -25,6 +25,12 @@ export interface TransformResult {
 }
 export type Transformer = (ast: types.ASTNode, builder: builders, types: NamedTypes) => types.ASTNode
 
+export function processFile(original: string, transformerFn: Transformer): string {
+  const ast = parse(original, {parser: customTsParser})
+  const transformedCode = print(transformerFn(ast, types.builders, namedTypes)).code
+  return transformedCode
+}
+
 export function transform(transformerFn: Transformer, targetFilePaths: string[]): TransformResult[] {
   const results: TransformResult[] = []
   for (const filePath of targetFilePaths) {
@@ -38,8 +44,7 @@ export function transform(transformerFn: Transformer, targetFilePaths: string[])
     try {
       const fileBuffer = fs.readFileSync(filePath)
       const fileSource = fileBuffer.toString('utf-8')
-      const ast = parse(fileSource, {parser: customTsParser})
-      const transformedCode = print(transformerFn(ast, types.builders, namedTypes)).code
+      const transformedCode = processFile(fileSource, transformerFn)
       fs.writeFileSync(filePath, transformedCode)
       results.push({
         status: TransformStatus.Success,
