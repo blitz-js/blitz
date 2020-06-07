@@ -56,7 +56,7 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static parse(input: string): Field[] {
-    const [_fieldName, _fieldType, attribute] = input.split(':')
+    const [_fieldName, _fieldType = 'String', attribute] = input.split(':')
     let fieldName = singleCamel(_fieldName)
     let fieldType = singlePascal(_fieldType)
     let isRequired = true
@@ -139,7 +139,7 @@ export class Field {
         throw new Error(
           `Each field in a model must have a name, but you supplied ${log.variable(
             input,
-          )}. Try giving the field as a ${log.variable('name:type')} pair, such as ${log.variable(
+          )}.\n         Try giving the field as a ${log.variable('name:type')} pair, such as ${log.variable(
             'description:string',
           )}.`,
         )

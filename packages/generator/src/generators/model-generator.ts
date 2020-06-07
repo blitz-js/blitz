@@ -43,6 +43,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
         `Model for '${this.options.modelName}'${this.options.dryRun ? '' : 'created successfully'}:\n`,
       )
       modelDefinition.toString().split('\n').map(log.progress)
+      log.info('\nNow run ' + log.variable('blitz db migrate') + ' to add this model to your database\n')
     } catch (error) {
       throw error
     }

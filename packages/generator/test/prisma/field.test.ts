@@ -40,6 +40,10 @@ describe('Field model', () => {
     expect(Field.parse('id:int:default[autoincrement]'))
   })
 
+  it('has default field type', () => {
+    expect(Field.parse('name').toString()).toMatchInlineSnapshot(`"name  String"`)
+  })
+
   it('disallows special characters in model name', () => {
     expect(() => Field.parse('app-user:int')).toThrow()
   })
