@@ -8,7 +8,8 @@ import {
   PageGenerator,
   MutationGenerator,
   QueryGenerator,
-  FormGenerator /* ModelGenerator */,
+  FormGenerator,
+  ModelGenerator,
 } from '@blitzjs/generator'
 import {PromptAbortedError} from '../errors/prompt-aborted'
 import {log} from '@blitzjs/display'
@@ -24,10 +25,11 @@ const isTypescript = fs.existsSync(path.join(projectRoot, 'tsconfig.json'))
 enum ResourceType {
   All = 'all',
   Crud = 'crud',
-  Mutation = 'mutations',
-  Page = 'pages',
-  Query = 'queries',
-  // Resource = 'resource',
+  Model = 'model',
+  Mutations = 'mutations',
+  Pages = 'pages',
+  Queries = 'queries',
+  Resource = 'resource',
 }
 
 interface Flags {
@@ -63,32 +65,25 @@ function ModelNames(input: string = '') {
 }
 
 const generatorMap = {
-  [ResourceType.All]: [/*ModelGenerator*/ PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [ModelGenerator, PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
-  [ResourceType.Mutation]: [MutationGenerator],
-  [ResourceType.Page]: [PageGenerator, FormGenerator],
-  [ResourceType.Query]: [QueryGenerator],
-  // [ResourceType.Resource]: [/*ModelGenerator*/ QueryGenerator, MutationGenerator],
+  [ResourceType.Model]: [ModelGenerator],
+  [ResourceType.Mutations]: [MutationGenerator],
+  [ResourceType.Pages]: [PageGenerator, FormGenerator],
+  [ResourceType.Queries]: [QueryGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueryGenerator, MutationGenerator],
 }
 
 export class Generate extends Command {
   static description = 'Generate new files for your Blitz project'
-
   static aliases = ['g']
-
+  static strict = false
   static args = [
     {
       name: 'type',
       required: true,
       description: 'What files to generate',
-      options: [
-        ResourceType.All,
-        // ResourceType.Resource,
-        ResourceType.Crud,
-        ResourceType.Query,
-        ResourceType.Mutation,
-        ResourceType.Page,
-      ],
+      options: Object.keys(generatorMap).map((s) => s.toLowerCase()),
     },
     {
       name: 'model',
@@ -132,6 +127,19 @@ export class Generate extends Command {
 # Tasks), specify a parent model. For example, this command generates pages under
 # app/tasks/pages/projects/[projectId]/tasks/
 > blitz generate all tasks --parent=projects
+    `,
+    `# Database models can also be generated directly from the CLI
+# Model fields can be specified with any generator that generates
+# a database model ("all", "model", "resource"). Both of the below
+# will generate the proper database model for a Task.
+> blitz generate model task \\
+    name:string \\
+    completed:boolean:default[false] \\
+    belongsTo:project?
+> blitz generate all tasks \\
+    name:string \\
+    completed:boolean:default[false] \\
+    belongsTo:project?
     `,
   ]
 
@@ -181,7 +189,7 @@ export class Generate extends Command {
   }
 
   async run() {
-    const {args, flags}: {args: Args; flags: Flags} = this.parse(Generate)
+    const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug('args: ', args)
     debug('flags: ', flags)
 
@@ -193,6 +201,7 @@ export class Generate extends Command {
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: path.resolve(),
+          extraArgs: argv.slice(2).filter((arg) => !arg.startsWith('-')),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),

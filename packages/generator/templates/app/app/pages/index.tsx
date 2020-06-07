@@ -11,19 +11,13 @@ const Home = () => (
       <div className="logo">
         <img src="/logo.png" alt="blitz.js" />
       </div>
-      <p>
-        1. Add this code to <strong>db/schema.prisma</strong>:
-      </p>
+      <p>1. Run this command in your terminal:</p>
       <pre>
-        <code>{`model Project {
-  id      Int      @default(autoincrement()) @id
-  name    String
-}`}</code>
+        <code>blitz generate all project name:string</code>
       </pre>
-      <p>2. Run these commands in your terminal:</p>
+      <p>2. Then run this command:</p>
       <pre>
-        <code>{`$ blitz db migrate
-$ blitz generate all project`}</code>
+        <code>blitz db migrate</code>
       </pre>
 
       <p>
@@ -187,8 +181,8 @@ $ blitz generate all project`}</code>
       body {
         padding: 0;
         margin: 0;
-        font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-          Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {
