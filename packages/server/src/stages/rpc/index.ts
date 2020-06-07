@@ -62,13 +62,13 @@ export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof re
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
-import {rpcHandler} from '@blitzjs/server'
+import {rpcApiHandler} from '@blitzjs/server'
 import resolver from '${resolverPath}'
 let db
 try {
   db = require('db').default
 }catch(err){}
-export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => db && db.connect())
+export default rpcApiHandler('${resolverType}', '${resolverName}', resolver, () => db && db.connect())
 `
 
 function removeExt(filePath: string) {

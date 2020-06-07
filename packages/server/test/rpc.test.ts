@@ -2,9 +2,18 @@ import http from 'http'
 import fetch from 'isomorphic-unfetch'
 import listen from 'test-listen'
 import {apiResolver} from 'next/dist/next-server/server/api-utils'
-import {rpcHandler} from '../src/rpc'
+import {rpcApiHandler} from '../src/rpc'
+import {Middleware} from '../src/middleware'
 
-describe('rpcHandler', () => {
+const customMiddleware: Middleware = async (req, res, next) => {
+  res.blitzCtx.referrer = req.headers.referer
+
+  await next()
+
+  console.log('Query result:', res.blitzResult)
+}
+
+describe('rpcApiHandler', () => {
   describe('HEAD', () => {
     it('warms the endpoint', async () => {
       expect.assertions(1)
@@ -91,7 +100,7 @@ describe('rpcHandler', () => {
     resolverFn = jest.fn(),
     connectorFn = jest.fn(),
   ) {
-    const subject = rpcHandler('', 'server/test/rpc.test.ts', resolverFn, connectorFn)
+    const subject = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, connectorFn, [customMiddleware])
 
     let server = http.createServer((req, res) =>
       apiResolver(req, res, null, subject, {

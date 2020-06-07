@@ -1,14 +1,29 @@
-import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
+// import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
 import {log} from '@blitzjs/display'
 import {serializeError} from 'serialize-error'
+import {runMiddleware, compose, Middleware} from './middleware'
 
-export function rpcHandler(
+export function rpcApiHandler(
   _: string,
   name: string,
   resolver: (...args: any) => Promise<any>,
   connectDb?: () => any,
+  middleware: Middleware[] = [],
 ) {
-  return async function (req: BlitzApiRequest, res: BlitzApiResponse) {
+  // RPC Middleware is always the last middleware to run
+  middleware.push(rpcMiddleware(name, resolver, connectDb))
+
+  return async (req: any, res: any) => {
+    await runMiddleware(req, res, compose(middleware))
+  }
+}
+
+const rpcMiddleware = (
+  name: string,
+  resolver: (...args: any) => Promise<any>,
+  connectDb?: () => any,
+): Middleware => {
+  return async (req, res, next) => {
     const logPrefix = `${name}`
 
     if (req.method === 'HEAD') {
@@ -16,7 +31,8 @@ export function rpcHandler(
       if (typeof connectDb === 'function') {
         connectDb()
       }
-      return res.status(200).end()
+      res.status(200).end()
+      return next()
     } else if (req.method === 'POST') {
       // Handle RPC call
       console.log('') // New line
@@ -25,31 +41,36 @@ export function rpcHandler(
       if (typeof req.body.params === 'undefined') {
         const error = {message: 'Request body is missing the `params` key'}
         log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
-        return res.status(400).json({
+        res.status(400).json({
           result: null,
           error,
         })
+        return next()
       }
 
       try {
-        const result = await resolver(req.body.params)
+        const result = await resolver(req.body.params, res.blitzCtx)
 
         log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
-        return res.json({
+        res.blitzResult = result
+        res.json({
           result,
           error: null,
         })
+        return next()
       } catch (error) {
         log.error(`${logPrefix} failed: ${error}\n`)
-        return res.json({
+        res.json({
           result: null,
           error: serializeError(error),
         })
+        return next()
       }
     } else {
       // Everything else is error
       log.error(`${logPrefix} not found\n`)
-      return res.status(404).end()
+      res.status(404).end()
+      return next()
     }
   }
 }
