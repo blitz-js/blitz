@@ -13,7 +13,7 @@
     "wait:repl": "wait-on ../repl/dist/packages/repl/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src",
     "test": "tsdx test",
     "test:watch": "jest --watch"
   },
@@ -60,9 +60,6 @@
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
-    "@rollup/pluginutils": "3.0.8",
-    "@types/pluralize": "0.0.29",
-    "@types/tar": "4.0.3",
     "nock": "13.0.0-beta.3"
   },
   "oclif": {

@@ -8,7 +8,7 @@
     "clean": "rimraf dist",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
-    "lint": "tsdx lint",
+    "lint": "tsdx lint src",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch"
   },
@@ -30,11 +30,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blitz-js/blitz.git"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "dependencies": {
     "chokidar": "3.3.1",

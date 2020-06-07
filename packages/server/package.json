@@ -19,12 +19,7 @@
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
+    "lint": "tsdx lint src"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -65,9 +60,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.13.0",
-    "@rollup/pluginutils": "3.0.8",
-    "@types/detect-port": "1.3.0"
+    "@blitzjs/core": "0.13.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

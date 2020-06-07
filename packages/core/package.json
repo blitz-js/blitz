@@ -9,7 +9,7 @@
     "build": "tsdx build",
     "test": "tsdx test --env=jest-environment-jsdom-sixteen",
     "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint src"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -29,11 +29,6 @@
   "files": [
     "dist"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/jest.setup.js"
@@ -49,9 +44,6 @@
     "serialize-error": "6.0.0",
     "url": "0.11.0"
   },
-  "devDependencies": {
-    "@rollup/pluginutils": "3.0.8",
-    "jest-environment-jsdom-sixteen": "1.0.3"
-  },
+  "devDependencies": {},
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
