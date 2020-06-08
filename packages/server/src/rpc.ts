@@ -6,7 +6,7 @@ import {runMiddleware, compose, Middleware} from './middleware'
 export function rpcApiHandler(
   _: string,
   name: string,
-  resolver: (...args: any) => Promise<any>,
+  resolver: (input: any, ctx: Record<string, any>) => Promise<any>,
   connectDb?: () => any,
   middleware: Middleware[] = [],
 ) {

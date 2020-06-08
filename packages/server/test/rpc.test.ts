@@ -5,19 +5,19 @@ import {apiResolver} from 'next/dist/next-server/server/api-utils'
 import {rpcApiHandler} from '../src/rpc'
 import {Middleware} from '../src/middleware'
 
-const customMiddleware: Middleware = async (req, res, next) => {
-  res.blitzCtx.referrer = req.headers.referer
+// const customMiddleware: Middleware = async (req, res, next) => {
+//   res.blitzCtx.referrer = req.headers.referer
+//
+//   await next()
+//
+//   console.log('Query result:', res.blitzResult)
+// }
 
-  await next()
-
-  console.log('Query result:', res.blitzResult)
-}
-
-describe('rpcApiHandler', () => {
+describe('rpcMiddleware', () => {
   describe('HEAD', () => {
     it('warms the endpoint', async () => {
       expect.assertions(1)
-      await mockServer(async (url) => {
+      await mockServer({}, async (url) => {
         const res = await fetch(url, {method: 'HEAD'})
         expect(res.status).toBe(200)
       })
@@ -26,7 +26,7 @@ describe('rpcApiHandler', () => {
 
   describe('POST', () => {
     it('handles missing params', async () => {
-      await mockServer(async (url) => {
+      await mockServer({}, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
         })
@@ -39,7 +39,7 @@ describe('rpcApiHandler', () => {
     })
 
     it('handles incorrect method', async () => {
-      await mockServer(async (url) => {
+      await mockServer({}, async (url) => {
         const res = await fetch(url, {
           method: 'GET',
         })
@@ -49,9 +49,9 @@ describe('rpcApiHandler', () => {
     })
 
     it('executes the request', async () => {
-      const resolverSpy = jest.fn().mockImplementation(() => 'test')
+      const resolverFn = jest.fn().mockImplementation(() => 'test')
 
-      await mockServer(async (url) => {
+      await mockServer({resolverFn}, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
           headers: {
@@ -64,15 +64,15 @@ describe('rpcApiHandler', () => {
 
         expect(res.status).toBe(200)
         expect(data.result).toBe('test')
-      }, resolverSpy)
+      })
     })
 
     it('handles a query error', async () => {
-      const resolverSpy = jest.fn().mockImplementation(() => {
+      const resolverFn = jest.fn().mockImplementation(() => {
         throw new Error('something broke')
       })
 
-      await mockServer(async (url) => {
+      await mockServer({resolverFn}, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
           headers: {
@@ -85,7 +85,7 @@ describe('rpcApiHandler', () => {
 
         expect(res.status).toBe(200)
         expect(data.error.message).toBe('something broke')
-      }, resolverSpy)
+      })
     })
   })
 
@@ -96,14 +96,17 @@ describe('rpcApiHandler', () => {
    * @param connectFn The DB connection function
    */
   async function mockServer(
+    {
+      resolverFn = jest.fn(),
+      dbConnectorFn = jest.fn(),
+      middleware,
+    }: {resolverFn?: (...args: any) => any; dbConnectorFn?: (...args: any) => any; middleware?: Middleware[]},
     callback: (url: string) => Promise<void>,
-    resolverFn = jest.fn(),
-    connectorFn = jest.fn(),
   ) {
-    const subject = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, connectorFn, [customMiddleware])
+    const handler = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, dbConnectorFn, middleware)
 
     let server = http.createServer((req, res) =>
-      apiResolver(req, res, null, subject, {
+      apiResolver(req, res, null, handler, {
         previewModeId: 'previewModeId',
         previewModeEncryptionKey: 'previewModeEncryptionKey',
         previewModeSigningKey: 'previewModeSigningKey',

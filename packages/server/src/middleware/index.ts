@@ -13,19 +13,15 @@ export type Middleware = (
   next: MiddlewareNext,
 ) => Promise<void>
 
-export function runMiddleware(req: BlitzApiRequest, res: BlitzApiResponse, fn: Middleware) {
+export async function runMiddleware(req: BlitzApiRequest, res: BlitzApiResponse, handler: Middleware) {
   ;(res as MiddlewareResponse).blitzCtx = {}
-  return new Promise((resolve, reject) => {
-    fn(req, res as MiddlewareResponse, (result) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-
-      return resolve(result)
-    })
-  })
+  await handler(req, res as MiddlewareResponse, () => {})
 }
 
+// -------------------------------------------------------------------------------
+// This takes an array of middleware and composes them into a single middleware fn
+// This is what makes `next()` and `await next()` work
+// -------------------------------------------------------------------------------
 export function compose(middleware: Middleware[]): Middleware {
   if (!Array.isArray(middleware)) {
     throw new TypeError('Middleware stack must be an array!')
@@ -37,23 +33,25 @@ export function compose(middleware: Middleware[]): Middleware {
     }
   }
 
-  return function (req, res, next) {
+  // Return a single middleware function that composes everything passed in
+  return async function (req, res, _next) {
     // last called middleware #
     let index = -1
 
-    function dispatch(i: number): Promise<any> {
-      if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+    // Recursive function that calls the first middleware, then second, and so on.
+    async function dispatch(i: number) {
+      if (i <= index) throw new Error('next() called multiple times')
       index = i
+
       let handler = middleware[i]
-      if (i === middleware.length) handler = (next as unknown) as Middleware
-      if (!handler) return Promise.resolve()
-      try {
-        return Promise.resolve(handler(req, res, dispatch.bind(null, i + 1)))
-      } catch (err) {
-        return Promise.reject(err)
-      }
+      if (!handler) return
+
+      await handler(req, res, (error) => {
+        if (error) throw error
+        dispatch(i + 1)
+      })
     }
 
-    return dispatch(0)
+    return await dispatch(0)
   }
 }
