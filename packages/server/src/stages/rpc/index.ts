@@ -88,6 +88,11 @@ export default rpcApiHandler(
   middleware,
   () => db && db.connect(),
 )
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}
 `
 
 function removeExt(filePath: string) {

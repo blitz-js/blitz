@@ -12,15 +12,10 @@ type Get__ModelNames__Input = {
   // include?: FindMany__ModelName__Args['include']
 }
 
-export default async function get__ModelNames__({
-  where,
-  orderBy,
-  skip,
-  first,
-  last,
-  after,
-  before,
-}: Get__ModelNames__Input) {
+export default async function get__ModelNames__(
+  {where, orderBy, skip, first, last, after, before /* include */}: Get__ModelNames__Input,
+  ctx?: any,
+) {
   const __modelNames__ = await db.__modelName__.findMany({
     where,
     orderBy,

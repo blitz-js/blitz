@@ -5,14 +5,6 @@ import {apiResolver} from 'next/dist/next-server/server/api-utils'
 import {rpcApiHandler} from '../src/rpc'
 import {Middleware} from '../src/middleware'
 
-// const customMiddleware: Middleware = async (req, res, next) => {
-//   res.blitzCtx.referrer = req.headers.referer
-//
-//   await next()
-//
-//   console.log('Query result:', res.blitzResult)
-// }
-
 describe('rpcMiddleware', () => {
   describe('HEAD', () => {
     it('warms the endpoint', async () => {
@@ -53,21 +45,60 @@ describe('rpcMiddleware', () => {
       console.log = jest.fn()
       const resolverFn = jest.fn().mockImplementation(() => 'test')
 
-      await mockServer({resolverFn}, async (url) => {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({params: {}}),
-        })
+      await mockServer(
+        {
+          resolverFn,
+          middleware: [
+            async (_req, res, next) => {
+              await next()
+              expect(res.blitzResult).toBe('test')
+            },
+          ],
+        },
+        async (url) => {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({params: {}}),
+          })
 
-        const data = await res.json()
+          const data = await res.json()
 
-        expect(res.status).toBe(200)
-        expect(data.result).toBe('test')
-      })
+          expect(data.result).toBe('test')
+          expect(res.status).toBe(200)
+        },
+      )
     })
+
+    // it('executes the request', async () => {
+    //   console.log = jest.fn()
+    //   const resolverFn = jest.fn().mockImplementation(() => 'test')
+    //
+    //   await mockServer(
+    //     {
+    //       resolverFn,
+    //       middleware: [
+    //         async (_req, _res, next) => {
+    //           await next()
+    //           throw new Error('hack')
+    //         },
+    //       ],
+    //     },
+    //     async (url) => {
+    //       const res = await fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({params: {}}),
+    //       })
+    //
+    //       expect(res.status).toBe(500)
+    //     },
+    //   )
+    // })
 
     it('handles a query error', async () => {
       console.log = jest.fn()

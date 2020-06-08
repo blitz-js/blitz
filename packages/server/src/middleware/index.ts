@@ -46,9 +46,12 @@ export function compose(middleware: Middleware[]): Middleware {
       let handler = middleware[i]
       if (!handler) return
 
-      await handler(req, res, (error) => {
-        if (error) throw error
-        dispatch(i + 1)
+      await handler(req, res, async (error) => {
+        if (error) {
+          console.log('GOT ERROR')
+          throw error
+        }
+        await dispatch(i + 1)
       })
     }
 

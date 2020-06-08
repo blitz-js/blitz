@@ -6,7 +6,7 @@ type Get__ModelName__Input = {
   // include?: FindOne__ModelName__Args['include']
 }
 
-export default async function get__ModelName__({where}: Get__ModelName__Input) {
+export default async function get__ModelName__({where /* include */}: Get__ModelName__Input, ctx?: any) {
   const __modelName__ = await db.__modelName__.findOne({where})
 
   return __modelName__

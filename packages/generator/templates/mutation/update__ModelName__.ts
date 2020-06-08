@@ -13,7 +13,7 @@ if (process.env.parentModel) {
   }
 }
 
-export default async function update__ModelName__({where, data}: Update__ModelName__Input) {
+export default async function update__ModelName__({where, data}: Update__ModelName__Input, ctx?: any) {
   // Don't allow updating
   delete data.id
   if (process.env.parentModel) {
