@@ -5,6 +5,7 @@ import spawn from 'cross-spawn'
 export class GUI extends Command {
   static description = 'Runs the Blitz GUI'
   static aliases = ['ui']
+  static hidden = true
 
   async run() {
     log.branded('You started the Blitz GUI')
