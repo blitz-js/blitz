@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps<ProjectsPageProps> = async (
 
 const ProjectPage: BlitzPage<ProjectsPageProps> = ({projects, homedir}) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [isBrowserModalOpen, setIsBrowserModalOpen] = useState(true)
+    const [isBrowserModalOpen, setIsBrowserModalOpen] = useState(false)
 
     return (
         <>

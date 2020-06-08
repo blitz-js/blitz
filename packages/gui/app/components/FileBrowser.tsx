@@ -4,6 +4,7 @@ import {Folder, ArrowLeft, X} from "heroicons-react";
 import ReactTooltip from "react-tooltip";
 
 import getDirectory, {_File} from "../queries/getDirectory"
+import importProjects from "../mutations/importProject";
 
 // base = ['usr']
 type UseStackReturn = [
@@ -136,6 +137,24 @@ export const FileBrowser: FC<FileBrowserProps> = ({close}) => {
     const [path, {pop, push}] = useStack();
     const [selected, {toggle}] = useList();
 
+    const _importProjects = async () => {
+        try {
+            const projects = await importProjects({projects: selected.get()});
+
+            if(projects) {
+                alert('Import completed!')
+                console.log('Imported these: ', projects)
+                close()
+            } else {
+                alert('Import failed!')
+                close()
+            }
+        } catch(e) {
+            alert('Something failed :(');
+            console.error(e);
+        }
+    }
+
     return (
         <div className="relative bg-white flex flex-row w-full max-w-6xl mx-auto rounded-lg"
              style={{height: '50%', maxHeight: '50%', zIndex: 9999}}>
@@ -182,6 +201,7 @@ export const FileBrowser: FC<FileBrowserProps> = ({close}) => {
                 <div className="sticky bottom-0 px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                 <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                   <button
+                      onClick={_importProjects}
                       type="submit"
                       className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5 disabled:opacity-50"
                       disabled={selected.get().length <= 0}>
