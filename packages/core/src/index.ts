@@ -5,7 +5,11 @@ export * from './use-router-query'
 export * from './use-infinite-query'
 export * from './ssr-query'
 export * from './rpc'
+export {Middleware, MiddlewareRequest, MiddlewareResponse, MiddlewareNext} from '@blitzjs/server'
 
+// --------------------
+// Exports from Next.js
+// --------------------
 export {
   GetStaticProps,
   GetStaticPaths,

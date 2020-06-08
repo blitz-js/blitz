@@ -26,6 +26,7 @@ describe('rpcMiddleware', () => {
 
   describe('POST', () => {
     it('handles missing params', async () => {
+      console.error = jest.fn()
       await mockServer({}, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
@@ -49,6 +50,7 @@ describe('rpcMiddleware', () => {
     })
 
     it('executes the request', async () => {
+      console.log = jest.fn()
       const resolverFn = jest.fn().mockImplementation(() => 'test')
 
       await mockServer({resolverFn}, async (url) => {
@@ -68,6 +70,8 @@ describe('rpcMiddleware', () => {
     })
 
     it('handles a query error', async () => {
+      console.log = jest.fn()
+      console.error = jest.fn()
       const resolverFn = jest.fn().mockImplementation(() => {
         throw new Error('something broke')
       })
@@ -103,7 +107,7 @@ describe('rpcMiddleware', () => {
     }: {resolverFn?: (...args: any) => any; dbConnectorFn?: (...args: any) => any; middleware?: Middleware[]},
     callback: (url: string) => Promise<void>,
   ) {
-    const handler = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, dbConnectorFn, middleware)
+    const handler = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, middleware, dbConnectorFn)
 
     let server = http.createServer((req, res) =>
       apiResolver(req, res, null, handler, {
