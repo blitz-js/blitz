@@ -1,7 +1,8 @@
 import {Command, flags} from '@oclif/command'
-import {dev, prod} from '@blitzjs/server'
+import {dev, prod, ServerConfig} from '@blitzjs/server'
 
 import {runPrismaGeneration} from './db'
+import {isServerless} from 'src/utils/is-serverless'
 
 export class Start extends Command {
   static description = 'Start a development server'
@@ -26,10 +27,11 @@ export class Start extends Command {
   async run() {
     const {flags} = this.parse(Start)
 
-    const config = {
+    const config: ServerConfig = {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
+      serverless: isServerless(process.cwd()),
     }
 
     try {

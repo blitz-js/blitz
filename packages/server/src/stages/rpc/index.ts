@@ -1,27 +1,15 @@
 import File from 'vinyl'
 import slash from 'slash'
-import {absolutePathTransform} from '../utils'
-import {relative, resolve} from 'path'
-import {pathExistsSync} from 'fs-extra'
+import {relative} from 'path'
 import {Stage, transform} from '@blitzjs/file-pipeline'
 
-const configFiles = ['next.config.js', 'blitz.config.js']
+import {absolutePathTransform} from '../utils'
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
 export const createStageRpc: Stage = function configure({config: {src}}) {
   const fileTransformer = absolutePathTransform(src)
-
-  let serverless = false
-  for (const configFile of configFiles) {
-    if (pathExistsSync(resolve(src, configFile))) {
-      const config = require(resolve(src, configFile))
-      if (Object.keys(config).includes('target') && config.target.includes('serverless')) {
-        serverless = true
-      }
-    }
-  }
 
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
@@ -54,7 +42,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
 
     // Isomorphic RPC client
     const rpcFile = file.clone()
-    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath))
+    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, serverless))
     push(rpcFile)
 
     return next()
@@ -67,10 +55,10 @@ export function isRpcPath(filePath: string) {
   return /(?:app[\\/])(?!_rpc).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorphicRpcTemplate = (resolverPath: string) => `
+const isomorphicRpcTemplate = (resolverPath: string, warm: boolean) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 import resolver from '${resolverPath}'
-export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof resolver
+export default getIsomorphicRpcHandler(resolver, '${resolverPath}', ${warm}) as typeof resolver
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)

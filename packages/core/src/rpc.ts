@@ -42,14 +42,16 @@ export type RpcFunction = {
   cacheKey?: string
 }
 
-export function getIsomorphicRpcHandler(resolver: any, cacheKey: string) {
+export function getIsomorphicRpcHandler(resolver: any, cacheKey: string, warmup: boolean) {
   if (typeof window !== 'undefined') {
     const url = cacheKey.replace(/^app\/_rpc/, '/api')
     let rpcFn: RpcFunction = (params, opts = {}) => executeRpcCall(url, params, opts)
     rpcFn.cacheKey = url
 
     // Warm the lambda
-    executeRpcCall.warm(url)
+    if (warmup) {
+      executeRpcCall.warm(url)
+    }
     return rpcFn
   } else {
     return resolver
