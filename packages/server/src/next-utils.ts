@@ -40,7 +40,7 @@ export async function nextStartDev(
   let spawnCommand: string[] = ["dev"]
   let availablePort: number
   if (config.port) {
-    availablePort = await detect({port: config.port, hostname: config.hostname})
+    availablePort = await detect({port: config.port})
     spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
   }
   if (config.hostname) {
@@ -49,7 +49,7 @@ export async function nextStartDev(
 
   return new Promise((res, rej) => {
     if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port}`)
+      rej(`Couldn't start server on port ${config.port}::port already in use`)
     } else {
       spawn(nextBin, spawnCommand, {
         cwd,
@@ -80,7 +80,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
   let spawnCommand: string[] = ["start"]
   let availablePort: number
   if (config.port) {
-    availablePort = await detect({port: config.port, hostname: config.hostname})
+    availablePort = await detect({port: config.port})
     spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
   }
   if (config.hostname) {
@@ -89,7 +89,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
 
   return new Promise((res, rej) => {
     if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port}`)
+      rej(`Couldn't start server on port ${config.port} ::port already in use`)
     } else {
       spawn(nextBin, spawnCommand, {
         cwd,
