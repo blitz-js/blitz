@@ -9,7 +9,11 @@ type CreateProjectModalProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export const CreateProjectModal: FC<CreateProjectModalProps> = ({isModalOpen, homedir, setIsModalOpen}) => (
+export const CreateProjectModal: FC<CreateProjectModalProps> = ({
+  isModalOpen,
+  homedir,
+  setIsModalOpen,
+}) => (
   <Fade show={isModalOpen}>
     <div className="fixed inset-x-0 bottom-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
       <div onClick={() => setIsModalOpen(false)} className="fixed inset-0">

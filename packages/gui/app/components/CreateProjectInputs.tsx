@@ -31,10 +31,14 @@ export const CreateProjectInputs: FC<CreateProjectInputsProps> = ({
         Create Project
       </h3>
       <div className="mt-2">
-        <p className="text-sm leading-5 text-gray-500">Fill out the information below to get started.</p>
+        <p className="text-sm leading-5 text-gray-500">
+          Fill out the information below to get started.
+        </p>
       </div>
       <div className="mt-6 sm:mt-4">
-        <label htmlFor="name" className="block text-sm font-medium leading-5 text-left text-gray-700">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium leading-5 text-left text-gray-700">
           Name
         </label>
         <div className="mt-1 rounded-md shadow-sm">
@@ -63,7 +67,9 @@ export const CreateProjectInputs: FC<CreateProjectInputsProps> = ({
           />
         </div>
 
-        <label htmlFor="path" className="block mt-4 text-sm font-medium leading-5 text-left text-gray-700">
+        <label
+          htmlFor="path"
+          className="block mt-4 text-sm font-medium leading-5 text-left text-gray-700">
           Path
         </label>
         <div className="flex w-full max-w-sm mt-1 rounded-md shadow-sm">

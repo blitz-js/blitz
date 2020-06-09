@@ -9,7 +9,13 @@ import {
 import {FC, useState} from 'react'
 
 import getCreateProjectStatus from 'app/queries/getCreateProjectStatus'
-import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
+import {
+  CREATING_FILES,
+  DONE,
+  INSTALLING_DEPS,
+  RETRIEVING_DEPS,
+  UNKNOWN,
+} from 'utils/status'
 import {useInterval} from 'utils/hooks/web/useInterval'
 
 const getStatusMeta = (status: string) => {
@@ -79,7 +85,9 @@ export const CreateProjectStatus: FC<CreateProjectStatusProps> = ({path}) => {
           {Array(dots).fill('.')}
         </h3>
         <div className="mt-2">
-          <p className="text-sm leading-5 text-gray-500">{getStatusMeta(status).description}</p>
+          <p className="text-sm leading-5 text-gray-500">
+            {getStatusMeta(status).description}
+          </p>
         </div>
       </div>
     </div>
