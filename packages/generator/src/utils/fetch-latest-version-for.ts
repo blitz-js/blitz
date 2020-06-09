@@ -19,7 +19,7 @@ export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
       async ([dep, version]): Promise<[string, string]> => {
         let skipFetch = false
 
-        if (!version.match(/\d.x/)) skipFetch = true
+        if (!version.match(/\d.x/) && !dep.match(/@prisma\/\w+/)) skipFetch = true
 
         // We pin experimental versions to ensure they work, so don't auto update experimental
         if (version.match(/experimental/)) skipFetch = true

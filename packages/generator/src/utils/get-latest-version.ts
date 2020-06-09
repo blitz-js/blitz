@@ -17,7 +17,8 @@ export const getLatestVersion = async (
   dependency: string,
   templateVersion: string = '',
 ): Promise<Fallbackable<string>> => {
-  const major = templateVersion.replace('.x', '')
+  const toBeReplaced = templateVersion.substring(templateVersion.indexOf('.'))
+  const major = templateVersion.replace(toBeReplaced, '')
 
   try {
     const [allVersions, latestDistVersion] = await Promise.all([
