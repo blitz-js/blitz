@@ -52,15 +52,23 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
+  let spawnCommand: string[] = ["dev"]
+  let availablePort: number
+  if (config.port) {
+    availablePort = await detect({port: config.port, hostname: config.hostname})
+    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
+  }
+  if (config.hostname) {
+    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
+  }
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ['dev', '-p', `${availablePort}`, '-H', config.hostname!], {
-      cwd,
-      stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
-    })
-      .on('exit', (code: number) => {
-        code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
+    if (availablePort && availablePort !== config.port) {
+      rej(`Couldn't start server on port ${config.port}`)
+    } else {
+      spawn(nextBin, spawnCommand, {
+        cwd,
+        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
       })
         .on("exit", (code: number) => {
           code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
@@ -84,13 +92,31 @@ export function nextBuild(nextBin: string, cwd: string) {
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  const availablePort = await detect({port: config.port!, hostname: config.hostname!})
-  return Promise.resolve(
-    spawn(nextBin, ['start', '-p', `${availablePort}`, '-H', config.hostname!], {
-      cwd,
-      stdio: 'inherit',
-    }).on('error', (err) => {
-      console.error(err)
-    }),
-  )
+  let spawnCommand: string[] = ["start"]
+  let availablePort: number
+  if (config.port) {
+    availablePort = await detect({port: config.port, hostname: config.hostname})
+    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
+  }
+  if (config.hostname) {
+    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
+  }
+
+  return new Promise((res, rej) => {
+    if (availablePort && availablePort !== config.port) {
+      rej(`Couldn't start server on port ${config.port}`)
+    } else {
+      spawn(nextBin, spawnCommand, {
+        cwd,
+        stdio: "inherit",
+      })
+        .on("exit", (code: number) => {
+          code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+        })
+        .on("error", (err) => {
+          console.error(err)
+          rej(err)
+        })
+    }
+  })
 }
