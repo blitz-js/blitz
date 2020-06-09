@@ -1,0 +1,8 @@
+export * from './installer'
+export * from './executors/executor'
+export {type as AddDependencyType} from './executors/add-dependency-executor'
+export {type as FileTransformType} from './executors/file-transform-executor'
+export {type as NewFileType} from './executors/new-file-executor'
+export * from './utils/paths'
+export * from './transforms'
+export {customTsParser} from './utils/transform'

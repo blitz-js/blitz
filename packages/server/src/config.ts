@@ -1,17 +1,31 @@
 import {resolve} from 'path'
-import {ciLog} from './ciLog'
 import {resolveBinAsync} from './resolve-bin-async'
-import {synchronizeFiles} from './synchronizer'
+import {transformFiles} from '@blitzjs/file-pipeline'
+import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
+
+type Synchronizer = typeof transformFiles
 
 export type ServerConfig = {
   rootFolder: string
+  port: number
+  hostname: string
   interceptNextErrors?: boolean
   devFolder?: string
   buildFolder?: string
-  manifestPath?: string
   writeManifestFile?: boolean
   watch?: boolean
-  synchronizer?: typeof synchronizeFiles
+  transformFiles?: Synchronizer
+}
+
+type NormalizedConfig = Omit<ServerConfig, 'interceptNextErrors'> & {
+  ignore: string[]
+  include: string[]
+  nextBin: string
+  devFolder: string
+  buildFolder: string
+  transformFiles: Synchronizer
+  writeManifestFile: boolean
+  watch: boolean
 }
 
 const defaults = {
@@ -28,42 +42,29 @@ const defaults = {
     'coverage/**/*',
     'dist/**/*',
     'node_modules/**/*',
+    'cypress/**/*',
   ],
   includePaths: ['**/*'],
   devFolder: '.blitz/caches/dev',
   buildFolder: '.blitz/caches/build',
   nextBinPatched: './node_modules/.bin/next-patched',
-  manifestPath: '_manifest.json',
   writeManifestFile: true,
 }
 
-export async function enhance(config: ServerConfig) {
-  const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
-  const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
-  const manifestPath = resolve(devFolder, config.manifestPath || defaults.manifestPath)
-  const writeManifestFile =
-    typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
-
+export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
   const nextBinOrig = await resolveBinAsync('next')
   const nextBinPatched = await resolveBinAsync('@blitzjs/server', 'next-patched')
+  const git = parseChokidarRulesFromGitignore(resolve(process.cwd(), config.rootFolder))
 
-  const nextBin = resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig)
-
-  return ciLog(
-    `
-Logging the following to understand what is happening in our CI environment
-and investigate why we have been getting random CI test failures.
-This will be temporary.
-`,
-    {
-      ...config,
-      ignoredPaths: defaults.ignoredPaths,
-      includePaths: defaults.includePaths,
-      manifestPath,
-      nextBin,
-      buildFolder,
-      devFolder,
-      writeManifestFile,
-    },
-  )
+  return {
+    ...config,
+    buildFolder: resolve(config.rootFolder, config.buildFolder ?? defaults.buildFolder),
+    devFolder: resolve(config.rootFolder, config.devFolder ?? defaults.devFolder),
+    ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
+    include: defaults.includePaths.concat(git.includePaths),
+    nextBin: resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig),
+    transformFiles: config.transformFiles ?? transformFiles,
+    watch: config.watch ?? false,
+    writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
+  }
 }

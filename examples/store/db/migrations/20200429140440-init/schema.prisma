@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource sqlite {
+  provider = "sqlite"
+  url = "***"
+}
+
+// SQLite is easy to start with, but if you use Postgres in production
+// you should also use it in development with the following:
+//datasource postgresql {
+//  provider = "postgresql"
+//  url = "***"
+//}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+// --------------------------------------
+
+model User {
+  id      Int      @default(autoincrement()) @id
+  email   String   @unique
+  name    String?
+  role    String?
+  storeId Int?
+}
+
+model Product {
+  id          Int      @default(autoincrement()) @id
+  handle      String   @unique
+  name        String?
+  description String?
+  price       Int?
+}

@@ -1,0 +1,27 @@
+# 2020-05-26 Blitz Contributor Call
+
+- Attending: Brandon Bayer, Robert Rosenberg, Adam Markon, Simon Debbarma
+- Brandon:
+  - Kitze livestream last week went great — recording on youtube
+  - Codebase walkthrough yesterday went great — recording on youtube
+  - Website overhaul, installed Theme UI
+- Adam:
+  - Opened PR for Prisma model generation from the CLI
+  - Working on Installer stuff and prepping for integration with Gatsby recipes
+- Simon
+  - Working on custom illustrations for the web
+- Robert
+  - Misc work on website
+- Website
+  - Most website components are owned by us now instead of docusaurus, we&#39;ll need to be weary of api updates and any other important component updates
+  - Make sidebar like tailwind docs sidebar
+  - Dark theme needs to be fixed
+  - Theme switcher inconsistent
+  - Live code sandbox examples
+  - Code comparison between blitz and rails
+- Auth
+  - Rishabh continuing to work on pseudo code for the session management library
+  - Brandon planning to build http middleware support this week
+- CLI
+  - Adam working on new features, including generating prisma models and making existing templates aware of actual model attributes
+  - Plugin ideas / discussion once recipes are farther along. Will post an RFC for plugins at some point

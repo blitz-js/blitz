@@ -1,3 +1,7 @@
 #!/usr/bin/env node
 
-require('../dist/cli')
+try {
+    require('../dist/cli')
+} catch (e) {
+    console.error('Blitz is not available yet, make sure "yarn build" or "yarn dev" has completed compiling')
+}

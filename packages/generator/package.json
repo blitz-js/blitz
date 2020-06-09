@@ -1,0 +1,57 @@
+{
+  "name": "@blitzjs/generator",
+  "version": "0.13.0",
+  "description": "File generation for the Blitz CLI",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
+    "dev": "run-p watch build:templates",
+    "watch": "tsdx watch --verbose",
+    "build": "tsdx build && yarn build:templates",
+    "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
+    "test": "tsdx test",
+    "lint": "tsdx lint src",
+    "test:watch": "tsdx test --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "dist/index.js",
+  "module": "dist/generator.esm.js",
+  "types": "dist/packages/generator/src/index.d.ts",
+  "keywords": [
+    "blitz",
+    "generator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "dependencies": {
+    "@babel/core": "7.9.0",
+    "@babel/plugin-transform-typescript": "7.9.4",
+    "@blitzjs/display": "0.13.0",
+    "ast-types": "0.13.3",
+    "chalk": "4.0.0",
+    "cross-spawn": "7.0.2",
+    "diff": "4.0.2",
+    "enquirer": "2.3.5",
+    "fs-extra": "9.0.0",
+    "fs-readdir-recursive": "1.1.0",
+    "mem-fs": "1.1.3",
+    "mem-fs-editor": "6.0.0",
+    "node-fetch": "2.6.0",
+    "pluralize": "8.0.0",
+    "recast": "0.19.1",
+    "username": "5.1.0",
+    "vinyl": "2.2.0"
+  },
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
+}
