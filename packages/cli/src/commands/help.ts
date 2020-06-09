@@ -17,7 +17,6 @@ export class HelpCommand extends Command {
 
   async run() {
     const {flags, argv} = this.parse(HelpCommand)
-
     const help = new Help(this.config, {all: flags.all})
     help.showHelp(argv)
   }
