@@ -1,4 +1,5 @@
 import {Command, flags} from '@oclif/command'
+import {getConfig} from '@blitzjs/config'
 
 import Help from '@oclif/plugin-help'
 
@@ -17,6 +18,10 @@ export class HelpCommand extends Command {
 
   async run() {
     const {flags, argv} = this.parse(HelpCommand)
+
+    const config = getConfig()
+    console.log(config)
+
     const help = new Help(this.config, {all: flags.all})
     help.showHelp(argv)
   }

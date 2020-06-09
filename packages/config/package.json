@@ -1,5 +1,5 @@
 {
-  "name": "@blitz/config",
+  "name": "@blitzjs/config",
   "description": "Loading next.config.js and blitz.config.js files",
   "keywords": [
     "next.config.js",

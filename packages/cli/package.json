@@ -6,11 +6,12 @@
   "scripts": {
     "b": "./bin/run",
     "clean": "rimraf lib",
-    "predev": "yarn wait:installer && yarn wait:server && yarn wait:generator && yarn wait:repl",
+    "predev": "yarn wait:installer && yarn wait:server && yarn wait:generator && yarn wait:repl && yarn wait:config",
     "wait:generator": "wait-on ../generator/dist/packages/generator/src/index.d.ts",
     "wait:server": "wait-on ../server/dist/packages/server/src/index.d.ts",
     "wait:installer": "wait-on ../installer/dist/packages/installer/src/index.d.ts",
     "wait:repl": "wait-on ../repl/dist/packages/repl/src/index.d.ts",
+    "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "lint": "tsdx lint src",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@blitzjs/generator": "0.13.0",
     "@blitzjs/installer": "0.13.0",
+    "@blitzjs/config": "0.13.0",
     "@blitzjs/server": "0.13.0",
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
