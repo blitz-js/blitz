@@ -16,7 +16,7 @@ type UseStackReturn = [
 ]
 
 function useStack(base: string[] = []): UseStackReturn {
-    const [stack, setStack] = useState(base)
+    const [stack, setStack] = useState(['/', ...base])
     const pop = useCallback(() => {
         let rest = stack
         const last = stack.pop()
@@ -30,7 +30,7 @@ function useStack(base: string[] = []): UseStackReturn {
     }, [])
 
     const resolve = useCallback(() => {
-        return '/' + stack.join('/')
+        return !stack[1] ? stack.join('/') : '/' + stack.slice(1).join('/')
     }, [stack])
 
     return [resolve(), {pop, push}]
@@ -48,17 +48,14 @@ function useList(base: any[] = []): UseListReturn {
     const [list, setList] = useState(base)
 
     const remove = useCallback((filter: string) => {
-        console.log('Removing from selected: ', filter, list.filter((str) => str !== filter));
         setList((list) => [...list.filter((str) => str !== filter)])
     }, [setList])
 
     const add = useCallback((entry: string) => {
-        console.log('Adding to selected: ', entry);
         setList((list) => [...list, entry])
     }, [setList])
 
     const get = useCallback((filter?: string) => {
-        console.log(list);
         return filter ? list.filter((str) => filter === str) : list
     }, [list])
 
@@ -130,11 +127,12 @@ const Directories: FC<DirectoriesProps> = ({path, selected, onClickFile, onClick
 
 
 type FileBrowserProps = {
-    close: () => void
+    close: () => void,
+    base: string
 }
 
-export const FileBrowser: FC<FileBrowserProps> = ({close}) => {
-    const [path, {pop, push}] = useStack();
+export const FileBrowser: FC<FileBrowserProps> = ({close, base}) => {
+    const [path, {pop, push}] = useStack(base.slice(1).split("/"));
     const [selected, {toggle}] = useList();
 
     const _importProjects = async () => {

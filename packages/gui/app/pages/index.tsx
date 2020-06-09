@@ -31,7 +31,7 @@ const ProjectPage: BlitzPage<ProjectsPageProps> = ({projects, homedir}) => {
     return (
         <>
             <CreateProjectModal isModalOpen={isModalOpen} homedir={homedir} setIsModalOpen={setIsModalOpen}/>
-            <CreateFileBrowserModal isModalOpen={isBrowserModalOpen} setIsModalOpen={setIsBrowserModalOpen} />
+            <CreateFileBrowserModal isModalOpen={isBrowserModalOpen} homedir={homedir} setIsModalOpen={setIsBrowserModalOpen} />
             <Nav setIsModalOpen={setIsModalOpen} openImport={() => setIsBrowserModalOpen(true)}/>
             <Greeting/>
             <ProjectList projects={projects}/>
