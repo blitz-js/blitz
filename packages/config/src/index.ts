@@ -3,9 +3,11 @@ import {join} from 'path'
 import {existsSync} from 'fs'
 
 const configFiles = ['blitz.config.js', 'next.config.js']
-
-export const getConfig = async (): Promise<Record<string, unknown>> => {
-  if (Object.keys(global.config).length > 0) {
+/**
+ * @param {boolean | undefined} reload - reimport config files to reset global cache
+ */
+export const getConfig = async (reload?: boolean): Promise<Record<string, unknown>> => {
+  if (Object.keys(global.config).length > 0 && !reload) {
     return global.config
   }
 
