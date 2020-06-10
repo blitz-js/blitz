@@ -16,6 +16,7 @@ module.exports = {
     'import/first': 'off',
     'import/no-default-export': 'error',
     'require-await': 'error',
+    'no-async-promise-executor': 'error',
     'unicorn/filename-case': [
       'error',
       {
