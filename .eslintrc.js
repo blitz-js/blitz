@@ -6,6 +6,7 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
+    project: `./tsconfig.json`,
   },
   plugins: ['@typescript-eslint', 'import', 'unicorn'],
   extends: ['react-app'],
@@ -20,6 +21,7 @@ module.exports = {
         case: 'kebabCase',
       },
     ],
+    '@typescript-eslint/no-floating-promises': 'error',
   },
   ignorePatterns: ['packages/cli/', 'packages/generator/templates'],
   overrides: [
@@ -28,6 +30,7 @@ module.exports = {
       rules: {
         'import/no-default-export': 'off',
         'unicorn/filename-case': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
       },
     },
   ],
