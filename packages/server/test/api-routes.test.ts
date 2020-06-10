@@ -53,7 +53,7 @@ describe('Dev command', () => {
     mocks.mockFs.restore()
   })
 
-  it('should copy the correct files to the dev folder', async () => {
+  it('should copy the correct files to the dev folder', () => {
     expect(directoryTree(devFolder)).toEqual({
       name: '.blitz-stages',
       children: [

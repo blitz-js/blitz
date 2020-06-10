@@ -39,6 +39,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ''
   }
 
+  // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }

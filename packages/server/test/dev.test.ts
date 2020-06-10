@@ -33,7 +33,7 @@ describe('Dev command', () => {
     jest.clearAllMocks()
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     console.log = originalLog
   })
 
@@ -65,7 +65,7 @@ describe('Dev command', () => {
   })
 
   describe.skip('when with next.config', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       rootFolder = resolve('bad')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz')
@@ -100,7 +100,7 @@ describe('Dev command', () => {
   })
 
   describe('when run normally', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       rootFolder = resolve('dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')

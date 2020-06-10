@@ -2,7 +2,7 @@ import {readFile} from 'fs'
 import {Manifest} from './stages/manifest'
 
 export const ManifestLoader = {
-  async load(filename: string) {
+  load(filename: string) {
     return new Promise((resolve, reject) => {
       readFile(filename, 'utf8', (err, data) => {
         if (err) {

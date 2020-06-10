@@ -83,7 +83,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}
   )
 }
 
-async function getPackageManager(): Promise<'yarn' | 'npm'> {
+function getPackageManager(): Promise<'yarn' | 'npm'> {
   if (fs.existsSync(path.resolve('package-lock.json'))) {
     return 'npm'
   }
@@ -91,7 +91,7 @@ async function getPackageManager(): Promise<'yarn' | 'npm'> {
 }
 
 async function installPackages(packages: NpmPackage[], isDev = false) {
-  const packageManager = await getPackageManager()
+  const packageManager = getPackageManager()
   const args: string[] = ['add']
 
   if (isDev) {

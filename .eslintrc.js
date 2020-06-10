@@ -13,8 +13,9 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off', // React is always in scope with Blitz
     'jsx-a11y/anchor-is-valid': 'off', //Doesn't play well with Blitz/Next <Link> usage
-    'import/first': 0,
-    'import/no-default-export': ['error'],
+    'import/first': 'off',
+    'import/no-default-export': 'error',
+    'require-await': 'error',
     'unicorn/filename-case': [
       'error',
       {

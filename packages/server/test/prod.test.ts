@@ -35,7 +35,7 @@ describe('Prod command', () => {
     hostname: 'localhost',
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     mocks.mockFs({
       build: {
         '.now': '',
