@@ -83,7 +83,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}
   )
 }
 
-function getPackageManager(): Promise<'yarn' | 'npm'> {
+function getPackageManager() {
   if (fs.existsSync(path.resolve('package-lock.json'))) {
     return 'npm'
   }
