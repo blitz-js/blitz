@@ -83,7 +83,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}
   )
 }
 
-async function getPackageManager(): Promise<'yarn' | 'npm'> {
+function getPackageManager() {
   if (fs.existsSync(path.resolve('package-lock.json'))) {
     return 'npm'
   }
@@ -91,7 +91,7 @@ async function getPackageManager(): Promise<'yarn' | 'npm'> {
 }
 
 async function installPackages(packages: NpmPackage[], isDev = false) {
-  const packageManager = await getPackageManager()
+  const packageManager = getPackageManager()
   const args: string[] = ['add']
 
   if (isDev) {
@@ -128,6 +128,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) =
       await installPackages(packagesToInstall)
       setDepsInstalled(true)
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     installDeps()
   }, [cliArgs, step])
 
@@ -140,6 +141,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) =
       await installPackages(packagesToInstall, true)
       setDevDepsInstalled(true)
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     installDevDeps()
   }, [cliArgs, depsInstalled, step])
 

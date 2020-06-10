@@ -9,8 +9,7 @@
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
-    "lint": "tsdx lint"
+    "test:watch": "tsdx test --watch"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -23,11 +22,6 @@
   "files": [
     "dist"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "keywords": [
     "blitz",
     "installer"
@@ -55,9 +49,6 @@
     "recast": "0.19.1",
     "ts-node": "8.9.1"
   },
-  "devDependencies": {
-    "@types/ink-spinner": "3.0.0",
-    "@types/node": "13.13.4"
-  },
+  "devDependencies": {},
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

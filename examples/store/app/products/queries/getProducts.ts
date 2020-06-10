@@ -5,16 +5,14 @@ type GetProductsInput = {
   where?: FindManyProductArgs["where"]
   orderBy?: FindManyProductArgs["orderBy"]
   skip?: FindManyProductArgs["skip"]
-  first?: FindManyProductArgs["first"]
-  last?: FindManyProductArgs["last"]
-  after?: FindManyProductArgs["after"]
-  before?: FindManyProductArgs["before"]
+  cursor?: FindManyProductArgs["cursor"]
+  take?: FindManyProductArgs["take"]
   // Only available if a model relationship exists
   // include?: FindManyProductArgs['include']
 }
 
 export default async function getProducts(
-  { where, orderBy, skip, first, last, after, before }: GetProductsInput,
+  { where, orderBy, skip, cursor, take }: GetProductsInput,
   ctx?: any
 ) {
   console.log("HTTP referer:", ctx.referer)
@@ -23,10 +21,8 @@ export default async function getProducts(
     where,
     orderBy,
     skip,
-    first,
-    last,
-    after,
-    before,
+    cursor,
+    take,
   })
 
   return products

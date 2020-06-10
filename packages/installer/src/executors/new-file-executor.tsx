@@ -73,6 +73,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
         setDryRunOutput(results)
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     proposeFileAdditions()
   }, [dryRunOutput, generatorArgs])
 
@@ -117,6 +118,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, onChangeCommitted, step}) =
         setFileCreateOutput(results)
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     createNewFiles()
   }, [fileCreateOutput, generatorArgs])
 

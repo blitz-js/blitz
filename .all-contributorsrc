@@ -634,6 +634,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "gvasquez11",
+      "name": "gvasquez11",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36422346?v=4",
+      "profile": "https://www.linkedin.com/in/gregory-vasquez-96413b184/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "josemiguelo",
+      "name": " José Miguel Ochoa",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15330034?v=4",
+      "profile": "https://github.com/josemiguelo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "osirvent",
+      "name": "Oscar Sirvent",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5927133?v=4",
+      "profile": "https://github.com/osirvent",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -54,7 +54,7 @@ export function transform(
 ) {
   const mergedOpts = Object.assign({}, defaultStreamOptions, options)
   return through(mergedOpts, async function (item: PipelineItem, _, next: StreamApi['next']) {
-    processInput({transformFn, next, self: this, item})
+    await processInput({transformFn, next, self: this, item})
   })
 }
 
@@ -64,7 +64,7 @@ transform.file = function transformFiles(
 ) {
   const mergedOpts = Object.assign({}, defaultStreamOptions, options)
   return through(mergedOpts, async function (item: PipelineItem, _, next: StreamApi['next']) {
-    processInput({transformFn, next, self: this, filesOnly: true, item})
+    await processInput({transformFn, next, self: this, filesOnly: true, item})
   })
 }
 

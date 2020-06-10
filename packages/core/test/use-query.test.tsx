@@ -6,6 +6,7 @@ describe('useQuery', () => {
   const setupHook = (params: any, queryFn: (...args: any) => Promise<any>): [{data?: any}, Function] => {
     let res = {}
     function TestHarness() {
+      // eslint-disable-next-line require-await
       useQuery(async (num: number) => num, 1)
       const [data] = useQuery(queryFn, params)
       Object.assign(res, {data})
@@ -23,6 +24,7 @@ describe('useQuery', () => {
   }
 
   describe('a "query" that converts the string parameter to uppercase', () => {
+    // eslint-disable-next-line require-await
     const upcase = async (args: string): Promise<string> => {
       return args.toUpperCase()
     }
@@ -44,6 +46,7 @@ describe('useQuery', () => {
       const [res, rerender] = setupHook(() => params(), upcase)
       await screen.findByText('Missing Dependency')
 
+      // eslint-disable-next-line require-await
       await act(async () => {
         // simulates the dependency becoming available
         params = () => 'test'
