@@ -1,5 +1,14 @@
 module.exports = {
-  extends: ['react-app', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  plugins: ['@typescript-eslint', 'import', 'unicorn'],
+  extends: [],
   rules: {
     'import/first': 0,
     'import/no-default-export': ['error'],
@@ -10,5 +19,14 @@ module.exports = {
       },
     ],
   },
-  plugins: ['unicorn'],
+  ignorePatterns: ['packages/cli/', 'packages/generator/templates'],
+  overrides: [
+    {
+      files: ['examples/**', 'packages/gui/**'],
+      rules: {
+        'import/no-default-export': 'off',
+        'unicorn/filename-case': 'off',
+      },
+    },
+  ],
 }
