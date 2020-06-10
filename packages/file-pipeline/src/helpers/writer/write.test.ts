@@ -5,7 +5,7 @@ import {normalize} from 'path'
 import File from 'vinyl'
 import {FILE_DELETED, FILE_WRITTEN} from '../../events'
 
-describe('writer', async () => {
+describe('writer', () => {
   it('should write files', async () => {
     // Setup an input stream
 
