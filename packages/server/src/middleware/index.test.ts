@@ -7,7 +7,27 @@ import {BlitzApiRequest, BlitzApiResponse, Middleware} from '@blitzjs/core'
 import {runMiddleware, compose} from '.'
 
 describe('runMiddleware', () => {
-  it('works', async () => {
+  it('works without await', async () => {
+    const middleware: Middleware[] = [
+      async (_req, res, next) => {
+        res.status(201)
+        next()
+      },
+      async (_req, res, next) => {
+        res.setHeader('test', 'works')
+        res.json({a: 'b'})
+        next()
+      },
+    ]
+
+    await mockServer(middleware, async (url) => {
+      const res = await fetch(url)
+      expect(res.status).toBe(201)
+      expect(res.headers.get('test')).toBe('works')
+    })
+  })
+
+  it('works with await', async () => {
     const middleware: Middleware[] = [
       async (_req, res, next) => {
         res.status(201)
@@ -95,7 +115,9 @@ describe('runMiddleware', () => {
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
   const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     await runMiddleware(req, res, compose(middleware))
-    res.end()
+    if (!res.writableEnded) {
+      res.end()
+    }
   }
 
   let server = http.createServer((req, res) =>

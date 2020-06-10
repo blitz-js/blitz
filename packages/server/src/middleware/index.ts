@@ -16,21 +16,15 @@ export async function runMiddleware(
     }
 
     await handler(req, res as MiddlewareResponse, (error) => {
-      console.log('top level next', error)
+      // console.log('top level next', error)
       if (error) {
-        console.log('throwing error', error)
         throw error
-      } else {
-        if (!res.writableEnded) {
-          res.end()
-        }
       }
     })
   } catch (error) {
     // console.log('Caught error', error)
-    console.log('before throw', res.writableFinished, res.statusCode)
     if (res.writableFinished) {
-      console.log(error)
+      console.log(error + '\n\n')
       throw new Error('Error occured in middleware after the response was already sent to the browser')
     } else {
       res.statusCode = (error as any).code || (error as any).status || 500
@@ -63,14 +57,13 @@ export function compose(middleware: Middleware[]): Middleware {
 
     // Recursive function that calls the first middleware, then second, and so on.
     async function dispatch(i: number) {
-      // console.log('dispatch', i)
+      console.log('dispatch', i)
       if (i <= index) throw new Error('next() called multiple times')
       index = i
 
-      // TODO: there's something goofy here. See logs
       let handler = middleware[i]
       if (!handler) {
-        // console.log('No handler, returning')
+        console.log('No handler, returning')
         return
       }
 
@@ -78,11 +71,12 @@ export function compose(middleware: Middleware[]): Middleware {
         await handler(req, res, async (error) => {
           if (error) {
             middlewareError = error
-            // console.log('dispatch error:', error)
+            console.log('dispatch error:', error)
           } else {
-            // console.log('Calling dispatch from `next`')
+            console.log('Calling dispatch from `next`')
             await dispatch(i + 1)
           }
+          console.log('next resolved', i + 1)
         })
       } catch (error) {
         middlewareError = error
@@ -91,6 +85,7 @@ export function compose(middleware: Middleware[]): Middleware {
     }
 
     await dispatch(0)
+    console.log('next resolved 0')
 
     return next(middlewareError)
   }

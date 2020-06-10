@@ -15,7 +15,9 @@ export function rpcApiHandler(
 
   return async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     await runMiddleware(req, res, middleware)
-    console.log('after runMiddleware', res.writableFinished, res.statusCode)
+    if (!res.writableEnded) {
+      res.end()
+    }
   }
 }
 

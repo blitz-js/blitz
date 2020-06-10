@@ -42,13 +42,16 @@ describe('rpcMiddleware', () => {
     })
 
     it('executes the request', async () => {
-      console.log = jest.fn()
+      // console.log = jest.fn()
       const resolverFn = jest.fn().mockImplementation(() => 'test')
 
       await mockServer(
         {
           resolverFn,
           middleware: [
+            (_req, _res, next) => {
+              next()
+            },
             async (_req, res, next) => {
               await next()
               expect(res.blitzResult).toBe('test')

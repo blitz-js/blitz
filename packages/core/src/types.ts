@@ -27,4 +27,4 @@ export type Middleware = (
   req: MiddlewareRequest,
   res: MiddlewareResponse,
   next: MiddlewareNext,
-) => Promise<void>
+) => Promise<void> | void

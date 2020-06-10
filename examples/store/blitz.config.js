@@ -1,9 +1,11 @@
 module.exports = {
   // Express/Connect compatible
   middleware: [
-    (req, res, next) => {
+    async (req, res, next) => {
       res.blitzCtx.referer = req.headers.referer
-      next()
+      console.log("header middleware before")
+      await next()
+      console.log("header middleware after")
     },
   ],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
