@@ -5,7 +5,7 @@ export * from './use-router-query'
 export * from './use-infinite-query'
 export * from './ssr-query'
 export * from './rpc'
-export {Middleware, MiddlewareRequest, MiddlewareResponse, MiddlewareNext} from '@blitzjs/server'
+export * from './types'
 
 // --------------------
 // Exports from Next.js

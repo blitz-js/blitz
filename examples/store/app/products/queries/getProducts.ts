@@ -35,8 +35,9 @@ export default async function getProducts(
 export const middleware: Middleware[] = [
   async (req, res, next) => {
     await next()
-    if (req.method === "POST") {
-      console.log("[Middleware] Total product count:", res.blitzResult.length)
-    }
+    throw new Error("hey")
+    // if (req.method === "POST") {
+    //   // console.log("[Middleware] Total product count:", res.blitzResult.length)
+    // }
   },
 ]

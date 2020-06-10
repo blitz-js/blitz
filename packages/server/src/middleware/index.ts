@@ -1,21 +1,42 @@
-import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
+import {Middleware, MiddlewareResponse, BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
 
-export interface MiddlewareRequest extends BlitzApiRequest {}
-export interface MiddlewareResponse extends BlitzApiResponse {
-  blitzCtx: Record<string, any>
-  blitzResult: any
-}
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
+export async function runMiddleware(
+  req: BlitzApiRequest,
+  res: BlitzApiResponse,
+  middleware: Middleware | Middleware[],
+) {
+  try {
+    ;(res as MiddlewareResponse).blitzCtx = {}
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void>
+    let handler: Middleware
+    if (Array.isArray(middleware)) {
+      handler = compose(middleware)
+    } else {
+      handler = middleware
+    }
 
-export async function runMiddleware(req: BlitzApiRequest, res: BlitzApiResponse, handler: Middleware) {
-  ;(res as MiddlewareResponse).blitzCtx = {}
-  await handler(req, res as MiddlewareResponse, () => {})
+    await handler(req, res as MiddlewareResponse, (error) => {
+      console.log('top level next', error)
+      if (error) {
+        console.log('throwing error', error)
+        throw error
+      } else {
+        if (!res.writableEnded) {
+          res.end()
+        }
+      }
+    })
+  } catch (error) {
+    // console.log('Caught error', error)
+    console.log('before throw', res.writableFinished, res.statusCode)
+    if (res.writableFinished) {
+      console.log(error)
+      throw new Error('Error occured in middleware after the response was already sent to the browser')
+    } else {
+      res.statusCode = (error as any).code || (error as any).status || 500
+      res.end(error.message || res.statusCode.toString())
+    }
+  }
 }
 
 // -------------------------------------------------------------------------------
@@ -34,27 +55,43 @@ export function compose(middleware: Middleware[]): Middleware {
   }
 
   // Return a single middleware function that composes everything passed in
-  return async function (req, res, _next) {
+  return async function (req, res, next) {
     // last called middleware #
     let index = -1
 
+    let middlewareError
+
     // Recursive function that calls the first middleware, then second, and so on.
     async function dispatch(i: number) {
+      // console.log('dispatch', i)
       if (i <= index) throw new Error('next() called multiple times')
       index = i
 
+      // TODO: there's something goofy here. See logs
       let handler = middleware[i]
-      if (!handler) return
+      if (!handler) {
+        // console.log('No handler, returning')
+        return
+      }
 
-      await handler(req, res, async (error) => {
-        if (error) {
-          console.log('GOT ERROR')
-          throw error
-        }
-        await dispatch(i + 1)
-      })
+      try {
+        await handler(req, res, async (error) => {
+          if (error) {
+            middlewareError = error
+            // console.log('dispatch error:', error)
+          } else {
+            // console.log('Calling dispatch from `next`')
+            await dispatch(i + 1)
+          }
+        })
+      } catch (error) {
+        middlewareError = error
+        // console.log('dispatch error:', error)
+      }
     }
 
-    return await dispatch(0)
+    await dispatch(0)
+
+    return next(middlewareError)
   }
 }

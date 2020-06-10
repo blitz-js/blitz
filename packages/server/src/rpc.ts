@@ -1,6 +1,7 @@
 import {log} from '@blitzjs/display'
+import {Middleware, BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
 import {serializeError} from 'serialize-error'
-import {runMiddleware, compose, Middleware} from './middleware'
+import {runMiddleware} from './middleware'
 
 export function rpcApiHandler(
   _: string,
@@ -12,8 +13,9 @@ export function rpcApiHandler(
   // RPC Middleware is always the last middleware to run
   middleware.push(rpcMiddleware(name, resolver, connectDb))
 
-  return async (req: any, res: any) => {
-    await runMiddleware(req, res, compose(middleware))
+  return async (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    await runMiddleware(req, res, middleware)
+    console.log('after runMiddleware', res.writableFinished, res.statusCode)
   }
 }
 

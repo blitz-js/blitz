@@ -3,8 +3,8 @@ import http from 'http'
 import listen from 'test-listen'
 import fetch from 'isomorphic-unfetch'
 
-import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
-import {runMiddleware, compose, Middleware} from '.'
+import {BlitzApiRequest, BlitzApiResponse, Middleware} from '@blitzjs/core'
+import {runMiddleware, compose} from '.'
 
 describe('runMiddleware', () => {
   it('works', async () => {
@@ -45,6 +45,22 @@ describe('runMiddleware', () => {
     })
   })
 
+  it('can short circuit request by not calling next', async () => {
+    const middleware: Middleware[] = [
+      async (_req, res, _next) => {
+        res.status(201)
+      },
+      async (_req, _res, _next) => {
+        throw new Error('This middleware should never run')
+      },
+    ]
+
+    await mockServer(middleware, async (url) => {
+      const res = await fetch(url)
+      expect(res.status).toBe(201)
+    })
+  })
+
   it('middleware can throw', async () => {
     console.error = jest.fn()
     const middleware: Middleware[] = [
@@ -63,6 +79,9 @@ describe('runMiddleware', () => {
     const middleware: Middleware[] = [
       async (_req, _res, next) => {
         next(new Error('test'))
+      },
+      async (_req, _res, _next) => {
+        throw new Error('Remaining middleware should not run if previous has error')
       },
     ]
 

@@ -2,8 +2,8 @@ import http from 'http'
 import fetch from 'isomorphic-unfetch'
 import listen from 'test-listen'
 import {apiResolver} from 'next/dist/next-server/server/api-utils'
+import {Middleware} from '@blitzjs/core'
 import {rpcApiHandler} from '../src/rpc'
-import {Middleware} from '../src/middleware'
 
 describe('rpcMiddleware', () => {
   describe('HEAD', () => {
@@ -72,33 +72,65 @@ describe('rpcMiddleware', () => {
       )
     })
 
-    // it('executes the request', async () => {
-    //   console.log = jest.fn()
-    //   const resolverFn = jest.fn().mockImplementation(() => 'test')
-    //
-    //   await mockServer(
-    //     {
-    //       resolverFn,
-    //       middleware: [
-    //         async (_req, _res, next) => {
-    //           await next()
-    //           throw new Error('hack')
-    //         },
-    //       ],
-    //     },
-    //     async (url) => {
-    //       const res = await fetch(url, {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({params: {}}),
-    //       })
-    //
-    //       expect(res.status).toBe(500)
-    //     },
-    //   )
-    // })
+    it('handles errors from middleware and aborts execution', async () => {
+      console.log = jest.fn()
+      const resolverFn = jest.fn()
+
+      await mockServer(
+        {
+          resolverFn,
+          middleware: [
+            async (_req, _res, _next) => {
+              throw new Error('hack')
+            },
+          ],
+        },
+        async (url) => {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({params: {}}),
+          })
+
+          expect(resolverFn).toHaveBeenCalledTimes(0)
+          expect(res.status).toBe(500)
+        },
+      )
+    })
+
+    it.skip('handles thrown error from post middleware', async () => {
+      // console.log = jest.fn()
+      const resolverFn = jest.fn().mockImplementation(() => 'test')
+
+      await mockServer(
+        {
+          resolverFn,
+          middleware: [
+            async (_req, _res, next) => {
+              await next()
+              throw new Error('hack')
+            },
+          ],
+        },
+        async (url) => {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({params: {}}),
+          })
+          console.log('res', res.ok)
+          console.log('res', res.status)
+          console.log('res', res.statusText)
+
+          expect(res.status).toBe(500)
+          expect(resolverFn).toHaveBeenCalledTimes(1)
+        },
+      )
+    })
 
     it('handles a query error', async () => {
       console.log = jest.fn()
@@ -140,13 +172,20 @@ describe('rpcMiddleware', () => {
   ) {
     const handler = rpcApiHandler('', 'server/test/rpc.test.ts', resolverFn, middleware, dbConnectorFn)
 
-    let server = http.createServer((req, res) =>
-      apiResolver(req, res, null, handler, {
+    ;(handler as any).config = {
+      api: {
+        externalResolver: true,
+      },
+    }
+
+    let server = http.createServer(async (req, res) => {
+      await apiResolver(req, res, null, handler, {
         previewModeId: 'previewModeId',
         previewModeEncryptionKey: 'previewModeEncryptionKey',
         previewModeSigningKey: 'previewModeSigningKey',
-      }),
-    )
+      })
+      console.log('after apiResolver', res.statusCode)
+    })
 
     try {
       let url = await listen(server)

@@ -18,7 +18,12 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     body: JSON.stringify({params}),
   })
 
-  const json = await result.json()
+  let json
+  try {
+    json = await result.json()
+  } catch (error) {
+    throw new Error(`Failed to parse json from request to ${url}`)
+  }
 
   if (json.error) {
     throw deserializeError(json.error)
