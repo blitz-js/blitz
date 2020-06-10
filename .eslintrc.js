@@ -8,8 +8,10 @@ module.exports = {
     },
   },
   plugins: ['@typescript-eslint', 'import', 'unicorn'],
-  extends: [],
+  extends: ['react-app'],
   rules: {
+    'react/react-in-jsx-scope': 'off', // React is always in scope with Blitz
+    'jsx-a11y/anchor-is-valid': 'off', //Doesn't play well with Blitz/Next <Link> usage
     'import/first': 0,
     'import/no-default-export': ['error'],
     'unicorn/filename-case': [

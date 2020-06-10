@@ -129,6 +129,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, onChangeCommitted, step}) =
       )}
       {fileCreateOutput && (
         <>
+          {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
           <Text>The file generation is complete! 🎉 Here are the results:</Text>
           <Newline />
           {fileCreateOutput && <Text>{fileCreateOutput}</Text>}
