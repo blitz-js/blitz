@@ -13,7 +13,6 @@
     "wait:repl": "wait-on ../repl/dist/packages/repl/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
-    "lint": "tsdx lint src",
     "test": "tsdx test",
     "test:watch": "jest --watch"
   },

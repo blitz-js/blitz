@@ -53,4 +53,5 @@ const cli = {
 
 const builds = [lib, cli]
 
+// eslint-disable-next-line
 export default builds
