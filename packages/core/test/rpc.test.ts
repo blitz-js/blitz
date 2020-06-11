@@ -39,7 +39,7 @@ describe('RPC', () => {
       }
     })
 
-    it('handles errors', async () => {
+    it('handles errors', () => {
       expect.assertions(1)
       const fetchMock = jest
         .spyOn(global, 'fetch')
