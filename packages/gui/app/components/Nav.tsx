@@ -4,9 +4,10 @@ import {Dispatch, FC, SetStateAction} from 'react'
 
 type NavProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
+  openImport: () => void
 }
 
-export const Nav: FC<NavProps> = ({setIsModalOpen}) => {
+export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
   const router = useRouter()
 
   const highlightLink = (pathname: string, target: string) =>
@@ -20,7 +21,11 @@ export const Nav: FC<NavProps> = ({setIsModalOpen}) => {
         <div className="flex items-center">
           <Link href="/">
             <a className="flex-shrink-0">
-              <img className="w-8 h-8" src="/img/logos/blitz-mark-on-white.svg" alt="Blitz logo" />
+              <img
+                className="w-8 h-8"
+                src="/img/logos/blitz-mark-on-white.svg"
+                alt="Blitz logo"
+              />
             </a>
           </Link>
           <div className="hidden md:block">
@@ -57,6 +62,12 @@ export const Nav: FC<NavProps> = ({setIsModalOpen}) => {
                 Create project
               </button>
             </span>
+            <button
+              onClick={openImport}
+              type="button"
+              className="ml-5 -mr-20 text-gray-500 font-medium hover:underline">
+              or Import
+            </button>
           </div>
         </div>
       </div>

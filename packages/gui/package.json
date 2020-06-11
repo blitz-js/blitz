@@ -14,6 +14,7 @@
     "heroicons-react": "^1.0.15",
     "react": "experimental",
     "react-dom": "experimental",
+    "react-tooltip": "4.2.6",
     "typescript": "3.9.3"
   },
   "devDependencies": {

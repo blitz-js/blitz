@@ -13,7 +13,15 @@ type GetProjectsInput = {
   before?: FindManyProjectArgs['before']
 }
 
-const getProjects = async ({where, orderBy, skip, first, last, after, before}: GetProjectsInput) => {
+const getProjects = async ({
+  where,
+  orderBy,
+  skip,
+  first,
+  last,
+  after,
+  before,
+}: GetProjectsInput) => {
   const projects = await db.project.findMany({
     where,
     orderBy,
@@ -24,7 +32,9 @@ const getProjects = async ({where, orderBy, skip, first, last, after, before}: G
     before,
   })
 
-  const existingProjects = projects.filter((project) => existsSync(project.path))
+  const existingProjects = projects.filter((project) =>
+    existsSync(project.path),
+  )
 
   const projectsWithMtime = await Promise.all(
     existingProjects.map(async (project) => {

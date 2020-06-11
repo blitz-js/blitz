@@ -33,7 +33,9 @@ export const Fade: FC<FadeProps> = ({show, children}) => {
           }
         }
       `}</style>
-      {shouldRenderChild && <div style={show ? mountedStyle : unmountedStyle}>{children}</div>}
+      {shouldRenderChild && (
+        <div style={show ? mountedStyle : unmountedStyle}>{children}</div>
+      )}
     </>
   )
 }
