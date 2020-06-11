@@ -35,9 +35,18 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 ### Quick Start
 
-1. `npm i -g blitz`
-2. `blitz new myapp`
+You need Node.js 12 or newer
 
+#### Install Blitz
+
+Run `npm install -g blitz`
+
+#### Create a New App
+
+1. `blitz new myAppName`
+2. `cd myAppName`
+3. `blitz start`
+4. View your baby app at http://localhost:3000
 
 <br><br>
 
@@ -66,7 +75,6 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 <br>
 
-
 ### The Foundational Principles
 
 1. Fullstack & Monolithic
@@ -94,6 +102,8 @@ While we currently only support web, we are pursuing the dream of a single monol
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://blitzjs.com/docs/code-of-conduct).
 
 [Join our Slack Community](https://slack.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
+
+For questions and longer form discussions, [post in our forum](https://github.com/blitz-js/blitz/discussions).
 
 There's still a lot of work to do, so you are especially invited to join us in building Blitz! A good place to start is [The Contributing Guide](https://blitzjs.com/docs/contributing).
 
