@@ -39,7 +39,7 @@ describe('RPC', () => {
       }
     })
 
-    it('handles errors', () => {
+    it('handles errors', async () => {
       expect.assertions(1)
       const fetchMock = jest
         .spyOn(global, 'fetch')
@@ -50,8 +50,11 @@ describe('RPC', () => {
       const resolverSpy = jest.fn()
       const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
 
-      await expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
-      fetchMock.mockRestore()
+      try {
+        await expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
+      } finally {
+        fetchMock.mockRestore()
+      }
     })
   })
 })
