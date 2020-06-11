@@ -3,6 +3,7 @@ import fetch from 'isomorphic-unfetch'
 import listen from 'test-listen'
 import {apiResolver} from 'next/dist/next-server/server/api-utils'
 import {Middleware} from '@blitzjs/core'
+import delay from 'delay'
 import {rpcApiHandler} from '../src/rpc'
 
 describe('rpcMiddleware', () => {
@@ -43,18 +44,25 @@ describe('rpcMiddleware', () => {
 
     it('executes the request', async () => {
       // console.log = jest.fn()
-      const resolverFn = jest.fn().mockImplementation(() => 'test')
+      const resolverFn = jest.fn().mockImplementation(async () => {
+        await delay(1)
+        return 'test'
+      })
+
+      let blitzResult: string | undefined
 
       await mockServer(
         {
           resolverFn,
           middleware: [
             (_req, _res, next) => {
-              return next()
+              // Intentionally test if promise is not handled
+              //eslint-disable-next-line @typescript-eslint/no-floating-promises
+              next()
             },
             async (_req, res, next) => {
               await next()
-              expect(res.blitzResult).toBe('test')
+              blitzResult = res.blitzResult
             },
           ],
         },
@@ -69,8 +77,9 @@ describe('rpcMiddleware', () => {
 
           const data = await res.json()
 
-          expect(data.result).toBe('test')
           expect(res.status).toBe(200)
+          expect(data.result).toBe('test')
+          expect(blitzResult).toBe('test')
         },
       )
     })
@@ -105,7 +114,10 @@ describe('rpcMiddleware', () => {
 
     it.skip('handles thrown error from post middleware', async () => {
       // console.log = jest.fn()
-      const resolverFn = jest.fn().mockImplementation(() => 'test')
+      const resolverFn = jest.fn().mockImplementation(async () => {
+        await delay(1)
+        return 'test'
+      })
 
       await mockServer(
         {
@@ -138,7 +150,8 @@ describe('rpcMiddleware', () => {
     it('handles a query error', async () => {
       console.log = jest.fn()
       console.error = jest.fn()
-      const resolverFn = jest.fn().mockImplementation(() => {
+      const resolverFn = jest.fn().mockImplementation(async () => {
+        await delay(1)
         throw new Error('something broke')
       })
 
