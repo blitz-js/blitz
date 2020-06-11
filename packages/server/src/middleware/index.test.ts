@@ -9,14 +9,14 @@ import {runMiddleware, compose} from '.'
 describe('runMiddleware', () => {
   it('works without await', async () => {
     const middleware: Middleware[] = [
-      async (_req, res, next) => {
+      (_req, res, next) => {
         res.status(201)
-        next()
+        return next()
       },
-      async (_req, res, next) => {
+      (_req, res, next) => {
         res.setHeader('test', 'works')
         res.json({a: 'b'})
-        next()
+        return next()
       },
     ]
 
@@ -67,10 +67,10 @@ describe('runMiddleware', () => {
 
   it('can short circuit request by not calling next', async () => {
     const middleware: Middleware[] = [
-      async (_req, res, _next) => {
+      (_req, res, _next) => {
         res.status(201)
       },
-      async (_req, _res, _next) => {
+      (_req, _res, _next) => {
         throw new Error('This middleware should never run')
       },
     ]
@@ -84,7 +84,7 @@ describe('runMiddleware', () => {
   it('middleware can throw', async () => {
     console.error = jest.fn()
     const middleware: Middleware[] = [
-      async (_req, _res, _next) => {
+      (_req, _res, _next) => {
         throw new Error('test')
       },
     ]
@@ -97,10 +97,10 @@ describe('runMiddleware', () => {
 
   it('middleware can return error', async () => {
     const middleware: Middleware[] = [
-      async (_req, _res, next) => {
-        next(new Error('test'))
+      (_req, _res, next) => {
+        return next(new Error('test'))
       },
-      async (_req, _res, _next) => {
+      (_req, _res, _next) => {
         throw new Error('Remaining middleware should not run if previous has error')
       },
     ]

@@ -50,7 +50,7 @@ describe('rpcMiddleware', () => {
           resolverFn,
           middleware: [
             (_req, _res, next) => {
-              next()
+              return next()
             },
             async (_req, res, next) => {
               await next()
@@ -83,7 +83,7 @@ describe('rpcMiddleware', () => {
         {
           resolverFn,
           middleware: [
-            async (_req, _res, _next) => {
+            (_req, _res, _next) => {
               throw new Error('hack')
             },
           ],
