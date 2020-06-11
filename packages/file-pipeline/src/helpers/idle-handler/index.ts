@@ -18,7 +18,7 @@ export const createIdleHandler = (bus: Writable, delay: number = 500) => {
 
   function resetTimeout() {
     destroyTimeout()
-    timeout = setTimeout(handler, delay)
+    timeout = global.setTimeout(handler, delay)
   }
 
   function destroyTimeout() {

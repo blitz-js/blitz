@@ -6,9 +6,9 @@ import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
 
 export const Edit__ModelName__: React.FC = () => {
   const router = useRouter()
-  const __modelId__ = parseInt(router?.query.__modelId__ as string)
+  const __modelId__ = useParam('__modelId__', 'number')
   if (process.env.parentModel) {
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
   const [__modelName__, {mutate}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
@@ -47,8 +47,7 @@ export const Edit__ModelName__: React.FC = () => {
 
 const Edit__ModelName__Page: React.FC = () => {
   if (process.env.parentModel) {
-    const router = useRouter()
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
 
   return (

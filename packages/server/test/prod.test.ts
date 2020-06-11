@@ -35,7 +35,7 @@ describe('Prod command', () => {
     hostname: 'localhost',
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     mocks.mockFs({
       build: {
         '.now': '',
@@ -59,7 +59,7 @@ describe('Prod command', () => {
 
   describe('When already built', () => {
     it('should not trigger build step', async () => {
-      ensureDir(buildFolder)
+      await ensureDir(buildFolder)
       await writeFile(`${buildFolder}/last-build`, await getInputArtefactsHash())
       await prod(prodArgs)
       expect(mocks.build.build.mock.calls).toEqual([])

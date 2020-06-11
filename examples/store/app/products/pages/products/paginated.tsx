@@ -8,7 +8,7 @@ const Products = () => {
   const [page, setPage] = useState(0)
   const [products] = usePaginatedQuery(getProducts, {
     skip: ITEMS_PER_PAGE * page,
-    first: ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
   })
 
   return (

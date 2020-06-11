@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react'
 if (process.env.parentModel) {
-  import {Head, Link, useRouter, useQuery} from 'blitz'
+  import {Head, Link, useQuery, useParam} from 'blitz'
 } else {
   import {Head, Link, useQuery} from 'blitz'
 }
@@ -8,8 +8,7 @@ import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
 
 export const __ModelNames__List: React.FC = () => {
   if (process.env.parentModel) {
-    const router = useRouter()
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
     const [__modelNames__] = useQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
       orderBy: {id: 'desc'},
@@ -47,8 +46,7 @@ export const __ModelNames__List: React.FC = () => {
 
 const __ModelNames__Page: React.FC = () => {
   if (process.env.parentModel) {
-    const router = useRouter()
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
 
   return (

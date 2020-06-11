@@ -70,6 +70,7 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   const vinylFsStream = vfs.src([...include, ...ignore.map((a) => '!' + a)], {
     buffer: true,
     read: true,
+    dot: true,
     cwd,
   })
 
@@ -83,8 +84,8 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   })
   const close = () => watcher.fswatcher.close()
 
-  stream.on('end', () => {
-    close()
+  stream.on('end', async () => {
+    await close()
   })
 
   return {stream, close}
