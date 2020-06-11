@@ -3,9 +3,7 @@ module.exports = {
   middleware: [
     (req, res, next) => {
       res.blitzCtx.referer = req.headers.referer
-      console.log("header middleware before")
-      // next()
-      return next()
+      next()
     },
   ],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

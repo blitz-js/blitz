@@ -27,6 +27,19 @@ describe('runMiddleware', () => {
     })
   })
 
+  it('works without next handler', async () => {
+    const middleware: Middleware[] = [
+      (_req, res) => {
+        res.status(201)
+      },
+    ]
+
+    await mockServer(middleware, async (url) => {
+      const res = await fetch(url)
+      expect(res.status).toBe(201)
+    })
+  })
+
   it('works with await', async () => {
     const middleware: Middleware[] = [
       async (_req, res, next) => {
@@ -62,22 +75,6 @@ describe('runMiddleware', () => {
       const res = await fetch(url)
       expect(res.status).toBe(201)
       expect(res.headers.get('test')).toBe('works')
-    })
-  })
-
-  it('can short circuit request by not calling next', async () => {
-    const middleware: Middleware[] = [
-      (_req, res, _next) => {
-        res.status(201)
-      },
-      (_req, _res, _next) => {
-        throw new Error('This middleware should never run')
-      },
-    ]
-
-    await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
-      expect(res.status).toBe(201)
     })
   })
 
