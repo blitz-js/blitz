@@ -46,7 +46,7 @@ describe('transform', () => {
       )
     })
 
-    it('should swallow stuff when it doesnt return anything', async () => {
+    it('should swallow stuff when it doesnt return anything', () => {
       const s = transform.file((_, {next}) => next())
       const l: any[] = []
       s.pipe(
