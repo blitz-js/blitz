@@ -3,10 +3,10 @@ import http from 'http'
 import listen from 'test-listen'
 import fetch from 'isomorphic-unfetch'
 
-import {BlitzApiRequest, BlitzApiResponse, Middleware} from '@blitzjs/core'
-import {runMiddleware, compose} from '.'
+import {BlitzApiRequest, BlitzApiResponse} from '.'
+import {Middleware, handleRequestWithMiddleware} from './middleware'
 
-describe('runMiddleware', () => {
+describe('handleRequestWithMiddleware', () => {
   it('works without await', async () => {
     const middleware: Middleware[] = [
       (_req, res, next) => {
@@ -24,19 +24,6 @@ describe('runMiddleware', () => {
       const res = await fetch(url)
       expect(res.status).toBe(201)
       expect(res.headers.get('test')).toBe('works')
-    })
-  })
-
-  it('works without next handler', async () => {
-    const middleware: Middleware[] = [
-      (_req, res) => {
-        res.status(201)
-      },
-    ]
-
-    await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
-      expect(res.status).toBe(201)
     })
   })
 
@@ -79,6 +66,7 @@ describe('runMiddleware', () => {
   })
 
   it('middleware can throw', async () => {
+    console.log = jest.fn()
     console.error = jest.fn()
     const middleware: Middleware[] = [
       (_req, _res, _next) => {
@@ -93,6 +81,7 @@ describe('runMiddleware', () => {
   })
 
   it('middleware can return error', async () => {
+    console.log = jest.fn()
     const middleware: Middleware[] = [
       (_req, _res, next) => {
         return next(new Error('test'))
@@ -110,11 +99,8 @@ describe('runMiddleware', () => {
 })
 
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
-  const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    await runMiddleware(req, res, compose(middleware))
-    if (!res.writableEnded) {
-      res.end()
-    }
+  const apiEndpoint = (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    return handleRequestWithMiddleware(req, res, middleware)
   }
 
   let server = http.createServer((req, res) =>

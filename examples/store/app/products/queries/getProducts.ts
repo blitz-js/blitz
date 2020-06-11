@@ -13,7 +13,7 @@ type GetProductsInput = {
 
 export default async function getProducts(
   { where, orderBy, skip, cursor, take }: GetProductsInput,
-  ctx?: any
+  ctx: Record<any, unknown> = {}
 ) {
   console.log("HTTP referer:", ctx.referer)
 
@@ -30,10 +30,8 @@ export default async function getProducts(
 
 export const middleware: Middleware[] = [
   async (req, res, next) => {
-    // throw new Error("hey1")
     await next()
-    // throw new Error("hey2")
-    if (req.method === "POST") {
+    if (req.method === "POST" && Array.isArray(res.blitzResult)) {
       console.log("[Middleware] Total product count:", res.blitzResult.length)
     }
   },

@@ -2,7 +2,7 @@ import http from 'http'
 import fetch from 'isomorphic-unfetch'
 import listen from 'test-listen'
 import {apiResolver} from 'next/dist/next-server/server/api-utils'
-import {Middleware} from '@blitzjs/core'
+import {Middleware, connectMiddleware} from '@blitzjs/core'
 import delay from 'delay'
 import {rpcApiHandler} from '../src/rpc'
 
@@ -43,23 +43,21 @@ describe('rpcMiddleware', () => {
     })
 
     it('executes the request', async () => {
-      // console.log = jest.fn()
+      console.log = jest.fn()
       const resolverFn = jest.fn().mockImplementation(async () => {
         await delay(1)
         return 'test'
       })
 
-      let blitzResult: string | undefined
+      let blitzResult: any
 
       await mockServer(
         {
           resolverFn,
           middleware: [
-            (_req, _res, next) => {
-              // Intentionally test if promise is not handled
-              //eslint-disable-next-line @typescript-eslint/no-floating-promises
+            connectMiddleware((_req, _res, next) => {
               next()
-            },
+            }),
             async (_req, res, next) => {
               await next()
               blitzResult = res.blitzResult
@@ -108,41 +106,6 @@ describe('rpcMiddleware', () => {
 
           expect(resolverFn).toHaveBeenCalledTimes(0)
           expect(res.status).toBe(500)
-        },
-      )
-    })
-
-    it.skip('handles thrown error from post middleware', async () => {
-      // console.log = jest.fn()
-      const resolverFn = jest.fn().mockImplementation(async () => {
-        await delay(1)
-        return 'test'
-      })
-
-      await mockServer(
-        {
-          resolverFn,
-          middleware: [
-            async (_req, _res, next) => {
-              await next()
-              throw new Error('hack')
-            },
-          ],
-        },
-        async (url) => {
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({params: {}}),
-          })
-          console.log('res', res.ok)
-          console.log('res', res.status)
-          console.log('res', res.statusText)
-
-          expect(res.status).toBe(500)
-          expect(resolverFn).toHaveBeenCalledTimes(1)
         },
       )
     })
@@ -200,7 +163,6 @@ describe('rpcMiddleware', () => {
         previewModeEncryptionKey: 'previewModeEncryptionKey',
         previewModeSigningKey: 'previewModeSigningKey',
       })
-      console.log('after apiResolver', res.statusCode)
     })
 
     try {

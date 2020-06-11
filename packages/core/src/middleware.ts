@@ -1,14 +1,27 @@
-import {
-  Middleware,
-  MiddlewareRequest,
-  MiddlewareResponse,
-  BlitzApiRequest,
-  BlitzApiResponse,
-  MiddlewareNext,
-} from '@blitzjs/core'
 import {log} from '@blitzjs/display'
+import {BlitzApiRequest, BlitzApiResponse} from '.'
+import {IncomingMessage, ServerResponse} from 'http'
 
-export async function runMiddleware(
+export interface MiddlewareRequest extends BlitzApiRequest {}
+export interface MiddlewareResponse extends BlitzApiResponse {
+  blitzCtx: Record<string, unknown>
+  blitzResult: unknown
+}
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+
+export type Middleware = (
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
+  next: MiddlewareNext,
+) => Promise<void> | void
+
+export type ConnectMiddleware = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: (error?: Error) => void,
+) => void
+
+export async function handleRequestWithMiddleware(
   req: BlitzApiRequest,
   res: BlitzApiResponse,
   middleware: Middleware | Middleware[],
@@ -28,6 +41,9 @@ export async function runMiddleware(
         throw error
       }
     })
+    if (!res.writableEnded) {
+      res.end()
+    }
   } catch (error) {
     console.log('') // new line
     if (res.writableFinished) {
@@ -45,7 +61,7 @@ export async function runMiddleware(
 // This takes an array of middleware and composes them into a single middleware fn
 // This is what makes `next()` and `await next()` work
 // -------------------------------------------------------------------------------
-export function compose(middleware: Middleware[]): Middleware {
+export function compose(middleware: Middleware[]) {
   if (!Array.isArray(middleware)) {
     throw new TypeError('Middleware stack must be an array!')
   }
@@ -57,58 +73,18 @@ export function compose(middleware: Middleware[]): Middleware {
   }
 
   // Return a single middleware function that composes everything passed in
-  return function (req, res, next) {
+  return function (req, res, next): Promise<any> {
     // last called middleware #
     let index = -1
 
-    // let middlewareError
-
-    // Recursive function that calls the first middleware, then second, and so on.
-    // async function dispatch(i: number) {
-    //   console.log('dispatch', i)
-    //   if (i <= index) throw new Error('next() called multiple times')
-    //   index = i
-    //
-    //   let handler = middleware[i]
-    //   if (!handler) {
-    //     console.log('No handler, returning')
-    //     return
-    //   }
-    //   handler = makeConnectCompatible(handler)
-    //
-    //   try {
-    //     await handler(req, res, async (error) => {
-    //       if (error) {
-    //         middlewareError = error
-    //         console.log('dispatch error:', error)
-    //       } else {
-    //         console.log('Calling dispatch from `next`')
-    //         await dispatch(i + 1)
-    //       }
-    //       console.log('next resolved', i + 1)
-    //     })
-    //   } catch (error) {
-    //     middlewareError = error
-    //     // console.log('dispatch error:', error)
-    //   }
-    // }
-    //
-    // await dispatch(0)
-    // console.log('next resolved 0')
-    //
-    // return next(middlewareError)
-
     function dispatch(i: number): Promise<void> {
-      // console.log('dispatch', i)
       if (i <= index) throw new Error('next() called multiple times')
       index = i
 
       let handler = middleware[i]
       if (!handler) {
-        // console.log('No handler, returning')
         return Promise.resolve()
       }
-      handler = makeConnectCompatible(handler)
 
       try {
         return Promise.resolve(handler(req, res, dispatch.bind(null, i + 1)))
@@ -117,8 +93,10 @@ export function compose(middleware: Middleware[]): Middleware {
       }
     }
 
+    // const result = await dispatch(0)
+    // return next(result as any)
     return dispatch(0).then(next as any)
-  }
+  } as Middleware
 }
 
 /**
@@ -129,10 +107,9 @@ function noCallbackHandler(
   req: MiddlewareRequest,
   res: MiddlewareResponse,
   next: MiddlewareNext,
-  middleware: Middleware,
+  middleware: ConnectMiddleware,
 ) {
-  // Cast to `any` here so we can call middleware with only two arguments.
-  // This is for connect middleware compatability
+  // Cast to any to call with two arguments for connect compatibility
   ;(middleware as any)(req, res)
   return next()
 }
@@ -142,39 +119,30 @@ function noCallbackHandler(
  * the Promise when it's called. If it's never called, the middleware stack
  * completion will stall
  */
-// function withCallbackHandler(
-//   req: MiddlewareRequest,
-//   res: MiddlewareResponse,
-//   next: MiddlewareNext,
-//   middleware: Middleware,
-// ) {
-//   return new Promise((resolve, reject) => {
-//     // Rule doesn't matter since we are inside new Promise()
-//     //eslint-disable-next-line @typescript-eslint/no-floating-promises
-//     middleware(req, res, (err) => {
-//       if (err) reject(err)
-//       else resolve(next())
-//     })
-//   })
-// }
+function withCallbackHandler(
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
+  next: MiddlewareNext,
+  middleware: ConnectMiddleware,
+) {
+  return new Promise((resolve, reject) => {
+    // Rule doesn't matter since we are inside new Promise()
+    //eslint-disable-next-line @typescript-eslint/no-floating-promises
+    middleware(req, res, (err) => {
+      if (err) reject(err)
+      else resolve(next())
+    })
+  })
+}
 
 /**
  * Returns a Blitz middleware function that varies its async logic based on if the
  * given middleware function declares at least 3 parameters, i.e. includes
  * the `next` callback function
  */
-function makeConnectCompatible(middleware: Middleware): Middleware {
-  // const handler = middleware.length < 3 ? noCallbackHandler : withCallbackHandler
-  // // TODO: investigate the TS error here without the explicit cast
-  // return function connectHandler(req, res, next) {
-  //   return handler(req, res, next, middleware)
-  // } as Middleware
-
-  if (middleware.length < 3) {
-    return function connectHandler(req, res, next) {
-      return noCallbackHandler(req, res, next, middleware)
-    } as Middleware
-  } else {
-    return middleware
-  }
+export function connectMiddleware(middleware: ConnectMiddleware): Middleware {
+  const handler = middleware.length < 3 ? noCallbackHandler : withCallbackHandler
+  return function connectHandler(req, res, next) {
+    return handler(req, res, next, middleware)
+  } as Middleware
 }

@@ -5,6 +5,7 @@ export * from './use-router-query'
 export * from './use-infinite-query'
 export * from './ssr-query'
 export * from './rpc'
+export * from './middleware'
 export * from './types'
 
 // --------------------
