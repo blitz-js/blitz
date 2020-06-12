@@ -173,18 +173,27 @@ export class Generate extends Command {
     }
   }
 
-  getModelNameAndContext(modelName: string, context?: string): {model: string; context: string} {
+  getModelNameAndContext(modelName: string, context?: string): {model: string; context?: string} {
     const modelSegments = modelName.split(/[\\/]/)
-    const contextSegments = (context || '').split(/[\\/]/)
+
     if (modelSegments.length > 1) {
       return {
         model: modelSegments[modelSegments.length - 1],
         context: path.join(...modelSegments.slice(0, modelSegments.length - 1)),
       }
     }
+
+    if (!!context && context !== '') {
+      const contextSegments = context.split(/[\\/]/)
+
+      return {
+        model: modelName,
+        context: path.join(...contextSegments),
+      }
+    }
+
     return {
       model: modelName,
-      context: path.join(...contextSegments),
     }
   }
 
