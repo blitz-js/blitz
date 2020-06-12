@@ -64,7 +64,7 @@ export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof re
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
 import {rpcHandler} from '@blitzjs/server'
 import resolver from '${resolverPath}'
-let db
+let db: any
 try {
   db = require('db').default
 }catch(err){}
