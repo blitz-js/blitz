@@ -1,7 +1,7 @@
 import React from 'react'
 import {Head, Link, useRouter, useParam} from 'blitz'
-import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName__'
-import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
+import create__ModelName__ from 'app/__importModelNames__/mutations/create__ModelName__'
+import __ModelName__Form from 'app/__importModelNames__/components/__ModelName__Form'
 
 const New__ModelName__Page: React.FC = () => {
   const router = useRouter()

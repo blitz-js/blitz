@@ -4,7 +4,7 @@ if (process.env.parentModel) {
 } else {
   import {Head, Link, useQuery} from 'blitz'
 }
-import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
+import get__ModelNames__ from 'app/__importModelNames__/queries/get__ModelNames__'
 
 export const __ModelNames__List: React.FC = () => {
   if (process.env.parentModel) {

@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react'
 import {Head, Link, useRouter, useQuery, useParam} from 'blitz'
-import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
-import delete__ModelName__ from 'app/__modelNames__/mutations/delete__ModelName__'
+import get__ModelName__ from 'app/__importModelNames__/queries/get__ModelName__'
+import delete__ModelName__ from 'app/__importModelNames__/mutations/delete__ModelName__'
 
 export const __ModelName__: React.FC = () => {
   const router = useRouter()
