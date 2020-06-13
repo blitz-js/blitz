@@ -670,6 +670,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "exclipy",
+      "name": "Kevin Wu Won",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/508799?v=4",
+      "profile": "https://github.com/exclipy",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "tehnuge",
+      "name": "John Duong",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1928236?v=4",
+      "profile": "https://github.com/tehnuge",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
