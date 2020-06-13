@@ -35,7 +35,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
 
   if (config.port) {
     availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
+    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
   }
   if (config.hostname) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
@@ -52,15 +52,7 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  let spawnCommand: string[] = ["dev"]
-  let availablePort: number
-  if (config.port) {
-    availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
-  }
-  if (config.hostname) {
-    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
-  }
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "dev")
 
   return new Promise((res, rej) => {
     if (availablePort && availablePort !== config.port) {
@@ -92,15 +84,7 @@ export function nextBuild(nextBin: string, cwd: string) {
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  let spawnCommand: string[] = ["start"]
-  let availablePort: number
-  if (config.port) {
-    availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
-  }
-  if (config.hostname) {
-    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
-  }
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "start")
 
   return new Promise((res, rej) => {
     if (availablePort && availablePort !== config.port) {
@@ -111,7 +95,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
         stdio: "inherit",
       })
         .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+          code === 0 ? res() : rej(`'next start' failed with status code: ${code}`)
         })
         .on("error", (err) => {
           console.error(err)
