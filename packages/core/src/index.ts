@@ -23,7 +23,7 @@ export {default as Head} from 'next/head'
 
 export {default as Link} from 'next/link'
 
-export {Router, withRouter} from 'next/router'
+export {Router} from 'next/router'
 
 export {
   default as Document,
