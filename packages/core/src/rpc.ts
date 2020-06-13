@@ -58,7 +58,7 @@ export interface RpcFunction {
 export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
 
 export interface EnhancedResolverModule extends ResolverEnhancement {
-  (args: any, ctx: any): Promise<unknown>
+  (input: any, ctx: Record<string, any>): Promise<unknown>
   middleware?: Middleware[]
 }
 

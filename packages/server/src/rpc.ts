@@ -1,29 +1,29 @@
 import {log} from '@blitzjs/display'
-import {Middleware, BlitzApiRequest, BlitzApiResponse, handleRequestWithMiddleware} from '@blitzjs/core'
+import {
+  Middleware,
+  BlitzApiRequest,
+  BlitzApiResponse,
+  handleRequestWithMiddleware,
+  EnhancedResolverModule,
+} from '@blitzjs/core'
 import {serializeError} from 'serialize-error'
 
 export function rpcApiHandler(
-  _: string,
-  name: string,
-  resolver: (input: any, ctx: Record<string, any>) => Promise<any>,
+  resolver: EnhancedResolverModule,
   middleware: Middleware[] = [],
   connectDb?: () => any,
 ) {
   // RPC Middleware is always the last middleware to run
-  middleware.push(rpcMiddleware(name, resolver, connectDb))
+  middleware.push(rpcMiddleware(resolver, connectDb))
 
   return (req: BlitzApiRequest, res: BlitzApiResponse) => {
     return handleRequestWithMiddleware(req, res, middleware)
   }
 }
 
-const rpcMiddleware = (
-  name: string,
-  resolver: (...args: any) => Promise<any>,
-  connectDb?: () => any,
-): Middleware => {
+const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any): Middleware => {
   return async (req, res, next) => {
-    const logPrefix = `${name}`
+    const logPrefix = `${resolver._meta.name}`
 
     if (req.method === 'HEAD') {
       // Warm the lamda and connect to DB
