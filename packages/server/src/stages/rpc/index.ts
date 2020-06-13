@@ -72,14 +72,15 @@ export default getIsomorphicRpcHandler(
 const apiHandlerTemplate = (originalPath: string) => `
 // This imports the isomorphicHandler
 import resolverModule from '${originalPath}'
-import {rpcApiHandler, getConfig} from '@blitzjs/server'
+import {getAllMiddlewareForModule} from '@blitzjs/core'
+import {rpcApiHandler} from '@blitzjs/server'
 let db
 try {
   db = require('db').default
 }catch(err){}
 export default rpcApiHandler(
   resolverModule,
-  middleware,
+  getAllMiddlewareForModule(resolverModule),
   () => db && db.connect(),
 )
 export const config = {

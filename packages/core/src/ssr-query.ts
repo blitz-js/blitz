@@ -1,7 +1,7 @@
 import {IncomingMessage, ServerResponse} from 'http'
 import {InferUnaryParam} from './types'
-// import {getAllMiddlewareForModule, handleRequestWithMiddleware, MiddlewareResponse} from './middleware'
-// import {EnhancedResolverModule} from 'rpc'
+import {getAllMiddlewareForModule, handleRequestWithMiddleware, MiddlewareResponse} from './middleware'
+import {EnhancedResolverModule} from './rpc'
 
 type QueryFn = (...args: any) => Promise<any>
 
@@ -13,21 +13,20 @@ type SsrQueryContext = {
 export async function ssrQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T>,
-  // {req, res}: SsrQueryContext,
-  _ctx: SsrQueryContext,
+  {req, res}: SsrQueryContext,
 ): Promise<ReturnType<T>> {
-  // const handler = (queryFn as unknown) as EnhancedResolverModule
-  //
-  // const middleware = getAllMiddlewareForModule(handler)
-  //
-  // middleware.push(async (_req, res, next) => {
-  //   const result = await handler.default(params, res.blitzCtx)
-  //   res.blitzResult = result
-  //   return next()
-  // })
-  //
-  // await handleRequestWithMiddleware(req, res, middleware, {finishRequest: false})
+  const handler = (queryFn as unknown) as EnhancedResolverModule
 
-  // return (res as MiddlewareResponse).blitzResult as ReturnType<T>
-  return (await queryFn(params)) as ReturnType<T>
+  const middleware = getAllMiddlewareForModule(handler)
+
+  middleware.push(async (_req, res, next) => {
+    const result = await handler(params, res.blitzCtx)
+    res.blitzResult = result
+    return next()
+  })
+
+  await handleRequestWithMiddleware(req, res, middleware, {finishRequest: false})
+
+  return (res as MiddlewareResponse).blitzResult as ReturnType<T>
+  // return (await queryFn(params)) as ReturnType<T>
 }

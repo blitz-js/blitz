@@ -8,15 +8,15 @@ import {EnhancedResolverModule} from './rpc'
 
 describe('ssrQuery', () => {
   it('works without middleware', async () => {
-    const resolverModule: EnhancedResolverModule = {
-      default: jest.fn().mockImplementation(async (input) => {
-        await delay(1)
-        return input
-      }),
+    const resolverModule = (jest.fn().mockImplementation(async (input) => {
+      await delay(1)
+      return input
+    }) as unknown) as EnhancedResolverModule
+    resolverModule._meta = {
       name: 'getTest',
       type: 'query',
       path: 'some/test/path',
-      cacheKey: 'some/test/path',
+      apiUrl: 'some/test/path',
     }
 
     await mockServer(
@@ -33,26 +33,26 @@ describe('ssrQuery', () => {
   })
 
   it('works with middleware', async () => {
-    const resolverModule: EnhancedResolverModule = {
-      default: jest.fn().mockImplementation(async (input) => {
-        await delay(1)
-        return input
-      }),
+    const resolverModule = (jest.fn().mockImplementation(async (input) => {
+      await delay(1)
+      return input
+    }) as unknown) as EnhancedResolverModule
+    resolverModule._meta = {
       name: 'getTest',
       type: 'query',
       path: 'some/test/path',
-      cacheKey: 'some/test/path',
-      middleware: [
-        (_req, res, next) => {
-          res.statusCode = 201
-          return next()
-        },
-        (_req, res, next) => {
-          res.setHeader('test', 'works')
-          return next()
-        },
-      ],
+      apiUrl: 'some/test/path',
     }
+    resolverModule.middleware = [
+      (_req, res, next) => {
+        res.statusCode = 201
+        return next()
+      },
+      (_req, res, next) => {
+        res.setHeader('test', 'works')
+        return next()
+      },
+    ]
 
     await mockServer(
       async (req, res) => {
