@@ -21,6 +21,11 @@ export type ConnectMiddleware = (
   next: (error?: Error) => void,
 ) => void
 
+export type ResolverModule = {
+  default: (args: any, ctx: any) => Promise<unknown>
+  middleware?: Middleware[]
+}
+
 export async function handleRequestWithMiddleware(
   req: BlitzApiRequest,
   res: BlitzApiResponse,

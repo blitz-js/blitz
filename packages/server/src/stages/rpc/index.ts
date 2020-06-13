@@ -34,14 +34,16 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     push(
       new File({
         path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(resolverImportPath, resolverType, resolverName)),
+        contents: Buffer.from(apiHandlerTemplate(resolverImportPath, resolverName, resolverType)),
         hash: file.hash + ':2',
       }),
     )
 
     // Isomorphic isomorphic client
     const isomorphicHandlerFile = file.clone()
-    isomorphicHandlerFile.contents = Buffer.from(isomorhicHandlerTemplate(resolverImportPath))
+    isomorphicHandlerFile.contents = Buffer.from(
+      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
+    )
     push(isomorphicHandlerFile)
 
     return next()
@@ -54,16 +56,27 @@ export function isResolverPath(filePath: string) {
   return /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorhicHandlerTemplate = (resolverPath: string) => `
+const isomorhicHandlerTemplate = (resolverPath: string, resolverName: string, resolverType: string) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 const resolverModule = require('${resolverPath}')
-export default getIsomorphicRpcHandler(resolverModule.default, '${resolverPath}') as typeof resolverModule.default
+export default getIsomorphicRpcHandler(
+  resolverModule,
+  '${resolverPath}',
+  '${resolverName}',
+  '${resolverType}',
+) as typeof resolverModule.default
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
+const apiHandlerTemplate = (resolverPath: string, resolverName: string, resolverType: string) => `
+import {getIsomorphicRpcHandler} from '@blitzjs/core'
 import {rpcApiHandler, getConfig} from '@blitzjs/server'
-const resolverModule = require('${resolverPath}')
+const resolverModule = getIsomorphicRpcHandler(
+  require('${resolverPath}'),
+  '${resolverPath}',
+  '${resolverName}',
+  '${resolverType}',
+)
 let db
 try {
   db = require('db').default
@@ -84,7 +97,7 @@ if (resolverModule.middleware) {
 export default rpcApiHandler(
   '${resolverType}',
   '${resolverName}',
-  resolverModule.default,
+  resolverModule,
   middleware,
   () => db && db.connect(),
 )
