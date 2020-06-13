@@ -4,14 +4,14 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./gui.db"
+  url = "***"
 }
 
 model Project {
   id          String @default(cuid()) @id
-  name        String
+  name        String @unique
   description String
-  path        String @unique
+  path        String
 
   // the following are stub values which are filled in by queries based on the filesystem state
   lastActive Int

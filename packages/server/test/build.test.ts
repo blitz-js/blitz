@@ -46,7 +46,7 @@ describe('Build command', () => {
     mocks.mockFs.restore()
   })
 
-  it('should copy the correct files to the build folder', async () => {
+  it('should copy the correct files to the build folder', () => {
     expect(directoryTree(rootFolder)).toEqual({
       children: [
         {

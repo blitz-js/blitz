@@ -37,12 +37,15 @@ export class Installer<Options extends RecipeMeta> {
     setupTsNode()
   }
 
+  // eslint-disable-next-line require-await
   private async validateArgs(cliArgs: {}): Promise<void> {
     if (this.options.validateArgs) return this.options.validateArgs(cliArgs)
   }
+  // eslint-disable-next-line require-await
   private async preInstall(): Promise<void> {
     if (this.options.preInstall) return this.options.preInstall()
   }
+  // eslint-disable-next-line require-await
   private async postInstall(): Promise<void> {
     if (this.options.postInstall) return this.options.postInstall()
   }

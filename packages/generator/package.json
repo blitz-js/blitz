@@ -15,7 +15,6 @@
     "build": "tsdx build && yarn build:templates",
     "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
-    "lint": "tsdx lint src",
     "test:watch": "tsdx test --watch"
   },
   "author": {

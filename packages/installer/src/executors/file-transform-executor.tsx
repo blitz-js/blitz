@@ -37,6 +37,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
       const newFile = processFile(originalFile, (step as Config).transform)
       return createPatch(fileToTransform, originalFile, newFile)
     }
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     generateDiff().then(setDiff)
   }, [cliArgs, step])
 

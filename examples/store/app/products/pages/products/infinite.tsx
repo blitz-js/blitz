@@ -6,7 +6,7 @@ const Products = () => {
   const [
     groupedProducts,
     { isFetching, isFetchingMore, fetchMore, canFetchMore },
-  ] = useInfiniteQuery(getProductsInfinite, (page = { first: 3, skip: 0 }) => page, {
+  ] = useInfiniteQuery(getProductsInfinite, (page = { take: 3, skip: 0 }) => page, {
     getFetchMore: (lastGroup) => lastGroup.nextPage,
   })
 

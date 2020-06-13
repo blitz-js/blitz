@@ -47,7 +47,7 @@ describe('Build command Vercel', () => {
     mocks.mockFs.restore()
   })
 
-  it('should copy the correct files to the build folder', async () => {
+  it('should copy the correct files to the build folder', () => {
     expect(directoryTree(buildFolder)).toEqual({
       name: '.blitz-build',
       children: [

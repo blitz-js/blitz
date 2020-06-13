@@ -22,7 +22,12 @@ export const CreateProjectForm: FC<CreateProjectFormProps> = ({homedir, setIsMod
     e.preventDefault()
     setIsSubmitting(true)
 
-    const data = {name, path: `${homedir}/${path}`, description, lastActive: new Date().getTime()}
+    const data = {
+      name,
+      path: `${homedir}/${path}`,
+      description,
+      lastActive: new Date().getTime(),
+    }
 
     try {
       const project = await createProject({data})
