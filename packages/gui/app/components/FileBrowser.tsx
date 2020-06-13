@@ -92,12 +92,7 @@ type DirectoriesProps = {
   onClickSelect: (name: string) => void
 }
 
-const Directories: FC<DirectoriesProps> = ({
-  path,
-  selected,
-  onClickFile,
-  onClickSelect,
-}) => {
+const Directories: FC<DirectoriesProps> = ({path, selected, onClickFile, onClickSelect}) => {
   const [content] = useQuery(getDirectory, path)
 
   const _onClickFile = (file: _File) => {
@@ -126,9 +121,7 @@ const Directories: FC<DirectoriesProps> = ({
                   className="flex flex-row mx-2 p-2 cursor-pointer text-gray-600 font-medium rounded-md hover:font-bold hover:bg-gray-100 hover:text-indigo-600"
                   onClick={() => _onClickFile(directory)}>
                   <span className="flex flex-row">
-                    {directory.isFolder && !directory.isBlitzProject && (
-                      <Folder className="mr-2" />
-                    )}
+                    {directory.isFolder && !directory.isBlitzProject && <Folder className="mr-2" />}
                     {directory.isBlitzProject && (
                       <div className="mr-2 p-1 rounded-md bg-indigo-600">
                         <img
@@ -187,9 +180,7 @@ export const FileBrowser: FC<FileBrowserProps> = ({close, base}) => {
       className="relative bg-white flex flex-row w-full max-w-6xl mx-auto rounded-lg"
       style={{height: '50%', maxHeight: '50%', zIndex: 9999}}>
       <div className="flex-1 bg-gray-100 rounded-l-md px-4 py-1 max-w-xs">
-        <h2 className="font-bold rounded-tl-md text-gray-500 py-2 pl-5 -mx-4 -mt-1">
-          Selected
-        </h2>
+        <h2 className="font-bold rounded-tl-md text-gray-500 py-2 pl-5 -mx-4 -mt-1">Selected</h2>
         <div>
           {selected.get().map((path) => (
             <>
@@ -203,10 +194,7 @@ export const FileBrowser: FC<FileBrowserProps> = ({close, base}) => {
                 />
                 <p>{path.slice(path.lastIndexOf('/') + 1)}</p>
                 <div className="absolute top-0 bottom-0 left-0 right-0 flex justify-end hover:opacity-100 opacity-0 ">
-                  <X
-                    className="w-1/4 h-full rounded-r-md p-1 bg-indigo-800"
-                    onClick={() => toggle(path)}
-                  />
+                  <X className="w-1/4 h-full rounded-r-md p-1 bg-indigo-800" onClick={() => toggle(path)} />
                 </div>
               </div>
               <ReactTooltip place="right" type="dark" effect="solid" />
@@ -228,12 +216,7 @@ export const FileBrowser: FC<FileBrowserProps> = ({close, base}) => {
           {path}
         </div>
         <Suspense fallback={<div className="flex-1">Loading...</div>}>
-          <Directories
-            path={path}
-            selected={selected}
-            onClickFile={push}
-            onClickSelect={toggle}
-          />
+          <Directories path={path} selected={selected} onClickFile={push} onClickSelect={toggle} />
         </Suspense>
         <div className="sticky bottom-0 px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
           <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">

@@ -10,10 +10,7 @@ type ProjectCardProps = {
   i: number
 }
 
-export const ProjectCard: FC<ProjectCardProps> = ({
-  project,
-  i,
-}: ProjectCardProps) => {
+export const ProjectCard: FC<ProjectCardProps> = ({project, i}: ProjectCardProps) => {
   const isFirstCard = i === 0
 
   return (
@@ -33,9 +30,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
             }`}>
             {project.name}
           </h3>
-          <p className="mt-3 text-base leading-6 text-gray-500">
-            {project.description}
-          </p>
+          <p className="mt-3 text-base leading-6 text-gray-500">{project.description}</p>
           {isFirstCard ? (
             <div className="flex items-center mt-3 text-sm font-semibold leading-5 text-indigo-600 transition duration-150 ease-in-out group-hover:text-indigo-500">
               Continue building
@@ -44,8 +39,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           ) : (
             <div className="flex items-center mt-3 text-sm leading-5 text-gray-500">
               <Calendar className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-              Last edited{' '}
-              {timeDifference(new Date().getTime(), project.lastActive)}
+              Last edited {timeDifference(new Date().getTime(), project.lastActive)}
             </div>
           )}
         </div>

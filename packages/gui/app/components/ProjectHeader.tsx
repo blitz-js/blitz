@@ -20,8 +20,6 @@ export const ProjectHeader: FC<ProjectHeaderProps> = ({project}) => (
         </Link>
       </nav>
     </div>
-    <h2 className="text-2xl font-semibold leading-8 sm:text-3xl sm:leading-9">
-      {project.name}
-    </h2>
+    <h2 className="text-2xl font-semibold leading-8 sm:text-3xl sm:leading-9">{project.name}</h2>
   </header>
 )

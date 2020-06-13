@@ -1,12 +1,6 @@
 import {existsSync, promises} from 'fs'
 
-import {
-  CREATING_FILES,
-  DONE,
-  INSTALLING_DEPS,
-  RETRIEVING_DEPS,
-  UNKNOWN,
-} from 'utils/status'
+import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
 
 const getCreateProjectStatus = async (path: string) => {
   if (!existsSync(path)) {

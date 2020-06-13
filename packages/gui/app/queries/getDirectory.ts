@@ -48,9 +48,7 @@ async function checkIfBlitzProject(path: string): Promise<boolean> {
   return isBlitz
 }
 
-export default async function getDirectory(
-  toRead?: string,
-): Promise<GetDirectoryResponse> {
+export default async function getDirectory(toRead?: string): Promise<GetDirectoryResponse> {
   try {
     const dir = await createDirExplorer(toRead)
 
@@ -63,8 +61,7 @@ export default async function getDirectory(
           name: dirent.name,
           isFolder: dirent.isDirectory(),
           isBlitzProject:
-            dirent.isDirectory() &&
-            (await checkIfBlitzProject(path.join(dir.path, dirent.name))),
+            dirent.isDirectory() && (await checkIfBlitzProject(path.join(dir.path, dirent.name))),
           isRestricted: false,
         }
       } catch (e) {

@@ -21,11 +21,7 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
         <div className="flex items-center">
           <Link href="/">
             <a className="flex-shrink-0">
-              <img
-                className="w-8 h-8"
-                src="/img/logos/blitz-mark-on-white.svg"
-                alt="Blitz logo"
-              />
+              <img className="w-8 h-8" src="/img/logos/blitz-mark-on-white.svg" alt="Blitz logo" />
             </a>
           </Link>
           <div className="hidden md:block">

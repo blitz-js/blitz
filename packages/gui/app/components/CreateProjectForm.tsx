@@ -1,12 +1,5 @@
 import {useRouter} from 'blitz'
-import {
-  Dispatch,
-  FC,
-  FormEvent,
-  SetStateAction,
-  Suspense,
-  useState,
-} from 'react'
+import {Dispatch, FC, FormEvent, SetStateAction, Suspense, useState} from 'react'
 
 import {CreateProjectInputs} from 'app/components/CreateProjectInputs'
 import {CreateProjectStatus} from 'app/components/CreateProjectStatus'
@@ -18,16 +11,10 @@ type CreateProjectFormProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export const CreateProjectForm: FC<CreateProjectFormProps> = ({
-  homedir,
-  setIsModalOpen,
-}) => {
+export const CreateProjectForm: FC<CreateProjectFormProps> = ({homedir, setIsModalOpen}) => {
   const router = useRouter()
   const [name, setName] = useLocalStorage<string>('name', '')
-  const [description, setDescription] = useLocalStorage<string>(
-    'description',
-    '',
-  )
+  const [description, setDescription] = useLocalStorage<string>('description', '')
   const [path, setPath] = useLocalStorage<string>('path', 'projects/')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
