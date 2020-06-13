@@ -10,7 +10,7 @@ declare global {
 
 describe('RPC', () => {
   describe('HEAD', () => {
-    it('warms the endpoint', async () => {
+    it('warms the endpoint', () => {
       expect.assertions(1)
       executeRpcCall.warm('/api/endpoint')
       expect(global.fetch).toBeCalled()
@@ -37,7 +37,7 @@ describe('RPC', () => {
       }
     })
 
-    it('handles errors', async () => {
+    it('handles errors', () => {
       expect.assertions(1)
       const fetchMock = jest
         .spyOn(global, 'fetch')

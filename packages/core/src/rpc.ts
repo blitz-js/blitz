@@ -33,6 +33,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 
 executeRpcCall.warm = (url: string) => {
   if (typeof window !== 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     window.fetch(url, {method: 'HEAD'})
   }
 }
