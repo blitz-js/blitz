@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.13.0",
+  "version": "0.14.0-canary.0",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": {
@@ -28,8 +28,8 @@
   "module": "dist/webpack.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/display": "0.13.0",
-    "@blitzjs/file-pipeline": "0.13.0",
+    "@blitzjs/display": "0.14.0-canary.0",
+    "@blitzjs/file-pipeline": "0.14.0-canary.0",
     "cross-spawn": "7.0.2",
     "detect-port": "1.3.0",
     "fast-glob": "3.2.2",
@@ -59,7 +59,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.13.0"
+    "@blitzjs/core": "0.14.0-canary.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
