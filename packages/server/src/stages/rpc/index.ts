@@ -18,7 +18,8 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
       return file
     }
 
-    const resolverImportPath = resolverPath(resolutionPath(src, file.path))
+    const originalPath = resolutionPath(src, file.path)
+    const resolverImportPath = resolverPath(originalPath)
     const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
     // Original function -> _resolvers path
@@ -34,7 +35,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     push(
       new File({
         path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(resolverImportPath, resolverName, resolverType)),
+        contents: Buffer.from(apiHandlerTemplate(originalPath, resolverName, resolverType)),
         hash: file.hash + ':2',
       }),
     )
@@ -68,15 +69,10 @@ export default getIsomorphicRpcHandler(
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (resolverPath: string, resolverName: string, resolverType: string) => `
-import {getIsomorphicRpcHandler} from '@blitzjs/core'
+const apiHandlerTemplate = (originalPath: string, resolverName: string, resolverType: string) => `
+// This imports the isomorphicHandler
+import resolverModule from '${originalPath}'
 import {rpcApiHandler, getConfig} from '@blitzjs/server'
-const resolverModule = getIsomorphicRpcHandler(
-  require('${resolverPath}'),
-  '${resolverPath}',
-  '${resolverName}',
-  '${resolverType}',
-)
 let db
 try {
   db = require('db').default
