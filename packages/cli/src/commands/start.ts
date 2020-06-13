@@ -34,7 +34,7 @@ export class Start extends Command {
 
     try {
       if (flags.production) {
-        await prod(config)
+        await prod(config, runPrismaGeneration({silent: true}))
       } else {
         await dev(config, runPrismaGeneration({silent: true}))
       }

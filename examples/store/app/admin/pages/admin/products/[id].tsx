@@ -1,19 +1,19 @@
 import { Suspense } from "react"
-import { Link, useRouter, useQuery } from "blitz"
+import { Link, useRouter, useQuery, useParam } from "blitz"
 import getProduct from "app/products/queries/getProduct"
 import ProductForm from "app/products/components/ProductForm"
 
 function Product() {
-  const { params, push } = useRouter()
-  const { id } = params
-  const [product, { mutate }] = useQuery(getProduct, { where: { id: Number(id) } })
+  const router = useRouter()
+  const id = useParam("id", "number")
+  const [product, { mutate }] = useQuery(getProduct, { where: { id } })
 
   return (
     <ProductForm
       product={product}
       onSuccess={(updatedProduct) => {
         mutate(updatedProduct)
-        push("/admin/products")
+        router.push("/admin/products")
       }}
     />
   )

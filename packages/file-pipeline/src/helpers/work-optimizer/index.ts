@@ -1,6 +1,6 @@
 // Mostly concerned with solving the Dirty Sync problem
 import {log} from '@blitzjs/display'
-import {transform} from '../transform'
+import {transform} from '../../transform'
 
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
