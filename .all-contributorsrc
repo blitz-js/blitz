@@ -670,6 +670,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "exclipy",
+      "name": "Kevin Wu Won",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/508799?v=4",
+      "profile": "https://github.com/exclipy",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
