@@ -2,7 +2,7 @@ import {Command} from '@oclif/command'
 import {join} from 'path'
 import pkgDir from 'pkg-dir'
 import {log} from '@blitzjs/display'
-import {runPrismaGeneration} from './db'
+import {runPrismaGeneration, runMigrate, Db} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
@@ -37,7 +37,7 @@ export class Seed extends Command {
     spinner.succeed()
 
     spinner = log.spinner('Checking for database migrations').start()
-    await runPrismaGeneration({silent: true})
+    await runMigrate()
     spinner.succeed()
 
     try {
@@ -47,11 +47,13 @@ export class Seed extends Command {
       if (res && typeof res.then === 'function') {
         await res
       }
-
-      log.success('Done seeding')
     } catch (err) {
       log.error(err)
       this.error(`Couldn't run imported function, are you sure it's a function?`)
     }
+
+    const db = require(join(projectRoot, 'db/index.ts')).default
+    await db.disconnect()
+    log.success('Done seeding')
   }
 }
