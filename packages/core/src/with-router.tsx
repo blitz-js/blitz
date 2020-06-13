@@ -4,12 +4,12 @@ import {WithRouterProps as WithRouterPropsNext} from 'next/dist/client/with-rout
 import {useParams, extractRouterParams} from './use-params'
 import {useRouterQuery} from './use-router-query'
 
-interface NextRouter extends NextRouterNext {
+export interface Router extends NextRouterNext {
   params: ReturnType<typeof extractRouterParams>
 }
 
 interface WithRouterProps {
-  router: NextRouter
+  router: Router
 }
 
 export function withRouter(WrappedComponent: React.ComponentType<WithRouterProps>) {
