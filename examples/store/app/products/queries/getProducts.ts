@@ -4,10 +4,8 @@ type GetProductsInput = {
   where?: FindManyProductArgs["where"]
   orderBy?: FindManyProductArgs["orderBy"]
   skip?: FindManyProductArgs["skip"]
-  first?: FindManyProductArgs["first"]
-  last?: FindManyProductArgs["last"]
-  after?: FindManyProductArgs["after"]
-  before?: FindManyProductArgs["before"]
+  cursor?: FindManyProductArgs["cursor"]
+  take?: FindManyProductArgs["take"]
   // Only available if a model relationship exists
   // include?: FindManyProductArgs['include']
 }
@@ -16,19 +14,15 @@ export default async function getProducts({
   where,
   orderBy,
   skip,
-  first,
-  last,
-  after,
-  before,
+  cursor,
+  take,
 }: GetProductsInput) {
   const products = await db.product.findMany({
     where,
     orderBy,
     skip,
-    first,
-    last,
-    after,
-    before,
+    cursor,
+    take,
   })
 
   return products

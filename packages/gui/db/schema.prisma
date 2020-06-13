@@ -11,7 +11,7 @@ model Project {
   id          String @default(cuid()) @id
   name        String
   description String
-  path        String
+  path        String @unique
 
   // the following are stub values which are filled in by queries based on the filesystem state
   lastActive Int

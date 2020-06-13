@@ -1,12 +1,12 @@
 import React from 'react'
-import {Head, Link, useRouter} from 'blitz'
+import {Head, Link, useRouter, useParam} from 'blitz'
 import create__ModelName__ from 'app/__modelNames__/mutations/create__ModelName__'
 import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
 
 const New__ModelName__Page: React.FC = () => {
   const router = useRouter()
   if (process.env.parentModel) {
-    const __parentModelId__ = parseInt(router?.query.__parentModelId__ as string)
+    const __parentModelId__ = useParam('__parentModelId__', 'number')
   }
 
   return (

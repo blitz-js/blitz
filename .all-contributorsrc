@@ -595,7 +595,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/972083?v=4",
       "profile": "http://anteprimorac.com.hr",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -612,6 +613,78 @@
       "name": "Jamie Davenport",
       "avatar_url": "https://avatars2.githubusercontent.com/u/1329874?v=4",
       "profile": "https://jamiedavenport.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ganeshmani",
+      "name": "GaneshMani",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/17050715?v=4",
+      "profile": "https://cloudnweb.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "reymon359",
+      "name": "reymon359",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/31936665?v=4",
+      "profile": "http://ramonmorcillo.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "gvasquez11",
+      "name": "gvasquez11",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36422346?v=4",
+      "profile": "https://www.linkedin.com/in/gregory-vasquez-96413b184/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "josemiguelo",
+      "name": " José Miguel Ochoa",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15330034?v=4",
+      "profile": "https://github.com/josemiguelo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "osirvent",
+      "name": "Oscar Sirvent",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5927133?v=4",
+      "profile": "https://github.com/osirvent",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "donni106",
+      "name": "Daniel Molnar",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1942953?v=4",
+      "profile": "https://github.com/donni106",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "exclipy",
+      "name": "Kevin Wu Won",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/508799?v=4",
+      "profile": "https://github.com/exclipy",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "tehnuge",
+      "name": "John Duong",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1928236?v=4",
+      "profile": "https://github.com/tehnuge",
       "contributions": [
         "code"
       ]

@@ -53,6 +53,9 @@ jobs:
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
+      - name: Setup kernel to increase watchers
+        if: matrix.os == 'ubuntu-latest'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
         run: yarn test
         env:

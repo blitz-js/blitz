@@ -26,6 +26,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     return `[${input}]`
   }
 
+  // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
       parentModelId: this.getId(this.options.parentModel),

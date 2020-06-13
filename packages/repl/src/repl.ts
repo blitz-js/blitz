@@ -14,25 +14,25 @@ const projectRoot = pkgDir.sync() || process.cwd()
 const commands = {
   reload: {
     help: 'Reload all modules',
-    action(this: REPLServer) {
+    async action(this: REPLServer) {
       this.clearBufferedCommand()
       console.log('Reloading all modules...')
-      loadModules(this)
+      await loadModules(this)
       this.displayPrompt()
     },
   },
 }
 
 const runRepl = async (replOptions: REPL.ReplOptions) => {
-  const repl = initializeRepl(replOptions)
+  const repl = await initializeRepl(replOptions)
   await setupFileWatchers(repl)
 }
 
-const initializeRepl = (replOptions: REPL.ReplOptions) => {
+const initializeRepl = async (replOptions: REPL.ReplOptions) => {
   const repl = REPL.start(replOptions)
 
   defineCommands(repl, commands)
-  loadModules(repl)
+  await loadModules(repl)
   setupHistory(repl)
 
   return repl

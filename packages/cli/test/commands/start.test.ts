@@ -34,6 +34,6 @@ describe('Start command', () => {
 
   it('runs the prod script when passed the production flag', async () => {
     await Start.run(['--production'])
-    expect(prod).toBeCalledWith(options)
+    expect(prod).toBeCalledWith(options, Promise.resolve())
   })
 })
