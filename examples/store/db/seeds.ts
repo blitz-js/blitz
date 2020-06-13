@@ -1,15 +1,14 @@
 import db from "./index"
 
 const randomString = (len: number, offset = 3) => {
-  return Array.from(
-    new Array(Math.ceil(len + Math.floor((Math.random() - 0.5) * offset))),
-    (_, i) => {
-      if (i % 2 === 0) {
-        return String.fromCharCode(Math.floor(Math.random() * 26) + 97)
-      }
-      return String.fromCharCode(Math.floor(Math.random() * 26) + 65)
-    }
-  ).join("")
+  let output = ""
+
+  for (let i = 0; i < len + Math.ceil((Math.random() - 0.5) * offset); i++) {
+    const ascii = Math.floor(Math.random() * 26) + (i % 2 === 0 ? 97 : 65)
+    output += String.fromCharCode(ascii)
+  }
+
+  return output
 }
 
 const randomProduct = () => {
@@ -22,7 +21,9 @@ const randomProduct = () => {
 }
 
 const seed = async () => {
-  await Promise.all(Array.from(new Array(5), () => db.product.create({ data: randomProduct() })))
+  for (let i = 0; i < 5; i++) {
+    await db.product.create({ data: randomProduct() })
+  }
   await db.user.create({ data: { email: "foo@bar.com", name: "Foobar" } })
 }
 
