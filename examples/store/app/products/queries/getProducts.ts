@@ -15,7 +15,9 @@ export default async function getProducts(
   { where, orderBy, skip, cursor, take }: GetProductsInput,
   ctx: Record<any, unknown> = {}
 ) {
-  console.log("HTTP referer:", ctx.referer)
+  if (ctx.referer) {
+    console.log("HTTP referer:", ctx.referer)
+  }
 
   const products = await db.product.findMany({
     where,

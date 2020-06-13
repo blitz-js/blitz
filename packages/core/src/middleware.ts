@@ -52,7 +52,7 @@ export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule
   }
   if (resolverModule.middleware) {
     if (!Array.isArray(resolverModule.middleware)) {
-      throw new Error(`'middleware' exported from ${resolverModule.resolverName} must be an array`)
+      throw new Error(`'middleware' exported from ${resolverModule._meta.name} must be an array`)
     }
     middleware.push(...resolverModule.middleware)
   }

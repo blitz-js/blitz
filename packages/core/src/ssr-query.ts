@@ -13,7 +13,8 @@ type SsrQueryContext = {
 export async function ssrQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T>,
-  {req, res}: SsrQueryContext,
+  // {req, res}: SsrQueryContext,
+  _ctx: SsrQueryContext,
 ): Promise<ReturnType<T>> {
   // const handler = (queryFn as unknown) as EnhancedResolverModule
   //
@@ -28,6 +29,5 @@ export async function ssrQuery<T extends QueryFn>(
   // await handleRequestWithMiddleware(req, res, middleware, {finishRequest: false})
 
   // return (res as MiddlewareResponse).blitzResult as ReturnType<T>
-  await console.log(queryFn, params, req, res)
-  return null
+  return (await queryFn(params)) as ReturnType<T>
 }

@@ -1,7 +1,7 @@
 import {deserializeError} from 'serialize-error'
 import {queryCache} from 'react-query'
 import {getQueryKey} from './utils'
-import {ResolverModule} from './middleware'
+import {ResolverModule, Middleware} from './middleware'
 
 type Options = {
   fromQueryHook?: boolean
@@ -45,62 +45,55 @@ executeRpcCall.warm = (url: string) => {
 }
 
 interface ResolverEnhancement {
-  resolverName: string
-  type: string
-  path: string
-  cacheKey: string
+  _meta: {
+    name: string
+    type: string
+    path: string
+    apiUrl: string
+  }
 }
-export interface RpcFunction extends ResolverEnhancement {
-  (params: any, opts?: Options): ReturnType<typeof executeRpcCall>
+export interface RpcFunction {
+  (params: any, opts: any): Promise<any>
 }
-export interface EnhancedResolverModule extends ResolverEnhancement, ResolverModule {}
+export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
+
+export interface EnhancedResolverModule extends ResolverEnhancement {
+  (input: any, ctx: Record<string, any>): Promise<unknown>
+  middleware?: Middleware[]
+}
 
 export function getIsomorphicRpcHandler(
   resolver: ResolverModule,
   resolverPath: string,
   resolverName: string,
-  _resolverType: string,
+  resolverType: string,
 ) {
-  const url = resolverPath.replace(/^app\/_rpc/, '/api')
+  const apiUrl = resolverPath.replace(/^app\/_resolvers/, '/api')
+  const enhance = <T extends ResolverEnhancement>(fn: T): T => {
+    fn._meta = {
+      name: resolverName,
+      type: resolverType,
+      path: resolverPath,
+      apiUrl: apiUrl,
+    }
+    return fn
+  }
 
-  let handler: any =
-    typeof window === 'undefined' ? resolver : (params: any, opts = {}) => executeRpcCall(url, params, opts)
+  if (typeof window !== 'undefined') {
+    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) => executeRpcCall(apiUrl, params, opts)) as any
 
-  handler = handler as ResolverEnhancement
-  handler.resolverName = resolverName
-  handler.path = resolverPath
-  handler.cacheKey = url
+    rpcFn = enhance(rpcFn)
 
-  if (typeof window === 'undefined') {
-    return handler as EnhancedResolverModule
-  } else {
     // Warm the lambda
-    executeRpcCall.warm(url)
-    return handler as RpcFunction
+    executeRpcCall.warm(apiUrl)
+
+    return rpcFn
+  } else {
+    let handler: EnhancedResolverModule = resolver.default as any
+
+    handler.middleware = resolver.middleware
+    handler = enhance(handler)
+
+    return handler
   }
 }
-
-// export function getIsomorphicRpcHandler(
-//   resolver: ResolverModule,
-//   resolverPath: string,
-//   resolverName: string,
-//   resolverType: string,
-// ) {
-//   if (typeof window !== 'undefined') {
-//     const url = resolverPath.replace(/^app\/_rpc/, '/api')
-//     let fn: any = (params: any, opts = {}) => executeRpcCall(url, params, opts)
-//
-//     fn.cacheKey = url
-//     fn.name = resolverName
-//     fn.type = resolverType
-//     fn.path = resolverPath
-//
-//     let rpcFn: RpcFunction = fn
-//
-//     // Warm the lambda
-//     executeRpcCall.warm(url)
-//     return rpcFn
-//   } else {
-//     return resolver
-//   }
-// }
