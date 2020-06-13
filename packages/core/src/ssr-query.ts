@@ -1,4 +1,5 @@
 import {IncomingMessage, ServerResponse} from 'http'
+import {log} from '@blitzjs/display'
 import {InferUnaryParam} from './types'
 import {getAllMiddlewareForModule, handleRequestWithMiddleware, MiddlewareResponse} from './middleware'
 import {EnhancedResolverModule} from './rpc'
@@ -20,13 +21,21 @@ export async function ssrQuery<T extends QueryFn>(
   const middleware = getAllMiddlewareForModule(handler)
 
   middleware.push(async (_req, res, next) => {
-    const result = await handler(params, res.blitzCtx)
-    res.blitzResult = result
-    return next()
+    const logPrefix = `${handler._meta.name}`
+    console.log('') // New line
+    try {
+      log.progress(`Running ${logPrefix}(${JSON.stringify(params, null, 2)})`)
+      const result = await handler(params, res.blitzCtx)
+      log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
+      res.blitzResult = result
+      return next()
+    } catch (error) {
+      log.error(`${logPrefix} failed: ${error}\n`)
+      throw error
+    }
   })
 
   await handleRequestWithMiddleware(req, res, middleware, {finishRequest: false})
 
   return (res as MiddlewareResponse).blitzResult as ReturnType<T>
-  // return (await queryFn(params)) as ReturnType<T>
 }

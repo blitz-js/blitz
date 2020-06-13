@@ -34,7 +34,7 @@ export const middleware: Middleware[] = [
   async (req, res, next) => {
     await next()
     if (req.method !== "HEAD" && Array.isArray(res.blitzResult)) {
-      console.log("[Middleware] Total product count:", res.blitzResult.length)
+      console.log("[Middleware] Total product count:", res.blitzResult.length, "\n")
     }
   },
 ]
