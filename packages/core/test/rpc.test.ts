@@ -28,7 +28,7 @@ describe('RPC', () => {
         .mockImplementationOnce(() => Promise.resolve({json: () => ({result: 'result', error: null})}))
 
       const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_resolvers/queries/getProduct')
 
       try {
         const result = await rpcFn('/api/endpoint', {paramOne: 1234})
@@ -48,7 +48,7 @@ describe('RPC', () => {
         )
 
       const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_resolvers/queries/getProduct')
 
       try {
         await expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)

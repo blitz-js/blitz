@@ -22,7 +22,8 @@ export function withBlitz(nextConfig: any) {
           if (!options.isServer) {
             config.module = config.module || {}
             config.module.rules = config.module.rules || []
-            config.module.rules.push({test: /_rpc/, use: {loader: 'null-loader'}})
+            config.module.rules.push({test: /_resolvers/, use: {loader: 'null-loader'}})
+            config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: 'null-loader'}})
             config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: 'null-loader'}})
           }
 

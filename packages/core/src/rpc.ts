@@ -50,7 +50,7 @@ export type RpcFunction = {
 
 export function getIsomorphicRpcHandler(resolver: any, cacheKey: string) {
   if (typeof window !== 'undefined') {
-    const url = cacheKey.replace(/^app\/_rpc/, '/api')
+    const url = cacheKey.replace(/^app\/_resolvers/, '/api')
     let rpcFn: RpcFunction = (params, opts = {}) => executeRpcCall(url, params, opts)
     rpcFn.cacheKey = url
 
