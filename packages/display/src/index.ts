@@ -1,6 +1,4 @@
 import chalk from 'chalk'
-import ora from 'ora'
-import readline from 'readline'
 
 // const blitzTrueBrandColor = '6700AB'
 const blitzBrightBrandColor = '8a3df0'
@@ -43,8 +41,8 @@ const branded = (msg: string) => {
  * @param {string} msg
  */
 const clearLine = (msg?: string) => {
-  readline.clearLine(process.stdout, 0)
-  readline.cursorTo(process.stdout, 0)
+  require('readline').clearLine(process.stdout, 0)
+  require('readline').cursorTo(process.stdout, 0)
   msg && process.stdout.write(msg)
 }
 
@@ -89,7 +87,7 @@ const info = (msg: string) => {
 }
 
 const spinner = (str: string) => {
-  return ora({
+  return require('ora')({
     text: str,
     color: 'blue',
     spinner: {

@@ -28,7 +28,7 @@ export function useInfiniteQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = queryFn as RpcFunction
+  const queryRpcFn = (queryFn as unknown) as RpcFunction
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey: () => [

@@ -21,7 +21,7 @@ export function usePaginatedQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = queryFn as RpcFunction
+  const queryRpcFn = (queryFn as unknown) as RpcFunction
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey: () => [

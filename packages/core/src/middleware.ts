@@ -1,6 +1,6 @@
-import {log} from '@blitzjs/display'
 import {BlitzApiRequest, BlitzApiResponse} from '.'
 import {IncomingMessage, ServerResponse} from 'http'
+import {EnhancedResolverModule} from './rpc'
 
 export interface MiddlewareRequest extends BlitzApiRequest {}
 export interface MiddlewareResponse extends BlitzApiResponse {
@@ -21,10 +21,49 @@ export type ConnectMiddleware = (
   next: (error?: Error) => void,
 ) => void
 
+export const getConfig = () => {
+  if (typeof window === 'undefined') {
+    const packageDir = require('pkg-dir').sync()
+    if (!packageDir) {
+      throw new Error('Could not find the root of the project')
+    }
+    try {
+      return require(require('path').join(packageDir, 'blitz.config.js'))
+    } catch (error) {
+      return {}
+    }
+  } else {
+    return {}
+  }
+}
+
+export type ResolverModule = {
+  default: (args: any, ctx: any) => Promise<unknown>
+  middleware?: Middleware[]
+}
+
+export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
+  const middleware: Middleware[] = []
+  if (getConfig().middleware) {
+    if (!Array.isArray(getConfig().middleware)) {
+      throw new Error("'middleware' in blitz.config.js must be an array")
+    }
+    middleware.push(...getConfig().middleware)
+  }
+  if (resolverModule.middleware) {
+    if (!Array.isArray(resolverModule.middleware)) {
+      throw new Error(`'middleware' exported from ${resolverModule.resolverName} must be an array`)
+    }
+    middleware.push(...resolverModule.middleware)
+  }
+  return middleware
+}
+
 export async function handleRequestWithMiddleware(
-  req: BlitzApiRequest,
-  res: BlitzApiResponse,
+  req: BlitzApiRequest | IncomingMessage,
+  res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
+  opts: {finishRequest: boolean} = {finishRequest: true},
 ) {
   ;(res as MiddlewareResponse).blitzCtx = {}
 
@@ -41,17 +80,21 @@ export async function handleRequestWithMiddleware(
         throw error
       }
     })
-    if (!res.writableEnded) {
+    if (opts.finishRequest && !res.writableEnded) {
       res.end()
     }
   } catch (error) {
     console.log('') // new line
     if (res.writableFinished) {
-      log.error('Error occured in middleware after the response was already sent to the browser:\n')
+      require('@blitzjs/display').log.error(
+        'Error occured in middleware after the response was already sent to the browser:\n',
+      )
     } else {
-      res.statusCode = (error as any).code || (error as any).status || 500
-      res.end(error.message || res.statusCode.toString())
-      log.error('Error while processing the request:\n')
+      if (opts.finishRequest) {
+        res.statusCode = (error as any).code || (error as any).status || 500
+        res.end(error.message || res.statusCode.toString())
+      }
+      require('@blitzjs/display').log.error('Error while processing the request:\n')
     }
     throw error
   }

@@ -1,4 +1,4 @@
-import { Link, BlitzPage, GetServerSideProps, ssrQuery } from "@blitzjs/core"
+import { Link, BlitzPage, GetServerSideProps, ssrQuery } from "blitz"
 import getProducts from "app/products/queries/getProducts"
 import { Product } from "db"
 

@@ -1,6 +1,7 @@
 import {deserializeError} from 'serialize-error'
 import {queryCache} from 'react-query'
 import {getQueryKey} from './utils'
+import {ResolverModule} from './middleware'
 
 type Options = {
   fromQueryHook?: boolean
@@ -43,21 +44,63 @@ executeRpcCall.warm = (url: string) => {
   }
 }
 
-export type RpcFunction = {
-  (params: any, opts?: Options): ReturnType<typeof executeRpcCall>
-  cacheKey?: string
+interface ResolverEnhancement {
+  resolverName: string
+  type: string
+  path: string
+  cacheKey: string
 }
+export interface RpcFunction extends ResolverEnhancement {
+  (params: any, opts?: Options): ReturnType<typeof executeRpcCall>
+}
+export interface EnhancedResolverModule extends ResolverEnhancement, ResolverModule {}
 
-export function getIsomorphicRpcHandler(resolver: any, cacheKey: string) {
-  if (typeof window !== 'undefined') {
-    const url = cacheKey.replace(/^app\/_rpc/, '/api')
-    let rpcFn: RpcFunction = (params, opts = {}) => executeRpcCall(url, params, opts)
-    rpcFn.cacheKey = url
+export function getIsomorphicRpcHandler(
+  resolver: ResolverModule,
+  resolverPath: string,
+  resolverName: string,
+  _resolverType: string,
+) {
+  const url = resolverPath.replace(/^app\/_rpc/, '/api')
 
+  let handler: any =
+    typeof window === 'undefined' ? resolver : (params: any, opts = {}) => executeRpcCall(url, params, opts)
+
+  handler = handler as ResolverEnhancement
+  handler.resolverName = resolverName
+  handler.path = resolverPath
+  handler.cacheKey = url
+
+  if (typeof window === 'undefined') {
+    return handler as EnhancedResolverModule
+  } else {
     // Warm the lambda
     executeRpcCall.warm(url)
-    return rpcFn
-  } else {
-    return resolver
+    return handler as RpcFunction
   }
 }
+
+// export function getIsomorphicRpcHandler(
+//   resolver: ResolverModule,
+//   resolverPath: string,
+//   resolverName: string,
+//   resolverType: string,
+// ) {
+//   if (typeof window !== 'undefined') {
+//     const url = resolverPath.replace(/^app\/_rpc/, '/api')
+//     let fn: any = (params: any, opts = {}) => executeRpcCall(url, params, opts)
+//
+//     fn.cacheKey = url
+//     fn.name = resolverName
+//     fn.type = resolverType
+//     fn.path = resolverPath
+//
+//     let rpcFn: RpcFunction = fn
+//
+//     // Warm the lambda
+//     executeRpcCall.warm(url)
+//     return rpcFn
+//   } else {
+//     return resolver
+//   }
+// }

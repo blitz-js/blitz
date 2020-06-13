@@ -41,7 +41,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
 
     // Isomorphic RPC client
     const rpcFile = file.clone()
-    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath))
+    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, resolverType, resolverName))
     push(rpcFile)
 
     return next()
@@ -54,38 +54,30 @@ export function isRpcPath(filePath: string) {
   return /(?:app[\\/])(?!_rpc).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorphicRpcTemplate = (resolverPath: string) => `
+const isomorphicRpcTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
-import resolver from '${resolverPath}'
-export default getIsomorphicRpcHandler(resolver, '${resolverPath}') as typeof resolver
+const resolverModule = require('${resolverPath}')
+export default getIsomorphicRpcHandler(
+  resolverModule,
+  '${resolverPath}',
+  '${resolverName}',
+  '${resolverType}'
+) as typeof resolverModule.default
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
-import {rpcApiHandler, getConfig} from '@blitzjs/server'
+import {rpcApiHandler, getAllMiddlewareForModule} from '@blitzjs/server'
 const resolverModule = require('${resolverPath}')
 let db
 try {
   db = require('db').default
 }catch(err){}
-const middleware = []
-if (getConfig().middleware) {
-  if (!Array.isArray(getConfig().middleware)) {
-    throw new Error("'middleware' in blitz.config.js must be an array")
-  }
-  middleware.push(...getConfig().middleware)
-}
-if (resolverModule.middleware) {
-  if (!Array.isArray(resolverModule.middleware)) {
-    throw new Error("'middleware' exported from ${resolverName} must be an array")
-  }
-  middleware.push(...resolverModule.middleware)
-}
 export default rpcApiHandler(
   '${resolverType}',
   '${resolverName}',
   resolverModule.default,
-  middleware,
+  getAllMiddlewareForModule('${resolverName}', resolverModule),
   () => db && db.connect(),
 )
 export const config = {
