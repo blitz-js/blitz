@@ -1,9 +1,8 @@
-import { Link, BlitzPage, GetServerSideProps, ssrQuery } from "blitz"
+import { ssrQuery, GetServerSideProps, Link, BlitzPage, PromiseReturnType } from "blitz"
 import getProducts from "app/products/queries/getProducts"
-import { Product } from "db"
 
 type PageProps = {
-  products: Product[]
+  products: PromiseReturnType<typeof getProducts>
 }
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({ req, res }) => {

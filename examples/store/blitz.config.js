@@ -1,5 +1,4 @@
 module.exports = {
-  // Express/Connect compatible
   middleware: [
     (req, res, next) => {
       res.blitzCtx.referer = req.headers.referer
