@@ -35,7 +35,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
 
   if (config.port) {
     availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
+    spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
   }
   if (config.hostname) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
@@ -52,21 +52,17 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const {spawnCommand, availablePort} = await createCommandAndPort(config, "dev")
+  const {spawnCommand} = await createCommandAndPort(config, "dev")
 
   return new Promise((res, rej) => {
-    if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port}::port already in use`)
-    } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
-        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+    spawn(nextBin, spawnCommand, {
+      cwd,
+      stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+    })
+      .on("exit", (code: number) => {
+        code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
       })
-        .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
-        })
-        .on("error", rej)
-    }
+      .on("error", rej)
   })
 }
 
