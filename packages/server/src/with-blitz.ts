@@ -26,6 +26,8 @@ export function withBlitz(nextConfig: any) {
             config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: 'null-loader'}})
             config.module.rules.push({test: /@blitzjs[\\/]config/, use: {loader: 'null-loader'}})
             config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: 'null-loader'}})
+            config.module.rules.push({test: /blitz\/packages\/config/, use: {loader: 'null-loader'}})
+            config.module.rules.push({test: /blitz\/packages\/display/, use: {loader: 'null-loader'}})
           }
 
           // This is needed because, for an unknown reason, the next build fails when
