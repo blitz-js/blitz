@@ -1,5 +1,5 @@
 declare namespace NodeJS {
   interface Global {
-    config: Record<string, unknown>
+    blitzConfig: Record<string, unknown>
   }
 }
