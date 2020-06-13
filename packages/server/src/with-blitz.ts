@@ -2,7 +2,7 @@ const withPlugins = require('next-compose-plugins')
 const withTM = require('next-transpile-modules')(['@blitzjs/core'])
 
 export function withBlitz(nextConfig: any) {
-  return (phase: string, nextOpts: any) => {
+  return (phase: string, nextOpts: any = {}) => {
     // Need to grab the normalized config based on the phase we are in incase we are given a functional config to extend
     const normalizedConfig = typeof nextConfig === 'function' ? nextConfig(phase, nextOpts) : nextConfig
 
@@ -24,6 +24,7 @@ export function withBlitz(nextConfig: any) {
             config.module.rules = config.module.rules || []
             config.module.rules.push({test: /_resolvers/, use: {loader: 'null-loader'}})
             config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: 'null-loader'}})
+            config.module.rules.push({test: /@blitzjs[\\/]config/, use: {loader: 'null-loader'}})
             config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: 'null-loader'}})
           }
 

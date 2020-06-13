@@ -1,6 +1,7 @@
 import {BlitzApiRequest, BlitzApiResponse} from '.'
 import {IncomingMessage, ServerResponse} from 'http'
 import {EnhancedResolverModule} from './rpc'
+import {getConfig} from '@blitzjs/config'
 
 export interface MiddlewareRequest extends BlitzApiRequest {}
 export interface MiddlewareResponse extends BlitzApiResponse {
@@ -21,22 +22,6 @@ export type ConnectMiddleware = (
   next: (error?: Error) => void,
 ) => void
 
-export const getConfig = () => {
-  if (typeof window === 'undefined') {
-    const packageDir = require('pkg-dir').sync()
-    if (!packageDir) {
-      throw new Error('Could not find the root of the project')
-    }
-    try {
-      return require(require('path').join(packageDir, 'blitz.config.js'))
-    } catch (error) {
-      return {}
-    }
-  } else {
-    return {}
-  }
-}
-
 export type ResolverModule = {
   default: (args: any, ctx: any) => Promise<unknown>
   middleware?: Middleware[]
@@ -44,11 +29,12 @@ export type ResolverModule = {
 
 export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
   const middleware: Middleware[] = []
-  if (getConfig().middleware) {
-    if (!Array.isArray(getConfig().middleware)) {
+  const config = getConfig()
+  if (config.middleware) {
+    if (!Array.isArray(config.middleware)) {
       throw new Error("'middleware' in blitz.config.js must be an array")
     }
-    middleware.push(...getConfig().middleware)
+    middleware.push(...config.middleware)
   }
   if (resolverModule.middleware) {
     if (!Array.isArray(resolverModule.middleware)) {
