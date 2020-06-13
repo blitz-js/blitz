@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/config",
-  "description": "Loading next.config.js and blitz.config.js files",
+  "description": "Loads the blitz app config",
   "keywords": [
     "next.config.js",
     "blitz.config.js",
@@ -13,9 +13,8 @@
     "clean": "rimraf dist",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
-    "test": "tsdx test --env=jest-environment-jsdom-sixteen",
-    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen",
-    "lint": "tsdx lint src"
+    "test": "tsdx test --env=jest-environment-jsdom-sixteen --passWithNoTests",
+    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
   },
   "main": "dist/index.js",
   "module": "dist/config.esm.js",
