@@ -6,18 +6,25 @@ const configFiles = ['next.config.js']
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
-export const getConfig = async (reload?: boolean): Promise<Record<string, unknown>> => {
-  if (Object.keys(global.blitzConfig).length > 0 && !reload) {
+export const getConfig = (reload?: boolean): Record<string, unknown> => {
+  if (global.blitzConfig && Object.keys(global.blitzConfig).length > 0 && !reload) {
     return global.blitzConfig
   }
 
   let blitzConfig = {}
-  const projectRoot = (await pkgDir()) || process.cwd()
+  const projectRoot = pkgDir.sync() || process.cwd()
 
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {
-      const file = require(join(projectRoot, configFile))
-      blitzConfig = {...blitzConfig, ...file}
+      const path = join(projectRoot, configFile)
+      const file = require(path)
+      let contents
+      if (typeof file === 'function') {
+        contents = file()
+      } else {
+        contents = file
+      }
+      blitzConfig = contents
     }
   }
 

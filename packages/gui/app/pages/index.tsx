@@ -1,4 +1,4 @@
-import {BlitzPage, GetServerSideProps, useQuery} from 'blitz'
+import {BlitzPage, GetServerSideProps} from 'blitz'
 import {homedir} from 'os'
 import {useState} from 'react'
 
