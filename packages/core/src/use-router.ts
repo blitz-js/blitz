@@ -1,9 +1,9 @@
-import {useRouter as useRouterNext} from 'next/router'
+import {useRouter as useNextRouter} from 'next/router'
 import {useParams} from './use-params'
 import {useRouterQuery} from './use-router-query'
 
 export function useRouter() {
-  const router = useRouterNext()
+  const router = useNextRouter()
   const query = useRouterQuery()
   const params = useParams()
 

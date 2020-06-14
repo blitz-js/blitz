@@ -1,6 +1,6 @@
 import React from 'react'
-import {withRouter as withRouterNext, NextRouter} from 'next/router'
-import {WithRouterProps as WithRouterPropsNext} from 'next/dist/client/with-router'
+import {withRouter as withNextRouter, NextRouter} from 'next/router'
+import {WithRouterProps as WithNextRouterProps} from 'next/dist/client/with-router'
 import {useParams, extractRouterParams} from './use-params'
 import {useRouterQuery} from './use-router-query'
 
@@ -13,10 +13,10 @@ interface WithRouterProps {
 }
 
 export function withRouter(WrappedComponent: React.ComponentType<WithRouterProps>) {
-  const Wrapper: React.FC<WithRouterPropsNext> = ({router}) => {
+  const Wrapper: React.FC<WithNextRouterProps> = ({router}) => {
     const query = useRouterQuery()
     const params = useParams()
     return <WrappedComponent router={{...router, query, params}} />
   }
-  return withRouterNext(Wrapper)
+  return withNextRouter(Wrapper)
 }
