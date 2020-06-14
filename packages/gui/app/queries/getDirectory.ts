@@ -22,8 +22,6 @@ export type GetDirectoryResponse = {
   status: ResponseStatus
 }
 
-let dir: fs.Dir
-
 async function createDirExplorer(path?: string): Promise<fs.Dir> {
   const _path = path || __dirname
 
