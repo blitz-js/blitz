@@ -53,9 +53,7 @@ const runMigrateUp = (prismaBin: string, resolve: (value?: unknown) => void) => 
 export const runMigrate = async () => {
   const prismaBin = await getPrismaBin()
   return new Promise((resolve) => {
-    if (process.env.NODE_ENV !== 'production') {
-      runMigrateUp(prismaBin, resolve)
-    } else {
+    if (process.env.NODE_ENV === 'production') {
       const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
         stdio: 'inherit',
       })
@@ -66,6 +64,8 @@ export const runMigrate = async () => {
           process.exit(1)
         }
       })
+    } else {
+      runMigrateUp(prismaBin, resolve)
     }
   })
 }
