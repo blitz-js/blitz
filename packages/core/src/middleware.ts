@@ -129,7 +129,7 @@ export function compose(middleware: Middleware[]) {
 }
 
 /**
- * If the middleware function does declare receiving the `next` callback
+ * If the middleware function doesn't declare receiving the `next` callback
  * assume that it's synchronous and invoke `next` ourselves
  */
 function noCallbackHandler(
