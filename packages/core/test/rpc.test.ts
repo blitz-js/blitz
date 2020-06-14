@@ -17,7 +17,7 @@ describe('RPC', () => {
     })
   })
 
-  describe('POST', () => {
+  describe('POST serverfull', () => {
     it('makes the request', async () => {
       expect.assertions(2)
       const fetchMock = jest
@@ -26,7 +26,7 @@ describe('RPC', () => {
         .mockImplementationOnce(() => Promise.resolve({json: () => ({result: 'result', error: null})}))
 
       const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct', false)
 
       try {
         const result = await rpcFn('/api/endpoint', {paramOne: 1234})
@@ -46,7 +46,7 @@ describe('RPC', () => {
         )
 
       const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct', false)
 
       try {
         expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
