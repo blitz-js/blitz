@@ -2,7 +2,6 @@ import {Command, flags} from '@oclif/command'
 import {dev, prod, ServerConfig} from '@blitzjs/server'
 
 import {runPrismaGeneration} from './db'
-import {isServerless} from 'src/utils/is-serverless'
 
 export class Start extends Command {
   static description = 'Start a development server'
@@ -31,7 +30,6 @@ export class Start extends Command {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
-      serverless: isServerless(process.cwd()),
     }
 
     try {

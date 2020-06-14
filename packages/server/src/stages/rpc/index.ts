@@ -2,6 +2,7 @@ import File from 'vinyl'
 import slash from 'slash'
 import {relative} from 'path'
 import {Stage, transform} from '@blitzjs/file-pipeline'
+import {getConfig} from '@blitzjs/config'
 
 import {absolutePathTransform} from '../utils'
 
@@ -13,6 +14,8 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
 
   const getRpcPath = fileTransformer(rpcPath)
   const getRpcHandlerPath = fileTransformer(handlerPath)
+
+  const {target}: {target?: string} = getConfig()
 
   const stream = transform.file((file, {next, push}) => {
     if (!isRpcPath(file.path)) {
@@ -42,7 +45,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
 
     // Isomorphic RPC client
     const rpcFile = file.clone()
-    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, serverless))
+    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, target?.includes('serverless') || false))
     push(rpcFile)
 
     return next()
