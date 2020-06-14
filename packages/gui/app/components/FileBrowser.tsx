@@ -79,7 +79,7 @@ function useList(base: any[] = []): UseListReturn {
         add(toToggle)
       }
     },
-    [get, add, remove],
+    [add, remove, list],
   )
 
   return [{get}, {remove, add, toggle}]
