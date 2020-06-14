@@ -1,15 +1,15 @@
 import React from 'react'
-import {withRouter as withRouterNext, NextRouter as NextRouterNext} from 'next/router'
+import {withRouter as withRouterNext, NextRouter} from 'next/router'
 import {WithRouterProps as WithRouterPropsNext} from 'next/dist/client/with-router'
 import {useParams, extractRouterParams} from './use-params'
 import {useRouterQuery} from './use-router-query'
 
-export interface Router extends NextRouterNext {
+export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof extractRouterParams>
 }
 
 interface WithRouterProps {
-  router: Router
+  router: BlitzRouter
 }
 
 export function withRouter(WrappedComponent: React.ComponentType<WithRouterProps>) {
