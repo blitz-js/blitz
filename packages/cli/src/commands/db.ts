@@ -36,30 +36,37 @@ export const runPrismaGeneration = async ({silent = false} = {}) => {
   }
 }
 
+const runMigrateUp = (prismaBin: string, resolve: (value?: unknown) => void) => {
+  const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
+    stdio: 'inherit',
+  })
+  cp.on('exit', async (code) => {
+    if (code === 0) {
+      await runPrismaGeneration()
+      resolve()
+    } else {
+      process.exit(1)
+    }
+  })
+}
+
 export const runMigrate = async () => {
   const prismaBin = await getPrismaBin()
-
   return new Promise((resolve) => {
-    const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
-      stdio: 'inherit',
-    })
-    cp.on('exit', (code) => {
-      if (code === 0) {
-        const cp = spawn(prismaBin, ['migrate', 'up', schemaArg, '--create-db', '--experimental'], {
-          stdio: 'inherit',
-        })
-        cp.on('exit', async (code) => {
-          if (code === 0) {
-            await runPrismaGeneration()
-            resolve()
-          } else {
-            process.exit(1)
-          }
-        })
-      } else {
-        process.exit(1)
-      }
-    })
+    if (process.env.NODE_ENV !== 'production') {
+      runMigrateUp(prismaBin, resolve)
+    } else {
+      const cp = spawn(prismaBin, ['migrate', 'save', schemaArg, '--create-db', '--experimental'], {
+        stdio: 'inherit',
+      })
+      cp.on('exit', (code) => {
+        if (code === 0) {
+          runMigrateUp(prismaBin, resolve)
+        } else {
+          process.exit(1)
+        }
+      })
+    }
   })
 }
 
