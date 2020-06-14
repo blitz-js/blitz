@@ -688,6 +688,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "fnoah",
+      "name": "Noah Fleischmann",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/23707137?v=4",
+      "profile": "https://noahfleischmann.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
