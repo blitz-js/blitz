@@ -2,7 +2,7 @@ import {Command} from '@oclif/command'
 import {join} from 'path'
 import pkgDir from 'pkg-dir'
 import {log} from '@blitzjs/display'
-import {runPrismaGeneration, runMigrate, Db} from './db'
+import {runMigrate} from './db'
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
