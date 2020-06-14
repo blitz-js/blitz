@@ -1,6 +1,12 @@
-import {Dispatch, SetStateAction} from 'react'
+import {Dispatch, DispatchWithoutAction, SetStateAction} from 'react'
+
+export type Directory = {
+  name: string
+  path: string
+  isBlitz: boolean
+}
 
 export type DirectoryListProps = {
-  path: string
-  setPath: Dispatch<SetStateAction<string>>
+  currentPath: string
+  setCurrentPath: Dispatch<SetStateAction<string>>
 }

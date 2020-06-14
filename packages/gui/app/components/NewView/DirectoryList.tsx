@@ -3,17 +3,28 @@ import {Folder} from 'heroicons-react'
 import {FC} from 'react'
 
 import getDirectories from 'app/queries/getDirectories'
-import {DirectoryListProps} from './types'
+import {useLocalStorage} from 'utils/hooks/web/useLocalStorage'
+import {Directory, DirectoryListProps} from './types'
 
-export const DirectoryList: FC<DirectoryListProps> = ({path, setPath}) => {
-  const [directories] = useQuery(getDirectories, {path})
+export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPath}) => {
+  const [directories] = useQuery(getDirectories, {path: currentPath})
+
+  const [path, setPath] = useLocalStorage<string>('path', '')
+
+  const handleClick = (directory: Directory) => {
+    if (directory.isBlitz) {
+      setPath(directory.path)
+    } else {
+      setCurrentPath(directory.path)
+    }
+  }
 
   return (
-    <ul className="divide-y divide-gray-200 ">
+    <ul className="divide-y divide-gray-200">
       {directories.map((directory) => (
         <li key={directory.path}>
           <button
-            onClick={() => setPath(directory.path)}
+            onClick={() => handleClick(directory)}
             type="button"
             className="block w-full text-left transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
             <div className="flex items-center py-3 pl-3 pr-4 text-sm leading-5">
