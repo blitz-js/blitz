@@ -74,7 +74,7 @@ export const createStageManifest = (
 ) => {
   const stage: Stage = () => {
     const manifest = Manifest.create()
-    // Other options is to do a timeout
+
     const debouncePushItem = debounce((push: (item: PipelineItem) => void, file: PipelineItem) => {
       push(file)
     }, 500)
