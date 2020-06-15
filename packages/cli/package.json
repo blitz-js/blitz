@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -30,8 +30,8 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.14.0",
-    "@blitzjs/repl": "0.14.0",
+    "@blitzjs/display": "0.14.1",
+    "@blitzjs/repl": "0.14.1",
     "@oclif/command": "1.5.20",
     "@oclif/config": "1.15.1",
     "@oclif/plugin-help": "2.2.3",
@@ -53,9 +53,9 @@
     "tsconfig-paths": "3.9.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.14.0",
-    "@blitzjs/installer": "0.14.0",
-    "@blitzjs/server": "0.14.0",
+    "@blitzjs/generator": "0.14.1",
+    "@blitzjs/installer": "0.14.1",
+    "@blitzjs/server": "0.14.1",
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
     "@prisma/cli": "2.0.0-beta.3",
