@@ -1,5 +1,5 @@
 import {useQuery} from 'blitz'
-import {FC, Suspense, useState} from 'react'
+import {FC, useState} from 'react'
 import {ChevronLeft, ChevronRight} from 'heroicons-react'
 
 import getHomedir from 'app/queries/getHomedir'
@@ -31,9 +31,8 @@ export const DirectoryChooser: FC = () => {
           <ChevronRight className="w-5 h-5" />
         </button>
       </nav>
-      <Suspense fallback={null}>
-        <DirectoryList currentPath={currentPath} setCurrentPath={setCurrentPath} />
-      </Suspense>
+
+      <DirectoryList currentPath={currentPath} setCurrentPath={setCurrentPath} />
     </>
   )
 }

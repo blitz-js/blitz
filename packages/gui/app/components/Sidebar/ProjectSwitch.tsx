@@ -11,7 +11,7 @@ export const ProjectSwitch: FC<ProjectSwitchProps> = ({project}) => {
   const isRunning = true
 
   // @ts-ignore
-  const Icon = Icons[`${project.icon}Outline`]
+  const Icon = Icons[project.icon]
 
   return (
     <>

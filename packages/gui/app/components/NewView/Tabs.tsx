@@ -1,7 +1,9 @@
 import {Link, useRouter} from 'blitz'
 import {FC} from 'react'
 
-export const Tabs: FC = () => {
+import {TabsProps} from './types'
+
+export const Tabs: FC<TabsProps> = ({isSubmitting}) => {
   const router = useRouter()
 
   return (
@@ -13,7 +15,7 @@ export const Tabs: FC = () => {
               router.pathname === '/import'
                 ? 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
                 : 'text-indigo-600 border-indigo-500 focus:text-indigo-800 focus:border-indigo-700'
-            }`}
+            } ${isSubmitting && 'opacity-50 pointer-events-none'}`}
             style={{borderRightColor: '#e5e7eb'}}>
             Create new
           </a>
@@ -24,8 +26,8 @@ export const Tabs: FC = () => {
               router.pathname === '/new'
                 ? 'text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
                 : 'text-indigo-600 border-indigo-500 focus:text-indigo-800 focus:border-indigo-700'
-            }`}>
-            Import existing project
+            } ${isSubmitting && 'opacity-50 pointer-events-none'}`}>
+            Import from existing
           </a>
         </Link>
       </nav>

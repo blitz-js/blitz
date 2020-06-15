@@ -1,19 +1,30 @@
 import {useQuery} from 'blitz'
 import {Folder} from 'heroicons-react'
 import {FC} from 'react'
+import {mutate} from 'swr'
 
 import getDirectories from 'app/queries/getDirectories'
-import {useLocalStorage} from 'utils/hooks/web/useLocalStorage'
+import {usePath} from 'utils/usePath'
 import {Directory, DirectoryListProps} from './types'
 
 export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPath}) => {
   const [directories] = useQuery(getDirectories, {path: currentPath})
 
-  const [path, setPath] = useLocalStorage<string>('path', '')
+  const {data: pathData = {path: ''}} = usePath()
 
   const handleClick = (directory: Directory) => {
-    if (directory.isBlitz) {
-      setPath(directory.path)
+    if (directory.isBlitz && directory.path !== pathData.path) {
+      localStorage.setItem('name', JSON.stringify({name: directory.name}))
+      mutate('name', {name: directory.name})
+
+      localStorage.setItem('path', JSON.stringify({path: directory.path}))
+      mutate('path', {path: directory.path})
+    } else if (directory.isBlitz && directory.path === pathData.path) {
+      localStorage.setItem('name', JSON.stringify({name: ''}))
+      mutate('name', {name: ''})
+
+      localStorage.setItem('path', JSON.stringify({path: ''}))
+      mutate('path', {path: ''})
     } else {
       setCurrentPath(directory.path)
     }
@@ -26,7 +37,9 @@ export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPa
           <button
             onClick={() => handleClick(directory)}
             type="button"
-            className="block w-full text-left transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
+            className={`block w-full text-left transition duration-150 ease-in-out focus:outline-none  ${
+              directory.path === pathData.path ? 'bg-indigo-50' : 'hover:bg-gray-50 focus:bg-gray-50'
+            }`}>
             <div className="flex items-center py-3 pl-3 pr-4 text-sm leading-5">
               {directory.isBlitz ? (
                 <img
