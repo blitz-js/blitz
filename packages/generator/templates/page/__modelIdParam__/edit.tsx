@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react'
-import {Head, Link, useRouter, useQuery} from 'blitz'
+import {Head, Link, useRouter, useQuery, useParam} from 'blitz'
 import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
 import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName__'
 import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
