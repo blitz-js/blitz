@@ -35,7 +35,6 @@ export const Inputs: FC = () => {
                 localStorage.setItem('name', JSON.stringify({name}))
                 mutate('name', {name})
               }}
-              autoFocus
               id="name"
               className="block w-full form-input sm:text-sm sm:leading-5"
               placeholder="my-awesome-project"

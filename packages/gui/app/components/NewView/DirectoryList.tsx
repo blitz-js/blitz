@@ -37,7 +37,7 @@ export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPa
           <button
             onClick={() => handleClick(directory)}
             type="button"
-            className={`block w-full text-left transition duration-150 ease-in-out focus:outline-none  ${
+            className={`block w-full text-left transition duration-150 ease-in-out cursor-pointer focus:outline-none  ${
               directory.path === pathData.path ? 'bg-indigo-50' : 'hover:bg-gray-50 focus:bg-gray-50'
             }`}>
             <div className="flex items-center py-3 pl-3 pr-4 text-sm leading-5">

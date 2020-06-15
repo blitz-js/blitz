@@ -3,16 +3,8 @@ import {mutate} from 'swr'
 
 import {useToggle} from 'utils/hooks/state/useToggle'
 import {useColor} from 'utils/useColor'
-
-const colors = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink']
-
-type ColorProps = {
-  color: string
-}
-
-const Color: FC<ColorProps> = ({color}) => {
-  return <div className={`w-6 h-6 rounded-md bg-${color}-500`} />
-}
+import {Color} from './Color'
+import {colors} from './utils'
 
 export const ColorChooser: FC = () => {
   const {data: colorData = {color: ''}} = useColor()

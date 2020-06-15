@@ -20,11 +20,13 @@ export const Footer: FC<FooterProps> = ({isSubmitting}) => {
       <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
         <button
           disabled={
-            isSubmitting ||
-            nameData.name.length === 0 ||
-            pathData.path.length === 0 ||
-            iconData.icon.length === 0 ||
-            colorData.color.length === 0
+            router.pathname === '/new'
+              ? isSubmitting ||
+                nameData.name.length === 0 ||
+                pathData.path.length === 0 ||
+                iconData.icon.length === 0 ||
+                colorData.color.length === 0
+              : isSubmitting || nameData.name.length === 0 || pathData.path.length === 0
           }
           type="submit"
           className="inline-flex justify-center w-full px-4 py-2 text-base font-medium leading-6 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo sm:text-sm sm:leading-5 disabled:opacity-50">

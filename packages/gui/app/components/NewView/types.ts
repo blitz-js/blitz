@@ -1,7 +1,10 @@
-import * as Heroicons from 'heroicons-react'
 import {Dispatch, SetStateAction} from 'react'
 
 import getDirectories from 'app/queries/getDirectories'
+
+export type ColorProps = {
+  color: string
+}
 
 type Await<T> = T extends {
   then(onfulfilled?: (value: infer U) => unknown): unknown
@@ -16,7 +19,9 @@ export type DirectoryListProps = {
   setCurrentPath: Dispatch<SetStateAction<string>>
 }
 
-export const Icons = Object.keys(Heroicons) as Array<keyof typeof Heroicons>
+export type IconProps = {
+  icon: string
+}
 
 export type FooterProps = {
   isSubmitting: boolean

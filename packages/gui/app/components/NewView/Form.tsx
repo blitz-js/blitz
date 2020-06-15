@@ -3,7 +3,9 @@ import {FC, FormEvent, useState, Suspense} from 'react'
 import {mutate} from 'swr'
 
 import createProject from 'app/mutations/createProject'
+import importProject from 'app/mutations/importProject'
 import getHomedir from 'app/queries/getHomedir'
+import {findClosestStringMatch} from 'utils/string/findClosestStringMatch'
 import {useColor} from 'utils/useColor'
 import {useIcon} from 'utils/useIcon'
 import {useName} from 'utils/useName'
@@ -14,6 +16,7 @@ import {Header} from './Header'
 import {Inputs} from './Inputs'
 import {Status} from './Status'
 import {Tabs} from './Tabs'
+import {colors, icons} from './utils'
 
 export const Form: FC = () => {
   const router = useRouter()
@@ -30,17 +33,20 @@ export const Form: FC = () => {
     e.preventDefault()
     setIsSubmitting(true)
 
+    const isNew = router.pathname === '/new'
+
     const data = {
       createdAt: new Date().getTime(),
       name: nameData.name,
-      path: `${homedir}/${pathData.path}`,
-      icon: iconData.icon,
-      color: colorData.color,
+      path: isNew ? `${homedir}/${pathData.path}` : pathData.path,
+      icon: isNew ? iconData.icon : findClosestStringMatch(nameData.name, icons) || 'CodeOutline',
+      color: isNew ? colorData.color : colors[(Math.random() * colors.length) | 0],
       lastActive: 0,
     }
 
     try {
-      const project = await createProject({data})
+      const command = isNew ? createProject : importProject
+      const project = await command({data})
 
       if (project) {
         localStorage.setItem('name', JSON.stringify({name: ''}))
@@ -55,7 +61,7 @@ export const Form: FC = () => {
         localStorage.setItem('color', JSON.stringify({color: ''}))
         mutate('color', {color: ''})
 
-        router.push(`/p/${project.id}`)
+        router.push('/p/[id]', `/p/${project.id}`)
       } else {
         alert('Something went wrong')
         setIsSubmitting(false)
