@@ -26,6 +26,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
     return `[${input}]`
   }
 
+  // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
       parentModelId: this.getId(this.options.parentModel),

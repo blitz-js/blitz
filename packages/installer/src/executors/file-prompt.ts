@@ -13,7 +13,7 @@ interface FilePromptOptions {
   context: any
 }
 
-async function getMatchingFiles(filter: string = ''): Promise<string[]> {
+function getMatchingFiles(filter: string = ''): Promise<string[]> {
   return globby(filter, {expandDirectories: true})
 }
 

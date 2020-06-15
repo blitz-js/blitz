@@ -21,6 +21,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     return ''
   }
 
+  // eslint-disable-next-line require-await
   async write() {
     try {
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {

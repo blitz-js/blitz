@@ -36,7 +36,6 @@
   - Working on various Next.js compatibility issues
   - Debugging a bug in blitz start where it gets stuck at \_manifest.json
 
-
 # 2020-05-26 Blitz Contributor Call
 
 - Attending: Brandon Bayer, Robert Rosenberg, Adam Markon, Simon Debbarma

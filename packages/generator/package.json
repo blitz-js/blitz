@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -15,7 +15,6 @@
     "build": "tsdx build && yarn build:templates",
     "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
-    "lint": "tsdx lint src",
     "test:watch": "tsdx test --watch"
   },
   "author": {
@@ -37,7 +36,7 @@
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/display": "0.13.0",
+    "@blitzjs/display": "0.14.0",
     "ast-types": "0.13.3",
     "chalk": "4.0.0",
     "cross-spawn": "7.0.2",

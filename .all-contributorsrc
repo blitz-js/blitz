@@ -652,6 +652,51 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "osirvent",
+      "name": "Oscar Sirvent",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5927133?v=4",
+      "profile": "https://github.com/osirvent",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "donni106",
+      "name": "Daniel Molnar",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1942953?v=4",
+      "profile": "https://github.com/donni106",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "exclipy",
+      "name": "Kevin Wu Won",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/508799?v=4",
+      "profile": "https://github.com/exclipy",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "tehnuge",
+      "name": "John Duong",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1928236?v=4",
+      "profile": "https://github.com/tehnuge",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fnoah",
+      "name": "Noah Fleischmann",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/23707137?v=4",
+      "profile": "https://noahfleischmann.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

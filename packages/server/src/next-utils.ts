@@ -51,7 +51,7 @@ export async function nextStartDev(
   })
 }
 
-export async function nextBuild(nextBin: string, cwd: string) {
+export function nextBuild(nextBin: string, cwd: string) {
   return new Promise((res, rej) => {
     spawn(nextBin, ['build'], {
       cwd,
