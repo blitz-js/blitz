@@ -22,7 +22,7 @@ export async function ssrQuery<T extends QueryFn>(
 
   middleware.push(async (_req, res, next) => {
     const logPrefix = `${handler._meta.name}`
-    console.log('') // New line
+    log.newline()
     try {
       log.progress(`Running ${logPrefix}(${JSON.stringify(params, null, 2)})`)
       const result = await handler(params, res.blitzCtx)
@@ -35,7 +35,7 @@ export async function ssrQuery<T extends QueryFn>(
     }
   })
 
-  await handleRequestWithMiddleware(req, res, middleware, {finishRequest: false})
+  await handleRequestWithMiddleware(req, res, middleware)
 
   return (res as MiddlewareResponse).blitzResult as ReturnType<T>
 }

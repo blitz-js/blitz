@@ -2,6 +2,7 @@ import {BlitzApiRequest, BlitzApiResponse} from '.'
 import {IncomingMessage, ServerResponse} from 'http'
 import {EnhancedResolverModule} from './rpc'
 import {getConfig} from '@blitzjs/config'
+import {log} from '@blitzjs/display'
 
 export interface MiddlewareRequest extends BlitzApiRequest {}
 export interface MiddlewareResponse extends BlitzApiResponse {
@@ -49,7 +50,6 @@ export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
-  opts: {finishRequest: boolean} = {finishRequest: true},
 ) {
   ;(res as MiddlewareResponse).blitzCtx = {}
 
@@ -66,21 +66,14 @@ export async function handleRequestWithMiddleware(
         throw error
       }
     })
-    if (opts.finishRequest && !res.writableEnded) {
-      res.end()
-    }
   } catch (error) {
-    console.log('') // new line
-    if (res.writableFinished) {
-      require('@blitzjs/display').log.error(
-        'Error occured in middleware after the response was already sent to the browser:\n',
-      )
+    log.newline()
+    if (!res.writableFinished) {
+      res.statusCode = (error as any).code || (error as any).status || 500
+      res.end(error.message || res.statusCode.toString())
+      log.error('Error while processing the request:\n')
     } else {
-      if (opts.finishRequest) {
-        res.statusCode = (error as any).code || (error as any).status || 500
-        res.end(error.message || res.statusCode.toString())
-      }
-      require('@blitzjs/display').log.error('Error while processing the request:\n')
+      log.error('Error occured in middleware after the response was already sent to the browser:\n')
     }
     throw error
   }
