@@ -37,6 +37,7 @@ const defaults = {
     '.git/**/*',
     '.next/**/*',
     '*.log',
+    '.vercel/**/*',
     '.now/**/*',
     '*.pnp.js',
     'coverage/**/*',
