@@ -8,9 +8,9 @@ describe('PageGenerator', () => {
     modelNames: 'projects',
   })
 
-  describe('#getPathWithContext', () => {
+  describe('#getModelNamesPath', () => {
     it('returns path only with default modelNames', () => {
-      expect(generator.getPathWithContext()).toEqual('projects')
+      expect(generator.getModelNamesPath()).toEqual('projects')
     })
 
     describe('when generator has context option', () => {
@@ -23,7 +23,7 @@ describe('PageGenerator', () => {
       })
 
       it('returns path with context as prefix', () => {
-        expect(generator.getPathWithContext()).toEqual('marketing/projects')
+        expect(generator.getModelNamesPath()).toEqual('marketing/projects')
       })
     })
   })
@@ -36,7 +36,7 @@ describe('PageGenerator', () => {
         ModelNames: 'projects',
         ParentModel: undefined,
         ParentModels: undefined,
-        importModelNames: 'projects',
+        modelNamesPath: 'projects',
         modelId: 'projectId',
         modelIdParam: '[projectId]',
         modelName: 'project',
@@ -61,7 +61,7 @@ describe('PageGenerator', () => {
         const values = await generator.getTemplateValues()
         expect(values).toEqual(
           expect.objectContaining({
-            importModelNames: 'marketing/projects',
+            modelNamesPath: 'marketing/projects',
           }),
         )
       })
