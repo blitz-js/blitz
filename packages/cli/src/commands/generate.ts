@@ -183,7 +183,7 @@ export class Generate extends Command {
       }
     }
 
-    if (!!context && context !== '') {
+    if (context !== undefined && context !== null && context !== '') {
       const contextSegments = context.split(/[\\/]/)
 
       return {
