@@ -111,6 +111,7 @@ describe('Dev command', () => {
 
     it('should copy the correct files to the dev folder', async () => {
       mocks.mockFs({
+        'dev/.git/hooks': '',
         'dev/.vercel/project.json': '',
         'dev/one': '',
         'dev/two': '',
@@ -129,6 +130,14 @@ describe('Dev command', () => {
           {
             children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
             name: '.blitz-dev',
+          },
+          {
+            children: [
+              {
+                name: 'hooks',
+              },
+            ],
+            name: '.git',
           },
           {
             children: [
