@@ -43,7 +43,8 @@ describe('Db command', () => {
   })
 
   function expectDbMigrateOutcome() {
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn).toBeCalledWith(...migrateSaveParams)
+    expect(spawn.mock.calls.length).toBe(3)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
@@ -52,8 +53,7 @@ describe('Db command', () => {
   }
 
   function expectProductionDbMigrateOutcome() {
-    expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(3)
+    expect(spawn.mock.calls.length).toBe(2)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
