@@ -99,8 +99,10 @@ describe('handleRequestWithMiddleware', () => {
 })
 
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
-  const apiEndpoint = (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return handleRequestWithMiddleware(req, res, middleware)
+  const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    await handleRequestWithMiddleware(req, res, middleware)
+    res.end()
+    return
   }
 
   let server = http.createServer((req, res) =>
