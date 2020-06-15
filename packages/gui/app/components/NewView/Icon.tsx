@@ -1,3 +1,4 @@
+import * as Icons from 'heroicons-react'
 import {FC} from 'react'
 
 import {IconProps} from './types'

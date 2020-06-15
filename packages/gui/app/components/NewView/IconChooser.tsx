@@ -1,4 +1,4 @@
-import {FC, useState} from 'react'
+import {FC, useEffect, useRef, useState} from 'react'
 import {mutate} from 'swr'
 
 import {useToggle} from 'utils/hooks/state/useToggle'
@@ -7,6 +7,8 @@ import {Icon} from './Icon'
 import {icons} from './utils'
 
 export const IconChooser: FC = () => {
+  const ref = useRef<HTMLDivElement>(null)
+
   const {data: iconData = {icon: ''}} = useIcon()
 
   const [isOpen, setOpen, toggleOpen] = useToggle(useState<boolean>(false))
@@ -23,9 +25,27 @@ export const IconChooser: FC = () => {
     }
   }
 
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Element)) {
+        return
+      }
+
+      setOpen(false)
+    }
+
+    document.addEventListener('mousedown', listener)
+    document.addEventListener('touchstart', listener)
+
+    return () => {
+      document.removeEventListener('mousedown', listener)
+      document.removeEventListener('touchstart', listener)
+    }
+  }, [ref])
+
   return (
-    <div>
-      <label htmlFor="color-menu" className="block text-sm font-medium leading-5 text-gray-700">
+    <div ref={ref}>
+      <label htmlFor="icon-menu" className="block text-sm font-medium leading-5 text-gray-700">
         Icon
       </label>
       <div className="relative inline-block w-full mt-1 text-left">

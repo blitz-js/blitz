@@ -1,4 +1,4 @@
-import {FC, useState} from 'react'
+import {FC, useEffect, useRef, useState} from 'react'
 import {mutate} from 'swr'
 
 import {useToggle} from 'utils/hooks/state/useToggle'
@@ -7,6 +7,8 @@ import {Color} from './Color'
 import {colors} from './utils'
 
 export const ColorChooser: FC = () => {
+  const ref = useRef<HTMLDivElement>(null)
+
   const {data: colorData = {color: ''}} = useColor()
 
   const [isOpen, setOpen, toggleOpen] = useToggle(useState<boolean>(false))
@@ -23,8 +25,26 @@ export const ColorChooser: FC = () => {
     }
   }
 
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(event.target as Element)) {
+        return
+      }
+
+      setOpen(false)
+    }
+
+    document.addEventListener('mousedown', listener)
+    document.addEventListener('touchstart', listener)
+
+    return () => {
+      document.removeEventListener('mousedown', listener)
+      document.removeEventListener('touchstart', listener)
+    }
+  }, [ref])
+
   return (
-    <div>
+    <div ref={ref}>
       <label htmlFor="color-menu" className="block text-sm font-medium leading-5 text-gray-700">
         Color
       </label>
