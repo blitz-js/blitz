@@ -668,7 +668,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/1942953?v=4",
       "profile": "https://github.com/donni106",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -694,6 +695,15 @@
       "name": "Noah Fleischmann",
       "avatar_url": "https://avatars0.githubusercontent.com/u/23707137?v=4",
       "profile": "https://noahfleischmann.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "toshi1127",
+      "name": "Matsumoto Toshi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32378535?v=4",
+      "profile": "https://github.com/toshi1127",
       "contributions": [
         "code"
       ]

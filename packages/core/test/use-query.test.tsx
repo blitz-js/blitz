@@ -4,11 +4,23 @@ import {useQuery} from '../src/use-query'
 
 describe('useQuery', () => {
   const setupHook = (params: any, queryFn: (...args: any) => Promise<any>): [{data?: any}, Function] => {
+    // This enhance fn does what getIsomorphicRpcHandler does during build time
+    const enhance = (fn: any) => {
+      fn._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'app/test',
+        apiUrl: 'test/url',
+      }
+      return fn
+    }
     let res = {}
     function TestHarness() {
-      // eslint-disable-next-line require-await
-      useQuery(async (num: number) => num, 1)
-      const [data] = useQuery(queryFn, params)
+      useQuery(
+        enhance((num: number) => num),
+        1,
+      )
+      const [data] = useQuery(enhance(queryFn), params)
       Object.assign(res, {data})
       return <div id="harness">{data ? 'Ready' : 'Missing Dependency'}</div>
     }

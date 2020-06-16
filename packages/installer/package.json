@@ -1,11 +1,14 @@
 {
   "name": "@blitzjs/installer",
-  "version": "0.14.0",
+  "version": "0.14.2-canary.0",
   "description": "Package installation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
-    "predev": "wait-on ../generator/dist/packages/generator/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
+    "clean": "rimraf dist",
+    "predev": "yarn wait:server && yarn wait:generator",
+    "wait:generator": "wait-on ../generator/dist/packages/generator/src/index.d.ts",
+    "wait:server": "wait-on ../server/dist/packages/server/src/index.d.ts",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
@@ -33,8 +36,8 @@
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/display": "0.14.0",
-    "@blitzjs/generator": "0.14.0",
+    "@blitzjs/display": "0.14.2-canary.0",
+    "@blitzjs/generator": "0.14.2-canary.0",
     "ast-types": "0.13.3",
     "chokidar": "3.3.1",
     "cross-spawn": "7.0.2",
