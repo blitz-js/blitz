@@ -1,5 +1,7 @@
 import {executeRpcCall, getIsomorphicRpcHandler} from '@blitzjs/core'
 
+global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+
 declare global {
   namespace NodeJS {
     interface Global {
@@ -25,8 +27,15 @@ describe('RPC', () => {
         .mockImplementationOnce(() => Promise.resolve())
         .mockImplementationOnce(() => Promise.resolve({json: () => ({result: 'result', error: null})}))
 
-      const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const resolverModule = {
+        default: jest.fn(),
+      }
+      const rpcFn = getIsomorphicRpcHandler(
+        resolverModule,
+        'app/_resolvers/queries/getProduct',
+        'testResolver',
+        'query',
+      )
 
       try {
         const result = await rpcFn('/api/endpoint', {paramOne: 1234})
@@ -37,7 +46,7 @@ describe('RPC', () => {
       }
     })
 
-    it('handles errors', () => {
+    it('handles errors', async () => {
       expect.assertions(1)
       const fetchMock = jest
         .spyOn(global, 'fetch')
@@ -45,11 +54,18 @@ describe('RPC', () => {
           Promise.resolve({json: () => ({result: null, error: {name: 'Error', message: 'something broke'}})}),
         )
 
-      const resolverSpy = jest.fn()
-      const rpcFn = getIsomorphicRpcHandler(resolverSpy, 'app/_rpc/queries/getProduct')
+      const resolverModule = {
+        default: jest.fn(),
+      }
+      const rpcFn = getIsomorphicRpcHandler(
+        resolverModule,
+        'app/_resolvers/queries/getProduct',
+        'testResolver',
+        'query',
+      )
 
       try {
-        expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
+        await expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
       } finally {
         fetchMock.mockRestore()
       }
