@@ -3,7 +3,6 @@
   "description": "Blitz.js server functionality",
   "version": "0.14.2-canary.0",
   "license": "MIT",
-  "main": "dist/index.js",
   "bin": {
     "next-patched": "./bin/next-patched"
   },
@@ -25,7 +24,8 @@
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "module": "dist/webpack.esm.js",
+  "main": "dist/index.js",
+  "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
     "@blitzjs/display": "0.14.2-canary.0",

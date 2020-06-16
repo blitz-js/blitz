@@ -76,6 +76,7 @@
     "cpy-cli": "3.1.0",
     "cross-env": "7.0.0",
     "debug": "4.1.1",
+    "delay": "4.3.0",
     "directory-tree": "2.2.4",
     "eslint": "6.x",
     "eslint-config-react-app": "5.2.1",

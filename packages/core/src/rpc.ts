@@ -1,6 +1,7 @@
 import {deserializeError} from 'serialize-error'
 import {queryCache} from 'react-query'
 import {getQueryKey} from './utils'
+import {ResolverModule, Middleware} from './middleware'
 
 type Options = {
   fromQueryHook?: boolean
@@ -18,7 +19,12 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     body: JSON.stringify({params}),
   })
 
-  const json = await result.json()
+  let json
+  try {
+    json = await result.json()
+  } catch (error) {
+    throw new Error(`Failed to parse json from request to ${url}`)
+  }
 
   if (json.error) {
     throw deserializeError(json.error)
@@ -38,21 +44,56 @@ executeRpcCall.warm = (url: string) => {
   }
 }
 
-export type RpcFunction = {
-  (params: any, opts?: Options): ReturnType<typeof executeRpcCall>
-  cacheKey?: string
+interface ResolverEnhancement {
+  _meta: {
+    name: string
+    type: string
+    path: string
+    apiUrl: string
+  }
+}
+export interface RpcFunction {
+  (params: any, opts: any): Promise<any>
+}
+export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
+
+export interface EnhancedResolverModule extends ResolverEnhancement {
+  (input: any, ctx: Record<string, any>): Promise<unknown>
+  middleware?: Middleware[]
 }
 
-export function getIsomorphicRpcHandler(resolver: any, cacheKey: string) {
+export function getIsomorphicRpcHandler(
+  resolver: ResolverModule,
+  resolverPath: string,
+  resolverName: string,
+  resolverType: string,
+) {
+  const apiUrl = resolverPath.replace(/^app\/_resolvers/, '/api')
+  const enhance = <T extends ResolverEnhancement>(fn: T): T => {
+    fn._meta = {
+      name: resolverName,
+      type: resolverType,
+      path: resolverPath,
+      apiUrl: apiUrl,
+    }
+    return fn
+  }
+
   if (typeof window !== 'undefined') {
-    const url = cacheKey.replace(/^app\/_rpc/, '/api')
-    let rpcFn: RpcFunction = (params, opts = {}) => executeRpcCall(url, params, opts)
-    rpcFn.cacheKey = url
+    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) => executeRpcCall(apiUrl, params, opts)) as any
+
+    rpcFn = enhance(rpcFn)
 
     // Warm the lambda
-    executeRpcCall.warm(url)
+    executeRpcCall.warm(apiUrl)
+
     return rpcFn
   } else {
-    return resolver
+    let handler: EnhancedResolverModule = resolver.default as any
+
+    handler.middleware = resolver.middleware
+    handler = enhance(handler)
+
+    return handler
   }
 }
