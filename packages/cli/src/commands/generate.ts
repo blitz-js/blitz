@@ -183,8 +183,8 @@ export class Generate extends Command {
       }
     }
 
-    if (context !== undefined && context !== null && context !== '') {
-      const contextSegments = context.split(/[\\/]/)
+    if (Boolean(context)) {
+      const contextSegments = (context as string).split(/[\\/]/)
 
       return {
         model: modelName,
