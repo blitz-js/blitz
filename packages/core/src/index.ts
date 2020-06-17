@@ -1,11 +1,18 @@
 export * from './use-query'
 export * from './use-paginated-query'
 export * from './use-params'
-export * from './use-router-query'
 export * from './use-infinite-query'
 export * from './ssr-query'
 export * from './rpc'
+export * from './with-router'
+export * from './use-router'
+export * from './use-router-query'
+export * from './middleware'
+export * from './types'
 
+// --------------------
+// Exports from Next.js
+// --------------------
 export {
   GetStaticProps,
   GetStaticPaths,
@@ -23,7 +30,7 @@ export {default as Head} from 'next/head'
 
 export {default as Link} from 'next/link'
 
-export {Router, useRouter, withRouter} from 'next/router'
+export {Router} from 'next/router'
 
 export {
   default as Document,

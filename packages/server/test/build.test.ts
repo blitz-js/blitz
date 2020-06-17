@@ -25,11 +25,10 @@ describe('Build command', () => {
 
   beforeEach(async () => {
     mocks.mockFs({
-      build: {
-        '.now': '',
-        one: '',
-        two: '',
-      },
+      'build/.git/hooks': '',
+      'build/.vercel/project.json': '',
+      'build/one': '',
+      'build/two': '',
     })
     jest.clearAllMocks()
     await build({
@@ -59,7 +58,22 @@ describe('Build command', () => {
           ],
           name: '.blitz-build',
         },
-        {name: '.now'},
+        {
+          children: [
+            {
+              name: 'hooks',
+            },
+          ],
+          name: '.git',
+        },
+        {
+          children: [
+            {
+              name: 'project.json',
+            },
+          ],
+          name: '.vercel',
+        },
         {name: 'one'},
         {name: 'two'},
       ],
