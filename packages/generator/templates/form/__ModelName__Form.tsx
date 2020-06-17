@@ -2,7 +2,7 @@ import React from 'react'
 
 type __ModelName__FormProps = {
   initialValues: any
-  onSubmit: () => any
+  onSubmit: React.FormEventHandler<HTMLFormElement>
 }
 
 const __ModelName__Form: React.FC<__ModelName__FormProps> = ({initialValues, onSubmit}) => {
@@ -10,7 +10,7 @@ const __ModelName__Form: React.FC<__ModelName__FormProps> = ({initialValues, onS
     <form
       onSubmit={(event) => {
         event.preventDefault()
-        onSubmit()
+        onSubmit(event)
       }}>
       <div>Put your form fields here. But for now, just click submit</div>
       <div>{JSON.stringify(initialValues)}</div>
