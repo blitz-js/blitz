@@ -32,7 +32,7 @@ const pipeline = (pumpify.ctor({
   autoDestroy: false,
   destroy: false,
   objectMode: true,
-  highWaterMark: 160,
+  highWaterMark: 10000,
 }) as any) as PumpifyFn
 
 export {pipeline}
