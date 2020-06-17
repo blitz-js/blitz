@@ -36,7 +36,6 @@
     "@rollup/pluginutils": "3.0.8",
     "@testing-library/jest-dom": "5.5.0",
     "@testing-library/react": "10.0.3",
-    "@types/base64-js": "1.3.0",
     "@types/cookie": "0.4.0",
     "@types/cross-spawn": "6.0.1",
     "@types/debug": "4.1.5",
