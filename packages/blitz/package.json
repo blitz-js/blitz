@@ -1,7 +1,7 @@
 {
   "name": "blitz",
   "description": "Blitz is a Rails-like framework for monolithic, full-stack React apps — built on Next.js",
-  "version": "0.15.1-canary.0",
+  "version": "0.15.1",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -39,10 +39,10 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/cli": "0.15.1-canary.0",
-    "@blitzjs/core": "0.15.1-canary.0",
-    "@blitzjs/generator": "0.15.1-canary.0",
-    "@blitzjs/server": "0.15.1-canary.0",
+    "@blitzjs/cli": "0.15.1",
+    "@blitzjs/core": "0.15.1",
+    "@blitzjs/generator": "0.15.1",
+    "@blitzjs/server": "0.15.1",
     "os-name": "3.1.0",
     "pkg-dir": "4.2.0",
     "resolve-from": "5.0.0",
