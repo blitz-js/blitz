@@ -17,6 +17,7 @@ const SchemaView: FC = () => {
     return null
   }
 
+  // eslint-disable-next-line
   const [schema] = useQuery(getSchema, {path: project.path})
 
   if (!schema) {

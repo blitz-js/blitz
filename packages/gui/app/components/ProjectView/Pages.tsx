@@ -14,6 +14,7 @@ export const Pages: FC = () => {
     return null
   }
 
+  // eslint-disable-next-line
   const [pages] = useQuery(getPages, {path: project.path})
 
   return (
