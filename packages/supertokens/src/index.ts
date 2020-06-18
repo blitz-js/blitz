@@ -363,44 +363,6 @@ export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
   // TODO: advanced method
 }
 
-// --------------------------------
-// storeNewSessionInDb()
-// --------------------------------
-export function storeNewSessionInDb(
-  sessionHandle: string,
-  userId: string,
-  sessionToken: string,
-  antiCSRFToken: string,
-  publicData: PublicData,
-  privateData: PrivateData,
-  expiresAt: Date,
-  createdAt: Date,
-) {
-  // table structure will be:
-  //  session_handle: varchar(35) Primary key
-  //  user_id TEXT
-  //  session_token_hash: TEXT
-  //  antiCSRFToken: TEXT
-  //  public_data TEXT
-  //  session_data TEXT
-  //  expires_at BIGINT
-  //  created_at_time BIGINT
-
-  // TODO
-  // createInDb
-  console.log(
-    'CREATE IN DB HERE',
-    sessionHandle,
-    userId,
-    hash(sessionToken),
-    antiCSRFToken,
-    JSON.stringify(publicData),
-    JSON.stringify(privateData),
-    expiresAt,
-    createdAt,
-  )
-}
-
 export async function updateSessionExpiryInDb(sessionHandle: string, expiresAt: Date) {
   const config = defaultConfig
   return await config.updateSession({handle: sessionHandle, expiresAt})
