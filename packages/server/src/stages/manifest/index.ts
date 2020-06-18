@@ -1,6 +1,6 @@
-import File from 'vinyl'
-import {Stage, PipelineItem, transform} from '@blitzjs/file-pipeline'
-import debounce from 'lodash/debounce'
+import File from "vinyl"
+import {Stage, PipelineItem, transform} from "@blitzjs/file-pipeline"
+import debounce from "lodash/debounce"
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -70,7 +70,7 @@ export class Manifest {
  */
 export const createStageManifest = (
   writeManifestFile: boolean = true,
-  manifestPath: string = '_manifest.json',
+  manifestPath: string = "_manifest.json",
 ) => {
   const stage: Stage = () => {
     const manifest = Manifest.create()
@@ -85,11 +85,11 @@ export const createStageManifest = (
       const [origin] = file.history
       const dest = file.path
 
-      if (file.event === 'add' || file.event === 'change') {
+      if (file.event === "add" || file.event === "change") {
         manifest.setEntry(origin, dest)
       }
 
-      if (file.event === 'unlink' || file.event === 'unlinkDir') {
+      if (file.event === "unlink" || file.event === "unlinkDir") {
         manifest.removeKey(origin)
       }
 

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState} from "react"
 
 export const useDelayUnmount = (isMounted: boolean, delayMs: number) => {
   const [shouldRender, setShouldRender] = useState(false)

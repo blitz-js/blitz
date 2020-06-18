@@ -11,7 +11,9 @@
   },
   "prettier": {
     "semi": false,
-    "printWidth": 100
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "trailingComma": "all"
   },
   "dependencies": {
     "@prisma/cli": "2.0.0",

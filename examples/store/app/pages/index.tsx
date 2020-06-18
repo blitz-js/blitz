@@ -1,4 +1,4 @@
-import { Head, Link } from "blitz"
+import {Head, Link} from "blitz"
 
 const Home = () => (
   <div className="container">
@@ -8,7 +8,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1 className="title" style={{ marginBottom: 24 }}>
+      <h1 className="title" style={{marginBottom: 24}}>
         Blitz Store Example
       </h1>
       <ul>

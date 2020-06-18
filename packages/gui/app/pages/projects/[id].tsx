@@ -1,15 +1,15 @@
-import {BlitzPage, GetServerSideProps} from 'blitz'
-import Error from 'next/error'
-import {homedir} from 'os'
-import {useState} from 'react'
+import {BlitzPage, GetServerSideProps} from "blitz"
+import Error from "next/error"
+import {homedir} from "os"
+import {useState} from "react"
 
-import {Nav} from 'app/components/Nav'
-import {CreateProjectModal} from 'app/components/CreateProjectModal'
-import {ProjectHeader} from 'app/components/ProjectHeader'
-import {ProjectModules} from 'app/components/ProjectModules'
-import getProject from 'app/queries/getProject'
-import {Project} from 'db'
-import {getPages} from 'utils/getPages'
+import {Nav} from "app/components/Nav"
+import {CreateProjectModal} from "app/components/CreateProjectModal"
+import {ProjectHeader} from "app/components/ProjectHeader"
+import {ProjectModules} from "app/components/ProjectModules"
+import getProject from "app/queries/getProject"
+import {Project} from "db"
+import {getPages} from "utils/getPages"
 
 type ShowProjectPageProps = {
   project: Project | null
@@ -47,7 +47,11 @@ const ShowProjectPage: BlitzPage<ShowProjectPageProps> = ({project, homedir, pro
 
   return (
     <>
-      <CreateProjectModal isModalOpen={isModalOpen} homedir={homedir} setIsModalOpen={setIsModalOpen} />
+      <CreateProjectModal
+        isModalOpen={isModalOpen}
+        homedir={homedir}
+        setIsModalOpen={setIsModalOpen}
+      />
       <Nav setIsModalOpen={setIsModalOpen} />
       <ProjectHeader project={project} />
       <ProjectModules project={project} projectData={projectData} />

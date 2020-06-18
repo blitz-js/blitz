@@ -1,8 +1,8 @@
-import { Link } from "blitz"
+import {Link} from "blitz"
 
 const links = [
-  { href: "https://github.com/blitz-js/blitz", label: "GitHub" },
-  { href: "https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md", label: "Docs" },
+  {href: "https://github.com/blitz-js/blitz", label: "GitHub"},
+  {href: "https://github.com/blitz-js/blitz/blob/canary/USER_GUIDE.md", label: "Docs"},
 ]
 
 export default function Nav() {
@@ -15,7 +15,7 @@ export default function Nav() {
           </Link>
         </li>
         <ul className="flex justify-between items-center">
-          {links.map(({ href, label }) => (
+          {links.map(({href, label}) => (
             <li key={`${href}${label}`} className="ml-4">
               <a href={href} className="btn-blue no-underline">
                 {label}

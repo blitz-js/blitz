@@ -1,40 +1,40 @@
-import {Command} from '../command'
-import {flags} from '@oclif/command'
-import * as fs from 'fs'
-import * as path from 'path'
-import enquirer from 'enquirer'
-import _pluralize from 'pluralize'
+import {Command} from "../command"
+import {flags} from "@oclif/command"
+import * as fs from "fs"
+import * as path from "path"
+import enquirer from "enquirer"
+import _pluralize from "pluralize"
 import {
   PageGenerator,
   MutationGenerator,
   QueryGenerator,
   FormGenerator,
   ModelGenerator,
-} from '@blitzjs/generator'
-import {PromptAbortedError} from '../errors/prompt-aborted'
-import {log} from '@blitzjs/display'
-import camelCase from 'camelcase'
-import pkgDir from 'pkg-dir'
-const debug = require('debug')('blitz:generate')
+} from "@blitzjs/generator"
+import {PromptAbortedError} from "../errors/prompt-aborted"
+import {log} from "@blitzjs/display"
+import camelCase from "camelcase"
+import pkgDir from "pkg-dir"
+const debug = require("debug")("blitz:generate")
 
 const pascalCase = (str: string) => camelCase(str, {pascalCase: true})
 
 const projectRoot = pkgDir.sync() || process.cwd()
-const isTypescript = fs.existsSync(path.join(projectRoot, 'tsconfig.json'))
+const isTypescript = fs.existsSync(path.join(projectRoot, "tsconfig.json"))
 
 enum ResourceType {
-  All = 'all',
-  Crud = 'crud',
-  Model = 'model',
-  Mutations = 'mutations',
-  Pages = 'pages',
-  Queries = 'queries',
-  Resource = 'resource',
+  All = "all",
+  Crud = "crud",
+  Model = "model",
+  Mutations = "mutations",
+  Pages = "pages",
+  Queries = "queries",
+  Resource = "resource",
 }
 
 interface Flags {
   context?: string
-  'dry-run'?: boolean
+  "dry-run"?: boolean
   parent?: string
 }
 
@@ -51,21 +51,27 @@ function singular(input: string): string {
   return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
 }
 
-function modelName(input: string = '') {
+function modelName(input: string = "") {
   return camelCase(singular(input))
 }
-function modelNames(input: string = '') {
+function modelNames(input: string = "") {
   return camelCase(pluralize(input))
 }
-function ModelName(input: string = '') {
+function ModelName(input: string = "") {
   return pascalCase(singular(input))
 }
-function ModelNames(input: string = '') {
+function ModelNames(input: string = "") {
   return pascalCase(pluralize(input))
 }
 
 const generatorMap = {
-  [ResourceType.All]: [ModelGenerator, PageGenerator, FormGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.All]: [
+    ModelGenerator,
+    PageGenerator,
+    FormGenerator,
+    QueryGenerator,
+    MutationGenerator,
+  ],
   [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
   [ResourceType.Model]: [ModelGenerator],
   [ResourceType.Mutations]: [MutationGenerator],
@@ -75,38 +81,38 @@ const generatorMap = {
 }
 
 export class Generate extends Command {
-  static description = 'Generate new files for your Blitz project'
-  static aliases = ['g']
+  static description = "Generate new files for your Blitz project"
+  static aliases = ["g"]
   static strict = false
   static args = [
     {
-      name: 'type',
+      name: "type",
       required: true,
-      description: 'What files to generate',
+      description: "What files to generate",
       options: Object.keys(generatorMap).map((s) => s.toLowerCase()),
     },
     {
-      name: 'model',
+      name: "model",
       required: true,
       description: 'The name of your model, like "user". Can be singular or plural - same result',
     },
   ]
 
   static flags = {
-    help: flags.help({char: 'h'}),
+    help: flags.help({char: "h"}),
     context: flags.string({
-      char: 'c',
+      char: "c",
       description:
         "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
     }),
     parent: flags.string({
-      char: 'p',
+      char: "p",
       description:
         "Specify a parent model to be used for generating nested routes for dependent data when generating pages, or to create hierarchical validation in queries and mutations. The code will be generated with the nested data model in mind. Most often this should be used in conjunction with 'blitz generate all'",
     }),
-    'dry-run': flags.boolean({
-      char: 'd',
-      description: 'Show what files will be created without writing them to disk',
+    "dry-run": flags.boolean({
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
   }
 
@@ -146,9 +152,9 @@ export class Generate extends Command {
   async promptForTargetDirectory(paths: string[]): Promise<string> {
     return enquirer
       .prompt<{directory: string}>({
-        name: 'directory',
-        type: 'select',
-        message: 'Please select a target directory:',
+        name: "directory",
+        type: "select",
+        message: "Please select a target directory:",
         choices: paths,
       })
       .then((resp) => resp.directory)
@@ -157,25 +163,25 @@ export class Generate extends Command {
   async genericConfirmPrompt(message: string): Promise<boolean> {
     return enquirer
       .prompt<{continue: string}>({
-        name: 'continue',
-        type: 'select',
+        name: "continue",
+        type: "select",
         message: message,
-        choices: ['Yes', 'No'],
+        choices: ["Yes", "No"],
       })
-      .then((resp) => resp.continue === 'Yes')
+      .then((resp) => resp.continue === "Yes")
   }
 
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      log.error('Could not determine proper location for files. Aborting.')
+      log.error("Could not determine proper location for files. Aborting.")
       this.exit(0)
     }
   }
 
   getModelNameAndContext(modelName: string, context?: string): {model: string; context: string} {
     const modelSegments = modelName.split(/[\\/]/)
-    const contextSegments = (context || '').split(/[\\/]/)
+    const contextSegments = (context || "").split(/[\\/]/)
     if (modelSegments.length > 1) {
       return {
         model: modelSegments[modelSegments.length - 1],
@@ -190,8 +196,8 @@ export class Generate extends Command {
 
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
-    debug('args: ', args)
-    debug('flags: ', flags)
+    debug("args: ", args)
+    debug("flags: ", flags)
 
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
@@ -201,7 +207,7 @@ export class Generate extends Command {
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: path.resolve(),
-          extraArgs: argv.slice(2).filter((arg) => !arg.startsWith('-')),
+          extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),
@@ -210,14 +216,14 @@ export class Generate extends Command {
           parentModels: modelNames(flags.parent),
           ParentModel: ModelName(flags.parent),
           ParentModels: ModelNames(flags.parent),
-          dryRun: flags['dry-run'],
+          dryRun: flags["dry-run"],
           context: context,
           useTs: isTypescript,
         })
         await generator.run()
       }
 
-      console.log(' ') // new line
+      console.log(" ") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 

@@ -1,8 +1,8 @@
-import {Link} from 'blitz'
-import {ArrowNarrowLeftOutline} from 'heroicons-react'
-import {FC} from 'react'
+import {Link} from "blitz"
+import {ArrowNarrowLeftOutline} from "heroicons-react"
+import {FC} from "react"
 
-import {Project} from 'db'
+import {Project} from "db"
 
 type ProjectHeaderProps = {
   project: Project

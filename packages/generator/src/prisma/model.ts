@@ -1,5 +1,5 @@
-import {Field, FieldType} from './field'
-import {singlePascal} from '../utils/plurals'
+import {Field, FieldType} from "./field"
+import {singlePascal} from "../utils/plurals"
 
 function stringifyFieldsForPrinting(fields: Field[]) {
   let maxNameLength = 1
@@ -14,10 +14,10 @@ function stringifyFieldsForPrinting(fields: Field[]) {
   maxTypeLength += 2
   return fields.map((field) => {
     const [name, type, ...rest] = field.toString().split(/[\s]+/)
-    const attrs = rest.join(' ')
+    const attrs = rest.join(" ")
     const namePad = maxNameLength - name.length
     const typePad = maxTypeLength - type.length
-    return `${name}${Array(namePad).join(' ')}${type}${Array(typePad).join(' ')}${attrs}`
+    return `${name}${Array(namePad).join(" ")}${type}${Array(typePad).join(" ")}${attrs}`
   })
 }
 
@@ -31,27 +31,27 @@ export class Model {
   }
 
   private getIdField() {
-    return new Field('id', {
+    return new Field("id", {
       isRequired: true,
       isList: false,
       isId: true,
-      default: 'autoincrement()',
+      default: "autoincrement()",
       type: FieldType.Int,
     })
   }
 
   private getCreatedAtField() {
-    return new Field('createdAt', {
+    return new Field("createdAt", {
       isRequired: true,
       isList: false,
       isId: false,
-      default: 'now()',
+      default: "now()",
       type: FieldType.DateTime,
     })
   }
 
   private getUpdatedAtField() {
-    return new Field('updatedAt', {
+    return new Field("updatedAt", {
       isRequired: true,
       isList: false,
       isId: false,
@@ -68,7 +68,7 @@ export class Model {
       ...this.fields,
     ])
       .map((field) => `\n  ${field}`)
-      .join('')
+      .join("")
   }
 
   toString() {

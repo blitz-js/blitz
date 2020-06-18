@@ -1,8 +1,12 @@
-import {IncomingMessage, ServerResponse} from 'http'
-import {log} from '@blitzjs/display'
-import {InferUnaryParam} from './types'
-import {getAllMiddlewareForModule, handleRequestWithMiddleware, MiddlewareResponse} from './middleware'
-import {EnhancedResolverModule} from './rpc'
+import {IncomingMessage, ServerResponse} from "http"
+import {log} from "@blitzjs/display"
+import {InferUnaryParam} from "./types"
+import {
+  getAllMiddlewareForModule,
+  handleRequestWithMiddleware,
+  MiddlewareResponse,
+} from "./middleware"
+import {EnhancedResolverModule} from "./rpc"
 
 type QueryFn = (...args: any) => Promise<any>
 

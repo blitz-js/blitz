@@ -1,16 +1,16 @@
-import {spawn} from 'cross-spawn'
-import detect from 'detect-port'
-import {Manifest} from './stages/manifest'
-import {through} from './streams'
-import {ServerConfig} from 'config'
+import {spawn} from "cross-spawn"
+import detect from "detect-port"
+import {Manifest} from "./stages/manifest"
+import {through} from "./streams"
+import {ServerConfig} from "config"
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {
     const dataStr = data.toString()
 
-    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`
+    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, "\\/")}\\/[^:]+)\\(\\d+,\\d+\\)`
 
-    const matches = new RegExp(buildError, 'g').exec(dataStr)
+    const matches = new RegExp(buildError, "g").exec(dataStr)
 
     if (matches) {
       const [, filepath] = matches
@@ -40,37 +40,37 @@ export async function nextStartDev(
   const availablePort = await detect({port: config.port, hostname: config.hostname})
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ['dev', '-p', `${availablePort}`, '-H', config.hostname], {
+    spawn(nextBin, ["dev", "-p", `${availablePort}`, "-H", config.hostname], {
       cwd,
       stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
     })
-      .on('exit', (code: number) => {
+      .on("exit", (code: number) => {
         code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
       })
-      .on('error', rej)
+      .on("error", rej)
   })
 }
 
 export function nextBuild(nextBin: string, cwd: string) {
   return new Promise((res, rej) => {
-    spawn(nextBin, ['build'], {
+    spawn(nextBin, ["build"], {
       cwd,
-      stdio: 'inherit',
+      stdio: "inherit",
     })
-      .on('exit', (code: number) => {
+      .on("exit", (code: number) => {
         code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
       })
-      .on('error', rej)
+      .on("error", rej)
   })
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
   const availablePort = await detect({port: config.port, hostname: config.hostname})
   return Promise.resolve(
-    spawn(nextBin, ['start', '-p', `${availablePort}`, '-H', config.hostname], {
+    spawn(nextBin, ["start", "-p", `${availablePort}`, "-H", config.hostname], {
       cwd,
-      stdio: 'inherit',
-    }).on('error', (err) => {
+      stdio: "inherit",
+    }).on("error", (err) => {
       console.error(err)
     }),
   )

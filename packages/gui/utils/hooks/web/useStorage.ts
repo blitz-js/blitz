@@ -1,7 +1,7 @@
-import {useEffect, useMemo, useState} from 'react'
+import {useEffect, useMemo, useState} from "react"
 
-import {dethunkify} from 'utils/dethunkify'
-import {JSONValue} from 'utils/types/JSONValue'
+import {dethunkify} from "utils/dethunkify"
+import {JSONValue} from "utils/types/JSONValue"
 
 export const useStorage = <T extends JSONValue>(
   getStorage: () => Storage | null,

@@ -1,15 +1,15 @@
-import {BlitzPage, GetServerSideProps} from 'blitz'
-import {homedir} from 'os'
-import {useState} from 'react'
+import {BlitzPage, GetServerSideProps} from "blitz"
+import {homedir} from "os"
+import {useState} from "react"
 
-import {CreateProjectModal} from 'app/components/CreateProjectModal'
-import {Greeting} from 'app/components/Greeting'
-import {Nav} from 'app/components/Nav'
-import {ProjectList} from 'app/components/ProjectList'
-import getProjects from 'app/queries/getProjects'
+import {CreateProjectModal} from "app/components/CreateProjectModal"
+import {Greeting} from "app/components/Greeting"
+import {Nav} from "app/components/Nav"
+import {ProjectList} from "app/components/ProjectList"
+import getProjects from "app/queries/getProjects"
 
-import {Project} from 'db'
-import CreateFileBrowserModal from '../components/CreateFileBrowserModal'
+import {Project} from "db"
+import CreateFileBrowserModal from "../components/CreateFileBrowserModal"
 
 type ProjectsPageProps = {
   projects: Project[]
@@ -30,7 +30,11 @@ const ProjectPage: BlitzPage<ProjectsPageProps> = ({projects, homedir}) => {
 
   return (
     <>
-      <CreateProjectModal isModalOpen={isModalOpen} homedir={homedir} setIsModalOpen={setIsModalOpen} />
+      <CreateProjectModal
+        isModalOpen={isModalOpen}
+        homedir={homedir}
+        setIsModalOpen={setIsModalOpen}
+      />
       <CreateFileBrowserModal
         isModalOpen={isBrowserModalOpen}
         homedir={homedir}

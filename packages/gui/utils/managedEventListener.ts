@@ -1,4 +1,4 @@
-import {EventMap} from 'utils/types/EventMap'
+import {EventMap} from "utils/types/EventMap"
 
 export const managedEventListener = <T extends EventTarget, K extends keyof EventMap<T> & string>(
   target: T,

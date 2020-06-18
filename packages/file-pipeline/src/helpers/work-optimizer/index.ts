@@ -1,6 +1,6 @@
 // Mostly concerned with solving the Dirty Sync problem
-import {log} from '@blitzjs/display'
-import {transform} from '../../transform'
+import {log} from "@blitzjs/display"
+import {transform} from "../../transform"
 
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
@@ -22,12 +22,12 @@ export function createWorkOptimizer() {
 
   const triage = transform.file((file, {push, next}) => {
     if (!file.hash) {
-      log.debug('File does not have hash! ' + file.path)
+      log.debug("File does not have hash! " + file.path)
       return next()
     }
     // Dont send files that have already been done or have already been added
     if (done.includes(file.hash) || todo.includes(file.hash)) {
-      log.debug('Rejecting because this job has been done before: ' + file.path)
+      log.debug("Rejecting because this job has been done before: " + file.path)
       return next()
     }
 

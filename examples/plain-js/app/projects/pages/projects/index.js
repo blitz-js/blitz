@@ -1,5 +1,5 @@
-import { Suspense } from "react"
-import { Head, Link, useQuery } from "blitz"
+import {Suspense} from "react"
+import {Head, Link, useQuery} from "blitz"
 import getProjects from "app/projects/queries/getProjects"
 
 export const ProjectsList = () => {

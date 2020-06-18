@@ -1,16 +1,16 @@
-import {Generator} from '../src/generator'
+import {Generator} from "../src/generator"
 
-describe('generator', () => {
-  describe('#replaceConditionals', () => {
+describe("generator", () => {
+  describe("#replaceConditionals", () => {
     const replaceConditionals = Generator.prototype.replaceConditionals
-    it('correctly picks consequent or alternate statement', () => {
+    it("correctly picks consequent or alternate statement", () => {
       const statement = "if (process.env.condition) console.log('a'); else console.log('b')"
       // babel parser fails without semicolon in template
       expect(replaceConditionals(statement, {condition: true})).toBe("console.log('a');")
       expect(replaceConditionals(statement, {condition: false})).toBe("console.log('b')")
     })
 
-    it('correctly picks statement with block statements', () => {
+    it("correctly picks statement with block statements", () => {
       const statement = `if (process.env.condition) {
         console.log('a')
       } else {
@@ -20,13 +20,13 @@ describe('generator', () => {
       expect(replaceConditionals(statement, {condition: false}).trim()).toBe("console.log('b')")
     })
 
-    it('correctly handles conditionals with no alternative', () => {
+    it("correctly handles conditionals with no alternative", () => {
       const statement = "if (process.env.condition) console.log('a')"
       expect(replaceConditionals(statement, {condition: true})).toBe("console.log('a')")
-      expect(replaceConditionals(statement, {condition: false})).toBe('')
+      expect(replaceConditionals(statement, {condition: false})).toBe("")
     })
 
-    it('correctly replaces ternary statements', () => {
+    it("correctly replaces ternary statements", () => {
       let statement = "process.env.condition ? console.log('a') : console.log('b')"
       expect(replaceConditionals(statement, {condition: true})).toBe("console.log('a')")
       expect(replaceConditionals(statement, {condition: false})).toBe("console.log('b')")

@@ -12,7 +12,9 @@
   ],
   "prettier": {
     "semi": false,
-    "printWidth": 110
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "trailingComma": "all"
   },
   "husky": {
     "hooks": {

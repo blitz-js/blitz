@@ -1,7 +1,7 @@
-import {FC} from 'react'
+import {FC} from "react"
 
-import {Project} from 'db'
-import {ProjectCard} from './ProjectCard'
+import {Project} from "db"
+import {ProjectCard} from "./ProjectCard"
 
 type ProjectListProps = {
   projects: Project[]

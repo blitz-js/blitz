@@ -9,27 +9,27 @@ The generator framework also supports conditional code generation, similar to ot
 ```js
 // VALID
 if (process.env.someCondition) {
-  console.log('condition was true')
+  console.log("condition was true")
 }
 
 // VALID
 if (process.env.someCondition) {
-  console.log('condition was true')
+  console.log("condition was true")
 } else {
-  console.log('condition was false')
+  console.log("condition was false")
 }
 
 // VALID
 const action = process.env.someCondition
-  ? () => console.log('condition was true')
-  : () => console.log('condition was false')
+  ? () => console.log("condition was true")
+  : () => console.log("condition was false")
 
 // **NOT** VALID
 // This will compile fine, but will not product the expected results.
 // The template argument `someValue` will be evaluated for truthiness
 // and the conditional will be evaluated based on that, regardless of
 // the rest of the expression
-if (process.env.someValue === 'some test') {
-  console.log('dynamic condition')
+if (process.env.someValue === "some test") {
+  console.log("dynamic condition")
 }
 ```

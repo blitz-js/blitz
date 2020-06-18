@@ -1,4 +1,4 @@
-import {useInput} from 'ink'
+import {useInput} from "ink"
 
 export function useEnterToContinue(cb: Function, additionalCondition: boolean = true) {
   useInput((_input, key) => {

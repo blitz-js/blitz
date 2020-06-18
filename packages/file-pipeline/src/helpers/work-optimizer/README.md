@@ -8,9 +8,9 @@ The following is a rough plan for how to do this. (Likely to change/improve at a
 
 ```ts
 const hash = crypto
-  .createHash('md5')
+  .createHash("md5")
   .update(file.path + file.stats.mtime)
-  .digest('hex')
+  .digest("hex")
 
 file.hash = hash
 ```
@@ -21,21 +21,21 @@ Following
 
 ```ts
 // reduced to as the first step during input
-const input = {abc123def456: '/foo/bar/baz', def456abc123: '/foo/bar/bop'}
+const input = {abc123def456: "/foo/bar/baz", def456abc123: "/foo/bar/bop"}
 
 // reduced to as the last step just before file write
 const complete = {
   abc123def456: {
-    input: '/foo/bar/baz',
-    output: ['/bas/boop/blop', '/bas/boop/ding', '/bas/boop/bar'],
+    input: "/foo/bar/baz",
+    output: ["/bas/boop/blop", "/bas/boop/ding", "/bas/boop/bar"],
   },
   def456abc123: {
-    input: '/foo/bar/bing',
-    output: ['/bas/boop/ping', '/bas/boop/foo', '/bas/boop/fawn'],
+    input: "/foo/bar/bing",
+    output: ["/bas/boop/ping", "/bas/boop/foo", "/bas/boop/fawn"],
   },
   cbd123aef456: {
-    input: '/foo/bar/bop',
-    output: ['/bas/boop/thing'],
+    input: "/foo/bar/bop",
+    output: ["/bas/boop/thing"],
   },
 }
 ```

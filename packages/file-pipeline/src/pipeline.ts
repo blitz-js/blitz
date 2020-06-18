@@ -1,16 +1,16 @@
-import {Writable} from 'stream'
-import File from 'vinyl'
-import {pipeline, through} from './streams'
-import {Stage, StageArgs, StageConfig} from './types'
-import {agnosticSource} from './helpers/agnostic-source'
-import {createEnrichFiles} from './helpers/enrich-files'
-import {createFileCache} from './helpers/file-cache'
-import {createIdleHandler} from './helpers/idle-handler'
-import {createWorkOptimizer} from './helpers/work-optimizer'
-import {createWrite} from './helpers/writer'
+import {Writable} from "stream"
+import File from "vinyl"
+import {pipeline, through} from "./streams"
+import {Stage, StageArgs, StageConfig} from "./types"
+import {agnosticSource} from "./helpers/agnostic-source"
+import {createEnrichFiles} from "./helpers/enrich-files"
+import {createFileCache} from "./helpers/file-cache"
+import {createIdleHandler} from "./helpers/idle-handler"
+import {createWorkOptimizer} from "./helpers/work-optimizer"
+import {createWrite} from "./helpers/writer"
 
 export function isSourceFile(file: File) {
-  return file.hash.indexOf(':') === -1
+  return file.hash.indexOf(":") === -1
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Link, useRouter } from "blitz"
+import {Link, useRouter} from "blitz"
 import ProductForm from "app/products/components/ProductForm"
 
 function AdminNewProductPage() {

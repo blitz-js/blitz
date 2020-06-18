@@ -1,19 +1,27 @@
-import {existsSync} from 'fs'
+import {existsSync} from "fs"
 
-import db, {FindManyProjectArgs} from 'db'
-import {getDirMtime} from 'utils/getDirMtime'
+import db, {FindManyProjectArgs} from "db"
+import {getDirMtime} from "utils/getDirMtime"
 
 type GetProjectsInput = {
-  where?: FindManyProjectArgs['where']
-  orderBy?: FindManyProjectArgs['orderBy']
-  skip?: FindManyProjectArgs['skip']
-  first?: FindManyProjectArgs['first']
-  last?: FindManyProjectArgs['last']
-  after?: FindManyProjectArgs['after']
-  before?: FindManyProjectArgs['before']
+  where?: FindManyProjectArgs["where"]
+  orderBy?: FindManyProjectArgs["orderBy"]
+  skip?: FindManyProjectArgs["skip"]
+  first?: FindManyProjectArgs["first"]
+  last?: FindManyProjectArgs["last"]
+  after?: FindManyProjectArgs["after"]
+  before?: FindManyProjectArgs["before"]
 }
 
-const getProjects = async ({where, orderBy, skip, first, last, after, before}: GetProjectsInput) => {
+const getProjects = async ({
+  where,
+  orderBy,
+  skip,
+  first,
+  last,
+  after,
+  before,
+}: GetProjectsInput) => {
   const projects = await db.project.findMany({
     where,
     orderBy,

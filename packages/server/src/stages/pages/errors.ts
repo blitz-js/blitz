@@ -1,13 +1,13 @@
-import {log} from '@blitzjs/display'
-import {Writable} from 'stream'
-import {ERROR_THROWN} from '@blitzjs/file-pipeline'
+import {log} from "@blitzjs/display"
+import {Writable} from "stream"
+import {ERROR_THROWN} from "@blitzjs/file-pipeline"
 
 export type Event<T> = {type: string; payload: T}
 
 type Error = DuplicatePathError
 
 export function handleErrors(bus: Writable) {
-  bus.on('data', (event: Event<Error>) => {
+  bus.on("data", (event: Event<Error>) => {
     if (event.type !== ERROR_THROWN) return
     const err = event.payload as Error
     if (err instanceof DuplicatePathError) {
@@ -18,13 +18,13 @@ export function handleErrors(bus: Writable) {
 }
 
 export class DuplicatePathError extends Error {
-  name = 'DuplicatePathError'
+  name = "DuplicatePathError"
   constructor(public message: string, public pathType: string, public paths: string[][]) {
     super(message)
   }
 }
 
-const removeCwd = (path: string) => path.replace(process.cwd(), '')
+const removeCwd = (path: string) => path.replace(process.cwd(), "")
 
 const renderErrorMessage = (path: string, type: string) =>
   `- ${path.split(`${type}/`)[0]}${type}/${log.variable(path.split(`${type}/`)[1])}`

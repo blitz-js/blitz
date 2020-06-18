@@ -1,5 +1,5 @@
-import pluralize from 'pluralize'
-import {pipe} from './pipe'
+import pluralize from "pluralize"
+import {pipe} from "./pipe"
 
 export function plural(input: string): string {
   return pluralize.isPlural(input) ? input : pluralize.plural(input)

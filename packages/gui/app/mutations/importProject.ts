@@ -1,7 +1,7 @@
-import db from 'db'
-import fs from 'fs'
+import db from "db"
+import fs from "fs"
 
-import getProject from '../queries/getProject'
+import getProject from "../queries/getProject"
 
 type ImportProjectInput = {
   projects: Array<string>
@@ -22,14 +22,14 @@ export default async function importProjects({projects}: ImportProjectInput) {
     }
 
     try {
-      const pkg = await fs.promises.readFile(`${path}/package.json`, 'utf-8')
+      const pkg = await fs.promises.readFile(`${path}/package.json`, "utf-8")
       const pkg_data = JSON.parse(pkg)
 
       console.log(pkg_data)
 
       const data = {
         name: pkg_data.name,
-        description: pkg_data.description || 'no description',
+        description: pkg_data.description || "no description",
         path,
         lastActive: new Date().getTime(),
       }
@@ -38,7 +38,7 @@ export default async function importProjects({projects}: ImportProjectInput) {
 
       _projects.push(project)
     } catch (e) {
-      console.log('Error: ', e)
+      console.log("Error: ", e)
       return
     }
   }

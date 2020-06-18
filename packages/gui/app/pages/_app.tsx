@@ -1,9 +1,9 @@
-import 'tailwindcss/tailwind.css'
+import "tailwindcss/tailwind.css"
 
-import {Head} from 'blitz'
-import {AppProps} from 'next/app'
+import {Head} from "blitz"
+import {AppProps} from "next/app"
 
-import {OfflineAlert} from 'app/components/OfflineAlert'
+import {OfflineAlert} from "app/components/OfflineAlert"
 
 const MyApp = ({Component, pageProps}: AppProps): JSX.Element => (
   <div className="min-h-screen font-sans antialiased text-gray-900">

@@ -1,5 +1,5 @@
-import {useRouter} from 'next/router'
-import {useRouterQuery} from './use-router-query'
+import {useRouter} from "next/router"
+import {useRouterQuery} from "./use-router-query"
 
 type ParsedUrlQueryValue = string | string[] | undefined
 
@@ -33,7 +33,8 @@ function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQuery
 export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUrlQuery) {
   return Object.fromEntries(
     Object.entries(routerQuery).filter(
-      ([key, value]) => typeof query[key] === 'undefined' || !areQueryValuesEqual(value, query[key]),
+      ([key, value]) =>
+        typeof query[key] === "undefined" || !areQueryValuesEqual(value, query[key]),
     ),
   )
 }
@@ -46,34 +47,34 @@ export function useParams() {
 }
 
 export function useParam(key: string): undefined | string | string[]
-export function useParam(key: string, returnType: 'string'): string
-export function useParam(key: string, returnType: 'number'): number
-export function useParam(key: string, returnType: 'array'): string[]
+export function useParam(key: string, returnType: "string"): string
+export function useParam(key: string, returnType: "number"): number
+export function useParam(key: string, returnType: "array"): string[]
 export function useParam(
   key: string,
-  returnType?: 'string' | 'number' | 'array',
+  returnType?: "string" | "number" | "array",
 ): undefined | number | string | string[] {
   const params = useParams()
   const rawValue = params[key]
 
-  if (returnType === 'number') {
+  if (returnType === "number") {
     return Number(rawValue)
   }
 
-  if (returnType === 'string') {
-    if (typeof rawValue === 'undefined') {
-      return ''
+  if (returnType === "string") {
+    if (typeof rawValue === "undefined") {
+      return ""
     }
 
     return rawValue
   }
 
-  if (returnType === 'array') {
-    if (typeof rawValue === 'undefined') {
+  if (returnType === "array") {
+    if (typeof rawValue === "undefined") {
       return []
     }
 
-    if (typeof rawValue === 'string') {
+    if (typeof rawValue === "string") {
       return [rawValue]
     }
 

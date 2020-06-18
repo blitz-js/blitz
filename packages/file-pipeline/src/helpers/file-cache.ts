@@ -1,6 +1,6 @@
-import {transform} from '../transform'
-import File from 'vinyl'
-import {isEvent} from '../utils'
+import {transform} from "../transform"
+import File from "vinyl"
+import {isEvent} from "../utils"
 
 type FileCacheEntry = {path: string}
 
@@ -64,7 +64,7 @@ export function createFileCache(filter: (a: File) => boolean = () => true) {
         return next(null, file)
       }
 
-      if (file.event === 'unlink') {
+      if (file.event === "unlink") {
         cache.delete(file)
       } else {
         cache.add(file)

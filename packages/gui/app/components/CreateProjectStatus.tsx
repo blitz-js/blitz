@@ -1,54 +1,54 @@
-import {useQuery} from 'blitz'
+import {useQuery} from "blitz"
 import {
   ArrowCircleDownOutline,
   CheckCircleOutline,
   ClockOutline,
   CloudDownloadOutline,
   DocumentDuplicateOutline,
-} from 'heroicons-react'
-import {FC, useState} from 'react'
+} from "heroicons-react"
+import {FC, useState} from "react"
 
-import getCreateProjectStatus from 'app/queries/getCreateProjectStatus'
-import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
-import {useInterval} from 'utils/hooks/web/useInterval'
+import getCreateProjectStatus from "app/queries/getCreateProjectStatus"
+import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from "utils/status"
+import {useInterval} from "utils/hooks/web/useInterval"
 
 const getStatusMeta = (status: string) => {
   switch (status) {
     case CREATING_FILES:
       return {
         svg: <DocumentDuplicateOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Creating files',
-        description: 'Description of this step.',
+        name: "Creating files",
+        description: "Description of this step.",
       }
     case DONE:
       return {
         svg: <CheckCircleOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Finishing',
-        description: 'Description of this step.',
+        name: "Finishing",
+        description: "Description of this step.",
       }
     case INSTALLING_DEPS:
       return {
         svg: <ArrowCircleDownOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Installing dependencies',
-        description: 'Description of this step.',
+        name: "Installing dependencies",
+        description: "Description of this step.",
       }
     case RETRIEVING_DEPS:
       return {
         svg: <CloudDownloadOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Retrieving dependencies',
-        description: 'Description of this step.',
+        name: "Retrieving dependencies",
+        description: "Description of this step.",
       }
     case UNKNOWN:
       return {
         svg: <ClockOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Working',
-        description: 'Description of this step.',
+        name: "Working",
+        description: "Description of this step.",
       }
     default:
       return {
         svg: <ClockOutline className="w-6 h-6 text-indigo-600" />,
-        name: 'Working',
-        description: 'Description of this step.',
+        name: "Working",
+        description: "Description of this step.",
       }
   }
 }
@@ -76,7 +76,7 @@ export const CreateProjectStatus: FC<CreateProjectStatusProps> = ({path}) => {
       <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
         <h3 className="text-lg font-medium leading-6" id="modal-headline">
           {getStatusMeta(status).name}
-          {Array(dots).fill('.')}
+          {Array(dots).fill(".")}
         </h3>
         <div className="mt-2">
           <p className="text-sm leading-5 text-gray-500">{getStatusMeta(status).description}</p>

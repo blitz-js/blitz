@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC} from "react"
 
 export const Greeting: FC = () => (
   <header className="max-w-6xl px-4 py-6 mx-auto sm:px-6 lg:px-8">

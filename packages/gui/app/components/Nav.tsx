@@ -1,6 +1,6 @@
-import {Link, useRouter} from 'blitz'
-import {Plus} from 'heroicons-react'
-import {Dispatch, FC, SetStateAction} from 'react'
+import {Link, useRouter} from "blitz"
+import {Plus} from "heroicons-react"
+import {Dispatch, FC, SetStateAction} from "react"
 
 type NavProps = {
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
@@ -12,8 +12,8 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
 
   const highlightLink = (pathname: string, target: string) =>
     pathname === target
-      ? 'bg-indigo-50 text-indigo-700'
-      : 'text-gray-500 hover:text-indigo-600 focus:text-indigo-600'
+      ? "bg-indigo-50 text-indigo-700"
+      : "text-gray-500 hover:text-indigo-600 focus:text-indigo-600"
 
   return (
     <nav className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
@@ -30,8 +30,9 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
                 <a
                   className={`px-3 py-2 text-sm font-medium rounded-md focus:outline-none ${highlightLink(
                     router.pathname,
-                    '/',
-                  )}`}>
+                    "/",
+                  )}`}
+                >
                   Dashboard
                 </a>
               </Link>
@@ -39,8 +40,9 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
                 <a
                   className={`px-3 py-2 ml-4 text-sm font-medium rounded-md focus:outline-none ${highlightLink(
                     router.pathname,
-                    '/settings',
-                  )}`}>
+                    "/settings",
+                  )}`}
+                >
                   Settings
                 </a>
               </Link>
@@ -53,7 +55,8 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
               <button
                 onClick={() => setIsModalOpen(true)}
                 type="button"
-                className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700">
+                className="inline-flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700"
+              >
                 <Plus className="w-5 h-5 mr-2 -ml-1" />
                 Create project
               </button>
@@ -61,7 +64,8 @@ export const Nav: FC<NavProps> = ({setIsModalOpen, openImport}) => {
             <button
               onClick={openImport}
               type="button"
-              className="ml-5 -mr-20 text-gray-500 font-medium hover:underline">
+              className="ml-5 -mr-20 text-gray-500 font-medium hover:underline"
+            >
               or Import
             </button>
           </div>

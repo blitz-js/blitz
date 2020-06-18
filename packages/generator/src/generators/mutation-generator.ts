@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from '../generator'
-import {join} from 'path'
+import {Generator, GeneratorOptions} from "../generator"
+import {join} from "path"
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -13,15 +13,15 @@ export interface MutationGeneratorOptions extends GeneratorOptions {
 }
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
-  static subdirectory = 'mutations'
-  sourceRoot = join(__dirname, './templates/mutation')
+  static subdirectory = "mutations"
+  sourceRoot = join(__dirname, "./templates/mutation")
 
-  private getId(input: string = '') {
+  private getId(input: string = "") {
     if (!input) return input
     return `${input}Id`
   }
 
-  private getParam(input: string = '') {
+  private getParam(input: string = "") {
     if (!input) return input
     return `[${input}]`
   }
@@ -45,7 +45,7 @@ export class MutationGenerator extends Generator<MutationGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ''
+    const context = this.options.context ? `${this.options.context}/` : ""
     return `app/${context}${this.options.modelNames}/mutations`
   }
 }

@@ -1,10 +1,17 @@
-import {StageConfig, StageArgs} from '@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types'
-import {FileCache} from '@blitzjs/file-pipeline'
+import {StageConfig, StageArgs} from "@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types"
+import {FileCache} from "@blitzjs/file-pipeline"
 
-import {through, pipeline} from '../streams'
+import {through, pipeline} from "../streams"
 
 export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs {
-  const config: StageConfig = {dest: '', cwd: a.cwd || '', ignore: [], include: [], src: '', watch: false}
+  const config: StageConfig = {
+    dest: "",
+    cwd: a.cwd || "",
+    ignore: [],
+    include: [],
+    src: "",
+    watch: false,
+  }
   return {
     getInputCache() {
       return ({
@@ -19,7 +26,7 @@ export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs 
   }
 }
 
-const defaultLogger = (file: any) => (typeof file === 'string' ? file : file.path)
+const defaultLogger = (file: any) => (typeof file === "string" ? file : file.path)
 export function testStreamItems(
   stream: NodeJS.ReadWriteStream,
   expected: any[],

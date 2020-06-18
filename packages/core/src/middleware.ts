@@ -1,8 +1,8 @@
-import {BlitzApiRequest, BlitzApiResponse} from '.'
-import {IncomingMessage, ServerResponse} from 'http'
-import {EnhancedResolverModule} from './rpc'
-import {getConfig} from '@blitzjs/config'
-import {log} from '@blitzjs/display'
+import {BlitzApiRequest, BlitzApiResponse} from "."
+import {IncomingMessage, ServerResponse} from "http"
+import {EnhancedResolverModule} from "./rpc"
+import {getConfig} from "@blitzjs/config"
+import {log} from "@blitzjs/display"
 
 export interface MiddlewareRequest extends BlitzApiRequest {}
 export interface MiddlewareResponse extends BlitzApiResponse {
@@ -71,9 +71,9 @@ export async function handleRequestWithMiddleware(
     if (!res.writableFinished) {
       res.statusCode = (error as any).code || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
-      log.error('Error while processing the request:\n')
+      log.error("Error while processing the request:\n")
     } else {
-      log.error('Error occured in middleware after the response was already sent to the browser:\n')
+      log.error("Error occured in middleware after the response was already sent to the browser:\n")
     }
     throw error
   }
@@ -85,12 +85,12 @@ export async function handleRequestWithMiddleware(
 // -------------------------------------------------------------------------------
 export function compose(middleware: Middleware[]) {
   if (!Array.isArray(middleware)) {
-    throw new TypeError('Middleware stack must be an array!')
+    throw new TypeError("Middleware stack must be an array!")
   }
 
   for (const handler of middleware) {
-    if (typeof handler !== 'function') {
-      throw new TypeError('Middleware must be composed of functions!')
+    if (typeof handler !== "function") {
+      throw new TypeError("Middleware must be composed of functions!")
     }
   }
 
@@ -100,7 +100,7 @@ export function compose(middleware: Middleware[]) {
     let index = -1
 
     function dispatch(i: number): Promise<void> {
-      if (i <= index) throw new Error('next() called multiple times')
+      if (i <= index) throw new Error("next() called multiple times")
       index = i
 
       let handler = middleware[i]

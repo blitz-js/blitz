@@ -1,5 +1,5 @@
-import {useRouter} from 'next/router'
-import {parse} from 'url'
+import {useRouter} from "next/router"
+import {parse} from "url"
 
 export function useRouterQuery() {
   const router = useRouter()

@@ -1,7 +1,7 @@
-import {resolve} from 'path'
-import {ServerConfig, normalize} from './config'
-import {nextStartDev} from './next-utils'
-import {configureStages} from './stages'
+import {resolve} from "path"
+import {ServerConfig, normalize} from "./config"
+import {nextStartDev} from "./next-utils"
+import {configureStages} from "./stages"
 
 export async function dev(
   {watch = true, ...config}: ServerConfig,

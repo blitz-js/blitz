@@ -1,8 +1,8 @@
-import React from 'react'
-import {withRouter as withNextRouter, NextRouter} from 'next/router'
-import {WithRouterProps as WithNextRouterProps} from 'next/dist/client/with-router'
-import {useParams, extractRouterParams} from './use-params'
-import {useRouterQuery} from './use-router-query'
+import React from "react"
+import {withRouter as withNextRouter, NextRouter} from "next/router"
+import {WithRouterProps as WithNextRouterProps} from "next/dist/client/with-router"
+import {useParams, extractRouterParams} from "./use-params"
+import {useRouterQuery} from "./use-router-query"
 
 export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof extractRouterParams>

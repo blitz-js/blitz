@@ -1,9 +1,9 @@
-import {Link} from 'blitz'
-import {ArrowRight, Calendar} from 'heroicons-react'
-import {FC} from 'react'
+import {Link} from "blitz"
+import {ArrowRight, Calendar} from "heroicons-react"
+import {FC} from "react"
 
-import {Project} from 'db'
-import {timeDifference} from 'utils/timeDifference'
+import {Project} from "db"
+import {timeDifference} from "utils/timeDifference"
 
 type ProjectCardProps = {
   project: Project
@@ -19,15 +19,17 @@ export const ProjectCard: FC<ProjectCardProps> = ({project, i}: ProjectCardProps
         <div
           className={`p-6 overflow-hidden rounded-lg ${
             isFirstCard
-              ? 'transition duration-150 ease-in-out border-2 border-indigo-600 hover:border-indigo-400 group'
-              : 'border border-gray-200'
-          }`}>
+              ? "transition duration-150 ease-in-out border-2 border-indigo-600 hover:border-indigo-400 group"
+              : "border border-gray-200"
+          }`}
+        >
           <h3
             className={`text-xl font-semibold leading-7 ${
               isFirstCard
-                ? 'text-indigo-600 transition duration-150 ease-in-out group-hover:text-indigo-500'
-                : ''
-            }`}>
+                ? "text-indigo-600 transition duration-150 ease-in-out group-hover:text-indigo-500"
+                : ""
+            }`}
+          >
             {project.name}
           </h3>
           <p className="mt-3 text-base leading-6 text-gray-500">{project.description}</p>
