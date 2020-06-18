@@ -2,13 +2,22 @@ import http from 'http'
 import fetch from 'isomorphic-unfetch'
 import listen from 'test-listen'
 import {apiResolver} from 'next/dist/next-server/server/api-utils'
-import {rpcHandler} from '../src/rpc'
+import {connectMiddleware, EnhancedResolverModule} from '@blitzjs/core'
+import delay from 'delay'
+import {rpcApiHandler} from '../src/rpc'
 
-describe('rpcHandler', () => {
+describe('rpcMiddleware', () => {
   describe('HEAD', () => {
     it('warms the endpoint', async () => {
       expect.assertions(1)
-      await mockServer(async (url) => {
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+      await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {method: 'HEAD'})
         expect(res.status).toBe(200)
       })
@@ -17,7 +26,16 @@ describe('rpcHandler', () => {
 
   describe('POST', () => {
     it('handles missing params', async () => {
-      await mockServer(async (url) => {
+      console.error = jest.fn()
+
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+      await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
         })
@@ -30,7 +48,14 @@ describe('rpcHandler', () => {
     })
 
     it('handles incorrect method', async () => {
-      await mockServer(async (url) => {
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+      await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
           method: 'GET',
         })
@@ -40,9 +65,31 @@ describe('rpcHandler', () => {
     })
 
     it('executes the request', async () => {
-      const resolverSpy = jest.fn().mockImplementation(() => 'test')
+      console.log = jest.fn()
 
-      await mockServer(async (url) => {
+      const resolverModule = (jest.fn().mockImplementation(async () => {
+        await delay(1)
+        return 'test'
+      }) as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+      resolverModule.middleware = [
+        connectMiddleware((_req, _res, next) => {
+          next()
+        }),
+        async (_req, res, next) => {
+          await next()
+          blitzResult = res.blitzResult
+        },
+      ]
+
+      let blitzResult: any
+
+      await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
           headers: {
@@ -55,15 +102,55 @@ describe('rpcHandler', () => {
 
         expect(res.status).toBe(200)
         expect(data.result).toBe('test')
-      }, resolverSpy)
+        expect(blitzResult).toBe('test')
+      })
+    })
+
+    it('handles errors from middleware and aborts execution', async () => {
+      console.log = jest.fn()
+
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+      resolverModule.middleware = [
+        (_req, _res, _next) => {
+          throw new Error('hack')
+        },
+      ]
+      await mockServer(resolverModule, async (url) => {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({params: {}}),
+        })
+
+        expect(resolverModule).toHaveBeenCalledTimes(0)
+        expect(res.status).toBe(500)
+      })
     })
 
     it('handles a query error', async () => {
-      const resolverSpy = jest.fn().mockImplementation(() => {
-        throw new Error('something broke')
-      })
+      console.log = jest.fn()
+      console.error = jest.fn()
 
-      await mockServer(async (url) => {
+      const resolverModule = (jest.fn().mockImplementation(async () => {
+        await delay(1)
+        throw new Error('something broke')
+      }) as unknown) as EnhancedResolverModule
+      resolverModule._meta = {
+        name: 'testResolver',
+        type: 'query',
+        path: 'test/path',
+        apiUrl: 'testurl',
+      }
+
+      await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
           method: 'POST',
           headers: {
@@ -76,7 +163,7 @@ describe('rpcHandler', () => {
 
         expect(res.status).toBe(200)
         expect(data.error.message).toBe('something broke')
-      }, resolverSpy)
+      })
     })
   })
 
@@ -87,19 +174,25 @@ describe('rpcHandler', () => {
    * @param connectFn The DB connection function
    */
   async function mockServer(
+    resolverModule: EnhancedResolverModule,
     callback: (url: string) => Promise<void>,
-    resolverFn = jest.fn(),
-    connectorFn = jest.fn(),
   ) {
-    const subject = rpcHandler('', 'server/test/rpc.test.ts', resolverFn, connectorFn)
+    const dbConnectorFn = undefined
+    const handler = rpcApiHandler(resolverModule, resolverModule.middleware, dbConnectorFn)
 
-    let server = http.createServer((req, res) =>
-      apiResolver(req, res, null, subject, {
+    ;(handler as any).config = {
+      api: {
+        externalResolver: true,
+      },
+    }
+
+    let server = http.createServer(async (req, res) => {
+      await apiResolver(req, res, null, handler, {
         previewModeId: 'previewModeId',
         previewModeEncryptionKey: 'previewModeEncryptionKey',
         previewModeSigningKey: 'previewModeSigningKey',
-      }),
-    )
+      })
+    })
 
     try {
       let url = await listen(server)

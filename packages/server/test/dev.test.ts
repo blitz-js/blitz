@@ -33,7 +33,7 @@ describe('Dev command', () => {
     jest.clearAllMocks()
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     console.log = originalLog
   })
 
@@ -46,28 +46,26 @@ describe('Dev command', () => {
       mocks['next-utils'].nextStartDev.mockReturnValue(Promise.resolve())
     })
 
-    it('should blow up', (done) => {
+    it('should blow up', async (done) => {
       const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
-      ;(async () => {
-        try {
-          await dev({
-            transformFiles,
-            rootFolder: '',
-            writeManifestFile: false,
-            watch: false,
-            port: 3000,
-            hostname: 'localhost',
-          })
-        } catch (err) {
-          expect(err).toBe('pow')
-          done()
-        }
-      })()
+      try {
+        await dev({
+          transformFiles,
+          rootFolder: '',
+          writeManifestFile: false,
+          watch: false,
+          port: 3000,
+          hostname: 'localhost',
+        })
+      } catch (err) {
+        expect(err).toBe('pow')
+        done()
+      }
     })
   })
 
   describe.skip('when with next.config', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       rootFolder = resolve('bad')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz')
@@ -102,7 +100,7 @@ describe('Dev command', () => {
   })
 
   describe('when run normally', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       rootFolder = resolve('dev')
       buildFolder = resolve(rootFolder, '.blitz')
       devFolder = resolve(rootFolder, '.blitz-dev')
@@ -113,7 +111,8 @@ describe('Dev command', () => {
 
     it('should copy the correct files to the dev folder', async () => {
       mocks.mockFs({
-        'dev/.now': '',
+        'dev/.git/hooks': '',
+        'dev/.vercel/project.json': '',
         'dev/one': '',
         'dev/two': '',
       })
@@ -132,7 +131,22 @@ describe('Dev command', () => {
             children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
             name: '.blitz-dev',
           },
-          {name: '.now'},
+          {
+            children: [
+              {
+                name: 'hooks',
+              },
+            ],
+            name: '.git',
+          },
+          {
+            children: [
+              {
+                name: 'project.json',
+              },
+            ],
+            name: '.vercel',
+          },
           {name: 'one'},
           {name: 'two'},
         ],

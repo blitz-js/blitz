@@ -108,6 +108,10 @@ const success = (msg: string) => {
   console.log(withCheck(chalk.green(msg)))
 }
 
+const newline = () => {
+  console.log(' ')
+}
+
 /**
  * Colorizes a variable for display.
  *
@@ -139,6 +143,7 @@ export const log = {
   progress,
   spinner,
   success,
+  newline,
   variable,
   info,
   debug,

@@ -38,9 +38,22 @@ describe('Db command', () => {
     jest.clearAllMocks()
   })
 
+  afterEach(() => {
+    process.env.NODE_ENV = 'test'
+  })
+
   function expectDbMigrateOutcome() {
     expect(spawn).toBeCalledWith(...migrateSaveParams)
     expect(spawn.mock.calls.length).toBe(3)
+
+    // following expection is not working
+    //expect(onSpy).toHaveBeenCalledWith(0);
+
+    expect(spawn).toBeCalledWith(...migrateUpParams)
+  }
+
+  function expectProductionDbMigrateOutcome() {
+    expect(spawn.mock.calls.length).toBe(2)
 
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
@@ -53,9 +66,21 @@ describe('Db command', () => {
     expectDbMigrateOutcome()
   })
 
+  it('runs db migrate in the production environment.', async () => {
+    process.env.NODE_ENV = 'production'
+    await Db.run(['migrate'])
+    expectProductionDbMigrateOutcome()
+  })
+
   it('runs db migrate (alias)', async () => {
     await Db.run(['m'])
     expectDbMigrateOutcome()
+  })
+
+  it('runs db migrate (alias) in the production environment.', async () => {
+    process.env.NODE_ENV = 'production'
+    await Db.run(['m'])
+    expectProductionDbMigrateOutcome()
   })
 
   it('runs db introspect', async () => {

@@ -39,6 +39,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ''
   }
 
+  // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath('gitignore'), this.destinationPath('.gitignore'))
   }
@@ -148,9 +149,16 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       // Ensure the generated files are formatted with the installed prettier version
+      const formattingSpinner = log.spinner(log.withBrand('Formatting your code')).start()
       const prettierResult = runLocalNodeCLI('prettier --loglevel silent --write .')
       if (prettierResult.status !== 0) {
-        throw new Error('Failed running prettier')
+        formattingSpinner.fail(
+          chalk.yellow.bold(
+            "We had an error running Prettier, but don't worry your app will still run fine :)",
+          ),
+        )
+      } else {
+        formattingSpinner.succeed()
       }
     } else {
       console.log('') // New line needed

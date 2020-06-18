@@ -67,7 +67,9 @@ function getWatcher(watching: boolean, cwd: string, include: string[], ignore: s
  * @param config Config object
  */
 export function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
-  const vinylFsStream = vfs.src([...include, ...ignore.map((a) => '!' + a)], {
+  const allGlobs = [...include, ...ignore.map((a) => '!' + a)]
+
+  const vinylFsStream = vfs.src(allGlobs, {
     buffer: true,
     read: true,
     dot: true,
@@ -84,8 +86,8 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   })
   const close = () => watcher.fswatcher.close()
 
-  stream.on('end', () => {
-    close()
+  stream.on('end', async () => {
+    await close()
   })
 
   return {stream, close}

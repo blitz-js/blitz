@@ -1,6 +1,16 @@
-# 2020-06-09 Blitz Contributor Call
+# 2020-06-17 Blitz Contributor Call
 
-# Blitz Contributor Call Meeting Notes June 9, 2020
+- Attending: Brandon Bayer, Fran Zekan, Sigurd Wahl
+- Brandon:
+  - Spent the past week implementing HTTP middlware which is now released!
+  - Now working on implementing session management!
+- Fran:
+  - Finishing up the PR for adding `blitz db seed`
+- Sigurd:
+  - New to the community, slowly learning the codebase
+  - Exicited to get a first PR in here sometime soon :)
+
+# 2020-06-09 Blitz Contributor Call
 
 - Attending: Brandon Bayer, Rudi Yardley, Fran Zekan, Adam Markon, Robert Rosenberg, Kristina Matuska
 - Brandon:
@@ -35,7 +45,6 @@
   - Extracted out the @blitzjs/display package
   - Working on various Next.js compatibility issues
   - Debugging a bug in blitz start where it gets stuck at \_manifest.json
-
 
 # 2020-05-26 Blitz Contributor Call
 

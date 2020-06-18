@@ -21,6 +21,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     return ''
   }
 
+  // eslint-disable-next-line require-await
   async write() {
     try {
       if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
@@ -40,7 +41,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
         this.fs.append(path.resolve('db/schema.prisma'), `\n${modelDefinition.toString()}\n`)
       }
       log.success(
-        `Model for '${this.options.modelName}'${this.options.dryRun ? '' : 'created successfully'}:\n`,
+        `Model for '${this.options.modelName}'${this.options.dryRun ? '' : ' created successfully'}:\n`,
       )
       modelDefinition.toString().split('\n').map(log.progress)
       log.info('\nNow run ' + log.variable('blitz db migrate') + ' to add this model to your database\n')
