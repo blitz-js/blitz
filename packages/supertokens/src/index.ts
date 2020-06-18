@@ -3,12 +3,18 @@ import {v4 as uuidv4} from 'uuid'
 import hasha, {HashaInput} from 'hasha'
 import cookie from 'cookie'
 import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
-import {addMinutes} from 'date-fns'
+import {addMinutes, isPast, differenceInMinutes} from 'date-fns'
 
 const TOKEN_SEPARATOR = ';'
 const HANDLE_SEPARATOR = ':'
 const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = 'ots'
-const ACCESS_TOKEN_VERSION_0 = 'v0'
+const SESSION_TOKEN_VERSION_0 = 'v0'
+
+const COOKIE_SESSION_TOKEN = 'sSessionToken'
+const COOKIE_REFRESH_TOKEN = 'sIdRefreshToken'
+
+const HEADER_CSRF = 'anti-csrf'
+const HEADER_PUBLIC_DATA_TOKEN = 'public-data-token'
 
 export interface PublicData extends Record<any, unknown> {
   userId: string | number
@@ -16,10 +22,41 @@ export interface PublicData extends Record<any, unknown> {
 }
 export type PrivateData = Record<any, unknown>
 
+type SessionModel = {
+  createdAt: Date
+  expiresAt: Date
+  handle: string
+  userId: string | number
+  hashedSessionToken: string
+  antiCSRFToken: string
+  publicData: string
+  privateData: string
+}
+
 const defaultConfig = {
   sessionExpiryMinutes: 100,
   method: 'essential',
   apiDomain: 'example.com',
+  async getSession(handle: string): Promise<SessionModel> {
+    await true
+    return {} as SessionModel
+  },
+  async getSessions(userId: string | number): Promise<SessionModel[]> {
+    await true
+    return [] as SessionModel[]
+  },
+  async createSession(session: SessionModel): Promise<SessionModel> {
+    await true
+    return {} as SessionModel
+  },
+  async updateSession(session: Partial<SessionModel> & {handle: string}): Promise<SessionModel> {
+    await true
+    return {} as SessionModel
+  },
+  async deleteSession(handle: string): Promise<boolean> {
+    await true
+    return true
+  },
 }
 
 // --------------------------------
@@ -29,35 +66,129 @@ const defaultConfig = {
 class AuthenticationError extends Error {
   // TODO implement constructor and custom name
 }
+class AntiCSRFTokenMismatchException extends Error {
+  // TODO implement constructor and custom name
+}
 
 // --------------------------------
-// utils
+// Session Class
+// --------------------------------
+class Session {
+  private sessionHandle: string | undefined
+  private publicData: PublicData | undefined
+  public userId: string | undefined
+  public role: string | undefined
+
+  constructor(sessionHandle?: string, publicData?: PublicData) {
+    if (sessionHandle) {
+      this.sessionHandle = sessionHandle
+    }
+    if (publicData) {
+      this.publicData = publicData
+      this.userId = publicData.userId
+      this.role = publicData.role
+    }
+  }
+
+  create(publicData, privateData) {
+    // TODO:
+  }
+
+  revoke() {
+    if (this.sessionHandle !== undefined) {
+      // TODO:
+    }
+  }
+
+  getPrivateData() {
+    if (this.sessionHandle !== undefined) {
+      // TODO:
+    } else {
+      throw Error('no session exists')
+    }
+  }
+
+  setPrivateData() {
+    if (this.sessionHandle !== undefined) {
+      // TODO:
+    } else {
+      throw Error('no session exists')
+    }
+  }
+
+  getPublicData() {
+    if (this.sessionHandle !== undefined) {
+      // TODO:
+    } else {
+      throw Error('no session exists')
+    }
+  }
+
+  setPublicData() {
+    if (this.sessionHandle !== undefined) {
+      // TODO:
+    } else {
+      throw Error('no session exists')
+    }
+  }
+}
+
+// --------------------------------
+// General utils
 // --------------------------------
 const base64 = (input: HashaInput) => hasha(input, {encoding: 'base64'})
 const hash = (input: HashaInput) => hasha(input, {algorithm: 'sha256'})
 
+// --------------------------------
+// Session utils
+// --------------------------------
 export const generateEssentialSessionHandle = () => {
   return uuidv4() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
 }
 
-export const createAccessToken = (sessionHandle: string, publicData: PublicData) => {
+export const createSessionToken = (sessionHandle: string, publicData: PublicData) => {
   // We store the hashed public data in the opaque token so that when we verify,
   // we can detect changes in it and return a new set of tokens if necessary.
   return base64(
-    [sessionHandle, uuidv4(), hash(JSON.stringify(publicData)), ACCESS_TOKEN_VERSION_0].join(TOKEN_SEPARATOR),
+    [sessionHandle, uuidv4(), hash(JSON.stringify(publicData)), SESSION_TOKEN_VERSION_0].join(
+      TOKEN_SEPARATOR,
+    ),
   )
 }
+export const parseSessionToken = (token: string) => {
+  const [sessionHandle, id, hashedPublicData, version] = token.split(TOKEN_SEPARATOR)
+  return {
+    sessionHandle,
+    id,
+    hashedPublicData,
+    version,
+  }
+}
 
-export const createPublicDataToken = (publicData: PublicData, expiry: number) => {
-  return base64([JSON.stringify(publicData), expiry].join(TOKEN_SEPARATOR))
+export const createPublicDataToken = (publicData: string, expireAt: Date) => {
+  return base64([publicData, expireAt].join(TOKEN_SEPARATOR))
 }
 
 export const createAntiCSRFToken = () => uuidv4()
 
+export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
+  // TODO - what if another middlware use `Set-Cookie`?
+  res.setHeader(
+    'Set-Cookie',
+    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+      //domain - can we omit?
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: true,
+      expires: expiresAt,
+    }),
+  )
+}
+
 // --------------------------------
 // createNewSession()
 // --------------------------------
-export function createNewSession(
+export async function createNewSession(
   res: BlitzApiResponse,
   publicData: PublicData,
   privateData: PrivateData = {},
@@ -70,25 +201,17 @@ export function createNewSession(
   const userId = publicData.userId.toString()
 
   if (config.method === 'essential') {
-    const {sessionHandle, accessToken, antiCSRFToken, publicDataToken, expiresAt} = createNewSessionHelper(
-      userId,
-      publicData,
-      privateData,
-    )
+    const {
+      sessionHandle,
+      sessionToken,
+      antiCSRFToken,
+      publicDataToken,
+      expiresAt,
+    } = await createNewSessionHelper(userId, publicData, privateData)
 
-    // TODO - what if another middlware use `Set-Cookie`?
-    res.setHeader(
-      'Set-Cookie',
-      cookie.serialize('sSessionToken', accessToken, {
-        //domain - can we omit?
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: true,
-        expires: expiresAt,
-      }),
-    )
-    res.setHeader('anti-csrf', antiCSRFToken)
-    res.setHeader('public-data-token', publicDataToken)
+    setSessionCookie(res, sessionToken, expiresAt)
+    res.setHeader(HEADER_CSRF, antiCSRFToken)
+    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
 
     return {
       sessionHandle,
@@ -103,33 +226,136 @@ export function createNewSession(
   }
 }
 
-export function createNewSessionHelper(userId: string, publicData: PublicData, privateData: PrivateData) {
+export async function createNewSessionHelper(
+  userId: string,
+  publicData: PublicData,
+  privateData: PrivateData,
+) {
   const config = defaultConfig
 
   const createdAt = new Date()
   const expiresAt = addMinutes(createdAt, config.sessionExpiryMinutes)
   const sessionHandle = generateEssentialSessionHandle()
-  const accessToken = createAccessToken(sessionHandle, publicData)
-  const publicDataToken = createPublicDataToken(publicData, config.sessionExpiryMinutes)
+  const sessionToken = createSessionToken(sessionHandle, publicData)
+  const publicDataToken = createPublicDataToken(JSON.stringify(publicData), expiresAt)
   const antiCSRFToken = createAntiCSRFToken()
 
-  storeNewSessionInDb(
-    sessionHandle,
-    userId,
-    accessToken,
-    antiCSRFToken,
-    publicData,
-    privateData,
-    expiresAt,
-    createdAt,
-  )
+  try {
+    await config.createSession({
+      handle: sessionHandle,
+      userId,
+      hashedSessionToken: hash(sessionToken),
+      antiCSRFToken,
+      publicData: JSON.stringify(publicData),
+      privateData: JSON.stringify(privateData),
+      expiresAt,
+      createdAt,
+    })
+  } catch (error) {
+    // TODO handler error
+  }
 
   return {
     sessionHandle,
-    accessToken,
+    sessionToken,
     antiCSRFToken,
     publicDataToken,
     expiresAt,
+  }
+}
+
+export function getSession(req: BlitzApiRequest, res: BlitzApiResponse, enableCsrfProtection: boolean) {
+  let sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
+  let idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
+
+  if (sessionToken === undefined && idRefreshToken === undefined) {
+    throw new AuthenticationError('Missing session tokens. Please login again')
+  }
+
+  if (sessionToken) {
+    let antiCSRFToken = req.headers[HEADER_CSRF] as string
+    let {sessionHandle, publicData, newSessionToken, newPublicDataToken, newExpiresAt} = getSessionHelper(
+      sessionToken,
+      antiCSRFToken,
+      enableCsrfProtection,
+      req.method as string,
+    )
+    if (newSessionToken && newExpiresAt) {
+      setSessionCookie(res, sessionToken, newExpiresAt)
+    }
+    if (newPublicDataToken) {
+      res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
+    }
+    return {
+      sessionHandle,
+      publicData,
+    }
+  } else {
+    // TODO: advanced method
+  }
+}
+
+export function getSessionHelper(
+  sessionToken: string,
+  inputAntiCSRFToken: string | undefined,
+  enableCsrfProtection: boolean,
+  httpMethod: string,
+) {
+  const config = defaultConfig
+
+  const {sessionHandle, version, hashedPublicData} = parseSessionToken(sessionToken)
+
+  if (version !== SESSION_TOKEN_VERSION_0) {
+    throw new AuthenticationError('Session token is not ' + SESSION_TOKEN_VERSION_0)
+  }
+
+  let session = config.getSession(sessionHandle)
+
+  if (!session) {
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+  if (enableCsrfProtection && session.antiCSRFToken !== inputAntiCSRFToken) {
+    throw new AntiCSRFTokenMismatchException()
+  }
+  if (hash(sessionToken) !== session.hashedSessionToken) {
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+  if (isPast(session.expiresAt)) {
+    revokeSession(sessionHandle)
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+
+  let newSessionToken
+  let newPublicDataToken
+  let newExpiresAt
+
+  let quarterExpiryTimePassed
+  // Only renew with non-GET requests
+  // We can't reliably update the frontend expiry information in GET requests since they could
+  // be from a browser level navigation (for example: user opening the site after a long time).
+  if (httpMethod !== 'GET') {
+    // Check if > 1/4th of the expiry time has passed
+    // (since we are doing a rolling expiry window).
+    quarterExpiryTimePassed =
+      differenceInMinutes(session.expiresAt, new Date()) < 0.75 * config.sessionExpiryMinutes
+  }
+
+  const publicDataChanged = hash(session.publicData) !== hashedPublicData
+
+  if (publicDataChanged || quarterExpiryTimePassed) {
+    newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
+    newPublicDataToken = createPublicDataToken(session.publicData, newExpiresAt)
+    newSessionToken = createSessionToken(sessionHandle, session.publicData)
+
+    // should not wait for this to happen
+    updateSessionExpiryInDb(sessionHandle, newExpiresAt)
+  }
+  return {
+    sessionHandle,
+    publicData: JSON.parse(session.publicData),
+    newSessionToken,
+    newPublicDataToken,
+    newExpiresAt,
   }
 }
 
@@ -143,7 +369,7 @@ export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
 export function storeNewSessionInDb(
   sessionHandle: string,
   userId: string,
-  accessToken: string,
+  sessionToken: string,
   antiCSRFToken: string,
   publicData: PublicData,
   privateData: PrivateData,
@@ -166,7 +392,7 @@ export function storeNewSessionInDb(
     'CREATE IN DB HERE',
     sessionHandle,
     userId,
-    hash(accessToken),
+    hash(sessionToken),
     antiCSRFToken,
     JSON.stringify(publicData),
     JSON.stringify(privateData),
@@ -175,28 +401,23 @@ export function storeNewSessionInDb(
   )
 }
 
-export function updateSessionExpiryInDb(sessionHandle: string, expiresAt: Date) {
-  // update <table> set expires_at = expiresAt where session_handle = sessionHandle;
-  // TODO
-  // updateInDb
-  console.log('UPDATE DB', sessionHandle, expiresAt)
+export async function updateSessionExpiryInDb(sessionHandle: string, expiresAt: Date) {
+  const config = defaultConfig
+  return await config.updateSession({handle: sessionHandle, expiresAt})
 }
 
-export function getAllSessionHandlesForUser(userId: string): string[] {
-  // select sessionHandle from <table> where user_id = userId;
-  // TODO
-  // return readFromDb(userId)
-  return []
+export async function getAllSessionHandlesForUser(userId: string) {
+  const config = defaultConfig
+  return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export function revokeSession(sessionHandle: string): boolean {
-  // delete from <table> where session_handle = sessionHandle;
-  // TODO
-  // return deleteFromDb(sessionHandle) === 1;
-  return true
+export async function revokeSession(sessionHandle: string): Promise<boolean> {
+  const config = defaultConfig
+
+  return await config.deleteSession(sessionHandle)
 }
 
-export function revokeMultipleSessions(sessionHandles: string[]): string[] {
+export function revokeMultipleSessions(sessionHandles: string[]) {
   let revoked: string[] = []
   for (const handle of sessionHandles) {
     if (revokeSession(handle)) {
@@ -206,34 +427,28 @@ export function revokeMultipleSessions(sessionHandles: string[]): string[] {
   return revoked
 }
 
-// returns list of revoked session for this user
-export function revokeAllSessionsForUser(userId: string): string[] {
-  // multiple ways to implement this. Ideally we want to delete from the db
-  // directly based on userId, however, that may not give us the list of sessionHandles...?
-  let sessionHandles: string[] = getAllSessionHandlesForUser(userId)
+export async function revokeAllSessionsForUser(userId: string) {
+  const config = defaultConfig
+  let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
   return revokeMultipleSessions(sessionHandles)
 }
 
-export function getPublicData(sessionHandle: string) {
-  // select sessionData from <table> where session_handle = sessionHandle;
-  // TODO
-  // const data = readFromDb(sessionHandle);
-  const data = {}
-  if (data === undefined) {
+export async function getPublicData(sessionHandle: string): Promise<PublicData> {
+  const config = defaultConfig
+  const session = await config.getSession(sessionHandle)
+  if (!session) {
     throw new AuthenticationError("sessionHandle doesn't exist")
   }
-  return data
+  return JSON.parse(session.publicData) as PublicData
 }
 
-export function getPrivateData(sessionHandle: string) {
-  // select sessionData from <table> where session_handle = sessionHandle;
-  // TODO
-  // const data = readFromDb(sessionHandle);
-  const data = {}
-  if (data === undefined) {
+export async function getPrivateData(sessionHandle: string): Promise<PrivateData> {
+  const config = defaultConfig
+  const session = await config.getSession(sessionHandle)
+  if (!session) {
     throw new AuthenticationError("sessionHandle doesn't exist")
   }
-  return data
+  return JSON.parse(session.privateData) as PrivateData
 }
 
 export function setPrivateData(sessionHandle: string, data: PrivateData) {
