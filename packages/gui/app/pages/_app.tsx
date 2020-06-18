@@ -10,7 +10,7 @@ const MyApp = ({Component, pageProps}: AppProps): JSX.Element => (
       <title>Blitz GUI</title>
       <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
-    <div className="min-h-screen font-sans antialiased text-gray-900 bg-gray-100">
+    <div className="font-sans antialiased text-gray-900 bg-gray-100">
       <div className="flex h-screen">
         <Component {...pageProps} />
       </div>

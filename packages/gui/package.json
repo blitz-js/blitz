@@ -10,6 +10,8 @@
     "@prisma/client": "^2.0.0",
     "@tippyjs/react": "^4.0.2",
     "blitz": "^0.14.1",
+    "fast-glob": "^3.2.3",
+    "framer-motion": "^1.11.0",
     "hasbin": "^1.2.3",
     "heroicons-react": "^1.0.15",
     "react": "experimental",
