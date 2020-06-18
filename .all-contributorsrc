@@ -717,6 +717,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shaunchurch",
+      "name": "Shaun Church",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/571764?v=4",
+      "profile": "https://shaun.church",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
