@@ -1,50 +1,32 @@
-import {BlitzPage, GetServerSideProps} from "blitz"
-import {homedir} from "os"
-import {useState} from "react"
+import {BlitzPage, useQuery, useRouter} from "blitz"
+import {FC, Suspense, useEffect} from "react"
 
-import {CreateProjectModal} from "app/components/CreateProjectModal"
-import {Greeting} from "app/components/Greeting"
-import {Nav} from "app/components/Nav"
-import {ProjectList} from "app/components/ProjectList"
+import {Sidebar} from "app/components/Sidebar"
 import getProjects from "app/queries/getProjects"
 
-import {Project} from "db"
-import CreateFileBrowserModal from "../components/CreateFileBrowserModal"
+const Stub: FC = () => {
+  const router = useRouter()
 
-type ProjectsPageProps = {
-  projects: Project[]
-  homedir: string
+  const [projects] = useQuery(getProjects, {})
+
+  useEffect(() => {
+    if (projects.length > 0) {
+      router.push("/p/[id]", `/p/${projects[0].id}`)
+    } else {
+      router.push("/new")
+    }
+  }, [projects])
+
+  return null
 }
 
-export const getServerSideProps: GetServerSideProps<ProjectsPageProps> = async () => {
-  const projects = await getProjects({})
+const HomePage: BlitzPage = () => (
+  <>
+    <Sidebar />
+    <Suspense fallback={null}>
+      <Stub />
+    </Suspense>
+  </>
+)
 
-  return {
-    props: {projects, homedir: homedir()},
-  }
-}
-
-const ProjectPage: BlitzPage<ProjectsPageProps> = ({projects, homedir}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isBrowserModalOpen, setIsBrowserModalOpen] = useState(false)
-
-  return (
-    <>
-      <CreateProjectModal
-        isModalOpen={isModalOpen}
-        homedir={homedir}
-        setIsModalOpen={setIsModalOpen}
-      />
-      <CreateFileBrowserModal
-        isModalOpen={isBrowserModalOpen}
-        homedir={homedir}
-        setIsModalOpen={setIsBrowserModalOpen}
-      />
-      <Nav setIsModalOpen={setIsModalOpen} openImport={() => setIsBrowserModalOpen(true)} />
-      <Greeting />
-      <ProjectList projects={projects} />
-    </>
-  )
-}
-
-export default ProjectPage
+export default HomePage

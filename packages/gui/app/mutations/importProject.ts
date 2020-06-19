@@ -1,46 +1,25 @@
-import db from "db"
-import fs from "fs"
-
-import getProject from "../queries/getProject"
+import db, {ProjectCreateArgs} from "db"
 
 type ImportProjectInput = {
-  projects: Array<string>
+  data: ProjectCreateArgs["data"]
 }
 
-export default async function importProjects({projects}: ImportProjectInput) {
-  let _projects = []
-  for await (const project of projects) {
-    const path = project
-    const isInDB = await getProject({where: {path}})
+const importProject = async ({data}: ImportProjectInput) => {
+  const {path} = data
 
-    if (!fs.existsSync(path)) {
-      return
-    }
+  const existingProjects = await db.project.findMany({where: {path}})
 
-    if (!!isInDB) {
-      continue
-    }
-
-    try {
-      const pkg = await fs.promises.readFile(`${path}/package.json`, "utf-8")
-      const pkg_data = JSON.parse(pkg)
-
-      console.log(pkg_data)
-
-      const data = {
-        name: pkg_data.name,
-        description: pkg_data.description || "no description",
-        path,
-        lastActive: new Date().getTime(),
-      }
-
-      const project = await db.project.create({data})
-
-      _projects.push(project)
-    } catch (e) {
-      console.log("Error: ", e)
-      return
-    }
+  if (existingProjects.length > 0) {
+    return
   }
-  return _projects
+
+  try {
+    const project = await db.project.create({data})
+
+    return project
+  } catch {
+    return
+  }
 }
+
+export default importProject

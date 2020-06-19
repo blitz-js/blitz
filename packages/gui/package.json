@@ -1,27 +1,28 @@
 {
   "name": "@blitzjs/gui",
-  "version": "0.15.1",
+  "version": "0.14.1",
   "scripts": {
     "start": "blitz start"
   },
   "dependencies": {
-    "@blitzjs/generator": "0.15.1",
-    "@prisma/cli": "2.0.0-beta.7",
-    "@prisma/client": "2.0.0-beta.7",
-    "blitz": "0.15.1",
-    "fast-glob": "3.2.2",
-    "hasbin": "1.2.3",
+    "@blitzjs/generator": "^0.14.1",
+    "@prisma/cli": "^2.0.0",
+    "@prisma/client": "^2.0.0",
+    "@tippyjs/react": "^4.0.2",
+    "blitz": "^0.14.1",
+    "fast-glob": "^3.2.3",
+    "framer-motion": "^1.11.0",
+    "hasbin": "^1.2.3",
     "heroicons-react": "^1.0.15",
     "react": "experimental",
     "react-dom": "experimental",
-    "react-tooltip": "4.2.6",
-    "typescript": "3.9.3"
+    "swr": "^0.2.3"
   },
   "devDependencies": {
-    "@tailwindcss/ui": "0.3.0",
-    "@types/react": "16.9.35",
-    "postcss-preset-env": "6.7.0",
-    "tailwindcss": "1.4.6"
+    "@tailwindcss/ui": "^0.3.0",
+    "@types/react": "^16.9.36",
+    "tailwindcss": "^1.4.6",
+    "typescript": "^3.9.5"
   },
   "private": true
 }
