@@ -46,12 +46,14 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   getModelNamesPath() {
-    const context = this.options.context ? `${this.options.context}/` : ''
+    const context = this.options.context ? `${this.options.context}/` : ""
     return context + this.options.modelNames
   }
 
   getTargetDirectory() {
-    const parent = this.options.parentModels ? `${this.options.parentModels}/__parentModelParam__/` : ''
+    const parent = this.options.parentModels
+      ? `${this.options.parentModels}/__parentModelParam__/`
+      : ""
     return `app/${this.getModelNamesPath()}/pages/${parent}${this.options.modelNames}`
   }
 }
