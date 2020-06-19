@@ -1,8 +1,8 @@
 import React, {Suspense} from 'react'
 import {Head, Link, useRouter, useQuery, useParam} from 'blitz'
-import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
-import update__ModelName__ from 'app/__modelNames__/mutations/update__ModelName__'
-import __ModelName__Form from 'app/__modelNames__/components/__ModelName__Form'
+import get__ModelName__ from 'app/__modelNamesPath__/queries/get__ModelName__'
+import update__ModelName__ from 'app/__modelNamesPath__/mutations/update__ModelName__'
+import __ModelName__Form from 'app/__modelNamesPath__/components/__ModelName__Form'
 
 export const Edit__ModelName__: React.FC = () => {
   const router = useRouter()
