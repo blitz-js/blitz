@@ -1,5 +1,5 @@
-import { Middleware } from "blitz"
-import db, { FindManyProductArgs } from "db"
+import {Middleware} from "blitz"
+import db, {FindManyProductArgs} from "db"
 
 type GetProductsInput = {
   where?: FindManyProductArgs["where"]
@@ -12,8 +12,8 @@ type GetProductsInput = {
 }
 
 export default async function getProducts(
-  { where, orderBy, skip, cursor, take }: GetProductsInput,
-  ctx: Record<any, unknown> = {}
+  {where, orderBy, skip, cursor, take}: GetProductsInput,
+  ctx: Record<any, unknown> = {},
 ) {
   if (ctx.referer) {
     console.log("HTTP referer:", ctx.referer)

@@ -1,4 +1,4 @@
-import { Head, Link } from "blitz"
+import {Head, Link} from "blitz"
 const modelSnippet = `model Project {
   id      Int      @default(autoincrement()) @id
   name    String
@@ -189,8 +189,8 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-          Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {

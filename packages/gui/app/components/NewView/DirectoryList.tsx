@@ -1,30 +1,30 @@
-import {useQuery} from 'blitz'
-import {Folder} from 'heroicons-react'
-import {FC} from 'react'
-import {mutate} from 'swr'
+import {useQuery} from "blitz"
+import {Folder} from "heroicons-react"
+import {FC} from "react"
+import {mutate} from "swr"
 
-import getDirectories from 'app/queries/getDirectories'
-import {usePath} from 'utils/usePath'
-import {Directory, DirectoryListProps} from './types'
+import getDirectories from "app/queries/getDirectories"
+import {usePath} from "utils/usePath"
+import {Directory, DirectoryListProps} from "./types"
 
 export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPath}) => {
   const [directories] = useQuery(getDirectories, {path: currentPath})
 
-  const {data: pathData = {path: ''}} = usePath()
+  const {data: pathData = {path: ""}} = usePath()
 
   const handleClick = (directory: Directory) => {
     if (directory.isBlitz && directory.path !== pathData.path) {
-      localStorage.setItem('name', JSON.stringify({name: directory.name}))
-      mutate('name', {name: directory.name})
+      localStorage.setItem("name", JSON.stringify({name: directory.name}))
+      mutate("name", {name: directory.name})
 
-      localStorage.setItem('path', JSON.stringify({path: directory.path}))
-      mutate('path', {path: directory.path})
+      localStorage.setItem("path", JSON.stringify({path: directory.path}))
+      mutate("path", {path: directory.path})
     } else if (directory.isBlitz && directory.path === pathData.path) {
-      localStorage.setItem('name', JSON.stringify({name: ''}))
-      mutate('name', {name: ''})
+      localStorage.setItem("name", JSON.stringify({name: ""}))
+      mutate("name", {name: ""})
 
-      localStorage.setItem('path', JSON.stringify({path: ''}))
-      mutate('path', {path: ''})
+      localStorage.setItem("path", JSON.stringify({path: ""}))
+      mutate("path", {path: ""})
     } else {
       setCurrentPath(directory.path)
     }
@@ -38,8 +38,11 @@ export const DirectoryList: FC<DirectoryListProps> = ({currentPath, setCurrentPa
             onClick={() => handleClick(directory)}
             type="button"
             className={`block w-full text-left transition duration-150 ease-in-out cursor-pointer focus:outline-none  ${
-              directory.path === pathData.path ? 'bg-indigo-50' : 'hover:bg-gray-50 focus:bg-gray-50'
-            }`}>
+              directory.path === pathData.path
+                ? "bg-indigo-50"
+                : "hover:bg-gray-50 focus:bg-gray-50"
+            }`}
+          >
             <div className="flex items-center py-3 pl-3 pr-4 text-sm leading-5">
               {directory.isBlitz ? (
                 <img

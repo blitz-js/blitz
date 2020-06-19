@@ -1,12 +1,12 @@
-import {useParam, useQuery} from 'blitz'
-import {Terminal} from 'heroicons-react'
-import {FC} from 'react'
+import {useParam, useQuery} from "blitz"
+import {Terminal} from "heroicons-react"
+import {FC} from "react"
 
-import getPages from 'app/queries/getPages'
-import getProject from 'app/queries/getProject'
+import getPages from "app/queries/getPages"
+import getProject from "app/queries/getProject"
 
 export const Pages: FC = () => {
-  const id = useParam('id', 'string')
+  const id = useParam("id", "string")
 
   const [project] = useQuery(getProject, {where: {id}})
 
@@ -27,7 +27,8 @@ export const Pages: FC = () => {
           <li key={`${page.route}-${i}`}>
             <a
               href="#"
-              className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
+              className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+            >
               <div className="flex items-center px-4 py-4 sm:px-6">
                 <div className="flex items-center flex-1 min-w-0">
                   <div className="flex-1 min-w-0">

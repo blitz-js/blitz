@@ -1,5 +1,5 @@
-import {accessSync, constants, lstatSync, promises} from 'fs'
-import {join} from 'path'
+import {accessSync, constants, lstatSync, promises} from "fs"
+import {join} from "path"
 
 const getIsReadable = (path: string) => {
   try {
@@ -18,8 +18,8 @@ const getIsBlitz = async (path: string) => {
 
   for await (const file of directory) {
     if (
-      (file.isFile() && file.name === 'blitz.config.js') ||
-      (file.isDirectory() && file.name === '.blitz')
+      (file.isFile() && file.name === "blitz.config.js") ||
+      (file.isDirectory() && file.name === ".blitz")
     ) {
       isBlitz = true
       break

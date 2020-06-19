@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC} from "react"
 
 export const Header: FC = () => (
   <div className="px-4 py-5 border-b border-gray-200 sm:px-6">

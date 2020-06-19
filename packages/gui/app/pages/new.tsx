@@ -1,7 +1,7 @@
-import {BlitzPage} from 'blitz'
+import {BlitzPage} from "blitz"
 
-import {Sidebar} from 'app/components/Sidebar'
-import {NewView} from 'app/components/NewView'
+import {Sidebar} from "app/components/Sidebar"
+import {NewView} from "app/components/NewView"
 
 const NewPage: BlitzPage = () => (
   <>

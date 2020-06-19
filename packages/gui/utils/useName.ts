@@ -3,12 +3,12 @@
 
 // also, consider consolidating all these into a single hook.
 
-import useSWR from 'swr'
+import useSWR from "swr"
 
-import {storage} from './storage'
+import {storage} from "./storage"
 
 export const useName = () => {
-  const swr = useSWR<{name: string}>('name', storage)
+  const swr = useSWR<{name: string}>("name", storage)
 
   return swr
 }

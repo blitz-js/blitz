@@ -1,13 +1,13 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from './executor'
-import {filePrompt} from './file-prompt'
-import {processFile, transform, Transformer, TransformStatus} from '../utils/transform'
-import {createPatch} from 'diff'
-import * as fs from 'fs-extra'
-import * as React from 'react'
-import Spinner from 'ink-spinner'
-import {Box, Text, Color} from 'ink'
-import {Newline} from '../components/newline'
-import {useEnterToContinue} from '../utils/use-enter-to-continue'
+import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
+import {filePrompt} from "./file-prompt"
+import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
+import {createPatch} from "diff"
+import * as fs from "fs-extra"
+import * as React from "react"
+import Spinner from "ink-spinner"
+import {Box, Text, Color} from "ink"
+import {Newline} from "../components/newline"
+import {useEnterToContinue} from "../utils/use-enter-to-continue"
 
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
@@ -19,10 +19,10 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
   return (executor as Config).transform !== undefined
 }
 
-export const type = 'file-transform'
-export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}) => {
+export const type = "file-transform"
+export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
   const [diff, setDiff] = React.useState<string | null>(null)
-  const filePathRef = React.useRef('')
+  const filePathRef = React.useRef("")
   useEnterToContinue(() => onProposalAccepted(filePathRef.current), !!filePathRef.current)
 
   React.useEffect(() => {
@@ -33,7 +33,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
         getChoices: (step as Config).selectTargetFiles,
       })
       filePathRef.current = fileToTransform
-      const originalFile = fs.readFileSync(fileToTransform).toString('utf-8')
+      const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
       const newFile = processFile(originalFile, (step as Config).transform)
       return createPatch(fileToTransform, originalFile, newFile)
     }
@@ -52,15 +52,15 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
   return (
     <Box flexDirection="column">
       {diff
-        .split('\n')
+        .split("\n")
         .slice(2)
         .map((line, idx) => {
           let styleProps: any = {}
           let colorProps: any = {}
-          if (line.startsWith('-') && !line.startsWith('---')) {
+          if (line.startsWith("-") && !line.startsWith("---")) {
             styleProps.bold = true
             colorProps.red = true
-          } else if (line.startsWith('+') && !line.startsWith('+++')) {
+          } else if (line.startsWith("+") && !line.startsWith("+++")) {
             styleProps.bold = true
             colorProps.green = true
           }
@@ -72,11 +72,13 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
           )
         })}
       <Newline />
-      <Text>The above diff will be applied. If it looks okay to you, hit ENTER to apply the changes!</Text>
+      <Text>
+        The above diff will be applied. If it looks okay to you, hit ENTER to apply the changes!
+      </Text>
     </Box>
   )
 }
-export const Commit: Executor['Commit'] = ({onChangeCommitted, proposalData: filePath, step}) => {
+export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
   const transformFn = (step as Config).transform
 
   const [loading, setLoading] = React.useState(true)

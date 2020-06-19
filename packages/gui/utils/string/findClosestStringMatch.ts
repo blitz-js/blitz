@@ -1,4 +1,4 @@
-import {orderBySimilarity} from './orderBySimilarity'
+import {orderBySimilarity} from "./orderBySimilarity"
 
 export const findClosestStringMatch = (
   name: string,

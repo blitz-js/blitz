@@ -1,29 +1,29 @@
-import http, {IncomingMessage, ServerResponse} from 'http'
-import listen from 'test-listen'
-import fetch from 'isomorphic-unfetch'
-import delay from 'delay'
+import http, {IncomingMessage, ServerResponse} from "http"
+import listen from "test-listen"
+import fetch from "isomorphic-unfetch"
+import delay from "delay"
 
-import {ssrQuery} from './ssr-query'
-import {EnhancedResolverModule} from './rpc'
+import {ssrQuery} from "./ssr-query"
+import {EnhancedResolverModule} from "./rpc"
 
-describe('ssrQuery', () => {
-  it('works without middleware', async () => {
+describe("ssrQuery", () => {
+  it("works without middleware", async () => {
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
     }) as unknown) as EnhancedResolverModule
     resolverModule._meta = {
-      name: 'getTest',
-      type: 'query',
-      path: 'some/test/path',
-      apiUrl: 'some/test/path',
+      name: "getTest",
+      type: "query",
+      path: "some/test/path",
+      apiUrl: "some/test/path",
     }
 
     await mockServer(
       async (req, res) => {
-        const result = await ssrQuery(resolverModule as any, 'test', {req, res})
+        const result = await ssrQuery(resolverModule as any, "test", {req, res})
 
-        expect(result).toBe('test')
+        expect(result).toBe("test")
       },
       async (url) => {
         const res = await fetch(url)
@@ -32,16 +32,16 @@ describe('ssrQuery', () => {
     )
   })
 
-  it('works with middleware', async () => {
+  it("works with middleware", async () => {
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
     }) as unknown) as EnhancedResolverModule
     resolverModule._meta = {
-      name: 'getTest',
-      type: 'query',
-      path: 'some/test/path',
-      apiUrl: 'some/test/path',
+      name: "getTest",
+      type: "query",
+      path: "some/test/path",
+      apiUrl: "some/test/path",
     }
     resolverModule.middleware = [
       (_req, res, next) => {
@@ -49,21 +49,21 @@ describe('ssrQuery', () => {
         return next()
       },
       (_req, res, next) => {
-        res.setHeader('test', 'works')
+        res.setHeader("test", "works")
         return next()
       },
     ]
 
     await mockServer(
       async (req, res) => {
-        const result = await ssrQuery(resolverModule as any, 'test', {req, res})
+        const result = await ssrQuery(resolverModule as any, "test", {req, res})
 
-        expect(result).toBe('test')
+        expect(result).toBe("test")
       },
       async (url) => {
         const res = await fetch(url)
         expect(res.status).toBe(201)
-        expect(res.headers.get('test')).toBe('works')
+        expect(res.headers.get("test")).toBe("works")
       },
     )
   })

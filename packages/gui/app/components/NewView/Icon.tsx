@@ -1,7 +1,7 @@
-import * as Icons from 'heroicons-react'
-import {FC} from 'react'
+import * as Icons from "heroicons-react"
+import {FC} from "react"
 
-import {IconProps} from './types'
+import {IconProps} from "./types"
 
 export const Icon: FC<IconProps> = ({icon}) => {
   // @ts-ignore

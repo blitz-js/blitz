@@ -1,3 +1,3 @@
-import {Project} from 'db'
+import {Project} from "db"
 
 export type ProjectSwitchProps = {project: Project}

@@ -1,8 +1,8 @@
-import {useQuery} from 'blitz'
-import {FC} from 'react'
+import {useQuery} from "blitz"
+import {FC} from "react"
 
-import getProjects from 'app/queries/getProjects'
-import {ProjectSwitch} from './ProjectSwitch'
+import getProjects from "app/queries/getProjects"
+import {ProjectSwitch} from "./ProjectSwitch"
 
 export const ProjectSwitches: FC = () => {
   const [projects] = useQuery(getProjects, {})

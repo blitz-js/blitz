@@ -1,5 +1,5 @@
-import * as path from 'path'
-import {forceRequire} from './module'
+import * as path from "path"
+import {forceRequire} from "./module"
 
 const modulePath = (module: string) => {
   try {
@@ -10,20 +10,20 @@ const modulePath = (module: string) => {
 }
 
 const isFunction = (functionToCheck: any): functionToCheck is Function =>
-  typeof functionToCheck === 'function'
+  typeof functionToCheck === "function"
 
 const toCamelCase = (name: string) =>
   name
     .replace(/[_-]([a-z])/g, (_match: string, group: string) => group.toUpperCase())
-    .replace(/@[a-z]+\//, '')
+    .replace(/@[a-z]+\//, "")
 
 const functionModuleName = (moduleName: string, fun: Function) => {
-  if (fun.name && fun.name !== 'anonymous') return fun.name
+  if (fun.name && fun.name !== "anonymous") return fun.name
   return toCamelCase(moduleName)
 }
 
 export const loadDependencies = (pkgRoot: string) => {
-  const pkg = forceRequire(path.join(pkgRoot, 'package.json'))
+  const pkg = forceRequire(path.join(pkgRoot, "package.json"))
 
   const modules = Object.keys(pkg.dependencies || {})
     .map((name) => [name, modulePath(name)])
@@ -33,7 +33,8 @@ export const loadDependencies = (pkgRoot: string) => {
       if (isFunction(module)) return {[functionModuleName(name, module)]: module}
       const defaultExport = module.default
       if (!defaultExport) return module
-      if (isFunction(defaultExport)) return {[functionModuleName(name, defaultExport)]: defaultExport}
+      if (isFunction(defaultExport))
+        return {[functionModuleName(name, defaultExport)]: defaultExport}
       return {
         [toCamelCase(defaultExport)]: defaultExport,
       }

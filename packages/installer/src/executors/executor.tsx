@@ -1,7 +1,7 @@
-import * as React from 'react'
-import {Box, Text} from 'ink'
-import {Newline} from '../components/newline'
-import {Branded} from '../components/branded'
+import * as React from "react"
+import {Box, Text} from "ink"
+import {Newline} from "../components/newline"
+import {Branded} from "../components/branded"
 
 export interface ExecutorConfig {
   stepId: string | number
@@ -24,15 +24,17 @@ export interface Executor {
 
 type dynamicExecutorArgument<T> = (cliArgs: any) => T
 
-function isDynamicExecutorArgument<T>(input: executorArgument<T>): input is dynamicExecutorArgument<T> {
-  return typeof (input as dynamicExecutorArgument<T>) === 'function'
+function isDynamicExecutorArgument<T>(
+  input: executorArgument<T>,
+): input is dynamicExecutorArgument<T> {
+  return typeof (input as dynamicExecutorArgument<T>) === "function"
 }
 
 export type executorArgument<T> = T | dynamicExecutorArgument<T>
 
 export function Frontmatter({executor}: {executor: ExecutorConfig}) {
   const lineLength = executor.stepName.length + 6
-  const verticalBorder = `+${new Array(lineLength).fill('–').join('')}+`
+  const verticalBorder = `+${new Array(lineLength).fill("–").join("")}+`
   return (
     <Box flexDirection="column" paddingBottom={1}>
       <Newline />

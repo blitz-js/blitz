@@ -1,13 +1,13 @@
-import {BlitzPage, useParam, useQuery, useRouter} from 'blitz'
-import {motion} from 'framer-motion'
-import {FC, useRef, Suspense} from 'react'
+import {BlitzPage, useParam, useQuery, useRouter} from "blitz"
+import {motion} from "framer-motion"
+import {FC, useRef, Suspense} from "react"
 
-import getProject from 'app/queries/getProject'
-import getSchema from 'app/queries/getSchema'
+import getProject from "app/queries/getProject"
+import getSchema from "app/queries/getSchema"
 
 const SchemaView: FC = () => {
   const router = useRouter()
-  const id = useParam('id', 'string')
+  const id = useParam("id", "string")
 
   const constraintsRef = useRef(null)
 
@@ -31,7 +31,8 @@ const SchemaView: FC = () => {
           drag={true}
           dragConstraints={constraintsRef}
           dragMomentum={false}
-          className="w-1/2 overflow-hidden bg-white border border-gray-200 rounded-lg ">
+          className="w-1/2 overflow-hidden bg-white border border-gray-200 rounded-lg "
+        >
           <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
             <h3 className="text-lg font-medium leading-6">{model.name}</h3>
           </div>

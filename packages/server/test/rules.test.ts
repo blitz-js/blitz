@@ -1,33 +1,33 @@
 /* eslint-disable import/first */
 
-import {multiMock} from './utils/multi-mock'
-import {resolve} from 'path'
+import {multiMock} from "./utils/multi-mock"
+import {resolve} from "path"
 const mocks = multiMock(
   {
-    'next-utils': {
+    "next-utils": {
       nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
     },
-    'resolve-bin-async': {
-      resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
+    "resolve-bin-async": {
+      resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve("")),
     },
   },
-  resolve(__dirname, '../src'),
+  resolve(__dirname, "../src"),
 )
 
 // Import with mocks applied
-import {dev} from '../src/dev'
-import {directoryTree} from './utils/tree-utils'
+import {dev} from "../src/dev"
+import {directoryTree} from "./utils/tree-utils"
 
-describe('Dev command', () => {
-  const rootFolder = resolve('')
-  const buildFolder = resolve(rootFolder, '.blitz-build')
-  const devFolder = resolve(rootFolder, '.blitz-stages')
+describe("Dev command", () => {
+  const rootFolder = resolve("")
+  const buildFolder = resolve(rootFolder, ".blitz-build")
+  const devFolder = resolve(rootFolder, ".blitz-stages")
 
   beforeEach(async () => {
     mocks.mockFs({
-      'app/posts/pages/foo.tsx': '',
-      'pages/bar.tsx': '',
+      "app/posts/pages/foo.tsx": "",
+      "pages/bar.tsx": "",
     })
     jest.clearAllMocks()
     await dev({
@@ -37,7 +37,7 @@ describe('Dev command', () => {
       writeManifestFile: false,
       watch: false,
       port: 3000,
-      hostname: 'localhost',
+      hostname: "localhost",
     })
   })
 
@@ -45,15 +45,15 @@ describe('Dev command', () => {
     mocks.mockFs.restore()
   })
 
-  it('should copy the correct files to the dev folder', () => {
+  it("should copy the correct files to the dev folder", () => {
     expect(directoryTree(devFolder)).toEqual({
-      name: '.blitz-stages',
+      name: ".blitz-stages",
       children: [
-        {name: 'blitz.config.js'},
-        {name: 'next.config.js'},
+        {name: "blitz.config.js"},
+        {name: "next.config.js"},
         {
-          name: 'pages',
-          children: [{name: 'bar.tsx'}, {name: 'foo.tsx'}],
+          name: "pages",
+          children: [{name: "bar.tsx"}, {name: "foo.tsx"}],
         },
       ],
     })

@@ -1,7 +1,7 @@
 // based on https://github.com/AhmedElywa/prisma-tools/blob/master/packages/schema
 
-import {existsSync, promises} from 'fs'
-import {join} from 'path'
+import {existsSync, promises} from "fs"
+import {join} from "path"
 
 export type Field = {
   name: string
@@ -10,7 +10,7 @@ export type Field = {
   required: boolean
   isId: boolean
   unique: boolean
-  kind: 'object' | 'enum' | 'scalar'
+  kind: "object" | "enum" | "scalar"
   map?: string
   relationField?: boolean
   documentation?: string
@@ -33,8 +33,8 @@ export type SchemaObject = {models: Model[]; enums: Enums[]}
 
 const lineArray = (line: string) =>
   line
-    .replace(/[\n\r]/g, '')
-    .split(' ')
+    .replace(/[\n\r]/g, "")
+    .split(" ")
     .filter((v) => v)
 
 const getClassName = (lines: string[]) => lineArray(lines[0])[1]
@@ -43,7 +43,7 @@ const getMap = (line: string) => {
   const value = line.match(/@map\((.*?)\)/)
 
   if (value) {
-    return value[1].replace(/name/, '').replace(':', '').replace(' ', '').replace(/"/g, '')
+    return value[1].replace(/name/, "").replace(":", "").replace(" ", "").replace(/"/g, "")
   }
 
   return undefined
@@ -53,7 +53,7 @@ const getRelation = (line: string) => {
   const relationString = line.match(/@relation\((.*?)\)/)
 
   if (relationString) {
-    const relation: Field['relation'] = {}
+    const relation: Field["relation"] = {}
 
     const name = relationString[1].match(/"(\w+)"/)
 
@@ -61,19 +61,19 @@ const getRelation = (line: string) => {
       relation.name = name[1]
     }
 
-    ;['fields', 'references'].forEach((item) => {
+    ;["fields", "references"].forEach((item) => {
       const pattern = new RegExp(`${item}:[\\s\\S]\\[(.*?)\\]`)
 
       const values = relationString[1].match(pattern)
 
       if (values) {
         const asArray = values[1]
-          .replace(/ /g, '')
-          .split(',')
+          .replace(/ /g, "")
+          .split(",")
           .filter((v) => v)
 
         if (asArray.length > 0) {
-          relation[item as 'fields' | 'references'] = asArray
+          relation[item as "fields" | "references"] = asArray
         }
       }
     })
@@ -103,53 +103,53 @@ const getSchemaInObject = (data: string) => {
         fields: [],
       }
 
-      let documentation = ''
+      let documentation = ""
 
       for (let i = 1; i + 1 < lines.length; i++) {
         const line = lineArray(lines[i])
 
-        if (line[0].includes('//')) {
-          documentation = documentation ? documentation + '\n' + line.join(' ') : line.join(' ')
-        } else if (line[0].includes('@@')) {
+        if (line[0].includes("//")) {
+          documentation = documentation ? documentation + "\n" + line.join(" ") : line.join(" ")
+        } else if (line[0].includes("@@")) {
           modelObject.map = getMap(lines[i])
         } else {
-          const type = line[1].replace('?', '').replace('[]', '')
+          const type = line[1].replace("?", "").replace("[]", "")
 
           const field: Field = {
             name: line[0],
             type,
-            isId: line.includes('@id'),
-            unique: line.includes('@unique'),
-            list: line[1].includes('[]'),
-            required: !line[1].includes('[]') && !line[1].includes('?'),
+            isId: line.includes("@id"),
+            unique: line.includes("@unique"),
+            list: line[1].includes("[]"),
+            required: !line[1].includes("[]") && !line[1].includes("?"),
             kind: data.includes(`enum ${type} `)
-              ? 'enum'
+              ? "enum"
               : data.includes(`model ${type} `)
-              ? 'object'
-              : 'scalar',
+              ? "object"
+              : "scalar",
             documentation,
             map: getMap(lines[i]),
           }
 
-          if (field.kind === 'object') {
+          if (field.kind === "object") {
             field.relation = getRelation(lines[i])
           }
 
           modelObject.fields.push(field)
 
-          documentation = ''
+          documentation = ""
         }
       }
 
       modelObject.documentation = documentation
 
       modelObject.fields
-        .filter((item) => item.kind !== 'object')
+        .filter((item) => item.kind !== "object")
         .forEach((item) => {
           let relationField = false
 
           modelObject.fields
-            .filter((field) => field.kind === 'object')
+            .filter((field) => field.kind === "object")
             .forEach((field) => {
               if (!relationField) {
                 relationField = !!field.relation?.fields?.includes(item.name)
@@ -175,7 +175,7 @@ const getSchemaInObject = (data: string) => {
       for (let i = 1; i + 1 < lines.length; i++) {
         const line = lineArray(lines[i])
 
-        !line[0].includes('//') && itemObject.fields.push(line[0])
+        !line[0].includes("//") && itemObject.fields.push(line[0])
       }
 
       modelsObject.enums.push({...itemObject})
@@ -190,13 +190,13 @@ type GetSchemaInput = {
 }
 
 const getSchema = async ({path}: GetSchemaInput) => {
-  const schemaPath = join(path, 'db', 'schema.prisma')
+  const schemaPath = join(path, "db", "schema.prisma")
 
   if (!existsSync(schemaPath)) {
     return
   }
 
-  const data = await promises.readFile(schemaPath, 'utf-8')
+  const data = await promises.readFile(schemaPath, "utf-8")
 
   return getSchemaInObject(data)
 }

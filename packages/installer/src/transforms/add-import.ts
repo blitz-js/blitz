@@ -1,7 +1,7 @@
-import {ASTNode} from 'ast-types'
-import {NamedTypes} from 'ast-types/gen/namedTypes'
-import {builders} from 'ast-types/gen/builders'
-import {types} from 'recast'
+import {ASTNode} from "ast-types"
+import {NamedTypes} from "ast-types/gen/namedTypes"
+import {builders} from "ast-types/gen/builders"
+import {types} from "recast"
 
 export function addImport(
   ast: ASTNode,

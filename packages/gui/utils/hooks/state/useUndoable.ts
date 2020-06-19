@@ -1,6 +1,6 @@
-import {useCallback, useRef} from 'react'
+import {useCallback, useRef} from "react"
 
-import {MAX_SMALL_INTEGER} from './utils'
+import {MAX_SMALL_INTEGER} from "./utils"
 
 export const useUndoable = <T>(
   [value, setValue]: [T, React.Dispatch<React.SetStateAction<T>>],
@@ -25,7 +25,7 @@ export const useUndoable = <T>(
         futureValuesRef.current = []
         pastValuesRef.current = [...pastValuesRef.current, prevValue]
 
-        return typeof update === 'function' ? (update as (prevValue: T) => T)(prevValue) : update
+        return typeof update === "function" ? (update as (prevValue: T) => T)(prevValue) : update
       })
     },
     [setValue],

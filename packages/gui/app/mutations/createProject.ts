@@ -1,12 +1,12 @@
-import {existsSync} from 'fs'
-import hasbin from 'hasbin'
+import {existsSync} from "fs"
+import hasbin from "hasbin"
 
-import {AppGenerator} from '@blitzjs/generator'
-import db, {ProjectCreateArgs} from 'db'
-import pkg from 'package.json'
+import {AppGenerator} from "@blitzjs/generator"
+import db, {ProjectCreateArgs} from "db"
+import pkg from "package.json"
 
 type CreateProjectInput = {
-  data: ProjectCreateArgs['data']
+  data: ProjectCreateArgs["data"]
 }
 
 const createProject = async ({data}: CreateProjectInput) => {
@@ -21,7 +21,7 @@ const createProject = async ({data}: CreateProjectInput) => {
     appName: name,
     dryRun: false,
     useTs: true,
-    yarn: hasbin.sync('yarn'),
+    yarn: hasbin.sync("yarn"),
     version: pkg.version,
     skipInstall: false,
   })

@@ -1,4 +1,4 @@
-import { Head, Link, useRouter } from "blitz"
+import {Head, Link, useRouter} from "blitz"
 import createProject from "app/projects/mutations/createProject"
 
 const NewProjectPage = () => {

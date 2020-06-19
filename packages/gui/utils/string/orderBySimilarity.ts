@@ -19,8 +19,8 @@ const getMap = <Key, Value>(
 }
 
 const compareTwoStrings = (aStr: string, bStr: string): number => {
-  const a = aStr.replace(/\s+/g, '')
-  const b = bStr.replace(/\s+/g, '')
+  const a = aStr.replace(/\s+/g, "")
+  const b = bStr.replace(/\s+/g, "")
 
   if (!a.length && !b.length) {
     return 1
@@ -50,7 +50,7 @@ const compareTwoStrings = (aStr: string, bStr: string): number => {
     const count = firstBigrams.has(bigram) ? getMap(firstBigrams, bigram) + 1 : 1
 
     if (count === undefined) {
-      throw new Error('Already used has() above')
+      throw new Error("Already used has() above")
     }
 
     firstBigrams.set(bigram, count)
@@ -64,7 +64,7 @@ const compareTwoStrings = (aStr: string, bStr: string): number => {
     const count = getMap(firstBigrams, bigram, 0)
 
     if (count === undefined) {
-      throw new Error('Already used has() above')
+      throw new Error("Already used has() above")
     }
 
     if (count > 0) {

@@ -1,7 +1,7 @@
-import db, {ProjectCreateArgs} from 'db'
+import db, {ProjectCreateArgs} from "db"
 
 type ImportProjectInput = {
-  data: ProjectCreateArgs['data']
+  data: ProjectCreateArgs["data"]
 }
 
 const importProject = async ({data}: ImportProjectInput) => {

@@ -1,7 +1,7 @@
-import {Dispatch, SetStateAction, useEffect, useMemo, useState} from 'react'
+import {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react"
 
-import {JSONValue} from './types'
-import {dethunkify} from './utils'
+import {JSONValue} from "./types"
+import {dethunkify} from "./utils"
 
 export const useStorage = <T extends JSONValue>(
   getStorage: () => Storage | null,

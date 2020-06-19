@@ -1,11 +1,11 @@
-import {useCallback, useEffect, useRef} from 'react'
+import {useCallback, useEffect, useRef} from "react"
 
-import {EventMap} from './types'
+import {EventMap} from "./types"
 
-export const canUseDOM = typeof window !== 'undefined'
+export const canUseDOM = typeof window !== "undefined"
 
 export const dethunkify = <T>(value: T | (() => T)): T =>
-  typeof value === 'function' ? (value as () => T)() : value
+  typeof value === "function" ? (value as () => T)() : value
 
 export const managedEventListener = <T extends EventTarget, K extends keyof EventMap<T> & string>(
   target: T,

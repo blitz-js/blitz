@@ -1,12 +1,12 @@
-import {createIdleHandler} from '.'
-import {pipeline, through} from '../../streams'
-import {testStreamItems} from '../../test-utils'
-import {IDLE, READY} from '../../events'
+import {createIdleHandler} from "."
+import {pipeline, through} from "../../streams"
+import {testStreamItems} from "../../test-utils"
+import {IDLE, READY} from "../../events"
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-describe('idlehander', () => {
-  it('should fire the idle event', async () => {
+describe("idlehander", () => {
+  it("should fire the idle event", async () => {
     // Setup an input stream
     const input = through.obj()
 
@@ -24,7 +24,7 @@ describe('idlehander', () => {
     for (const item of arr) {
       input.write(item)
     }
-    input.write('ready')
+    input.write("ready")
     await sleep(150)
     for (const item of arr) {
       input.write(item)

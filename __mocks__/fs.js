@@ -1,3 +1,3 @@
-const {fs} = require('memfs')
+const {fs} = require("memfs")
 
 module.exports = fs

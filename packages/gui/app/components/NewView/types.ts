@@ -1,6 +1,6 @@
-import {Dispatch, SetStateAction} from 'react'
+import {Dispatch, SetStateAction} from "react"
 
-import getDirectories from 'app/queries/getDirectories'
+import getDirectories from "app/queries/getDirectories"
 
 export type ColorProps = {
   color: string

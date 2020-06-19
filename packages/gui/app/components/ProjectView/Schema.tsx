@@ -1,12 +1,12 @@
-import {Link, useParam, useQuery} from 'blitz'
-import {BanOutline, PlayOutline, PuzzleOutline} from 'heroicons-react'
-import {FC} from 'react'
+import {Link, useParam, useQuery} from "blitz"
+import {BanOutline, PlayOutline, PuzzleOutline} from "heroicons-react"
+import {FC} from "react"
 
-import getProject from 'app/queries/getProject'
-import getSchema from 'app/queries/getSchema'
+import getProject from "app/queries/getProject"
+import getSchema from "app/queries/getSchema"
 
 export const Schema: FC = () => {
-  const id = useParam('id', 'string')
+  const id = useParam("id", "string")
 
   const [project] = useQuery(getProject, {where: {id}})
 
@@ -31,7 +31,7 @@ export const Schema: FC = () => {
             <h3 className="text-lg font-medium leading-6">Schema not found!</h3>
             <div className="mt-2">
               <p className="text-sm leading-5 text-gray-500">
-                It doesn’t look like you have any Prisma schema at{' '}
+                It doesn’t look like you have any Prisma schema at{" "}
                 <code className="px-1 text-xs bg-gray-200">db/prisma.schema</code>
               </p>
             </div>
@@ -47,9 +47,9 @@ export const Schema: FC = () => {
             <h3 className="text-lg font-medium leading-6">Couldn’t read schema!</h3>
             <div className="mt-2">
               <p className="text-sm leading-5 text-gray-500">
-                It looks like you have a Prisma schema at{' '}
-                <code className="px-1 text-xs bg-gray-200">db/prisma.schema</code>, but we couldn’t read it.
-                Try creating some models first!
+                It looks like you have a Prisma schema at{" "}
+                <code className="px-1 text-xs bg-gray-200">db/prisma.schema</code>, but we couldn’t
+                read it. Try creating some models first!
               </p>
             </div>
           </div>
@@ -60,7 +60,8 @@ export const Schema: FC = () => {
           <Link href="/p/[id]/schema" as={`/p/${id}/schema`}>
             <a
               href="#"
-              className="flex items-center p-3 space-x-3 text-base font-medium leading-6 text-gray-900 transition duration-150 ease-in-out rounded-md hover:bg-gray-100">
+              className="flex items-center p-3 space-x-3 text-base font-medium leading-6 text-gray-900 transition duration-150 ease-in-out rounded-md hover:bg-gray-100"
+            >
               <PlayOutline className="flex-shrink-0 w-6 h-6 text-gray-400" />
               <span>View Schema</span>
             </a>

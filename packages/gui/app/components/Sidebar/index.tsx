@@ -1,8 +1,8 @@
-import {Link} from 'blitz'
-import {FC, Suspense} from 'react'
+import {Link} from "blitz"
+import {FC, Suspense} from "react"
 
-import {NewSwitch} from './NewSwitch'
-import {ProjectSwitches} from './ProjectSwitches'
+import {NewSwitch} from "./NewSwitch"
+import {ProjectSwitches} from "./ProjectSwitches"
 
 export const Sidebar: FC = () => (
   <div className="flex flex-col w-20 overflow-auto bg-white border-r border-gray-200 divide-y divide-gray-200">

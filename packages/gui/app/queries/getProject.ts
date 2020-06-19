@@ -1,10 +1,10 @@
-import {existsSync} from 'fs'
+import {existsSync} from "fs"
 
-import db, {FindOneProjectArgs} from 'db'
-import {getDirMtime} from 'utils/getDirMtime'
+import db, {FindOneProjectArgs} from "db"
+import {getDirMtime} from "utils/getDirMtime"
 
 type GetProjectInput = {
-  where: FindOneProjectArgs['where']
+  where: FindOneProjectArgs["where"]
 }
 
 const getProject = async ({where}: GetProjectInput) => {

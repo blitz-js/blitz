@@ -1,14 +1,14 @@
-import {existsSync} from 'fs'
+import {existsSync} from "fs"
 
-import db, {FindManyProjectArgs} from 'db'
-import {getDirMtime} from 'utils/getDirMtime'
+import db, {FindManyProjectArgs} from "db"
+import {getDirMtime} from "utils/getDirMtime"
 
 type GetProjectsInput = {
-  where?: FindManyProjectArgs['where']
-  orderBy?: FindManyProjectArgs['orderBy']
-  cursor?: FindManyProjectArgs['cursor']
-  take?: FindManyProjectArgs['take']
-  skip?: FindManyProjectArgs['skip']
+  where?: FindManyProjectArgs["where"]
+  orderBy?: FindManyProjectArgs["orderBy"]
+  cursor?: FindManyProjectArgs["cursor"]
+  take?: FindManyProjectArgs["take"]
+  skip?: FindManyProjectArgs["skip"]
 }
 
 const getProjects = async ({where, orderBy, cursor, take, skip}: GetProjectsInput) => {

@@ -1,29 +1,29 @@
-import * as fs from 'fs-extra'
-import * as path from 'path'
-import {EventEmitter} from 'events'
-import {create as createStore, Store} from 'mem-fs'
-import {create as createEditor, Editor} from 'mem-fs-editor'
-import Enquirer from 'enquirer'
-import {log} from '@blitzjs/display'
-import readDirRecursive from 'fs-readdir-recursive'
-import * as babel from '@babel/core'
+import * as fs from "fs-extra"
+import * as path from "path"
+import {EventEmitter} from "events"
+import {create as createStore, Store} from "mem-fs"
+import {create as createEditor, Editor} from "mem-fs-editor"
+import Enquirer from "enquirer"
+import {log} from "@blitzjs/display"
+import readDirRecursive from "fs-readdir-recursive"
+import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
-import babelTransformTypescript from '@babel/plugin-transform-typescript'
-import {ConflictChecker} from './conflict-checker'
-import {parse, print} from 'recast'
-import {namedTypes} from 'ast-types/gen/namedTypes'
-import * as babelParser from 'recast/parsers/babel'
-import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
-import {ASTNode, visit} from 'ast-types'
-import {StatementKind, ExpressionKind} from 'ast-types/gen/kinds'
-import {Context} from 'ast-types/lib/path-visitor'
-import {NodePath} from 'ast-types/lib/node-path'
+import babelTransformTypescript from "@babel/plugin-transform-typescript"
+import {ConflictChecker} from "./conflict-checker"
+import {parse, print} from "recast"
+import {namedTypes} from "ast-types/gen/namedTypes"
+import * as babelParser from "recast/parsers/babel"
+import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
+import {ASTNode, visit} from "ast-types"
+import {StatementKind, ExpressionKind} from "ast-types/gen/kinds"
+import {Context} from "ast-types/lib/path-visitor"
+import {NodePath} from "ast-types/lib/node-path"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)
-    babelOptions.plugins.push('typescript')
-    babelOptions.plugins.push('jsx')
+    babelOptions.plugins.push("typescript")
+    babelOptions.plugins.push("jsx")
     return babelParser.parser.parse(source, babelOptions)
   },
 }
@@ -35,12 +35,14 @@ export interface GeneratorOptions {
   useTs?: boolean
 }
 
-const alwaysIgnoreFiles = ['.blitz', '.DS_Store', '.git', '.next', '.now', 'node_modules']
-const ignoredExtensions = ['.ico', '.png', '.jpg']
+const alwaysIgnoreFiles = [".blitz", ".DS_Store", ".git", ".next", ".now", "node_modules"]
+const ignoredExtensions = [".ico", ".png", ".jpg"]
 const tsExtension = /\.(tsx?)$/
 const codeFileExtensions = /\.(tsx?|jsx?)$/
 
-function getInnerStatements(s?: StatementKind | ExpressionKind): Array<StatementKind | ExpressionKind> {
+function getInnerStatements(
+  s?: StatementKind | ExpressionKind,
+): Array<StatementKind | ExpressionKind> {
   if (!s) return []
   if (namedTypes.BlockStatement.check(s)) {
     return s.body
@@ -64,10 +66,10 @@ function conditionalExpressionVisitor(
       // condition statement starts with `process.` and has a second accessor
       namedTypes.MemberExpression.check(statement.test.object) &&
       namedTypes.Identifier.check(statement.test.object.object) &&
-      statement.test.object.object.name === 'process' &&
+      statement.test.object.object.name === "process" &&
       // condition statement continues with `env.`
       namedTypes.Identifier.check(statement.test.object.property) &&
-      statement.test.object.property.name === 'env' &&
+      statement.test.object.property.name === "env" &&
       // condition ends with valid templateVariable
       namedTypes.Identifier.check(statement.test.property) &&
       Object.keys(templateValues).includes(statement.test.property.name)
@@ -87,7 +89,9 @@ function conditionalExpressionVisitor(
  * The base generator class.
  * Every generator must extend this class.
  */
-export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> extends EventEmitter {
+export abstract class Generator<
+  T extends GeneratorOptions = GeneratorOptions
+> extends EventEmitter {
   private readonly store: Store
 
   protected readonly fs: Editor
@@ -95,7 +99,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
 
   private performedActions: string[] = []
   private useTs: boolean
-  private prettier: typeof import('prettier') | undefined
+  private prettier: typeof import("prettier") | undefined
 
   prettierDisabled: boolean = false
   unsafe_disableConflictChecker = false
@@ -110,8 +114,8 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     this.fs = createEditor(this.store)
     this.enquirer = new Enquirer()
     this.useTs =
-      typeof this.options.useTs === 'undefined'
-        ? fs.existsSync(path.resolve('tsconfig.json'))
+      typeof this.options.useTs === "undefined"
+        ? fs.existsSync(path.resolve("tsconfig.json"))
         : this.options.useTs
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
@@ -147,7 +151,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     for (let templateKey in templateValues) {
       const token = `__${templateKey}__`
       if (result.includes(token)) {
-        result = result.replace(new RegExp(token, 'g'), templateValues[templateKey])
+        result = result.replace(new RegExp(token, "g"), templateValues[templateKey])
       }
     }
     return result
@@ -157,12 +161,12 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     input: Buffer,
     pathEnding: string,
     templateValues: any,
-    prettierOptions: import('prettier').Options | undefined,
+    prettierOptions: import("prettier").Options | undefined,
   ): string | Buffer {
-    if (new RegExp(`${ignoredExtensions.join('|')}$`).test(pathEnding)) {
+    if (new RegExp(`${ignoredExtensions.join("|")}$`).test(pathEnding)) {
       return input
     }
-    const inputStr = input.toString('utf-8')
+    const inputStr = input.toString("utf-8")
     let templatedFile = inputStr
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues)
@@ -172,19 +176,19 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       return (
         babel.transform(templatedFile, {
           plugins: [[babelTransformTypescript, {isTSX: true}]],
-        })?.code || ''
+        })?.code || ""
       )
     }
 
     if (
       codeFileExtensions.test(pathEnding) &&
-      typeof templatedFile === 'string' &&
+      typeof templatedFile === "string" &&
       this.prettier &&
       !this.prettierDisabled
     ) {
       const options: Record<any, any> = {...prettierOptions}
       if (this.useTs) {
-        options.parser = 'babel-ts'
+        options.parser = "babel-ts"
       }
       templatedFile = this.prettier.format(templatedFile, options)
     }
@@ -197,7 +201,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
     try {
-      this.prettier = await import('prettier')
+      this.prettier = await import("prettier")
     } catch {}
     const prettierOptions = await this.prettier?.resolveConfig(this.sourcePath())
 
@@ -208,11 +212,12 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const templateValues = await this.getTemplateValues()
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) => this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+          process: (input) =>
+            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
         })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
-          templatedPathSuffix = templatedPathSuffix.replace(tsExtension, '.js')
+          templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
         if (templatedPathSuffix !== pathSuffix) {
           this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
@@ -262,10 +267,10 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
         const conflictChecker = new ConflictChecker({
           dryRun: this.options.dryRun,
         })
-        conflictChecker.on('error', (err) => {
+        conflictChecker.on("error", (err) => {
           reject(err)
         })
-        conflictChecker.on('fileStatus', (data: string) => {
+        conflictChecker.on("fileStatus", (data: string) => {
           this.performedActions.push(data)
         })
 
@@ -287,7 +292,7 @@ export abstract class Generator<T extends GeneratorOptions = GeneratorOptions> e
     }
 
     if (this.returnResults) {
-      return this.performedActions.join('\n')
+      return this.performedActions.join("\n")
     }
   }
 }

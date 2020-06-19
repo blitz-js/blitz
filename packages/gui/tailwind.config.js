@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require("tailwindcss/defaultTheme")
 
 module.exports = {
   // ideally we should use this since the tailwind bundle is quite big,
@@ -8,15 +8,15 @@ module.exports = {
   theme: {
     extend: {
       borderWidth: {
-        3: '3px',
+        3: "3px",
       },
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
       },
     },
   },
   variants: {
-    opacity: ['responsive', 'hover', 'focus', 'disabled'],
+    opacity: ["responsive", "hover", "focus", "disabled"],
   },
-  plugins: [require('@tailwindcss/ui')],
+  plugins: [require("@tailwindcss/ui")],
 }

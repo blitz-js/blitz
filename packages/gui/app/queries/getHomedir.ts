@@ -1,4 +1,4 @@
-import {homedir} from 'os'
+import {homedir} from "os"
 
 // eslint-disable-next-line
 const getHomedir = async () => homedir()

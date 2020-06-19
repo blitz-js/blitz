@@ -1,6 +1,6 @@
-import {existsSync, promises} from 'fs'
+import {existsSync, promises} from "fs"
 
-import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from 'utils/status'
+import {CREATING_FILES, DONE, INSTALLING_DEPS, RETRIEVING_DEPS, UNKNOWN} from "utils/status"
 
 type GetCreateProjectStatusInput = {
   path: string
@@ -15,11 +15,11 @@ const getCreateProjectStatus = async ({path}: GetCreateProjectStatusInput) => {
 
   if (!files) {
     return CREATING_FILES
-  } else if (!files.includes('node_modules')) {
+  } else if (!files.includes("node_modules")) {
     return RETRIEVING_DEPS
-  } else if (!files.includes('yarn.lock')) {
+  } else if (!files.includes("yarn.lock")) {
     return INSTALLING_DEPS
-  } else if (files.includes('yarn.lock')) {
+  } else if (files.includes("yarn.lock")) {
     return DONE
   }
 

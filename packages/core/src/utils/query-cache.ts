@@ -1,4 +1,4 @@
-import {queryCache} from 'react-query'
+import {queryCache} from "react-query"
 
 export interface QueryCacheFunctions<T> {
   mutate: (newData: T | ((oldData: T | undefined) => T)) => void

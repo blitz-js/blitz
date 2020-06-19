@@ -1,8 +1,8 @@
-import pkgDir from 'pkg-dir'
-import {join} from 'path'
-import {existsSync} from 'fs'
+import pkgDir from "pkg-dir"
+import {join} from "path"
+import {existsSync} from "fs"
 
-const configFiles = ['next.config.js']
+const configFiles = ["next.config.js"]
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
@@ -19,7 +19,7 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
       const path = join(projectRoot, configFile)
       const file = require(path)
       let contents
-      if (typeof file === 'function') {
+      if (typeof file === "function") {
         contents = file()
       } else {
         contents = file

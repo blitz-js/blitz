@@ -1,14 +1,14 @@
-export * from './use-query'
-export * from './use-paginated-query'
-export * from './use-params'
-export * from './use-infinite-query'
-export * from './ssr-query'
-export * from './rpc'
-export * from './with-router'
-export * from './use-router'
-export * from './use-router-query'
-export * from './middleware'
-export * from './types'
+export * from "./use-query"
+export * from "./use-paginated-query"
+export * from "./use-params"
+export * from "./use-infinite-query"
+export * from "./ssr-query"
+export * from "./rpc"
+export * from "./with-router"
+export * from "./use-router"
+export * from "./use-router-query"
+export * from "./middleware"
+export * from "./types"
 
 // --------------------
 // Exports from Next.js
@@ -22,15 +22,15 @@ export {
   NextPage as BlitzPage,
   NextApiRequest as BlitzApiRequest,
   NextApiResponse as BlitzApiResponse,
-} from 'next'
+} from "next"
 
-export {AppProps} from 'next/app'
+export {AppProps} from "next/app"
 
-export {default as Head} from 'next/head'
+export {default as Head} from "next/head"
 
-export {default as Link} from 'next/link'
+export {default as Link} from "next/link"
 
-export {Router} from 'next/router'
+export {Router} from "next/router"
 
 export {
   default as Document,
@@ -40,8 +40,8 @@ export {
   NextScript as BlitzScript,
   DocumentContext,
   DocumentInitialProps,
-} from 'next/document'
+} from "next/document"
 
-export {default as dynamic} from 'next/dynamic'
+export {default as dynamic} from "next/dynamic"
 
-export {default as Error} from 'next/error'
+export {default as Error} from "next/error"

@@ -1,8 +1,8 @@
 // import '@reach/tabs/styles.css'
-import 'tailwindcss/tailwind.css'
-import 'tippy.js/dist/tippy.css'
+import "tailwindcss/tailwind.css"
+import "tippy.js/dist/tippy.css"
 
-import {AppProps, Head} from 'blitz'
+import {AppProps, Head} from "blitz"
 
 const MyApp = ({Component, pageProps}: AppProps): JSX.Element => (
   <>
