@@ -21,7 +21,6 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "uuid": "8.1.0",
     "hasha": "5.2.0",
     "cookie": "0.4.1",
     "date-fns": "2.14.0",

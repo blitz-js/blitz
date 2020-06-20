@@ -1,5 +1,5 @@
+import crypto from "crypto"
 import invariant from "tiny-invariant"
-import {v4 as uuidv4} from "uuid"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
 import {BlitzApiRequest, BlitzApiResponse, Middleware} from "@blitzjs/core"
@@ -22,8 +22,7 @@ export interface PublicData extends Record<any, unknown> {
 }
 export type PrivateData = Record<any, unknown>
 
-export type SessionModel = {
-  createdAt: Date
+export interface SessionModel extends Record<any, any> {
   expiresAt: Date
   handle: string
   userId: string | number
@@ -83,6 +82,7 @@ export type SessionContext = {
   getPrivateData: () => Promise<PrivateData>
   setPrivateData: (data: PrivateData) => Promise<void>
   getPublicData: () => Promise<PublicData>
+  setPublicData: (data: PublicData) => Promise<void>
   // TODO
   // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
 }
@@ -127,8 +127,17 @@ export function createSessionContext(
     },
     revoke: () => revokeSession(handle),
     getPrivateData: () => getPrivateData(handle),
-    setPrivateData: (data) => setPrivateData(handle, data),
+    setPrivateData: async (data) => {
+      await setPrivateData(handle, data)
+      // TODO - if anonymous session, create new session and save to DB
+      return
+    },
     getPublicData: () => getPublicData(handle),
+    setPublicData: async (data) => {
+      await setPublicData(handle, data)
+      // TODO - need to regenerate accessToken here right?
+      return
+    },
     // TODO
     // regenerate: () => {},
   }
@@ -238,18 +247,25 @@ export async function createNewSession(
   invariant(publicData.userId, "You must publicData.userId")
   invariant(publicData.role, "You must publicData.role")
 
-  // Ensure userId is a string within the session library
-  const userId = publicData.userId.toString()
-
   if (config.method === "essential") {
-    // TODO handle anonymous
-    const {
-      handle,
-      sessionToken,
-      antiCSRFToken,
-      publicDataToken,
-      expiresAt,
-    } = await createNewSessionHelper(userId, publicData, privateData)
+    const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
+    const handle = generateEssentialSessionHandle()
+    const sessionToken = createSessionToken(handle, publicData)
+    const publicDataToken = createPublicDataToken(JSON.stringify(publicData), expiresAt)
+    const antiCSRFToken = createAntiCSRFToken()
+
+    // Don't save to DB if anonymous user
+    if (publicData.userId) {
+      await config.createSession({
+        expiresAt,
+        handle,
+        userId: publicData.userId,
+        hashedSessionToken: hash(sessionToken),
+        antiCSRFToken,
+        publicData: JSON.stringify(publicData),
+        privateData: JSON.stringify(privateData),
+      })
+    }
 
     setSessionCookie(res, sessionToken, expiresAt)
     res.setHeader(HEADER_CSRF, antiCSRFToken)
@@ -265,44 +281,6 @@ export async function createNewSession(
     throw new Error(
       `Session management method ${config.method} is invalid. Supported methods are "essential" and "advanced"`,
     )
-  }
-}
-
-export async function createNewSessionHelper(
-  userId: string,
-  publicData: PublicData,
-  privateData: PrivateData,
-) {
-  const config = defaultConfig
-
-  const createdAt = new Date()
-  const expiresAt = addMinutes(createdAt, config.sessionExpiryMinutes)
-  const handle = generateEssentialSessionHandle()
-  const sessionToken = createSessionToken(handle, publicData)
-  const publicDataToken = createPublicDataToken(JSON.stringify(publicData), expiresAt)
-  const antiCSRFToken = createAntiCSRFToken()
-
-  try {
-    await config.createSession({
-      handle,
-      userId,
-      hashedSessionToken: hash(sessionToken),
-      antiCSRFToken,
-      publicData: JSON.stringify(publicData),
-      privateData: JSON.stringify(privateData),
-      expiresAt,
-      createdAt,
-    })
-  } catch (error) {
-    // TODO handler error
-  }
-
-  return {
-    handle,
-    sessionToken,
-    antiCSRFToken,
-    publicDataToken,
-    expiresAt,
   }
 }
 
@@ -390,6 +368,7 @@ export async function setPublicData(handle: string, data: Omit<PublicData, "user
   const config = defaultConfig
 
   try {
+    // TODO - how do we handle anonymous session here?
     const publicData = JSON.stringify({
       ...(await getPublicData(handle)),
       ...data,
@@ -410,8 +389,10 @@ const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
 // --------------------------------
 // Token/handle utils
 // --------------------------------
+export const generateToken = () => crypto.randomBytes(32).toString("base64")
+
 export const generateEssentialSessionHandle = () => {
-  return uuidv4() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
 }
 
 export const createSessionToken = (handle: string, publicData: PublicData | string) => {
@@ -425,8 +406,9 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
     publicDataString = JSON.stringify(publicData)
   }
   return base64(
-    // TODO - shouldn't we do some crypto thing instead of uuid?
-    [handle, uuidv4(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(TOKEN_SEPARATOR),
+    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
+      TOKEN_SEPARATOR,
+    ),
   )
 }
 export const parseSessionToken = (token: string) => {
@@ -443,14 +425,14 @@ export const createPublicDataToken = (publicData: string, expireAt: Date) => {
   return base64([publicData, expireAt].join(TOKEN_SEPARATOR))
 }
 
-export const createAntiCSRFToken = () => uuidv4()
+export const createAntiCSRFToken = () => generateToken()
 
 export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
   // TODO - what if another middlware use `Set-Cookie`?
   res.setHeader(
     "Set-Cookie",
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
-      //domain - can we omit?
+      //TODO - domain - can we omit?
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: true,
