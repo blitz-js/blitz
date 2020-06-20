@@ -14,7 +14,8 @@ console.log(
 
 let usageType: "local" | "monorepo" | "global" | "global-linked"
 
-const localCLIPkgPath = path.resolve(process.cwd(), "node_modules", "@blitzjs/cli")
+const localCLIPkgPath1 = path.resolve(process.cwd(), "node_modules", "@blitzjs/cli")
+const localCLIPkgPath2 = path.resolve(process.cwd(), "node_modules/blitz/node_modules/@blitzjs/cli")
 const monorepoCLIPkgPath = path.resolve(process.cwd(), "../..", "node_modules", "@blitzjs/cli")
 const globalCLIPkgPath = resolveFrom(__dirname, "@blitzjs/cli")
 const globalLinkedPath = path.resolve(pkgDir.sync(__dirname), "../../lerna.json")
@@ -33,9 +34,12 @@ function getBlitzPkgJsonPath() {
 }
 
 let pkgPath
-if (fs.existsSync(localCLIPkgPath)) {
+if (fs.existsSync(localCLIPkgPath1)) {
   usageType = "local"
-  pkgPath = localCLIPkgPath
+  pkgPath = localCLIPkgPath1
+} else if (fs.existsSync(localCLIPkgPath2)) {
+  usageType = "local"
+  pkgPath = localCLIPkgPath2
 } else if (fs.existsSync(monorepoCLIPkgPath)) {
   usageType = "monorepo"
   pkgPath = monorepoCLIPkgPath
