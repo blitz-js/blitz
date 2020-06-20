@@ -2,6 +2,7 @@ import {serialize, deserialize} from "."
 
 const input = {
   normal: "string",
+
   timestamp: new Date(),
   test: /blitz/,
   set: new Set([1, 2]),

@@ -1,22 +1,22 @@
-import _ from "lodash"
+import every from "lodash/every"
+import isBoolean from "lodash/isBoolean"
+import isNull from "lodash/isNull"
+import isNumber from "lodash/isNumber"
+import isPlainObject from "lodash/isPlainObject"
+import isString from "lodash/isString"
+import isUndefined from "lodash/isUndefined"
+import overSome from "lodash/overSome"
 
 const isSerializable = (value: any) => {
   const nestedSerialisable: any = (v: any) =>
-    (_.isPlainObject(v) || Array.isArray(v)) && _.every(v, isSerializable)
+    (isPlainObject(v) || Array.isArray(v)) && every(v, isSerializable)
 
-  return _.overSome([
-    _.isUndefined,
-    _.isNull,
-    _.isBoolean,
-    _.isNumber,
-    _.isString,
-    nestedSerialisable,
-  ])(value)
+  return overSome([isUndefined, isNull, isBoolean, isNumber, isString, nestedSerialisable])(value)
 }
 
-export const serialize = (input: any) => {
-  let json: any = {}
-  let meta: any = {}
+export const serialize = (input: {[key: string]: any}) => {
+  let json: {[key: string]: any} = {}
+  let meta: {[key: string]: string} = {}
 
   for (let i = 0, len = Object.keys(input).length; i < len; i++) {
     const key = Object.keys(input)[i]
@@ -60,8 +60,8 @@ export const serialize = (input: any) => {
   return {json, meta}
 }
 
-export const deserialize = (json: any, meta: any) => {
-  let ouput: any = {}
+export const deserialize = (json: {[key: string]: any}, meta: {[key: string]: string}) => {
+  let ouput: {[key: string]: any} = {}
 
   for (let i = 0, len = Object.keys(json).length; i < len; i++) {
     const key = Object.keys(json)[i]
