@@ -1,9 +1,8 @@
 import {log} from "@blitzjs/display"
-import {
+import type {
   Middleware,
   BlitzApiRequest,
   BlitzApiResponse,
-  handleRequestWithMiddleware,
   EnhancedResolverModule,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
@@ -17,7 +16,7 @@ export function rpcApiHandler(
   middleware.push(rpcMiddleware(resolver, connectDb))
 
   return (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return handleRequestWithMiddleware(req, res, middleware)
+    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
   }
 }
 
