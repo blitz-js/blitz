@@ -42,6 +42,7 @@
   "dependencies": {
     "@blitzjs/config": "0.15.2",
     "@blitzjs/display": "0.15.2",
+    "@blitzjs/serializer": "0.15.2",
     "pretty-ms": "6.0.1",
     "react-query": "1.5.8",
     "serialize-error": "6.0.0",

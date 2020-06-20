@@ -1,0 +1,35 @@
+{
+  "name": "@blitzjs/serializer",
+  "version": "0.15.2",
+  "description": "Serializer package for Blitz.",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "dist/index.js",
+  "module": "dist/serializer.esm.js",
+  "types": "dist/packages/serializer/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "blitz",
+    "serializer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
