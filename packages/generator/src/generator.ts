@@ -190,7 +190,11 @@ export abstract class Generator<
       if (this.useTs) {
         options.parser = "babel-ts"
       }
-      templatedFile = this.prettier.format(templatedFile, options)
+      try {
+        templatedFile = this.prettier.format(templatedFile, options)
+      } catch (error) {
+        log.warning(`Failed trying to run prettier:` + error)
+      }
     }
     return templatedFile
   }
