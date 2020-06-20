@@ -95,36 +95,33 @@ export const sessionMiddleware: Middleware = async (req, res, next) => {
   return next()
 }
 
+type SessionKernel = {
+  handle: string
+  publicData: PublicData
+}
+
 export async function createSessionContextFromRequest(
   req: BlitzApiRequest,
   res: BlitzApiResponse,
 ): Promise<SessionContext> {
-  let session = await getSession(req, res)
+  let sessionKernel = await getSession(req, res)
 
-  if (!session) {
-    session = await createAnonymousSession(res)
+  if (!sessionKernel) {
+    sessionKernel = await createAnonymousSession(res)
   }
 
-  return createSessionContext(res, session)
+  return createSessionContext(res, sessionKernel)
 }
 
 export function createSessionContext(
   res: BlitzApiResponse,
-  {
-    handle,
-  }: {
-    handle: string
-    publicData: PublicData
-  },
+  {handle, publicData}: SessionKernel,
 ): SessionContext {
   return {
     handle,
-    //TODO - fill from db
-    userId: null,
-    //TODO - fill from db
-    role: "public",
-    //TODO - where does come from?
-    publicData: {},
+    userId: publicData.userId,
+    role: publicData.role,
+    publicData,
     create: async ({publicData, privateData}) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },
@@ -140,8 +137,12 @@ export function createSessionContext(
 // --------------------------------
 // Get Session
 // --------------------------------
-export async function getSession(req: BlitzApiRequest, res: BlitzApiResponse) {
-  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+export async function getSession(
+  req: BlitzApiRequest,
+  res: BlitzApiResponse,
+): Promise<SessionKernel | null> {
+  const config = defaultConfig
+
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
 
@@ -151,99 +152,76 @@ export async function getSession(req: BlitzApiRequest, res: BlitzApiResponse) {
   }
 
   if (sessionToken) {
-    let antiCSRFToken = req.headers[HEADER_CSRF] as string
-    let {
-      handle,
-      publicData,
-      newSessionToken,
-      newPublicDataToken,
-      newExpiresAt,
-    } = await getSessionHelper(
-      sessionToken,
-      antiCSRFToken,
-      enableCsrfProtection,
-      req.method as string,
-    )
+    const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
-    if (newSessionToken && newExpiresAt) {
-      setSessionCookie(res, sessionToken, newExpiresAt)
+    if (version !== SESSION_TOKEN_VERSION_0) {
+      throw new AuthenticationError("Session token version is not " + SESSION_TOKEN_VERSION_0)
     }
-    if (newPublicDataToken) {
-      res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
+
+    const persistedSession = await config.getSession(handle)
+    if (!persistedSession) {
+      // TODO - shouldn't we just return null?
+      throw new AuthenticationError(`Session handle ${handle} doesn't exist`)
+    }
+
+    const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+    const antiCSRFToken = req.headers[HEADER_CSRF] as string
+    if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
+      throw new AntiCSRFTokenMismatchException()
+    }
+    if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
+      // TODO - shouldn't we just return null?
+      throw new AuthenticationError("Input session ID doesn't exist")
+    }
+    if (isPast(persistedSession.expiresAt)) {
+      await revokeSession(handle)
+      // TODO - shouldn't we just return null?
+      throw new AuthenticationError("Input session ID doesn't exist")
+    }
+
+    /*
+     * Session Renewal - Will renew if any of the following is true
+     * 1) publicData has changed
+     * 2) 1/4 of expiry time has elasped
+     *
+     *  But only renew with non-GET requests because a GET request could be from a
+     *  browser level navigation
+     */
+    if (req.method !== "GET") {
+      // TODO - I don't think publicData will ever change here?? Because it comes straight from DB
+      const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+
+      let hasQuarterExpiryTimePassed
+      // Check if > 1/4th of the expiry time has passed
+      // (since we are doing a rolling expiry window).
+      hasQuarterExpiryTimePassed =
+        differenceInMinutes(persistedSession.expiresAt, new Date()) <
+        0.75 * config.sessionExpiryMinutes
+
+      if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
+        const newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
+        const newSessionToken = createSessionToken(handle, persistedSession.publicData)
+        const newPublicDataToken = createPublicDataToken(persistedSession.publicData, newExpiresAt)
+
+        setSessionCookie(res, sessionToken, newExpiresAt)
+        res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
+
+        // should not wait for this to happen for performance
+        // eslint-disable-next-line
+        config.updateSession(handle, {
+          expiresAt: newExpiresAt,
+          hashedSessionToken: hash(newSessionToken),
+        })
+      }
     }
 
     return {
       handle,
-      publicData,
+      publicData: JSON.parse(persistedSession.publicData),
     }
   } else {
     // TODO: advanced method
     return null
-  }
-}
-
-export async function getSessionHelper(
-  sessionToken: string,
-  inputAntiCSRFToken: string | undefined,
-  enableCsrfProtection: boolean,
-  httpMethod: string,
-) {
-  const config = defaultConfig
-
-  const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
-
-  if (version !== SESSION_TOKEN_VERSION_0) {
-    throw new AuthenticationError("Session token is not " + SESSION_TOKEN_VERSION_0)
-  }
-
-  let session = await config.getSession(handle)
-
-  if (!session) {
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-  if (enableCsrfProtection && session.antiCSRFToken !== inputAntiCSRFToken) {
-    throw new AntiCSRFTokenMismatchException()
-  }
-  if (hash(sessionToken) !== session.hashedSessionToken) {
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-  if (isPast(session.expiresAt)) {
-    await revokeSession(handle)
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-
-  let newSessionToken
-  let newPublicDataToken
-  let newExpiresAt
-  let quarterExpiryTimePassed
-
-  // Only renew with non-GET requests
-  // We can't reliably update the frontend expiry information in GET requests since they could
-  // be from a browser level navigation (for example: user opening the site after a long time).
-  if (httpMethod !== "GET") {
-    // Check if > 1/4th of the expiry time has passed
-    // (since we are doing a rolling expiry window).
-    quarterExpiryTimePassed =
-      differenceInMinutes(session.expiresAt, new Date()) < 0.75 * config.sessionExpiryMinutes
-  }
-
-  const publicDataChanged = hash(session.publicData) !== hashedPublicData
-
-  if (publicDataChanged || quarterExpiryTimePassed) {
-    newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
-    newPublicDataToken = createPublicDataToken(session.publicData, newExpiresAt)
-    newSessionToken = createSessionToken(handle, session.publicData)
-
-    // should not wait for this to happen
-    // eslint-disable-next-line
-    updateSessionExpiryInDb(handle, newExpiresAt)
-  }
-  return {
-    handle,
-    publicData: JSON.parse(session.publicData),
-    newSessionToken,
-    newPublicDataToken,
-    newExpiresAt,
   }
 }
 
@@ -254,7 +232,7 @@ export async function createNewSession(
   res: BlitzApiResponse,
   publicData: PublicData,
   privateData: PrivateData = {},
-) {
+): Promise<SessionKernel> {
   const config = defaultConfig
 
   invariant(publicData.userId, "You must publicData.userId")
@@ -447,6 +425,7 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
     publicDataString = JSON.stringify(publicData)
   }
   return base64(
+    // TODO - shouldn't we do some crypto thing instead of uuid?
     [handle, uuidv4(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(TOKEN_SEPARATOR),
   )
 }
