@@ -6,7 +6,17 @@ import {log} from "@blitzjs/display"
 
 export interface MiddlewareRequest extends BlitzApiRequest {}
 export interface MiddlewareResponse extends BlitzApiResponse {
+  /**
+   * This will be passed as the second argument to Blitz queries/mutations.
+   *
+   * You must set blitzCtx BEFORE calling next()
+   */
   blitzCtx: Record<string, unknown>
+  /**
+   * This is the exact result returned from the Blitz query/mutation
+   *
+   * You must first `await next()` before reading this
+   */
   blitzResult: unknown
 }
 export type MiddlewareNext = (error?: Error) => Promise<void> | void
