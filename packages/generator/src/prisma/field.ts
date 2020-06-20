@@ -1,4 +1,4 @@
-import {singlePascal, singleCamel, pluralCamel} from "../utils/plurals"
+import {singlePascal, singleCamel, pluralCamel, uncapitalize} from "../utils/plurals"
 import {log} from "@blitzjs/display"
 
 export enum FieldType {
@@ -57,7 +57,7 @@ export class Field {
   // 'name:type?[]:attribute' => Field
   static parse(input: string): Field[] {
     const [_fieldName, _fieldType = "String", attribute] = input.split(":")
-    let fieldName = singleCamel(_fieldName)
+    let fieldName = uncapitalize(_fieldName)
     let fieldType = singlePascal(_fieldType)
     let isRequired = true
     let isList = false

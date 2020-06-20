@@ -6,6 +6,11 @@ describe("Field model", () => {
     expect(Field.parse("userId: int").toString()).toMatchInlineSnapshot(`"userId   int"`)
   })
 
+  it("generates models for pluralized property, making pluralized name fields", () => {
+    expect(Field.parse("names:string").toString()).toMatchInlineSnapshot(`"names  String"`)
+    expect(Field.parse("userIds: int").toString()).toMatchInlineSnapshot(`"userIds   int"`)
+  })
+
   it("serializes optional types", () => {
     expect(Field.parse("name:string?").toString()).toMatchInlineSnapshot(`"name  String?"`)
   })
@@ -15,8 +20,7 @@ describe("Field model", () => {
     expect(Field.parse("user:int[]").toString()).toMatchInlineSnapshot(`"users  Int[]"`)
   })
 
-  it("pluralizes lists and makes single fields singular", () => {
-    expect(Field.parse("name:string").toString()).toEqual(Field.parse("names:string").toString())
+  it("makes pluralizes lists", () => {
     expect(Field.parse("userIds:string[]").toString()).toEqual(
       Field.parse("userId:string[]").toString(),
     )
