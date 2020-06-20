@@ -22,7 +22,7 @@ export interface PublicData extends Record<any, unknown> {
 }
 export type PrivateData = Record<any, unknown>
 
-type SessionModel = {
+export type SessionModel = {
   createdAt: Date
   expiresAt: Date
   handle: string
@@ -74,9 +74,10 @@ export type SessionContext = {
   /**
    * null if anonymous
    */
-  userId: string | null
+  userId: string | number | null
   role: string
-  handle: string
+  handle: string | null
+  publicData: PublicData
   create: (arg: {publicData: PublicData; privateData?: PrivateData}) => Promise<SessionContext>
   revoke: () => Promise<boolean>
   getPrivateData: () => Promise<PrivateData>
@@ -90,18 +91,8 @@ export type SessionContext = {
 // Middleware
 // --------------------------------
 export const sessionMiddleware: Middleware = async (req, res, next) => {
-  try {
-    res.blitzCtx.session = await createSessionContextFromRequest(req, res)
-    return next()
-  } catch (err) {
-    // if (Session.Error.isUnauthorized(err)) {
-    //   if (Session.Error.isAntiCSRFTokenFailed(err)) {
-    //     throw err
-    //   }
-    // } else {
-    //   throw err
-    // }
-  }
+  res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+  return next()
 }
 
 export async function createSessionContextFromRequest(
@@ -127,11 +118,13 @@ export function createSessionContext(
   },
 ): SessionContext {
   return {
-    //TODO - where does userId come from?
-    userId: null,
-    //TODO - where does role come from?
-    role: "public",
     handle,
+    //TODO - fill from db
+    userId: null,
+    //TODO - fill from db
+    role: "public",
+    //TODO - where does come from?
+    publicData: {},
     create: async ({publicData, privateData}) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },
@@ -145,68 +138,117 @@ export function createSessionContext(
 }
 
 // --------------------------------
-// General utils
+// Get Session
 // --------------------------------
-const base64 = (input: HashaInput) => hasha(input, {encoding: "base64"})
-const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
+export async function getSession(req: BlitzApiRequest, res: BlitzApiResponse) {
+  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
+  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
 
-// --------------------------------
-// Session utils
-// --------------------------------
-export const generateEssentialSessionHandle = () => {
-  return uuidv4() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
-}
-
-export const createSessionToken = (handle: string, publicData: PublicData | string) => {
-  // We store the hashed public data in the opaque token so that when we verify,
-  // we can detect changes in it and return a new set of tokens if necessary.
-
-  let publicDataString
-  if (typeof publicData === "string") {
-    publicDataString = publicData
-  } else {
-    publicDataString = JSON.stringify(publicData)
+  if (sessionToken === undefined && idRefreshToken === undefined) {
+    // No session exists
+    return null
   }
-  return base64(
-    [handle, uuidv4(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(TOKEN_SEPARATOR),
-  )
+
+  if (sessionToken) {
+    let antiCSRFToken = req.headers[HEADER_CSRF] as string
+    let {
+      handle,
+      publicData,
+      newSessionToken,
+      newPublicDataToken,
+      newExpiresAt,
+    } = await getSessionHelper(
+      sessionToken,
+      antiCSRFToken,
+      enableCsrfProtection,
+      req.method as string,
+    )
+
+    if (newSessionToken && newExpiresAt) {
+      setSessionCookie(res, sessionToken, newExpiresAt)
+    }
+    if (newPublicDataToken) {
+      res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
+    }
+
+    return {
+      handle,
+      publicData,
+    }
+  } else {
+    // TODO: advanced method
+    return null
+  }
 }
-export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = token.split(TOKEN_SEPARATOR)
+
+export async function getSessionHelper(
+  sessionToken: string,
+  inputAntiCSRFToken: string | undefined,
+  enableCsrfProtection: boolean,
+  httpMethod: string,
+) {
+  const config = defaultConfig
+
+  const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
+
+  if (version !== SESSION_TOKEN_VERSION_0) {
+    throw new AuthenticationError("Session token is not " + SESSION_TOKEN_VERSION_0)
+  }
+
+  let session = await config.getSession(handle)
+
+  if (!session) {
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+  if (enableCsrfProtection && session.antiCSRFToken !== inputAntiCSRFToken) {
+    throw new AntiCSRFTokenMismatchException()
+  }
+  if (hash(sessionToken) !== session.hashedSessionToken) {
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+  if (isPast(session.expiresAt)) {
+    await revokeSession(handle)
+    throw new AuthenticationError("Input session ID doesn't exist")
+  }
+
+  let newSessionToken
+  let newPublicDataToken
+  let newExpiresAt
+  let quarterExpiryTimePassed
+
+  // Only renew with non-GET requests
+  // We can't reliably update the frontend expiry information in GET requests since they could
+  // be from a browser level navigation (for example: user opening the site after a long time).
+  if (httpMethod !== "GET") {
+    // Check if > 1/4th of the expiry time has passed
+    // (since we are doing a rolling expiry window).
+    quarterExpiryTimePassed =
+      differenceInMinutes(session.expiresAt, new Date()) < 0.75 * config.sessionExpiryMinutes
+  }
+
+  const publicDataChanged = hash(session.publicData) !== hashedPublicData
+
+  if (publicDataChanged || quarterExpiryTimePassed) {
+    newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
+    newPublicDataToken = createPublicDataToken(session.publicData, newExpiresAt)
+    newSessionToken = createSessionToken(handle, session.publicData)
+
+    // should not wait for this to happen
+    // eslint-disable-next-line
+    updateSessionExpiryInDb(handle, newExpiresAt)
+  }
   return {
     handle,
-    id,
-    hashedPublicData,
-    version,
+    publicData: JSON.parse(session.publicData),
+    newSessionToken,
+    newPublicDataToken,
+    newExpiresAt,
   }
 }
 
-export const createPublicDataToken = (publicData: string, expireAt: Date) => {
-  return base64([publicData, expireAt].join(TOKEN_SEPARATOR))
-}
-
-export const createAntiCSRFToken = () => uuidv4()
-
-export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
-  // TODO - what if another middlware use `Set-Cookie`?
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
-      //domain - can we omit?
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: true,
-      expires: expiresAt,
-    }),
-  )
-}
-
-export async function createAnonymousSession(res: BlitzApiResponse) {
-  return await createNewSession(res, {userId: null, role: "public"})
-}
-
 // --------------------------------
-// createNewSession()
+// Create Session
 // --------------------------------
 export async function createNewSession(
   res: BlitzApiResponse,
@@ -286,112 +328,13 @@ export async function createNewSessionHelper(
   }
 }
 
-export async function getSession(req: BlitzApiRequest, res: BlitzApiResponse) {
-  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
-  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
-  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
-
-  if (sessionToken === undefined && idRefreshToken === undefined) {
-    // No session exists
-    return null
-  }
-
-  if (sessionToken) {
-    let antiCSRFToken = req.headers[HEADER_CSRF] as string
-    let {
-      handle,
-      publicData,
-      newSessionToken,
-      newPublicDataToken,
-      newExpiresAt,
-    } = await getSessionHelper(
-      sessionToken,
-      antiCSRFToken,
-      enableCsrfProtection,
-      req.method as string,
-    )
-
-    if (newSessionToken && newExpiresAt) {
-      setSessionCookie(res, sessionToken, newExpiresAt)
-    }
-    if (newPublicDataToken) {
-      res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
-    }
-
-    return {
-      handle,
-      publicData,
-    }
-  } else {
-    // TODO: advanced method
-    return null
-  }
+export async function createAnonymousSession(res: BlitzApiResponse) {
+  return await createNewSession(res, {userId: null, role: "public"})
 }
 
-export async function getSessionHelper(
-  sessionToken: string,
-  inputAntiCSRFToken: string | undefined,
-  enableCsrfProtection: boolean,
-  httpMethod: string,
-) {
-  const config = defaultConfig
-
-  const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
-
-  if (version !== SESSION_TOKEN_VERSION_0) {
-    throw new AuthenticationError("Session token is not " + SESSION_TOKEN_VERSION_0)
-  }
-
-  let session = await config.getSession(handle)
-
-  if (!session) {
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-  if (enableCsrfProtection && session.antiCSRFToken !== inputAntiCSRFToken) {
-    throw new AntiCSRFTokenMismatchException()
-  }
-  if (hash(sessionToken) !== session.hashedSessionToken) {
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-  if (isPast(session.expiresAt)) {
-    await revokeSession(handle)
-    throw new AuthenticationError("Input session ID doesn't exist")
-  }
-
-  let newSessionToken
-  let newPublicDataToken
-  let newExpiresAt
-
-  let quarterExpiryTimePassed
-  // Only renew with non-GET requests
-  // We can't reliably update the frontend expiry information in GET requests since they could
-  // be from a browser level navigation (for example: user opening the site after a long time).
-  if (httpMethod !== "GET") {
-    // Check if > 1/4th of the expiry time has passed
-    // (since we are doing a rolling expiry window).
-    quarterExpiryTimePassed =
-      differenceInMinutes(session.expiresAt, new Date()) < 0.75 * config.sessionExpiryMinutes
-  }
-
-  const publicDataChanged = hash(session.publicData) !== hashedPublicData
-
-  if (publicDataChanged || quarterExpiryTimePassed) {
-    newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
-    newPublicDataToken = createPublicDataToken(session.publicData, newExpiresAt)
-    newSessionToken = createSessionToken(handle, session.publicData)
-
-    // should not wait for this to happen
-    // eslint-disable-next-line
-    updateSessionExpiryInDb(handle, newExpiresAt)
-  }
-  return {
-    handle,
-    publicData: JSON.parse(session.publicData),
-    newSessionToken,
-    newPublicDataToken,
-    newExpiresAt,
-  }
-}
+// --------------------------------
+// Session/DB utils
+// --------------------------------
 
 export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
   // TODO: advanced method
@@ -478,4 +421,61 @@ export async function setPublicData(handle: string, data: Omit<PublicData, "user
     // TODO handle error
     throw error
   }
+}
+
+// --------------------------------
+// General utils
+// --------------------------------
+const base64 = (input: HashaInput) => hasha(input, {encoding: "base64"})
+const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
+
+// --------------------------------
+// Token/handle utils
+// --------------------------------
+export const generateEssentialSessionHandle = () => {
+  return uuidv4() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+}
+
+export const createSessionToken = (handle: string, publicData: PublicData | string) => {
+  // We store the hashed public data in the opaque token so that when we verify,
+  // we can detect changes in it and return a new set of tokens if necessary.
+
+  let publicDataString
+  if (typeof publicData === "string") {
+    publicDataString = publicData
+  } else {
+    publicDataString = JSON.stringify(publicData)
+  }
+  return base64(
+    [handle, uuidv4(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(TOKEN_SEPARATOR),
+  )
+}
+export const parseSessionToken = (token: string) => {
+  const [handle, id, hashedPublicData, version] = token.split(TOKEN_SEPARATOR)
+  return {
+    handle,
+    id,
+    hashedPublicData,
+    version,
+  }
+}
+
+export const createPublicDataToken = (publicData: string, expireAt: Date) => {
+  return base64([publicData, expireAt].join(TOKEN_SEPARATOR))
+}
+
+export const createAntiCSRFToken = () => uuidv4()
+
+export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
+  // TODO - what if another middlware use `Set-Cookie`?
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+      //domain - can we omit?
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: true,
+      expires: expiresAt,
+    }),
+  )
 }
