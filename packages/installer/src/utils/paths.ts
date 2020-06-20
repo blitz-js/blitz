@@ -1,8 +1,8 @@
-import * as fs from 'fs-extra'
-import * as path from 'path'
+import * as fs from "fs-extra"
+import * as path from "path"
 
 function ext(jsx = false) {
-  return fs.existsSync(path.resolve('tsconfig.json')) ? (jsx ? '.tsx' : '.ts') : '.js'
+  return fs.existsSync(path.resolve("tsconfig.json")) ? (jsx ? ".tsx" : ".ts") : ".js"
 }
 
 export const paths = {
@@ -16,6 +16,6 @@ export const paths = {
     return `app/pages/index${ext(true)}`
   },
   blitzConfig() {
-    return 'blitz.config.js'
+    return "blitz.config.js"
   },
 }

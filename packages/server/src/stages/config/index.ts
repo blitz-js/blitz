@@ -1,9 +1,9 @@
-import {pathExistsSync} from 'fs-extra'
-import {resolve} from 'path'
-import File from 'vinyl'
+import {pathExistsSync} from "fs-extra"
+import {resolve} from "path"
+import File from "vinyl"
 
-import {transform} from '@blitzjs/file-pipeline'
-import {Stage} from '@blitzjs/file-pipeline'
+import {transform} from "@blitzjs/file-pipeline"
+import {Stage} from "@blitzjs/file-pipeline"
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
@@ -12,15 +12,15 @@ const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
  */
 export const createStageConfig: Stage = ({config, input}) => {
   // Preconditions
-  const hasNextConfig = pathExistsSync(resolve(config.src, 'next.config.js'))
-  const hasBlitzConfig = pathExistsSync(resolve(config.src, 'blitz.config.js'))
+  const hasNextConfig = pathExistsSync(resolve(config.src, "next.config.js"))
+  const hasBlitzConfig = pathExistsSync(resolve(config.src, "blitz.config.js"))
 
   if (hasNextConfig && !isNowBuild()) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
     const err = new Error(
-      'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
+      "Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js",
     )
-    err.name = 'NextConfigSupportError'
+    err.name = "NextConfigSupportError"
     throw err
   }
 
@@ -29,8 +29,8 @@ export const createStageConfig: Stage = ({config, input}) => {
     input.write(
       new File({
         cwd: config.src,
-        path: resolve(config.src, 'blitz.config.js'),
-        contents: Buffer.from('module.exports = {};'),
+        path: resolve(config.src, "blitz.config.js"),
+        contents: Buffer.from("module.exports = {};"),
       }),
     )
   }
@@ -39,7 +39,7 @@ export const createStageConfig: Stage = ({config, input}) => {
     input.write(
       new File({
         cwd: config.src,
-        path: resolve(config.src, 'next.config.js'),
+        path: resolve(config.src, "next.config.js"),
         contents: Buffer.from(`
 const {withBlitz} = require('@blitzjs/server');
 const config = require('./blitz.config.js');
@@ -61,7 +61,7 @@ module.exports = withBlitz(config);
       input.write(
         new File({
           cwd: config.src,
-          path: resolve(config.src, 'next-vercel.config.js'),
+          path: resolve(config.src, "next-vercel.config.js"),
           contents: file.contents,
         }),
       )

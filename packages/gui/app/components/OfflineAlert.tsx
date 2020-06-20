@@ -1,7 +1,7 @@
-import {InformationCircleOutline} from 'heroicons-react'
-import {FC} from 'react'
+import {InformationCircleOutline} from "heroicons-react"
+import {FC} from "react"
 
-import {useNetworkAvailability} from 'utils/hooks/web/useNetworkAvailability'
+import {useNetworkAvailability} from "utils/hooks/web/useNetworkAvailability"
 
 export const OfflineAlert: FC = () => {
   const isOnline = useNetworkAvailability()

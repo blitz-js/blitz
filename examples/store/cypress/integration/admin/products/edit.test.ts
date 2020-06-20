@@ -1,4 +1,4 @@
-import { insert, data, fields } from "./helper"
+import {insert, data, fields} from "./helper"
 
 describe("admin/products/[handle] page", () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe("admin/products/[handle] page", () => {
 
     const count = {}
     for (let i = 0; i < data.length; i++) {
-      const { label, type } = fields[i]
+      const {label, type} = fields[i]
       const [element, inputType] = type.split("|")
       let item = data[i]
 

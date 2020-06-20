@@ -1,7 +1,7 @@
-import {FC} from 'react'
+import {FC} from "react"
 
-import {PagesModule} from 'app/components/PagesModule'
-import {Project} from 'db'
+import {PagesModule} from "app/components/PagesModule"
+import {Project} from "db"
 
 type ProjectModulesProps = {
   project: Project

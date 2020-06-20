@@ -1,9 +1,9 @@
-import * as fs from 'fs'
-import path from 'path'
+import * as fs from "fs"
+import path from "path"
 
 enum ResponseStatus {
-  Success = 'ok',
-  Error = 'error',
+  Success = "ok",
+  Error = "error",
 }
 
 // type Status = 'ok' | 'error'
@@ -35,8 +35,8 @@ async function checkIfBlitzProject(path: string): Promise<boolean> {
 
   for await (const dirent of dir) {
     if (
-      (dirent.isFile() && dirent.name === 'blitz.config.js') ||
-      (dirent.isDirectory() && dirent.name === '.blitz')
+      (dirent.isFile() && dirent.name === "blitz.config.js") ||
+      (dirent.isDirectory() && dirent.name === ".blitz")
     ) {
       isBlitz = true
       break
@@ -81,7 +81,7 @@ export default async function getDirectory(toRead?: string): Promise<GetDirector
     }
   } catch (e) {
     return {
-      dir: 'none',
+      dir: "none",
       files: [],
       message: e.toString(),
       status: ResponseStatus.Error,

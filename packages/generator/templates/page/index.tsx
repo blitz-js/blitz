@@ -1,17 +1,17 @@
-import React, {Suspense} from 'react'
+import React, {Suspense} from "react"
 if (process.env.parentModel) {
-  import {Head, Link, useQuery, useParam} from 'blitz'
+  import {Head, Link, useQuery, useParam, BlitzPage} from "blitz"
 } else {
-  import {Head, Link, useQuery} from 'blitz'
+  import {Head, Link, useQuery, BlitzPage} from "blitz"
 }
-import get__ModelNames__ from 'app/__modelNames__/queries/get__ModelNames__'
+import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
 
-export const __ModelNames__List: React.FC = () => {
+export const __ModelNames__List = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam('__parentModelId__', 'number')
+    const __parentModelId__ = useParam("__parentModelId__", "number")
     const [__modelNames__] = useQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
-      orderBy: {id: 'desc'},
+      orderBy: {id: "desc"},
     })
 
     return (
@@ -20,7 +20,8 @@ export const __ModelNames__List: React.FC = () => {
           <li key={__modelName__.id}>
             <Link
               href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}>
+              as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
+            >
               <a>{__modelName__.name}</a>
             </Link>
           </li>
@@ -28,13 +29,16 @@ export const __ModelNames__List: React.FC = () => {
       </ul>
     )
   } else {
-    const [__modelNames__] = useQuery(get__ModelNames__, {orderBy: {id: 'desc'}})
+    const [__modelNames__] = useQuery(get__ModelNames__, {orderBy: {id: "desc"}})
 
     return (
       <ul>
         {__modelNames__.map((__modelName__) => (
           <li key={__modelName__.id}>
-            <Link href="/__modelNames__/__modelIdParam__" as={`/__modelNames__/${__modelName__.id}`}>
+            <Link
+              href="/__modelNames__/__modelIdParam__"
+              as={`/__modelNames__/${__modelName__.id}`}
+            >
               <a>{__modelName__.name}</a>
             </Link>
           </li>
@@ -44,9 +48,9 @@ export const __ModelNames__List: React.FC = () => {
   }
 }
 
-const __ModelNames__Page: React.FC = () => {
+const __ModelNames__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam('__parentModelId__', 'number')
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
 
   return (
@@ -63,7 +67,8 @@ const __ModelNames__Page: React.FC = () => {
           {process.env.parentModel ? (
             <Link
               href="/__parentModels__/__parentModelId__/__modelNames__/new"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+              as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}
+            >
               <a>Create __ModelName__</a>
             </Link>
           ) : (

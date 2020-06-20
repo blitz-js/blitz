@@ -1,81 +1,81 @@
-import http from 'http'
-import fetch from 'isomorphic-unfetch'
-import listen from 'test-listen'
-import {apiResolver} from 'next/dist/next-server/server/api-utils'
-import {connectMiddleware, EnhancedResolverModule} from '@blitzjs/core'
-import delay from 'delay'
-import {rpcApiHandler} from '../src/rpc'
+import http from "http"
+import fetch from "isomorphic-unfetch"
+import listen from "test-listen"
+import {apiResolver} from "next/dist/next-server/server/api-utils"
+import {connectMiddleware, EnhancedResolverModule} from "@blitzjs/core"
+import delay from "delay"
+import {rpcApiHandler} from "../src/rpc"
 
-describe('rpcMiddleware', () => {
-  describe('HEAD', () => {
-    it('warms the endpoint', async () => {
+describe("rpcMiddleware", () => {
+  describe("HEAD", () => {
+    it("warms the endpoint", async () => {
       expect.assertions(1)
       const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
-        const res = await fetch(url, {method: 'HEAD'})
+        const res = await fetch(url, {method: "HEAD"})
         expect(res.status).toBe(200)
       })
     })
   })
 
-  describe('POST', () => {
-    it('handles missing params', async () => {
+  describe("POST", () => {
+    it("handles missing params", async () => {
       console.error = jest.fn()
 
       const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
-          method: 'POST',
+          method: "POST",
         })
 
         const data = await res.json()
 
         expect(res.status).toBe(400)
-        expect(data.error.message).toBe('Request body is missing the `params` key')
+        expect(data.error.message).toBe("Request body is missing the `params` key")
       })
     })
 
-    it('handles incorrect method', async () => {
+    it("handles incorrect method", async () => {
       const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
-          method: 'GET',
+          method: "GET",
         })
 
         expect(res.status).toBe(404)
       })
     })
 
-    it('executes the request', async () => {
+    it("executes the request", async () => {
       console.log = jest.fn()
 
       const resolverModule = (jest.fn().mockImplementation(async () => {
         await delay(1)
-        return 'test'
+        return "test"
       }) as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
       resolverModule.middleware = [
         connectMiddleware((_req, _res, next) => {
@@ -91,9 +91,9 @@ describe('rpcMiddleware', () => {
 
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({params: {}}),
         })
@@ -101,31 +101,31 @@ describe('rpcMiddleware', () => {
         const data = await res.json()
 
         expect(res.status).toBe(200)
-        expect(data.result).toBe('test')
-        expect(blitzResult).toBe('test')
+        expect(data.result).toBe("test")
+        expect(blitzResult).toBe("test")
       })
     })
 
-    it('handles errors from middleware and aborts execution', async () => {
+    it("handles errors from middleware and aborts execution", async () => {
       console.log = jest.fn()
 
       const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
       resolverModule.middleware = [
         (_req, _res, _next) => {
-          throw new Error('hack')
+          throw new Error("hack")
         },
       ]
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({params: {}}),
         })
@@ -135,26 +135,26 @@ describe('rpcMiddleware', () => {
       })
     })
 
-    it('handles a query error', async () => {
+    it("handles a query error", async () => {
       console.log = jest.fn()
       console.error = jest.fn()
 
       const resolverModule = (jest.fn().mockImplementation(async () => {
         await delay(1)
-        throw new Error('something broke')
+        throw new Error("something broke")
       }) as unknown) as EnhancedResolverModule
       resolverModule._meta = {
-        name: 'testResolver',
-        type: 'query',
-        path: 'test/path',
-        apiUrl: 'testurl',
+        name: "testResolver",
+        type: "query",
+        path: "test/path",
+        apiUrl: "testurl",
       }
 
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({params: {}}),
         })
@@ -162,7 +162,7 @@ describe('rpcMiddleware', () => {
         const data = await res.json()
 
         expect(res.status).toBe(200)
-        expect(data.error.message).toBe('something broke')
+        expect(data.error.message).toBe("something broke")
       })
     })
   })
@@ -188,9 +188,9 @@ describe('rpcMiddleware', () => {
 
     let server = http.createServer(async (req, res) => {
       await apiResolver(req, res, null, handler, {
-        previewModeId: 'previewModeId',
-        previewModeEncryptionKey: 'previewModeEncryptionKey',
-        previewModeSigningKey: 'previewModeSigningKey',
+        previewModeId: "previewModeId",
+        previewModeEncryptionKey: "previewModeEncryptionKey",
+        previewModeSigningKey: "previewModeSigningKey",
       })
     })
 

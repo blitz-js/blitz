@@ -1,11 +1,11 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from './executor'
-import {Generator, GeneratorOptions} from '@blitzjs/generator'
-import {useEnterToContinue} from '../utils/use-enter-to-continue'
-import {useEffect, useState} from 'react'
-import * as React from 'react'
-import {Box, Text} from 'ink'
-import {Newline} from '../components/newline'
-import Spinner from 'ink-spinner'
+import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
+import {Generator, GeneratorOptions} from "@blitzjs/generator"
+import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useEffect, useState} from "react"
+import * as React from "react"
+import {Box, Text} from "ink"
+import {Newline} from "../components/newline"
+import Spinner from "ink-spinner"
 
 export interface Config extends ExecutorConfig {
   targetDirectory?: executorArgument<string>
@@ -18,7 +18,7 @@ export function isNewFileExecutor(executor: ExecutorConfig): executor is Config 
   return (executor as Config).templatePath !== undefined
 }
 
-export const type = 'new-file'
+export const type = "new-file"
 
 interface TempGeneratorOptions extends GeneratorOptions {
   targetDirectory?: string
@@ -36,7 +36,7 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
     super(options)
     this.sourceRoot = options.templateRoot
     this.templateValues = options.templateValues
-    this.targetDirectory = options.targetDirectory || '.'
+    this.targetDirectory = options.targetDirectory || "."
   }
 
   getTemplateValues() {
@@ -48,10 +48,10 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
   }
 }
 
-export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}) => {
+export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
   const generatorArgs = React.useMemo(
     () => ({
-      destinationRoot: '.',
+      destinationRoot: ".",
       targetDirectory: getExecutorArgument((step as Config).targetDirectory, cliArgs),
       templateRoot: getExecutorArgument((step as Config).templatePath, cliArgs),
       templateValues: getExecutorArgument((step as Config).templateValues, cliArgs),
@@ -63,7 +63,7 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
     onProposalAccepted(generatorArgs)
   })
 
-  const [dryRunOutput, setDryRunOutput] = useState('')
+  const [dryRunOutput, setDryRunOutput] = useState("")
 
   useEffect(() => {
     async function proposeFileAdditions() {
@@ -80,7 +80,8 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
   return (
     <Box flexDirection="column">
       <Text>
-        Before creating any new files, we'll do a dry run. Here's a list of files that would be created:
+        Before creating any new files, we'll do a dry run. Here's a list of files that would be
+        created:
       </Text>
       <Newline />
       {dryRunOutput && <Text>{dryRunOutput}</Text>}
@@ -90,21 +91,23 @@ export const Propose: Executor['Propose'] = ({cliArgs, onProposalAccepted, step}
   )
 }
 
-export const Commit: Executor['Commit'] = ({cliArgs, onChangeCommitted, step}) => {
+export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) => {
   const generatorArgs = React.useMemo(
     () => ({
-      destinationRoot: '.',
+      destinationRoot: ".",
       targetDirectory: getExecutorArgument((step as Config).targetDirectory, cliArgs),
       templateRoot: getExecutorArgument((step as Config).templatePath, cliArgs),
       templateValues: getExecutorArgument((step as Config).templateValues, cliArgs),
     }),
     [cliArgs, step],
   )
-  const [fileCreateOutput, setFileCreateOutput] = useState('')
-  const fileCreateLines = fileCreateOutput.split('\n')
+  const [fileCreateOutput, setFileCreateOutput] = useState("")
+  const fileCreateLines = fileCreateOutput.split("\n")
   const handleChangeCommitted = React.useCallback(() => {
     onChangeCommitted(
-      `Successfully created ${fileCreateLines.map((l) => l.split(' ').slice(1).join('').trim()).join(', ')}`,
+      `Successfully created ${fileCreateLines
+        .map((l) => l.split(" ").slice(1).join("").trim())
+        .join(", ")}`,
     )
   }, [fileCreateLines, onChangeCommitted])
 

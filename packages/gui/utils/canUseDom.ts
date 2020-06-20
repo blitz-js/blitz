@@ -1,1 +1,1 @@
-export const canUseDOM = typeof window !== 'undefined'
+export const canUseDOM = typeof window !== "undefined"

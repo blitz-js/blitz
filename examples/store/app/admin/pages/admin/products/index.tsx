@@ -1,10 +1,10 @@
-import { Suspense } from "react"
-import { useQuery, Link, useRouterQuery } from "blitz"
+import {Suspense} from "react"
+import {useQuery, Link, useRouterQuery} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 import getProduct from "app/products/queries/getProduct"
 
 function ProductsList() {
-  const { orderby = "id", order = "desc" } = useRouterQuery()
+  const {orderby = "id", order = "desc"} = useRouterQuery()
 
   const [products] = useQuery(getProducts, {
     orderBy: {
@@ -17,7 +17,7 @@ function ProductsList() {
       {products.map((product) => (
         <li key={product.id}>
           <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
-            <a onMouseEnter={() => getProduct({ where: { id: product.id } })}>{product.name}</a>
+            <a onMouseEnter={() => getProduct({where: {id: product.id}})}>{product.name}</a>
           </Link>
         </li>
       ))}
@@ -35,7 +35,7 @@ function AdminProducts() {
           <a>Create Product</a>
         </Link>
         <Link href="/admin">
-          <a style={{ marginLeft: 16 }}>Admin</a>
+          <a style={{marginLeft: 16}}>Admin</a>
         </Link>
       </p>
 

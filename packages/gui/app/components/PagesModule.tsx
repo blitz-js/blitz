@@ -1,5 +1,5 @@
-import {Terminal} from 'heroicons-react'
-import {FC} from 'react'
+import {Terminal} from "heroicons-react"
+import {FC} from "react"
 
 type PagesModuleProps = {
   pages: {route: string; link: string}[]
@@ -15,7 +15,8 @@ export const PagesModule: FC<PagesModuleProps> = ({pages}) => (
         <li key={`${page.route}-${i}`} className="border-t border-gray-200">
           <a
             href="#"
-            className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
+            className="block transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
+          >
             <div className="flex items-center px-4 py-4 sm:px-6">
               <div className="flex items-center flex-1 min-w-0">
                 <div className="flex-1 min-w-0">

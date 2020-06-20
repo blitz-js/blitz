@@ -1,12 +1,11 @@
-import {log} from '@blitzjs/display'
-import {
+import {log} from "@blitzjs/display"
+import type {
   Middleware,
   BlitzApiRequest,
   BlitzApiResponse,
-  handleRequestWithMiddleware,
   EnhancedResolverModule,
-} from '@blitzjs/core'
-import {serializeError} from 'serialize-error'
+} from "@blitzjs/core"
+import {serializeError} from "serialize-error"
 
 export function rpcApiHandler(
   resolver: EnhancedResolverModule,
@@ -17,7 +16,7 @@ export function rpcApiHandler(
   middleware.push(rpcMiddleware(resolver, connectDb))
 
   return (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return handleRequestWithMiddleware(req, res, middleware)
+    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
   }
 }
 
@@ -25,20 +24,20 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
   return async (req, res, next) => {
     const logPrefix = `${resolver._meta.name}`
 
-    if (req.method === 'HEAD') {
+    if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
-      if (typeof connectDb === 'function') {
+      if (typeof connectDb === "function") {
         connectDb()
       }
       res.status(200).end()
       return next()
-    } else if (req.method === 'POST') {
+    } else if (req.method === "POST") {
       // Handle RPC call
-      console.log('') // New line
+      console.log("") // New line
       log.progress(`Running ${logPrefix}(${JSON.stringify(req.body?.params, null, 2)})`)
 
-      if (typeof req.body.params === 'undefined') {
-        const error = {message: 'Request body is missing the `params` key'}
+      if (typeof req.body.params === "undefined") {
+        const error = {message: "Request body is missing the `params` key"}
         log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
         res.status(400).json({
           result: null,

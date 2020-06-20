@@ -1,8 +1,8 @@
-import File from 'vinyl'
-import slash from 'slash'
-import {absolutePathTransform} from '../utils'
-import {relative} from 'path'
-import {Stage, transform} from '@blitzjs/file-pipeline'
+import File from "vinyl"
+import slash from "slash"
+import {absolutePathTransform} from "../utils"
+import {relative} from "path"
+import {Stage, transform} from "@blitzjs/file-pipeline"
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
@@ -27,7 +27,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
       new File({
         path: getResolverPath(file.path),
         contents: file.contents,
-        hash: file.hash + ':1',
+        hash: file.hash + ":1",
       }),
     )
 
@@ -36,7 +36,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
       new File({
         path: getApiHandlerPath(file.path),
         contents: Buffer.from(apiHandlerTemplate(originalPath)),
-        hash: file.hash + ':2',
+        hash: file.hash + ":2",
       }),
     )
 
@@ -57,7 +57,11 @@ export function isResolverPath(filePath: string) {
   return /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorhicHandlerTemplate = (resolverPath: string, resolverName: string, resolverType: string) => `
+const isomorhicHandlerTemplate = (
+  resolverPath: string,
+  resolverName: string,
+  resolverType: string,
+) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 const resolverModule = require('${resolverPath}')
 export default getIsomorphicRpcHandler(
@@ -91,7 +95,7 @@ export const config = {
 `
 
 function removeExt(filePath: string) {
-  return filePath.replace(/[.][^./\s]+$/, '')
+  return filePath.replace(/[.][^./\s]+$/, "")
 }
 
 function resolutionPath(srcPath: string, filePath: string) {
@@ -99,19 +103,20 @@ function resolutionPath(srcPath: string, filePath: string) {
 }
 
 function extractTemplateVars(resolverImportPath: string) {
-  const [, resolverTypePlural, resolverName] = /(queries|mutations)\/(.*)$/.exec(resolverImportPath) || []
+  const [, resolverTypePlural, resolverName] =
+    /(queries|mutations)\/(.*)$/.exec(resolverImportPath) || []
 
   return {
     resolverImportPath,
-    resolverType: resolverTypePlural === 'mutations' ? 'mutation' : 'query',
+    resolverType: resolverTypePlural === "mutations" ? "mutation" : "query",
     resolverName,
   }
 }
 
 function resolverPath(path: string) {
-  return path.replace(/^app/, 'app/_resolvers')
+  return path.replace(/^app/, "app/_resolvers")
 }
 
 function apiHandlerPath(path: string) {
-  return path.replace(/^app/, 'pages/api')
+  return path.replace(/^app/, "pages/api")
 }

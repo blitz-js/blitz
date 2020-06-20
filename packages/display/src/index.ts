@@ -1,9 +1,9 @@
-import chalk from 'chalk'
-import ora from 'ora'
-import readline from 'readline'
+import chalk from "chalk"
+import ora from "ora"
+import readline from "readline"
 
 // const blitzTrueBrandColor = '6700AB'
-const blitzBrightBrandColor = '8a3df0'
+const blitzBrightBrandColor = "8a3df0"
 
 // Using brigh brand color so it's better for dark terminals
 const brandColor = blitzBrightBrandColor
@@ -17,15 +17,15 @@ const withWarning = (str: string) => {
 }
 
 const withCaret = (str: string) => {
-  return `${chalk.gray('>')} ${str}`
+  return `${chalk.gray(">")} ${str}`
 }
 
 const withCheck = (str: string) => {
-  return `${chalk.green('✔')} ${str}`
+  return `${chalk.green("✔")} ${str}`
 }
 
 const withX = (str: string) => {
-  return `${chalk.red.bold('✕')} ${str}`
+  return `${chalk.red.bold("✕")} ${str}`
 }
 
 /**
@@ -91,10 +91,10 @@ const info = (msg: string) => {
 const spinner = (str: string) => {
   return ora({
     text: str,
-    color: 'blue',
+    color: "blue",
     spinner: {
       interval: 120,
-      frames: ['◢', '◣', '◤', '◥'],
+      frames: ["◢", "◣", "◤", "◥"],
     },
   })
 }
@@ -109,7 +109,7 @@ const success = (msg: string) => {
 }
 
 const newline = () => {
-  console.log(' ')
+  console.log(" ")
 }
 
 /**

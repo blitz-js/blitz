@@ -1,29 +1,33 @@
-import * as fs from 'fs-extra'
-import {parse, print, types} from 'recast'
-import {builders} from 'ast-types/gen/builders'
-import {namedTypes, NamedTypes} from 'ast-types/gen/namedTypes'
-import * as babel from 'recast/parsers/babel'
-import getBabelOptions, {Overrides} from 'recast/parsers/_babel_options'
+import * as fs from "fs-extra"
+import {parse, print, types} from "recast"
+import {builders} from "ast-types/gen/builders"
+import {namedTypes, NamedTypes} from "ast-types/gen/namedTypes"
+import * as babel from "recast/parsers/babel"
+import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
     const babelOptions = getBabelOptions(options)
-    babelOptions.plugins.push('typescript')
-    babelOptions.plugins.push('jsx')
+    babelOptions.plugins.push("typescript")
+    babelOptions.plugins.push("jsx")
     return babel.parser.parse(source, babelOptions)
   },
 }
 
 export enum TransformStatus {
-  Success = 'success',
-  Failure = 'failure',
+  Success = "success",
+  Failure = "failure",
 }
 export interface TransformResult {
   status: TransformStatus
   filename: string
   error?: Error
 }
-export type Transformer = (ast: types.ASTNode, builder: builders, types: NamedTypes) => types.ASTNode
+export type Transformer = (
+  ast: types.ASTNode,
+  builder: builders,
+  types: NamedTypes,
+) => types.ASTNode
 
 export function processFile(original: string, transformerFn: Transformer): string {
   const ast = parse(original, {parser: customTsParser})
@@ -31,7 +35,10 @@ export function processFile(original: string, transformerFn: Transformer): strin
   return transformedCode
 }
 
-export function transform(transformerFn: Transformer, targetFilePaths: string[]): TransformResult[] {
+export function transform(
+  transformerFn: Transformer,
+  targetFilePaths: string[],
+): TransformResult[] {
   const results: TransformResult[] = []
   for (const filePath of targetFilePaths) {
     if (!fs.existsSync(filePath)) {
@@ -43,7 +50,7 @@ export function transform(transformerFn: Transformer, targetFilePaths: string[])
     }
     try {
       const fileBuffer = fs.readFileSync(filePath)
-      const fileSource = fileBuffer.toString('utf-8')
+      const fileSource = fileBuffer.toString("utf-8")
       const transformedCode = processFile(fileSource, transformerFn)
       fs.writeFileSync(filePath, transformedCode)
       results.push({

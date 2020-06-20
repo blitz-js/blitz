@@ -9,7 +9,7 @@ The Server package exposes some key functions for controlling blitz.
 Start the development server in watch mode.
 
 ```ts
-import {dev} from '@blitzjs/server'
+import {dev} from "@blitzjs/server"
 
 await dev(serverConfig)
 ```
@@ -19,7 +19,7 @@ await dev(serverConfig)
 Start the production server.
 
 ```ts
-import {prod} from '@blitzjs/server'
+import {prod} from "@blitzjs/server"
 
 await prod(serverConfig)
 ```

@@ -1,21 +1,21 @@
-import {deserializeError} from 'serialize-error'
-import {queryCache} from 'react-query'
-import {getQueryKey} from './utils'
-import {ResolverModule, Middleware} from './middleware'
+import {deserializeError} from "serialize-error"
+import {queryCache} from "react-query"
+import {getQueryKey} from "./utils"
+import {ResolverModule, Middleware} from "./middleware"
 
 type Options = {
   fromQueryHook?: boolean
 }
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
-  if (typeof window === 'undefined') return
+  if (typeof window === "undefined") return
   const result = await window.fetch(url, {
-    method: 'POST',
-    credentials: 'same-origin',
+    method: "POST",
+    credentials: "same-origin",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    redirect: 'follow',
+    redirect: "follow",
     body: JSON.stringify({params}),
   })
 
@@ -38,9 +38,9 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 }
 
 executeRpcCall.warm = (url: string) => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window.fetch(url, {method: 'HEAD'})
+    window.fetch(url, {method: "HEAD"})
   }
 }
 
@@ -68,7 +68,7 @@ export function getIsomorphicRpcHandler(
   resolverName: string,
   resolverType: string,
 ) {
-  const apiUrl = resolverPath.replace(/^app\/_resolvers/, '/api')
+  const apiUrl = resolverPath.replace(/^app\/_resolvers/, "/api")
   const enhance = <T extends ResolverEnhancement>(fn: T): T => {
     fn._meta = {
       name: resolverName,
@@ -79,8 +79,9 @@ export function getIsomorphicRpcHandler(
     return fn
   }
 
-  if (typeof window !== 'undefined') {
-    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) => executeRpcCall(apiUrl, params, opts)) as any
+  if (typeof window !== "undefined") {
+    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) =>
+      executeRpcCall(apiUrl, params, opts)) as any
 
     rpcFn = enhance(rpcFn)
 

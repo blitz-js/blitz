@@ -1,7 +1,7 @@
 // based on https://github.com/kripod/react-hooks/blob/master/packages/web-api-hooks/src/useLocalStorage.ts
 
-import {JSONValue} from 'utils/types/JSONValue'
-import {useStorage} from 'utils/hooks/web/useStorage'
+import {JSONValue} from "utils/types/JSONValue"
+import {useStorage} from "utils/hooks/web/useStorage"
 
 const getLocalStorage = (): Storage => localStorage
 

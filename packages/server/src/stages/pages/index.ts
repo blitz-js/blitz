@@ -1,8 +1,8 @@
-import {join} from 'path'
-import {absolutePathTransform} from '../utils'
-import {Stage, transform} from '@blitzjs/file-pipeline'
-import {handleErrors, DuplicatePathError} from './errors'
-import flow from 'lodash/flow'
+import {join} from "path"
+import {absolutePathTransform} from "../utils"
+import {Stage, transform} from "@blitzjs/file-pipeline"
+import {handleErrors, DuplicatePathError} from "./errors"
+import flow from "lodash/flow"
 
 export function pagesPathTransformer(path: string) {
   const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+)$/
@@ -12,7 +12,7 @@ export function pagesPathTransformer(path: string) {
 export function apiPathTransformer(path: string) {
   const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
   const matchedPath = (regex.exec(path) || [])[1]
-  return matchedPath ? join('pages', matchedPath) : path
+  return matchedPath ? join("pages", matchedPath) : path
 }
 
 export const fullTransformer = flow(pagesPathTransformer, apiPathTransformer)
@@ -56,7 +56,7 @@ export function filterBy(entries: string[][], yes: string, no?: string) {
     let rowContainsNo = false
     for (let item of row) {
       rowContainsYes = rowContainsYes || item.indexOf(yes) > -1
-      if (typeof no === 'string') {
+      if (typeof no === "string") {
         rowContainsNo = rowContainsNo || item.indexOf(no) > -1
       }
     }
@@ -82,20 +82,24 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
     const duplicates = findDuplicates(entries, fullTransformer)
 
     // Check for duplicate pages entries
-    const duplicatePages = filterBy(duplicates, 'pages', 'api')
+    const duplicatePages = filterBy(duplicates, "pages", "api")
 
     if (duplicatePages.length > 0) {
       return new DuplicatePathError(
-        'Warning: You have created conflicting page routes:',
-        'pages',
+        "Warning: You have created conflicting page routes:",
+        "pages",
         duplicatePages,
       )
     }
 
     // Check for duplicate api entries
-    const duplicateApi = filterBy(duplicates, 'api')
+    const duplicateApi = filterBy(duplicates, "api")
     if (duplicateApi.length > 0) {
-      return new DuplicatePathError('Warning: You have created conflicting api routes:', 'api', duplicateApi)
+      return new DuplicatePathError(
+        "Warning: You have created conflicting api routes:",
+        "api",
+        duplicateApi,
+      )
     }
 
     file.path = apiTransformer(pagesTransformer(file.path))

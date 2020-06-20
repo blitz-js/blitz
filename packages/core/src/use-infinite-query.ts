@@ -2,14 +2,14 @@ import {
   useInfiniteQuery as useInfiniteReactQuery,
   InfiniteQueryResult,
   InfiniteQueryOptions,
-} from 'react-query'
-import {PromiseReturnType, InferUnaryParam, QueryFn} from './types'
-import {getQueryCacheFunctions, QueryCacheFunctions} from './utils/query-cache'
-import {EnhancedRpcFunction} from './rpc'
+} from "react-query"
+import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
+import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
+import {EnhancedRpcFunction} from "./rpc"
 
 type RestQueryResult<T extends QueryFn> = Omit<
   InfiniteQueryResult<PromiseReturnType<T>, any>,
-  'resolvedData'
+  "resolvedData"
 > &
   QueryCacheFunctions<PromiseReturnType<T>[]>
 
@@ -18,11 +18,11 @@ export function useInfiniteQuery<T extends QueryFn>(
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
   options: InfiniteQueryOptions<PromiseReturnType<T>, any>,
 ): [PromiseReturnType<T>[], RestQueryResult<T>] {
-  if (typeof queryFn === 'undefined') {
-    throw new Error('useInfiniteQuery is missing the first argument - it must be a query function')
+  if (typeof queryFn === "undefined") {
+    throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  if (typeof params === 'undefined') {
+  if (typeof params === "undefined") {
     throw new Error(
       "useInfiniteQuery is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
     )
@@ -31,11 +31,14 @@ export function useInfiniteQuery<T extends QueryFn>(
   const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
 
   const {data, ...queryRest} = useInfiniteReactQuery({
-    queryKey: () => [queryRpcFn._meta.apiUrl, typeof params === 'function' ? (params as Function)() : params],
+    queryKey: () => [
+      queryRpcFn._meta.apiUrl,
+      typeof params === "function" ? (params as Function)() : params,
+    ],
     queryFn: (_: string, params, more?) => queryRpcFn({...params, ...more}, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === 'production' ? 3 : false,
+      retry: process.env.NODE_ENV === "production" ? 3 : false,
       ...options,
     },
   })

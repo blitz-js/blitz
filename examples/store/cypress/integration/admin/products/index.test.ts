@@ -1,4 +1,4 @@
-import { insert } from "./helper"
+import {insert} from "./helper"
 
 describe("admin/products page", () => {
   beforeEach(() => {

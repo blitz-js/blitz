@@ -1,12 +1,12 @@
-import {through} from '../../streams'
-import vfs from 'vinyl-fs'
-import mergeStream from 'merge-stream'
+import {through} from "../../streams"
+import vfs from "vinyl-fs"
+import mergeStream from "merge-stream"
 
-import File from 'vinyl'
-import chokidar from 'chokidar'
-import vinyl from 'vinyl-file'
-import {Stats} from 'fs'
-import {normalize, resolve, isAbsolute} from 'path'
+import File from "vinyl"
+import chokidar from "chokidar"
+import vinyl from "vinyl-file"
+import {Stats} from "fs"
+import {normalize, resolve, isAbsolute} from "path"
 
 export const watch = (includePaths: string[] | string, options: chokidar.WatchOptions) => {
   function resolveFilepath(filepath: string) {
@@ -26,7 +26,9 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
 
       const fileOpts = Object.assign({}, options, {path: filepath})
       const file =
-        evt === 'unlink' || evt === 'unlinkDir' ? new File(fileOpts) : await vinyl.read(filepath, fileOpts)
+        evt === "unlink" || evt === "unlinkDir"
+          ? new File(fileOpts)
+          : await vinyl.read(filepath, fileOpts)
 
       file.event = evt
       stream.push(file)
@@ -34,9 +36,9 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
   }
 
   const fswatcher = chokidar.watch(includePaths, options)
-  fswatcher.on('add', processEvent('add'))
-  fswatcher.on('change', processEvent('change'))
-  fswatcher.on('unlink', processEvent('unlink'))
+  fswatcher.on("add", processEvent("add"))
+  fswatcher.on("change", processEvent("change"))
+  fswatcher.on("unlink", processEvent("unlink"))
 
   return {stream, fswatcher}
 }
@@ -67,7 +69,7 @@ function getWatcher(watching: boolean, cwd: string, include: string[], ignore: s
  * @param config Config object
  */
 export function agnosticSource({ignore, include, cwd, watch: watching = false}: SourceConfig) {
-  const allGlobs = [...include, ...ignore.map((a) => '!' + a)]
+  const allGlobs = [...include, ...ignore.map((a) => "!" + a)]
 
   const vinylFsStream = vfs.src(allGlobs, {
     buffer: true,
@@ -80,13 +82,13 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
 
   const stream = mergeStream(vinylFsStream, watcher.stream) as NodeJS.ReadWriteStream
 
-  vinylFsStream.on('end', () => {
+  vinylFsStream.on("end", () => {
     // Send ready event when our initial scan of the folder is done
-    stream.write('ready')
+    stream.write("ready")
   })
   const close = () => watcher.fswatcher.close()
 
-  stream.on('end', async () => {
+  stream.on("end", async () => {
     await close()
   })
 

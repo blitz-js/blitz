@@ -1,17 +1,17 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState} from "react"
 
-import {canUseDOM} from 'utils/canUseDom'
-import {managedEventListener} from 'utils/managedEventListener'
+import {canUseDOM} from "utils/canUseDom"
+import {managedEventListener} from "utils/managedEventListener"
 
 export const useNetworkAvailability = (): boolean => {
   const [online, setOnline] = useState(canUseDOM ? navigator.onLine : true)
 
   useEffect(() => {
-    const cleanup1 = managedEventListener(window, 'offline', () => {
+    const cleanup1 = managedEventListener(window, "offline", () => {
       setOnline(false)
     })
 
-    const cleanup2 = managedEventListener(window, 'online', () => {
+    const cleanup2 = managedEventListener(window, "online", () => {
       setOnline(true)
     })
 

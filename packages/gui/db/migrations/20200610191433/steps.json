@@ -73,6 +73,13 @@
     {
       "tag": "CreateField",
       "model": "Project",
+      "field": "createdAt",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Project",
       "field": "name",
       "type": "String",
       "arity": "Required"
@@ -88,6 +95,20 @@
       "tag": "CreateField",
       "model": "Project",
       "field": "path",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Project",
+      "field": "icon",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Project",
+      "field": "color",
       "type": "String",
       "arity": "Required"
     },

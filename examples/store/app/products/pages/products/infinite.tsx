@@ -1,14 +1,15 @@
-import { Suspense, Fragment } from "react"
-import { BlitzPage, useInfiniteQuery } from "blitz"
+import {Suspense, Fragment} from "react"
+import {BlitzPage, useInfiniteQuery} from "blitz"
 import getProductsInfinite from "app/products/queries/getProductsInfinite"
 
 const Products = () => {
-  const [
-    groupedProducts,
-    { isFetching, isFetchingMore, fetchMore, canFetchMore },
-  ] = useInfiniteQuery(getProductsInfinite, (page = { take: 3, skip: 0 }) => page, {
-    getFetchMore: (lastGroup) => lastGroup.nextPage,
-  })
+  const [groupedProducts, {isFetching, isFetchingMore, fetchMore, canFetchMore}] = useInfiniteQuery(
+    getProductsInfinite,
+    (page = {take: 3, skip: 0}) => page,
+    {
+      getFetchMore: (lastGroup) => lastGroup.nextPage,
+    },
+  )
 
   return (
     <>

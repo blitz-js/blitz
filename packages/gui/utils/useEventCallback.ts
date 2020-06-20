@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef} from 'react'
+import {useCallback, useEffect, useRef} from "react"
 
 export const useEventCallback = <T extends Function>(callback: T): ((...args: unknown[]) => T) => {
   const ref = useRef<T>()
