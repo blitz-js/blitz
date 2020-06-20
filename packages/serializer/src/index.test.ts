@@ -14,32 +14,32 @@ it("should work", () => {
   expect(deserialize(json, meta)).toStrictEqual(input)
 })
 
-it("should be performant", () => {
-  const start = new Date()
+// it("should be performant", () => {
+//   const start = new Date()
 
-  for (let i = 0; i < 1000; i++) {
-    const {json, meta} = serialize(input)
+//   for (let i = 0; i < 1000; i++) {
+//     const {json, meta} = serialize(input)
 
-    deserialize(json, meta)
-  }
+//     deserialize(json, meta)
+//   }
 
-  const end = new Date()
+//   const end = new Date()
 
-  expect(end.getTime() - start.getTime()).toBeLessThanOrEqual(1000)
-})
+//   expect(end.getTime() - start.getTime()).toBeLessThanOrEqual(1000)
+// })
 
-it("should handle large objects", () => {
-  const large = {...Array(10000).fill(Math.random().toString(36).substring(7))}
+// it("should handle large objects", () => {
+//   const large = {...Array(10000).fill(Math.random().toString(36).substring(7))}
 
-  const start = new Date()
+//   const start = new Date()
 
-  const {json, meta} = serialize(large)
+//   const {json, meta} = serialize(large)
 
-  deserialize(json, meta)
+//   deserialize(json, meta)
 
-  const end = new Date()
+//   const end = new Date()
 
-  // NOTE(@merelinguist) this is probably good enough for now, but I’d
-  // welcome any efforts to make the serializers even faster.
-  expect(end.getTime() - start.getTime()).toBeLessThanOrEqual(5000)
-})
+//   // NOTE(@merelinguist) this is probably good enough for now, but I’d
+//   // welcome any efforts to make the serializers even faster.
+//   expect(end.getTime() - start.getTime()).toBeLessThanOrEqual(5000)
+// })
