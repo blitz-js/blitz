@@ -1,5 +1,5 @@
 .gitkeep
-.env
+.env*
 *.ico
 *.lock
-
+db/migrations

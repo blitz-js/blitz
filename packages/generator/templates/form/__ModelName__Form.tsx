@@ -5,7 +5,7 @@ type __ModelName__FormProps = {
   onSubmit: React.FormEventHandler<HTMLFormElement>
 }
 
-const __ModelName__Form: React.FC<__ModelName__FormProps> = ({initialValues, onSubmit}) => {
+const __ModelName__Form> = ({initialValues, onSubmit}: __ModelName__FormProps) => {
   return (
     <form
       onSubmit={(event) => {

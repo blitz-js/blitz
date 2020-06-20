@@ -1,12 +1,12 @@
-import React from 'react'
-import {Head, Link, useRouter, useParam} from 'blitz'
-import create__ModelName__ from 'app/__modelNamesPath__/mutations/create__ModelName__'
-import __ModelName__Form from 'app/__modelNamesPath__/components/__ModelName__Form'
+import React from "react"
+import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
+import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
+import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
 
-const New__ModelName__Page: React.FC = () => {
+const New__ModelName__Page: BlitzPage = () => {
   const router = useRouter()
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam('__parentModelId__', 'number')
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
 
   return (
@@ -25,20 +25,20 @@ const New__ModelName__Page: React.FC = () => {
             try {
               const __modelName__ = await create__ModelName__(
                 process.env.parentModel
-                  ? {data: {name: 'MyName'}, __parentModelId__}
-                  : {data: {name: 'MyName'}},
+                  ? {data: {name: "MyName"}, __parentModelId__}
+                  : {data: {name: "MyName"}},
               )
-              alert('Success!' + JSON.stringify(__modelName__))
+              alert("Success!" + JSON.stringify(__modelName__))
               router.push(
                 process.env.parentModel
-                  ? '/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__'
-                  : '/__modelNames__/__modelIdParam__',
+                  ? "/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
+                  : "/__modelNames__/__modelIdParam__",
                 process.env.parentModel
                   ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
                   : `/__modelNames__/${__modelName__.id}`,
               )
             } catch (error) {
-              alert('Error creating __modelName__ ' + JSON.stringify(error, null, 2))
+              alert("Error creating __modelName__ " + JSON.stringify(error, null, 2))
             }
           }}
         />
@@ -47,7 +47,8 @@ const New__ModelName__Page: React.FC = () => {
           {process.env.parentModel ? (
             <Link
               as="/__parentModels__/__parentModelId__/__modelNames__"
-              href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+              href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
+            >
               <a>__ModelNames__</a>
             </Link>
           ) : (
