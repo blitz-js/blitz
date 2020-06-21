@@ -33,10 +33,9 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
   let spawnCommand: string[] = [command]
   let availablePort: number | undefined
 
-  if (config.port) {
-    availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
-  }
+  availablePort = await detect({port: config.port ? config.port : 3000})
+  spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
+
   if (config.hostname) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
   }
@@ -52,19 +51,11 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  let spawnCommand: string[] = ["dev"]
-  let availablePort: number
-  if (config.port) {
-    availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
-  }
-  if (config.hostname) {
-    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
-  }
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "dev")
 
   return new Promise((res, rej) => {
-    if (availablePort && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port}::port already in use`)
+    if (config.port && availablePort !== config.port) {
+      rej(`Couldn't start server on port ${config.port} ::port already in use`)
     } else {
       spawn(nextBin, spawnCommand, {
         cwd,
@@ -73,6 +64,7 @@ export async function nextStartDev(
         .on("exit", (code: number) => {
           code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
         })
+
         .on("error", rej)
     }
   })
@@ -103,7 +95,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
   }
 
   return new Promise((res, rej) => {
-    if (availablePort && availablePort !== config.port) {
+    if (config.port && availablePort !== config.port) {
       rej(`Couldn't start server on port ${config.port} ::port already in use`)
     } else {
       spawn(nextBin, spawnCommand, {
