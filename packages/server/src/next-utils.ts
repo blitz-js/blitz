@@ -31,7 +31,7 @@ function createOutputTransformer(manifest: Manifest, devFolder: string) {
 
 async function createCommandAndPort(config: ServerConfig, command: string) {
   let spawnCommand: string[] = [command]
-  let availablePort: number | undefined
+  let availablePort: number
 
   availablePort = await detect({port: config.port ? config.port : 3000})
   spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
@@ -84,15 +84,7 @@ export function nextBuild(nextBin: string, cwd: string) {
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  let spawnCommand: string[] = ["start"]
-  let availablePort: number
-  if (config.port) {
-    availablePort = await detect({port: config.port})
-    spawnCommand = spawnCommand.concat(["-p", `${config.port}`])
-  }
-  if (config.hostname) {
-    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
-  }
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "start")
 
   return new Promise((res, rej) => {
     if (config.port && availablePort !== config.port) {
