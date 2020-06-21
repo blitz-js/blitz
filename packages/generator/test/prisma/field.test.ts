@@ -83,21 +83,21 @@ describe("Field model", () => {
       taskId  Int"
     `)
     expect(Field.parse("belongsTo:tasks").join("\n")).toMatchInlineSnapshot(`
-      "task  Task  @relation(fields: [taskId], references: [id])
-      taskId  Int"
+      "tasks  Task  @relation(fields: [tasksId], references: [id])
+      tasksId  Int"
     `)
     expect(Field.parse("belongsTo:task?").join("\n")).toMatchInlineSnapshot(`
       "task  Task?  @relation(fields: [taskId], references: [id])
       taskId  Int?"
     `)
     expect(Field.parse("belongsTo:tasks?").join("\n")).toMatchInlineSnapshot(`
-      "task  Task?  @relation(fields: [taskId], references: [id])
-      taskId  Int?"
+      "tasks  Task?  @relation(fields: [tasksId], references: [id])
+      tasksId  Int?"
     `)
     // ignore list directives, not a valid relation type
     expect(Field.parse("belongsTo:tasks[]").join("\n")).toMatchInlineSnapshot(`
-      "task  Task  @relation(fields: [taskId], references: [id])
-      taskId  Int"
+      "tasks  Task  @relation(fields: [tasksId], references: [id])
+      tasksId  Int"
     `)
   })
 })

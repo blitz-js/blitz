@@ -1,4 +1,4 @@
-import {singlePascal, uncapitalize} from "../utils/plurals"
+import {singlePascal, uncapitalize, capitalize} from "../utils/plurals"
 import {log} from "@blitzjs/display"
 
 export enum FieldType {
@@ -58,7 +58,7 @@ export class Field {
   static parse(input: string): Field[] {
     const [_fieldName, _fieldType = "String", attribute] = input.split(":")
     let fieldName = uncapitalize(_fieldName)
-    let fieldType = singlePascal(_fieldType)
+    let fieldType = capitalize(_fieldType)
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
