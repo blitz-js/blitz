@@ -3,6 +3,7 @@ import detect from "detect-port"
 import {Manifest} from "./stages/manifest"
 import {through} from "./streams"
 import {ServerConfig} from "config"
+import {log} from "@blitzjs/display"
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {
@@ -55,7 +56,8 @@ export async function nextStartDev(
 
   return new Promise((res, rej) => {
     if (config.port && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port} ::port already in use`)
+      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      rej("")
     } else {
       spawn(nextBin, spawnCommand, {
         cwd,
@@ -88,7 +90,8 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
 
   return new Promise((res, rej) => {
     if (config.port && availablePort !== config.port) {
-      rej(`Couldn't start server on port ${config.port} ::port already in use`)
+      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      rej("")
     } else {
       spawn(nextBin, spawnCommand, {
         cwd,
