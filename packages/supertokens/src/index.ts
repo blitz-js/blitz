@@ -5,16 +5,16 @@ import cookie from "cookie"
 import {BlitzApiRequest, BlitzApiResponse, Middleware} from "@blitzjs/core"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 
-const TOKEN_SEPARATOR = ";"
-const HANDLE_SEPARATOR = ":"
-const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
-const SESSION_TOKEN_VERSION_0 = "v0"
+export const TOKEN_SEPARATOR = ";"
+export const HANDLE_SEPARATOR = ":"
+export const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
+export const SESSION_TOKEN_VERSION_0 = "v0"
 
-const COOKIE_SESSION_TOKEN = "sSessionToken"
-const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
+export const COOKIE_SESSION_TOKEN = "sSessionToken"
+export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 
-const HEADER_CSRF = "anti-csrf"
-const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
+export const HEADER_CSRF = "anti-csrf"
+export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 
 export interface PublicData extends Record<any, unknown> {
   userId: string | number | null
@@ -37,22 +37,27 @@ const defaultConfig = {
   method: "essential",
   apiDomain: "example.com",
   anonymousRole: "public",
+  // @ts-ignore
   async getSession(handle: string): Promise<SessionModel> {
     await true
     return {} as SessionModel
   },
+  // @ts-ignore
   async getSessions(userId: string | number): Promise<SessionModel[]> {
     await true
     return [] as SessionModel[]
   },
+  // @ts-ignore
   async createSession(session: SessionModel): Promise<SessionModel> {
     await true
     return {} as SessionModel
   },
+  // @ts-ignore
   async updateSession(handle: string, session: Partial<SessionModel>): Promise<SessionModel> {
     await true
     return {} as SessionModel
   },
+  // @ts-ignore
   async deleteSession(handle: string): Promise<boolean> {
     await true
     return true
@@ -245,8 +250,8 @@ export async function createNewSession(
 ): Promise<SessionKernel> {
   const config = defaultConfig
 
-  invariant(publicData.userId, "You must publicData.userId")
-  invariant(publicData.role, "You must publicData.role")
+  invariant(publicData.userId !== undefined, "You must provide publicData.userId")
+  invariant(publicData.role, "You must provide publicData.role")
 
   if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
@@ -294,6 +299,7 @@ export async function createAnonymousSession(res: BlitzApiResponse) {
 // Session/DB utils
 // --------------------------------
 
+//@ts-ignore
 export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
   // TODO: advanced method
 }
@@ -385,7 +391,8 @@ export async function setPublicData(handle: string, data: Omit<PublicData, "user
 // --------------------------------
 // General utils
 // --------------------------------
-const base64 = (input: HashaInput) => hasha(input, {encoding: "base64"})
+// const base64 = (input: HashaInput) => hasha(input, {encoding: "base64"})
+const base64 = btoa
 const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
 
 // --------------------------------
@@ -424,7 +431,15 @@ export const parseSessionToken = (token: string) => {
 }
 
 export const createPublicDataToken = (publicData: string, expireAt: Date) => {
-  return base64([publicData, expireAt].join(TOKEN_SEPARATOR))
+  return base64([publicData, expireAt.toISOString()].join(TOKEN_SEPARATOR))
+}
+
+export const parsePublicDataToken = (token: string) => {
+  const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
+  return {
+    publicData: JSON.parse(publicDataStr),
+    expireAt: new Date(expireAt),
+  }
 }
 
 export const createAntiCSRFToken = () => generateToken()
