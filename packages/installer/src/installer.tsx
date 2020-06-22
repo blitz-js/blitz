@@ -1,21 +1,24 @@
-import * as AddDependencyExecutor from './executors/add-dependency-executor'
-import * as NewFileExecutor from './executors/new-file-executor'
-import * as FileTransformExecutor from './executors/file-transform-executor'
-import {log} from '@blitzjs/display'
-import {REGISTER_INSTANCE} from 'ts-node'
-import * as React from 'react'
-import {render} from 'ink'
-import {RecipeRenderer} from './recipe-renderer'
+import * as AddDependencyExecutor from "./executors/add-dependency-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
+import * as FileTransformExecutor from "./executors/file-transform-executor"
+import {log} from "@blitzjs/display"
+import {REGISTER_INSTANCE} from "ts-node"
+import * as React from "react"
+import {render} from "ink"
+import {RecipeRenderer} from "./recipe-renderer"
 
 export const setupTsNode = () => {
   if (!process[REGISTER_INSTANCE]) {
     // During blitz interal dev, oclif automaticaly sets up ts-node so we have to check
-    require('ts-node').register({compilerOptions: {module: 'commonjs'}})
+    require("ts-node").register({compilerOptions: {module: "commonjs"}})
   }
-  require('tsconfig-paths/register')
+  require("tsconfig-paths/register")
 }
 
-type ExecutorConfig = AddDependencyExecutor.Config | FileTransformExecutor.Config | NewFileExecutor.Config
+type ExecutorConfig =
+  | AddDependencyExecutor.Config
+  | FileTransformExecutor.Config
+  | NewFileExecutor.Config
 
 export interface RecipeMeta {
   packageName: string

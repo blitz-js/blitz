@@ -80,7 +80,8 @@
       "contributions": [
         "code",
         "review",
-        "maintenance"
+        "maintenance",
+        "doc"
       ]
     },
     {
@@ -659,7 +660,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/5927133?v=4",
       "profile": "https://github.com/osirvent",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -668,7 +670,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/1942953?v=4",
       "profile": "https://github.com/donni106",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -696,6 +699,34 @@
       "profile": "https://noahfleischmann.com",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "toshi1127",
+      "name": "Matsumoto Toshi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32378535?v=4",
+      "profile": "https://github.com/toshi1127",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "simonedelmann",
+      "name": "Simon Edelmann",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2821076?v=4",
+      "profile": "https://github.com/simonedelmann",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "shaunchurch",
+      "name": "Shaun Church",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/571764?v=4",
+      "profile": "https://shaun.church",
+      "contributions": [
+        "doc"
       ]
     }
   ],

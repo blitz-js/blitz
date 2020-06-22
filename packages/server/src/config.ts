@@ -1,7 +1,7 @@
-import {resolve} from 'path'
-import {resolveBinAsync} from './resolve-bin-async'
-import {transformFiles} from '@blitzjs/file-pipeline'
-import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
+import {resolve} from "path"
+import {resolveBinAsync} from "./resolve-bin-async"
+import {transformFiles} from "@blitzjs/file-pipeline"
+import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
 
 type Synchronizer = typeof transformFiles
 
@@ -17,7 +17,7 @@ export type ServerConfig = {
   transformFiles?: Synchronizer
 }
 
-type NormalizedConfig = Omit<ServerConfig, 'interceptNextErrors'> & {
+type NormalizedConfig = Omit<ServerConfig, "interceptNextErrors"> & {
   ignore: string[]
   include: string[]
   nextBin: string
@@ -30,30 +30,31 @@ type NormalizedConfig = Omit<ServerConfig, 'interceptNextErrors'> & {
 
 const defaults = {
   ignoredPaths: [
-    './build/**/*',
-    './.blitz-*/**/*',
-    './.blitz/**/*',
-    '.DS_Store',
-    '.git',
-    '.next/**/*',
-    '*.log',
-    '.now',
-    '*.pnp.js',
-    'coverage/**/*',
-    'dist/**/*',
-    'node_modules/**/*',
-    'cypress/**/*',
+    "./build/**/*",
+    "./.blitz-*/**/*",
+    "./.blitz/**/*",
+    ".DS_Store",
+    ".git/**/*",
+    ".next/**/*",
+    "*.log",
+    ".vercel/**/*",
+    ".now/**/*",
+    "*.pnp.js",
+    "coverage/**/*",
+    "dist/**/*",
+    "node_modules/**/*",
+    "cypress/**/*",
   ],
-  includePaths: ['**/*'],
-  devFolder: '.blitz/caches/dev',
-  buildFolder: '.blitz/caches/build',
-  nextBinPatched: './node_modules/.bin/next-patched',
+  includePaths: ["**/*"],
+  devFolder: ".blitz/caches/dev",
+  buildFolder: ".blitz/caches/build",
+  nextBinPatched: "./node_modules/.bin/next-patched",
   writeManifestFile: true,
 }
 
 export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
-  const nextBinOrig = await resolveBinAsync('next')
-  const nextBinPatched = await resolveBinAsync('@blitzjs/server', 'next-patched')
+  const nextBinOrig = await resolveBinAsync("next")
+  const nextBinPatched = await resolveBinAsync("@blitzjs/server", "next-patched")
   const git = parseChokidarRulesFromGitignore(resolve(process.cwd(), config.rootFolder))
 
   return {

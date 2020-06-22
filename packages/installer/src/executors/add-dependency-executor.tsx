@@ -1,12 +1,12 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from './executor'
-import * as fs from 'fs-extra'
-import * as path from 'path'
-import {spawn} from 'cross-spawn'
-import * as React from 'react'
-import {Box, Text} from 'ink'
-import {Newline} from '../components/newline'
-import Spinner from 'ink-spinner'
-import {useEnterToContinue} from '../utils/use-enter-to-continue'
+import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
+import * as fs from "fs-extra"
+import * as path from "path"
+import {spawn} from "cross-spawn"
+import * as React from "react"
+import {Box, Text} from "ink"
+import {Newline} from "../components/newline"
+import Spinner from "ink-spinner"
+import {useEnterToContinue} from "../utils/use-enter-to-continue"
 
 interface NpmPackage {
   name: string
@@ -24,13 +24,13 @@ export function isAddDependencyExecutor(executor: ExecutorConfig): executor is C
   return (executor as Config).packages !== undefined
 }
 
-export const type = 'add-dependency'
+export const type = "add-dependency"
 
 function Package({pkg, loading}: {pkg: NpmPackage; loading: boolean}) {
   return (
     <Text>
       {`   `}
-      {loading ? <Spinner /> : '📦'}
+      {loading ? <Spinner /> : "📦"}
       {` ${pkg.name}@${pkg.version}`}
     </Text>
   )
@@ -68,7 +68,7 @@ const DependencyList = ({
   )
 }
 
-export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}) => {
+export const Propose: Executor["Propose"] = ({cliArgs, step, onProposalAccepted}) => {
   useEnterToContinue(onProposalAccepted)
 
   if (!isAddDependencyExecutor(step)) {
@@ -77,44 +77,44 @@ export const Propose: Executor['Propose'] = ({cliArgs, step, onProposalAccepted}
   }
   return (
     <DependencyList
-      lede={'Adding some shiny new dependencies.\nIf this list looks good, press ENTER to install.'}
+      lede={"Adding some shiny new dependencies.\nIf this list looks good, press ENTER to install."}
       packages={getExecutorArgument(step.packages, cliArgs)}
     />
   )
 }
 
 function getPackageManager() {
-  if (fs.existsSync(path.resolve('package-lock.json'))) {
-    return 'npm'
+  if (fs.existsSync(path.resolve("package-lock.json"))) {
+    return "npm"
   }
-  return 'yarn'
+  return "yarn"
 }
 
 async function installPackages(packages: NpmPackage[], isDev = false) {
   const packageManager = getPackageManager()
-  const args: string[] = ['add']
+  const args: string[] = ["add"]
 
   if (isDev) {
-    args.push(packageManager === 'yarn' ? '-D' : '--save-dev')
+    args.push(packageManager === "yarn" ? "-D" : "--save-dev")
   }
   packages.forEach((pkg) => {
     pkg.version ? args.push(`${pkg.name}@${pkg.version}`) : args.push(pkg.name)
   })
   await new Promise((resolve) => {
     const cp = spawn(packageManager, args, {
-      stdio: ['inherit', 'pipe', 'pipe'],
+      stdio: ["inherit", "pipe", "pipe"],
     })
-    cp.on('exit', resolve)
+    cp.on("exit", resolve)
   })
 }
 
-export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) => {
+export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) => {
   const [depsInstalled, setDepsInstalled] = React.useState(false)
   const [devDepsInstalled, setDevDepsInstalled] = React.useState(false)
 
   const handleChangeCommitted = React.useCallback(() => {
     const packages = (step as Config).packages
-    const dependencies = packages.length === 1 ? 'dependency' : 'dependencies'
+    const dependencies = packages.length === 1 ? "dependency" : "dependencies"
     onChangeCommitted(`Installed ${packages.length} ${dependencies}`)
   }, [onChangeCommitted, step])
 
@@ -152,7 +152,7 @@ export const Commit: Executor['Commit'] = ({cliArgs, step, onChangeCommitted}) =
   return (
     <>
       <DependencyList
-        lede={'Hang tight! Fetching the latest dependencies...'}
+        lede={"Hang tight! Fetching the latest dependencies..."}
         depsLoading={!depsInstalled}
         devDepsLoading={!devDepsInstalled}
         packages={getExecutorArgument(step.packages, cliArgs)}

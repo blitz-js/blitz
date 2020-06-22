@@ -1,5 +1,5 @@
-import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery } from "blitz"
+import {Suspense} from "react"
+import {Head, Link, useRouter, useQuery} from "blitz"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
 export const Project = () => {

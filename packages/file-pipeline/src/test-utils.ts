@@ -1,6 +1,6 @@
-import {through, pipeline} from './streams'
+import {through, pipeline} from "./streams"
 
-const defaultLogger = (file: any) => (typeof file === 'string' ? file : file.path)
+const defaultLogger = (file: any) => (typeof file === "string" ? file : file.path)
 export function testStreamItems(
   stream: NodeJS.ReadWriteStream,
   expected: any[],

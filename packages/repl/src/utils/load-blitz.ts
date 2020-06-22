@@ -1,21 +1,21 @@
-import {forceRequire} from './module'
-import path from 'path'
-import globby from 'globby'
-import pkgDir from 'pkg-dir'
+import {forceRequire} from "./module"
+import path from "path"
+import globby from "globby"
+import pkgDir from "pkg-dir"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
 export async function getBlitzModulePaths() {
   const paths = await globby(
     [
-      'app/**/{queries,mutations}/*.{js,ts,tsx}',
-      '**/utils/*.{js,ts,tsx}',
-      'jobs/**/*.{js,ts,tsx}',
-      'integrations/**/*.{js,ts,tsx}',
+      "app/**/{queries,mutations}/*.{js,ts,tsx}",
+      "**/utils/*.{js,ts,tsx}",
+      "jobs/**/*.{js,ts,tsx}",
+      "integrations/**/*.{js,ts,tsx}",
     ],
     {cwd: projectRoot, gitignore: true},
   )
-  paths.push('db')
+  paths.push("db")
 
   return [...paths.map((p) => path.join(projectRoot, p))]
 }
@@ -26,7 +26,7 @@ export const loadBlitz = async () => {
     {},
     ...paths.map((modulePath) => {
       let name = path.parse(modulePath).name
-      if (name === 'index') {
+      if (name === "index") {
         const dirs = path.dirname(modulePath).split(path.sep)
         name = dirs[dirs.length - 1]
       }

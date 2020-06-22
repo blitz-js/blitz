@@ -1,4 +1,5 @@
-import db, { FindManyProductArgs } from "db"
+import {Middleware} from "blitz"
+import db, {FindManyProductArgs} from "db"
 
 type GetProductsInput = {
   where?: FindManyProductArgs["where"]
@@ -10,13 +11,14 @@ type GetProductsInput = {
   // include?: FindManyProductArgs['include']
 }
 
-export default async function getProducts({
-  where,
-  orderBy,
-  skip,
-  cursor,
-  take,
-}: GetProductsInput) {
+export default async function getProducts(
+  {where, orderBy, skip, cursor, take}: GetProductsInput,
+  ctx: Record<any, unknown> = {},
+) {
+  if (ctx.referer) {
+    console.log("HTTP referer:", ctx.referer)
+  }
+
   const products = await db.product.findMany({
     where,
     orderBy,
@@ -27,3 +29,12 @@ export default async function getProducts({
 
   return products
 }
+
+export const middleware: Middleware[] = [
+  async (req, res, next) => {
+    await next()
+    if (req.method !== "HEAD" && Array.isArray(res.blitzResult)) {
+      console.log("[Middleware] Total product count:", res.blitzResult.length, "\n")
+    }
+  },
+]

@@ -9,8 +9,11 @@ datasource db {
 
 model Project {
   id          String @default(cuid()) @id
+  createdAt   Int
   name        String
   description String
   path        String
+  icon        String
+  color       String
   lastActive  Int
 }

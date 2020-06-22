@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Project {
-  id          String @default(cuid()) @id
-  name        String
-  description String
-  path        String @unique
-
-  // the following are stub values which are filled in by queries based on the filesystem state
+  id         String @default(cuid()) @id
+  createdAt  Int
+  name       String
+  path       String
+  icon       String
+  color      String
   lastActive Int
 }

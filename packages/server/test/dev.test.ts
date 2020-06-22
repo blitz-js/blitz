@@ -1,27 +1,27 @@
 /* eslint-disable import/first */
 
-import {multiMock} from './utils/multi-mock'
-import {resolve, join} from 'path'
+import {multiMock} from "./utils/multi-mock"
+import {resolve, join} from "path"
 const mocks = multiMock(
   {
-    'next-utils': {
+    "next-utils": {
       nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
     },
-    'resolve-bin-async': {
+    "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
     },
   },
-  resolve(__dirname, '../src'),
+  resolve(__dirname, "../src"),
 )
 
 // Import with mocks applied
-import {dev} from '../src/dev'
-import {Manifest} from '../src/stages/manifest'
-import {directoryTree} from './utils/tree-utils'
+import {dev} from "../src/dev"
+import {Manifest} from "../src/stages/manifest"
+import {directoryTree} from "./utils/tree-utils"
 
 const originalLog = console.log
-describe('Dev command', () => {
+describe("Dev command", () => {
   let rootFolder: string
   let buildFolder: string
   let devFolder: string
@@ -37,47 +37,47 @@ describe('Dev command', () => {
     console.log = originalLog
   })
 
-  describe('throw in nextStartDev', () => {
+  describe("throw in nextStartDev", () => {
     beforeEach(() => {
-      mocks['next-utils'].nextStartDev.mockRejectedValue('pow')
+      mocks["next-utils"].nextStartDev.mockRejectedValue("pow")
     })
 
     afterEach(() => {
-      mocks['next-utils'].nextStartDev.mockReturnValue(Promise.resolve())
+      mocks["next-utils"].nextStartDev.mockReturnValue(Promise.resolve())
     })
 
-    it('should blow up', async (done) => {
+    it("should blow up", async (done) => {
       const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
       try {
         await dev({
           transformFiles,
-          rootFolder: '',
+          rootFolder: "",
           writeManifestFile: false,
           watch: false,
           port: 3000,
-          hostname: 'localhost',
+          hostname: "localhost",
         })
       } catch (err) {
-        expect(err).toBe('pow')
+        expect(err).toBe("pow")
         done()
       }
     })
   })
 
-  describe.skip('when with next.config', () => {
+  describe.skip("when with next.config", () => {
     beforeEach(() => {
-      rootFolder = resolve('bad')
-      buildFolder = resolve(rootFolder, '.blitz')
-      devFolder = resolve(rootFolder, '.blitz')
+      rootFolder = resolve("bad")
+      buildFolder = resolve(rootFolder, ".blitz")
+      devFolder = resolve(rootFolder, ".blitz")
       mocks.mockFs({
-        'bad/next.config.js': 'yo',
+        "bad/next.config.js": "yo",
       })
     })
     afterEach(() => {
       mocks.mockFs.restore()
     })
 
-    it('should fail when passed a next.config.js', async () => {
+    it("should fail when passed a next.config.js", async () => {
       expect.assertions(2)
       await expect(
         dev({
@@ -87,33 +87,34 @@ describe('Dev command', () => {
           writeManifestFile: false,
           watch: false,
           port: 3000,
-          hostname: 'localhost',
+          hostname: "localhost",
         }),
-      ).rejects.toThrowError('Blitz does not support')
+      ).rejects.toThrowError("Blitz does not support")
 
       expect(
         consoleOutput.includes(
-          'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
+          "Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js",
         ),
       ).toBeTruthy()
     })
   })
 
-  describe('when run normally', () => {
+  describe("when run normally", () => {
     beforeEach(() => {
-      rootFolder = resolve('dev')
-      buildFolder = resolve(rootFolder, '.blitz')
-      devFolder = resolve(rootFolder, '.blitz-dev')
+      rootFolder = resolve("dev")
+      buildFolder = resolve(rootFolder, ".blitz")
+      devFolder = resolve(rootFolder, ".blitz-dev")
     })
     afterEach(() => {
       mocks.mockFs.restore()
     })
 
-    it('should copy the correct files to the dev folder', async () => {
+    it("should copy the correct files to the dev folder", async () => {
       mocks.mockFs({
-        'dev/.now': '',
-        'dev/one': '',
-        'dev/two': '',
+        "dev/.git/hooks": "",
+        "dev/.vercel/project.json": "",
+        "dev/one": "",
+        "dev/two": "",
       })
       await dev({
         rootFolder,
@@ -122,26 +123,46 @@ describe('Dev command', () => {
         writeManifestFile: false,
         watch: false,
         port: 3000,
-        hostname: 'localhost',
+        hostname: "localhost",
       })
       expect(directoryTree(rootFolder)).toEqual({
         children: [
           {
-            children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
-            name: '.blitz-dev',
+            children: [
+              {name: "blitz.config.js"},
+              {name: "next.config.js"},
+              {name: "one"},
+              {name: "two"},
+            ],
+            name: ".blitz-dev",
           },
-          {name: '.now'},
-          {name: 'one'},
-          {name: 'two'},
+          {
+            children: [
+              {
+                name: "hooks",
+              },
+            ],
+            name: ".git",
+          },
+          {
+            children: [
+              {
+                name: "project.json",
+              },
+            ],
+            name: ".vercel",
+          },
+          {name: "one"},
+          {name: "two"},
         ],
-        name: 'dev',
+        name: "dev",
       })
     })
 
-    it('calls spawn with the patched next cli bin', async () => {
+    it("calls spawn with the patched next cli bin", async () => {
       mocks.mockFs(
         {
-          'dev/@blitzjs/server/next-patched': '',
+          "dev/@blitzjs/server/next-patched": "",
         },
         {createCwd: false, createTmp: false},
       )
@@ -152,15 +173,15 @@ describe('Dev command', () => {
         writeManifestFile: false,
         watch: false,
         port: 3000,
-        hostname: 'localhost',
+        hostname: "localhost",
       })
-      const nextPatched = resolve(rootFolder, '@blitzjs/server', 'next-patched')
-      const blitzDev = join(rootFolder, '.blitz-dev')
-      expect(mocks['next-utils'].nextStartDev.mock.calls[0].length).toBe(5)
-      expect(mocks['next-utils'].nextStartDev.mock.calls[0][0]).toBe(nextPatched)
-      expect(mocks['next-utils'].nextStartDev.mock.calls[0][1]).toBe(blitzDev)
-      expect(mocks['next-utils'].nextStartDev.mock.calls[0][4]).toHaveProperty('port')
-      expect(mocks['next-utils'].nextStartDev.mock.calls[0][4]).toHaveProperty('hostname')
+      const nextPatched = resolve(rootFolder, "@blitzjs/server", "next-patched")
+      const blitzDev = join(rootFolder, ".blitz-dev")
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0].length).toBe(5)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][0]).toBe(nextPatched)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][1]).toBe(blitzDev)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][4]).toHaveProperty("port")
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][4]).toHaveProperty("hostname")
     })
   })
 })

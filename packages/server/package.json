@@ -1,9 +1,8 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.14.0",
+  "version": "0.15.2",
   "license": "MIT",
-  "main": "dist/index.js",
   "bin": {
     "next-patched": "./bin/next-patched"
   },
@@ -26,12 +25,13 @@
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "module": "dist/webpack.esm.js",
+  "main": "dist/index.js",
+  "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/display": "0.14.0",
-    "@blitzjs/config": "0.14.0",
-    "@blitzjs/file-pipeline": "0.14.0",
+    "@blitzjs/config": "0.15.2",
+    "@blitzjs/display": "0.15.2",
+    "@blitzjs/file-pipeline": "0.15.2",
     "cross-spawn": "7.0.2",
     "detect-port": "1.3.0",
     "fast-glob": "3.2.2",
@@ -61,7 +61,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.14.0"
+    "@blitzjs/core": "0.15.2"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

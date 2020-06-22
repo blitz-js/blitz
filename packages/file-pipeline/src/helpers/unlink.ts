@@ -1,8 +1,8 @@
-import {unlink as unlinkFile, pathExists} from 'fs-extra'
+import {unlink as unlinkFile, pathExists} from "fs-extra"
 
-import {relative, resolve} from 'path'
-import {transform} from '../transform'
-import {EventedFile} from 'types'
+import {relative, resolve} from "path"
+import {transform} from "../transform"
+import {EventedFile} from "types"
 
 function getDestPath(folder: string, file: EventedFile) {
   const {history, cwd} = file
@@ -16,7 +16,7 @@ function getDestPath(folder: string, file: EventedFile) {
  */
 export function unlink(folder: string) {
   return transform.file(async (file) => {
-    if (file.event === 'unlink' || file.event === 'unlinkDir') {
+    if (file.event === "unlink" || file.event === "unlinkDir") {
       if (await pathExists(getDestPath(folder, file))) await unlinkFile(getDestPath(folder, file))
     }
 

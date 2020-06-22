@@ -1,10 +1,9 @@
-import File from 'vinyl'
-import slash from 'slash'
-import {relative} from 'path'
-import {Stage, transform} from '@blitzjs/file-pipeline'
-import {getConfig} from '@blitzjs/config'
-
-import {absolutePathTransform} from '../utils'
+import File from "vinyl"
+import slash from "slash"
+import {relative} from "path"
+import {Stage, transform} from "@blitzjs/file-pipeline"
+import {getConfig} from "@blitzjs/config"
+import {absolutePathTransform} from "../utils"
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
@@ -12,41 +11,49 @@ import {absolutePathTransform} from '../utils'
 export const createStageRpc: Stage = function configure({config: {src}}) {
   const fileTransformer = absolutePathTransform(src)
 
-  const getRpcPath = fileTransformer(rpcPath)
-  const getRpcHandlerPath = fileTransformer(handlerPath)
+  const getResolverPath = fileTransformer(resolverPath)
+  const getApiHandlerPath = fileTransformer(apiHandlerPath)
 
   const {target}: {target?: string} = getConfig()
 
   const stream = transform.file((file, {next, push}) => {
-    if (!isRpcPath(file.path)) {
+    if (!isResolverPath(file.path)) {
       return file
     }
 
-    const importPath = rpcPath(resolutionPath(src, file.path))
-    const {resolverType, resolverName} = extractTemplateVars(importPath)
+    const originalPath = resolutionPath(src, file.path)
+    const resolverImportPath = resolverPath(originalPath)
+    const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
-    // Original function -> _rpc path
+    // Original function -> _resolvers path
     push(
       new File({
-        path: getRpcPath(file.path),
+        path: getResolverPath(file.path),
         contents: file.contents,
-        hash: file.hash + ':1',
+        hash: file.hash + ":1",
       }),
     )
 
     // File API route handler
     push(
       new File({
-        path: getRpcHandlerPath(file.path),
-        contents: Buffer.from(rpcHandlerTemplate(importPath, resolverType, resolverName)),
-        hash: file.hash + ':2',
+        path: getApiHandlerPath(file.path),
+        contents: Buffer.from(apiHandlerTemplate(originalPath)),
+        hash: file.hash + ":2",
       }),
     )
 
-    // Isomorphic RPC client
-    const rpcFile = file.clone()
-    rpcFile.contents = Buffer.from(isomorphicRpcTemplate(importPath, target?.includes('serverless') || false))
-    push(rpcFile)
+    // Isomorphic client
+    const isomorphicHandlerFile = file.clone()
+    isomorphicHandlerFile.contents = Buffer.from(
+      isomorhicHandlerTemplate(
+        resolverImportPath,
+        resolverName,
+        resolverType,
+        target?.includes("serverless") || false,
+      ),
+    )
+    push(isomorphicHandlerFile)
 
     return next()
   })
@@ -54,49 +61,72 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
   return {stream}
 }
 
-export function isRpcPath(filePath: string) {
-  return /(?:app[\\/])(?!_rpc).*(?:queries|mutations)[\\/].+/.exec(filePath)
+export function isResolverPath(filePath: string) {
+  return /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorphicRpcTemplate = (resolverPath: string, warm: boolean) => `
+const isomorhicHandlerTemplate = (
+  resolverPath: string,
+  resolverName: string,
+  resolverType: string,
+  warm: boolean,
+) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
-import resolver from '${resolverPath}'
-export default getIsomorphicRpcHandler(resolver, '${resolverPath}', ${warm}) as typeof resolver
+const resolverModule = require('${resolverPath}')
+export default getIsomorphicRpcHandler(
+  resolverModule,
+  '${resolverPath}',
+  '${resolverName}',
+  '${resolverType}',
+  ${warm}
+) as typeof resolverModule.default
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const rpcHandlerTemplate = (resolverPath: string, resolverType: string, resolverName: string) => `
-import {rpcHandler} from '@blitzjs/server'
-import resolver from '${resolverPath}'
+const apiHandlerTemplate = (originalPath: string) => `
+// This imports the isomorphicHandler
+import resolverModule from '${originalPath}'
+import {getAllMiddlewareForModule} from '@blitzjs/core'
+import {rpcApiHandler} from '@blitzjs/server'
 let db
 try {
   db = require('db').default
 }catch(err){}
-export default rpcHandler('${resolverType}', '${resolverName}', resolver, () => db && db.connect())
+export default rpcApiHandler(
+  resolverModule,
+  getAllMiddlewareForModule(resolverModule),
+  () => db && db.connect(),
+)
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}
 `
 
 function removeExt(filePath: string) {
-  return filePath.replace(/[.][^./\s]+$/, '')
+  return filePath.replace(/[.][^./\s]+$/, "")
 }
 
 function resolutionPath(srcPath: string, filePath: string) {
   return removeExt(slash(relative(srcPath, filePath)))
 }
 
-function extractTemplateVars(importPath: string) {
-  const [, resolverTypePlural, resolverName] = /(queries|mutations)\/(.*)$/.exec(importPath) || []
+function extractTemplateVars(resolverImportPath: string) {
+  const [, resolverTypePlural, resolverName] =
+    /(queries|mutations)\/(.*)$/.exec(resolverImportPath) || []
 
   return {
-    importPath,
-    resolverType: resolverTypePlural === 'mutations' ? 'mutation' : 'query',
+    resolverImportPath,
+    resolverType: resolverTypePlural === "mutations" ? "mutation" : "query",
     resolverName,
   }
 }
 
-function rpcPath(path: string) {
-  return path.replace(/^app/, 'app/_rpc')
+function resolverPath(path: string) {
+  return path.replace(/^app/, "app/_resolvers")
 }
 
-function handlerPath(path: string) {
-  return path.replace(/^app/, 'pages/api')
+function apiHandlerPath(path: string) {
+  return path.replace(/^app/, "pages/api")
 }

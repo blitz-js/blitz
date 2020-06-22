@@ -1,11 +1,11 @@
-import mockFileSystem from 'mock-fs'
+import mockFileSystem from "mock-fs"
 
 const mockFs = (...args: any[]) => {
   // Fixes an issue with mockFs around console log in tests and dependencies
   // This is a magic workaround until mock-fs provides an overlay functionality
   // Tried using union fs and memfs but it wasn't working properly
   // https://github.com/facebook/jest/issues/5792#issuecomment-377861996
-  console.log('')
+  console.log("")
   mockFileSystem(...args)
 }
 
@@ -23,7 +23,7 @@ mockFs.restore = mockFileSystem.restore
  */
 
 export function multiMock<T extends Record<string, any>>(mocks: T, cwd: string = process.cwd()) {
-  const {join} = jest.requireActual('path')
+  const {join} = jest.requireActual("path")
   Object.entries(mocks).forEach(([path, obj]) => {
     const moduleName = join(cwd, path)
     jest.doMock(moduleName, () => obj)

@@ -1,12 +1,12 @@
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
-  coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  preset: "ts-jest",
+  testEnvironment: "node",
+  moduleFileExtensions: ["ts", "tsx", "js", "json"],
+  coverageReporters: ["json", "lcov", "text", "clover"],
   // collectCoverage: !!`Boolean(process.env.CI)`,
-  collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: ['/templates/'],
-  modulePathIgnorePatterns: ['<rootDir>/tmp', '<rootDir>/dist'],
+  collectCoverageFrom: ["src/**/*.ts"],
+  coveragePathIgnorePatterns: ["/templates/"],
+  modulePathIgnorePatterns: ["<rootDir>/tmp", "<rootDir>/dist"],
   // TODO enable threshold
   // coverageThreshold: {
   //   global: {

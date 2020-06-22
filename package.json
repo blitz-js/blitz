@@ -76,6 +76,7 @@
     "cpy-cli": "3.1.0",
     "cross-env": "7.0.0",
     "debug": "4.1.1",
+    "delay": "4.3.0",
     "directory-tree": "2.2.4",
     "eslint": "6.x",
     "eslint-config-react-app": "5.2.1",
@@ -121,8 +122,6 @@
     "hooks": {
       "pre-commit": "lint-staged && pretty-quick --staged",
       "pre-push": "yarn lint",
-      "post-checkout": "if [[ $HUSKY_GIT_PARAMS =~ 1$ ]]; then yarn install --frozen-lockfile; fi",
-      "post-merge": "yarn install --frozen-lockfile",
       "post-rebase": "yarn install"
     }
   },

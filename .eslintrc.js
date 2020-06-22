@@ -1,38 +1,38 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 6,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
     project: `./tsconfig.json`,
   },
-  plugins: ['@typescript-eslint', 'import', 'unicorn'],
-  extends: ['react-app'],
+  plugins: ["@typescript-eslint", "import", "unicorn"],
+  extends: ["react-app"],
   rules: {
-    'react/react-in-jsx-scope': 'off', // React is always in scope with Blitz
-    'jsx-a11y/anchor-is-valid': 'off', //Doesn't play well with Blitz/Next <Link> usage
-    'import/first': 'off',
-    'import/no-default-export': 'error',
-    'require-await': 'error',
-    'no-async-promise-executor': 'error',
-    'unicorn/filename-case': [
-      'error',
+    "react/react-in-jsx-scope": "off", // React is always in scope with Blitz
+    "jsx-a11y/anchor-is-valid": "off", //Doesn't play well with Blitz/Next <Link> usage
+    "import/first": "off",
+    "import/no-default-export": "error",
+    "require-await": "error",
+    "no-async-promise-executor": "error",
+    "unicorn/filename-case": [
+      "error",
       {
-        case: 'kebabCase',
+        case: "kebabCase",
       },
     ],
-    '@typescript-eslint/no-floating-promises': 'error',
+    "@typescript-eslint/no-floating-promises": "error",
   },
-  ignorePatterns: ['packages/cli/', 'packages/generator/templates'],
+  ignorePatterns: ["packages/cli/", "packages/generator/templates"],
   overrides: [
     {
-      files: ['examples/**', 'packages/gui/**'],
+      files: ["examples/**", "packages/gui/**"],
       rules: {
-        'import/no-default-export': 'off',
-        'unicorn/filename-case': 'off',
-        '@typescript-eslint/no-floating-promises': 'off',
+        "import/no-default-export": "off",
+        "unicorn/filename-case": "off",
+        "@typescript-eslint/no-floating-promises": "off",
       },
     },
   ],

@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from '../generator'
-import {join} from 'path'
+import {Generator, GeneratorOptions} from "../generator"
+import {join} from "path"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -13,15 +13,15 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
-  static subdirectory = 'queries'
-  sourceRoot = join(__dirname, './templates/query')
+  static subdirectory = "queries"
+  sourceRoot = join(__dirname, "./templates/query")
 
-  private getId(input: string = '') {
+  private getId(input: string = "") {
     if (!input) return input
     return `${input}Id`
   }
 
-  private getParam(input: string = '') {
+  private getParam(input: string = "") {
     if (!input) return input
     return `[${input}]`
   }
@@ -45,7 +45,7 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ''
+    const context = this.options.context ? `${this.options.context}/` : ""
     return `app/${context}${this.options.modelNames}/queries`
   }
 }

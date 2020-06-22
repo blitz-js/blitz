@@ -1,4 +1,4 @@
-import db, { FindOneProductArgs } from "db"
+import db, {FindOneProductArgs} from "db"
 
 type GetProductInput = {
   where: FindOneProductArgs["where"]
@@ -6,8 +6,8 @@ type GetProductInput = {
   // include?: FindOneProductArgs['include']
 }
 
-export default async function getProduct({ where }: GetProductInput) {
-  const product = await db.product.findOne({ where })
+export default async function getProduct({where}: GetProductInput) {
+  const product = await db.product.findOne({where})
 
   return product
 }

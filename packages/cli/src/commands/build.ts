@@ -1,21 +1,21 @@
-import {Command, flags} from '@oclif/command'
-import {build, ServerConfig} from '@blitzjs/server'
-import {runPrismaGeneration} from './db'
+import {Command, flags} from "@oclif/command"
+import {build, ServerConfig} from "@blitzjs/server"
+import {runPrismaGeneration} from "./db"
 
 export class Build extends Command {
-  static description = 'Create a production build'
-  static aliases = ['b']
+  static description = "Create a production build"
+  static aliases = ["b"]
 
   static flags = {
     port: flags.integer({
-      char: 'p',
-      description: 'Set port number',
+      char: "p",
+      description: "Set port number",
       default: 3000,
     }),
     hostname: flags.string({
-      char: 'H',
-      description: 'Set server hostname',
-      default: 'localhost',
+      char: "H",
+      description: "Set server hostname",
+      default: "localhost",
     }),
   }
 

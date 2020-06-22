@@ -1,6 +1,6 @@
-import {FC, ReactNode} from 'react'
+import {FC, ReactNode} from "react"
 
-import {useDelayUnmount} from 'utils/hooks/web/useDelayUnmount'
+import {useDelayUnmount} from "utils/hooks/web/useDelayUnmount"
 
 type FadeProps = {
   show: boolean
@@ -9,8 +9,8 @@ type FadeProps = {
 
 export const Fade: FC<FadeProps> = ({show, children}) => {
   const shouldRenderChild = useDelayUnmount(show, 300)
-  const mountedStyle = {animation: 'fadein 300ms ease-in'}
-  const unmountedStyle = {animation: 'fadeout 310ms ease-in'}
+  const mountedStyle = {animation: "fadein 300ms ease-in"}
+  const unmountedStyle = {animation: "fadeout 310ms ease-in"}
 
   return (
     <>

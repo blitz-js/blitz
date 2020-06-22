@@ -1,14 +1,14 @@
-import {useEffect, useMemo, useState} from 'react'
+import {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react"
 
-import {dethunkify} from 'utils/dethunkify'
-import {JSONValue} from 'utils/types/JSONValue'
+import {JSONValue} from "./types"
+import {dethunkify} from "./utils"
 
 export const useStorage = <T extends JSONValue>(
   getStorage: () => Storage | null,
   key: string,
   initialValue: T | (() => T) | null = null,
   errorCallback?: (error: DOMException | TypeError) => void,
-): [T, React.Dispatch<React.SetStateAction<T>>] => {
+): [T, Dispatch<SetStateAction<T>>] => {
   const storage = useMemo(() => {
     try {
       return getStorage()
@@ -18,6 +18,7 @@ export const useStorage = <T extends JSONValue>(
 
   const [value, setValue] = useState<T>(() => {
     const serializedValue = storage?.getItem(key)
+
     if (serializedValue == null) return dethunkify(initialValue)
 
     try {

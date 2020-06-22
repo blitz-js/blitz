@@ -1,5 +1,6 @@
-import File from 'vinyl'
-import {Stage, transform} from '@blitzjs/file-pipeline'
+import File from "vinyl"
+import {Stage, PipelineItem, transform} from "@blitzjs/file-pipeline"
+import debounce from "lodash/debounce"
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -69,10 +70,14 @@ export class Manifest {
  */
 export const createStageManifest = (
   writeManifestFile: boolean = true,
-  manifestPath: string = '_manifest.json',
+  manifestPath: string = "_manifest.json",
 ) => {
   const stage: Stage = () => {
     const manifest = Manifest.create()
+
+    const debouncePushItem = debounce((push: (item: PipelineItem) => void, file: PipelineItem) => {
+      push(file)
+    }, 500)
 
     const stream = transform.file((file, {next, push}) => {
       push(file) // Send file on through to be written
@@ -80,16 +85,17 @@ export const createStageManifest = (
       const [origin] = file.history
       const dest = file.path
 
-      if (file.event === 'add' || file.event === 'change') {
+      if (file.event === "add" || file.event === "change") {
         manifest.setEntry(origin, dest)
       }
 
-      if (file.event === 'unlink' || file.event === 'unlinkDir') {
+      if (file.event === "unlink" || file.event === "unlinkDir") {
         manifest.removeKey(origin)
       }
 
       if (writeManifestFile) {
-        push(
+        debouncePushItem(
+          push,
           new File({
             // NOTE:  no need to for hash because this is a manifest
             //        and doesn't count as work

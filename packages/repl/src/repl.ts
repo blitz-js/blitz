@@ -1,22 +1,22 @@
-import * as REPL from 'repl'
-import path from 'path'
-import fs from 'fs'
-import {REPLCommand, REPLServer} from 'repl'
-import {watch} from 'chokidar'
-import pkgDir from 'pkg-dir'
-import os from 'os'
+import * as REPL from "repl"
+import path from "path"
+import fs from "fs"
+import {REPLCommand, REPLServer} from "repl"
+import {watch} from "chokidar"
+import pkgDir from "pkg-dir"
+import os from "os"
 
 // import {loadDependencies} from '../utils/load-dependencies'
-import {getBlitzModulePaths, loadBlitz} from './utils/load-blitz'
+import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
 const commands = {
   reload: {
-    help: 'Reload all modules',
+    help: "Reload all modules",
     async action(this: REPLServer) {
       this.clearBufferedCommand()
-      console.log('Reloading all modules...')
+      console.log("Reloading all modules...")
       await loadModules(this)
       this.displayPrompt()
     },
@@ -56,11 +56,11 @@ const setupFileWatchers = async (repl: REPLServer) => {
     // watch('package.json').on('change', () => Console.loadDependencies(repl)),
     watch(await getBlitzModulePaths(), {
       ignoreInitial: true,
-    }).on('all', () => loadBlitzModules(repl)),
+    }).on("all", () => loadBlitzModules(repl)),
   ]
 
-  repl.on('reset', () => loadModules(repl))
-  repl.on('exit', () => watchers.forEach((watcher) => watcher.close()))
+  repl.on("reset", () => loadModules(repl))
+  repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
 }
 
 // const loadBlitzDependencies = (repl: REPLServer) => {
@@ -68,7 +68,7 @@ const setupFileWatchers = async (repl: REPLServer) => {
 // }
 
 const setupHistory = (repl: any) => {
-  const blitzConsoleHistoryPath = path.join(projectRoot, '.blitz-console-history')
+  const blitzConsoleHistoryPath = path.join(projectRoot, ".blitz-console-history")
   if (repl.setupHistory) {
     repl.setupHistory(blitzConsoleHistoryPath, () => {})
   } else {
@@ -79,11 +79,11 @@ const setupHistory = (repl: any) => {
 const setupSelfRolledHistory = (repl: any, path: string) => {
   function init() {
     try {
-      const history = fs.readFileSync(path, {encoding: 'utf8'})
+      const history = fs.readFileSync(path, {encoding: "utf8"})
       const nonEmptyLines = history.split(os.EOL).filter((line) => line.trim())
       repl.history.push(...nonEmptyLines.reverse())
     } catch (err) {
-      if (err.code !== 'ENOENT') {
+      if (err.code !== "ENOENT") {
         throw err
       }
     }
@@ -95,7 +95,7 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
   }
 
   init()
-  repl.on('exit', onExit)
+  repl.on("exit", onExit)
 }
 
 export {runRepl}

@@ -1,10 +1,10 @@
-import parseGitignore from 'parse-gitignore'
-import fs from 'fs'
-import partition from 'lodash/partition'
-import fastGlob from 'fast-glob'
+import parseGitignore from "parse-gitignore"
+import fs from "fs"
+import partition from "lodash/partition"
+import fastGlob from "fast-glob"
 
 export function isControlledByUser(file: string) {
-  if (file.startsWith('node_modules')) {
+  if (file.startsWith("node_modules")) {
     return false
   }
 
@@ -12,25 +12,31 @@ export function isControlledByUser(file: string) {
 }
 
 function getAllGitIgnores(rootFolder: string) {
-  const files = fastGlob.sync('**/.gitignore', {cwd: rootFolder})
+  const files = fastGlob.sync("**/.gitignore", {cwd: rootFolder})
   return files.filter(isControlledByUser).map((file) => {
-    const [prefix] = file.split('.gitignore')
+    const [prefix] = file.split(".gitignore")
     return {
-      gitIgnore: fs.readFileSync(file, {encoding: 'utf8'}),
+      gitIgnore: fs.readFileSync(file, {encoding: "utf8"}),
       prefix,
     }
   })
 }
 
-export function chokidarRulesFromGitignore({gitIgnore, prefix}: {gitIgnore: string; prefix: string}) {
+export function chokidarRulesFromGitignore({
+  gitIgnore,
+  prefix,
+}: {
+  gitIgnore: string
+  prefix: string
+}) {
   const rules = parseGitignore(gitIgnore)
 
-  const isInclusionRule = (rule: string) => rule.startsWith('!')
+  const isInclusionRule = (rule: string) => rule.startsWith("!")
   const [includePaths, ignoredPaths] = partition(rules, isInclusionRule)
 
   const trimExclamationMark = (rule: string) => rule.substring(1)
   const prefixPath = (_rule: string) => {
-    const rule = _rule.startsWith('/') ? _rule.substring(1) : _rule
+    const rule = _rule.startsWith("/") ? _rule.substring(1) : _rule
 
     if (!prefix) {
       return rule
