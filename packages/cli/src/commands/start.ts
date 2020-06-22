@@ -14,12 +14,10 @@ export class Start extends Command {
     port: flags.integer({
       char: "p",
       description: "Set port number",
-      default: 3000,
     }),
     hostname: flags.string({
       char: "H",
       description: "Set server hostname",
-      default: "localhost",
     }),
   }
 
