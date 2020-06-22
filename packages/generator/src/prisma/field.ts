@@ -1,4 +1,4 @@
-import {singlePascal, singleCamel, pluralCamel} from "../utils/plurals"
+import {singlePascal, uncapitalize, capitalize} from "../utils/plurals"
 import {log} from "@blitzjs/display"
 
 export enum FieldType {
@@ -57,8 +57,8 @@ export class Field {
   // 'name:type?[]:attribute' => Field
   static parse(input: string): Field[] {
     const [_fieldName, _fieldType = "String", attribute] = input.split(":")
-    let fieldName = singleCamel(_fieldName)
-    let fieldType = singlePascal(_fieldType)
+    let fieldName = uncapitalize(_fieldName)
+    let fieldType = capitalize(_fieldType)
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
@@ -73,7 +73,7 @@ export class Field {
     }
     if (fieldType.includes("[]")) {
       fieldType = fieldType.replace("[]", "")
-      fieldName = pluralCamel(fieldName)
+      fieldName = uncapitalize(fieldName)
       isList = true
     }
     // use original unmodified field name in case the list handling code
@@ -82,17 +82,17 @@ export class Field {
       // this field is an object type, not a scalar type
       const relationType = Relation[_fieldName]
       // translate the type into the name since they should stay in sync
-      fieldName = singleCamel(fieldType)
+      fieldName = uncapitalize(fieldType)
       fieldType = singlePascal(fieldType)
 
       switch (relationType) {
         case Relation.hasOne:
-          // current model gets single `modelName ModelName` association field
+          // current model gets single association field
           isList = false
           break
         case Relation.hasMany:
-          // current model gets single `modelNames ModelName[]` association field
-          fieldName = pluralCamel(fieldName)
+          // current model gets single association field
+          fieldName = uncapitalize(fieldName)
           isList = true
           isRequired = true
           break
