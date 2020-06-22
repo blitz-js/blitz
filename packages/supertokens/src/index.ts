@@ -36,6 +36,7 @@ const defaultConfig = {
   sessionExpiryMinutes: 100,
   method: "essential",
   apiDomain: "example.com",
+  anonymousRole: "public",
   async getSession(handle: string): Promise<SessionModel> {
     await true
     return {} as SessionModel
@@ -275,7 +276,7 @@ export async function createNewSession(
       handle,
       publicData,
     }
-  } else if (config.method === "essential") {
+  } else if (config.method === "advanced") {
     throw new Error("The advanced method is not yet supported")
   } else {
     throw new Error(
@@ -285,7 +286,8 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
-  return await createNewSession(res, {userId: null, role: "public"})
+  const config = defaultConfig
+  return await createNewSession(res, {userId: null, role: config.anonymousRole})
 }
 
 // --------------------------------
