@@ -60,7 +60,7 @@ describe("supertokens", () => {
 
       const publicData = JSON.parse(publicDataStr)
       expect(publicData.userId).toBe(null)
-      expect(publicData.role).toBe("public")
+      expect(publicData.roles[0]).toBe("public")
 
       const cookies = cookie.parse(res.headers.get("Set-Cookie") as string)
       expect(cookies[COOKIE_SESSION_TOKEN]).not.toBe(undefined)
@@ -70,7 +70,7 @@ describe("supertokens", () => {
 
   it("login works", async () => {
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.create({publicData: {userId: 1, role: "admin"}})
+      await ctx.session.create({publicData: {userId: 1, roles: ["admin"]}})
       return
     }) as EnhancedResolverModule
 
@@ -87,7 +87,7 @@ describe("supertokens", () => {
       const {publicData} = parsePublicDataToken(res.headers.get(HEADER_PUBLIC_DATA_TOKEN) as string)
 
       expect(publicData.userId).toBe(1)
-      expect(publicData.role).toBe("admin")
+      expect(publicData.roles[0]).toBe("admin")
 
       const cookies = cookie.parse(res.headers.get("Set-Cookie") as string)
       expect(cookies[COOKIE_SESSION_TOKEN]).not.toBe(undefined)

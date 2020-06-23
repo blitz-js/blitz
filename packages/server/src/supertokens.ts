@@ -18,7 +18,7 @@ export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 
 export interface PublicData extends Record<any, unknown> {
   userId: string | number | null
-  role: string
+  roles: string[]
 }
 export type PrivateData = Record<any, unknown>
 
@@ -80,7 +80,7 @@ export type SessionContext = {
    * null if anonymous
    */
   userId: string | number | null
-  role: string
+  roles: string[]
   handle: string | null
   publicData: PublicData
   create: (arg: {publicData: PublicData; privateData?: PrivateData}) => Promise<SessionContext>
@@ -126,7 +126,7 @@ export function createSessionContext(
   return {
     handle,
     userId: publicData.userId,
-    role: publicData.role,
+    roles: publicData.roles,
     publicData,
     create: async ({publicData, privateData}) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
@@ -251,7 +251,7 @@ export async function createNewSession(
   const config = defaultConfig
 
   invariant(publicData.userId !== undefined, "You must provide publicData.userId")
-  invariant(publicData.role, "You must provide publicData.role")
+  invariant(publicData.roles, "You must provide publicData.roles")
 
   if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
@@ -292,7 +292,7 @@ export async function createNewSession(
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
   const config = defaultConfig
-  return await createNewSession(res, {userId: null, role: config.anonymousRole})
+  return await createNewSession(res, {userId: null, roles: [config.anonymousRole]})
 }
 
 // --------------------------------
