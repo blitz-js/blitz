@@ -69,13 +69,13 @@ const defaultConfig = {
 // --------------------------------
 
 export class AuthenticationError extends Error {
-  constructor(message) {
+  constructor(message?: string) {
     super(message)
     this.name = "AuthenticationError"
   }
 }
 export class CSRFTokenMismatchException extends Error {
-  constructor(message) {
+  constructor(message?: string) {
     super(message)
     this.name = "CSRFTokenMismatchException"
   }
