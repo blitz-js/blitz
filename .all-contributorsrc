@@ -728,6 +728,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "styfle",
+      "name": "Steven",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/229881?v=4",
+      "profile": "https://styfle.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
