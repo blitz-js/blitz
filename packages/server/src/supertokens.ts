@@ -68,11 +68,17 @@ const defaultConfig = {
 // Errors
 // --------------------------------
 
-class AuthenticationError extends Error {
-  // TODO implement constructor and custom name
+export class AuthenticationError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "AuthenticationError"
+  }
 }
-class AntiCSRFTokenMismatchException extends Error {
-  // TODO implement constructor and custom name
+export class CSRFTokenMismatchException extends Error {
+  constructor(message) {
+    super(message)
+    this.name = "CSRFTokenMismatchException"
+  }
 }
 
 export type SessionContext = {
@@ -182,7 +188,7 @@ export async function getSession(
     const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
     const antiCSRFToken = req.headers[HEADER_CSRF] as string
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
-      throw new AntiCSRFTokenMismatchException()
+      throw new CSRFTokenMismatchException()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
       // TODO - shouldn't we just return null?
