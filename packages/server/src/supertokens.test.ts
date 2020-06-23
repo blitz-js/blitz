@@ -5,6 +5,7 @@ import cookie from "cookie"
 import fetch from "isomorphic-unfetch"
 import {EnhancedResolverModule} from "@blitzjs/core"
 import {rpcApiHandler} from "@blitzjs/server"
+import {atob} from "b64-lite"
 
 import {
   sessionMiddleware,

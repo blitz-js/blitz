@@ -4,6 +4,7 @@ import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
 import {BlitzApiRequest, BlitzApiResponse, Middleware} from "@blitzjs/core"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
+import {btoa, atob} from "b64-lite"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -298,6 +299,7 @@ export async function createNewSession(
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
   const config = defaultConfig
+  console.log("Creating anonymous session")
   return await createNewSession(res, {userId: null, roles: [config.anonymousRole]})
 }
 
@@ -395,15 +397,10 @@ export async function setPublicData(handle: string, data: Omit<PublicData, "user
 }
 
 // --------------------------------
-// General utils
-// --------------------------------
-// const base64 = (input: HashaInput) => hasha(input, {encoding: "base64"})
-const base64 = btoa
-const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
-
-// --------------------------------
 // Token/handle utils
 // --------------------------------
+const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
+
 export const generateToken = () => crypto.randomBytes(32).toString("base64")
 
 export const generateEssentialSessionHandle = () => {
@@ -420,14 +417,19 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
   } else {
     publicDataString = JSON.stringify(publicData)
   }
-  return base64(
+  return btoa(
     [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
 }
 export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = token.split(TOKEN_SEPARATOR)
+  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
+
+  if (!handle || !id || !hashedPublicData || !version) {
+    throw new AuthenticationError("Failed to parse session token")
+  }
+
   return {
     handle,
     id,
@@ -437,7 +439,7 @@ export const parseSessionToken = (token: string) => {
 }
 
 export const createPublicDataToken = (publicData: string, expireAt: Date) => {
-  return base64([publicData, expireAt.toISOString()].join(TOKEN_SEPARATOR))
+  return btoa([publicData, expireAt.toISOString()].join(TOKEN_SEPARATOR))
 }
 
 export const parsePublicDataToken = (token: string) => {

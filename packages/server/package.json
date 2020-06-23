@@ -60,6 +60,7 @@
     "hasha": "5.2.0",
     "cookie": "0.4.1",
     "date-fns": "2.14.0",
+    "b64-lite": "1.4.0",
     "tiny-invariant": "1.1.0"
   },
   "devDependencies": {

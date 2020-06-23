@@ -11,7 +11,7 @@
     "wait:server": "wait-on ../server/dist/packages/server/src/index.d.ts",
     "wait:installer": "wait-on ../installer/dist/packages/installer/src/index.d.ts",
     "wait:repl": "wait-on ../repl/dist/packages/repl/src/index.d.ts",
-    "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
+    "dev": "rimraf lib && tsc --watch --preserveWatchOutput src",
     "build": "rimraf lib && tsc",
     "test": "tsdx test",
     "test:watch": "jest --watch"
