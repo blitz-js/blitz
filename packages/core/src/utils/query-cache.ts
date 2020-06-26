@@ -11,9 +11,9 @@ export interface QueryCacheFunctions<T> {
 export const getQueryCacheFunctions = <T>(queryKey: string): QueryCacheFunctions<T> => ({
   mutate: (newData, opts = {refetch: true}) => {
     queryCache.setQueryData(queryKey, newData)
-    if (!opts.refetch) {
-      return null
+    if (opts.refetch) {
+      return queryCache.refetchQueries(queryKey, {force: true})
     }
-    return queryCache.refetchQueries(queryKey, {force: true})
+    return null
   },
 })
