@@ -288,14 +288,13 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://noahfleischmann.com"><img src="https://avatars0.githubusercontent.com/u/23707137?v=4" width="100px;" alt=""/><br /><sub><b>Noah Fleischmann</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=fnoah" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/toshi1127"><img src="https://avatars3.githubusercontent.com/u/32378535?v=4" width="100px;" alt=""/><br /><sub><b>Matsumoto Toshi</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=toshi1127" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=toshi1127" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/simonedelmann"><img src="https://avatars2.githubusercontent.com/u/2821076?v=4" width="100px;" alt=""/><br /><sub><b>Simon Edelmann</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=simonedelmann" title="Code">💻</a></td>
-    <td align="center"><a href="https://shaun.church"><img src="https://avatars3.githubusercontent.com/u/571764?v=4" width="100px;" alt=""/><br /><sub><b>Shaun Church</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=shaunchurch" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://shaun.church"><img src="https://avatars3.githubusercontent.com/u/571764?v=4" width="100px;" alt=""/><br /><sub><b>Shaun Church</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=shaunchurch" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=shaunchurch" title="Code">💻</a></td>
     <td align="center"><a href="https://styfle.dev"><img src="https://avatars1.githubusercontent.com/u/229881?v=4" width="100px;" alt=""/><br /><sub><b>Steven</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=styfle" title="Documentation">📖</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
