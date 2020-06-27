@@ -109,7 +109,11 @@ export function compose(middleware: Middleware[]) {
     // last called middleware #
     let index = -1
 
-    function dispatch(i: number): Promise<void> {
+    function dispatch(i: number, error?: any): Promise<void> {
+      if (error) {
+        return Promise.reject(error)
+      }
+
       if (i <= index) throw new Error("next() called multiple times")
       index = i
 
