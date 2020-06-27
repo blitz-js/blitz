@@ -58,6 +58,7 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
         return next()
       } catch (error) {
         log.error(`${logPrefix} failed: ${error}\n`)
+        console.error(error)
         res.json({
           result: null,
           error: serializeError(error),

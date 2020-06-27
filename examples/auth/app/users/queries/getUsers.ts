@@ -1,4 +1,6 @@
 import db, {FindManyUserArgs} from "db"
+import {AuthorizationError} from "blitz"
+import {SessionContext} from "@blitzjs/server"
 
 type GetUsersInput = {
   where?: FindManyUserArgs["where"]
@@ -10,10 +12,14 @@ type GetUsersInput = {
   // include?: FindManyUserArgs['include']
 }
 
+type Ctx = {session?: SessionContext}
+
 export default async function getUsers(
   {where, orderBy, cursor, take, skip}: GetUsersInput,
-  ctx: Record<any, any> = {},
+  ctx: Ctx = {},
 ) {
+  if (!ctx.session?.roles.includes("admin")) throw new AuthorizationError()
+
   const users = await db.user.findMany({
     where,
     orderBy,

@@ -10,6 +10,25 @@ export * from "./use-router-query"
 export * from "./middleware"
 export * from "./types"
 
+export class AuthenticationError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = "AuthenticationError"
+  }
+}
+export class AuthorizationError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = "AuthorizationError"
+  }
+}
+export class CSRFTokenMismatchError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = "CSRFTokenMismatchError"
+  }
+}
+
 // --------------------
 // Exports from Next.js
 // --------------------

@@ -2,7 +2,13 @@ import crypto from "crypto"
 import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
-import {BlitzApiRequest, BlitzApiResponse, Middleware} from "@blitzjs/core"
+import {
+  BlitzApiRequest,
+  BlitzApiResponse,
+  Middleware,
+  AuthenticationError,
+  CSRFTokenMismatchError,
+} from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
@@ -60,26 +66,12 @@ const defaultConfig: SessionConfig = {
   anonymousRole: "public",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
-  createSession: (session) => getDb().session.create({data: session}),
+  createSession: (session) =>
+    getDb().session.create({
+      data: {...session, userId: undefined, user: {connect: {id: session.userId}}},
+    }),
   updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
-}
-
-// --------------------------------
-// Errors
-// --------------------------------
-
-export class AuthenticationError extends Error {
-  constructor(message?: string) {
-    super(message)
-    this.name = "AuthenticationError"
-  }
-}
-export class CSRFTokenMismatchException extends Error {
-  constructor(message?: string) {
-    super(message)
-    this.name = "CSRFTokenMismatchException"
-  }
 }
 
 export type SessionContext = {
@@ -90,7 +82,7 @@ export type SessionContext = {
   roles: string[]
   handle: string | null
   publicData: PublicData
-  create: (arg: {publicData: PublicData; privateData?: PrivateData}) => Promise<SessionContext>
+  create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
   revoke: () => Promise<boolean>
   getPrivateData: () => Promise<PrivateData>
   setPrivateData: (data: PrivateData) => Promise<void>
@@ -144,7 +136,7 @@ export function createSessionContext(
     userId: publicData.userId,
     roles: publicData.roles,
     publicData,
-    create: async ({publicData, privateData}) => {
+    create: async (publicData, privateData) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },
     revoke: async () => {
@@ -185,21 +177,33 @@ export async function getSession(
   if (sessionToken) {
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
+    if (!handle) {
+      return null
+    }
+
     if (version !== SESSION_TOKEN_VERSION_0) {
-      throw new AuthenticationError("Session token version is not " + SESSION_TOKEN_VERSION_0)
+      console.log(
+        new AuthenticationError("Session token version is not " + SESSION_TOKEN_VERSION_0),
+      )
+      return null
     }
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
       // TODO - shouldn't we just return null?
       // throw new AuthenticationError(`Session handle ${handle} doesn't exist`)
-      return null
+
+      // TODO for anonymous session, how do we return original non-hashed public data??
+      return {
+        handle,
+        publicData: {userId: null, roles: [config.anonymousRole]},
+      }
     }
 
     const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
     const antiCSRFToken = req.headers[HEADER_CSRF] as string
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
-      throw new CSRFTokenMismatchException()
+      throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
       // TODO - shouldn't we just return null?
