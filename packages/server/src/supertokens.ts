@@ -3,6 +3,8 @@ import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
 import {BlitzApiRequest, BlitzApiResponse, Middleware} from "@blitzjs/core"
+import pkgDir from "pkg-dir"
+import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 
@@ -33,36 +35,34 @@ export interface SessionModel extends Record<any, any> {
   privateData: string
 }
 
-const defaultConfig = {
+export type SessionConfig = {
+  sessionExpiryMinutes?: number
+  method?: "essential" | "advanced"
+  apiDomain?: string
+  anonymousRole?: string
+  getSession: (handle: string) => Promise<SessionModel>
+  getSessions: (userId: string | number) => Promise<SessionModel[]>
+  createSession: (session: SessionModel) => Promise<SessionModel>
+  updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
+  deleteSession: (handle: string) => Promise<SessionModel>
+}
+
+const getDb = () => {
+  const projectRoot = pkgDir.sync() || process.cwd()
+  const path = join(projectRoot, "_db.js")
+  return require(path).default
+}
+
+const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 100,
   method: "essential",
   apiDomain: "example.com",
   anonymousRole: "public",
-  // @ts-ignore
-  async getSession(handle: string): Promise<SessionModel> {
-    await true
-    return {} as SessionModel
-  },
-  // @ts-ignore
-  async getSessions(userId: string | number): Promise<SessionModel[]> {
-    await true
-    return [] as SessionModel[]
-  },
-  // @ts-ignore
-  async createSession(session: SessionModel): Promise<SessionModel> {
-    await true
-    return {} as SessionModel
-  },
-  // @ts-ignore
-  async updateSession(handle: string, session: Partial<SessionModel>): Promise<SessionModel> {
-    await true
-    return {} as SessionModel
-  },
-  // @ts-ignore
-  async deleteSession(handle: string): Promise<boolean> {
-    await true
-    return true
-  },
+  getSession: (handle) => getDb().session.findOne({where: {handle}}),
+  getSessions: (userId) => getDb().session.findMany({where: {userId}}),
+  createSession: (session) => getDb().session.create({data: session}),
+  updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
+  deleteSession: (handle) => getDb().session.delete({where: {handle}}),
 }
 
 // --------------------------------
@@ -100,12 +100,21 @@ export type SessionContext = {
   // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
 }
 
+let config: Required<SessionConfig>
+
 // --------------------------------
 // Middleware
 // --------------------------------
-export const sessionMiddleware: Middleware = async (req, res, next) => {
-  res.blitzCtx.session = await createSessionContextFromRequest(req, res)
-  return next()
+export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
+  config = {
+    ...defaultConfig,
+    ...sessionConfig,
+  } as Required<SessionConfig>
+
+  return async (req, res, next) => {
+    res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+    return next()
+  }
 }
 
 type SessionKernel = {
@@ -138,7 +147,9 @@ export function createSessionContext(
     create: async ({publicData, privateData}) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },
-    revoke: () => revokeSession(handle),
+    revoke: async () => {
+      return !!(await revokeSession(handle))
+    },
     getPrivateData: () => getPrivateData(handle),
     setPrivateData: async (data) => {
       await setPrivateData(handle, data)
@@ -163,8 +174,6 @@ export async function getSession(
   req: BlitzApiRequest,
   res: BlitzApiResponse,
 ): Promise<SessionKernel | null> {
-  const config = defaultConfig
-
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
 
@@ -183,7 +192,8 @@ export async function getSession(
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
       // TODO - shouldn't we just return null?
-      throw new AuthenticationError(`Session handle ${handle} doesn't exist`)
+      // throw new AuthenticationError(`Session handle ${handle} doesn't exist`)
+      return null
     }
 
     const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
@@ -193,12 +203,14 @@ export async function getSession(
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
       // TODO - shouldn't we just return null?
-      throw new AuthenticationError("Input session ID doesn't exist")
+      // throw new AuthenticationError("Input session ID doesn't exist")
+      return null
     }
     if (isPast(persistedSession.expiresAt)) {
       await revokeSession(handle)
       // TODO - shouldn't we just return null?
-      throw new AuthenticationError("Input session ID doesn't exist")
+      // throw new AuthenticationError("Input session ID doesn't exist")
+      return null
     }
 
     /*
@@ -255,8 +267,6 @@ export async function createNewSession(
   publicData: PublicData,
   privateData: PrivateData = {},
 ): Promise<SessionKernel> {
-  const config = defaultConfig
-
   invariant(publicData.userId !== undefined, "You must provide publicData.userId")
   invariant(publicData.roles, "You must provide publicData.roles")
 
@@ -298,7 +308,6 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
-  const config = defaultConfig
   console.log("Creating anonymous session")
   return await createNewSession(res, {userId: null, roles: [config.anonymousRole]})
 }
@@ -313,18 +322,14 @@ export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
 }
 
 export async function updateSessionExpiryInDb(handle: string, expiresAt: Date) {
-  const config = defaultConfig
   return await config.updateSession(handle, {expiresAt})
 }
 
 export async function getAllSessionHandlesForUser(userId: string) {
-  const config = defaultConfig
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export async function revokeSession(handle: string): Promise<boolean> {
-  const config = defaultConfig
-
+export async function revokeSession(handle: string): Promise<SessionModel> {
   return await config.deleteSession(handle)
 }
 
@@ -339,13 +344,11 @@ export function revokeMultipleSessions(sessionHandles: string[]) {
 }
 
 export async function revokeAllSessionsForUser(userId: string) {
-  const config = defaultConfig
   let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
   return revokeMultipleSessions(sessionHandles)
 }
 
 export async function getPublicData(handle: string): Promise<PublicData> {
-  const config = defaultConfig
   const session = await config.getSession(handle)
   if (!session) {
     throw new AuthenticationError("handle doesn't exist")
@@ -354,7 +357,6 @@ export async function getPublicData(handle: string): Promise<PublicData> {
 }
 
 export async function getPrivateData(handle: string): Promise<PrivateData> {
-  const config = defaultConfig
   const session = await config.getSession(handle)
   if (!session) {
     throw new AuthenticationError("handle doesn't exist")
@@ -363,8 +365,6 @@ export async function getPrivateData(handle: string): Promise<PrivateData> {
 }
 
 export async function setPrivateData(handle: string, data: PrivateData) {
-  const config = defaultConfig
-
   try {
     const privateData = JSON.stringify({
       ...(await getPrivateData(handle)),
@@ -380,8 +380,6 @@ export async function setPrivateData(handle: string, data: PrivateData) {
 export async function setPublicData(handle: string, data: Omit<PublicData, "userId">) {
   // Don't allow updating userId
   delete data.userId
-
-  const config = defaultConfig
 
   try {
     // TODO - how do we handle anonymous session here?

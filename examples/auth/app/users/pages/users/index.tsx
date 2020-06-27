@@ -7,7 +7,7 @@ export const UsersList = () => {
 
   return (
     <ul>
-      {users.map((user) => (
+      {users?.map((user) => (
         <li key={user.id}>
           <Link href="/users/[userId]" as={`/users/${user.id}`}>
             <a>{user.name}</a>
