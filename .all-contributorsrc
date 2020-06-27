@@ -738,6 +738,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "SigurdMW",
+      "name": "Sigurd Moland Wahl",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6359003?v=4",
+      "profile": "https://github.com/SigurdMW",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
