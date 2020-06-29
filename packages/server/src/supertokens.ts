@@ -104,7 +104,9 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   } as Required<SessionConfig>
 
   return async (req, res, next) => {
-    res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+    if (req.method !== "HEAD") {
+      res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+    }
     return next()
   }
 }
