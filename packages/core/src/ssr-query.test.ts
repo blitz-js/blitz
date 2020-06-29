@@ -8,6 +8,7 @@ import {EnhancedResolverModule} from "./rpc"
 
 describe("ssrQuery", () => {
   it("works without middleware", async () => {
+    console.log = jest.fn()
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
@@ -33,6 +34,7 @@ describe("ssrQuery", () => {
   })
 
   it("works with middleware", async () => {
+    console.log = jest.fn()
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
