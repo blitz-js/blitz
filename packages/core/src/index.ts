@@ -11,18 +11,21 @@ export * from "./middleware"
 export * from "./types"
 
 export class AuthenticationError extends Error {
+  statusCode = 401 // Unauthorized
   constructor(message?: string) {
     super(message)
     this.name = "AuthenticationError"
   }
 }
 export class AuthorizationError extends Error {
+  statusCode = 403 // Forbidden
   constructor(message?: string) {
     super(message)
     this.name = "AuthorizationError"
   }
 }
 export class CSRFTokenMismatchError extends Error {
+  statusCode = 401 // Unauthorized
   constructor(message?: string) {
     super(message)
     this.name = "CSRFTokenMismatchError"

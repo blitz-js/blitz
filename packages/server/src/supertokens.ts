@@ -122,6 +122,10 @@ export async function createSessionContextFromRequest(
 ): Promise<SessionContext> {
   let sessionKernel = await getSession(req, res)
 
+  if (sessionKernel) {
+    console.log("Got existing session", sessionKernel)
+  }
+
   if (!sessionKernel) {
     sessionKernel = await createAnonymousSession(res)
   }
