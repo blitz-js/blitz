@@ -2,6 +2,7 @@ import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
+import {LOCALSTORAGE_PREFIX, HEADER_CSRF, HEADER_PUBLIC_DATA_TOKEN} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
@@ -9,15 +10,33 @@ type Options = {
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
   if (typeof window === "undefined") return
+
+  const headers: Record<string, any> = {
+    "Content-Type": "application/json",
+  }
+
+  const antiCSRFToken = localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+  if (antiCSRFToken) {
+    headers[HEADER_CSRF] = antiCSRFToken
+  }
+
   const result = await window.fetch(url, {
     method: "POST",
+    headers,
     credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
     redirect: "follow",
     body: JSON.stringify({params}),
   })
+
+  // TODO TODO TODO - not being saved to localstorage
+  const newAntiCSRFToken = result.headers.get(HEADER_CSRF)
+  if (newAntiCSRFToken) {
+    localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_CSRF, newAntiCSRFToken)
+  }
+  const publicDataToken = result.headers.get(HEADER_PUBLIC_DATA_TOKEN)
+  if (publicDataToken) {
+    localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+  }
 
   let json
   try {
@@ -27,7 +46,12 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   }
 
   if (json.error) {
-    throw deserializeError(json.error)
+    const error = deserializeError(json.error)
+    if (error.name === "AuthenticationError") {
+      localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+      localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+    }
+    throw error
   } else {
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)

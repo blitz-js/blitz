@@ -14,13 +14,17 @@ export default class ErrorBoundary extends React.Component<{
   }
 
   render() {
-    if (this.state.hasError) {
-      if (this.state.error.name === "AuthorizationError") {
+    const {hasError, error} = this.state
+    if (hasError) {
+      if (error.name === "AuthenticationError") {
         return <LoginForm />
+      } else if (error.name === "AuthorizationError") {
+        alert("AuthorizationError")
+        return <h1>You are not allow to access this resource</h1>
       } else if (this.props.fallback) {
-        return this.props.fallback(this.state.error)
+        return this.props.fallback(error)
       } else {
-        throw this.state.error
+        throw error
       }
     }
     return this.props.children

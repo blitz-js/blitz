@@ -8,50 +8,24 @@ import {
   Middleware,
   AuthenticationError,
   CSRFTokenMismatchError,
+  SessionConfig,
+  SessionModel,
+  PublicData,
+  PrivateData,
+  TOKEN_SEPARATOR,
+  HANDLE_SEPARATOR,
+  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
+  SESSION_TOKEN_VERSION_0,
+  COOKIE_SESSION_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  parsePublicDataToken,
 } from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
-
-export const TOKEN_SEPARATOR = ";"
-export const HANDLE_SEPARATOR = ":"
-export const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
-export const SESSION_TOKEN_VERSION_0 = "v0"
-
-export const COOKIE_SESSION_TOKEN = "sSessionToken"
-export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
-
-export const HEADER_CSRF = "anti-csrf"
-export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
-
-export interface PublicData extends Record<any, unknown> {
-  userId: string | number | null
-  roles: string[]
-}
-export type PrivateData = Record<any, unknown>
-
-export interface SessionModel extends Record<any, any> {
-  expiresAt: Date
-  handle: string
-  userId: string | number
-  hashedSessionToken: string
-  antiCSRFToken: string
-  publicData: string
-  privateData: string
-}
-
-export type SessionConfig = {
-  sessionExpiryMinutes?: number
-  method?: "essential" | "advanced"
-  apiDomain?: string
-  anonymousRole?: string
-  getSession: (handle: string) => Promise<SessionModel>
-  getSessions: (userId: string | number) => Promise<SessionModel[]>
-  createSession: (session: SessionModel) => Promise<SessionModel>
-  updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
-  deleteSession: (handle: string) => Promise<SessionModel>
-}
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
@@ -448,14 +422,6 @@ export const parseSessionToken = (token: string) => {
 
 export const createPublicDataToken = (publicData: string, expireAt: Date) => {
   return btoa([publicData, expireAt.toISOString()].join(TOKEN_SEPARATOR))
-}
-
-export const parsePublicDataToken = (token: string) => {
-  const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
-  return {
-    publicData: JSON.parse(publicDataStr),
-    expireAt: new Date(expireAt),
-  }
 }
 
 export const createAntiCSRFToken = () => generateToken()
