@@ -51,27 +51,5 @@ describe("useQuery", () => {
         expect(res.data).toBe("TEST")
       })
     })
-
-    it("should work on dependent query", async () => {
-      // dependent queries are canceled if the params function throws
-      let params: Function = () => {
-        throw new Error("not ready yet")
-      }
-
-      const [res, rerender] = setupHook(() => params(), upcase)
-      await screen.findByText("Missing Dependency")
-
-      // eslint-disable-next-line require-await
-      await act(async () => {
-        // simulates the dependency becoming available
-        params = () => "test"
-        rerender()
-      })
-
-      await act(async () => {
-        await screen.findByText("Ready")
-        expect(res.data).toBe("TEST")
-      })
-    })
   })
 })
