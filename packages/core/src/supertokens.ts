@@ -81,6 +81,34 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 
+export const savedAntiCSRFToken = {
+  set(token: string | undefined | null) {
+    if (token) {
+      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_CSRF, token)
+    }
+  },
+  get() {
+    return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+  },
+  clear() {
+    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+  },
+}
+
+export const savedPublicDataToken = {
+  set(token: string | undefined | null) {
+    if (token) {
+      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, token)
+    }
+  },
+  get() {
+    return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+  },
+  clear() {
+    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+  },
+}
+
 export const parsePublicDataToken = (token: string) => {
   const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
   return {
@@ -128,6 +156,7 @@ export const useSession = () => {
  * Not logged in -> throw AuthenticationError
  * Role not matched -> throw AuthorizationError
  */
+// TODO - returned type should require the ctx argument with `session`
 export const authorize = <T extends (input: any, ctx?: any) => any>(
   resolver: T,
   roles: string[] = [],

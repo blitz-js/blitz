@@ -82,11 +82,15 @@ export async function createSessionContextFromRequest(
     console.log("Got existing session", sessionKernel)
   }
 
-  if (!sessionKernel) {
-    sessionKernel = await createAnonymousSession(res)
-  }
+  // if (!sessionKernel) {
+  //   sessionKernel = await createAnonymousSession(res)
+  // }
 
-  return createSessionContext(res, sessionKernel)
+  // return createSessionContext(res, sessionKernel)
+  return createSessionContext(res, {
+    handle: (null as unknown) as string,
+    publicData: {userId: null, roles: []},
+  })
 }
 
 export function createSessionContext(

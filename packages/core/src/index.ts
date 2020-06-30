@@ -31,7 +31,7 @@ export {default as Head} from "next/head"
 
 export {default as Link} from "next/link"
 
-export {Router} from "next/router"
+export {default as Router} from "next/router"
 
 export {
   default as Document,

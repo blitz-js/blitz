@@ -2,7 +2,12 @@ import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
-import {LOCALSTORAGE_PREFIX, HEADER_CSRF, HEADER_PUBLIC_DATA_TOKEN} from "./supertokens"
+import {
+  savedAntiCSRFToken,
+  savedPublicDataToken,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
@@ -15,7 +20,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     "Content-Type": "application/json",
   }
 
-  const antiCSRFToken = localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+  const antiCSRFToken = savedAntiCSRFToken.get()
   if (antiCSRFToken) {
     headers[HEADER_CSRF] = antiCSRFToken
   }
@@ -28,14 +33,14 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     body: JSON.stringify({params}),
   })
 
-  // TODO TODO TODO - not being saved to localstorage
-  const newAntiCSRFToken = result.headers.get(HEADER_CSRF)
-  if (newAntiCSRFToken) {
-    localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_CSRF, newAntiCSRFToken)
+  for (const [name, value] of result.headers.entries()) {
+    if (name === HEADER_CSRF) savedAntiCSRFToken.set(value)
+    if (name === HEADER_PUBLIC_DATA_TOKEN) savedPublicDataToken.set(value)
   }
-  const publicDataToken = result.headers.get(HEADER_PUBLIC_DATA_TOKEN)
-  if (publicDataToken) {
-    localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+
+  if (result.status === 401) {
+    // Usually means csrf token is bad, but this should never happen
+    savedAntiCSRFToken.clear()
   }
 
   let json
@@ -48,8 +53,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   if (json.error) {
     const error = deserializeError(json.error)
     if (error.name === "AuthenticationError") {
-      localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
-      localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+      savedPublicDataToken.clear()
     }
     throw error
   } else {

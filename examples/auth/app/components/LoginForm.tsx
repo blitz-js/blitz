@@ -1,4 +1,5 @@
 import React from "react"
+import {Router} from "blitz"
 import signUp from "app/users/mutations/signUp"
 import login from "app/users/mutations/login"
 
@@ -30,6 +31,7 @@ const LoginForm = () => {
           event.preventDefault()
           const inputs = event.currentTarget.elements as any
           await login({email: inputs.email.value, password: inputs.password.value})
+          Router.reload()
         }}
       >
         <label>
