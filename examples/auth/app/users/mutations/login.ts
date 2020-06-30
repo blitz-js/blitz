@@ -1,6 +1,5 @@
 import db from "db"
-import {AuthenticationError} from "blitz"
-import {SessionContext} from "@blitzjs/server"
+import {AuthenticationError, SessionContext} from "blitz"
 
 type LoginInput = {
   email: string

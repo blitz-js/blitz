@@ -11,9 +11,13 @@ type GetUsersInput = {
   // include?: FindManyUserArgs['include']
 }
 
-export default authorize(getUsers, ["admin"])
-
-async function getUsers({where, orderBy, cursor, take, skip}: GetUsersInput) {
+export default authorize(["admin"], async function getUsers({
+  where,
+  orderBy,
+  cursor,
+  take,
+  skip,
+}: GetUsersInput) {
   const users = await db.user.findMany({
     where,
     orderBy,
@@ -23,4 +27,4 @@ async function getUsers({where, orderBy, cursor, take, skip}: GetUsersInput) {
   })
 
   return users
-}
+})

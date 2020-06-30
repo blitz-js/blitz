@@ -158,8 +158,8 @@ export const useSession = () => {
  */
 // TODO - returned type should require the ctx argument with `session`
 export const authorize = <T extends (input: any, ctx?: any) => any>(
-  resolver: T,
   roles: string[] = [],
+  resolver: T,
 ) => {
   return ((input: any, ctx?: {session?: SessionContext}) => {
     if (!ctx?.session?.userId) throw new AuthenticationError()
