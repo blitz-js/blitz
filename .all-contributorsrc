@@ -747,6 +747,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sbardian",
+      "name": "Brian Andrews",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6384100?v=4",
+      "profile": "https://brianandrews.dev/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
