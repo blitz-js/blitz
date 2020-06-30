@@ -43,7 +43,7 @@
     "@blitzjs/config": "0.15.3",
     "@blitzjs/display": "0.15.3",
     "pretty-ms": "6.0.1",
-    "react-query": "^2.4.4",
+    "react-query": "2.4.4",
     "serialize-error": "6.0.0",
     "url": "0.11.0"
   },
