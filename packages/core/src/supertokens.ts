@@ -41,6 +41,24 @@ export type SessionConfig = {
   deleteSession: (handle: string) => Promise<SessionModel>
 }
 
+export type SessionContext = {
+  /**
+   * null if anonymous
+   */
+  userId: string | number | null
+  roles: string[]
+  handle: string | null
+  publicData: PublicData
+  create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
+  revoke: () => Promise<boolean>
+  getPrivateData: () => Promise<PrivateData>
+  setPrivateData: (data: PrivateData) => Promise<void>
+  getPublicData: () => Promise<PublicData>
+  setPublicData: (data: PublicData) => Promise<void>
+  // TODO
+  // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
+}
+
 export class AuthenticationError extends Error {
   statusCode = 401 // Unauthorized
   constructor(message?: string) {
@@ -101,4 +119,24 @@ export const useSession = () => {
   }, [])
 
   return publicData
+}
+
+/*
+ * This will ensure a user is logged in before using the query/mutation.
+ * Optionally, as the second argument you can pass an array of roles
+ * which will also be enforce.
+ * Not logged in -> throw AuthenticationError
+ * Role not matched -> throw AuthorizationError
+ */
+export const authorize = <T extends (input: any, ctx?: any) => any>(
+  resolver: T,
+  roles: string[] = [],
+) => {
+  return ((input: any, ctx?: {session?: SessionContext}) => {
+    if (!ctx?.session?.userId) throw new AuthenticationError()
+    for (let role of roles) {
+      if (!ctx?.session?.roles.includes(role)) throw new AuthorizationError()
+    }
+    return resolver(input, ctx)
+  }) as T
 }

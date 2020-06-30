@@ -12,6 +12,7 @@ import {
   SessionModel,
   PublicData,
   PrivateData,
+  SessionContext,
   TOKEN_SEPARATOR,
   HANDLE_SEPARATOR,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
@@ -20,7 +21,6 @@ import {
   COOKIE_REFRESH_TOKEN,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
-  parsePublicDataToken,
 } from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
@@ -46,24 +46,6 @@ const defaultConfig: SessionConfig = {
     }),
   updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
-}
-
-export type SessionContext = {
-  /**
-   * null if anonymous
-   */
-  userId: string | number | null
-  roles: string[]
-  handle: string | null
-  publicData: PublicData
-  create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
-  revoke: () => Promise<boolean>
-  getPrivateData: () => Promise<PrivateData>
-  setPrivateData: (data: PrivateData) => Promise<void>
-  getPublicData: () => Promise<PublicData>
-  setPublicData: (data: PublicData) => Promise<void>
-  // TODO
-  // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
 }
 
 let config: Required<SessionConfig>
