@@ -156,7 +156,7 @@ export const useSession = () => {
  * Not logged in -> throw AuthenticationError
  * Role not matched -> throw AuthorizationError
  */
-// TODO - returned type should require the ctx argument with `session`
+// TODO - returned type should accept the ctx argument with `session`
 export const authorize = <T extends (input: any, ctx?: any) => any>(
   roles: string[] = [],
   resolver: T,
