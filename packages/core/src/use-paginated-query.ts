@@ -31,7 +31,7 @@ export function usePaginatedQuery<T extends QueryFn>(
   const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
-    queryKey: () => [
+    queryKey: [
       queryRpcFn._meta.apiUrl,
       typeof params === "function" ? (params as Function)() : params,
     ],

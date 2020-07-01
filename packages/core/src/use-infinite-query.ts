@@ -31,7 +31,7 @@ export function useInfiniteQuery<T extends QueryFn>(
   const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
 
   const {data, ...queryRest} = useInfiniteReactQuery({
-    queryKey: () => [
+    queryKey: [
       queryRpcFn._meta.apiUrl,
       typeof params === "function" ? (params as Function)() : params,
     ],

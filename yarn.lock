@@ -13986,10 +13986,10 @@ react-query@1.3.3:
     "@scarf/scarf" "^1.0.0"
     ts-toolbelt "^6.4.2"
 
-react-query@1.5.8:
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.5.8.tgz#80cd99cb279d1ff0ac64122761d95a3e4b014d49"
-  integrity sha512-tQIndH00/pJ21jCIche2jwcoflNGPrSBx0m9MxuDEbTwbQztp5dCzN+3/tKWk6dRw2jrhsV78KhoeYrR21SkZQ==
+react-query@2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.4.4.tgz#31cb61738f2534fe51eb3921afd3a57abefa3f07"
+  integrity sha512-rDGMj4KHFt+D83Aq076rmAZDnfsVcArrOYQusO7EgIbMa9ioeppJ/fdSGiGH+tfShB4o+8xpKBxpHFjuLnitQw==
   dependencies:
     "@scarf/scarf" "^1.0.6"
     ts-toolbelt "^6.9.4"
