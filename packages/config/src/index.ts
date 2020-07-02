@@ -2,7 +2,7 @@ import pkgDir from "pkg-dir"
 import {join} from "path"
 import {existsSync} from "fs"
 
-const configFiles = ["next.config.js"]
+const configFiles = ["blitz.config.js", "next.config.js"]
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
@@ -24,7 +24,10 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
       } else {
         contents = file
       }
-      blitzConfig = contents
+      blitzConfig = {
+        ...blitzConfig,
+        ...contents,
+      }
     }
   }
 
