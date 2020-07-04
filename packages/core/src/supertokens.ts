@@ -22,7 +22,6 @@ export interface PublicData extends Record<any, any> {
   userId: string | number | null
   roles: string[]
 }
-export type PrivateData = Record<any, any>
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -44,7 +43,7 @@ export type SessionConfig = {
   deleteSession: (handle: string) => Promise<SessionModel>
 }
 
-export type SessionContext = {
+export interface SessionContext {
   /**
    * null if anonymous
    */
@@ -54,12 +53,11 @@ export type SessionContext = {
   publicData: PublicData
   authorize: (roleOrRoles?: string | string[]) => void
   isAuthorized: (roleOrRoles?: string | string[]) => boolean
-  create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
+  create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   revoke: () => Promise<void>
   revokeAll: () => Promise<void>
-  getPrivateData: () => Promise<PrivateData>
-  setPrivateData: (data: PrivateData) => Promise<void>
-  getPublicData: () => Promise<PublicData>
+  getPrivateData: () => Promise<Record<any, any>>
+  setPrivateData: (data: Record<any, any>) => Promise<void>
   setPublicData: (data: Record<any, any>) => Promise<void>
 }
 

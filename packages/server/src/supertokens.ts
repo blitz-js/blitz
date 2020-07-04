@@ -12,7 +12,6 @@ import {
   CSRFTokenMismatchError,
   SessionConfig,
   PublicData,
-  PrivateData,
   SessionContext,
   TOKEN_SEPARATOR,
   HANDLE_SEPARATOR,
@@ -95,55 +94,81 @@ export async function createSessionContextFromRequest(
     sessionKernel = await createAnonymousSession(res)
   }
 
-  return createSessionContext(res, sessionKernel)
+  return new SessionContextClass(res, sessionKernel)
 }
 
-export function createSessionContext(res: BlitzApiResponse, kernel: SessionKernel): SessionContext {
-  const {handle, publicData, jwtPayload} = kernel
-  return {
-    handle,
-    userId: publicData.userId,
-    roles: publicData.roles,
-    publicData,
-    authorize(roleOrRoles) {
-      if (!this.isAuthorized(roleOrRoles)) {
-        throw new AuthorizationError()
-      }
-    },
-    isAuthorized(roleOrRoles) {
-      if (!publicData.userId) throw new AuthenticationError()
+export class SessionContextClass implements SessionContext {
+  private _res: BlitzApiResponse
+  private _kernel: SessionKernel
 
-      const roles = []
-      if (Array.isArray(roleOrRoles)) {
-        roles.push(...roleOrRoles)
-      } else if (roleOrRoles) {
-        roles.push(roleOrRoles)
-      }
+  constructor(res: BlitzApiResponse, kernel: SessionKernel) {
+    this._res = res
+    this._kernel = kernel
+  }
 
-      let isAuthorized = false
-      for (const role of roles) {
-        if (publicData.roles.includes(role)) isAuthorized = true
-      }
-      return isAuthorized
-    },
-    create: async (publicData, privateData) => {
-      return createSessionContext(
-        res,
-        await createNewSession(res, publicData, privateData, {jwtPayload}),
-      )
-    },
-    revoke: () => revokeSession(res, handle),
-    revokeAll: async () => {
-      if (!publicData.userId) {
-        throw new Error("session.revokeAll() cannot be used with anonymous sessions")
-      }
-      await revokeAllSessionsForUser(res, publicData.userId)
-      return
-    },
-    getPrivateData: async () => (await getPrivateData(handle)) || {},
-    setPrivateData: (data) => setPrivateData(kernel, data),
-    getPublicData: () => getPublicData(kernel),
-    setPublicData: (data) => setPublicData(res, kernel, data),
+  get handle() {
+    return this._kernel.handle
+  }
+  get userId() {
+    return this._kernel.publicData.userId
+  }
+  get roles() {
+    return this._kernel.publicData.roles
+  }
+  get publicData() {
+    return this._kernel.publicData
+  }
+
+  authorize(roleOrRoles?: string | string[]) {
+    if (!this.isAuthorized(roleOrRoles)) {
+      throw new AuthorizationError()
+    }
+  }
+
+  isAuthorized(roleOrRoles?: string | string[]) {
+    if (!this.userId) throw new AuthenticationError()
+
+    const roles = []
+    if (Array.isArray(roleOrRoles)) {
+      roles.push(...roleOrRoles)
+    } else if (roleOrRoles) {
+      roles.push(roleOrRoles)
+    }
+
+    let isAuthorized = false
+    for (const role of roles) {
+      if (this.roles.includes(role)) isAuthorized = true
+    }
+    return isAuthorized
+  }
+
+  async create(publicData: PublicData, privateData?: Record<any, any>) {
+    this._kernel = await createNewSession(this._res, publicData, privateData, {
+      jwtPayload: this._kernel.jwtPayload,
+    })
+  }
+
+  revoke() {
+    return revokeSession(this._res, this.handle)
+  }
+
+  async revokeAll() {
+    if (!this.publicData.userId) {
+      throw new Error("session.revokeAll() cannot be used with anonymous sessions")
+    }
+    await revokeAllSessionsForUser(this._res, this.publicData.userId)
+    return
+  }
+
+  async setPublicData(data: Record<any, any>) {
+    this._kernel.publicData = await setPublicData(this._res, this._kernel, data)
+  }
+
+  async getPrivateData() {
+    return (await getPrivateData(this.handle)) || {}
+  }
+  setPrivateData(data: Record<any, any>) {
+    return setPrivateData(this._kernel, data)
   }
 }
 
@@ -259,7 +284,7 @@ export async function getSession(
 export async function createNewSession(
   res: BlitzApiResponse,
   publicData: PublicData,
-  privateData: PrivateData = {},
+  privateData: Record<any, any> = {},
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
   invariant(publicData.userId !== undefined, "You must provide publicData.userId")
@@ -310,7 +335,7 @@ export async function createNewSession(
       }
     }
 
-    const newPrivateData: PrivateData = {
+    const newPrivateData: Record<any, any> = {
       ...existingPrivateData,
       ...privateData,
     }
@@ -467,12 +492,13 @@ export async function setPublicData(
   // Don't allow updating userId
   delete data.userId
 
-  const publicData = {
+  const publicData: PublicData = {
     ...(await getPublicData(sessionKernel)),
     ...data,
   }
 
   await refreshSession(res, {...sessionKernel, publicData})
+  return publicData
 }
 
 // --------------------------------
