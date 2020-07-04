@@ -30,8 +30,9 @@ const LoginForm = () => {
         onSubmit={async (event) => {
           event.preventDefault()
           const inputs = event.currentTarget.elements as any
-          await login({email: inputs.email.value, password: inputs.password.value})
-          Router.reload()
+          const res = await login({email: inputs.email.value, password: inputs.password.value})
+          console.log("login result:", res)
+          // Router.reload()
         }}
       >
         <label>

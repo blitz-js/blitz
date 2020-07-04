@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react"
+import BadBehavior from "bad-behavior"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -81,31 +82,22 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 
-export const savedAntiCSRFToken = {
-  set(token: string | undefined | null) {
+export const antiCSRFStore = {
+  setToken(token: string | undefined | null) {
     if (token) {
       localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_CSRF, token)
     }
   },
-  get() {
-    return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+  getToken() {
+    try {
+      return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+    } catch (error) {
+      //ignore any errors
+      return null
+    }
   },
   clear() {
     localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
-  },
-}
-
-export const savedPublicDataToken = {
-  set(token: string | undefined | null) {
-    if (token) {
-      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, token)
-    }
-  },
-  get() {
-    return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
-  },
-  clear() {
-    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
   },
 }
 
@@ -117,33 +109,57 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-export const getPublicData = () => {
-  const publicDataToken = localStorage.getItem(HEADER_PUBLIC_DATA_TOKEN)
-  if (!publicDataToken) {
-    return null
-  }
+const emptyPublicData: PublicData = {userId: null, roles: []}
 
-  const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
+export const publicDataStore = {
+  observable: BadBehavior<PublicData>(),
+  setToken(token: string | undefined | null) {
+    if (token) {
+      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, token)
+      this.updateState()
+    }
+  },
+  getToken() {
+    try {
+      return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+    } catch (error) {
+      //ignore any errors
+      return null
+    }
+  },
+  getData() {
+    const publicDataToken = this.getToken()
+    if (!publicDataToken) {
+      return emptyPublicData
+    }
 
-  if (expireAt < new Date()) {
-    localStorage.removeItem(HEADER_CSRF)
-    localStorage.removeItem(HEADER_PUBLIC_DATA_TOKEN)
-    return null
-  }
-  return publicData
+    const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
+
+    if (expireAt < new Date()) {
+      this.clear()
+      return emptyPublicData
+    }
+    return publicData
+  },
+  updateState() {
+    publicDataStore.observable.next(this.getData())
+  },
+  clear() {
+    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+    this.updateState()
+  },
 }
+// Set default value
+publicDataStore.updateState()
 
 export const useSession = () => {
-  const [publicData, setPublicData] = useState(getPublicData())
+  const [publicData, setPublicData] = useState(emptyPublicData)
 
   useEffect(() => {
-    const listener = (event: StorageEvent) => {
-      if (event.key === HEADER_PUBLIC_DATA_TOKEN) {
-        setPublicData(getPublicData())
-      }
-    }
-    window.addEventListener("storage", listener)
-    return () => window.removeEventListener("storage", listener)
+    // Initialize on mount
+    setPublicData(publicDataStore.getData())
+    const subscription = publicDataStore.observable.subscribe(setPublicData)
+    return subscription.unsubscribe
   }, [])
 
   return publicData
@@ -162,7 +178,9 @@ export const authorize = <T extends (input: any, ctx?: any) => any>(
   resolver: T,
 ) => {
   return ((input: any, ctx?: {session?: SessionContext}) => {
+    console.log("[authorize()]", ctx?.session)
     if (!ctx?.session?.userId) throw new AuthenticationError()
+    // TODO: fix this, only require one role instead of all roles
     for (let role of roles) {
       if (!ctx?.session?.roles.includes(role)) throw new AuthorizationError()
     }

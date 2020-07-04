@@ -1,4 +1,5 @@
 import db, {FindOneUserArgs} from "db"
+import {authorize} from "blitz"
 
 type GetUserInput = {
   where: FindOneUserArgs["where"]
@@ -6,11 +7,8 @@ type GetUserInput = {
   // include?: FindOneUserArgs['include']
 }
 
-export default async function getUser(
-  {where /* include */}: GetUserInput,
-  ctx: Record<any, any> = {},
-) {
+export default authorize(["admin"], async function getUser({where /* include */}: GetUserInput) {
   const user = await db.user.findOne({where})
 
   return user
-}
+})

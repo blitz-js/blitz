@@ -1,4 +1,28 @@
-import {Head, Link} from "blitz"
+import {Head, Link, useSession} from "blitz"
+import LoginForm from "app/components/LoginForm"
+import getUser from "app/users/queries/getUser"
+
+const UserStuff = () => {
+  const session = useSession()
+  return (
+    <div>
+      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <button
+        onClick={async () => {
+          try {
+            const user = await getUser({where: {id: session.userId as number}})
+            alert(JSON.stringify(user))
+          } catch (error) {
+            alert("error: " + JSON.stringify(error))
+          }
+        }}
+      >
+        Get user
+      </button>
+      <LoginForm />
+    </div>
+  )
+}
 
 const Home = () => (
   <div className="container">
@@ -11,42 +35,8 @@ const Home = () => (
       <div className="logo">
         <img src="/logo.png" alt="blitz.js" />
       </div>
-      <p>1. Run this command in your terminal:</p>
-      <pre>
-        <code>blitz start</code>
-      </pre>
-      <p>
-        2. Go to{" "}
-        <Link href="/users">
-          <a>/users</a>
-        </Link>
-      </p>
-      <div className="buttons">
-        <a
-          className="button"
-          href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Documentation
-        </a>
-        <a
-          className="button-outline"
-          href="https://github.com/blitz-js/blitz"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Github Repo
-        </a>
-        <a
-          className="button-outline"
-          href="https://slack.blitzjs.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Slack Community
-        </a>
-      </div>
+
+      <UserStuff />
     </main>
 
     <footer>

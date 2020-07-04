@@ -86,11 +86,13 @@ export async function createSessionContextFromRequest(
   //   sessionKernel = await createAnonymousSession(res)
   // }
 
-  // return createSessionContext(res, sessionKernel)
-  return createSessionContext(res, {
-    handle: (null as unknown) as string,
-    publicData: {userId: null, roles: []},
-  })
+  return createSessionContext(
+    res,
+    sessionKernel || {
+      handle: (null as unknown) as string,
+      publicData: {userId: null, roles: []},
+    },
+  )
 }
 
 export function createSessionContext(
@@ -417,7 +419,7 @@ export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, ex
   res.setHeader(
     "Set-Cookie",
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
-      //TODO - domain - can we omit?
+      path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: true,

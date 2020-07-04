@@ -2,12 +2,7 @@ import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
-import {
-  savedAntiCSRFToken,
-  savedPublicDataToken,
-  HEADER_CSRF,
-  HEADER_PUBLIC_DATA_TOKEN,
-} from "./supertokens"
+import {antiCSRFStore, publicDataStore, HEADER_CSRF, HEADER_PUBLIC_DATA_TOKEN} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
@@ -20,7 +15,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     "Content-Type": "application/json",
   }
 
-  const antiCSRFToken = savedAntiCSRFToken.get()
+  const antiCSRFToken = antiCSRFStore.getToken()
   if (antiCSRFToken) {
     headers[HEADER_CSRF] = antiCSRFToken
   }
@@ -28,19 +23,19 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   const result = await window.fetch(url, {
     method: "POST",
     headers,
-    credentials: "same-origin",
+    credentials: "include",
     redirect: "follow",
     body: JSON.stringify({params}),
   })
 
   for (const [name, value] of result.headers.entries()) {
-    if (name === HEADER_CSRF) savedAntiCSRFToken.set(value)
-    if (name === HEADER_PUBLIC_DATA_TOKEN) savedPublicDataToken.set(value)
+    if (name === HEADER_CSRF) antiCSRFStore.setToken(value)
+    if (name === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
   }
 
   if (result.status === 401) {
     // Usually means csrf token is bad, but this should never happen
-    savedAntiCSRFToken.clear()
+    antiCSRFStore.clear()
   }
 
   let json
@@ -53,7 +48,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   if (json.error) {
     const error = deserializeError(json.error)
     if (error.name === "AuthenticationError") {
-      savedPublicDataToken.clear()
+      publicDataStore.clear()
     }
     throw error
   } else {
