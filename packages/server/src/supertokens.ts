@@ -107,20 +107,17 @@ export function createSessionContext(
     roles: publicData.roles,
     publicData,
     authorize(roleOrRoles) {
-      invariant(roleOrRoles, "You must provide session.authorize() with a role or array of roles")
       if (!this.isAuthorized(roleOrRoles)) {
         throw new AuthorizationError()
       }
     },
     isAuthorized(roleOrRoles) {
-      invariant(
-        roleOrRoles,
-        "You must provide session.isAuthorized() with a role or array of roles",
-      )
+      if (!publicData.userId) throw new AuthenticationError()
+
       const roles = []
       if (Array.isArray(roleOrRoles)) {
         roles.push(...roleOrRoles)
-      } else {
+      } else if (roleOrRoles) {
         roles.push(roleOrRoles)
       }
 
