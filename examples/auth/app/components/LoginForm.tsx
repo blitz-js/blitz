@@ -1,9 +1,10 @@
-import React from "react"
+import React, {useState} from "react"
 import {Router} from "blitz"
 import signUp from "app/users/mutations/signUp"
 import login from "app/users/mutations/login"
 
 const LoginForm = () => {
+  const [loginError, setLoginError] = useState("")
   return (
     <div>
       <h1>Sign Up</h1>
@@ -29,10 +30,18 @@ const LoginForm = () => {
       <form
         onSubmit={async (event) => {
           event.preventDefault()
-          const inputs = event.currentTarget.elements as any
-          const res = await login({email: inputs.email.value, password: inputs.password.value})
-          console.log("login result:", res)
-          // Router.reload()
+          try {
+            setLoginError("")
+            const inputs = event.currentTarget.elements as any
+            await login({email: inputs.email.value, password: inputs.password.value})
+            // Router.reload()
+          } catch (error) {
+            if (error.name === "AuthenticationError") {
+              setLoginError("Those login credentials are invalid")
+            } else {
+              setLoginError("Sorry, we had an unexpected error. Please try again")
+            }
+          }
         }}
       >
         <label>
@@ -43,6 +52,7 @@ const LoginForm = () => {
           Password
           <input name="password" />
         </label>
+        {loginError && <p style={{color: "red"}}>{loginError}</p>}
         <button>Login</button>
       </form>
     </div>
