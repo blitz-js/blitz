@@ -21,6 +21,7 @@ import {
   COOKIE_REFRESH_TOKEN,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_REVOKED,
 } from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
@@ -108,7 +109,12 @@ export function createSessionContext(
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },
     revoke: async () => {
-      return !!(await revokeSession(handle))
+      return !!(await revokeSession(res, handle))
+    },
+    revokeAll: async () => {
+      if (!publicData.userId)
+        throw new Error("session.revokeAll() cannot be used with anonymous sessions")
+      return !!(await revokeAllSessionsForUser(res, publicData.userId))
     },
     getPrivateData: () => getPrivateData(handle),
     setPrivateData: async (data) => {
@@ -179,7 +185,7 @@ export async function getSession(
       return null
     }
     if (isPast(persistedSession.expiresAt)) {
-      await revokeSession(handle)
+      await revokeSession(res, handle)
       // TODO - shouldn't we just return null?
       // throw new AuthenticationError("Input session ID doesn't exist")
       return null
@@ -301,23 +307,27 @@ export async function getAllSessionHandlesForUser(userId: string) {
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export async function revokeSession(handle: string): Promise<SessionModel> {
-  return await config.deleteSession(handle)
+export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<SessionModel> {
+  const result = await config.deleteSession(handle)
+  if (result) {
+    res.setHeader(HEADER_SESSION_REVOKED, "true")
+  }
+  return result
 }
 
-export function revokeMultipleSessions(sessionHandles: string[]) {
+export function revokeMultipleSessions(res: BlitzApiResponse, sessionHandles: string[]) {
   let revoked: string[] = []
   for (const handle of sessionHandles) {
-    if (revokeSession(handle)) {
+    if (revokeSession(res, handle)) {
       revoked.push(handle)
     }
   }
   return revoked
 }
 
-export async function revokeAllSessionsForUser(userId: string) {
+export async function revokeAllSessionsForUser(res: BlitzApiResponse, userId: string | number) {
   let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
-  return revokeMultipleSessions(sessionHandles)
+  return revokeMultipleSessions(res, sessionHandles)
 }
 
 export async function getPublicData(handle: string): Promise<PublicData> {

@@ -11,6 +11,7 @@ export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 
 export const HEADER_CSRF = "anti-csrf"
 export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
+export const HEADER_SESSION_REVOKED = "session-revoked"
 
 export const LOCALSTORAGE_PREFIX = "_blitz-"
 
@@ -52,6 +53,7 @@ export type SessionContext = {
   publicData: PublicData
   create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
   revoke: () => Promise<boolean>
+  revokeAll: () => Promise<boolean>
   getPrivateData: () => Promise<PrivateData>
   setPrivateData: (data: PrivateData) => Promise<void>
   getPublicData: () => Promise<PublicData>

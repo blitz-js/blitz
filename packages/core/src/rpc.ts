@@ -2,7 +2,13 @@ import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
-import {antiCSRFStore, publicDataStore, HEADER_CSRF, HEADER_PUBLIC_DATA_TOKEN} from "./supertokens"
+import {
+  antiCSRFStore,
+  publicDataStore,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_REVOKED,
+} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
@@ -25,12 +31,13 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers,
     credentials: "include",
     redirect: "follow",
-    body: JSON.stringify({params}),
+    body: JSON.stringify({params: params || null}),
   })
 
   for (const [name, value] of result.headers.entries()) {
     if (name === HEADER_CSRF) antiCSRFStore.setToken(value)
     if (name === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
+    if (name === HEADER_SESSION_REVOKED) publicDataStore.clear()
   }
 
   if (result.status === 401) {
