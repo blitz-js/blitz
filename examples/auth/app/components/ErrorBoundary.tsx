@@ -25,7 +25,6 @@ export default class ErrorBoundary extends React.Component<{
       if (error.name === "AuthenticationError") {
         return <LoginForm onSuccess={this.reset} />
       } else if (error.name === "AuthorizationError") {
-        alert("AuthorizationError")
         return <h1>You are not allow to access this resource</h1>
       } else if (this.props.fallback) {
         return this.props.fallback(error)

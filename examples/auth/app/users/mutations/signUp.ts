@@ -11,7 +11,7 @@ type Ctx = {
 }
 
 export default async function signUp({email, password}: SignUpInput, ctx: Ctx = {}) {
-  const user = await db.user.create({data: {email, hashedPassword: password, role: "admin"}})
+  const user = await db.user.create({data: {email, hashedPassword: password, role: "user"}})
 
   if (user) {
     await ctx.session.create({userId: user.id, roles: [user.role]})

@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react"
 import BadBehavior from "bad-behavior"
+import invariant from "tiny-invariant"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -176,16 +177,33 @@ export const useSession = () => {
  */
 // TODO - returned type should accept the ctx argument with `session`
 export const authorize = <T extends (input: any, ctx?: any) => any>(
-  roles: string[] = [],
-  resolver: T,
+  resolverOrRoles: T | string[],
+  maybeResolver?: T,
 ) => {
+  let resolver: T
+  let roles: string[]
+  if (Array.isArray(resolverOrRoles)) {
+    roles = resolverOrRoles
+    resolver = maybeResolver as T
+  } else {
+    roles = []
+    resolver = resolverOrRoles
+  }
+
+  invariant(resolver, "You must pass a query or mutation resolver function to authorize()")
+
   return ((input: any, ctx?: {session?: SessionContext}) => {
-    console.log("[authorize()]", ctx?.session)
     if (!ctx?.session?.userId) throw new AuthenticationError()
-    // TODO: fix this, only require one role instead of all roles
-    for (let role of roles) {
-      if (!ctx?.session?.roles.includes(role)) throw new AuthorizationError()
+
+    // If user doesn't supply roles, then authorization is not checked
+    if (roles.length) {
+      let isAuthorized = false
+      for (const role of roles) {
+        if (ctx?.session?.roles.includes(role)) isAuthorized = true
+      }
+      if (!isAuthorized) throw new AuthorizationError()
     }
+
     return resolver(input, ctx)
   }) as T
 }
