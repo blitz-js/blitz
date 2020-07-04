@@ -35,8 +35,6 @@ export interface SessionModel extends Record<any, any> {
 export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
-  apiDomain?: string
-  anonymousRole?: string
   getSession: (handle: string) => Promise<SessionModel>
   getSessions: (userId: string | number) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>

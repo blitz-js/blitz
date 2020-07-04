@@ -38,8 +38,6 @@ const getDb = () => {
 const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 100,
   method: "essential",
-  apiDomain: "example.com",
-  anonymousRole: "public",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) =>
@@ -84,9 +82,9 @@ export async function createSessionContextFromRequest(
     console.log("Got existing session", sessionKernel)
   }
 
-  // if (!sessionKernel) {
-  //   sessionKernel = await createAnonymousSession(res)
-  // }
+  if (!sessionKernel) {
+    sessionKernel = await createAnonymousSession(res)
+  }
 
   return createSessionContext(
     res,
@@ -186,13 +184,10 @@ export async function getSession(
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
-      // TODO - shouldn't we just return null?
-      // throw new AuthenticationError(`Session handle ${handle} doesn't exist`)
-
       // TODO for anonymous session, how do we return original non-hashed public data??
       return {
         handle,
-        publicData: {userId: null, roles: [config.anonymousRole]},
+        publicData: {userId: null, roles: []},
       }
     }
 
@@ -202,14 +197,10 @@ export async function getSession(
       throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
-      // TODO - shouldn't we just return null?
-      // throw new AuthenticationError("Input session ID doesn't exist")
       return null
     }
     if (isPast(persistedSession.expiresAt)) {
       await revokeSession(res, handle)
-      // TODO - shouldn't we just return null?
-      // throw new AuthenticationError("Input session ID doesn't exist")
       return null
     }
 
@@ -309,7 +300,7 @@ export async function createNewSession(
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
   console.log("Creating anonymous session")
-  return await createNewSession(res, {userId: null, roles: [config.anonymousRole]})
+  return await createNewSession(res, {userId: null, roles: []})
 }
 
 // --------------------------------
@@ -447,9 +438,8 @@ export const createPublicDataToken = (publicData: string, expireAt: Date) => {
 export const createAntiCSRFToken = () => generateToken()
 
 export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
-  // TODO - what if another middlware use `Set-Cookie`?
-  res.setHeader(
-    "Set-Cookie",
+  setCookie(
+    res,
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
       path: "/",
       httpOnly: true,
@@ -458,4 +448,38 @@ export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, ex
       expires: expiresAt,
     }),
   )
+}
+
+export const setCookie = (res: BlitzApiResponse, cookie: string) => {
+  append(res, "Set-Cookie", cookie)
+}
+
+/**
+ * Append additional header `field` with value `val`.
+ *
+ * Example:
+ *
+ *    append(res, 'Set-Cookie', 'foo=bar; Path=/; HttpOnly');
+ *
+ * @param {BlitzApiResponse} res
+ * @param {string} field
+ * @param {string| string[]} val
+ */
+export function append(res: BlitzApiResponse, field: string, val: string | string[]) {
+  let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
+  let value = val
+
+  if (prev !== undefined) {
+    // concat the new and prev vals
+    value = Array.isArray(prev)
+      ? prev.concat(val)
+      : Array.isArray(val)
+      ? [prev].concat(val)
+      : [prev, val]
+  }
+
+  value = Array.isArray(value) ? value.map(String) : String(value)
+
+  res.setHeader(field, value)
+  return res
 }

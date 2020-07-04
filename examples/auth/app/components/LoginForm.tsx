@@ -1,7 +1,6 @@
 import React, {useState} from "react"
 import signUp from "app/users/mutations/signUp"
 import login from "app/users/mutations/login"
-import {queryCache} from "react-query"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -38,13 +37,12 @@ const LoginForm = (props: LoginFormProps) => {
             setLoginError("")
             const inputs = event.currentTarget.elements as any
             await login({email: inputs.email.value, password: inputs.password.value})
-            queryCache.resetErrorBoundaries()
-            props?.onSuccess()
+            props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
               setLoginError("Those login credentials are invalid")
             } else {
-              setLoginError("Sorry, we had an unexpected error. Please try again")
+              setLoginError("Sorry, we had an unexpected error. Please try again. - " + error)
             }
           }
         }}

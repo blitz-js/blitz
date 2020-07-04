@@ -28,6 +28,7 @@ model User {
   email     String   @unique
   hashedPassword String
   role      String
+  sessions  Session[]
 }
 
 model Session {
