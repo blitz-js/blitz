@@ -7,6 +7,7 @@ import {
   BlitzApiResponse,
   Middleware,
   AuthenticationError,
+  AuthorizationError,
   CSRFTokenMismatchError,
   SessionConfig,
   SessionModel,
@@ -105,6 +106,30 @@ export function createSessionContext(
     userId: publicData.userId,
     roles: publicData.roles,
     publicData,
+    authorize(roleOrRoles) {
+      invariant(roleOrRoles, "You must provide session.authorize() with a role or array of roles")
+      if (!this.isAuthorized(roleOrRoles)) {
+        throw new AuthorizationError()
+      }
+    },
+    isAuthorized(roleOrRoles) {
+      invariant(
+        roleOrRoles,
+        "You must provide session.isAuthorized() with a role or array of roles",
+      )
+      const roles = []
+      if (Array.isArray(roleOrRoles)) {
+        roles.push(...roleOrRoles)
+      } else {
+        roles.push(roleOrRoles)
+      }
+
+      let isAuthorized = false
+      for (const role of roles) {
+        if (publicData.roles.includes(role)) isAuthorized = true
+      }
+      return isAuthorized
+    },
     create: async (publicData, privateData) => {
       return createSessionContext(res, await createNewSession(res, publicData, privateData))
     },

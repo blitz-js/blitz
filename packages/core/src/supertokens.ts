@@ -52,6 +52,8 @@ export type SessionContext = {
   roles: string[]
   handle: string | null
   publicData: PublicData
+  authorize: (roleOrRoles: string | string[]) => void
+  isAuthorized: (roleOrRoles: string | string[]) => boolean
   create: (publicData: PublicData, privateData?: PrivateData) => Promise<SessionContext>
   revoke: () => Promise<boolean>
   revokeAll: () => Promise<boolean>
