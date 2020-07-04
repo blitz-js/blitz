@@ -1,6 +1,7 @@
 import {Head, Link, useSession} from "blitz"
 import LoginForm from "app/components/LoginForm"
 import getUser from "app/users/queries/getUser"
+import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
 
 const UserStuff = () => {
@@ -19,6 +20,18 @@ const UserStuff = () => {
         }}
       >
         Get user
+      </button>
+      <button
+        onClick={async () => {
+          try {
+            await trackView()
+          } catch (error) {
+            alert("error: " + error)
+            console.log(error)
+          }
+        }}
+      >
+        Track view
       </button>
       <LoginForm />
     </div>

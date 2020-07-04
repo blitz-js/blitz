@@ -5,8 +5,10 @@ import invariant from "tiny-invariant"
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
 export const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
+export const SESSION_TYPE_ANONYMOUS_JWT = "ajwt"
 export const SESSION_TOKEN_VERSION_0 = "v0"
 
+export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
 export const COOKIE_SESSION_TOKEN = "sSessionToken"
 export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 
@@ -16,11 +18,11 @@ export const HEADER_SESSION_REVOKED = "session-revoked"
 
 export const LOCALSTORAGE_PREFIX = "_blitz-"
 
-export interface PublicData extends Record<any, unknown> {
+export interface PublicData extends Record<any, any> {
   userId: string | number | null
   roles: string[]
 }
-export type PrivateData = Record<any, unknown>
+export type PrivateData = Record<any, any>
 
 export interface SessionModel extends Record<any, any> {
   expiresAt: Date
@@ -58,7 +60,7 @@ export type SessionContext = {
   getPrivateData: () => Promise<PrivateData>
   setPrivateData: (data: PrivateData) => Promise<void>
   getPublicData: () => Promise<PublicData>
-  setPublicData: (data: PublicData) => Promise<void>
+  setPublicData: (data: Record<any, any>) => Promise<void>
   // TODO
   // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
 }
@@ -108,7 +110,7 @@ export const parsePublicDataToken = (token: string) => {
   const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
   return {
     publicData: JSON.parse(publicDataStr) as PublicData,
-    expireAt: new Date(expireAt),
+    expireAt: expireAt && new Date(expireAt),
   }
 }
 

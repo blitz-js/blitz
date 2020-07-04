@@ -2,6 +2,7 @@ import crypto from "crypto"
 import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
+import jwt from "jsonwebtoken"
 import {
   BlitzApiRequest,
   BlitzApiResponse,
@@ -17,7 +18,9 @@ import {
   TOKEN_SEPARATOR,
   HANDLE_SEPARATOR,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
+  SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TOKEN_VERSION_0,
+  COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
   HEADER_CSRF,
@@ -86,13 +89,7 @@ export async function createSessionContextFromRequest(
     sessionKernel = await createAnonymousSession(res)
   }
 
-  return createSessionContext(
-    res,
-    sessionKernel || {
-      handle: (null as unknown) as string,
-      publicData: {userId: null, roles: []},
-    },
-  )
+  return createSessionContext(res, sessionKernel)
 }
 
 export function createSessionContext(
@@ -136,17 +133,16 @@ export function createSessionContext(
         throw new Error("session.revokeAll() cannot be used with anonymous sessions")
       return !!(await revokeAllSessionsForUser(res, publicData.userId))
     },
-    getPrivateData: () => getPrivateData(handle),
-    setPrivateData: async (data) => {
-      await setPrivateData(handle, data)
-      // TODO - if anonymous session, create new session and save to DB
-      return
+    // TODO for anonymous
+    getPrivateData: () => {
+      return getPrivateData(handle)
+    },
+    setPrivateData: (data) => {
+      return setPrivateData(handle, data)
     },
     getPublicData: () => getPublicData(handle),
-    setPublicData: async (data) => {
-      await setPublicData(handle, data)
-      // TODO - need to regenerate accessToken here right?
-      return
+    setPublicData: (data) => {
+      return setPublicData(res, handle, data)
     },
     // TODO
     // regenerate: () => {},
@@ -160,18 +156,17 @@ export async function getSession(
   req: BlitzApiRequest,
   res: BlitzApiResponse,
 ): Promise<SessionKernel | null> {
+  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
-
-  if (sessionToken === undefined && idRefreshToken === undefined) {
-    // No session exists
-    return null
-  }
+  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+  const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
+      console.log("No session: no handle")
       return null
     }
 
@@ -184,19 +179,18 @@ export async function getSession(
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
-      // TODO for anonymous session, how do we return original non-hashed public data??
-      return {
-        handle,
-        publicData: {userId: null, roles: []},
-      }
+      console.log("No session: not in DB")
+      return null
     }
 
-    const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
-    const antiCSRFToken = req.headers[HEADER_CSRF] as string
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
       throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
+      console.log("No session: sessionToken hash did not match")
+      console.log("In db:", persistedSession.hashedSessionToken)
+      console.log("In token hashed:", hash(sessionToken))
+      console.log("In token:", sessionToken)
       return null
     }
     if (isPast(persistedSession.expiresAt)) {
@@ -213,8 +207,13 @@ export async function getSession(
      *  browser level navigation
      */
     if (req.method !== "GET") {
-      // TODO - I don't think publicData will ever change here?? Because it comes straight from DB
+      // The publicData in the DB could have been updated since this client last made
+      // a request. If so, then we generate a new access token
       const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+
+      if (hasPublicDataChanged) {
+        console.log("PUBLIC DATA HAS CHANGED")
+      }
 
       let hasQuarterExpiryTimePassed
       // Check if > 1/4th of the expiry time has passed
@@ -224,19 +223,7 @@ export async function getSession(
         0.75 * config.sessionExpiryMinutes
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
-        const newExpiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
-        const newSessionToken = createSessionToken(handle, persistedSession.publicData)
-        const newPublicDataToken = createPublicDataToken(persistedSession.publicData, newExpiresAt)
-
-        setSessionCookie(res, sessionToken, newExpiresAt)
-        res.setHeader(HEADER_PUBLIC_DATA_TOKEN, newPublicDataToken)
-
-        // should not wait for this to happen for performance
-        // eslint-disable-next-line
-        config.updateSession(handle, {
-          expiresAt: newExpiresAt,
-          hashedSessionToken: hash(newSessionToken),
-        })
+        await refreshSession(res, handle, persistedSession.publicData)
       }
     }
 
@@ -244,10 +231,29 @@ export async function getSession(
       handle,
       publicData: JSON.parse(persistedSession.publicData),
     }
-  } else {
+  } else if (idRefreshToken) {
     // TODO: advanced method
     return null
+    // Important: check anonymousSessionToken token as the very last thing
+  } else if (anonymousSessionToken) {
+    const payload = parseAnonymousSessionToken(anonymousSessionToken)
+
+    if (!payload) {
+      return null
+    }
+
+    if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
+      throw new CSRFTokenMismatchError()
+    }
+
+    return {
+      handle: payload.handle,
+      publicData: payload.publicData,
+    }
   }
+
+  // No session exists
+  return null
 }
 
 // --------------------------------
@@ -257,33 +263,51 @@ export async function createNewSession(
   res: BlitzApiResponse,
   publicData: PublicData,
   privateData: PrivateData = {},
+  opts: {anonymous?: boolean} = {},
 ): Promise<SessionKernel> {
   invariant(publicData.userId !== undefined, "You must provide publicData.userId")
   invariant(publicData.roles, "You must provide publicData.roles")
 
-  if (config.method === "essential") {
+  const antiCSRFToken = createAntiCSRFToken()
+
+  if (opts.anonymous) {
+    const handle = generateAnonymousSessionHandle()
+    const anonymousSessionToken = createAnonymousSessionToken(handle, publicData, antiCSRFToken)
+    const publicDataToken = createPublicDataToken(JSON.stringify(publicData))
+
+    setAnonymousSessionCookie(res, anonymousSessionToken)
+    res.setHeader(HEADER_CSRF, antiCSRFToken)
+    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    // Clear the essential session cookie in case it was previously set
+    setSessionCookie(res, "", new Date(0))
+
+    return {
+      handle,
+      publicData,
+    }
+  } else if (config.method === "essential") {
+    invariant(publicData.userId, "You must provide a non-empty userId as publicData.userId")
+
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const handle = generateEssentialSessionHandle()
     const sessionToken = createSessionToken(handle, publicData)
     const publicDataToken = createPublicDataToken(JSON.stringify(publicData), expiresAt)
-    const antiCSRFToken = createAntiCSRFToken()
 
-    // Don't save to DB if anonymous user
-    if (publicData.userId) {
-      await config.createSession({
-        expiresAt,
-        handle,
-        userId: publicData.userId,
-        hashedSessionToken: hash(sessionToken),
-        antiCSRFToken,
-        publicData: JSON.stringify(publicData),
-        privateData: JSON.stringify(privateData),
-      })
-    }
+    await config.createSession({
+      expiresAt,
+      handle,
+      userId: publicData.userId,
+      hashedSessionToken: hash(sessionToken),
+      antiCSRFToken,
+      publicData: JSON.stringify(publicData),
+      privateData: JSON.stringify(privateData),
+    })
 
     setSessionCookie(res, sessionToken, expiresAt)
     res.setHeader(HEADER_CSRF, antiCSRFToken)
     res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    // Clear the anonymous session cookie in case it was previously set
+    setAnonymousSessionCookie(res, "", new Date(0))
 
     return {
       handle,
@@ -300,20 +324,36 @@ export async function createNewSession(
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
   console.log("Creating anonymous session")
-  return await createNewSession(res, {userId: null, roles: []})
+  return await createNewSession(res, {userId: null, roles: []}, undefined, {anonymous: true})
 }
 
 // --------------------------------
 // Session/DB utils
 // --------------------------------
 
-//@ts-ignore
-export function refreshSession(req: BlitzApiRequest, res: BlitzApiResponse) {
-  // TODO: advanced method
-}
+export async function refreshSession(
+  res: BlitzApiResponse,
+  handle: string,
+  publicData: string | PublicData,
+) {
+  if (config.method === "essential") {
+    const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
+    const sessionToken = createSessionToken(handle, publicData)
+    const publicDataToken = createPublicDataToken(publicData, expiresAt)
 
-export async function updateSessionExpiryInDb(handle: string, expiresAt: Date) {
-  return await config.updateSession(handle, {expiresAt})
+    setSessionCookie(res, sessionToken, expiresAt)
+    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+
+    const hashedSessionToken = hash(sessionToken)
+
+    await config.updateSession(handle, {
+      expiresAt,
+      hashedSessionToken,
+      publicData: typeof publicData === "string" ? publicData : JSON.stringify(publicData),
+    })
+  } else if (config.method === "advanced") {
+    throw new Error("refreshSession() not implemented for advanced method")
+  }
 }
 
 export async function getAllSessionHandlesForUser(userId: string) {
@@ -323,7 +363,12 @@ export async function getAllSessionHandlesForUser(userId: string) {
 export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<SessionModel> {
   const result = await config.deleteSession(handle)
   if (result) {
+    // This is used on the frontend to clear localstorage
     res.setHeader(HEADER_SESSION_REVOKED, "true")
+
+    // Clear all cookies
+    setSessionCookie(res, "", new Date(0))
+    setAnonymousSessionCookie(res, "", new Date(0))
   }
   return result
 }
@@ -346,47 +391,39 @@ export async function revokeAllSessionsForUser(res: BlitzApiResponse, userId: st
 export async function getPublicData(handle: string): Promise<PublicData> {
   const session = await config.getSession(handle)
   if (!session) {
-    throw new AuthenticationError("handle doesn't exist")
+    throw new Error("getPublicData() failed because handle doesn't exist " + handle)
   }
   return JSON.parse(session.publicData) as PublicData
 }
 
-export async function getPrivateData(handle: string): Promise<PrivateData> {
+export async function getPrivateData(handle: string): Promise<Record<any, any>> {
   const session = await config.getSession(handle)
   if (!session) {
-    throw new AuthenticationError("handle doesn't exist")
+    throw new Error("getPrivateData() failed because handle doesn't exist")
   }
-  return JSON.parse(session.privateData) as PrivateData
+  return JSON.parse(session.privateData) as Record<any, any>
 }
 
-export async function setPrivateData(handle: string, data: PrivateData) {
-  try {
-    const privateData = JSON.stringify({
-      ...(await getPrivateData(handle)),
-      ...data,
-    })
-    await config.updateSession(handle, {privateData})
-  } catch (error) {
-    // TODO handle error
-    throw error
-  }
+export async function setPrivateData(handle: string, data: Record<any, any>) {
+  const privateData = JSON.stringify({
+    ...(await getPrivateData(handle)),
+    ...data,
+  })
+  await config.updateSession(handle, {privateData})
 }
 
-export async function setPublicData(handle: string, data: Omit<PublicData, "userId">) {
+// TODO - how to update public data for all sessions (like if user's roles change)
+export async function setPublicData(res: BlitzApiResponse, handle: string, data: Record<any, any>) {
   // Don't allow updating userId
   delete data.userId
 
-  try {
-    // TODO - how do we handle anonymous session here?
-    const publicData = JSON.stringify({
-      ...(await getPublicData(handle)),
-      ...data,
-    })
-    await config.updateSession(handle, {publicData})
-  } catch (error) {
-    // TODO handle error
-    throw error
+  // TODO - how do we handle anonymous session here?
+  const publicData = {
+    ...(await getPublicData(handle)),
+    ...data,
   }
+
+  await refreshSession(res, handle, publicData)
 }
 
 // --------------------------------
@@ -398,6 +435,10 @@ export const generateToken = () => crypto.randomBytes(32).toString("base64")
 
 export const generateEssentialSessionHandle = () => {
   return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+}
+
+export const generateAnonymousSessionHandle = () => {
+  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
 }
 
 export const createSessionToken = (handle: string, publicData: PublicData | string) => {
@@ -431,16 +472,66 @@ export const parseSessionToken = (token: string) => {
   }
 }
 
-export const createPublicDataToken = (publicData: string, expireAt: Date) => {
-  return btoa([publicData, expireAt.toISOString()].join(TOKEN_SEPARATOR))
+export const createPublicDataToken = (publicData: string | PublicData, expireAt?: Date) => {
+  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
+  if (expireAt) {
+    payload.push(expireAt.toISOString())
+  }
+  return btoa(payload.join(TOKEN_SEPARATOR))
 }
 
 export const createAntiCSRFToken = () => generateToken()
+
+export type AnonymousSessionPayload = {
+  handle: string
+  publicData: PublicData
+  antiCSRFToken: string
+}
+
+export const createAnonymousSessionToken = (
+  handle: string,
+  publicData: PublicData,
+  antiCSRFToken: string,
+) => {
+  const payload: AnonymousSessionPayload = {
+    handle,
+    publicData,
+    antiCSRFToken,
+  }
+  // TODO use secret from ENV for production
+  return jwt.sign(payload, "secret", {algorithm: "HS256"})
+}
+
+export const parseAnonymousSessionToken = (token: string) => {
+  // TODO use secret from ENV for production
+  try {
+    return jwt.verify(token, "secret", {algorithms: ["HS256"]}) as AnonymousSessionPayload
+  } catch (error) {
+    return null
+  }
+}
 
 export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: true,
+      expires: expiresAt,
+    }),
+  )
+}
+
+export const setAnonymousSessionCookie = (
+  res: BlitzApiResponse,
+  token: string,
+  expiresAt?: Date,
+) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
