@@ -12,7 +12,7 @@ export const getQueryCacheFunctions = <T>(queryKey: string): QueryCacheFunctions
   mutate: (newData, opts = {refetch: true}) => {
     queryCache.setQueryData(queryKey, newData)
     if (opts.refetch) {
-      return queryCache.refetchQueries(queryKey, {force: true})
+      return queryCache.invalidateQueries(queryKey, {refetchActive: true})
     }
     return null
   },

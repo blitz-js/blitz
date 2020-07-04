@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/gui",
-  "version": "0.15.3",
+  "version": "0.16.1",
   "scripts": {
     "start": "blitz start"
   },

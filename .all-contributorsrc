@@ -747,6 +747,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sbardian",
+      "name": "Brian Andrews",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6384100?v=4",
+      "profile": "https://brianandrews.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "garrisons",
+      "name": "Garrison Snelling",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5100597?v=4",
+      "profile": "http://garrisonsnelling.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

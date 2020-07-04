@@ -1,6 +1,6 @@
 {
   "name": "auth",
-  "version": "1.0.0",
+  "version": "0.16.1",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@prisma/cli": "2.1.0",
     "@prisma/client": "2.1.0",
-    "blitz": "0.15.3",
+    "blitz": "0.16.1",
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284"
   },

@@ -22,6 +22,7 @@ export function withBlitz(nextConfig: any) {
       Object.assign({}, normalizedConfig, {
         experimental: {
           reactMode: "concurrent",
+          ...(normalizedConfig.experimental || {}),
         },
         webpack(config: any, options: Record<any, any>) {
           if (options.isServer) {

@@ -5,7 +5,7 @@ jest.mock("react-query")
 
 describe("getQueryCacheFunctions", () => {
   it("returns a mutate function with working options", () => {
-    const spyRefetchQueries = jest.spyOn(queryCache, "refetchQueries")
+    const spyRefetchQueries = jest.spyOn(queryCache, "invalidateQueries")
     const {mutate} = getQueryCacheFunctions("testQueryKey")
     expect(mutate).toBeTruthy()
     mutate({newData: true})
