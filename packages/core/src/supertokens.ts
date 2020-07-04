@@ -25,19 +25,19 @@ export interface PublicData extends Record<any, any> {
 export type PrivateData = Record<any, any>
 
 export interface SessionModel extends Record<any, any> {
-  expiresAt: Date
   handle: string
-  userId: string | number
-  hashedSessionToken: string
-  antiCSRFToken: string
-  publicData: string
-  privateData: string
+  userId?: string | number
+  expiresAt?: Date
+  hashedSessionToken?: string
+  antiCSRFToken?: string
+  publicData?: string
+  privateData?: string
 }
 
 export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
-  getSession: (handle: string) => Promise<SessionModel>
+  getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: string | number) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
@@ -61,8 +61,6 @@ export type SessionContext = {
   setPrivateData: (data: PrivateData) => Promise<void>
   getPublicData: () => Promise<PublicData>
   setPublicData: (data: Record<any, any>) => Promise<void>
-  // TODO
-  // regenerate: (arg: {publicData: PublicData}) => Promise<SessionContext>
 }
 
 export class AuthenticationError extends Error {

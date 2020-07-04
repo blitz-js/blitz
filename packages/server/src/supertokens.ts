@@ -2,7 +2,7 @@ import crypto from "crypto"
 import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
-import jwt from "jsonwebtoken"
+import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {
   BlitzApiRequest,
   BlitzApiResponse,
@@ -42,10 +42,15 @@ const defaultConfig: SessionConfig = {
   method: "essential",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
-  createSession: (session) =>
-    getDb().session.create({
-      data: {...session, userId: undefined, user: {connect: {id: session.userId}}},
-    }),
+  createSession: (session) => {
+    let user
+    if (session.userId) {
+      user = {connect: {id: session.userId}}
+    }
+    return getDb().session.create({
+      data: {...session, userId: undefined, user},
+    })
+  },
   updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
 }
@@ -129,24 +134,16 @@ export function createSessionContext(res: BlitzApiResponse, kernel: SessionKerne
     },
     revoke: () => revokeSession(res, handle),
     revokeAll: async () => {
-      if (!publicData.userId)
+      if (!publicData.userId) {
         throw new Error("session.revokeAll() cannot be used with anonymous sessions")
+      }
       await revokeAllSessionsForUser(res, publicData.userId)
       return
     },
-    // TODO for anonymous
-    getPrivateData: () => {
-      return getPrivateData(handle)
-    },
-    setPrivateData: (data) => {
-      return setPrivateData(handle, data)
-    },
+    getPrivateData: async () => (await getPrivateData(handle)) || {},
+    setPrivateData: (data) => setPrivateData(kernel, data),
     getPublicData: () => getPublicData(kernel),
-    setPublicData: (data) => {
-      return setPublicData(res, kernel, data)
-    },
-    // TODO
-    // regenerate: () => {},
+    setPublicData: (data) => setPublicData(res, kernel, data),
   }
 }
 
@@ -189,12 +186,9 @@ export async function getSession(
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
       console.log("No session: sessionToken hash did not match")
-      console.log("In db:", persistedSession.hashedSessionToken)
-      console.log("In token hashed:", hash(sessionToken))
-      console.log("In token:", sessionToken)
       return null
     }
-    if (isPast(persistedSession.expiresAt)) {
+    if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
       await revokeSession(res, handle)
       return null
     }
@@ -212,21 +206,17 @@ export async function getSession(
       // a request. If so, then we generate a new access token
       const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
 
-      if (hasPublicDataChanged) {
-        console.log("PUBLIC DATA HAS CHANGED")
-      }
-
-      let hasQuarterExpiryTimePassed
       // Check if > 1/4th of the expiry time has passed
       // (since we are doing a rolling expiry window).
-      hasQuarterExpiryTimePassed =
+      const hasQuarterExpiryTimePassed =
+        persistedSession.expiresAt &&
         differenceInMinutes(persistedSession.expiresAt, new Date()) <
-        0.75 * config.sessionExpiryMinutes
+          0.75 * config.sessionExpiryMinutes
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
         await refreshSession(res, {
           handle,
-          publicData: JSON.parse(persistedSession.publicData),
+          publicData: JSON.parse(persistedSession.publicData || ""),
           jwtPayload: null,
         })
       }
@@ -234,7 +224,7 @@ export async function getSession(
 
     return {
       handle,
-      publicData: JSON.parse(persistedSession.publicData),
+      publicData: JSON.parse(persistedSession.publicData || ""),
       jwtPayload: null,
     }
   } else if (idRefreshToken) {
@@ -305,8 +295,25 @@ export async function createNewSession(
       ...(opts.jwtPayload?.publicData || {}),
       ...publicData,
     }
-
     invariant(newPublicData.userId, "You must provide a non-empty userId as publicData.userId")
+
+    // This carries over any private data from the anonymous session
+    let existingPrivateData = {}
+    if (opts.jwtPayload?.isAnonymous) {
+      const session = await config.getSession(opts.jwtPayload.handle)
+      if (session) {
+        if (session.privateData) {
+          existingPrivateData = JSON.parse(session.privateData)
+        }
+        // Delete the previous anonymous session
+        await config.deleteSession(opts.jwtPayload.handle)
+      }
+    }
+
+    const newPrivateData: PrivateData = {
+      ...existingPrivateData,
+      ...privateData,
+    }
 
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const handle = generateEssentialSessionHandle()
@@ -320,7 +327,7 @@ export async function createNewSession(
       hashedSessionToken: hash(sessionToken),
       antiCSRFToken,
       publicData: JSON.stringify(newPublicData),
-      privateData: JSON.stringify(privateData),
+      privateData: JSON.stringify(newPrivateData),
     })
 
     setSessionCookie(res, sessionToken, expiresAt)
@@ -344,7 +351,6 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(res: BlitzApiResponse) {
-  console.log("Creating anonymous session")
   return await createNewSession(res, {userId: null, roles: []}, undefined, {anonymous: true})
 }
 
@@ -419,24 +425,37 @@ export async function getPublicData(sessionKernel: SessionKernel): Promise<Publi
     if (!session) {
       throw new Error("getPublicData() failed because handle doesn't exist " + sessionKernel.handle)
     }
-    return JSON.parse(session.publicData) as PublicData
+    if (session.publicData) {
+      return JSON.parse(session.publicData) as PublicData
+    } else {
+      return {} as PublicData
+    }
   }
 }
 
-export async function getPrivateData(handle: string): Promise<Record<any, any>> {
+export async function getPrivateData(handle: string): Promise<Record<any, any> | null> {
   const session = await config.getSession(handle)
-  if (!session) {
-    throw new Error("getPrivateData() failed because handle doesn't exist")
+  if (session && session.privateData) {
+    return JSON.parse(session.privateData) as Record<any, any>
+  } else {
+    return null
   }
-  return JSON.parse(session.privateData) as Record<any, any>
 }
 
-export async function setPrivateData(handle: string, data: Record<any, any>) {
+export async function setPrivateData(sessionKernel: SessionKernel, data: Record<any, any>) {
+  let existingPrivateData = await getPrivateData(sessionKernel.handle)
+  if (existingPrivateData === null) {
+    // Anonymous sessions may not exist in the DB yet
+    try {
+      await config.createSession({handle: sessionKernel.handle})
+    } catch (error) {}
+    existingPrivateData = {}
+  }
   const privateData = JSON.stringify({
-    ...(await getPrivateData(handle)),
+    ...existingPrivateData,
     ...data,
   })
-  await config.updateSession(handle, {privateData})
+  await config.updateSession(sessionKernel.handle, {privateData})
 }
 
 // TODO - how to update public data for all sessions (like if user's roles change)
@@ -459,7 +478,7 @@ export async function setPublicData(
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: HashaInput) => hasha(input, {algorithm: "sha256"})
+const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
 
 export const generateToken = () => crypto.randomBytes(32).toString("base64")
 
@@ -521,13 +540,13 @@ export type AnonymousSessionPayload = {
 
 export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
   // TODO use secret from ENV for production
-  return jwt.sign(payload, "secret", {algorithm: "HS256"})
+  return jwtSign(payload, "secret", {algorithm: "HS256"})
 }
 
 export const parseAnonymousSessionToken = (token: string) => {
   // TODO use secret from ENV for production
   try {
-    return jwt.verify(token, "secret", {algorithms: ["HS256"]}) as AnonymousSessionPayload
+    return jwtVerify(token, "secret", {algorithms: ["HS256"]}) as AnonymousSessionPayload
   } catch (error) {
     return null
   }

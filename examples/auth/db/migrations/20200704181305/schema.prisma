@@ -3,14 +3,14 @@
 
 datasource sqlite {
   provider = "sqlite"
-  url      = "file:./db.sqlite"
+  url = "***"
 }
 
 // SQLite is easy to start with, but if you use Postgres in production
 // you should also use it in development with the following:
 //datasource postgresql {
 //  provider = "postgresql"
-//  url      = env("DATABASE_URL")
+//  url = "***"
 //}
 
 generator client {

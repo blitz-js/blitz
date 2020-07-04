@@ -56,7 +56,6 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     const error = deserializeError(json.error)
     if (error.name === "AuthenticationError") {
       publicDataStore.clear()
-      antiCSRFStore.clear()
     }
     throw error
   } else {
