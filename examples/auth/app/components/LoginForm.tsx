@@ -1,9 +1,13 @@
 import React, {useState} from "react"
-import {Router} from "blitz"
 import signUp from "app/users/mutations/signUp"
 import login from "app/users/mutations/login"
+import {queryCache} from "react-query"
 
-const LoginForm = () => {
+type LoginFormProps = {
+  onSuccess?: () => void
+}
+
+const LoginForm = (props: LoginFormProps) => {
   const [loginError, setLoginError] = useState("")
   return (
     <div>
@@ -34,7 +38,8 @@ const LoginForm = () => {
             setLoginError("")
             const inputs = event.currentTarget.elements as any
             await login({email: inputs.email.value, password: inputs.password.value})
-            // Router.reload()
+            queryCache.resetErrorBoundaries()
+            props?.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
               setLoginError("Those login credentials are invalid")

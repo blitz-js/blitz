@@ -9,8 +9,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
       {session.userId && (
         <button
           onClick={async () => {
-            await logout()
             router.push("/")
+            await logout()
           }}
         >
           Logout

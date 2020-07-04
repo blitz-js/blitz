@@ -1,4 +1,5 @@
 import React from "react"
+import {queryCache} from "react-query"
 import LoginForm from "app/components/LoginForm"
 
 export default class ErrorBoundary extends React.Component<{
@@ -13,11 +14,16 @@ export default class ErrorBoundary extends React.Component<{
     }
   }
 
+  reset = () => {
+    this.setState({hasError: false, error: null})
+    queryCache.resetErrorBoundaries()
+  }
+
   render() {
     const {hasError, error} = this.state
     if (hasError) {
       if (error.name === "AuthenticationError") {
-        return <LoginForm />
+        return <LoginForm onSuccess={this.reset} />
       } else if (error.name === "AuthorizationError") {
         alert("AuthorizationError")
         return <h1>You are not allow to access this resource</h1>
