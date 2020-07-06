@@ -1,9 +1,7 @@
-// import * as fs from "fs"
 import * as path from "path"
-// const resolveGlobal = require("resolve-global")
-const resolveFrom = require("resolve-from")
-const pkgDir = require("pkg-dir")
-const chalk = require("chalk")
+import resolveFrom from "resolve-from"
+import pkgDir from "pkg-dir"
+import chalk from "chalk"
 
 console.log(
   chalk.yellow(
@@ -12,30 +10,22 @@ console.log(
   ),
 )
 
-console.log("__dirname", __dirname)
-// console.log("A:", require.resolve("@blitzjs/cli"))
-// console.log("B:", resolveFrom.silent(__dirname, "@blitzjs/cli"))
-// console.log("--")
-// console.log("b1:", resolveFrom.silent(process.cwd(), "blitz"))
-// console.log("b2:", resolveFrom(resolveFrom(process.cwd(), "blitz"), "@blitzjs/cli"))
-// console.log("--")
-// console.log("Z:", resolveFrom.silent(process.cwd(), "@blitzjs/cli"))
+const globalBlitzPath = resolveFrom(__dirname, "blitz")
+const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
-// const localCLIPkgPath1 = path.resolve(process.cwd(), "node_modules", "@blitzjs/cli")
-// const localCLIPkgPath2 = path.resolve(process.cwd(), "node_modules/blitz/node_modules/@blitzjs/cli")
-// const monorepoCLIPkgPath = path.resolve(process.cwd(), "../..", "node_modules", "@blitzjs/cli")
-// // TODO - shouldn't this be resolveFrom.silent?
-// const globalCLIPkgPath = resolveFrom(__dirname, "@blitzjs/cli")
-// const globalLinkedPath = path.resolve(pkgDir.sync(__dirname), "../../lerna.json")
+const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
 
-// const isGlobalLinked = __dirname.includes("packages/blitz/dist")
+let blitzPkgPath
+if (isInDevelopmentAsGloballyLinked) {
+  blitzPkgPath = globalBlitzPath
+} else {
+  // localBlitzPath won't exist if used outside a blitz app directory
+  blitzPkgPath = localBlitzPath || globalBlitzPath
+}
 
-let pkgPath: string = resolveFrom(
-  resolveFrom.silent(process.cwd(), "blitz") || resolveFrom(__dirname, "blitz"),
-  "@blitzjs/cli",
-)
+const cliPkgPath = resolveFrom(blitzPkgPath, "@blitzjs/cli")
 
-const cli = require(pkgPath)
+const cli = require(cliPkgPath)
 
 const options = require("minimist")(process.argv.slice(2))
 const hasVersionFlag = options._.length === 0 && (options.v || options.version)
@@ -43,27 +33,24 @@ const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
 
 if (hasVersionFlag) {
   if (hasVerboseFlag) {
-    // console.log("debug:", usageType)
-    console.log("debug: pkgPath:", pkgPath, "\n")
+    console.log("debug: blitzPkgPath:", blitzPkgPath)
+    console.log("debug: cliPkgPath:", cliPkgPath, "\n")
   }
   try {
     const osName = require("os-name")
     console.log(`${osName()} | ${process.platform}-${process.arch} | Node: ${process.version}\n`)
 
-    const globalBlitzPath = pkgDir.sync(resolveFrom.silent(__dirname, "blitz"))
-    console.log("globalBlitzPath", globalBlitzPath)
-    const localBlitzPath = pkgDir.sync(resolveFrom.silent(process.cwd(), "blitz"))
-    console.log("localBlitzPath", localBlitzPath)
+    const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
+    const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
 
-    if (globalBlitzPath !== localBlitzPath) {
-      // This will always happen if using the global CLI.
-      // It won't happen if user does `npx blitz` or `yarn blitz`
-      const globalPkgJson = path.join(globalBlitzPath, "package.json")
-      console.log(`blitz: ${require(globalPkgJson).version} (global)`)
+    if (globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
+      // This branch won't run if user does `npx blitz` or `yarn blitz`
+      const globalVersion = require(path.join(globalBlitzPkgJsonPath, "package.json")).version
+      console.log(`blitz: ${globalVersion} (global)`)
     }
 
-    if (localBlitzPath) {
-      const localVersion = require(path.join(localBlitzPath, "package.json")).version
+    if (localBlitzPkgJsonPath) {
+      const localVersion = require(path.join(localBlitzPkgJsonPath, "package.json")).version
       console.log(`blitz: ${localVersion} (local)`)
     }
 
