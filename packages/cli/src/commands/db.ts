@@ -159,6 +159,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
       name: "command",
       description: "Run specific db command",
       required: true,
+      default: "help",
     },
   ]
 
@@ -229,6 +230,8 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
           }
         }
       })
+    } else if (command === "help") {
+      await Db.run(["--help"])
     } else {
       this.log("\nUh oh, Blitz does not support that command.")
       this.log("You can try running a prisma command directly with:")
