@@ -564,15 +564,29 @@ export type AnonymousSessionPayload = {
   antiCSRFToken: string
 }
 
+export const getSessionSecretKey = () => {
+  if (process.env.NODE_ENV === "production") {
+    if (!process.env.SESSION_SECRET_KEY) {
+      throw new Error(
+        "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
+      )
+    }
+    return process.env.SESSION_SECRET_KEY
+  } else {
+    return process.env.SESSION_SECRET_KEY || "default-dev-secret"
+  }
+}
+
 export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  // TODO use secret from ENV for production
-  return jwtSign(payload, "secret", {algorithm: "HS256"})
+  return jwtSign(payload, getSessionSecretKey(), {algorithm: "HS256"})
 }
 
 export const parseAnonymousSessionToken = (token: string) => {
-  // TODO use secret from ENV for production
+  // This must happen outside the try/catch because it could throw an error
+  // about a missing environment variable
+  const secret = getSessionSecretKey()
   try {
-    return jwtVerify(token, "secret", {algorithms: ["HS256"]}) as AnonymousSessionPayload
+    return jwtVerify(token, secret, {algorithms: ["HS256"]}) as AnonymousSessionPayload
   } catch (error) {
     return null
   }
