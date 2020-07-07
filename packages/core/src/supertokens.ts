@@ -84,21 +84,22 @@ export class CSRFTokenMismatchError extends Error {
 }
 
 export const antiCSRFStore = {
+  key: LOCALSTORAGE_PREFIX + HEADER_CSRF,
   setToken(token: string | undefined | null) {
     if (token) {
-      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_CSRF, token)
+      localStorage.setItem(this.key, token)
     }
   },
   getToken() {
     try {
-      return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+      return localStorage.getItem(this.key)
     } catch (error) {
       //ignore any errors
       return null
     }
   },
   clear() {
-    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_CSRF)
+    localStorage.removeItem(this.key)
   },
 }
 
@@ -113,16 +114,28 @@ export const parsePublicDataToken = (token: string) => {
 const emptyPublicData: PublicData = {userId: null, roles: []}
 
 export const publicDataStore = {
+  key: "LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN",
   observable: BadBehavior<PublicData>(),
+  initialize() {
+    // Set default value
+    publicDataStore.updateState()
+    if (typeof window !== "undefined") {
+      window.addEventListener("storage", (event) => {
+        if (event.key === this.key) {
+          publicDataStore.updateState()
+        }
+      })
+    }
+  },
   setToken(token: string | undefined | null) {
     if (token) {
-      localStorage.setItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN, token)
+      localStorage.setItem(this.key, token)
       this.updateState()
     }
   },
   getToken() {
     try {
-      return localStorage.getItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+      return localStorage.getItem(this.key)
     } catch (error) {
       //ignore any errors
       return null
@@ -146,12 +159,11 @@ export const publicDataStore = {
     publicDataStore.observable.next(this.getData())
   },
   clear() {
-    localStorage.removeItem(LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN)
+    localStorage.removeItem(this.key)
     this.updateState()
   },
 }
-// Set default value
-publicDataStore.updateState()
+publicDataStore.initialize()
 
 export const useSession = () => {
   const [publicData, setPublicData] = useState(emptyPublicData)
