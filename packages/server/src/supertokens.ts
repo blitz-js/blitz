@@ -161,6 +161,9 @@ export class SessionContextClass implements SessionContext {
   }
 
   async setPublicData(data: Record<any, any>) {
+    if (this.userId && data.roles) {
+      await updateAllPublicDataRolesForUser(this.userId, data.roles)
+    }
     this._kernel.publicData = await setPublicData(this._res, this._kernel, data)
   }
 
@@ -418,6 +421,18 @@ export async function getAllSessionHandlesForUser(userId: string) {
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
+export async function updateAllPublicDataRolesForUser(userId: string | number, roles: string[]) {
+  const sessions = await config.getSessions(userId)
+
+  for (const session of sessions) {
+    const publicData = JSON.stringify({
+      ...(session.publicData ? JSON.parse(session.publicData) : {}),
+      roles,
+    })
+    await config.updateSession(session.handle, {publicData})
+  }
+}
+
 export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<void> {
   await config.deleteSession(handle)
   // This is used on the frontend to clear localstorage
@@ -483,7 +498,6 @@ export async function setPrivateData(sessionKernel: SessionKernel, data: Record<
   await config.updateSession(sessionKernel.handle, {privateData})
 }
 
-// TODO - how to update public data for all sessions (like if user's roles change)
 export async function setPublicData(
   res: BlitzApiResponse,
   sessionKernel: SessionKernel,
