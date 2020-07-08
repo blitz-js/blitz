@@ -1,21 +1,25 @@
 import db from "db"
-import {SessionContext} from "@blitzjs/server"
+import {SessionContext} from "blitz"
+import {hashPassword} from "app/auth"
+import * as s from "superstruct"
 
-type SignUpInput = {
-  email: string
-  password: string
-}
+export const SignUpInput = s.masked(
+  s.object({
+    email: s.pattern(s.string(), /.+@.+\..+/),
+    password: s.length(s.string(), 10, 100),
+  }),
+)
 
-type Ctx = {
-  session?: SessionContext
-}
+export default async function signUp(
+  input: s.StructType<typeof SignUpInput>,
+  ctx: {session?: SessionContext} = {},
+) {
+  // This throws an error if input is invalid
+  const {email, password} = s.coerce(input, SignUpInput)
+  const hashedPassword = await hashPassword(password)
+  const user = await db.user.create({data: {email, hashedPassword, role: "user"}})
 
-export default async function signUp({email, password}: SignUpInput, ctx: Ctx = {}) {
-  const user = await db.user.create({data: {email, hashedPassword: password, role: "user"}})
-
-  if (user) {
-    await ctx.session.create({userId: user.id, roles: [user.role]})
-  }
+  await ctx.session.create({userId: user.id, roles: [user.role]})
 
   return user
 }

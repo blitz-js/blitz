@@ -1,20 +1,22 @@
-import db from "db"
-import {AuthenticationError, SessionContext} from "blitz"
+import {SessionContext} from "blitz"
+import {authorizeUser} from "app/auth"
+import * as s from "superstruct"
 
-type LoginInput = {
-  email: string
-  password: string
-}
+export const LoginInput = s.masked(
+  s.object({
+    email: s.string(),
+    password: s.string(),
+  }),
+)
 
 export default async function login(
-  {email, password}: LoginInput,
+  input: s.StructType<typeof LoginInput>,
   ctx: {session?: SessionContext} = {},
 ) {
-  const user = await db.user.findOne({where: {email}})
-
-  if (!user || password !== user.hashedPassword) {
-    throw new AuthenticationError()
-  }
+  // This throws an error if input is invalid
+  const {email, password} = s.coerce(input, LoginInput)
+  // This throws an error if credentials are invalid
+  const user = await authorizeUser(email, password)
 
   await ctx.session.create({userId: user.id, roles: [user.role]})
 
