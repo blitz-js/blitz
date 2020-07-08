@@ -35,9 +35,9 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   })
 
   for (const [name, value] of result.headers.entries()) {
-    if (name === HEADER_CSRF) antiCSRFStore.setToken(value)
-    if (name === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
-    if (name === HEADER_SESSION_REVOKED) publicDataStore.clear()
+    if (name.toLowerCase() === HEADER_CSRF) antiCSRFStore.setToken(value)
+    if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
+    if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
   }
 
   if (result.status === 401) {

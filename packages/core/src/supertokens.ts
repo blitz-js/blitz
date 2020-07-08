@@ -12,6 +12,7 @@ export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
 export const COOKIE_SESSION_TOKEN = "sSessionToken"
 export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 
+// Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
 export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 export const HEADER_SESSION_REVOKED = "session-revoked"
