@@ -9,26 +9,27 @@ describe("relative", () => {
       {
         path: normalize("/projects/blitz/blitz/app/users/pages.ts"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "app/thing/bar"
-  import from 'app/thing/bar'`,
+import from "app/thing/bar"
+import from 'app/thing/bar'
+import 'app/thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "../thing/bar"
-  import from '../thing/bar'`,
+import from "../thing/bar"
+import from '../thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/bar.tsx"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "app/thing/bar"
-  import from 'app/thing/bar'`,
+import from "app/thing/bar"
+import from 'app/thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/baz.js"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "app/thing/bar"
-  import from 'app/thing/bar'`,
+import from "app/thing/bar"
+import from 'app/thing/bar'`,
       },
     ]
 
@@ -36,26 +37,27 @@ describe("relative", () => {
       {
         path: normalize("/projects/blitz/blitz/app/users/pages.ts"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "../thing/bar"
-  import from '../thing/bar'`,
+import from "../thing/bar"
+import from '../thing/bar'
+import '../thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "../thing/bar"
-  import from '../thing/bar'`,
+import from "../thing/bar"
+import from '../thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/bar.tsx"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "../thing/bar"
-  import from '../thing/bar'`,
+import from "../thing/bar"
+import from '../thing/bar'`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/baz.js"),
         contents: `import {getFoo} from 'app/foo/bar';
-  import from "../thing/bar"
-  import from '../thing/bar'`,
+import from "../thing/bar"
+import from '../thing/bar'`,
       },
     ]
     const {stream} = createStageRelative(mockStageArgs({cwd: normalize("/projects/blitz/blitz")}))
