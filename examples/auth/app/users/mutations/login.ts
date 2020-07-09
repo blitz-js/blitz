@@ -1,20 +1,19 @@
 import {SessionContext} from "blitz"
 import {authorizeUser} from "app/auth"
-import * as s from "superstruct"
+import * as z from "zod"
 
-export const LoginInput = s.masked(
-  s.object({
-    email: s.string(),
-    password: s.string(),
-  }),
-)
+export const LoginInput = z.object({
+  email: z.string(),
+  password: z.string(),
+})
 
 export default async function login(
-  input: s.StructType<typeof LoginInput>,
+  input: z.infer<typeof LoginInput>,
   ctx: {session?: SessionContext} = {},
 ) {
   // This throws an error if input is invalid
-  const {email, password} = s.coerce(input, LoginInput)
+  const {email, password} = LoginInput.parse(input)
+
   // This throws an error if credentials are invalid
   const user = await authorizeUser(email, password)
 

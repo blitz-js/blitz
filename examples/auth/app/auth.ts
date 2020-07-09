@@ -12,6 +12,8 @@ export const hashPassword = async (password: string) => {
 export const authorizeUser = async (email: string, password: string) => {
   const user = await db.user.findOne({where: {email}})
 
+  if (!user) throw new AuthenticationError()
+
   switch (await SP.verify(Buffer.from(password), Buffer.from(user.hashedPassword))) {
     case SecurePassword.VALID:
       break

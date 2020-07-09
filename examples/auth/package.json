@@ -35,7 +35,7 @@
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
     "secure-password": "4.0.0",
-    "superstruct": "0.10.12"
+    "zod": "1.9.0"
   },
   "devDependencies": {
     "@types/react": "16.9.38",

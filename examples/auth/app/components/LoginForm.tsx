@@ -7,6 +7,7 @@ type LoginFormProps = {
 }
 
 const LoginForm = (props: LoginFormProps) => {
+  const [signUpError, setSignUpError] = useState("")
   const [loginError, setLoginError] = useState("")
   return (
     <div>
@@ -14,8 +15,17 @@ const LoginForm = (props: LoginFormProps) => {
       <form
         onSubmit={async (event) => {
           event.preventDefault()
-          const inputs = event.currentTarget.elements as any
-          await signUp({email: inputs.email.value, password: inputs.password.value})
+          try {
+            setSignUpError("")
+            const inputs = event.currentTarget.elements as any
+            await signUp({email: inputs.email.value, password: inputs.password.value})
+          } catch (error) {
+            if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+              setSignUpError("That email is already being used")
+            } else {
+              setSignUpError(error.toString())
+            }
+          }
         }}
       >
         <label>
@@ -26,6 +36,7 @@ const LoginForm = (props: LoginFormProps) => {
           Password
           <input name="password" />
         </label>
+        {signUpError && <p style={{color: "red"}}>{signUpError}</p>}
         <button>Sign Up</button>
       </form>
 
