@@ -31,6 +31,8 @@ Blitz comes with a powerful CLI that is designed to make development easy and fa
   test      Run project tests
 ```
 
+You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-overview) documentation.
+
 ## What's included?
 
 Here is the structure of your app.
@@ -90,9 +92,6 @@ These files are:
 
 
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
-
-
-You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-overview) documentation.
 
 ## Learn more
 
