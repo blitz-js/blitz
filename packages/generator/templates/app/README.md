@@ -1,7 +1,7 @@
 
 [![Blitz.js](https://raw.githubusercontent.com/blitz-js/art/master/github-cover-photo.png)](https://blitzjs.com)
 
-This project was bootstraped by the [Blitz.js](https://github.com/blitz-js/blitz).
+This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
 # __name__
 
@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Commands
 
-Blitz comes with a powerful CLI that is meant to help you on all sort of tasks, guiding you towards our best practices.
+Blitz comes with a powerful CLI that is designed to make development easy and fast. You can install it with `npm i -g blitz`
 
 ```
   blitz [COMMAND]
@@ -27,7 +27,6 @@ Blitz comes with a powerful CLI that is meant to help you on all sort of tasks, 
   db        Run database commands
   generate  Generate new files for your Blitz project
   help      display help for blitz
-  new       Create a new Blitz project
   start     Start a development server
   test      Run project tests
 ```
@@ -37,7 +36,7 @@ Blitz comes with a powerful CLI that is meant to help you on all sort of tasks, 
 Here is the structure of your app.
 
 ```
-mysite
+__name__
 ├── app
 │   ├── components
 │   │   └── ErrorBoundary.tsx
@@ -90,20 +89,19 @@ These files are:
 - `tsconfig.json` is our recommended setup for TypeScript.
 
 
-You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of our documentation.
+You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
 
 
 You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-overview) documentation.
 
 ## Learn more
 
-You can learn more about Blitz on the [Documentation](https://blitzjs.com/docs/getting-started) website.
+Read the [Blitz.js Documentation](https://blitzjs.com/docs/getting-started) to learn more.
 
 ### The Blitz.js Manifesto
-Read our [Manifesto](https://blitzjs.com/docs/manifesto) to understand more about what Blitz is for.
+Read the [Blitz Manifesto](https://blitzjs.com/docs/manifesto) to learn the Blitz foundational principles.
 
-### Next.js
-Next.js is baked into Blitz and almost all features of [Next.js](https://nextjs.org/) are supported. For more info on the differences see here: [Why use Blitz instead of Next.js](https://blitzjs.com/docs/why-blitz)
+Blitz is built on Next.js. For more info on this see [Why use Blitz instead of Next.js](https://blitzjs.com/docs/why-blitz)
 
 
 ## Get in touch
@@ -113,10 +111,6 @@ The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to rea
 * [Website](https://blitzjs.com/)
 * [Slack](https://slack.blitzjs.com/)
 * [Report an issue](https://github.com/blitz-js/blitz/issues/new/choose)
-* [GitHub discussions](https://github.com/blitz-js/blitz/discussions)
+* [Forum discussions](https://github.com/blitz-js/blitz/discussions)
 * [Sponsors and donations](https://github.com/blitz-js/blitz#sponsors-and-donations)
 * [Contributiong Guide](https://blitzjs.com/docs/contributing)
-
-Join our [Slack Community](https://slack.blitzjs.com/) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
-
-For questions and longer form discussions, post in our [forum](https://github.com/blitz-js/blitz/discussions).
