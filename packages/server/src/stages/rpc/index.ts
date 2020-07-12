@@ -79,13 +79,15 @@ import resolverModule from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
 import {rpcApiHandler} from '@blitzjs/server'
 let db
+let connect
 try {
   db = require('db').default
+  connect = require('db').connect ?? db.connect
 }catch(err){}
 export default rpcApiHandler(
   resolverModule,
   getAllMiddlewareForModule(resolverModule),
-  () => db && db.connect(),
+  () => db && connect?.(),
 )
 export const config = {
   api: {
