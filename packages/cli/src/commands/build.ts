@@ -1,4 +1,4 @@
-import {Command, flags} from "@oclif/command"
+import {Command} from "@oclif/command"
 import {build} from "@blitzjs/server"
 import {runPrismaGeneration} from "./db"
 
@@ -7,8 +7,6 @@ export class Build extends Command {
   static aliases = ["b"]
 
   async run() {
-    const {flags} = this.parse(Build)
-
     const config = {
       rootFolder: process.cwd(),
     }
