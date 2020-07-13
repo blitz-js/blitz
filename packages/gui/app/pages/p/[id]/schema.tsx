@@ -1,4 +1,4 @@
-import {BlitzPage, useParam, useQuery, useRouter} from "blitz"
+import {BlitzPage, useParam, useQuery} from "blitz"
 import {motion} from "framer-motion"
 import {FC, useRef, Suspense} from "react"
 
@@ -6,7 +6,6 @@ import getProject from "app/queries/getProject"
 import getSchema from "app/queries/getSchema"
 
 const SchemaView: FC = () => {
-  const router = useRouter()
   const id = useParam("id", "string")
 
   const constraintsRef = useRef(null)

@@ -1,5 +1,5 @@
 import React from "react"
-import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
+import {Head, Link, useRouter, BlitzPage} from "blitz"
 import createUser from "app/users/mutations/createUser"
 import UserForm from "app/users/components/UserForm"
 
