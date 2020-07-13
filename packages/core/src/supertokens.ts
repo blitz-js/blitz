@@ -105,9 +105,17 @@ export const antiCSRFStore = {
 }
 
 export const parsePublicDataToken = (token: string) => {
+  invariant(token, "[parsePublicDataToken] Failed - token is empty")
+
   const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
+  let publicData: PublicData
+  try {
+    publicData = JSON.parse(publicDataStr)
+  } catch (error) {
+    throw new Error("Failed to parse publicDataToken: " + publicDataStr)
+  }
   return {
-    publicData: JSON.parse(publicDataStr) as PublicData,
+    publicData,
     expireAt: expireAt && new Date(expireAt),
   }
 }
