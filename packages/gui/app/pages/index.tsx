@@ -15,7 +15,7 @@ const Stub: FC = () => {
     } else {
       router.push("/new")
     }
-  }, [projects])
+  }, [projects, router])
 
   return null
 }
