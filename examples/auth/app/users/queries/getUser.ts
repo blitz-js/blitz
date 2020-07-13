@@ -11,7 +11,7 @@ export default async function getUser(
   {where /* include */}: GetUserInput,
   ctx: {session?: SessionContext} = {},
 ) {
-  ctx.session?.authorize(["admin", "user"])
+  ctx.session?.authorize(["user"])
 
   const user = await db.user.findOne({where})
 

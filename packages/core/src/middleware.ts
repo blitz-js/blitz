@@ -28,8 +28,8 @@ export type Middleware = (
 ) => Promise<void> | void
 
 export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
+  req: IncomingMessage & MiddlewareRequest,
+  res: ServerResponse & MiddlewareResponse,
   next: (error?: Error) => void,
 ) => void
 
@@ -38,37 +38,40 @@ export type ResolverModule = {
   middleware?: Middleware[]
 }
 
-export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
-  const middleware: Middleware[] = []
+export function getGlobalMiddleware(): Middleware[] {
   const config = getConfig()
   if (config.middleware) {
     if (!Array.isArray(config.middleware)) {
       throw new Error("'middleware' in blitz.config.js must be an array")
     }
-    middleware.push(...config.middleware)
+    return config.middleware
+  } else {
+    return []
   }
+}
+
+export function getMiddlewareForModule(resolverModule: EnhancedResolverModule): Middleware[] {
   if (resolverModule.middleware) {
     if (!Array.isArray(resolverModule.middleware)) {
       throw new Error(`'middleware' exported from ${resolverModule._meta.name} must be an array`)
     }
-    middleware.push(...resolverModule.middleware)
+    return resolverModule.middleware
+  } else {
+    return []
   }
-  return middleware
 }
 
 export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
-  middleware: Middleware | Middleware[],
+  middleware: Middleware[],
 ) {
   ;(res as MiddlewareResponse).blitzCtx = {}
+  ;(res as any)._blitz = {}
 
-  let handler: Middleware
-  if (Array.isArray(middleware)) {
-    handler = compose(middleware)
-  } else {
-    handler = middleware
-  }
+  const allMiddleware: Middleware[] = [...getGlobalMiddleware(), ...middleware]
+
+  const handler = compose(allMiddleware)
 
   try {
     await handler(req as MiddlewareRequest, res as MiddlewareResponse, (error) => {

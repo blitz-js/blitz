@@ -1,11 +1,7 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
 import {InferUnaryParam} from "./types"
-import {
-  getAllMiddlewareForModule,
-  handleRequestWithMiddleware,
-  MiddlewareResponse,
-} from "./middleware"
+import {getMiddlewareForModule, handleRequestWithMiddleware, MiddlewareResponse} from "./middleware"
 import {EnhancedResolverModule} from "./rpc"
 
 type QueryFn = (...args: any) => Promise<any>
@@ -22,7 +18,7 @@ export async function ssrQuery<T extends QueryFn>(
 ): Promise<ReturnType<T>> {
   const handler = (queryFn as unknown) as EnhancedResolverModule
 
-  const middleware = getAllMiddlewareForModule(handler)
+  const middleware = getMiddlewareForModule(handler)
 
   middleware.push(async (_req, res, next) => {
     const logPrefix = `${handler._meta.name}`

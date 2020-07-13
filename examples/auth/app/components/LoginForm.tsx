@@ -15,10 +15,15 @@ const LoginForm = (props: LoginFormProps) => {
       <form
         onSubmit={async (event) => {
           event.preventDefault()
+          const inputs = event.currentTarget.elements as any
+          const input = {
+            email: inputs.email.value,
+            password: inputs.password.value,
+          }
+          const {email, password} = input
           try {
             setSignUpError("")
-            const inputs = event.currentTarget.elements as any
-            await signUp({email: inputs.email.value, password: inputs.password.value})
+            await signUp({email, password})
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               setSignUpError("That email is already being used")
