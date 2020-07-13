@@ -61,6 +61,45 @@ describe("Db command", () => {
     expect(spawn).toBeCalledWith(...migrateUpParams)
   }
 
+  it("runs db help when no command given", async () => {
+    // When running the help command oclif exits with code 0
+    // Unfortantely it treats this as an exception and throws accordingly
+
+    // Get the db --help command output
+    let dbHelpCommandOutput = []
+    let dbHelpCommandExit
+    try {
+      jest.spyOn(global.console, "log").mockImplementation(
+        jest.fn((output: string) => {
+          dbHelpCommandOutput.push(output)
+        }),
+      )
+
+      await Db.run(["--help"])
+    } catch (e) {
+      dbHelpCommandExit = e
+    }
+
+    // Get the db command output
+    let dbCommandOutput = []
+    let dbCommandExit
+    try {
+      jest.spyOn(global.console, "log").mockImplementation(
+        jest.fn((output: string) => {
+          dbCommandOutput.push(output)
+        }),
+      )
+
+      await Db.run([])
+    } catch (e) {
+      dbCommandExit = e
+    }
+
+    // We expect the 2 outputs to be the same
+    expect(dbHelpCommandOutput).toEqual(dbCommandOutput)
+    expect(dbHelpCommandExit).toEqual(dbCommandExit)
+  })
+
   it("runs db migrate", async () => {
     await Db.run(["migrate"])
     expectDbMigrateOutcome()

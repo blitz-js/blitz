@@ -1,3 +1,35 @@
+# 2020-07-07 Blitz Contributor Call
+
+- Attending: Brandon Bayer, Robert Rosenburg, Jeremy Liberman
+- Brandon:
+  - Finishing up session managment code
+  - Waiting for review of session managment code from Rishabh
+  - Will be working on actual auth code (vs session management) like password hashing, password reset, social login, etc.
+  - Benefits of our session managment vs rails
+    - Don’t have to redirect to login page
+    - Using top level error component that catches authentication errors
+    - You can login from anywhere, during sign up
+- Robert:
+  - Waiting on Kirstina’s website designs. Desktop design is finished, but she's working on mobile design
+  - Code snippet / sandbox of blitz code for the website
+
+# 2020-06-23 Blitz Contributor Call
+
+- Attending: Brandon Bayer, Robert Rosenberg, Justin Hall, Adam Markon
+- Brandon:
+  - Server side session management code is mostly set up. Still need to integrate client side of RPC calls to expose session information
+  - Identity verification/Oauth integrations still need to be firmed up
+  - Once auth is wrapped up we should be ready to start on plugins
+- Adam:
+  - Been experimenting with smart page generation based on the current schema model
+  - MDX installer recipes
+- Robert:
+  - Waiting on designs from Kristina
+  - Prism component from theme ui customization? If not try and grab source code from docusaurus line highlighting component
+- Justin:
+  - Updated the tutorial
+  - Helped with various bug fixes
+
 # 2020-06-17 Blitz Contributor Call
 
 - Attending: Brandon Bayer, Fran Zekan, Sigurd Wahl

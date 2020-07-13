@@ -79,15 +79,15 @@ export async function resetPostgres(connectionString: string, db: any): Promise<
   const dbName: string = getDbName(connectionString)
   try {
     // close all other connections
-    await db.raw(
+    await db.queryRaw(
       `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname='${dbName};'`,
     )
     // currently assuming the public schema is being used
     // delete schema and recreate with the appropriate privileges
-    await db.raw("DROP SCHEMA public cascade;")
-    await db.raw("CREATE SCHEMA public;")
-    await db.raw("GRANT ALL ON schema public TO postgres;")
-    await db.raw("GRANT ALL ON schema public TO public;")
+    await db.executeRaw("DROP SCHEMA public cascade;")
+    await db.executeRaw("CREATE SCHEMA public;")
+    await db.executeRaw("GRANT ALL ON schema public TO postgres;")
+    await db.executeRaw("GRANT ALL ON schema public TO public;")
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -103,7 +103,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
   const dbName: string = getDbName(connectionString)
   try {
     // delete database
-    await db.raw(`DROP DATABASE \`${dbName}\``)
+    await db.executeRaw(`DROP DATABASE \`${dbName}\``)
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -159,6 +159,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
       name: "command",
       description: "Run specific db command",
       required: true,
+      default: "help",
     },
   ]
 
@@ -229,6 +230,8 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
           }
         }
       })
+    } else if (command === "help") {
+      await Db.run(["--help"])
     } else {
       this.log("\nUh oh, Blitz does not support that command.")
       this.log("You can try running a prisma command directly with:")

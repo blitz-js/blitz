@@ -6,6 +6,7 @@ describe("index page", () => {
   it("Has title and H1", () => {
     cy.contains("h1", "Blitz Store Example")
     cy.title().should("eq", "Blitz Example Store")
+    cy.get("#referer").contains("http://localhost:3099")
   })
 
   it("goes to products page", () => {

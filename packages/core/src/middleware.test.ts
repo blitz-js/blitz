@@ -68,31 +68,34 @@ describe("handleRequestWithMiddleware", () => {
   it("middleware can throw", async () => {
     console.log = jest.fn()
     console.error = jest.fn()
+    const forbiddenMiddleware = jest.fn()
     const middleware: Middleware[] = [
       (_req, _res, _next) => {
         throw new Error("test")
       },
+      forbiddenMiddleware,
     ]
 
     await mockServer(middleware, async (url) => {
       const res = await fetch(url)
+      expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
   })
 
   it("middleware can return error", async () => {
     console.log = jest.fn()
+    const forbiddenMiddleware = jest.fn()
     const middleware: Middleware[] = [
       (_req, _res, next) => {
         return next(new Error("test"))
       },
-      (_req, _res, _next) => {
-        throw new Error("Remaining middleware should not run if previous has error")
-      },
+      forbiddenMiddleware,
     ]
 
     await mockServer(middleware, async (url) => {
       const res = await fetch(url)
+      expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
   })

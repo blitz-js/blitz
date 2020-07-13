@@ -22,7 +22,7 @@ const Products = () => {
       ))}
 
       <div>
-        <button onClick={() => fetchMore()} disabled={!canFetchMore || isFetchingMore}>
+        <button onClick={() => fetchMore()} disabled={!canFetchMore || !!isFetchingMore}>
           {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
         </button>
       </div>

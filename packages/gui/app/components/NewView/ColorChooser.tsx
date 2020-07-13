@@ -41,7 +41,7 @@ export const ColorChooser: FC = () => {
       document.removeEventListener("mousedown", listener)
       document.removeEventListener("touchstart", listener)
     }
-  }, [ref])
+  }, [ref, setOpen])
 
   return (
     <div ref={ref}>

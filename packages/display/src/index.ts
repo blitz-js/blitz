@@ -5,7 +5,7 @@ import readline from "readline"
 // const blitzTrueBrandColor = '6700AB'
 const blitzBrightBrandColor = "8a3df0"
 
-// Using brigh brand color so it's better for dark terminals
+// Using bright brand color so it's better for dark terminals
 const brandColor = blitzBrightBrandColor
 
 const withBrand = (str: string) => {

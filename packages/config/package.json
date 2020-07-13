@@ -7,7 +7,7 @@
     "config"
   ],
   "author": "Fran Zekan <zekan.fran369@gmail.com>",
-  "version": "0.15.2",
+  "version": "0.16.3",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",

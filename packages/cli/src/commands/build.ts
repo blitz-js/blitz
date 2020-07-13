@@ -1,31 +1,16 @@
 import {Command, flags} from "@oclif/command"
-import {build, ServerConfig} from "@blitzjs/server"
+import {build} from "@blitzjs/server"
 import {runPrismaGeneration} from "./db"
 
 export class Build extends Command {
   static description = "Create a production build"
   static aliases = ["b"]
 
-  static flags = {
-    port: flags.integer({
-      char: "p",
-      description: "Set port number",
-      default: 3000,
-    }),
-    hostname: flags.string({
-      char: "H",
-      description: "Set server hostname",
-      default: "localhost",
-    }),
-  }
-
   async run() {
     const {flags} = this.parse(Build)
 
-    const config: ServerConfig = {
+    const config = {
       rootFolder: process.cwd(),
-      port: flags.port,
-      hostname: flags.hostname,
     }
 
     try {
