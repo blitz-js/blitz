@@ -9,7 +9,7 @@ export const Sidebar: FC = () => (
     <div className="flex justify-center py-4">
       <Link href="/">
         <a>
-          <img src="/img/logos/blitz-mark-on-white.svg" className="w-5 h-auto" />
+          <img src="/img/logos/blitz-mark-on-white.svg" alt="blitz" className="w-5 h-auto" />
         </a>
       </Link>
     </div>
