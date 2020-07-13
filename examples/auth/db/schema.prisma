@@ -26,8 +26,8 @@ model User {
   updatedAt DateTime @updatedAt
   name      String?
   email     String   @unique
-  hashedPassword String
-  role      String
+  hashedPassword String?
+  role      String   @default("user")
   sessions  Session[]
 }
 

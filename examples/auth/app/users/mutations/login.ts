@@ -1,5 +1,5 @@
 import {SessionContext} from "blitz"
-import {authorizeUser} from "app/auth"
+import {authenticateUser} from "app/auth"
 import * as z from "zod"
 
 export const LoginInput = z.object({
@@ -15,9 +15,9 @@ export default async function login(
   const {email, password} = LoginInput.parse(input)
 
   // This throws an error if credentials are invalid
-  const user = await authorizeUser(email, password)
+  const user = await authenticateUser(email, password)
 
-  await ctx.session.create({userId: user.id, roles: [user.role]})
+  await ctx.session?.create({userId: user.id, roles: [user.role]})
 
   return user
 }

@@ -37,7 +37,7 @@ const getDb = () => {
 }
 
 const defaultConfig: SessionConfig = {
-  sessionExpiryMinutes: 100,
+  sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
@@ -307,8 +307,8 @@ export async function createNewSession(
     const publicDataToken = createPublicDataToken(publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    res.setHeader(HEADER_CSRF, antiCSRFToken)
-    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(res, "", new Date(0))
 
@@ -359,8 +359,8 @@ export async function createNewSession(
     })
 
     setSessionCookie(res, sessionToken, expiresAt)
-    res.setHeader(HEADER_CSRF, antiCSRFToken)
-    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(res, "", new Date(0))
 
@@ -396,14 +396,14 @@ export async function refreshSession(res: BlitzApiResponse, sessionKernel: Sessi
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
   } else if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
 
     setSessionCookie(res, sessionToken, expiresAt)
-    res.setHeader(HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
 
     const hashedSessionToken = hash(sessionToken)
 
@@ -434,9 +434,13 @@ export async function updateAllPublicDataRolesForUser(userId: string | number, r
 }
 
 export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<void> {
-  await config.deleteSession(handle)
+  try {
+    await config.deleteSession(handle)
+  } catch (error) {
+    // Ignore any errors, like if session doesn't exist in DB
+  }
   // This is used on the frontend to clear localstorage
-  res.setHeader(HEADER_SESSION_REVOKED, "true")
+  setHeader(res, HEADER_SESSION_REVOKED, "true")
 
   // Clear all cookies
   setSessionCookie(res, "", new Date(0))
@@ -638,6 +642,11 @@ export const setAnonymousSessionCookie = (
 
 export const setCookie = (res: BlitzApiResponse, cookie: string) => {
   append(res, "Set-Cookie", cookie)
+}
+
+export const setHeader = (res: BlitzApiResponse, name: string, value: string) => {
+  res.setHeader(name, value)
+  ;(res as any)._blitz[name] = value
 }
 
 /**

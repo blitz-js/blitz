@@ -9,7 +9,7 @@ export const hashPassword = async (password: string) => {
   return hashedBuffer.toString()
 }
 
-export const authorizeUser = async (email: string, password: string) => {
+export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findOne({where: {email}})
 
   if (!user) throw new AuthenticationError()

@@ -3,12 +3,8 @@ import http from "http"
 import listen from "test-listen"
 import cookie from "cookie"
 import fetch from "isomorphic-unfetch"
-import {EnhancedResolverModule} from "@blitzjs/core"
-import {rpcApiHandler} from "@blitzjs/server"
-import {atob} from "b64-lite"
-
 import {
-  sessionMiddleware,
+  EnhancedResolverModule,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
   COOKIE_SESSION_TOKEN,
@@ -16,7 +12,11 @@ import {
   TOKEN_SEPARATOR,
   SessionContext,
   parsePublicDataToken,
-} from "./supertokens"
+} from "@blitzjs/core"
+import {rpcApiHandler} from "@blitzjs/server"
+import {atob} from "b64-lite"
+
+import {sessionMiddleware} from "./supertokens"
 
 const isIsoDate = (str: string) => {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
@@ -71,7 +71,7 @@ describe("supertokens", () => {
 
   it("login works", async () => {
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.create({publicData: {userId: 1, roles: ["admin"]}})
+      await ctx.session.create({userId: 1, roles: ["admin"]})
       return
     }) as EnhancedResolverModule
 
@@ -111,7 +111,7 @@ async function mockServer(
 
   const handler = rpcApiHandler(
     resolverModule,
-    [sessionMiddleware, ...(resolverModule.middleware || [])],
+    [sessionMiddleware(), ...(resolverModule.middleware || [])],
     dbConnectorFn,
   )
 
