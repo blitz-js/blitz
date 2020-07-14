@@ -1,5 +1,5 @@
 {
-  "name": "auth",
+  "name": "@examples/auth",
   "version": "0.16.4",
   "scripts": {
     "start": "blitz start",
