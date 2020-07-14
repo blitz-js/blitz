@@ -13,10 +13,10 @@ import {
   TOKEN_SEPARATOR,
   SessionContext,
 } from "@blitzjs/core"
-import {rpcApiHandler} from "@blitzjs/server"
+import {rpcApiHandler} from "./rpc"
 import {atob} from "b64-lite"
 
-import {sessionMiddleware} from "./supertokens"
+import {sessionMiddleware, unstable_simpleRolesIsAuthorized} from "./supertokens"
 
 const isIsoDate = (str: string) => {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
@@ -123,7 +123,10 @@ async function mockServer(
 
   const handler = rpcApiHandler(
     resolverModule,
-    [sessionMiddleware(), ...(resolverModule.middleware || [])],
+    [
+      sessionMiddleware({unstable_isAuthorized: unstable_simpleRolesIsAuthorized}),
+      ...(resolverModule.middleware || []),
+    ],
     dbConnectorFn,
   )
 
