@@ -17,7 +17,6 @@ export const authenticateUser = async (email: string, password: string) => {
 
   if (!user || !user.hashedPassword) throw new AuthenticationError()
 
-  console.log(user)
   switch (await verifyPassword(user.hashedPassword, password)) {
     case SecurePassword.VALID:
       break
