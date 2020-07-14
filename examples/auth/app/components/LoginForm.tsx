@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import signUp from "app/users/mutations/signUp"
+import signup from "app/users/mutations/signup"
 import login from "app/users/mutations/login"
 
 type LoginFormProps = {
@@ -18,7 +18,7 @@ const LoginForm = (props: LoginFormProps) => {
           try {
             setSignUpError("")
             const inputs = event.currentTarget.elements as any
-            await signUp({email: inputs.email.value, password: inputs.password.value})
+            await signup({email: inputs.email.value, password: inputs.password.value})
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               setSignUpError("That email is already being used")

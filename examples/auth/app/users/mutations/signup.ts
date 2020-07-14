@@ -3,17 +3,17 @@ import {SessionContext} from "blitz"
 import {hashPassword} from "app/auth"
 import * as z from "zod"
 
-export const SignUpInput = z.object({
+export const SignupInput = z.object({
   email: z.string().email(),
   password: z.string().min(10).max(100),
 })
 
-export default async function signUp(
-  input: z.infer<typeof SignUpInput>,
+export default async function signup(
+  input: z.infer<typeof SignupInput>,
   ctx: {session?: SessionContext} = {},
 ) {
   // This throws an error if input is invalid
-  const {email, password} = SignUpInput.parse(input)
+  const {email, password} = SignupInput.parse(input)
   const hashedPassword = await hashPassword(password)
   console.log("hashedPassword", hashedPassword)
   const user = await db.user.create({data: {email, hashedPassword, role: "user"}})
