@@ -110,7 +110,7 @@ export async function createSessionContextFromRequest(
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
-    console.log("Got existing session", sessionKernel)
+    // console.log("Got existing session", sessionKernel)
   }
 
   if (!sessionKernel) {
@@ -596,27 +596,54 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
-    if (!process.env.SESSION_SECRET_KEY) {
-      throw new Error(
-        "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
-      )
-    }
+    invariant(
+      process.env.SESSION_SECRET_KEY,
+      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
+    )
+    invariant(
+      process.env.SESSION_SECRET_KEY.length >= 32,
+      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
+    )
+
     return process.env.SESSION_SECRET_KEY
   } else {
     return process.env.SESSION_SECRET_KEY || "default-dev-secret"
   }
 }
 
+const JWT_NAMESPACE = "blitzjs"
+const JWT_ISSUER = "blitzjs"
+const JWT_AUDIENCE = "blitzjs"
+const JWT_ANONYMOUS_SUBJECT = "anonymous"
+const JWT_ALGORITHM = "HS256"
+
 export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  return jwtSign(payload, getSessionSecretKey(), {algorithm: "HS256"})
+  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey(), {
+    algorithm: JWT_ALGORITHM,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+    subject: JWT_ANONYMOUS_SUBJECT,
+  })
 }
 
 export const parseAnonymousSessionToken = (token: string) => {
   // This must happen outside the try/catch because it could throw an error
   // about a missing environment variable
   const secret = getSessionSecretKey()
+
   try {
-    return jwtVerify(token, secret, {algorithms: ["HS256"]}) as AnonymousSessionPayload
+    const fullPayload = jwtVerify(token, secret, {
+      algorithms: [JWT_ALGORITHM],
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+      subject: JWT_ANONYMOUS_SUBJECT,
+    })
+
+    if (typeof fullPayload === "object") {
+      return (fullPayload as any)[JWT_NAMESPACE] as AnonymousSessionPayload
+    } else {
+      return null
+    }
   } catch (error) {
     return null
   }
