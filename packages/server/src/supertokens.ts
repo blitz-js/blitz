@@ -52,6 +52,25 @@ const defaultConfig: SessionConfig = {
   },
   updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
+  unstable_isAuthorized: () => {
+    throw new Error("No unstable_isAuthorized implementation provided")
+  },
+}
+
+export function unstable_simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+  // No roles required, so all roles allowed
+  if (!input) return true
+
+  const rolesToAuthorize = []
+  if (Array.isArray(input)) {
+    rolesToAuthorize.push(...input)
+  } else if (input) {
+    rolesToAuthorize.push(input)
+  }
+  for (const role of rolesToAuthorize) {
+    if (userRoles.includes(role)) return true
+  }
+  return false
 }
 
 let config: Required<SessionConfig>
@@ -60,6 +79,10 @@ let config: Required<SessionConfig>
 // Middleware
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
+  invariant(
+    sessionConfig.unstable_isAuthorized,
+    "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
+  )
   config = {
     ...defaultConfig,
     ...sessionConfig,
@@ -119,27 +142,16 @@ export class SessionContextClass implements SessionContext {
     return this._kernel.publicData
   }
 
-  authorize(roleOrRoles?: string | string[]) {
-    if (!this.isAuthorized(roleOrRoles)) {
+  authorize(input?: any) {
+    if (!this.isAuthorized(input)) {
       throw new AuthorizationError()
     }
   }
 
-  isAuthorized(roleOrRoles?: string | string[]) {
+  isAuthorized(input?: any) {
     if (!this.userId) throw new AuthenticationError()
 
-    const roles = []
-    if (Array.isArray(roleOrRoles)) {
-      roles.push(...roleOrRoles)
-    } else if (roleOrRoles) {
-      roles.push(roleOrRoles)
-    }
-
-    let isAuthorized = false
-    for (const role of roles) {
-      if (this.roles.includes(role)) isAuthorized = true
-    }
-    return isAuthorized
+    return config.unstable_isAuthorized(this.roles, input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {

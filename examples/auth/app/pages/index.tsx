@@ -1,4 +1,4 @@
-import {Head, Link, useSession} from "blitz"
+import {Head, useSession} from "blitz"
 import LoginForm from "app/components/LoginForm"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"

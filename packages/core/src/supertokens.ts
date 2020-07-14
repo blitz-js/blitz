@@ -42,6 +42,7 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
+  unstable_isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
 export interface SessionContext {
@@ -52,8 +53,10 @@ export interface SessionContext {
   roles: string[]
   handle: string | null
   publicData: PublicData
-  authorize: (roleOrRoles?: string | string[]) => void
-  isAuthorized: (roleOrRoles?: string | string[]) => boolean
+  authorize: (input?: any) => void
+  isAuthorized: (input?: any) => boolean
+  // authorize: (roleOrRoles?: string | string[]) => void
+  // isAuthorized: (roleOrRoles?: string | string[]) => boolean
   create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   revoke: () => Promise<void>
   revokeAll: () => Promise<void>
@@ -195,34 +198,37 @@ export const useSession = () => {
  * Role not matched -> throw AuthorizationError
  */
 // TODO - returned type should accept the ctx argument with `session`
-export const authorize = <T extends (input: any, ctx?: any) => any>(
-  resolverOrRoles: T | string[],
-  maybeResolver?: T,
-) => {
-  let resolver: T
-  let roles: string[]
-  if (Array.isArray(resolverOrRoles)) {
-    roles = resolverOrRoles
-    resolver = maybeResolver as T
-  } else {
-    roles = []
-    resolver = resolverOrRoles
-  }
-
-  invariant(resolver, "You must pass a query or mutation resolver function to authorize()")
-
-  return ((input: any, ctx?: {session?: SessionContext}) => {
-    if (!ctx?.session?.userId) throw new AuthenticationError()
-
-    // If user doesn't supply roles, then authorization is not checked
-    if (roles.length) {
-      let isAuthorized = false
-      for (const role of roles) {
-        if (ctx?.session?.roles.includes(role)) isAuthorized = true
-      }
-      if (!isAuthorized) throw new AuthorizationError()
-    }
-
-    return resolver(input, ctx)
-  }) as T
-}
+/*
+ * DISABLING THIS FOR NOW - I think ctx.session.authorize is probably the best way
+ */
+// export const authorize = <T extends (input: any, ctx?: any) => any>(
+//   resolverOrRoles: T | string[],
+//   maybeResolver?: T,
+// ) => {
+//   let resolver: T
+//   let roles: string[]
+//   if (Array.isArray(resolverOrRoles)) {
+//     roles = resolverOrRoles
+//     resolver = maybeResolver as T
+//   } else {
+//     roles = []
+//     resolver = resolverOrRoles
+//   }
+//
+//   invariant(resolver, "You must pass a query or mutation resolver function to authorize()")
+//
+//   return ((input: any, ctx?: {session?: SessionContext}) => {
+//     if (!ctx?.session?.userId) throw new AuthenticationError()
+//
+//     // If user doesn't supply roles, then authorization is not checked
+//     if (roles.length) {
+//       let isAuthorized = false
+//       for (const role of roles) {
+//         if (ctx?.session?.roles.includes(role)) isAuthorized = true
+//       }
+//       if (!isAuthorized) throw new AuthorizationError()
+//     }
+//
+//     return resolver(input, ctx)
+//   }) as T
+// }

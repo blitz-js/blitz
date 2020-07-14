@@ -15,6 +15,7 @@ export default async function signUp(
   // This throws an error if input is invalid
   const {email, password} = SignUpInput.parse(input)
   const hashedPassword = await hashPassword(password)
+  console.log("hashedPassword", hashedPassword)
   const user = await db.user.create({data: {email, hashedPassword, role: "user"}})
 
   await ctx.session.create({userId: user.id, roles: [user.role]})
