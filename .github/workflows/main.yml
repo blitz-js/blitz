@@ -77,7 +77,17 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Cache built packages
+        id: pkgcache
+        uses: actions/cache@v2
+        with:
+          path: |
+            packages/**/dist
+            packages/**/lib
+            packages/**/bin
+          key: ${{ runner.os }}-${{ hashFiles('**/packages/**') }}
       - name: Build packages
+        if: steps.pkgcache.outputs.cache-hit != 'true'
         run: yarn build
         env:
           CI: true
@@ -112,7 +122,17 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Cache built packages
+        id: pkgcache
+        uses: actions/cache@v2
+        with:
+          path: |
+            packages/**/dist
+            packages/**/lib
+            packages/**/bin
+          key: ${{ runner.os }}-${{ hashFiles('**/packages/**') }}
       - name: Build packages
+        if: steps.pkgcache.outputs.cache-hit != 'true'
         run: yarn build
         env:
           CI: true
