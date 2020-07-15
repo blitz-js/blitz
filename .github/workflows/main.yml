@@ -83,8 +83,12 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Build packages
+        run: yarn build
+        env:
+          CI: true
       - name: Test Blitz Packages
-        run: yarn test:packages
+        run: yarn testonly:packages
         env:
           CI: true
   build_and_test_examples:
@@ -117,7 +121,11 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Test Blitz Packages
-        run: yarn test:examples
+      - name: Build packages
+        run: yarn build
+        env:
+          CI: true
+      - name: Test examples
+        run: yarn testonly:examples
         env:
           CI: true
