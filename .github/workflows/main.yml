@@ -34,15 +34,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.1"
-      - name: Cache node_modules
-        id: cache
-        uses: actions/cache@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        uses: actions/cache@v1
         with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
@@ -62,32 +65,26 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.1"
-      - name: Cache node_modules
-        id: cache
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Cache built packages
-        id: pkgcache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packages/**/dist
-            packages/**/lib
-            packages/**/bin
-          key: ${{ runner.os }}-${{ hashFiles('**/packages/**') }}
       - name: Build packages
-        if: steps.pkgcache.outputs.cache-hit != 'true'
         run: yarn build
         env:
           CI: true
@@ -107,32 +104,26 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.1"
-      - name: Cache node_modules
-        id: cache
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Cache built packages
-        id: pkgcache
-        uses: actions/cache@v2
-        with:
-          path: |
-            packages/**/dist
-            packages/**/lib
-            packages/**/bin
-          key: ${{ runner.os }}-${{ hashFiles('**/packages/**') }}
       - name: Build packages
-        if: steps.pkgcache.outputs.cache-hit != 'true'
         run: yarn build
         env:
           CI: true
