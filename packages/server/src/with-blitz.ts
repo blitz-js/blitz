@@ -27,12 +27,12 @@ export function withBlitz(nextConfig: any) {
         webpack(config: any, options: Record<any, any>) {
           if (options.isServer) {
             const originalEntry = config.entry
-            console.log("projectRoot", projectRoot)
+            console.log("R:", projectRoot)
             console.log("A:", path.join(projectRoot, "_db.js"))
             console.log("B:", path.join(projectRoot, "db/index"))
             config.entry = async () => ({
               ...(await originalEntry()),
-              [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+              [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index.ts"),
             })
             // config.watchOptions = config.watchOptions || {ignored: []}
             // config.watchOptions.ignored.push("_db.js")
