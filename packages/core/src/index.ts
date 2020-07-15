@@ -9,7 +9,7 @@ export * from "./use-router"
 export * from "./use-router-query"
 export * from "./middleware"
 export * from "./types"
-// export * from "./supertokens"
+export * from "./supertokens"
 
 // --------------------
 // Exports from Next.js
