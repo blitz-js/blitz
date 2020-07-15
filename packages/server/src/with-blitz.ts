@@ -31,9 +31,10 @@ export function withBlitz(nextConfig: any) {
             console.log("A:", path.join(projectRoot, "_db.js"))
             console.log("B:", path.join(projectRoot, "db/index"))
             config.entry = async () => {
+              console.log("HERE 1")
               const output = {
                 ...(await originalEntry()),
-                [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+                // [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
               }
               console.log(JSON.stringify(output, null, 2))
               return output
