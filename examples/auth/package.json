@@ -33,9 +33,7 @@
     "@prisma/client": "2.1.0",
     "blitz": "0.16.4",
     "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
-    "secure-password": "4.0.0",
-    "zod": "1.9.0"
+    "react-dom": "0.0.0-experimental-33c3af284"
   },
   "devDependencies": {
     "@types/react": "16.9.38",
