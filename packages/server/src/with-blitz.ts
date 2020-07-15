@@ -26,11 +26,11 @@ export function withBlitz(nextConfig: any) {
         },
         webpack(config: any, options: Record<any, any>) {
           if (options.isServer) {
-            // const originalEntry = config.entry
-            // config.entry = async () => ({
-            //   ...(await originalEntry()),
-            //   [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
-            // })
+            const originalEntry = config.entry
+            config.entry = async () => ({
+              ...(await originalEntry()),
+              // [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+            })
             // config.watchOptions = config.watchOptions || {ignored: []}
             // config.watchOptions.ignored.push("_db.js")
           } else {
