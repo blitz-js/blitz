@@ -30,11 +30,14 @@ export function withBlitz(nextConfig: any) {
             console.log("R:", projectRoot)
             console.log("A:", path.join(projectRoot, "_db.js"))
             console.log("B:", path.join(projectRoot, "db/index"))
-            config.entry = async () => ({
-              ...(await originalEntry()),
-              [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
-            })
-            console.log(JSON.stringify(config.entry, null, 2))
+            config.entry = async () => {
+              const output = {
+                ...(await originalEntry()),
+                [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+              }
+              console.log(JSON.stringify(output, null, 2))
+              return output
+            }
             // config.watchOptions = config.watchOptions || {ignored: []}
             // config.watchOptions.ignored.push("_db.js")
           } else {
