@@ -32,7 +32,7 @@ import {btoa, atob} from "b64-lite"
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, "_db.js")
+  const path = join(projectRoot, ".next/server/db.js")
   return require(path).default
 }
 

@@ -35,6 +35,9 @@ export function withBlitz(nextConfig: any) {
               const output = {
                 ...(await originalEntry()),
                 // [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+                // "_db.js": path.join(projectRoot, "db/index"),
+                // This generates .next/server/db.js
+                "./db.js": "./db/index",
               }
               console.log(JSON.stringify(output, null, 2))
               return output
