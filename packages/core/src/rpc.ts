@@ -56,7 +56,8 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 
   if (json.error) {
     const error = deserializeError(json.error)
-    if (error.name === "AuthenticationError") {
+    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+      // We don't clear the publicDataStore for anonymous users
       publicDataStore.clear()
     }
     throw error

@@ -18,7 +18,7 @@ export default async function signup(
   console.log("hashedPassword", hashedPassword)
   const user = await db.user.create({data: {email, hashedPassword, role: "user"}})
 
-  await ctx.session.create({userId: user.id, roles: [user.role]})
+  await ctx.session?.create({userId: user.id, roles: [user.role]})
 
   return user
 }

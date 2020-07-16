@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react"
 import BadBehavior from "bad-behavior"
-import invariant from "tiny-invariant"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -18,6 +17,10 @@ export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 export const HEADER_SESSION_REVOKED = "session-revoked"
 
 export const LOCALSTORAGE_PREFIX = "_blitz-"
+
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
 
 export interface PublicData extends Record<any, any> {
   userId: string | number | null
@@ -108,7 +111,7 @@ export const antiCSRFStore = {
 }
 
 export const parsePublicDataToken = (token: string) => {
-  invariant(token, "[parsePublicDataToken] Failed - token is empty")
+  assert(token, "[parsePublicDataToken] Failed - token is empty")
 
   const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
   let publicData: PublicData
@@ -215,7 +218,7 @@ export const useSession = () => {
 //     resolver = resolverOrRoles
 //   }
 //
-//   invariant(resolver, "You must pass a query or mutation resolver function to authorize()")
+//   assert(resolver, "You must pass a query or mutation resolver function to authorize()")
 //
 //   return ((input: any, ctx?: {session?: SessionContext}) => {
 //     if (!ctx?.session?.userId) throw new AuthenticationError()

@@ -21,20 +21,20 @@ const UserStuff = () => {
       >
         Get user
       </button>
+      <button
+        onClick={async () => {
+          try {
+            await trackView()
+          } catch (error) {
+            alert("error: " + error)
+            console.log(error)
+          }
+        }}
+      >
+        Track view
+      </button>
       {!session.userId && (
         <>
-          <button
-            onClick={async () => {
-              try {
-                await trackView()
-              } catch (error) {
-                alert("error: " + error)
-                console.log(error)
-              }
-            }}
-          >
-            Track view
-          </button>
           <LoginForm />
           <a href="/api/auth/twitter" style={{display: "block", marginTop: "1rem"}}>
             Login with Twitter

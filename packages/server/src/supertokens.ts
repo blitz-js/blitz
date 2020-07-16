@@ -1,5 +1,4 @@
 import crypto from "crypto"
-import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
@@ -30,9 +29,13 @@ import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
+
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, "_db.js")
+  const path = join(projectRoot, ".next/server/db.js")
   return require(path).default
 }
 
@@ -79,7 +82,7 @@ let config: Required<SessionConfig>
 // Middleware
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
-  invariant(
+  assert(
     sessionConfig.unstable_isAuthorized,
     "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
   )
@@ -204,7 +207,7 @@ export async function getSession(
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
-      console.log("No session: no handle")
+      // console.log("No session: no handle")
       return null
     }
 
@@ -217,7 +220,7 @@ export async function getSession(
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
-      console.log("No session: not in DB")
+      // console.log("No session: not in DB")
       return null
     }
 
@@ -225,7 +228,7 @@ export async function getSession(
       throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
-      console.log("No session: sessionToken hash did not match")
+      // console.log("No session: sessionToken hash did not match")
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -302,8 +305,8 @@ export async function createNewSession(
   privateData: Record<any, any> = {},
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
-  invariant(publicData.userId !== undefined, "You must provide publicData.userId")
-  invariant(publicData.roles, "You must provide publicData.roles")
+  assert(publicData.userId !== undefined, "You must provide publicData.userId")
+  assert(publicData.roles, "You must provide publicData.roles")
 
   const antiCSRFToken = createAntiCSRFToken()
 
@@ -335,7 +338,7 @@ export async function createNewSession(
       ...(opts.jwtPayload?.publicData || {}),
       ...publicData,
     }
-    invariant(newPublicData.userId, "You must provide a non-empty userId as publicData.userId")
+    assert(newPublicData.userId, "You must provide a non-empty userId as publicData.userId")
 
     // This carries over any private data from the anonymous session
     let existingPrivateData = {}
@@ -596,11 +599,11 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
-    invariant(
+    assert(
       process.env.SESSION_SECRET_KEY,
       "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
     )
-    invariant(
+    assert(
       process.env.SESSION_SECRET_KEY.length >= 32,
       "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
     )
@@ -655,7 +658,7 @@ export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, ex
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,
       expires: expiresAt,
     }),
@@ -672,7 +675,7 @@ export const setAnonymousSessionCookie = (
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,
       expires: expiresAt,
     }),
