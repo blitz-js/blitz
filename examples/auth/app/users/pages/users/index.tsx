@@ -1,16 +1,17 @@
 import React, {Suspense} from "react"
 import {Head, Link, useQuery, BlitzPage} from "blitz"
 import getUsers from "app/users/queries/getUsers"
+import Layout from "app/layouts/Layout"
 
 export const UsersList = () => {
   const [users] = useQuery(getUsers, {orderBy: {id: "desc"}})
 
   return (
     <ul>
-      {users.map((user) => (
+      {users?.map((user) => (
         <li key={user.id}>
           <Link href="/users/[userId]" as={`/users/${user.id}`}>
-            <a>{user.name}</a>
+            <a>{user.email}</a>
           </Link>
         </li>
       ))}
@@ -20,7 +21,7 @@ export const UsersList = () => {
 
 const UsersPage: BlitzPage = () => {
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Users</title>
         <link rel="icon" href="/favicon.ico" />
@@ -41,7 +42,7 @@ const UsersPage: BlitzPage = () => {
           <UsersList />
         </Suspense>
       </main>
-    </div>
+    </Layout>
   )
 }
 

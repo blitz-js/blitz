@@ -8,7 +8,7 @@ describe("patternRelativeImport", () => {
 
   it("matches a multiline import statement", () => {
     const input = `import {
-  foo, 
+  foo,
   bar
 } from "./ding"`
     const matches = input.match(patternRelativeImportSingle)

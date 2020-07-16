@@ -2,6 +2,13 @@ import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
+import {
+  antiCSRFStore,
+  publicDataStore,
+  HEADER_CSRF,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_REVOKED,
+} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
@@ -9,15 +16,36 @@ type Options = {
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
   if (typeof window === "undefined") return
+
+  const headers: Record<string, any> = {
+    "Content-Type": "application/json",
+  }
+
+  const antiCSRFToken = antiCSRFStore.getToken()
+  if (antiCSRFToken) {
+    headers[HEADER_CSRF] = antiCSRFToken
+  }
+
   const result = await window.fetch(url, {
     method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
+    credentials: "include",
     redirect: "follow",
-    body: JSON.stringify({params}),
+    body: JSON.stringify({params: params || null}),
   })
+
+  if (result.headers) {
+    for (const [name, value] of result.headers.entries()) {
+      if (name.toLowerCase() === HEADER_CSRF) antiCSRFStore.setToken(value)
+      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
+      if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
+    }
+  }
+
+  if (result.status === 401) {
+    // Usually means csrf token is bad, but this should never happen
+    antiCSRFStore.clear()
+  }
 
   let json
   try {
@@ -27,7 +55,12 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   }
 
   if (json.error) {
-    throw deserializeError(json.error)
+    const error = deserializeError(json.error)
+    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+      // We don't clear the publicDataStore for anonymous users
+      publicDataStore.clear()
+    }
+    throw error
   } else {
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)

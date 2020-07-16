@@ -62,6 +62,7 @@ export async function handleRequestWithMiddleware(
   middleware: Middleware | Middleware[],
 ) {
   ;(res as MiddlewareResponse).blitzCtx = {}
+  ;(res as any)._blitz = {}
 
   let handler: Middleware
   if (Array.isArray(middleware)) {
@@ -79,7 +80,7 @@ export async function handleRequestWithMiddleware(
   } catch (error) {
     log.newline()
     if (!res.writableFinished) {
-      res.statusCode = (error as any).code || (error as any).status || 500
+      res.statusCode = (error as any).statusCode || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
       log.error("Error while processing the request:\n")
     } else {

@@ -25,13 +25,9 @@ jobs:
           cd ../ && mkdir test && cd test
           yarn add file:../blitz/packages/blitz --non-interactive | tee out.txt
           cat out.txt | ../blitz/.github/checkInstallTime.js
-
-  build_and_test:
-    name: Build & Test
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -53,10 +49,89 @@ jobs:
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
+      - name: yarn lint
+        run: yarn lint
+        env:
+          CI: true
+  build_and_test_pkgs:
+    name: Build & Test Packages
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.1"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        if: ${{ !startsWith(runner.os, 'windows') }}
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Build packages
+        run: yarn build
+        env:
+          CI: true
       - name: Test Blitz Packages
-        run: yarn test
+        run: yarn testonly:packages
+        env:
+          CI: true
+  build_and_test_examples:
+    name: Build & Test Examples
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.1"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Node.js modules
+        id: yarn-cache
+        if: ${{ !startsWith(runner.os, 'windows') }}
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            # **/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
+      - name: Setup kernel to increase watchers
+        if: matrix.os == 'ubuntu-latest'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Build packages
+        run: yarn build
+        env:
+          CI: true
+      - name: Test examples
+        run: yarn testonly:examples
         env:
           CI: true

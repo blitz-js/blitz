@@ -1,5 +1,5 @@
 {
-  "name": "plain-js",
+  "name": "@examples/plain-js",
   "version": "0.16.4",
   "scripts": {
     "start": "blitz start",
