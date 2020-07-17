@@ -62,7 +62,9 @@ export function useParams(returnType?: "string" | "number" | "array") {
   if (returnType === "number") {
     const params: Record<string, number> = {}
     for (const [key, value] of Object.entries(rawParams)) {
-      params[key] = Number(value)
+      if (value) {
+        params[key] = Number(value)
+      }
     }
     return params
   }
@@ -96,7 +98,7 @@ export function useParam(
   }
 
   if (returnType === "string") {
-    if (typeof rawValue !== "string") {
+    if (typeof rawValue === "undefined") {
       return ""
     }
 
