@@ -2,9 +2,21 @@ import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
+import {useRouter} from "next/router"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
+
+const emptyQueryFn: EnhancedRpcFunction = (() => {
+  const fn = () => new Promise(() => {})
+  fn._meta = {
+    name: "emptyQueryFn",
+    type: "n/a",
+    path: "n/a",
+    apiUrl: "",
+  }
+  return fn
+})()
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
@@ -21,7 +33,15 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
+  // It is Next.js prerender if a route parameter exists in pathname but router.query is empty
+  const router = useRouter()
+  const queryKeys = Object.keys(router.query)
+  const isDevPrerender =
+    process.env.NODE_ENV !== "production" &&
+    /\[.*\]/.test(router.pathname) &&
+    (queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp"))
+
+  const queryRpcFn = isDevPrerender ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
 
   const {data, ...queryRest} = useReactQuery({
     queryKey: [
