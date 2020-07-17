@@ -109,16 +109,29 @@ There's still a lot of work to do, so you are especially invited to join us in b
 
 <br>
 
-## Sponsors and Donations
+## Financial Contributors
 
-- Contribute via [GitHub Sponsors](https://github.com/sponsors/blitz-js)
-- Contribute via [PayPal](https://paypal.me/thebayers)
-- Contribute via [Open Collective](https://opencollective.com/blitzjs)
-- Contribute via [Patreon](https://patreon.com/flybayer)
+Your financial contributions help ensure Blitz continues to be developed and maintained! We have monthly sponsorship options starting at $5/month.
 
-_Sponsor Blitz and display your logo and hiring status here. This is a great way to get in front of early adopters!_
+👉 View options and contribute at [GitHub Sponsors](https://github.com/sponsors/blitz-js), [PayPal](https://paypal.me/thebayers), or [Open Collective](https://opencollective.com/blitzjs)
 
-[View our Bronze Sponsors](https://github.com/blitz-js/blitz/blob/canary/BACKERS.md)
+### 🥉 Bronze Sponsors
+
+—
+
+### 🥈 Silver Sponsors
+
+<a aria-label="Fauna" href="https://dashboard.fauna.com/accounts/register?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="175px">
+</a>
+
+### 🏆 Gold Sponsors
+
+—
+
+### 💎 Diamond Sponsors
+
+—
 
 <br>
 
