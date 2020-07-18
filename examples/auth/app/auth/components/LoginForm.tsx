@@ -27,9 +27,7 @@ export const LoginForm = (props: LoginFormProps) => {
             props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
-              return {
-                [FORM_ERROR]: "Sorry, those credentials are invalid",
-              }
+              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
               return {
                 [FORM_ERROR]:
@@ -57,6 +55,7 @@ export const LoginForm = (props: LoginFormProps) => {
             <button type="submit" disabled={submitting}>
               Log In
             </button>
+
             <style global jsx>{`
               .login-form > * + * {
                 margin-top: 1rem;

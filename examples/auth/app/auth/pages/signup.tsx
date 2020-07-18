@@ -33,13 +33,9 @@ const SignupPage: BlitzPage = () => {
               router.push("/")
             } catch (error) {
               if (error.meta?.target?.includes("email")) {
-                return {
-                  email: "This email is already being used",
-                }
+                return {email: "This email is already being used"}
               } else {
-                return {
-                  [FORM_ERROR]: error.toString(),
-                }
+                return {[FORM_ERROR]: error.toString()}
               }
             }
           }}
