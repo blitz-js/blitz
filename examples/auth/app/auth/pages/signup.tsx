@@ -32,7 +32,8 @@ const SignupPage: BlitzPage = () => {
               await signup({email: values.email, password: values.password})
               router.push("/")
             } catch (error) {
-              if (error.meta?.target?.includes("email")) {
+              if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+                // This error comes from Prisma
                 return {email: "This email is already being used"}
               } else {
                 return {[FORM_ERROR]: error.toString()}
