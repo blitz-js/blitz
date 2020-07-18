@@ -28,6 +28,8 @@ import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
+import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {IncomingMessage, ServerResponse} from "http"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -93,7 +95,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
 
   return async (req, res, next) => {
     if (req.method !== "HEAD") {
-      res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+      res.blitzCtx.session = await getSessionContext(req, res)
     }
     return next()
   }
@@ -106,10 +108,19 @@ type SessionKernel = {
   jwtPayload: JwtPayload
 }
 
-export async function createSessionContextFromRequest(
-  req: BlitzApiRequest,
-  res: BlitzApiResponse,
+const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
+  "cookies" in req
+
+export async function getSessionContext(
+  req: BlitzApiRequest | IncomingMessage,
+  res: BlitzApiResponse | ServerResponse,
 ): Promise<SessionContext> {
+  if (!("cookies" in req)) {
+    // Cookie parser isn't include inside getServerSideProps, so we have to add it
+    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
+  }
+  assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
+
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
@@ -124,10 +135,10 @@ export async function createSessionContextFromRequest(
 }
 
 export class SessionContextClass implements SessionContext {
-  private _res: BlitzApiResponse
+  private _res: ServerResponse
   private _kernel: SessionKernel
 
-  constructor(res: BlitzApiResponse, kernel: SessionKernel) {
+  constructor(res: ServerResponse, kernel: SessionKernel) {
     this._res = res
     this._kernel = kernel
   }
@@ -195,7 +206,7 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 export async function getSession(
   req: BlitzApiRequest,
-  res: BlitzApiResponse,
+  res: ServerResponse,
 ): Promise<SessionKernel | null> {
   const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
@@ -300,7 +311,7 @@ export async function getSession(
 // Create Session
 // --------------------------------
 export async function createNewSession(
-  res: BlitzApiResponse,
+  res: ServerResponse,
   publicData: PublicData,
   privateData: Record<any, any> = {},
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
@@ -393,7 +404,7 @@ export async function createNewSession(
   }
 }
 
-export async function createAnonymousSession(res: BlitzApiResponse) {
+export async function createAnonymousSession(res: ServerResponse) {
   return await createNewSession(res, {userId: null, roles: []}, undefined, {anonymous: true})
 }
 
@@ -401,7 +412,7 @@ export async function createAnonymousSession(res: BlitzApiResponse) {
 // Session/DB utils
 // --------------------------------
 
-export async function refreshSession(res: BlitzApiResponse, sessionKernel: SessionKernel) {
+export async function refreshSession(res: ServerResponse, sessionKernel: SessionKernel) {
   if (sessionKernel.jwtPayload?.isAnonymous) {
     const payload: AnonymousSessionPayload = {
       ...sessionKernel.jwtPayload,
@@ -448,7 +459,7 @@ export async function updateAllPublicDataRolesForUser(userId: string | number, r
   }
 }
 
-export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<void> {
+export async function revokeSession(res: ServerResponse, handle: string): Promise<void> {
   try {
     await config.deleteSession(handle)
   } catch (error) {
@@ -462,7 +473,7 @@ export async function revokeSession(res: BlitzApiResponse, handle: string): Prom
   setAnonymousSessionCookie(res, "", new Date(0))
 }
 
-export async function revokeMultipleSessions(res: BlitzApiResponse, sessionHandles: string[]) {
+export async function revokeMultipleSessions(res: ServerResponse, sessionHandles: string[]) {
   let revoked: string[] = []
   for (const handle of sessionHandles) {
     await revokeSession(res, handle)
@@ -471,7 +482,7 @@ export async function revokeMultipleSessions(res: BlitzApiResponse, sessionHandl
   return revoked
 }
 
-export async function revokeAllSessionsForUser(res: BlitzApiResponse, userId: string | number) {
+export async function revokeAllSessionsForUser(res: ServerResponse, userId: string | number) {
   let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
   return revokeMultipleSessions(res, sessionHandles)
 }
@@ -518,7 +529,7 @@ export async function setPrivateData(sessionKernel: SessionKernel, data: Record<
 }
 
 export async function setPublicData(
-  res: BlitzApiResponse,
+  res: ServerResponse,
   sessionKernel: SessionKernel,
   data: Record<any, any>,
 ) {
@@ -652,7 +663,7 @@ export const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
+export const setSessionCookie = (res: ServerResponse, sessionToken: string, expiresAt: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
@@ -665,11 +676,7 @@ export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, ex
   )
 }
 
-export const setAnonymousSessionCookie = (
-  res: BlitzApiResponse,
-  token: string,
-  expiresAt?: Date,
-) => {
+export const setAnonymousSessionCookie = (res: ServerResponse, token: string, expiresAt?: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
@@ -682,13 +689,15 @@ export const setAnonymousSessionCookie = (
   )
 }
 
-export const setCookie = (res: BlitzApiResponse, cookie: string) => {
+export const setCookie = (res: ServerResponse, cookie: string) => {
   append(res, "Set-Cookie", cookie)
 }
 
-export const setHeader = (res: BlitzApiResponse, name: string, value: string) => {
+export const setHeader = (res: ServerResponse, name: string, value: string) => {
   res.setHeader(name, value)
-  ;(res as any)._blitz[name] = value
+  if ("_blitz" in res) {
+    ;(res as any)._blitz[name] = value
+  }
 }
 
 /**
@@ -698,11 +707,11 @@ export const setHeader = (res: BlitzApiResponse, name: string, value: string) =>
  *
  *    append(res, 'Set-Cookie', 'foo=bar; Path=/; HttpOnly');
  *
- * @param {BlitzApiResponse} res
+ * @param {ServerResponse} res
  * @param {string} field
  * @param {string| string[]} val
  */
-export function append(res: BlitzApiResponse, field: string, val: string | string[]) {
+export function append(res: ServerResponse, field: string, val: string | string[]) {
   let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
   let value = val
 
