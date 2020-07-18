@@ -1,7 +1,6 @@
 import React from "react"
 import {LabeledTextField} from "app/components/LabeledTextField"
-import {Form} from "react-final-form"
-import {FORM_ERROR} from "final-form"
+import {useForm} from "react-hook-form"
 import login from "app/auth/mutations/login"
 
 type LoginFormProps = {
@@ -9,61 +8,76 @@ type LoginFormProps = {
 }
 
 export const LoginForm = (props: LoginFormProps) => {
+  const {register, handleSubmit, errors, setError, formState} = useForm({
+    mode: "onBlur",
+    async resolver(values) {
+      const errors: {email?: string; password?: string} = {}
+      if (!values.email) errors.email = "Required"
+      if (!values.password) errors.password = "Required"
+      if (Object.keys(errors).length) {
+        return {values: {}, errors}
+      } else {
+        return {values, errors: {}}
+      }
+    },
+  })
+
   return (
     <div>
       <h1>Login</h1>
-
-      <Form
-        initialValues={{email: undefined, password: undefined}}
-        validate={(values) => {
-          const errors: {email?: string; password?: string} = {}
-          if (!values.email) errors.email = "Required"
-          if (!values.password) errors.password = "Required"
-          return errors
-        }}
-        onSubmit={async (values) => {
+      <form
+        onSubmit={handleSubmit(async (values) => {
           try {
             await login({email: values.email, password: values.password})
             props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
-              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
+              setError("email", {type: "manual", message: "Sorry, those credentials are invalid"})
             } else {
-              return {
-                [FORM_ERROR]:
+              setError("form", {
+                type: "manual",
+                message:
                   "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
-              }
+              })
             }
           }
-        }}
-        render={({handleSubmit, submitting, submitError}) => (
-          <form onSubmit={handleSubmit} className="login-form">
-            <LabeledTextField name="email" label="Email" placeholder="Email" />
-            <LabeledTextField
-              name="password"
-              label="Password"
-              placeholder="Password"
-              type="password"
-            />
+        })}
+        className="login-form"
+      >
+        <LabeledTextField
+          name="email"
+          label="Email"
+          placeholder="Email"
+          ref={register}
+          formState={formState}
+          errors={errors}
+        />
+        <LabeledTextField
+          name="password"
+          label="Password"
+          placeholder="Password"
+          type="password"
+          ref={register}
+          formState={formState}
+          errors={errors}
+        />
 
-            {submitError && (
-              <div role="alert" style={{color: "red"}}>
-                {submitError}
-              </div>
-            )}
-
-            <button type="submit" disabled={submitting}>
-              Log In
-            </button>
-
-            <style global jsx>{`
-              .login-form > * + * {
-                margin-top: 1rem;
-              }
-            `}</style>
-          </form>
+        {errors.form && (
+          <div role="alert" style={{color: "red"}}>
+            {errors.form.message}
+          </div>
         )}
-      />
+
+        <button type="submit" disabled={formState.isSubmitting}>
+          Log In
+        </button>
+
+        <style global jsx>{`
+          .login-form > * + * {
+            margin-top: 1rem;
+          }
+        `}</style>
+      </form>
     </div>
   )
 }

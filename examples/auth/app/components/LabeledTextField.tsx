@@ -1,5 +1,5 @@
 import React, {PropsWithoutRef} from "react"
-import {useField} from "react-final-form"
+import {FormStateProxy} from "react-hook-form/dist/types/form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -9,25 +9,26 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   /** Field type. Doesn't include radio buttons and checkboxes */
   type?: "text" | "password" | "email" | "number"
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  errors: Record<string, any>
+  formState: FormStateProxy
 }
 
 export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({name, label, outerProps, ...props}, ref) => {
-    const {
-      input,
-      meta: {touched, error, submitError, submitting},
-    } = useField(name)
+  ({label, outerProps, formState, errors, ...props}, ref) => {
+    const error = Array.isArray(errors[props.name])
+      ? errors[props.name].join(", ")
+      : errors[props.name]?.message
 
     return (
       <div {...outerProps}>
         <label>
           {label}
-          <input {...input} disabled={submitting} {...props} ref={ref} />
+          <input disabled={formState.isSubmitting} {...props} ref={ref} />
         </label>
 
-        {touched && (error || submitError) && (
+        {error && (
           <div role="alert" style={{color: "red"}}>
-            {error || submitError}
+            {error}
           </div>
         )}
 
