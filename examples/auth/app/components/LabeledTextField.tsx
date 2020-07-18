@@ -8,45 +8,39 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   label: string
   /** Field type. Doesn't include radio buttons and checkboxes */
   type?: "text" | "password" | "email" | "number"
-  groupProps?: PropsWithoutRef<JSX.IntrinsicElements["input"]>
+  outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
 }
 
-export const LabeledTextField = ({name, label, groupProps, ...props}: LabeledTextFieldProps) => {
-  const {
-    input,
-    meta: {touched, error, submitError, submitting},
-  } = useField(name, {
-    subscription: {
-      value: true,
-      touched: true,
-      error: true,
-      submitError: true,
-      submitting: true,
-    },
-  })
+export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
+  ({name, label, outerProps, ...props}, ref) => {
+    const {
+      input,
+      meta: {touched, error, submitError, submitting},
+    } = useField(name)
 
-  return (
-    <div {...groupProps}>
-      <label>
-        {label}
-        <input {...input} disabled={submitting} {...props} />
-      </label>
+    return (
+      <div {...outerProps}>
+        <label>
+          {label}
+          <input {...input} disabled={submitting} {...props} ref={ref} />
+        </label>
 
-      {touched && (error || submitError) && (
-        <div role="alert" style={{color: "red"}}>
-          {error || submitError}
-        </div>
-      )}
+        {touched && (error || submitError) && (
+          <div role="alert" style={{color: "red"}}>
+            {error || submitError}
+          </div>
+        )}
 
-      <style jsx>{`
-        label {
-          display: flex;
-          flex-direction: column;
-          align-items: start;
-        }
-      `}</style>
-    </div>
-  )
-}
+        <style jsx>{`
+          label {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+          }
+        `}</style>
+      </div>
+    )
+  },
+)
 
 export default LabeledTextField
