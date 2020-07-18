@@ -2,9 +2,38 @@ import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
+import {useRouter} from "next/router"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
+
+export const emptyQueryFn: EnhancedRpcFunction = (() => {
+  const fn = () => new Promise(() => {})
+  fn._meta = {
+    name: "emptyQueryFn",
+    type: "n/a",
+    path: "n/a",
+    apiUrl: "",
+  }
+  return fn
+})()
+
+export const useIsDevPrerender = () => {
+  const router = useRouter()
+  if (process.env.NODE_ENV === "production") {
+    return false
+  } else {
+    const currentRouteHasParameters = /\[.*\]/.test(router.pathname)
+    const queryKeys = Object.keys(router.query)
+    // This checks if query == {} || query == {amp: any}
+    const queryIsEmpty =
+      queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp")
+
+    const isDevPrerender = currentRouteHasParameters && queryIsEmpty
+
+    return isDevPrerender
+  }
+}
 
 export function useQuery<T extends QueryFn>(
   queryFn: T,
@@ -21,7 +50,9 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
+  const queryRpcFn = useIsDevPrerender()
+    ? emptyQueryFn
+    : ((queryFn as unknown) as EnhancedRpcFunction)
 
   const {data, ...queryRest} = useReactQuery({
     queryKey: [

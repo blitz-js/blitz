@@ -1,4 +1,4 @@
-import {extractRouterParams, useParam} from "../src/use-params"
+import {extractRouterParams, useParams, useParam} from "../src/use-params"
 import {renderHook} from "./test-utils"
 
 describe("extractRouterParams", () => {
@@ -24,6 +24,75 @@ describe("extractRouterParams", () => {
       cat: "category",
       slug: ["example", "multiple", "slugs"],
       empty: "",
+    })
+  })
+})
+
+describe("useParams", () => {
+  it("works without parameter", () => {
+    // This is the router query object which includes route params
+    const query = {
+      id: "1",
+      cat: "category",
+      slug: ["example", "multiple", "slugs"],
+      empty: "",
+    }
+
+    const {result} = renderHook(() => useParams(), {router: {query}})
+    expect(result.current).toEqual({
+      id: "1",
+      cat: "category",
+      slug: ["example", "multiple", "slugs"],
+      empty: "",
+    })
+  })
+
+  it("works with string", () => {
+    // This is the router query object which includes route params
+    const query = {
+      id: "1",
+      cat: "category",
+      slug: ["example", "multiple", "slugs"],
+      empty: "",
+    }
+
+    const {result} = renderHook(() => useParams("string"), {router: {query}})
+    expect(result.current).toEqual({
+      id: "1",
+      cat: "category",
+      empty: "",
+    })
+  })
+
+  it("works with number", () => {
+    // This is the router query object which includes route params
+    const query = {
+      id: "1",
+      cat: "category",
+      slug: ["example", "multiple", "slugs"],
+      empty: "",
+    }
+
+    const {result} = renderHook(() => useParams("number"), {router: {query}})
+    expect(result.current).toEqual({
+      id: 1,
+      cat: NaN,
+      slug: NaN,
+    })
+  })
+
+  it("works with array", () => {
+    // This is the router query object which includes route params
+    const query = {
+      id: "1",
+      cat: "category",
+      slug: ["example", "multiple", "slugs"],
+      empty: "",
+    }
+
+    const {result} = renderHook(() => useParams("array"), {router: {query}})
+    expect(result.current).toEqual({
+      slug: ["example", "multiple", "slugs"],
     })
   })
 })

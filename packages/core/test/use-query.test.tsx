@@ -1,5 +1,5 @@
 import React from "react"
-import {act, render, waitForElementToBeRemoved, screen} from "@testing-library/react"
+import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
 import {useQuery} from "../src/use-query"
 
 describe("useQuery", () => {
