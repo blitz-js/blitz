@@ -1,7 +1,7 @@
 import React from "react"
 import {Error as ErrorComponent} from "blitz"
 import {queryCache} from "react-query"
-import LoginForm from "app/components/LoginForm"
+import LoginForm from "app/auth/components/LoginForm"
 
 export default class ErrorBoundary extends React.Component<{
   fallback?: (error: any) => React.ReactNode
