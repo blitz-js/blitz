@@ -94,14 +94,17 @@ export function useParam(
   const rawValue = params[key]
 
   if (returnType === "number") {
+    // Special case because Number("") === 0
+    if (rawValue === "") {
+      return NaN
+    }
     return Number(rawValue)
   }
 
   if (returnType === "string") {
-    if (typeof rawValue === "undefined") {
+    if (typeof rawValue !== "string") {
       return ""
     }
-
     return rawValue
   }
 
@@ -109,11 +112,9 @@ export function useParam(
     if (typeof rawValue === "undefined") {
       return []
     }
-
-    if (typeof rawValue === "string") {
+    if (!Array.isArray(rawValue)) {
       return [rawValue]
     }
-
     return rawValue
   }
 
