@@ -3,6 +3,7 @@ import {
   InfiniteQueryResult,
   InfiniteQueryOptions,
 } from "react-query"
+import {useIsDevPrerender, emptyQueryFn} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
@@ -28,7 +29,9 @@ export function useInfiniteQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
+  const queryRpcFn = useIsDevPrerender()
+    ? emptyQueryFn
+    : ((queryFn as unknown) as EnhancedRpcFunction)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey: [
