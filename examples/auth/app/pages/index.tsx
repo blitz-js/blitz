@@ -1,5 +1,4 @@
-import {Head, useSession} from "blitz"
-import LoginForm from "app/components/LoginForm"
+import {Head, Link, useSession} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
@@ -8,6 +7,19 @@ const UserStuff = () => {
   const session = useSession()
   return (
     <div>
+      {!session.userId && (
+        <>
+          <div style={{marginTop: "1rem"}}>
+            <Link href="/signup">Sign Up</Link>
+          </div>
+          <div>
+            <Link href="/login">Log In</Link>
+          </div>
+          <a href="/api/auth/twitter" style={{display: "block"}}>
+            Login with Twitter
+          </a>
+        </>
+      )}
       <pre>{JSON.stringify(session, null, 2)}</pre>
       <button
         onClick={async () => {
@@ -33,14 +45,6 @@ const UserStuff = () => {
       >
         Track view
       </button>
-      {!session.userId && (
-        <>
-          <LoginForm />
-          <a href="/api/auth/twitter" style={{display: "block", marginTop: "1rem"}}>
-            Login with Twitter
-          </a>
-        </>
-      )}
     </div>
   )
 }

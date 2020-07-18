@@ -35,7 +35,9 @@
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
     "secure-password": "4.0.0",
-    "zod": "1.9.0"
+    "zod": "1.10.0-alpha.2",
+    "final-form": "4.20.1",
+    "react-final-form": "6.5.1"
   },
   "devDependencies": {
     "@types/react": "16.9.38",

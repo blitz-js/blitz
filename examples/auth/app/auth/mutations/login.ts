@@ -17,7 +17,7 @@ export default async function login(
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
-  await ctx.session?.create({userId: user.id, roles: [user.role]})
+  await ctx.session!.create({userId: user.id, roles: [user.role]})
 
   return user
 }
