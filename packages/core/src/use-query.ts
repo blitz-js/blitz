@@ -21,12 +21,17 @@ export const emptyQueryFn: EnhancedRpcFunction = (() => {
 export const useIsDevPrerender = () => {
   // It is Next.js prerender if a route parameter exists in pathname but router.query is empty
   const router = useRouter()
-  const queryKeys = Object.keys(router.query)
-  const isDevPrerender =
-    process.env.NODE_ENV !== "production" &&
-    /\[.*\]/.test(router.pathname) &&
-    (queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp"))
-  return isDevPrerender
+  if (process.env.NODE_ENV === "production") {
+    return false
+  } else {
+    const currentRouteHasParameters = /\[.*\]/.test(router.pathname)
+    const queryKeys = Object.keys(router.query)
+    const isDevPrerender =
+      currentRouteHasParameters &&
+      // This checks if query == {} || query == {amp: any}
+      (queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp"))
+    return isDevPrerender
+  }
 }
 
 export function useQuery<T extends QueryFn>(
