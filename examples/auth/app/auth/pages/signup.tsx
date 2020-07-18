@@ -1,7 +1,7 @@
 import React from "react"
 import {Head, useRouter, BlitzPage} from "blitz"
-import {FieldError} from "app/components/FieldError"
-import {Form, Field} from "react-final-form"
+import {LabeledTextField} from "app/components/LabeledTextField"
+import {Form} from "react-final-form"
 import {FORM_ERROR} from "final-form"
 import signup from "app/auth/mutations/signup"
 import {SignupInput} from "app/auth/validations"
@@ -44,18 +44,14 @@ const SignupPage: BlitzPage = () => {
             }
           }}
           render={({handleSubmit, submitting, submitError}) => (
-            <form onSubmit={handleSubmit}>
-              <label>
-                Email
-                <Field name="email" component="input" placeholder="Email" />
-                <FieldError name="email" />
-              </label>
-
-              <label>
-                Password
-                <Field name="password" component="input" placeholder="Password" type="password" />
-                <FieldError name="password" />
-              </label>
+            <form onSubmit={handleSubmit} className="signup-form">
+              <LabeledTextField name="email" label="Email" placeholder="Email" />
+              <LabeledTextField
+                name="password"
+                label="Password"
+                placeholder="Password"
+                type="password"
+              />
 
               {submitError && (
                 <div role="alert" style={{color: "red"}}>
@@ -66,19 +62,15 @@ const SignupPage: BlitzPage = () => {
               <button type="submit" disabled={submitting}>
                 Create Account
               </button>
+
+              <style global jsx>{`
+                .signup-form > * + * {
+                  margin-top: 1rem;
+                }
+              `}</style>
             </form>
           )}
         />
-        <style jsx>{`
-          label {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-          }
-          form > * + * {
-            margin-top: 1rem;
-          }
-        `}</style>
       </div>
     </>
   )
