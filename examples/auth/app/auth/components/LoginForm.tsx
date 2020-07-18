@@ -1,6 +1,6 @@
 import React from "react"
 import {LabeledTextField} from "app/components/LabeledTextField"
-import {useForm} from "react-hook-form"
+import {FormProvider, useForm} from "react-hook-form"
 import login from "app/auth/mutations/login"
 
 type LoginFormProps = {
@@ -8,7 +8,7 @@ type LoginFormProps = {
 }
 
 export const LoginForm = (props: LoginFormProps) => {
-  const {register, handleSubmit, errors, setError, formState} = useForm({
+  const methods = useForm({
     mode: "onBlur",
     async resolver(values) {
       const errors: {email?: string; password?: string} = {}
@@ -25,59 +25,55 @@ export const LoginForm = (props: LoginFormProps) => {
   return (
     <div>
       <h1>Login</h1>
-      <form
-        onSubmit={handleSubmit(async (values) => {
-          try {
-            await login({email: values.email, password: values.password})
-            props.onSuccess && props.onSuccess()
-          } catch (error) {
-            if (error.name === "AuthenticationError") {
-              setError("email", {type: "manual", message: "Sorry, those credentials are invalid"})
-            } else {
-              setError("form", {
-                type: "manual",
-                message:
-                  "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
-              })
+
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(async (values) => {
+            try {
+              await login({email: values.email, password: values.password})
+              props.onSuccess && props.onSuccess()
+            } catch (error) {
+              if (error.name === "AuthenticationError") {
+                methods.setError("form", {
+                  type: "manual",
+                  message: "Sorry, those credentials are invalid",
+                })
+              } else {
+                methods.setError("form", {
+                  type: "manual",
+                  message:
+                    "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                })
+              }
             }
-          }
-        })}
-        className="login-form"
-      >
-        <LabeledTextField
-          name="email"
-          label="Email"
-          placeholder="Email"
-          ref={register}
-          formState={formState}
-          errors={errors}
-        />
-        <LabeledTextField
-          name="password"
-          label="Password"
-          placeholder="Password"
-          type="password"
-          ref={register}
-          formState={formState}
-          errors={errors}
-        />
+          })}
+          className="login-form"
+        >
+          <LabeledTextField name="email" label="Email" placeholder="Email" />
+          <LabeledTextField
+            name="password"
+            label="Password"
+            placeholder="Password"
+            type="password"
+          />
 
-        {errors.form && (
-          <div role="alert" style={{color: "red"}}>
-            {errors.form.message}
-          </div>
-        )}
+          {methods.errors.form && (
+            <div role="alert" style={{color: "red"}}>
+              {methods.errors.form.message}
+            </div>
+          )}
 
-        <button type="submit" disabled={formState.isSubmitting}>
-          Log In
-        </button>
+          <button type="submit" disabled={methods.formState.isSubmitting}>
+            Log In
+          </button>
 
-        <style global jsx>{`
-          .login-form > * + * {
-            margin-top: 1rem;
-          }
-        `}</style>
-      </form>
+          <style global jsx>{`
+            .login-form > * + * {
+              margin-top: 1rem;
+            }
+          `}</style>
+        </form>
+      </FormProvider>
     </div>
   )
 }
