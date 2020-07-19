@@ -1,12 +1,8 @@
-import {Installer} from "@blitzjs/installer"
+import {RecipeBuilder} from "@blitzjs/installer"
 
 // eslint-disable-next-line import/no-default-export
-export default new Installer(
-  {
-    description: "test package",
-    name: "test",
-    owner: "blitz@blitzjs.com",
-    repoLink: "https://github.com/blitz-js/blitz",
-  },
-  [],
-)
+export default RecipeBuilder()
+  .setName("test")
+  .setDescription("test package")
+  .setOwner("blitz@blitzjs.com")
+  .setRepoLink("https://github.com/blitz-js/blitz")
