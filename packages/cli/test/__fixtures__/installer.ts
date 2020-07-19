@@ -3,10 +3,10 @@ import {Installer} from "@blitzjs/installer"
 // eslint-disable-next-line import/no-default-export
 export default new Installer(
   {
-    packageDescription: "test package",
-    packageName: "test",
-    packageOwner: "blitz@blitzjs.com",
-    packageRepoLink: "https://github.com/blitz-js/blitz",
+    description: "test package",
+    name: "test",
+    owner: "blitz@blitzjs.com",
+    repoLink: "https://github.com/blitz-js/blitz",
   },
   [],
 )

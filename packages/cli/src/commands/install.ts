@@ -1,6 +1,6 @@
 import {Command} from "../command"
 import * as path from "path"
-import {Installer} from "@blitzjs/installer"
+import {RecipeExecutor} from "@blitzjs/installer"
 import _got from "got"
 import {log} from "@blitzjs/display"
 import {dedent} from "../utils/dedent"
@@ -11,6 +11,7 @@ import {mkdirSync, readFileSync, existsSync} from "fs-extra"
 import rimraf from "rimraf"
 import spawn from "cross-spawn"
 import * as os from "os"
+import {setupTsnode} from "../utils/setup-ts-node"
 
 const pipeline = promisify(Stream.pipeline)
 
@@ -135,7 +136,7 @@ export class Install extends Command {
   }
 
   private async installRecipeAtPath(recipePath: string) {
-    const installer = require(recipePath).default as Installer<any>
+    const recipe = require(recipePath).default as RecipeExecutor<any>
     const recipeArgs = this.argv.slice(1).reduce(
       (acc, arg) => ({
         ...acc,
@@ -145,10 +146,11 @@ export class Install extends Command {
       }),
       {},
     )
-    await installer.run(recipeArgs)
+    await recipe.run(recipeArgs)
   }
 
   async run() {
+    setupTsnode()
     const {args} = this.parse(Install)
     const pkgManager = existsSync(path.resolve("yarn.lock")) ? "yarn" : "npm"
     const originalCwd = process.cwd()
