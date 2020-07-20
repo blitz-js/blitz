@@ -61,8 +61,12 @@ export async function handleRequestWithMiddleware(
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
 ) {
-  ;(res as MiddlewareResponse).blitzCtx = {}
-  ;(res as any)._blitz = {}
+  if (!(res as MiddlewareResponse).blitzCtx) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+  if (!(res as any)._blitz) {
+    ;(res as any)._blitz = {}
+  }
 
   let handler: Middleware
   if (Array.isArray(middleware)) {

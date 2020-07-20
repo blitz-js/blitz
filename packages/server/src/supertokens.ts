@@ -25,6 +25,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
+  MiddlewareResponse,
 } from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
@@ -96,8 +97,9 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   } as Required<SessionConfig>
 
   return async (req, res, next) => {
-    if (req.method !== "HEAD") {
-      res.blitzCtx.session = await getSessionContext(req, res)
+    if (req.method !== "HEAD" && !res.blitzCtx.session) {
+      // This function also saves session to res.blitzCtx
+      await getSessionContext(req, res)
     }
     return next()
   }
@@ -112,6 +114,9 @@ type SessionKernel = {
 
 const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
   "cookies" in req
+const isMiddlewareApResponse = (
+  res: MiddlewareResponse | ServerResponse,
+): res is MiddlewareResponse => "blitzCtx" in res
 
 export async function getSessionContext(
   req: BlitzApiRequest | IncomingMessage,
@@ -123,6 +128,10 @@ export async function getSessionContext(
   }
   assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
 
+  if (isMiddlewareApResponse(res) && res.blitzCtx.session) {
+    return res.blitzCtx.session as SessionContext
+  }
+
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
@@ -133,7 +142,12 @@ export async function getSessionContext(
     sessionKernel = await createAnonymousSession(res)
   }
 
-  return new SessionContextClass(res, sessionKernel)
+  const sessionContext = new SessionContextClass(res, sessionKernel)
+  if (!("blitzCtx" in res)) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+  ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
+  return sessionContext
 }
 
 export class SessionContextClass implements SessionContext {
