@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.16.5-canary.1",
+  "version": "0.16.5-canary.2",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -31,13 +31,13 @@
   "dependencies": {
     "@prisma/cli": "2.1.0",
     "@prisma/client": "2.1.0",
-    "blitz": "0.16.5-canary.1",
+    "blitz": "0.16.5-canary.2",
+    "final-form": "4.20.1",
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
+    "react-final-form": "6.5.1",
     "secure-password": "4.0.0",
-    "zod": "1.10.0-alpha.2",
-    "final-form": "4.20.1",
-    "react-final-form": "6.5.1"
+    "zod": "1.10.0-alpha.2"
   },
   "devDependencies": {
     "@types/react": "16.9.38",
