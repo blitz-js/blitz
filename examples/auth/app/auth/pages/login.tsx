@@ -13,7 +13,7 @@ const SignupPage: BlitzPage = () => {
       </Head>
 
       <div>
-        <LoginForm onSuccess={() => router.push("/")} />
+        <LoginForm onSuccess={() => router.push("/users/test")} />
       </div>
     </>
   )
