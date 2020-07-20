@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/gui",
-  "version": "0.16.5-canary.1",
+  "version": "0.16.5-canary.2",
   "scripts": {
     "start": "blitz start"
   },
