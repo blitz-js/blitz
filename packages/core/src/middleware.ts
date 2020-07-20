@@ -83,12 +83,20 @@ export async function handleRequestWithMiddleware(
     })
   } catch (error) {
     log.newline()
-    if (!res.writableFinished) {
-      res.statusCode = (error as any).statusCode || (error as any).status || 500
-      res.end(error.message || res.statusCode.toString())
+    if (req.method === "GET") {
+      // This GET method check is so we don't .end() the request for SSR requests
       log.error("Error while processing the request:\n")
+      log.error(error)
     } else {
-      log.error("Error occured in middleware after the response was already sent to the browser:\n")
+      if (!res.writableFinished) {
+        res.statusCode = (error as any).statusCode || (error as any).status || 500
+        res.end(error.message || res.statusCode.toString())
+        log.error("Error while processing the request:\n")
+      } else {
+        log.error(
+          "Error occured in middleware after the response was already sent to the browser:\n",
+        )
+      }
     }
     throw error
   }

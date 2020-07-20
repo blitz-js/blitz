@@ -1,46 +1,57 @@
 import * as React from "react"
-import {GetServerSideProps} from "next"
 import {getSessionContext} from "@blitzjs/server"
-import {ssrQuery, useRouter} from "blitz"
+import {ssrQuery, useRouter, GetServerSideProps, PromiseReturnType, Error as ErrorPage} from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
-import {User} from "db"
 
 type PageProps = {
-  user: User
+  user?: PromiseReturnType<typeof getUser>
+  error?: {
+    statusCode: number
+    message: string
+  }
 }
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, res}) => {
   const session = await getSessionContext(req, res)
-
-  console.log("SESSION USERID: ", session.userId)
-
-  if (!session.userId) {
-    res.setHeader("location", "/login")
-    res.statusCode = 302
-    res.end()
-    return {props: {}}
+  console.log("Session id:", session.userId)
+  try {
+    const user = await ssrQuery(
+      getUser,
+      {where: {id: Number(session.userId)}, select: {id: true}},
+      {res, req},
+    )
+    return {props: {user}}
+  } catch (error) {
+    if (error.name === "AuthenticationError") {
+      res.writeHead(302, {location: "/login"})
+      res.end()
+      return {props: {}}
+    } else if (error.name === "AuthorizationError") {
+      return {
+        props: {
+          error: {
+            statusCode: error.statusCode,
+            message: "Sorry, you are not authorized to access this",
+          },
+        },
+      }
+    } else {
+      return {props: {error: {statusCode: error.statusCode || 500, message: error.message}}}
+    }
   }
-
-  let user: Partial<User> = {id: 0}
-  if (session.userId) {
-    user =
-      (await ssrQuery(
-        getUser,
-        {where: {id: session.userId as number}, select: {id: true}},
-        {res, req},
-      )) || {}
-  }
-
-  return {props: {user}}
 }
 
-const Test: React.FC<PageProps> = ({user}: PageProps) => {
+const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
   const router = useRouter()
+
+  if (error) {
+    return <ErrorPage statusCode={error.statusCode} title={error.message} />
+  }
 
   return (
     <div>
-      <div>Logged in user id: {user.id}</div>
+      <div>Logged in user id: {user?.id}</div>
       <button
         onClick={async () => {
           await logout()
