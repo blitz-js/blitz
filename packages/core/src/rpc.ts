@@ -3,11 +3,13 @@ import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
 import {ResolverModule, Middleware} from "./middleware"
 import {
-  antiCSRFStore,
+  getAntiCSRFToken,
   publicDataStore,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
+  HEADER_CSRF_ERROR,
+  CSRFTokenMismatchError,
 } from "./supertokens"
 
 type Options = {
@@ -21,7 +23,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     "Content-Type": "application/json",
   }
 
-  const antiCSRFToken = antiCSRFStore.getToken()
+  const antiCSRFToken = getAntiCSRFToken()
   if (antiCSRFToken) {
     headers[HEADER_CSRF] = antiCSRFToken
   }
@@ -36,15 +38,12 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 
   if (result.headers) {
     for (const [name, value] of result.headers.entries()) {
-      if (name.toLowerCase() === HEADER_CSRF) antiCSRFStore.setToken(value)
       if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
       if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
+      if (name.toLowerCase() === HEADER_CSRF_ERROR) {
+        throw new CSRFTokenMismatchError()
+      }
     }
-  }
-
-  if (result.status === 401) {
-    // Usually means csrf token is bad, but this should never happen
-    antiCSRFStore.clear()
   }
 
   let json
@@ -56,8 +55,8 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 
   if (json.error) {
     const error = deserializeError(json.error)
+    // We don't clear the publicDataStore for anonymous users
     if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
-      // We don't clear the publicDataStore for anonymous users
       publicDataStore.clear()
     }
     throw error
