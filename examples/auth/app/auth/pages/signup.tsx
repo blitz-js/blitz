@@ -1,10 +1,9 @@
 import React from "react"
 import {Head, useRouter, BlitzPage} from "blitz"
+import {Form, FORM_ERROR} from "app/components/Form"
 import {LabeledTextField} from "app/components/LabeledTextField"
-import {Form} from "react-final-form"
-import {FORM_ERROR} from "final-form"
 import signup from "app/auth/mutations/signup"
-import {SignupInput} from "app/auth/validations"
+import {SignupInput, SignupInputType} from "app/auth/validations"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
@@ -19,14 +18,9 @@ const SignupPage: BlitzPage = () => {
       <div>
         <h1>Create an Account</h1>
 
-        <Form
-          validate={(values) => {
-            try {
-              SignupInput.parse(values)
-            } catch (error) {
-              return error.formErrors.fieldErrors
-            }
-          }}
+        <Form<SignupInputType>
+          submitText="Create Account"
+          schema={SignupInput}
           onSubmit={async (values) => {
             try {
               await signup({email: values.email, password: values.password})
@@ -40,34 +34,15 @@ const SignupPage: BlitzPage = () => {
               }
             }
           }}
-          render={({handleSubmit, submitting, submitError}) => (
-            <form onSubmit={handleSubmit} className="signup-form">
-              <LabeledTextField name="email" label="Email" placeholder="Email" />
-              <LabeledTextField
-                name="password"
-                label="Password"
-                placeholder="Password"
-                type="password"
-              />
-
-              {submitError && (
-                <div role="alert" style={{color: "red"}}>
-                  {submitError}
-                </div>
-              )}
-
-              <button type="submit" disabled={submitting}>
-                Create Account
-              </button>
-
-              <style global jsx>{`
-                .signup-form > * + * {
-                  margin-top: 1rem;
-                }
-              `}</style>
-            </form>
-          )}
-        />
+        >
+          <LabeledTextField name="email" label="Email" placeholder="Email" />
+          <LabeledTextField
+            name="password"
+            label="Password"
+            placeholder="Password"
+            type="password"
+          />
+        </Form>
       </div>
     </>
   )
