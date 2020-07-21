@@ -17788,7 +17788,7 @@ yoga-layout-prebuilt@^1.9.3:
   dependencies:
     "@types/yoga-layout" "1.9.2"
 
-zod@1.10.0-alpha.2:
-  version "1.10.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-1.10.0-alpha.2.tgz#4f1f6b5219e2cf337c3536b58e4c3e15786d52aa"
-  integrity sha512-82h3X4ml17UPcYyKmyOguySiL5uXhcJP1s5xB668xS9AKFD9K0XqJS9AOgcM0dZ4nhLEpGF2sNW6plpz9YWlcQ==
+zod@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-1.10.0.tgz#175286f09d480ac604014245d7215f67959b0d7a"
+  integrity sha512-u06UhgHEUzLN26qDI7Ei9sqWdiQjQnrjEJtAXmAHF3fH35sOkPmdAl4FNZOgsigv2Jki6yrx5wivQyYXB4B+aA==
