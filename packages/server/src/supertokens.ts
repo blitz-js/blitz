@@ -1,6 +1,6 @@
-import crypto from "crypto"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
+import {nanoid} from "nanoid"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {
   BlitzApiRequest,
@@ -568,7 +568,7 @@ export async function setPublicData(
 // --------------------------------
 const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
 
-export const generateToken = () => crypto.randomBytes(32).toString("base64")
+export const generateToken = () => nanoid(32)
 
 export const generateEssentialSessionHandle = () => {
   return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
