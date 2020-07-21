@@ -48,7 +48,6 @@ export function Form<FormValues extends Record<string, unknown>>({
       <form
         onSubmit={ctx.handleSubmit(async (values) => {
           const result = (await onSubmit(values as FormValues)) || {}
-          console.log("RES", result)
           for (const [key, value] of Object.entries(result)) {
             if (key === FORM_ERROR) {
               setFormError(value)
