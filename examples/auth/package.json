@@ -1,12 +1,12 @@
 {
-  "name": "auth",
-  "version": "0.16.1",
+  "name": "@examples/auth",
+  "version": "0.16.5-canary.4",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "echo \"No tests yet\""
+    "test": "blitz build"
   },
   "browserslist": [
     "defaults"
@@ -31,21 +31,17 @@
   "dependencies": {
     "@prisma/cli": "2.1.0",
     "@prisma/client": "2.1.0",
-    "blitz": "0.16.1",
+    "blitz": "0.16.5-canary.4",
+    "final-form": "4.20.1",
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
+    "react-final-form": "6.5.1",
     "secure-password": "4.0.0",
-    "zod": "1.9.0",
-    "passport": "0.4.1",
-    "passport-twitter": "1.0.4",
-    "cookie-session": "1.4.0"
+    "zod": "1.10.0"
   },
   "devDependencies": {
     "@types/react": "16.9.38",
-    "@types/passport": "1.0.4",
-    "@types/passport-twitter": "1.0.36",
     "@types/secure-password": "3.1.0",
-    "@types/cookie-session": "2.0.41",
     "@typescript-eslint/eslint-plugin": "2.34.1-alpha.2",
     "@typescript-eslint/parser": "2.34.1-alpha.2",
     "babel-eslint": "10.1.0",

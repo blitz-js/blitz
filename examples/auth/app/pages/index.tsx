@@ -1,5 +1,4 @@
 import {Head, Link, useSession} from "blitz"
-import LoginForm from "app/components/LoginForm"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
@@ -8,6 +7,19 @@ const UserStuff = () => {
   const session = useSession()
   return (
     <div>
+      {!session.userId && (
+        <>
+          <div style={{marginTop: "1rem"}}>
+            <Link href="/signup">Sign Up</Link>
+          </div>
+          <div>
+            <Link href="/login">Log In</Link>
+          </div>
+          <a href="/api/auth/twitter" style={{display: "block"}}>
+            Login with Twitter
+          </a>
+        </>
+      )}
       <pre>{JSON.stringify(session, null, 2)}</pre>
       <button
         onClick={async () => {
@@ -21,26 +33,18 @@ const UserStuff = () => {
       >
         Get user
       </button>
-      {!session.userId && (
-        <>
-          <button
-            onClick={async () => {
-              try {
-                await trackView()
-              } catch (error) {
-                alert("error: " + error)
-                console.log(error)
-              }
-            }}
-          >
-            Track view
-          </button>
-          <LoginForm />
-          <a href="/api/auth/twitter" style={{display: "block", marginTop: "1rem"}}>
-            Login with Twitter
-          </a>
-        </>
-      )}
+      <button
+        onClick={async () => {
+          try {
+            await trackView()
+          } catch (error) {
+            alert("error: " + error)
+            console.log(error)
+          }
+        }}
+      >
+        Track view
+      </button>
     </div>
   )
 }
@@ -74,15 +78,6 @@ const Home = () => (
       <style jsx>{`
         .container {
           min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
           display: flex;
           flex-direction: column;
           justify-content: center;

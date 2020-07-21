@@ -1,6 +1,7 @@
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {existsSync} from "fs"
+import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
 
 const configFiles = ["blitz.config.js", "next.config.js"]
 /**
@@ -20,7 +21,9 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
       const file = require(path)
       let contents
       if (typeof file === "function") {
-        contents = file()
+        const phase =
+          process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+        contents = file(phase, {})
       } else {
         contents = file
       }

@@ -1,9 +1,5 @@
 const withPlugins = require("next-compose-plugins")
 const withTM = require("next-transpile-modules")(["@blitzjs/core"])
-const path = require("path")
-const pkgDir = require("pkg-dir")
-
-const projectRoot = pkgDir.sync() || process.cwd()
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
@@ -29,10 +25,10 @@ export function withBlitz(nextConfig: any) {
             const originalEntry = config.entry
             config.entry = async () => ({
               ...(await originalEntry()),
-              [path.join(projectRoot, "_db.js")]: path.join(projectRoot, "db/index"),
+              "./__db.js": "./db/index",
             })
             config.watchOptions = config.watchOptions || {ignored: []}
-            config.watchOptions.ignored.push("_db.js")
+            config.watchOptions.ignored.push("__db.js")
           } else {
             config.module = config.module || {}
             config.module.rules = config.module.rules || []

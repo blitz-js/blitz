@@ -3,6 +3,7 @@ import {
   PaginatedQueryResult,
   QueryOptions,
 } from "react-query"
+import {useIsDevPrerender, emptyQueryFn} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
@@ -28,7 +29,9 @@ export function usePaginatedQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = (queryFn as unknown) as EnhancedRpcFunction
+  const queryRpcFn = useIsDevPrerender()
+    ? emptyQueryFn
+    : ((queryFn as unknown) as EnhancedRpcFunction)
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey: [

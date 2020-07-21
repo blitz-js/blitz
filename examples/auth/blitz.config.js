@@ -1,7 +1,11 @@
-const {sessionMiddleware} = require("@blitzjs/server")
+const {sessionMiddleware, unstable_simpleRolesIsAuthorized} = require("@blitzjs/server")
 
 module.exports = {
-  middleware: [sessionMiddleware()],
+  middleware: [
+    sessionMiddleware({
+      unstable_isAuthorized: unstable_simpleRolesIsAuthorized,
+    }),
+  ],
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     // Note: we provide webpack above so you should not `require` it

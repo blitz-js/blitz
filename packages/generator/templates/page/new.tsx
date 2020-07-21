@@ -1,5 +1,9 @@
 import React from "react"
-import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
+if (process.env.parentModel) {
+  import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
+} else {
+  import {Head, Link, useRouter, BlitzPage} from "blitz"
+}
 import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
 import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
 

@@ -1,7 +1,7 @@
 import React from "react"
 import {Box, Text, Color, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
-import {RecipeMeta} from "./installer"
+import {RecipeMeta} from "./recipe-executor"
 import {Branded} from "./components/branded"
 import {Newline} from "./components/newline"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
@@ -79,14 +79,12 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
     <Box flexDirection="column">
       <Branded>
         <Box flexDirection="column">
-          <Text>Welcome to the recipe for {recipeMeta.packageName}</Text>
-          <Text>{recipeMeta.packageDescription}</Text>
+          <Text>Welcome to the recipe for {recipeMeta.name}</Text>
+          <Text>{recipeMeta.description}</Text>
         </Box>
       </Branded>
-      <Text bold={false}>This recipe is authored and supported by {recipeMeta.packageOwner}.</Text>
-      <Text>
-        For additional documentation and support please visit {recipeMeta.packageRepoLink}
-      </Text>
+      <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
+      <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
       <Newline />
       <Text>Press ENTER to begin the recipe</Text>
     </Box>

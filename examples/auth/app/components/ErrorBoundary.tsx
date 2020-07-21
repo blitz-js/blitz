@@ -1,31 +1,38 @@
 import React from "react"
+import {Error as ErrorComponent} from "blitz"
 import {queryCache} from "react-query"
-import LoginForm from "app/components/LoginForm"
+import LoginForm from "app/auth/components/LoginForm"
 
 export default class ErrorBoundary extends React.Component<{
   fallback?: (error: any) => React.ReactNode
 }> {
-  state = {hasError: false, error: null}
+  state = {
+    error: null as Error | null,
+  }
 
   static getDerivedStateFromError(error: any) {
     return {
-      hasError: true,
       error,
     }
   }
 
   reset = () => {
-    this.setState({hasError: false, error: null})
+    this.setState({error: null})
     queryCache.resetErrorBoundaries()
   }
 
   render() {
-    const {hasError, error} = this.state
-    if (hasError) {
+    const {error} = this.state
+    if (error) {
       if (error.name === "AuthenticationError") {
         return <LoginForm onSuccess={this.reset} />
       } else if (error.name === "AuthorizationError") {
-        return <h1>You are not allow to access this resource</h1>
+        return (
+          <ErrorComponent
+            statusCode={(error as any).statusCode}
+            title="Sorry, you are not authorized to access this"
+          />
+        )
       } else if (this.props.fallback) {
         return this.props.fallback(error)
       } else {

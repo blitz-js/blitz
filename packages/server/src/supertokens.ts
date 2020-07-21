@@ -1,7 +1,6 @@
-import crypto from "crypto"
-import invariant from "tiny-invariant"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
+import {nanoid} from "nanoid"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {
   BlitzApiRequest,
@@ -21,18 +20,27 @@ import {
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
+  COOKIE_CSRF_TOKEN,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
+  HEADER_CSRF_ERROR,
+  MiddlewareResponse,
 } from "@blitzjs/core"
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
+import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {IncomingMessage, ServerResponse} from "http"
+
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, "_db.js")
+  const path = join(projectRoot, ".next/server/__db.js")
   return require(path).default
 }
 
@@ -52,6 +60,25 @@ const defaultConfig: SessionConfig = {
   },
   updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
+  unstable_isAuthorized: () => {
+    throw new Error("No unstable_isAuthorized implementation provided")
+  },
+}
+
+export function unstable_simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+  // No roles required, so all roles allowed
+  if (!input) return true
+
+  const rolesToAuthorize = []
+  if (Array.isArray(input)) {
+    rolesToAuthorize.push(...input)
+  } else if (input) {
+    rolesToAuthorize.push(input)
+  }
+  for (const role of rolesToAuthorize) {
+    if (userRoles.includes(role)) return true
+  }
+  return false
 }
 
 let config: Required<SessionConfig>
@@ -60,14 +87,19 @@ let config: Required<SessionConfig>
 // Middleware
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
+  assert(
+    sessionConfig.unstable_isAuthorized,
+    "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
+  )
   config = {
     ...defaultConfig,
     ...sessionConfig,
   } as Required<SessionConfig>
 
   return async (req, res, next) => {
-    if (req.method !== "HEAD") {
-      res.blitzCtx.session = await createSessionContextFromRequest(req, res)
+    if (req.method !== "HEAD" && !res.blitzCtx.session) {
+      // This function also saves session to res.blitzCtx
+      await getSessionContext(req, res)
     }
     return next()
   }
@@ -80,28 +112,49 @@ type SessionKernel = {
   jwtPayload: JwtPayload
 }
 
-export async function createSessionContextFromRequest(
-  req: BlitzApiRequest,
-  res: BlitzApiResponse,
+const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
+  "cookies" in req
+const isMiddlewareApResponse = (
+  res: MiddlewareResponse | ServerResponse,
+): res is MiddlewareResponse => "blitzCtx" in res
+
+export async function getSessionContext(
+  req: BlitzApiRequest | IncomingMessage,
+  res: BlitzApiResponse | ServerResponse,
 ): Promise<SessionContext> {
+  if (!("cookies" in req)) {
+    // Cookie parser isn't include inside getServerSideProps, so we have to add it
+    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
+  }
+  assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
+
+  if (isMiddlewareApResponse(res) && res.blitzCtx.session) {
+    return res.blitzCtx.session as SessionContext
+  }
+
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
-    console.log("Got existing session", sessionKernel)
+    // console.log("Got existing session", sessionKernel)
   }
 
   if (!sessionKernel) {
     sessionKernel = await createAnonymousSession(res)
   }
 
-  return new SessionContextClass(res, sessionKernel)
+  const sessionContext = new SessionContextClass(res, sessionKernel)
+  if (!("blitzCtx" in res)) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+  ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
+  return sessionContext
 }
 
 export class SessionContextClass implements SessionContext {
-  private _res: BlitzApiResponse
+  private _res: ServerResponse
   private _kernel: SessionKernel
 
-  constructor(res: BlitzApiResponse, kernel: SessionKernel) {
+  constructor(res: ServerResponse, kernel: SessionKernel) {
     this._res = res
     this._kernel = kernel
   }
@@ -119,27 +172,16 @@ export class SessionContextClass implements SessionContext {
     return this._kernel.publicData
   }
 
-  authorize(roleOrRoles?: string | string[]) {
-    if (!this.isAuthorized(roleOrRoles)) {
+  authorize(input?: any) {
+    if (!this.isAuthorized(input)) {
       throw new AuthorizationError()
     }
   }
 
-  isAuthorized(roleOrRoles?: string | string[]) {
+  isAuthorized(input?: any) {
     if (!this.userId) throw new AuthenticationError()
 
-    const roles = []
-    if (Array.isArray(roleOrRoles)) {
-      roles.push(...roleOrRoles)
-    } else if (roleOrRoles) {
-      roles.push(roleOrRoles)
-    }
-
-    let isAuthorized = false
-    for (const role of roles) {
-      if (this.roles.includes(role)) isAuthorized = true
-    }
-    return isAuthorized
+    return config.unstable_isAuthorized(this.roles, input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -180,7 +222,7 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 export async function getSession(
   req: BlitzApiRequest,
-  res: BlitzApiResponse,
+  res: ServerResponse,
 ): Promise<SessionKernel | null> {
   const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
@@ -192,7 +234,7 @@ export async function getSession(
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
-      console.log("No session: no handle")
+      // console.log("No session: no handle")
       return null
     }
 
@@ -205,15 +247,16 @@ export async function getSession(
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
-      console.log("No session: not in DB")
+      // console.log("No session: not in DB")
       return null
     }
 
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
-      console.log("No session: sessionToken hash did not match")
+      // console.log("No session: sessionToken hash did not match")
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -267,6 +310,7 @@ export async function getSession(
     }
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 
@@ -285,13 +329,13 @@ export async function getSession(
 // Create Session
 // --------------------------------
 export async function createNewSession(
-  res: BlitzApiResponse,
+  res: ServerResponse,
   publicData: PublicData,
   privateData: Record<any, any> = {},
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
-  invariant(publicData.userId !== undefined, "You must provide publicData.userId")
-  invariant(publicData.roles, "You must provide publicData.roles")
+  assert(publicData.userId !== undefined, "You must provide publicData.userId")
+  assert(publicData.roles, "You must provide publicData.roles")
 
   const antiCSRFToken = createAntiCSRFToken()
 
@@ -307,7 +351,7 @@ export async function createNewSession(
     const publicDataToken = createPublicDataToken(publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setCSRFCookie(res, antiCSRFToken)
     setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(res, "", new Date(0))
@@ -323,7 +367,7 @@ export async function createNewSession(
       ...(opts.jwtPayload?.publicData || {}),
       ...publicData,
     }
-    invariant(newPublicData.userId, "You must provide a non-empty userId as publicData.userId")
+    assert(newPublicData.userId, "You must provide a non-empty userId as publicData.userId")
 
     // This carries over any private data from the anonymous session
     let existingPrivateData = {}
@@ -359,7 +403,7 @@ export async function createNewSession(
     })
 
     setSessionCookie(res, sessionToken, expiresAt)
-    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setCSRFCookie(res, antiCSRFToken)
     setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(res, "", new Date(0))
@@ -378,7 +422,7 @@ export async function createNewSession(
   }
 }
 
-export async function createAnonymousSession(res: BlitzApiResponse) {
+export async function createAnonymousSession(res: ServerResponse) {
   return await createNewSession(res, {userId: null, roles: []}, undefined, {anonymous: true})
 }
 
@@ -386,7 +430,7 @@ export async function createAnonymousSession(res: BlitzApiResponse) {
 // Session/DB utils
 // --------------------------------
 
-export async function refreshSession(res: BlitzApiResponse, sessionKernel: SessionKernel) {
+export async function refreshSession(res: ServerResponse, sessionKernel: SessionKernel) {
   if (sessionKernel.jwtPayload?.isAnonymous) {
     const payload: AnonymousSessionPayload = {
       ...sessionKernel.jwtPayload,
@@ -433,7 +477,7 @@ export async function updateAllPublicDataRolesForUser(userId: string | number, r
   }
 }
 
-export async function revokeSession(res: BlitzApiResponse, handle: string): Promise<void> {
+export async function revokeSession(res: ServerResponse, handle: string): Promise<void> {
   try {
     await config.deleteSession(handle)
   } catch (error) {
@@ -447,7 +491,7 @@ export async function revokeSession(res: BlitzApiResponse, handle: string): Prom
   setAnonymousSessionCookie(res, "", new Date(0))
 }
 
-export async function revokeMultipleSessions(res: BlitzApiResponse, sessionHandles: string[]) {
+export async function revokeMultipleSessions(res: ServerResponse, sessionHandles: string[]) {
   let revoked: string[] = []
   for (const handle of sessionHandles) {
     await revokeSession(res, handle)
@@ -456,7 +500,7 @@ export async function revokeMultipleSessions(res: BlitzApiResponse, sessionHandl
   return revoked
 }
 
-export async function revokeAllSessionsForUser(res: BlitzApiResponse, userId: string | number) {
+export async function revokeAllSessionsForUser(res: ServerResponse, userId: string | number) {
   let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
   return revokeMultipleSessions(res, sessionHandles)
 }
@@ -503,7 +547,7 @@ export async function setPrivateData(sessionKernel: SessionKernel, data: Record<
 }
 
 export async function setPublicData(
-  res: BlitzApiResponse,
+  res: ServerResponse,
   sessionKernel: SessionKernel,
   data: Record<any, any>,
 ) {
@@ -524,7 +568,7 @@ export async function setPublicData(
 // --------------------------------
 const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
 
-export const generateToken = () => crypto.randomBytes(32).toString("base64")
+export const generateToken = () => nanoid(32)
 
 export const generateEssentialSessionHandle = () => {
   return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
@@ -584,69 +628,105 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
-    if (!process.env.SESSION_SECRET_KEY) {
-      throw new Error(
-        "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
-      )
-    }
+    assert(
+      process.env.SESSION_SECRET_KEY,
+      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
+    )
+    assert(
+      process.env.SESSION_SECRET_KEY.length >= 32,
+      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
+    )
+
     return process.env.SESSION_SECRET_KEY
   } else {
     return process.env.SESSION_SECRET_KEY || "default-dev-secret"
   }
 }
 
+const JWT_NAMESPACE = "blitzjs"
+const JWT_ISSUER = "blitzjs"
+const JWT_AUDIENCE = "blitzjs"
+const JWT_ANONYMOUS_SUBJECT = "anonymous"
+const JWT_ALGORITHM = "HS256"
+
 export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  return jwtSign(payload, getSessionSecretKey(), {algorithm: "HS256"})
+  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey(), {
+    algorithm: JWT_ALGORITHM,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+    subject: JWT_ANONYMOUS_SUBJECT,
+  })
 }
 
 export const parseAnonymousSessionToken = (token: string) => {
   // This must happen outside the try/catch because it could throw an error
   // about a missing environment variable
   const secret = getSessionSecretKey()
+
   try {
-    return jwtVerify(token, secret, {algorithms: ["HS256"]}) as AnonymousSessionPayload
+    const fullPayload = jwtVerify(token, secret, {
+      algorithms: [JWT_ALGORITHM],
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+      subject: JWT_ANONYMOUS_SUBJECT,
+    })
+
+    if (typeof fullPayload === "object") {
+      return (fullPayload as any)[JWT_NAMESPACE] as AnonymousSessionPayload
+    } else {
+      return null
+    }
   } catch (error) {
     return null
   }
 }
 
-export const setSessionCookie = (res: BlitzApiResponse, sessionToken: string, expiresAt: Date) => {
+export const setSessionCookie = (res: ServerResponse, sessionToken: string, expiresAt: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,
       expires: expiresAt,
     }),
   )
 }
 
-export const setAnonymousSessionCookie = (
-  res: BlitzApiResponse,
-  token: string,
-  expiresAt?: Date,
-) => {
+export const setAnonymousSessionCookie = (res: ServerResponse, token: string, expiresAt?: Date) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,
       expires: expiresAt,
     }),
   )
 }
 
-export const setCookie = (res: BlitzApiResponse, cookie: string) => {
+export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+      path: "/",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      sameSite: true,
+    }),
+  )
+}
+
+export const setCookie = (res: ServerResponse, cookie: string) => {
   append(res, "Set-Cookie", cookie)
 }
 
-export const setHeader = (res: BlitzApiResponse, name: string, value: string) => {
+export const setHeader = (res: ServerResponse, name: string, value: string) => {
   res.setHeader(name, value)
-  ;(res as any)._blitz[name] = value
+  if ("_blitz" in res) {
+    ;(res as any)._blitz[name] = value
+  }
 }
 
 /**
@@ -656,11 +736,11 @@ export const setHeader = (res: BlitzApiResponse, name: string, value: string) =>
  *
  *    append(res, 'Set-Cookie', 'foo=bar; Path=/; HttpOnly');
  *
- * @param {BlitzApiResponse} res
+ * @param {ServerResponse} res
  * @param {string} field
  * @param {string| string[]} val
  */
-export function append(res: BlitzApiResponse, field: string, val: string | string[]) {
+export function append(res: ServerResponse, field: string, val: string | string[]) {
   let prev: string | string[] | undefined = res.getHeader(field) as string | string[] | undefined
   let value = val
 
