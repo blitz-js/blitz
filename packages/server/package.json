@@ -33,6 +33,7 @@
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.2",
+    "nanoid": "3.1.10",
     "date-fns": "2.14.0",
     "detect-port": "1.3.0",
     "fast-glob": "3.2.2",
