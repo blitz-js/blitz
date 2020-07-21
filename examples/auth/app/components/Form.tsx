@@ -17,11 +17,13 @@ export function Form<FormValues extends Record<string, unknown>>({
   children,
   submitText,
   schema,
+  initialValues,
   onSubmit,
   ...props
 }: FormProps<FormValues>) {
   return (
     <FinalForm<FormValues>
+      initialValues={initialValues}
       validate={(values) => {
         if (!schema) return
         try {
@@ -53,7 +55,6 @@ export function Form<FormValues extends Record<string, unknown>>({
           `}</style>
         </form>
       )}
-      {...props}
     />
   )
 }

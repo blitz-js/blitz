@@ -14,6 +14,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <h1>Login</h1>
 
       <Form<LoginInputType>
+        submitText="Log In"
         schema={LoginInput}
         initialValues={{email: undefined, password: undefined}}
         onSubmit={async (values) => {
@@ -31,7 +32,6 @@ export const LoginForm = (props: LoginFormProps) => {
             }
           }
         }}
-        submitText="Log In"
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
