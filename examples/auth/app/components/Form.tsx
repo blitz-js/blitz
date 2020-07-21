@@ -28,7 +28,6 @@ export function Form<FormValues extends Record<string, unknown>>({
   ...props
 }: FormProps<FormValues>) {
   const ctx = useForm<FormValues>({
-    // TODO: try onChange
     mode: "onBlur",
     resolver: async (values) => {
       try {

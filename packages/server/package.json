@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.16.5-canary.1",
+  "version": "0.16.5-canary.4",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -28,8 +28,8 @@
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/display": "0.16.5-canary.1",
-    "@blitzjs/file-pipeline": "0.16.5-canary.1",
+    "@blitzjs/display": "0.16.5-canary.4",
+    "@blitzjs/file-pipeline": "0.16.5-canary.4",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.2",
@@ -42,8 +42,9 @@
     "gulp-if": "3.0.0",
     "hasha": "5.2.0",
     "jsonwebtoken": "8.5.1",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "merge-stream": "2.0.0",
+    "nanoid": "3.1.10",
     "next": "9.4.4",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.2.0",
@@ -64,7 +65,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.16.5-canary.1"
+    "@blitzjs/core": "0.16.5-canary.4"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

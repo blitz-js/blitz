@@ -16,6 +16,7 @@ export const LoginForm = (props: LoginFormProps) => {
       <Form<LoginInputType>
         submitText="Log In"
         schema={LoginInput}
+        initialValues={{email: undefined, password: undefined}}
         onSubmit={async (values) => {
           try {
             await login({email: values.email, password: values.password})

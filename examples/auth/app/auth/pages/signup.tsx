@@ -18,7 +18,7 @@ const SignupPage: BlitzPage = () => {
         <h1>Create an Account</h1>
 
         <Form<SignupInputType>
-          submitText="Log In"
+          submitText="Create Account"
           schema={SignupInput}
           onSubmit={async (values) => {
             try {
