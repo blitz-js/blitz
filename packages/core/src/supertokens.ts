@@ -113,7 +113,7 @@ export const parsePublicDataToken = (token: string) => {
 const emptyPublicData: PublicData = {userId: null, roles: []}
 
 export const publicDataStore = {
-  key: "LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN",
+  key: LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN,
   observable: BadBehavior<PublicData>(),
   initialize() {
     // Set default value
