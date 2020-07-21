@@ -3,7 +3,18 @@ import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import * as TransformFileExecutor from "./executors/file-transform-executor"
 
-export function RecipeBuilder() {
+export interface RecipeBuilder {
+  setName(name: string): RecipeBuilder
+  setDescription(description: string): RecipeBuilder
+  setOwner(owner: string): RecipeBuilder
+  setRepoLink(repoLink: string): RecipeBuilder
+  addAddDependenciesStep(step: Omit<AddDependencyExecutor.Config, "stepType">): RecipeBuilder
+  addNewFilesStep(step: Omit<NewFileExecutor.Config, "stepType">): RecipeBuilder
+  addTransformFilesStep(step: Omit<TransformFileExecutor.Config, "stepType">): RecipeBuilder
+  build(): RecipeExecutor<any>
+}
+
+export function RecipeBuilder(): RecipeBuilder {
   const steps: ExecutorConfigUnion[] = []
   const meta: Partial<RecipeMeta> = {}
 
