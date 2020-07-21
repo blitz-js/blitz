@@ -1,6 +1,6 @@
 import React from "react"
 import {LabeledTextField} from "app/components/LabeledTextField"
-import {Form} from "app/components/Form"
+import {Form, FORM_ERROR} from "app/components/Form"
 import login from "app/auth/mutations/login"
 import {LoginInput, LoginInputType} from "app/auth/validations"
 
@@ -22,16 +22,12 @@ export const LoginForm = (props: LoginFormProps) => {
             props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {
-              setError("form", {
-                type: "manual",
-                message: "Sorry, those credentials are invalid",
-              })
+              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
-              setError("form", {
-                type: "manual",
-                message:
+              return {
+                [FORM_ERROR]:
                   "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
-              })
+              }
             }
           }
         }}
