@@ -1,16 +1,8 @@
 import {SessionContext} from "blitz"
 import {authenticateUser} from "app/auth"
-import * as z from "zod"
+import {LoginInput, LoginInputType} from "../validations"
 
-export const LoginInput = z.object({
-  email: z.string(),
-  password: z.string(),
-})
-
-export default async function login(
-  input: z.infer<typeof LoginInput>,
-  ctx: {session?: SessionContext} = {},
-) {
+export default async function login(input: LoginInputType, ctx: {session?: SessionContext} = {}) {
   // This throws an error if input is invalid
   const {email, password} = LoginInput.parse(input)
 
