@@ -16,7 +16,8 @@ import {Db} from "../../src/commands/db"
 let schemaArg: string
 let prismaBin: string
 let migrateSaveParams: any[]
-let migrateUpParams: any[]
+let migrateUpDevParams: any[]
+let migrateUpProdParams: any[]
 beforeAll(async () => {
   schemaArg = `--schema=${path.join(process.cwd(), "db", "schema.prisma")}`
   prismaBin = await resolveBinAsync("@prisma/cli", "prisma")
@@ -26,14 +27,16 @@ beforeAll(async () => {
     ["migrate", "save", schemaArg, "--create-db", "--experimental"],
     {stdio: "inherit"},
   ]
-  migrateUpParams = [
+  migrateUpDevParams = [
     prismaBin,
     ["migrate", "up", schemaArg, "--create-db", "--experimental"],
     {stdio: "inherit"},
   ]
-  if (process.env.NODE_ENV === "production") {
-    migrateUpParams[1].push("--auto-approve")
-  }
+  migrateUpProdParams = [
+    prismaBin,
+    ["migrate", "up", schemaArg, "--create-db", "--experimental", "--auto-approve"],
+    {stdio: "inherit"},
+  ]
 })
 
 describe("Db command", () => {
@@ -52,7 +55,7 @@ describe("Db command", () => {
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
 
-    expect(spawn).toBeCalledWith(...migrateUpParams)
+    expect(spawn).toBeCalledWith(...migrateUpDevParams)
   }
 
   function expectProductionDbMigrateOutcome() {
@@ -61,7 +64,7 @@ describe("Db command", () => {
     // following expection is not working
     //expect(onSpy).toHaveBeenCalledWith(0);
 
-    expect(spawn).toBeCalledWith(...migrateUpParams)
+    expect(spawn).toBeCalledWith(...migrateUpProdParams)
   }
 
   it("runs db help when no command given", async () => {
