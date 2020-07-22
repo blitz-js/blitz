@@ -2,6 +2,11 @@ const {sessionMiddleware, unstable_simpleRolesIsAuthorized} = require("@blitzjs/
 
 module.exports = {
   middleware: [
+    (req, res, next) => {
+      console.log("REFERER", req.headers.referer)
+      res.blitzCtx.referer = req.headers.referer
+      return next()
+    },
     sessionMiddleware({
       unstable_isAuthorized: unstable_simpleRolesIsAuthorized,
     }),
