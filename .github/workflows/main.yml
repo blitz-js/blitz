@@ -39,7 +39,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache Node.js modules
         id: yarn-cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -70,7 +70,6 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache Node.js modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
@@ -111,7 +110,6 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache Node.js modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
