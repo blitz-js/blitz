@@ -40,7 +40,7 @@ function assert(condition: any, message: string): asserts condition {
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/server/__db.js")
+  const path = join(projectRoot, ".next/__db.js")
   return require(path).default
 }
 
