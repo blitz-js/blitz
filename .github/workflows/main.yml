@@ -45,6 +45,7 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -79,6 +80,7 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -120,6 +122,7 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
