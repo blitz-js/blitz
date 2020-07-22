@@ -123,7 +123,7 @@ export class Install extends Command {
     process.chdir(recipeDir)
 
     const repoName = repoFullName.split("/")[1]
-    // `tar` top-level filder is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
+    // `tar` top-level filter is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
     // within that folder
     const extractPath = subdirectory ? [`${repoName}-${defaultBranch}/${subdirectory}`] : undefined
     const depth = subdirectory ? subdirectory.split("/").length + 1 : 1

@@ -774,6 +774,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rubenmoya",
+      "name": "Rubén Moya",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/905225?v=4",
+      "profile": "https://rubenmoya.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
