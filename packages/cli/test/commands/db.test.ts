@@ -31,6 +31,9 @@ beforeAll(async () => {
     ["migrate", "up", schemaArg, "--create-db", "--experimental"],
     {stdio: "inherit"},
   ]
+  if (process.env.NODE_ENV === "production") {
+    migrateUpParams[1].push("--auto-approve")
+  }
 })
 
 describe("Db command", () => {
