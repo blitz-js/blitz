@@ -37,7 +37,7 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
         with:
@@ -70,7 +70,7 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
         with:
@@ -110,7 +110,7 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
         with:
