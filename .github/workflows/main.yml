@@ -45,7 +45,8 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
@@ -79,7 +80,8 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
@@ -120,7 +122,8 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
             /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
