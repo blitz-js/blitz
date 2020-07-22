@@ -37,11 +37,14 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -68,14 +71,14 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -109,14 +112,14 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            # **/node_modules
+            **/node_modules
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
