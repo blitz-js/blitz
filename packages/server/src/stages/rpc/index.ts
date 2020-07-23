@@ -90,12 +90,12 @@ let db
 let connect
 try {
   db = require('db').default
-  connect = require('db').connect ?? db.connect
+  connect = require('db').connect ?? () => db.connect()
 }catch(err){}
 export default rpcApiHandler(
   resolverModule,
   getAllMiddlewareForModule(resolverModule),
-  () => db && connect?.(),
+  () => db && connect(),
 )
 export const config = {
   api: {
