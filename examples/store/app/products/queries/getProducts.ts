@@ -15,6 +15,7 @@ export default async function getProducts(
   {where, orderBy, skip, cursor, take}: GetProductsInput,
   ctx: Record<any, unknown> = {},
 ) {
+  console.log("ctx", ctx)
   if (ctx.referer) {
     console.log("HTTP referer:", ctx.referer)
   }

@@ -35,6 +35,8 @@ export const useIsDevPrerender = () => {
   }
 }
 
+const isServer = typeof window === "undefined"
+
 export function useQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
@@ -50,9 +52,13 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = useIsDevPrerender()
-    ? emptyQueryFn
-    : ((queryFn as unknown) as EnhancedRpcFunction)
+  const queryRpcFn =
+    useIsDevPrerender() || isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
+
+  console.log("prerender", useIsDevPrerender())
+  console.log("window", typeof window)
+  console.log("isServer", isServer)
+  console.log("queryRpcFn", queryRpcFn)
 
   const {data, ...queryRest} = useReactQuery({
     queryKey: [
