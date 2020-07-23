@@ -1,4 +1,5 @@
 import db, {FindManyUserArgs} from "db"
+import {SessionContext} from "blitz"
 
 type GetUsersInput = {
   where?: FindManyUserArgs["where"]
@@ -12,8 +13,10 @@ type GetUsersInput = {
 
 export default async function getUsers(
   {where, orderBy, cursor, take, skip}: GetUsersInput,
-  ctx: Record<any, any> = {},
+  ctx: {session?: SessionContext} = {},
 ) {
+  ctx.session?.authorize(["admin"])
+
   const users = await db.user.findMany({
     where,
     orderBy,

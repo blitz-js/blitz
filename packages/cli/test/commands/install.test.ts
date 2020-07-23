@@ -1,17 +1,16 @@
 import {Install, RecipeLocation} from "../../src/commands/install"
 import * as path from "path"
-import tempInstaller from "../__fixtures__/installer"
-
-jest.mock("../__fixtures__/installer")
-jest.mock("@blitzjs/installer")
+import tempRecipe from "../__fixtures__/installer"
 
 describe("`install` command", () => {
   afterAll(() => {
     jest.resetAllMocks()
   })
+
   it("runs local installer", async (done) => {
+    jest.spyOn(tempRecipe, "run")
     await Install.run([path.resolve(__dirname, "../__fixtures__/installer")])
-    expect(tempInstaller.run).toHaveBeenCalledWith({})
+    expect(tempRecipe.run).toHaveBeenCalledWith({})
     done()
   })
 

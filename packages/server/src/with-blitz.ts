@@ -21,7 +21,13 @@ export function withBlitz(nextConfig: any) {
           ...(normalizedConfig.experimental || {}),
         },
         webpack(config: any, options: Record<any, any>) {
-          if (!options.isServer) {
+          if (options.isServer) {
+            const originalEntry = config.entry
+            config.entry = async () => ({
+              ...(await originalEntry()),
+              "../__db.js": "./db/index",
+            })
+          } else {
             config.module = config.module || {}
             config.module.rules = config.module.rules || []
             config.module.rules.push({test: /_resolvers/, use: {loader: "null-loader"}})
