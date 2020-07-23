@@ -34,7 +34,7 @@
     "postpack": "rimraf packages/blitz/README.md",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
-    "publish-danger": "yarn && lerna publish --canary --preid danger --pre-dist-tag danger --allow-branch * --force-publish",
+    "publish-danger": "yarn && lerna publish --canary --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {
