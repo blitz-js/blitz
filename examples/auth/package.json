@@ -6,7 +6,10 @@
     "studio": "blitz db studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "blitz build"
+    "test": "blitz build",
+    "analyze": "cross-env ANALYZE=true blitz build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server blitz build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser blitz build"
   },
   "browserslist": [
     "defaults"
@@ -56,7 +59,9 @@
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
-    "typescript": "3.9.5"
+    "typescript": "3.9.5",
+    "@next/bundle-analyzer": "latest",
+    "cross-env": "latest"
   },
   "private": true
 }
