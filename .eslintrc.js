@@ -28,7 +28,7 @@ module.exports = {
   ignorePatterns: ["packages/cli/", "packages/generator/templates"],
   overrides: [
     {
-      files: ["examples/**", "packages/gui/**"],
+      files: ["examples/**", "packages/gui/**", "recipes/**"],
       rules: {
         "import/no-default-export": "off",
         "unicorn/filename-case": "off",

@@ -27,6 +27,7 @@ import {
   HEADER_CSRF_ERROR,
   MiddlewareResponse,
 } from "@blitzjs/core"
+import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
@@ -38,9 +39,15 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
+// ----------------------------------------------------------------------------------------
+// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// This line ensures that blitz.config.js is loaded
+// ----------------------------------------------------------------------------------------
+getConfig()
+
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/server/__db.js")
+  const path = join(projectRoot, ".next/__db.js")
   return require(path).default
 }
 

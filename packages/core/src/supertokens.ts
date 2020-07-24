@@ -114,7 +114,7 @@ const emptyPublicData: PublicData = {userId: null, roles: []}
 
 let LOCK = false
 export const publicDataStore = {
-  key: "LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN",
+  key: LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN,
   observable: BadBehavior<PublicData>(),
   initialize() {
     if (typeof window !== "undefined") {

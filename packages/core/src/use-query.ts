@@ -2,7 +2,6 @@ import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
-import {useRouter} from "next/router"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
@@ -18,20 +17,16 @@ export const emptyQueryFn: EnhancedRpcFunction = (() => {
   return fn
 })()
 
+const isServer = typeof window === "undefined"
+
+// NOTE - this is only for use inside useQuery
 export const useIsDevPrerender = () => {
-  const router = useRouter()
   if (process.env.NODE_ENV === "production") {
     return false
   } else {
-    const currentRouteHasParameters = /\[.*\]/.test(router.pathname)
-    const queryKeys = Object.keys(router.query)
-    // This checks if query == {} || query == {amp: any}
-    const queryIsEmpty =
-      queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp")
-
-    const isDevPrerender = currentRouteHasParameters && queryIsEmpty
-
-    return isDevPrerender
+    // useQuery is only for client-side data fetching, so if it's running on the
+    // server, it's for pre-render
+    return isServer
   }
 }
 
