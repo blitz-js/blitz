@@ -1,6 +1,6 @@
-import crypto from "crypto"
 import hasha, {HashaInput} from "hasha"
 import cookie from "cookie"
+import {nanoid} from "nanoid"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {
   BlitzApiRequest,
@@ -20,10 +20,14 @@ import {
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
+  COOKIE_CSRF_TOKEN,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
+  HEADER_CSRF_ERROR,
+  MiddlewareResponse,
 } from "@blitzjs/core"
+import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
 import {join} from "path"
 import {addMinutes, isPast, differenceInMinutes} from "date-fns"
@@ -35,9 +39,15 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
+// ----------------------------------------------------------------------------------------
+// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// This line ensures that blitz.config.js is loaded
+// ----------------------------------------------------------------------------------------
+process.nextTick(getConfig)
+
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/server/__db.js")
+  const path = join(projectRoot, ".next/__db.js")
   return require(path).default
 }
 
@@ -94,8 +104,9 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   } as Required<SessionConfig>
 
   return async (req, res, next) => {
-    if (req.method !== "HEAD") {
-      res.blitzCtx.session = await getSessionContext(req, res)
+    if (req.method !== "HEAD" && !res.blitzCtx.session) {
+      // This function also saves session to res.blitzCtx
+      await getSessionContext(req, res)
     }
     return next()
   }
@@ -110,6 +121,9 @@ type SessionKernel = {
 
 const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
   "cookies" in req
+const isMiddlewareApResponse = (
+  res: MiddlewareResponse | ServerResponse,
+): res is MiddlewareResponse => "blitzCtx" in res
 
 export async function getSessionContext(
   req: BlitzApiRequest | IncomingMessage,
@@ -121,6 +135,10 @@ export async function getSessionContext(
   }
   assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
 
+  if (isMiddlewareApResponse(res) && res.blitzCtx.session) {
+    return res.blitzCtx.session as SessionContext
+  }
+
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
@@ -131,7 +149,12 @@ export async function getSessionContext(
     sessionKernel = await createAnonymousSession(res)
   }
 
-  return new SessionContextClass(res, sessionKernel)
+  const sessionContext = new SessionContextClass(res, sessionKernel)
+  if (!("blitzCtx" in res)) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+  ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
+  return sessionContext
 }
 
 export class SessionContextClass implements SessionContext {
@@ -236,6 +259,7 @@ export async function getSession(
     }
 
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
@@ -293,6 +317,7 @@ export async function getSession(
     }
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
+      setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
 
@@ -333,7 +358,7 @@ export async function createNewSession(
     const publicDataToken = createPublicDataToken(publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setCSRFCookie(res, antiCSRFToken)
     setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(res, "", new Date(0))
@@ -385,7 +410,7 @@ export async function createNewSession(
     })
 
     setSessionCookie(res, sessionToken, expiresAt)
-    setHeader(res, HEADER_CSRF, antiCSRFToken)
+    setCSRFCookie(res, antiCSRFToken)
     setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(res, "", new Date(0))
@@ -550,7 +575,7 @@ export async function setPublicData(
 // --------------------------------
 const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
 
-export const generateToken = () => crypto.randomBytes(32).toString("base64")
+export const generateToken = () => nanoid(32)
 
 export const generateEssentialSessionHandle = () => {
   return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
@@ -685,6 +710,17 @@ export const setAnonymousSessionCookie = (res: ServerResponse, token: string, ex
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,
       expires: expiresAt,
+    }),
+  )
+}
+
+export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+      path: "/",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      sameSite: true,
     }),
   )
 }

@@ -25,10 +25,8 @@ export function withBlitz(nextConfig: any) {
             const originalEntry = config.entry
             config.entry = async () => ({
               ...(await originalEntry()),
-              "./__db.js": "./db/index",
+              "../__db.js": "./db/index",
             })
-            config.watchOptions = config.watchOptions || {ignored: []}
-            config.watchOptions.ignored.push("__db.js")
           } else {
             config.module = config.module || {}
             config.module.rules = config.module.rules || []

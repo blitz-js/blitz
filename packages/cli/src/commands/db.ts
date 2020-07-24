@@ -42,9 +42,11 @@ export const runPrismaGeneration = async ({silent = false} = {}) => {
 }
 
 const runMigrateUp = (prismaBin: string, resolve: (value?: unknown) => void) => {
-  const cp = spawn(prismaBin, ["migrate", "up", schemaArg, "--create-db", "--experimental"], {
-    stdio: "inherit",
-  })
+  const args = ["migrate", "up", schemaArg, "--create-db", "--experimental"]
+  if (process.env.NODE_ENV === "production") {
+    args.push("--auto-approve")
+  }
+  const cp = spawn(prismaBin, args, {stdio: "inherit"})
   cp.on("exit", async (code) => {
     if (code === 0) {
       await runPrismaGeneration()

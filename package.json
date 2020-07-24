@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "recipes/*"
     ],
     "nohoist": [
       "**/@prisma",
@@ -28,11 +29,12 @@
     "testonly:packages": "lerna run test --stream --scope @blitzjs/*",
     "testonly:examples": "lerna run test --stream --scope @examples/*",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-prep": "yarn run reset && yarn run test",
+    "publish-prep": "lerna run clean && yarn && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
+    "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {

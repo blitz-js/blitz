@@ -37,12 +37,16 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+            /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
@@ -68,15 +72,16 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
@@ -109,15 +114,16 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Node.js modules
+      - name: Cache node_modules
         id: yarn-cache
-        if: ${{ !startsWith(runner.os, 'windows') }}
         uses: actions/cache@v2
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            # **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            **/node_modules
+            /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies

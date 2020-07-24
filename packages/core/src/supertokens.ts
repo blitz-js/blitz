@@ -10,11 +10,13 @@ export const SESSION_TOKEN_VERSION_0 = "v0"
 export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
 export const COOKIE_SESSION_TOKEN = "sSessionToken"
 export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
+export const COOKIE_CSRF_TOKEN = "sAntiCrfToken"
 
 // Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
 export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 export const HEADER_SESSION_REVOKED = "session-revoked"
+export const HEADER_CSRF_ERROR = "csrf-error"
 
 export const LOCALSTORAGE_PREFIX = "_blitz-"
 
@@ -90,25 +92,7 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 
-export const antiCSRFStore = {
-  key: LOCALSTORAGE_PREFIX + HEADER_CSRF,
-  setToken(token: string | undefined | null) {
-    if (token) {
-      localStorage.setItem(this.key, token)
-    }
-  },
-  getToken() {
-    try {
-      return localStorage.getItem(this.key)
-    } catch (error) {
-      //ignore any errors
-      return null
-    }
-  },
-  clear() {
-    localStorage.removeItem(this.key)
-  },
-}
+export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed - token is empty")
@@ -129,7 +113,7 @@ export const parsePublicDataToken = (token: string) => {
 const emptyPublicData: PublicData = {userId: null, roles: []}
 
 export const publicDataStore = {
-  key: "LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN",
+  key: LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN,
   observable: BadBehavior<PublicData>(),
   initialize() {
     // Set default value
@@ -191,6 +175,19 @@ export const useSession = () => {
   }, [])
 
   return publicData
+}
+
+// Taken from https://github.com/HenrikJoreteg/cookie-getter
+// simple commonJS cookie reader, best perf according to http://jsperf.com/cookie-parsing
+export function readCookie(name: string) {
+  if (typeof document === "undefined") return null
+  const cookie = document.cookie
+  const setPos = cookie.search(new RegExp("\\b" + name + "="))
+  const stopPos = cookie.indexOf(";", setPos)
+  let res
+  if (!~setPos) return null
+  res = decodeURIComponent(cookie.substring(setPos, ~stopPos ? stopPos : undefined).split("=")[1])
+  return res.charAt(0) === "{" ? JSON.parse(res) : res
 }
 
 /*

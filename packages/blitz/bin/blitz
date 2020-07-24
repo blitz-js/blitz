@@ -3,6 +3,10 @@ const spawn = require('cross-spawn')
 
 const nodeOpts = ['--experimental-repl-await']
 
+if (process.env.INSPECT_BRK === 'true') {
+  nodeOpts.push('--inspect-brk')
+}
+
 try {
   const cliBin = require.resolve('../dist/cli')
   const binArgs = process.argv.slice(2)
