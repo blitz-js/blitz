@@ -9,6 +9,7 @@ import {
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   CSRFTokenMismatchError,
+  HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
 
 type Options = {
@@ -37,6 +38,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 
   if (result.headers) {
     for (const [name] of result.headers.entries()) {
+      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
       if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
       if (name.toLowerCase() === HEADER_CSRF_ERROR) {
         throw new CSRFTokenMismatchError()

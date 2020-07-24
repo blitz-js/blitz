@@ -25,6 +25,7 @@ import {
   HEADER_CSRF,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
+  HEADER_PUBLIC_DATA_TOKEN,
   MiddlewareResponse,
 } from "@blitzjs/core"
 import {getConfig} from "@blitzjs/config"
@@ -726,6 +727,7 @@ export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
 }
 
 export const setPublicDataCookie = (res: ServerResponse, publicDataToken: string) => {
+  setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
     res,
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
