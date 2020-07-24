@@ -11,6 +11,7 @@ export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
 export const COOKIE_SESSION_TOKEN = "sSessionToken"
 export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 export const COOKIE_CSRF_TOKEN = "sAntiCrfToken"
+export const COOKIE_PUBLIC_DATA_TOKEN = "sPublicDataToken"
 
 // Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
@@ -93,6 +94,7 @@ export class CSRFTokenMismatchError extends Error {
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
+export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed - token is empty")
@@ -127,19 +129,8 @@ export const publicDataStore = {
       })
     }
   },
-  setToken(token: string | undefined | null) {
-    if (token) {
-      localStorage.setItem(this.key, token)
-      this.updateState()
-    }
-  },
   getToken() {
-    try {
-      return localStorage.getItem(this.key)
-    } catch (error) {
-      //ignore any errors
-      return null
-    }
+    return getPublicDataToken()
   },
   getData(mount = false) {
     let publicDataToken

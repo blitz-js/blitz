@@ -21,8 +21,8 @@ import {
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
   COOKIE_CSRF_TOKEN,
+  COOKIE_PUBLIC_DATA_TOKEN,
   HEADER_CSRF,
-  HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   MiddlewareResponse,
@@ -359,7 +359,7 @@ export async function createNewSession(
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
     setCSRFCookie(res, antiCSRFToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(res, "", new Date(0))
 
@@ -411,7 +411,7 @@ export async function createNewSession(
 
     setSessionCookie(res, sessionToken, expiresAt)
     setCSRFCookie(res, antiCSRFToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(res, "", new Date(0))
 
@@ -447,14 +447,14 @@ export async function refreshSession(res: ServerResponse, sessionKernel: Session
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
   } else if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
 
     setSessionCookie(res, sessionToken, expiresAt)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
 
     const hashedSessionToken = hash(sessionToken)
 
@@ -718,6 +718,17 @@ export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+      path: "/",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      sameSite: true,
+    }),
+  )
+}
+
+export const setPublicDataCookie = (res: ServerResponse, publicDataToken: string) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: true,

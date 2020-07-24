@@ -40,10 +40,16 @@
     "react-dom": "0.0.0-experimental-33c3af284",
     "react-final-form": "6.5.1",
     "secure-password": "4.0.0",
-    "zod": "1.10.0"
+    "zod": "1.10.0",
+    "passport": "0.4.1",
+    "passport-twitter": "1.0.4",
+    "cookie-session": "1.4.0"
   },
   "devDependencies": {
     "@types/react": "16.9.38",
+    "@types/passport": "1.0.4",
+    "@types/passport-twitter": "1.0.36",
+    "@types/cookie-session": "2.0.41",
     "@types/secure-password": "3.1.0",
     "@typescript-eslint/eslint-plugin": "2.34.1-alpha.2",
     "@typescript-eslint/parser": "2.34.1-alpha.2",

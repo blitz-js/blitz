@@ -6,7 +6,6 @@ import {
   getAntiCSRFToken,
   publicDataStore,
   HEADER_CSRF,
-  HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   CSRFTokenMismatchError,
@@ -37,8 +36,7 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
   })
 
   if (result.headers) {
-    for (const [name, value] of result.headers.entries()) {
-      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.setToken(value)
+    for (const [name] of result.headers.entries()) {
       if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
       if (name.toLowerCase() === HEADER_CSRF_ERROR) {
         throw new CSRFTokenMismatchError()

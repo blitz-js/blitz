@@ -5,14 +5,12 @@ import {
   connectMiddleware,
   Middleware,
   SessionContext,
-  HEADER_CSRF,
-  HEADER_PUBLIC_DATA_TOKEN,
 } from "blitz"
 import passport from "passport"
 import {Strategy as TwitterStrategy} from "passport-twitter"
 import invariant from "tiny-invariant"
 import cookieSession from "cookie-session"
-import db, {User} from "db"
+import db from "db"
 
 export default async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
   const middleware: Middleware[] = [
@@ -96,8 +94,7 @@ export default async function authHandler(req: BlitzApiRequest, res: BlitzApiRes
             if (!user) throw new Error("Twitter OAuth: No user found")
 
             await session.create(user)
-            const publicDataToken = (res as any)._blitz[HEADER_PUBLIC_DATA_TOKEN]
-            res.setHeader("Location", `/?${HEADER_PUBLIC_DATA_TOKEN}=${publicDataToken}`)
+            res.setHeader("Location", `/`)
             res.status(302).end()
           })(req, res, next)
         }),

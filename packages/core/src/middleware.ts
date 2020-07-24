@@ -28,8 +28,8 @@ export type Middleware = (
 ) => Promise<void> | void
 
 export type ConnectMiddleware = (
-  req: IncomingMessage & MiddlewareRequest,
-  res: ServerResponse & MiddlewareResponse,
+  req: IncomingMessage | MiddlewareRequest,
+  res: ServerResponse | MiddlewareResponse,
   next: (error?: Error) => void,
 ) => void
 
@@ -155,8 +155,8 @@ export function compose(middleware: Middleware[]) {
  * assume that it's synchronous and invoke `next` ourselves
  */
 function noCallbackHandler(
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
+  req: IncomingMessage,
+  res: ServerResponse,
   next: MiddlewareNext,
   middleware: ConnectMiddleware,
 ) {
@@ -171,8 +171,8 @@ function noCallbackHandler(
  * completion will stall
  */
 function withCallbackHandler(
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
+  req: IncomingMessage,
+  res: ServerResponse,
   next: MiddlewareNext,
   middleware: ConnectMiddleware,
 ) {
