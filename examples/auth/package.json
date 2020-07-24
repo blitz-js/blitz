@@ -8,8 +8,8 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "blitz build",
     "analyze": "cross-env ANALYZE=true blitz build",
-    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server blitz build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser blitz build"
   },
   "browserslist": [
     "defaults"
