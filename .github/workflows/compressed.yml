@@ -3,7 +3,9 @@ name: Compressed Size
 on:
   pull_request:
     branches:
-      - all
+      - master
+  registry_package:
+    types: [published]
 
 jobs:
   build:
