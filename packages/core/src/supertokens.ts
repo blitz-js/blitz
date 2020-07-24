@@ -114,7 +114,6 @@ export const parsePublicDataToken = (token: string) => {
 
 const emptyPublicData: PublicData = {userId: null, roles: []}
 
-let LOCK = false
 export const publicDataStore = {
   key: LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN,
   observable: BadBehavior<PublicData>(),
@@ -132,37 +131,8 @@ export const publicDataStore = {
   getToken() {
     return getPublicDataToken()
   },
-  getData(mount = false) {
-    let publicDataToken
-
-    // In case of OAuth login, the publicDataToken is set via query parameter
-    const url = new URL(window.location.href)
-    const query = new URLSearchParams(url.search)
-    if (mount && !LOCK && query.get(HEADER_PUBLIC_DATA_TOKEN)) {
-      // TODO
-      // TODO move this out of here into a standalone function that can only run once on mount
-      // TODO
-      // TODO
-      LOCK = true
-      publicDataToken = query.get(HEADER_PUBLIC_DATA_TOKEN)
-
-      query.delete(HEADER_PUBLIC_DATA_TOKEN)
-      url.search = query.toString()
-      console.log("new url:", url.href)
-      // window.history.replaceState(
-      //   {
-      //     url: url.href,
-      //   },
-      //   document.title,
-      // )
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      // Router.replace({
-      //   pathname: url.pathname,
-      //   query: url.search,
-      // })
-    } else {
-      publicDataToken = this.getToken()
-    }
+  getData() {
+    const publicDataToken = this.getToken()
 
     if (!publicDataToken) {
       return emptyPublicData
@@ -191,7 +161,7 @@ export const useSession = () => {
 
   useEffect(() => {
     // Initialize on mount
-    setPublicData(publicDataStore.getData(true))
+    setPublicData(publicDataStore.getData())
     const subscription = publicDataStore.observable.subscribe(setPublicData)
     return subscription.unsubscribe
   }, [])

@@ -84,6 +84,15 @@ const Home = () => (
           align-items: center;
         }
 
+        main {
+          padding: 5rem 0;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+
         main p {
           font-size: 1.2rem;
         }
