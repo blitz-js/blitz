@@ -55,6 +55,7 @@ const getDb = () => {
 const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
+  sameSite: "lax",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
@@ -696,7 +697,7 @@ export const setSessionCookie = (res: ServerResponse, sessionToken: string, expi
       path: "/",
       httpOnly: true,
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
       expires: expiresAt,
     }),
   )
@@ -709,7 +710,7 @@ export const setAnonymousSessionCookie = (res: ServerResponse, token: string, ex
       path: "/",
       httpOnly: true,
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
       expires: expiresAt,
     }),
   )
@@ -721,7 +722,7 @@ export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
     }),
   )
 }
@@ -733,7 +734,7 @@ export const setPublicDataCookie = (res: ServerResponse, publicDataToken: string
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
     }),
   )
 }
