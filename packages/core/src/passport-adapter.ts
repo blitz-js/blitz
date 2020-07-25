@@ -1,5 +1,10 @@
 import {BlitzApiRequest, BlitzApiResponse} from "."
-import {handleRequestWithMiddleware, connectMiddleware, Middleware} from "./middleware"
+import {
+  getAllMiddlewareForModule,
+  handleRequestWithMiddleware,
+  connectMiddleware,
+  Middleware,
+} from "./middleware"
 import {SessionContext, PublicData} from "./supertokens"
 import type {Strategy} from "passport"
 
@@ -129,6 +134,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       )
     }
 
-    await handleRequestWithMiddleware(req, res, middleware)
+    const globalMiddleware = getAllMiddlewareForModule({} as any)
+    await handleRequestWithMiddleware(req, res, [...globalMiddleware, ...middleware])
   }
 }

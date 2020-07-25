@@ -28,8 +28,8 @@ export type Middleware = (
 ) => Promise<void> | void
 
 export type ConnectMiddleware = (
-  req: IncomingMessage | MiddlewareRequest,
-  res: ServerResponse | MiddlewareResponse,
+  req: IncomingMessage,
+  res: ServerResponse,
   next: (error?: Error) => void,
 ) => void
 
@@ -38,33 +38,28 @@ export type ResolverModule = {
   middleware?: Middleware[]
 }
 
-export function getGlobalMiddleware(): Middleware[] {
+export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
+  const middleware: Middleware[] = []
   const config = getConfig()
   if (config.middleware) {
     if (!Array.isArray(config.middleware)) {
       throw new Error("'middleware' in blitz.config.js must be an array")
     }
-    return config.middleware
-  } else {
-    return []
+    middleware.push(...config.middleware)
   }
-}
-
-export function getMiddlewareForModule(resolverModule: EnhancedResolverModule): Middleware[] {
   if (resolverModule.middleware) {
     if (!Array.isArray(resolverModule.middleware)) {
       throw new Error(`'middleware' exported from ${resolverModule._meta.name} must be an array`)
     }
-    return resolverModule.middleware
-  } else {
-    return []
+    middleware.push(...resolverModule.middleware)
   }
+  return middleware
 }
 
 export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
-  middleware: Middleware[],
+  middleware: Middleware | Middleware[],
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {}
@@ -73,9 +68,12 @@ export async function handleRequestWithMiddleware(
     ;(res as any)._blitz = {}
   }
 
-  const allMiddleware: Middleware[] = [...getGlobalMiddleware(), ...middleware]
-
-  const handler = compose(allMiddleware)
+  let handler: Middleware
+  if (Array.isArray(middleware)) {
+    handler = compose(middleware)
+  } else {
+    handler = middleware
+  }
 
   try {
     await handler(req as MiddlewareRequest, res as MiddlewareResponse, (error) => {
@@ -155,8 +153,8 @@ export function compose(middleware: Middleware[]) {
  * assume that it's synchronous and invoke `next` ourselves
  */
 function noCallbackHandler(
-  req: IncomingMessage,
-  res: ServerResponse,
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
   next: MiddlewareNext,
   middleware: ConnectMiddleware,
 ) {
@@ -171,8 +169,8 @@ function noCallbackHandler(
  * completion will stall
  */
 function withCallbackHandler(
-  req: IncomingMessage,
-  res: ServerResponse,
+  req: MiddlewareRequest,
+  res: MiddlewareResponse,
   next: MiddlewareNext,
   middleware: ConnectMiddleware,
 ) {

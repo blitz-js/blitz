@@ -76,7 +76,7 @@ export default getIsomorphicRpcHandler(
 const apiHandlerTemplate = (originalPath: string) => `
 // This imports the isomorphicHandler
 import resolverModule from '${originalPath}'
-import {getMiddlewareForModule} from '@blitzjs/core'
+import {getAllMiddlewareForModule} from '@blitzjs/core'
 import {rpcApiHandler} from '@blitzjs/server'
 import path from 'path'
 
@@ -92,7 +92,7 @@ try {
 }catch(err){}
 export default rpcApiHandler(
   resolverModule,
-  getMiddlewareForModule(resolverModule),
+  getAllMiddlewareForModule(resolverModule),
   () => db && db.connect(),
 )
 export const config = {
