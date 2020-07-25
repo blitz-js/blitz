@@ -31,7 +31,7 @@ import {
 import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
 import {join} from "path"
-import {addMinutes, isPast, differenceInMinutes} from "date-fns"
+import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {IncomingMessage, ServerResponse} from "http"
@@ -703,7 +703,11 @@ export const setSessionCookie = (res: ServerResponse, sessionToken: string, expi
   )
 }
 
-export const setAnonymousSessionCookie = (res: ServerResponse, token: string, expiresAt?: Date) => {
+export const setAnonymousSessionCookie = (
+  res: ServerResponse,
+  token: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
@@ -716,18 +720,27 @@ export const setAnonymousSessionCookie = (res: ServerResponse, token: string, ex
   )
 }
 
-export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
+export const setCSRFCookie = (
+  res: ServerResponse,
+  antiCSRFToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: config.sameSite,
+      expires: expiresAt,
     }),
   )
 }
 
-export const setPublicDataCookie = (res: ServerResponse, publicDataToken: string) => {
+export const setPublicDataCookie = (
+  res: ServerResponse,
+  publicDataToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
   setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
     res,
@@ -735,6 +748,7 @@ export const setPublicDataCookie = (res: ServerResponse, publicDataToken: string
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
       sameSite: config.sameSite,
+      expires: expiresAt,
     }),
   )
 }
