@@ -11,6 +11,7 @@ export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
 export const COOKIE_SESSION_TOKEN = "sSessionToken"
 export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
 export const COOKIE_CSRF_TOKEN = "sAntiCrfToken"
+export const COOKIE_PUBLIC_DATA_TOKEN = "sPublicDataToken"
 
 // Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
@@ -42,6 +43,7 @@ export interface SessionModel extends Record<any, any> {
 export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
+  sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: string | number) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
@@ -93,6 +95,7 @@ export class CSRFTokenMismatchError extends Error {
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
+export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed - token is empty")
@@ -113,35 +116,25 @@ export const parsePublicDataToken = (token: string) => {
 const emptyPublicData: PublicData = {userId: null, roles: []}
 
 export const publicDataStore = {
-  key: LOCALSTORAGE_PREFIX + HEADER_PUBLIC_DATA_TOKEN,
+  eventKey: LOCALSTORAGE_PREFIX + "publicDataUpdated",
   observable: BadBehavior<PublicData>(),
   initialize() {
-    // Set default value
-    publicDataStore.updateState()
     if (typeof window !== "undefined") {
+      // Set default value
+      publicDataStore.updateState()
       window.addEventListener("storage", (event) => {
-        if (event.key === this.key) {
+        if (event.key === this.eventKey) {
           publicDataStore.updateState()
         }
       })
     }
   },
-  setToken(token: string | undefined | null) {
-    if (token) {
-      localStorage.setItem(this.key, token)
-      this.updateState()
-    }
-  },
   getToken() {
-    try {
-      return localStorage.getItem(this.key)
-    } catch (error) {
-      //ignore any errors
-      return null
-    }
+    return getPublicDataToken()
   },
   getData() {
     const publicDataToken = this.getToken()
+
     if (!publicDataToken) {
       return emptyPublicData
     }
@@ -155,10 +148,13 @@ export const publicDataStore = {
     return publicData
   },
   updateState() {
+    // We use localStorage as a message bus between tabs.
+    // Setting the current time in ms will cause other tabs to receive the `storage` event
+    localStorage.setItem(this.eventKey, Date.now().toString())
     publicDataStore.observable.next(this.getData())
   },
   clear() {
-    localStorage.removeItem(this.key)
+    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
     this.updateState()
   },
 }
@@ -188,6 +184,13 @@ export function readCookie(name: string) {
   if (!~setPos) return null
   res = decodeURIComponent(cookie.substring(setPos, ~stopPos ? stopPos : undefined).split("=")[1])
   return res.charAt(0) === "{" ? JSON.parse(res) : res
+}
+
+export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
+
+export const setCookie = (name: string, value: string, expires: string) => {
+  const result = `${name}=${value};path=/;expires=${expires}`
+  document.cookie = result
 }
 
 /*

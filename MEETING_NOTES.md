@@ -8,11 +8,10 @@
   - Benefits of our session managment vs rails
     - Don’t have to redirect to login page
     - Using top level error component that catches authentication errors
-    - You can login from anywhere, during sign up 
+    - You can login from anywhere, during sign up
 - Robert:
   - Waiting on Kirstina’s website designs. Desktop design is finished, but she's working on mobile design
   - Code snippet / sandbox of blitz code for the website
-
 
 # 2020-06-23 Blitz Contributor Call
 
@@ -30,8 +29,6 @@
 - Justin:
   - Updated the tutorial
   - Helped with various bug fixes
-
-
 
 # 2020-06-17 Blitz Contributor Call
 

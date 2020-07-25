@@ -1,7 +1,6 @@
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 import http from "http"
 import listen from "test-listen"
-import cookie from "cookie"
 import fetch from "isomorphic-unfetch"
 import {
   EnhancedResolverModule,
@@ -10,6 +9,7 @@ import {
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
+  COOKIE_PUBLIC_DATA_TOKEN,
   TOKEN_SEPARATOR,
   SessionContext,
 } from "@blitzjs/core"
@@ -22,6 +22,17 @@ const isIsoDate = (str: string) => {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
   var d = new Date(str)
   return d.toISOString() === str
+}
+
+export function readCookie(cookieHeader: string, name: string) {
+  const setPos = cookieHeader.search(new RegExp("\\b" + name + "="))
+  const stopPos = cookieHeader.indexOf(";", setPos)
+  let res
+  if (!~setPos) return undefined
+  res = decodeURIComponent(
+    cookieHeader.substring(setPos, ~stopPos ? stopPos : undefined).split("=")[1],
+  )
+  return res.charAt(0) === "{" ? JSON.parse(res) : res
 }
 
 type CtxWithSession = {
@@ -50,24 +61,27 @@ describe("supertokens", () => {
         body: JSON.stringify({params: {}}),
       })
 
+      const cookieHeader = res.headers.get("Set-Cookie") as string
+      const cookie = (name: string) => readCookie(cookieHeader, name)
+
       expect(res.status).toBe(200)
       expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
-      expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
+      expect(cookie(COOKIE_ANONYMOUS_SESSION_TOKEN)).not.toBeUndefined()
+      expect(cookie(COOKIE_SESSION_TOKEN)).toBe("")
+      expect(cookie(COOKIE_REFRESH_TOKEN)).toBeUndefined()
 
-      const [publicDataStr, expireAtStr] = atob(
-        res.headers.get(HEADER_PUBLIC_DATA_TOKEN) as string,
-      ).split(TOKEN_SEPARATOR)
+      expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).toBe("updated")
+      expect(cookie(COOKIE_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
+
+      const [publicDataStr, expireAtStr] = atob(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
+        TOKEN_SEPARATOR,
+      )
 
       expect(expireAtStr).toBeUndefined()
 
       const publicData = JSON.parse(publicDataStr)
       expect(publicData.userId).toBe(null)
       expect(publicData.roles.length).toBe(0)
-
-      const cookies = cookie.parse(res.headers.get("Set-Cookie") as string)
-      expect(cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]).not.toBe(undefined)
-      expect(cookies[COOKIE_SESSION_TOKEN]).toBe(undefined)
-      expect(cookies[COOKIE_REFRESH_TOKEN]).toBe(undefined)
     })
   })
 
@@ -102,8 +116,8 @@ describe("supertokens", () => {
       expect(publicData.userId).toBe(1)
       expect(publicData.roles[0]).toBe("admin")
 
-      const cookies = cookie.parse(res.headers.get("Set-Cookie") as string)
-      expect(cookies[COOKIE_SESSION_TOKEN]).not.toBe(undefined)
+      const cookieHeader = res.headers.get("Set-Cookie") as string
+      expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN)).not.toBe(undefined)
     })
   })
 })

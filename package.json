@@ -77,6 +77,8 @@
     "@types/vinyl": "2.0.4",
     "@types/vinyl-fs": "2.4.11",
     "@types/webpack": "4.41.13",
+    "@types/passport": "1.0.4",
+    "@types/cookie-session": "2.0.41",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "@wessberg/cjs-to-esm-transformer": "0.0.19",
