@@ -18,6 +18,9 @@ const UserStuff = () => {
           <a href="/api/auth/twitter" style={{display: "block"}}>
             Login with Twitter
           </a>
+          <a href="/api/auth/github" style={{display: "block"}}>
+            Login with Github
+          </a>
         </>
       )}
       <pre>{JSON.stringify(session, null, 2)}</pre>
