@@ -65,7 +65,6 @@
     "vinyl": "2.2.0",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3",
-    "tiny-invariant": "1.1.0",
     "cookie-session": "1.4.0"
   },
   "devDependencies": {
