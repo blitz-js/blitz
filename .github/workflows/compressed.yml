@@ -1,10 +1,6 @@
 name: Compressed Size
 
 on:
-  push:
-    branches:
-      - master
-      - canary
   pull_request:
     branches: [master, canary]
   registry_package:
