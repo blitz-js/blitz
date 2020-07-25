@@ -64,8 +64,7 @@
     "through2": "3.0.1",
     "vinyl": "2.2.0",
     "vinyl-file": "3.0.0",
-    "vinyl-fs": "3.0.3",
-    "cookie-session": "1.4.0"
+    "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
     "@blitzjs/core": "0.16.5-canary.5"

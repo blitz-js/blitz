@@ -7,7 +7,8 @@ import {
 } from "./middleware"
 import {SessionContext, PublicData} from "./supertokens"
 import {log} from "@blitzjs/display"
-import type {Strategy} from "passport"
+import passport, {Strategy} from "passport"
+import cookieSession from "cookie-session"
 
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
@@ -31,18 +32,17 @@ const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function passportAuth(config: BlitzPassportConfig) {
-  const passport = require("passport")
-  const cookieSession = require("cookie-session")
-
   return async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
     const middleware: Middleware[] = [
+      // TODO - fix TS type - shouldn't need `any` here
       connectMiddleware(
         cookieSession({
           secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
           secure: process.env.NODE_ENV === "production",
-        }),
+        }) as any,
       ),
-      connectMiddleware(passport.initialize()),
+      // TODO - fix TS type - shouldn't need `any` here
+      connectMiddleware(passport.initialize() as any),
       connectMiddleware(passport.session()),
     ]
 

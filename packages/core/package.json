@@ -46,7 +46,9 @@
     "pretty-ms": "6.0.1",
     "react-query": "2.4.15",
     "serialize-error": "6.0.0",
-    "url": "0.11.0"
+    "url": "0.11.0",
+    "passport": "0.4.1",
+    "cookie-session": "1.4.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
