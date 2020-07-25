@@ -7,9 +7,7 @@
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "blitz build",
-    "analyze": "cross-env ANALYZE=true blitz build",
-    "analyze:server": "cross-env BUNDLE_ANALYZE=server blitz build",
-    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser blitz build"
+    "analyze": "cross-env ANALYZE=true blitz build"
   },
   "browserslist": [
     "defaults"
@@ -41,6 +39,7 @@
     "react-final-form": "6.5.1",
     "secure-password": "4.0.0",
     "zod": "1.10.0",
+    "passport": "0.4.1",
     "passport-twitter": "1.0.4",
     "passport-github2": "0.1.11"
   },

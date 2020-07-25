@@ -6,6 +6,7 @@ import {
   Middleware,
 } from "./middleware"
 import {SessionContext, PublicData} from "./supertokens"
+import {log} from "@blitzjs/display"
 import type {Strategy} from "passport"
 
 export type BlitzPassportConfig = {
@@ -60,7 +61,7 @@ export function passportAuth(config: BlitzPassportConfig) {
     passport.use(strategy)
 
     if (req.query.auth.length === 1) {
-      console.log(`Starting authentication via ${strategy.name}...`)
+      log.info(`Starting authentication via ${strategy.name}...`)
       if (req.query.redirectUrl) {
         middleware.push(async (req, res, next) => {
           const session = res.blitzCtx.session as SessionContext
@@ -71,7 +72,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       }
       middleware.push(connectMiddleware(passport.authenticate(strategy.name)))
     } else if (req.query.auth[1] === "callback") {
-      console.log(`Processing callback for ${strategy.name}`)
+      log.info(`Processing callback for ${strategy.name}...`)
       middleware.push(
         connectMiddleware((req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
@@ -83,7 +84,7 @@ export function passportAuth(config: BlitzPassportConfig) {
 
               if (!error) {
                 if (result === false) {
-                  console.log(
+                  log.warning(
                     `Login via ${strategy.name} failed - usually this means the user did not authenticate properly with the provider`,
                   )
                   error = `Login failed`
