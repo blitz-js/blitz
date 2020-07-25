@@ -1,0 +1,18 @@
+{
+  "name": "stats-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "blitz start",
+    "build": "blitz build"
+  },
+  "dependencies": {
+    "blitz": "latest",
+    "react": "0.0.0-experimental-33c3af284",
+    "react-dom": "0.0.0-experimental-33c3af284"
+  },
+  "devDependencies": {
+    "@types/react": "16.9.43",
+    "typescript": "3.9.7"
+  },
+  "private": true
+}
