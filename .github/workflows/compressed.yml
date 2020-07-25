@@ -2,11 +2,11 @@ name: Compressed Size
 
 on:
   pull_request:
-    branches:
-      - master
-      - canary
+    branches: [master, canary]
   registry_package:
     types: [published]
+  push:
+    branches: [master, canary]
 
 jobs:
   build:
@@ -19,10 +19,11 @@ jobs:
         with:
           node-version: "12.x"
       - name: Install dependencies
-      - run: yarn build
+        run: |
+          yarn && yarn build
         env:
           CI: true
-      - uses: preactjs/compressed-size-action@v2
-      - name: Run action…
+      - name: Count size
+        uses: preactjs/compressed-size-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
