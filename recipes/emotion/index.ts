@@ -5,7 +5,7 @@ import {ASTNode} from "ast-types/lib/types"
 import {NamedTypes} from "ast-types/gen/namedTypes"
 import {types, visit} from "recast"
 
-function wrapComponentWithCacheProviderAndGlobalStyles(ast: ASTNode, b: builders, t: NamedTypes) {
+function wrapComponentWithCacheProvider(ast: ASTNode, b: builders, t: NamedTypes) {
   if (!t.File.check(ast)) return
 
   visit(ast, {
@@ -19,7 +19,6 @@ function wrapComponentWithCacheProviderAndGlobalStyles(ast: ASTNode, b: builders
     },
     visitJSXElement(path) {
       const {node} = path
-
       if (
         t.JSXIdentifier.check(node.openingElement.name) &&
         // TODO: need a better way to detect the Component
@@ -34,15 +33,41 @@ function wrapComponentWithCacheProviderAndGlobalStyles(ast: ASTNode, b: builders
               ),
             ]),
             b.jsxClosingElement(b.jsxIdentifier("CacheProvider")),
-            [
-              b.literal("\n      "),
-              b.jsxExpressionContainer(b.identifier("globalStyles")),
-              b.literal("\n  \t  "),
-              node,
-              b.literal("\n    "),
-            ],
+            [b.literal("\n  \t  "), node, b.literal("\n    ")],
           ),
         )
+        return false
+      }
+      return this.traverse(path)
+    },
+  })
+
+  return ast
+}
+
+function applyGlobalStyles(ast: ASTNode, b: builders, t: NamedTypes) {
+  if (!t.File.check(ast)) return
+
+  visit(ast, {
+    visitFunction(path) {
+      const {node} = path
+      // TODO: need a better way to detect the custom App function
+      if (t.Identifier.check(node.id) && node.id.name === "MyApp") {
+        return this.traverse(path)
+      }
+      return false
+    },
+    visitJSXElement(path) {
+      const {node} = path
+      // TODO: need a better way to detect the CacheProvider
+      if (
+        t.JSXIdentifier.check(node.openingElement.name) &&
+        node.openingElement.name.name === "CacheProvider"
+      ) {
+        if (Array.isArray(node.children)) {
+          node.children.splice(0, 0, b.literal("\n      "))
+          node.children.splice(1, 0, b.jsxExpressionContainer(b.identifier("globalStyles")))
+        }
         return false
       }
       return this.traverse(path)
@@ -107,10 +132,9 @@ We'll install @emotion/core and @emotion/styled for general usage, as well as em
     templateValues: {},
   })
   .addTransformFilesStep({
-    stepId: "cacheProviderAndGlobalStyles",
-    stepName: "Enable Emotion's built-in cache and apply global styles",
-    explanation: `Next, we wrap our app-level Component in Emotion's CacheProvider with their built-in cache to enable server-side rendering of our styles.
-We'll also import and use the provided default global styles here.`,
+    stepId: "cacheProvider",
+    stepName: "Enable Emotion's built-in cache",
+    explanation: `Next, we wrap our app-level Component in Emotion's CacheProvider with their built-in cache to enable server-side rendering of our styles.`,
     singleFileSearch: paths.app(),
     transform(ast: ASTNode, b: builders, t: NamedTypes) {
       const cacheProviderImport = b.importDeclaration(
@@ -123,6 +147,20 @@ We'll also import and use the provided default global styles here.`,
         b.literal("emotion"),
       )
 
+      if (t.File.check(ast)) {
+        addImport(ast, b, t, cacheImport)
+        addImport(ast, b, t, cacheProviderImport)
+        return wrapComponentWithCacheProvider(ast, b, t)!
+      }
+      throw new Error("Not given valid source file")
+    },
+  })
+  .addTransformFilesStep({
+    stepId: "addGlobalStyles",
+    stepName: "Apply global styles",
+    explanation: `Now we'll import and render the global styles.`,
+    singleFileSearch: paths.app(),
+    transform(ast: ASTNode, b: builders, t: NamedTypes) {
       const stylesImport = b.importDeclaration(
         [b.importSpecifier(b.identifier("globalStyles"))],
         b.literal("app/styles"),
@@ -130,9 +168,7 @@ We'll also import and use the provided default global styles here.`,
 
       if (t.File.check(ast)) {
         addImport(ast, b, t, stylesImport)
-        addImport(ast, b, t, cacheImport)
-        addImport(ast, b, t, cacheProviderImport)
-        return wrapComponentWithCacheProviderAndGlobalStyles(ast, b, t)!
+        return applyGlobalStyles(ast, b, t)!
       }
       throw new Error("Not given valid source file")
     },
@@ -140,7 +176,7 @@ We'll also import and use the provided default global styles here.`,
   .addTransformFilesStep({
     stepId: "extractCritical",
     stepName: "Extract critical CSS",
-    explanation: `We now call Emotion's extractCritical function in the getInitialProps method of our custom Document class to extract the critical CSS on the server.
+    explanation: `We will now call Emotion's extractCritical function in the getInitialProps method of our custom Document class to extract the critical CSS on the server.
 We also inject a style tag to inline the critical styles for every server response.`,
     singleFileSearch: paths.document(),
     transform(ast: ASTNode, b: builders, t: NamedTypes) {
