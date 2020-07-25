@@ -5,6 +5,7 @@ import {
   connectMiddleware,
   Middleware,
   SessionContext,
+  PublicData,
 } from "blitz"
 import passport, {Strategy} from "passport"
 import {Strategy as TwitterStrategy} from "passport-twitter"
@@ -56,7 +57,7 @@ export default passportAuth({
         })
 
         const publicData = {userId: user.id, roles: [user.role], source: "twitter"}
-        done(null, publicData)
+        done(null, {publicData})
       },
     ),
     new GitHubStrategy(
@@ -91,18 +92,26 @@ export default passportAuth({
           source: "github",
           githubUsername: profile.username,
         }
-        done(null, publicData)
+        done(null, {publicData})
       },
     ),
   ],
 })
 
 type BlitzPassportConfig = {
-  // TODO - support function that receives publicData
   successRedirectUrl?: string
   errorRedirectUrl?: string
   strategies: Required<Strategy>[]
 }
+
+type VerifyCallbackResult = {
+  publicData: PublicData
+  privateData?: Record<string, any>
+  redirectUrl?: string
+}
+
+const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
+  value && typeof value === "object" && "publicData" in value
 
 function passportAuth(config: BlitzPassportConfig) {
   return async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
@@ -142,17 +151,54 @@ function passportAuth(config: BlitzPassportConfig) {
           const session = (res as any).blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
 
-          passport.authenticate(strategy.name, async (err, user) => {
-            if (err) {
-              // TODO - redirect back to origin with error
-              throw err
-            }
-            assert(user, `No user found in callback from ${strategy.name}!`)
-            await session.create(user)
+          passport.authenticate(strategy.name, async (err, result: unknown) => {
+            try {
+              let error = err
 
-            res.setHeader("Location", config.successRedirectUrl || "/")
-            // TODO fix type
-            ;(res as any).status(302).end()
+              if (!error) {
+                if (result === false) {
+                  console.log(
+                    `Login via ${strategy.name} failed - usually this means the user did not authenticate properly with the provider`,
+                  )
+                  error = `Login failed`
+                }
+                assert(
+                  typeof result === "object" && result !== null,
+                  `Your '${strategy.name}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
+                )
+                assert(
+                  (result as any).publicData,
+                  `'publicData' is missing from your '${strategy.name}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
+                )
+              }
+
+              if (error) {
+                const customRedirectUrl =
+                  result && typeof result === "object" && (result as any).redirectUrl
+
+                let redirectUrl = customRedirectUrl || config.errorRedirectUrl || "/"
+                redirectUrl += "?authError=" + error.toString()
+
+                res.setHeader("Location", redirectUrl)
+                res.statusCode = 302
+                res.end()
+                return
+              }
+
+              assert(isVerifyCallbackResult(result), "Passport verify callback is invalid")
+
+              await session.create(result.publicData, result.privateData)
+
+              const redirectUrl = result.redirectUrl || config.successRedirectUrl || "/"
+
+              res.setHeader("Location", redirectUrl)
+              res.statusCode = 302
+              res.end()
+            } catch (error) {
+              console.error(error)
+              res.statusCode = 500
+              res.end()
+            }
           })(req, res, next)
         }),
       )
