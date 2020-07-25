@@ -1,6 +1,8 @@
 on:
   pull_request:
-    types: [opened, synchronize]
+    branches:
+      - master
+      - canary
 
 name: Generate PR App Stats
 
