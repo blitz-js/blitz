@@ -10,6 +10,7 @@ export * from "./use-router-query"
 export * from "./middleware"
 export * from "./types"
 export * from "./supertokens"
+export * from "./passport-adapter"
 
 // --------------------
 // Exports from Next.js
