@@ -1,5 +1,5 @@
 import React from "react"
-import {Error as ErrorComponent} from "blitz"
+import {ErrorComponent} from "blitz"
 import {queryCache} from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
