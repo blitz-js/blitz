@@ -3,7 +3,7 @@ import * as fs from "fs-extra"
 
 describe("path utils", () => {
   it("returns proper file paths in a TS project", () => {
-    jest.spyOn(fs, "existsSync").mockReturnValueOnce(true)
+    jest.spyOn(fs, "existsSync").mockReturnValue(true)
     expect(paths.document()).toBe("app/pages/_document.tsx")
     expect(paths.app()).toBe("app/pages/_app.tsx")
     expect(paths.entry()).toBe("app/pages/index.tsx")
@@ -12,7 +12,7 @@ describe("path utils", () => {
   })
 
   it("returns JS file paths in a JS project", () => {
-    jest.spyOn(fs, "existsSync").mockReturnValueOnce(false)
+    jest.spyOn(fs, "existsSync").mockReturnValue(false)
     expect(paths.document()).toBe("app/pages/_document.js")
     expect(paths.app()).toBe("app/pages/_app.js")
     expect(paths.entry()).toBe("app/pages/index.js")
