@@ -1,8 +1,6 @@
 import {paths} from "@blitzjs/installer"
 import * as fs from "fs-extra"
 
-jest.mock("fs-extra")
-
 describe("path utils", () => {
   it("returns proper file paths in a TS project", () => {
     jest.spyOn(fs, "existsSync").mockReturnValueOnce(true)
