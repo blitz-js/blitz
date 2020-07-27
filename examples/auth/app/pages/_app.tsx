@@ -1,10 +1,32 @@
-import {AppProps} from "blitz"
-import ErrorBoundary from "app/components/ErrorBoundary"
+import {AppProps, Error as ErrorComponent} from "blitz"
+import {ErrorBoundary} from "react-error-boundary"
+import {queryCache} from "react-query"
+import LoginForm from "app/auth/components/LoginForm"
 
-export default function MyApp({Component, pageProps}: AppProps) {
+export default function App({Component, pageProps}: AppProps) {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary
+      FallbackComponent={RootErrorFallback}
+      onReset={() => {
+        queryCache.resetErrorBoundaries()
+      }}
+    >
       <Component {...pageProps} />
     </ErrorBoundary>
   )
+}
+
+function RootErrorFallback({error, resetErrorBoundary}) {
+  if (error.name === "AuthenticationError") {
+    return <LoginForm onSuccess={resetErrorBoundary} />
+  } else if (error.name === "AuthorizationError") {
+    return (
+      <ErrorComponent
+        statusCode={error.statusCode}
+        title="Sorry, you are not authorized to access this"
+      />
+    )
+  } else {
+    return <ErrorComponent statusCode={error.statusCode || 400} title={error.message} />
+  }
 }

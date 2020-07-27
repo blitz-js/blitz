@@ -1129,7 +1129,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.0", "@babel/runtime@^7.5.4":
+"@babel/runtime@^7.10.0", "@babel/runtime@^7.10.5", "@babel/runtime@^7.5.4":
   version "7.10.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.5.tgz#303d8bd440ecd5a491eae6117fd3367698674c5c"
   integrity sha512-otddXKhdNn7d0ptoFRHtMLa8LqDxLYwTjB4nYgM1yy5N6gU/MUf8zqyyLltCH3yAVitBzmwK4us+DD0l/MauAg==
@@ -14251,6 +14251,13 @@ react-dom@0.0.0-experimental-33c3af284:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "0.0.0-experimental-33c3af284"
+
+react-error-boundary@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-2.3.1.tgz#bd6c8a9777224b6a1153c5f63e1ac86bf039f657"
+  integrity sha512-w1i++MM5GV6WTnM3MtLdw9CNXxqydkZwbwNDT9GBFBaWs0sp21z27DGIevb3fism1T+LGfdWgTFlhaq7G1pIMA==
+  dependencies:
+    "@babel/runtime" "^7.10.5"
 
 react-final-form@6.4.0:
   version "6.4.0"
