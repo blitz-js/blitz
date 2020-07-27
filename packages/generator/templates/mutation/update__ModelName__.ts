@@ -17,9 +17,8 @@ export default async function update__ModelName__(
   {where, data}: Update__ModelName__Input,
   ctx: Record<any, any> = {},
 ) {
-  // Don't allow updating
-  delete data.id
   if (process.env.parentModel) {
+    // Don't allow updating
     delete (data as any).__parentModel__
   }
 

@@ -1,4 +1,4 @@
-import {AppProps, Error as ErrorComponent} from "blitz"
+import {AppProps, ErrorComponent} from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
 import LoginForm from "app/auth/components/LoginForm"

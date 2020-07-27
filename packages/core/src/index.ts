@@ -46,4 +46,4 @@ export {
 
 export {default as dynamic} from "next/dynamic"
 
-export {default as Error} from "next/error"
+export {default as ErrorComponent} from "next/error"
