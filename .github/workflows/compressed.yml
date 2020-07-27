@@ -3,10 +3,6 @@ name: Compressed Size
 on:
   pull_request:
     branches: [master, canary]
-  registry_package:
-    types: [published]
-  push:
-    branches: [master, canary]
 
 jobs:
   build:
