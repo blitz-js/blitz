@@ -32,7 +32,7 @@
     "blitz": "canary",
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
-    "react-error-boundary": "2.x",
+    "react-error-boundary": "2.x"
   },
   "devDependencies": {
     "@types/react": "16.x",
