@@ -27,6 +27,8 @@ function RootErrorFallback({error, resetErrorBoundary}) {
       />
     )
   } else {
-    return <ErrorComponent statusCode={error.statusCode || 400} title={error.message} />
+    return (
+      <ErrorComponent statusCode={error.statusCode || 400} title={error.message || error.name} />
+    )
   }
 }
