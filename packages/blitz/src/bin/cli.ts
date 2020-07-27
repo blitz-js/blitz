@@ -2,6 +2,7 @@ import * as path from "path"
 import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
 import chalk from "chalk"
+import { parseSemver } from '../utils/parse-semver'
 
 console.log(
   chalk.yellow(
@@ -9,6 +10,14 @@ console.log(
   https://github.com/blitz-js/blitz/issues/new/choose\n`,
   ),
 )
+
+if (parseSemver(process.version).major < 12) {
+  console.log(
+    chalk.yellow(
+      `You are using an unsupported version of Node.js. Consider switching to v12 or newer.\n`,
+    ),
+  )
+}
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
