@@ -1,19 +1,11 @@
 import db, {FindOneUserArgs} from "db"
-import {SessionContext} from "blitz"
+import {SessionContext, NotFoundError} from "blitz"
 
 type GetUserInput = {
   where: FindOneUserArgs["where"]
   select?: FindOneUserArgs["select"]
   // Only available if a model relationship exists
   // include?: FindOneUserArgs['include']
-}
-
-export class NotFoundError extends Error {
-  statusCode = 404
-  constructor(message?: string) {
-    super(message)
-    this.name = "NotFoundError"
-  }
 }
 
 export default async function getUser(
