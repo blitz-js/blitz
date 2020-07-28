@@ -36,11 +36,7 @@ describe("`new` command", () => {
 
       await whileStayingInCWD(() => New.run([tempDir, "--skip-install"]))
 
-      const packageJsonFile = fs.readFileSync(path.join(tempDir, "package.json"), {
-        encoding: "utf8",
-        flag: "r",
-      })
-      const packageJson = JSON.parse(packageJsonFile)
+      const packageJson = require(path.join(tempDir, "package.json"))
 
       await test(tempDir, packageJson)
 
