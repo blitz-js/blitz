@@ -1,3 +1,5 @@
+import * as path from "path"
+
 const dev = jest.fn(() => {})
 const prod = jest.fn(() => {})
 
@@ -22,7 +24,7 @@ describe("Start command", () => {
   })
 
   const options = {
-    rootFolder: resolve(__dirname, "../../"),
+    rootFolder: resolve(path.join(__dirname, "../../")),
   }
 
   it("runs the dev script", async () => {

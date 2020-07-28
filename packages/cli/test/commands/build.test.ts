@@ -1,3 +1,5 @@
+import * as path from "path"
+
 const build = jest.fn(() => {})
 jest.mock("@blitzjs/server", () => ({build, resolveBinAsync: jest.fn()}))
 
@@ -20,7 +22,7 @@ describe("Build command", () => {
   })
 
   const options = {
-    rootFolder: resolve(__dirname, "../../"),
+    rootFolder: resolve(path.join(__dirname, "../../")),
   }
 
   it("runs the build script", async () => {
