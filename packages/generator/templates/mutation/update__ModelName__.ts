@@ -1,22 +1,24 @@
-import db, {__ModelName__UpdateArgs} from 'db'
+import db, {__ModelName__UpdateArgs} from "db"
 
 if (process.env.parentModel) {
   type Update__ModelName__Input = {
-    where: __ModelName__UpdateArgs['where']
-    data: Omit<__ModelName__UpdateArgs['data'], '__parentModel__'>
+    where: __ModelName__UpdateArgs["where"]
+    data: Omit<__ModelName__UpdateArgs["data"], "__parentModel__">
     __parentModelId__: number
   }
 } else {
   type Update__ModelName__Input = {
-    where: __ModelName__UpdateArgs['where']
-    data: __ModelName__UpdateArgs['data']
+    where: __ModelName__UpdateArgs["where"]
+    data: __ModelName__UpdateArgs["data"]
   }
 }
 
-export default async function update__ModelName__({where, data}: Update__ModelName__Input) {
-  // Don't allow updating
-  delete data.id
+export default async function update__ModelName__(
+  {where, data}: Update__ModelName__Input,
+  ctx: Record<any, any> = {},
+) {
   if (process.env.parentModel) {
+    // Don't allow updating
     delete (data as any).__parentModel__
   }
 

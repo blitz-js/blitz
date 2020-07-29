@@ -1,13 +1,13 @@
-import React, {Suspense} from 'react'
-import {Head, Link, useRouter, useQuery, useParam} from 'blitz'
-import get__ModelName__ from 'app/__modelNames__/queries/get__ModelName__'
-import delete__ModelName__ from 'app/__modelNames__/mutations/delete__ModelName__'
+import React, {Suspense} from "react"
+import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
+import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
+import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
 
-export const __ModelName__: React.FC = () => {
+export const __ModelName__ = () => {
   const router = useRouter()
-  const __modelId__ = useParam('__modelId__', 'number')
+  const __modelId__ = useParam("__modelId__", "number")
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam('__parentModelId__', 'number')
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
 
@@ -19,11 +19,15 @@ export const __ModelName__: React.FC = () => {
       {process.env.parentModel ? (
         <Link
           href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
-          as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}>
+          as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
+        >
           <a>Edit</a>
         </Link>
       ) : (
-        <Link href="/__modelNames__/__modelIdParam__/edit" as={`/__modelNames__/${__modelName__.id}/edit`}>
+        <Link
+          href="/__modelNames__/__modelIdParam__/edit"
+          as={`/__modelNames__/${__modelName__.id}/edit`}
+        >
           <a>Edit</a>
         </Link>
       )}
@@ -31,27 +35,28 @@ export const __ModelName__: React.FC = () => {
       <button
         type="button"
         onClick={async () => {
-          if (window.confirm('This will be deleted')) {
+          if (window.confirm("This will be deleted")) {
             await delete__ModelName__({where: {id: __modelName__.id}})
             if (process.env.parentModel) {
               router.push(
-                '/__parentModels__/__parentModelParam__/__modelNames__',
+                "/__parentModels__/__parentModelParam__/__modelNames__",
                 `/__parentModels__/${__parentModelId__}/__modelNames__`,
               )
             } else {
-              router.push('/__modelNames__')
+              router.push("/__modelNames__")
             }
           }
-        }}>
+        }}
+      >
         Delete
       </button>
     </div>
   )
 }
 
-const Show__ModelName__Page: React.FC = () => {
+const Show__ModelName__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam('__parentModelId__', 'number')
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
 
   return (
@@ -66,7 +71,8 @@ const Show__ModelName__Page: React.FC = () => {
           {process.env.parentModel ? (
             <Link
               href="/__parentModels__/__parentModelId__/__modelNames__"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+              as={`/__parentModels__/${__parentModelId__}/__modelNames__`}
+            >
               <a>__ModelNames__</a>
             </Link>
           ) : (

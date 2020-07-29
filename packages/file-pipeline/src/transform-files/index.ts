@@ -1,11 +1,11 @@
-import {pipe} from '../streams'
-import {createPipeline} from '../pipeline'
-import {pathExists, ensureDir, remove} from 'fs-extra'
-import {through} from '../streams'
-import {createDisplay} from '../display'
-import {READY, ERROR_THROWN} from '../events'
-import {Stage} from '../types'
-import {Transform} from 'stream'
+import {pipe} from "../streams"
+import {createPipeline} from "../pipeline"
+import {pathExists, ensureDir, remove} from "fs-extra"
+import {through} from "../streams"
+import {createDisplay} from "../display"
+import {READY, ERROR_THROWN} from "../events"
+import {Stage} from "../types"
+import {Transform} from "stream"
 
 type FSStreamer = {stream: NodeJS.ReadWriteStream}
 
@@ -59,7 +59,7 @@ export async function transformFiles(
       watch,
     }
 
-    bus.on('data', ({type}) => {
+    bus.on("data", ({type}) => {
       if (type === READY) {
         resolve(fileTransformPipeline.ready)
       }
@@ -68,7 +68,7 @@ export async function transformFiles(
     const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     // Send source to fileTransformPipeline
-    fileTransformPipeline.stream.on('error', (err) => {
+    fileTransformPipeline.stream.on("error", (err) => {
       bus.write({type: ERROR_THROWN, payload: err})
       if (err) reject(err)
     })

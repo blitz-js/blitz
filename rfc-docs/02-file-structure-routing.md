@@ -129,7 +129,7 @@ Contains third-party integration code. Ex: `auth0.js`, `twilio.js`, etc. These f
 
 Asynchronous background job processing is TBD, but processing logic will live here.
 
-#### `pages` 
+#### `pages`
 
 The top level `pages` folder and all nested `pages` folders inside `app` are merged together at build time. The build will fail if the same route is defined in two places. The Blitz CLI will have a routes command to easily see all your app routes at once, including your queries and mutations.
 
@@ -180,13 +180,13 @@ We copied the conventions from Ruby on Rails, where it has stood the test of tim
 
 Example: You have a `Project` model and a `Task` model which belongs to a `Project`. Your routes will be:
 
-| Path                                  | File                                                     |
-| ------------------------------------- | -------------------------------------------------------- |
+| Path                                  | File                                                    |
+| ------------------------------------- | ------------------------------------------------------- |
 | /projects                             | app/projects/pages/projects/index.js                    |
 | /projects/new                         | app/projects/pages/projects/new.js                      |
 | /projects/[id]                        | app/projects/pages/projects/[id].js                     |
 | /projects/[id]/edit                   | app/projects/pages/projects/[id]/edit.js                |
-|                                       |                                                          |
+|                                       |                                                         |
 | /projects/[projectId]/tasks           | app/tasks/pages/projects/[projectId]/tasks/index.js     |
 | /projects/[projectId]/tasks/new       | app/tasks/pages/projects/[projectId]/tasks/new.js       |
 | /projects/[projectId]/tasks/[id]      | app/tasks/pages/projects/[projectId]/tasks/[id].js      |

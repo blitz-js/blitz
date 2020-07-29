@@ -1,16 +1,17 @@
-import {spawn} from 'cross-spawn'
-import detect from 'detect-port'
-import {Manifest} from './stages/manifest'
-import {through} from './streams'
-import {ServerConfig} from 'config'
+import {spawn} from "cross-spawn"
+import detect from "detect-port"
+import {Manifest} from "./stages/manifest"
+import {through} from "./streams"
+import {ServerConfig} from "config"
+import {log} from "@blitzjs/display"
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {
     const dataStr = data.toString()
 
-    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, '\\/')}\\/[^:]+)\\(\\d+,\\d+\\)`
+    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, "\\/")}\\/[^:]+)\\(\\d+,\\d+\\)`
 
-    const matches = new RegExp(buildError, 'g').exec(dataStr)
+    const matches = new RegExp(buildError, "g").exec(dataStr)
 
     if (matches) {
       const [, filepath] = matches
@@ -29,6 +30,20 @@ function createOutputTransformer(manifest: Manifest, devFolder: string) {
   return {stream}
 }
 
+async function createCommandAndPort(config: ServerConfig, command: string) {
+  let spawnCommand: string[] = [command]
+  let availablePort: number
+
+  availablePort = await detect({port: config.port ? config.port : 3000})
+  spawnCommand = spawnCommand.concat(["-p", `${availablePort}`])
+
+  if (config.hostname) {
+    spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
+  }
+
+  return {spawnCommand, availablePort}
+}
+
 export async function nextStartDev(
   nextBin: string,
   cwd: string,
@@ -37,41 +52,58 @@ export async function nextStartDev(
   config: ServerConfig,
 ) {
   const transform = createOutputTransformer(manifest, devFolder).stream
-  const availablePort = await detect({port: config.port, hostname: config.hostname})
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "dev")
 
   return new Promise((res, rej) => {
-    spawn(nextBin, ['dev', '-p', `${availablePort}`, '-H', config.hostname], {
-      cwd,
-      stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
-    })
-      .on('exit', (code: number) => {
-        code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
+    if (config.port && availablePort !== config.port) {
+      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      rej("")
+    } else {
+      spawn(nextBin, spawnCommand, {
+        cwd,
+        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
       })
-      .on('error', rej)
+        .on("exit", (code: number) => {
+          code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
+        })
+
+        .on("error", rej)
+    }
   })
 }
 
 export function nextBuild(nextBin: string, cwd: string) {
   return new Promise((res, rej) => {
-    spawn(nextBin, ['build'], {
+    spawn(nextBin, ["build"], {
       cwd,
-      stdio: 'inherit',
+      stdio: "inherit",
     })
-      .on('exit', (code: number) => {
+      .on("exit", (code: number) => {
         code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
       })
-      .on('error', rej)
+      .on("error", rej)
   })
 }
 
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  const availablePort = await detect({port: config.port, hostname: config.hostname})
-  return Promise.resolve(
-    spawn(nextBin, ['start', '-p', `${availablePort}`, '-H', config.hostname], {
-      cwd,
-      stdio: 'inherit',
-    }).on('error', (err) => {
-      console.error(err)
-    }),
-  )
+  const {spawnCommand, availablePort} = await createCommandAndPort(config, "start")
+
+  return new Promise((res, rej) => {
+    if (config.port && availablePort !== config.port) {
+      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      rej("")
+    } else {
+      spawn(nextBin, spawnCommand, {
+        cwd,
+        stdio: "inherit",
+      })
+        .on("exit", (code: number) => {
+          code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+        })
+        .on("error", (err) => {
+          console.error(err)
+          rej(err)
+        })
+    }
+  })
 }

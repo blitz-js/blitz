@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const yarnOut = fs.readFileSync(0, {encoding: 'utf8'})
+const fs = require("fs")
+const yarnOut = fs.readFileSync(0, {encoding: "utf8"})
 
 const [installTimeString] = /(?<=^Done in )\d+\.\d+(?=s\.$)/m.exec(yarnOut)
 const installTime = Number(installTimeString)

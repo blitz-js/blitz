@@ -101,8 +101,8 @@ The query function is always executed on the server, so you can safely read dire
 
 ```ts
 // /some/path/getProduct.ts
-import {Context} from 'blitz/types'
-import db, {FindOneProductArgs} from 'db'
+import {Context} from "blitz/types"
+import db, {FindOneProductArgs} from "db"
 
 export default async function getProduct(args: FindOneProductArgs, ctx?: Context) {
   // Can do any pre-processing here or trigger events
@@ -121,10 +121,10 @@ The hook's input and output is fully typed. This would fail to compile if the `p
 
 ```tsx
 // pages/products/[id].tsx
-import {useQuery} from 'blitz'
-import getProduct from '/some/path/getProduct'
+import {useQuery} from "blitz"
+import getProduct from "/some/path/getProduct"
 
-export default function(props: {query: {id: number}}) {
+export default function (props: {query: {id: number}}) {
   const [product] = useQuery(getProduct, {where: {id: props.query.id}})
 
   return (
@@ -143,18 +143,18 @@ For public pages without private user data, you can use Blitz queries at build t
 
 ```tsx
 // pages/products/[id].tsx
-import {PromiseReturnType} from 'blitz/types'
-import getProduct from '/some/path/getProduct'
+import {PromiseReturnType} from "blitz/types"
+import getProduct from "/some/path/getProduct"
 
-export const getStaticProps = async context => {
+export const getStaticProps = async (context) => {
   const product = await getProduct({where: {id: context.params?.id}})
 
-  if (!product) throw new Error('Missing product!')
+  if (!product) throw new Error("Missing product!")
 
   return {props: {product}}
 }
 
-export default function(props: PromiseReturnType<typeof getStaticProps>['props']) {
+export default function (props: PromiseReturnType<typeof getStaticProps>["props"]) {
   return (
     <div>
       <h1>{props.product.name}</h1>
@@ -169,8 +169,8 @@ Mutations follow the same pattern. Export a plain Javascript function with your 
 
 ```ts
 // /some/path/updateProduct.ts
-import {Context} from 'blitz/types'
-import db, {ProductUpdateInput} from 'db'
+import {Context} from "blitz/types"
+import db, {ProductUpdateInput} from "db"
 
 export default async function updateProduct(data: ProductUpdateInput, ctx?: Context) {
   // Can do any pre-processing here or trigger events
@@ -187,12 +187,12 @@ Then in your component, import the above mutation function and call it directly.
 
 ```tsx
 // pages/product/[id]/edit.tsx
-import {useQuery, Router} from 'blitz'
-import getProduct from '/some/path/getProduct'
-import updateProduct from '/some/path/updateProduct'
-import {Formik} from 'formik'
+import {useQuery, Router} from "blitz"
+import getProduct from "/some/path/getProduct"
+import updateProduct from "/some/path/updateProduct"
+import {Formik} from "formik"
 
-export default function(props: {query: {id: number}}) {
+export default function (props: {query: {id: number}}) {
   const [product] = useQuery(getProduct, {where: {id: props.query.id}})
 
   return (
@@ -201,14 +201,15 @@ export default function(props: {query: {id: number}}) {
       <Formik
         initialValues={product}
         validate={/* TBD */}
-        onSubmit={async values => {
+        onSubmit={async (values) => {
           try {
             const product = await updateProduct(values)
             Router.push(`/products/${product.id}`)
           } catch (error) {
-            alert('Error saving product')
+            alert("Error saving product")
           }
-        }}>
+        }}
+      >
         {({handleSubmit}) => <form onSubmit={handleSubmit}></form>}
       </Formik>
     </div>
@@ -235,11 +236,11 @@ Here's an example:
 
 ```ts
 // /some/path/importProducts.ts
-import {Context} from 'blitz/types'
-import {createProduct} from '.'
-import {ProductCreateInput} from 'db'
+import {Context} from "blitz/types"
+import {createProduct} from "."
+import {ProductCreateInput} from "db"
 
-export default async function(data: ProductCreateInput[], ctx?: Context) {
+export default async function (data: ProductCreateInput[], ctx?: Context) {
   let numberOfCreatedProducts = 0
   let errors: any[] = []
 
@@ -270,7 +271,7 @@ This example gets the `referer` and adds it to the context object.
 
 ```ts
 // /some/path/special.ts
-import {Context, ApiRequest, ApiResponse} from 'blitz/types'
+import {Context, ApiRequest, ApiResponse} from "blitz/types"
 
 type ReferrerContext = {referrer: string}
 

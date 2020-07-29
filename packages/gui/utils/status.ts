@@ -1,5 +1,0 @@
-export const CREATING_FILES = 'creating-files'
-export const DONE = 'done'
-export const INSTALLING_DEPS = 'installing-deps'
-export const RETRIEVING_DEPS = 'retrieving-deps'
-export const UNKNOWN = 'unknown'

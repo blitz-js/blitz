@@ -1,27 +1,65 @@
-import {deserializeError} from 'serialize-error'
-import {queryCache} from 'react-query'
-import {getQueryKey} from './utils'
+import {deserializeError} from "serialize-error"
+import {queryCache} from "react-query"
+import {getQueryKey} from "./utils"
+import {ResolverModule, Middleware} from "./middleware"
+import {
+  getAntiCSRFToken,
+  publicDataStore,
+  HEADER_CSRF,
+  HEADER_SESSION_REVOKED,
+  HEADER_CSRF_ERROR,
+  CSRFTokenMismatchError,
+  HEADER_PUBLIC_DATA_TOKEN,
+} from "./supertokens"
 
 type Options = {
   fromQueryHook?: boolean
 }
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
-  if (typeof window === 'undefined') return
+  if (typeof window === "undefined") return
+
+  const headers: Record<string, any> = {
+    "Content-Type": "application/json",
+  }
+
+  const antiCSRFToken = getAntiCSRFToken()
+  if (antiCSRFToken) {
+    headers[HEADER_CSRF] = antiCSRFToken
+  }
+
   const result = await window.fetch(url, {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    body: JSON.stringify({params}),
+    method: "POST",
+    headers,
+    credentials: "include",
+    redirect: "follow",
+    body: JSON.stringify({params: params || null}),
   })
 
-  const json = await result.json()
+  if (result.headers) {
+    for (const [name] of result.headers.entries()) {
+      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
+      if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
+      if (name.toLowerCase() === HEADER_CSRF_ERROR) {
+        throw new CSRFTokenMismatchError()
+      }
+    }
+  }
+
+  let json
+  try {
+    json = await result.json()
+  } catch (error) {
+    throw new Error(`Failed to parse json from request to ${url}`)
+  }
 
   if (json.error) {
-    throw deserializeError(json.error)
+    const error = deserializeError(json.error)
+    // We don't clear the publicDataStore for anonymous users
+    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+      publicDataStore.clear()
+    }
+    throw error
   } else {
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)
@@ -32,27 +70,63 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
 }
 
 executeRpcCall.warm = (url: string) => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window.fetch(url, {method: 'HEAD'})
+    window.fetch(url, {method: "HEAD"})
   }
 }
 
-export type RpcFunction = {
-  (params: any, opts?: Options): ReturnType<typeof executeRpcCall>
-  cacheKey?: string
+interface ResolverEnhancement {
+  _meta: {
+    name: string
+    type: string
+    path: string
+    apiUrl: string
+  }
+}
+export interface RpcFunction {
+  (params: any, opts: any): Promise<any>
+}
+export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
+
+export interface EnhancedResolverModule extends ResolverEnhancement {
+  (input: any, ctx: Record<string, any>): Promise<unknown>
+  middleware?: Middleware[]
 }
 
-export function getIsomorphicRpcHandler(resolver: any, cacheKey: string) {
-  if (typeof window !== 'undefined') {
-    const url = cacheKey.replace(/^app\/_rpc/, '/api')
-    let rpcFn: RpcFunction = (params, opts = {}) => executeRpcCall(url, params, opts)
-    rpcFn.cacheKey = url
+export function getIsomorphicRpcHandler(
+  resolver: ResolverModule,
+  resolverPath: string,
+  resolverName: string,
+  resolverType: string,
+) {
+  const apiUrl = resolverPath.replace(/^app\/_resolvers/, "/api")
+  const enhance = <T extends ResolverEnhancement>(fn: T): T => {
+    fn._meta = {
+      name: resolverName,
+      type: resolverType,
+      path: resolverPath,
+      apiUrl: apiUrl,
+    }
+    return fn
+  }
+
+  if (typeof window !== "undefined") {
+    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) =>
+      executeRpcCall(apiUrl, params, opts)) as any
+
+    rpcFn = enhance(rpcFn)
 
     // Warm the lambda
-    executeRpcCall.warm(url)
+    executeRpcCall.warm(apiUrl)
+
     return rpcFn
   } else {
-    return resolver
+    let handler: EnhancedResolverModule = resolver.default as any
+
+    handler.middleware = resolver.middleware
+    handler = enhance(handler)
+
+    return handler
   }
 }

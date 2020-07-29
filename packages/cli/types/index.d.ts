@@ -1,1 +1,1 @@
-declare module 'hasbin'
+declare module "hasbin"

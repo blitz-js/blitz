@@ -1,13 +1,13 @@
-import React from 'react'
-import {Box, Text, Color, useApp, Static} from 'ink'
-import {ExecutorConfig, Executor, Frontmatter} from './executors/executor'
-import {RecipeMeta} from './installer'
-import {Branded} from './components/branded'
-import {Newline} from './components/newline'
-import {useEnterToContinue} from './utils/use-enter-to-continue'
-import * as AddDependencyExecutor from './executors/add-dependency-executor'
-import * as NewFileExecutor from './executors/new-file-executor'
-import * as FileTransformExecutor from './executors/file-transform-executor'
+import React from "react"
+import {Box, Text, Color, useApp, Static} from "ink"
+import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
+import {RecipeMeta} from "./recipe-executor"
+import {Branded} from "./components/branded"
+import {Newline} from "./components/newline"
+import {useEnterToContinue} from "./utils/use-enter-to-continue"
+import * as AddDependencyExecutor from "./executors/add-dependency-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
+import * as FileTransformExecutor from "./executors/file-transform-executor"
 
 enum Action {
   SkipStep,
@@ -79,12 +79,12 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
     <Box flexDirection="column">
       <Branded>
         <Box flexDirection="column">
-          <Text>Welcome to the recipe for {recipeMeta.packageName}</Text>
-          <Text>{recipeMeta.packageDescription}</Text>
+          <Text>Welcome to the recipe for {recipeMeta.name}</Text>
+          <Text>{recipeMeta.description}</Text>
         </Box>
       </Branded>
-      <Text bold={false}>This recipe is authored and supported by {recipeMeta.packageOwner}.</Text>
-      <Text>For additional documentation and support please visit {recipeMeta.packageRepoLink}</Text>
+      <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
+      <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
       <Newline />
       <Text>Press ENTER to begin the recipe</Text>
     </Box>
@@ -148,13 +148,16 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   const {exit} = useApp()
   const [state, dispatch] = React.useReducer(recipeReducer, {
     ...initialState,
-    steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ''})),
+    steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ""})),
   })
 
   useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
 
   React.useEffect(() => {
-    if (state.current === state.steps.length - 1 && state.steps[state.current].status === Status.Committed) {
+    if (
+      state.current === state.steps.length - 1 &&
+      state.steps[state.current].status === Status.Committed
+    ) {
       exit()
     }
   })
@@ -167,7 +170,7 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
         {messages.map((msg, idx) => (
           <Color key={msg + idx + Math.random()} green>
             <Text>
-              {msg === '\n' ? '' : '✅'} {msg}
+              {msg === "\n" ? "" : "✅"} {msg}
             </Text>
           </Color>
         ))}

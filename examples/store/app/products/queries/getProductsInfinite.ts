@@ -1,4 +1,4 @@
-import db, { FindManyProductArgs } from "db"
+import db, {FindManyProductArgs} from "db"
 
 type GetProductsInput = {
   where?: FindManyProductArgs["where"]
@@ -10,7 +10,7 @@ type GetProductsInput = {
   // include?: FindManyProductArgs['include']
 }
 
-export default async function getProducts({ where, orderBy, take, skip }: GetProductsInput) {
+export default async function getProducts({where, orderBy, take, skip}: GetProductsInput) {
   const products = await db.product.findMany({
     where,
     orderBy,
@@ -20,7 +20,7 @@ export default async function getProducts({ where, orderBy, take, skip }: GetPro
 
   const count = await db.product.count()
   const hasMore = skip + take < count
-  const nextPage = hasMore ? { take, skip: skip + take } : null
+  const nextPage = hasMore ? {take, skip: skip + take} : null
 
   return {
     products,

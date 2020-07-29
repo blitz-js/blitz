@@ -98,7 +98,7 @@ function myStage({
 
   // Ready - is an object that will be merged with all other
   // Stages and returned in a promise by  transformFiles()
-  const ready = {foo: 'This will appear in the object returned by transformation promise'}
+  const ready = {foo: "This will appear in the object returned by transformation promise"}
 
   // Export the stream and the ready info
   return {stream, ready}
@@ -175,21 +175,21 @@ If you push an Error to the transform stream `next(new Error)` an Error Event wi
 Evented Vinyl Files are [Vinyl Files](https://github.com/gulpjs/vinyl) with events attached to them
 
 ```ts
-const isDelete = (file) => file.isNull() && file.event === 'unlink'
+const isDelete = (file) => file.isNull() && file.event === "unlink"
 
 // The input file at '/path/to/foo' was deleted
 // This can be transformed during the process phase
 return new Vinyl({
-  path: '/path/to/foo',
+  path: "/path/to/foo",
   content: null,
-  event: 'unlink',
+  event: "unlink",
 })
 ```
 
 ```ts
 // Add file at '/path/to/foo'
 new Vinyl({
-  path: '/path/to/foo',
+  path: "/path/to/foo",
   content: someContentStream,
 })
 ```

@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "recipes/*"
     ],
     "nohoist": [
       "**/@prisma",
@@ -22,20 +23,27 @@
     "unlink-cli": "yarn workspace blitz unlink",
     "build": "lerna run build --no-private --stream",
     "lint": "eslint --ignore-path .gitignore --ext \".js,.ts,.tsx\" .",
-    "test": "yarn run lint && yarn run build && yarn run testonly",
-    "testonly": "lerna run test --stream",
+    "test": "yarn run lint && yarn run build && lerna run test --stream",
+    "test:packages": "yarn run build && yarn testonly:packages",
+    "test:examples": "yarn run build && yarn testonly:examples",
+    "testonly:packages": "lerna run test --stream --scope @blitzjs/*",
+    "testonly:examples": "lerna run test --stream --scope @examples/*",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-prep": "yarn run reset && yarn run test",
+    "publish-prep": "lerna run clean && yarn && yarn run test",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
+    "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
   "devDependencies": {
     "@rollup/pluginutils": "3.0.8",
     "@testing-library/jest-dom": "5.5.0",
     "@testing-library/react": "10.0.3",
+    "@testing-library/react-hooks": "3.3.0",
+    "@types/b64-lite": "1.3.0",
+    "@types/cookie": "0.4.0",
     "@types/cross-spawn": "6.0.1",
     "@types/debug": "4.1.5",
     "@types/detect-port": "1.3.0",
@@ -47,6 +55,7 @@
     "@types/gulp-if": "0.0.33",
     "@types/ink-spinner": "3.0.0",
     "@types/jest": "25.1.3",
+    "@types/jsonwebtoken": "8.5.0",
     "@types/lodash": "4.14.150",
     "@types/mem-fs": "1.1.2",
     "@types/mem-fs-editor": "5.1.1",
@@ -68,14 +77,18 @@
     "@types/vinyl": "2.0.4",
     "@types/vinyl-fs": "2.4.11",
     "@types/webpack": "4.41.13",
+    "@types/passport": "1.0.4",
+    "@types/cookie-session": "2.0.41",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "@wessberg/cjs-to-esm-transformer": "0.0.19",
     "@wessberg/rollup-plugin-ts": "1.2.24",
+    "react-test-renderer": "16.13.1",
     "babel-eslint": "10.x",
     "cpy-cli": "3.1.0",
     "cross-env": "7.0.0",
     "debug": "4.1.1",
+    "delay": "4.3.0",
     "directory-tree": "2.2.4",
     "eslint": "6.x",
     "eslint-config-react-app": "5.2.1",
@@ -121,8 +134,6 @@
     "hooks": {
       "pre-commit": "lint-staged && pretty-quick --staged",
       "pre-push": "yarn lint",
-      "post-checkout": "if [[ $HUSKY_GIT_PARAMS =~ 1$ ]]; then yarn install --frozen-lockfile; fi",
-      "post-merge": "yarn install --frozen-lockfile",
       "post-rebase": "yarn install"
     }
   },

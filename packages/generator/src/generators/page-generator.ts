@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from '../generator'
-import {join} from 'path'
+import {Generator, GeneratorOptions} from "../generator"
+import {join} from "path"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -13,15 +13,15 @@ export interface PageGeneratorOptions extends GeneratorOptions {
 }
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
-  static subdirectory = 'pages'
-  sourceRoot = join(__dirname, './templates/page')
+  static subdirectory = "pages"
+  sourceRoot = join(__dirname, "./templates/page")
 
-  private getId(input: string = '') {
+  private getId(input: string = "") {
     if (!input) return input
     return `${input}Id`
   }
 
-  private getParam(input: string = '') {
+  private getParam(input: string = "") {
     if (!input) return input
     return `[${input}]`
   }
@@ -41,12 +41,19 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
+      modelNamesPath: this.getModelNamesPath(),
     }
   }
 
+  getModelNamesPath() {
+    const context = this.options.context ? `${this.options.context}/` : ""
+    return context + this.options.modelNames
+  }
+
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ''
-    const parent = this.options.parentModels ? `${this.options.parentModels}/__parentModelParam__/` : ''
-    return `app/${context}${this.options.modelNames}/pages/${parent}${this.options.modelNames}`
+    const parent = this.options.parentModels
+      ? `${this.options.parentModels}/__parentModelParam__/`
+      : ""
+    return `app/${this.getModelNamesPath()}/pages/${parent}${this.options.modelNames}`
   }
 }

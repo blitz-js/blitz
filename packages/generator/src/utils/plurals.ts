@@ -1,5 +1,5 @@
-import pluralize from 'pluralize'
-import {pipe} from './pipe'
+import pluralize from "pluralize"
+import {pipe} from "./pipe"
 
 export function plural(input: string): string {
   return pluralize.isPlural(input) ? input : pluralize.plural(input)
@@ -20,7 +20,3 @@ export function uncapitalize(input: string): string {
 export const singlePascal = pipe(singular, capitalize)
 
 export const singleCamel = pipe(singular, uncapitalize)
-
-export const pluralPascal = pipe(plural, capitalize)
-
-export const pluralCamel = pipe(plural, uncapitalize)

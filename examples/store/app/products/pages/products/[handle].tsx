@@ -1,24 +1,24 @@
-import { Link, BlitzPage, GetStaticProps, GetStaticPaths } from "blitz"
+import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from "blitz"
 import getProduct from "app/products/queries/getProduct"
 import getProducts from "app/products/queries/getProducts"
-import { Product } from "db"
+import {Product} from "db"
 
 type StaticProps = {
   product: Product
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
-  const product = await getProduct({ where: { handle: ctx.params.handle as string } })
+  const product = await getProduct({where: {handle: ctx.params.handle as string}})
 
   return {
-    props: { product },
+    props: {product},
     // Unstable beacuse revalidate is still under RFC: https://nextjs.link/issg
     unstable_revalidate: 1,
   }
 }
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getProducts({ orderBy: { id: "desc" } })).map(({ handle }) => ({
-    params: { handle },
+  const paths = (await getProducts({orderBy: {id: "desc"}})).map(({handle}) => ({
+    params: {handle},
   }))
   return {
     paths,
@@ -26,7 +26,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-const Page: BlitzPage<StaticProps> = function ({ product }) {
+const Page: BlitzPage<StaticProps> = function ({product}) {
   if (!product) {
     return <div>Building Page...</div>
   }

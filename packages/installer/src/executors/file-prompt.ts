@@ -1,5 +1,5 @@
-import {prompt as enquirer} from 'enquirer'
-import globby from 'globby'
+import {prompt as enquirer} from "enquirer"
+import globby from "globby"
 
 enum SearchType {
   file,
@@ -13,7 +13,7 @@ interface FilePromptOptions {
   context: any
 }
 
-function getMatchingFiles(filter: string = ''): Promise<string[]> {
+function getMatchingFiles(filter: string = ""): Promise<string[]> {
   return globby(filter, {expandDirectories: true})
 }
 
@@ -25,9 +25,9 @@ export async function filePrompt(options: FilePromptOptions): Promise<string> {
     return choices[0]
   }
   const results: {file: string} = await enquirer({
-    type: 'autocomplete',
-    name: 'file',
-    message: 'Select the target file',
+    type: "autocomplete",
+    name: "file",
+    message: "Select the target file",
     // @ts-ignore
     limit: 10,
     choices,

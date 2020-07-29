@@ -1,12 +1,12 @@
-import {pipeline} from '../../streams'
-import gulpIf from 'gulp-if'
-import {unlink} from '../unlink'
-import {dest} from 'vinyl-fs'
-import File from 'vinyl'
-import {FILE_WRITTEN, FILE_DELETED} from '../../events'
-import {Writable} from 'stream'
-import {isFile} from '../../utils'
-import {transform} from '../../transform'
+import {pipeline} from "../../streams"
+import gulpIf from "gulp-if"
+import {unlink} from "../unlink"
+import {dest} from "vinyl-fs"
+import File from "vinyl"
+import {FILE_WRITTEN, FILE_DELETED} from "../../events"
+import {Writable} from "stream"
+import {isFile} from "../../utils"
+import {transform} from "../../transform"
 /**
  * Returns a Stage that writes files to the destination path
  */
@@ -30,4 +30,4 @@ export const createWrite = (
   return {stream}
 }
 
-const isUnlinkFile = (file: File) => file.event === 'unlink' || file.event === 'unlinkDir'
+const isUnlinkFile = (file: File) => file.event === "unlink" || file.event === "unlinkDir"

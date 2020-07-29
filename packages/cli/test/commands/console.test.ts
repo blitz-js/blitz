@@ -1,12 +1,13 @@
-import {Console} from '../../src/commands/console'
+import {Console} from "../../src/commands/console"
+import * as path from "path"
 
-import * as repl from '@blitzjs/repl'
-import * as db from '../../src/commands/db'
+import * as repl from "@blitzjs/repl"
+import * as db from "../../src/commands/db"
 
-jest.spyOn(global.console, 'log').mockImplementation()
+jest.spyOn(global.console, "log").mockImplementation()
 
 jest.mock(
-  '@blitzjs/server',
+  "@blitzjs/server",
   jest.fn(() => {
     return {
       log: {
@@ -21,14 +22,14 @@ jest.mock(
   }),
 )
 
-jest.mock(`${process.cwd()}/package.json`, () => ({
+jest.mock("../../package.json", () => ({
   dependencies: {
-    ramda: '1.0.0',
+    ramda: "1.0.0",
   },
 }))
 
 jest.mock(
-  '@blitzjs/repl',
+  "@blitzjs/repl",
   jest.fn(() => {
     return {
       runRepl: jest.fn(),
@@ -37,7 +38,7 @@ jest.mock(
 )
 
 jest.mock(
-  '../../src/commands/db',
+  "../../src/commands/db",
   jest.fn(() => {
     return {
       runPrismaGeneration: jest.fn(),
@@ -45,27 +46,27 @@ jest.mock(
   }),
 )
 
-describe('Console command', () => {
+describe("Console command", () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
 
-  it('runs PrismaGeneration', async () => {
+  it("runs PrismaGeneration", async () => {
     await Console.prototype.run()
     expect(db.runPrismaGeneration).toHaveBeenCalled()
   })
 
-  it('runs PrismaGeneration with silent allowed', async () => {
+  it("runs PrismaGeneration with silent allowed", async () => {
     await Console.prototype.run()
     expect(db.runPrismaGeneration).toHaveBeenCalledWith({silent: true})
   })
 
-  it('runs repl', async () => {
+  it("runs repl", async () => {
     await Console.prototype.run()
     expect(repl.runRepl).toHaveBeenCalled()
   })
 
-  it('runs repl with replOptions', async () => {
+  it("runs repl with replOptions", async () => {
     await Console.prototype.run()
     expect(repl.runRepl).toHaveBeenCalledWith(Console.replOptions)
   })

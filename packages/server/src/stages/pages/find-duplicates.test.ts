@@ -1,79 +1,85 @@
-import {fullTransformer, findDuplicates, filterBy} from '.'
-import {normalize} from 'path'
+import {fullTransformer, findDuplicates, filterBy} from "."
+import {normalize} from "path"
 
-test('should filter by path', () => {
-  expect(fullTransformer(normalize('app/foo/pages/api/bar'))).toBe(normalize('pages/api/bar'))
-  expect(fullTransformer(normalize('app/foo/api/bar'))).toBe(normalize('pages/api/bar'))
+test("should filter by path", () => {
+  expect(fullTransformer(normalize("app/foo/pages/api/bar.ts"))).toBe(normalize("pages/api/bar.ts"))
+  expect(fullTransformer(normalize("app/foo/api/bar.ts"))).toBe(normalize("pages/api/bar.ts"))
 
   const dupes = findDuplicates(
-    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar', 'pages/bar', 'app/ding/pages/bar'].map(
-      normalize,
-    ),
+    [
+      "app/foo/pages/api/bar.ts",
+      "app/pages/api/bar.ts",
+      "app/api/bar.ts",
+      "pages/bar.ts",
+      "app/ding/pages/bar.ts",
+    ].map(normalize),
     fullTransformer,
   )
 
   expect(dupes).toEqual([
-    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar'].map(normalize),
-    ['pages/bar', 'app/ding/pages/bar'].map(normalize),
+    ["app/foo/pages/api/bar.ts", "app/pages/api/bar.ts", "app/api/bar.ts"].map(normalize),
+    ["pages/bar.ts", "app/ding/pages/bar.ts"].map(normalize),
   ])
-  expect(filterBy(dupes, 'api')).toEqual([
-    ['app/foo/pages/api/bar', 'app/pages/api/bar', 'app/api/bar'].map(normalize),
+  expect(filterBy(dupes, "api")).toEqual([
+    ["app/foo/pages/api/bar.ts", "app/pages/api/bar.ts", "app/api/bar.ts"].map(normalize),
   ])
-  expect(filterBy(dupes, 'pages', 'api')).toEqual([['pages/bar', 'app/ding/pages/bar'].map(normalize)])
+  expect(filterBy(dupes, "pages", "api")).toEqual([
+    ["pages/bar.ts", "app/ding/pages/bar.ts"].map(normalize),
+  ])
 })
 
-test('filterBy', () => {
+test("filterBy", () => {
   expect(
     filterBy(
       [
-        ['foo', 'bar', 'baz'],
-        ['boo', 'bar', 'boo'],
+        ["foo", "bar", "baz"],
+        ["boo", "bar", "boo"],
       ],
-      'foo',
+      "foo",
     ),
-  ).toEqual([['foo', 'bar', 'baz']])
+  ).toEqual([["foo", "bar", "baz"]])
 
   expect(
     filterBy(
       [
-        ['foo', 'bar', 'api', 'baz'],
-        ['boo', 'bar', 'boo'],
+        ["foo", "bar", "api", "baz"],
+        ["boo", "bar", "boo"],
       ],
-      'foo',
-      'api',
+      "foo",
+      "api",
     ),
   ).toEqual([])
 
   expect(
     filterBy(
       [
-        ['foo', 'bar', 'baz'],
-        ['boo', 'bar', 'boo'],
+        ["foo", "bar", "baz"],
+        ["boo", "bar", "boo"],
       ],
-      'bar',
+      "bar",
     ),
   ).toEqual([
-    ['foo', 'bar', 'baz'],
-    ['boo', 'bar', 'boo'],
+    ["foo", "bar", "baz"],
+    ["boo", "bar", "boo"],
   ])
 
   expect(
     filterBy(
       [
-        ['foo', 'bar', 'baz'],
-        ['boo', 'foo', 'boo'],
+        ["foo", "bar", "baz"],
+        ["boo", "foo", "boo"],
       ],
-      'boo',
+      "boo",
     ),
-  ).toEqual([['boo', 'foo', 'boo']])
+  ).toEqual([["boo", "foo", "boo"]])
 
   expect(
     filterBy(
       [
-        ['foo', 'bar', 'baz'],
-        ['boo', 'foo', 'boo'],
+        ["foo", "bar", "baz"],
+        ["boo", "foo", "boo"],
       ],
-      'bozo',
+      "bozo",
     ),
   ).toEqual([])
 })

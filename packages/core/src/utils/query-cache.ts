@@ -1,12 +1,19 @@
-import {queryCache} from 'react-query'
+import {queryCache} from "react-query"
+
+type MutateOptions = {
+  refetch?: boolean
+}
 
 export interface QueryCacheFunctions<T> {
-  mutate: (newData: T | ((oldData: T) => T)) => void
+  mutate: (newData: T | ((oldData: T | undefined) => T), opts?: MutateOptions) => void
 }
 
 export const getQueryCacheFunctions = <T>(queryKey: string): QueryCacheFunctions<T> => ({
-  mutate: (newData) => {
+  mutate: (newData, opts = {refetch: true}) => {
     queryCache.setQueryData(queryKey, newData)
-    return queryCache.refetchQueries(queryKey, {force: true})
+    if (opts.refetch) {
+      return queryCache.invalidateQueries(queryKey, {refetchActive: true})
+    }
+    return null
   },
 })

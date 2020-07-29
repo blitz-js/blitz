@@ -1,55 +1,75 @@
-import {BlitzApiRequest, BlitzApiResponse} from '@blitzjs/core'
-import {log} from '@blitzjs/display'
-import {serializeError} from 'serialize-error'
+import {log} from "@blitzjs/display"
+import type {
+  Middleware,
+  BlitzApiRequest,
+  BlitzApiResponse,
+  EnhancedResolverModule,
+} from "@blitzjs/core"
+import {serializeError} from "serialize-error"
 
-export function rpcHandler(
-  _: string,
-  name: string,
-  resolver: (...args: any) => Promise<any>,
+export function rpcApiHandler(
+  resolver: EnhancedResolverModule,
+  middleware: Middleware[] = [],
   connectDb?: () => any,
 ) {
-  return async function (req: BlitzApiRequest, res: BlitzApiResponse) {
-    const logPrefix = `${name}`
+  // RPC Middleware is always the last middleware to run
+  middleware.push(rpcMiddleware(resolver, connectDb))
 
-    if (req.method === 'HEAD') {
+  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
+  }
+}
+
+const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any): Middleware => {
+  return async (req, res, next) => {
+    const logPrefix = `${resolver._meta.name}`
+
+    if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
-      if (typeof connectDb === 'function') {
+      if (typeof connectDb === "function") {
         connectDb()
       }
-      return res.status(200).end()
-    } else if (req.method === 'POST') {
+      res.status(200).end()
+      return next()
+    } else if (req.method === "POST") {
       // Handle RPC call
-      console.log('') // New line
+      console.log("") // New line
       log.progress(`Running ${logPrefix}(${JSON.stringify(req.body?.params, null, 2)})`)
 
-      if (typeof req.body.params === 'undefined') {
-        const error = {message: 'Request body is missing the `params` key'}
+      if (typeof req.body.params === "undefined") {
+        const error = {message: "Request body is missing the `params` key"}
         log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
-        return res.status(400).json({
+        res.status(400).json({
           result: null,
           error,
         })
+        return next()
       }
 
       try {
-        const result = await resolver(req.body.params)
+        const result = await resolver(req.body.params, res.blitzCtx)
 
         log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
-        return res.json({
-          result,
+        res.blitzResult = result
+        res.json({
+          result: result || null,
           error: null,
         })
+        return next()
       } catch (error) {
         log.error(`${logPrefix} failed: ${error}\n`)
-        return res.json({
+        console.error(error)
+        res.json({
           result: null,
           error: serializeError(error),
         })
+        return next()
       }
     } else {
       // Everything else is error
       log.error(`${logPrefix} not found\n`)
-      return res.status(404).end()
+      res.status(404).end()
+      return next()
     }
   }
 }

@@ -1,9 +1,8 @@
-import * as fs from 'fs'
-import * as path from 'path'
-const resolveGlobal = require('resolve-global')
-const resolveFrom = require('resolve-from')
-const pkgDir = require('pkg-dir')
-const chalk = require('chalk')
+import * as path from "path"
+import resolveFrom from "resolve-from"
+import pkgDir from "pkg-dir"
+import chalk from "chalk"
+import { parseSemver } from '../utils/parse-semver'
 
 console.log(
   chalk.yellow(
@@ -12,71 +11,61 @@ console.log(
   ),
 )
 
-let usageType: 'local' | 'monorepo' | 'global' | 'global-linked'
-
-const localCLIPkgPath = path.resolve(process.cwd(), 'node_modules', '@blitzjs/cli')
-const monorepoCLIPkgPath = path.resolve(process.cwd(), '../..', 'node_modules', '@blitzjs/cli')
-const globalCLIPkgPath = resolveFrom(__dirname, '@blitzjs/cli')
-const globalLinkedPath = path.resolve(pkgDir.sync(__dirname), '../../lerna.json')
-
-function getBlitzPkgJsonPath() {
-  switch (usageType) {
-    case 'local':
-      return path.join(process.cwd(), 'node_modules/blitz/package.json')
-    case 'monorepo':
-      return path.join(process.cwd(), '../../node_modules/blitz/package.json')
-    case 'global':
-      return path.join(resolveGlobal.silent('blitz') || '', 'package.json')
-    case 'global-linked':
-      return path.join(pkgDir.sync(__dirname), 'package.json')
-  }
+if (parseSemver(process.version).major < 12) {
+  console.log(
+    chalk.yellow(
+      `You are using an unsupported version of Node.js. Consider switching to v12 or newer.\n`,
+    ),
+  )
 }
 
-let pkgPath
-if (fs.existsSync(localCLIPkgPath)) {
-  usageType = 'local'
-  pkgPath = localCLIPkgPath
-} else if (fs.existsSync(monorepoCLIPkgPath)) {
-  usageType = 'monorepo'
-  pkgPath = monorepoCLIPkgPath
-} else if (fs.existsSync(globalLinkedPath)) {
-  usageType = 'global-linked'
-  pkgPath = path.resolve(pkgDir.sync(__dirname), '../cli')
+const globalBlitzPath = resolveFrom(__dirname, "blitz")
+const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
+
+const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
+
+let blitzPkgPath
+if (isInDevelopmentAsGloballyLinked) {
+  blitzPkgPath = globalBlitzPath
 } else {
-  usageType = 'global'
-  pkgPath = globalCLIPkgPath
+  // localBlitzPath won't exist if used outside a blitz app directory
+  blitzPkgPath = localBlitzPath || globalBlitzPath
 }
 
-const cli = require(pkgPath as string)
+const cliPkgPath = resolveFrom(blitzPkgPath, "@blitzjs/cli")
 
-const options = require('minimist')(process.argv.slice(2))
+const cli = require(cliPkgPath)
+
+const options = require("minimist")(process.argv.slice(2))
 const hasVersionFlag = options._.length === 0 && (options.v || options.version)
 const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
 
 if (hasVersionFlag) {
   if (hasVerboseFlag) {
-    console.log('debug:', usageType)
-    console.log('debug: pkgPath:', pkgPath, '\n')
+    console.log("debug: blitzPkgPath:", blitzPkgPath)
+    console.log("debug: cliPkgPath:", cliPkgPath, "\n")
   }
   try {
-    const osName = require('os-name')
+    const osName = require("os-name")
     console.log(`${osName()} | ${process.platform}-${process.arch} | Node: ${process.version}\n`)
 
-    let globalInstallPath
-    let localButGlobalLinked = usageType === 'local' && fs.existsSync(globalLinkedPath)
-    if (usageType === 'global-linked' || usageType === 'monorepo' || localButGlobalLinked) {
-      globalInstallPath = pkgDir.sync(__dirname)
-    } else {
-      globalInstallPath = pkgDir.sync(resolveFrom(__dirname, 'blitz'))
+    const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
+    const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
+
+    if (globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
+      // This branch won't run if user does `npx blitz` or `yarn blitz`
+      const globalVersion = require(path.join(globalBlitzPkgJsonPath, "package.json")).version
+      console.log(`blitz: ${globalVersion} (global)`)
     }
-    const globalVersion = path.join(globalInstallPath, 'package.json')
-    console.log(`blitz: ${require(globalVersion).version} (global)`)
-    if (!usageType.includes('global')) {
-      console.log(`blitz: ${require(getBlitzPkgJsonPath()).version} (local)`)
+
+    if (localBlitzPkgJsonPath) {
+      const localVersion = require(path.join(localBlitzPkgJsonPath, "package.json")).version
+      console.log(`blitz: ${localVersion} (local)`)
     }
-    console.log('') // One last new line
+
+    console.log("") // One last new line
   } catch (e) {
-    console.log('blitz error', e)
+    console.log("blitz error", e)
   }
   process.exit(0)
 } else {

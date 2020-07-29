@@ -1,4 +1,13 @@
-import { Head, Link } from "blitz"
+import React, {Suspense} from "react"
+import {Head, Link, useQuery} from "blitz"
+import getReferer from "app/queries/getReferer"
+
+const Referer = () => {
+  // This is here mainly as an integration test for global middleware
+  const [referer] = useQuery(getReferer, {})
+
+  return <div id="referer">Referer: {referer}</div>
+}
 
 const Home = () => (
   <div className="container">
@@ -8,7 +17,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1 className="title" style={{ marginBottom: 24 }}>
+      <h1 className="title" style={{marginBottom: 24}}>
         Blitz Store Example
       </h1>
       <ul>
@@ -48,6 +57,9 @@ const Home = () => (
       >
         Powered by Blitz.js
       </a>
+      <Suspense fallback={null}>
+        <Referer />
+      </Suspense>
     </footer>
 
     <style jsx>{`
@@ -74,6 +86,7 @@ const Home = () => (
         height: 100px;
         border-top: 1px solid #eaeaea;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
       }

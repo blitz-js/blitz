@@ -1,6 +1,6 @@
-import File from 'vinyl'
+import File from "vinyl"
 
-declare module 'vinyl-file' {
+declare module "vinyl-file" {
   type Options = {
     cwd?: string
     base?: string

@@ -1,13 +1,13 @@
-import {singlePascal, singleCamel, pluralCamel} from '../utils/plurals'
-import {log} from '@blitzjs/display'
+import {singlePascal, uncapitalize, capitalize} from "../utils/plurals"
+import {log} from "@blitzjs/display"
 
 export enum FieldType {
-  Boolean = 'Boolean',
-  DateTime = 'DateTime',
-  Float = 'Float',
-  Int = 'Int',
-  Json = 'Json',
-  String = 'String',
+  Boolean = "Boolean",
+  DateTime = "DateTime",
+  Float = "Float",
+  Int = "Int",
+  Json = "Json",
+  String = "String",
 }
 
 export enum Relation {
@@ -38,7 +38,7 @@ const fallbackIfUndef = <T extends any>(defaultValue: T, input?: T) => {
 }
 
 const defaultValueTest = /\[([\w]+)\]/
-const builtInGenerators = ['autoincrement', 'now', 'uuid', 'cuid']
+const builtInGenerators = ["autoincrement", "now", "uuid", "cuid"]
 
 class MissingFieldNameError extends Error {}
 
@@ -56,9 +56,9 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static parse(input: string): Field[] {
-    const [_fieldName, _fieldType = 'String', attribute] = input.split(':')
-    let fieldName = singleCamel(_fieldName)
-    let fieldType = singlePascal(_fieldType)
+    const [_fieldName, _fieldType = "String", attribute] = input.split(":")
+    let fieldName = uncapitalize(_fieldName)
+    let fieldType = capitalize(_fieldType)
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
@@ -67,13 +67,13 @@ export class Field {
     let relationFromFields = undefined
     let relationToFields = undefined
     let maybeIdField = undefined
-    if (fieldType.includes('?')) {
-      fieldType = fieldType.replace('?', '')
+    if (fieldType.includes("?")) {
+      fieldType = fieldType.replace("?", "")
       isRequired = false
     }
-    if (fieldType.includes('[]')) {
-      fieldType = fieldType.replace('[]', '')
-      fieldName = pluralCamel(fieldName)
+    if (fieldType.includes("[]")) {
+      fieldType = fieldType.replace("[]", "")
+      fieldName = uncapitalize(fieldName)
       isList = true
     }
     // use original unmodified field name in case the list handling code
@@ -82,17 +82,17 @@ export class Field {
       // this field is an object type, not a scalar type
       const relationType = Relation[_fieldName]
       // translate the type into the name since they should stay in sync
-      fieldName = singleCamel(fieldType)
+      fieldName = uncapitalize(fieldType)
       fieldType = singlePascal(fieldType)
 
       switch (relationType) {
         case Relation.hasOne:
-          // current model gets single `modelName ModelName` association field
+          // current model gets single association field
           isList = false
           break
         case Relation.hasMany:
-          // current model gets single `modelNames ModelName[]` association field
-          fieldName = pluralCamel(fieldName)
+          // current model gets single association field
+          fieldName = uncapitalize(fieldName)
           isList = true
           isRequired = true
           break
@@ -102,7 +102,7 @@ export class Field {
           //   modelNameId  ModelIdType
           const idFieldName = `${fieldName}Id`
           relationFromFields = [idFieldName]
-          relationToFields = ['id']
+          relationToFields = ["id"]
           maybeIdField = new Field(idFieldName, {type: FieldType.Int, isRequired})
           isList = false
           break
@@ -110,7 +110,9 @@ export class Field {
     }
     if (!/^[A-Za-z]*$/.test(fieldName)) {
       // modelName should be just alpha characters at this point, validate
-      throw new Error(`[Field.parse]: received unknown special character in field name: ${fieldName}`)
+      throw new Error(
+        `[Field.parse]: received unknown special character in field name: ${fieldName}`,
+      )
     }
 
     if (/unique/i.test(attribute)) isUnique = true
@@ -118,7 +120,9 @@ export class Field {
     if (/default/i.test(attribute)) {
       if (defaultValueTest.test(attribute)) {
         const [, _defaultValue] = attribute.match(defaultValueTest)!
-        defaultValue = builtInGenerators.includes(_defaultValue) ? {name: _defaultValue} : _defaultValue
+        defaultValue = builtInGenerators.includes(_defaultValue)
+          ? {name: _defaultValue}
+          : _defaultValue
       }
     }
     try {
@@ -139,9 +143,9 @@ export class Field {
         throw new Error(
           `Each field in a model must have a name, but you supplied ${log.variable(
             input,
-          )}.\n         Try giving the field as a ${log.variable('name:type')} pair, such as ${log.variable(
-            'description:string',
-          )}.`,
+          )}.\n         Try giving the field as a ${log.variable(
+            "name:type",
+          )} pair, such as ${log.variable("description:string")}.`,
         )
       }
       throw err
@@ -149,10 +153,12 @@ export class Field {
   }
 
   constructor(name: string, options: FieldArgs) {
-    if (!name) throw new MissingFieldNameError('[PrismaField]: A field name is required')
+    if (!name) throw new MissingFieldNameError("[PrismaField]: A field name is required")
     if (!options.type) {
       log.warning(
-        `No field type specified for field ${log.variable(name)}, falling back to ${log.variable('String')}.`,
+        `No field type specified for field ${log.variable(name)}, falling back to ${log.variable(
+          "String",
+        )}.`,
       )
       options.type = FieldType.String
     }
@@ -167,17 +173,17 @@ export class Field {
     this.relationFromFields = options.relationFromFields
     this.relationToFields = options.relationToFields
     if (!this.isRequired && this.isList) {
-      throw new Error('[PrismaField]: a type cannot be both optional and a list')
+      throw new Error("[PrismaField]: a type cannot be both optional and a list")
     }
     if (this.isId && this.default === undefined) {
-      throw new Error('[PrismaField]: ID fields must have a default value')
+      throw new Error("[PrismaField]: ID fields must have a default value")
     }
   }
 
   private getDefault() {
-    if (this.default === undefined) return ''
+    if (this.default === undefined) return ""
     let defaultValue: string
-    if (typeof this.default === 'object') {
+    if (typeof this.default === "object") {
       // { name: 'fnname' } is based off of the Prisma model definition
       defaultValue = `${this.default.name}()`
     } else {
@@ -187,40 +193,40 @@ export class Field {
   }
 
   private getId() {
-    return this.isId ? '@id' : ''
+    return this.isId ? "@id" : ""
   }
 
   private getIsUnique() {
-    return this.isUnique ? '@unique' : ''
+    return this.isUnique ? "@unique" : ""
   }
 
   private getIsUpdatedAt() {
-    return this.isUpdatedAt ? '@updatedAt' : ''
+    return this.isUpdatedAt ? "@updatedAt" : ""
   }
 
   private getRelation() {
-    if (this.relationFromFields === undefined || this.relationToFields === undefined) return ''
+    if (this.relationFromFields === undefined || this.relationToFields === undefined) return ""
     const separator =
       this.relationToFields &&
       this.relationToFields.length > 0 &&
       this.relationFromFields &&
       this.relationFromFields.length
-        ? ', '
-        : ''
+        ? ", "
+        : ""
     const fromFields =
       this.relationFromFields && this.relationFromFields.length > 0
         ? `fields: [${this.relationFromFields.toString()}]`
-        : ''
+        : ""
 
     const toFields =
       this.relationToFields && this.relationToFields.length > 0
         ? `references: [${this.relationToFields.toString()}]`
-        : ''
+        : ""
     return `@relation(${fromFields}${separator}${toFields})`
   }
 
   private getTypeModifiers() {
-    return `${this.isRequired ? '' : '?'}${this.isList ? '[]' : ''}`
+    return `${this.isRequired ? "" : "?"}${this.isList ? "[]" : ""}`
   }
 
   private getAttributes() {
@@ -234,9 +240,9 @@ export class Field {
     // filter out any attributes that return ''
     const attrs = possibleAttributes.filter((attr) => attr)
     if (attrs.length > 0) {
-      return `  ${attrs.join(' ')}`
+      return `  ${attrs.join(" ")}`
     }
-    return ''
+    return ""
   }
 
   toString() {

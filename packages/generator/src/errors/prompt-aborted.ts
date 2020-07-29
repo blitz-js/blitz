@@ -1,5 +1,5 @@
 export class PromptAbortedError extends Error {
   constructor() {
-    super('Prompt aborted')
+    super("Prompt aborted")
   }
 }

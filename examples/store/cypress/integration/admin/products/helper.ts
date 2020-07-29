@@ -1,8 +1,8 @@
 export const fields = [
-  { label: "Product Name", type: "input|", uniq: true },
-  { label: "Handle", type: "input|", uniq: true },
-  { label: "Description", type: "textarea|" },
-  { label: "Price", type: "input|" }, // TODO: Add input type here input|number
+  {label: "Product Name", type: "input|", uniq: true},
+  {label: "Handle", type: "input|", uniq: true},
+  {label: "Description", type: "textarea|"},
+  {label: "Price", type: "input|"}, // TODO: Add input type here input|number
 ]
 export const data = ["Apples", "apples", "Fresh apples", "32"]
 
@@ -16,7 +16,7 @@ export const insert = (): string => {
 
   const count = {}
   for (let i = 0; i < data.length; i++) {
-    const { label, type, uniq } = fields[i]
+    const {label, type, uniq} = fields[i]
     const [element, inputType] = type.split("|")
     let item = data[i]
 

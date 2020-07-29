@@ -1,7 +1,7 @@
-import {fetchAllVersions, fetchLatestDistVersion} from './npm-fetch'
-import {log} from '@blitzjs/display'
-import {Fallbackable} from './fallbackable'
-import chalk from 'chalk'
+import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
+import {log} from "@blitzjs/display"
+import {Fallbackable} from "./fallbackable"
+import chalk from "chalk"
 
 export const logFailedVersionFetch = (dependency: string, fallback: string) => {
   log.clearLine(
@@ -15,9 +15,9 @@ export const logFailedVersionFetch = (dependency: string, fallback: string) => {
 
 export const getLatestVersion = async (
   dependency: string,
-  templateVersion: string = '',
+  templateVersion: string = "",
 ): Promise<Fallbackable<string>> => {
-  const major = templateVersion.replace('.x', '')
+  const major = templateVersion.replace(".x", "")
 
   try {
     const [allVersions, latestDistVersion] = await Promise.all([
