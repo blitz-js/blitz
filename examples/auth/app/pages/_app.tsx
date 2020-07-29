@@ -8,6 +8,8 @@ export default function App({Component, pageProps}: AppProps) {
     <ErrorBoundary
       FallbackComponent={RootErrorFallback}
       onReset={() => {
+        // This ensures the Blitz useQuery hooks will automatically refetch
+        // data any time you reset the error boundary
         queryCache.resetErrorBoundaries()
       }}
     >
