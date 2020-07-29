@@ -17,3 +17,11 @@ export class AuthorizationError extends Error {
     super(message)
   }
 }
+
+export class NotFoundError extends Error {
+  name = "NotFoundError"
+  statusCode = 404
+  constructor(message = "This could not be found") {
+    super(message)
+  }
+}
