@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.16.5-canary.5",
+  "version": "0.16.5-canary.7",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -14,7 +14,8 @@
     "clean": "rimraf dist",
     "wait:file-pipeline": "wait-on ../file-pipeline/dist/packages/file-pipeline/src/index.d.ts",
     "wait:core": "wait-on ../core/dist/packages/core/src/index.d.ts",
-    "predev": "yarn wait:core && yarn wait:file-pipeline",
+    "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
+    "predev": "yarn wait:config && yarn wait:file-pipeline && yarn wait:core",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test"
@@ -28,8 +29,9 @@
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/display": "0.16.5-canary.5",
-    "@blitzjs/file-pipeline": "0.16.5-canary.5",
+    "@blitzjs/config": "0.16.5-canary.7",
+    "@blitzjs/display": "0.16.5-canary.7",
+    "@blitzjs/file-pipeline": "0.16.5-canary.7",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.2",
@@ -65,7 +67,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.16.5-canary.5"
+    "@blitzjs/core": "0.16.5-canary.7"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

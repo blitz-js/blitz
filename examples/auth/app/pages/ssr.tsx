@@ -3,6 +3,7 @@ import {getSessionContext} from "@blitzjs/server"
 import {ssrQuery, useRouter, GetServerSideProps, PromiseReturnType, Error as ErrorPage} from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
+import path from "path"
 
 type PageProps = {
   user?: PromiseReturnType<typeof getUser>
@@ -13,6 +14,13 @@ type PageProps = {
 }
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, res}) => {
+  // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
+  // https://github.com/blitz-js/blitz/issues/794
+  path.resolve("next.config.js")
+  path.resolve("blitz.config.js")
+  path.resolve(".next/__db.js")
+  // End anti-tree-shaking
+
   const session = await getSessionContext(req, res)
   console.log("Session id:", session.userId)
   try {

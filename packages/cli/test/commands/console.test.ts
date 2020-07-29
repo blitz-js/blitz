@@ -1,4 +1,5 @@
 import {Console} from "../../src/commands/console"
+import * as path from "path"
 
 import * as repl from "@blitzjs/repl"
 import * as db from "../../src/commands/db"
@@ -21,7 +22,7 @@ jest.mock(
   }),
 )
 
-jest.mock(`${process.cwd()}/package.json`, () => ({
+jest.mock("../../package.json", () => ({
   dependencies: {
     ramda: "1.0.0",
   },

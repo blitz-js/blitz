@@ -21,15 +21,17 @@ import {
   COOKIE_SESSION_TOKEN,
   COOKIE_REFRESH_TOKEN,
   COOKIE_CSRF_TOKEN,
+  COOKIE_PUBLIC_DATA_TOKEN,
   HEADER_CSRF,
-  HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
+  HEADER_PUBLIC_DATA_TOKEN,
   MiddlewareResponse,
 } from "@blitzjs/core"
+import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
 import {join} from "path"
-import {addMinutes, isPast, differenceInMinutes} from "date-fns"
+import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {IncomingMessage, ServerResponse} from "http"
@@ -37,6 +39,12 @@ import {IncomingMessage, ServerResponse} from "http"
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
+
+// ----------------------------------------------------------------------------------------
+// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// This line ensures that blitz.config.js is loaded
+// ----------------------------------------------------------------------------------------
+process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
@@ -47,6 +55,7 @@ const getDb = () => {
 const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
+  sameSite: "lax",
   getSession: (handle) => getDb().session.findOne({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
@@ -352,7 +361,7 @@ export async function createNewSession(
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
     setCSRFCookie(res, antiCSRFToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(res, "", new Date(0))
 
@@ -404,7 +413,7 @@ export async function createNewSession(
 
     setSessionCookie(res, sessionToken, expiresAt)
     setCSRFCookie(res, antiCSRFToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(res, "", new Date(0))
 
@@ -440,14 +449,14 @@ export async function refreshSession(res: ServerResponse, sessionKernel: Session
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     setAnonymousSessionCookie(res, anonymousSessionToken)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
   } else if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
 
     setSessionCookie(res, sessionToken, expiresAt)
-    setHeader(res, HEADER_PUBLIC_DATA_TOKEN, publicDataToken)
+    setPublicDataCookie(res, publicDataToken)
 
     const hashedSessionToken = hash(sessionToken)
 
@@ -688,32 +697,58 @@ export const setSessionCookie = (res: ServerResponse, sessionToken: string, expi
       path: "/",
       httpOnly: true,
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
       expires: expiresAt,
     }),
   )
 }
 
-export const setAnonymousSessionCookie = (res: ServerResponse, token: string, expiresAt?: Date) => {
+export const setAnonymousSessionCookie = (
+  res: ServerResponse,
+  token: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
       path: "/",
       httpOnly: true,
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
       expires: expiresAt,
     }),
   )
 }
 
-export const setCSRFCookie = (res: ServerResponse, antiCSRFToken: string) => {
+export const setCSRFCookie = (
+  res: ServerResponse,
+  antiCSRFToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
       path: "/",
       secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
-      sameSite: true,
+      sameSite: config.sameSite,
+      expires: expiresAt,
+    }),
+  )
+}
+
+export const setPublicDataCookie = (
+  res: ServerResponse,
+  publicDataToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
+  setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
+      path: "/",
+      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      sameSite: config.sameSite,
+      expires: expiresAt,
     }),
   )
 }

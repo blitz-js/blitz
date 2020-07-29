@@ -1,10 +1,11 @@
-import {Head, Link, useSession} from "blitz"
+import {Head, Link, useSession, useRouterQuery} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
 
 const UserStuff = () => {
   const session = useSession()
+  const query = useRouterQuery()
   return (
     <div>
       {!session.userId && (
@@ -18,6 +19,10 @@ const UserStuff = () => {
           <a href="/api/auth/twitter" style={{display: "block"}}>
             Login with Twitter
           </a>
+          <a href="/api/auth/github" style={{display: "block"}}>
+            Login with Github
+          </a>
+          {query.authError && <div style={{color: "red"}}>{query.authError}</div>}
         </>
       )}
       <pre>{JSON.stringify(session, null, 2)}</pre>

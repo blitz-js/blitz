@@ -1,6 +1,9 @@
 const {sessionMiddleware, unstable_simpleRolesIsAuthorized} = require("@blitzjs/server")
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+})
 
-module.exports = {
+module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
       unstable_isAuthorized: unstable_simpleRolesIsAuthorized,
@@ -19,4 +22,4 @@ module.exports = {
     return config
   },
   */
-}
+})
