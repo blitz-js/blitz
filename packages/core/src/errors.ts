@@ -1,24 +1,27 @@
-export class CSRFTokenMismatchError extends Error {
-  name = "CSRFTokenMismatchError"
-  statusCode = 401
-  message = "Unauthorized"
-}
-
 export class AuthenticationError extends Error {
   name = "AuthenticationError"
   statusCode = 401
-  message = "Unauthorized"
+  constructor(message = "You must be logged in to access this") {
+    super(message)
+  }
+}
+
+export class CSRFTokenMismatchError extends AuthenticationError {
+  name = "CSRFTokenMismatchError"
 }
 
 export class AuthorizationError extends Error {
   name = "AuthorizationError"
   statusCode = 403
-  message = "Forbidden"
+  constructor(message = "You are not authorized to access this") {
+    super(message)
+  }
 }
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
   statusCode = 404
-  message = "Not Found"
-  // TODO - allow custom message
+  constructor(message = "This could not be found") {
+    super(message)
+  }
 }
