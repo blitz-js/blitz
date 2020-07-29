@@ -13,6 +13,14 @@ export * from "./supertokens"
 export * from "./passport-adapter"
 export * from "./errors"
 
+export class NotFoundError extends Error {
+  name = "NotFoundError"
+  statusCode = 404
+  constructor(message = "This could not be found") {
+    super(message)
+  }
+}
+
 // --------------------
 // Exports from Next.js
 // --------------------
