@@ -47,7 +47,7 @@
     "lodash": "4.17.19",
     "merge-stream": "2.0.0",
     "nanoid": "3.1.10",
-    "next": "9.4.4",
+    "next": "9.5.0",
     "next-compose-plugins": "2.2.0",
     "next-transpile-modules": "3.2.0",
     "null-loader": "4.0.0",
