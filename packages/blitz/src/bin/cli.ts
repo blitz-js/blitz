@@ -2,7 +2,10 @@ import * as path from "path"
 import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
 import chalk from "chalk"
-import { parseSemver } from '../utils/parse-semver'
+import { parseSemver } from "../utils/parse-semver"
+import { execSync } from "child_process"
+import hasYarn from "has-yarn"
+
 
 console.log(
   chalk.yellow(
@@ -63,6 +66,8 @@ if (hasVersionFlag) {
       console.log(`blitz: ${localVersion} (local)`)
     }
 
+    printEnvInfo()
+
     console.log("") // One last new line
   } catch (e) {
     console.log("blitz error", e)
@@ -70,4 +75,14 @@ if (hasVersionFlag) {
   process.exit(0)
 } else {
   cli.run()
+}
+
+/**
+ * Prints detailed system info
+ */
+function printEnvInfo() {
+  const packageManager = `\n  Package manager: ${hasYarn() ? 'yarn' : 'npm'}`
+  const envinfo = execSync('npx envinfo --system --binaries --npmPackages blitz,typescript,react,react-dom,@prisma/cli,@prisma/client').toString()
+
+  console.log(packageManager, envinfo)
 }
