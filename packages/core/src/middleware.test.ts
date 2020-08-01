@@ -109,11 +109,18 @@ async function mockServer(middleware: Middleware[], callback: (url: string) => P
   }
 
   let server = http.createServer((req, res) =>
-    apiResolver(req, res, null, apiEndpoint, {
-      previewModeId: "previewModeId",
-      previewModeEncryptionKey: "previewModeEncryptionKey",
-      previewModeSigningKey: "previewModeSigningKey",
-    }),
+    apiResolver(
+      req,
+      res,
+      null,
+      apiEndpoint,
+      {
+        previewModeId: "previewModeId",
+        previewModeEncryptionKey: "previewModeEncryptionKey",
+        previewModeSigningKey: "previewModeSigningKey",
+      },
+      true,
+    ),
   )
 
   try {

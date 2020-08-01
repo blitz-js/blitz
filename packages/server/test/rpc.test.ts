@@ -186,13 +186,20 @@ describe("rpcMiddleware", () => {
       },
     }
 
-    let server = http.createServer(async (req, res) => {
-      await apiResolver(req, res, null, handler, {
-        previewModeId: "previewModeId",
-        previewModeEncryptionKey: "previewModeEncryptionKey",
-        previewModeSigningKey: "previewModeSigningKey",
-      })
-    })
+    let server = http.createServer((req, res) =>
+      apiResolver(
+        req,
+        res,
+        null,
+        handler,
+        {
+          previewModeId: "previewModeId",
+          previewModeEncryptionKey: "previewModeEncryptionKey",
+          previewModeSigningKey: "previewModeSigningKey",
+        },
+        true,
+      ),
+    )
 
     try {
       let url = await listen(server)
