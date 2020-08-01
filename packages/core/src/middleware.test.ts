@@ -119,7 +119,7 @@ async function mockServer(middleware: Middleware[], callback: (url: string) => P
         previewModeEncryptionKey: "previewModeEncryptionKey",
         previewModeSigningKey: "previewModeSigningKey",
       },
-      true,
+      false,
     ),
   )
 

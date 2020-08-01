@@ -161,7 +161,7 @@ async function mockServer(
         previewModeEncryptionKey: "previewModeEncryptionKey",
         previewModeSigningKey: "previewModeSigningKey",
       },
-      true,
+      false,
     )
   })
 
