@@ -1,6 +1,6 @@
 import * as React from "react"
 import {getSessionContext} from "@blitzjs/server"
-import {ssrQuery, useRouter, GetServerSideProps, PromiseReturnType, Error as ErrorPage} from "blitz"
+import {ssrQuery, useRouter, GetServerSideProps, PromiseReturnType, ErrorComponent} from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
 import path from "path"
@@ -31,7 +31,11 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
     )
     return {props: {user}}
   } catch (error) {
-    if (error.name === "AuthenticationError") {
+    if (error.name === "NotFoundError") {
+      res.statusCode = 404
+      res.end()
+      return {props: {}}
+    } else if (error.name === "AuthenticationError") {
       res.writeHead(302, {location: "/login"})
       res.end()
       return {props: {}}
@@ -54,7 +58,7 @@ const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
   const router = useRouter()
 
   if (error) {
-    return <ErrorPage statusCode={error.statusCode} title={error.message} />
+    return <ErrorComponent statusCode={error.statusCode} title={error.message} />
   }
 
   return (
