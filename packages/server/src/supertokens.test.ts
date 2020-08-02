@@ -151,11 +151,18 @@ async function mockServer(
   }
 
   let server = http.createServer(async (req, res) => {
-    await apiResolver(req, res, null, handler, {
-      previewModeId: "previewModeId",
-      previewModeEncryptionKey: "previewModeEncryptionKey",
-      previewModeSigningKey: "previewModeSigningKey",
-    })
+    await apiResolver(
+      req,
+      res,
+      null,
+      handler,
+      {
+        previewModeId: "previewModeId",
+        previewModeEncryptionKey: "previewModeEncryptionKey",
+        previewModeSigningKey: "previewModeSigningKey",
+      },
+      false,
+    )
   })
 
   try {
