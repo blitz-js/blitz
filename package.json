@@ -29,7 +29,7 @@
     "testonly:packages": "lerna run test --stream --scope @blitzjs/*",
     "testonly:examples": "lerna run test --stream --scope @examples/*",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-prep": "lerna run clean && yarn && yarn run test",
+    "publish-prep": "lerna run clean && yarn",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
