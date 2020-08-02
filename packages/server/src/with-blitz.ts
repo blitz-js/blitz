@@ -46,13 +46,6 @@ export function withBlitz(nextConfig: any) {
             })
           }
 
-          // This is needed because, for an unknown reason, the next build fails when
-          // importing directly from the `blitz` package, complaining about child_process
-          // Somehow our server code is getting into the next build that way.
-          // This alias eliminates that problem.
-          // Anyone is welcome to investigate this further sometime
-          config.resolve.alias.blitz = "@blitzjs/core"
-
           if (typeof normalizedConfig.webpack === "function") {
             return normalizedConfig.webpack(config, options)
           }
