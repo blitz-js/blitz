@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.16.5-canary.7",
+  "version": "0.16.5-canary.8",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -40,8 +40,8 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/config": "0.16.5-canary.7",
-    "@blitzjs/display": "0.16.5-canary.7",
+    "@blitzjs/config": "0.16.5-canary.8",
+    "@blitzjs/display": "0.16.5-canary.8",
     "bad-behavior": "1.0.1",
     "cookie-session": "1.4.0",
     "passport": "0.4.1",
