@@ -72,28 +72,6 @@ export interface SessionContext {
   setPublicData: (data: Record<any, any>) => Promise<void>
 }
 
-export class AuthenticationError extends Error {
-  statusCode = 401 // Unauthorized
-  constructor(message?: string) {
-    super(message)
-    this.name = "AuthenticationError"
-  }
-}
-export class AuthorizationError extends Error {
-  statusCode = 403 // Forbidden
-  constructor(message?: string) {
-    super(message)
-    this.name = "AuthorizationError"
-  }
-}
-export class CSRFTokenMismatchError extends Error {
-  statusCode = 401 // Unauthorized
-  constructor(message?: string) {
-    super(message)
-    this.name = "CSRFTokenMismatchError"
-  }
-}
-
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
 export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 

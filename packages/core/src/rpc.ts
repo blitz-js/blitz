@@ -8,9 +8,9 @@ import {
   HEADER_CSRF,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
-  CSRFTokenMismatchError,
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
+import {CSRFTokenMismatchError} from "./errors"
 
 type Options = {
   fromQueryHook?: boolean

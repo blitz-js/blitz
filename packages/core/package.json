@@ -46,7 +46,7 @@
     "cookie-session": "1.4.0",
     "passport": "0.4.1",
     "pretty-ms": "6.0.1",
-    "react-query": "2.4.15",
+    "react-query": "2.5.11",
     "serialize-error": "6.0.0",
     "url": "0.11.0"
   },
