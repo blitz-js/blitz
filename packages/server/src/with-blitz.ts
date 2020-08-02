@@ -1,8 +1,3 @@
-// We add next-transpile-modules during internal blitz development so that changes in blitz
-// framework code will trigger a hot reload of any example apps that are running
-const isInternalBlitzDevelopment = __dirname.includes("packages/server/src")
-const withTM = require("next-transpile-modules")(["@blitzjs/core", "@blitzjs/server"])
-
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
     // Need to grab the normalized config based on the phase
@@ -49,8 +44,11 @@ export function withBlitz(nextConfig: any) {
       },
     })
 
-    // if inside monorepo
+    // We add next-transpile-modules during internal blitz development so that changes in blitz
+    // framework code will trigger a hot reload of any example apps that are running
+    const isInternalBlitzDevelopment = __dirname.includes("packages/server/src")
     if (isInternalBlitzDevelopment) {
+      const withTM = require("next-transpile-modules")(["@blitzjs/core", "@blitzjs/server"])
       return withTM(newConfig)
     } else {
       return newConfig
