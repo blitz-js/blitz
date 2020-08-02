@@ -1,17 +1,19 @@
+import {useMemo} from "react"
 import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from "blitz"
 import getProduct from "app/products/queries/getProduct"
 import getProducts from "app/products/queries/getProducts"
 import {Product} from "db"
+import superjson from "superjson"
 
 type StaticProps = {
-  product: Product
+  dataString: string
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
   const product = await getProduct({where: {handle: ctx.params.handle as string}})
-
+  const dataString = superjson.stringify(product)
   return {
-    props: {product},
+    props: {dataString},
     revalidate: 1,
   }
 }
@@ -25,10 +27,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-const Page: BlitzPage<StaticProps> = function ({product}) {
-  if (!product) {
-    return <div>Building Page...</div>
-  }
+const Page: BlitzPage<StaticProps> = function ({dataString}) {
+  // On initial render during the build, dataString is empty for the placeholder page
+  // So in that case, set product = {}
+  const product = useMemo(() => (dataString ? superjson.parse(dataString) : {}), [
+    dataString,
+  ]) as Product
 
   return (
     <div>
