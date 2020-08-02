@@ -1,7 +1,7 @@
-import {apiResolver} from "next/dist/next-server/server/api-utils"
 import http from "http"
 import listen from "test-listen"
 import fetch from "isomorphic-unfetch"
+import {apiResolver} from "next/dist/next-server/server/api-utils"
 
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {Middleware, handleRequestWithMiddleware} from "./middleware"
@@ -109,11 +109,18 @@ async function mockServer(middleware: Middleware[], callback: (url: string) => P
   }
 
   let server = http.createServer((req, res) =>
-    apiResolver(req, res, null, apiEndpoint, {
-      previewModeId: "previewModeId",
-      previewModeEncryptionKey: "previewModeEncryptionKey",
-      previewModeSigningKey: "previewModeSigningKey",
-    }),
+    apiResolver(
+      req,
+      res,
+      null,
+      apiEndpoint,
+      {
+        previewModeId: "previewModeId",
+        previewModeEncryptionKey: "previewModeEncryptionKey",
+        previewModeSigningKey: "previewModeSigningKey",
+      },
+      false,
+    ),
   )
 
   try {
