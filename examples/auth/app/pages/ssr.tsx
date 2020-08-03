@@ -37,7 +37,11 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
     )
     return {props: {user}}
   } catch (error) {
-    if (error.name === "AuthenticationError") {
+    if (error.name === "NotFoundError") {
+      res.statusCode = 404
+      res.end()
+      return {props: {}}
+    } else if (error.name === "AuthenticationError") {
       res.writeHead(302, {location: "/login"})
       res.end()
       return {props: {}}
