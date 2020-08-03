@@ -15,8 +15,8 @@ describe("admin/products page", () => {
   })
 
   it("goes to bas product page", () => {
-    cy.get("p > a").last().contains("Admin").click()
-    cy.location("pathname").should("equal", "/admin")
+    cy.get("p > a").last().contains("Home").click()
+    cy.location("pathname").should("equal", "/home")
   })
 
   it("shows ascending order", () => {
