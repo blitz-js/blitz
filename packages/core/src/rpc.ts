@@ -11,6 +11,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
+import {deserialize} from "superjson"
 
 type Options = {
   fromQueryHook?: boolean
@@ -61,11 +62,13 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     }
     throw error
   } else {
+    const data = deserialize({json: json.result, meta: json.meta})
+
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)
-      queryCache.setQueryData(queryKey, json.result)
+      queryCache.setQueryData(queryKey, data)
     }
-    return json.result
+    return data
   }
 }
 

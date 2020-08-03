@@ -6,6 +6,7 @@ import type {
   EnhancedResolverModule,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
+import {serialize} from "superjson"
 
 export function rpcApiHandler(
   resolver: EnhancedResolverModule,
@@ -51,9 +52,13 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
 
         log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
         res.blitzResult = result
+
+        const {json, meta} = serialize(result as any)
+
         res.json({
-          result: result || null,
+          result: json,
           error: null,
+          meta,
         })
         return next()
       } catch (error) {

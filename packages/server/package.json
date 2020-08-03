@@ -62,7 +62,8 @@
     "through2": "3.0.1",
     "vinyl": "2.2.0",
     "vinyl-file": "3.0.0",
-    "vinyl-fs": "3.0.3"
+    "vinyl-fs": "3.0.3",
+    "superjson": "1.1.0"
   },
   "devDependencies": {
     "@blitzjs/core": "0.17.0",

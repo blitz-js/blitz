@@ -19,6 +19,7 @@ function ProductsList() {
           <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
             <a onMouseEnter={() => getProduct({where: {id: product.id}})}>{product.name}</a>
           </Link>
+          - Created at: {product.createdAt.getTime()}
         </li>
       ))}
     </ul>
@@ -34,8 +35,8 @@ function AdminProducts() {
         <Link href="/admin/products/new">
           <a>Create Product</a>
         </Link>
-        <Link href="/admin">
-          <a style={{marginLeft: 16}}>Admin</a>
+        <Link href="/">
+          <a style={{marginLeft: 16}}>Home</a>
         </Link>
       </p>
 
