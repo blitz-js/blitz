@@ -18,8 +18,8 @@ function ProductsList() {
         <li key={product.id}>
           <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
             <a onMouseEnter={() => getProduct({where: {id: product.id}})}>{product.name}</a>
-          </Link>
-          - Created at: {product.createdAt.getTime()}
+          </Link>{" "}
+          - Created: {product.createdAt.toISOString()}
         </li>
       ))}
     </ul>

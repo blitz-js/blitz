@@ -53,12 +53,14 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
         log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
         res.blitzResult = result
 
-        const {json, meta} = serialize(result as any)
+        const serializedResult = serialize(result as any)
 
         res.json({
-          result: json,
+          result: serializedResult.json,
           error: null,
-          meta,
+          meta: {
+            result: serializedResult.meta,
+          },
         })
         return next()
       } catch (error) {
