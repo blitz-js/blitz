@@ -3,86 +3,101 @@ import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
 import chalk from "chalk"
 import { parseSemver } from "../utils/parse-semver"
-import { execSync } from "child_process"
+import envinfo from 'envinfo'
 import hasYarn from "has-yarn"
 
 
-console.log(
-  chalk.yellow(
-    `You are using alpha software - if you have any problems, please open an issue here:
-  https://github.com/blitz-js/blitz/issues/new/choose\n`,
-  ),
-)
-
-if (parseSemver(process.version).major < 12) {
+async function main() {
   console.log(
     chalk.yellow(
-      `You are using an unsupported version of Node.js. Consider switching to v12 or newer.\n`,
+      `You are using alpha software - if you have any problems, please open an issue here:
+    https://github.com/blitz-js/blitz/issues/new/choose\n`,
     ),
   )
-}
 
-const globalBlitzPath = resolveFrom(__dirname, "blitz")
-const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
-
-const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
-
-let blitzPkgPath
-if (isInDevelopmentAsGloballyLinked) {
-  blitzPkgPath = globalBlitzPath
-} else {
-  // localBlitzPath won't exist if used outside a blitz app directory
-  blitzPkgPath = localBlitzPath || globalBlitzPath
-}
-
-const cliPkgPath = resolveFrom(blitzPkgPath, "@blitzjs/cli")
-
-const cli = require(cliPkgPath)
-
-const options = require("minimist")(process.argv.slice(2))
-const hasVersionFlag = options._.length === 0 && (options.v || options.version)
-const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
-
-if (hasVersionFlag) {
-  if (hasVerboseFlag) {
-    console.log("debug: blitzPkgPath:", blitzPkgPath)
-    console.log("debug: cliPkgPath:", cliPkgPath, "\n")
+  if (parseSemver(process.version).major < 12) {
+    console.log(
+      chalk.yellow(
+        `You are using an unsupported version of Node.js. Consider switching to v12 or newer.\n`,
+      ),
+    )
   }
-  try {
-    const osName = require("os-name")
-    console.log(`${osName()} | ${process.platform}-${process.arch} | Node: ${process.version}\n`)
 
-    const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
-    const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
+  const globalBlitzPath = resolveFrom(__dirname, "blitz")
+  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
-    if (globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
-      // This branch won't run if user does `npx blitz` or `yarn blitz`
-      const globalVersion = require(path.join(globalBlitzPkgJsonPath, "package.json")).version
-      console.log(`blitz: ${globalVersion} (global)`)
-    }
+  const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
 
-    if (localBlitzPkgJsonPath) {
-      const localVersion = require(path.join(localBlitzPkgJsonPath, "package.json")).version
-      console.log(`blitz: ${localVersion} (local)`)
-    }
-
-    printEnvInfo()
-
-    console.log("") // One last new line
-  } catch (e) {
-    console.log("blitz error", e)
+  let blitzPkgPath
+  if (isInDevelopmentAsGloballyLinked) {
+    blitzPkgPath = globalBlitzPath
+  } else {
+    // localBlitzPath won't exist if used outside a blitz app directory
+    blitzPkgPath = localBlitzPath || globalBlitzPath
   }
-  process.exit(0)
-} else {
-  cli.run()
+
+  const cliPkgPath = resolveFrom(blitzPkgPath, "@blitzjs/cli")
+
+  const cli = require(cliPkgPath)
+
+  const options = require("minimist")(process.argv.slice(2))
+  const hasVersionFlag = options._.length === 0 && (options.v || options.version)
+  const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
+
+  if (hasVersionFlag) {
+    if (hasVerboseFlag) {
+      console.log("debug: blitzPkgPath:", blitzPkgPath)
+      console.log("debug: cliPkgPath:", cliPkgPath, "\n")
+    }
+    try {
+      const osName = require("os-name")
+      console.log(`${osName()} | ${process.platform}-${process.arch} | Node: ${process.version}\n`)
+
+      const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
+      const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
+
+      if (globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
+        // This branch won't run if user does `npx blitz` or `yarn blitz`
+        const globalVersion = require(path.join(globalBlitzPkgJsonPath, "package.json")).version
+        console.log(`blitz: ${globalVersion} (global)`)
+      }
+
+      if (localBlitzPkgJsonPath) {
+        const localVersion = require(path.join(localBlitzPkgJsonPath, "package.json")).version
+        console.log(`blitz: ${localVersion} (local)`)
+      }
+
+      await printEnvInfo()
+
+      console.log("") // One last new line
+    } catch (e) {
+      throw new Error(`Blitz Error: ${e}`)
+    }
+    process.exit(0)
+  } else {
+    cli.run()
+  }
 }
 
 /**
  * Prints detailed system info
  */
-function printEnvInfo() {
+async function printEnvInfo() {
   const packageManager = `\n  Package manager: ${hasYarn() ? 'yarn' : 'npm'}`
-  const envinfo = execSync('npx envinfo --system --binaries --npmPackages blitz,typescript,react,react-dom,@prisma/cli,@prisma/client').toString()
 
-  console.log(packageManager, envinfo)
+  const env = await envinfo.run(
+    {
+        System: ['OS', 'CPU', 'Memory', 'Shell'],
+        Binaries: ['Node', 'Yarn', 'npm', 'Watchman'],
+        npmPackages: ['blitz','typescript','react','react-dom','@prisma/cli','@prisma/client'],
+    },
+    { showNotFound: true }
+  )
+
+  console.log(packageManager, env)
 }
+
+main()
+  .catch(e => {
+    console.error(e)
+  })
