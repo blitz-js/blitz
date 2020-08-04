@@ -5,6 +5,7 @@ import {AppGenerator} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
+import {runMigrate} from "./db"
 const debug = require("debug")("blitz:new")
 
 import {PromptAbortedError} from "../errors/prompt-aborted"
@@ -70,6 +71,7 @@ export class New extends Command {
     try {
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
+      await runMigrate()
       this.log("\n" + log.withBrand("Your new Blitz app is ready! Next steps:") + "\n")
       this.log(chalk.yellow(`   1. cd ${args.name}`))
       this.log(chalk.yellow(`   2. blitz start`))
