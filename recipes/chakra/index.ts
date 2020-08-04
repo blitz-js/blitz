@@ -5,34 +5,36 @@ import {NamedTypes} from "ast-types/gen/namedTypes"
 import {visit} from "ast-types"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithCacheProvider(ast: ASTNode, b: builders, t: NamedTypes) {
+function wrapComponentWithThemeProvider(ast: ASTNode, b: builders, t: NamedTypes) {
   if (!t.File.check(ast)) return
 
   visit(ast, {
-    visitFunction(path) {
-      // const {node} = path
-      // TODO: need a better way to detect the custom App function
-      // check if is default export
-      if (false) {
-        return this.traverse(path)
-      }
-      return false
+    visitExportDefaultDeclaration(path) {
+      return this.traverse(path)
     },
     visitJSXElement(path) {
       const {node} = path
-      path.replace(
-        b.jsxElement(
-          b.jsxOpeningElement(b.jsxIdentifier("ThemeProvider")),
-          b.jsxClosingElement(b.jsxIdentifier("CacheProvider")),
-          [
-            b.literal("\n  \t  "),
-            b.jsxElement(b.jsxOpeningElement({name: "CSSReset", type: "JSXIdentifier"})),
-            node,
-            b.literal("\n    "),
-          ],
-        ),
-      )
-      return false
+      if (
+        t.JSXIdentifier.check(node.openingElement.name) &&
+        // TODO: need a better way to detect the Component
+        node.openingElement.name.name === "Component"
+      ) {
+        path.replace(
+          b.jsxElement(
+            b.jsxOpeningElement(b.jsxIdentifier("ThemeProvider")),
+            b.jsxClosingElement(b.jsxIdentifier("ThemeProvider")),
+            [
+              b.literal("\n  \t  "),
+              b.jsxElement(b.jsxOpeningElement(b.jsxIdentifier("CSSReset"), [], true)),
+              b.literal("\n  \t  "),
+              node,
+              b.literal("\n    "),
+            ],
+          ),
+        )
+        return false
+      }
+      return this.traverse(path)
     },
   })
 
@@ -68,12 +70,12 @@ export default RecipeBuilder()
           b.importSpecifier(b.identifier("CSSReset")),
           b.importSpecifier(b.identifier("ThemeProvider")),
         ],
-        b.literal("@chakra/core"),
+        b.literal("@chakra-ui/core"),
       )
 
       if (t.File.check(ast)) {
         addImport(ast, b, t, stylesImport)
-        return wrapComponentWithCacheProvider(ast, b, t)!
+        return wrapComponentWithThemeProvider(ast, b, t)!
       }
 
       throw new Error("Not given valid source file")
