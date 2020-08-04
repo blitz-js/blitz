@@ -9,7 +9,7 @@
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3098",
+    "test:start": "blitz db migrate && blitz start --production -p 3099",
     "test": "cross-env NODE_ENV=test start-server-and-test test:start http://localhost:3099 cy:run"
   },
   "browserslist": [
