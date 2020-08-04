@@ -22,3 +22,5 @@ import "./commands"
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 })
+
+require("@cypress/skip-test/support")
