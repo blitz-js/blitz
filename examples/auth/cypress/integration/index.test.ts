@@ -53,6 +53,7 @@ describe("index page", () => {
 
   // TODO - why does this fail on windows??
   if (process.platform !== "win32") {
+    console.log("PLATFORM:", process.platform)
     it("tracks anonymous sessions", () => {
       const user = createRandomUser()
 
