@@ -11,6 +11,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
+import {deserialize} from "superjson"
 
 type Options = {
   fromQueryHook?: boolean
@@ -46,26 +47,28 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     }
   }
 
-  let json
+  let payload
   try {
-    json = await result.json()
+    payload = await result.json()
   } catch (error) {
     throw new Error(`Failed to parse json from request to ${url}`)
   }
 
-  if (json.error) {
-    const error = deserializeError(json.error)
+  if (payload.error) {
+    const error = deserializeError(payload.error)
     // We don't clear the publicDataStore for anonymous users
     if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
       publicDataStore.clear()
     }
     throw error
   } else {
+    const data = deserialize({json: payload.result, meta: payload.meta?.result})
+
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)
-      queryCache.setQueryData(queryKey, json.result)
+      queryCache.setQueryData(queryKey, data)
     }
-    return json.result
+    return data
   }
 }
 
