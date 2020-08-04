@@ -62,7 +62,10 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     }
     throw error
   } else {
-    const data = deserialize({json: payload.result, meta: payload.meta?.result})
+    const data =
+      payload.result === undefined
+        ? undefined
+        : deserialize({json: payload.result, meta: payload.meta?.result})
 
     if (!opts.fromQueryHook) {
       const queryKey = getQueryKey(url, params)
