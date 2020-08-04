@@ -6,6 +6,8 @@ import {transform} from "@blitzjs/file-pipeline"
 import {Stage} from "@blitzjs/file-pipeline"
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
+const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
+
 /**
  * Returns a Stage that manages converting from blitz.config.js to next.config.js
  */
