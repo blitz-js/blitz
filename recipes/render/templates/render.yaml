@@ -12,5 +12,5 @@ services:
           property: connectionString
 
 databases:
-  - name: myapp-db
+  - name: blitzapp-db
     plan: starter
