@@ -76,12 +76,8 @@ function addMethodToCustomDocument(
   if (!t.File.check(ast) || !t.MethodDefinition.check(methodToAdd)) return
 
   visit(ast, {
-    visitClassDeclaration(path) {
-      const {node} = path
-      if (t.Identifier.check(node.superClass) && node.superClass.name === "Document") {
-        return this.traverse(path)
-      }
-      return false
+    visitExportDefaultDeclaration(path) {
+      return this.traverse(path)
     },
     visitClassBody(path) {
       const {node} = path
