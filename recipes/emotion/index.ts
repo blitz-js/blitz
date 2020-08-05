@@ -9,13 +9,8 @@ function wrapComponentWithCacheProvider(ast: ASTNode, b: builders, t: NamedTypes
   if (!t.File.check(ast)) return
 
   visit(ast, {
-    visitFunction(path) {
-      const {node} = path
-      // TODO: need a better way to detect the custom App function
-      if (t.Identifier.check(node.id) && node.id.name === "MyApp") {
-        return this.traverse(path)
-      }
-      return false
+    visitExportDefaultDeclaration(path) {
+      return this.traverse(path)
     },
     visitJSXElement(path) {
       const {node} = path
@@ -49,13 +44,8 @@ function applyGlobalStyles(ast: ASTNode, b: builders, t: NamedTypes) {
   if (!t.File.check(ast)) return
 
   visit(ast, {
-    visitFunction(path) {
-      const {node} = path
-      // TODO: need a better way to detect the custom App function
-      if (t.Identifier.check(node.id) && node.id.name === "MyApp") {
-        return this.traverse(path)
-      }
-      return false
+    visitExportDefaultDeclaration(path) {
+      return this.traverse(path)
     },
     visitJSXElement(path) {
       const {node} = path
