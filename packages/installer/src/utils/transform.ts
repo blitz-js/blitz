@@ -1,5 +1,5 @@
 import * as fs from "fs-extra"
-import {parse, print, types} from "recast"
+import {parse, prettyPrint, types} from "recast"
 import {builders} from "ast-types/gen/builders"
 import {namedTypes, NamedTypes} from "ast-types/gen/namedTypes"
 import * as babel from "recast/parsers/babel"
@@ -31,7 +31,7 @@ export type Transformer = (
 
 export function processFile(original: string, transformerFn: Transformer): string {
   const ast = parse(original, {parser: customTsParser})
-  const transformedCode = print(transformerFn(ast, types.builders, namedTypes)).code
+  const transformedCode = prettyPrint(transformerFn(ast, types.builders, namedTypes), {}).code
   return transformedCode
 }
 
