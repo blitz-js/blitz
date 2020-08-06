@@ -1,0 +1,32 @@
+.main {
+  margin: 10px;
+}
+
+.gif_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gif_list > li {
+  border: solid black 1px;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px;
+  width: fit-content;
+}
+
+.gif_list > li > img {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.gif_list > li > span {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.gif_list > li > span > select {
+  float: right;
+}
