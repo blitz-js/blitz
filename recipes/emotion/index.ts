@@ -95,7 +95,7 @@ export default RecipeBuilder()
   .setDescription(
     `Configure your Blitz app's styling with Emotion CSS-in-JS. This recipe will install all necessary dependencies and configure Emotion for immediate use.`,
   )
-  .setOwner("justin.r.hall@gmail.com")
+  .setOwner("justin.r.hall+blitz@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
