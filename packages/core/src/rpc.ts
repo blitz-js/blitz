@@ -11,7 +11,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
-import {deserialize} from "superjson"
+import {serialize, deserialize} from "superjson"
 
 type Options = {
   fromQueryHook?: boolean
@@ -29,12 +29,19 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
+  const serialized = serialize(params)
+
   const result = await window.fetch(url, {
     method: "POST",
     headers,
     credentials: "include",
     redirect: "follow",
-    body: JSON.stringify({params: params || null}),
+    body: JSON.stringify({
+      params: serialized.json,
+      meta: {
+        params: serialized.meta,
+      },
+    }),
   })
 
   if (result.headers) {
