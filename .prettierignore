@@ -16,5 +16,6 @@ reports
 tsconfig.tsbuildinfo
 dist
 bin
+!packages/blitz/src/bin
 packages/generator/templates/**
 .github/ISSUE_TEMPLATE/bug_report.md
