@@ -40,9 +40,10 @@
     "zod": "1.x"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.11.1",
-    "@testing-library/react": "10.4.7",
-    "@types/jest": "26.0.7",
+    "@testing-library/jest-dom": "5.x",
+    "@testing-library/react": "10.x",
+    "@testing-library/react-hooks": "3.x",
+    "@types/jest": "26.x",
     "@types/react": "16.x",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
@@ -55,13 +56,14 @@
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "3.x",
     "husky": "4.x",
-    "jest": "24.9.0",
-    "jest-environment-jsdom-fourteen": "1.0.1",
-    "jest-watch-typeahead": "0.4.2",
+    "jest": "24.x",
+    "jest-environment-jsdom-fourteen": "1.x",
+    "jest-watch-typeahead": "0.x",
     "lint-staged": "10.x",
     "prettier": "2.x",
     "pretty-quick": "2.x",
-    "typescript": "3.x"
+    "typescript": "3.x",
+    "ts-jest": "26.x"
   },
   "private": true
 }

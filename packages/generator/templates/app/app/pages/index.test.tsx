@@ -1,7 +1,7 @@
 import React from "react"
-import { render } from "@testing-library/react"
+import { render } from "test/utils"
 
-import Home from "./../index"
+import Home from "./index"
 
 test("renders blitz documentation link", () => {
   const { getByText } = render(<Home />)
