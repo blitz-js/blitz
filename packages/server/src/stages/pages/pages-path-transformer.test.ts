@@ -39,6 +39,11 @@ describe("createPagesPathTransformer", () => {
       expected: normalize("app/users/pages/one/two/three.scss"),
     },
     {
+      name: "Ignores test pages: tsx",
+      input: normalize("app/users/pages/one/two/three.test.tsx"),
+      expected: normalize("app/users/pages/one/two/three.test.tsx"),
+    },
+    {
       name: "handles leading /",
       input: normalize("/app/users/pages/one/two/three.tsx"),
       expected: normalize("pages/one/two/three.tsx"),
