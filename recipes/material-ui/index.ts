@@ -22,6 +22,7 @@ export default RecipeBuilder()
     stepId: "addThemeFile",
     stepName: "Add Material-UI theme file",
     explanation: `You can customize the base theme very easily using a theme object in Material-UI. We can setup the base light theme as the starting point`,
+    targetDirectory: "./app",
     templatePath: join(__dirname, "templates", "theme"),
     templateValues: {},
   })
