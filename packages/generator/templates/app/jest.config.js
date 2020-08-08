@@ -1,6 +1,6 @@
 module.exports = {
   // Test setup file
-  setupFilesAfterEnv: ["./jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
   preset: "ts-jest",
   testEnvironment: "jest-environment-jsdom-fourteen",
   // Automatically clear mock calls and instances between every test
