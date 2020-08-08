@@ -26,6 +26,7 @@
     "test": "yarn run lint && yarn run build && lerna run test --stream",
     "test:packages": "yarn run build && yarn testonly:packages",
     "test:examples": "yarn run build && yarn testonly:examples",
+    "testonly": "yarn test:packages && yarn test:examples",
     "testonly:packages": "lerna run test --stream --scope @blitzjs/*",
     "testonly:examples": "lerna run test --stream --scope @examples/* --concurrency 1",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
