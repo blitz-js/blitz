@@ -803,6 +803,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chris-tse",
+      "name": "Chris Tse",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/250450?v=4",
+      "profile": "https://christse.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
