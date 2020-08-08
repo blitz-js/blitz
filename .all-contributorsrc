@@ -794,6 +794,15 @@
         "code",
         "infra"
       ]
+    },
+    {
+      "login": "agoxlea",
+      "name": "Alex Orr",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1240841?v=4",
+      "profile": "https://github.com/agoxlea",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
