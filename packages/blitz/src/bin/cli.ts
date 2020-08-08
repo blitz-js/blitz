@@ -3,7 +3,6 @@ import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
 import chalk from "chalk"
 import {parseSemver} from "../utils/parse-semver"
-import hasYarn from "has-yarn"
 
 async function main() {
   console.log(
@@ -81,9 +80,10 @@ async function main() {
  * Prints detailed system info
  */
 async function printEnvInfo() {
-  const packageManager = `\n  Package manager: ${hasYarn() ? "yarn" : "npm"}`
-
+  const hasYarn = require("has-yarn")
   const envinfo = require("envinfo")
+
+  const packageManager = `\n  Package manager: ${hasYarn() ? "yarn" : "npm"}`
 
   const env = await envinfo.run(
     {
