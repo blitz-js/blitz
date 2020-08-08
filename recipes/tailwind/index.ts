@@ -14,7 +14,7 @@ export default RecipeBuilder()
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add npm dependencies",
-    explanation: `Tailwind CSS rqeuires a couple of dependencies to get up and running.
+    explanation: `Tailwind CSS requires a couple of dependencies to get up and running.
 We'll install the Tailwind library itself, as well as PostCSS for removing unused styles from our production bundles.`,
     packages: [
       {name: "tailwindcss", version: "1"},
