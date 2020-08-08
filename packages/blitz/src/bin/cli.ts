@@ -2,10 +2,8 @@ import * as path from "path"
 import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
 import chalk from "chalk"
-import { parseSemver } from "../utils/parse-semver"
-import envinfo from 'envinfo'
+import {parseSemver} from "../utils/parse-semver"
 import hasYarn from "has-yarn"
-
 
 async function main() {
   console.log(
@@ -83,21 +81,22 @@ async function main() {
  * Prints detailed system info
  */
 async function printEnvInfo() {
-  const packageManager = `\n  Package manager: ${hasYarn() ? 'yarn' : 'npm'}`
+  const packageManager = `\n  Package manager: ${hasYarn() ? "yarn" : "npm"}`
+
+  const envinfo = require("envinfo")
 
   const env = await envinfo.run(
     {
-        System: ['OS', 'CPU', 'Memory', 'Shell'],
-        Binaries: ['Node', 'Yarn', 'npm', 'Watchman'],
-        npmPackages: ['blitz','typescript','react','react-dom','@prisma/cli','@prisma/client'],
+      System: ["OS", "CPU", "Memory", "Shell"],
+      Binaries: ["Node", "Yarn", "npm", "Watchman"],
+      npmPackages: ["blitz", "typescript", "react", "react-dom", "@prisma/cli", "@prisma/client"],
     },
-    { showNotFound: true }
+    {showNotFound: true},
   )
 
   console.log(packageManager, env)
 }
 
-main()
-  .catch(e => {
-    console.error(e)
-  })
+main().catch((e) => {
+  console.error(e)
+})

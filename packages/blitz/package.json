@@ -46,7 +46,8 @@
     "@blitzjs/server": "0.17.0",
     "os-name": "3.1.0",
     "pkg-dir": "4.2.0",
-    "resolve-from": "5.0.0"
+    "resolve-from": "5.0.0",
+    "envinfo": "7.7.2"
   },
   "keywords": [
     "blitz",
