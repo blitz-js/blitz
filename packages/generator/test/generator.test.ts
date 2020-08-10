@@ -36,5 +36,47 @@ describe("generator", () => {
       const statement = "if (process.env.IS_PRODUCTION) console.log('a')"
       expect(replaceConditionals(statement, {})).toBe(statement)
     })
+
+    describe("JSX", () => {
+      it("correctly picks consequent or alternate statement", () => {
+        const statement = `
+        <if condition="condition">
+          <div>true</div>
+          <else>
+            <div>false</div>
+          </else>
+        </if>`
+        expect(replaceConditionals(statement, {condition: true}).trim()).toMatchInlineSnapshot(
+          `"<div>true</div>"`,
+        )
+        expect(replaceConditionals(statement, {condition: false}).trim()).toMatchInlineSnapshot(
+          `"<div>false</div>"`,
+        )
+      })
+
+      it("doesn't require an alternate statement", () => {
+        const statement = `
+        <if condition="condition">
+          <div>true</div>
+        </if>`
+        expect(replaceConditionals(statement, {condition: true}).trim()).toMatchInlineSnapshot(
+          `"<div>true</div>"`,
+        )
+        expect(replaceConditionals(statement, {condition: false}).trim()).toMatchInlineSnapshot(
+          `""`,
+        )
+      })
+
+      it("doesn't process condition if value is not in the template context", () => {
+        const statement = `
+        <if condition="condition">
+          <div>true</div>
+          <else>
+            <div>false</div>
+          </else>
+        </if>`
+        expect(replaceConditionals(statement, {})).toBe(statement)
+      })
+    })
   })
 })

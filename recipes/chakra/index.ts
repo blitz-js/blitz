@@ -2,15 +2,14 @@ import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
 import {builders} from "ast-types/gen/builders"
 import {ASTNode} from "ast-types/lib/types"
 import {NamedTypes} from "ast-types/gen/namedTypes"
-import {visit} from "ast-types"
 import j from "jscodeshift"
+import {NodePath} from "ast-types/lib/node-path"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithThemeProvider(ast: ASTNode, b: builders, t: NamedTypes) {
   const fileSource = j(ast)
-  fileSource.find(j.JSXIdentifier, {name: "Component"}).forEach((path) => {
-    debugger
-    j(path).replaceWith(
+  fileSource.find(j.JSXIdentifier, {name: "Component"}).forEach((path: NodePath) => {
+    j(path.parent).replaceWith(
       j.jsxElement(
         j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider")),
         j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
@@ -18,7 +17,7 @@ function wrapComponentWithThemeProvider(ast: ASTNode, b: builders, t: NamedTypes
           j.jsxText("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CSSReset"), [], true)),
           j.jsxText("\n"),
-          j(path),
+          path.parent.parent.node,
           j.jsxText("\n"),
         ],
       ),
