@@ -8,7 +8,9 @@ import {join} from "path"
 export default RecipeBuilder()
   .setName("Material-UI")
   .setDescription(
-    `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for immediate usage.`,
+    `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for immediate usage.
+    
+    NOTE: Material-UI currently doesn't support concurrent mode. Therefore, if you intend to use it with blitz.js, you will need to set { suspense: false } on useQuery hook for fetching data.`,
   )
   .setOwner("s.pathak5995@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
@@ -187,6 +189,52 @@ export default RecipeBuilder()
           )
           addImport(ast, b, t, reactImport)
         }
+
+        return ast
+      }
+
+      throw new Error("Not given valid source file")
+    },
+  })
+  .addTransformFilesStep({
+    stepId: "enableReactLegacyMode",
+    stepName:
+      "Customize App and import ThemeProvider with the base theme and CssBaseline component",
+    explanation: `Material-UI currently doesn't work with concurrent mode. We need to enable Legacy React mode by customizing the blitz config experimental property.`,
+    singleFileSearch: paths.blitzConfig(),
+    transform(ast: ASTNode, b: builders, t: NamedTypes) {
+      if (t.File.check(ast)) {
+        visit(ast, {
+          visitAssignmentExpression(path) {
+            const {value} = path
+
+            // TODO: there may be a better way to do this
+            // currently only handle adding the experimental reactMode legacy
+            // doesn't check if any part of the tree already exists
+            if (
+              value.type === "AssignmentExpression" &&
+              value.left &&
+              value.left.type === "MemberExpression" &&
+              value.left.object.type === "Identifier" &&
+              value.left.object.name === "module" &&
+              value.left.property.type === "Identifier" &&
+              value.left.property.name === "exports"
+            ) {
+              value.right.properties.splice(
+                0,
+                0,
+                b.objectProperty(
+                  b.identifier("experimental"),
+                  b.objectExpression([
+                    b.objectProperty(b.identifier("reactNode"), b.stringLiteral("legacy")),
+                  ]),
+                ),
+              )
+            }
+
+            return this.traverse(path)
+          },
+        })
 
         return ast
       }
