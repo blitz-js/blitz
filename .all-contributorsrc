@@ -812,6 +812,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nettofarah",
+      "name": "Netto Farah",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/270688?v=4",
+      "profile": "http://twitter.com/nettofarah",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
