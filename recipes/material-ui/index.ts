@@ -3,7 +3,6 @@ import {builders} from "ast-types/gen/builders"
 import {ASTNode} from "ast-types/lib/types"
 import {NamedTypes, namedTypes} from "ast-types/gen/namedTypes"
 import {visit} from "ast-types"
-import {join} from "path"
 
 export default RecipeBuilder()
   .setName("Material-UI")
@@ -20,209 +19,211 @@ export default RecipeBuilder()
     explanation: `@material-ui/core needs to be installed`,
     packages: [{name: "@material-ui/core", version: "latest"}],
   })
-  .addNewFilesStep({
-    stepId: "addThemeFile",
-    stepName: "Add Material-UI theme file",
-    explanation: `You can customize the base theme very easily using a theme object in Material-UI. We can setup the base light theme as the starting point`,
-    targetDirectory: "./app",
-    templatePath: join(__dirname, "templates", "theme"),
-    templateValues: {},
-  })
   .addTransformFilesStep({
     stepId: "modifyGetInitialPropsInCustomDocumentApp",
     stepName: "Add custom getInitialProps logic in Custom Document",
-    explanation: `We need to do this so that styles are correctly rendered on the server side.`,
+    explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
     transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      // import ServerStyleSheets
-      const serverStyleSheetsImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("ServerStyleSheets"))],
-        b.literal("@material-ui/core/styles"),
-      )
+      if (t.File.check(ast)) {
+        // import ServerStyleSheets
+        const serverStyleSheetsImport = b.importDeclaration(
+          [b.importSpecifier(b.identifier("ServerStyleSheets"))],
+          b.literal("@material-ui/core/styles"),
+        )
 
-      let isReactImported = false
+        let isReactImported = false
 
-      visit(ast, {
-        visitImportDeclaration(path) {
-          // check if React is already imported
-          // if yes then we can skip importing it
-          // since we need it for useEffect
-          const source = path.value.source.value
-          if (source === "react") {
-            isReactImported = true
+        visit(ast, {
+          visitImportDeclaration(path) {
+            // check if React is already imported
+            // if yes then we can skip importing it
+            // since we need it for useEffect
+            const source = path.value.source.value
+            if (source === "react") {
+              isReactImported = true
 
-            // currently, we only check if the default export is there
-            // because we use the hook as React.useEffect
-            // if not then add the default export
-            if (
-              !path.value.specifiers.some(
-                (node: namedTypes.ImportDefaultSpecifier | namedTypes.ImportSpecifier) =>
-                  node.type === "ImportDefaultSpecifier",
-              )
-            ) {
-              path.value.specifiers.splice(0, 0, b.importDefaultSpecifier(b.identifier("React")))
-
-              return false
-            }
-          }
-          // check if DocumentContext is imported from blitz if not add that as well
-          else if (source === "blitz") {
-            if (
-              !path.value.specifiers
-                .filter(
+              // currently, we only check if the default export is there
+              // because we use the hook as React.useEffect
+              // if not then add the default export
+              if (
+                !path.value.specifiers.some(
                   (node: namedTypes.ImportDefaultSpecifier | namedTypes.ImportSpecifier) =>
-                    node.type === "ImportSpecifier",
+                    node.type === "ImportDefaultSpecifier",
                 )
-                .some(
-                  (node: namedTypes.ImportSpecifier) => node?.imported?.name === "DocumentContext",
-                )
-            ) {
-              path.value.specifiers.splice(0, 0, b.importSpecifier(b.identifier("DocumentContext")))
+              ) {
+                path.value.specifiers.splice(0, 0, b.importDefaultSpecifier(b.identifier("React")))
+
+                return false
+              }
             }
-          }
+            // check if DocumentContext is imported from blitz if not add that as well
+            else if (source === "blitz") {
+              if (
+                !path.value.specifiers
+                  .filter(
+                    (node: namedTypes.ImportDefaultSpecifier | namedTypes.ImportSpecifier) =>
+                      node.type === "ImportSpecifier",
+                  )
+                  .some(
+                    (node: namedTypes.ImportSpecifier) =>
+                      node?.imported?.name === "DocumentContext",
+                  )
+              ) {
+                path.value.specifiers.splice(
+                  0,
+                  0,
+                  b.importSpecifier(b.identifier("DocumentContext")),
+                )
+              }
+            }
 
-          return this.traverse(path)
-        },
-        visitClassBody(path) {
-          const {node} = path
+            return this.traverse(path)
+          },
+          visitClassBody(path) {
+            const {node} = path
 
-          const ctxParam = b.identifier("ctx")
-          ctxParam.typeAnnotation = b.tsTypeAnnotation(
-            b.tsTypeReference(b.identifier("DocumentContext")),
-          )
+            const ctxParam = b.identifier("ctx")
+            ctxParam.typeAnnotation = b.tsTypeAnnotation(
+              b.tsTypeReference(b.identifier("DocumentContext")),
+            )
 
-          const getInitialPropsBody = b.blockStatement([
-            b.variableDeclaration("const", [
-              b.variableDeclarator(
-                b.identifier("sheets"),
-                b.newExpression(b.identifier("ServerStyleSheets"), []),
-              ),
-            ]),
-            b.variableDeclaration("const", [
-              b.variableDeclarator(
-                b.identifier("originalRenderPage"),
-                b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
-              ),
-            ]),
-            b.expressionStatement(
-              b.assignmentExpression(
-                "=",
-                b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
-                b.arrowFunctionExpression(
-                  [],
-                  b.callExpression(b.identifier("originalRenderPage"), [
-                    b.objectExpression([
-                      b.objectProperty(
-                        b.identifier("enhanceApp"),
-                        b.arrowFunctionExpression(
-                          [b.identifier("App")],
+            const getInitialPropsBody = b.blockStatement([
+              b.variableDeclaration("const", [
+                b.variableDeclarator(
+                  b.identifier("sheets"),
+                  b.newExpression(b.identifier("ServerStyleSheets"), []),
+                ),
+              ]),
+              b.variableDeclaration("const", [
+                b.variableDeclarator(
+                  b.identifier("originalRenderPage"),
+                  b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
+                ),
+              ]),
+              b.expressionStatement(
+                b.assignmentExpression(
+                  "=",
+                  b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
+                  b.arrowFunctionExpression(
+                    [],
+                    b.callExpression(b.identifier("originalRenderPage"), [
+                      b.objectExpression([
+                        b.objectProperty(
+                          b.identifier("enhanceApp"),
                           b.arrowFunctionExpression(
-                            [b.identifier("props")],
-                            b.callExpression(
-                              b.memberExpression(b.identifier("sheets"), b.identifier("collect")),
-                              [
-                                b.jsxElement(
-                                  b.jsxOpeningElement(
-                                    b.jsxIdentifier("App"),
-                                    [b.jsxSpreadAttribute(b.identifier("props"))],
-                                    true,
+                            [b.identifier("App")],
+                            b.arrowFunctionExpression(
+                              [b.identifier("props")],
+                              b.callExpression(
+                                b.memberExpression(b.identifier("sheets"), b.identifier("collect")),
+                                [
+                                  b.jsxElement(
+                                    b.jsxOpeningElement(
+                                      b.jsxIdentifier("App"),
+                                      [b.jsxSpreadAttribute(b.identifier("props"))],
+                                      true,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ]),
                     ]),
-                  ]),
-                ),
-              ),
-            ),
-            b.variableDeclaration("const", [
-              b.variableDeclarator(
-                b.identifier("initialProps"),
-                b.awaitExpression(
-                  b.callExpression(
-                    b.memberExpression(b.identifier("Document"), b.identifier("getInitialProps")),
-                    [b.identifier("ctx")],
                   ),
                 ),
               ),
-            ]),
-            b.returnStatement(
-              b.objectExpression([
-                b.spreadElement(b.identifier("initialProps")),
-                b.objectProperty(
-                  b.identifier("styles"),
-                  b.arrayExpression([
-                    b.spreadElement(
-                      b.callExpression(
-                        b.memberExpression(
-                          b.memberExpression(b.identifier("React"), b.identifier("Children")),
-                          b.identifier("toArray"),
-                        ),
-                        [b.memberExpression(b.identifier("initialProps"), b.identifier("styles"))],
-                      ),
-                    ),
+              b.variableDeclaration("const", [
+                b.variableDeclarator(
+                  b.identifier("initialProps"),
+                  b.awaitExpression(
                     b.callExpression(
-                      b.memberExpression(b.identifier("sheets"), b.identifier("getStyleElement")),
-                      [],
+                      b.memberExpression(b.identifier("Document"), b.identifier("getInitialProps")),
+                      [b.identifier("ctx")],
                     ),
-                  ]),
+                  ),
                 ),
               ]),
-            ),
-          ])
+              b.returnStatement(
+                b.objectExpression([
+                  b.spreadElement(b.identifier("initialProps")),
+                  b.objectProperty(
+                    b.identifier("styles"),
+                    b.arrayExpression([
+                      b.spreadElement(
+                        b.callExpression(
+                          b.memberExpression(
+                            b.memberExpression(b.identifier("React"), b.identifier("Children")),
+                            b.identifier("toArray"),
+                          ),
+                          [
+                            b.memberExpression(
+                              b.identifier("initialProps"),
+                              b.identifier("styles"),
+                            ),
+                          ],
+                        ),
+                      ),
+                      b.callExpression(
+                        b.memberExpression(b.identifier("sheets"), b.identifier("getStyleElement")),
+                        [],
+                      ),
+                    ]),
+                  ),
+                ]),
+              ),
+            ])
 
-          const getInitialPropsMethod = b.classMethod(
-            "method",
-            b.identifier("getInitialProps"),
-            [ctxParam],
-            getInitialPropsBody,
-            false,
-            true,
+            const getInitialPropsMethod = b.classMethod(
+              "method",
+              b.identifier("getInitialProps"),
+              [ctxParam],
+              getInitialPropsBody,
+              false,
+              true,
+            )
+            getInitialPropsMethod.async = true
+
+            // TODO: better way will be to check if the method already exists and modify it or else add it
+            // currently it gets added assuming it did not exist before
+            node.body.splice(0, 0, getInitialPropsMethod)
+
+            return false
+          },
+        })
+
+        // import React if it wasn't already imported
+        if (!isReactImported) {
+          const reactImport = b.importDeclaration(
+            [b.importDefaultSpecifier(b.identifier("React"))],
+            b.literal("react"),
           )
-          getInitialPropsMethod.async = true
+          addImport(ast, b, t, reactImport)
+        }
 
-          // TODO: better way will be to check if the method already exists and modify it or else add it
-          // currently it gets added assuming it did not exist before
-          node.body.splice(0, 0, getInitialPropsMethod)
+        addImport(ast, b, t, serverStyleSheetsImport)
 
-          return false
-        },
-      })
-
-      // import React if it wasn't already imported
-      if (!isReactImported) {
-        const reactImport = b.importDeclaration(
-          [b.importDefaultSpecifier(b.identifier("React"))],
-          b.literal("react"),
-        )
-        addImport(ast, b, t, reactImport)
+        return ast
       }
 
-      addImport(ast, b, t, serverStyleSheetsImport)
-
-      return ast
+      throw new Error("Not given valid source file")
     },
   })
   .addTransformFilesStep({
     stepId: "importThemeProviderInCustomApp",
-    stepName:
-      "Customize App and import ThemeProvider with the base theme and CssBaseline component",
-    explanation: `We can import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @material-ui components. We will customize the _app component to be remove the server side injected CSS.`,
+    stepName: "Customize App and import ThemeProvider with a base theme and CssBaseline component",
+    explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @material-ui components. We will also customize the _app component to be remove the server side injected CSS.`,
     singleFileSearch: paths.app(),
     transform(ast: ASTNode, b: builders, t: NamedTypes) {
       if (t.File.check(ast)) {
-        // import theme from theme.js
+        // import ThemeProvider and createMuiTheme
         const themeImport = b.importDeclaration(
-          [b.importDefaultSpecifier(b.identifier("theme"))],
-          b.literal("../theme"),
-        )
-
-        // import ThemeProvider
-        const themeProviderImport = b.importDeclaration(
-          [b.importSpecifier(b.identifier("ThemeProvider"))],
+          [
+            b.importSpecifier(b.identifier("ThemeProvider")),
+            b.importSpecifier(b.identifier("createMuiTheme")),
+          ],
           b.literal("@material-ui/core/styles"),
         )
 
@@ -232,18 +233,42 @@ export default RecipeBuilder()
           b.literal("@material-ui/core/CssBaseline"),
         )
 
-        addImport(ast, b, t, themeImport)
         addImport(ast, b, t, cssBaselineImport)
-        addImport(ast, b, t, themeProviderImport)
+        addImport(ast, b, t, themeImport)
 
         let isReactImported = false
 
         visit(ast, {
+          visitExportDefaultDeclaration(path) {
+            const theme = b.variableDeclaration("const", [
+              b.variableDeclarator(
+                b.identifier("theme"),
+                b.callExpression(b.identifier("createMuiTheme"), [
+                  b.objectExpression([
+                    b.objectProperty(
+                      b.identifier("palette"),
+                      b.objectExpression([
+                        b.objectProperty(b.identifier("type"), b.stringLiteral("light")),
+                      ]),
+                    ),
+                  ]),
+                ]),
+              ),
+            ])
+            theme.comments = [
+              b.commentLine(
+                "You can customize this as you want and even move it out to a separate file",
+              ),
+            ]
+
+            path.insertBefore(theme)
+
+            return this.traverse(path)
+          },
           visitImportDeclaration(path) {
             // check if React is already imported
             // if yes then we can skip importing it
             // since we need it for useEffect
-
             const source = path.value.source.value
             if (source === "react") {
               isReactImported = true
@@ -258,8 +283,6 @@ export default RecipeBuilder()
                 )
               ) {
                 path.value.specifiers.splice(0, 0, b.importDefaultSpecifier(b.identifier("React")))
-
-                return false
               }
             }
 
@@ -321,13 +344,10 @@ export default RecipeBuilder()
               )
 
               node.body.body.splice(0, 0, removeServerSideInjectedCss)
-
-              return false
             }
 
             return this.traverse(path)
           },
-
           visitJSXElement(path) {
             const {node} = path
             if (
@@ -346,7 +366,7 @@ export default RecipeBuilder()
                   b.jsxClosingElement(b.jsxIdentifier("ThemeProvider")),
                   [
                     b.literal("\n  \t  "),
-                    b.jsxElement(b.jsxOpeningElement(b.jsxIdentifier("CSSBaseline"), [], true)),
+                    b.jsxElement(b.jsxOpeningElement(b.jsxIdentifier("CssBaseline"), [], true)),
                     b.literal("\n  \t  "),
                     node,
                     b.literal("\n    "),
@@ -355,6 +375,7 @@ export default RecipeBuilder()
               )
               return false
             }
+
             return this.traverse(path)
           },
         })
@@ -376,8 +397,7 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "enableReactLegacyMode",
-    stepName:
-      "Customize App and import ThemeProvider with the base theme and CssBaseline component",
+    stepName: "Customize blitz.config.js",
     explanation: `Material-UI currently doesn't work with concurrent mode. We need to enable Legacy React mode by customizing the blitz config experimental property.`,
     singleFileSearch: paths.blitzConfig(),
     transform(ast: ASTNode, b: builders, t: NamedTypes) {
