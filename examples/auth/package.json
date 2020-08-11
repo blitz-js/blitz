@@ -1,13 +1,16 @@
 {
   "name": "@examples/auth",
-  "version": "0.16.5-canary.7",
+  "version": "0.17.1-canary.3",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "blitz build",
-    "analyze": "cross-env ANALYZE=true blitz build"
+    "analyze": "cross-env ANALYZE=true blitz build",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --browser chrome",
+    "test:start": "blitz db migrate && blitz start --production -p 3099",
+    "test": "cross-env NODE_ENV=test start-server-and-test test:start http://localhost:3099 cy:run"
   },
   "browserslist": [
     "defaults"
@@ -32,7 +35,7 @@
   "dependencies": {
     "@prisma/cli": "2.1.0",
     "@prisma/client": "2.1.0",
-    "blitz": "0.16.5-canary.7",
+    "blitz": "0.17.1-canary.3",
     "final-form": "4.20.1",
     "passport-github2": "0.1.11",
     "passport-twitter": "1.0.4",
@@ -44,6 +47,7 @@
     "zod": "1.10.0"
   },
   "devDependencies": {
+    "@cypress/skip-test": "2.5.0",
     "@next/bundle-analyzer": "latest",
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
@@ -53,17 +57,20 @@
     "@typescript-eslint/parser": "2.34.1-alpha.2",
     "babel-eslint": "10.1.0",
     "cross-env": "latest",
-    "eslint": "6.8.0",
+    "cypress": "4.11.0",
+    "eslint": "7.6.0",
     "eslint-config-react-app": "5.2.1",
-    "eslint-plugin-flowtype": "4.7.0",
-    "eslint-plugin-import": "2.21.2",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-hooks": "3.0.0",
+    "eslint-plugin-react": "7.20.5",
+    "eslint-plugin-react-hooks": "4.0.8",
+    "eslint-plugin-cypress": "2.11.1",
     "husky": "4.2.5",
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
+    "start-server-and-test": "1.11.2",
     "typescript": "3.9.5"
   },
   "private": true

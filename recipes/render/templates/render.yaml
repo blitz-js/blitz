@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: blitzapp
+    env: node
+    plan: starter
+    buildCommand: yarn; blitz db migrate; blitz build
+    startCommand: blitz start --production -H 0.0.0.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: myapp-db
+          property: connectionString
+
+databases:
+  - name: blitzapp-db
+    plan: starter

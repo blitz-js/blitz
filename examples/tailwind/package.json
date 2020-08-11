@@ -1,6 +1,6 @@
 {
   "name": "tailwind",
-  "version": "0.16.5-canary.7",
+  "version": "0.17.1-canary.3",
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@prisma/cli": "2.0.0",
     "@prisma/client": "2.0.0",
-    "blitz": "0.16.5-canary.7",
+    "blitz": "0.17.1-canary.3",
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
     "typescript": "3.8.3"
@@ -40,13 +40,13 @@
     "@typescript-eslint/eslint-plugin": "2.29.0",
     "@typescript-eslint/parser": "2.29.0",
     "babel-eslint": "10.1.0",
-    "eslint": "6.8.0",
+    "eslint": "7.6.0",
     "eslint-config-react-app": "5.2.1",
-    "eslint-plugin-flowtype": "4.7.0",
-    "eslint-plugin-import": "2.20.2",
-    "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.19.0",
-    "eslint-plugin-react-hooks": "3.0.0",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-react": "7.20.5",
+    "eslint-plugin-react-hooks": "4.0.8",
     "husky": "4.2.5",
     "lint-staged": "10.1.7",
     "postcss-preset-env": "6.7.0",

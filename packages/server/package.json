@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.16.5-canary.7",
+  "version": "0.17.1-canary.3",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -29,9 +29,9 @@
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/config": "0.16.5-canary.7",
-    "@blitzjs/display": "0.16.5-canary.7",
-    "@blitzjs/file-pipeline": "0.16.5-canary.7",
+    "@blitzjs/config": "0.17.1-canary.3",
+    "@blitzjs/display": "0.17.1-canary.3",
+    "@blitzjs/file-pipeline": "0.17.1-canary.3",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.2",
@@ -47,9 +47,7 @@
     "lodash": "4.17.19",
     "merge-stream": "2.0.0",
     "nanoid": "3.1.10",
-    "next": "9.4.4",
-    "next-compose-plugins": "2.2.0",
-    "next-transpile-modules": "3.2.0",
+    "next": "9.5.1",
     "null-loader": "4.0.0",
     "ora": "4.0.4",
     "parallel-transform": "1.2.0",
@@ -61,13 +59,15 @@
     "resolve-cwd": "3.0.0",
     "serialize-error": "6.0.0",
     "slash": "3.0.0",
+    "superjson": "1.1.0",
     "through2": "3.0.1",
     "vinyl": "2.2.0",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.16.5-canary.7"
+    "@blitzjs/core": "0.17.1-canary.3",
+    "next-transpile-modules": "3.2.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

@@ -781,7 +781,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/905225?v=4",
       "profile": "https://rubenmoya.dev",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -792,6 +793,33 @@
       "contributions": [
         "code",
         "infra"
+      ]
+    },
+    {
+      "login": "agoxlea",
+      "name": "Alex Orr",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1240841?v=4",
+      "profile": "https://github.com/agoxlea",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chris-tse",
+      "name": "Chris Tse",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/250450?v=4",
+      "profile": "https://christse.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nettofarah",
+      "name": "Netto Farah",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/270688?v=4",
+      "profile": "http://twitter.com/nettofarah",
+      "contributions": [
+        "code"
       ]
     }
   ],

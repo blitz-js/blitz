@@ -11,20 +11,6 @@ on:
       - canary
 
 jobs:
-  check_install_time:
-    name: Check install time
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.16.1"
-      - name: Test Install time
-        run: |
-          cd ../ && mkdir test && cd test
-          yarn add file:../blitz/packages/blitz --non-interactive | tee out.txt
-          cat out.txt | ../blitz/.github/checkInstallTime.js
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -46,9 +32,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-yarn-v2-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -78,12 +64,11 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-yarn-v2-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -120,12 +105,11 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-yarn-v2-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:

@@ -6,6 +6,7 @@ import type {
   EnhancedResolverModule,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
+import {serialize, deserialize} from "superjson"
 
 export function rpcApiHandler(
   resolver: EnhancedResolverModule,
@@ -47,13 +48,24 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
       }
 
       try {
-        const result = await resolver(req.body.params, res.blitzCtx)
+        const data =
+          req.body.params === undefined
+            ? undefined
+            : deserialize({json: req.body.params, meta: req.body.meta?.params})
+
+        const result = await resolver(data, res.blitzCtx)
 
         log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
         res.blitzResult = result
+
+        const serializedResult = serialize(result as any)
+
         res.json({
-          result: result || null,
+          result: serializedResult.json,
           error: null,
+          meta: {
+            result: serializedResult.meta,
+          },
         })
         return next()
       } catch (error) {
