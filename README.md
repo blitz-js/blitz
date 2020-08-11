@@ -271,7 +271,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://twitter.com/ivandevp"><img src="https://avatars3.githubusercontent.com/u/9284690?v=4" width="100px;" alt=""/><br /><sub><b>Ivan Medina</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ivandevp" title="Code">💻</a> <a href="#maintenance-ivandevp" title="Maintenance">🚧</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://www.dwightwatson.com"><img src="https://avatars3.githubusercontent.com/u/1100408?v=4" width="100px;" alt=""/><br /><sub><b>Dwight Watson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dwightwatson" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.dwightwatson.com"><img src="https://avatars3.githubusercontent.com/u/1100408?v=4" width="100px;" alt=""/><br /><sub><b>Dwight Watson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dwightwatson" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=dwightwatson" title="Documentation">📖</a></td>
     <td align="center"><a href="http://is2ei.com/"><img src="https://avatars3.githubusercontent.com/u/3948353?v=4" width="100px;" alt=""/><br /><sub><b>Horie Issei</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=is2ei" title="Code">💻</a></td>
     <td align="center"><a href="https://twitter.com/lednhatkhanh"><img src="https://avatars2.githubusercontent.com/u/9303093?v=4" width="100px;" alt=""/><br /><sub><b>Nhat Khanh</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lednhatkhanh" title="Code">💻</a></td>
     <td align="center"><a href="https://builtforfifty.com"><img src="https://avatars1.githubusercontent.com/u/19371989?v=4" width="100px;" alt=""/><br /><sub><b>Abu Uzayr</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=abuuzayr" title="Code">💻</a></td>
@@ -322,6 +322,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
