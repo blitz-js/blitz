@@ -1,8 +1,8 @@
-import File from "vinyl"
-import slash from "slash"
-import {absolutePathTransform} from "../utils"
-import {relative} from "path"
 import {Stage, transform} from "@blitzjs/file-pipeline"
+import {relative} from "path"
+import slash from "slash"
+import File from "vinyl"
+import {absolutePathTransform, isTypescript} from "../utils"
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
@@ -69,7 +69,7 @@ export default getIsomorphicRpcHandler(
   '${resolverPath}',
   '${resolverName}',
   '${resolverType}',
-) as typeof resolverModule.default
+) ${isTypescript() ? "as typeof resolverModule.default" : ""}
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)

@@ -1,4 +1,6 @@
-import {relative, resolve} from "path"
+import fs from "fs"
+import path, {relative, resolve} from "path"
+import pkgDir from "pkg-dir"
 
 // Transform an absolute path with a relative path transformer
 export const absolutePathTransform = (sourceFolder = "") => (
@@ -8,3 +10,6 @@ export const absolutePathTransform = (sourceFolder = "") => (
   const transformedPath = relativeTransformer(startingPath)
   return resolve(sourceFolder, transformedPath)
 }
+
+export const isTypescript = () =>
+  fs.existsSync(path.join(pkgDir.sync() || process.cwd(), "tsconfig.json"))
