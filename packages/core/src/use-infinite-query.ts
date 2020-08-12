@@ -7,6 +7,7 @@ import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
+import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<
   InfiniteQueryResult<PromiseReturnType<T>, any>,
@@ -36,7 +37,7 @@ export function useInfiniteQuery<T extends QueryFn>(
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey: [
       queryRpcFn._meta.apiUrl,
-      typeof params === "function" ? (params as Function)() : params,
+      serialize(typeof params === "function" ? (params as Function)() : params),
     ],
     queryFn: (_: string, params, more?) => queryRpcFn({...params, ...more}, {fromQueryHook: true}),
     config: {
