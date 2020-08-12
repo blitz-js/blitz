@@ -497,7 +497,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1100408?v=4",
       "profile": "https://www.dwightwatson.com",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -811,6 +812,24 @@
       "profile": "https://christse.io",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "nettofarah",
+      "name": "Netto Farah",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/270688?v=4",
+      "profile": "http://twitter.com/nettofarah",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rohanjulka19",
+      "name": "Rohan Julka",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/19673968?v=4",
+      "profile": "https://github.com/rohanjulka19",
+      "contributions": [
+        "infra"
       ]
     }
   ],
