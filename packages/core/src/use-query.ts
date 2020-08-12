@@ -30,6 +30,20 @@ export const useIsDevPrerender = () => {
   }
 }
 
+export const retryFunction = (failureCount: number, error: any) => {
+  if (process.env.NODE_ENV !== "production") return false
+  if (error.name === "AuthenticationError") return false
+  if (error.name === "AuthorizationError") return false
+  if (error.name === "CSRFTokenMismatchError") return false
+  if (error.name === "NotFoundError") return false
+  if (error.name === "ZodError") return false
+  // Prisma errors
+  if (typeof error.code === "string" && error.code.startsWith("P")) return false
+  if (failureCount > 3) return false
+
+  return true
+}
+
 export function useQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
@@ -57,7 +71,7 @@ export function useQuery<T extends QueryFn>(
     queryFn: (_: string, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      retry: retryFunction,
       ...options,
     },
   })
