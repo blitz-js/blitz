@@ -91,7 +91,7 @@
     "debug": "4.1.1",
     "delay": "4.3.0",
     "directory-tree": "2.2.4",
-    "eslint": "6.x",
+    "eslint": "7.x",
     "eslint-config-react-app": "5.2.1",
     "eslint-plugin-flowtype": "4.x",
     "eslint-plugin-import": "2.x",
