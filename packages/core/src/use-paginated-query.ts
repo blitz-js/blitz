@@ -3,7 +3,7 @@ import {
   PaginatedQueryResult,
   QueryOptions,
 } from "react-query"
-import {useIsDevPrerender, emptyQueryFn} from "./use-query"
+import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
@@ -41,7 +41,7 @@ export function usePaginatedQuery<T extends QueryFn>(
     queryFn: (_: string, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      retry: retryFunction,
       ...options,
     },
   })

@@ -15,7 +15,7 @@ export function withBlitz(nextConfig: any) {
           const originalEntry = config.entry
           config.entry = async () => ({
             ...(await originalEntry()),
-            "../__db.js": "./db/index",
+            "../__db": "./db/index",
           })
         } else {
           config.module = config.module || {}

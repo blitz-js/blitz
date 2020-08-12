@@ -25,7 +25,7 @@ module.exports = {
     ],
     "@typescript-eslint/no-floating-promises": "error",
   },
-  ignorePatterns: ["packages/cli/", "packages/generator/templates"],
+  ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
   overrides: [
     {
       files: ["examples/**", "packages/gui/**", "recipes/**"],

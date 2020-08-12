@@ -1,3 +1,4 @@
+import {SessionContext} from "blitz"
 import db, {__ModelName__UpdateArgs} from "db"
 
 if (process.env.parentModel) {
@@ -15,8 +16,10 @@ if (process.env.parentModel) {
 
 export default async function update__ModelName__(
   {where, data}: Update__ModelName__Input,
-  ctx: Record<any, any> = {},
+  ctx: {session?: SessionContext} = {},
 ) {
+  ctx.session!.authorize()
+
   if (process.env.parentModel) {
     // Don't allow updating
     delete (data as any).__parentModel__
