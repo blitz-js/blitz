@@ -39,7 +39,7 @@ export const retryFunction = (failureCount: number, error: any) => {
   if (error.name === "ZodError") return false
   // Prisma errors
   if (typeof error.code === "string" && error.code.startsWith("P")) return false
-  if (failureCount > 3) return false
+  if (failureCount > 2) return false
 
   return true
 }
