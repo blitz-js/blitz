@@ -822,6 +822,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rohanjulka19",
+      "name": "Rohan Julka",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/19673968?v=4",
+      "profile": "https://github.com/rohanjulka19",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,
