@@ -3,7 +3,7 @@ import {
   InfiniteQueryResult,
   InfiniteQueryOptions,
 } from "react-query"
-import {useIsDevPrerender, emptyQueryFn} from "./use-query"
+import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
@@ -41,7 +41,7 @@ export function useInfiniteQuery<T extends QueryFn>(
     queryFn: (_: string, params, more?) => queryRpcFn({...params, ...more}, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      retry: retryFunction,
       ...options,
     },
   })
