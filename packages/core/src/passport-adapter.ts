@@ -26,6 +26,16 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
+function isLocalhost(req: BlitzApiRequest) {
+  let {host} = req.headers
+  let localhost = false
+  if (host) {
+    host = host.split(":")[0]
+    localhost = host === "localhost"
+  }
+  return localhost
+}
+
 const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
   typeof value === "object" && value !== null && "publicData" in value
 
@@ -38,7 +48,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       connectMiddleware(
         cookieSession({
           secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
         }) as any,
       ),
       // TODO - fix TS type - shouldn't need `any` here
