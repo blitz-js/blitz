@@ -1,6 +1,6 @@
 import db, {FindManyProductArgs} from "db"
 
-type GetProductsInfiniteInput = {
+type GetProductsPaginatedInput = {
   where?: FindManyProductArgs["where"]
   orderBy?: FindManyProductArgs["orderBy"]
   skip?: FindManyProductArgs["skip"]
@@ -10,12 +10,12 @@ type GetProductsInfiniteInput = {
   // include?: FindManyProductArgs['include']
 }
 
-export default async function getProductsInfinite({
+export default async function getProductsPaginated({
   where,
   orderBy,
   take,
   skip,
-}: GetProductsInfiniteInput) {
+}: GetProductsPaginatedInput) {
   const products = await db.product.findMany({
     where,
     orderBy,
@@ -25,10 +25,9 @@ export default async function getProductsInfinite({
 
   const count = await db.product.count()
   const hasMore = skip! + take! < count
-  const nextPage = hasMore ? {take, skip: skip! + take!} : null
 
   return {
     products,
-    nextPage,
+    hasMore,
   }
 }

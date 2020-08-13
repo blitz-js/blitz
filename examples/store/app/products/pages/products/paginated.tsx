@@ -1,12 +1,12 @@
 import {Suspense, useState} from "react"
 import {Link, BlitzPage, usePaginatedQuery} from "blitz"
-import getProducts from "app/products/queries/getProducts"
+import getProductsPaginated from "app/products/queries/getProductsPaginated"
 
 const ITEMS_PER_PAGE = 3
 
 const Products = () => {
   const [page, setPage] = useState(0)
-  const [products] = usePaginatedQuery(getProducts, {
+  const [{products, hasMore}] = usePaginatedQuery(getProductsPaginated, {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
@@ -23,7 +23,7 @@ const Products = () => {
       <button disabled={page === 0} onClick={() => setPage(page - 1)}>
         Previous
       </button>
-      <button disabled={products.length !== ITEMS_PER_PAGE} onClick={() => setPage(page + 1)}>
+      <button disabled={!hasMore} onClick={() => setPage(page + 1)}>
         Next
       </button>
     </div>

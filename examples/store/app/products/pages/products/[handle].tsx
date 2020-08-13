@@ -10,7 +10,7 @@ type StaticProps = {
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
-  const product = await getProduct({where: {handle: ctx.params.handle as string}})
+  const product = await getProduct({where: {handle: ctx.params!.handle as string}})
   const dataString = superjson.stringify(product)
   return {
     props: {dataString},
