@@ -17,7 +17,6 @@ const New__ModelName__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>New __ModelName__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>

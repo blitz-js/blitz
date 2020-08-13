@@ -12,7 +12,6 @@ const SignupPage: BlitzPage = () => {
     <>
       <Head>
         <title>Sign Up</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div>
