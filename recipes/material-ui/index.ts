@@ -9,7 +9,17 @@ export default RecipeBuilder()
   .setDescription(
     `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for immediate usage.
     
-    NOTE: Material-UI currently doesn't support concurrent mode. Therefore, if you intend to use it with blitz.js, you will need to set { suspense: false } on useQuery hook for fetching data.`,
+NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @material-ui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js - 
+    
+module.exports = {    
+  experimental: {
+    reactNode: "legacy"
+  },
+
+  // keep the other parts of the config as is
+},
+
+This will let the next.js app opt out of the React.Strict mode wrapping. Once you switch to legacy mode, you will also have to pass { suspense: false } to the useQuery options when querying data endpoints in your pages/components. You can check the documentation for useQuery at https://blitzjs.com/docs/use-query#options`,
   )
   .setOwner("s.pathak5995@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
@@ -388,51 +398,6 @@ export default RecipeBuilder()
           )
           addImport(ast, b, t, reactImport)
         }
-
-        return ast
-      }
-
-      throw new Error("Not given valid source file")
-    },
-  })
-  .addTransformFilesStep({
-    stepId: "enableReactLegacyMode",
-    stepName: "Customize blitz.config.js",
-    explanation: `Material-UI currently doesn't work with concurrent mode. We need to enable Legacy React mode by customizing the blitz config experimental property.`,
-    singleFileSearch: paths.blitzConfig(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      if (t.File.check(ast)) {
-        visit(ast, {
-          visitAssignmentExpression(path) {
-            const {value} = path
-
-            // TODO: there may be a better way to do this
-            // currently only handle adding { experimental: { reactMode: 'legacy' } } directly
-            // doesn't check if any part of the tree already exists
-            if (
-              value.type === "AssignmentExpression" &&
-              value.left &&
-              value.left.type === "MemberExpression" &&
-              value.left.object.type === "Identifier" &&
-              value.left.object.name === "module" &&
-              value.left.property.type === "Identifier" &&
-              value.left.property.name === "exports"
-            ) {
-              value.right.properties.splice(
-                0,
-                0,
-                b.objectProperty(
-                  b.identifier("experimental"),
-                  b.objectExpression([
-                    b.objectProperty(b.identifier("reactNode"), b.stringLiteral("legacy")),
-                  ]),
-                ),
-              )
-            }
-
-            return this.traverse(path)
-          },
-        })
 
         return ast
       }
