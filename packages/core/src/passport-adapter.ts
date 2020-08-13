@@ -26,7 +26,7 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
-function isLocalhost(req: BlitzApiRequest) {
+export function isLocalhost(req: BlitzApiRequest): boolean {
   let {host} = req.headers
   let localhost = false
   if (host) {
