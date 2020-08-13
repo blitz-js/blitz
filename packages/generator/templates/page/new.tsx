@@ -21,7 +21,7 @@ const New__ModelName__Page: BlitzPage = () => {
       </Head>
 
       <main>
-        <h1>Create New __ModelName__ </h1>
+        <h1>Create New __ModelName__</h1>
 
         <__ModelName__Form
           initialValues={{}}
