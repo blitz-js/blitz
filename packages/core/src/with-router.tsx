@@ -4,6 +4,8 @@ import {WithRouterProps as WithNextRouterProps} from "next/dist/client/with-rout
 import {useParams, extractRouterParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
+export {RouterContext} from "next/dist/next-server/lib/router-context"
+
 export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof extractRouterParams>
 }

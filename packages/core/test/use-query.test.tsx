@@ -1,6 +1,7 @@
 import React from "react"
 import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
 import {useQuery} from "../src/use-query"
+import {deserialize} from "superjson"
 
 describe("useQuery", () => {
   const setupHook = (
@@ -9,13 +10,17 @@ describe("useQuery", () => {
   ): [{data?: any}, Function] => {
     // This enhance fn does what getIsomorphicRpcHandler does during build time
     const enhance = (fn: any) => {
-      fn._meta = {
+      const newFn = (...args: any) => {
+        const [data, ...rest] = args
+        return fn(deserialize(data), ...rest)
+      }
+      newFn._meta = {
         name: "testResolver",
         type: "query",
         path: "app/test",
         apiUrl: "test/url",
       }
-      return fn
+      return newFn
     }
     let res = {}
     function TestHarness() {

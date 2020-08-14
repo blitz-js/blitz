@@ -29,7 +29,8 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
-  const serialized = serialize(params)
+  // query hook already serializes the params because otherwise react-query will mess it up
+  const serialized = opts.fromQueryHook ? params : serialize(params)
 
   const result = await window.fetch(url, {
     method: "POST",
