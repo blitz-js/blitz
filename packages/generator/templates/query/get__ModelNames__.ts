@@ -1,3 +1,4 @@
+import {SessionContext} from "blitz"
 import db, {FindMany__ModelName__Args} from "db"
 
 type Get__ModelNames__Input = {
@@ -12,8 +13,10 @@ type Get__ModelNames__Input = {
 
 export default async function get__ModelNames__(
   {where, orderBy, cursor, take, skip}: Get__ModelNames__Input,
-  ctx: Record<any, any> = {},
+  ctx: {session?: SessionContext} = {},
 ) {
+  ctx.session!.authorize()
+
   const __modelNames__ = await db.__modelName__.findMany({
     where,
     orderBy,

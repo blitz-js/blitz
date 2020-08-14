@@ -831,6 +831,44 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "pragmaticivan",
+      "name": "Ivan Santos",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/301291?v=4",
+      "profile": "https://www.ivansantos.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "drenther",
+      "name": "Soumyajit Pathak",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/12991390?v=4",
+      "profile": "https://able.bio",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SebastianKurp",
+      "name": "Sebastian Kurpiel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16307737?v=4",
+      "profile": "http://www.sebastiankurpiel.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "scisteffan",
+      "name": "Steffan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2676185?v=4",
+      "profile": "https://github.com/scisteffan",
+      "contributions": [
+        "code",
+        "doc",
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
