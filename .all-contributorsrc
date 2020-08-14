@@ -858,6 +858,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "scisteffan",
+      "name": "Steffan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2676185?v=4",
+      "profile": "https://github.com/scisteffan",
+      "contributions": [
+        "code",
+        "doc",
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
