@@ -849,6 +849,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "SebastianKurp",
+      "name": "Sebastian Kurpiel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16307737?v=4",
+      "profile": "http://www.sebastiankurpiel.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
