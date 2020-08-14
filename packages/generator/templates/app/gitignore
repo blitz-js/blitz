@@ -37,7 +37,7 @@ pids
 *.pid.lock
 
 # Testing
-coverage
+.coverage
 *.lcov
 .nyc_output
 lib-cov
