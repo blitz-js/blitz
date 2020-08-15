@@ -27,7 +27,15 @@ export default async function getProducts(
     take,
   })
 
-  return products
+  const count = await db.product.count()
+  const hasMore = skip! + take! < count
+  const nextPage = hasMore ? {take, skip: skip! + take!} : null
+
+  return {
+    products,
+    nextPage,
+    hasMore,
+  }
 }
 
 export const middleware: Middleware[] = [

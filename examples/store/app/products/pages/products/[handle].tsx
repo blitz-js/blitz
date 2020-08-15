@@ -18,7 +18,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async (ctx) => {
   }
 }
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = (await getProducts({orderBy: {id: "desc"}})).map(({handle}) => ({
+  const paths = (await getProducts({orderBy: {id: "desc"}})).products.map(({handle}) => ({
     params: {handle},
   }))
   return {

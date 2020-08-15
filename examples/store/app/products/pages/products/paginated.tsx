@@ -1,12 +1,12 @@
 import {Suspense, useState} from "react"
 import {Link, BlitzPage, usePaginatedQuery} from "blitz"
-import getProductsPaginated from "app/products/queries/getProductsPaginated"
+import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
 
 const Products = () => {
   const [page, setPage] = useState(0)
-  const [{products, hasMore}] = usePaginatedQuery(getProductsPaginated, {
+  const [{products, hasMore}] = usePaginatedQuery(getProducts, {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
