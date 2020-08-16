@@ -1,4 +1,5 @@
 import React from "react"
+import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
 } else {
@@ -65,5 +66,7 @@ const New__ModelName__Page: BlitzPage = () => {
     </div>
   )
 }
+
+New__ModelName__Page.getLayout = (page) => <Layout title={"Create New __ModelName__"}>{page}</Layout>
 
 export default New__ModelName__Page

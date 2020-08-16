@@ -1,4 +1,5 @@
 import React, {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
@@ -80,5 +81,7 @@ const Edit__ModelName__Page: BlitzPage = () => {
     </div>
   )
 }
+
+Edit__ModelName__Page.getLayout = (page) => <Layout title={"Edit __ModelName__"}>{page}</Layout>
 
 export default Edit__ModelName__Page
