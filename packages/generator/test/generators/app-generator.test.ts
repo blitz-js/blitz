@@ -109,9 +109,15 @@ describe("AppGenerator", () => {
   it("calls git commit", async () => {
     await generator.run()
 
-    expect(spawn.sync).toHaveBeenCalledWith("git", ["commit", "-m", "New baby Blitz app!"], {
-      stdio: "ignore",
-    })
+    //
+    expect(spawn.sync).toHaveBeenCalledWith(
+      "git",
+      ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+      {
+        stdio: "ignore",
+        timeout: 5000,
+      },
+    )
   })
 
   describe("when git init fails", () => {
