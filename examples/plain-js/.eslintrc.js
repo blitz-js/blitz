@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    es2020: true,
+  },
   extends: ["react-app", "plugin:jsx-a11y/recommended"],
   plugins: ["jsx-a11y"],
   rules: {
