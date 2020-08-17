@@ -7,9 +7,10 @@ import _pluralize from "pluralize"
 import {
   PageGenerator,
   MutationGenerator,
-  QueryGenerator,
+  QueriesGenerator,
   FormGenerator,
   ModelGenerator,
+  QueryGenerator,
 } from "@blitzjs/generator"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 import {log} from "@blitzjs/display"
@@ -29,6 +30,7 @@ enum ResourceType {
   Mutations = "mutations",
   Pages = "pages",
   Queries = "queries",
+  Query = "query",
   Resource = "resource",
 }
 
@@ -69,15 +71,16 @@ const generatorMap = {
     ModelGenerator,
     PageGenerator,
     FormGenerator,
-    QueryGenerator,
+    QueriesGenerator,
     MutationGenerator,
   ],
-  [ResourceType.Crud]: [MutationGenerator, QueryGenerator],
+  [ResourceType.Crud]: [MutationGenerator, QueriesGenerator],
   [ResourceType.Model]: [ModelGenerator],
   [ResourceType.Mutations]: [MutationGenerator],
   [ResourceType.Pages]: [PageGenerator, FormGenerator],
-  [ResourceType.Queries]: [QueryGenerator],
-  [ResourceType.Resource]: [ModelGenerator, QueryGenerator, MutationGenerator],
+  [ResourceType.Queries]: [QueriesGenerator],
+  [ResourceType.Query]: [QueryGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationGenerator],
 }
 
 export class Generate extends Command {
@@ -147,6 +150,10 @@ export class Generate extends Command {
     completed:boolean:default[false] \\
     belongsTo:project?
     `,
+    `# Sometimes you want just a single query with no generated
+# logic. Generating "query" instead of "queries" will give you a more
+# customizable template.
+> blitz generate query getUserSession`,
   ]
 
   async promptForTargetDirectory(paths: string[]): Promise<string> {
