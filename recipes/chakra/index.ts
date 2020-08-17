@@ -1,14 +1,11 @@
 import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import {builders} from "ast-types/gen/builders"
-import {ASTNode} from "ast-types/lib/types"
-import {NamedTypes} from "ast-types/gen/namedTypes"
 import j from "jscodeshift"
 import {NodePath} from "ast-types/lib/node-path"
+import {Collection} from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithThemeProvider(ast: ASTNode, b: builders, t: NamedTypes) {
-  const fileSource = j(ast)
-  fileSource.find(j.JSXIdentifier, {name: "Component"}).forEach((path: NodePath) => {
+function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
+  program.find(j.JSXIdentifier, {name: "Component"}).forEach((path: NodePath) => {
     j(path.parent).replaceWith(
       j.jsxElement(
         j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider")),
@@ -23,39 +20,7 @@ function wrapComponentWithThemeProvider(ast: ASTNode, b: builders, t: NamedTypes
       ),
     )
   })
-  //if (!t.File.check(ast)) return
-
-  //visit(ast, {
-  //visitExportDefaultDeclaration(path) {
-  //return this.traverse(path)
-  //},
-  //visitJSXElement(path) {
-  //const {node} = path
-  //if (
-  //t.JSXIdentifier.check(node.openingElement.name) &&
-  //// TODO: need a better way to detect the Component
-  //node.openingElement.name.name === "Component"
-  //) {
-  //path.replace(
-  //b.jsxElement(
-  //b.jsxOpeningElement(b.jsxIdentifier("ThemeProvider")),
-  //b.jsxClosingElement(b.jsxIdentifier("ThemeProvider")),
-  //[
-  //b.jsxText("\n"),
-  //b.jsxElement(b.jsxOpeningElement(b.jsxIdentifier("CSSReset"), [], true)),
-  //b.jsxText("\n"),
-  //node,
-  //b.jsxText("\n"),
-  //],
-  //),
-  //)
-  //return false
-  //}
-  //return this.traverse(path)
-  //},
-  //})
-
-  return ast
+  return program
 }
 
 export default RecipeBuilder()
@@ -65,37 +30,33 @@ export default RecipeBuilder()
   )
   .setOwner("zekan.fran369@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
-  //.addAddDependenciesStep({
-  //stepId: "addDeps",
-  //stepName: "Add npm dependencies",
-  //explanation: `Chakra requires some other dependencies like emotion to work`,
-  //packages: [
-  //{name: "@chakra-ui/core", version: "latest"},
-  //{name: "@emotion/core", version: "latest"},
-  //{name: "@emotion/styled", version: "latest"},
-  //{name: "emotion-theming", version: "latest"},
-  //],
-  //})
+  .addAddDependenciesStep({
+    stepId: "addDeps",
+    stepName: "Add npm dependencies",
+    explanation: `Chakra requires some other dependencies like emotion to work`,
+    packages: [
+      {name: "@chakra-ui/core", version: "latest"},
+      {name: "@emotion/core", version: "latest"},
+      {name: "@emotion/styled", version: "latest"},
+      {name: "emotion-theming", version: "latest"},
+    ],
+  })
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
     stepName: "Import ThemeProvider and CSSReset component",
     explanation: `We can import the chakra provider into _app, so it is accessibly in the whole app`,
     singleFileSearch: paths.app(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      const stylesImport = b.importDeclaration(
+    transform(program: Collection<j.Program>) {
+      const stylesImport = j.importDeclaration(
         [
-          b.importSpecifier(b.identifier("CSSReset")),
-          b.importSpecifier(b.identifier("ThemeProvider")),
+          j.importSpecifier(j.identifier("CSSReset")),
+          j.importSpecifier(j.identifier("ThemeProvider")),
         ],
-        b.literal("@chakra-ui/core"),
+        j.literal("@chakra-ui/core"),
       )
 
-      if (t.File.check(ast)) {
-        addImport(ast, b, t, stylesImport)
-        return wrapComponentWithThemeProvider(ast, b, t)!
-      }
-
-      throw new Error("Not given valid source file")
+      addImport(program, stylesImport)
+      return wrapComponentWithThemeProvider(program)
     },
   })
   .build()

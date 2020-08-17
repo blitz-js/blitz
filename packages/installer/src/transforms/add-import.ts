@@ -1,21 +1,19 @@
-import {ASTNode} from "ast-types"
-import {NamedTypes} from "ast-types/gen/namedTypes"
-import {builders} from "ast-types/gen/builders"
-import {types} from "recast"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
 
 export function addImport(
-  ast: ASTNode,
-  __b: builders,
-  t: NamedTypes,
-  importToAdd: types.namedTypes.ImportDeclaration,
-) {
-  if (!t.File.check(ast) || !t.ImportDeclaration.check(importToAdd)) return
-  const statements = ast.program.body
-  if (statements.length > 0 && !t.ImportDeclaration.check(statements[0])) {
-    ast.program.body.splice(0, 0, importToAdd)
-  } else {
-    const idx = ast.program.body.findIndex((node) => t.ImportDeclaration.check(node))
-    ast.program.body.splice(idx + 1, 0, importToAdd)
+  program: Collection<j.Program>,
+  importToAdd: j.ImportDeclaration,
+): Collection<j.Program> {
+  const importStatementCount = program.find(j.ImportDeclaration).length
+  if (importStatementCount === 0) {
+    program.find(j.Statement).at(0).insertBefore(importToAdd)
+    return program
   }
-  return ast
+  program.find(j.ImportDeclaration).forEach((stmt, idx) => {
+    if (idx === importStatementCount - 1) {
+      stmt.replace(stmt.node, importToAdd)
+    }
+  })
+  return program
 }

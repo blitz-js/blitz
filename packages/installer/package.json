@@ -38,6 +38,7 @@
     "@babel/plugin-transform-typescript": "7.9.4",
     "@blitzjs/display": "0.17.1-canary.4",
     "@blitzjs/generator": "0.17.1-canary.4",
+    "@types/jscodeshift": "0.7.1",
     "ast-types": "0.13.3",
     "chokidar": "3.3.1",
     "cross-spawn": "7.0.2",
