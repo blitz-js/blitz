@@ -56,6 +56,6 @@ export interface AppProps extends NextAppProps {
     getLayout?: (component: JSX.Element) => JSX.Element
   }
 }
-export type BlitzPage = NextPage & {
+export type BlitzPage<P, IP> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
 }
