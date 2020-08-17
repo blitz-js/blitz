@@ -50,6 +50,7 @@
     "ink-spinner": "3.0.1",
     "jscodeshift": "0.10.0",
     "react": "experimental",
+    "recast": "0.19.1",
     "ts-node": "8.9.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

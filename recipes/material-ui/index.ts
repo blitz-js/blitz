@@ -1,8 +1,6 @@
 import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import {builders} from "ast-types/gen/builders"
-import {ASTNode} from "ast-types/lib/types"
-import {NamedTypes, namedTypes} from "ast-types/gen/namedTypes"
-import {visit} from "ast-types"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
 
 export default RecipeBuilder()
   .setName("Material-UI")
@@ -34,191 +32,156 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      if (t.File.check(ast)) {
-        // import ServerStyleSheets
-        const serverStyleSheetsImport = b.importDeclaration(
-          [b.importSpecifier(b.identifier("ServerStyleSheets"))],
-          b.literal("@material-ui/core/styles"),
+    transform(program: Collection<j.Program>) {
+      // import ServerStyleSheets
+      const serverStyleSheetsImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("ServerStyleSheets"))],
+        j.literal("@material-ui/core/styles"),
+      )
+
+      let isReactImported = false
+
+      program.find(j.ImportDeclaration, {source: "react"}).forEach((reactImportPath) => {
+        isReactImported = true
+        if (reactImportPath.value.specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
+          reactImportPath.value.specifiers.splice(
+            0,
+            0,
+            j.importDefaultSpecifier(j.identifier("React")),
+          )
+        }
+      })
+      program.find(j.ImportDeclaration, {source: "blitz"}).forEach((blitzImportPath) => {
+        if (
+          !blitzImportPath.value.specifiers
+            .filter((spec) => j.ImportSpecifier.check(spec))
+            .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
+        ) {
+          blitzImportPath.value.specifiers.splice(
+            0,
+            0,
+            j.importSpecifier(j.identifier("DocumentContext")),
+          )
+        }
+      })
+      program.find(j.ClassBody).forEach((path) => {
+        const {node} = path
+
+        const ctxParam = j.identifier("ctx")
+        ctxParam.typeAnnotation = j.tsTypeAnnotation(
+          j.tsTypeReference(j.identifier("DocumentContext")),
         )
 
-        let isReactImported = false
-
-        visit(ast, {
-          visitImportDeclaration(path) {
-            // check if React is already imported
-            // if yes then we can skip importing it
-            // since we need it for useEffect
-            const source = path.value.source.value
-            if (source === "react") {
-              isReactImported = true
-
-              // currently, we only check if the default export is there
-              // because we use the hook as React.useEffect
-              // if not then add the default export
-              if (
-                !path.value.specifiers.some(
-                  (node: namedTypes.ImportDefaultSpecifier | namedTypes.ImportSpecifier) =>
-                    node.type === "ImportDefaultSpecifier",
-                )
-              ) {
-                path.value.specifiers.splice(0, 0, b.importDefaultSpecifier(b.identifier("React")))
-
-                return false
-              }
-            }
-            // check if DocumentContext is imported from blitz if not add that as well
-            else if (source === "blitz") {
-              if (
-                !path.value.specifiers
-                  .filter(
-                    (node: namedTypes.ImportDefaultSpecifier | namedTypes.ImportSpecifier) =>
-                      node.type === "ImportSpecifier",
-                  )
-                  .some(
-                    (node: namedTypes.ImportSpecifier) =>
-                      node?.imported?.name === "DocumentContext",
-                  )
-              ) {
-                path.value.specifiers.splice(
-                  0,
-                  0,
-                  b.importSpecifier(b.identifier("DocumentContext")),
-                )
-              }
-            }
-
-            return this.traverse(path)
-          },
-          visitClassBody(path) {
-            const {node} = path
-
-            const ctxParam = b.identifier("ctx")
-            ctxParam.typeAnnotation = b.tsTypeAnnotation(
-              b.tsTypeReference(b.identifier("DocumentContext")),
-            )
-
-            const getInitialPropsBody = b.blockStatement([
-              b.variableDeclaration("const", [
-                b.variableDeclarator(
-                  b.identifier("sheets"),
-                  b.newExpression(b.identifier("ServerStyleSheets"), []),
-                ),
-              ]),
-              b.variableDeclaration("const", [
-                b.variableDeclarator(
-                  b.identifier("originalRenderPage"),
-                  b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
-                ),
-              ]),
-              b.expressionStatement(
-                b.assignmentExpression(
-                  "=",
-                  b.memberExpression(b.identifier("ctx"), b.identifier("renderPage")),
-                  b.arrowFunctionExpression(
-                    [],
-                    b.callExpression(b.identifier("originalRenderPage"), [
-                      b.objectExpression([
-                        b.objectProperty(
-                          b.identifier("enhanceApp"),
-                          b.arrowFunctionExpression(
-                            [b.identifier("App")],
-                            b.arrowFunctionExpression(
-                              [b.identifier("props")],
-                              b.callExpression(
-                                b.memberExpression(b.identifier("sheets"), b.identifier("collect")),
-                                [
-                                  b.jsxElement(
-                                    b.jsxOpeningElement(
-                                      b.jsxIdentifier("App"),
-                                      [b.jsxSpreadAttribute(b.identifier("props"))],
-                                      true,
-                                    ),
-                                  ),
-                                ],
+        const getInitialPropsBody = j.blockStatement([
+          j.variableDeclaration("const", [
+            j.variableDeclarator(
+              j.identifier("sheets"),
+              j.newExpression(j.identifier("ServerStyleSheets"), []),
+            ),
+          ]),
+          j.variableDeclaration("const", [
+            j.variableDeclarator(
+              j.identifier("originalRenderPage"),
+              j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
+            ),
+          ]),
+          j.expressionStatement(
+            j.assignmentExpression(
+              "=",
+              j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
+              j.arrowFunctionExpression(
+                [],
+                j.callExpression(j.identifier("originalRenderPage"), [
+                  j.objectExpression([
+                    j.objectProperty(
+                      j.identifier("enhanceApp"),
+                      j.arrowFunctionExpression(
+                        [j.identifier("App")],
+                        j.arrowFunctionExpression(
+                          [j.identifier("props")],
+                          j.callExpression(
+                            j.memberExpression(j.identifier("sheets"), j.identifier("collect")),
+                            [
+                              j.jsxElement(
+                                j.jsxOpeningElement(
+                                  j.jsxIdentifier("App"),
+                                  [j.jsxSpreadAttribute(j.identifier("props"))],
+                                  true,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                      ]),
-                    ]),
-                  ),
+                      ),
+                    ),
+                  ]),
+                ]),
+              ),
+            ),
+          ),
+          j.variableDeclaration("const", [
+            j.variableDeclarator(
+              j.identifier("initialProps"),
+              j.awaitExpression(
+                j.callExpression(
+                  j.memberExpression(j.identifier("Document"), j.identifier("getInitialProps")),
+                  [j.identifier("ctx")],
                 ),
               ),
-              b.variableDeclaration("const", [
-                b.variableDeclarator(
-                  b.identifier("initialProps"),
-                  b.awaitExpression(
-                    b.callExpression(
-                      b.memberExpression(b.identifier("Document"), b.identifier("getInitialProps")),
-                      [b.identifier("ctx")],
+            ),
+          ]),
+          j.returnStatement(
+            j.objectExpression([
+              j.spreadElement(j.identifier("initialProps")),
+              j.objectProperty(
+                j.identifier("styles"),
+                j.arrayExpression([
+                  j.spreadElement(
+                    j.callExpression(
+                      j.memberExpression(
+                        j.memberExpression(j.identifier("React"), j.identifier("Children")),
+                        j.identifier("toArray"),
+                      ),
+                      [j.memberExpression(j.identifier("initialProps"), j.identifier("styles"))],
                     ),
                   ),
-                ),
-              ]),
-              b.returnStatement(
-                b.objectExpression([
-                  b.spreadElement(b.identifier("initialProps")),
-                  b.objectProperty(
-                    b.identifier("styles"),
-                    b.arrayExpression([
-                      b.spreadElement(
-                        b.callExpression(
-                          b.memberExpression(
-                            b.memberExpression(b.identifier("React"), b.identifier("Children")),
-                            b.identifier("toArray"),
-                          ),
-                          [
-                            b.memberExpression(
-                              b.identifier("initialProps"),
-                              b.identifier("styles"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      b.callExpression(
-                        b.memberExpression(b.identifier("sheets"), b.identifier("getStyleElement")),
-                        [],
-                      ),
-                    ]),
+                  j.callExpression(
+                    j.memberExpression(j.identifier("sheets"), j.identifier("getStyleElement")),
+                    [],
                   ),
                 ]),
               ),
-            ])
+            ]),
+          ),
+        ])
 
-            const getInitialPropsMethod = b.classMethod(
-              "method",
-              b.identifier("getInitialProps"),
-              [ctxParam],
-              getInitialPropsBody,
-              false,
-              true,
-            )
-            getInitialPropsMethod.async = true
+        const getInitialPropsMethod = j.classMethod(
+          "method",
+          j.identifier("getInitialProps"),
+          [ctxParam],
+          getInitialPropsBody,
+          false,
+          true,
+        )
+        getInitialPropsMethod.async = true
 
-            // TODO: better way will be to check if the method already exists and modify it or else add it
-            // currently it gets added assuming it did not exist before
-            node.body.splice(0, 0, getInitialPropsMethod)
+        // TODO: better way will be to check if the method already exists and modify it or else add it
+        // currently it gets added assuming it did not exist before
+        node.body.splice(0, 0, getInitialPropsMethod)
+      })
 
-            return false
-          },
-        })
-
-        // import React if it wasn't already imported
-        if (!isReactImported) {
-          const reactImport = b.importDeclaration(
-            [b.importDefaultSpecifier(b.identifier("React"))],
-            b.literal("react"),
-          )
-          addImport(ast, b, t, reactImport)
-        }
-
-        addImport(ast, b, t, serverStyleSheetsImport)
-
-        return ast
+      // import React if it wasn't already imported
+      if (!isReactImported) {
+        const reactImport = j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier("React"))],
+          j.literal("react"),
+        )
+        addImport(program, reactImport)
       }
 
-      throw new Error("Not given valid source file")
+      addImport(program, serverStyleSheetsImport)
+
+      return program
     },
   })
   .addTransformFilesStep({
@@ -226,183 +189,147 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Customize App and import ThemeProvider with a base theme and CssBaseline component",
     explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @material-ui components. We will also customize the _app component to be remove the server side injected CSS.`,
     singleFileSearch: paths.app(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      if (t.File.check(ast)) {
-        // import ThemeProvider and createMuiTheme
-        const themeImport = b.importDeclaration(
-          [
-            b.importSpecifier(b.identifier("ThemeProvider")),
-            b.importSpecifier(b.identifier("createMuiTheme")),
-          ],
-          b.literal("@material-ui/core/styles"),
-        )
+    transform(program) {
+      // import ThemeProvider and createMuiTheme
+      const themeImport = j.importDeclaration(
+        [
+          j.importSpecifier(j.identifier("ThemeProvider")),
+          j.importSpecifier(j.identifier("createMuiTheme")),
+        ],
+        j.literal("@material-ui/core/styles"),
+      )
 
-        // import CSSBaseline
-        const cssBaselineImport = b.importDeclaration(
-          [b.importDefaultSpecifier(b.identifier("CssBaseline"))],
-          b.literal("@material-ui/core/CssBaseline"),
-        )
+      // import CSSBaseline
+      const cssBaselineImport = j.importDeclaration(
+        [j.importDefaultSpecifier(j.identifier("CssBaseline"))],
+        j.literal("@material-ui/core/CssBaseline"),
+      )
 
-        addImport(ast, b, t, cssBaselineImport)
-        addImport(ast, b, t, themeImport)
+      addImport(program, cssBaselineImport)
+      addImport(program, themeImport)
 
-        let isReactImported = false
+      let isReactImported = false
 
-        visit(ast, {
-          visitExportDefaultDeclaration(path) {
-            const theme = b.variableDeclaration("const", [
-              b.variableDeclarator(
-                b.identifier("theme"),
-                b.callExpression(b.identifier("createMuiTheme"), [
-                  b.objectExpression([
-                    b.objectProperty(
-                      b.identifier("palette"),
-                      b.objectExpression([
-                        b.objectProperty(b.identifier("type"), b.stringLiteral("light")),
-                      ]),
+      program.find(j.ExportDefaultDeclaration).forEach((path) => {
+        const theme = j.variableDeclaration("const", [
+          j.variableDeclarator(
+            j.identifier("theme"),
+            j.callExpression(j.identifier("createMuiTheme"), [
+              j.objectExpression([
+                j.objectProperty(
+                  j.identifier("palette"),
+                  j.objectExpression([
+                    j.objectProperty(j.identifier("type"), j.stringLiteral("light")),
+                  ]),
+                ),
+              ]),
+            ]),
+          ),
+        ])
+        theme.comments = [
+          j.commentLine(
+            "You can customize this as you want and even move it out to a separate file",
+          ),
+        ]
+
+        path.insertBefore(theme)
+      })
+
+      program.find(j.ImportDeclaration, {source: "react"}).forEach((path) => {
+        // check if React is already imported
+        // if yes then we can skip importing it
+        // since we need it for useEffect
+        isReactImported = true
+
+        // currently, we only check if the default export is there
+        // because we use the hook as React.useEffect
+        // if not then add the default export
+        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        }
+      })
+
+      program.find(j.Function).forEach((path) => {
+        const {parentPath, node} = path
+
+        // assuming App component is the default export of the file
+        if (parentPath && j.ExportDefaultDeclaration.check(parentPath)) {
+          const removeServerSideInjectedCss = j.expressionStatement(
+            j.callExpression(j.memberExpression(j.identifier("React"), j.identifier("useEffect")), [
+              j.arrowFunctionExpression(
+                [],
+                j.blockStatement([
+                  j.variableDeclaration("const", [
+                    j.variableDeclarator(
+                      j.identifier("jssStyles"),
+                      j.callExpression(
+                        j.memberExpression(j.identifier("document"), j.identifier("querySelector")),
+                        [j.literal("#jss-server-side")],
+                      ),
                     ),
                   ]),
+                  j.ifStatement(
+                    j.logicalExpression(
+                      "&&",
+                      j.identifier("jssStyles"),
+                      j.memberExpression(j.identifier("jssStyles"), j.identifier("parentElement")),
+                    ),
+                    j.blockStatement([
+                      j.expressionStatement(
+                        j.callExpression(
+                          j.memberExpression(
+                            j.memberExpression(
+                              j.identifier("jssStyles"),
+                              j.identifier("parentElement"),
+                            ),
+                            j.identifier("removeChild"),
+                          ),
+                          [j.identifier("jssStyles")],
+                        ),
+                      ),
+                    ]),
+                  ),
                 ]),
               ),
-            ])
-            theme.comments = [
-              b.commentLine(
-                "You can customize this as you want and even move it out to a separate file",
-              ),
-            ]
-
-            path.insertBefore(theme)
-
-            return this.traverse(path)
-          },
-          visitImportDeclaration(path) {
-            // check if React is already imported
-            // if yes then we can skip importing it
-            // since we need it for useEffect
-            const source = path.value.source.value
-            if (source === "react") {
-              isReactImported = true
-
-              // currently, we only check if the default export is there
-              // because we use the hook as React.useEffect
-              // if not then add the default export
-              if (
-                !path.value.specifiers.some(
-                  (node: namedTypes.ImportSpecifier | namedTypes.ImportDefaultSpecifier) =>
-                    node.type === "ImportDefaultSpecifier",
-                )
-              ) {
-                path.value.specifiers.splice(0, 0, b.importDefaultSpecifier(b.identifier("React")))
-              }
-            }
-
-            return this.traverse(path)
-          },
-          visitFunction(path) {
-            const {parentPath, node} = path
-
-            // assuming App component is the default export of the file
-            if (parentPath && parentPath.value.type === "ExportDefaultDeclaration") {
-              const removeServerSideInjectedCss = b.expressionStatement(
-                b.callExpression(
-                  b.memberExpression(b.identifier("React"), b.identifier("useEffect")),
-                  [
-                    b.arrowFunctionExpression(
-                      [],
-                      b.blockStatement([
-                        b.variableDeclaration("const", [
-                          b.variableDeclarator(
-                            b.identifier("jssStyles"),
-                            b.callExpression(
-                              b.memberExpression(
-                                b.identifier("document"),
-                                b.identifier("querySelector"),
-                              ),
-                              [b.literal("#jss-server-side")],
-                            ),
-                          ),
-                        ]),
-                        b.ifStatement(
-                          b.logicalExpression(
-                            "&&",
-                            b.identifier("jssStyles"),
-                            b.memberExpression(
-                              b.identifier("jssStyles"),
-                              b.identifier("parentElement"),
-                            ),
-                          ),
-                          b.blockStatement([
-                            b.expressionStatement(
-                              b.callExpression(
-                                b.memberExpression(
-                                  b.memberExpression(
-                                    b.identifier("jssStyles"),
-                                    b.identifier("parentElement"),
-                                  ),
-                                  b.identifier("removeChild"),
-                                ),
-                                [b.identifier("jssStyles")],
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ]),
-                    ),
-                    b.arrayExpression([]),
-                  ],
-                ),
-              )
-
-              node.body.body.splice(0, 0, removeServerSideInjectedCss)
-            }
-
-            return this.traverse(path)
-          },
-          visitJSXElement(path) {
-            const {node} = path
-            if (
-              t.JSXIdentifier.check(node.openingElement.name) &&
-              // TODO: need a better way to detect the Component
-              node.openingElement.name.name === "Component"
-            ) {
-              path.replace(
-                b.jsxElement(
-                  b.jsxOpeningElement(b.jsxIdentifier("ThemeProvider"), [
-                    b.jsxAttribute(
-                      b.jsxIdentifier("theme"),
-                      b.jsxExpressionContainer(b.identifier("theme")),
-                    ),
-                  ]),
-                  b.jsxClosingElement(b.jsxIdentifier("ThemeProvider")),
-                  [
-                    b.literal("\n  \t  "),
-                    b.jsxElement(b.jsxOpeningElement(b.jsxIdentifier("CssBaseline"), [], true)),
-                    b.literal("\n  \t  "),
-                    node,
-                    b.literal("\n    "),
-                  ],
-                ),
-              )
-              return false
-            }
-
-            return this.traverse(path)
-          },
-        })
-
-        // import React if it wasn't already imported
-        if (!isReactImported) {
-          const reactImport = b.importDeclaration(
-            [b.importDefaultSpecifier(b.identifier("React"))],
-            b.literal("react"),
+              j.arrayExpression([]),
+            ]),
           )
-          addImport(ast, b, t, reactImport)
-        }
 
-        return ast
+          node.body.body.splice(0, 0, removeServerSideInjectedCss)
+        }
+      })
+      program.find(j.JSXElement, {openingElement: {name: {name: "Component"}}}).forEach((path) => {
+        const {node} = path
+        path.replace(
+          j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+              j.jsxAttribute(
+                j.jsxIdentifier("theme"),
+                j.jsxExpressionContainer(j.identifier("theme")),
+              ),
+            ]),
+            j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+            [
+              j.literal("\n"),
+              j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
+              j.literal("\n"),
+              node,
+              j.literal("\n"),
+            ],
+          ),
+        )
+      })
+
+      // import React if it wasn't already imported
+      if (!isReactImported) {
+        const reactImport = j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier("React"))],
+          j.literal("react"),
+        )
+        addImport(program, reactImport)
       }
 
-      throw new Error("Not given valid source file")
+      return program
     },
   })
   .build()
