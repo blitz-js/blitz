@@ -160,7 +160,7 @@ export abstract class Generator<
   replaceConditionals(
     input: string,
     templateValues: any,
-    prettierOptions: import("Prettier").Options = {},
+    prettierOptions: import("prettier").Options = {},
   ): string {
     const source = j(input, {parser: customTsParser})
     const program = source.find(j.Program)
