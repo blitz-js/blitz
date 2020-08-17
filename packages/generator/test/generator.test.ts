@@ -16,10 +16,10 @@ describe("generator", () => {
       } else {
         console.log('b')
       }`
-      expect(replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim()).toBe(
+      expect(replaceConditionals(statement, {condition: true}).trim().replace(/\r\n/g, "\n")).toBe(
         "console.log('a')",
       )
-      expect(replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim()).toBe(
+      expect(replaceConditionals(statement, {condition: false}).trim().replace(/\r\n/g, "\n")).toBe(
         "console.log('b')",
       )
     })
@@ -51,10 +51,10 @@ describe("generator", () => {
           </else>
         </if>`
         expect(
-          replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim(),
+          replaceConditionals(statement, {condition: true}).trim().replace(/\r\n/g, "\n"),
         ).toMatchInlineSnapshot(`"<div>true</div>"`)
         expect(
-          replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim(),
+          replaceConditionals(statement, {condition: false}).trim().replace(/\r\n/g, "\n"),
         ).toMatchInlineSnapshot(`"<div>false</div>"`)
       })
 
@@ -64,10 +64,10 @@ describe("generator", () => {
           <div>true</div>
         </if>`
         expect(
-          replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim(),
+          replaceConditionals(statement, {condition: true}).trim().replace(/\r\n/g, "\n"),
         ).toMatchInlineSnapshot(`"<div>true</div>"`)
         expect(
-          replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim(),
+          replaceConditionals(statement, {condition: false}).trim().replace(/\r\n/g, "\n"),
         ).toMatchInlineSnapshot(`""`)
       })
 
@@ -79,7 +79,7 @@ describe("generator", () => {
             <div>false</div>
           </else>
         </if>`
-        expect(replaceConditionals(statement, {}, {endOfLine: "lf"})).toBe(statement)
+        expect(replaceConditionals(statement, {})).toBe(statement)
       })
     })
   })
