@@ -157,7 +157,11 @@ export abstract class Generator<
     return []
   }
 
-  replaceConditionals(input: string, templateValues: any, prettierOptions: {} = {}): string {
+  replaceConditionals(
+    input: string,
+    templateValues: any,
+    prettierOptions: import("Prettier").Options = {},
+  ): string {
     const source = j(input, {parser: customTsParser})
     const program = source.find(j.Program)
     const result = pipe(replaceConditionalStatements, replaceJsxConditionals)(

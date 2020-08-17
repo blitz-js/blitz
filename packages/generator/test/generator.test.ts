@@ -16,8 +16,12 @@ describe("generator", () => {
       } else {
         console.log('b')
       }`
-      expect(replaceConditionals(statement, {condition: true}).trim()).toBe("console.log('a')")
-      expect(replaceConditionals(statement, {condition: false}).trim()).toBe("console.log('b')")
+      expect(replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim()).toBe(
+        "console.log('a')",
+      )
+      expect(replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim()).toBe(
+        "console.log('b')",
+      )
     })
 
     it("correctly handles conditionals with no alternative", () => {
@@ -46,12 +50,12 @@ describe("generator", () => {
             <div>false</div>
           </else>
         </if>`
-        expect(replaceConditionals(statement, {condition: true}).trim()).toMatchInlineSnapshot(
-          `"<div>true</div>"`,
-        )
-        expect(replaceConditionals(statement, {condition: false}).trim()).toMatchInlineSnapshot(
-          `"<div>false</div>"`,
-        )
+        expect(
+          replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim(),
+        ).toMatchInlineSnapshot(`"<div>true</div>"`)
+        expect(
+          replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim(),
+        ).toMatchInlineSnapshot(`"<div>false</div>"`)
       })
 
       it("doesn't require an alternate statement", () => {
@@ -59,12 +63,12 @@ describe("generator", () => {
         <if condition="condition">
           <div>true</div>
         </if>`
-        expect(replaceConditionals(statement, {condition: true}).trim()).toMatchInlineSnapshot(
-          `"<div>true</div>"`,
-        )
-        expect(replaceConditionals(statement, {condition: false}).trim()).toMatchInlineSnapshot(
-          `""`,
-        )
+        expect(
+          replaceConditionals(statement, {condition: true}, {endOfLine: "lf"}).trim(),
+        ).toMatchInlineSnapshot(`"<div>true</div>"`)
+        expect(
+          replaceConditionals(statement, {condition: false}, {endOfLine: "lf"}).trim(),
+        ).toMatchInlineSnapshot(`""`)
       })
 
       it("doesn't process condition if value is not in the template context", () => {
@@ -75,7 +79,7 @@ describe("generator", () => {
             <div>false</div>
           </else>
         </if>`
-        expect(replaceConditionals(statement, {})).toBe(statement)
+        expect(replaceConditionals(statement, {}, {endOfLine: "lf"})).toBe(statement)
       })
     })
   })
