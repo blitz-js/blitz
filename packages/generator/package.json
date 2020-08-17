@@ -38,7 +38,6 @@
     "@babel/plugin-transform-typescript": "7.9.4",
     "@blitzjs/display": "0.17.1-canary.4",
     "@types/jscodeshift": "0.7.1",
-    "ast-types": "0.13.3",
     "chalk": "4.0.0",
     "cross-spawn": "7.0.2",
     "diff": "4.0.2",
@@ -51,7 +50,6 @@
     "mem-fs-editor": "6.0.0",
     "node-fetch": "2.6.0",
     "pluralize": "8.0.0",
-    "recast": "0.19.1",
     "username": "5.1.0",
     "vinyl": "2.2.0"
   },
