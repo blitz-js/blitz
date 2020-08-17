@@ -27,8 +27,8 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   MiddlewareResponse,
+  isLocalhost,
 } from "@blitzjs/core"
-import {isLocalhost} from "../../core/src/utils/index"
 import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
 import {join} from "path"

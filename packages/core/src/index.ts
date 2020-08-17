@@ -48,3 +48,5 @@ export {
 export {default as dynamic} from "next/dynamic"
 
 export {default as ErrorComponent} from "next/error"
+
+export {isLocalhost} from "./utils/index"
