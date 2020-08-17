@@ -1227,6 +1227,116 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@blitzjs/display@0.16.5-canary.5":
+  version "0.16.5-canary.5"
+  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.16.5-canary.5.tgz#4b68b64589999d93d5071ec865b77a1b87a03e65"
+  integrity sha512-VslQiV5PgCTQO9s7QsekTUFq+JcMT3dKEeVF5GgjNVMoXLpfubMTlVUqkIaJMns5ogBvSz++thmCSfwtodNnFA==
+  dependencies:
+    chalk "4.0.0"
+    ora "4.0.4"
+
+"@blitzjs/display@0.17.1-canary.2":
+  version "0.17.1-canary.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.17.1-canary.2.tgz#7a9f153470758119cc38d45e643bf49d8c8b8823"
+  integrity sha512-7c3i5tu1iWKiXRvJUVYID9jPDdJ7orkwK86erEKlzfAX3nJ97wibtNVjhbipsanBGfTYf7v6GXOs9Jqqgcs1Ew==
+  dependencies:
+    chalk "4.0.0"
+    ora "4.0.4"
+
+"@blitzjs/generator@0.16.5-canary.5":
+  version "0.16.5-canary.5"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.16.5-canary.5.tgz#eac6e524ca9dbe066248ccc84ad0a93c2696a82e"
+  integrity sha512-+c34UhqmQ1pN0HnU0bp4M6d9hDNWeCN+lY2I/H1xSFqdtN/KgnYcKheduKljPkkEkL9VzbElGHzSw5M0+xylEA==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.16.5-canary.5"
+    ast-types "0.13.3"
+    chalk "4.0.0"
+    cross-spawn "7.0.2"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    fs-readdir-recursive "1.1.0"
+    got "11.1.3"
+    mem-fs "1.1.3"
+    mem-fs-editor "6.0.0"
+    node-fetch "2.6.0"
+    pluralize "8.0.0"
+    recast "0.19.1"
+    username "5.1.0"
+    vinyl "2.2.0"
+
+"@blitzjs/generator@0.17.1-canary.2":
+  version "0.17.1-canary.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.17.1-canary.2.tgz#559e6568d64f7af0356690b678db58d418097cfe"
+  integrity sha512-DxePxs27WOIMNmEJxMGFT/+1OlASO07SOu30KUEEdS3ZX++0YFAMXaLwcsVfOJY7zDuKum4jEQhBXCAeem1KBA==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.17.1-canary.2"
+    ast-types "0.13.3"
+    chalk "4.0.0"
+    cross-spawn "7.0.2"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    fs-readdir-recursive "1.1.0"
+    got "11.1.3"
+    mem-fs "1.1.3"
+    mem-fs-editor "6.0.0"
+    node-fetch "2.6.0"
+    pluralize "8.0.0"
+    recast "0.19.1"
+    username "5.1.0"
+    vinyl "2.2.0"
+
+"@blitzjs/installer@0.16.5-canary.5":
+  version "0.16.5-canary.5"
+  resolved "https://registry.yarnpkg.com/@blitzjs/installer/-/installer-0.16.5-canary.5.tgz#50074e9fd8922d2f9996e9a2f2d86d7cfb6dc83c"
+  integrity sha512-kBq/uJYeWCZsMRgKPfMDRn6s6qcnk+OTbHPCkTFp5SFP11Rm5YwFQR1FOIuJ0Y1J2KF+Hc3Xyziu6rc4Pq42aw==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.16.5-canary.5"
+    "@blitzjs/generator" "0.16.5-canary.5"
+    ast-types "0.13.3"
+    chokidar "3.3.1"
+    cross-spawn "7.0.2"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    globby "11.0.0"
+    ink "2.7.1"
+    ink-link "1.1.0"
+    ink-spinner "3.0.1"
+    react experimental
+    recast "0.19.1"
+    ts-node "8.9.1"
+
+"@blitzjs/installer@0.17.1-canary.2":
+  version "0.17.1-canary.2"
+  resolved "https://registry.yarnpkg.com/@blitzjs/installer/-/installer-0.17.1-canary.2.tgz#a6c118a544139de0fcd608277e2c9190fa543887"
+  integrity sha512-Eke3VAs0GL15tyObU1uIPZ9PA5/klETBVRy5PaaPPbhqo3Ppz9xs/KKLlE88MP1EAStMGc3R4I660IZJPDJHJw==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.17.1-canary.2"
+    "@blitzjs/generator" "0.17.1-canary.2"
+    ast-types "0.13.3"
+    chokidar "3.3.1"
+    cross-spawn "7.0.2"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    globby "11.0.0"
+    ink "2.7.1"
+    ink-link "1.1.0"
+    ink-spinner "3.0.1"
+    react experimental
+    recast "0.19.1"
+    ts-node "8.9.1"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
