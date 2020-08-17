@@ -168,7 +168,7 @@ export abstract class Generator<
       program,
       templateValues,
     )
-    return result.toSource(prettierOptions)
+    return result.toSource({...prettierOptions, lineTerminator: "\n"})
   }
 
   replaceTemplateValues(input: string, templateValues: any) {
