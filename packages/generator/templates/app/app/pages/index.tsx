@@ -1,4 +1,5 @@
-import { Head, Link, useSession } from "blitz"
+import Layout from "app/layouts/layout"
+import { Link, useSession } from "blitz"
 import logout from "app/auth/mutations/logout"
 
 /*
@@ -6,16 +7,11 @@ import logout from "app/auth/mutations/logout"
  * You can delete everything in here and start from scratch if you like.
  */
 
-export default function Home() {
+const Home = () => {
   const session = useSession()
 
   return (
     <div className="container">
-      <Head>
-        <title>__name__</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <div className="logo">
           <img src="/logo.png" alt="blitz.js" />
@@ -249,3 +245,7 @@ export default function Home() {
     </div>
   )
 }
+
+Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
+
+export default Home
