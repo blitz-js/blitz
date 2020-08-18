@@ -33,9 +33,12 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.1.0",
-    "@prisma/client": "2.1.0",
+
+    "@prisma/cli": "2.4.1",
+    "@prisma/client": "2.4.1",
+
     "blitz": "0.17.1-canary.5",
+
     "final-form": "4.20.1",
     "passport-github2": "0.1.11",
     "passport-twitter": "1.0.4",
