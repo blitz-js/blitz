@@ -5,7 +5,7 @@ export default async function getCurrentUser(_ = null, ctx: {session?: SessionCo
   if (!ctx.session?.userId) return null
 
   const user = await db.user.findOne({
-    where: {id: ctx.session!.userId as any},
+    where: {id: ctx.session!.userId},
     select: {id: true, name: true, email: true, role: true},
   })
 
