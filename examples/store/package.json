@@ -23,7 +23,7 @@
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
     "react-final-form": "6.4.0",
-    "superjson": "1.1.0",
+    "superjson": "1.2.1",
     "typescript": "3.8.3"
   },
   "devDependencies": {
