@@ -92,6 +92,7 @@ describe("AppGenerator", () => {
     yarn: true,
     version: "1.0",
     skipInstall: false,
+    skipGit: false,
   })
 
   it("calls git init", async () => {
