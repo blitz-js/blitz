@@ -26,13 +26,13 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 export interface PublicData extends Record<any, any> {
-  userId: string | number | null
+  userId: any
   roles: string[]
 }
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: string | number
+  userId?: any
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -45,7 +45,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: string | number) => Promise<SessionModel[]>
+  getSessions: (userId: any) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -56,7 +56,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: string | number | null
+  userId: any
   roles: string[]
   handle: string | null
   publicData: PublicData
