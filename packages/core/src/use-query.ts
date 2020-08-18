@@ -33,16 +33,11 @@ export const useIsDevPrerender = () => {
 
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
-  if (error.name === "AuthenticationError") return false
-  if (error.name === "AuthorizationError") return false
-  if (error.name === "CSRFTokenMismatchError") return false
-  if (error.name === "NotFoundError") return false
-  if (error.name === "ZodError") return false
-  // Prisma errors
-  if (typeof error.code === "string" && error.code.startsWith("P")) return false
-  if (failureCount > 2) return false
 
-  return true
+  // Retry (max. 3 times) only if network error detected
+  if (error.message === "Network request failed" && failureCount <= 3) return true
+
+  return false
 }
 
 export function useQuery<T extends QueryFn>(
