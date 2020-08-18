@@ -1,19 +1,13 @@
-import db, {FindOneUserArgs} from "db"
+import db from "db"
 import {SessionContext} from "blitz"
 
-type GetUserInput = {
-  select?: FindOneUserArgs["select"]
-}
-
-export default async function getUser(
-  {select = {id: true, name: true, email: true, role: true}}: GetUserInput,
-  ctx: {session?: SessionContext} = {},
-) {
-  ctx.session?.authorize()
-
+export default async function getCurrentUser(_ = null, ctx: {session?: SessionContext} = {}) {
   if (!ctx.session?.userId) return null
 
-  const user = await db.user.findOne({where: {id: ctx.session!.userId}, select})
+  const user = await db.user.findOne({
+    where: {id: ctx.session!.userId as any},
+    select: {id: true, name: true, email: true, role: true},
+  })
 
   return user
 }
