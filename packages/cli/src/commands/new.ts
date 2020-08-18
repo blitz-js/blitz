@@ -47,6 +47,10 @@ export class New extends Command {
     "dry-run": flags.boolean({
       description: "show what files will be created without writing them to disk",
     }),
+    "no-git": flags.boolean({
+      description: "Skip git repository creation",
+      default: false,
+    }),
   }
 
   async run() {
@@ -65,6 +69,7 @@ export class New extends Command {
       yarn: !flags.npm,
       version: this.config.version,
       skipInstall: flags["skip-install"],
+      skipGit: flags["no-git"],
     })
 
     try {
