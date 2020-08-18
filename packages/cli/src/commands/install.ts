@@ -47,10 +47,9 @@ interface RecipeMeta {
 }
 
 export class Install extends Command {
-  static description = "Install a third-party package into your Blitz app"
+  static description = "Install a Recipe into your Blitz app"
   static aliases = ["i"]
   static strict = false
-  static hidden = true
 
   static args = [
     {
