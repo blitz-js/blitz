@@ -46,12 +46,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    const gitInitResult = this.options.skipGit
-      ? undefined
-      : spawn.sync("git", ["init"], {
-          stdio: "ignore",
-        })
-
     const pkgJsonLocation = join(this.destinationPath(), "package.json")
     const pkg = readJSONSync(pkgJsonLocation)
 
@@ -174,13 +168,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         ),
       )
     }
-    if (gitInitResult === undefined) {
-      return
-    } else if (gitInitResult.status === 0) {
-      this.commitChanges()
-    } else {
-      log.warning("Failed to run git init.")
-      log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+
+    if (!this.options.skipGit) {
+      const initResult = spawn.sync("git", ["init"], {
+        stdio: "ignore",
+      })
+
+      if (initResult.status === 0) {
+        this.commitChanges()
+      } else {
+        log.warning("Failed to run git init.")
+        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+      }
     }
   }
 
