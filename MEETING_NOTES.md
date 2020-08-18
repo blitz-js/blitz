@@ -1,21 +1,19 @@
-
 # 2020-08-17 Blitz Contributor Call
 
 - Attending: Brandon Bayer, Adam Markon, Kellen Mace, Myron Davis, Dwight Watson
 - Brandon:
-    - Auth out, set up by default in canary release
-    - Need to work on a potential CSRF bug
-    - Next major release will include auth by default and allow you to choose your form library
-    - Next auth features are email confirmation
-    - After that, logging and plugins are next
+  - Auth out, set up by default in canary release
+  - Need to work on a potential CSRF bug
+  - Next major release will include auth by default and allow you to choose your form library
+  - Next auth features are email confirmation
+  - After that, logging and plugins are next
 - Adam:
-    - Overhauled the recipe infrastructure. Now using jscodeshift instead of recast
-    - Added support for conditional JSX in templates
-    - Going to work on custom templates next
+  - Overhauled the recipe infrastructure. Now using jscodeshift instead of recast
+  - Added support for conditional JSX in templates
+  - Going to work on custom templates next
 - Dwight
-    - Has been opening issues for problems
-    - Made a few PRs for some issues
-
+  - Has been opening issues for problems
+  - Made a few PRs for some issues
 
 # 2020-07-07 Blitz Contributor Call
 
