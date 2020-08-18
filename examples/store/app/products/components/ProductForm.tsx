@@ -3,10 +3,10 @@ import {Product, ProductCreateInput, ProductUpdateInput} from "db"
 import createProduct from "../mutations/createProduct"
 import updateProduct from "../mutations/updateProduct"
 
-type ProductInput = ProductCreateInput | ProductUpdateInput
+type ProductInput = ProductCreateInput | Product
 
 function isNew(product: ProductInput): product is ProductCreateInput {
-  return (product as ProductUpdateInput).id === undefined
+  return (product as any).id === undefined
 }
 
 type ProductFormProps = {
@@ -19,7 +19,7 @@ function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
   return (
     <Form
       initialValues={product || {name: null, handle: null, description: null, price: null}}
-      onSubmit={async (data: ProductInput) => {
+      onSubmit={async (data: any) => {
         if (isNew(data)) {
           try {
             const product = await createProduct({data})
