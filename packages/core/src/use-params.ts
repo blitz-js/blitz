@@ -40,9 +40,9 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUr
 }
 
 export function useParams(): Record<string, undefined | string | string[]>
-export function useParams(returnType: "string"): Record<string, string>
+export function useParams(returnType: "string"): Record<string, string | undefined>
 export function useParams(returnType: "number"): Record<string, number>
-export function useParams(returnType: "array"): Record<string, string[]>
+export function useParams(returnType: "array"): Record<string, Array<string | undefined>>
 export function useParams(returnType?: "string" | "number" | "array") {
   const router = useRouter()
   const query = useRouterQuery()
@@ -70,7 +70,7 @@ export function useParams(returnType?: "string" | "number" | "array") {
   }
 
   if (returnType === "array") {
-    const params: Record<string, string[]> = {}
+    const params: Record<string, Array<string | undefined>> = {}
     for (const [key, value] of Object.entries(rawParams)) {
       if (Array.isArray(value)) {
         params[key] = value
@@ -83,13 +83,13 @@ export function useParams(returnType?: "string" | "number" | "array") {
 }
 
 export function useParam(key: string): undefined | string | string[]
-export function useParam(key: string, returnType: "string"): string
-export function useParam(key: string, returnType: "number"): number
-export function useParam(key: string, returnType: "array"): string[]
+export function useParam(key: string, returnType: "string"): string | undefined
+export function useParam(key: string, returnType: "number"): number | undefined
+export function useParam(key: string, returnType: "array"): Array<string | undefined>
 export function useParam(
   key: string,
   returnType?: "string" | "number" | "array",
-): undefined | number | string | string[] {
+): undefined | number | string | Array<string | undefined> {
   const params = useParams()
   const rawValue = params[key]
 

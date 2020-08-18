@@ -9,6 +9,7 @@ import {SessionContext, PublicData} from "./supertokens"
 import {log} from "@blitzjs/display"
 import passport, {Strategy} from "passport"
 import cookieSession from "cookie-session"
+import {isLocalhost} from "./utils/index"
 
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
@@ -38,7 +39,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       connectMiddleware(
         cookieSession({
           secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
         }) as any,
       ),
       // TODO - fix TS type - shouldn't need `any` here
