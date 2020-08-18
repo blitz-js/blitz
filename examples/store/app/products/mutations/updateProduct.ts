@@ -6,6 +6,9 @@ type UpdateProductInput = {
 }
 
 export default async function updateProduct({where, data}: UpdateProductInput) {
+  // Don't allow updating
+  delete data.id
+
   const product = await db.product.update({where, data})
 
   return product
