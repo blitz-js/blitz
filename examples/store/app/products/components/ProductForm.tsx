@@ -29,7 +29,10 @@ function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
           }
         } else {
           try {
-            const product = await updateProduct({where: {id: data.id}, data})
+            // Can't update id
+            const id = data.id
+            delete data.id
+            const product = await updateProduct({where: {id}, data})
             onSuccess(product)
           } catch (error) {
             alert("Error updating product " + JSON.stringify(error, null, 2))
