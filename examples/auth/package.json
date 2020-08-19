@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.17.1-canary.6",
+  "version": "0.17.1-canary.7",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -35,7 +35,7 @@
   "dependencies": {
     "@prisma/cli": "2.4.1",
     "@prisma/client": "2.4.1",
-    "blitz": "0.17.1-canary.6",
+    "blitz": "0.17.1-canary.7",
     "final-form": "4.20.1",
     "passport-github2": "0.1.11",
     "passport-twitter": "1.0.4",

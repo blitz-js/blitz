@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-emotion",
   "private": true,
-  "version": "0.17.1-canary.6",
+  "version": "0.17.1-canary.7",
   "description": "The Blitz Recipe for installing Emotion",
   "main": "index.ts",
   "scripts": {
