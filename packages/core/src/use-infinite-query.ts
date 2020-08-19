@@ -3,6 +3,7 @@ import {
   InfiniteQueryResult,
   InfiniteQueryOptions,
 } from "react-query"
+import {useSession} from "./supertokens"
 import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
@@ -37,9 +38,12 @@ export function useInfiniteQuery<T extends QueryFn>(
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey: [
       queryRpcFn._meta.apiUrl,
+      // We add the session object here so queries will refetch if session changes
+      useSession(),
       serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, params, more?) => queryRpcFn({...params, ...more}, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params, more?) =>
+      queryRpcFn({...params, ...more}, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
