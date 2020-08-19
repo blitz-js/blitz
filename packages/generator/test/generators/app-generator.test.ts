@@ -92,6 +92,7 @@ describe("AppGenerator", () => {
     yarn: true,
     version: "1.0",
     skipInstall: false,
+    form: "React Final Form",
     skipGit: false,
   })
 
