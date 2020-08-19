@@ -1,7 +1,7 @@
-import React, {ReactNode, PropsWithoutRef} from "react"
-import {Form as FinalForm, FormProps as FinalFormProps} from "react-final-form"
+import React, { ReactNode, PropsWithoutRef } from "react"
+import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form"
 import * as z from "zod"
-export {FORM_ERROR} from "final-form"
+export { FORM_ERROR } from "final-form"
 
 type FormProps<FormValues> = {
   /** All your form fields */
@@ -33,13 +33,13 @@ export function Form<FormValues extends Record<string, unknown>>({
         }
       }}
       onSubmit={onSubmit}
-      render={({handleSubmit, submitting, submitError}) => (
+      render={({ handleSubmit, submitting, submitError }) => (
         <form onSubmit={handleSubmit} className="form" {...props}>
           {/* Form fields supplied as children are rendered here */}
           {children}
 
           {submitError && (
-            <div role="alert" style={{color: "red"}}>
+            <div role="alert" style={{ color: "red" }}>
               {submitError}
             </div>
           )}

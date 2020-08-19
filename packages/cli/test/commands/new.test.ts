@@ -25,6 +25,14 @@ async function getBlitzDistTags() {
  */
 const testIfNotWindows = process.platform === "win32" ? test.skip : test
 
+jest.mock("enquirer", () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      prompt: jest.fn().mockImplementation(() => ({form: "React Final Form"})),
+    }
+  })
+})
+
 describe("`new` command", () => {
   describe("when scaffolding new project", () => {
     jest.setTimeout(120 * 1000)

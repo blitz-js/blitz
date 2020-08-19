@@ -72,8 +72,14 @@ jest.mock(
       create: jest.fn().mockImplementation(() => {
         return {
           move: jest.fn(),
+          readJSON: jest.fn().mockImplementation(() => ({
+            dependencies: {},
+            devDependencies: {},
+          })),
+          writeJSON: jest.fn(),
           commit: (_: any, callback: any) => callback(),
           copy: jest.fn(),
+          delete: jest.fn(),
         }
       }),
     }
@@ -92,6 +98,7 @@ describe("AppGenerator", () => {
     yarn: true,
     version: "1.0",
     skipInstall: false,
+    form: "React Final Form",
     skipGit: false,
   })
 
