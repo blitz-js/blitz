@@ -1,7 +1,15 @@
+import {Suspense} from "react"
 import {Head, Link, useSession, useRouterQuery} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
+import {useCurrentUser} from "app/hooks/useCurrentUser"
+
+const CurrentUserInfo = () => {
+  const currentUser = useCurrentUser()
+
+  return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
+}
 
 const UserStuff = () => {
   const session = useSession()
@@ -26,6 +34,9 @@ const UserStuff = () => {
         </>
       )}
       <pre>{JSON.stringify(session, null, 2)}</pre>
+      <Suspense fallback="Loading...">
+        <CurrentUserInfo />
+      </Suspense>
       <button
         onClick={async () => {
           try {
