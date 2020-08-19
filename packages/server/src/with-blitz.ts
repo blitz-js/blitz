@@ -1,4 +1,6 @@
-const fs = require("fs")
+import pkgDir from "pkg-dir"
+import path from "path"
+import fs from "fs"
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
@@ -17,7 +19,7 @@ export function withBlitz(nextConfig: any) {
           const originalEntry = config.entry
           config.entry = async () => ({
             ...(await originalEntry()),
-            ...(doesDbModuleExist ? {"../__db": "./db/index"} : {}),
+            ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
           })
         } else {
           config.module = config.module || {}
@@ -46,7 +48,14 @@ export function withBlitz(nextConfig: any) {
       },
     })
 
-    const doesDbModuleExist = fs.existsSync("./db")
+    function doesDbModuleExist() {
+      const projectRoot = pkgDir.sync() || process.cwd()
+      return (
+        fs.existsSync(path.join(projectRoot, "db/index.js")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.ts")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.tsx"))
+      )
+    }
 
     // We add next-transpile-modules during internal blitz development so that changes in blitz
     // framework code will trigger a hot reload of any example apps that are running
