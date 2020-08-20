@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-material-ui",
   "private": true,
-  "version": "0.17.1-canary.4",
+  "version": "0.17.1-canary.7",
   "description": "The Blitz Recipe for installing Material-UI",
   "main": "index.ts",
   "scripts": {

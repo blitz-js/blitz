@@ -1,4 +1,5 @@
 import React, {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Head, Link, useQuery, useParam, BlitzPage} from "blitz"
 } else {
@@ -86,5 +87,7 @@ const __ModelNames__Page: BlitzPage = () => {
     </div>
   )
 }
+
+__ModelNames__Page.getLayout = (page) => <Layout title={"__ModelNames__"}>{page}</Layout>
 
 export default __ModelNames__Page

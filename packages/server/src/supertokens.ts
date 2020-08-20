@@ -239,7 +239,8 @@ export async function getSession(
   const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
-  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+  const enableCsrfProtection =
+    req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {

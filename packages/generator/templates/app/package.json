@@ -34,8 +34,6 @@
     "react": "0.0.0-experimental-33c3af284",
     "react-dom": "0.0.0-experimental-33c3af284",
     "react-error-boundary": "2.x",
-    "final-form": "4.x",
-    "react-final-form": "6.5.1",
     "secure-password": "4.x",
     "zod": "1.x"
   },

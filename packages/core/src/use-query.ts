@@ -1,4 +1,5 @@
 import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
+import {useSession} from "./supertokens"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
@@ -33,16 +34,11 @@ export const useIsDevPrerender = () => {
 
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
-  if (error.name === "AuthenticationError") return false
-  if (error.name === "AuthorizationError") return false
-  if (error.name === "CSRFTokenMismatchError") return false
-  if (error.name === "NotFoundError") return false
-  if (error.name === "ZodError") return false
-  // Prisma errors
-  if (typeof error.code === "string" && error.code.startsWith("P")) return false
-  if (failureCount > 2) return false
 
-  return true
+  // Retry (max. 3 times) only if network error detected
+  if (error.message === "Network request failed" && failureCount <= 3) return true
+
+  return false
 }
 
 export function useQuery<T extends QueryFn>(
@@ -67,9 +63,11 @@ export function useQuery<T extends QueryFn>(
   const {data, ...queryRest} = useReactQuery({
     queryKey: [
       queryRpcFn._meta.apiUrl,
+      // We add the session object here so queries will refetch if session changes
+      useSession(),
       serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,

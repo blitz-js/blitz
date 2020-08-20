@@ -1,3 +1,6 @@
+import {NextPage, NextComponentType} from "next"
+import {AppProps as NextAppProps} from "next/app"
+
 export * from "./use-query"
 export * from "./use-paginated-query"
 export * from "./use-params"
@@ -22,12 +25,9 @@ export {
   GetServerSideProps,
   InferGetStaticPropsType,
   InferGetServerSidePropsType,
-  NextPage as BlitzPage,
   NextApiRequest as BlitzApiRequest,
   NextApiResponse as BlitzApiResponse,
 } from "next"
-
-export {AppProps} from "next/app"
 
 export {default as Head} from "next/head"
 
@@ -49,4 +49,14 @@ export {default as dynamic} from "next/dynamic"
 
 export {default as ErrorComponent} from "next/error"
 
+export type BlitzComponentType = NextComponentType
+
+export interface AppProps extends NextAppProps {
+  Component: BlitzComponentType & {
+    getLayout?: (component: JSX.Element) => JSX.Element
+  }
+}
+export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+}
 export {isLocalhost} from "./utils/index"

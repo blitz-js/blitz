@@ -14,6 +14,8 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   yarn: boolean
   version: string
   skipInstall: boolean
+  skipGit: boolean
+  form: "React Final Form" | "React Hook Form"
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -42,13 +44,39 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
+    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+
+    switch (this.options.form) {
+      case "React Final Form":
+        this.fs.move(
+          this.destinationPath("_forms/finalform/Form.tsx"),
+          this.destinationPath("app/components/Form.tsx"),
+        )
+        this.fs.move(
+          this.destinationPath("_forms/finalform/LabeledTextField.tsx"),
+          this.destinationPath("app/components/LabeledTextField.tsx"),
+        )
+        pkg.dependencies["final-form"] = "4.x"
+        pkg.dependencies["react-final-form"] = "6.x"
+        break
+      case "React Hook Form":
+        this.fs.move(
+          this.destinationPath("_forms/hookform/Form.tsx"),
+          this.destinationPath("app/components/Form.tsx"),
+        )
+        this.fs.move(
+          this.destinationPath("_forms/hookform/LabeledTextField.tsx"),
+          this.destinationPath("app/components/LabeledTextField.tsx"),
+        )
+        pkg.dependencies["react-hook-form"] = "6.x"
+        break
+    }
+    this.fs.delete(this.destinationPath("_forms"))
+
+    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }
 
   async postWrite() {
-    const gitInitResult = spawn.sync("git", ["init"], {
-      stdio: "ignore",
-    })
-
     const pkgJsonLocation = join(this.destinationPath(), "package.json")
     const pkg = readJSONSync(pkgJsonLocation)
 
@@ -172,11 +200,17 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
-    if (gitInitResult.status === 0) {
-      this.commitChanges()
-    } else {
-      log.warning("Failed to run git init.")
-      log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+    if (!this.options.skipGit) {
+      const initResult = spawn.sync("git", ["init"], {
+        stdio: "ignore",
+      })
+
+      if (initResult.status === 0) {
+        this.commitChanges()
+      } else {
+        log.warning("Failed to run git init.")
+        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+      }
     }
   }
 
