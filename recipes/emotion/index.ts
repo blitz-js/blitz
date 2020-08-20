@@ -1,93 +1,51 @@
 import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
 import {join} from "path"
-import {builders} from "ast-types/gen/builders"
-import {ASTNode} from "ast-types/lib/types"
-import {NamedTypes} from "ast-types/gen/namedTypes"
-import {types, visit} from "recast"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
 
-function wrapComponentWithCacheProvider(ast: ASTNode, b: builders, t: NamedTypes) {
-  if (!t.File.check(ast)) return
-
-  visit(ast, {
-    visitExportDefaultDeclaration(path) {
-      return this.traverse(path)
-    },
-    visitJSXElement(path) {
-      const {node} = path
-      if (
-        t.JSXIdentifier.check(node.openingElement.name) &&
-        // TODO: need a better way to detect the Component
-        node.openingElement.name.name === "Component"
-      ) {
-        path.replace(
-          b.jsxElement(
-            b.jsxOpeningElement(b.jsxIdentifier("CacheProvider"), [
-              b.jsxAttribute(
-                b.jsxIdentifier("value"),
-                b.jsxExpressionContainer(b.identifier("cache")),
-              ),
-            ]),
-            b.jsxClosingElement(b.jsxIdentifier("CacheProvider")),
-            [b.literal("\n  \t  "), node, b.literal("\n    ")],
-          ),
-        )
-        return false
-      }
-      return this.traverse(path)
-    },
+function wrapComponentWithCacheProvider(program: Collection<j.Program>) {
+  program.find(j.JSXIdentifier, {name: "Component"}).forEach((path) => {
+    j(path.parent).replaceWith(
+      j.jsxElement(
+        j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
+          j.jsxAttribute(j.jsxIdentifier("value"), j.jsxExpressionContainer(j.identifier("cache"))),
+        ]),
+        j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
+        [j.jsxText("\n"), path.parent.parent.node, j.jsxText("\n")],
+      ),
+    )
   })
-
-  return ast
+  return program
 }
 
-function applyGlobalStyles(ast: ASTNode, b: builders, t: NamedTypes) {
-  if (!t.File.check(ast)) return
-
-  visit(ast, {
-    visitExportDefaultDeclaration(path) {
-      return this.traverse(path)
-    },
-    visitJSXElement(path) {
-      const {node} = path
-      // TODO: need a better way to detect the CacheProvider
-      if (
-        t.JSXIdentifier.check(node.openingElement.name) &&
-        node.openingElement.name.name === "CacheProvider"
-      ) {
-        if (Array.isArray(node.children)) {
-          node.children.splice(0, 0, b.literal("\n      "))
-          node.children.splice(1, 0, b.jsxExpressionContainer(b.identifier("globalStyles")))
+function applyGlobalStyles(program: Collection<j.Program>) {
+  program.find(j.ExportDefaultDeclaration).forEach((exportPath) => {
+    j(exportPath)
+      .find(j.JSXElement, {openingElement: {name: {name: "CacheProvider"}}})
+      .forEach((elementPath) => {
+        if (Array.isArray(elementPath.node.children)) {
+          elementPath.node.children.splice(0, 0, j.literal("\n"))
+          elementPath.node.children.splice(
+            1,
+            0,
+            j.jsxExpressionContainer(j.identifier("globalStyles")),
+          )
         }
-        return false
-      }
-      return this.traverse(path)
-    },
+      })
   })
 
-  return ast
+  return program
 }
 
 function addMethodToCustomDocument(
-  ast: ASTNode,
-  __b: builders,
-  t: NamedTypes,
-  methodToAdd: types.namedTypes.MethodDefinition,
+  program: Collection<j.Program>,
+  methodToAdd: j.MethodDefinition,
 ) {
-  if (!t.File.check(ast) || !t.MethodDefinition.check(methodToAdd)) return
-
-  visit(ast, {
-    visitExportDefaultDeclaration(path) {
-      return this.traverse(path)
-    },
-    visitClassBody(path) {
-      const {node} = path
-      // TODO: check if method already exists and modify rather than inserting new?
-      node.body.splice(0, 0, methodToAdd)
-      return false
-    },
+  program.find(j.ClassBody).forEach((path) => {
+    path.node.body.splice(0, 0, methodToAdd)
   })
 
-  return ast
+  return program
 }
 
 export default RecipeBuilder()
@@ -122,23 +80,20 @@ We'll install @emotion/core and @emotion/styled for general usage, as well as em
     stepName: "Enable Emotion's built-in cache",
     explanation: `Next, we wrap our app-level Component in Emotion's CacheProvider with their built-in cache to enable server-side rendering of our styles.`,
     singleFileSearch: paths.app(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      const cacheProviderImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("CacheProvider"))],
-        b.literal("@emotion/core"),
+    transform(program: Collection<j.Program>) {
+      const cacheProviderImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("CacheProvider"))],
+        j.literal("@emotion/core"),
       )
 
-      const cacheImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("cache"))],
-        b.literal("emotion"),
+      const cacheImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("cache"))],
+        j.literal("emotion"),
       )
 
-      if (t.File.check(ast)) {
-        addImport(ast, b, t, cacheImport)
-        addImport(ast, b, t, cacheProviderImport)
-        return wrapComponentWithCacheProvider(ast, b, t)!
-      }
-      throw new Error("Not given valid source file")
+      addImport(program, cacheImport)
+      addImport(program, cacheProviderImport)
+      return wrapComponentWithCacheProvider(program)
     },
   })
   .addTransformFilesStep({
@@ -146,17 +101,14 @@ We'll install @emotion/core and @emotion/styled for general usage, as well as em
     stepName: "Apply global styles",
     explanation: `Now we'll import and render the global styles.`,
     singleFileSearch: paths.app(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      const stylesImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("globalStyles"))],
-        b.literal("app/styles"),
+    transform(program: Collection<j.Program>) {
+      const stylesImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("globalStyles"))],
+        j.literal("app/styles"),
       )
 
-      if (t.File.check(ast)) {
-        addImport(ast, b, t, stylesImport)
-        return applyGlobalStyles(ast, b, t)!
-      }
-      throw new Error("Not given valid source file")
+      addImport(program, stylesImport)
+      return applyGlobalStyles(program)
     },
   })
   .addTransformFilesStep({
@@ -165,84 +117,84 @@ We'll install @emotion/core and @emotion/styled for general usage, as well as em
     explanation: `We will now call Emotion's extractCritical function in the getInitialProps method of our custom Document class to extract the critical CSS on the server.
 We also inject a style tag to inline the critical styles for every server response.`,
     singleFileSearch: paths.document(),
-    transform(ast: ASTNode, b: builders, t: NamedTypes) {
-      const documentContextImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("DocumentContext"))],
-        b.literal("blitz"),
+    transform(program: Collection<j.Program>) {
+      const documentContextImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("DocumentContext"))],
+        j.literal("blitz"),
       )
 
-      const extractCriticalImport = b.importDeclaration(
-        [b.importSpecifier(b.identifier("extractCritical"))],
-        b.literal("emotion-server"),
+      const extractCriticalImport = j.importDeclaration(
+        [j.importSpecifier(j.identifier("extractCritical"))],
+        j.literal("emotion-server"),
       )
 
-      const ctxParam = b.identifier("ctx")
-      ctxParam.typeAnnotation = b.tsTypeAnnotation(
-        b.tsTypeReference(b.identifier("DocumentContext")),
+      const ctxParam = j.identifier("ctx")
+      ctxParam.typeAnnotation = j.tsTypeAnnotation(
+        j.tsTypeReference(j.identifier("DocumentContext")),
       )
 
-      const getInitialPropsBody = b.blockStatement([
-        b.variableDeclaration("const", [
-          b.variableDeclarator(
-            b.identifier("initialProps"),
-            b.awaitExpression(
-              b.callExpression(
-                b.memberExpression(b.identifier("Document"), b.identifier("getInitialProps")),
-                [b.identifier("ctx")],
+      const getInitialPropsBody = j.blockStatement([
+        j.variableDeclaration("const", [
+          j.variableDeclarator(
+            j.identifier("initialProps"),
+            j.awaitExpression(
+              j.callExpression(
+                j.memberExpression(j.identifier("Document"), j.identifier("getInitialProps")),
+                [j.identifier("ctx")],
               ),
             ),
           ),
         ]),
-        b.variableDeclaration("const", [
-          b.variableDeclarator(
-            b.identifier("styles"),
-            b.callExpression(b.identifier("extractCritical"), [
-              b.memberExpression(b.identifier("initialProps"), b.identifier("html")),
+        j.variableDeclaration("const", [
+          j.variableDeclarator(
+            j.identifier("styles"),
+            j.callExpression(j.identifier("extractCritical"), [
+              j.memberExpression(j.identifier("initialProps"), j.identifier("html")),
             ]),
           ),
         ]),
-        b.returnStatement(
-          b.objectExpression([
-            b.spreadElement(b.identifier("initialProps")),
-            b.property(
+        j.returnStatement(
+          j.objectExpression([
+            j.spreadElement(j.identifier("initialProps")),
+            j.property(
               "init",
-              b.identifier("styles"),
+              j.identifier("styles"),
               // TODO: this should be b.jsxFragment(b.jsxOpeningFragment(), b.jsxClosingFragment(), [
               // but it errors: Cannot read property 'selfClosing' of undefined
               // @see https://github.com/facebook/jscodeshift/issues/368
-              b.jsxElement(
-                b.jsxOpeningElement(b.jsxIdentifier("")),
-                b.jsxClosingElement(b.jsxIdentifier("")),
+              j.jsxElement(
+                j.jsxOpeningElement(j.jsxIdentifier("")),
+                j.jsxClosingElement(j.jsxIdentifier("")),
                 [
-                  b.literal("\n          "),
-                  b.jsxExpressionContainer(
-                    b.memberExpression(b.identifier("initialProps"), b.identifier("styles")),
+                  j.literal("\n          "),
+                  j.jsxExpressionContainer(
+                    j.memberExpression(j.identifier("initialProps"), j.identifier("styles")),
                   ),
-                  b.literal("\n          "),
-                  b.jsxElement(
-                    b.jsxOpeningElement(
-                      b.jsxIdentifier("style"),
+                  j.literal("\n          "),
+                  j.jsxElement(
+                    j.jsxOpeningElement(
+                      j.jsxIdentifier("style"),
                       [
-                        b.jsxAttribute(
-                          b.jsxIdentifier("data-emotion-css"),
-                          b.jsxExpressionContainer(
-                            b.callExpression(
-                              b.memberExpression(
-                                b.memberExpression(b.identifier("styles"), b.identifier("ids")),
-                                b.identifier("join"),
+                        j.jsxAttribute(
+                          j.jsxIdentifier("data-emotion-css"),
+                          j.jsxExpressionContainer(
+                            j.callExpression(
+                              j.memberExpression(
+                                j.memberExpression(j.identifier("styles"), j.identifier("ids")),
+                                j.identifier("join"),
                               ),
-                              [b.literal(" ")],
+                              [j.literal(" ")],
                             ),
                           ),
                         ),
-                        b.jsxAttribute(
-                          b.jsxIdentifier("dangerouslySetInnerHTML"),
-                          b.jsxExpressionContainer(
-                            b.objectExpression([
-                              b.property(
+                        j.jsxAttribute(
+                          j.jsxIdentifier("dangerouslySetInnerHTML"),
+                          j.jsxExpressionContainer(
+                            j.objectExpression([
+                              j.property(
                                 "init",
-                                b.identifier("__html"),
-                                b.memberExpression(b.identifier("styles"), b.identifier("css")),
+                                j.identifier("__html"),
+                                j.memberExpression(j.identifier("styles"), j.identifier("css")),
                               ),
                             ]),
                           ),
@@ -251,7 +203,7 @@ We also inject a style tag to inline the critical styles for every server respon
                       true,
                     ),
                   ),
-                  b.literal("\n        "),
+                  j.literal("\n        "),
                 ],
               ),
             ),
@@ -259,22 +211,19 @@ We also inject a style tag to inline the critical styles for every server respon
         ),
       ])
 
-      const getInitialPropsFuncExpr = b.functionExpression(null, [ctxParam], getInitialPropsBody)
+      const getInitialPropsFuncExpr = j.functionExpression(null, [ctxParam], getInitialPropsBody)
       getInitialPropsFuncExpr.async = true
 
-      const getInitialPropsMethod = b.methodDefinition(
+      const getInitialPropsMethod = j.methodDefinition(
         "method",
-        b.identifier("getInitialProps"),
+        j.identifier("getInitialProps"),
         getInitialPropsFuncExpr,
         true, // static
       )
 
-      if (t.File.check(ast)) {
-        addImport(ast, b, t, documentContextImport)
-        addImport(ast, b, t, extractCriticalImport)
-        return addMethodToCustomDocument(ast, b, t, getInitialPropsMethod)!
-      }
-      throw new Error("Not given valid source file")
+      addImport(program, documentContextImport)
+      addImport(program, extractCriticalImport)
+      return addMethodToCustomDocument(program, getInitialPropsMethod)
     },
   })
   .build()

@@ -38,7 +38,7 @@
     "@babel/plugin-transform-typescript": "7.9.4",
     "@blitzjs/display": "0.17.1-canary.7",
     "@blitzjs/generator": "0.17.1-canary.7",
-    "ast-types": "0.13.3",
+    "@types/jscodeshift": "0.7.1",
     "chokidar": "3.3.1",
     "cross-spawn": "7.0.2",
     "diff": "4.0.2",
@@ -48,6 +48,7 @@
     "ink": "2.7.1",
     "ink-link": "1.1.0",
     "ink-spinner": "3.0.1",
+    "jscodeshift": "0.10.0",
     "react": "experimental",
     "recast": "0.19.1",
     "ts-node": "8.9.1"

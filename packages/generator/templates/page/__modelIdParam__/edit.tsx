@@ -64,18 +64,19 @@ const Edit__ModelName__Page: BlitzPage = () => {
         </Suspense>
 
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               as="/__parentModels__/__parentModelId__/__modelNames__"
               href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
             >
               <a>__ModelNames__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__">
-              <a>__ModelNames__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__">
+                <a>__ModelNames__</a>
+              </Link>
+            </else>
+          </if>
         </p>
       </main>
     </div>

@@ -17,21 +17,22 @@ export const __ModelName__ = () => {
       <h1>__ModelName__ {__modelName__.id}</h1>
       <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
-      {process.env.parentModel ? (
+      <if condition="parentModel">
         <Link
           href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
           as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
         >
           <a>Edit</a>
         </Link>
-      ) : (
-        <Link
-          href="/__modelNames__/__modelIdParam__/edit"
-          as={`/__modelNames__/${__modelName__.id}/edit`}
-        >
-          <a>Edit</a>
-        </Link>
-      )}
+        <else>
+          <Link
+            href="/__modelNames__/__modelIdParam__/edit"
+            as={`/__modelNames__/${__modelName__.id}/edit`}
+          >
+            <a>Edit</a>
+          </Link>
+        </else>
+      </if>
 
       <button
         type="button"
@@ -69,18 +70,19 @@ const Show__ModelName__Page: BlitzPage = () => {
 
       <main>
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               href="/__parentModels__/__parentModelId__/__modelNames__"
               as={`/__parentModels__/${__parentModelId__}/__modelNames__`}
             >
               <a>__ModelNames__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__">
-              <a>__ModelNames__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__">
+                <a>__ModelNames__</a>
+              </Link>
+            </else>
+          </if>
         </p>
 
         <Suspense fallback={<div>Loading...</div>}>
