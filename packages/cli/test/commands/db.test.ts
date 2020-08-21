@@ -1,13 +1,11 @@
 import * as path from "path"
 import {resolveBinAsync} from "@blitzjs/server"
 
-let onSpy: jest.Mock
-const spawn = jest.fn(() => {
-  onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
-    callback(0)
-  })
-  return {on: onSpy}
+let onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
+  callback(0)
 })
+
+const spawn = jest.fn(() => ({on: onSpy, off: jest.fn()}))
 
 jest.doMock("cross-spawn", () => ({spawn}))
 
@@ -18,6 +16,7 @@ let prismaBin: string
 let migrateSaveParams: any[]
 let migrateUpDevParams: any[]
 let migrateUpProdParams: any[]
+let migrateSaveWithNameParams: any[]
 beforeAll(async () => {
   schemaArg = `--schema=${path.join(process.cwd(), "db", "schema.prisma")}`
   prismaBin = await resolveBinAsync("@prisma/cli", "prisma")
@@ -25,17 +24,22 @@ beforeAll(async () => {
   migrateSaveParams = [
     prismaBin,
     ["migrate", "save", schemaArg, "--create-db", "--experimental"],
-    {stdio: "inherit"},
+    {stdio: "inherit", env: process.env},
   ]
   migrateUpDevParams = [
     prismaBin,
     ["migrate", "up", schemaArg, "--create-db", "--experimental"],
-    {stdio: "inherit"},
+    {stdio: "inherit", env: process.env},
   ]
   migrateUpProdParams = [
     prismaBin,
     ["migrate", "up", schemaArg, "--create-db", "--experimental", "--auto-approve"],
-    {stdio: "inherit"},
+    {stdio: "inherit", env: process.env},
+  ]
+  migrateSaveWithNameParams = [
+    prismaBin,
+    ["migrate", "save", schemaArg, "--create-db", "--experimental", "--name", "name"],
+    {stdio: "ignore", env: process.env},
   ]
 })
 
@@ -50,21 +54,26 @@ describe("Db command", () => {
 
   function expectDbMigrateOutcome() {
     expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(3)
+    expect(spawn).toHaveBeenCalledTimes(3)
 
-    // following expection is not working
-    //expect(onSpy).toHaveBeenCalledWith(0);
+    expect(onSpy).toHaveBeenCalledTimes(3)
 
     expect(spawn).toBeCalledWith(...migrateUpDevParams)
   }
 
   function expectProductionDbMigrateOutcome() {
-    expect(spawn.mock.calls.length).toBe(2)
+    expect(spawn).toHaveBeenCalledTimes(2)
 
-    // following expection is not working
-    //expect(onSpy).toHaveBeenCalledWith(0);
+    expect(onSpy).toHaveBeenCalledTimes(2)
 
     expect(spawn).toBeCalledWith(...migrateUpProdParams)
+  }
+
+  function expectDbMigrateWithNameOutcome() {
+    expect(spawn).toBeCalledWith(...migrateSaveWithNameParams)
+    expect(spawn).toHaveBeenCalledTimes(3)
+
+    expect(onSpy).toHaveBeenCalledTimes(3)
   }
 
   it("runs db help when no command given", async () => {
@@ -131,18 +140,34 @@ describe("Db command", () => {
   it("runs db introspect", async () => {
     await Db.run(["introspect"])
 
-    expect(spawn).toHaveBeenCalled()
+    expect(spawn).toHaveBeenCalledWith(prismaBin, ["introspect", schemaArg], {
+      stdio: "inherit",
+      env: process.env,
+    })
+    expect(spawn).toHaveBeenCalledWith(prismaBin, ["generate", schemaArg], {
+      stdio: "inherit",
+      env: process.env,
+    })
   })
 
   it("runs db studio", async () => {
     await Db.run(["studio"])
 
-    expect(spawn).toHaveBeenCalled()
+    expect(spawn).toHaveBeenCalledWith(prismaBin, ["studio", schemaArg, "--experimental"], {
+      stdio: "inherit",
+      env: process.env,
+    })
   })
 
   it("does not run db in case of invalid command", async () => {
     await Db.run(["invalid"])
 
     expect(spawn.mock.calls.length).toBe(0)
+  })
+
+  it("runs db migrate silently with the right args when name flag is used", async () => {
+    await Db.run(["migrate", "--name", "name"])
+
+    expectDbMigrateWithNameOutcome()
   })
 })

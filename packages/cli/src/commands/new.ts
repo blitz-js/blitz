@@ -8,6 +8,7 @@ import {log} from "@blitzjs/display"
 const debug = require("debug")("blitz:new")
 
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import {Db} from "./db"
 
 export interface Flags {
   ts: boolean
@@ -74,26 +75,52 @@ export class New extends Command {
         choices: formChoices,
       })
 
+      const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
+
       const generator = new AppGenerator({
         destinationRoot,
         appName,
-        dryRun: flags["dry-run"],
+        dryRun,
         useTs: !flags.js,
-        yarn: !flags.npm,
+        yarn: !npm,
         form: promptResult.form,
         version: this.config.version,
-        skipInstall: flags["skip-install"],
+        skipInstall,
         skipGit: flags["no-git"],
       })
 
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
+
+      const postInstallSteps = [`cd ${args.name}`]
+      const needsInstall = dryRun || skipInstall
+
+      if (needsInstall) {
+        postInstallSteps.push(npm ? "npm install" : "yarn")
+        postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
+      } else {
+        const spinner = log.spinner(log.withBrand("Migrating database")).start()
+
+        try {
+          // Required in order for DATABASE_URL to be available
+          require("dotenv").config()
+          await Db.run(["migrate", "--name", "Initial Migration"])
+          spinner.succeed()
+        } catch {
+          spinner.stop()
+          postInstallSteps.push(
+            "blitz db migrate (when asked, you can name the migration anything)",
+          )
+        }
+      }
+
+      postInstallSteps.push("blitz start")
+
       this.log("\n" + log.withBrand("Your new Blitz app is ready! Next steps:") + "\n")
-      this.log(chalk.yellow(`   1. cd ${args.name}`))
-      this.log(
-        chalk.yellow(`   2. blitz db migrate (when asked, you can name the migration anything)`),
-      )
-      this.log(chalk.yellow(`   3. blitz start`))
+
+      postInstallSteps.forEach((step, index) => {
+        this.log(chalk.yellow(`   ${index + 1}. ${step}`))
+      })
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
