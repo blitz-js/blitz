@@ -55,7 +55,6 @@ const Edit__ModelName__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>Edit __ModelName__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
