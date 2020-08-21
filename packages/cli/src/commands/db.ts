@@ -44,10 +44,10 @@ const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>) => {
 
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
-export const runPrismaGeneration = async ({silent = false} = {}) => {
+export const runPrismaGeneration = async ({silent = false, failSilently = false} = {}) => {
   const success = await runPrisma(["generate", schemaArg], silent)
 
-  if (!success) {
+  if (!success && !failSilently) {
     throw new Error("Prisma Client generation failed")
   }
 }
@@ -213,9 +213,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
 
     if (command === "reset") {
       const spinner = log.spinner("Loading your database").start()
-      try {
-        await runPrismaGeneration({silent: true})
-      } catch {}
+      await runPrismaGeneration({silent: true, failSilently: true})
       spinner.succeed()
 
       const {confirm} = await prompt<{confirm: string}>({
