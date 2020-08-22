@@ -2,8 +2,10 @@ import {Command} from "../command"
 import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
+  PageGenerator,
   PagesGenerator,
   MutationGenerator,
+  MutationsGenerator,
   QueriesGenerator,
   FormGenerator,
   ModelGenerator,
@@ -22,7 +24,9 @@ enum ResourceType {
   All = "all",
   Crud = "crud",
   Model = "model",
+  Mutation = "mutation",
   Mutations = "mutations",
+  Page = "page",
   Pages = "pages",
   Queries = "queries",
   Query = "query",
@@ -71,7 +75,9 @@ const generatorMap = {
   ],
   [ResourceType.Crud]: [MutationGenerator, QueriesGenerator],
   [ResourceType.Model]: [ModelGenerator],
-  [ResourceType.Mutations]: [MutationGenerator],
+  [ResourceType.Mutation]: [MutationGenerator],
+  [ResourceType.Mutations]: [MutationsGenerator],
+  [ResourceType.Page]: [PageGenerator],
   [ResourceType.Pages]: [PagesGenerator, FormGenerator],
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
@@ -145,10 +151,11 @@ export class Generate extends Command {
     completed:boolean:default[false] \\
     belongsTo:project?
     `,
-    `# Sometimes you want just a single query with no generated
-# logic. Generating "query" instead of "queries" will give you a more
-# customizable template.
-> blitz generate query getUserSession`,
+    `# Sometimes you want just a single file with no generated
+# logic. Generating a singular type (e.g. "query" instead of "queries")
+# will give you a more customizable template.
+> blitz generate query getUserSession
+> blitz generate page AdminHomePage`,
   ]
 
   async promptForTargetDirectory(paths: string[]): Promise<string> {

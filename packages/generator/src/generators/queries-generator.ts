@@ -13,7 +13,6 @@ export interface QueriesGeneratorOptions extends GeneratorOptions {
 }
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
-  static subdirectory = "queries"
   sourceRoot = join(__dirname, "./templates/queries")
 
   private getId(input: string = "") {

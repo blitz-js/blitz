@@ -14,7 +14,6 @@ export interface PagesGeneratorOptions extends GeneratorOptions {
 }
 
 export class PagesGenerator extends Generator<PagesGeneratorOptions> {
-  static subdirectory = "pages"
   sourceRoot = join(__dirname, "./templates/pages")
 
   private getId(input: string = "") {

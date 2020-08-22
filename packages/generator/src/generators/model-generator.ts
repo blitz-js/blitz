@@ -11,8 +11,6 @@ export interface ModelGeneratorOptions extends GeneratorOptions {
 }
 
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
-  // default subdirectory is /app/[name], we need to back out of there to generate the model
-  static subdirectory = "../.."
   sourceRoot: string = ""
   unsafe_disableConflictChecker = true
 

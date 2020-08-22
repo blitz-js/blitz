@@ -6,7 +6,6 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
-  static subdirectory = "query"
   sourceRoot = join(__dirname, "./templates/query")
 
   // eslint-disable-next-line require-await

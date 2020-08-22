@@ -1,7 +1,7 @@
 import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
 
-export interface FormGeneratorOptions extends GeneratorOptions {
+export interface MutationsGeneratorOptions extends GeneratorOptions {
   ModelName: string
   ModelNames: string
   modelName: string
@@ -12,8 +12,8 @@ export interface FormGeneratorOptions extends GeneratorOptions {
   ParentModels?: string
 }
 
-export class FormGenerator extends Generator<FormGeneratorOptions> {
-  sourceRoot = join(__dirname, "./templates/form")
+export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
+  sourceRoot = join(__dirname, "./templates/mutations")
 
   private getId(input: string = "") {
     if (!input) return input
@@ -45,6 +45,6 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${this.options.context}/` : ""
-    return `app/${context}${this.options.modelNames}/components`
+    return `app/${context}${this.options.modelNames}/mutations`
   }
 }
