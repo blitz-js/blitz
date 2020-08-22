@@ -11,7 +11,8 @@ describe("relative", () => {
         contents: `import {getFoo} from 'app/foo/bar';
 import from "app/thing/bar"
 import from 'app/thing/bar'
-import 'app/thing/bar'`,
+import 'app/thing/bar'
+const Component = dynamic(() => import("app/thing/bar"), {})`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),
@@ -39,7 +40,8 @@ import from 'app/thing/bar'`,
         contents: `import {getFoo} from 'app/foo/bar';
 import from "../thing/bar"
 import from '../thing/bar'
-import '../thing/bar'`,
+import '../thing/bar'
+const Component = dynamic(() => import("../thing/bar"), {})`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),
