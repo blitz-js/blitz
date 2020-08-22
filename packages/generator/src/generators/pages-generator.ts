@@ -2,7 +2,7 @@ import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
 import {camelCaseToKebabCase} from "../utils/kebab-case"
 
-export interface PageGeneratorOptions extends GeneratorOptions {
+export interface PagesGeneratorOptions extends GeneratorOptions {
   ModelName: string
   ModelNames: string
   modelName: string
@@ -13,9 +13,9 @@ export interface PageGeneratorOptions extends GeneratorOptions {
   ParentModels?: string
 }
 
-export class PageGenerator extends Generator<PageGeneratorOptions> {
+export class PagesGenerator extends Generator<PagesGeneratorOptions> {
   static subdirectory = "pages"
-  sourceRoot = join(__dirname, "./templates/page")
+  sourceRoot = join(__dirname, "./templates/pages")
 
   private getId(input: string = "") {
     if (!input) return input
