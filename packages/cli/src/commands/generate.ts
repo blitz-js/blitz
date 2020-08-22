@@ -10,8 +10,12 @@ import {
   FormGenerator,
   ModelGenerator,
   QueryGenerator,
+  Generator,
+  GeneratorOptions,
 } from "@blitzjs/generator"
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import path from "path"
+import globby from "globby"
 
 const debug = require("debug")("blitz:generate")
 const pascalCase = (str: string) => require("camelcase")(str, {pascalCase: true})
@@ -65,6 +69,43 @@ function ModelNames(input: string = "") {
   return pascalCase(pluralize(input))
 }
 
+interface TemplateMetadata<T extends Generator<any>> {
+  fullPath: string
+  name: string
+  generator: T
+}
+
+class GenericGenerator extends Generator<GeneratorOptions> {
+  sourceRoot = __dirname
+
+  async getTemplateValues() {
+    return this.options
+  }
+
+  getTargetDirectory() {
+    return `app/${this.options.context || ""}`
+  }
+}
+
+function templateFromPath(p: string): TemplateMetadata<any> {
+  const {dir, name} = path.parse(p)
+  // gets the parent dir, which tells us if we need a special generator type
+  const {name: rawType} = path.parse(dir)
+  const generator = (() => {
+    switch (rawType) {
+      case ResourceType.Page:
+        return PageGenerator
+      case ResourceType.Query:
+        return QueryGenerator
+      case ResourceType.Mutation:
+        return MutationGenerator
+      default:
+        return GenericGenerator
+    }
+  })()
+  return {fullPath: p, name, generator}
+}
+
 const generatorMap = {
   [ResourceType.All]: [
     ModelGenerator,
@@ -93,7 +134,6 @@ export class Generate extends Command {
       name: "type",
       required: true,
       description: "What files to generate",
-      options: Object.keys(generatorMap).map((s) => s.toLowerCase()),
     },
     {
       name: "model",
@@ -214,6 +254,18 @@ export class Generate extends Command {
     }
   }
 
+  async getCustomTemplates() {
+    const pageTemplates = await globby(["templates/page/*"], {onlyDirectories: true})
+    const queryTemplates = await globby(["templates/query/*"], {onlyDirectories: true})
+    const mutationTemplates = await globby(["templates/mutation/*"], {onlyDirectories: true})
+    const genericTemplates = await globby(["templates/!(page|query|mutation)"], {
+      onlyDirectories: true,
+    })
+    return [...pageTemplates, ...queryTemplates, ...mutationTemplates, ...genericTemplates].map(
+      templateFromPath,
+    )
+  }
+
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug("args: ", args)
@@ -222,8 +274,12 @@ export class Generate extends Command {
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
+      const customTemplates = await this.getCustomTemplates()
+      const customTemplateMeta = customTemplates.find((meta) => meta.name === args.type)
 
-      const generators = generatorMap[args.type]
+      const generators = customTemplateMeta
+        ? [customTemplateMeta.generator]
+        : generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
@@ -241,6 +297,9 @@ export class Generate extends Command {
           context: context,
           useTs: getIsTypescript(),
         })
+        if (customTemplateMeta) {
+          generator.sourceRoot = path.resolve(customTemplateMeta.fullPath)
+        }
         await generator.run()
       }
 

@@ -30,6 +30,7 @@ export interface GeneratorOptions {
   destinationRoot?: string
   dryRun?: boolean
   useTs?: boolean
+  extraArgs?: string[]
 }
 
 const alwaysIgnoreFiles = [".blitz", ".DS_Store", ".git", ".next", ".now", "node_modules"]
@@ -239,12 +240,19 @@ export abstract class Generator<
         let pathSuffix = filePath
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
+        const argsFromCli =
+          this.options.extraArgs?.reduce((acc: Record<string, string>, arg) => {
+            const [k, v] = arg.split("=")
+            acc[k] = JSON.parse(v)
+            return acc
+          }, {}) ?? {}
+        const finalTemplateValues = {...templateValues, ...argsFromCli}
 
         this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
           process: (input) =>
-            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+            this.process(input, pathSuffix, finalTemplateValues, prettierOptions ?? undefined),
         })
-        let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+        let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, finalTemplateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
