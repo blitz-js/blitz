@@ -15,7 +15,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form: "React Final Form" | "React Hook Form"
+  form: "React Final Form" | "React Hook Form" | "Formik"
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -69,6 +69,17 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
           this.destinationPath("app/components/LabeledTextField.tsx"),
         )
         pkg.dependencies["react-hook-form"] = "6.x"
+        break
+      case "Formik":
+        this.fs.move(
+          this.destinationPath("_forms/formik/Form.tsx"),
+          this.destinationPath("app/components/Form.tsx"),
+        )
+        this.fs.move(
+          this.destinationPath("_forms/formik/LabeledTextField.tsx"),
+          this.destinationPath("app/components/LabeledTextField.tsx"),
+        )
+        pkg.dependencies["formik"] = "2.x"
         break
     }
     this.fs.delete(this.destinationPath("_forms"))

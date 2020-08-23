@@ -65,6 +65,7 @@ export class New extends Command {
       const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
         {name: "React Final Form", message: "React Final Form (recommended)"},
         {name: "React Hook Form"},
+        {name: "Formik"},
       ]
 
       const promptResult: any = await this.enquirer.prompt({
