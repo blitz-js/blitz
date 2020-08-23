@@ -109,7 +109,7 @@ export function passportAuth(config: BlitzPassportConfig) {
                 "/"
 
               if (error) {
-                redirectUrl += "?authError=" + error.toString()
+                redirectUrl += "?authError=" + encodeURIComponent(error.toString())
                 res.setHeader("Location", redirectUrl)
                 res.statusCode = 302
                 res.end()
