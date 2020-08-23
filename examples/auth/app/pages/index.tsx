@@ -14,6 +14,9 @@ const CurrentUserInfo = () => {
 const UserStuff = () => {
   const session = useSession()
   const query = useRouterQuery()
+
+  if (session.isLoading) return <div>Loading...</div>
+
   return (
     <div>
       {!session.userId && (
