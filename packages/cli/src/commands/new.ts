@@ -99,7 +99,7 @@ export class New extends Command {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
       } else {
-        const spinner = log.spinner(log.withBrand("Migrating database")).start()
+        const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
 
         try {
           // Required in order for DATABASE_URL to be available
@@ -107,7 +107,7 @@ export class New extends Command {
           await Db.run(["migrate", "--name", "Initial Migration"])
           spinner.succeed()
         } catch {
-          spinner.stop()
+          spinner.fail()
           postInstallSteps.push(
             "blitz db migrate (when asked, you can name the migration anything)",
           )

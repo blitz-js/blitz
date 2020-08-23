@@ -60,7 +60,7 @@
     "@oclif/test": "1.2.5",
     "@prisma/cli": "2.4.1",
     "nock": "13.0.0-beta.3",
-    "stdout-stderr": "^0.1.13"
+    "stdout-stderr": "0.1.13"
   },
   "oclif": {
     "commands": "./lib/src/commands",

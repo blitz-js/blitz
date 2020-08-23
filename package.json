@@ -123,6 +123,7 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-peer-deps-external": "2.2.2",
     "semver": "7.3.2",
+    "stdout-stderr": "0.1.13",
     "test-listen": "1.1.0",
     "ts-jest": "24.3.0",
     "tsdx": "0.13.1",
