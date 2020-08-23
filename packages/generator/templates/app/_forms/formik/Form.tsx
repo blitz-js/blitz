@@ -51,7 +51,7 @@ export function Form<FormValues extends Record<string, unknown>>({
         }         
       }}
     >
-      {({ handleSubmit, isSubmitting, values, setErrors }) => (
+      {({ handleSubmit, isSubmitting, }) => (
         <form
           onSubmit={handleSubmit}
           className="form"

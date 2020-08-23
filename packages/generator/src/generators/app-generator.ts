@@ -72,11 +72,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         break
       case "Formik":
         this.fs.move(
-          this.destinationPath("_forms/formikform/Form.tsx"),
+          this.destinationPath("_forms/formik/Form.tsx"),
           this.destinationPath("app/components/Form.tsx"),
         )
         this.fs.move(
-          this.destinationPath("_forms/formikform/LabeledTextField.tsx"),
+          this.destinationPath("_forms/formik/LabeledTextField.tsx"),
           this.destinationPath("app/components/LabeledTextField.tsx"),
         )
         pkg.dependencies["formik"] = "2.x"
