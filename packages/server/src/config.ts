@@ -15,6 +15,7 @@ export type ServerConfig = {
   writeManifestFile?: boolean
   watch?: boolean
   transformFiles?: Synchronizer
+  isTypescript?: boolean
 }
 
 type NormalizedConfig = Omit<ServerConfig, "interceptNextErrors"> & {
@@ -26,6 +27,7 @@ type NormalizedConfig = Omit<ServerConfig, "interceptNextErrors"> & {
   transformFiles: Synchronizer
   writeManifestFile: boolean
   watch: boolean
+  isTypescript: boolean
 }
 
 const defaults = {
@@ -67,5 +69,6 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     transformFiles: config.transformFiles ?? transformFiles,
     watch: config.watch ?? false,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
+    isTypescript: config.isTypescript ?? true,
   }
 }

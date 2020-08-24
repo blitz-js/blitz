@@ -2,12 +2,12 @@ import {Stage, transform} from "@blitzjs/file-pipeline"
 import {relative} from "path"
 import slash from "slash"
 import File from "vinyl"
-import {absolutePathTransform, isTypescript} from "../utils"
+import {absolutePathTransform} from "../utils"
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
-export const createStageRpc: Stage = function configure({config: {src}}) {
+export const createStageRpc: Stage = function configure({config: {src, isTypescript = true}}) {
   const fileTransformer = absolutePathTransform(src)
 
   const getResolverPath = fileTransformer(resolverPath)
@@ -43,7 +43,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     // Isomorphic client
     const isomorphicHandlerFile = file.clone()
     isomorphicHandlerFile.contents = Buffer.from(
-      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
+      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
     )
     push(isomorphicHandlerFile)
 
@@ -61,6 +61,7 @@ const isomorhicHandlerTemplate = (
   resolverPath: string,
   resolverName: string,
   resolverType: string,
+  useTypes: boolean = true,
 ) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 const resolverModule = require('${resolverPath}')
@@ -69,7 +70,7 @@ export default getIsomorphicRpcHandler(
   '${resolverPath}',
   '${resolverName}',
   '${resolverType}',
-) ${isTypescript() ? "as typeof resolverModule.default" : ""}
+) ${useTypes ? "as typeof resolverModule.default" : ""}
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
