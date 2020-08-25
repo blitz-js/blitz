@@ -12,7 +12,7 @@ export class Build extends Command {
     }
 
     try {
-      await build(config, runPrismaGeneration({silent: true}))
+      await build(config, runPrismaGeneration({silent: true, failSilently: true}))
     } catch (err) {
       console.error(err)
       process.exit(1) // clean up?

@@ -8,7 +8,7 @@ const spawn = jest.fn(() => {
   onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
     callback(0)
   })
-  return {on: onSpy}
+  return {on: onSpy, off: jest.fn()}
 })
 
 jest.doMock("cross-spawn", () => ({spawn}))

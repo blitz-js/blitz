@@ -6,6 +6,7 @@ import * as os from "os"
 import fetch from "node-fetch"
 import nock from "nock"
 import rimraf from "rimraf"
+import {stdout} from "stdout-stderr"
 
 jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require("../../package.json")
@@ -35,7 +36,21 @@ jest.mock("enquirer", () => {
 
 describe("`new` command", () => {
   describe("when scaffolding new project", () => {
+    beforeEach(() => {
+      stdout.stripColor = true
+      stdout.start()
+    })
+
+    afterEach(() => {
+      stdout.stop()
+    })
+
     jest.setTimeout(120 * 1000)
+
+    function makeTempDir() {
+      const tmpDirPath = path.join(os.tmpdir(), "blitzjs-test-")
+      return fs.mkdtempSync(tmpDirPath)
+    }
 
     async function whileStayingInCWD(task: () => PromiseLike<void>) {
       const oldCWD = process.cwd()
@@ -43,13 +58,20 @@ describe("`new` command", () => {
       process.chdir(oldCWD)
     }
 
-    async function withNewApp(test: (dirName: string, packageJson: any) => Promise<void> | void) {
-      function makeTempDir() {
-        const tmpDirPath = path.join(os.tmpdir(), "blitzjs-test-")
+    function getStepsFromOutput() {
+      const output = stdout.output
+      const exp = /^   \d. (.*)$/gm
+      const matches = []
+      let match
 
-        return fs.mkdtempSync(tmpDirPath)
+      while ((match = exp.exec(output)) != null) {
+        matches.push(match[1].trim())
       }
 
+      return matches
+    }
+
+    async function withNewApp(test: (dirName: string, packageJson: any) => Promise<void> | void) {
       const tempDir = makeTempDir()
 
       await whileStayingInCWD(() => New.run([tempDir, "--skip-install"]))
@@ -68,7 +90,7 @@ describe("`new` command", () => {
     testIfNotWindows(
       "pins Blitz to the current version",
       async () =>
-        await withNewApp(async (_, packageJson) => {
+        await withNewApp(async (dirName, packageJson) => {
           const {
             dependencies: {blitz: blitzVersion},
           } = packageJson
@@ -79,8 +101,23 @@ describe("`new` command", () => {
           } else {
             expect(blitzVersion).toEqual(latest)
           }
+
+          expect(getStepsFromOutput()).toStrictEqual([
+            `cd ${dirName}`,
+            "yarn",
+            "blitz db migrate (when asked, you can name the migration anything)",
+            "blitz start",
+          ])
         }),
     )
+
+    testIfNotWindows("performs all steps on a full install", async () => {
+      const tempDir = makeTempDir()
+      await whileStayingInCWD(() => New.run([tempDir]))
+      rimraf.sync(tempDir)
+
+      expect(getStepsFromOutput()).toStrictEqual([`cd ${tempDir}`, "blitz start"])
+    })
 
     it("fetches latest version from template", async () => {
       const expectedVersion = "3.0.0"
