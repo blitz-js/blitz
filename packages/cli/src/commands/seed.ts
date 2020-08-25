@@ -39,7 +39,7 @@ export class Seed extends Command {
       this.error(`Couldn't run imported function, are you sure it's a function?`)
     }
 
-    const db = require(join(projectRoot, "db/index.ts")).default
+    const db = require(join(projectRoot, "db/index")).default
     await db.disconnect()
     log.success("Done seeding")
   }
