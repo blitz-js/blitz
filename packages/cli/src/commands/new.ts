@@ -121,6 +121,7 @@ export class New extends Command {
       postInstallSteps.forEach((step, index) => {
         this.log(chalk.yellow(`   ${index + 1}. ${step}`))
       })
+      this.log("") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
