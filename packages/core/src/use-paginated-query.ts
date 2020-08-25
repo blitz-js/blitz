@@ -1,7 +1,7 @@
 import {
   usePaginatedQuery as usePaginatedReactQuery,
   PaginatedQueryResult,
-  QueryOptions,
+  PaginatedQueryConfig,
 } from "react-query"
 import {useSession} from "./supertokens"
 import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
@@ -19,7 +19,7 @@ type RestQueryResult<T extends QueryFn> = Omit<
 export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options?: QueryOptions<PaginatedQueryResult<PromiseReturnType<T>>>,
+  options?: PaginatedQueryConfig<PaginatedQueryResult<PromiseReturnType<T>>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
@@ -42,7 +42,8 @@ export function usePaginatedQuery<T extends QueryFn>(
       useSession(),
       serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, __: any, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params: InferUnaryParam<T>) =>
+      queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,

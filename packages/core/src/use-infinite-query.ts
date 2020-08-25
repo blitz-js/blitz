@@ -1,7 +1,7 @@
 import {
   useInfiniteQuery as useInfiniteReactQuery,
   InfiniteQueryResult,
-  InfiniteQueryOptions,
+  InfiniteQueryConfig,
 } from "react-query"
 import {useSession} from "./supertokens"
 import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
@@ -19,7 +19,7 @@ type RestQueryResult<T extends QueryFn> = Omit<
 export function useInfiniteQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options: InfiniteQueryOptions<PromiseReturnType<T>, any>,
+  options: InfiniteQueryConfig<PromiseReturnType<T>, any>,
 ): [PromiseReturnType<T>[], RestQueryResult<T>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
@@ -42,8 +42,8 @@ export function useInfiniteQuery<T extends QueryFn>(
       useSession(),
       serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, __: any, params, more?) =>
-      queryRpcFn({...params, ...more}, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params: InferUnaryParam<T>) =>
+      queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
