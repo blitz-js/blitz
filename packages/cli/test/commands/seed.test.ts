@@ -1,10 +1,6 @@
-// const dev = jest.fn(() => {})
-
 import {join} from "path"
 import pkgDir from "pkg-dir"
 import {resolveBinAsync} from "@blitzjs/server"
-import seeds from "../__fixtures__/db/seeds"
-import db from "../__fixtures__/db/index"
 
 let onSpy: jest.Mock
 const spawn = jest.fn(() => {
