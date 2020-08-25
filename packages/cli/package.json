@@ -34,6 +34,7 @@
     "@blitzjs/repl": "0.18.0",
     "@oclif/command": "1.5.20",
     "@oclif/config": "1.15.1",
+    "@oclif/plugin-autocomplete": "0.2.0",
     "@oclif/plugin-help": "2.2.3",
     "@oclif/plugin-not-found": "1.2.3",
     "camelcase": "6.0.0",
@@ -66,7 +67,8 @@
     "bin": "blitz",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-not-found"
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-autocomplete"
     ],
     "hooks": {
       "init": [
