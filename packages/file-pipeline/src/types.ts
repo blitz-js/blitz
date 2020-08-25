@@ -21,6 +21,7 @@ export type StageConfig = {
   include: string[]
   ignore: string[]
   watch: boolean
+  isTypescript: boolean
 }
 
 /**

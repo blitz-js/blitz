@@ -1,7 +1,12 @@
-import {Command, flags} from "@oclif/command"
 import {dev, prod} from "@blitzjs/server"
-
+import {Command, flags} from "@oclif/command"
+import fs from "fs"
+import path from "path"
+import pkgDir from "pkg-dir"
 import {runPrismaGeneration} from "./db"
+
+const projectRoot = pkgDir.sync() || process.cwd()
+const isTypescript = fs.existsSync(path.join(projectRoot, "tsconfig.json"))
 
 export class Start extends Command {
   static description = "Start a development server"
@@ -22,12 +27,14 @@ export class Start extends Command {
   }
 
   async run() {
+    
     const {flags} = this.parse(Start)
 
     const config = {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
+      isTypescript,
     }
 
     try {
