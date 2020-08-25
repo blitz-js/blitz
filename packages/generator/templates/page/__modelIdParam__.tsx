@@ -1,4 +1,5 @@
 import React, {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
@@ -16,21 +17,22 @@ export const __ModelName__ = () => {
       <h1>__ModelName__ {__modelName__.id}</h1>
       <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
-      {process.env.parentModel ? (
+      <if condition="parentModel">
         <Link
           href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
           as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
         >
           <a>Edit</a>
         </Link>
-      ) : (
-        <Link
-          href="/__modelNames__/__modelIdParam__/edit"
-          as={`/__modelNames__/${__modelName__.id}/edit`}
-        >
-          <a>Edit</a>
-        </Link>
-      )}
+        <else>
+          <Link
+            href="/__modelNames__/__modelIdParam__/edit"
+            as={`/__modelNames__/${__modelName__.id}/edit`}
+          >
+            <a>Edit</a>
+          </Link>
+        </else>
+      </if>
 
       <button
         type="button"
@@ -63,23 +65,23 @@ const Show__ModelName__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>__ModelName__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               href="/__parentModels__/__parentModelId__/__modelNames__"
               as={`/__parentModels__/${__parentModelId__}/__modelNames__`}
             >
               <a>__ModelNames__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__">
-              <a>__ModelNames__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__">
+                <a>__ModelNames__</a>
+              </Link>
+            </else>
+          </if>
         </p>
 
         <Suspense fallback={<div>Loading...</div>}>
@@ -89,5 +91,7 @@ const Show__ModelName__Page: BlitzPage = () => {
     </div>
   )
 }
+
+Show__ModelName__Page.getLayout = (page) => <Layout title={"__ModelName__"}>{page}</Layout>
 
 export default Show__ModelName__Page

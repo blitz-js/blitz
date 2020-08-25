@@ -17,8 +17,8 @@ if (process.env.NODE_ENV === "production") {
 } else {
   // Ensure the knex instance is re-used during hot-reloading
   // Otherwise, a new client will be created on every reload
-  global["knex"] = global["knex"] || getKnex()
-  knex = global["knex"]
+  globalThis["knex"] = globalThis["knex"] || getKnex()
+  knex = globalThis["knex"]
 }
 
 export default knex

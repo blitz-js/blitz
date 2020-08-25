@@ -27,6 +27,7 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   MiddlewareResponse,
+  isLocalhost,
 } from "@blitzjs/core"
 import {getConfig} from "@blitzjs/config"
 import pkgDir from "pkg-dir"
@@ -148,10 +149,10 @@ export async function getSessionContext(
   }
 
   if (!sessionKernel) {
-    sessionKernel = await createAnonymousSession(res)
+    sessionKernel = await createAnonymousSession(req, res)
   }
 
-  const sessionContext = new SessionContextClass(res, sessionKernel)
+  const sessionContext = new SessionContextClass(req, res, sessionKernel)
   if (!("blitzCtx" in res)) {
     ;(res as MiddlewareResponse).blitzCtx = {}
   }
@@ -160,10 +161,12 @@ export async function getSessionContext(
 }
 
 export class SessionContextClass implements SessionContext {
+  private _req: IncomingMessage
   private _res: ServerResponse
   private _kernel: SessionKernel
 
-  constructor(res: ServerResponse, kernel: SessionKernel) {
+  constructor(req: IncomingMessage, res: ServerResponse, kernel: SessionKernel) {
+    this._req = req
     this._res = res
     this._kernel = kernel
   }
@@ -194,20 +197,20 @@ export class SessionContextClass implements SessionContext {
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {
-    this._kernel = await createNewSession(this._res, publicData, privateData, {
+    this._kernel = await createNewSession(this._req, this._res, publicData, privateData, {
       jwtPayload: this._kernel.jwtPayload,
     })
   }
 
   revoke() {
-    return revokeSession(this._res, this.handle)
+    return revokeSession(this._req, this._res, this.handle)
   }
 
   async revokeAll() {
     if (!this.publicData.userId) {
       throw new Error("session.revokeAll() cannot be used with anonymous sessions")
     }
-    await revokeAllSessionsForUser(this._res, this.publicData.userId)
+    await revokeAllSessionsForUser(this._req, this._res, this.publicData.userId)
     return
   }
 
@@ -215,7 +218,7 @@ export class SessionContextClass implements SessionContext {
     if (this.userId && data.roles) {
       await updateAllPublicDataRolesForUser(this.userId, data.roles)
     }
-    this._kernel.publicData = await setPublicData(this._res, this._kernel, data)
+    this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
 
   async getPrivateData() {
@@ -236,7 +239,8 @@ export async function getSession(
   const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
-  const enableCsrfProtection = req.method !== "GET" && req.method !== "OPTIONS"
+  const enableCsrfProtection =
+    req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
@@ -269,7 +273,7 @@ export async function getSession(
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
-      await revokeSession(res, handle)
+      await revokeSession(req, res, handle)
       return null
     }
 
@@ -294,7 +298,7 @@ export async function getSession(
           0.75 * config.sessionExpiryMinutes
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
-        await refreshSession(res, {
+        await refreshSession(req, res, {
           handle,
           publicData: JSON.parse(persistedSession.publicData || ""),
           jwtPayload: null,
@@ -338,6 +342,7 @@ export async function getSession(
 // Create Session
 // --------------------------------
 export async function createNewSession(
+  req: IncomingMessage,
   res: ServerResponse,
   publicData: PublicData,
   privateData: Record<any, any> = {},
@@ -359,11 +364,11 @@ export async function createNewSession(
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(publicData)
 
-    setAnonymousSessionCookie(res, anonymousSessionToken)
-    setCSRFCookie(res, antiCSRFToken)
-    setPublicDataCookie(res, publicDataToken)
+    setAnonymousSessionCookie(req, res, anonymousSessionToken)
+    setCSRFCookie(req, res, antiCSRFToken)
+    setPublicDataCookie(req, res, publicDataToken)
     // Clear the essential session cookie in case it was previously set
-    setSessionCookie(res, "", new Date(0))
+    setSessionCookie(req, res, "", new Date(0))
 
     return {
       handle,
@@ -411,11 +416,11 @@ export async function createNewSession(
       privateData: JSON.stringify(newPrivateData),
     })
 
-    setSessionCookie(res, sessionToken, expiresAt)
-    setCSRFCookie(res, antiCSRFToken)
-    setPublicDataCookie(res, publicDataToken)
+    setSessionCookie(req, res, sessionToken, expiresAt)
+    setCSRFCookie(req, res, antiCSRFToken)
+    setPublicDataCookie(req, res, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
-    setAnonymousSessionCookie(res, "", new Date(0))
+    setAnonymousSessionCookie(req, res, "", new Date(0))
 
     return {
       handle,
@@ -431,15 +436,19 @@ export async function createNewSession(
   }
 }
 
-export async function createAnonymousSession(res: ServerResponse) {
-  return await createNewSession(res, {userId: null, roles: []}, undefined, {anonymous: true})
+export async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
+  return await createNewSession(req, res, {userId: null, roles: []}, undefined, {anonymous: true})
 }
 
 // --------------------------------
 // Session/DB utils
 // --------------------------------
 
-export async function refreshSession(res: ServerResponse, sessionKernel: SessionKernel) {
+export async function refreshSession(
+  req: IncomingMessage,
+  res: ServerResponse,
+  sessionKernel: SessionKernel,
+) {
   if (sessionKernel.jwtPayload?.isAnonymous) {
     const payload: AnonymousSessionPayload = {
       ...sessionKernel.jwtPayload,
@@ -448,15 +457,15 @@ export async function refreshSession(res: ServerResponse, sessionKernel: Session
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
-    setAnonymousSessionCookie(res, anonymousSessionToken)
-    setPublicDataCookie(res, publicDataToken)
+    setAnonymousSessionCookie(req, res, anonymousSessionToken)
+    setPublicDataCookie(req, res, publicDataToken)
   } else if (config.method === "essential") {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
 
-    setSessionCookie(res, sessionToken, expiresAt)
-    setPublicDataCookie(res, publicDataToken)
+    setSessionCookie(req, res, sessionToken, expiresAt)
+    setPublicDataCookie(req, res, publicDataToken)
 
     const hashedSessionToken = hash(sessionToken)
 
@@ -486,7 +495,11 @@ export async function updateAllPublicDataRolesForUser(userId: string | number, r
   }
 }
 
-export async function revokeSession(res: ServerResponse, handle: string): Promise<void> {
+export async function revokeSession(
+  req: IncomingMessage,
+  res: ServerResponse,
+  handle: string,
+): Promise<void> {
   try {
     await config.deleteSession(handle)
   } catch (error) {
@@ -496,22 +509,30 @@ export async function revokeSession(res: ServerResponse, handle: string): Promis
   setHeader(res, HEADER_SESSION_REVOKED, "true")
 
   // Clear all cookies
-  setSessionCookie(res, "", new Date(0))
-  setAnonymousSessionCookie(res, "", new Date(0))
+  setSessionCookie(req, res, "", new Date(0))
+  setAnonymousSessionCookie(req, res, "", new Date(0))
 }
 
-export async function revokeMultipleSessions(res: ServerResponse, sessionHandles: string[]) {
+export async function revokeMultipleSessions(
+  req: IncomingMessage,
+  res: ServerResponse,
+  sessionHandles: string[],
+) {
   let revoked: string[] = []
   for (const handle of sessionHandles) {
-    await revokeSession(res, handle)
+    await revokeSession(req, res, handle)
     revoked.push(handle)
   }
   return revoked
 }
 
-export async function revokeAllSessionsForUser(res: ServerResponse, userId: string | number) {
+export async function revokeAllSessionsForUser(
+  req: IncomingMessage,
+  res: ServerResponse,
+  userId: string | number,
+) {
   let sessionHandles = (await config.getSessions(userId)).map((session) => session.handle)
-  return revokeMultipleSessions(res, sessionHandles)
+  return revokeMultipleSessions(req, res, sessionHandles)
 }
 
 export async function getPublicData(sessionKernel: SessionKernel): Promise<PublicData> {
@@ -556,6 +577,7 @@ export async function setPrivateData(sessionKernel: SessionKernel, data: Record<
 }
 
 export async function setPublicData(
+  req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
   data: Record<any, any>,
@@ -568,7 +590,7 @@ export async function setPublicData(
     ...data,
   }
 
-  await refreshSession(res, {...sessionKernel, publicData})
+  await refreshSession(req, res, {...sessionKernel, publicData})
   return publicData
 }
 
@@ -690,13 +712,21 @@ export const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-export const setSessionCookie = (res: ServerResponse, sessionToken: string, expiresAt: Date) => {
+export const setSessionCookie = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  sessionToken: string,
+  expiresAt: Date,
+) => {
   setCookie(
     res,
     cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
       sameSite: config.sameSite,
       expires: expiresAt,
     }),
@@ -704,6 +734,7 @@ export const setSessionCookie = (res: ServerResponse, sessionToken: string, expi
 }
 
 export const setAnonymousSessionCookie = (
+  req: IncomingMessage,
   res: ServerResponse,
   token: string,
   expiresAt: Date = addYears(new Date(), 30),
@@ -713,7 +744,10 @@ export const setAnonymousSessionCookie = (
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
       path: "/",
       httpOnly: true,
-      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
       sameSite: config.sameSite,
       expires: expiresAt,
     }),
@@ -721,6 +755,7 @@ export const setAnonymousSessionCookie = (
 }
 
 export const setCSRFCookie = (
+  req: IncomingMessage,
   res: ServerResponse,
   antiCSRFToken: string,
   expiresAt: Date = addYears(new Date(), 30),
@@ -729,7 +764,10 @@ export const setCSRFCookie = (
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
       path: "/",
-      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
       sameSite: config.sameSite,
       expires: expiresAt,
     }),
@@ -737,6 +775,7 @@ export const setCSRFCookie = (
 }
 
 export const setPublicDataCookie = (
+  req: IncomingMessage,
   res: ServerResponse,
   publicDataToken: string,
   expiresAt: Date = addYears(new Date(), 30),
@@ -746,7 +785,10 @@ export const setPublicDataCookie = (
     res,
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
       path: "/",
-      secure: !process.env.DISABLE_SECURE_COOKIES && process.env.NODE_ENV === "production",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
       sameSite: config.sameSite,
       expires: expiresAt,
     }),

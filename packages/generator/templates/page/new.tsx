@@ -1,4 +1,5 @@
 import React from "react"
+import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Head, Link, useRouter, useParam, BlitzPage} from "blitz"
 } else {
@@ -17,11 +18,10 @@ const New__ModelName__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>New __ModelName__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1>Create New __ModelName__ </h1>
+        <h1>Create New __ModelName__</h1>
 
         <__ModelName__Form
           initialValues={{}}
@@ -48,22 +48,25 @@ const New__ModelName__Page: BlitzPage = () => {
         />
 
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               as="/__parentModels__/__parentModelId__/__modelNames__"
               href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
             >
               <a>__ModelNames__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__">
-              <a>__ModelNames__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__">
+                <a>__ModelNames__</a>
+              </Link>
+            </else>
+          </if>
         </p>
       </main>
     </div>
   )
 }
+
+New__ModelName__Page.getLayout = (page) => <Layout title={"Create New __ModelName__"}>{page}</Layout>
 
 export default New__ModelName__Page

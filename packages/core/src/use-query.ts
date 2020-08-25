@@ -1,7 +1,9 @@
 import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
+import {useSession} from "./supertokens"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
+import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
@@ -30,6 +32,15 @@ export const useIsDevPrerender = () => {
   }
 }
 
+export const retryFunction = (failureCount: number, error: any) => {
+  if (process.env.NODE_ENV !== "production") return false
+
+  // Retry (max. 3 times) only if network error detected
+  if (error.message === "Network request failed" && failureCount <= 3) return true
+
+  return false
+}
+
 export function useQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
@@ -52,12 +63,14 @@ export function useQuery<T extends QueryFn>(
   const {data, ...queryRest} = useReactQuery({
     queryKey: [
       queryRpcFn._meta.apiUrl,
-      typeof params === "function" ? (params as Function)() : params,
+      // We add the session object here so queries will refetch if session changes
+      useSession(),
+      serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      retry: retryFunction,
       ...options,
     },
   })

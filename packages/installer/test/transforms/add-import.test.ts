@@ -1,29 +1,16 @@
 import {addImport, customTsParser} from "@blitzjs/installer"
-import {parse, print, types} from "recast"
-import {namedTypes} from "ast-types/gen/namedTypes"
+import j from "jscodeshift"
 
-const b = types.builders
-
-function executeImport(
-  fileStr: string,
-  importStatement: types.namedTypes.ImportDeclaration,
-): string {
-  return print(
-    addImport(
-      parse(fileStr, {parser: customTsParser}) as types.namedTypes.File,
-      types.builders,
-      namedTypes,
-      importStatement,
-    ) as types.namedTypes.File,
-  ).code
+function executeImport(fileStr: string, importStatement: j.ImportDeclaration): string {
+  return addImport(j(fileStr, {parser: customTsParser}), importStatement).toSource({tabWidth: 60})
 }
 
 describe("addImport transform", () => {
   it("adds import at start of file with no imports present", () => {
     const file = `export const truth = () => 42`
-    const importStatement = b.importDeclaration(
-      [b.importDefaultSpecifier(b.identifier("React"))],
-      b.literal("react"),
+    const importStatement = j.importDeclaration(
+      [j.importDefaultSpecifier(j.identifier("React"))],
+      j.literal("react"),
     )
     expect(executeImport(file, importStatement)).toMatchSnapshot()
   })
@@ -34,7 +21,7 @@ describe("addImport transform", () => {
 export default function Comp() {
   return <div>hello world!</div>
 }`
-    const importStatement = b.importDeclaration([], b.literal("app/styles/app.css"))
+    const importStatement = j.importDeclaration([], j.literal("app/styles/app.css"))
     expect(executeImport(file, importStatement)).toMatchSnapshot()
   })
 })

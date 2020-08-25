@@ -26,13 +26,13 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 export interface PublicData extends Record<any, any> {
-  userId: string | number | null
+  userId: any
   roles: string[]
 }
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: string | number
+  userId?: any
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -45,7 +45,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: string | number) => Promise<SessionModel[]>
+  getSessions: (userId: any) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -56,7 +56,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: string | number | null
+  userId: any
   roles: string[]
   handle: string | null
   publicData: PublicData
@@ -70,28 +70,6 @@ export interface SessionContext {
   getPrivateData: () => Promise<Record<any, any>>
   setPrivateData: (data: Record<any, any>) => Promise<void>
   setPublicData: (data: Record<any, any>) => Promise<void>
-}
-
-export class AuthenticationError extends Error {
-  statusCode = 401 // Unauthorized
-  constructor(message?: string) {
-    super(message)
-    this.name = "AuthenticationError"
-  }
-}
-export class AuthorizationError extends Error {
-  statusCode = 403 // Forbidden
-  constructor(message?: string) {
-    super(message)
-    this.name = "AuthorizationError"
-  }
-}
-export class CSRFTokenMismatchError extends Error {
-  statusCode = 401 // Unauthorized
-  constructor(message?: string) {
-    super(message)
-    this.name = "CSRFTokenMismatchError"
-  }
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)

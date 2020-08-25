@@ -1,6 +1,10 @@
 module.exports = {
+  env: {
+    es2020: true,
+    "cypress/globals": true,
+  },
   extends: ["react-app", "plugin:jsx-a11y/recommended"],
-  plugins: ["jsx-a11y"],
+  plugins: ["jsx-a11y", "cypress"],
   rules: {
     "import/no-anonymous-default-export": "error",
     "import/no-webpack-loader-syntax": "off",

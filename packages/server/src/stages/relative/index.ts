@@ -30,7 +30,7 @@ const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)
 
 const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, "").indexOf("app") === 0
 
-export const patternRelativeImportSingle = /(import\s(?:{[^}]*})?.*(?=(?:['"])(?:\.[^'"]+)(?:['"]))(?:['"]))(\.[^'"]+)(['"])/
+export const patternRelativeImportSingle = /(import(?:\s|\()(?:{[^}]*})?.*(?=(?:['"])(?:\.[^'"]+)(?:['"]))(?:['"]))(\.[^'"]+)(['"])/
 export const patternRelativeImportGlobal = new RegExp(patternRelativeImportSingle, "g")
 
 export function replaceRelativeImports(content: string, replacer: (s: string) => string) {

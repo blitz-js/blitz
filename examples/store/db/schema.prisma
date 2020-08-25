@@ -22,6 +22,8 @@ generator client {
 
 model User {
   id      Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   email   String   @unique
   name    String?
   role    String?
@@ -30,6 +32,8 @@ model User {
 
 model Product {
   id          Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   handle      String   @unique
   name        String?
   description String?

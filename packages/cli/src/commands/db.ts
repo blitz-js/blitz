@@ -118,7 +118,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 }
 
 export async function resetSqlite(connectionString: string): Promise<void> {
-  const dbPath: string = connectionString.replace(/^(?:\.\.[\\/])+/, "")
+  const dbPath: string = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
   const unlink = promisify(fs.unlink)
   try {
     // delete database from folder
@@ -218,14 +218,14 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
           const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
           const {PrismaClient} = require(prismaClientPath)
           const db = new PrismaClient()
-          const dataSource: any = db.internalDatasources[0]
-          const connectorType: string = dataSource.connectorType
-          const connectionString: string = dataSource.url.value
-          if (connectorType === "postgresql") {
+          const dataSource: any = db.engine.datasources[0]
+          const providerType: string = dataSource.name
+          const connectionString: string = dataSource.url
+          if (providerType === "postgresql") {
             resetPostgres(connectionString, db)
-          } else if (connectorType === "mysql") {
+          } else if (providerType === "mysql") {
             resetMysql(connectionString, db)
-          } else if (connectorType === "sqlite") {
+          } else if (providerType === "sqlite") {
             resetSqlite(connectionString)
           } else {
             this.log("Could not find a valid database configuration")
