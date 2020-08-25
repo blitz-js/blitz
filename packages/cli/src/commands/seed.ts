@@ -1,34 +1,25 @@
-import {Command} from '@oclif/command'
-import {join} from 'path'
-import pkgDir from 'pkg-dir'
-import {log} from '@blitzjs/display'
-import {runMigrate} from './db'
+import {Command} from "@oclif/command"
+import {join} from "path"
+import pkgDir from "pkg-dir"
+import {log} from "@blitzjs/display"
+import {runMigrate} from "./db"
 
 const projectRoot = pkgDir.sync() || process.cwd()
-
-const seedFunctions = ['default', 'seed']
 
 export class Seed extends Command {
   static description = `Fill database with seed data`
 
   async run() {
-    log.branded('Seeding database')
-    let spinner = log.spinner('Loading seeds').start()
+    log.branded("Seeding database")
+    let spinner = log.spinner("Loading seeds").start()
 
-    let seeds: Function | undefined = undefined
+    let seeds: Function
 
     try {
-      const exports = Object.entries(require(join(projectRoot, 'db/seeds')))
-      for (const functionName of seedFunctions) {
-        const fn = exports.find(([name]) => functionName === name)
-        if (fn) {
-          seeds = fn[1] as Function
-          break
-        }
-      }
+      seeds = require(join(projectRoot, "db/seeds")).default
 
       if (seeds === undefined) {
-        throw new Error(`Cant find default or named "seed" export`)
+        throw new Error(`Cant find default export from db/seeds`)
       }
     } catch (err) {
       log.error(err)
@@ -36,24 +27,20 @@ export class Seed extends Command {
     }
     spinner.succeed()
 
-    spinner = log.spinner('Checking for database migrations').start()
+    spinner = log.spinner("Checking for database migrations").start()
     await runMigrate()
     spinner.succeed()
 
     try {
-      console.log(log.withCaret('Seeding...'))
-
-      const res = seeds()
-      if (res && typeof res.then === 'function') {
-        await res
-      }
+      console.log(log.withCaret("Seeding..."))
+      await seeds()
     } catch (err) {
       log.error(err)
       this.error(`Couldn't run imported function, are you sure it's a function?`)
     }
 
-    const db = require(join(projectRoot, 'db/index.ts')).default
+    const db = require(join(projectRoot, "db/index.ts")).default
     await db.disconnect()
-    log.success('Done seeding')
+    log.success("Done seeding")
   }
 }
