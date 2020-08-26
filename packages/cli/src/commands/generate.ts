@@ -255,15 +255,13 @@ export class Generate extends Command {
   }
 
   async getCustomTemplates() {
-    const pageTemplates = await globby(["templates/page/*"], {onlyDirectories: true})
-    const queryTemplates = await globby(["templates/query/*"], {onlyDirectories: true})
-    const mutationTemplates = await globby(["templates/mutation/*"], {onlyDirectories: true})
-    const genericTemplates = await globby(["templates/!(page|query|mutation)"], {
+    const specialTemplates = await globby(["templates/(pages|queries|mutations)/*"], {
       onlyDirectories: true,
     })
-    return [...pageTemplates, ...queryTemplates, ...mutationTemplates, ...genericTemplates].map(
-      templateFromPath,
-    )
+    const genericTemplates = await globby(["templates/!(pages|queries|mutations)"], {
+      onlyDirectories: true,
+    })
+    return [...specialTemplates, ...genericTemplates].map(templateFromPath)
   }
 
   async run() {
