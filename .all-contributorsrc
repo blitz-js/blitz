@@ -926,6 +926,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "alan2207",
+      "name": "Alan Alickovic",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/12713315?v=4",
+      "profile": "https://github.com/alan2207",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
