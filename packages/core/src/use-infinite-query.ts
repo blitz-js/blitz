@@ -42,8 +42,8 @@ export function useInfiniteQuery<T extends QueryFn>(
       useSession(),
       serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, __: any, params, pageParams?) =>
-      queryRpcFn(params, {fromQueryHook: true, pageParams}),
+    queryFn: (_: string, __: any, params, resultOfGetFetchMore?) =>
+      queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
     config: {
       suspense: true,
       retry: retryFunction,

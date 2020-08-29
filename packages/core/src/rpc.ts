@@ -16,7 +16,7 @@ import merge from "deepmerge"
 
 type Options = {
   fromQueryHook?: boolean
-  pageParams?: any
+  resultOfGetFetchMore?: any
 }
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
@@ -36,11 +36,11 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     // We have to serialize query arguments inside the hooks, otherwise react-query will use
     // JSON.parse(JSON.stringify) so by the time the arguments come here the real JS objects are lost
     serialized = params
-    if (opts.pageParams) {
+    if (opts.resultOfGetFetchMore) {
       // useInfiniteQuery usually passes in extra pageParams here that come from getFetchMore()
       // This isn't serialized inside useInfiniteQuery because this data is provided separately
       // by react-query
-      serialized = merge(params, serialize(opts.pageParams))
+      serialized = merge(params, serialize(opts.resultOfGetFetchMore))
     }
   } else {
     serialized = serialize(params)
