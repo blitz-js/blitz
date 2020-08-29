@@ -1,5 +1,6 @@
-import {useState, useEffect} from "react"
+import {useState} from "react"
 import BadBehavior from "bad-behavior"
+import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -140,15 +141,17 @@ publicDataStore.initialize()
 
 export const useSession = () => {
   const [publicData, setPublicData] = useState(emptyPublicData)
+  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // Initialize on mount
     setPublicData(publicDataStore.getData())
+    setIsLoading(false)
     const subscription = publicDataStore.observable.subscribe(setPublicData)
     return subscription.unsubscribe
   }, [])
 
-  return publicData
+  return {...publicData, isLoading}
 }
 
 // Taken from https://github.com/HenrikJoreteg/cookie-getter
