@@ -31,7 +31,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "chokidar": "3.3.1",
+    "chokidar": "3.4.2",
     "globby": "11.0.0",
     "pkg-dir": "4.2.0"
   },
