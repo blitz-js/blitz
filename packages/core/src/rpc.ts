@@ -12,9 +12,11 @@ import {
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
+import merge from "deepmerge"
 
 type Options = {
   fromQueryHook?: boolean
+  pageParams?: any
 }
 
 export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
@@ -29,8 +31,20 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
-  // query hook already serializes the params because otherwise react-query will mess it up
-  const serialized = opts.fromQueryHook ? params : serialize(params)
+  let serialized
+  if (opts.fromQueryHook) {
+    // We have to serialize query arguments inside the hooks, otherwise react-query will use
+    // JSON.parse(JSON.stringify) so by the time the arguments come here the real JS objects are lost
+    serialized = params
+    if (opts.pageParams) {
+      // useInfiniteQuery usually passes in extra pageParams here that come from getFetchMore()
+      // This isn't serialized inside useInfiniteQuery because this data is provided separately
+      // by react-query
+      serialized = merge(params, serialize(opts.pageParams))
+    }
+  } else {
+    serialized = serialize(params)
+  }
 
   const result = await window.fetch(url, {
     method: "POST",
