@@ -31,8 +31,8 @@
     "@prisma/cli": "2.x",
     "@prisma/client": "2.x",
     "blitz": "canary",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
+    "react": "0.0.0-experimental-94c0244ba",
+    "react-dom": "0.0.0-experimental-94c0244ba",
     "react-error-boundary": "2.x",
     "secure-password": "4.x",
     "zod": "1.x"
