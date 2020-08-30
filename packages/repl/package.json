@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/repl",
-  "version": "0.18.1-canary.1",
+  "version": "0.19.0",
   "description": "Repl package for Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz/packages/repl/#readme",
   "license": "MIT",
