@@ -34,6 +34,9 @@ const Page: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Paginated</h1>
+      <Link href="/products/infinite">
+        <a>Go to Infinite Product List</a>
+      </Link>
       <Suspense fallback={<div>Loading...</div>}>
         <Products />
       </Suspense>

@@ -1,5 +1,5 @@
 import {Suspense, Fragment} from "react"
-import {BlitzPage, useInfiniteQuery} from "blitz"
+import {BlitzPage, useInfiniteQuery, Link} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 
 const Products = () => {
@@ -36,6 +36,9 @@ const Page: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Infinite</h1>
+      <Link href="/products/paginated">
+        <a>Go to Paginated Product List</a>
+      </Link>
       <Suspense fallback={<div>Loading...</div>}>
         <Products />
       </Suspense>
