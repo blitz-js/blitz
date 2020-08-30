@@ -10,7 +10,7 @@ import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
 export const __ModelNames__List = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
-    const [__modelNames__] = useQuery(get__ModelNames__, {
+    const [{__modelNames__}] = useQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
       orderBy: {id: "desc"},
     })
@@ -30,7 +30,7 @@ export const __ModelNames__List = () => {
       </ul>
     )
   } else {
-    const [__modelNames__] = useQuery(get__ModelNames__, {orderBy: {id: "desc"}})
+    const [{__modelNames__}] = useQuery(get__ModelNames__, {orderBy: {id: "desc"}})
 
     return (
       <ul>
