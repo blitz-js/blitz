@@ -15,6 +15,7 @@ export async function dev(
     devFolder,
     ignore,
     include,
+    isTypescript,
     ...stagesConfig
   } = await normalize({
     ...config,
@@ -28,6 +29,7 @@ export async function dev(
     ignore,
     include,
     watch,
+    isTypescript,
   }
 
   const [{manifest}] = await Promise.all([

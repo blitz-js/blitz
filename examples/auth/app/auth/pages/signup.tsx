@@ -30,7 +30,10 @@ const SignupPage: BlitzPage = () => {
                 // This error comes from Prisma
                 return {email: "This email is already being used"}
               } else {
-                return {[FORM_ERROR]: error.toString()}
+                return {
+                  [FORM_ERROR]:
+                    "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+                }
               }
             }
           }}

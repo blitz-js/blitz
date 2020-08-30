@@ -22,4 +22,11 @@ describe("patternRelativeImport", () => {
 
     expect(matches && matches[2]).toEqual("./ding")
   })
+
+  it("matches a dynamic import statement", () => {
+    const input = `import("../bar/baz")`
+    const matches = input.match(patternRelativeImportSingle)
+
+    expect(matches && matches[2]).toEqual("../bar/baz")
+  })
 })

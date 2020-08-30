@@ -17,6 +17,7 @@ export async function build(
     ignore,
     include,
     watch,
+    isTypescript,
     ...stageConfig
   } = await normalize(config)
 
@@ -27,6 +28,7 @@ export async function build(
     ignore,
     include,
     watch,
+    isTypescript,
   }
   await Promise.all([transformFiles(src, stages, dest, options), readyForNextBuild])
 

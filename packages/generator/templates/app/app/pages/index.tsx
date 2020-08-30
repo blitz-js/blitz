@@ -1,21 +1,56 @@
-import { Head, Link, useSession } from "blitz"
+import { Link, BlitzPage } from "blitz"
+import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
+import { useCurrentUser } from "app/hooks/useCurrentUser"
+import { Suspense } from "react"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
  */
 
-export default function Home() {
-  const session = useSession()
+const UserInfo = () => {
+  const currentUser = useCurrentUser()
 
+  if (currentUser) {
+    return (
+      <>
+        <button
+          className="button small"
+          onClick={async () => {
+            await logout()
+          }}
+        >
+          Logout
+        </button>
+        <div>
+          User id: <code>{currentUser.id}</code>
+          <br />
+          User role: <code>{currentUser.role}</code>
+        </div>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <Link href="/signup">
+          <a className="button small">
+            <strong>Sign Up</strong>
+          </a>
+        </Link>
+        <Link href="/login">
+          <a className="button small">
+            <strong>Login</strong>
+          </a>
+        </Link>
+      </>
+    )
+  }
+}
+
+const Home: BlitzPage = () => {
   return (
     <div className="container">
-      <Head>
-        <title>__name__</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
         <div className="logo">
           <img src="/logo.png" alt="blitz.js" />
@@ -24,36 +59,9 @@ export default function Home() {
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
         </p>
         <div className="buttons" style={{ marginTop: "1rem", marginBottom: "5rem" }}>
-          {session.userId ? (
-            <>
-              <button
-                className="button small"
-                onClick={async () => {
-                  await logout()
-                }}
-              >
-                Logout
-              </button>
-              <div>
-                User id: <code>{session.userId}</code>
-                <br />
-                User role: <code>{session.roles[0]}</code>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link href="/signup">
-                <a className="button small">
-                  <strong>Sign Up</strong>
-                </a>
-              </Link>
-              <Link href="/login">
-                <a className="button small">
-                  <strong>Login</strong>
-                </a>
-              </Link>
-            </>
-          )}
+          <Suspense fallback="Loading...">
+            <UserInfo />
+          </Suspense>
         </div>
         <p>
           <strong>
@@ -112,7 +120,22 @@ export default function Home() {
         </a>
       </footer>
 
-      <style jsx>{`
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;700&display=swap");
+
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+            Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        }
+
+        * {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          box-sizing: border-box;
+        }
         .container {
           min-height: 100vh;
           display: flex;
@@ -228,24 +251,10 @@ export default function Home() {
           }
         }
       `}</style>
-
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;700&display=swap");
-
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: "Libre Franklin", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-            Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-        }
-
-        * {
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          box-sizing: border-box;
-        }
-      `}</style>
     </div>
   )
 }
+
+Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
+
+export default Home

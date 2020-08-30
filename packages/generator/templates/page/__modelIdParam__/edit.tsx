@@ -1,4 +1,5 @@
 import React, {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
@@ -54,7 +55,6 @@ const Edit__ModelName__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>Edit __ModelName__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
@@ -63,22 +63,25 @@ const Edit__ModelName__Page: BlitzPage = () => {
         </Suspense>
 
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               as="/__parentModels__/__parentModelId__/__modelNames__"
               href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
             >
               <a>__ModelNames__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__">
-              <a>__ModelNames__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__">
+                <a>__ModelNames__</a>
+              </Link>
+            </else>
+          </if>
         </p>
       </main>
     </div>
   )
 }
+
+Edit__ModelName__Page.getLayout = (page) => <Layout title={"Edit __ModelName__"}>{page}</Layout>
 
 export default Edit__ModelName__Page

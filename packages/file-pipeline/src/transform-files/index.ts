@@ -17,6 +17,7 @@ type SynchronizeFilesOptions = {
   source?: FSStreamer
   writer?: FSStreamer
   noclean?: boolean
+  isTypescript?: boolean
 }
 
 const defaultBus = through.obj()
@@ -41,6 +42,7 @@ export async function transformFiles(
     source,
     writer,
     noclean = false,
+    isTypescript = true,
   } = options
 
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
@@ -57,6 +59,7 @@ export async function transformFiles(
       include,
       ignore,
       watch,
+      isTypescript,
     }
 
     bus.on("data", ({type}) => {

@@ -32,7 +32,7 @@ export class Console extends Command {
       setupTsnode()
     }
 
-    await runPrismaGeneration({silent: true})
+    await runPrismaGeneration({silent: true, failSilently: true})
     spinner.succeed()
 
     runRepl(Console.replOptions)

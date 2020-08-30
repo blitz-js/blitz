@@ -1,4 +1,5 @@
 import React, {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Head, Link, useQuery, useParam, BlitzPage} from "blitz"
 } else {
@@ -57,25 +58,25 @@ const __ModelNames__Page: BlitzPage = () => {
     <div>
       <Head>
         <title>__ModelNames__</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <h1>__ModelNames__</h1>
 
         <p>
-          {process.env.parentModel ? (
+          <if condition="parentModel">
             <Link
               href="/__parentModels__/__parentModelId__/__modelNames__/new"
               as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}
             >
               <a>Create __ModelName__</a>
             </Link>
-          ) : (
-            <Link href="/__modelNames__/new">
-              <a>Create __ModelName__</a>
-            </Link>
-          )}
+            <else>
+              <Link href="/__modelNames__/new">
+                <a>Create __ModelName__</a>
+              </Link>
+            </else>
+          </if>
         </p>
 
         <Suspense fallback={<div>Loading...</div>}>
@@ -85,5 +86,7 @@ const __ModelNames__Page: BlitzPage = () => {
     </div>
   )
 }
+
+__ModelNames__Page.getLayout = (page) => <Layout title={"__ModelNames__"}>{page}</Layout>
 
 export default __ModelNames__Page

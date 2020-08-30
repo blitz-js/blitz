@@ -1,3 +1,7 @@
+import pkgDir from "pkg-dir"
+import path from "path"
+import fs from "fs"
+
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
     // Need to grab the normalized config based on the phase
@@ -15,7 +19,7 @@ export function withBlitz(nextConfig: any) {
           const originalEntry = config.entry
           config.entry = async () => ({
             ...(await originalEntry()),
-            "../__db.js": "./db/index",
+            ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
           })
         } else {
           config.module = config.module || {}
@@ -43,6 +47,15 @@ export function withBlitz(nextConfig: any) {
         return config
       },
     })
+
+    function doesDbModuleExist() {
+      const projectRoot = pkgDir.sync() || process.cwd()
+      return (
+        fs.existsSync(path.join(projectRoot, "db/index.js")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.ts")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.tsx"))
+      )
+    }
 
     // We add next-transpile-modules during internal blitz development so that changes in blitz
     // framework code will trigger a hot reload of any example apps that are running

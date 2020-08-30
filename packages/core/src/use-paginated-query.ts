@@ -3,10 +3,12 @@ import {
   PaginatedQueryResult,
   QueryOptions,
 } from "react-query"
-import {useIsDevPrerender, emptyQueryFn} from "./use-query"
+import {useSession} from "./supertokens"
+import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
+import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<
   PaginatedQueryResult<PromiseReturnType<T>>,
@@ -36,12 +38,14 @@ export function usePaginatedQuery<T extends QueryFn>(
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey: [
       queryRpcFn._meta.apiUrl,
-      typeof params === "function" ? (params as Function)() : params,
+      // We add the session object here so queries will refetch if session changes
+      useSession(),
+      serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_: string, __: any, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
-      retry: process.env.NODE_ENV === "production" ? 3 : false,
+      retry: retryFunction,
       ...options,
     },
   })

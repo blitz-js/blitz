@@ -1,6 +1,6 @@
 import db from "db"
 import {SessionContext} from "blitz"
-import {hashPassword} from "app/auth"
+import {hashPassword} from "app/auth/auth-utils"
 import {SignupInput, SignupInputType} from "app/auth/validations"
 
 export default async function signup(input: SignupInputType, ctx: {session?: SessionContext} = {}) {
