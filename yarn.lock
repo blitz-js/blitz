@@ -14133,6 +14133,13 @@ p-each-series@^1.0.0:
   dependencies:
     p-reduce "^1.0.0"
 
+p-event@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/p-event/-/p-event-4.2.0.tgz#af4b049c8acd91ae81083ebd1e6f5cae2044c1b5"
+  integrity sha512-KXatOjCRXXkSePPb1Nbi0p0m+gQAwdlbhi4wQKJPI1HsMQS9g+Sqp2o+QHziPr7eYJyOZet836KoHEVM1mwOrQ==
+  dependencies:
+    p-timeout "^3.1.0"
+
 p-event@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/p-event/-/p-event-4.1.0.tgz#e92bb866d7e8e5b732293b1c8269d38e9982bf8e"
@@ -14251,6 +14258,13 @@ p-timeout@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-2.0.1.tgz#d8dd1979595d2dc0139e1fe46b8b646cb3cdf038"
   integrity sha512-88em58dDVB/KzPEx1X0N3LwFfYZPyDc4B6eF38M1rk9VTZMbxXXgjugz8mmwpS9Ox4BDZ+t6t3QP5+/gazweIA==
+  dependencies:
+    p-finally "^1.0.0"
+
+p-timeout@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-3.2.0.tgz#c7e17abc971d2a7962ef83626b35d635acf23dfe"
+  integrity sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==
   dependencies:
     p-finally "^1.0.0"
 
