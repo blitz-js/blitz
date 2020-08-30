@@ -37,12 +37,15 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey: [
+      serialize(typeof params === "function" ? (params as Function)() : params),
       queryRpcFn._meta.apiUrl,
       // We add the session object here so queries will refetch if session changes
       useSession(),
-      serialize(typeof params === "function" ? (params as Function)() : params),
+      // we need an extra cache key for infinite loading so that the cache for
+      // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
+      "infinite",
     ],
-    queryFn: (_: string, __: any, params, resultOfGetFetchMore?) =>
+    queryFn: (params, _, __, ___, resultOfGetFetchMore?) =>
       queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
     config: {
       suspense: true,
