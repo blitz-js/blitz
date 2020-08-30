@@ -12,7 +12,7 @@ type GetProductsInput = {
 }
 
 export default async function getProducts(
-  {where, orderBy, skip, cursor, take}: GetProductsInput,
+  {where, orderBy, skip = 0, cursor, take}: GetProductsInput,
   ctx: Record<any, unknown> = {},
 ) {
   if (ctx.referer) {
@@ -28,8 +28,8 @@ export default async function getProducts(
   })
 
   const count = await db.product.count()
-  const hasMore = skip! + take! < count
-  const nextPage = hasMore ? {take, skip: skip! + take!} : null
+  const hasMore = typeof take === "number" ? skip + take < count : false
+  const nextPage = hasMore ? {take, skip: skip + take!} : null
 
   return {
     products,
