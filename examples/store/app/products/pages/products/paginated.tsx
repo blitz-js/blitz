@@ -1,19 +1,19 @@
 import {Suspense} from "react"
-import {Link, BlitzPage, usePaginatedQuery, useRouterQuery, useRouter} from "blitz"
+import {Link, BlitzPage, usePaginatedQuery, useRouter} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
 
 const Products = () => {
   const router = useRouter()
-  const {page = 0} = useRouterQuery()
+  const page = Number(router.query.page) || 0
   const [{products, hasMore}] = usePaginatedQuery(getProducts, {
-    skip: ITEMS_PER_PAGE * Number(page),
+    skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
 
-  const goToPreviousPage = () => router.push({query: {page: Number(page) - 1}})
-  const goToNextPage = () => router.push({query: {page: Number(page) + 1}})
+  const goToPreviousPage = () => router.push({query: {page: page - 1}})
+  const goToNextPage = () => router.push({query: {page: page + 1}})
 
   return (
     <div>
