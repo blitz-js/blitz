@@ -37,12 +37,12 @@ export function usePaginatedQuery<T extends QueryFn>(
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey: [
+      serialize(typeof params === "function" ? (params as Function)() : params),
       queryRpcFn._meta.apiUrl,
       // We add the session object here so queries will refetch if session changes
       useSession(),
-      serialize(typeof params === "function" ? (params as Function)() : params),
     ],
-    queryFn: (_: string, __: any, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
