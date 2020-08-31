@@ -945,6 +945,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "brunocrosier",
+      "name": "Bruno Crosier",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/18399089?v=4",
+      "profile": "https://twitter.com/bruno_crosier",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
