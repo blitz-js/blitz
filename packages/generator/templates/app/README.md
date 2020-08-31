@@ -51,13 +51,34 @@ Here is the structure of your app.
 ```
 __name__
 ├── app
+│   |── auth
+│   │   ├── components
+│   │   │   └── LoginForm.tsx
+│   │   ├── mutations
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   └── signup.ts
+│   │   └── pages
+│   │       ├── login.tsx
+│   │       └── signup.tsx
+│   ├── auth-utils.ts
+│   ├── validations.ts
 │   ├── components
-│   │   └── ErrorBoundary.tsx
+│   │   ├── Form.tsx
+│   │   └── LabeledTextField.tsx
+│   ├── hooks
+│   │   └── useCurrentUser.ts
 │   ├── layouts
-│   └── pages
-│       ├── _app.tsx
-│       ├── _document.tsx
-│       └── index.tsx
+│   │   └── Layout.tsx
+│   │── pages
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── 404.tsx
+│   │   ├── index.tsx
+│   │   └── index.test.tsx
+│   └── users
+│   │   └── queries
+│   │       └── getCurrentUser.ts
 ├── db
 │   ├── migrations
 │   ├── index.ts
@@ -67,16 +88,22 @@ __name__
 ├── public
 │   ├── favicon.ico
 │   └── logo.png
+├── test
+│   ├── __mocks__
+│   │       └── fileMock.js
+│   ├── setup.ts
+│   └── utils.tsx
 ├── utils
-├── .babelrc.js
 ├── .env
 ├── .eslintrc.js
 ├── .gitignore
 ├── .npmrc
 ├── .prettierignore
-├── README.md
+├── babel.config.js
 ├── blitz.config.js
+├── jest.config.js
 ├── package.json
+├── README.md
 ├── tsconfig.json
 └── yarn.lock
 ```
@@ -91,11 +118,15 @@ These files are:
 
 - `public/` is a directory where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
 
+- `test/` is a directory where you can put your automated tests.
+
 - `utils/` is a good place to put any shared utility files which you might use across different sections of your app.
 
 - `.babelrc.js`, `.env`, etc. ("dotfiles") are configuration files for various bits of JavaScript tooling.
 
 - `blitz.config.js` is for advanced custom configuration of Blitz. It extends [`next.config.js`](https://nextjs.org/docs/api-reference/next.config.js/introduction).
+
+- `jest.config.js` is a file where you can find Jest's configuration.
 
 - `package.json` contains information about your dependencies and devDependencies. If you’re using a tool like `npm` or `yarn`, you won’t have to worry about this much.
 
