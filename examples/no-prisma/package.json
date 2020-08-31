@@ -1,6 +1,6 @@
 {
   "name": "no-prisma",
-  "version": "0.18.0",
+  "version": "0.20.0",
   "scripts": {
     "start": "blitz start",
     "build": "blitz build",
@@ -26,10 +26,10 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.18.0",
+    "blitz": "0.20.0",
     "knex": "0.21.2",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
+    "react": "0.0.0-experimental-94c0244ba",
+    "react-dom": "0.0.0-experimental-94c0244ba",
     "sqlite3": "5.0.0"
   },
   "devDependencies": {
@@ -45,7 +45,7 @@
     "eslint-plugin-react": "7.20.5",
     "eslint-plugin-react-hooks": "4.0.8",
     "husky": "4.2.5",
-    "lint-staged": "10.2.11",
+    "lint-staged": "10.2.13",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "typescript": "3.9.6"

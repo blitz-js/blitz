@@ -35,7 +35,7 @@ export const createStageRpc: Stage = function configure({config: {src, isTypescr
     push(
       new File({
         path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(originalPath)),
+        contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
         hash: file.hash + ":2",
       }),
     )
@@ -76,7 +76,7 @@ export default resolverModule.default
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (originalPath: string) => `
+const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
 // This imports the isomorphicHandler
 import resolverModule from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
@@ -89,8 +89,8 @@ path.resolve("blitz.config.js")
 path.resolve(".next/__db.js")
 // End anti-tree-shaking
 
-let db
-let connect
+let db${useTypes ? ": any" : ""}
+let connect${useTypes ? ": any" : ""}
 try {
   db = require('db').default
   connect = require('db').connect ?? (() => db.$connect ? db.$connect() : db.connect())

@@ -31,8 +31,8 @@
     "@prisma/cli": "2.x",
     "@prisma/client": "2.x",
     "blitz": "canary",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
+    "react": "0.0.0-experimental-94c0244ba",
+    "react-dom": "0.0.0-experimental-94c0244ba",
     "react-error-boundary": "2.x",
     "secure-password": "4.x",
     "zod": "1.x"
@@ -43,6 +43,7 @@
     "@testing-library/react-hooks": "3.x",
     "@types/jest": "26.x",
     "@types/react": "16.x",
+    "@types/secure-password": "3.x",
     "@typescript-eslint/eslint-plugin": "3.x",
     "@typescript-eslint/parser": "3.x",
     "babel-eslint": "10.x",
