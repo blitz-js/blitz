@@ -191,7 +191,7 @@ export class SessionContextClass implements SessionContext {
   }
 
   isAuthorized(input?: any) {
-    if (!this.userId) throw new AuthenticationError()
+    if (!this.userId) return false
 
     return config.unstable_isAuthorized(this.roles, input)
   }
