@@ -9,7 +9,7 @@ type StaticProps = {
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const products = await getProducts({orderBy: {id: "desc"}})
+  const {products} = await getProducts({orderBy: {id: "desc"}})
   const dataString = superjson.stringify(products)
   return {
     props: {dataString},
@@ -18,7 +18,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
 }
 
 const Page: BlitzPage<StaticProps> = function ({dataString}) {
-  const products = useMemo(() => superjson.parse(dataString), [dataString]) as Product[]
+  const products = useMemo(() => superjson.parse<Product[]>(dataString), [dataString])
   return (
     <div>
       <h1>Products</h1>

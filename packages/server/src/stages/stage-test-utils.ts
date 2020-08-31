@@ -11,6 +11,7 @@ export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs 
     include: [],
     src: "",
     watch: false,
+    isTypescript: true,
   }
   return {
     getInputCache() {

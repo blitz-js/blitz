@@ -58,7 +58,7 @@ describe("Console command", () => {
 
   it("runs PrismaGeneration with silent allowed", async () => {
     await Console.prototype.run()
-    expect(db.runPrismaGeneration).toHaveBeenCalledWith({silent: true})
+    expect(db.runPrismaGeneration).toHaveBeenCalledWith({silent: true, failSilently: true})
   })
 
   it("runs repl", async () => {

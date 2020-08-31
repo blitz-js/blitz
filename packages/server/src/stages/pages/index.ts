@@ -5,7 +5,7 @@ import {handleErrors, DuplicatePathError} from "./errors"
 import flow from "lodash/flow"
 
 export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!test)\.m?[tj]sx?)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!test)\.(m?[tj]sx?|mdx))$/
   return (regex.exec(path) || [])[1] || path
 }
 

@@ -3,7 +3,7 @@ import chalk from "chalk"
 
 import {isBlitzRoot, IsBlitzRootError} from "./utils/is-blitz-root"
 
-const whitelistGlobal = ["-h", "--help", "help", "new"]
+const whitelistGlobal = ["-h", "--help", "help", "new", "autocomplete", "autocomplete:script"]
 
 export const hook: Hook<"init"> = async function (options) {
   const {id} = options

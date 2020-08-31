@@ -1,13 +1,13 @@
-import File from "vinyl"
-import slash from "slash"
-import {absolutePathTransform} from "../utils"
-import {relative} from "path"
 import {Stage, transform} from "@blitzjs/file-pipeline"
+import {relative} from "path"
+import slash from "slash"
+import File from "vinyl"
+import {absolutePathTransform} from "../utils"
 
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
-export const createStageRpc: Stage = function configure({config: {src}}) {
+export const createStageRpc: Stage = function configure({config: {src, isTypescript = true}}) {
   const fileTransformer = absolutePathTransform(src)
 
   const getResolverPath = fileTransformer(resolverPath)
@@ -35,7 +35,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     push(
       new File({
         path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(originalPath)),
+        contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
         hash: file.hash + ":2",
       }),
     )
@@ -43,7 +43,7 @@ export const createStageRpc: Stage = function configure({config: {src}}) {
     // Isomorphic client
     const isomorphicHandlerFile = file.clone()
     isomorphicHandlerFile.contents = Buffer.from(
-      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
+      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
     )
     push(isomorphicHandlerFile)
 
@@ -61,6 +61,7 @@ const isomorhicHandlerTemplate = (
   resolverPath: string,
   resolverName: string,
   resolverType: string,
+  useTypes: boolean = true,
 ) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 const resolverModule = require('${resolverPath}')
@@ -69,11 +70,11 @@ export default getIsomorphicRpcHandler(
   '${resolverPath}',
   '${resolverName}',
   '${resolverType}',
-) as typeof resolverModule.default
+) ${useTypes ? "as typeof resolverModule.default" : ""}
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (originalPath: string) => `
+const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
 // This imports the isomorphicHandler
 import resolverModule from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
@@ -86,8 +87,8 @@ path.resolve("blitz.config.js")
 path.resolve(".next/__db.js")
 // End anti-tree-shaking
 
-let db
-let connect
+let db${useTypes ? ": any" : ""}
+let connect${useTypes ? ": any" : ""}
 try {
   db = require('db').default
   connect = require('db').connect ?? (() => db.$connect ? db.$connect() : db.connect())

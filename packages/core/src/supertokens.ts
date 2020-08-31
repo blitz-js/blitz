@@ -1,5 +1,6 @@
-import {useState, useEffect} from "react"
+import {useState} from "react"
 import BadBehavior from "bad-behavior"
+import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -26,13 +27,13 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 export interface PublicData extends Record<any, any> {
-  userId: string | number | null
+  userId: any
   roles: string[]
 }
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: string | number
+  userId?: any
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -45,7 +46,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: string | number) => Promise<SessionModel[]>
+  getSessions: (userId: any) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -56,7 +57,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: string | number | null
+  userId: any
   roles: string[]
   handle: string | null
   publicData: PublicData
@@ -140,15 +141,17 @@ publicDataStore.initialize()
 
 export const useSession = () => {
   const [publicData, setPublicData] = useState(emptyPublicData)
+  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // Initialize on mount
     setPublicData(publicDataStore.getData())
+    setIsLoading(false)
     const subscription = publicDataStore.observable.subscribe(setPublicData)
     return subscription.unsubscribe
   }, [])
 
-  return publicData
+  return {...publicData, isLoading}
 }
 
 // Taken from https://github.com/HenrikJoreteg/cookie-getter
