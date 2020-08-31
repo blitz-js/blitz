@@ -226,16 +226,26 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   commitChanges() {
+    const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
-      ["git", ["commit", "-m", "New baby Blitz app!"], {stdio: "ignore"}],
+      [
+        "git",
+        ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+        {stdio: "ignore", timeout: 10000},
+      ],
     ]
     for (let command of commands) {
       const result = spawn.sync(...command)
       if (result.status !== 0) {
-        log.error(`Failed to run command ${command[0]} with ${command[1].join(" ")} options.`)
-        break
+        commitSpinner.fail(
+          chalk.red.bold(
+            `Failed to run command ${command[0]} with ${command[1].join(" ")} options.`,
+          ),
+        )
+        return
       }
     }
+    commitSpinner.succeed()
   }
 }
