@@ -118,7 +118,7 @@ These files are:
 
 - `public/` is a directory where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
 
-- `test/` is a directory where you can put your automated tests.
+- `test/` is a directory where you can put your unit and integration tests.
 
 - `utils/` is a good place to put any shared utility files which you might use across different sections of your app.
 
