@@ -19,12 +19,9 @@ blitz-log.log
 .DS_Store
 
 # local env files
-.env
-.envrc
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+.envrc
 
 # Logs
 logs
