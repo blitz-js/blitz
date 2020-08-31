@@ -65,12 +65,14 @@ const isomorhicHandlerTemplate = (
 ) => `
 import {getIsomorphicRpcHandler} from '@blitzjs/core'
 const resolverModule = require('${resolverPath}')
-export default getIsomorphicRpcHandler(
-  resolverModule,
-  '${resolverPath}',
-  '${resolverName}',
-  '${resolverType}',
-) ${useTypes ? "as typeof resolverModule.default" : ""}
+export default resolverModule.default
+  ? getIsomorphicRpcHandler(
+      resolverModule,
+      '${resolverPath}',
+      '${resolverName}',
+      '${resolverType}',
+    ) ${useTypes ? "as typeof resolverModule.default" : ""}
+  : undefined
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
@@ -93,11 +95,15 @@ try {
   db = require('db').default
   connect = require('db').connect ?? (() => db.$connect ? db.$connect() : db.connect())
 }catch(err){}
-export default rpcApiHandler(
-  resolverModule,
-  getAllMiddlewareForModule(resolverModule),
-  () => db && connect(),
-)
+export default resolverModule 
+  ? rpcApiHandler(
+      resolverModule,
+      getAllMiddlewareForModule(resolverModule),
+      () => db && connect(),
+    )
+  : function notFoundHandler(_req, res) {
+      res.status(404).end()
+    }
 export const config = {
   api: {
     externalResolver: true,
