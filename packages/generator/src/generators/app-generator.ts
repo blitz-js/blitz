@@ -187,7 +187,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       [
         "git",
         ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
-        {stdio: "ignore", timeout: 5000},
+        {stdio: "ignore", timeout: 10000},
       ],
     ]
     for (let command of commands) {
