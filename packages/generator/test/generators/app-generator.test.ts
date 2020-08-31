@@ -115,7 +115,7 @@ describe("AppGenerator", () => {
       ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
       {
         stdio: "ignore",
-        timeout: 5000,
+        timeout: 10000,
       },
     )
   })
