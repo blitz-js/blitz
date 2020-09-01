@@ -3796,6 +3796,11 @@
   resolved "https://registry.yarnpkg.com/@types/diff/-/diff-4.0.2.tgz#2e9bb89f9acc3ab0108f0f3dc4dbdcf2fff8a99c"
   integrity sha512-mIenTfsIe586/yzsyfql69KRnA75S8SVXQbTLpDejRrjH0QSJcpu3AUOi/Vjnt9IOsXKxPhJfGpQUNMueIU1fQ==
 
+"@types/dotenv-flow@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/dotenv-flow/-/dotenv-flow-3.0.1.tgz#28e7884aed155cb7561691fe6684ce47c1eb1ce1"
+  integrity sha512-+HD2z/1kVDPk9s85HdK8jmYvW+B2SqpUzfpz8nZdpy+NXY/+ixcxeD2dAUn2tVaj/8t04lMwPO+Zfh0tbQkCjQ==
+
 "@types/duplexify@*":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@types/duplexify/-/duplexify-3.6.0.tgz#dfc82b64bd3a2168f5bd26444af165bf0237dcd8"
