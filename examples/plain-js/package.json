@@ -32,8 +32,8 @@
     "@prisma/cli": "2.4.1",
     "@prisma/client": "2.4.1",
     "blitz": "0.20.0",
-    "react": "0.0.0-experimental-94c0244ba",
-    "react-dom": "0.0.0-experimental-94c0244ba"
+    "react": "0.0.0-experimental-7f28234f8",
+    "react-dom": "0.0.0-experimental-7f28234f8"
   },
   "devDependencies": {
     "@types/react": "16.9.35",
