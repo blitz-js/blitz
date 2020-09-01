@@ -94,7 +94,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         stdio: "ignore",
       })
 
-      gitInitSuccessful = initResult.status !== 0
+      gitInitSuccessful = initResult.status === 0
       if (!gitInitSuccessful) {
         log.warning("Failed to run git init.")
         log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
