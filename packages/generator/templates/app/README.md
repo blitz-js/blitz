@@ -2,7 +2,7 @@
 
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
-# __name__
+# **name**
 
 ## Getting Started
 
@@ -13,6 +13,20 @@ blitz start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Environment Variables
+
+Ensure the `.env.local` file has required environment variables:
+
+```
+DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name__
+```
+
+Ensure the `.env.test.local` file has required environment variables:
+
+```
+DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name___test
+```
 
 ## Tests
 

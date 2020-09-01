@@ -104,7 +104,7 @@ export class New extends Command {
 
         try {
           // Required in order for DATABASE_URL to be available
-          require("dotenv").config()
+          require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
           await Db.run(["migrate", "--name", "Initial Migration"])
           spinner.succeed()
         } catch {
