@@ -36,6 +36,7 @@ import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {IncomingMessage, ServerResponse} from "http"
+import {log} from "@blitzjs/display"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -68,7 +69,18 @@ const defaultConfig: SessionConfig = {
       data: {...session, userId: undefined, user},
     })
   },
-  updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
+  updateSession: async (handle, session) => {
+    try {
+      return await getDb().session.update({where: {handle}, data: session})
+    } catch (error) {
+      // Session doesn't exist in DB for some reason, so create it
+      if (error.code === "P2016") {
+        log.warning("Could not update session because it's not in the DB")
+      } else {
+        throw error
+      }
+    }
+  },
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
   unstable_isAuthorized: () => {
     throw new Error("No unstable_isAuthorized implementation provided")
