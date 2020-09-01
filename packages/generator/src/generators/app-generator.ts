@@ -88,13 +88,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
-    let initResult
+    let gitInitSuccessful
     if (!this.options.skipGit) {
-      initResult = spawn.sync("git", ["init"], {
+      const initResult = spawn.sync("git", ["init"], {
         stdio: "ignore",
       })
 
-      if (initResult.status !== 0) {
+      gitInitSuccessful = initResult.status !== 0
+      if (!gitInitSuccessful) {
         log.warning("Failed to run git init.")
         log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
       }
@@ -222,10 +223,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
-    if (!this.options.skipGit) {
-      if (initResult?.status === 0) {
-        this.commitChanges()
-      }
+    if (!this.options.skipGit && gitInitSuccessful) {
+      this.commitChanges()
     }
   }
 
