@@ -235,7 +235,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
       const datamodel = await getSchema(schemaPath)
       const config = await getConfig({datamodel})
       const dataSource = config.datasources[0]
-      const providerType = dataSource.name
+      const providerType = dataSource.activeProvider
       const connectionString = dataSource.url.value
 
       if (providerType === "postgresql") {
