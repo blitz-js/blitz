@@ -9,6 +9,7 @@ import * as path from "path"
 import {promisify} from "util"
 import {projectRoot} from "../utils/get-project-root"
 import pEvent from "p-event"
+import {getConfig, getSchema} from "@prisma/sdk"
 
 const getPrismaBin = () => resolveBinAsync("@prisma/cli", "prisma")
 let prismaBin: string
@@ -92,15 +93,15 @@ export async function resetPostgres(connectionString: string, db: any): Promise<
   const dbName: string = getDbName(connectionString)
   try {
     // close all other connections
-    await db.queryRaw(
+    await db.$queryRaw(
       `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname='${dbName};'`,
     )
     // currently assuming the public schema is being used
     // delete schema and recreate with the appropriate privileges
-    await db.executeRaw("DROP SCHEMA public cascade;")
-    await db.executeRaw("CREATE SCHEMA public;")
-    await db.executeRaw("GRANT ALL ON schema public TO postgres;")
-    await db.executeRaw("GRANT ALL ON schema public TO public;")
+    await db.$executeRaw("DROP SCHEMA public cascade;")
+    await db.$executeRaw("CREATE SCHEMA public;")
+    await db.$executeRaw("GRANT ALL ON schema public TO postgres;")
+    await db.$executeRaw("GRANT ALL ON schema public TO public;")
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -116,7 +117,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
   const dbName: string = getDbName(connectionString)
   try {
     // delete database
-    await db.executeRaw(`DROP DATABASE \`${dbName}\``)
+    await db.$executeRaw(`DROP DATABASE \`${dbName}\``)
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -129,7 +130,8 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 }
 
 export async function resetSqlite(connectionString: string): Promise<void> {
-  const dbPath: string = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
+  const relativePath = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
+  const dbPath = path.join(projectRoot, "db", relativePath)
   const unlink = promisify(fs.unlink)
   try {
     // delete database from folder
@@ -229,9 +231,12 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
       const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
       const {PrismaClient} = require(prismaClientPath)
       const db = new PrismaClient()
-      const dataSource: any = db.engine.datasources[0]
-      const providerType: string = dataSource.name
-      const connectionString: string = dataSource.url
+      const schemaPath = path.join(projectRoot, "db/schema.prisma")
+      const datamodel = await getSchema(schemaPath)
+      const config = await getConfig({datamodel})
+      const dataSource = config.datasources[0]
+      const providerType = dataSource.name
+      const connectionString = dataSource.url.value
 
       if (providerType === "postgresql") {
         resetPostgres(connectionString, db)
