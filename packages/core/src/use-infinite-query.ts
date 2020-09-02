@@ -3,12 +3,10 @@ import {
   InfiniteQueryResult,
   InfiniteQueryOptions,
 } from "react-query"
-import {useSession} from "./supertokens"
 import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
-import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
+import {getQueryCacheFunctions, QueryCacheFunctions, getInfiniteQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
-import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<
   InfiniteQueryResult<PromiseReturnType<T>, any>,
@@ -35,17 +33,11 @@ export function useInfiniteQuery<T extends QueryFn>(
     ? emptyQueryFn
     : ((queryFn as unknown) as EnhancedRpcFunction)
 
+  const queryKey = getInfiniteQueryKey(queryFn, params)
+
   const {data, ...queryRest} = useInfiniteReactQuery({
-    queryKey: [
-      serialize(typeof params === "function" ? (params as Function)() : params),
-      queryRpcFn._meta.apiUrl,
-      // We add the session object here so queries will refetch if session changes
-      useSession(),
-      // we need an extra cache key for infinite loading so that the cache for
-      // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
-      "infinite",
-    ],
-    queryFn: (params, _, __, ___, resultOfGetFetchMore?) =>
+    queryKey,
+    queryFn: (_infinite, _apiUrl, params, resultOfGetFetchMore?) =>
       queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
     config: {
       suspense: true,
@@ -56,7 +48,7 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn._meta.apiUrl),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
   }
 
   return [data as PromiseReturnType<T>[], rest as RestQueryResult<T>]

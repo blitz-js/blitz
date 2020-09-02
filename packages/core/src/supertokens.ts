@@ -1,6 +1,7 @@
 import {useState} from "react"
 import BadBehavior from "bad-behavior"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
+import {queryCache} from "react-query"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -154,6 +155,7 @@ export const publicDataStore = {
   },
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
+    queryCache.clear()
     this.updateState()
   },
 }
