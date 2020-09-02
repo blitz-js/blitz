@@ -65,12 +65,12 @@ Run `npm install -g blitz`
 ⚡️ CLI with code scaffolding, Rails-style console REPL, etc<br>
 ⚡️ GraphQL Ready<br>
 ⚡️ Deploy serverless or serverful<br>
-
-**Other key features coming:**<br>
 ⚡️ Highly secure authentication <br>
 ⚡️ Authorization you can use on both server and client<br>
+⚡️ Recipes for easily adding libraries like Tailwind, CSS-in-JS, etc.<br>
+
+**Other key features coming:**<br>
 ⚡️ Model validation you can use on both server and client<br>
-⚡️ Plugins for easily adding libraries like Tailwind, CSS-in-JS, etc.<br>
 ⚡️ React native support<br>
 ⚡️ GUI so you don't have to use the CLI<br>
 
@@ -339,6 +339,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
