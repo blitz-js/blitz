@@ -8,19 +8,6 @@ import type {
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
 
-export function rpcApiHandler(
-  resolver: EnhancedResolverModule,
-  middleware: Middleware[] = [],
-  connectDb?: () => any,
-) {
-  // RPC Middleware is always the last middleware to run
-  middleware.push(rpcMiddleware(resolver, connectDb))
-
-  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
-  }
-}
-
 const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any): Middleware => {
   return async (req, res, next) => {
     const logPrefix = `${resolver._meta.name}`
@@ -83,5 +70,18 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
       res.status(404).end()
       return next()
     }
+  }
+}
+
+export function rpcApiHandler(
+  resolver: EnhancedResolverModule,
+  middleware: Middleware[] = [],
+  connectDb?: () => any,
+) {
+  // RPC Middleware is always the last middleware to run
+  middleware.push(rpcMiddleware(resolver, connectDb))
+
+  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
   }
 }

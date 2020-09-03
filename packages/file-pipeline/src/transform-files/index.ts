@@ -61,14 +61,13 @@ export async function transformFiles(
       watch,
       isTypescript,
     }
+    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     bus.on("data", ({type}) => {
       if (type === READY) {
         resolve(fileTransformPipeline.ready)
       }
     })
-
-    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     // Send source to fileTransformPipeline
     fileTransformPipeline.stream.on("error", (err) => {
