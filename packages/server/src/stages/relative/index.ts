@@ -2,6 +2,10 @@ import {Stage, transform} from "@blitzjs/file-pipeline"
 import path from "path"
 import slash from "slash"
 
+const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
+
+const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, "").indexOf("app") === 0
+
 /**
  * Returns a Stage that converts relative files paths to absolute
  */
@@ -25,10 +29,6 @@ export const createStageRelative: Stage = ({config: {cwd}}) => {
 
   return {stream}
 }
-
-const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
-
-const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, "").indexOf("app") === 0
 
 export const patternRelativeImportSingle = /(import(?:\s|\()(?:{[^}]*})?.*(?=(?:['"])(?:\.[^'"]+)(?:['"]))(?:['"]))(\.[^'"]+)(['"])/
 export const patternRelativeImportGlobal = new RegExp(patternRelativeImportSingle, "g")

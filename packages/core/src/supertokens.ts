@@ -87,12 +87,11 @@ export function readCookie(name: string) {
   return res.charAt(0) === "{" ? JSON.parse(res) : res
 }
 
-export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
-
 export const setCookie = (name: string, value: string, expires: string) => {
   const result = `${name}=${value};path=/;expires=${expires}`
   document.cookie = result
 }
+export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
 export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
