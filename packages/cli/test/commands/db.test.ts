@@ -150,6 +150,18 @@ describe("Db command", () => {
     expectProductionDbMigrateOutcome()
   })
 
+  it("runs db migrate silently with the right args when name flag is used", async () => {
+    await Db.run(["migrate", "--name", "name"])
+
+    expectDbMigrateWithNameOutcome()
+  })
+
+  it("runs db migrate. (with unknown flags)\n ", async () => {
+    await Db.run(["migrate", "--hoge", 'aaa'])
+
+    expectDbMigrateWithUnknownFlag()
+  })
+
   it("runs db introspect", async () => {
     await Db.run(["introspect"])
 
@@ -176,17 +188,5 @@ describe("Db command", () => {
     await Db.run(["invalid"])
 
     expect(spawn.mock.calls.length).toBe(0)
-  })
-
-  it("runs db migrate silently with the right args when name flag is used", async () => {
-    await Db.run(["migrate", "--name", "name"])
-
-    expectDbMigrateWithNameOutcome()
-  })
-
-  it("runs db migrate. (with unknown flags)\n ", async () => {
-    await Db.run(["migrate", "--hoge", 'aaa'])
-
-    expectDbMigrateWithUnknownFlag()
   })
 })
