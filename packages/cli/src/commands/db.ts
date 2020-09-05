@@ -68,16 +68,17 @@ const runMigrateUp = async ({silent = false} = {}) => {
   return runPrismaGeneration({silent})
 }
 
-export const runMigrate = async (name?: string) => {
+export const runMigrate = async (flags: object = {}) => {
   if (process.env.NODE_ENV === "production") {
     return runMigrateUp()
   }
+  // @ts-ignore escape:TS7053
+  const nestedFlags = Object.keys(flags).map(key => [`--${key}`, flags[key]])
+  const options = ([] as string[]).concat(...nestedFlags)
 
-  const silent = Boolean(name)
-  const args = ["migrate", "save", schemaArg, "--create-db", "--experimental"]
-  if (name) {
-    args.push("--name", name)
-  }
+  const silent = options.includes('name')
+
+  const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
 
   const success = await runPrisma(args, silent)
 
@@ -182,6 +183,8 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
     name: flags.string({hidden: true}),
   }
 
+  static strict = false
+
   async run() {
     const {args, flags} = this.parse(Db)
     const command = args["command"]
@@ -192,9 +195,9 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
 
     if (command === "migrate" || command === "m") {
       try {
-        return await runMigrate(flags.name)
+        return await runMigrate(flags)
       } catch (error) {
-        if (flags.name) {
+        if (Object.keys(flags).length > 0) {
           throw error
         } else {
           process.exit(1)

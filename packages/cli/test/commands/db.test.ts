@@ -17,6 +17,7 @@ let migrateSaveParams: any[]
 let migrateUpDevParams: any[]
 let migrateUpProdParams: any[]
 let migrateSaveWithNameParams: any[]
+let migrateSaveWithUnknownParams: any[]
 beforeAll(async () => {
   schemaArg = `--schema=${path.join(process.cwd(), "db", "schema.prisma")}`
   prismaBin = await resolveBinAsync("@prisma/cli", "prisma")
@@ -40,6 +41,11 @@ beforeAll(async () => {
     prismaBin,
     ["migrate", "save", schemaArg, "--create-db", "--experimental", "--name", "name"],
     {stdio: "ignore", env: process.env},
+  ]
+  migrateSaveWithUnknownParams = [
+    prismaBin,
+    ["migrate", "save", schemaArg, "--create-db", "--experimental"],
+    {stdio: "inherit", env: process.env},
   ]
 })
 
@@ -71,6 +77,13 @@ describe("Db command", () => {
 
   function expectDbMigrateWithNameOutcome() {
     expect(spawn).toBeCalledWith(...migrateSaveWithNameParams)
+    expect(spawn).toHaveBeenCalledTimes(3)
+
+    expect(onSpy).toHaveBeenCalledTimes(3)
+  }
+
+  function expectDbMigrateWithUnknownFlag() {
+    expect(spawn).toBeCalledWith(...migrateSaveWithUnknownParams)
     expect(spawn).toHaveBeenCalledTimes(3)
 
     expect(onSpy).toHaveBeenCalledTimes(3)
@@ -169,5 +182,11 @@ describe("Db command", () => {
     await Db.run(["migrate", "--name", "name"])
 
     expectDbMigrateWithNameOutcome()
+  })
+
+  it("runs db migrate. (with unknown flags)\n ", async () => {
+    await Db.run(["migrate", "--hoge", 'aaa'])
+
+    expectDbMigrateWithUnknownFlag()
   })
 })
