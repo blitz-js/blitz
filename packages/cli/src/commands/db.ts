@@ -73,8 +73,8 @@ export const runMigrate = async (flags: object = {}) => {
     return runMigrateUp()
   }
   // @ts-ignore escape:TS7053
-  const formatFlags = Object.keys(flags).map(key => [`--${key}`, flags[key]])
-  const options = formatFlags as unknown as string[]
+  const nestedFlags = Object.keys(flags).map(key => [`--${key}`, flags[key]])
+  const options = ([] as string[]).concat(...nestedFlags)
 
   const silent = options.includes('name')
 
