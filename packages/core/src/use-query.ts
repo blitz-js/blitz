@@ -1,9 +1,7 @@
 import {useQuery as useReactQuery, QueryResult, QueryOptions} from "react-query"
-import {useSession} from "./supertokens"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
-import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
+import {QueryCacheFunctions, getQueryCacheFunctions, getQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
-import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
@@ -60,14 +58,11 @@ export function useQuery<T extends QueryFn>(
     ? emptyQueryFn
     : ((queryFn as unknown) as EnhancedRpcFunction)
 
+  const queryKey = getQueryKey(queryFn, params)
+
   const {data, ...queryRest} = useReactQuery({
-    queryKey: [
-      serialize(typeof params === "function" ? (params as Function)() : params),
-      queryRpcFn._meta.apiUrl,
-      // We add the session object here so queries will refetch if session changes
-      useSession(),
-    ],
-    queryFn: (params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryKey,
+    queryFn: (_apiUrl, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
@@ -77,7 +72,7 @@ export function useQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn._meta.apiUrl),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
   }
 
   return [data as PromiseReturnType<T>, rest as RestQueryResult<T>]

@@ -36,6 +36,7 @@ import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
 import {btoa, atob} from "b64-lite"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {IncomingMessage, ServerResponse} from "http"
+import {log} from "@blitzjs/display"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -68,7 +69,18 @@ const defaultConfig: SessionConfig = {
       data: {...session, userId: undefined, user},
     })
   },
-  updateSession: (handle, session) => getDb().session.update({where: {handle}, data: session}),
+  updateSession: async (handle, session) => {
+    try {
+      return await getDb().session.update({where: {handle}, data: session})
+    } catch (error) {
+      // Session doesn't exist in DB for some reason, so create it
+      if (error.code === "P2016") {
+        log.warning("Could not update session because it's not in the DB")
+      } else {
+        throw error
+      }
+    }
+  },
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
   unstable_isAuthorized: () => {
     throw new Error("No unstable_isAuthorized implementation provided")
@@ -227,6 +239,218 @@ export class SessionContextClass implements SessionContext {
   setPrivateData(data: Record<any, any>) {
     return setPrivateData(this._kernel, data)
   }
+}
+
+// --------------------------------
+// Token/handle utils
+// --------------------------------
+const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
+
+export const generateToken = () => nanoid(32)
+
+export const generateEssentialSessionHandle = () => {
+  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+}
+
+export const generateAnonymousSessionHandle = () => {
+  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
+}
+
+export const createSessionToken = (handle: string, publicData: PublicData | string) => {
+  // We store the hashed public data in the opaque token so that when we verify,
+  // we can detect changes in it and return a new set of tokens if necessary.
+
+  let publicDataString
+  if (typeof publicData === "string") {
+    publicDataString = publicData
+  } else {
+    publicDataString = JSON.stringify(publicData)
+  }
+  return btoa(
+    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
+      TOKEN_SEPARATOR,
+    ),
+  )
+}
+export const parseSessionToken = (token: string) => {
+  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
+
+  if (!handle || !id || !hashedPublicData || !version) {
+    throw new AuthenticationError("Failed to parse session token")
+  }
+
+  return {
+    handle,
+    id,
+    hashedPublicData,
+    version,
+  }
+}
+
+export const createPublicDataToken = (publicData: string | PublicData, expireAt?: Date) => {
+  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
+  if (expireAt) {
+    payload.push(expireAt.toISOString())
+  }
+  return btoa(payload.join(TOKEN_SEPARATOR))
+}
+
+export const createAntiCSRFToken = () => generateToken()
+
+export type AnonymousSessionPayload = {
+  isAnonymous: true
+  handle: string
+  publicData: PublicData
+  antiCSRFToken: string
+}
+
+export const getSessionSecretKey = () => {
+  if (process.env.NODE_ENV === "production") {
+    assert(
+      process.env.SESSION_SECRET_KEY,
+      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
+    )
+    assert(
+      process.env.SESSION_SECRET_KEY.length >= 32,
+      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
+    )
+
+    return process.env.SESSION_SECRET_KEY
+  } else {
+    return process.env.SESSION_SECRET_KEY || "default-dev-secret"
+  }
+}
+
+const JWT_NAMESPACE = "blitzjs"
+const JWT_ISSUER = "blitzjs"
+const JWT_AUDIENCE = "blitzjs"
+const JWT_ANONYMOUS_SUBJECT = "anonymous"
+const JWT_ALGORITHM = "HS256"
+
+export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
+  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey(), {
+    algorithm: JWT_ALGORITHM,
+    issuer: JWT_ISSUER,
+    audience: JWT_AUDIENCE,
+    subject: JWT_ANONYMOUS_SUBJECT,
+  })
+}
+
+export const parseAnonymousSessionToken = (token: string) => {
+  // This must happen outside the try/catch because it could throw an error
+  // about a missing environment variable
+  const secret = getSessionSecretKey()
+
+  try {
+    const fullPayload = jwtVerify(token, secret, {
+      algorithms: [JWT_ALGORITHM],
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+      subject: JWT_ANONYMOUS_SUBJECT,
+    })
+
+    if (typeof fullPayload === "object") {
+      return (fullPayload as any)[JWT_NAMESPACE] as AnonymousSessionPayload
+    } else {
+      return null
+    }
+  } catch (error) {
+    return null
+  }
+}
+
+export const setCookie = (res: ServerResponse, cookie: string) => {
+  append(res, "Set-Cookie", cookie)
+}
+
+export const setHeader = (res: ServerResponse, name: string, value: string) => {
+  res.setHeader(name, value)
+  if ("_blitz" in res) {
+    ;(res as any)._blitz[name] = value
+  }
+}
+
+export const setSessionCookie = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  sessionToken: string,
+  expiresAt: Date,
+) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+      path: "/",
+      httpOnly: true,
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
+      sameSite: config.sameSite,
+      expires: expiresAt,
+    }),
+  )
+}
+
+export const setAnonymousSessionCookie = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  token: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
+      path: "/",
+      httpOnly: true,
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
+      sameSite: config.sameSite,
+      expires: expiresAt,
+    }),
+  )
+}
+
+export const setCSRFCookie = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  antiCSRFToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+      path: "/",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
+      sameSite: config.sameSite,
+      expires: expiresAt,
+    }),
+  )
+}
+
+export const setPublicDataCookie = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  publicDataToken: string,
+  expiresAt: Date = addYears(new Date(), 30),
+) => {
+  setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
+  setCookie(
+    res,
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
+      path: "/",
+      secure:
+        !process.env.DISABLE_SECURE_COOKIES &&
+        process.env.NODE_ENV === "production" &&
+        !isLocalhost(req),
+      sameSite: config.sameSite,
+      expires: expiresAt,
+    }),
+  )
 }
 
 // --------------------------------
@@ -592,218 +816,6 @@ export async function setPublicData(
 
   await refreshSession(req, res, {...sessionKernel, publicData})
   return publicData
-}
-
-// --------------------------------
-// Token/handle utils
-// --------------------------------
-const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
-
-export const generateToken = () => nanoid(32)
-
-export const generateEssentialSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
-}
-
-export const generateAnonymousSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
-}
-
-export const createSessionToken = (handle: string, publicData: PublicData | string) => {
-  // We store the hashed public data in the opaque token so that when we verify,
-  // we can detect changes in it and return a new set of tokens if necessary.
-
-  let publicDataString
-  if (typeof publicData === "string") {
-    publicDataString = publicData
-  } else {
-    publicDataString = JSON.stringify(publicData)
-  }
-  return btoa(
-    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
-      TOKEN_SEPARATOR,
-    ),
-  )
-}
-export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
-
-  if (!handle || !id || !hashedPublicData || !version) {
-    throw new AuthenticationError("Failed to parse session token")
-  }
-
-  return {
-    handle,
-    id,
-    hashedPublicData,
-    version,
-  }
-}
-
-export const createPublicDataToken = (publicData: string | PublicData, expireAt?: Date) => {
-  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  if (expireAt) {
-    payload.push(expireAt.toISOString())
-  }
-  return btoa(payload.join(TOKEN_SEPARATOR))
-}
-
-export const createAntiCSRFToken = () => generateToken()
-
-export type AnonymousSessionPayload = {
-  isAnonymous: true
-  handle: string
-  publicData: PublicData
-  antiCSRFToken: string
-}
-
-export const getSessionSecretKey = () => {
-  if (process.env.NODE_ENV === "production") {
-    assert(
-      process.env.SESSION_SECRET_KEY,
-      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
-    )
-    assert(
-      process.env.SESSION_SECRET_KEY.length >= 32,
-      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
-    )
-
-    return process.env.SESSION_SECRET_KEY
-  } else {
-    return process.env.SESSION_SECRET_KEY || "default-dev-secret"
-  }
-}
-
-const JWT_NAMESPACE = "blitzjs"
-const JWT_ISSUER = "blitzjs"
-const JWT_AUDIENCE = "blitzjs"
-const JWT_ANONYMOUS_SUBJECT = "anonymous"
-const JWT_ALGORITHM = "HS256"
-
-export const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey(), {
-    algorithm: JWT_ALGORITHM,
-    issuer: JWT_ISSUER,
-    audience: JWT_AUDIENCE,
-    subject: JWT_ANONYMOUS_SUBJECT,
-  })
-}
-
-export const parseAnonymousSessionToken = (token: string) => {
-  // This must happen outside the try/catch because it could throw an error
-  // about a missing environment variable
-  const secret = getSessionSecretKey()
-
-  try {
-    const fullPayload = jwtVerify(token, secret, {
-      algorithms: [JWT_ALGORITHM],
-      issuer: JWT_ISSUER,
-      audience: JWT_AUDIENCE,
-      subject: JWT_ANONYMOUS_SUBJECT,
-    })
-
-    if (typeof fullPayload === "object") {
-      return (fullPayload as any)[JWT_NAMESPACE] as AnonymousSessionPayload
-    } else {
-      return null
-    }
-  } catch (error) {
-    return null
-  }
-}
-
-export const setSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  sessionToken: string,
-  expiresAt: Date,
-) => {
-  setCookie(
-    res,
-    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
-      path: "/",
-      httpOnly: true,
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
-      sameSite: config.sameSite,
-      expires: expiresAt,
-    }),
-  )
-}
-
-export const setAnonymousSessionCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  token: string,
-  expiresAt: Date = addYears(new Date(), 30),
-) => {
-  setCookie(
-    res,
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
-      path: "/",
-      httpOnly: true,
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
-      sameSite: config.sameSite,
-      expires: expiresAt,
-    }),
-  )
-}
-
-export const setCSRFCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  antiCSRFToken: string,
-  expiresAt: Date = addYears(new Date(), 30),
-) => {
-  setCookie(
-    res,
-    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
-      path: "/",
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
-      sameSite: config.sameSite,
-      expires: expiresAt,
-    }),
-  )
-}
-
-export const setPublicDataCookie = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  publicDataToken: string,
-  expiresAt: Date = addYears(new Date(), 30),
-) => {
-  setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
-  setCookie(
-    res,
-    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
-      path: "/",
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
-      sameSite: config.sameSite,
-      expires: expiresAt,
-    }),
-  )
-}
-
-export const setCookie = (res: ServerResponse, cookie: string) => {
-  append(res, "Set-Cookie", cookie)
-}
-
-export const setHeader = (res: ServerResponse, name: string, value: string) => {
-  res.setHeader(name, value)
-  if ("_blitz" in res) {
-    ;(res as any)._blitz[name] = value
-  }
 }
 
 /**

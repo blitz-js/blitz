@@ -19,6 +19,26 @@ type DefaultParams = Parameters<typeof defaultRender>
 type RenderUI = DefaultParams[0]
 type RenderOptions = DefaultParams[1] & {router?: Partial<NextRouter>}
 
+const mockRouter: NextRouter = {
+  basePath: "",
+  pathname: "/",
+  route: "/",
+  asPath: "/",
+  query: {},
+  push: jest.fn(),
+  replace: jest.fn(),
+  reload: jest.fn(),
+  back: jest.fn(),
+  prefetch: jest.fn(),
+  beforePopState: jest.fn(),
+  events: {
+    on: jest.fn(),
+    off: jest.fn(),
+    emit: jest.fn(),
+  },
+  isFallback: false,
+}
+
 export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
   if (!wrapper) {
     wrapper = ({children}) => (
@@ -53,24 +73,4 @@ export function renderHook(
   }
 
   return defaultRenderHook(hook, {wrapper, ...options})
-}
-
-const mockRouter: NextRouter = {
-  basePath: "",
-  pathname: "/",
-  route: "/",
-  asPath: "/",
-  query: {},
-  push: jest.fn(),
-  replace: jest.fn(),
-  reload: jest.fn(),
-  back: jest.fn(),
-  prefetch: jest.fn(),
-  beforePopState: jest.fn(),
-  events: {
-    on: jest.fn(),
-    off: jest.fn(),
-    emit: jest.fn(),
-  },
-  isFallback: false,
 }
