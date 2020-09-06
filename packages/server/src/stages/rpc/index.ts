@@ -59,51 +59,52 @@ export const config = {
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
-export const createStageRpc: Stage = function configure({config: {src, isTypescript = true}}) {
-  const fileTransformer = absolutePathTransform(src)
+export const createStageRpc = (isTypescript = true): Stage =>
+  function configure({config: {src}}) {
+    const fileTransformer = absolutePathTransform(src)
 
-  const getResolverPath = fileTransformer(resolverPath)
-  const getApiHandlerPath = fileTransformer(apiHandlerPath)
+    const getResolverPath = fileTransformer(resolverPath)
+    const getApiHandlerPath = fileTransformer(apiHandlerPath)
 
-  const stream = transform.file((file, {next, push}) => {
-    if (!isResolverPath(file.path)) {
-      return file
-    }
+    const stream = transform.file((file, {next, push}) => {
+      if (!isResolverPath(file.path)) {
+        return file
+      }
 
-    const originalPath = resolutionPath(src, file.path)
-    const resolverImportPath = resolverPath(originalPath)
-    const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
+      const originalPath = resolutionPath(src, file.path)
+      const resolverImportPath = resolverPath(originalPath)
+      const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
-    // Original function -> _resolvers path
-    push(
-      new File({
-        path: getResolverPath(file.path),
-        contents: file.contents,
-        hash: file.hash + ":1",
-      }),
-    )
+      // Original function -> _resolvers path
+      push(
+        new File({
+          path: getResolverPath(file.path),
+          contents: file.contents,
+          hash: file.hash + ":1",
+        }),
+      )
 
-    // File API route handler
-    push(
-      new File({
-        path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
-        hash: file.hash + ":2",
-      }),
-    )
+      // File API route handler
+      push(
+        new File({
+          path: getApiHandlerPath(file.path),
+          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
+          hash: file.hash + ":2",
+        }),
+      )
 
-    // Isomorphic client
-    const isomorphicHandlerFile = file.clone()
-    isomorphicHandlerFile.contents = Buffer.from(
-      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
-    )
-    push(isomorphicHandlerFile)
+      // Isomorphic client
+      const isomorphicHandlerFile = file.clone()
+      isomorphicHandlerFile.contents = Buffer.from(
+        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
+      )
+      push(isomorphicHandlerFile)
 
-    return next()
-  })
+      return next()
+    })
 
-  return {stream}
-}
+    return {stream}
+  }
 
 function removeExt(filePath: string) {
   return filePath.replace(/[.][^./\s]+$/, "")

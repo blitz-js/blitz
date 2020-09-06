@@ -1,7 +1,6 @@
-import {StageConfig, StageArgs} from "@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types"
 import {FileCache} from "@blitzjs/file-pipeline"
-
-import {through, pipeline} from "../streams"
+import {StageArgs, StageConfig} from "@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types"
+import {pipeline, through} from "../streams"
 
 export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs {
   const config: StageConfig = {
@@ -11,7 +10,6 @@ export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs 
     include: [],
     src: "",
     watch: false,
-    isTypescript: true,
   }
   return {
     getInputCache() {

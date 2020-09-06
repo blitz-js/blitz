@@ -1,14 +1,9 @@
-import {resolve} from "path"
-import {ServerConfig, normalize} from "./config"
+import {normalize, ServerConfig} from "./config"
 import {nextStartDev} from "./next-utils"
 import {configureStages} from "./stages"
 
-export async function dev(
-  {watch = true, ...config}: ServerConfig,
-  readyForNextDev: Promise<any> = Promise.resolve(),
-) {
+export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
   const {
-    //
     rootFolder,
     transformFiles,
     nextBin,
@@ -16,27 +11,21 @@ export async function dev(
     ignore,
     include,
     isTypescript,
-    ...stagesConfig
-  } = await normalize({
-    ...config,
-    interceptNextErrors: true,
-  })
-
-  const src = resolve(rootFolder)
-  const stages = configureStages(stagesConfig)
-  const dest = resolve(rootFolder, devFolder)
-  const options = {
-    ignore,
-    include,
+    writeManifestFile,
     watch,
-    isTypescript,
-  }
+  } = await normalize(config, true)
+
+  const stages = configureStages({writeManifestFile, isTypescript})
 
   const [{manifest}] = await Promise.all([
-    transformFiles(src, stages, dest, options),
+    transformFiles(rootFolder, stages, devFolder, {
+      ignore,
+      include,
+      watch,
+    }),
     // Ensure next does not start until parallel processing completes
     readyForNextDev,
   ])
 
-  await nextStartDev(nextBin, dest, manifest, devFolder, config)
+  await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
 }
