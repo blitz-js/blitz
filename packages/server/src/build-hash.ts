@@ -5,7 +5,17 @@ import {resolve} from "path"
 export async function getInputArtefactsHash() {
   const options = {
     algo: "md5",
-    folders: {exclude: ["node_modules", ".blitz-build", ".blitz", "cypress", ".next"]},
+    folders: {
+      exclude: [
+        "node_modules",
+        ".blitz-build",
+        ".blitz",
+        "cypress",
+        ".next",
+        ".heroku",
+        ".profile.d",
+      ],
+    },
   }
   const tree = await hashElement(".", options)
   return tree.hash
