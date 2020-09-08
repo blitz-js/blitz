@@ -71,6 +71,26 @@ function ModelNames(input: string = "") {
   return pascalCase(pluralize(input))
 }
 
+function templateFromPath(p: string): TemplateMetadata<any> {
+  const {dir, name} = path.parse(p)
+  // gets the parent dir, which tells us if we need a special generator type
+  const {name: rawType} = path.parse(dir)
+  return {fullPath: p, name, generators: generatorMap[rawType as ResourceType]}
+}
+
+function getCustomTemplates() {
+  const allResourceTypesRegex = Object.keys(ResourceType)
+    .map((k) => (ResourceType as Record<string, string>)[k])
+    .join("|")
+  const specialTemplates = globby.sync([`templates/(${allResourceTypesRegex})/*`], {
+    onlyDirectories: true,
+  })
+  const genericTemplates = globby.sync([`templates/!(${allResourceTypesRegex})`], {
+    onlyDirectories: true,
+  })
+  return [...specialTemplates, ...genericTemplates].map(templateFromPath)
+}
+
 interface TemplateMetadata<T extends ResourceType, K extends any = typeof generatorMap[T]> {
   fullPath: string
   name: string
@@ -92,13 +112,6 @@ class GenericGenerator extends Generator<GenericGeneratorOptions> {
     const context = this.options.context ? `${this.options.context}/` : ""
     return `app/${context}`
   }
-}
-
-function templateFromPath(p: string): TemplateMetadata<any> {
-  const {dir, name} = path.parse(p)
-  // gets the parent dir, which tells us if we need a special generator type
-  const {name: rawType} = path.parse(dir)
-  return {fullPath: p, name, generators: generatorMap[rawType as ResourceType]}
 }
 
 const generatorMap = {
@@ -129,7 +142,11 @@ export class Generate extends Command {
     {
       name: "type",
       required: true,
-      description: "What files to generate",
+      description: "What type of files to generate",
+      options: [
+        ...Object.keys(generatorMap).map((s) => s.toLowerCase()),
+        ...getCustomTemplates().map((t) => t.name.toLowerCase()),
+      ].sort(),
     },
     {
       name: "model",
@@ -250,19 +267,6 @@ export class Generate extends Command {
     }
   }
 
-  async getCustomTemplates() {
-    const allResourceTypesRegex = Object.keys(ResourceType)
-      .map((k) => (ResourceType as Record<string, string>)[k])
-      .join("|")
-    const specialTemplates = await globby([`templates/(${allResourceTypesRegex})/*`], {
-      onlyDirectories: true,
-    })
-    const genericTemplates = await globby([`templates/!(${allResourceTypesRegex})`], {
-      onlyDirectories: true,
-    })
-    return [...specialTemplates, ...genericTemplates].map(templateFromPath)
-  }
-
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug("args: ", args)
@@ -271,7 +275,7 @@ export class Generate extends Command {
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
-      const customTemplates = await this.getCustomTemplates()
+      const customTemplates = getCustomTemplates()
       const customTemplateMeta = customTemplates.find((meta) => meta.name === args.type)
 
       const generators = customTemplateMeta
