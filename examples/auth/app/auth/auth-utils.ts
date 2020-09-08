@@ -1,6 +1,6 @@
 import {AuthenticationError} from "blitz"
 import SecurePassword from "secure-password"
-import db, {User} from "db"
+import db from "db"
 
 const SP = new SecurePassword()
 
@@ -9,7 +9,12 @@ export const hashPassword = async (password: string) => {
   return hashedBuffer.toString("base64")
 }
 export const verifyPassword = async (hashedPassword: string, password: string) => {
-  return await SP.verify(Buffer.from(password), Buffer.from(hashedPassword, "base64"))
+  try {
+    return await SP.verify(Buffer.from(password), Buffer.from(hashedPassword, "base64"))
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
 
 export const authenticateUser = async (email: string, password: string) => {
@@ -29,6 +34,6 @@ export const authenticateUser = async (email: string, password: string) => {
       throw new AuthenticationError()
   }
 
-  delete user.hashedPassword
-  return user as Omit<User, "hashedPassword">
+  const {hashedPassword, ...rest} = user
+  return rest
 }
