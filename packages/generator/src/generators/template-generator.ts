@@ -31,7 +31,7 @@ export class TemplateGenerator extends Generator<TemplateGeneratorOptions> {
       }
     }
 
-    const [, providedType] = this.options.extraArgs![0]?.split(":") ?? ""
+    const [, providedType] = (this.options.extraArgs ?? [])[0]?.split(":") ?? ""
     const destination = this.destinationPath("templates", providedType, this.options.modelName)
 
     this.fs.copy(
