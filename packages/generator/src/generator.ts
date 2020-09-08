@@ -242,7 +242,7 @@ export abstract class Generator<
         const templateValues = await this.getTemplateValues()
         const argsFromCli =
           this.options.extraArgs?.reduce((acc: Record<string, string>, arg) => {
-            const [k, v] = arg.split("=")
+            const [k, v] = arg.split(":")
             acc[k] = JSON.parse(v)
             return acc
           }, {}) ?? {}

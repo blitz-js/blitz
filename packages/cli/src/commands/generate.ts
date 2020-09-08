@@ -10,6 +10,7 @@ import {
   FormGenerator,
   ModelGenerator,
   QueryGenerator,
+  TemplateGenerator,
   Generator,
   GeneratorOptions,
 } from "@blitzjs/generator"
@@ -35,6 +36,7 @@ enum ResourceType {
   Queries = "queries",
   Query = "query",
   Resource = "resource",
+  Template = "template",
 }
 
 interface Flags {
@@ -69,21 +71,26 @@ function ModelNames(input: string = "") {
   return pascalCase(pluralize(input))
 }
 
-interface TemplateMetadata<T extends Generator<any>> {
+interface TemplateMetadata<T extends ResourceType, K extends any = typeof generatorMap[T]> {
   fullPath: string
   name: string
-  generator: T
+  generators: K
 }
 
-class GenericGenerator extends Generator<GeneratorOptions> {
-  sourceRoot = __dirname
+interface GenericGeneratorOptions extends GeneratorOptions {
+  modelNames: string
+}
 
+class GenericGenerator extends Generator<GenericGeneratorOptions> {
+  sourceRoot = ""
+  prettierDisabled = true
   async getTemplateValues() {
     return this.options
   }
 
   getTargetDirectory() {
-    return `app/${this.options.context || ""}`
+    const context = this.options.context ? `${this.options.context}/` : ""
+    return `app/${context}`
   }
 }
 
@@ -91,19 +98,7 @@ function templateFromPath(p: string): TemplateMetadata<any> {
   const {dir, name} = path.parse(p)
   // gets the parent dir, which tells us if we need a special generator type
   const {name: rawType} = path.parse(dir)
-  const generator = (() => {
-    switch (rawType) {
-      case ResourceType.Page:
-        return PageGenerator
-      case ResourceType.Query:
-        return QueryGenerator
-      case ResourceType.Mutation:
-        return MutationGenerator
-      default:
-        return GenericGenerator
-    }
-  })()
-  return {fullPath: p, name, generator}
+  return {fullPath: p, name, generators: generatorMap[rawType as ResourceType]}
 }
 
 const generatorMap = {
@@ -123,6 +118,7 @@ const generatorMap = {
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
   [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationGenerator],
+  [ResourceType.Template]: [TemplateGenerator],
 }
 
 export class Generate extends Command {
@@ -255,10 +251,13 @@ export class Generate extends Command {
   }
 
   async getCustomTemplates() {
-    const specialTemplates = await globby(["templates/(pages|queries|mutations)/*"], {
+    const allResourceTypesRegex = Object.keys(ResourceType)
+      .map((k) => (ResourceType as Record<string, string>)[k])
+      .join("|")
+    const specialTemplates = await globby([`templates/(${allResourceTypesRegex})/*`], {
       onlyDirectories: true,
     })
-    const genericTemplates = await globby(["templates/!(pages|queries|mutations)"], {
+    const genericTemplates = await globby([`templates/!(${allResourceTypesRegex})`], {
       onlyDirectories: true,
     })
     return [...specialTemplates, ...genericTemplates].map(templateFromPath)
@@ -276,7 +275,7 @@ export class Generate extends Command {
       const customTemplateMeta = customTemplates.find((meta) => meta.name === args.type)
 
       const generators = customTemplateMeta
-        ? [customTemplateMeta.generator]
+        ? customTemplateMeta.generators || [GenericGenerator]
         : generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
