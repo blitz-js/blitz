@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.21.1",
+  "version": "0.21.2-canary.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
