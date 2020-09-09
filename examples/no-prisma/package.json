@@ -28,7 +28,7 @@
   "dependencies": {
     "blitz": "0.21.2-canary.0",
     "knex": "0.21.2",
-    "react": "0.0.0-experimental-7f28234f8",
+    "react": "16.13.1",
     "react-dom": "0.0.0-experimental-7f28234f8",
     "sqlite3": "5.0.0"
   },
