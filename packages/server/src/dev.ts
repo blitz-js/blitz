@@ -13,7 +13,7 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     isTypescript,
     writeManifestFile,
     watch,
-  } = await normalize(config, true)
+  } = await normalize({...config, env: "dev"})
 
   const stages = configureStages({writeManifestFile, isTypescript})
 

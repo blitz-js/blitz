@@ -1,9 +1,11 @@
 import {transformFiles} from "@blitzjs/file-pipeline"
+import {promises} from "fs"
 import {join, resolve} from "path"
 import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
 import {resolveBinAsync} from "./resolve-bin-async"
 
 type Synchronizer = typeof transformFiles
+type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
   rootFolder: string
@@ -18,6 +20,8 @@ export type ServerConfig = {
   // -
   port?: number
   hostname?: string
+  // –
+  env?: ServerEnvironment
 }
 
 type NormalizedConfig = ServerConfig & {
@@ -34,9 +38,12 @@ type NormalizedConfig = ServerConfig & {
   include: string[]
   // -
   nextBin: string
+  env: ServerEnvironment
 }
 
 const defaults = {
+  env: "prod" as ServerEnvironment,
+  // -
   buildFolder: ".blitz/caches/build",
   devFolder: ".blitz/caches/dev",
   // -
@@ -61,22 +68,22 @@ const defaults = {
   includePaths: ["**/*"],
 }
 
-export async function normalize(
-  config: ServerConfig,
-  dev: boolean = false,
-): Promise<NormalizedConfig> {
+export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
   const rootFolder = resolve(process.cwd(), config.rootFolder)
   const git = parseChokidarRulesFromGitignore(rootFolder)
 
+  const env = config.env || defaults.env
+
   return {
     ...config,
+    env,
     // -
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
     devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
     // -
     isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
-    watch: config.watch ?? dev,
+    watch: config.watch ?? env === "dev",
     // -
     transformFiles: config.transformFiles ?? transformFiles,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
@@ -84,19 +91,23 @@ export async function normalize(
     ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
     include: defaults.includePaths.concat(git.includePaths),
     // -
-    nextBin: await getNextBin(rootFolder, dev),
+    nextBin: await getNextBin(rootFolder, env === "dev"),
   }
 }
 
-async function getNextBin(rootFolder: string, dev: boolean = false) {
+async function getNextBin(rootFolder: string, usePatched: boolean = false): Promise<string> {
   // do not await for both bin-pkg because just one is used at a time
-  const nextBinPkg = dev ? "@blitzjs/server" : "next"
-  const nextBinExec = dev ? "next-patched" : undefined
+  const nextBinPkg = usePatched ? "@blitzjs/server" : "next"
+  const nextBinExec = usePatched ? "next-patched" : undefined
   const nextBin = await resolveBinAsync(nextBinPkg, nextBinExec)
   return resolve(rootFolder, nextBin)
 }
 
-async function getIsTypescript(rootFolder: string) {
-  const fs = await import("fs")
-  return fs.existsSync(join(rootFolder, "tsconfig.json"))
+async function getIsTypescript(rootFolder: string): Promise<boolean> {
+  try {
+    await promises.access(join(rootFolder, "tsconfig.json"))
+    return true
+  } catch {
+    return false
+  }
 }

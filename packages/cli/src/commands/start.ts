@@ -18,9 +18,6 @@ export class Start extends Command {
       char: "H",
       description: "Set server hostname",
     }),
-    ts: flags.boolean({
-      description: "Use typescript explicitly (just for performance optimization)",
-    }),
   }
 
   async run() {
@@ -30,7 +27,6 @@ export class Start extends Command {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
-      isTypescript: flags.ts,
     }
 
     try {
