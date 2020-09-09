@@ -1,6 +1,6 @@
 {
   "name": "tailwind",
-  "version": "0.21.1",
+  "version": "0.21.2-canary.0",
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@prisma/cli": "2.4.1",
     "@prisma/client": "2.4.1",
-    "blitz": "0.21.1",
+    "blitz": "0.21.2-canary.0",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8",
     "typescript": "3.8.3"

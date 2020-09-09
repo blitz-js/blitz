@@ -7,7 +7,7 @@
     "config"
   ],
   "author": "Fran Zekan <zekan.fran369@gmail.com>",
-  "version": "0.21.1",
+  "version": "0.21.2-canary.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-tailwind",
   "private": true,
-  "version": "0.21.1",
+  "version": "0.21.2-canary.0",
   "description": "The Blitz Recipe for installing Tailwind CSS",
   "main": "index.ts",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "@blitzjs/installer": "0.21.1",
+    "@blitzjs/installer": "0.21.2-canary.0",
     "jscodeshift": "0.10.0"
   },
   "devDependencies": {

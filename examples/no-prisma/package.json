@@ -1,6 +1,6 @@
 {
   "name": "no-prisma",
-  "version": "0.21.1",
+  "version": "0.21.2-canary.0",
   "scripts": {
     "start": "blitz start",
     "build": "blitz build",
@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.21.1",
+    "blitz": "0.21.2-canary.0",
     "knex": "0.21.2",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8",
