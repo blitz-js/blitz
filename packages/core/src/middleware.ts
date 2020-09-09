@@ -4,7 +4,9 @@ import {EnhancedResolverModule} from "./rpc"
 import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 
-export interface MiddlewareRequest extends BlitzApiRequest {}
+export interface MiddlewareRequest extends BlitzApiRequest {
+  protocol?: string
+}
 export interface MiddlewareResponse extends BlitzApiResponse {
   /**
    * This will be passed as the second argument to Blitz queries/mutations.
