@@ -7,13 +7,14 @@ import {
 } from "./middleware"
 import {SessionContext, PublicData} from "./supertokens"
 import {log} from "@blitzjs/display"
-import passport, {Strategy} from "passport"
+import passport, {AuthenticateOptions, Strategy} from "passport"
 import cookieSession from "cookie-session"
 import {isLocalhost} from "./utils/index"
 
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
   errorRedirectUrl?: string
+  authenticateOptions?: AuthenticateOptions
   strategies: Required<Strategy>[]
 }
 
@@ -71,7 +72,9 @@ export function passportAuth(config: BlitzPassportConfig) {
           return next()
         })
       }
-      middleware.push(connectMiddleware(passport.authenticate(strategy.name)))
+      middleware.push(
+        connectMiddleware(passport.authenticate(strategy.name, {...config.authenticateOptions})),
+      )
     } else if (req.query.auth[1] === "callback") {
       log.info(`Processing callback for ${strategy.name}...`)
       middleware.push(
