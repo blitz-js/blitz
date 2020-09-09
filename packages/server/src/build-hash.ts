@@ -14,6 +14,8 @@ export async function getInputArtefactsHash() {
         ".next",
         ".heroku",
         ".profile.d",
+        ".cache",
+        ".config",
       ],
     },
   }
