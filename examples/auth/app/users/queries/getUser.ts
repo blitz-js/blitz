@@ -10,11 +10,11 @@ type GetUserInput = {
 
 export default async function getUser(
   {where, select}: GetUserInput,
-  ctx: {session?: SessionContext} = {},
+  ctx: {session: SessionContext},
 ) {
-  ctx.session!.authorize(["admin", "user"])
+  ctx.session.authorize(["admin", "user"])
 
-  const user = await db.user.findOne({where: {id: ctx.session!.userId}})
+  const user = await db.user.findOne({where: {id: ctx.session.userId}})
   // const user = await db.user.findOne({where, select})
 
   if (!user) throw new NotFoundError(`User with id ${where.id} does not exist`)

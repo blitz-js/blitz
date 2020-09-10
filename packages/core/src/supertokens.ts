@@ -60,24 +60,33 @@ export type SessionConfig = {
   unstable_isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
-export interface SessionContext {
+export interface SessionContextBase {
   /**
    * null if anonymous
    */
-  userId: AuthTypes["userId"] | null
+  userId: unknown
   roles: string[]
   handle: string | null
   publicData: PublicData
-  authorize: (input?: any) => void
-  isAuthorized: (input?: any) => boolean
+  authorize(input?: any): asserts this is AuthenticatedSessionContext
+  isAuthorized(input?: any): boolean
   // authorize: (roleOrRoles?: string | string[]) => void
   // isAuthorized: (roleOrRoles?: string | string[]) => boolean
-  create: (publicData: DeepNonNullable<PublicData>, privateData?: Record<any, any>) => Promise<void>
-  revoke: () => Promise<void>
-  revokeAll: () => Promise<void>
-  getPrivateData: () => Promise<Record<any, any>>
-  setPrivateData: (data: Record<any, any>) => Promise<void>
-  setPublicData: (data: Record<any, any>) => Promise<void>
+  create(publicData: DeepNonNullable<PublicData>, privateData?: Record<any, any>): Promise<void>
+  revoke(): Promise<void>
+  revokeAll(): Promise<void>
+  getPrivateData(): Promise<Record<any, any>>
+  setPrivateData(data: Record<any, any>): Promise<void>
+  setPublicData(data: Record<any, any>): Promise<void>
+}
+
+export interface AuthenticatedSessionContext extends SessionContextBase {
+  userId: AuthTypes["userId"]
+}
+
+// Anonymous session context
+export interface SessionContext extends SessionContextBase {
+  userId: AuthTypes["userId"] | null
 }
 
 // Taken from https://github.com/HenrikJoreteg/cookie-getter
