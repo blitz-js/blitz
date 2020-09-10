@@ -2,7 +2,7 @@ import {useState} from "react"
 import BadBehavior from "bad-behavior"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {queryCache} from "react-query"
-import {Assign} from "utility-types"
+import {DeepNonNullable} from "utility-types"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -28,20 +28,19 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
-export interface MyUserIdType {}
-export interface DefaultUserIdType {
-  id: any
+export interface DefaultAuthTypes {
+  userId: any
 }
-export interface UserIdType extends Assign<DefaultUserIdType, MyUserIdType> {}
+export interface AuthTypes extends DefaultAuthTypes {}
 
 export interface PublicData extends Record<any, any> {
-  userId: any
+  userId: AuthTypes["userId"] | null
   roles: string[]
 }
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: any
+  userId?: AuthTypes["userId"]
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -54,7 +53,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: any) => Promise<SessionModel[]>
+  getSessions: (userId: AuthTypes["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -65,7 +64,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: UserIdType["id"]
+  userId: AuthTypes["userId"]
   roles: string[]
   handle: string | null
   publicData: PublicData
@@ -73,7 +72,7 @@ export interface SessionContext {
   isAuthorized: (input?: any) => boolean
   // authorize: (roleOrRoles?: string | string[]) => void
   // isAuthorized: (roleOrRoles?: string | string[]) => boolean
-  create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
+  create: (publicData: DeepNonNullable<PublicData>, privateData?: Record<any, any>) => Promise<void>
   revoke: () => Promise<void>
   revokeAll: () => Promise<void>
   getPrivateData: () => Promise<Record<any, any>>

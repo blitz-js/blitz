@@ -1,10 +1,8 @@
-import {DefaultUserIdType} from "blitz"
-
-// type UserIdType = number
+import {DefaultAuthTypes} from "blitz"
+import {User} from "db"
 
 declare module "blitz" {
-  export interface MyUserIdType extends DefaultUserIdType {
-    id: number
+  export interface AuthTypes extends DefaultAuthTypes {
+    userId: User["id"]
   }
-  // export type MyUserIdType = number
 }
