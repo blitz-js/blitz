@@ -2,6 +2,7 @@ import {useState} from "react"
 import BadBehavior from "bad-behavior"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {queryCache} from "react-query"
+import {Assign} from "utility-types"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -26,6 +27,12 @@ export const LOCALSTORAGE_PREFIX = "_blitz-"
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
+
+export interface MyUserIdType {}
+export interface DefaultUserIdType {
+  id: any
+}
+export interface UserIdType extends Assign<DefaultUserIdType, MyUserIdType> {}
 
 export interface PublicData extends Record<any, any> {
   userId: any
@@ -58,7 +65,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: any
+  userId: UserIdType["id"]
   roles: string[]
   handle: string | null
   publicData: PublicData
