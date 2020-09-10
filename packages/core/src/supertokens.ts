@@ -64,7 +64,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: AuthTypes["userId"]
+  userId: AuthTypes["userId"] | null
   roles: string[]
   handle: string | null
   publicData: PublicData
