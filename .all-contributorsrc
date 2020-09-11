@@ -1008,6 +1008,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "engelkes-finstreet",
+      "name": "engelkes-finstreet",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36962022?v=4",
+      "profile": "https://github.com/engelkes-finstreet",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
