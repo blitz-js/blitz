@@ -1018,6 +1018,17 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "PixelsCommander",
+      "name": "Denis Radin",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/810671?v=4",
+      "profile": "http://twitter.com/pixelscommander",
+      "contributions": [
+        "review",
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
