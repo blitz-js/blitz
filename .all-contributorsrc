@@ -999,6 +999,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sirmyron",
+      "name": "sirmyron",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1430136?v=4",
+      "profile": "https://github.com/sirmyron",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
