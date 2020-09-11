@@ -1,6 +1,6 @@
-import {AuthenticationError} from "blitz"
+import { AuthenticationError } from "blitz"
 import SecurePassword from "secure-password"
-import db, {User} from "db"
+import db from "db"
 
 const SP = new SecurePassword()
 
@@ -9,11 +9,16 @@ export const hashPassword = async (password: string) => {
   return hashedBuffer.toString("base64")
 }
 export const verifyPassword = async (hashedPassword: string, password: string) => {
-  return await SP.verify(Buffer.from(password), Buffer.from(hashedPassword, "base64"))
+  try {
+    return await SP.verify(Buffer.from(password), Buffer.from(hashedPassword, "base64"))
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
 
 export const authenticateUser = async (email: string, password: string) => {
-  const user = await db.user.findOne({where: {email}})
+  const user = await db.user.findOne({ where: { email } })
 
   if (!user || !user.hashedPassword) throw new AuthenticationError()
 
@@ -23,12 +28,12 @@ export const authenticateUser = async (email: string, password: string) => {
     case SecurePassword.VALID_NEEDS_REHASH:
       // Upgrade hashed password with a more secure hash
       const improvedHash = await hashPassword(password)
-      await db.user.update({where: {id: user.id}, data: {hashedPassword: improvedHash}})
+      await db.user.update({ where: { id: user.id }, data: { hashedPassword: improvedHash } })
       break
     default:
       throw new AuthenticationError()
   }
 
-  delete user.hashedPassword
-  return user as Omit<User, "hashedPassword">
+  const { hashedPassword, ...rest } = user
+  return rest
 }

@@ -19,17 +19,6 @@ export const emptyQueryFn: EnhancedRpcFunction = (() => {
 
 const isServer = typeof window === "undefined"
 
-// NOTE - this is only for use inside useQuery
-export const useIsDevPrerender = () => {
-  if (process.env.NODE_ENV === "production") {
-    return false
-  } else {
-    // useQuery is only for client-side data fetching, so if it's running on the
-    // server, it's for pre-render
-    return isServer
-  }
-}
-
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
 
@@ -54,9 +43,7 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = useIsDevPrerender()
-    ? emptyQueryFn
-    : ((queryFn as unknown) as EnhancedRpcFunction)
+  const queryRpcFn = isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
 
   const queryKey = getQueryKey(queryFn, params)
 

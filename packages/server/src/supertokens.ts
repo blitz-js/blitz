@@ -197,6 +197,8 @@ export class SessionContextClass implements SessionContext {
   }
 
   authorize(input?: any) {
+    if (!this.userId) throw new AuthenticationError()
+
     if (!this.isAuthorized(input)) {
       throw new AuthorizationError()
     }
