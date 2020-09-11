@@ -1,4 +1,4 @@
-import {BlitzApiRequest, BlitzApiResponse} from "."
+import {BlitzApiRequest, BlitzApiResponse, ConnectMiddleware} from "."
 import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
@@ -10,12 +10,14 @@ import {log} from "@blitzjs/display"
 import passport, {AuthenticateOptions, Strategy} from "passport"
 import cookieSession from "cookie-session"
 import {isLocalhost} from "./utils/index"
+import {secureProxyMiddleware} from "./secure-proxy-middleware"
 
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
   errorRedirectUrl?: string
   authenticateOptions?: AuthenticateOptions
   strategies: Required<Strategy>[]
+  secureProxy?: boolean
 }
 
 export type VerifyCallbackResult = {
@@ -35,18 +37,22 @@ const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function passportAuth(config: BlitzPassportConfig) {
   return async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
+    const cookieSessionMiddleware = cookieSession({
+      secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
+      secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
+    })
+
+    const passportMiddleware = passport.initialize()
+
     const middleware: Middleware[] = [
-      // TODO - fix TS type - shouldn't need `any` here
-      connectMiddleware(
-        cookieSession({
-          secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
-          secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
-        }) as any,
-      ),
-      // TODO - fix TS type - shouldn't need `any` here
-      connectMiddleware(passport.initialize() as any),
+      connectMiddleware(cookieSessionMiddleware as ConnectMiddleware),
+      connectMiddleware(passportMiddleware as ConnectMiddleware),
       connectMiddleware(passport.session()),
     ]
+
+    if (config.secureProxy) {
+      middleware.push(secureProxyMiddleware)
+    }
 
     if (!req.query.auth.length) {
       return res.status(404).end()
