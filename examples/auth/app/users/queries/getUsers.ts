@@ -15,7 +15,7 @@ export default async function getUsers(
   {where, orderBy, cursor, take, skip}: GetUsersInput,
   ctx: {session?: SessionContext} = {},
 ) {
-  ctx.session?.authorize(["admin"])
+  ctx.session!.authorize(["admin"])
 
   const users = await db.user.findMany({
     where,
