@@ -1,6 +1,6 @@
 {
   "name": "@examples/plain-js",
-  "version": "0.22.0",
+  "version": "0.22.1",
   "scripts": {
     "start": "blitz start",
     "build": "blitz db migrate && blitz build",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@prisma/cli": "2.4.1",
     "@prisma/client": "2.4.1",
-    "blitz": "0.22.0",
+    "blitz": "0.22.1",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8"
   },
