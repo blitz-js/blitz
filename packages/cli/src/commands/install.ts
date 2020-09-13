@@ -8,7 +8,7 @@ import {promisify} from "util"
 const pipeline = promisify(Stream.pipeline)
 
 async function got(url: string) {
-  return require("got")(url).catch((e) => Boolean(console.error(e)) || e)
+  return require("got")(url).catch((e: any) => Boolean(console.error(e)) || e)
 }
 
 async function gotJSON(url: string) {
