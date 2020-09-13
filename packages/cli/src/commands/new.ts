@@ -97,6 +97,7 @@ export class New extends Command {
         useTs: !flags.js,
         yarn: !npm,
         form: promptResult.form,
+        databaseEngine: databaseEnginePromptResult.databaseEngine,
         version: this.config.version,
         skipInstall,
         skipGit: flags["no-git"],
