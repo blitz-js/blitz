@@ -1,22 +1,14 @@
 import {Command} from "../command"
-import * as path from "path"
-import {RecipeExecutor} from "@blitzjs/installer"
-import _got from "got"
+import type {RecipeExecutor} from "@blitzjs/installer"
 import {log} from "@blitzjs/display"
 import {dedent} from "../utils/dedent"
 import {Stream} from "stream"
 import {promisify} from "util"
-import tar from "tar"
-import {mkdirSync, readFileSync, existsSync} from "fs-extra"
-import rimraf from "rimraf"
-import spawn from "cross-spawn"
-import * as os from "os"
-import {setupTsnode} from "../utils/setup-ts-node"
 
 const pipeline = promisify(Stream.pipeline)
 
 async function got(url: string) {
-  return _got(url).catch((e) => Boolean(console.error(e)) || e)
+  return require("got")(url).catch((e) => Boolean(console.error(e)) || e)
 }
 
 async function gotJSON(url: string) {
@@ -28,7 +20,7 @@ async function isUrlValid(url: string) {
 }
 
 function requireJSON(file: string) {
-  return JSON.parse(readFileSync(file).toString("utf-8"))
+  return JSON.parse(require("fs-extra").readFileSync(file).toString("utf-8"))
 }
 
 const GH_ROOT = "https://github.com/"
@@ -115,10 +107,13 @@ export class Install extends Command {
     defaultBranch: string,
     subdirectory?: string,
   ): Promise<string> {
-    const recipeDir = path.join(os.tmpdir(), `blitz-recipe-${repoFullName.replace("/", "-")}`)
+    const recipeDir = require("path").join(
+      require("os").tmpdir(),
+      `blitz-recipe-${repoFullName.replace("/", "-")}`,
+    )
     // clean up from previous run in case of error
-    rimraf.sync(recipeDir)
-    mkdirSync(recipeDir)
+    require("rimraf").sync(recipeDir)
+    require("fs-extra").mkdirSync(recipeDir)
     process.chdir(recipeDir)
 
     const repoName = repoFullName.split("/")[1]
@@ -127,8 +122,8 @@ export class Install extends Command {
     const extractPath = subdirectory ? [`${repoName}-${defaultBranch}/${subdirectory}`] : undefined
     const depth = subdirectory ? subdirectory.split("/").length + 1 : 1
     await pipeline(
-      _got.stream(`${CODE_ROOT}${repoFullName}/tar.gz/${defaultBranch}`),
-      tar.extract({strip: depth}, extractPath),
+      require("got").stream(`${CODE_ROOT}${repoFullName}/tar.gz/${defaultBranch}`),
+      require("tar").extract({strip: depth}, extractPath),
     )
 
     return recipeDir
@@ -149,9 +144,11 @@ export class Install extends Command {
   }
 
   async run() {
-    setupTsnode()
+    require("../utils/setup-ts-node").setupTsnode()
     const {args} = this.parse(Install)
-    const pkgManager = existsSync(path.resolve("yarn.lock")) ? "yarn" : "npm"
+    const pkgManager = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
+      ? "yarn"
+      : "npm"
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
 
@@ -178,21 +175,21 @@ export class Install extends Command {
 
         spinner = log.spinner("Installing package.json dependencies").start()
         await new Promise((resolve) => {
-          const installProcess = spawn(pkgManager, ["install"])
+          const installProcess = require("cross-spawn")(pkgManager, ["install"])
           installProcess.on("exit", resolve)
         })
         spinner.stop()
 
         const recipePackageMain = requireJSON("./package.json").main
-        const recipeEntry = path.resolve(recipePackageMain)
+        const recipeEntry = require("path").resolve(recipePackageMain)
         process.chdir(originalCwd)
 
         await this.installRecipeAtPath(recipeEntry)
 
-        rimraf.sync(recipeRepoPath)
+        require("rimraf").sync(recipeRepoPath)
       }
     } else {
-      await this.installRecipeAtPath(path.resolve(args.recipe))
+      await this.installRecipeAtPath(require("path").resolve(args.recipe))
     }
   }
 }

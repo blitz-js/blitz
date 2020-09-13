@@ -1,17 +1,7 @@
-import {resolveBinAsync} from "@blitzjs/server"
-import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
-import chalk from "chalk"
-import {spawn} from "cross-spawn"
-import {prompt} from "enquirer"
-import * as fs from "fs"
-import * as path from "path"
-import {promisify} from "util"
-import {projectRoot} from "../utils/get-project-root"
-import pEvent from "p-event"
-import {getConfig, getSchema} from "@prisma/sdk"
+import {log} from "@blitzjs/display"
 
-const getPrismaBin = () => resolveBinAsync("@prisma/cli", "prisma")
+const getPrismaBin = () => require("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
 let prismaBin: string
 let schemaArg: string
 
@@ -26,11 +16,11 @@ const runPrisma = async (args: string[], silent = false) => {
     }
   }
 
-  const cp = spawn(prismaBin, args, {
+  const cp = require("cross-spawn").spawn(prismaBin, args, {
     stdio: silent ? "ignore" : "inherit",
     env: process.env,
   })
-  const code = await pEvent(cp, "exit", {rejectionEvents: []})
+  const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
 
   return code === 0
 }
@@ -74,10 +64,10 @@ export const runMigrate = async (flags: object = {}) => {
     return runMigrateUp()
   }
   // @ts-ignore escape:TS7053
-  const nestedFlags = Object.keys(flags).map(key => [`--${key}`, flags[key]])
+  const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
   const options = ([] as string[]).concat(...nestedFlags)
 
-  const silent = options.includes('name')
+  const silent = options.includes("name")
 
   const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
 
@@ -132,8 +122,12 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 
 export async function resetSqlite(connectionString: string): Promise<void> {
   const relativePath = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
-  const dbPath = path.join(projectRoot, "db", relativePath)
-  const unlink = promisify(fs.unlink)
+  const dbPath = require("path").join(
+    require("../utils/get-project-root").projectRoot,
+    "db",
+    relativePath,
+  )
+  const unlink = require("util").promisify(require("fs").unlink)
   try {
     // delete database from folder
     await unlink(dbPath)
@@ -157,17 +151,19 @@ export function getDbName(connectionString: string): string {
 export class Db extends Command {
   static description = `Run database commands
 
-${chalk.bold("migrate")}   Run any needed migrations via Prisma 2 and generate Prisma Client.
+${require("chalk").bold(
+  "migrate",
+)}   Run any needed migrations via Prisma 2 and generate Prisma Client.
 
-${chalk.bold(
+${require("chalk").bold(
   "introspect",
 )}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it'll generate Prisma Client.
 
-${chalk.bold(
+${require("chalk").bold(
   "studio",
 )}   Open the Prisma Studio UI at http://localhost:5555 so you can easily see and change data in your database.
 
-${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma 2.
+${require("chalk").bold("reset")}   Reset the database and run a fresh migration via Prisma 2.
 `
 
   static args = [
@@ -192,7 +188,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
     const command = args["command"]
 
     // Needs to happen at run-time since the `new` command needs to change the cwd before running
-    const schemaPath = path.join(process.cwd(), "db", "schema.prisma")
+    const schemaPath = require("path").join(process.cwd(), "db", "schema.prisma")
     schemaArg = `--schema=${schemaPath}`
 
     if (command === "migrate" || command === "m") {
@@ -221,7 +217,7 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
       await runPrismaGeneration({silent: true, failSilently: true})
       spinner.succeed()
 
-      const {confirm} = await prompt<{confirm: string}>({
+      const {confirm} = await require("enquirer").prompt({
         type: "confirm",
         name: "confirm",
         message: "Are you sure you want to reset your database and erase ALL data?",
@@ -231,12 +227,13 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
         return
       }
 
+      const {projectRoot} = require("../utils/get-project-root")
       const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
       const {PrismaClient} = require(prismaClientPath)
       const db = new PrismaClient()
-      const schemaPath = path.join(projectRoot, "db/schema.prisma")
-      const datamodel = await getSchema(schemaPath)
-      const config = await getConfig({datamodel})
+      const schemaPath = require("path").join(projectRoot, "db/schema.prisma")
+      const datamodel = await require("@prisma/sdk").getSchema(schemaPath)
+      const config = await require("@prisma/sdk").getConfig({datamodel})
       const dataSource = config.datasources[0]
       const providerType = dataSource.activeProvider
       const connectionString = dataSource.url.value
