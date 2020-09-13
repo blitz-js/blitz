@@ -98,7 +98,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
         stdio: "inherit",
       })
         .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+          code === 0 ? res() : rej(`'next start' failed with status code: ${code}`)
         })
         .on("error", (err) => {
           console.error(err)
