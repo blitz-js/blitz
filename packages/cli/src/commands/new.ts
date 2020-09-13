@@ -76,6 +76,18 @@ export class New extends Command {
         choices: formChoices,
       })
 
+      const databaseEngineChoices: Array<{
+        name: AppGeneratorOptions["databaseEngine"]
+        message?: string
+      }> = [{name: "SQLite", message: "SQLite (default)"}, {name: "PostgreSQL"}]
+
+      const databaseEnginePromptResult: any = await this.enquirer.prompt({
+        type: "select",
+        name: "databaseEngine",
+        message: "Pick a database engine",
+        choices: databaseEngineChoices,
+      })
+
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
 
       const generator = new AppGenerator({
