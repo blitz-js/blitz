@@ -31,7 +31,7 @@ export const retryFunction = (failureCount: number, error: any) => {
 export function useQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options?: QueryOptions<QueryResult<PromiseReturnType<T>>>,
+  options?: QueryOptions<PromiseReturnType<T>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")

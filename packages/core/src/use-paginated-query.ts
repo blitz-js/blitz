@@ -19,7 +19,7 @@ const isServer = typeof window === "undefined"
 export function usePaginatedQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options?: QueryOptions<PaginatedQueryResult<PromiseReturnType<T>>>,
+  options?: QueryOptions<PromiseReturnType<T>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
