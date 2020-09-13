@@ -19,3 +19,4 @@ dist
 **/.env.*.local
 **/.envrc
 .blitz-*
+.blitz-cli-cache
