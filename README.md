@@ -116,23 +116,35 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 👉 View options and contribute at [GitHub Sponsors](https://github.com/sponsors/blitz-js), [PayPal](https://paypal.me/thebayers), or [Open Collective](https://opencollective.com/blitzjs)
 
+### 🌱 Seedling Sponsors
+
+<a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
+<img alt="" src="https://reactbricks.com/reactbricks_icon.svg" width="30px">
+</a>
+
 ### 🥉 Bronze Sponsors
 
-—
+<a aria-label="Your Company" href="#">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="100px">
+</a>
 
 ### 🥈 Silver Sponsors
 
 <a aria-label="Fauna" href="https://dashboard.fauna.com/accounts/register?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="175px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="200px">
 </a>
 
 ### 🏆 Gold Sponsors
 
-—
+<a aria-label="Your Company" href="#">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="300px">
+</a>
 
 ### 💎 Diamond Sponsors
 
-—
+<a aria-label="Your Company" href="#">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="400px">
+</a>
 
 <br>
 
