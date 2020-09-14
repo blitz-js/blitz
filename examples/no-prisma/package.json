@@ -27,28 +27,28 @@
   },
   "dependencies": {
     "blitz": "0.22.1",
-    "knex": "0.21.2",
-    "react": "0.0.0-experimental-7f28234f8",
-    "react-dom": "0.0.0-experimental-7f28234f8",
+    "knex": "0.21.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "sqlite3": "5.0.0"
   },
   "devDependencies": {
-    "@types/react": "16.9.43",
-    "@typescript-eslint/eslint-plugin": "2.34.1-alpha.2",
-    "@typescript-eslint/parser": "2.34.1-alpha.2",
+    "@types/react": "16.9.49",
+    "@typescript-eslint/eslint-plugin": "4.1.0",
+    "@typescript-eslint/parser": "4.1.0",
     "babel-eslint": "10.1.0",
-    "eslint": "7.6.0",
+    "eslint": "7.9.0",
     "eslint-config-react-app": "5.2.1",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-react": "7.20.5",
-    "eslint-plugin-react-hooks": "4.0.8",
-    "husky": "4.2.5",
-    "lint-staged": "10.2.13",
-    "prettier": "2.0.5",
-    "pretty-quick": "2.0.1",
-    "typescript": "3.9.6"
+    "eslint-plugin-react": "7.20.6",
+    "eslint-plugin-react-hooks": "4.1.2",
+    "husky": "4.3.0",
+    "lint-staged": "10.3.0",
+    "prettier": "2.1.1",
+    "pretty-quick": "3.0.2",
+    "typescript": "4.0.2"
   },
   "private": true
 }
