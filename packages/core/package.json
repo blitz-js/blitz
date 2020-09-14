@@ -46,9 +46,9 @@
     "cookie-session": "1.4.0",
     "deepmerge": "4.2.2",
     "passport": "0.4.1",
-    "pretty-ms": "6.0.1",
-    "react-query": "2.5.11",
-    "serialize-error": "6.0.0",
+    "pretty-ms": "7.0.0",
+    "react-query": "2.15.4",
+    "serialize-error": "7.0.1",
     "superjson": "1.2.1",
     "url": "0.11.0"
   },
