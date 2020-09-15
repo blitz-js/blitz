@@ -1047,6 +1047,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Obii-bit",
+      "name": "Obadja Ris",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/67339820?v=4",
+      "profile": "https://github.com/Obii-bit",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
