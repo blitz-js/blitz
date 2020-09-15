@@ -357,7 +357,7 @@
       ]
     },
     {
-      "login": "skn0tt",
+      "login": "Skn0tt",
       "name": "Simon Knott",
       "avatar_url": "https://avatars1.githubusercontent.com/u/14912729?v=4",
       "profile": "http://simonknott.de",
@@ -561,15 +561,6 @@
       "name": "Pierre Grimaud",
       "avatar_url": "https://avatars1.githubusercontent.com/u/1866496?v=4",
       "profile": "https://github.com/pgrimaud",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "jletey",
-      "name": "John Letey",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/62398724?v=4",
-      "profile": "https://github.com/jletey",
       "contributions": [
         "code"
       ]
@@ -1080,6 +1071,15 @@
       "name": "Kwuang Tang",
       "avatar_url": "https://avatars1.githubusercontent.com/u/10319942?v=4",
       "profile": "http://kwuang.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "johnletey",
+      "name": "John Letey",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/62398724?v=4",
+      "profile": "https://github.com/johnletey",
       "contributions": [
         "code"
       ]
