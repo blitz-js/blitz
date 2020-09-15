@@ -10,6 +10,7 @@
     "sourceMap": false,
     "esModuleInterop": true,
     "types": [],
+    "noEmit": false,
     "lib": ["dom", "dom.iterable", "ES2018"]
   },
   "include": ["src/**/*", "types"],
