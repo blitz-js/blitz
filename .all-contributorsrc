@@ -1056,6 +1056,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "JoseRFelix",
+      "name": "Jose Felix ",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/21092519?v=4",
+      "profile": "http://jfelix.info",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
