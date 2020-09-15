@@ -20,6 +20,7 @@ export type ServerConfig = {
   // -
   port?: number
   hostname?: string
+  inspect?: boolean
   // –
   env?: ServerEnvironment
 }

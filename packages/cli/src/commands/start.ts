@@ -17,6 +17,9 @@ export class Start extends Command {
       char: "H",
       description: "Set server hostname",
     }),
+    inspect: flags.boolean({
+      description: "Enable the Node.js inspector",
+    }),
   }
 
   async run() {
@@ -26,6 +29,7 @@ export class Start extends Command {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
+      inspect: flags.inspect,
     }
 
     try {
