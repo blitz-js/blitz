@@ -1029,6 +1029,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "xiaoyu-tamu",
+      "name": "Michael Li",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/33362998?v=4",
+      "profile": "https://github.com/xiaoyu-tamu",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
