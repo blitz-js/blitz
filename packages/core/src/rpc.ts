@@ -49,7 +49,7 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
   // Create a new AbortController instance for this request
   const controller = new AbortController()
 
-  const promise = window
+  const promise: CancellablePromise<any> = window
     .fetch(url, {
       method: "POST",
       headers,
@@ -106,7 +106,6 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
       }
     })
 
-  // TODO: add cancellable type to returned promise
   promise.cancel = () => controller.abort()
 
   return promise
@@ -127,13 +126,18 @@ interface ResolverEnhancement {
     apiUrl: string
   }
 }
+
+interface CancellablePromise<T> extends Promise<T> {
+  cancel?: Function
+}
+
 export interface RpcFunction {
-  (params: any, opts: any): Promise<any>
+  (params: any, opts: any): CancellablePromise<any>
 }
 export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
 
 export interface EnhancedResolverModule extends ResolverEnhancement {
-  (input: any, ctx: Record<string, any>): Promise<unknown>
+  (input: any, ctx: Record<string, any>): CancellablePromise<unknown>
   middleware?: Middleware[]
 }
 
