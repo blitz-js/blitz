@@ -1,5 +1,5 @@
-import React, {PropsWithoutRef} from "react"
-import {useField} from "react-final-form"
+import React, { PropsWithoutRef } from "react"
+import { useField } from "react-final-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
   /** Field name. */
@@ -12,11 +12,13 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
 }
 
 export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({name, label, outerProps, ...props}, ref) => {
+  ({ name, label, outerProps, ...props }, ref) => {
     const {
       input,
-      meta: {touched, error, submitError, submitting},
+      meta: { touched, error, submitError, submitting },
     } = useField(name)
+
+    const normalizedError = Array.isArray(error) ? error.join(", ") : error || submitError
 
     return (
       <div {...outerProps}>
@@ -25,9 +27,9 @@ export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFi
           <input {...input} disabled={submitting} {...props} ref={ref} />
         </label>
 
-        {touched && (error || submitError) && (
-          <div role="alert" style={{color: "red"}}>
-            {error || submitError}
+        {touched && normalizedError && (
+          <div role="alert" style={{ color: "red" }}>
+            {normalizedError}
           </div>
         )}
 
@@ -49,7 +51,7 @@ export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFi
         `}</style>
       </div>
     )
-  },
+  }
 )
 
 export default LabeledTextField
