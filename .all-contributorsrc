@@ -1092,6 +1092,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "taylorcjohnson",
+      "name": "Taylor Johnson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10552296?v=4",
+      "profile": "https://github.com/taylorcjohnson",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
