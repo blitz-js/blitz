@@ -16,8 +16,8 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.4.1",
-    "@prisma/client": "2.4.1",
+    "@prisma/cli": "2.5.1",
+    "@prisma/client": "2.6.2",
     "blitz": "0.22.2-canary.0",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-7f28234f8",
@@ -28,9 +28,9 @@
     "typescript": "3.8.3"
   },
   "devDependencies": {
-    "@types/react": "16.9.34",
-    "cypress": "4.11.0",
+    "@types/react": "16.9.49",
+    "cypress": "5.1.0",
     "eslint-plugin-cypress": "2.10.3",
-    "start-server-and-test": "1.11.2"
+    "start-server-and-test": "1.11.3"
   }
 }
