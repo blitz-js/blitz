@@ -19,7 +19,7 @@ type Options = {
   resultOfGetFetchMore?: any
 }
 
-export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
+export function executeRpcCall(url: string, params: any, opts: Options = {}) {
   if (typeof window === "undefined") return
 
   const headers: Record<string, any> = {
@@ -46,56 +46,70 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     serialized = serialize(params)
   }
 
-  const result = await window.fetch(url, {
-    method: "POST",
-    headers,
-    credentials: "include",
-    redirect: "follow",
-    body: JSON.stringify({
-      // TODO remove `|| null` once superjson allows `undefined`
-      params: serialized.json || null,
-      meta: {
-        params: serialized.meta,
-      },
-    }),
-  })
+  // Create a new AbortController instance for this request
+  const controller = new AbortController()
 
-  if (result.headers) {
-    for (const [name] of result.headers.entries()) {
-      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
-      if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
-      if (name.toLowerCase() === HEADER_CSRF_ERROR) {
-        throw new CSRFTokenMismatchError()
+  const promise = window
+    .fetch(url, {
+      method: "POST",
+      headers,
+      credentials: "include",
+      redirect: "follow",
+      body: JSON.stringify({
+        // TODO remove `|| null` once superjson allows `undefined`
+        params: serialized.json || null,
+        meta: {
+          params: serialized.meta,
+        },
+      }),
+      signal: controller.signal,
+    })
+    .then((result) => {
+      if (result.headers) {
+        for (const [name] of result.headers.entries()) {
+          if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
+          if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
+          if (name.toLowerCase() === HEADER_CSRF_ERROR) {
+            throw new CSRFTokenMismatchError()
+          }
+        }
       }
-    }
-  }
+      return result
+    })
+    .then((result) => result.json())
+    .then((payload) => {
+      if (payload.error) {
+        const error = deserializeError(payload.error)
+        // We don't clear the publicDataStore for anonymous users
+        if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+          publicDataStore.clear()
+        }
+        throw error
+      } else {
+        const data =
+          payload.result === undefined
+            ? undefined
+            : deserialize({json: payload.result, meta: payload.meta?.result})
 
-  let payload
-  try {
-    payload = await result.json()
-  } catch (error) {
-    throw new Error(`Failed to parse json from request to ${url}`)
-  }
+        if (!opts.fromQueryHook) {
+          const queryKey = getQueryKey(url, params)
+          queryCache.setQueryData(queryKey, data)
+        }
+        return data
+      }
+    })
+    .catch((err) => {
+      if (err.name === "SyntaxError") {
+        throw new Error(`Failed to parse json from request to ${url}`)
+      } else {
+        throw err
+      }
+    })
 
-  if (payload.error) {
-    const error = deserializeError(payload.error)
-    // We don't clear the publicDataStore for anonymous users
-    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
-      publicDataStore.clear()
-    }
-    throw error
-  } else {
-    const data =
-      payload.result === undefined
-        ? undefined
-        : deserialize({json: payload.result, meta: payload.meta?.result})
+  // TODO: add cancellable type to returned promise
+  promise.cancel = () => controller.abort()
 
-    if (!opts.fromQueryHook) {
-      const queryKey = getQueryKey(url, params)
-      queryCache.setQueryData(queryKey, data)
-    }
-    return data
-  }
+  return promise
 }
 
 executeRpcCall.warm = (url: string) => {
