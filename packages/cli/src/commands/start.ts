@@ -1,7 +1,5 @@
-import {Command, flags} from "@oclif/command"
 import {dev, prod} from "@blitzjs/server"
-
-import {runPrismaGeneration} from "./db"
+import {Command, flags} from "@oclif/command"
 
 export class Start extends Command {
   static description = "Start a development server"
@@ -19,6 +17,9 @@ export class Start extends Command {
       char: "H",
       description: "Set server hostname",
     }),
+    inspect: flags.boolean({
+      description: "Enable the Node.js inspector",
+    }),
   }
 
   async run() {
@@ -28,13 +29,14 @@ export class Start extends Command {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
+      inspect: flags.inspect,
     }
 
     try {
       if (flags.production) {
-        await prod(config, runPrismaGeneration({silent: true}))
+        await prod(config, require("./db").runPrismaGeneration({silent: true, failSilently: true}))
       } else {
-        await dev(config, runPrismaGeneration({silent: true}))
+        await dev(config, require("./db").runPrismaGeneration({silent: true, failSilently: true}))
       }
     } catch (err) {
       console.error(err)

@@ -66,6 +66,7 @@ describe("rpcMiddleware", () => {
 
     it("executes the request", async () => {
       console.log = jest.fn()
+      let blitzResult: any
 
       const resolverModule = (jest.fn().mockImplementation(async () => {
         await delay(1)
@@ -86,8 +87,6 @@ describe("rpcMiddleware", () => {
           blitzResult = res.blitzResult
         },
       ]
-
-      let blitzResult: any
 
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {

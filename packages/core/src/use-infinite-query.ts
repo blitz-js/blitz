@@ -3,18 +3,18 @@ import {
   InfiniteQueryResult,
   InfiniteQueryOptions,
 } from "react-query"
-import {useSession} from "./supertokens"
-import {useIsDevPrerender, emptyQueryFn, retryFunction} from "./use-query"
+import {emptyQueryFn, retryFunction} from "./use-query"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
-import {getQueryCacheFunctions, QueryCacheFunctions} from "./utils/query-cache"
+import {getQueryCacheFunctions, QueryCacheFunctions, getInfiniteQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
-import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<
   InfiniteQueryResult<PromiseReturnType<T>, any>,
   "resolvedData"
 > &
   QueryCacheFunctions<PromiseReturnType<T>[]>
+
+const isServer = typeof window === "undefined"
 
 export function useInfiniteQuery<T extends QueryFn>(
   queryFn: T,
@@ -31,19 +31,14 @@ export function useInfiniteQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = useIsDevPrerender()
-    ? emptyQueryFn
-    : ((queryFn as unknown) as EnhancedRpcFunction)
+  const queryRpcFn = isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
+
+  const queryKey = getInfiniteQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
-    queryKey: [
-      queryRpcFn._meta.apiUrl,
-      // We add the session object here so queries will refetch if session changes
-      useSession(),
-      serialize(typeof params === "function" ? (params as Function)() : params),
-    ],
-    queryFn: (_: string, __: any, params, more?) =>
-      queryRpcFn({...params, ...more}, {fromQueryHook: true}),
+    queryKey,
+    queryFn: (_infinite, _apiUrl, params, resultOfGetFetchMore?) =>
+      queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
     config: {
       suspense: true,
       retry: retryFunction,
@@ -53,7 +48,7 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn._meta.apiUrl),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
   }
 
   return [data as PromiseReturnType<T>[], rest as RestQueryResult<T>]

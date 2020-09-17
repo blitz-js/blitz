@@ -1,6 +1,5 @@
 import {spawn} from "cross-spawn"
 import {Command} from "@oclif/command"
-import hasYarn from "has-yarn"
 
 export class Test extends Command {
   static description = "Run project tests"
@@ -20,7 +19,7 @@ export class Test extends Command {
     if (watch) {
       watchMode = watch === "watch" || watch === "w"
     }
-    const packageManager = hasYarn() ? "yarn" : "npm"
+    const packageManager = require("has-yarn")() ? "yarn" : "npm"
 
     if (watchMode) spawn(packageManager, ["test:watch"], {stdio: "inherit"})
     else spawn(packageManager, ["test"], {stdio: "inherit"})

@@ -1,6 +1,6 @@
 import {Writable} from "stream"
-import {FileCache} from "./helpers/file-cache"
 import File from "vinyl"
+import {FileCache} from "./helpers/file-cache"
 
 export type EventedFile = {
   event: "add" | "change" | "unlink" | "unlinkDir"

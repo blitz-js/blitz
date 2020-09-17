@@ -11,6 +11,14 @@ import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
+const loadBlitzModules = async (repl: REPLServer) => {
+  Object.assign(repl.context, await loadBlitz())
+}
+const loadModules = async (repl: REPLServer) => {
+  // loadBlitzDependencies(repl)
+  await loadBlitzModules(repl)
+}
+
 const commands = {
   reload: {
     help: "Reload all modules",
@@ -23,57 +31,8 @@ const commands = {
   },
 }
 
-const runRepl = async (replOptions: REPL.ReplOptions) => {
-  const repl = await initializeRepl(replOptions)
-  await setupFileWatchers(repl)
-}
-
-const initializeRepl = async (replOptions: REPL.ReplOptions) => {
-  const repl = REPL.start(replOptions)
-
-  defineCommands(repl, commands)
-  await loadModules(repl)
-  setupHistory(repl)
-
-  return repl
-}
-
 const defineCommands = (repl: REPLServer, commands: Record<string, REPLCommand>) => {
   Object.entries(commands).forEach(([keyword, cmd]) => repl.defineCommand(keyword, cmd))
-}
-
-const loadModules = async (repl: REPLServer) => {
-  // loadBlitzDependencies(repl)
-  await loadBlitzModules(repl)
-}
-
-const loadBlitzModules = async (repl: REPLServer) => {
-  Object.assign(repl.context, await loadBlitz())
-}
-
-const setupFileWatchers = async (repl: REPLServer) => {
-  const watchers = [
-    // watch('package.json').on('change', () => Console.loadDependencies(repl)),
-    watch(await getBlitzModulePaths(), {
-      ignoreInitial: true,
-    }).on("all", () => loadBlitzModules(repl)),
-  ]
-
-  repl.on("reset", () => loadModules(repl))
-  repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
-}
-
-// const loadBlitzDependencies = (repl: REPLServer) => {
-//   Object.assign(repl.context, loadDependencies(process.cwd()))
-// }
-
-const setupHistory = (repl: any) => {
-  const blitzConsoleHistoryPath = path.join(projectRoot, ".blitz-console-history")
-  if (repl.setupHistory) {
-    repl.setupHistory(blitzConsoleHistoryPath, () => {})
-  } else {
-    setupSelfRolledHistory(repl, blitzConsoleHistoryPath)
-  }
 }
 
 const setupSelfRolledHistory = (repl: any, path: string) => {
@@ -97,5 +56,45 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
   init()
   repl.on("exit", onExit)
 }
+
+const setupHistory = (repl: any) => {
+  const blitzConsoleHistoryPath = path.join(projectRoot, ".blitz-console-history")
+  if (repl.setupHistory) {
+    repl.setupHistory(blitzConsoleHistoryPath, () => {})
+  } else {
+    setupSelfRolledHistory(repl, blitzConsoleHistoryPath)
+  }
+}
+
+const initializeRepl = async (replOptions: REPL.ReplOptions) => {
+  const repl = REPL.start(replOptions)
+
+  defineCommands(repl, commands)
+  await loadModules(repl)
+  setupHistory(repl)
+
+  return repl
+}
+
+const setupFileWatchers = async (repl: REPLServer) => {
+  const watchers = [
+    // watch('package.json').on('change', () => Console.loadDependencies(repl)),
+    watch(await getBlitzModulePaths(), {
+      ignoreInitial: true,
+    }).on("all", () => loadBlitzModules(repl)),
+  ]
+
+  repl.on("reset", () => loadModules(repl))
+  repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
+}
+
+const runRepl = async (replOptions: REPL.ReplOptions) => {
+  const repl = await initializeRepl(replOptions)
+  await setupFileWatchers(repl)
+}
+
+// const loadBlitzDependencies = (repl: REPLServer) => {
+//   Object.assign(repl.context, loadDependencies(process.cwd()))
+// }
 
 export {runRepl}

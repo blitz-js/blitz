@@ -88,6 +88,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    let gitInitSuccessful
+    if (!this.options.skipGit) {
+      const initResult = spawn.sync("git", ["init"], {
+        stdio: "ignore",
+      })
+
+      gitInitSuccessful = initResult.status === 0
+      if (!gitInitSuccessful) {
+        log.warning("Failed to run git init.")
+        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+      }
+    }
     const pkgJsonLocation = join(this.destinationPath(), "package.json")
     const pkg = readJSONSync(pkgJsonLocation)
 
@@ -211,31 +223,32 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
-    if (!this.options.skipGit) {
-      const initResult = spawn.sync("git", ["init"], {
-        stdio: "ignore",
-      })
-
-      if (initResult.status === 0) {
-        this.commitChanges()
-      } else {
-        log.warning("Failed to run git init.")
-        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
-      }
+    if (!this.options.skipGit && gitInitSuccessful) {
+      this.commitChanges()
     }
   }
 
   commitChanges() {
+    const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
-      ["git", ["commit", "-m", "New baby Blitz app!"], {stdio: "ignore"}],
+      [
+        "git",
+        ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+        {stdio: "ignore", timeout: 10000},
+      ],
     ]
     for (let command of commands) {
       const result = spawn.sync(...command)
       if (result.status !== 0) {
-        log.error(`Failed to run command ${command[0]} with ${command[1].join(" ")} options.`)
-        break
+        commitSpinner.fail(
+          chalk.red.bold(
+            `Failed to run command ${command[0]} with ${command[1].join(" ")} options.`,
+          ),
+        )
+        return
       }
     }
+    commitSpinner.succeed()
   }
 }

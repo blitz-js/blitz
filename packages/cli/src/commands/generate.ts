@@ -1,9 +1,6 @@
 import {Command} from "../command"
 import {flags} from "@oclif/command"
-import * as fs from "fs"
-import * as path from "path"
-import enquirer from "enquirer"
-import _pluralize from "pluralize"
+import {log} from "@blitzjs/display"
 import {
   PageGenerator,
   MutationGenerator,
@@ -13,15 +10,13 @@ import {
   QueryGenerator,
 } from "@blitzjs/generator"
 import {PromptAbortedError} from "../errors/prompt-aborted"
-import {log} from "@blitzjs/display"
-import camelCase from "camelcase"
-import pkgDir from "pkg-dir"
+
 const debug = require("debug")("blitz:generate")
-
-const pascalCase = (str: string) => camelCase(str, {pascalCase: true})
-
-const projectRoot = pkgDir.sync() || process.cwd()
-const isTypescript = fs.existsSync(path.join(projectRoot, "tsconfig.json"))
+const pascalCase = (str: string) => require("camelcase")(str, {pascalCase: true})
+const getIsTypescript = () =>
+  require("fs").existsSync(
+    require("path").join(require("../utils/get-project-root").projectRoot, "tsconfig.json"),
+  )
 
 enum ResourceType {
   All = "all",
@@ -46,18 +41,18 @@ interface Args {
 }
 
 function pluralize(input: string): string {
-  return _pluralize.isPlural(input) ? input : _pluralize.plural(input)
+  return require("pluralize").isPlural(input) ? input : require("pluralize").plural(input)
 }
 
 function singular(input: string): string {
-  return _pluralize.isSingular(input) ? input : _pluralize.singular(input)
+  return require("pluralize").isSingular(input) ? input : require("pluralize").singular(input)
 }
 
 function modelName(input: string = "") {
-  return camelCase(singular(input))
+  return require("camelcase")(singular(input))
 }
 function modelNames(input: string = "") {
-  return camelCase(pluralize(input))
+  return require("camelcase")(pluralize(input))
 }
 function ModelName(input: string = "") {
   return pascalCase(singular(input))
@@ -157,31 +152,33 @@ export class Generate extends Command {
   ]
 
   async promptForTargetDirectory(paths: string[]): Promise<string> {
-    return enquirer
-      .prompt<{directory: string}>({
+    return require("enquirer")
+      .prompt({
         name: "directory",
         type: "select",
         message: "Please select a target directory:",
         choices: paths,
       })
-      .then((resp) => resp.directory)
+      .then((resp: any) => resp.directory)
   }
 
   async genericConfirmPrompt(message: string): Promise<boolean> {
-    return enquirer
-      .prompt<{continue: string}>({
+    return require("enquirer")
+      .prompt({
         name: "continue",
         type: "select",
         message: message,
         choices: ["Yes", "No"],
       })
-      .then((resp) => resp.continue === "Yes")
+      .then((resp: any) => resp.continue === "Yes")
   }
 
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      log.error("Could not determine proper location for files. Aborting.")
+      require("@blitzjs/display").log.error(
+        "Could not determine proper location for files. Aborting.",
+      )
       this.exit(0)
     }
   }
@@ -192,7 +189,7 @@ export class Generate extends Command {
     if (modelSegments.length > 1) {
       return {
         model: modelSegments[modelSegments.length - 1],
-        context: path.join(...modelSegments.slice(0, modelSegments.length - 1)),
+        context: require("path").join(...modelSegments.slice(0, modelSegments.length - 1)),
       }
     }
 
@@ -201,7 +198,7 @@ export class Generate extends Command {
 
       return {
         model: modelName,
-        context: path.join(...contextSegments),
+        context: require("path").join(...contextSegments),
       }
     }
 
@@ -222,7 +219,7 @@ export class Generate extends Command {
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
-          destinationRoot: path.resolve(),
+          destinationRoot: require("path").resolve(),
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
@@ -232,9 +229,10 @@ export class Generate extends Command {
           parentModels: modelNames(flags.parent),
           ParentModel: ModelName(flags.parent),
           ParentModels: ModelNames(flags.parent),
+          rawInput: model,
           dryRun: flags["dry-run"],
           context: context,
-          useTs: isTypescript,
+          useTs: getIsTypescript(),
         })
         await generator.run()
       }

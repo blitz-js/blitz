@@ -1,12 +1,10 @@
-import * as path from "path"
 import {flags} from "@oclif/command"
 import {Command} from "../command"
-import {AppGenerator, AppGeneratorOptions} from "@blitzjs/generator"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 const debug = require("debug")("blitz:new")
-
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 export interface Flags {
@@ -59,8 +57,8 @@ export class New extends Command {
     debug("flags: ", flags)
 
     try {
-      const destinationRoot = path.resolve(args.name)
-      const appName = path.basename(destinationRoot)
+      const destinationRoot = require("path").resolve(args.name)
+      const appName = require("path").basename(destinationRoot)
 
       const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
         {name: "React Final Form", message: "React Final Form (recommended)"},
@@ -75,26 +73,53 @@ export class New extends Command {
         choices: formChoices,
       })
 
-      const generator = new AppGenerator({
+      const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
+
+      const generator = new (require("@blitzjs/generator").AppGenerator)({
         destinationRoot,
         appName,
-        dryRun: flags["dry-run"],
+        dryRun,
         useTs: !flags.js,
-        yarn: !flags.npm,
+        yarn: !npm,
         form: promptResult.form,
         version: this.config.version,
-        skipInstall: flags["skip-install"],
+        skipInstall,
         skipGit: flags["no-git"],
       })
 
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
+
+      const postInstallSteps = [`cd ${args.name}`]
+      const needsInstall = dryRun || skipInstall
+
+      if (needsInstall) {
+        postInstallSteps.push(npm ? "npm install" : "yarn")
+        postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
+      } else {
+        const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
+
+        try {
+          // Required in order for DATABASE_URL to be available
+          require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+          await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
+          spinner.succeed()
+        } catch {
+          spinner.fail()
+          postInstallSteps.push(
+            "blitz db migrate (when asked, you can name the migration anything)",
+          )
+        }
+      }
+
+      postInstallSteps.push("blitz start")
+
       this.log("\n" + log.withBrand("Your new Blitz app is ready! Next steps:") + "\n")
-      this.log(chalk.yellow(`   1. cd ${args.name}`))
-      this.log(
-        chalk.yellow(`   2. blitz db migrate (when asked, you can name the migration anything)`),
-      )
-      this.log(chalk.yellow(`   3. blitz start`))
+
+      postInstallSteps.forEach((step, index) => {
+        this.log(chalk.yellow(`   ${index + 1}. ${step}`))
+      })
+      this.log("") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 

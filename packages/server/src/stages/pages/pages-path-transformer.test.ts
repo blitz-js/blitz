@@ -29,6 +29,11 @@ describe("createPagesPathTransformer", () => {
       expected: normalize("pages/one/two/three.mjs"),
     },
     {
+      name: "Transforms mdx",
+      input: normalize("app/users/pages/one/two/three.mdx"),
+      expected: normalize("pages/one/two/three.mdx"),
+    },
+    {
       name: "Ignores non tjsx paths: css",
       input: normalize("app/users/pages/one/two/three.css"),
       expected: normalize("app/users/pages/one/two/three.css"),
