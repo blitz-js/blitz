@@ -1,4 +1,4 @@
-import {SessionContext} from "blitz"
+import {NotFoundError, SessionContext} from "blitz"
 import db, {FindMany__ModelName__Args} from "db"
 
 type Get__ModelNames__Input = {
@@ -16,12 +16,15 @@ export default async function get__ModelNames__(
 ) {
   ctx.session!.authorize()
 
-  const __modelNames__ = await db.__modelName__.findMany({
+  const __modelNames__ = await db.__modelName__?.findMany({
     where,
     orderBy,
     take,
     skip,
   })
+
+  if (!__modelNames__) throw new NotFoundError()
+
 
   const count = await db.__modelName__.count()
   const hasMore = typeof take === "number" ? skip + take < count : false

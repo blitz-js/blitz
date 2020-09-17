@@ -27,7 +27,7 @@ export const __ModelNames__List = () => {
     return (
       <div>
         <ul>
-          {__modelNames__.map((__modelName__) => (
+          {__modelNames__?.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
                 href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
@@ -60,7 +60,7 @@ export const __ModelNames__List = () => {
     return (
       <div>
         <ul>
-          {__modelNames__.map((__modelName__) => (
+          {__modelNames__?.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
                 href="/__modelNames__/__modelIdParam__"
