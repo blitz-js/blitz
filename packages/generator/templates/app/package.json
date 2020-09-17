@@ -18,8 +18,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc && lint-staged && pretty-quick --staged",
-      "pre-push": "yarn lint && yarn test"
+      "pre-commit": "lint-staged && pretty-quick --staged",
+      "pre-push": "blitz test"
     }
   },
   "lint-staged": {
