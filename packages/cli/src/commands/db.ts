@@ -182,7 +182,7 @@ ${require("chalk").bold(
     // Used by `new` command to perform the initial migration
     name: flags.string({hidden: true}),
     // Used by `reset` command to skip the confirmation prompt
-    force: flags.boolean({char: "f", hidden: true, default: false}),
+    force: flags.boolean({char: "f", hidden: true}),
   }
 
   static strict = false

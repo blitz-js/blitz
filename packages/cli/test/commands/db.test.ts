@@ -157,7 +157,7 @@ describe("Db command", () => {
   })
 
   it("runs db migrate. (with unknown flags)", async () => {
-    await Db.run(["migrate", "--hoge", 'aaa'])
+    await Db.run(["migrate", "--hoge", "aaa"])
 
     expectDbMigrateWithUnknownFlag()
   })
