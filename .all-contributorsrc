@@ -1102,6 +1102,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "tsriram",
+      "name": "Sriram Thiagarajan",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/450559?v=4",
+      "profile": "https://twitter.com/tsriram",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

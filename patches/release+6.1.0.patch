@@ -1,8 +1,8 @@
 diff --git a/node_modules/release/bin/release.js b/node_modules/release/bin/release.js
-index a5ab985..ce9475a 100755
+index a5ab985..e324528 100755
 --- a/node_modules/release/bin/release.js
 +++ b/node_modules/release/bin/release.js
-@@ -52,25 +52,37 @@ let githubConnection;
+@@ -52,25 +52,49 @@ let githubConnection;
  let repoDetails;
  
  const changeTypes = [
@@ -42,6 +42,18 @@ index a5ab985..ce9475a 100755
 +    name: 'Patch',
 +    pluralName: '🐞 Patches',
 +    description: 'backwards-compatible bug fix',
++  },
++  {
++    handle: 'newapp',
++    name: 'New App Template',
++    pluralName: '⚡️ Changes to the New App Template',
++    description: 'change to new app template',
++  },
++  {
++    handle: 'recipe',
++    name: 'Recipe',
++    pluralName: '👩‍🍳 Recipes',
++    description: 'change to a recipe',
 +  },
 +  {
 +    handle: 'example',
