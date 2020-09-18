@@ -3,9 +3,12 @@ services:
     name: blitzapp
     env: node
     plan: starter
-    buildCommand: yarn; blitz db migrate; blitz build
-    startCommand: blitz start --production -H 0.0.0.0
+    buildCommand: yarn --frozen-lockfile --prod=false; blitz db migrate; blitz build
+    # If you have an out of memory error, change startCommand to "yarn next start"
+    startCommand: blitz start --production
     envVars:
+      # ⚠️  You must set SESSION_SECRET_KEY env var through the UI.
+      # Add this env name, then a "generate" button will appear in the value box
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
