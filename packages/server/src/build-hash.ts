@@ -17,6 +17,9 @@ export async function getInputArtefactsHash() {
         ".cache",
         ".config",
         "test",
+        "tests",
+        "spec",
+        "specs",
       ],
     },
   }
