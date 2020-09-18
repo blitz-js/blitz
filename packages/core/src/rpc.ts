@@ -64,7 +64,7 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
       }),
       signal: controller.signal,
     })
-    .then((result) => {
+    .then(async (result) => {
       if (result.headers) {
         for (const [name] of result.headers.entries()) {
           if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
@@ -74,10 +74,14 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
           }
         }
       }
-      return result
-    })
-    .then((result) => result.json())
-    .then((payload) => {
+
+      let payload
+      try {
+        payload = await result.json()
+      } catch (error) {
+        throw new Error(`Failed to parse json from request to ${url}`)
+      }
+
       if (payload.error) {
         const error = deserializeError(payload.error)
         // We don't clear the publicDataStore for anonymous users
@@ -96,13 +100,6 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
           queryCache.setQueryData(queryKey, data)
         }
         return data
-      }
-    })
-    .catch((err) => {
-      if (err.name === "SyntaxError") {
-        throw new Error(`Failed to parse json from request to ${url}`)
-      } else {
-        throw err
       }
     })
 
