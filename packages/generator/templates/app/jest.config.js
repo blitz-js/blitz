@@ -2,6 +2,7 @@ const { pathsToModuleNameMapper } = require("ts-jest/utils")
 const { compilerOptions } = require("./tsconfig")
 
 module.exports = {
+  setupFiles: ["dotenv-flow/config"],
   // Test setup file
   setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
   // Add type checking to Typescript test files
