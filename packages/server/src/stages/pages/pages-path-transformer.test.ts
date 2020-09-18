@@ -68,6 +68,11 @@ describe("createPagesPathTransformer", () => {
       input: normalize("/User/foo/bar/app/users/pages/one/two/three.tsx"),
       expected: normalize("pages/one/two/three.tsx"),
     },
+    {
+      name: "Transforms app/pages/test.tsx",
+      input: normalize("app/pages/test.tsx"),
+      expected: normalize("pages/test.tsx"),
+    },
   ]
 
   tests.forEach(({name, input, expected}) => {
