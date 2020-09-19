@@ -52,7 +52,7 @@ Some especially important points:
 ## Slack
 
 - All `#-*` channels are for Blitz users
-- All `#dev-*` channels are for Blitz internal development
+- All `#contributor-*` channels are for Blitz internal development
 
 If someone that's not a maintainer post in the wrong area, that's fine. Don't tell them they posted in the wrong place. But as a maintainer, you should for sure post in the right channel :)
 
