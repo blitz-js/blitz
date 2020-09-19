@@ -12,6 +12,7 @@ describe("withBlitz", () => {
     })
 
     expect(newNextWithoutWebpack).toStrictEqual({
+      distDir: "../.next",
       foo: "bar",
       experimental: {
         reactMode: "concurrent",
@@ -30,6 +31,7 @@ describe("withBlitz", () => {
     })
 
     expect(newNextWithoutWebpack).toStrictEqual({
+      distDir: "../.next",
       phase: "foo",
       foo: "bar",
       experimental: {
