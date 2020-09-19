@@ -35,7 +35,7 @@ export async function build(
   await nextBuild(nextBin, buildFolder)
 
   const rootNextFolder = resolve(rootFolder, ".next")
-  const buildNextFolder = resolve(buildFolder, ".next")
+  const buildNextFolder = resolve(buildFolder, "../.next")
 
   if (await pathExists(rootNextFolder)) {
     await remove(rootNextFolder)
