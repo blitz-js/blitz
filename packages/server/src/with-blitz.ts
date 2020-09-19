@@ -10,6 +10,7 @@ export function withBlitz(nextConfig: any) {
       typeof nextConfig === "function" ? nextConfig(phase, nextOpts) : nextConfig
 
     const newConfig = Object.assign({}, normalizedConfig, {
+      distDir: "../.next",
       experimental: {
         reactMode: "concurrent",
         ...(normalizedConfig.experimental || {}),
