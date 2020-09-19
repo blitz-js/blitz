@@ -50,7 +50,7 @@ process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/__db.js")
+  const path = join(projectRoot, "../.next/__db.js")
   return require(path).default
 }
 
