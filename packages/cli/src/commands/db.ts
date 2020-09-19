@@ -67,7 +67,7 @@ export const runMigrate = async (flags: object = {}) => {
   const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
   const options = ([] as string[]).concat(...nestedFlags)
 
-  const silent = options.includes("name")
+  const silent = options.includes("--name")
 
   const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
 
