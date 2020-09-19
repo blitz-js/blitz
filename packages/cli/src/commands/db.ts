@@ -217,10 +217,6 @@ ${require("chalk").bold(
     }
 
     if (command === "reset") {
-      const spinner = log.spinner("Loading your database").start()
-      await runPrismaGeneration({silent: true, failSilently: true})
-      spinner.succeed()
-
       const forceSkipConfirmation = flags.force
 
       if (!forceSkipConfirmation) {
@@ -235,6 +231,7 @@ ${require("chalk").bold(
         }
       }
 
+      log.progress("Resetting your database...")
       const {projectRoot} = require("../utils/get-project-root")
       const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
       const {PrismaClient} = require(prismaClientPath)
@@ -247,16 +244,18 @@ ${require("chalk").bold(
       const connectionString = dataSource.url.value
 
       if (providerType === "postgresql") {
-        resetPostgres(connectionString, db)
+        await resetPostgres(connectionString, db)
+        return
       } else if (providerType === "mysql") {
-        resetMysql(connectionString, db)
+        await resetMysql(connectionString, db)
+        return
       } else if (providerType === "sqlite") {
-        resetSqlite(connectionString)
+        await resetSqlite(connectionString)
+        return
       } else {
-        this.log("Could not find a valid database configuration")
+        log.error("Could not find a valid database configuration")
+        return
       }
-
-      return
     }
 
     if (command === "help") {

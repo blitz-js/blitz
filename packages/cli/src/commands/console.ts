@@ -20,13 +20,9 @@ export class Console extends Command {
     console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
     console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
-    const spinner = log.spinner("Loading your code").start()
     if (isTypescript) {
       require("../utils/setup-ts-node").setupTsnode()
     }
-
-    await require("./db").runPrismaGeneration({silent: true, failSilently: true})
-    spinner.succeed()
 
     require("@blitzjs/repl").runRepl(Console.replOptions)
   }
