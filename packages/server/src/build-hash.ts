@@ -16,6 +16,10 @@ export async function getInputArtefactsHash() {
         ".profile.d",
         ".cache",
         ".config",
+        "test",
+        "tests",
+        "spec",
+        "specs",
       ],
     },
   }

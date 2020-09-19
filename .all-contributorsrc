@@ -1092,6 +1092,52 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "taylorcjohnson",
+      "name": "Taylor Johnson",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/10552296?v=4",
+      "profile": "https://github.com/taylorcjohnson",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "tsriram",
+      "name": "Sriram Thiagarajan",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/450559?v=4",
+      "profile": "https://twitter.com/tsriram",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sergiodxa",
+      "name": "Sergio Xalambrí",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1312018?v=4",
+      "profile": "https://sergiodxa.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "doeixd",
+      "name": "Patrick G",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13461122?v=4",
+      "profile": "https://github.com/doeixd",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hardfire",
+      "name": "अभिनाश (Avinash)",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/513457?v=4",
+      "profile": "http://avinash.com.np",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
