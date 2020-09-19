@@ -1,5 +1,5 @@
 require("v8-compile-cache")
-const cacheFile = require("path").join(require("temp-dir"), "blitzjs-cli-cache")
+const cacheFile = require("path").join(__dirname, ".blitzjs-cli-cache")
 const lazyLoad = require("@salesforce/lazy-require").default.create(cacheFile)
 lazyLoad.start()
 import {run as oclifRun} from "@oclif/command"
