@@ -200,6 +200,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
   </tr>
   <tr>
     <td align="center"><a href="https://twitter.com/ivandevp"><img src="https://avatars3.githubusercontent.com/u/9284690?v=4" width="100px;" alt=""/><br /><sub><b>Ivan Medina</b></sub></a></td>
+    <td align="center"><a href="https://twitter.com/nitaking_"><img src="https://avatars2.githubusercontent.com/u/10850034?v=4" width="100px;" alt=""/><br /><sub><b>Satoshi Nitawaki</b></sub></a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
@@ -347,7 +348,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://twitter.com/dillonraphael"><img src="https://avatars0.githubusercontent.com/u/3496193?v=4" width="100px;" alt=""/><br /><sub><b>Dillon Raphael</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dillonraphael" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/clgeoio"><img src="https://avatars2.githubusercontent.com/u/37571416?v=4" width="100px;" alt=""/><br /><sub><b>Cody G</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=clgeoio" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/madflow"><img src="https://avatars0.githubusercontent.com/u/183248?v=4" width="100px;" alt=""/><br /><sub><b>madflow</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=madflow" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://twitter.com/nitaking_"><img src="https://avatars2.githubusercontent.com/u/10850034?v=4" width="100px;" alt=""/><br /><sub><b>Satoshi Nitawaki</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=nitaking" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/nitaking_"><img src="https://avatars2.githubusercontent.com/u/10850034?v=4" width="100px;" alt=""/><br /><sub><b>Satoshi Nitawaki</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=nitaking" title="Code">💻</a> <a href="#maintenance-nitaking" title="Maintenance">🚧</a> <a href="#question-nitaking" title="Answering Questions">💬</a></td>
     <td align="center"><a href="https://github.com/sirmyron"><img src="https://avatars2.githubusercontent.com/u/1430136?v=4" width="100px;" alt=""/><br /><sub><b>sirmyron</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=sirmyron" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/engelkes-finstreet"><img src="https://avatars1.githubusercontent.com/u/36962022?v=4" width="100px;" alt=""/><br /><sub><b>engelkes-finstreet</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=engelkes-finstreet" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=engelkes-finstreet" title="Documentation">📖</a></td>
   </tr>
@@ -373,6 +374,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
