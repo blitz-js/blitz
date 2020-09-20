@@ -66,12 +66,14 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
     })
     .then(async (result) => {
       if (result.headers) {
-        for (const [name] of result.headers.entries()) {
-          if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
-          if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
-          if (name.toLowerCase() === HEADER_CSRF_ERROR) {
-            throw new CSRFTokenMismatchError()
-          }
+        if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+          publicDataStore.updateState()
+        }
+        if (result.headers.get(HEADER_SESSION_REVOKED)) {
+          publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_CSRF_ERROR)) {
+          throw new CSRFTokenMismatchError()
         }
       }
 

@@ -50,6 +50,8 @@
     "react-query": "2.5.11",
     "serialize-error": "6.0.0",
     "superjson": "1.2.1",
+    "lodash": "^4.17.19",
+    "lodash-es": "^4.17.15",
     "url": "0.11.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

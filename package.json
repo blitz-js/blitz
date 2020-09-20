@@ -101,6 +101,7 @@
     "eslint-plugin-react": "7.20.6",
     "eslint-plugin-react-hooks": "4.1.0",
     "eslint-plugin-unicorn": "21.0.0",
+    "eslint-plugin-es5": "1.5.0",
     "husky": "4.2.5",
     "isomorphic-unfetch": "3.0.0",
     "jest": "24.9.0",

@@ -1,3 +1,5 @@
+/* eslint-disable es5/no-for-of  -- file only used on the server */
+/* eslint-disable es5/no-es6-methods  -- file only used on the server */
 import {BlitzApiRequest, BlitzApiResponse, ConnectMiddleware} from "."
 import {
   getAllMiddlewareForModule,
