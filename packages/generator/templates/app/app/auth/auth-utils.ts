@@ -1,8 +1,12 @@
 import { AuthenticationError } from "blitz"
 import SecurePassword from "secure-password"
+import hasha, { HashaInput } from "hasha"
+import { nanoid } from "nanoid"
 import db from "db"
 
 const SP = new SecurePassword()
+
+export const RESET_PASSSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 
 export const hashPassword = async (password: string) => {
   const hashedBuffer = await SP.hash(Buffer.from(password))
@@ -16,6 +20,9 @@ export const verifyPassword = async (hashedPassword: string, password: string) =
     return false
   }
 }
+
+export const generateToken = () => nanoid(32)
+export const hashToken = (input: HashaInput) => hasha(input, { algorithm: "sha256" })
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findOne({ where: { email } })
@@ -36,4 +43,17 @@ export const authenticateUser = async (email: string, password: string) => {
 
   const { hashedPassword, ...rest } = user
   return rest
+}
+
+type PublicData = {
+  userId: number
+  role: string
+}
+
+/*
+ * This is a nice utility function for ensuring that you set the session
+ * public data exactly the same way on signup and login.
+ */
+export const buildPublicData = ({ userId, role }: PublicData) => {
+  return { userId, roles: [role] }
 }

@@ -1,6 +1,6 @@
 import db from "db"
 import { SessionContext } from "blitz"
-import { hashPassword } from "app/auth/auth-utils"
+import { hashPassword, buildPublicData } from "app/auth/auth-utils"
 import { SignupInput, SignupInputType } from "app/auth/validations"
 
 export default async function signup(
@@ -16,7 +16,12 @@ export default async function signup(
     select: { id: true, name: true, email: true, role: true },
   })
 
-  await ctx.session!.create({ userId: user.id, roles: [user.role] })
+  await ctx.session!.create(
+    buildPublicData({
+      userId: user.id,
+      role: user.role,
+    })
+  )
 
   return user
 }
