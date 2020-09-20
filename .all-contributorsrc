@@ -1141,6 +1141,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "enricoschaaf",
+      "name": "Enrico Schaaf",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/54645197?v=4",
+      "profile": "http://enricoschaaf.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
