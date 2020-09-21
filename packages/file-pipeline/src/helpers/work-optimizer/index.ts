@@ -23,8 +23,6 @@ const defaultReadCache = (filePath: string) => {
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
  */
-// TODO:  This needs quite a bit of work before we can manage a dirty start
-//        Currently this does not do much aside from guard against repeated work
 export function createWorkOptimizer(
   src: string,
   dest: string,
