@@ -15,7 +15,7 @@ export default async function forgotPassword(
   const { email } = ForgotPasswordInput.parse(input)
 
   // 1. Get the user
-  const user = await db.user.findOne({ where: { email } })
+  const user = await db.user.findOne({ where: { email: email.toLowerCase() } })
 
   // 2. Generate the token and expiration date.
   // We use encodeURIComponent(token) since it will be used in the URL
