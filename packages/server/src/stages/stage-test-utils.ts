@@ -22,6 +22,8 @@ export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs 
     bus: through.obj(),
     input: through.obj(),
     config,
+    processNewFile: () => {},
+    processNewChildFile: () => {},
   }
 }
 

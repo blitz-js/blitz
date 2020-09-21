@@ -60,12 +60,12 @@ module.exports = withBlitz(config);
     if (isNowBuild()) {
       // Assume we have a next.config.js if NOW_BUILDER is true as the cli creates one
 
-      // Divert next.config to _blitz_next-vercel.config.js
+      // Divert next.config to __next-vercel.config.js
       processNewChildFile({
         parent: file,
         child: new File({
           cwd: config.src,
-          path: resolve(config.src, "_blitz_next-vercel.config.js"),
+          path: resolve(config.src, "__next-vercel.config.js"),
           contents: file.contents,
         }),
         stageId: "config",
@@ -74,7 +74,7 @@ module.exports = withBlitz(config);
 
       file.contents = Buffer.from(`
 const {withBlitz} = require('@blitzjs/server');
-const vercelConfig = require('./_blitz_next-vercel.config.js');
+const vercelConfig = require('./__next-vercel.config.js');
 const config = require('./blitz.config.js');
 module.exports = withBlitz({...config, ...vercelConfig});
       `)

@@ -51,9 +51,9 @@ describe("Build command Vercel", () => {
     expect(directoryTree(buildFolder)).toEqual({
       name: ".blitz-build",
       children: [
+        {name: "__next-vercel.config.js"},
         {name: "blitz.config.js"},
         {name: "last-build"},
-        {name: "__next-vercel.config.js"},
         {name: "next.config.js"},
         {
           name: "pages",
