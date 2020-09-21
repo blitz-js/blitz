@@ -1,4 +1,3 @@
-import {ensureDir, pathExists, remove} from "fs-extra"
 import {Transform} from "stream"
 import {createDisplay} from "../display"
 import {ERROR_THROWN, READY} from "../events"
@@ -39,16 +38,16 @@ export async function transformFiles(
     bus = defaultBus,
     source,
     writer,
-    noclean = false,
+    // noclean = false,
   } = options
 
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
   // TODO: remove this clean and devise a way to resolve differences in stream
-  if (!noclean) await clean(dest)
+  // if (!noclean) await clean(dest)
 
   // const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     const config = {
       cwd: src,
       src,
@@ -76,11 +75,4 @@ export async function transformFiles(
       if (err) reject(err)
     })
   })
-}
-
-async function clean(path: string) {
-  if (await pathExists(path)) {
-    await remove(path)
-  }
-  return await ensureDir(path)
 }

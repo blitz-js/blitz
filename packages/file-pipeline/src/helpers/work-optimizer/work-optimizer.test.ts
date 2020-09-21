@@ -13,7 +13,7 @@ function logItem(fileOrString: {path: string} | string) {
 
 describe("agnosticSource", () => {
   test("basic throughput", async () => {
-    const {triage, reportComplete} = createWorkOptimizer()
+    const {triage, reportComplete} = createWorkOptimizer("/somewhere")
     triage.write(
       new File({
         hash: "one",
@@ -44,7 +44,7 @@ describe("agnosticSource", () => {
   })
 
   test("same file is rejected", async () => {
-    const {triage, reportComplete} = createWorkOptimizer()
+    const {triage, reportComplete} = createWorkOptimizer("/somewhere")
     triage.write(
       new File({
         hash: "one",
