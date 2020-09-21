@@ -7,28 +7,37 @@ import {writeFile, existsSync, readFileSync} from "fs-extra"
 import {resolve, relative} from "path"
 import File from "vinyl"
 
-const debounceSaveToFile = debounce((filePath: string, data: object) => {
+const defaultSaveCache = (filePath: string, data: object) => {
   return writeFile(filePath, Buffer.from(JSON.stringify(data, null, 2)))
     .then(() => {})
     .catch(() => {})
-}, 500)
+}
+
+const defaultReadCache = (filePath: string) => {
+  // We need to do sync file reading here as this cache
+  // must be loaded before the stream is added to the pipeline
+  // or we end up with more complexity having to cache files as they come in
+  return existsSync(filePath) ? readFileSync(filePath).toString() : ""
+}
 
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
  */
 // TODO:  This needs quite a bit of work before we can manage a dirty start
 //        Currently this does not do much aside from guard against repeated work
-export function createWorkOptimizer(src: string, dest: string) {
+export function createWorkOptimizer(
+  src: string,
+  dest: string,
+  saveCache: (filePath: string, data: object) => Promise<void> = defaultSaveCache,
+  readCache: (filePath: string) => string = defaultReadCache,
+) {
   const getOriginalPath = (file: File) => {
     return relative(src, file.history[0])
   }
-
   const doneCacheLocation = resolve(dest, "_blitz_done.json")
+  const debounceSaveCache = debounce(saveCache, 500)
 
-  // We need to do sync file reading here as this cache
-  // must be loaded before the stream is added to the pipeline
-  // or we end up with more complexity having to cache files as they come in
-  const doneStr = existsSync(doneCacheLocation) ? readFileSync(doneCacheLocation).toString() : ""
+  const doneStr = readCache(doneCacheLocation)
 
   const todo: Record<string, string> = {}
   const done: Record<string, string> = doneStr ? JSON.parse(doneStr) : {}
@@ -48,7 +57,7 @@ export function createWorkOptimizer(src: string, dest: string) {
       delete done[origPath]
     }
 
-    await debounceSaveToFile(resolve(dest, "_blitz_done.json"), done)
+    await debounceSaveCache(resolve(dest, "_blitz_done.json"), done)
 
     return file
   })
