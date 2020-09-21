@@ -7,11 +7,11 @@ import {writeFile, existsSync, readFileSync} from "fs-extra"
 import {resolve, relative} from "path"
 import File from "vinyl"
 
-const defaultSaveCache = (filePath: string, data: object) => {
+const defaultSaveCache = debounce((filePath: string, data: object) => {
   return writeFile(filePath, Buffer.from(JSON.stringify(data, null, 2)))
     .then(() => {})
     .catch(() => {})
-}
+}, 500)
 
 const defaultReadCache = (filePath: string) => {
   // We need to do sync file reading here as this cache
@@ -35,7 +35,6 @@ export function createWorkOptimizer(
     return relative(src, file.history[0])
   }
   const doneCacheLocation = resolve(dest, "_blitz_done.json")
-  const debounceSaveCache = debounce(saveCache, 500)
 
   const doneStr = readCache(doneCacheLocation)
 
@@ -57,7 +56,7 @@ export function createWorkOptimizer(
       delete done[origPath]
     }
 
-    await debounceSaveCache(resolve(dest, "_blitz_done.json"), done)
+    await saveCache(resolve(dest, "_blitz_done.json"), done)
 
     return file
   })
