@@ -32,7 +32,7 @@ export function createWorkOptimizer(
   const getOriginalPath = (file: File) => {
     return relative(src, file.history[0])
   }
-  const doneCacheLocation = resolve(dest, "_blitz_done.json")
+  const doneCacheLocation = resolve(dest, ".blitz.icache.json")
 
   const doneStr = readCache(doneCacheLocation)
 
@@ -54,7 +54,7 @@ export function createWorkOptimizer(
       delete done[origPath]
     }
 
-    await saveCache(resolve(dest, "_blitz_done.json"), done)
+    await saveCache(resolve(dest, ".blitz.icache.json"), done)
 
     return file
   })

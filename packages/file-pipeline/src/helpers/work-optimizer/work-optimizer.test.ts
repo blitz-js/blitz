@@ -154,7 +154,7 @@ describe("agnosticSource", () => {
       [normalize("to/three")]: "three",
     }
 
-    expect(saveCache).toHaveBeenCalledWith("/dest/_blitz_done.json", doneObj)
+    expect(saveCache).toHaveBeenCalledWith("/dest/.blitz.icache.json", doneObj)
   })
 
   test("should keep track of deleted files", async () => {
@@ -201,6 +201,6 @@ describe("agnosticSource", () => {
       [normalize("to/three")]: "three",
     }
 
-    expect(saveCache).toHaveBeenCalledWith("/dest/_blitz_done.json", expectedDone)
+    expect(saveCache).toHaveBeenCalledWith("/dest/.blitz.icache.json", expectedDone)
   })
 })
