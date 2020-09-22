@@ -1,8 +1,13 @@
 import {createWorkOptimizer} from "."
 import {take} from "../../test-utils"
+import {hash} from "../../utils"
 import {pipeline} from "../../streams"
 import {normalize} from "path"
 import File from "vinyl"
+
+const pathToOneHash = hash(normalize("to/one"))
+const pathToTwoHash = hash(normalize("to/two"))
+const pathToThreeHash = hash(normalize("to/three"))
 
 describe("agnosticSource", () => {
   test("basic throughput", async () => {
@@ -83,7 +88,7 @@ describe("agnosticSource", () => {
   test("read cache from disk and skips cached files with the same hash and path", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn(() => {
-      return `{"${normalize("to/one")}": "one","${normalize("to/two")}": "two"}`
+      return `{"${pathToOneHash}": "one","${pathToTwoHash}": "two"}`
     })
 
     const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
@@ -150,9 +155,9 @@ describe("agnosticSource", () => {
     await take(stream, 3)
 
     const doneObj = {
-      [normalize("to/one")]: "one",
-      [normalize("to/two")]: "two",
-      [normalize("to/three")]: "three",
+      [`${pathToOneHash}`]: "one",
+      [`${pathToTwoHash}`]: "two",
+      [`${pathToThreeHash}`]: "three",
     }
 
     expect(saveCache).toHaveBeenCalledWith(
@@ -201,8 +206,8 @@ describe("agnosticSource", () => {
     await take(stream, 4)
 
     const expectedDone = {
-      [normalize("to/one")]: "one",
-      [normalize("to/three")]: "three",
+      [pathToOneHash]: "one",
+      [pathToThreeHash]: "three",
     }
 
     expect(saveCache).toHaveBeenCalledWith(

@@ -1,7 +1,7 @@
 // Mostly concerned with solving the Dirty Sync problem
 import {log} from "@blitzjs/display"
 import {transform} from "../../transform"
-
+import {hash} from "../../utils"
 import debounce from "lodash/debounce"
 import {writeFile, existsSync, readFileSync} from "fs-extra"
 import {resolve, relative} from "path"
@@ -29,29 +29,29 @@ export function createWorkOptimizer(
   saveCache: (filePath: string, data: object) => Promise<void> = defaultSaveCache,
   readCache: (filePath: string) => string = defaultReadCache,
 ) {
-  const getOriginalPath = (file: File) => {
-    return relative(src, file.history[0])
+  const getOriginalPathHash = (file: File) => {
+    return hash(relative(src, file.history[0]))
   }
   const doneCacheLocation = resolve(dest, ".blitz.incremental.cache.json")
 
   const doneStr = readCache(doneCacheLocation)
-  console.log({doneStr})
+
   const todo: Record<string, string> = {}
   const done: Record<string, string> = doneStr ? JSON.parse(doneStr) : {}
 
   const stats = {todo, done}
 
   const reportComplete = transform.file(async (file) => {
-    const origPath = getOriginalPath(file)
+    const pathHash = getOriginalPathHash(file)
 
-    delete todo[origPath]
+    delete todo[pathHash]
 
     if (file.event === "add") {
-      done[origPath] = file.hash
+      done[pathHash] = file.hash
     }
 
     if (file.event === "unlink") {
-      delete done[origPath]
+      delete done[pathHash]
     }
 
     await saveCache(resolve(dest, ".blitz.incremental.cache.json"), done)
@@ -60,7 +60,7 @@ export function createWorkOptimizer(
   })
 
   const triage = transform.file((file, {push, next}) => {
-    const origPath = getOriginalPath(file)
+    const pathHash = getOriginalPathHash(file)
 
     if (!file.hash) {
       log.debug("File does not have hash! " + file.path)
@@ -68,12 +68,12 @@ export function createWorkOptimizer(
     }
 
     // Dont send files that have already been done or have already been added
-    if (done[origPath] === file.hash || todo[origPath] === file.hash) {
+    if (done[pathHash] === file.hash || todo[pathHash] === file.hash) {
       log.debug("Rejecting because this job has been done before: " + file.path)
       return next()
     }
 
-    todo[origPath] = file.hash
+    todo[pathHash] = file.hash
 
     push(file)
 
