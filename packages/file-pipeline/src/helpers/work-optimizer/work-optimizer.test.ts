@@ -13,7 +13,12 @@ describe("agnosticSource", () => {
   test("basic throughput", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn()
-    const {triage, reportComplete} = createWorkOptimizer("/src", "/dest", saveCache, readCache)
+    const {triage, reportComplete} = createWorkOptimizer(
+      normalize("/path"),
+      normalize("/dest"),
+      saveCache,
+      readCache,
+    )
 
     triage.write(
       new File({
@@ -51,7 +56,12 @@ describe("agnosticSource", () => {
   test("same file is rejected", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn()
-    const {triage, reportComplete} = createWorkOptimizer("/src", "/dest", saveCache, readCache)
+    const {triage, reportComplete} = createWorkOptimizer(
+      normalize("/path"),
+      normalize("/dest"),
+      saveCache,
+      readCache,
+    )
     triage.write(
       new File({
         hash: "one",
@@ -125,7 +135,12 @@ describe("agnosticSource", () => {
   test("save cache should be saved correctly", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn()
-    const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
+    const {triage, reportComplete} = createWorkOptimizer(
+      normalize("/path"),
+      normalize("/dest"),
+      saveCache,
+      readCache,
+    )
     triage.write(
       new File({
         hash: "one",
