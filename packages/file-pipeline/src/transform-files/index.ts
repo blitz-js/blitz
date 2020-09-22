@@ -1,3 +1,4 @@
+import {ensureDir, pathExists, remove} from "fs-extra"
 import {Transform} from "stream"
 import {createDisplay} from "../display"
 import {ERROR_THROWN, READY} from "../events"
@@ -14,7 +15,7 @@ type SynchronizeFilesOptions = {
   bus?: Transform
   source?: FSStreamer
   writer?: FSStreamer
-  noclean?: boolean
+  clean?: boolean
 }
 
 const defaultBus = through.obj()
@@ -38,14 +39,14 @@ export async function transformFiles(
     bus = defaultBus,
     source,
     writer,
-    // noclean = false,
+    clean: requestClean,
   } = options
 
-  // HACK: cleaning the dev folder on every restart means we do more work than necessary
-  // TODO: remove this clean and devise a way to resolve differences in stream
-  // if (!noclean) await clean(dest)
+  if (requestClean) {
+    console.log("Requesting clean!")
+    await clean(dest)
+  }
 
-  // const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
   return await new Promise((resolve, reject) => {
     const config = {
@@ -75,4 +76,11 @@ export async function transformFiles(
       if (err) reject(err)
     })
   })
+}
+
+async function clean(path: string) {
+  if (await pathExists(path)) {
+    await remove(path)
+  }
+  return await ensureDir(path)
 }
