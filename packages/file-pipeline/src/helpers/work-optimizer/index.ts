@@ -35,7 +35,7 @@ export function createWorkOptimizer(
   const doneCacheLocation = resolve(dest, ".blitz.incremental.cache.json")
 
   const doneStr = readCache(doneCacheLocation)
-
+  console.log({doneStr})
   const todo: Record<string, string> = {}
   const done: Record<string, string> = doneStr ? JSON.parse(doneStr) : {}
 

@@ -11,43 +11,44 @@ on:
       - canary
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.16.1"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-v3-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-v3-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
-      - name: yarn lint
-        run: yarn lint
-        env:
-          CI: true
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.16.1"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - name: Cache node_modules
+  #       id: yarn-cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: |
+  #           ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #           **/node_modules
+  #           /home/runner/.cache/Cypress
+  #           C:\Users\runneradmin\AppData\Local\Cypress\Cache
+  #         key: ${{ runner.os }}-yarn-v3-${{ hashFiles('yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-v3-
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile --silent
+  #       env:
+  #         CI: true
+  #     - name: yarn lint
+  #       run: yarn lint
+  #       env:
+  #         CI: true
   build_and_test_pkgs:
     name: Build & Test Packages
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
+        # os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -84,44 +85,44 @@ jobs:
         run: yarn testonly:packages
         env:
           CI: true
-  build_and_test_examples:
-    name: Build & Test Examples
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.16.1"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-v2-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
-      - name: Setup kernel to increase watchers
-        if: matrix.os == 'ubuntu-latest'
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
-      - name: Test examples
-        run: yarn testonly:examples
-        env:
-          CI: true
+  # build_and_test_examples:
+  #   name: Build & Test Examples
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.16.1"
+  #     - name: Get yarn cache directory path
+  #       id: yarn-cache-dir-path
+  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+  #     - name: Cache node_modules
+  #       id: yarn-cache
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: |
+  #           ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #           /home/runner/.cache/Cypress
+  #           C:\Users\runneradmin\AppData\Local\Cypress\Cache
+  #         key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-yarn-v2-
+  #     - name: Install dependencies
+  #       run: yarn install --frozen-lockfile --silent
+  #       env:
+  #         CI: true
+  #     - name: Setup kernel to increase watchers
+  #       if: matrix.os == 'ubuntu-latest'
+  #       run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+  #     - name: Build packages
+  #       run: yarn build
+  #       env:
+  #         CI: true
+  #     - name: Test examples
+  #       run: yarn testonly:examples
+  #       env:
+  #         CI: true
