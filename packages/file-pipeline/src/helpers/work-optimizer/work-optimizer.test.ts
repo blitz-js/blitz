@@ -85,6 +85,7 @@ describe("agnosticSource", () => {
     const readCache = jest.fn(() => {
       return `{"${normalize("to/one")}": "one","${normalize("to/two")}": "two"}`
     })
+
     const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
     triage.write(
       new File({
@@ -154,7 +155,10 @@ describe("agnosticSource", () => {
       [normalize("to/three")]: "three",
     }
 
-    expect(saveCache).toHaveBeenCalledWith("/dest/.blitz.icache.json", doneObj)
+    expect(saveCache).toHaveBeenCalledWith(
+      normalize("/dest/.blitz.incremental.cache.json"),
+      doneObj,
+    )
   })
 
   test("should keep track of deleted files", async () => {
@@ -201,6 +205,9 @@ describe("agnosticSource", () => {
       [normalize("to/three")]: "three",
     }
 
-    expect(saveCache).toHaveBeenCalledWith("/dest/.blitz.icache.json", expectedDone)
+    expect(saveCache).toHaveBeenCalledWith(
+      normalize("/dest/.blitz.incremental.cache.json"),
+      expectedDone,
+    )
   })
 })
