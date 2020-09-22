@@ -83,7 +83,7 @@ describe("agnosticSource", () => {
   test("read cache from disk and skips cached files with the same hash and path", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn(() => {
-      return '{"to/one": "one","to/two": "two"}'
+      return `{"${normalize("to/one")}": "one","${normalize("to/two")}": "two"}`
     })
     const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
     triage.write(
@@ -149,9 +149,9 @@ describe("agnosticSource", () => {
     await take(stream, 3)
 
     const doneObj = {
-      "to/one": "one",
-      "to/two": "two",
-      "to/three": "three",
+      [normalize("to/one")]: "one",
+      [normalize("to/two")]: "two",
+      [normalize("to/three")]: "three",
     }
 
     expect(saveCache).toHaveBeenCalledWith("/dest/_blitz_done.json", doneObj)
@@ -197,8 +197,8 @@ describe("agnosticSource", () => {
     await take(stream, 4)
 
     const expectedDone = {
-      "to/one": "one",
-      "to/three": "three",
+      [normalize("to/one")]: "one",
+      [normalize("to/three")]: "three",
     }
 
     expect(saveCache).toHaveBeenCalledWith("/dest/_blitz_done.json", expectedDone)
