@@ -1,6 +1,5 @@
-import crypto from "crypto"
 import {transform} from "../transform"
-
+import {hash} from "../utils"
 /**
  * Returns a stage that prepares files coming into the stream
  * with correct event information as well as hash information
@@ -20,10 +19,7 @@ export function createEnrichFiles() {
     }
 
     if (!file.hash) {
-      file.hash = crypto
-        .createHash("md5")
-        .update(file.path + file.stat?.mtime.toString())
-        .digest("hex")
+      file.hash = hash(file.path + file.stat?.mtime.toString())
     }
 
     return file
