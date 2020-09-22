@@ -2,7 +2,7 @@ import {createWorkOptimizer} from "."
 import {take} from "../../test-utils"
 import {hash} from "../../utils"
 import {pipeline} from "../../streams"
-import {normalize} from "path"
+import {normalize, resolve} from "path"
 import File from "vinyl"
 
 const pathToOneHash = hash(normalize("to/one"))
@@ -101,7 +101,12 @@ describe("agnosticSource", () => {
       return `{"${pathToOneHash}": "one","${pathToTwoHash}": "two"}`
     })
 
-    const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
+    const {triage, reportComplete} = createWorkOptimizer(
+      normalize("/path"),
+      normalize("/dest"),
+      saveCache,
+      readCache,
+    )
     triage.write(
       new File({
         hash: "one",
@@ -175,16 +180,18 @@ describe("agnosticSource", () => {
       [`${pathToThreeHash}`]: "three",
     }
 
-    expect(saveCache).toHaveBeenCalledWith(
-      normalize("/dest/.blitz.incremental.cache.json"),
-      doneObj,
-    )
+    expect(saveCache).toHaveBeenCalledWith(resolve(normalize("/dest/.blitz.incache.json")), doneObj)
   })
 
   test("should keep track of deleted files", async () => {
     const saveCache = jest.fn()
     const readCache = jest.fn()
-    const {triage, reportComplete} = createWorkOptimizer("/path", "/dest", saveCache, readCache)
+    const {triage, reportComplete} = createWorkOptimizer(
+      normalize("/path"),
+      normalize("/dest"),
+      saveCache,
+      readCache,
+    )
     triage.write(
       new File({
         hash: "one",
@@ -226,7 +233,7 @@ describe("agnosticSource", () => {
     }
 
     expect(saveCache).toHaveBeenCalledWith(
-      normalize("/dest/.blitz.incremental.cache.json"),
+      resolve(normalize("/dest/.blitz.incache.json")),
       expectedDone,
     )
   })
