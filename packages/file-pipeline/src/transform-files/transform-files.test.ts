@@ -53,7 +53,7 @@ describe("transformFiles", () => {
         ["/foo/one", "/foo/two", "/foo/three"].map(normalize).concat(["ready"]),
         logFile,
       ),
-      transformFiles(normalize("/foo"), [], normalize("/bar"), {source, writer, noclean: true}),
+      transformFiles(normalize("/foo"), [], normalize("/bar"), {source, writer}),
     ])
   })
 })
