@@ -3,7 +3,7 @@ import {Link} from "blitz"
 import {LabeledTextField} from "app/components/LabeledTextField"
 import {Form, FORM_ERROR} from "app/components/Form"
 import login from "app/auth/mutations/login"
-import {LoginInput, LoginInputType} from "app/auth/validations"
+import {LoginInput} from "app/auth/validations"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -13,7 +13,7 @@ export const LoginForm = (props: LoginFormProps) => {
   return (
     <div>
       <h1>Login</h1>
-      <Form<LoginInputType>
+      <Form
         submitText="Log In"
         schema={LoginInput}
         initialValues={{email: undefined, password: undefined}}

@@ -3,26 +3,26 @@ import { Form as FinalForm, FormProps as FinalFormProps } from "react-final-form
 import * as z from "zod"
 export { FORM_ERROR } from "final-form"
 
-type FormProps<FormValues> = {
+type FormProps<S extends z.ZodType<any, any>> = {
   /** All your form fields */
   children: ReactNode
   /** Text to display in the submit button */
   submitText: string
-  onSubmit: FinalFormProps<FormValues>["onSubmit"]
-  initialValues?: FinalFormProps<FormValues>["initialValues"]
-  schema?: z.ZodType<any, any>
+  schema?: S
+  onSubmit: FinalFormProps<z.infer<S>>["onSubmit"]
+  initialValues?: FinalFormProps<z.infer<S>>["initialValues"]
 } & Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit">
 
-export function Form<FormValues extends Record<string, unknown>>({
+export function Form<S extends z.ZodType<any, any>>({
   children,
   submitText,
   schema,
   initialValues,
   onSubmit,
   ...props
-}: FormProps<FormValues>) {
+}: FormProps<S>) {
   return (
-    <FinalForm<FormValues>
+    <FinalForm
       initialValues={initialValues}
       validate={(values) => {
         if (!schema) return
@@ -32,7 +32,13 @@ export function Form<FormValues extends Record<string, unknown>>({
           return error.formErrors.fieldErrors
         }
       }}
-      onSubmit={onSubmit}
+      onSubmit={async (values, form) => {
+        const result = await onSubmit(values, form)
+        if (result === undefined) {
+          form.reset()
+        }
+        return result
+      }}
       render={({ handleSubmit, submitting, submitError }) => (
         <form onSubmit={handleSubmit} className="form" {...props}>
           {/* Form fields supplied as children are rendered here */}
