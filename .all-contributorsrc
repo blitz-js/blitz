@@ -887,7 +887,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/8602086?v=4",
       "profile": "http://ricardotrejos.tech",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -988,7 +989,9 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/10850034?v=4",
       "profile": "https://twitter.com/nitaking_",
       "contributions": [
-        "code"
+        "code",
+        "maintenance",
+        "question"
       ]
     },
     {
@@ -1137,6 +1140,24 @@
       "profile": "http://avinash.com.np",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "enricoschaaf",
+      "name": "Enrico Schaaf",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/54645197?v=4",
+      "profile": "http://enricoschaaf.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kitze",
+      "name": "Kitze",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1160594?v=4",
+      "profile": "http://kitze.io",
+      "contributions": [
+        "ideas"
       ]
     }
   ],

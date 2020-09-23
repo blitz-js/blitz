@@ -67,7 +67,7 @@ export const runMigrate = async (flags: object = {}) => {
   const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
   const options = ([] as string[]).concat(...nestedFlags)
 
-  const silent = options.includes("name")
+  const silent = options.includes("--name")
 
   const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
 
@@ -163,7 +163,9 @@ ${require("chalk").bold(
   "studio",
 )}   Open the Prisma Studio UI at http://localhost:5555 so you can easily see and change data in your database.
 
-${require("chalk").bold("reset")}   Reset the database and run a fresh migration via Prisma 2.
+${require("chalk").bold(
+  "reset",
+)}   Reset the database and run a fresh migration via Prisma 2. You can also pass --force to skip all the user prompts.
 `
 
   static args = [
@@ -179,6 +181,8 @@ ${require("chalk").bold("reset")}   Reset the database and run a fresh migration
     help: flags.help({char: "h"}),
     // Used by `new` command to perform the initial migration
     name: flags.string({hidden: true}),
+    // Used by `reset` command to skip the confirmation prompt
+    force: flags.boolean({char: "f", hidden: true}),
   }
 
   static strict = false
@@ -213,20 +217,21 @@ ${require("chalk").bold("reset")}   Reset the database and run a fresh migration
     }
 
     if (command === "reset") {
-      const spinner = log.spinner("Loading your database").start()
-      await runPrismaGeneration({silent: true, failSilently: true})
-      spinner.succeed()
+      const forceSkipConfirmation = flags.force
 
-      const {confirm} = await require("enquirer").prompt({
-        type: "confirm",
-        name: "confirm",
-        message: "Are you sure you want to reset your database and erase ALL data?",
-      })
+      if (!forceSkipConfirmation) {
+        const {confirm} = await require("enquirer").prompt({
+          type: "confirm",
+          name: "confirm",
+          message: "Are you sure you want to reset your database and erase ALL data?",
+        })
 
-      if (!confirm) {
-        return
+        if (!confirm) {
+          return
+        }
       }
 
+      log.progress("Resetting your database...")
       const {projectRoot} = require("../utils/get-project-root")
       const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
       const {PrismaClient} = require(prismaClientPath)
@@ -239,16 +244,18 @@ ${require("chalk").bold("reset")}   Reset the database and run a fresh migration
       const connectionString = dataSource.url.value
 
       if (providerType === "postgresql") {
-        resetPostgres(connectionString, db)
+        await resetPostgres(connectionString, db)
+        return
       } else if (providerType === "mysql") {
-        resetMysql(connectionString, db)
+        await resetMysql(connectionString, db)
+        return
       } else if (providerType === "sqlite") {
-        resetSqlite(connectionString)
+        await resetSqlite(connectionString)
+        return
       } else {
-        this.log("Could not find a valid database configuration")
+        log.error("Could not find a valid database configuration")
+        return
       }
-
-      return
     }
 
     if (command === "help") {

@@ -37,28 +37,9 @@ jest.mock(
   }),
 )
 
-jest.mock(
-  "../../src/commands/db",
-  jest.fn(() => {
-    return {
-      runPrismaGeneration: jest.fn(),
-    }
-  }),
-)
-
 describe("Console command", () => {
   beforeEach(() => {
     jest.resetAllMocks()
-  })
-
-  it("runs PrismaGeneration", async () => {
-    await Console.prototype.run()
-    expect(db.runPrismaGeneration).toHaveBeenCalled()
-  })
-
-  it("runs PrismaGeneration with silent allowed", async () => {
-    await Console.prototype.run()
-    expect(db.runPrismaGeneration).toHaveBeenCalledWith({silent: true, failSilently: true})
   })
 
   it("runs repl", async () => {

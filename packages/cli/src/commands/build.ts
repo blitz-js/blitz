@@ -10,10 +10,7 @@ export class Build extends Command {
     }
 
     try {
-      await require("@blitzjs/server").build(
-        config,
-        require("./db").runPrismaGeneration({silent: true, failSilently: true}),
-      )
+      await require("@blitzjs/server").build(config)
     } catch (err) {
       console.error(err)
       process.exit(1) // clean up?

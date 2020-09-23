@@ -310,11 +310,11 @@ export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
     assert(
       process.env.SESSION_SECRET_KEY,
-      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify JWTs.",
+      "You must provide the SESSION_SECRET_KEY environment variable in production. This used to sign and verify tokens. It should be 32 chars long.",
     )
     assert(
       process.env.SESSION_SECRET_KEY.length >= 32,
-      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent JWT security",
+      "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent token security",
     )
 
     return process.env.SESSION_SECRET_KEY

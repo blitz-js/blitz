@@ -94,6 +94,8 @@
     "directory-tree": "2.2.4",
     "eslint": "7.7.0",
     "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-es": "mysticatea/eslint-plugin-es",
+    "eslint-plugin-es5": "1.5.0",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-jsx-a11y": "6.3.1",

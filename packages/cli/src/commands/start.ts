@@ -34,9 +34,9 @@ export class Start extends Command {
 
     try {
       if (flags.production) {
-        await prod(config, require("./db").runPrismaGeneration({silent: true, failSilently: true}))
+        await prod(config)
       } else {
-        await dev(config, require("./db").runPrismaGeneration({silent: true, failSilently: true}))
+        await dev(config)
       }
     } catch (err) {
       console.error(err)
