@@ -32,13 +32,7 @@ export function Form<S extends z.ZodType<any, any>>({
           return error.formErrors.fieldErrors
         }
       }}
-      onSubmit={async (values, form) => {
-        const result = await onSubmit(values, form)
-        if (result === undefined) {
-          form.reset()
-        }
-        return result
-      }}
+      onSubmit={onSubmit}
       render={({ handleSubmit, submitting, submitError }) => (
         <form onSubmit={handleSubmit} className="form" {...props}>
           {/* Form fields supplied as children are rendered here */}
