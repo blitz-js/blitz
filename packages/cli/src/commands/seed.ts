@@ -28,7 +28,7 @@ export class Seed extends Command {
     spinner.succeed()
 
     spinner = log.spinner("Checking for database migrations").start()
-    await runMigrate()
+    await runMigrate({}, `--schema=${join(process.cwd(), "db", "schema.prisma")}`)
     spinner.succeed()
 
     try {

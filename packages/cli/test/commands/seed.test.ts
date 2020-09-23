@@ -2,13 +2,10 @@ import {join} from "path"
 import pkgDir from "pkg-dir"
 import {resolveBinAsync} from "@blitzjs/server"
 
-let onSpy: jest.Mock
-const spawn = jest.fn(() => {
-  onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
-    callback(0)
-  })
-  return {on: onSpy}
+let onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
+  callback(0)
 })
+const spawn = jest.fn(() => ({on: onSpy, off: jest.fn()}))
 
 jest.doMock("cross-spawn", () => ({spawn}))
 
@@ -40,12 +37,12 @@ beforeAll(async () => {
   migrateSaveParams = [
     prismaBin,
     ["migrate", "save", schemaArg, "--create-db", "--experimental"],
-    {stdio: "inherit"},
+    {stdio: "inherit", env: process.env},
   ]
   migrateUpDevParams = [
     prismaBin,
     ["migrate", "up", schemaArg, "--create-db", "--experimental"],
-    {stdio: "inherit"},
+    {stdio: "inherit", env: process.env},
   ]
 
   jest.spyOn(global.console, "log").mockImplementation(jest.fn((output: string) => {}))
@@ -63,6 +60,7 @@ describe("Start command", () => {
   function expectDbMigrateOutcome() {
     expect(spawn).toBeCalledWith(...migrateSaveParams)
     expect(spawn.mock.calls.length).toBe(3)
+    expect(onSpy).toHaveBeenCalledTimes(3)
     expect(spawn).toBeCalledWith(...migrateUpDevParams)
   }
 
