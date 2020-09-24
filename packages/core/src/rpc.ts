@@ -56,8 +56,7 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
       credentials: "include",
       redirect: "follow",
       body: JSON.stringify({
-        // TODO remove `|| null` once superjson allows `undefined`
-        params: serialized.json || null,
+        params: serialized.json,
         meta: {
           params: serialized.meta,
         },
