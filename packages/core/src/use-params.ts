@@ -1,6 +1,7 @@
+import {useMemo, useState} from "react"
+import {fromPairs, isEqual} from "lodash"
 import {useRouter} from "next/router"
 import {useRouterQuery} from "./use-router-query"
-import {fromPairs} from "lodash"
 
 type ParsedUrlQueryValue = string | string[] | undefined
 
@@ -47,40 +48,54 @@ export function useParams(returnType: "array"): Record<string, Array<string | un
 export function useParams(returnType?: "string" | "number" | "array") {
   const router = useRouter()
   const query = useRouterQuery()
+  const [lastRouterQuery, setLastRouterQuery] = useState(router.query)
+  const [lastQuery, setLastQuery] = useState(query)
 
-  const rawParams = extractRouterParams(router.query, query)
-
-  if (returnType === "string") {
-    const params: Record<string, string> = {}
-    for (const key in rawParams) {
-      if (typeof rawParams[key] === "string") {
-        params[key] = rawParams[key] as string
-      }
-    }
-    return params
+  if (!isEqual(router.query, lastRouterQuery)) {
+    setLastRouterQuery(router.query)
   }
 
-  if (returnType === "number") {
-    const params: Record<string, number> = {}
-    for (const key in rawParams) {
-      if (rawParams[key]) {
-        params[key] = Number(rawParams[key])
-      }
-    }
-    return params
+  if (!isEqual(query, lastQuery)) {
+    setLastQuery(query)
   }
 
-  if (returnType === "array") {
-    const params: Record<string, Array<string | undefined>> = {}
-    for (const key in rawParams) {
-      if (Array.isArray(rawParams[key])) {
-        params[key] = rawParams[key] as Array<string | undefined>
-      }
-    }
-    return params
-  }
+  const params = useMemo(() => {
+    const rawParams = extractRouterParams(lastRouterQuery, lastQuery)
 
-  return rawParams
+    if (returnType === "string") {
+      const params: Record<string, string> = {}
+      for (const key in rawParams) {
+        if (typeof rawParams[key] === "string") {
+          params[key] = rawParams[key] as string
+        }
+      }
+      return params
+    }
+
+    if (returnType === "number") {
+      const params: Record<string, number> = {}
+      for (const key in rawParams) {
+        if (rawParams[key]) {
+          params[key] = Number(rawParams[key])
+        }
+      }
+      return params
+    }
+
+    if (returnType === "array") {
+      const params: Record<string, Array<string | undefined>> = {}
+      for (const key in rawParams) {
+        if (Array.isArray(rawParams[key])) {
+          params[key] = rawParams[key] as Array<string | undefined>
+        }
+      }
+      return params
+    }
+
+    return rawParams
+  }, [lastRouterQuery, lastQuery, returnType])
+
+  return params
 }
 
 export function useParam(key: string): undefined | string | string[]
