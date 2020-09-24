@@ -28,6 +28,7 @@ export async function build(
       ignore,
       include,
       watch,
+      clean: true, // always clean in build
     }),
     readyForNextBuild,
   ])
