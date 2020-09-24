@@ -80,7 +80,12 @@ export const createStageRpc = (isTypescript = true): Stage =>
         new File({
           path: getResolverPath(file.path),
           contents: file.contents,
-          hash: file.hash + ":1",
+          // Appending a new file to the output of this particular stream
+          // We don't want to reprocess this file but simply add it to the output
+          // of the stream here we provide a hash with some information for how
+          // this file came to be here
+          hash: [file.hash, "rpc", "resolver"].join("|"),
+          event: "add",
         }),
       )
 
@@ -89,7 +94,12 @@ export const createStageRpc = (isTypescript = true): Stage =>
         new File({
           path: getApiHandlerPath(file.path),
           contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
-          hash: file.hash + ":2",
+          // Appending a new file to the output of this particular stream
+          // We don't want to reprocess this file but simply add it to the output
+          // of the stream here we provide a hash with some information for how
+          // this file came to be here
+          hash: [file.hash, "rpc", "handler"].join("|"),
+          event: "add",
         }),
       )
 

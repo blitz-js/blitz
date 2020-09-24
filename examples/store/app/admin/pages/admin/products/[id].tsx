@@ -2,17 +2,18 @@ import {Suspense} from "react"
 import {Link, useRouter, useQuery, useParam} from "blitz"
 import getProduct from "app/products/queries/getProduct"
 import ProductForm from "app/products/components/ProductForm"
+import {queryCache} from "react-query"
 
 function Product() {
   const router = useRouter()
   const id = useParam("id", "number")
-  const [product, {mutate}] = useQuery(getProduct, {where: {id}})
+  const [product] = useQuery(getProduct, {where: {id}})
 
   return (
     <ProductForm
       product={product}
-      onSuccess={(updatedProduct) => {
-        mutate(updatedProduct)
+      onSuccess={() => {
+        queryCache.invalidateQueries("/api/products/queries/getProducts")
         router.push("/admin/products")
       }}
     />

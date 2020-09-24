@@ -13,6 +13,7 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     isTypescript,
     writeManifestFile,
     watch,
+    clean,
   } = await normalize({...config, env: "dev"})
 
   const stages = configureStages({writeManifestFile, isTypescript})
@@ -22,6 +23,7 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
       ignore,
       include,
       watch,
+      clean,
     }),
     // Ensure next does not start until parallel processing completes
     readyForNextDev,
