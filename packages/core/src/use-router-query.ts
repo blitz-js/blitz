@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useRef} from "react"
 import {isEqual} from "lodash"
 import {useRouter} from "next/router"
 import {parse} from "url"
@@ -8,11 +8,11 @@ export function useRouterQuery() {
 
   const {query} = parse(router.asPath, true)
 
-  const [lastQuery, setLastQuery] = useState(query)
+  const lastQueryRef = useRef(query)
 
-  if (!isEqual(query, lastQuery)) {
-    setLastQuery(query)
+  if (!isEqual(query, lastQueryRef.current)) {
+    lastQueryRef.current = query
   }
 
-  return lastQuery
+  return lastQueryRef.current
 }
