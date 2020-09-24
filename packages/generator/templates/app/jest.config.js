@@ -16,6 +16,7 @@ module.exports = {
   },
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>/node_modules", "."],
+  modulePathIgnorePatterns: [".blitz"],
   moduleNameMapper: {
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),

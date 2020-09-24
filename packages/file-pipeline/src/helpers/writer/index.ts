@@ -7,6 +7,9 @@ import {FILE_WRITTEN, FILE_DELETED} from "../../events"
 import {Writable} from "stream"
 import {isFile} from "../../utils"
 import {transform} from "../../transform"
+
+const isUnlinkFile = (file: File) => file.event === "unlink" || file.event === "unlinkDir"
+
 /**
  * Returns a Stage that writes files to the destination path
  */
@@ -29,5 +32,3 @@ export const createWrite = (
 
   return {stream}
 }
-
-const isUnlinkFile = (file: File) => file.event === "unlink" || file.event === "unlinkDir"

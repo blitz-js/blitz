@@ -1,11 +1,10 @@
-import {pipe} from "../streams"
-import {createPipeline} from "../pipeline"
-import {pathExists, ensureDir, remove} from "fs-extra"
-import {through} from "../streams"
-import {createDisplay} from "../display"
-import {READY, ERROR_THROWN} from "../events"
-import {Stage} from "../types"
+import {ensureDir, pathExists, remove} from "fs-extra"
 import {Transform} from "stream"
+import {createDisplay} from "../display"
+import {ERROR_THROWN, READY} from "../events"
+import {createPipeline} from "../pipeline"
+import {pipe, through} from "../streams"
+import {Stage} from "../types"
 
 type FSStreamer = {stream: NodeJS.ReadWriteStream}
 
@@ -17,7 +16,6 @@ type SynchronizeFilesOptions = {
   source?: FSStreamer
   writer?: FSStreamer
   noclean?: boolean
-  isTypescript?: boolean
 }
 
 const defaultBus = through.obj()
@@ -42,7 +40,6 @@ export async function transformFiles(
     source,
     writer,
     noclean = false,
-    isTypescript = true,
   } = options
 
   // HACK: cleaning the dev folder on every restart means we do more work than necessary
@@ -59,16 +56,14 @@ export async function transformFiles(
       include,
       ignore,
       watch,
-      isTypescript,
     }
+    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     bus.on("data", ({type}) => {
       if (type === READY) {
         resolve(fileTransformPipeline.ready)
       }
     })
-
-    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     // Send source to fileTransformPipeline
     fileTransformPipeline.stream.on("error", (err) => {

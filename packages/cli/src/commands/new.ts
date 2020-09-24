@@ -1,14 +1,11 @@
-import * as path from "path"
 import {flags} from "@oclif/command"
 import {Command} from "../command"
-import {AppGenerator, AppGeneratorOptions} from "@blitzjs/generator"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 const debug = require("debug")("blitz:new")
-
 import {PromptAbortedError} from "../errors/prompt-aborted"
-import {Db} from "./db"
 
 export interface Flags {
   ts: boolean
@@ -60,8 +57,8 @@ export class New extends Command {
     debug("flags: ", flags)
 
     try {
-      const destinationRoot = path.resolve(args.name)
-      const appName = path.basename(destinationRoot)
+      const destinationRoot = require("path").resolve(args.name)
+      const appName = require("path").basename(destinationRoot)
 
       const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
         {name: "React Final Form", message: "React Final Form (recommended)"},
@@ -78,7 +75,7 @@ export class New extends Command {
 
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
 
-      const generator = new AppGenerator({
+      const generator = new (require("@blitzjs/generator").AppGenerator)({
         destinationRoot,
         appName,
         dryRun,
@@ -104,8 +101,8 @@ export class New extends Command {
 
         try {
           // Required in order for DATABASE_URL to be available
-          require("dotenv").config()
-          await Db.run(["migrate", "--name", "Initial Migration"])
+          require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+          await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
           spinner.succeed()
         } catch {
           spinner.fail()

@@ -9,7 +9,7 @@ type StaticProps = {
 }
 
 export const getStaticProps: GetStaticProps<StaticProps> = async () => {
-  const products = await getProducts({orderBy: {id: "desc"}})
+  const {products} = await getProducts({orderBy: {id: "desc"}})
   const dataString = superjson.stringify(products)
   return {
     props: {dataString},

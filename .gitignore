@@ -15,10 +15,8 @@ tsconfig.tsbuildinfo
 dist
 .now
 # local env files
-**/.envrc
-**/.env
 **/.env.local
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
+**/.env.*.local
+**/.envrc
 .blitz-*
+.blitz-cli-cache

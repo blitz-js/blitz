@@ -1,9 +1,7 @@
 import {useQuery as useReactQuery, QueryResult, QueryConfig} from "react-query"
-import {useSession} from "./supertokens"
 import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
-import {QueryCacheFunctions, getQueryCacheFunctions} from "./utils/query-cache"
+import {QueryCacheFunctions, getQueryCacheFunctions, getQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
-import {serialize} from "superjson"
 
 type RestQueryResult<T extends QueryFn> = Omit<QueryResult<PromiseReturnType<T>>, "data"> &
   QueryCacheFunctions<PromiseReturnType<T>>
@@ -21,17 +19,6 @@ export const emptyQueryFn: EnhancedRpcFunction = (() => {
 
 const isServer = typeof window === "undefined"
 
-// NOTE - this is only for use inside useQuery
-export const useIsDevPrerender = () => {
-  if (process.env.NODE_ENV === "production") {
-    return false
-  } else {
-    // useQuery is only for client-side data fetching, so if it's running on the
-    // server, it's for pre-render
-    return isServer
-  }
-}
-
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
 
@@ -44,7 +31,7 @@ export const retryFunction = (failureCount: number, error: any) => {
 export function useQuery<T extends QueryFn>(
   queryFn: T,
   params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options?: QueryConfig<QueryResult<PromiseReturnType<T>>>,
+  options?: QueryConfig<PromiseReturnType<T>>,
 ): [PromiseReturnType<T>, RestQueryResult<T>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
@@ -56,19 +43,13 @@ export function useQuery<T extends QueryFn>(
     )
   }
 
-  const queryRpcFn = useIsDevPrerender()
-    ? emptyQueryFn
-    : ((queryFn as unknown) as EnhancedRpcFunction)
+  const queryRpcFn = isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
+
+  const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
-    queryKey: [
-      queryRpcFn._meta.apiUrl,
-      // We add the session object here so queries will refetch if session changes
-      useSession(),
-      serialize(typeof params === "function" ? (params as Function)() : params),
-    ],
-    queryFn: (_: string, __: any, params: InferUnaryParam<T>) =>
-      queryRpcFn(params, {fromQueryHook: true}),
+    queryKey,
+    queryFn: (_apiUrl, params) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
@@ -78,7 +59,7 @@ export function useQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryRpcFn._meta.apiUrl),
+    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
   }
 
   return [data as PromiseReturnType<T>, rest as RestQueryResult<T>]

@@ -12,12 +12,14 @@ import {
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
+import merge from "deepmerge"
 
 type Options = {
   fromQueryHook?: boolean
+  resultOfGetFetchMore?: any
 }
 
-export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
+export function executeRpcCall(url: string, params: any, opts: Options = {}) {
   if (typeof window === "undefined") return
 
   const headers: Record<string, any> = {
@@ -29,59 +31,83 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
-  // query hook already serializes the params because otherwise react-query will mess it up
-  const serialized = opts.fromQueryHook ? params : serialize(params)
-
-  const result = await window.fetch(url, {
-    method: "POST",
-    headers,
-    credentials: "include",
-    redirect: "follow",
-    body: JSON.stringify({
-      // TODO remove `|| null` once superjson allows `undefined`
-      params: serialized.json || null,
-      meta: {
-        params: serialized.meta,
-      },
-    }),
-  })
-
-  if (result.headers) {
-    for (const [name] of result.headers.entries()) {
-      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
-      if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
-      if (name.toLowerCase() === HEADER_CSRF_ERROR) {
-        throw new CSRFTokenMismatchError()
-      }
+  let serialized
+  if (opts.fromQueryHook) {
+    // We have to serialize query arguments inside the hooks, otherwise react-query will use
+    // JSON.parse(JSON.stringify) so by the time the arguments come here the real JS objects are lost
+    serialized = params
+    if (opts.resultOfGetFetchMore) {
+      // useInfiniteQuery usually passes in extra pageParams here that come from getFetchMore()
+      // This isn't serialized inside useInfiniteQuery because this data is provided separately
+      // by react-query
+      serialized = merge(params, serialize(opts.resultOfGetFetchMore))
     }
-  }
-
-  let payload
-  try {
-    payload = await result.json()
-  } catch (error) {
-    throw new Error(`Failed to parse json from request to ${url}`)
-  }
-
-  if (payload.error) {
-    const error = deserializeError(payload.error)
-    // We don't clear the publicDataStore for anonymous users
-    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
-      publicDataStore.clear()
-    }
-    throw error
   } else {
-    const data =
-      payload.result === undefined
-        ? undefined
-        : deserialize({json: payload.result, meta: payload.meta?.result})
-
-    if (!opts.fromQueryHook) {
-      const queryKey = getQueryKey(url, params)
-      queryCache.setQueryData(queryKey, data)
-    }
-    return data
+    serialized = serialize(params)
   }
+
+  // Create a new AbortController instance for this request
+  const controller = new AbortController()
+
+  const promise: CancellablePromise<any> = window
+    .fetch(url, {
+      method: "POST",
+      headers,
+      credentials: "include",
+      redirect: "follow",
+      body: JSON.stringify({
+        // TODO remove `|| null` once superjson allows `undefined`
+        params: serialized.json || null,
+        meta: {
+          params: serialized.meta,
+        },
+      }),
+      signal: controller.signal,
+    })
+    .then(async (result) => {
+      if (result.headers) {
+        if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+          publicDataStore.updateState()
+        }
+        if (result.headers.get(HEADER_SESSION_REVOKED)) {
+          publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_CSRF_ERROR)) {
+          throw new CSRFTokenMismatchError()
+        }
+      }
+
+      let payload
+      try {
+        payload = await result.json()
+      } catch (error) {
+        throw new Error(`Failed to parse json from request to ${url}`)
+      }
+
+      if (payload.error) {
+        const error = deserializeError(payload.error)
+        // We don't clear the publicDataStore for anonymous users
+        if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+          publicDataStore.clear()
+        }
+        throw error
+      } else {
+        const data =
+          payload.result === undefined
+            ? undefined
+            : deserialize({json: payload.result, meta: payload.meta?.result})
+
+        if (!opts.fromQueryHook) {
+          const queryKey = getQueryKey(url, params)
+          queryCache.setQueryData(queryKey, data)
+        }
+        return data
+      }
+    })
+
+  promise.cancel = () => controller.abort()
+
+  return promise
 }
 
 executeRpcCall.warm = (url: string) => {
@@ -99,13 +125,18 @@ interface ResolverEnhancement {
     apiUrl: string
   }
 }
+
+interface CancellablePromise<T> extends Promise<T> {
+  cancel?: Function
+}
+
 export interface RpcFunction {
-  (params: any, opts: any): Promise<any>
+  (params: any, opts: any): CancellablePromise<any>
 }
 export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
 
 export interface EnhancedResolverModule extends ResolverEnhancement {
-  (input: any, ctx: Record<string, any>): Promise<unknown>
+  (input: any, ctx: Record<string, any>): CancellablePromise<unknown>
   middleware?: Middleware[]
 }
 

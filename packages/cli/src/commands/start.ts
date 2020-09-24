@@ -1,12 +1,5 @@
 import {dev, prod} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
-import fs from "fs"
-import path from "path"
-import pkgDir from "pkg-dir"
-import {runPrismaGeneration} from "./db"
-
-const projectRoot = pkgDir.sync() || process.cwd()
-const isTypescript = fs.existsSync(path.join(projectRoot, "tsconfig.json"))
 
 export class Start extends Command {
   static description = "Start a development server"
@@ -24,24 +17,26 @@ export class Start extends Command {
       char: "H",
       description: "Set server hostname",
     }),
+    inspect: flags.boolean({
+      description: "Enable the Node.js inspector",
+    }),
   }
 
   async run() {
-    
     const {flags} = this.parse(Start)
 
     const config = {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,
-      isTypescript,
+      inspect: flags.inspect,
     }
 
     try {
       if (flags.production) {
-        await prod(config, runPrismaGeneration({silent: true, failSilently: true}))
+        await prod(config)
       } else {
-        await dev(config, runPrismaGeneration({silent: true, failSilently: true}))
+        await dev(config)
       }
     } catch (err) {
       console.error(err)

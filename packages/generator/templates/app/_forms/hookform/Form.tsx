@@ -2,14 +2,14 @@ import React, { useState, ReactNode, PropsWithoutRef } from "react"
 import { FormProvider, useForm, UseFormOptions } from "react-hook-form"
 import * as z from "zod"
 
-type FormProps<FormValues> = {
+type FormProps<S extends z.ZodType<any, any>> = {
   /** All your form fields */
   children: ReactNode
   /** Text to display in the submit button */
   submitText: string
-  onSubmit: (values: FormValues) => Promise<void | OnSubmitResult>
-  initialValues?: UseFormOptions<FormValues>["defaultValues"]
-  schema?: z.ZodType<any, any>
+  schema?: S
+  onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
+  initialValues?: UseFormOptions<z.infer<S>>["defaultValues"]
 } & Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit">
 
 type OnSubmitResult = {
@@ -19,15 +19,15 @@ type OnSubmitResult = {
 
 export const FORM_ERROR = "FORM_ERROR"
 
-export function Form<FormValues extends Record<string, unknown>>({
+export function Form<S extends z.ZodType<any, any>>({
   children,
   submitText,
   schema,
   initialValues,
   onSubmit,
   ...props
-}: FormProps<FormValues>) {
-  const ctx = useForm<FormValues>({
+}: FormProps<S>) {
+  const ctx = useForm<z.infer<S>>({
     mode: "onBlur",
     resolver: async (values) => {
       try {
@@ -36,7 +36,7 @@ export function Form<FormValues extends Record<string, unknown>>({
         }
         return { values, errors: {} }
       } catch (error) {
-        return { values: {}, errors: error.formErrors?.fieldErrors } as any
+        return { values: {}, errors: error.formErrors?.fieldErrors }
       }
     },
     defaultValues: initialValues,
@@ -47,7 +47,7 @@ export function Form<FormValues extends Record<string, unknown>>({
     <FormProvider {...ctx}>
       <form
         onSubmit={ctx.handleSubmit(async (values) => {
-          const result = (await onSubmit(values as FormValues)) || {}
+          const result = (await onSubmit(values)) || {}
           for (const [key, value] of Object.entries(result)) {
             if (key === FORM_ERROR) {
               setFormError(value)

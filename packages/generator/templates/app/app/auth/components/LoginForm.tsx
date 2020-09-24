@@ -1,8 +1,9 @@
 import React from "react"
-import {LabeledTextField} from "app/components/LabeledTextField"
-import {Form, FORM_ERROR} from "app/components/Form"
+import { Link } from "blitz"
+import { LabeledTextField } from "app/components/LabeledTextField"
+import { Form, FORM_ERROR } from "app/components/Form"
 import login from "app/auth/mutations/login"
-import {LoginInput, LoginInputType} from "app/auth/validations"
+import { LoginInput } from "app/auth/validations"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -13,17 +14,17 @@ export const LoginForm = (props: LoginFormProps) => {
     <div>
       <h1>Login</h1>
 
-      <Form<LoginInputType>
+      <Form
         submitText="Log In"
         schema={LoginInput}
-        initialValues={{email: undefined, password: undefined}}
+        initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await login({email: values.email, password: values.password})
-            props.onSuccess && props.onSuccess()
+            await login({ email: values.email, password: values.password })
+            props.onSuccess?.()
           } catch (error) {
             if (error.name === "AuthenticationError") {
-              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
+              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
             } else {
               return {
                 [FORM_ERROR]:
@@ -36,6 +37,10 @@ export const LoginForm = (props: LoginFormProps) => {
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
       </Form>
+
+      <div style={{ marginTop: "1rem" }}>
+        Or <Link href="/signup">Sign Up</Link>
+      </div>
     </div>
   )
 }

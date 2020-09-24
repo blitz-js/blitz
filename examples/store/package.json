@@ -1,6 +1,6 @@
 {
   "name": "@examples/store",
-  "version": "0.18.0",
+  "version": "0.23.0",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
@@ -18,10 +18,11 @@
   "dependencies": {
     "@prisma/cli": "2.4.1",
     "@prisma/client": "2.4.1",
-    "blitz": "0.18.0",
+    "blitz": "0.23.0",
     "final-form": "4.19.1",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
+    "react": "0.0.0-experimental-7f28234f8",
+    "react-dom": "0.0.0-experimental-7f28234f8",
+    "react-error-boundary": "2.3.1",
     "react-final-form": "6.4.0",
     "superjson": "1.2.1",
     "typescript": "3.8.3"

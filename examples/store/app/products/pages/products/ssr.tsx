@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
 }
 
 const Page: BlitzPage<PageProps> = function ({dataString}) {
-  const products = useMemo(() => superjson.parse(dataString), [dataString]) as Products
+  const {products} = useMemo(() => superjson.parse(dataString), [dataString]) as Products
 
   return (
     <div>

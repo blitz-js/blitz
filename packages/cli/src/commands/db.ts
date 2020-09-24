@@ -1,16 +1,7 @@
-import {resolveBinAsync} from "@blitzjs/server"
-import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
-import chalk from "chalk"
-import {spawn} from "cross-spawn"
-import {prompt} from "enquirer"
-import * as fs from "fs"
-import * as path from "path"
-import {promisify} from "util"
-import {projectRoot} from "../utils/get-project-root"
-import pEvent from "p-event"
+import {log} from "@blitzjs/display"
 
-const getPrismaBin = () => resolveBinAsync("@prisma/cli", "prisma")
+const getPrismaBin = () => require("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
 let prismaBin: string
 let schemaArg: string
 
@@ -25,11 +16,11 @@ const runPrisma = async (args: string[], silent = false) => {
     }
   }
 
-  const cp = spawn(prismaBin, args, {
+  const cp = require("cross-spawn").spawn(prismaBin, args, {
     stdio: silent ? "ignore" : "inherit",
     env: process.env,
   })
-  const code = await pEvent(cp, "exit", {rejectionEvents: []})
+  const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
 
   return code === 0
 }
@@ -68,16 +59,17 @@ const runMigrateUp = async ({silent = false} = {}) => {
   return runPrismaGeneration({silent})
 }
 
-export const runMigrate = async (name?: string) => {
+export const runMigrate = async (flags: object = {}) => {
   if (process.env.NODE_ENV === "production") {
     return runMigrateUp()
   }
+  // @ts-ignore escape:TS7053
+  const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
+  const options = ([] as string[]).concat(...nestedFlags)
 
-  const silent = Boolean(name)
-  const args = ["migrate", "save", schemaArg, "--create-db", "--experimental"]
-  if (name) {
-    args.push("--name", name)
-  }
+  const silent = options.includes("--name")
+
+  const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
 
   const success = await runPrisma(args, silent)
 
@@ -92,15 +84,15 @@ export async function resetPostgres(connectionString: string, db: any): Promise<
   const dbName: string = getDbName(connectionString)
   try {
     // close all other connections
-    await db.queryRaw(
+    await db.$queryRaw(
       `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname='${dbName};'`,
     )
     // currently assuming the public schema is being used
     // delete schema and recreate with the appropriate privileges
-    await db.executeRaw("DROP SCHEMA public cascade;")
-    await db.executeRaw("CREATE SCHEMA public;")
-    await db.executeRaw("GRANT ALL ON schema public TO postgres;")
-    await db.executeRaw("GRANT ALL ON schema public TO public;")
+    await db.$executeRaw("DROP SCHEMA public cascade;")
+    await db.$executeRaw("CREATE SCHEMA public;")
+    await db.$executeRaw("GRANT ALL ON schema public TO postgres;")
+    await db.$executeRaw("GRANT ALL ON schema public TO public;")
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -116,7 +108,7 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
   const dbName: string = getDbName(connectionString)
   try {
     // delete database
-    await db.executeRaw(`DROP DATABASE \`${dbName}\``)
+    await db.$executeRaw(`DROP DATABASE \`${dbName}\``)
     // run migration
     await runMigrate()
     log.success("Your database has been reset.")
@@ -129,8 +121,13 @@ export async function resetMysql(connectionString: string, db: any): Promise<voi
 }
 
 export async function resetSqlite(connectionString: string): Promise<void> {
-  const dbPath: string = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
-  const unlink = promisify(fs.unlink)
+  const relativePath = connectionString.replace(/^file:/, "").replace(/^(?:\.\.[\\/])+/, "")
+  const dbPath = require("path").join(
+    require("../utils/get-project-root").projectRoot,
+    "db",
+    relativePath,
+  )
+  const unlink = require("util").promisify(require("fs").unlink)
   try {
     // delete database from folder
     await unlink(dbPath)
@@ -154,17 +151,21 @@ export function getDbName(connectionString: string): string {
 export class Db extends Command {
   static description = `Run database commands
 
-${chalk.bold("migrate")}   Run any needed migrations via Prisma 2 and generate Prisma Client.
+${require("chalk").bold(
+  "migrate",
+)}   Run any needed migrations via Prisma 2 and generate Prisma Client.
 
-${chalk.bold(
+${require("chalk").bold(
   "introspect",
 )}   Will introspect the database defined in db/schema.prisma and automatically generate a complete schema.prisma file for you. Lastly, it'll generate Prisma Client.
 
-${chalk.bold(
+${require("chalk").bold(
   "studio",
 )}   Open the Prisma Studio UI at http://localhost:5555 so you can easily see and change data in your database.
 
-${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma 2.
+${require("chalk").bold(
+  "reset",
+)}   Reset the database and run a fresh migration via Prisma 2. You can also pass --force to skip all the user prompts.
 `
 
   static args = [
@@ -180,21 +181,25 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
     help: flags.help({char: "h"}),
     // Used by `new` command to perform the initial migration
     name: flags.string({hidden: true}),
+    // Used by `reset` command to skip the confirmation prompt
+    force: flags.boolean({char: "f", hidden: true}),
   }
+
+  static strict = false
 
   async run() {
     const {args, flags} = this.parse(Db)
     const command = args["command"]
 
     // Needs to happen at run-time since the `new` command needs to change the cwd before running
-    const schemaPath = path.join(process.cwd(), "db", "schema.prisma")
+    const schemaPath = require("path").join(process.cwd(), "db", "schema.prisma")
     schemaArg = `--schema=${schemaPath}`
 
     if (command === "migrate" || command === "m") {
       try {
-        return await runMigrate(flags.name)
+        return await runMigrate(flags)
       } catch (error) {
-        if (flags.name) {
+        if (Object.keys(flags).length > 0) {
           throw error
         } else {
           process.exit(1)
@@ -212,38 +217,45 @@ ${chalk.bold("reset")}   Reset the database and run a fresh migration via Prisma
     }
 
     if (command === "reset") {
-      const spinner = log.spinner("Loading your database").start()
-      await runPrismaGeneration({silent: true, failSilently: true})
-      spinner.succeed()
+      const forceSkipConfirmation = flags.force
 
-      const {confirm} = await prompt<{confirm: string}>({
-        type: "confirm",
-        name: "confirm",
-        message: "Are you sure you want to reset your database and erase ALL data?",
-      })
+      if (!forceSkipConfirmation) {
+        const {confirm} = await require("enquirer").prompt({
+          type: "confirm",
+          name: "confirm",
+          message: "Are you sure you want to reset your database and erase ALL data?",
+        })
 
-      if (!confirm) {
-        return
+        if (!confirm) {
+          return
+        }
       }
 
+      log.progress("Resetting your database...")
+      const {projectRoot} = require("../utils/get-project-root")
       const prismaClientPath = require.resolve("@prisma/client", {paths: [projectRoot]})
       const {PrismaClient} = require(prismaClientPath)
       const db = new PrismaClient()
-      const dataSource: any = db.engine.datasources[0]
-      const providerType: string = dataSource.name
-      const connectionString: string = dataSource.url
+      const schemaPath = require("path").join(projectRoot, "db/schema.prisma")
+      const datamodel = await require("@prisma/sdk").getSchema(schemaPath)
+      const config = await require("@prisma/sdk").getConfig({datamodel})
+      const dataSource = config.datasources[0]
+      const providerType = dataSource.activeProvider
+      const connectionString = dataSource.url.value
 
       if (providerType === "postgresql") {
-        resetPostgres(connectionString, db)
+        await resetPostgres(connectionString, db)
+        return
       } else if (providerType === "mysql") {
-        resetMysql(connectionString, db)
+        await resetMysql(connectionString, db)
+        return
       } else if (providerType === "sqlite") {
-        resetSqlite(connectionString)
+        await resetSqlite(connectionString)
+        return
       } else {
-        this.log("Could not find a valid database configuration")
+        log.error("Could not find a valid database configuration")
+        return
       }
-
-      return
     }
 
     if (command === "help") {
