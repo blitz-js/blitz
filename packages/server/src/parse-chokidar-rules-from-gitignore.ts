@@ -11,10 +11,12 @@ export function isControlledByUser(file: string) {
   return true
 }
 
-function getAllGitIgnores(rootFolder: string) {
-  const files = fastGlob.sync("**/.gitignore", {cwd: rootFolder})
+export function getAllGitIgnores(rootFolder: string) {
+  const files = fastGlob.sync(["**/.gitignore", "**/.git/info/exclude"], {cwd: rootFolder})
   return files.filter(isControlledByUser).map((file) => {
-    const [prefix] = file.split(".gitignore")
+    const [prefix] = file.match(".git/info/exclude")
+      ? file.split(".git/info/exclude")
+      : file.split(".gitignore")
     return {
       gitIgnore: fs.readFileSync(file, {encoding: "utf8"}),
       prefix,

@@ -1,7 +1,12 @@
 import {
   chokidarRulesFromGitignore,
   isControlledByUser,
+  getAllGitIgnores,
 } from "../src/parse-chokidar-rules-from-gitignore"
+import {multiMock} from "./utils/multi-mock"
+import {resolve} from "path"
+
+const mocks = multiMock({}, resolve(__dirname, ".."))
 
 describe("isControlledByUser", () => {
   describe("given a .gitignore from a dependency", () => {
@@ -13,6 +18,68 @@ describe("isControlledByUser", () => {
   describe("given a nested, but user-controlled file", () => {
     it("returns true", () => {
       expect(isControlledByUser("app/myassets/.gitignore")).toBe(true)
+    })
+  })
+})
+
+describe("getAllGitIgnores", () => {
+  const ignoreValue = `
+	.foo
+	.bar
+				`
+  const nestedIgnoreValue = `
+				.bip
+				.bop
+							`
+
+  afterEach(() => {
+    jest.clearAllMocks()
+    mocks.mockFs.restore()
+  })
+
+  describe("given a .git/info/exclude file at the root", () => {
+    beforeAll(() => {
+      mocks.mockFs({
+        ".git": {
+          info: {
+            exclude: ignoreValue,
+          },
+        },
+      })
+    })
+    it("returns the file", () => {
+      expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([
+        {
+          prefix: "",
+          gitIgnore: ignoreValue,
+        },
+      ])
+    })
+  })
+
+  describe("given a .git/info/exclude file in some nested submodule", () => {
+    beforeAll(() => {
+      mocks.mockFs({
+        some: {
+          nested: {
+            submodule: {
+              ".git": {
+                info: {
+                  exclude: nestedIgnoreValue,
+                },
+              },
+            },
+          },
+        },
+      })
+    })
+    it("returns the file", () => {
+      expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([
+        {
+          prefix: "some/nested/submodule/",
+          gitIgnore: nestedIgnoreValue,
+        },
+      ])
     })
   })
 })
