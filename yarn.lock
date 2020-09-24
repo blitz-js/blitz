@@ -12769,7 +12769,7 @@ lodash@4.17.19, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
-lodash@^4.17.15:
+lodash@^4.17.15, lodash@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -17859,10 +17859,13 @@ stylis@3.5.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.4.tgz#f665f25f5e299cf3d64654ab949a57c768b73fbe"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.2.1.tgz#ff2e790058bb7dfd3cdd5f0acdc3673b7f2b0a1f"
-  integrity sha512-DA81HRhsyUGMx67CH9uOna1MAlc6mBKvZits9YkmRtcyIHKqa1rYz9YPWlGAOyRomdq2IuS/jmhACBstWed89Q==
+superjson@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.2.2.tgz#3d17b9db2d6981de1dfb0fd6f7d2e94ae7aea621"
+  integrity sha512-jaWetqrLU83LhMNsbcKuwtb/CtiDVkUcXsnUoVqTrKm8NxWk0eNeD0nOlQ8rfPazQMAJD9sbXYYGX0ozNPY6qg==
+  dependencies:
+    lodash "^4.17.20"
+    lodash-es "^4.17.15"
 
 supports-color@7.1.0, supports-color@^7.0.0:
   version "7.1.0"
