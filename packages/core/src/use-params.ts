@@ -49,18 +49,13 @@ export function useParams(returnType?: "string" | "number" | "array") {
   const router = useRouter()
   const query = useRouterQuery()
   const [lastRouterQuery, setLastRouterQuery] = useState(router.query)
-  const [lastQuery, setLastQuery] = useState(query)
 
   if (!isEqual(router.query, lastRouterQuery)) {
     setLastRouterQuery(router.query)
   }
 
-  if (!isEqual(query, lastQuery)) {
-    setLastQuery(query)
-  }
-
   const params = useMemo(() => {
-    const rawParams = extractRouterParams(lastRouterQuery, lastQuery)
+    const rawParams = extractRouterParams(lastRouterQuery, query)
 
     if (returnType === "string") {
       const params: Record<string, string> = {}
@@ -93,7 +88,7 @@ export function useParams(returnType?: "string" | "number" | "array") {
     }
 
     return rawParams
-  }, [lastRouterQuery, lastQuery, returnType])
+  }, [lastRouterQuery, query, returnType])
 
   return params
 }
