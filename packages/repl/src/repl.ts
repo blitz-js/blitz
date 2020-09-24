@@ -90,9 +90,7 @@ const setupFileWatchers = async (repl: REPLServer) => {
 
 const runRepl = async (replOptions: REPL.ReplOptions) => {
   const repl = await initializeRepl(replOptions)
-  repl.on("exit", () => {
-    process.exit()
-  })
+  repl.on("exit", () => process.exit())
   await setupFileWatchers(repl)
 }
 
