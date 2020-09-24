@@ -37,7 +37,7 @@ export function usePaginatedQuery<T extends QueryFn>(
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey,
-    queryFn: (_apiUrl, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_apiUrl: string, params: any) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,

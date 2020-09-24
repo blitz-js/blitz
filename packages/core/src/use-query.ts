@@ -49,7 +49,7 @@ export function useQuery<T extends QueryFn>(
 
   const {data, ...queryRest} = useReactQuery({
     queryKey,
-    queryFn: (_apiUrl, params) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_apiUrl: string, params: any) => queryRpcFn(params, {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,

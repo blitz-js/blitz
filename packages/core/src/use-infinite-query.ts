@@ -37,7 +37,7 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey,
-    queryFn: (_infinite, _apiUrl, params, resultOfGetFetchMore?) =>
+    queryFn: (_infinite: boolean, _apiUrl: string, params: any, resultOfGetFetchMore?: any) =>
       queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
     config: {
       suspense: true,
