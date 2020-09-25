@@ -1,5 +1,5 @@
 import {unlink} from "."
-import {normalize} from "path"
+import {normalize, resolve} from "path"
 import {take} from "../../test-utils"
 import File from "vinyl"
 
@@ -22,9 +22,9 @@ describe("unlink", () => {
     await take(unlinkStream, 1)
 
     // Test the file exists before attempting to unlink it
-    expect(pathExists).toHaveBeenCalledWith(normalize("/dest/bar/baz.tz"))
+    expect(pathExists).toHaveBeenCalledWith(resolve(normalize("/dest/bar/baz.tz")))
 
     // Remove the correct file
-    expect(unlinkFile).toHaveBeenCalledWith(normalize("/dest/bar/baz.tz"))
+    expect(unlinkFile).toHaveBeenCalledWith(resolve(normalize("/dest/bar/baz.tz")))
   })
 })
