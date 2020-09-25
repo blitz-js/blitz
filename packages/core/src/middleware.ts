@@ -6,6 +6,9 @@ import {EnhancedResolverModule} from "./rpc"
 import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
+
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
 }

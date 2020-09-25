@@ -1,4 +1,5 @@
 import React from "react"
+import { useMutation } from "blitz"
 import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"
 import signup from "app/auth/mutations/signup"
@@ -9,6 +10,8 @@ type SignupFormProps = {
 }
 
 export const SignupForm = (props: SignupFormProps) => {
+  const [signupMutation] = useMutation(signup)
+
   return (
     <div>
       <h1>Create an Account</h1>
@@ -19,7 +22,7 @@ export const SignupForm = (props: SignupFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await signup({ email: values.email, password: values.password })
+            await signupMutation(values)
             props.onSuccess?.()
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
