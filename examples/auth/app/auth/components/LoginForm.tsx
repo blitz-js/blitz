@@ -20,7 +20,7 @@ export const LoginForm = (props: LoginFormProps) => {
         initialValues={{email: undefined, password: undefined}}
         onSubmit={async (values) => {
           try {
-            await loginMutation(values)
+            const res = await loginMutation(values)
             props.onSuccess && props.onSuccess()
           } catch (error) {
             if (error.name === "AuthenticationError") {

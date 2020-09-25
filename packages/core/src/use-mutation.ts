@@ -4,7 +4,6 @@ import {
   MutationConfig,
   MutateConfig,
 } from "react-query"
-import {QueryFn} from "types"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair
@@ -29,13 +28,15 @@ export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> =
   MutationResult<TResult, TError>,
 ]
 
-export function useMutation<
-  T extends QueryFn,
-  TResult,
-  TError = unknown,
-  TVariables = Parameters<T>[0],
-  TSnapshot = unknown
->(mutationResolver: T, config?: MutationConfig<TResult, TError, TVariables, TSnapshot>) {
+export declare type MutationFunction<TResult, TVariables = unknown> = (
+  variables: TVariables,
+  ctx?: any,
+) => Promise<TResult>
+
+export function useMutation<TResult, TError = unknown, TVariables = undefined, TSnapshot = unknown>(
+  mutationResolver: MutationFunction<TResult, TVariables>,
+  config?: MutationConfig<TResult, TError, TVariables, TSnapshot>,
+) {
   return useReactQueryMutation(mutationResolver, {
     throwOnError: true,
     ...config,
