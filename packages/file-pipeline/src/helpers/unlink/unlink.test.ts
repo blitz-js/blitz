@@ -22,9 +22,9 @@ describe("unlink", () => {
     await take(unlinkStream, 1)
 
     // Test the file exists before attempting to unlink it
-    expect(pathExists).toHaveBeenCalledWith("/dest/bar/baz.tz")
+    expect(pathExists).toHaveBeenCalledWith(normalize("/dest/bar/baz.tz"))
 
     // Remove the correct file
-    expect(unlinkFile).toHaveBeenCalledWith("/dest/bar/baz.tz")
+    expect(unlinkFile).toHaveBeenCalledWith(normalize("/dest/bar/baz.tz"))
   })
 })
