@@ -6,20 +6,20 @@ export default RecipeBuilder()
   .setDescription("This recipe will add a multi-driver mailing system.")
   .setOwner("alex@sandulat.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
-  // .addAddDependenciesStep({
-  //   stepId: "addDeps",
-  //   stepName: "Add npm dependencies",
-  //   explanation: `This mailing system relies on a couple of dependencies. Handlebars will be installed as the templating engine. SendGrid, Nodemailer and Preview Email will be installed as mail drivers.`,
-  //   packages: [
-  //     {name: "handlebars", version: "4.7.6"},
-  //     {name: "@sendgrid/mail", version: "7.2.6"},
-  //     {name: "nodemailer", version: "6.4.11"},
-  //     {name: "preview-email", version: "2.0.2"},
-  //     {name: "@types/handlebars", version: "4.1.0", isDevDep: true},
-  //     {name: "@types/nodemailer", version: "6.4.0", isDevDep: true},
-  //     {name: "@types/preview-email", version: "2.0.0", isDevDep: true},
-  //   ],
-  // })
+  .addAddDependenciesStep({
+    stepId: "addDeps",
+    stepName: "Add npm dependencies",
+    explanation: `This mailing system relies on a couple of dependencies. Handlebars will be installed as the templating engine. SendGrid, Nodemailer and Preview Email will be installed as mail drivers.`,
+    packages: [
+      {name: "handlebars", version: "4.7.6"},
+      {name: "@sendgrid/mail", version: "7.2.6"},
+      {name: "nodemailer", version: "6.4.11"},
+      {name: "preview-email", version: "2.0.2"},
+      {name: "@types/handlebars", version: "4.1.0", isDevDep: true},
+      {name: "@types/nodemailer", version: "6.4.0", isDevDep: true},
+      {name: "@types/preview-email", version: "2.0.0", isDevDep: true},
+    ],
+  })
   .addNewFilesStep({
     stepId: "addMailer",
     stepName: "Add the mailing system and all its drivers",
