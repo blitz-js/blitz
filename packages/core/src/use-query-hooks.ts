@@ -25,6 +25,16 @@ import {
 type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
 
 export function useQuery<TInput, TResult>(
+  queryFn: Resolver<TInput, TResult>,
+  params: TInput,
+  options?: QueryConfig<TResult>,
+): [TResult, RestQueryResult<TResult>]
+export function useQuery<TInput, TResult>(
+  queryFn: EnhancedResolverRpcClient<TInput, TResult>,
+  params: TInput,
+  options?: QueryConfig<TResult>,
+): [TResult, RestQueryResult<TResult>]
+export function useQuery<TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
   params: TInput,
   options?: QueryConfig<TResult>,
