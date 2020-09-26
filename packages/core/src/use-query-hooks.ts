@@ -9,14 +9,14 @@ import {
   InfiniteQueryResult,
   InfiniteQueryConfig as RQInfiniteQueryConfig,
 } from "react-query"
-import {Resolver} from "./types"
+import {Resolver, EnhancedResolverRpcClient} from "./types"
 import {
   QueryCacheFunctions,
   getQueryCacheFunctions,
   getQueryKey,
   sanitize,
-  defaultQueryConfig,
   getInfiniteQueryKey,
+  defaultQueryConfig,
 } from "./utils/react-query-utils"
 
 // -------------------------
@@ -25,7 +25,7 @@ import {
 type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
 
 export function useQuery<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult>,
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
   params: TInput,
   options?: QueryConfig<TResult>,
 ): [TResult, RestQueryResult<TResult>] {

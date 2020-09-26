@@ -13,16 +13,15 @@ const isomorhicHandlerTemplate = (
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
-  useTypes: boolean = true,
 ) => `
 import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
-const resolverModule = require('${resolverFilePath}')
+import * as resolverModule from '${resolverFilePath}'
 export default getIsomorphicEnhancedResolver(
   resolverModule,
   '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
-) ${useTypes ? "as typeof resolverModule.default" : ""}
+)
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
@@ -107,7 +106,7 @@ export const createStageRpc = (isTypescript = true): Stage =>
       // Isomorphic client
       const isomorphicHandlerFile = file.clone()
       isomorphicHandlerFile.contents = Buffer.from(
-        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
+        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
       )
       push(isomorphicHandlerFile)
 

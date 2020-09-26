@@ -18,12 +18,16 @@ import {
   EnhancedResolverRpcClient,
   CancellablePromise,
   ResolverRpc,
-  ResolverRpcExecutor,
+  RpcOptions,
 } from "./types"
 import {SuperJSONResult} from "superjson/dist/types"
 
-export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, params, opts = {}) => {
-  if (isServer) return Promise.resolve()
+export const executeRpcCall = <TInput, TResult>(
+  apiUrl: string,
+  params: TInput,
+  opts: RpcOptions = {},
+) => {
+  if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -40,7 +44,7 @@ export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, param
     // We have to serialize the params before passing to react-query in the query key
     // because otherwise react-query will use JSON.parse(JSON.stringify)
     // so by the time the arguments come here the real JS objects are lost
-    serialized = params as SuperJSONResult
+    serialized = (params as unknown) as SuperJSONResult
   } else {
     serialized = serialize(params)
   }
@@ -48,8 +52,8 @@ export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, param
   // Create a new AbortController instance for this request
   const controller = new AbortController()
 
-  const promise: CancellablePromise<any> = window
-    .fetch(url, {
+  const promise = window
+    .fetch(apiUrl, {
       method: "POST",
       headers,
       credentials: "include",
@@ -79,7 +83,7 @@ export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, param
       try {
         payload = await result.json()
       } catch (error) {
-        throw new Error(`Failed to parse json from request to ${url}`)
+        throw new Error(`Failed to parse json from request to ${apiUrl}`)
       }
 
       if (payload.error) {
@@ -96,21 +100,21 @@ export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, param
             : deserialize({json: payload.result, meta: payload.meta?.result})
 
         if (!opts.fromQueryHook) {
-          const queryKey = getQueryKey(url, params)
+          const queryKey = getQueryKey(apiUrl, params)
           queryCache.setQueryData(queryKey, data)
         }
-        return data
+        return data as TResult
       }
-    })
+    }) as CancellablePromise<TResult>
 
   promise.cancel = () => controller.abort()
 
   return promise
 }
 
-executeRpcCall.warm = (url: string) => {
+executeRpcCall.warm = (apiUrl: string) => {
   if (isClient) {
-    return window.fetch(url, {method: "HEAD"})
+    return window.fetch(apiUrl, {method: "HEAD"})
   } else {
     return
   }
@@ -123,43 +127,43 @@ const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
  * Overloading signature so you can specify server/client and get the
  * correct return type
  */
-export function getIsomorphicEnhancedResolver(
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
-  resolver: ResolverModule | undefined,
+  resolver: ResolverModule<TInput, TResult> | undefined,
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
-): EnhancedResolver<unknown, unknown> | EnhancedResolverRpcClient
-export function getIsomorphicEnhancedResolver(
+): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
-  resolver: ResolverModule | undefined,
+  resolver: ResolverModule<TInput, TResult> | undefined,
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
   target: "client",
-): EnhancedResolverRpcClient
-export function getIsomorphicEnhancedResolver(
+): EnhancedResolverRpcClient<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
-  resolver: ResolverModule | undefined,
+  resolver: ResolverModule<TInput, TResult> | undefined,
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
   target: "server",
-): EnhancedResolver<unknown, unknown>
-export function getIsomorphicEnhancedResolver(
+): EnhancedResolver<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
-  resolver: ResolverModule | undefined,
+  resolver: ResolverModule<TInput, TResult> | undefined,
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
   target: "server" | "client" = isClient ? "client" : "server",
-): EnhancedResolver<unknown, unknown> | EnhancedResolverRpcClient {
+): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult> {
   const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
 
   if (target === "client") {
-    const resolverRpc: ResolverRpc<unknown, unknown> = (params, opts) =>
+    const resolverRpc: ResolverRpc<TInput, TResult> = (params, opts) =>
       executeRpcCall(apiUrl, params, opts)
-    const enhancedResolverRpcClient = resolverRpc as EnhancedResolverRpcClient
+    const enhancedResolverRpcClient = resolverRpc as EnhancedResolverRpcClient<TInput, TResult>
 
     enhancedResolverRpcClient._meta = {
       name: resolverName,
@@ -175,7 +179,7 @@ export function getIsomorphicEnhancedResolver(
     return enhancedResolverRpcClient
   } else {
     if (!resolver) throw new Error("resolver is missing on the server")
-    const enhancedResolver = (resolver.default as unknown) as EnhancedResolver<unknown, unknown>
+    const enhancedResolver = (resolver.default as unknown) as EnhancedResolver<TInput, TResult>
     enhancedResolver.middleware = resolver.middleware
     enhancedResolver._meta = {
       name: resolverName,

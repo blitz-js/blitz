@@ -20,10 +20,10 @@ export interface CancellablePromise<T> extends Promise<T> {
 }
 
 // The actual resolver source definition
-export type Resolver<TInput, TResult> = (input: TInput, ctx?: unknown) => TResult | Promise<TResult>
+export type Resolver<TInput, TResult> = (input: TInput, ctx?: unknown) => Promise<TResult>
 
 // Resolver type when imported with require()
-export type ResolverModule<TInput = unknown, TResult = unknown> = {
+export type ResolverModule<TInput, TResult> = {
   default: Resolver<TInput, TResult>
   middleware?: Middleware[]
 }
@@ -60,6 +60,6 @@ export interface EnhancedResolver<TInput, TResult>
     ResolverEnhancement {
   middleware?: Middleware[]
 }
-export interface EnhancedResolverRpcClient
-  extends ResolverRpc<unknown, unknown>,
+export interface EnhancedResolverRpcClient<TInput, TResult>
+  extends ResolverRpc<TInput, TResult>,
     ResolverEnhancement {}

@@ -21,7 +21,7 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
   },
 })
 
-export const emptyQueryFn: EnhancedResolverRpcClient = (() => {
+export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => {
   const fn = () => new Promise(() => {})
   fn._meta = {
     name: "emptyQueryFn",
@@ -32,16 +32,21 @@ export const emptyQueryFn: EnhancedResolverRpcClient = (() => {
   return fn
 })()
 
-export const sanitize = <TInput, TResult>(queryFn: Resolver<TInput, TResult>) => {
+export const sanitize = <TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+) => {
   if (isServer) {
     // Prevents logging garbage during static pre-rendering
     return emptyQueryFn
   }
 
-  return queryFn as EnhancedResolverRpcClient
+  return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
-export function getQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>, params: TInput) {
+export function getQueryKey<TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params: TInput,
+) {
   if (typeof queryFn === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a query function")
   }
@@ -53,7 +58,9 @@ export function getQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>,
   return queryKey
 }
 
-export function getInfiniteQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>) {
+export function getInfiniteQueryKey<TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+) {
   if (typeof queryFn === "undefined") {
     throw new Error(
       "getInfiniteQueryKey is missing the first argument - it must be a query function",
