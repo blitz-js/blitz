@@ -1,6 +1,6 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
-import {InferUnaryParam} from "./types"
+import {Resolver} from "./types"
 import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
@@ -8,19 +8,17 @@ import {
 } from "./middleware"
 import {EnhancedResolverModule} from "./rpc"
 
-type QueryFn = (...args: any) => Promise<any>
-
 type SsrQueryContext = {
   req: IncomingMessage
   res: ServerResponse
 }
 
-export async function ssrQuery<T extends QueryFn>(
-  queryFn: T,
-  params: InferUnaryParam<T>,
+export async function ssrQuery<TInput, TResult>(
+  resolver: Resolver<TInput, TResult>,
+  params: TInput,
   {req, res}: SsrQueryContext,
-): Promise<ReturnType<T>> {
-  const handler = (queryFn as unknown) as EnhancedResolverModule
+): Promise<TResult> {
+  const handler = (resolver as unknown) as EnhancedResolverModule
 
   const middleware = getAllMiddlewareForModule(handler)
 
@@ -41,5 +39,5 @@ export async function ssrQuery<T extends QueryFn>(
 
   await handleRequestWithMiddleware(req, res, middleware)
 
-  return (res as MiddlewareResponse).blitzResult as ReturnType<T>
+  return (res as MiddlewareResponse).blitzResult as TResult
 }
