@@ -1,3 +1,4 @@
+import {ResolverType} from "@blitzjs/core"
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import {relative} from "path"
 import slash from "slash"
@@ -9,16 +10,16 @@ export function isResolverPath(filePath: string) {
 }
 
 const isomorhicHandlerTemplate = (
-  resolverPath: string,
+  resolverFilePath: string,
   resolverName: string,
-  resolverType: string,
+  resolverType: ResolverType,
   useTypes: boolean = true,
 ) => `
-import {getIsomorphicRpcHandler} from '@blitzjs/core'
-const resolverModule = require('${resolverPath}')
-export default getIsomorphicRpcHandler(
+import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
+const resolverModule = require('${resolverFilePath}')
+export default getIsomorphicEnhancedResolver(
   resolverModule,
-  '${resolverPath}',
+  '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
 ) ${useTypes ? "as typeof resolverModule.default" : ""}
@@ -26,8 +27,8 @@ export default getIsomorphicRpcHandler(
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
-// This imports the isomorphicHandler
-import resolverModule from '${originalPath}'
+// This imports the output of getIsomorphicEnhancedResolver()
+import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
 import {rpcApiHandler} from '@blitzjs/server'
 import path from 'path'
@@ -45,8 +46,8 @@ try {
   connect = require('db').connect ?? (() => db.$connect ? db.$connect() : db.connect())
 }catch(err){}
 export default rpcApiHandler(
-  resolverModule,
-  getAllMiddlewareForModule(resolverModule),
+  enhancedResolver,
+  getAllMiddlewareForModule(enhancedResolver),
   () => db && connect(),
 )
 export const config = {
@@ -63,7 +64,7 @@ export const createStageRpc = (isTypescript = true): Stage =>
   function configure({config: {src}}) {
     const fileTransformer = absolutePathTransform(src)
 
-    const getResolverPath = fileTransformer(resolverPath)
+    const getResolverPath = fileTransformer(resolverFilePath)
     const getApiHandlerPath = fileTransformer(apiHandlerPath)
 
     const stream = transform.file((file, {next, push}) => {
@@ -72,7 +73,7 @@ export const createStageRpc = (isTypescript = true): Stage =>
       }
 
       const originalPath = resolutionPath(src, file.path)
-      const resolverImportPath = resolverPath(originalPath)
+      const resolverImportPath = resolverFilePath(originalPath)
       const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
       // Original function -> _resolvers path
@@ -128,14 +129,16 @@ function extractTemplateVars(resolverImportPath: string) {
   const [, resolverTypePlural, resolverName] =
     /(queries|mutations)\/(.*)$/.exec(resolverImportPath) || []
 
+  const resolverType: ResolverType = resolverTypePlural === "mutations" ? "mutation" : "query"
+
   return {
     resolverImportPath,
-    resolverType: resolverTypePlural === "mutations" ? "mutation" : "query",
+    resolverType,
     resolverName,
   }
 }
 
-function resolverPath(path: string) {
+function resolverFilePath(path: string) {
   return path.replace(/^app/, "app/_resolvers")
 }
 

@@ -1,14 +1,13 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
-import {Resolver} from "./types"
+import {Resolver, EnhancedResolver} from "./types"
 import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
   MiddlewareResponse,
 } from "./middleware"
-import {EnhancedResolverModule} from "./rpc"
 
-type SsrQueryContext = {
+export type SsrQueryContext = {
   req: IncomingMessage
   res: ServerResponse
 }
@@ -18,16 +17,16 @@ export async function ssrQuery<TInput, TResult>(
   params: TInput,
   {req, res}: SsrQueryContext,
 ): Promise<TResult> {
-  const handler = (resolver as unknown) as EnhancedResolverModule
+  const enhancedResolver = (resolver as unknown) as EnhancedResolver<TInput, TResult>
 
-  const middleware = getAllMiddlewareForModule(handler)
+  const middleware = getAllMiddlewareForModule(enhancedResolver)
 
   middleware.push(async (_req, res, next) => {
-    const logPrefix = `${handler._meta.name}`
+    const logPrefix = `${enhancedResolver._meta.name}`
     log.newline()
     try {
       log.progress(`Running ${logPrefix}(${JSON.stringify(params, null, 2)})`)
-      const result = await handler(params, res.blitzCtx)
+      const result = await enhancedResolver(params, res.blitzCtx)
       log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
       res.blitzResult = result
       return next()

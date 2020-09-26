@@ -1,7 +1,6 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {getQueryKey} from "./utils"
-import {ResolverModule, Middleware} from "./middleware"
+import {getQueryKey, isClient, isServer} from "./utils"
 import {
   getAntiCSRFToken,
   publicDataStore,
@@ -12,14 +11,19 @@ import {
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
+import {
+  ResolverType,
+  ResolverModule,
+  EnhancedResolver,
+  EnhancedResolverRpcClient,
+  CancellablePromise,
+  ResolverRpc,
+  ResolverRpcExecutor,
+} from "./types"
+import {SuperJSONResult} from "superjson/dist/types"
 
-type Options = {
-  fromQueryHook?: boolean
-  alreadySerialized?: boolean
-}
-
-export function executeRpcCall(url: string, params: any, opts: Options = {}) {
-  if (typeof window === "undefined") return
+export const executeRpcCall: ResolverRpcExecutor<unknown, unknown> = (url, params, opts = {}) => {
+  if (isServer) return Promise.resolve()
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -30,13 +34,13 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
-  let serialized
+  let serialized: SuperJSONResult
   if (opts.alreadySerialized) {
     // params is already serialized with superjson when it gets here
     // We have to serialize the params before passing to react-query in the query key
     // because otherwise react-query will use JSON.parse(JSON.stringify)
     // so by the time the arguments come here the real JS objects are lost
-    serialized = params
+    serialized = params as SuperJSONResult
   } else {
     serialized = serialize(params)
   }
@@ -105,68 +109,80 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
 }
 
 executeRpcCall.warm = (url: string) => {
-  if (typeof window !== "undefined") {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window.fetch(url, {method: "HEAD"})
+  if (isClient) {
+    return window.fetch(url, {method: "HEAD"})
+  } else {
+    return
   }
 }
 
-interface ResolverEnhancement {
-  _meta: {
-    name: string
-    type: string
-    path: string
-    apiUrl: string
-  }
-}
+const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
+  resolverFilePath.replace(/^app\/_resolvers/, "/api")
 
-interface CancellablePromise<T> extends Promise<T> {
-  cancel?: Function
-}
-
-export interface RpcFunction {
-  (params: any, opts?: any): CancellablePromise<any>
-}
-export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
-
-export interface EnhancedResolverModule extends ResolverEnhancement {
-  (input: any, ctx: Record<string, any>): CancellablePromise<unknown>
-  middleware?: Middleware[]
-}
-
-export function getIsomorphicRpcHandler(
-  resolver: ResolverModule,
-  resolverPath: string,
+/*
+ * Overloading signature so you can specify server/client and get the
+ * correct return type
+ */
+export function getIsomorphicEnhancedResolver(
+  // resolver is undefined on the client
+  resolver: ResolverModule | undefined,
+  resolverFilePath: string,
   resolverName: string,
-  resolverType: string,
-) {
-  const apiUrl = resolverPath.replace(/^app\/_resolvers/, "/api")
-  const enhance = <T extends ResolverEnhancement>(fn: T): T => {
-    fn._meta = {
+  resolverType: ResolverType,
+): EnhancedResolver<unknown, unknown> | EnhancedResolverRpcClient
+export function getIsomorphicEnhancedResolver(
+  // resolver is undefined on the client
+  resolver: ResolverModule | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "client",
+): EnhancedResolverRpcClient
+export function getIsomorphicEnhancedResolver(
+  // resolver is undefined on the client
+  resolver: ResolverModule | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "server",
+): EnhancedResolver<unknown, unknown>
+export function getIsomorphicEnhancedResolver(
+  // resolver is undefined on the client
+  resolver: ResolverModule | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "server" | "client" = isClient ? "client" : "server",
+): EnhancedResolver<unknown, unknown> | EnhancedResolverRpcClient {
+  const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
+
+  if (target === "client") {
+    const resolverRpc: ResolverRpc<unknown, unknown> = (params, opts) =>
+      executeRpcCall(apiUrl, params, opts)
+    const enhancedResolverRpcClient = resolverRpc as EnhancedResolverRpcClient
+
+    enhancedResolverRpcClient._meta = {
       name: resolverName,
       type: resolverType,
-      path: resolverPath,
+      filePath: resolverFilePath,
       apiUrl: apiUrl,
     }
-    return fn
-  }
-
-  if (typeof window !== "undefined") {
-    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) =>
-      executeRpcCall(apiUrl, params, opts)) as any
-
-    rpcFn = enhance(rpcFn)
 
     // Warm the lambda
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     executeRpcCall.warm(apiUrl)
 
-    return rpcFn
+    return enhancedResolverRpcClient
   } else {
-    let handler: EnhancedResolverModule = resolver.default as any
-
-    handler.middleware = resolver.middleware
-    handler = enhance(handler)
-
-    return handler
+    if (!resolver) throw new Error("resolver is missing on the server")
+    const enhancedResolver = (resolver.default as unknown) as EnhancedResolver<unknown, unknown>
+    enhancedResolver.middleware = resolver.middleware
+    enhancedResolver._meta = {
+      name: resolverName,
+      type: resolverType,
+      filePath: resolverFilePath,
+      apiUrl: apiUrl,
+    }
+    return enhancedResolver
   }
 }

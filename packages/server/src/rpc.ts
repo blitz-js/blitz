@@ -1,14 +1,12 @@
 import {log} from "@blitzjs/display"
-import type {
-  Middleware,
-  BlitzApiRequest,
-  BlitzApiResponse,
-  EnhancedResolverModule,
-} from "@blitzjs/core"
+import type {Middleware, BlitzApiRequest, BlitzApiResponse, EnhancedResolver} from "@blitzjs/core"
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
 
-const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any): Middleware => {
+const rpcMiddleware = <TInput, TResult>(
+  resolver: EnhancedResolver<TInput, TResult>,
+  connectDb?: () => any,
+): Middleware => {
   return async (req, res, next) => {
     const logPrefix = `${resolver._meta.name}`
 
@@ -35,10 +33,9 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
       }
 
       try {
-        const data =
-          req.body.params === undefined
-            ? undefined
-            : deserialize({json: req.body.params, meta: req.body.meta?.params})
+        const data = (req.body.params === undefined
+          ? undefined
+          : deserialize({json: req.body.params, meta: req.body.meta?.params})) as TInput
 
         const result = await resolver(data, res.blitzCtx)
 
@@ -73,8 +70,8 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
   }
 }
 
-export function rpcApiHandler(
-  resolver: EnhancedResolverModule,
+export function rpcApiHandler<TInput, TResult>(
+  resolver: EnhancedResolver<TInput, TResult>,
   middleware: Middleware[] = [],
   connectDb?: () => any,
 ) {

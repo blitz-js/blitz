@@ -1,7 +1,7 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver} from "../types"
-import {EnhancedRpcFunction} from "rpc"
+import {Resolver, EnhancedResolverRpcClient} from "../types"
+import {isServer} from "."
 
 type MutateOptions = {
   refetch?: boolean
@@ -21,13 +21,33 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
   },
 })
 
+export const emptyQueryFn: EnhancedResolverRpcClient = (() => {
+  const fn = () => new Promise(() => {})
+  fn._meta = {
+    name: "emptyQueryFn",
+    type: "n/a" as any,
+    filePath: "n/a",
+    apiUrl: "",
+  }
+  return fn
+})()
+
+export const sanitize = <TInput, TResult>(queryFn: Resolver<TInput, TResult>) => {
+  if (isServer) {
+    // Prevents logging garbage during static pre-rendering
+    return emptyQueryFn
+  }
+
+  return queryFn as EnhancedResolverRpcClient
+}
+
 export function getQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>, params: TInput) {
   if (typeof queryFn === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a query function")
   }
 
   const queryKey: [string, Record<string, any>] = [
-    ((queryFn as unknown) as EnhancedRpcFunction)._meta.apiUrl,
+    sanitize(queryFn)._meta.apiUrl,
     serialize(typeof params === "function" ? (params as Function)() : params),
   ]
   return queryKey
@@ -44,7 +64,21 @@ export function getInfiniteQueryKey<TInput, TResult>(queryFn: Resolver<TInput, T
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
     "infinite",
-    ((queryFn as unknown) as EnhancedRpcFunction)._meta.apiUrl,
+    sanitize(queryFn)._meta.apiUrl,
   ]
   return queryKey
+}
+
+export const retryFunction = (failureCount: number, error: any) => {
+  if (process.env.NODE_ENV !== "production") return false
+
+  // Retry (max. 3 times) only if network error detected
+  if (error.message === "Network request failed" && failureCount <= 3) return true
+
+  return false
+}
+
+export const defaultQueryConfig = {
+  suspense: true,
+  retry: retryFunction,
 }

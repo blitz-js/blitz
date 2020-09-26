@@ -1,10 +1,9 @@
-/* eslint-disable es5/no-for-of  -- file only used on the server */
 /* eslint-disable es5/no-es6-methods  -- file only used on the server */
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
-import {EnhancedResolverModule} from "./rpc"
 import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
+import {EnhancedResolver} from "./types"
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -37,12 +36,9 @@ export type ConnectMiddleware = (
   next: (error?: Error) => void,
 ) => void
 
-export type ResolverModule = {
-  default: (args: any, ctx: any) => Promise<unknown>
-  middleware?: Middleware[]
-}
-
-export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
+export function getAllMiddlewareForModule<TInput, TResult>(
+  resolverModule: EnhancedResolver<TInput, TResult>,
+) {
   const middleware: Middleware[] = []
   const config = getConfig()
   if (config.middleware) {

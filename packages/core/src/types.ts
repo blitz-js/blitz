@@ -1,3 +1,5 @@
+import {Middleware} from "./middleware"
+
 /**
  * Infer the type of the parameter from function that takes a single argument
  */
@@ -13,4 +15,51 @@ export type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infe
  */
 export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
 
+export interface CancellablePromise<T> extends Promise<T> {
+  cancel?: Function
+}
+
+// The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: unknown) => TResult | Promise<TResult>
+
+// Resolver type when imported with require()
+export type ResolverModule<TInput = unknown, TResult = unknown> = {
+  default: Resolver<TInput, TResult>
+  middleware?: Middleware[]
+}
+
+export type RpcOptions = {
+  fromQueryHook?: boolean
+  alreadySerialized?: boolean
+}
+
+// The compiled rpc resolver available on client
+export type ResolverRpc<TInput, TResult> = (
+  input: TInput,
+  opts?: RpcOptions,
+) => CancellablePromise<TResult>
+
+export interface ResolverRpcExecutor<TInput, TResult> {
+  (apiUrl: string, params: TInput, opts?: RpcOptions): CancellablePromise<TResult>
+  warm: (apiUrl: string) => undefined | Promise<unknown>
+}
+
+export type ResolverType = "query" | "mutation"
+
+export interface ResolverEnhancement {
+  _meta: {
+    name: string
+    type: ResolverType
+    filePath: string
+    apiUrl: string
+  }
+}
+
+export interface EnhancedResolver<TInput, TResult>
+  extends Resolver<TInput, TResult>,
+    ResolverEnhancement {
+  middleware?: Middleware[]
+}
+export interface EnhancedResolverRpcClient
+  extends ResolverRpc<unknown, unknown>,
+    ResolverEnhancement {}

@@ -3,7 +3,7 @@ import http from "http"
 import listen from "test-listen"
 import fetch from "isomorphic-unfetch"
 import {
-  EnhancedResolverModule,
+  EnhancedResolver,
   HEADER_CSRF,
   HEADER_PUBLIC_DATA_TOKEN,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
@@ -43,7 +43,7 @@ describe("supertokens", () => {
   it("anonymous", async () => {
     const resolverModule = ((() => {
       return
-    }) as unknown) as EnhancedResolverModule
+    }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
         expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
@@ -90,7 +90,7 @@ describe("supertokens", () => {
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
       await ctx.session.create({userId: 1, roles: ["admin"]})
       return
-    }) as EnhancedResolverModule
+    }) as EnhancedResolver<unknown, unknown>
 
     await mockServer(resolverModule, async (url) => {
       console.log = jest.fn()
@@ -122,8 +122,8 @@ describe("supertokens", () => {
   })
 })
 
-async function mockServer(
-  resolverModule: EnhancedResolverModule,
+async function mockServer<TInput, TResult>(
+  resolverModule: EnhancedResolver<TInput, TResult>,
   callback: (url: string) => Promise<void>,
 ) {
   const dbConnectorFn = undefined
@@ -131,7 +131,7 @@ async function mockServer(
   resolverModule._meta = {
     name: "testResolver",
     type: "query",
-    path: "test/path",
+    filePath: "test/path",
     apiUrl: "testurl",
   }
 
