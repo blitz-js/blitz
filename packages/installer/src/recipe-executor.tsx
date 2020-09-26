@@ -32,10 +32,7 @@ export class RecipeExecutor<Options extends RecipeMeta> {
   async run(cliArgs: {}): Promise<void> {
     try {
       const {waitUntilExit} = render(
-        <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
-        {
-          experimental: true,
-        },
+        <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />
       )
       await waitUntilExit()
     } catch (e) {

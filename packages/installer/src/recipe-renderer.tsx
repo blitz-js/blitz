@@ -1,8 +1,7 @@
 import React from "react"
-import {Box, Text, Color, useApp, Static} from "ink"
+import {Box, Text, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
 import {RecipeMeta} from "./recipe-executor"
-import {Branded} from "./components/branded"
 import {Newline} from "./components/newline"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
@@ -77,12 +76,10 @@ const DispatchContext = React.createContext<React.Dispatch<{type: Action; data?:
 function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
     <Box flexDirection="column">
-      <Branded>
-        <Box flexDirection="column">
-          <Text>Welcome to the recipe for {recipeMeta.name}</Text>
-          <Text>{recipeMeta.description}</Text>
-        </Box>
-      </Branded>
+      <Box flexDirection="column">
+        <Text color="#8a3df0" bold>Welcome to the recipe for {recipeMeta.name}</Text>
+        <Text color="#8a3df0" bold>{recipeMeta.description}</Text>
+      </Box>
       <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
       <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
       <Newline />
@@ -166,14 +163,12 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <Static>
-        {messages.map((msg, idx) => (
-          <Color key={msg + idx + Math.random()} green>
-            <Text>
-              {msg === "\n" ? "" : "✅"} {msg}
-            </Text>
-          </Color>
-        ))}
+      <Static items={messages}>
+        {msg => (
+          <Text key={msg + Math.random()} color="green">
+            {msg === "\n" ? "" : "✅"} {msg}
+          </Text>
+        )}
       </Static>
       {state.current === -1 && <WelcomeMessage recipeMeta={recipeMeta} />}
       {state.current > -1 && (
