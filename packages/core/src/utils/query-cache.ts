@@ -1,6 +1,6 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {InferUnaryParam, QueryFn} from "../types"
+import {Resolver} from "../types"
 import {EnhancedRpcFunction} from "rpc"
 
 type MutateOptions = {
@@ -21,17 +21,9 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
   },
 })
 
-export function getQueryKey<T extends QueryFn>(
-  queryFn: T,
-  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-) {
+export function getQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>, params: TInput) {
   if (typeof queryFn === "undefined") {
     throw new Error("getQueryKey is missing the first argument - it must be a query function")
-  }
-  if (typeof params === "undefined") {
-    throw new Error(
-      "getQueryKey is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
-    )
   }
 
   const queryKey: [string, Record<string, any>] = [
@@ -41,25 +33,18 @@ export function getQueryKey<T extends QueryFn>(
   return queryKey
 }
 
-export function getInfiniteQueryKey<T extends QueryFn>(
-  queryFn: T,
-  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-) {
+export function getInfiniteQueryKey<TInput, TResult>(queryFn: Resolver<TInput, TResult>) {
   if (typeof queryFn === "undefined") {
-    throw new Error("getQueryKey is missing the first argument - it must be a query function")
-  }
-  if (typeof params === "undefined") {
     throw new Error(
-      "getQueryKey is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
+      "getInfiniteQueryKey is missing the first argument - it must be a query function",
     )
   }
 
-  const queryKey: ["infinite", string, Record<string, any>] = [
+  const queryKey: ["infinite", string] = [
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
     "infinite",
     ((queryFn as unknown) as EnhancedRpcFunction)._meta.apiUrl,
-    serialize(typeof params === "function" ? (params as Function)() : params),
   ]
   return queryKey
 }

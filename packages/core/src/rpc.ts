@@ -12,11 +12,10 @@ import {
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
-import merge from "deepmerge"
 
 type Options = {
   fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
+  alreadySerialized?: boolean
 }
 
 export function executeRpcCall(url: string, params: any, opts: Options = {}) {
@@ -32,16 +31,12 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
   }
 
   let serialized
-  if (opts.fromQueryHook) {
-    // We have to serialize query arguments inside the hooks, otherwise react-query will use
-    // JSON.parse(JSON.stringify) so by the time the arguments come here the real JS objects are lost
+  if (opts.alreadySerialized) {
+    // params is already serialized with superjson when it gets here
+    // We have to serialize the params before passing to react-query in the query key
+    // because otherwise react-query will use JSON.parse(JSON.stringify)
+    // so by the time the arguments come here the real JS objects are lost
     serialized = params
-    if (opts.resultOfGetFetchMore) {
-      // useInfiniteQuery usually passes in extra pageParams here that come from getFetchMore()
-      // This isn't serialized inside useInfiniteQuery because this data is provided separately
-      // by react-query
-      serialized = merge(params, serialize(opts.resultOfGetFetchMore))
-    }
   } else {
     serialized = serialize(params)
   }
@@ -130,7 +125,7 @@ interface CancellablePromise<T> extends Promise<T> {
 }
 
 export interface RpcFunction {
-  (params: any, opts: any): CancellablePromise<any>
+  (params: any, opts?: any): CancellablePromise<any>
 }
 export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
 

@@ -1,44 +1,41 @@
 import {
   useInfiniteQuery as useInfiniteReactQuery,
   InfiniteQueryResult,
-  InfiniteQueryConfig,
+  InfiniteQueryConfig as RQInfiniteQueryConfig,
 } from "react-query"
 import {emptyQueryFn, retryFunction} from "./use-query"
-import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
+import {Resolver} from "./types"
 import {getQueryCacheFunctions, QueryCacheFunctions, getInfiniteQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
 
-type RestQueryResult<T extends QueryFn> = Omit<
-  InfiniteQueryResult<PromiseReturnType<T>, any>,
-  "resolvedData"
-> &
-  QueryCacheFunctions<PromiseReturnType<T>[]>
+type RestQueryResult<TResult> = Omit<InfiniteQueryResult<TResult>, "resolvedData"> &
+  QueryCacheFunctions<TResult>
 
 const isServer = typeof window === "undefined"
 
-export function useInfiniteQuery<T extends QueryFn>(
-  queryFn: T,
-  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options: InfiniteQueryConfig<PromiseReturnType<T>, any>,
-): [PromiseReturnType<T>[], RestQueryResult<T>] {
+interface InfiniteQueryConfig<TResult, TFetchMoreResult> extends RQInfiniteQueryConfig<TResult> {
+  getFetchMore?: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
+}
+
+// TODO - Fix TFetchMoreResult not actually taking affect in apps.
+// It shows as 'unknown' in the params() input argumunt, but should show as TFetchMoreResult
+export function useInfiniteQuery<TInput, TResult, TFetchMoreResult>(
+  queryFn: Resolver<TInput, TResult>,
+  params: (fetchMoreResult: TFetchMoreResult) => TInput,
+  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
+): [TResult[], RestQueryResult<TResult>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  if (typeof params === "undefined") {
-    throw new Error(
-      "useInfiniteQuery is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
-    )
-  }
-
   const queryRpcFn = isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
 
-  const queryKey = getInfiniteQueryKey(queryFn, params)
+  const queryKey = getInfiniteQueryKey(queryFn)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     queryKey,
-    queryFn: (_infinite: boolean, _apiUrl: string, params: any, resultOfGetFetchMore?: any) =>
-      queryRpcFn(params, {fromQueryHook: true, resultOfGetFetchMore}),
+    queryFn: (_infinite: boolean, _apiUrl: string, resultOfGetFetchMore: TFetchMoreResult) =>
+      queryRpcFn(params(resultOfGetFetchMore), {fromQueryHook: true}),
     config: {
       suspense: true,
       retry: retryFunction,
@@ -48,8 +45,8 @@ export function useInfiniteQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
+    ...getQueryCacheFunctions<TResult>(queryKey),
   }
 
-  return [data as PromiseReturnType<T>[], rest as RestQueryResult<T>]
+  return [data as TResult[], rest as RestQueryResult<TResult>]
 }

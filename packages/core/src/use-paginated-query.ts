@@ -4,31 +4,22 @@ import {
   PaginatedQueryConfig,
 } from "react-query"
 import {emptyQueryFn, retryFunction} from "./use-query"
-import {PromiseReturnType, InferUnaryParam, QueryFn} from "./types"
+import {Resolver} from "./types"
 import {QueryCacheFunctions, getQueryCacheFunctions, getQueryKey} from "./utils/query-cache"
 import {EnhancedRpcFunction} from "./rpc"
 
-type RestQueryResult<T extends QueryFn> = Omit<
-  PaginatedQueryResult<PromiseReturnType<T>>,
-  "resolvedData"
-> &
-  QueryCacheFunctions<PromiseReturnType<T>>
+type RestQueryResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolvedData"> &
+  QueryCacheFunctions<TResult>
 
 const isServer = typeof window === "undefined"
 
-export function usePaginatedQuery<T extends QueryFn>(
-  queryFn: T,
-  params: InferUnaryParam<T> | (() => InferUnaryParam<T>),
-  options?: PaginatedQueryConfig<PromiseReturnType<T>>,
-): [PromiseReturnType<T>, RestQueryResult<T>] {
+export function usePaginatedQuery<TInput, TResult>(
+  queryFn: Resolver<TInput, TResult>,
+  params: TInput,
+  options?: PaginatedQueryConfig<TResult>,
+): [TResult, RestQueryResult<TResult>] {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
-  }
-
-  if (typeof params === "undefined") {
-    throw new Error(
-      "usePaginatedQuery is missing the second argument. This will be the input to your query function on the server. Pass `null` if the query function doesn't take any arguments",
-    )
   }
 
   const queryRpcFn = isServer ? emptyQueryFn : ((queryFn as unknown) as EnhancedRpcFunction)
@@ -37,7 +28,8 @@ export function usePaginatedQuery<T extends QueryFn>(
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey,
-    queryFn: (_apiUrl: string, params: any) => queryRpcFn(params, {fromQueryHook: true}),
+    queryFn: (_apiUrl: string, params: any) =>
+      queryRpcFn(params, {fromQueryHook: true, alreadySerialized: true}),
     config: {
       suspense: true,
       retry: retryFunction,
@@ -47,8 +39,8 @@ export function usePaginatedQuery<T extends QueryFn>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<PromiseReturnType<T>>(queryKey),
+    ...getQueryCacheFunctions<TResult>(queryKey),
   }
 
-  return [resolvedData as PromiseReturnType<T>, rest as RestQueryResult<T>]
+  return [resolvedData as TResult, rest as RestQueryResult<TResult>]
 }

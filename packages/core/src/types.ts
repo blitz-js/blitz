@@ -14,3 +14,4 @@ export type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infe
 export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
 
 export type QueryFn = (...args: any) => Promise<any>
+export type Resolver<TInput, TResult> = (input: TInput, ctx?: unknown) => TResult | Promise<TResult>
