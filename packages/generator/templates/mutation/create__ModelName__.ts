@@ -1,4 +1,4 @@
-import {SessionContext} from "blitz"
+import {Ctx} from "blitz"
 import db, {__ModelName__CreateArgs} from "db"
 
 if (process.env.parentModel) {
@@ -15,9 +15,9 @@ if (process.env.parentModel) {
 if (process.env.parentModel) {
   export default async function create__ModelName__(
     {data, __parentModelId__}: Create__ModelName__Input,
-    ctx: {session?: SessionContext} = {},
+    {session}: Ctx,
   ) {
-    ctx.session!.authorize()
+    session.authorize()
 
     const __modelName__ = await db.__modelName__.create({
       data: {...data, __parentModel__: {connect: {id: __parentModelId__}}},
@@ -28,9 +28,9 @@ if (process.env.parentModel) {
 } else {
   export default async function create__ModelName__(
     {data}: Create__ModelName__Input,
-    ctx: {session?: SessionContext} = {},
+    {session}: Ctx,
   ) {
-    ctx.session!.authorize()
+    session.authorize()
 
     const __modelName__ = await db.__modelName__.create({data})
 

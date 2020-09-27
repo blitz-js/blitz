@@ -5,6 +5,9 @@ import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {EnhancedResolver} from "./types"
 
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
+
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
 }
