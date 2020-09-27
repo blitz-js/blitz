@@ -1,10 +1,8 @@
 import {NextPage, NextComponentType, NextPageContext} from "next"
 import {AppProps as NextAppProps} from "next/app"
 
-export * from "./use-query"
-export * from "./use-paginated-query"
+export * from "./use-query-hooks"
 export * from "./use-params"
-export * from "./use-infinite-query"
 export * from "./ssr-query"
 export * from "./rpc"
 export * from "./with-router"
