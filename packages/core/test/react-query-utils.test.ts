@@ -1,4 +1,4 @@
-import {getQueryCacheFunctions} from "../src/utils/query-cache"
+import {getQueryCacheFunctions} from "../src/utils/react-query-utils"
 import {queryCache} from "react-query"
 
 jest.mock("react-query")

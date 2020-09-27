@@ -1,6 +1,6 @@
 import React from "react"
 import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
-import {useQuery} from "../src/use-query"
+import {useQuery} from "../src/use-query-hooks"
 import {deserialize} from "superjson"
 
 describe("useQuery", () => {
@@ -8,7 +8,7 @@ describe("useQuery", () => {
     params: any,
     queryFn: (...args: any) => Promise<any>,
   ): [{data?: any}, Function] => {
-    // This enhance fn does what getIsomorphicRpcHandler does during build time
+    // This enhance fn does what getIsomorphicEnhancedResolver does during build time
     const enhance = (fn: any) => {
       const newFn = (...args: any) => {
         const [data, ...rest] = args

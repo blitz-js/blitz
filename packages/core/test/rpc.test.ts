@@ -1,4 +1,4 @@
-import {executeRpcCall, getIsomorphicRpcHandler} from "@blitzjs/core"
+import {executeRpcCall, getIsomorphicEnhancedResolver} from "@blitzjs/core"
 
 global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
 
@@ -12,9 +12,9 @@ declare global {
 
 describe("RPC", () => {
   describe("HEAD", () => {
-    it("warms the endpoint", () => {
+    it("warms the endpoint", async () => {
       expect.assertions(1)
-      executeRpcCall.warm("/api/endpoint")
+      await executeRpcCall.warm("/api/endpoint")
       expect(global.fetch).toBeCalled()
     })
   })
@@ -32,15 +32,16 @@ describe("RPC", () => {
       const resolverModule = {
         default: jest.fn(),
       }
-      const rpcFn = getIsomorphicRpcHandler(
+      const rpcFn = getIsomorphicEnhancedResolver(
         resolverModule,
         "app/_resolvers/queries/getProduct",
         "testResolver",
         "query",
+        "client",
       )
 
       try {
-        const result = await rpcFn("/api/endpoint", {paramOne: 1234})
+        const result = await rpcFn({paramOne: 1234})
         expect(result).toBe("result")
         expect(fetchMock).toBeCalled()
       } finally {
@@ -59,17 +60,16 @@ describe("RPC", () => {
       const resolverModule = {
         default: jest.fn(),
       }
-      const rpcFn = getIsomorphicRpcHandler(
+      const rpcFn = getIsomorphicEnhancedResolver(
         resolverModule,
         "app/_resolvers/queries/getProduct",
         "testResolver",
         "query",
+        "client",
       )
 
       try {
-        await expect(rpcFn("/api/endpoint", {paramOne: 1234})).rejects.toThrowError(
-          /something broke/,
-        )
+        await expect(rpcFn({paramOne: 1234})).rejects.toThrowError(/something broke/)
       } finally {
         fetchMock.mockRestore()
       }
