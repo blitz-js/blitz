@@ -19,7 +19,7 @@ export declare type MutateFunction<
   TVariables = unknown,
   TSnapshot = unknown
 > = (
-  variables: TVariables,
+  variables?: TVariables,
   config?: MutateConfig<TResult, TError, TVariables, TSnapshot>,
 ) => Promise<TResult>
 
