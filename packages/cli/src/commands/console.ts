@@ -1,16 +1,7 @@
-import {runRepl} from "@blitzjs/repl"
 import {Command} from "@oclif/command"
-import path from "path"
-import fs from "fs"
-import pkgDir from "pkg-dir"
-import {log} from "@blitzjs/display"
-import chalk from "chalk"
 
-import {setupTsnode} from "../utils/setup-ts-node"
-import {runPrismaGeneration} from "./db"
-
-const projectRoot = pkgDir.sync() || process.cwd()
-const isTypescript = fs.existsSync(path.join(projectRoot, "tsconfig.json"))
+const projectRoot = require("pkg-dir").sync() || process.cwd()
+const isTypescript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
 
 export class Console extends Command {
   static description = "Run the Blitz console REPL"
@@ -22,19 +13,17 @@ export class Console extends Command {
   }
 
   async run() {
+    const {log} = require("@blitzjs/display")
+    const chalk = require("chalk")
     log.branded("You have entered the Blitz console")
     console.log(chalk.yellow("Tips: - Exit by typing .exit or pressing Ctrl-D"))
     console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
     console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
-    const spinner = log.spinner("Loading your code").start()
     if (isTypescript) {
-      setupTsnode()
+      require("../utils/setup-ts-node").setupTsnode()
     }
 
-    await runPrismaGeneration({silent: true, failSilently: true})
-    spinner.succeed()
-
-    runRepl(Console.replOptions)
+    require("@blitzjs/repl").runRepl(Console.replOptions)
   }
 }

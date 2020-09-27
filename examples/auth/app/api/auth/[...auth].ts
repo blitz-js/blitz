@@ -2,6 +2,7 @@ import {passportAuth} from "blitz"
 import db from "db"
 import {Strategy as TwitterStrategy} from "passport-twitter"
 import {Strategy as GitHubStrategy} from "passport-github2"
+import {Strategy as Auth0Strategy} from "passport-auth0"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -16,8 +17,13 @@ assert(
 assert(process.env.GITHUB_CLIENT_ID, "You must provide the GITHUB_CLIENT_ID env variable")
 assert(process.env.GITHUB_CLIENT_SECRET, "You must provide the GITHUB_CLIENT_SECRET env variable")
 
+assert(process.env.AUTH0_DOMAIN, "You must provide the AUTH0_DOMAIN env variable")
+assert(process.env.AUTH0_CLIENT_ID, "You must provide the AUTH0_CLIENT_ID env variable")
+assert(process.env.AUTH0_CLIENT_SECRET, "You must provide the AUTH0_CLIENT_SECRET env variable")
+
 export default passportAuth({
   successRedirectUrl: "/",
+  authenticateOptions: {scope: "openid email profile"}, //used for Auth0Strategy - without an empty profile is returned
   strategies: [
     new TwitterStrategy(
       {
@@ -83,6 +89,42 @@ export default passportAuth({
           githubUsername: profile.username,
         }
         done(null, {publicData})
+      },
+    ),
+    new Auth0Strategy(
+      {
+        domain: process.env.AUTH0_DOMAIN,
+        clientID: process.env.AUTH0_CLIENT_ID,
+        clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        callbackURL:
+          process.env.NODE_ENV === "production"
+            ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/auth0/callback"
+            : "http://localhost:3000/api/auth/auth0/callback",
+      },
+      async function (_token, _tokenSecret, extraParams, profile, done) {
+        const email = profile.emails && profile.emails[0]?.value
+
+        if (!email) {
+          // This can happen if you haven't enabled email access in your twitter app permissions
+          return done(new Error("GitHub OAuth response doesn't have email."))
+        }
+
+        const user = await db.user.upsert({
+          where: {email},
+          create: {
+            email,
+            name: profile.displayName,
+          },
+          update: {email},
+        })
+
+        const publicData = {
+          userId: user.id,
+          roles: [user.role],
+          source: "auth0",
+          githubUsername: profile.username,
+        }
+        done(undefined, {publicData})
       },
     ),
   ],

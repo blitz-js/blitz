@@ -6,15 +6,17 @@ type LayoutProps = {
   children: ReactNode
 }
 
-const Layout = ({ title, children }: LayoutProps) => (
-  <>
-    <Head>
-      <title>{title || "__name__"}</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+const Layout = ({ title, children }: LayoutProps) => {
+  return (
+    <>
+      <Head>
+        <title>{title || "__name__"}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    {children}
-  </>
-)
+      {children}
+    </>
+  )
+}
 
 export default Layout

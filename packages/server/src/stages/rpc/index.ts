@@ -1,3 +1,4 @@
+import {ResolverType} from "@blitzjs/core"
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import {relative} from "path"
 import slash from "slash"
@@ -9,25 +10,24 @@ export function isResolverPath(filePath: string) {
 }
 
 const isomorhicHandlerTemplate = (
-  resolverPath: string,
+  resolverFilePath: string,
   resolverName: string,
-  resolverType: string,
-  useTypes: boolean = true,
+  resolverType: ResolverType,
 ) => `
-import {getIsomorphicRpcHandler} from '@blitzjs/core'
-const resolverModule = require('${resolverPath}')
-export default getIsomorphicRpcHandler(
+import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
+import * as resolverModule from '${resolverFilePath}'
+export default getIsomorphicEnhancedResolver(
   resolverModule,
-  '${resolverPath}',
+  '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
-) ${useTypes ? "as typeof resolverModule.default" : ""}
+)
 `
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
-// This imports the isomorphicHandler
-import resolverModule from '${originalPath}'
+// This imports the output of getIsomorphicEnhancedResolver()
+import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
 import {rpcApiHandler} from '@blitzjs/server'
 import path from 'path'
@@ -45,8 +45,8 @@ try {
   connect = require('db').connect ?? (() => db.$connect ? db.$connect() : db.connect())
 }catch(err){}
 export default rpcApiHandler(
-  resolverModule,
-  getAllMiddlewareForModule(resolverModule),
+  enhancedResolver,
+  getAllMiddlewareForModule(enhancedResolver),
   () => db && connect(),
 )
 export const config = {
@@ -59,51 +59,62 @@ export const config = {
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
-export const createStageRpc: Stage = function configure({config: {src, isTypescript = true}}) {
-  const fileTransformer = absolutePathTransform(src)
+export const createStageRpc = (isTypescript = true): Stage =>
+  function configure({config: {src}}) {
+    const fileTransformer = absolutePathTransform(src)
 
-  const getResolverPath = fileTransformer(resolverPath)
-  const getApiHandlerPath = fileTransformer(apiHandlerPath)
+    const getResolverPath = fileTransformer(resolverFilePath)
+    const getApiHandlerPath = fileTransformer(apiHandlerPath)
 
-  const stream = transform.file((file, {next, push}) => {
-    if (!isResolverPath(file.path)) {
-      return file
-    }
+    const stream = transform.file((file, {next, push}) => {
+      if (!isResolverPath(file.path)) {
+        return file
+      }
 
-    const originalPath = resolutionPath(src, file.path)
-    const resolverImportPath = resolverPath(originalPath)
-    const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
+      const originalPath = resolutionPath(src, file.path)
+      const resolverImportPath = resolverFilePath(originalPath)
+      const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
-    // Original function -> _resolvers path
-    push(
-      new File({
-        path: getResolverPath(file.path),
-        contents: file.contents,
-        hash: file.hash + ":1",
-      }),
-    )
+      // Original function -> _resolvers path
+      push(
+        new File({
+          path: getResolverPath(file.path),
+          contents: file.contents,
+          // Appending a new file to the output of this particular stream
+          // We don't want to reprocess this file but simply add it to the output
+          // of the stream here we provide a hash with some information for how
+          // this file came to be here
+          hash: [file.hash, "rpc", "resolver"].join("|"),
+          event: "add",
+        }),
+      )
 
-    // File API route handler
-    push(
-      new File({
-        path: getApiHandlerPath(file.path),
-        contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
-        hash: file.hash + ":2",
-      }),
-    )
+      // File API route handler
+      push(
+        new File({
+          path: getApiHandlerPath(file.path),
+          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
+          // Appending a new file to the output of this particular stream
+          // We don't want to reprocess this file but simply add it to the output
+          // of the stream here we provide a hash with some information for how
+          // this file came to be here
+          hash: [file.hash, "rpc", "handler"].join("|"),
+          event: "add",
+        }),
+      )
 
-    // Isomorphic client
-    const isomorphicHandlerFile = file.clone()
-    isomorphicHandlerFile.contents = Buffer.from(
-      isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, isTypescript),
-    )
-    push(isomorphicHandlerFile)
+      // Isomorphic client
+      const isomorphicHandlerFile = file.clone()
+      isomorphicHandlerFile.contents = Buffer.from(
+        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
+      )
+      push(isomorphicHandlerFile)
 
-    return next()
-  })
+      return next()
+    })
 
-  return {stream}
-}
+    return {stream}
+  }
 
 function removeExt(filePath: string) {
   return filePath.replace(/[.][^./\s]+$/, "")
@@ -117,14 +128,16 @@ function extractTemplateVars(resolverImportPath: string) {
   const [, resolverTypePlural, resolverName] =
     /(queries|mutations)\/(.*)$/.exec(resolverImportPath) || []
 
+  const resolverType: ResolverType = resolverTypePlural === "mutations" ? "mutation" : "query"
+
   return {
     resolverImportPath,
-    resolverType: resolverTypePlural === "mutations" ? "mutation" : "query",
+    resolverType,
     resolverName,
   }
 }
 
-function resolverPath(path: string) {
+function resolverFilePath(path: string) {
   return path.replace(/^app/, "app/_resolvers")
 }
 

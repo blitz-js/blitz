@@ -1,8 +1,8 @@
+import {move, pathExists, remove} from "fs-extra"
 import {resolve} from "path"
-import {move, remove, pathExists} from "fs-extra"
-import {ServerConfig, normalize} from "./config"
-import {nextBuild} from "./next-utils"
 import {saveBuild} from "./build-hash"
+import {normalize, ServerConfig} from "./config"
+import {nextBuild} from "./next-utils"
 import {configureStages} from "./stages"
 
 export async function build(
@@ -18,19 +18,20 @@ export async function build(
     include,
     watch,
     isTypescript,
-    ...stageConfig
+    writeManifestFile,
   } = await normalize(config)
 
-  const src = rootFolder
-  const stages = configureStages(stageConfig)
-  const dest = buildFolder
-  const options = {
-    ignore,
-    include,
-    watch,
-    isTypescript,
-  }
-  await Promise.all([transformFiles(src, stages, dest, options), readyForNextBuild])
+  const stages = configureStages({isTypescript, writeManifestFile})
+
+  await Promise.all([
+    transformFiles(rootFolder, stages, buildFolder, {
+      ignore,
+      include,
+      watch,
+      clean: true, // always clean in build
+    }),
+    readyForNextBuild,
+  ])
 
   await nextBuild(nextBin, buildFolder)
 

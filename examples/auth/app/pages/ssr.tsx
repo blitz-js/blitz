@@ -30,11 +30,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   const session = await getSessionContext(req, res)
   console.log("Session id:", session.userId)
   try {
-    const user = await ssrQuery(
-      getUser,
-      {where: {id: Number(session.userId)}, select: {id: true}},
-      {res, req},
-    )
+    const user = await ssrQuery(getUser, {where: {id: Number(session.userId)}}, {res, req})
     return {props: {user}}
   } catch (error) {
     if (error.name === "NotFoundError") {

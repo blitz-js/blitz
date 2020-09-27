@@ -1,7 +1,6 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {getQueryKey} from "./utils"
-import {ResolverModule, Middleware} from "./middleware"
+import {getQueryKey, isClient, isServer} from "./utils"
 import {
   getAntiCSRFToken,
   publicDataStore,
@@ -12,15 +11,23 @@ import {
 } from "./supertokens"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
-import merge from "deepmerge"
+import {
+  ResolverType,
+  ResolverModule,
+  EnhancedResolver,
+  EnhancedResolverRpcClient,
+  CancellablePromise,
+  ResolverRpc,
+  RpcOptions,
+} from "./types"
+import {SuperJSONResult} from "superjson/dist/types"
 
-type Options = {
-  fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
-}
-
-export async function executeRpcCall(url: string, params: any, opts: Options = {}) {
-  if (typeof window === "undefined") return
+export const executeRpcCall = <TInput, TResult>(
+  apiUrl: string,
+  params: TInput,
+  opts: RpcOptions = {},
+) => {
+  if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -31,131 +38,155 @@ export async function executeRpcCall(url: string, params: any, opts: Options = {
     headers[HEADER_CSRF] = antiCSRFToken
   }
 
-  let serialized
-  if (opts.fromQueryHook) {
-    // We have to serialize query arguments inside the hooks, otherwise react-query will use
-    // JSON.parse(JSON.stringify) so by the time the arguments come here the real JS objects are lost
-    serialized = params
-    if (opts.resultOfGetFetchMore) {
-      // useInfiniteQuery usually passes in extra pageParams here that come from getFetchMore()
-      // This isn't serialized inside useInfiniteQuery because this data is provided separately
-      // by react-query
-      serialized = merge(params, serialize(opts.resultOfGetFetchMore))
-    }
+  let serialized: SuperJSONResult
+  if (opts.alreadySerialized) {
+    // params is already serialized with superjson when it gets here
+    // We have to serialize the params before passing to react-query in the query key
+    // because otherwise react-query will use JSON.parse(JSON.stringify)
+    // so by the time the arguments come here the real JS objects are lost
+    serialized = (params as unknown) as SuperJSONResult
   } else {
     serialized = serialize(params)
   }
 
-  const result = await window.fetch(url, {
-    method: "POST",
-    headers,
-    credentials: "include",
-    redirect: "follow",
-    body: JSON.stringify({
-      // TODO remove `|| null` once superjson allows `undefined`
-      params: serialized.json || null,
-      meta: {
-        params: serialized.meta,
-      },
-    }),
-  })
+  // Create a new AbortController instance for this request
+  const controller = new AbortController()
 
-  if (result.headers) {
-    for (const [name] of result.headers.entries()) {
-      if (name.toLowerCase() === HEADER_PUBLIC_DATA_TOKEN) publicDataStore.updateState()
-      if (name.toLowerCase() === HEADER_SESSION_REVOKED) publicDataStore.clear()
-      if (name.toLowerCase() === HEADER_CSRF_ERROR) {
-        throw new CSRFTokenMismatchError()
+  const promise = window
+    .fetch(apiUrl, {
+      method: "POST",
+      headers,
+      credentials: "include",
+      redirect: "follow",
+      body: JSON.stringify({
+        params: serialized.json,
+        meta: {
+          params: serialized.meta,
+        },
+      }),
+      signal: controller.signal,
+    })
+    .then(async (result) => {
+      if (result.headers) {
+        if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+          publicDataStore.updateState()
+        }
+        if (result.headers.get(HEADER_SESSION_REVOKED)) {
+          publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_CSRF_ERROR)) {
+          throw new CSRFTokenMismatchError()
+        }
       }
-    }
-  }
 
-  let payload
-  try {
-    payload = await result.json()
-  } catch (error) {
-    throw new Error(`Failed to parse json from request to ${url}`)
-  }
+      let payload
+      try {
+        payload = await result.json()
+      } catch (error) {
+        throw new Error(`Failed to parse json from request to ${apiUrl}`)
+      }
 
-  if (payload.error) {
-    const error = deserializeError(payload.error)
-    // We don't clear the publicDataStore for anonymous users
-    if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
-      publicDataStore.clear()
-    }
-    throw error
+      if (payload.error) {
+        const error = deserializeError(payload.error)
+        // We don't clear the publicDataStore for anonymous users
+        if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+          publicDataStore.clear()
+        }
+        throw error
+      } else {
+        const data =
+          payload.result === undefined
+            ? undefined
+            : deserialize({json: payload.result, meta: payload.meta?.result})
+
+        if (!opts.fromQueryHook) {
+          const queryKey = getQueryKey(apiUrl, params)
+          queryCache.setQueryData(queryKey, data)
+        }
+        return data as TResult
+      }
+    }) as CancellablePromise<TResult>
+
+  promise.cancel = () => controller.abort()
+
+  return promise
+}
+
+executeRpcCall.warm = (apiUrl: string) => {
+  if (isClient) {
+    return window.fetch(apiUrl, {method: "HEAD"})
   } else {
-    const data =
-      payload.result === undefined
-        ? undefined
-        : deserialize({json: payload.result, meta: payload.meta?.result})
-
-    if (!opts.fromQueryHook) {
-      const queryKey = getQueryKey(url, params)
-      queryCache.setQueryData(queryKey, data)
-    }
-    return data
+    return
   }
 }
 
-executeRpcCall.warm = (url: string) => {
-  if (typeof window !== "undefined") {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    window.fetch(url, {method: "HEAD"})
-  }
-}
+const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
+  resolverFilePath.replace(/^app\/_resolvers/, "/api")
 
-interface ResolverEnhancement {
-  _meta: {
-    name: string
-    type: string
-    path: string
-    apiUrl: string
-  }
-}
-export interface RpcFunction {
-  (params: any, opts: any): Promise<any>
-}
-export interface EnhancedRpcFunction extends RpcFunction, ResolverEnhancement {}
-
-export interface EnhancedResolverModule extends ResolverEnhancement {
-  (input: any, ctx: Record<string, any>): Promise<unknown>
-  middleware?: Middleware[]
-}
-
-export function getIsomorphicRpcHandler(
-  resolver: ResolverModule,
-  resolverPath: string,
+/*
+ * Overloading signature so you can specify server/client and get the
+ * correct return type
+ */
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
+  // resolver is undefined on the client
+  resolver: ResolverModule<TInput, TResult> | undefined,
+  resolverFilePath: string,
   resolverName: string,
-  resolverType: string,
-) {
-  const apiUrl = resolverPath.replace(/^app\/_resolvers/, "/api")
-  const enhance = <T extends ResolverEnhancement>(fn: T): T => {
-    fn._meta = {
+  resolverType: ResolverType,
+): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
+  // resolver is undefined on the client
+  resolver: ResolverModule<TInput, TResult> | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "client",
+): EnhancedResolverRpcClient<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
+  // resolver is undefined on the client
+  resolver: ResolverModule<TInput, TResult> | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "server",
+): EnhancedResolver<TInput, TResult>
+export function getIsomorphicEnhancedResolver<TInput, TResult>(
+  // resolver is undefined on the client
+  resolver: ResolverModule<TInput, TResult> | undefined,
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+  target: "server" | "client" = isClient ? "client" : "server",
+): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult> {
+  const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
+
+  if (target === "client") {
+    const resolverRpc: ResolverRpc<TInput, TResult> = (params, opts) =>
+      executeRpcCall(apiUrl, params, opts)
+    const enhancedResolverRpcClient = resolverRpc as EnhancedResolverRpcClient<TInput, TResult>
+
+    enhancedResolverRpcClient._meta = {
       name: resolverName,
       type: resolverType,
-      path: resolverPath,
+      filePath: resolverFilePath,
       apiUrl: apiUrl,
     }
-    return fn
-  }
-
-  if (typeof window !== "undefined") {
-    let rpcFn: EnhancedRpcFunction = ((params: any, opts = {}) =>
-      executeRpcCall(apiUrl, params, opts)) as any
-
-    rpcFn = enhance(rpcFn)
 
     // Warm the lambda
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     executeRpcCall.warm(apiUrl)
 
-    return rpcFn
+    return enhancedResolverRpcClient
   } else {
-    let handler: EnhancedResolverModule = resolver.default as any
-
-    handler.middleware = resolver.middleware
-    handler = enhance(handler)
-
-    return handler
+    if (!resolver) throw new Error("resolver is missing on the server")
+    const enhancedResolver = (resolver.default as unknown) as EnhancedResolver<TInput, TResult>
+    enhancedResolver.middleware = resolver.middleware
+    enhancedResolver._meta = {
+      name: resolverName,
+      type: resolverType,
+      filePath: resolverFilePath,
+      apiUrl: apiUrl,
+    }
+    return enhancedResolver
   }
 }

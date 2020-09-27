@@ -1,9 +1,9 @@
+import {Ctx} from "blitz"
 import db from "db"
-import {SessionContext} from "blitz"
 import {hashPassword} from "app/auth/auth-utils"
 import {SignupInput, SignupInputType} from "app/auth/validations"
 
-export default async function signup(input: SignupInputType, ctx: {session?: SessionContext} = {}) {
+export default async function signup(input: SignupInputType, {session}: Ctx) {
   // This throws an error if input is invalid
   const {email, password} = SignupInput.parse(input)
 
@@ -13,7 +13,7 @@ export default async function signup(input: SignupInputType, ctx: {session?: Ses
     select: {id: true, name: true, email: true, role: true},
   })
 
-  await ctx.session!.create({userId: user.id, roles: [user.role]})
+  await session.create({userId: user.id, roles: [user.role]})
 
   return user
 }

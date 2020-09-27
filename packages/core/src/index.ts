@@ -1,10 +1,9 @@
-import {NextPage, NextComponentType} from "next"
+import {NextPage, NextComponentType, NextPageContext} from "next"
 import {AppProps as NextAppProps} from "next/app"
 
-export * from "./use-query"
-export * from "./use-paginated-query"
+export * from "./use-query-hooks"
+export {useMutation} from "./use-mutation"
 export * from "./use-params"
-export * from "./use-infinite-query"
 export * from "./ssr-query"
 export * from "./rpc"
 export * from "./with-router"
@@ -49,10 +48,10 @@ export {default as dynamic} from "next/dynamic"
 
 export {default as ErrorComponent} from "next/error"
 
-export type BlitzComponentType = NextComponentType
+export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
 
-export interface AppProps extends NextAppProps {
-  Component: BlitzComponentType & {
+export interface AppProps<P = {}> extends NextAppProps<P> {
+  Component: BlitzComponentType<NextPageContext, any, P> & {
     getLayout?: (component: JSX.Element) => JSX.Element
   }
 }

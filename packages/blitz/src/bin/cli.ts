@@ -5,12 +5,16 @@ import chalk from "chalk"
 import {parseSemver} from "../utils/parse-semver"
 
 async function main() {
-  console.log(
-    chalk.yellow(
-      `You are using alpha software - if you have any problems, please open an issue here:
-    https://github.com/blitz-js/blitz/issues/new/choose\n`,
-    ),
-  )
+  const options = require("minimist")(process.argv.slice(2))
+
+  if (options._[0] !== "autocomplete:script" || Object.keys(options).length > 1) {
+    console.log(
+      chalk.yellow(
+        `You are using alpha software - if you have any problems, please open an issue here:
+      https://github.com/blitz-js/blitz/issues/new/choose\n`,
+      ),
+    )
+  }
 
   if (parseSemver(process.version).major < 12) {
     console.log(
@@ -37,7 +41,6 @@ async function main() {
 
   const cli = require(cliPkgPath)
 
-  const options = require("minimist")(process.argv.slice(2))
   const hasVersionFlag = options._.length === 0 && (options.v || options.version)
   const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
 
