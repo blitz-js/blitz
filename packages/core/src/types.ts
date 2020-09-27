@@ -20,7 +20,7 @@ export interface CancellablePromise<T> extends Promise<T> {
 }
 
 // The actual resolver source definition
-export type Resolver<TInput, TResult> = (input: TInput, ctx?: unknown) => Promise<TResult>
+export type Resolver<TInput, TResult> = (input?: TInput, ctx?: unknown) => Promise<TResult>
 
 // Resolver type when imported with require()
 export type ResolverModule<TInput, TResult> = {
@@ -35,7 +35,7 @@ export type RpcOptions = {
 
 // The compiled rpc resolver available on client
 export type ResolverRpc<TInput, TResult> = (
-  input: TInput,
+  input?: TInput,
   opts?: RpcOptions,
 ) => CancellablePromise<TResult>
 

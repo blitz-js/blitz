@@ -9,7 +9,7 @@ import {
   InfiniteQueryResult,
   InfiniteQueryConfig as RQInfiniteQueryConfig,
 } from "react-query"
-import {Resolver, EnhancedResolverRpcClient} from "./types"
+import {InferUnaryParam, PromiseReturnType} from "./types"
 import {
   QueryCacheFunctions,
   getQueryCacheFunctions,
@@ -24,19 +24,11 @@ import {
 // -------------------------
 type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
 
-export function useQuery<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult>,
-  params: TInput,
-  options?: QueryConfig<TResult>,
-): [TResult, RestQueryResult<TResult>]
-export function useQuery<TInput, TResult>(
-  queryFn: EnhancedResolverRpcClient<TInput, TResult>,
-  params: TInput,
-  options?: QueryConfig<TResult>,
-): [TResult, RestQueryResult<TResult>]
-export function useQuery<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
-  params: TInput,
+type QueryFn = (...args: any) => Promise<any>
+
+export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: InferUnaryParam<T>,
   options?: QueryConfig<TResult>,
 ): [TResult, RestQueryResult<TResult>] {
   if (typeof queryFn === "undefined") {
@@ -70,9 +62,9 @@ export function useQuery<TInput, TResult>(
 type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolvedData"> &
   QueryCacheFunctions<TResult>
 
-export function usePaginatedQuery<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult>,
-  params: TInput,
+export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: InferUnaryParam<T>,
   options?: PaginatedQueryConfig<TResult>,
 ): [TResult, RestPaginatedResult<TResult>] {
   if (typeof queryFn === "undefined") {
@@ -106,15 +98,19 @@ export function usePaginatedQuery<TInput, TResult>(
 type RestInfiniteResult<TResult> = Omit<InfiniteQueryResult<TResult>, "resolvedData"> &
   QueryCacheFunctions<TResult>
 
-// TODO - Fix TFetchMoreResult not actually taking affect in apps.
-// It shows as 'unknown' in the params() input argumunt, but should show as TFetchMoreResult
 interface InfiniteQueryConfig<TResult, TFetchMoreResult> extends RQInfiniteQueryConfig<TResult> {
   getFetchMore?: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
 }
 
-export function useInfiniteQuery<TInput, TResult, TFetchMoreResult>(
-  queryFn: Resolver<TInput, TResult>,
-  params: (fetchMoreResult: TFetchMoreResult) => TInput,
+// TODO - Fix TFetchMoreResult not actually taking affect in apps.
+// It shows as 'unknown' in the params() input argumunt, but should show as TFetchMoreResult
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TFetchMoreResult = any,
+  TResult = PromiseReturnType<T>
+>(
+  queryFn: T,
+  params: (fetchMoreResult: TFetchMoreResult) => InferUnaryParam<T>,
   options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
 ): [TResult[], RestInfiniteResult<TResult>] {
   if (typeof queryFn === "undefined") {
