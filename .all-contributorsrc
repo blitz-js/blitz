@@ -1187,6 +1187,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "lukebennett",
+      "name": "Luke Bennett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/135390?v=4",
+      "profile": "https://lukebennett.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
