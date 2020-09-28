@@ -1,5 +1,5 @@
-import {useMemo, useState} from "react"
-import {fromPairs, isEqual} from "lodash"
+import {useMemo} from "react"
+import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
 import {useRouterQuery} from "./use-router-query"
 
@@ -48,14 +48,9 @@ export function useParams(returnType: "array"): Record<string, Array<string | un
 export function useParams(returnType?: "string" | "number" | "array") {
   const router = useRouter()
   const query = useRouterQuery()
-  const [lastRouterQuery, setLastRouterQuery] = useState(router.query)
-
-  if (!isEqual(router.query, lastRouterQuery)) {
-    setLastRouterQuery(router.query)
-  }
 
   const params = useMemo(() => {
-    const rawParams = extractRouterParams(lastRouterQuery, query)
+    const rawParams = extractRouterParams(router.query, query)
 
     if (returnType === "string") {
       const params: Record<string, string> = {}
@@ -88,7 +83,7 @@ export function useParams(returnType?: "string" | "number" | "array") {
     }
 
     return rawParams
-  }, [lastRouterQuery, query, returnType])
+  }, [router.query, query, returnType])
 
   return params
 }
