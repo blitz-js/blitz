@@ -43,8 +43,7 @@ describe("admin/products/[handle] page", () => {
     cy.get("button").click()
 
     cy.location("pathname").should("equal", "/admin/products")
-    // Todo - make test work for this
-    // cy.get("ul > li:last-child").contains(data[0] + random)
+    cy.get("ul > li:last-child").contains(data[0] + random)
   })
 })
 

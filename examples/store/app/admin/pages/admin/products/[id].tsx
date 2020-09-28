@@ -12,9 +12,9 @@ function Product() {
   return (
     <ProductForm
       product={product}
-      onSuccess={() => {
+      onSuccess={async () => {
+        await router.push("/admin/products")
         queryCache.invalidateQueries("/api/products/queries/getProducts")
-        router.push("/admin/products")
       }}
     />
   )
