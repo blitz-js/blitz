@@ -1,23 +1,35 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {Resolver, EnhancedResolverRpcClient} from "../types"
-import {isServer} from "."
+import {isServer, isClient} from "."
 
 type MutateOptions = {
   refetch?: boolean
 }
 
 export interface QueryCacheFunctions<T> {
-  mutate: (newData: T | ((oldData: T | undefined) => T), opts?: MutateOptions) => void
+  mutate: (
+    newData: T | ((oldData: T | undefined) => T),
+    opts?: MutateOptions,
+  ) => Promise<void | ReturnType<typeof queryCache.invalidateQueries>>
 }
 
 export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctions<T> => ({
   mutate: (newData, opts = {refetch: true}) => {
-    queryCache.setQueryData(queryKey, newData)
-    if (opts.refetch) {
-      return queryCache.invalidateQueries(queryKey, {refetchActive: true})
-    }
-    return null
+    return new Promise((res) => {
+      queryCache.setQueryData(queryKey, newData)
+      let result: void | ReturnType<typeof queryCache.invalidateQueries>
+      if (opts.refetch) {
+        result = res(queryCache.invalidateQueries(queryKey, {refetchActive: true}))
+      }
+      if (isClient) {
+        window.requestIdleCallback(() => {
+          res(result)
+        })
+      } else {
+        res(result)
+      }
+    })
   },
 })
 

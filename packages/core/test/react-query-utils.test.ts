@@ -4,15 +4,15 @@ import {queryCache} from "react-query"
 jest.mock("react-query")
 
 describe("getQueryCacheFunctions", () => {
-  it("returns a mutate function with working options", () => {
+  it("returns a mutate function with working options", async () => {
     const spyRefetchQueries = jest.spyOn(queryCache, "invalidateQueries")
     const {mutate} = getQueryCacheFunctions("testQueryKey")
     expect(mutate).toBeTruthy()
-    mutate({newData: true})
+    await mutate({newData: true})
     expect(spyRefetchQueries).toBeCalledTimes(1)
-    mutate({newData: true}, {refetch: false})
+    await mutate({newData: true}, {refetch: false})
     expect(spyRefetchQueries).toBeCalledTimes(1)
-    mutate({newData: true}, {refetch: true})
+    await mutate({newData: true}, {refetch: true})
     expect(spyRefetchQueries).toBeCalledTimes(2)
   })
 })
