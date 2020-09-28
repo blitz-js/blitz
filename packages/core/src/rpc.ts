@@ -107,7 +107,9 @@ export const executeRpcCall = <TInput, TResult>(
       }
     }) as CancellablePromise<TResult>
 
-  promise.cancel = () => controller.abort()
+  // Disable react-query request cancellation for now
+  // Having too many weird bugs with it enabled
+  // promise.cancel = () => controller.abort()
 
   return promise
 }
