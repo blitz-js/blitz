@@ -1178,6 +1178,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Kamshak",
+      "name": "Valentin Funk",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/337968?v=4",
+      "profile": "https://github.com/Kamshak",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
