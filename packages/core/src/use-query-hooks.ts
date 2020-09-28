@@ -9,7 +9,7 @@ import {
   InfiniteQueryResult,
   InfiniteQueryConfig as RQInfiniteQueryConfig,
 } from "react-query"
-import {InferUnaryParam, PromiseReturnType} from "./types"
+import {FirstParam, QueryFn, PromiseReturnType} from "./types"
 import {
   QueryCacheFunctions,
   getQueryCacheFunctions,
@@ -24,11 +24,9 @@ import {
 // -------------------------
 type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
 
-type QueryFn = (...args: any) => Promise<any>
-
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
-  params: InferUnaryParam<T>,
+  params: FirstParam<T>,
   options?: QueryConfig<TResult>,
 ): [TResult, RestQueryResult<TResult>] {
   if (typeof queryFn === "undefined") {
@@ -64,7 +62,7 @@ type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolve
 
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
-  params: InferUnaryParam<T>,
+  params: FirstParam<T>,
   options?: PaginatedQueryConfig<TResult>,
 ): [TResult, RestPaginatedResult<TResult>] {
   if (typeof queryFn === "undefined") {
@@ -110,7 +108,7 @@ export function useInfiniteQuery<
   TResult = PromiseReturnType<T>
 >(
   queryFn: T,
-  params: (fetchMoreResult: TFetchMoreResult) => InferUnaryParam<T>,
+  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
 ): [TResult[], RestInfiniteResult<TResult>] {
   if (typeof queryFn === "undefined") {

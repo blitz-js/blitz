@@ -6,6 +6,7 @@ import {
   GetServerSideProps,
   PromiseReturnType,
   ErrorComponent as ErrorPage,
+  useMutation,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
@@ -58,6 +59,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
 
 const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
   const router = useRouter()
+  const [logoutMutation] = useMutation(logout)
 
   if (error) {
     return <ErrorPage statusCode={error.statusCode} title={error.message} />
@@ -68,7 +70,7 @@ const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
       <div>Logged in user id: {user?.id}</div>
       <button
         onClick={async () => {
-          await logout()
+          await logoutMutation()
           router.push("/")
         }}
       >
