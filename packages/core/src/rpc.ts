@@ -105,7 +105,9 @@ export function executeRpcCall(url: string, params: any, opts: Options = {}) {
       }
     })
 
-  promise.cancel = () => controller.abort()
+  // Disable react-query request cancellation for now
+  // Having too many weird bugs with it enabled
+  // promise.cancel = () => controller.abort()
 
   return promise
 }
