@@ -23,6 +23,7 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
         result = res(queryCache.invalidateQueries(queryKey, {refetchActive: true}))
       }
       if (isClient) {
+        // Fix for https://github.com/blitz-js/blitz/issues/1174
         window.requestIdleCallback(() => {
           res(result)
         })
