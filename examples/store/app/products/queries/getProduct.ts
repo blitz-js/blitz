@@ -1,4 +1,4 @@
-import {NotFoundError} from "blitz"
+import {NotFoundError, Ctx} from "blitz"
 import db, {FindOneProductArgs} from "db"
 
 type GetProductInput = {
@@ -7,7 +7,7 @@ type GetProductInput = {
   // include?: FindOneProductArgs['include']
 }
 
-export default async function getProduct({where}: GetProductInput) {
+export default async function getProduct({where}: GetProductInput, _ctx: Ctx) {
   const product = await db.product.findOne({where})
 
   if (!product) throw new NotFoundError()

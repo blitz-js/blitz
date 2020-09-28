@@ -3,7 +3,7 @@ import {Middleware} from "./middleware"
 /**
  * Infer the type of the parameter from function that takes a single argument
  */
-export type InferUnaryParam<F extends Function> = F extends (args: infer A) => any ? A : never
+export type FirstParam<F extends QueryFn> = Parameters<F>[0]
 
 /**
  * Get the type of the value, that the Promise holds.
@@ -18,6 +18,8 @@ export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Promis
 export interface CancellablePromise<T> extends Promise<T> {
   cancel?: Function
 }
+
+export type QueryFn = (...args: any) => Promise<any>
 
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input?: TInput, ctx?: unknown) => Promise<TResult>
