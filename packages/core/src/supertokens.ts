@@ -97,18 +97,18 @@ export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
 export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 
 export const parsePublicDataToken = (token: string) => {
-  assert(token, "[parsePublicDataToken] Failed - token is empty")
+  assert(token, "[parsePublicDataToken] Failed: token is empty")
 
   const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
-  let publicData: PublicData
   try {
-    publicData = JSON.parse(publicDataStr)
+    const publicData: PublicData = JSON.parse(publicDataStr)
+    return {
+      publicData,
+      // note: milliseconds are lost when converting from strings to Dates
+      expireAt: expireAt ? new Date(expireAt) : undefined,
+    }
   } catch (error) {
-    throw new Error("Failed to parse publicDataToken: " + publicDataStr)
-  }
-  return {
-    publicData,
-    expireAt: expireAt && new Date(expireAt),
+    throw new Error(`[parsePublicDataToken] Failed to parse publicDataStr: ${publicDataStr}`)
   }
 }
 
@@ -140,7 +140,7 @@ export const publicDataStore = {
 
     const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
 
-    if (expireAt < new Date()) {
+    if (expireAt && expireAt.getTime() < Date.now()) {
       this.clear()
       return emptyPublicData
     }
