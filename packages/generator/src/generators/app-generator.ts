@@ -22,6 +22,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: string = resolve(__dirname, "./templates/app")
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
+  packageInstallSuccess: boolean = false
 
   filesToIgnore() {
     if (!this.options.useTs) {
@@ -186,6 +187,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
             if (code !== 0) spinners[spinners.length - 1].fail()
             else {
               spinners[spinners.length - 1].succeed()
+              this.packageInstallSuccess = true
             }
           }
           resolve()
@@ -201,16 +203,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       // Ensure the generated files are formatted with the installed prettier version
-      const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
-      const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
-      if (prettierResult.status !== 0) {
-        formattingSpinner.fail(
-          chalk.yellow.bold(
-            "We had an error running Prettier, but don't worry your app will still run fine :)",
-          ),
-        )
-      } else {
-        formattingSpinner.succeed()
+      if (this.packageInstallSuccess) {
+        const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
+        const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
+        if (prettierResult.status !== 0) {
+          formattingSpinner.fail(
+            chalk.yellow.bold(
+              "We had an error running Prettier, but don't worry your app will still run fine :)",
+            ),
+          )
+        } else {
+          formattingSpinner.succeed()
+        }
       }
     } else {
       console.log("") // New line needed
