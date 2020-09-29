@@ -26,7 +26,7 @@ export const Edit__ModelName__ = () => {
               where: {id: __modelName__.id},
               data: {name: "MyNewName"},
             })
-            mutate(updated)
+            await mutate(updated)
             alert("Success!" + JSON.stringify(updated))
             router.push(
               process.env.parentModel

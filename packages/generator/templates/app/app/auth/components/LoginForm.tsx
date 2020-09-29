@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "blitz"
+import { Link, useMutation } from "blitz"
 import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"
 import login from "app/auth/mutations/login"
@@ -10,6 +10,8 @@ type LoginFormProps = {
 }
 
 export const LoginForm = (props: LoginFormProps) => {
+  const [loginMutation] = useMutation(login)
+
   return (
     <div>
       <h1>Login</h1>
@@ -20,7 +22,7 @@ export const LoginForm = (props: LoginFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await login({ email: values.email, password: values.password })
+            await loginMutation(values)
             props.onSuccess?.()
           } catch (error) {
             if (error.name === "AuthenticationError") {

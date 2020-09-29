@@ -944,7 +944,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/18399089?v=4",
       "profile": "https://twitter.com/bruno_crosier",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -1165,6 +1166,33 @@
       "name": "Mohamed Shaban",
       "avatar_url": "https://avatars3.githubusercontent.com/u/644440?v=4",
       "profile": "https://github.com/drmas",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jorisre",
+      "name": "Joris",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7545547?v=4",
+      "profile": "https://github.com/jorisre",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Kamshak",
+      "name": "Valentin Funk",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/337968?v=4",
+      "profile": "https://github.com/Kamshak",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "lukebennett",
+      "name": "Luke Bennett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/135390?v=4",
+      "profile": "https://lukebennett.com",
       "contributions": [
         "code"
       ]

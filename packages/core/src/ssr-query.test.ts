@@ -4,7 +4,7 @@ import fetch from "isomorphic-unfetch"
 import delay from "delay"
 
 import {ssrQuery} from "./ssr-query"
-import {EnhancedResolverModule} from "./rpc"
+import {EnhancedResolver} from "types"
 
 describe("ssrQuery", () => {
   it("works without middleware", async () => {
@@ -12,11 +12,11 @@ describe("ssrQuery", () => {
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
-    }) as unknown) as EnhancedResolverModule
+    }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule._meta = {
       name: "getTest",
       type: "query",
-      path: "some/test/path",
+      filePath: "some/test/path",
       apiUrl: "some/test/path",
     }
 
@@ -38,11 +38,11 @@ describe("ssrQuery", () => {
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
       await delay(1)
       return input
-    }) as unknown) as EnhancedResolverModule
+    }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule._meta = {
       name: "getTest",
       type: "query",
-      path: "some/test/path",
+      filePath: "some/test/path",
       apiUrl: "some/test/path",
     }
     resolverModule.middleware = [
