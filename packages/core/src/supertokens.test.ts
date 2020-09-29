@@ -26,23 +26,23 @@ describe("supertokens", () => {
     })
 
     it("parses the expireAt if a separator is present", () => {
-      const validJSON = `"foo"${TOKEN_SEPARATOR}`
-      expect(parsePublicDataToken(btoa(validJSON))).toEqual({
+      const data = `"foo"${TOKEN_SEPARATOR}`
+      expect(parsePublicDataToken(btoa(data))).toEqual({
         publicData: "foo",
       })
     })
 
     it("parses the expireAt date", () => {
-      const validJSON = `"foo"${TOKEN_SEPARATOR}${date}`
-      expect(parsePublicDataToken(btoa(validJSON))).toEqual({
+      const data = `"foo"${TOKEN_SEPARATOR}${date}`
+      expect(parsePublicDataToken(btoa(data))).toEqual({
         publicData: "foo",
         expireAt: date,
       })
     })
 
     it("only uses the first two separated tokens", () => {
-      const validJSON = `"foo"${TOKEN_SEPARATOR}${date}${TOKEN_SEPARATOR}123`
-      expect(parsePublicDataToken(btoa(validJSON))).toEqual({
+      const data = `"foo"${TOKEN_SEPARATOR}${date}${TOKEN_SEPARATOR}123`
+      expect(parsePublicDataToken(btoa(data))).toEqual({
         publicData: "foo",
         expireAt: date,
       })
