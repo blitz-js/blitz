@@ -25,7 +25,7 @@ describe("supertokens", () => {
       })
     })
 
-    it("parses the expireAt if a separator is present", () => {
+    it("returns no expireAt value if not set", () => {
       const data = `"foo"${TOKEN_SEPARATOR}`
       expect(parsePublicDataToken(btoa(data))).toEqual({
         publicData: "foo",
