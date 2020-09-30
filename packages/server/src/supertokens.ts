@@ -372,6 +372,13 @@ export const setHeader = (res: ServerResponse, name: string, value: string) => {
   }
 }
 
+export const removeHeader = (res: ServerResponse, name: string) => {
+  res.removeHeader(name)
+  if ("_blitz" in res) {
+    delete (res as any)._blitz[name]
+  }
+}
+
 export const setSessionCookie = (
   req: IncomingMessage,
   res: ServerResponse,
@@ -647,6 +654,7 @@ export async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, "", new Date(0))
+    removeHeader(res, HEADER_SESSION_REVOKED)
 
     return {
       handle,
