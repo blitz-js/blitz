@@ -22,7 +22,7 @@ export interface CancellablePromise<T> extends Promise<T> {
 export type QueryFn = (...args: any) => Promise<any>
 
 // The actual resolver source definition
-export type Resolver<TInput, TResult> = (input?: TInput, ctx?: unknown) => Promise<TResult>
+export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
 
 // Resolver type when imported with require()
 export type ResolverModule<TInput, TResult> = {
