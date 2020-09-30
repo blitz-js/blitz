@@ -25,3 +25,11 @@ export class NotFoundError extends Error {
     super(message)
   }
 }
+
+export class PaginationPayloadInvalidError extends Error {
+  name = "PaginationPayloadInvalidError"
+  statusCode = 422
+  constructor(message = "The skip or take parameters are invalid") {
+    super(message)
+  }
+}
