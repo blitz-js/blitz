@@ -2,10 +2,10 @@ import React from "react"
 import { useRouter, BlitzPage } from "blitz"
 import Layout from "app/layouts/Layout"
 import { LoginForm } from "app/auth/components/LoginForm"
-import { useRedirectLoggedInUser } from "../../hooks/redirectLoggedInUser"
+import { useRedirectLoggedInUserTo } from "app/hooks/redirectLoggedInUser"
 
 const LoginPage: BlitzPage = () => {
-  useRedirectLoggedInUser("/")
+  useRedirectLoggedInUserTo("/")
   const router = useRouter()
 
   return (
