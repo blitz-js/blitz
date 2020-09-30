@@ -8,10 +8,7 @@ if (process.env.parentModel) {
     __parentModelId__: number
   }
 } else {
-  type Update__ModelName__Input = {
-    where: __ModelName__UpdateArgs["where"]
-    data: __ModelName__UpdateArgs["data"]
-  }
+  type Update__ModelName__Input = Pick<__ModelName__UpdateArgs, "where" | "data">
 }
 
 export default async function update__ModelName__(

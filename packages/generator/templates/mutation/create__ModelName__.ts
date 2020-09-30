@@ -7,9 +7,7 @@ if (process.env.parentModel) {
     __parentModelId__: number
   }
 } else {
-  type Create__ModelName__Input = {
-    data: __ModelName__CreateArgs["data"]
-  }
+  type Create__ModelName__Input = Pick<__ModelName__CreateArgs, "data">
 }
 
 if (process.env.parentModel) {
