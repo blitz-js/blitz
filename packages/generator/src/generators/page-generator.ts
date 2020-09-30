@@ -47,7 +47,8 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   getModelNamesPath() {
-    const context = this.options.context ? `${this.options.context}/` : ""
+    const kebabCaseContext = camelCaseToKebabCase(this.options.context)
+    const context = this.options.context ? `${kebabCaseContext}/` : ""
     return context + this.options.modelNames
   }
 
