@@ -341,7 +341,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://www.yeahcoach.com"><img src="https://avatars1.githubusercontent.com/u/761766?v=4" width="100px;" alt=""/><br /><sub><b>Jirka Svoboda</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=svobik7" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/alan2207"><img src="https://avatars3.githubusercontent.com/u/12713315?v=4" width="100px;" alt=""/><br /><sub><b>Alan Alickovic</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=alan2207" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=alan2207" title="Documentation">📖</a></td>
     <td align="center"><a href="https://yngve.hoiseth.net"><img src="https://avatars0.githubusercontent.com/u/8469540?v=4" width="100px;" alt=""/><br /><sub><b>Yngve Høiseth</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=yhoiseth" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://twitter.com/bruno_crosier"><img src="https://avatars1.githubusercontent.com/u/18399089?v=4" width="100px;" alt=""/><br /><sub><b>Bruno Crosier</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=brunocrosier" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=brunocrosier" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/bruno_crosier"><img src="https://avatars1.githubusercontent.com/u/18399089?v=4" width="100px;" alt=""/><br /><sub><b>Bruno Crosier</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=brunocrosier" title="Documentation">📖</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/jschepmans"><img src="https://avatars2.githubusercontent.com/u/5782977?v=4" width="100px;" alt=""/><br /><sub><b>Johan Schepmans</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=jschepmans" title="Code">💻</a></td>
@@ -382,6 +382,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
