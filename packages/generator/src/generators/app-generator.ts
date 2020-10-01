@@ -49,35 +49,71 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     switch (this.options.form) {
       case "React Final Form":
         this.fs.move(
-          this.destinationPath("_forms/finalform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
+          this.destinationPath(
+            this.options.useTs ? "_forms/finalform/Form.tsx" : "_forms/finalform/Form.js",
+          ),
+          this.destinationPath(
+            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
+          ),
         )
         this.fs.move(
-          this.destinationPath("_forms/finalform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
+          this.destinationPath(
+            this.options.useTs
+              ? "_forms/finalform/LabeledTextField.tsx"
+              : "_forms/finalform/LabeledTextField.js",
+          ),
+          this.destinationPath(
+            this.options.useTs
+              ? "app/components/LabeledTextField.tsx"
+              : "app/components/LabeledTextField.js",
+          ),
         )
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
       case "React Hook Form":
         this.fs.move(
-          this.destinationPath("_forms/hookform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
+          this.destinationPath(
+            this.options.useTs ? "_forms/hookform/Form.tsx" : "_forms/hookform/Form.js",
+          ),
+          this.destinationPath(
+            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
+          ),
         )
         this.fs.move(
-          this.destinationPath("_forms/hookform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
+          this.destinationPath(
+            this.options.useTs
+              ? "_forms/hookform/LabeledTextField.tsx"
+              : "_forms/hookform/LabeledTextField.js",
+          ),
+          this.destinationPath(
+            this.options.useTs
+              ? "app/components/LabeledTextField.tsx"
+              : "app/components/LabeledTextField.js",
+          ),
         )
         pkg.dependencies["react-hook-form"] = "6.x"
         break
       case "Formik":
         this.fs.move(
-          this.destinationPath("_forms/formik/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
+          this.destinationPath(
+            this.options.useTs ? "_forms/formik/Form.tsx" : "_forms/formik/Form.js",
+          ),
+          this.destinationPath(
+            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
+          ),
         )
         this.fs.move(
-          this.destinationPath("_forms/formik/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
+          this.destinationPath(
+            this.options.useTs
+              ? "_forms/formik/LabeledTextField.tsx"
+              : "_forms/formik/LabeledTextField.js",
+          ),
+          this.destinationPath(
+            this.options.useTs
+              ? "app/components/LabeledTextField.tsx"
+              : "app/components/LabeledTextField.js",
+          ),
         )
         pkg.dependencies["formik"] = "2.x"
         break
