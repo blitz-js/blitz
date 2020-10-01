@@ -153,6 +153,7 @@ export const publicDataStore = {
     publicDataStore.observable.next(this.getData())
   },
   clear() {
+    // deleteCookie(COOKIE_CSRF_TOKEN)
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
     queryCache.clear()
     this.updateState()

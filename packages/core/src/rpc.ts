@@ -9,7 +9,7 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
-import {CSRFTokenMismatchError} from "./errors"
+import {AuthenticationError} from "./errors"
 import {serialize, deserialize} from "superjson"
 import {
   ResolverType,
@@ -35,7 +35,10 @@ export const executeRpcCall = <TInput, TResult>(
 
   const antiCSRFToken = getAntiCSRFToken()
   if (antiCSRFToken) {
+    console.log("Adding antiCSRFToken cookie header", antiCSRFToken)
     headers[HEADER_CSRF] = antiCSRFToken
+  } else {
+    console.log("No antiCSRFToken cookie found")
   }
 
   let serialized: SuperJSONResult
@@ -75,7 +78,7 @@ export const executeRpcCall = <TInput, TResult>(
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
-          throw new CSRFTokenMismatchError()
+          throw new AuthenticationError()
         }
       }
 

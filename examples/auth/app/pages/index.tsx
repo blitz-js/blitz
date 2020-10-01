@@ -1,6 +1,6 @@
 import {Suspense} from "react"
 import {Head, Link, useSession, useRouterQuery, useMutation} from "blitz"
-// import getUser from "app/users/queries/getUser"
+import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
 import {useCurrentUser} from "app/hooks/useCurrentUser"
@@ -45,9 +45,9 @@ const UserStuff = () => {
         onClick={async () => {
           try {
             // TODO - disabled until invoke() is added
-            // const user = await getUser({where: {id: session.userId as number}})
-            // alert(JSON.stringify(user))
-            alert("todo")
+            const user = await getUser({where: {id: session.userId as number}}, {} as any)
+            alert(JSON.stringify(user))
+            // alert("todo")
           } catch (error) {
             alert("error: " + JSON.stringify(error))
           }
