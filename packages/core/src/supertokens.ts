@@ -1,7 +1,6 @@
 import {useState} from "react"
-import BadBehavior from "bad-behavior"
+import {publicDataStore} from "./public-data-store"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
-import {queryCache} from "react-query"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -112,56 +111,8 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-const emptyPublicData: PublicData = {userId: null, roles: []}
-
-export const publicDataStore = {
-  eventKey: LOCALSTORAGE_PREFIX + "publicDataUpdated",
-  observable: BadBehavior<PublicData>(),
-  initialize() {
-    if (typeof window !== "undefined") {
-      // Set default value
-      publicDataStore.updateState()
-      window.addEventListener("storage", (event) => {
-        if (event.key === this.eventKey) {
-          publicDataStore.updateState()
-        }
-      })
-    }
-  },
-  getToken() {
-    return getPublicDataToken()
-  },
-  getData() {
-    const publicDataToken = this.getToken()
-
-    if (!publicDataToken) {
-      return emptyPublicData
-    }
-
-    const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
-
-    if (expireAt && expireAt.getTime() < Date.now()) {
-      this.clear()
-      return emptyPublicData
-    }
-    return publicData
-  },
-  updateState() {
-    // We use localStorage as a message bus between tabs.
-    // Setting the current time in ms will cause other tabs to receive the `storage` event
-    localStorage.setItem(this.eventKey, Date.now().toString())
-    publicDataStore.observable.next(this.getData())
-  },
-  clear() {
-    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
-    queryCache.clear()
-    this.updateState()
-  },
-}
-publicDataStore.initialize()
-
 export const useSession = () => {
-  const [publicData, setPublicData] = useState(emptyPublicData)
+  const [publicData, setPublicData] = useState(publicDataStore.emptyPublicData)
   const [isLoading, setIsLoading] = useState(true)
 
   useIsomorphicLayoutEffect(() => {
@@ -174,6 +125,8 @@ export const useSession = () => {
 
   return {...publicData, isLoading}
 }
+
+export {publicDataStore}
 
 /*
  * This will ensure a user is logged in before using the query/mutation.
