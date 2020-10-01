@@ -518,7 +518,7 @@ export async function getSession(
       return null
     }
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
-      await revokeSession(req, res, handle)
+      // await revokeSession(req, res, handle)
       setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
@@ -588,7 +588,7 @@ export async function getSession(
     }
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
-      await revokeSession(req, res, payload.handle, true)
+      // await revokeSession(req, res, payload.handle, true)
       setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
