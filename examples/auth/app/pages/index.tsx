@@ -1,10 +1,10 @@
 import {Suspense} from "react"
-import {Head, Link, useSession, useRouterQuery, useMutation, useQuery} from "blitz"
+import {Head, Link, useSession, useRouterQuery, useMutation} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/layouts/Layout"
 import {useCurrentUser} from "app/hooks/useCurrentUser"
-import getUsers from "app/users/queries/getUsers"
+// import getUsers from "app/users/queries/getUsers"
 
 const CurrentUserInfo = () => {
   const currentUser = useCurrentUser()
@@ -12,11 +12,11 @@ const CurrentUserInfo = () => {
   return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
 }
 
-const Users = () => {
-  const [users] = useQuery(getUsers, {})
-
-  return <pre style={{maxWidth: "30rem"}}>{JSON.stringify(users, null, 2)}</pre>
-}
+// const Users = () => {
+//   const [users] = useQuery(getUsers, {})
+//
+//   return <pre style={{maxWidth: "30rem"}}>{JSON.stringify(users, null, 2)}</pre>
+// }
 
 const UserStuff = () => {
   const session = useSession()
@@ -48,9 +48,11 @@ const UserStuff = () => {
       <Suspense fallback="Loading...">
         <CurrentUserInfo />
       </Suspense>
+      {/*
       <Suspense fallback="Loading...">
         <Users />
       </Suspense>
+        */}
       <button
         onClick={async () => {
           try {
