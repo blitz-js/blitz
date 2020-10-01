@@ -27,7 +27,6 @@ export async function ssrQuery<TInput, TResult>(
     try {
       log.progress(`Running ${logPrefix}(${JSON.stringify(params, null, 2)})`)
       const result = await enhancedResolver(params, res.blitzCtx)
-      log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
       res.blitzResult = result
       return next()
     } catch (error) {
