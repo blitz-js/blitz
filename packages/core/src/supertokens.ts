@@ -93,7 +93,6 @@ export const setCookie = (name: string, value: string, expires: string) => {
 export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
-export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")

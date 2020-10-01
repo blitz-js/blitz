@@ -2,7 +2,7 @@ import {
   LOCALSTORAGE_PREFIX,
   COOKIE_PUBLIC_DATA_TOKEN,
   PublicData,
-  getPublicDataToken,
+  readCookie,
   parsePublicDataToken,
   deleteCookie,
 } from "./supertokens"
@@ -26,22 +26,21 @@ class PublicDataStore {
     }
   }
 
-  updateState() {
+  updateState(value?: PublicData) {
     // We use localStorage as a message bus between tabs.
     // Setting the current time in ms will cause other tabs to receive the `storage` event
     localStorage.setItem(this.eventKey, Date.now().toString())
-    this.observable.next(this.getData())
+    this.observable.next(value ?? this.getData())
   }
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
     queryCache.clear()
-    this.updateState()
+    this.updateState(this.emptyPublicData)
   }
 
   getData() {
     const publicDataToken = this.getToken()
-
     if (!publicDataToken) {
       return this.emptyPublicData
     }
@@ -56,7 +55,7 @@ class PublicDataStore {
   }
 
   private getToken() {
-    return getPublicDataToken()
+    return readCookie(COOKIE_PUBLIC_DATA_TOKEN)
   }
 }
 export const publicDataStore = new PublicDataStore()
