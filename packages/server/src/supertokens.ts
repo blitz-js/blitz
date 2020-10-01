@@ -129,12 +129,21 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
 }
 
 type JwtPayload = AnonymousSessionPayload | null
-type SessionKernel = {
+type AnonSessionKernel = {
   handle: string
   publicData: PublicData
   jwtPayload: JwtPayload
   antiCSRFToken: string
+  anonymousSessionToken: string
 }
+type AuthedSessionKernel = {
+  handle: string
+  publicData: PublicData
+  jwtPayload: JwtPayload
+  antiCSRFToken: string
+  sessionToken: string
+}
+type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
 const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
   "cookies" in req
@@ -292,11 +301,8 @@ export const parseSessionToken = (token: string) => {
   }
 }
 
-export const createPublicDataToken = (publicData: string | PublicData, expireAt?: Date) => {
+export const createPublicDataToken = (publicData: string | PublicData) => {
   const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  if (expireAt) {
-    payload.push(expireAt.toISOString())
-  }
   return btoa(payload.join(TOKEN_SEPARATOR))
 }
 
@@ -481,7 +487,7 @@ export async function getSession(
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
-    debug("Request has sessionToken")
+    debug("[getSession] Request has sessionToken")
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
@@ -503,6 +509,8 @@ export async function getSession(
     }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
       debug("sessionToken hash did not match")
+      debug("persisted: ", persistedSession.hashedSessionToken)
+      debug("in req: ", hash(sessionToken))
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -537,20 +545,25 @@ export async function getSession(
         persistedSession.expiresAt &&
         differenceInMinutes(persistedSession.expiresAt, new Date()) <
           0.75 * config.sessionExpiryMinutes
-      debug("diff mins", differenceInMinutes(persistedSession.expiresAt!, new Date()))
-      debug("compare mins", 0.75 * config.sessionExpiryMinutes)
 
       if (hasQuarterExpiryTimePassed) {
         debug("quarter expiry time has passed")
+        debug("Persisted expire time", persistedSession.expiresAt)
       }
 
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
-        await refreshSession(req, res, {
-          handle,
-          publicData: JSON.parse(persistedSession.publicData || ""),
-          jwtPayload: null,
-          antiCSRFToken,
-        })
+        await refreshSession(
+          req,
+          res,
+          {
+            handle,
+            publicData: JSON.parse(persistedSession.publicData || ""),
+            jwtPayload: null,
+            antiCSRFToken,
+            sessionToken,
+          },
+          {publicDataChanged: hasPublicDataChanged},
+        )
       }
     }
 
@@ -559,6 +572,7 @@ export async function getSession(
       publicData: JSON.parse(persistedSession.publicData || ""),
       jwtPayload: null,
       antiCSRFToken,
+      sessionToken,
     }
   } else if (idRefreshToken) {
     // TODO: advanced method
@@ -584,6 +598,7 @@ export async function getSession(
       publicData: payload.publicData,
       jwtPayload: payload,
       antiCSRFToken,
+      anonymousSessionToken,
     }
   }
 
@@ -630,6 +645,7 @@ export async function createNewSession(
       publicData,
       jwtPayload: payload,
       antiCSRFToken,
+      anonymousSessionToken,
     }
   } else if (config.method === "essential") {
     debug("Creating new session")
@@ -661,7 +677,7 @@ export async function createNewSession(
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const handle = generateEssentialSessionHandle()
     const sessionToken = createSessionToken(handle, newPublicData)
-    const publicDataToken = createPublicDataToken(newPublicData, expiresAt)
+    const publicDataToken = createPublicDataToken(newPublicData)
 
     await config.createSession({
       expiresAt,
@@ -685,6 +701,7 @@ export async function createNewSession(
       publicData: newPublicData,
       jwtPayload: null,
       antiCSRFToken,
+      sessionToken,
     }
   } else if (config.method === "advanced") {
     throw new Error("The advanced method is not yet supported")
@@ -707,6 +724,7 @@ export async function refreshSession(
   req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
+  {publicDataChanged}: {publicDataChanged: boolean},
 ) {
   debug("Refreshing session", sessionKernel)
   if (sessionKernel.jwtPayload?.isAnonymous) {
@@ -721,22 +739,34 @@ export async function refreshSession(
     setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
-  } else if (config.method === "essential") {
+  } else if (config.method === "essential" && "sessionToken" in sessionKernel) {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
-    const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
-    const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
+    const publicDataToken = createPublicDataToken(sessionKernel.publicData)
+
+    let sessionToken: string
+    // Only generate new session token if public data actually changed
+    // Otherwise if new session token is generated just for refresh, then
+    // we have race condition bugs
+    if (publicDataChanged) {
+      sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
+    } else {
+      sessionToken = sessionKernel.sessionToken
+    }
 
     setSessionCookie(req, res, sessionToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
 
-    const hashedSessionToken = hash(sessionToken)
-
-    await config.updateSession(sessionKernel.handle, {
-      expiresAt,
-      hashedSessionToken,
-      publicData: JSON.stringify(sessionKernel.publicData),
-    })
+    debug("Updating session in db with", {expiresAt})
+    if (publicDataChanged) {
+      await config.updateSession(sessionKernel.handle, {
+        expiresAt,
+        hashedSessionToken: hash(sessionToken),
+        publicData: JSON.stringify(sessionKernel.publicData),
+      })
+    } else {
+      await config.updateSession(sessionKernel.handle, {expiresAt})
+    }
   } else if (config.method === "advanced") {
     throw new Error("refreshSession() not implemented for advanced method")
   }
@@ -858,7 +888,7 @@ export async function setPublicData(
     ...data,
   }
 
-  await refreshSession(req, res, {...sessionKernel, publicData})
+  await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
 }
 

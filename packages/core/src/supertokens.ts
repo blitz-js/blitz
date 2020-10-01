@@ -99,13 +99,11 @@ export const getPublicDataToken = () => readCookie(COOKIE_PUBLIC_DATA_TOKEN)
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")
 
-  const [publicDataStr, expireAt] = atob(token).split(TOKEN_SEPARATOR)
+  const [publicDataStr] = atob(token).split(TOKEN_SEPARATOR)
   try {
     const publicData: PublicData = JSON.parse(publicDataStr)
     return {
       publicData,
-      // note: milliseconds are lost when converting from strings to Dates
-      expireAt: expireAt ? new Date(expireAt) : undefined,
     }
   } catch (error) {
     throw new Error(`[parsePublicDataToken] Failed to parse publicDataStr: ${publicDataStr}`)
@@ -138,12 +136,8 @@ export const publicDataStore = {
       return emptyPublicData
     }
 
-    const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
+    const {publicData} = parsePublicDataToken(publicDataToken)
 
-    if (expireAt && expireAt.getTime() < Date.now()) {
-      this.clear()
-      return emptyPublicData
-    }
     return publicData
   },
   updateState() {
@@ -153,7 +147,7 @@ export const publicDataStore = {
     publicDataStore.observable.next(this.getData())
   },
   clear() {
-    // deleteCookie(COOKIE_CSRF_TOKEN)
+    deleteCookie(COOKIE_CSRF_TOKEN)
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
     queryCache.clear()
     this.updateState()
