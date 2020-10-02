@@ -37,6 +37,7 @@ import {btoa, atob} from "b64-lite"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
+const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -128,11 +129,21 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
 }
 
 type JwtPayload = AnonymousSessionPayload | null
-type SessionKernel = {
+type AnonSessionKernel = {
   handle: string
   publicData: PublicData
   jwtPayload: JwtPayload
+  antiCSRFToken: string
+  anonymousSessionToken: string
 }
+type AuthedSessionKernel = {
+  handle: string
+  publicData: PublicData
+  jwtPayload: JwtPayload
+  antiCSRFToken: string
+  sessionToken: string
+}
+type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
 const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
   "cookies" in req
@@ -157,10 +168,11 @@ export async function getSessionContext(
   let sessionKernel = await getSession(req, res)
 
   if (sessionKernel) {
-    // console.log("Got existing session", sessionKernel)
+    debug("Got existing session", sessionKernel)
   }
 
   if (!sessionKernel) {
+    debug("No session found, creating anonymous session")
     sessionKernel = await createAnonymousSession(req, res)
   }
 
@@ -293,11 +305,8 @@ export const parseSessionToken = (token: string) => {
   }
 }
 
-export const createPublicDataToken = (publicData: string | PublicData, expireAt?: Date) => {
+export const createPublicDataToken = (publicData: string | PublicData) => {
   const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  if (expireAt) {
-    payload.push(expireAt.toISOString())
-  }
   return btoa(payload.join(TOKEN_SEPARATOR))
 }
 
@@ -408,7 +417,7 @@ export const setAnonymousSessionCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   token: string,
-  expiresAt: Date = addYears(new Date(), 30),
+  expiresAt: Date,
 ) => {
   setCookie(
     res,
@@ -429,8 +438,9 @@ export const setCSRFCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   antiCSRFToken: string,
-  expiresAt: Date = addYears(new Date(), 30),
+  expiresAt: Date,
 ) => {
+  debug("setCSRFCookie", antiCSRFToken)
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
@@ -449,7 +459,7 @@ export const setPublicDataCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   publicDataToken: string,
-  expiresAt: Date = addYears(new Date(), 30),
+  expiresAt: Date,
 ) => {
   setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
@@ -481,10 +491,11 @@ export async function getSession(
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
+    debug("[getSession] Request has sessionToken")
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
-      // console.log("No session: no handle")
+      debug("No handle in sessionToken")
       return null
     }
 
@@ -497,21 +508,23 @@ export async function getSession(
 
     const persistedSession = await config.getSession(handle)
     if (!persistedSession) {
-      // console.log("No session: not in DB")
+      debug("Session not found in DB")
       return null
     }
-
-    if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
-      setHeader(res, HEADER_CSRF_ERROR, "true")
-      throw new CSRFTokenMismatchError()
-    }
     if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
-      // console.log("No session: sessionToken hash did not match")
+      debug("sessionToken hash did not match")
+      debug("persisted: ", persistedSession.hashedSessionToken)
+      debug("in req: ", hash(sessionToken))
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
-      await revokeSession(req, res, handle)
+      debug("Session expired")
       return null
+    }
+    if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
+      // await revokeSession(req, res, handle)
+      setHeader(res, HEADER_CSRF_ERROR, "true")
+      throw new CSRFTokenMismatchError()
     }
 
     /*
@@ -526,6 +539,9 @@ export async function getSession(
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
       const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+      if (hasPublicDataChanged) {
+        debug("PublicData has changed since the last request")
+      }
 
       // Check if > 1/4th of the expiry time has passed
       // (since we are doing a rolling expiry window).
@@ -534,12 +550,24 @@ export async function getSession(
         differenceInMinutes(persistedSession.expiresAt, new Date()) <
           0.75 * config.sessionExpiryMinutes
 
+      if (hasQuarterExpiryTimePassed) {
+        debug("quarter expiry time has passed")
+        debug("Persisted expire time", persistedSession.expiresAt)
+      }
+
       if (hasPublicDataChanged || hasQuarterExpiryTimePassed) {
-        await refreshSession(req, res, {
-          handle,
-          publicData: JSON.parse(persistedSession.publicData || ""),
-          jwtPayload: null,
-        })
+        await refreshSession(
+          req,
+          res,
+          {
+            handle,
+            publicData: JSON.parse(persistedSession.publicData || ""),
+            jwtPayload: null,
+            antiCSRFToken,
+            sessionToken,
+          },
+          {publicDataChanged: hasPublicDataChanged},
+        )
       }
     }
 
@@ -547,19 +575,24 @@ export async function getSession(
       handle,
       publicData: JSON.parse(persistedSession.publicData || ""),
       jwtPayload: null,
+      antiCSRFToken,
+      sessionToken,
     }
   } else if (idRefreshToken) {
     // TODO: advanced method
     return null
     // Important: check anonymousSessionToken token as the very last thing
   } else if (anonymousSessionToken) {
+    debug("Request has anonymousSessionToken")
     const payload = parseAnonymousSessionToken(anonymousSessionToken)
 
     if (!payload) {
+      debug("Payload empty")
       return null
     }
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
+      // await revokeSession(req, res, payload.handle, true)
       setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
@@ -568,6 +601,8 @@ export async function getSession(
       handle: payload.handle,
       publicData: payload.publicData,
       jwtPayload: payload,
+      antiCSRFToken,
+      anonymousSessionToken,
     }
   }
 
@@ -591,6 +626,7 @@ export async function createNewSession(
   const antiCSRFToken = createAntiCSRFToken()
 
   if (opts.anonymous) {
+    debug("Creating new anonymous session")
     const handle = generateAnonymousSessionHandle()
     const payload: AnonymousSessionPayload = {
       isAnonymous: true,
@@ -601,9 +637,10 @@ export async function createNewSession(
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(publicData)
 
-    setAnonymousSessionCookie(req, res, anonymousSessionToken)
-    setCSRFCookie(req, res, antiCSRFToken)
-    setPublicDataCookie(req, res, publicDataToken)
+    const expiresAt = addYears(new Date(), 30)
+    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
+    setCSRFCookie(req, res, antiCSRFToken, expiresAt)
+    setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, "", new Date(0))
 
@@ -611,8 +648,11 @@ export async function createNewSession(
       handle,
       publicData,
       jwtPayload: payload,
+      antiCSRFToken,
+      anonymousSessionToken,
     }
   } else if (config.method === "essential") {
+    debug("Creating new session")
     const newPublicData: PublicData = {
       // This carries over any public data from the anonymous session
       ...(opts.jwtPayload?.publicData || {}),
@@ -641,7 +681,7 @@ export async function createNewSession(
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
     const handle = generateEssentialSessionHandle()
     const sessionToken = createSessionToken(handle, newPublicData)
-    const publicDataToken = createPublicDataToken(newPublicData, expiresAt)
+    const publicDataToken = createPublicDataToken(newPublicData)
 
     await config.createSession({
       expiresAt,
@@ -654,8 +694,8 @@ export async function createNewSession(
     })
 
     setSessionCookie(req, res, sessionToken, expiresAt)
-    setCSRFCookie(req, res, antiCSRFToken)
-    setPublicDataCookie(req, res, publicDataToken)
+    setCSRFCookie(req, res, antiCSRFToken, expiresAt)
+    setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, "", new Date(0))
     removeHeader(res, HEADER_SESSION_REVOKED)
@@ -664,6 +704,8 @@ export async function createNewSession(
       handle,
       publicData: newPublicData,
       jwtPayload: null,
+      antiCSRFToken,
+      sessionToken,
     }
   } else if (config.method === "advanced") {
     throw new Error("The advanced method is not yet supported")
@@ -686,7 +728,9 @@ export async function refreshSession(
   req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
+  {publicDataChanged}: {publicDataChanged: boolean},
 ) {
+  debug("Refreshing session", sessionKernel)
   if (sessionKernel.jwtPayload?.isAnonymous) {
     const payload: AnonymousSessionPayload = {
       ...sessionKernel.jwtPayload,
@@ -695,23 +739,38 @@ export async function refreshSession(
     const anonymousSessionToken = createAnonymousSessionToken(payload)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
-    setAnonymousSessionCookie(req, res, anonymousSessionToken)
-    setPublicDataCookie(req, res, publicDataToken)
-  } else if (config.method === "essential") {
+    const expiresAt = addYears(new Date(), 30)
+    setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
+    setPublicDataCookie(req, res, publicDataToken, expiresAt)
+    setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
+  } else if (config.method === "essential" && "sessionToken" in sessionKernel) {
     const expiresAt = addMinutes(new Date(), config.sessionExpiryMinutes)
-    const sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
-    const publicDataToken = createPublicDataToken(sessionKernel.publicData, expiresAt)
+    const publicDataToken = createPublicDataToken(sessionKernel.publicData)
+
+    let sessionToken: string
+    // Only generate new session token if public data actually changed
+    // Otherwise if new session token is generated just for refresh, then
+    // we have race condition bugs
+    if (publicDataChanged) {
+      sessionToken = createSessionToken(sessionKernel.handle, sessionKernel.publicData)
+    } else {
+      sessionToken = sessionKernel.sessionToken
+    }
 
     setSessionCookie(req, res, sessionToken, expiresAt)
-    setPublicDataCookie(req, res, publicDataToken)
+    setPublicDataCookie(req, res, publicDataToken, expiresAt)
+    setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
 
-    const hashedSessionToken = hash(sessionToken)
-
-    await config.updateSession(sessionKernel.handle, {
-      expiresAt,
-      hashedSessionToken,
-      publicData: JSON.stringify(sessionKernel.publicData),
-    })
+    debug("Updating session in db with", {expiresAt})
+    if (publicDataChanged) {
+      await config.updateSession(sessionKernel.handle, {
+        expiresAt,
+        hashedSessionToken: hash(sessionToken),
+        publicData: JSON.stringify(sessionKernel.publicData),
+      })
+    } else {
+      await config.updateSession(sessionKernel.handle, {expiresAt})
+    }
   } else if (config.method === "advanced") {
     throw new Error("refreshSession() not implemented for advanced method")
   }
@@ -737,11 +796,15 @@ export async function revokeSession(
   req: IncomingMessage,
   res: ServerResponse,
   handle: string,
+  anonymous: boolean = false,
 ): Promise<void> {
-  try {
-    await config.deleteSession(handle)
-  } catch (error) {
-    // Ignore any errors, like if session doesn't exist in DB
+  debug("Revoking session", handle)
+  if (!anonymous) {
+    try {
+      await config.deleteSession(handle)
+    } catch (error) {
+      // Ignore any errors, like if session doesn't exist in DB
+    }
   }
   // This is used on the frontend to clear localstorage
   setHeader(res, HEADER_SESSION_REVOKED, "true")
@@ -749,6 +812,7 @@ export async function revokeSession(
   // Clear all cookies
   setSessionCookie(req, res, "", new Date(0))
   setAnonymousSessionCookie(req, res, "", new Date(0))
+  setCSRFCookie(req, res, "", new Date(0))
 }
 
 export async function revokeMultipleSessions(
@@ -828,7 +892,7 @@ export async function setPublicData(
     ...data,
   }
 
-  await refreshSession(req, res, {...sessionKernel, publicData})
+  await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
 }
 

@@ -1,6 +1,6 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {getQueryKey, isClient, isServer} from "./utils"
+import {getQueryKey, isClient, isServer, clientDebug} from "./utils"
 import {
   getAntiCSRFToken,
   publicDataStore,
@@ -28,6 +28,7 @@ export const executeRpcCall = <TInput, TResult>(
   opts: RpcOptions = {},
 ) => {
   if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
+  clientDebug("Starting request for", apiUrl)
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -35,7 +36,10 @@ export const executeRpcCall = <TInput, TResult>(
 
   const antiCSRFToken = getAntiCSRFToken()
   if (antiCSRFToken) {
+    clientDebug("Adding antiCSRFToken cookie header", antiCSRFToken)
     headers[HEADER_CSRF] = antiCSRFToken
+  } else {
+    clientDebug("No antiCSRFToken cookie found")
   }
 
   let serialized: SuperJSONResult
@@ -67,11 +71,14 @@ export const executeRpcCall = <TInput, TResult>(
       signal: controller.signal,
     })
     .then(async (result) => {
+      clientDebug("Received request for", apiUrl)
       if (result.headers) {
         if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
           publicDataStore.updateState()
+          clientDebug("Public data updated")
         }
         if (result.headers.get(HEADER_SESSION_REVOKED)) {
+          clientDebug("Sessin revoked")
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {

@@ -18,3 +18,9 @@ export function isLocalhost(req: BlitzApiRequest | IncomingMessage): boolean {
   }
   return localhost
 }
+
+export function clientDebug(...args: any) {
+  if (typeof window !== "undefined" && (window as any)["DEBUG_BLITZ"]) {
+    console.log("[BLITZ]", ...args)
+  }
+}
