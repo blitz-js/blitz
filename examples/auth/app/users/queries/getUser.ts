@@ -6,7 +6,8 @@ type GetUserInput = {
 }
 
 export default async function getUser({where}: GetUserInput, {session}: Ctx) {
-  session.authorize(["admin", "user"])
+  // session.userId
+  session.authorize()
 
   const user = await db.user.findOne({where})
 
