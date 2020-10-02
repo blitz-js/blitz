@@ -6,8 +6,9 @@ export class AuthenticationError extends Error {
   }
 }
 
-export class CSRFTokenMismatchError extends AuthenticationError {
+export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
+  statusCode = 401
 }
 
 export class AuthorizationError extends Error {

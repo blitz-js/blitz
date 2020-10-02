@@ -5,27 +5,13 @@ import {
   EnhancedResolver,
   AuthenticationError,
   AuthorizationError,
+  CSRFTokenMismatchError,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
-import {Logger} from "tslog"
 import chalk from "chalk"
 import prettyMs from "pretty-ms"
-
-const baseLogger = new Logger({
-  dateTimePattern:
-    process.env.NODE_ENV === "production"
-      ? "year-month-day hour:minute:second.millisecond"
-      : "hour:minute:second.millisecond",
-  displayFunctionName: false,
-  displayFilePath: "hidden",
-  displayRequestId: false,
-  dateTimeTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  prettyInspectHighlightStyles: {name: "black"},
-  maskValuesOfKeys: ["password", "passwordConfirmation"],
-})
-
-const printNewLine = () => console.log("")
+import {baseLogger, log as displayLog} from "@blitzjs/display"
 
 const rpcMiddleware = <TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,
@@ -66,7 +52,7 @@ const rpcMiddleware = <TInput, TResult>(
 
         const duration = prettyMs(new Date().getTime() - startTime)
         log.info(chalk.dim("Finished", "in", duration))
-        printNewLine()
+        displayLog.newline()
 
         res.blitzResult = result
 
@@ -81,12 +67,11 @@ const rpcMiddleware = <TInput, TResult>(
         })
         return next()
       } catch (error) {
-        log.error(error)
-
-        if (error! instanceof AuthenticationError && error! instanceof AuthorizationError) {
-          // console.error(error)
+        if (error instanceof AuthenticationError || error instanceof AuthorizationError) {
+          delete error.stack
         }
-        printNewLine()
+        log.error(error)
+        displayLog.newline()
 
         res.json({
           result: null,
