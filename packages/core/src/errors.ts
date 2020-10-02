@@ -4,11 +4,17 @@ export class AuthenticationError extends Error {
   constructor(message = "You must be logged in to access this") {
     super(message)
   }
+  get _clearStack() {
+    return true
+  }
 }
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
   statusCode = 401
+  get _clearStack() {
+    return true
+  }
 }
 
 export class AuthorizationError extends Error {
@@ -17,6 +23,9 @@ export class AuthorizationError extends Error {
   constructor(message = "You are not authorized to access this") {
     super(message)
   }
+  get _clearStack() {
+    return true
+  }
 }
 
 export class NotFoundError extends Error {
@@ -24,5 +33,8 @@ export class NotFoundError extends Error {
   statusCode = 404
   constructor(message = "This could not be found") {
     super(message)
+  }
+  get _clearStack() {
+    return true
   }
 }

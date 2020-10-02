@@ -96,16 +96,19 @@ export const executeRpcCall = <TInput, TResult>(
       }
 
       if (payload.error) {
-        const error = deserializeError(payload.error)
+        let error = deserializeError(payload.error) as any
         // We don't clear the publicDataStore for anonymous users
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
         }
-        if (
-          error.name === "AuthenticationError" ||
-          error.name === "AuthorizationError" ||
-          error.name === "CSRFTokenMismatchError"
-        ) {
+        if (error.name === "AuthenticationError" || error.name === "AuthorizationError") {
+          delete error.stack
+        }
+
+        const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
+        if (prismaError) {
+          error = new Error(prismaError[0])
+          error.statusCode = 500
           delete error.stack
         }
         throw error

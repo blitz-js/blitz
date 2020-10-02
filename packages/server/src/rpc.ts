@@ -3,8 +3,7 @@ import {
   BlitzApiRequest,
   BlitzApiResponse,
   EnhancedResolver,
-  AuthenticationError,
-  AuthorizationError,
+  handleRequestWithMiddleware,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
@@ -66,7 +65,7 @@ const rpcMiddleware = <TInput, TResult>(
         })
         return next()
       } catch (error) {
-        if (error instanceof AuthenticationError || error instanceof AuthorizationError) {
+        if (error._clearStack) {
           delete error.stack
         }
         log.error(error)
@@ -96,6 +95,8 @@ export function rpcApiHandler<TInput, TResult>(
   middleware.push(rpcMiddleware(resolver, connectDb))
 
   return (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
+    return handleRequestWithMiddleware(req, res, middleware, {
+      throwOnError: false,
+    })
   }
 }

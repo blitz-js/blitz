@@ -4,7 +4,6 @@ import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
 import {log, baseLogger} from "@blitzjs/display"
 import {EnhancedResolver} from "./types"
-import {CSRFTokenMismatchError} from "./errors"
 
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
@@ -64,6 +63,7 @@ export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
+  {throwOnError = true}: {throwOnError?: boolean} = {},
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {}
@@ -97,14 +97,14 @@ export async function handleRequestWithMiddleware(
     } else {
       res.statusCode = (error as any).statusCode || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
-      console.log("Sett")
       baseLogger.error("Error while processing the request")
     }
-    if (error instanceof CSRFTokenMismatchError) {
+    if (error._clearStack) {
       delete error.stack
     }
     baseLogger.prettyError(error)
     log.newline()
+    if (throwOnError) throw error
   }
 }
 

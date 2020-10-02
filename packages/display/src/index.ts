@@ -163,7 +163,10 @@ export const baseLogger = new Logger({
   displayFunctionName: false,
   displayFilePath: "hidden",
   displayRequestId: false,
-  dateTimeTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  dateTimeTimezone:
+    process.env.NODE_ENV === "production"
+      ? "utc"
+      : Intl.DateTimeFormat().resolvedOptions().timeZone,
   prettyInspectHighlightStyles: {name: "black"},
   maskValuesOfKeys: ["password", "passwordConfirmation"],
   exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
