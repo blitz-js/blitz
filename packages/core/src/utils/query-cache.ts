@@ -1,7 +1,12 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {InferUnaryParam, QueryFn} from "../types"
-import {EnhancedRpcFunction} from "rpc"
+import {EnhancedRpcFunction} from "../rpc"
+import Router from "next/router"
+
+Router.events.on("routeChangeComplete", async () => {
+  await (queryCache.invalidateQueries as any)()
+})
 
 type MutateOptions = {
   refetch?: boolean
