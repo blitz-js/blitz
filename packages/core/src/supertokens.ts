@@ -57,31 +57,31 @@ export type SessionConfig = {
 }
 
 export interface SessionContextBase {
-  userId: number | null
+  userId: unknown
   roles: string[]
   handle: string | null
-  // publicData: PublicData
+  publicData: unknown
   authorize(input?: any): asserts this is AuthenticatedSessionContext
   isAuthorized(input?: any): boolean
   // authorize: (roleOrRoles?: string | string[]) => void
   // isAuthorized: (roleOrRoles?: string | string[]) => boolean
-  // create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
-  // revoke: () => Promise<void>
-  // revokeAll: () => Promise<void>
-  // getPrivateData: () => Promise<Record<any, any>>
-  // setPrivateData: (data: Record<any, any>) => Promise<void>
-  // setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
+  create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
+  revoke: () => Promise<void>
+  revokeAll: () => Promise<void>
+  getPrivateData: () => Promise<Record<any, any>>
+  setPrivateData: (data: Record<any, any>) => Promise<void>
+  setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
+}
+
+// Could be anonymous
+export interface SessionContext extends SessionContextBase {
+  userId: PublicData["userId"] | null
+  publicData: Partial<PublicData>
 }
 
 export interface AuthenticatedSessionContext extends SessionContextBase {
-  // userId: PublicData["userId"]
-  userId: number
-}
-
-// Anonymous session context
-export interface SessionContext extends SessionContextBase {
-  // userId: PublicData["userId"] | null
-  userId: number | null
+  userId: PublicData["userId"]
+  publicData: PublicData
 }
 
 // Taken from https://github.com/HenrikJoreteg/cookie-getter

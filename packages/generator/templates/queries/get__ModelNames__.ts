@@ -5,9 +5,9 @@ type Get__ModelNames__Input = Pick<FindMany__ModelName__Args, "where" | "orderBy
 
 export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
-  {session}: Ctx,
+  ctx: Ctx,
 ) {
-  session.authorize()
+  ctx.session.authorize()
 
   const __modelNames__ = await db.__modelName__.findMany({
     where,
