@@ -9,7 +9,7 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
-import {AuthenticationError} from "./errors"
+import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
 import {
   ResolverType,
@@ -82,8 +82,9 @@ export const executeRpcCall = <TInput, TResult>(
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
-          clientDebug("CSRF error")
-          throw new AuthenticationError()
+          const err = new CSRFTokenMismatchError()
+          delete err.stack
+          throw err
         }
       }
 
@@ -95,11 +96,21 @@ export const executeRpcCall = <TInput, TResult>(
       }
 
       if (payload.error) {
-        const error = deserializeError(payload.error)
+        let error = deserializeError(payload.error) as any
         // We don't clear the publicDataStore for anonymous users
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
         }
+
+        const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
+        if (prismaError) {
+          error = new Error(prismaError[0])
+          error.statusCode = 500
+        }
+
+        // Prevent client-side error popop from showing
+        delete error.stack
+
         throw error
       } else {
         const data =

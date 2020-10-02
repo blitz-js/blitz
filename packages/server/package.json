@@ -64,7 +64,8 @@
     "through2": "3.0.1",
     "vinyl": "2.2.0",
     "vinyl-file": "3.0.0",
-    "vinyl-fs": "3.0.3"
+    "vinyl-fs": "3.0.3",
+    "pretty-ms": "6.0.1"
   },
   "devDependencies": {
     "@blitzjs/core": "0.23.2-canary.3",
