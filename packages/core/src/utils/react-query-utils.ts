@@ -1,6 +1,6 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver, EnhancedResolverRpcClient} from "../types"
+import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
 
 type MutateOptions = {
@@ -56,37 +56,24 @@ export const sanitize = <TInput, TResult>(
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
-export function getQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
-  params: TInput,
-) {
-  if (typeof queryFn === "undefined") {
-    throw new Error("getQueryKey is missing the first argument - it must be a query function")
-  }
+export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
+  const queryKey = [url]
 
-  const queryKey: [string, Record<string, any>] = [
-    sanitize(queryFn)._meta.apiUrl,
-    serialize(typeof params === "function" ? (params as Function)() : params),
-  ]
-  return queryKey
+  const args = typeof params === "function" ? (params as Function)() : params
+  queryKey.push(serialize(args) as any)
+
+  return queryKey as [string, any]
 }
 
-export function getInfiniteQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+export function getQueryKey<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params?: TInput,
 ) {
-  if (typeof queryFn === "undefined") {
-    throw new Error(
-      "getInfiniteQueryKey is missing the first argument - it must be a query function",
-    )
+  if (typeof resolver === "undefined") {
+    throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  const queryKey: ["infinite", string] = [
-    // we need an extra cache key for infinite loading so that the cache for
-    // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
-    "infinite",
-    sanitize(queryFn)._meta.apiUrl,
-  ]
-  return queryKey
+  return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
 export const retryFunction = (failureCount: number, error: any) => {
