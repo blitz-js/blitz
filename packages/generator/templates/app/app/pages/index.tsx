@@ -1,4 +1,4 @@
-import { Link, BlitzPage } from "blitz"
+import { Link, BlitzPage, useMutation } from "blitz"
 import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
@@ -11,6 +11,7 @@ import { Suspense } from "react"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
     return (
@@ -18,7 +19,7 @@ const UserInfo = () => {
         <button
           className="button small"
           onClick={async () => {
-            await logout()
+            await logoutMutation()
           }}
         >
           Logout

@@ -3,10 +3,10 @@ import listen from "test-listen"
 import fetch from "isomorphic-unfetch"
 import delay from "delay"
 
-import {ssrQuery} from "./ssr-query"
-import {EnhancedResolver} from "types"
+import {invokeWithMiddleware} from "./invoke"
+import {EnhancedResolver} from "./types"
 
-describe("ssrQuery", () => {
+describe("invokeWithMiddleware", () => {
   it("works without middleware", async () => {
     console.log = jest.fn()
     const resolverModule = (jest.fn().mockImplementation(async (input) => {
@@ -22,7 +22,7 @@ describe("ssrQuery", () => {
 
     await mockServer(
       async (req, res) => {
-        const result = await ssrQuery(resolverModule as any, "test", {req, res})
+        const result = await invokeWithMiddleware(resolverModule as any, "test", {req, res})
 
         expect(result).toBe("test")
       },
@@ -58,7 +58,49 @@ describe("ssrQuery", () => {
 
     await mockServer(
       async (req, res) => {
-        const result = await ssrQuery(resolverModule as any, "test", {req, res})
+        const result = await invokeWithMiddleware(resolverModule as any, "test", {req, res})
+
+        expect(result).toBe("test")
+      },
+      async (url) => {
+        const res = await fetch(url)
+        expect(res.status).toBe(201)
+        expect(res.headers.get("test")).toBe("works")
+      },
+    )
+  })
+
+  it("works with extra middleware in config", async () => {
+    console.log = jest.fn()
+    const resolverModule = (jest.fn().mockImplementation(async (input) => {
+      await delay(1)
+      return input
+    }) as unknown) as EnhancedResolver<unknown, unknown>
+    resolverModule._meta = {
+      name: "getTest",
+      type: "query",
+      filePath: "some/test/path",
+      apiUrl: "some/test/path",
+    }
+    resolverModule.middleware = [
+      (_req, res, next) => {
+        res.statusCode = 201
+        return next()
+      },
+    ]
+
+    await mockServer(
+      async (req, res) => {
+        const result = await invokeWithMiddleware(resolverModule as any, "test", {
+          req,
+          res,
+          middleware: [
+            (_req, res, next) => {
+              res.setHeader("test", "works")
+              return next()
+            },
+          ],
+        })
 
         expect(result).toBe("test")
       },

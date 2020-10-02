@@ -1,4 +1,4 @@
-import React, {PropsWithoutRef} from "react"
+import {forwardRef, PropsWithoutRef} from "react"
 import {useField} from "react-final-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
@@ -11,7 +11,7 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
 }
 
-export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
+export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
   ({name, label, outerProps, ...props}, ref) => {
     const {
       input,

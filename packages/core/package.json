@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.23.2-canary.3",
+  "version": "0.24.0-canary.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -40,8 +40,8 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/config": "0.23.2-canary.3",
-    "@blitzjs/display": "0.23.2-canary.3",
+    "@blitzjs/config": "0.24.0-canary.0",
+    "@blitzjs/display": "0.24.0-canary.0",
     "bad-behavior": "1.0.1",
     "cookie-session": "1.4.0",
     "deepmerge": "4.2.2",
@@ -51,7 +51,7 @@
     "pretty-ms": "6.0.1",
     "react-query": "2.23.0",
     "serialize-error": "6.0.0",
-    "superjson": "1.2.2",
+    "superjson": "1.2.3",
     "url": "0.11.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
