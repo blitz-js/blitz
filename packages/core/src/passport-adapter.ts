@@ -113,7 +113,7 @@ export function passportAuth(config: BlitzPassportConfig) {
 
               const redirectUrlFromVerifyResult =
                 result && typeof result === "object" && (result as any).redirectUrl
-              let redirectUrl =
+              let redirectUrl: string =
                 redirectUrlFromVerifyResult ||
                 (session.publicData as any)[INTERNAL_REDIRECT_URL_KEY] ||
                 (error ? config.errorRedirectUrl : config.successRedirectUrl) ||
