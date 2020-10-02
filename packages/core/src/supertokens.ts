@@ -36,7 +36,7 @@ export interface PublicData extends DefaultPublicData {}
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: any
+  userId?: PublicData["userId"]
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -49,7 +49,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: any) => Promise<SessionModel[]>
+  getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -60,7 +60,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: any
+  userId: PublicData["userId"] | null
   roles: string[]
   handle: string | null
   publicData: PublicData
