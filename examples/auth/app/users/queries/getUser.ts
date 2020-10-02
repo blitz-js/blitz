@@ -5,8 +5,12 @@ type GetUserInput = {
   where: FindOneUserArgs["where"]
 }
 
-export default async function getUser({where}: GetUserInput, {session}: Ctx) {
-  // session.userId
+export default async function getUser({where}: GetUserInput, ctx: Ctx) {
+  // THIS WORKS
+  ctx.session.authorize()
+
+  // THIS DOES NOT :(
+  const session = ctx.session
   session.authorize()
 
   const user = await db.user.findOne({where})
