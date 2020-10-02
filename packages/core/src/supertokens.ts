@@ -2,6 +2,11 @@ import {useState} from "react"
 import BadBehavior from "bad-behavior"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {queryCache} from "react-query"
+import getConfig from "next/config"
+
+const {publicRuntimeConfig = {}} = getConfig() || {}
+
+const sessionPrefix = publicRuntimeConfig.sessionPrefix || process.env.SESSION_PREFIX || "s"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
@@ -9,11 +14,11 @@ export const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
 export const SESSION_TYPE_ANONYMOUS_JWT = "ajwt"
 export const SESSION_TOKEN_VERSION_0 = "v0"
 
-export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
-export const COOKIE_SESSION_TOKEN = "sSessionToken"
-export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
-export const COOKIE_CSRF_TOKEN = "sAntiCrfToken"
-export const COOKIE_PUBLIC_DATA_TOKEN = "sPublicDataToken"
+export const COOKIE_ANONYMOUS_SESSION_TOKEN = sessionPrefix + "AnonymousSessionToken"
+export const COOKIE_SESSION_TOKEN = sessionPrefix + "SessionToken"
+export const COOKIE_REFRESH_TOKEN = sessionPrefix + "IdRefreshToken"
+export const COOKIE_CSRF_TOKEN = sessionPrefix + "AntiCrfToken"
+export const COOKIE_PUBLIC_DATA_TOKEN = sessionPrefix + "PublicDataToken"
 
 // Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
