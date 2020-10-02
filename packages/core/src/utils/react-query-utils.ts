@@ -76,24 +76,6 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
   return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
-export function getInfiniteQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
-) {
-  if (typeof queryFn === "undefined") {
-    throw new Error(
-      "getInfiniteQueryKey is missing the first argument - it must be a query function",
-    )
-  }
-
-  const queryKey: ["infinite", string] = [
-    // we need an extra cache key for infinite loading so that the cache for
-    // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
-    "infinite",
-    sanitize(queryFn)._meta.apiUrl,
-  ]
-  return queryKey
-}
-
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
 
