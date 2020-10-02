@@ -1,6 +1,7 @@
 import chalk from "chalk"
 import ora from "ora"
 import readline from "readline"
+import {Logger} from "tslog"
 
 // const blitzTrueBrandColor = '6700AB'
 const blitzBrightBrandColor = "8a3df0"
@@ -26,6 +27,10 @@ const withCheck = (str: string) => {
 
 const withX = (str: string) => {
   return `${chalk.red.bold("✕")} ${str}`
+}
+
+const withProgress = (str: string) => {
+  return withCaret(chalk.bold(str))
 }
 
 /**
@@ -135,6 +140,7 @@ export const log = {
   withCaret,
   withCheck,
   withX,
+  withProgress,
   branded,
   clearLine,
   error,
@@ -148,3 +154,20 @@ export const log = {
   info,
   debug,
 }
+
+export const baseLogger = new Logger({
+  dateTimePattern:
+    process.env.NODE_ENV === "production"
+      ? "year-month-day hour:minute:second.millisecond"
+      : "hour:minute:second.millisecond",
+  displayFunctionName: false,
+  displayFilePath: "hidden",
+  displayRequestId: false,
+  dateTimeTimezone:
+    process.env.NODE_ENV === "production"
+      ? "utc"
+      : Intl.DateTimeFormat().resolvedOptions().timeZone,
+  prettyInspectHighlightStyles: {name: "black"},
+  maskValuesOfKeys: ["password", "passwordConfirmation"],
+  exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+})

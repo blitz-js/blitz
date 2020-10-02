@@ -30,6 +30,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "tslog": "2.9.0",
     "chalk": "4.0.0",
     "ora": "4.0.4"
   }
