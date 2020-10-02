@@ -5,7 +5,6 @@ import {
   EnhancedResolver,
   AuthenticationError,
   AuthorizationError,
-  CSRFTokenMismatchError,
 } from "@blitzjs/core"
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
