@@ -4,6 +4,7 @@ import {
   MutationConfig,
   MutateConfig,
 } from "react-query"
+import {validateQueryFn} from "./utils/react-query-utils"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair
@@ -37,6 +38,8 @@ export function useMutation<TResult, TError = unknown, TVariables = undefined, T
   mutationResolver: MutationFunction<TResult, TVariables>,
   config?: MutationConfig<TResult, TError, TVariables, TSnapshot>,
 ) {
+  validateQueryFn(mutationResolver)
+
   return useReactQueryMutation(mutationResolver, {
     throwOnError: true,
     ...config,

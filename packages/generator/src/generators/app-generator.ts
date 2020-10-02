@@ -22,6 +22,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: string = resolve(__dirname, "./templates/app")
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
+  packageInstallSuccess: boolean = false
 
   filesToIgnore() {
     if (!this.options.useTs) {
@@ -45,43 +46,33 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string
 
     switch (this.options.form) {
       case "React Final Form":
-        this.fs.move(
-          this.destinationPath("_forms/finalform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/finalform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "finalform"
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
       case "React Hook Form":
-        this.fs.move(
-          this.destinationPath("_forms/hookform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/hookform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "hookform"
         pkg.dependencies["react-hook-form"] = "6.x"
         break
       case "Formik":
-        this.fs.move(
-          this.destinationPath("_forms/formik/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/formik/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "formik"
         pkg.dependencies["formik"] = "2.x"
         break
     }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+    )
+
     this.fs.delete(this.destinationPath("_forms"))
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
@@ -186,6 +177,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
             if (code !== 0) spinners[spinners.length - 1].fail()
             else {
               spinners[spinners.length - 1].succeed()
+              this.packageInstallSuccess = true
             }
           }
           resolve()
@@ -201,16 +193,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       // Ensure the generated files are formatted with the installed prettier version
-      const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
-      const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
-      if (prettierResult.status !== 0) {
-        formattingSpinner.fail(
-          chalk.yellow.bold(
-            "We had an error running Prettier, but don't worry your app will still run fine :)",
-          ),
-        )
-      } else {
-        formattingSpinner.succeed()
+      if (this.packageInstallSuccess) {
+        const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
+        const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
+        if (prettierResult.status !== 0) {
+          formattingSpinner.fail(
+            chalk.yellow.bold(
+              "We had an error running Prettier, but don't worry your app will still run fine :)",
+            ),
+          )
+        } else {
+          formattingSpinner.succeed()
+        }
       }
     } else {
       console.log("") // New line needed

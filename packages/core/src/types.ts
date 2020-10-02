@@ -32,6 +32,7 @@ export type ResolverModule<TInput, TResult> = {
 
 export type RpcOptions = {
   fromQueryHook?: boolean
+  fromInvoke?: boolean
   alreadySerialized?: boolean
 }
 

@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {useQuery, Link, useRouterQuery} from "blitz"
+import {useQuery, Link, useRouterQuery, invalidateQuery} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 // import getProduct from "app/products/queries/getProduct"
 
@@ -35,6 +35,8 @@ function AdminProducts() {
   return (
     <div>
       <h1>Products</h1>
+
+      <button onClick={() => invalidateQuery(getProducts)}>Invalidate query</button>
 
       <p>
         <Link href="/admin/products/new">
