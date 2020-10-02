@@ -2,10 +2,9 @@ import {
   LOCALSTORAGE_PREFIX,
   COOKIE_PUBLIC_DATA_TOKEN,
   PublicData,
-  readCookie,
   parsePublicDataToken,
-  deleteCookie,
 } from "./supertokens"
+import {readCookie, deleteCookie} from "./utils/cookie"
 import BadBehavior from "bad-behavior"
 import {queryCache} from "react-query"
 
