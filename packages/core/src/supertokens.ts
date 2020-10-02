@@ -32,7 +32,10 @@ export interface DefaultPublicData {
   roles: string[]
 }
 
-export interface PublicData extends DefaultPublicData {}
+declare module "blitz" {
+  export interface PublicData extends DefaultPublicData {}
+}
+import {PublicData} from "blitz"
 
 export interface SessionModel extends Record<any, any> {
   handle: string
