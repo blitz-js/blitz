@@ -7,6 +7,10 @@ type MutateOptions = {
   refetch?: boolean
 }
 
+function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
+  return !!f._meta
+}
+
 export interface QueryCacheFunctions<T> {
   mutate: (
     newData: T | ((oldData: T | undefined) => T),
@@ -45,6 +49,16 @@ export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => 
   return fn
 })()
 
+export const validateQueryFn = <TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+) => {
+  if (!isEnhancedResolverRpcClient(queryFn)) {
+    throw new Error(
+      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
+    )
+  }
+}
+
 export const sanitize = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
@@ -52,6 +66,8 @@ export const sanitize = <TInput, TResult>(
     // Prevents logging garbage during static pre-rendering
     return emptyQueryFn
   }
+
+  validateQueryFn(queryFn)
 
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
