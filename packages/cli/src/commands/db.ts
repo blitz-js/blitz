@@ -36,6 +36,9 @@ const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>) => {
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
 export const runPrismaGeneration = async ({silent = false, failSilently = false} = {}) => {
+  // Needs to happen at run-time since the `new` command needs to change the cwd before running
+  const schemaPath = require("path").join(process.cwd(), "db", "schema.prisma")
+  schemaArg = `--schema=${schemaPath}`
   const success = await runPrisma(["generate", schemaArg], silent)
 
   if (!success && !failSilently) {

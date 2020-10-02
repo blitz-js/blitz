@@ -1,5 +1,6 @@
 import {dev, prod} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
+import {runPrismaGeneration} from "./db"
 
 export class Start extends Command {
   static description = "Start a development server"
@@ -41,7 +42,7 @@ export class Start extends Command {
       if (flags.production) {
         await prod(config)
       } else {
-        await dev(config)
+        await dev(config, runPrismaGeneration({silent: true}))
       }
     } catch (err) {
       console.error(err)
