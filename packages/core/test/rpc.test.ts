@@ -1,7 +1,5 @@
 import {executeRpcCall, getIsomorphicEnhancedResolver} from "@blitzjs/core"
 
-global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
-
 declare global {
   namespace NodeJS {
     interface Global {
@@ -9,6 +7,8 @@ declare global {
     }
   }
 }
+
+global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
 
 describe("RPC", () => {
   describe("HEAD", () => {
