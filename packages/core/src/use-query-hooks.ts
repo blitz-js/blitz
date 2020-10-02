@@ -8,6 +8,7 @@ import {
   useInfiniteQuery as useInfiniteReactQuery,
   InfiniteQueryResult,
   InfiniteQueryConfig as RQInfiniteQueryConfig,
+  queryCache,
 } from "react-query"
 import {FirstParam, QueryFn, PromiseReturnType} from "./types"
 import {
@@ -18,6 +19,11 @@ import {
   getInfiniteQueryKey,
   defaultQueryConfig,
 } from "./utils/react-query-utils"
+import {Router} from "./index"
+
+Router.events.on("routeChangeComplete", async () => {
+  await queryCache.invalidateQueries()
+})
 
 // -------------------------
 // useQuery
