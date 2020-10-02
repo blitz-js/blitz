@@ -41,7 +41,7 @@ describe("RPC", () => {
       )
 
       try {
-        const result = await rpcFn({paramOne: 1234})
+        const result = await rpcFn({paramOne: 1234}, {fromQueryHook: true})
         expect(result).toBe("result")
         expect(fetchMock).toBeCalled()
       } finally {
@@ -69,7 +69,9 @@ describe("RPC", () => {
       )
 
       try {
-        await expect(rpcFn({paramOne: 1234})).rejects.toThrowError(/something broke/)
+        await expect(rpcFn({paramOne: 1234}, {fromQueryHook: true})).rejects.toThrowError(
+          /something broke/,
+        )
       } finally {
         fetchMock.mockRestore()
       }

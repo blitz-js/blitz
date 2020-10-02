@@ -1,7 +1,7 @@
 import * as React from "react"
 import {getSessionContext} from "@blitzjs/server"
 import {
-  ssrQuery,
+  invokeWithMiddleware,
   useRouter,
   GetServerSideProps,
   PromiseReturnType,
@@ -31,7 +31,11 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   const session = await getSessionContext(req, res)
   console.log("Session id:", session.userId)
   try {
-    const user = await ssrQuery(getUser, {where: {id: Number(session.userId)}}, {res, req})
+    const user = await invokeWithMiddleware(
+      getUser,
+      {where: {id: Number(session.userId)}},
+      {res, req},
+    )
     return {props: {user}}
   } catch (error) {
     if (error.name === "NotFoundError") {
@@ -39,8 +43,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
       res.end()
       return {props: {}}
     } else if (error.name === "AuthenticationError") {
-      res.writeHead(302, {location: "/login"})
-      res.end()
+      res.writeHead(302, {location: "/login"}).end()
       return {props: {}}
     } else if (error.name === "AuthorizationError") {
       return {
