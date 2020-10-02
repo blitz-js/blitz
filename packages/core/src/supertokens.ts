@@ -105,8 +105,6 @@ export const useSession = () => {
   return {...publicData, isLoading}
 }
 
-export {publicDataStore}
-
 /*
  * This will ensure a user is logged in before using the query/mutation.
  * Optionally, as the second argument you can pass an array of roles
