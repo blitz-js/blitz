@@ -76,6 +76,27 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
   return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
+export function invalidateQuery<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params?: TInput,
+) {
+  if (typeof resolver === "undefined") {
+    throw new Error(
+      "invalidateQuery is missing the first argument - it must be a resolver function",
+    )
+  }
+
+  const fullQueryKey = getQueryKey(resolver, params)
+  let queryKey: any
+  if (params) {
+    queryKey = fullQueryKey
+  } else {
+    // Params not provided, only use first query key item (url)
+    queryKey = fullQueryKey[0]
+  }
+  return queryCache.invalidateQueries(queryKey)
+}
+
 export const retryFunction = (failureCount: number, error: any) => {
   if (process.env.NODE_ENV !== "production") return false
 
