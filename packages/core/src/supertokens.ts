@@ -27,10 +27,12 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
-export interface PublicData extends Record<any, any> {
+export interface DefaultPublicData {
   userId: any
   roles: string[]
 }
+
+export interface PublicData extends DefaultPublicData {}
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -167,7 +169,7 @@ export const useSession = () => {
     return subscription.unsubscribe
   }, [])
 
-  return {...publicData, isLoading}
+  return {...publicData, isLoading} as PublicData & {isLoading: boolean}
 }
 
 /*
