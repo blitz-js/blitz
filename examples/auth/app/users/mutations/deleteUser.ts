@@ -8,9 +8,9 @@ export default protect(
       id: z.number(),
     }),
   },
-  async function delete__ModelName__({id}, {session}) {
-    const __modelName__ = await db.__modelName__.delete({where: {id}})
+  async function deleteUser({id}, {session}) {
+    const user = await db.user.delete({where: {id}})
 
-    return __modelName__
+    return user
   },
 )

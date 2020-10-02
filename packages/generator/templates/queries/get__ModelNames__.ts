@@ -3,13 +3,13 @@ import db, {FindMany__ModelName__Args} from "db"
 
 type Get__ModelNames__Input = Pick<FindMany__ModelName__Args, "orderBy" | "skip" | "take">
 
-export default protect<Get__ModelNames__Input>({}, async function get__ModelNames__(
-  {orderBy, skip = 0, take},
+export default protect({}, async function get__ModelNames__(
+  {orderBy, skip = 0, take}: Get__ModelNames__Input,
   {session},
 ) {
   const __modelNames__ = await db.__modelName__.findMany({
     where: {
-      // add your selection here
+      // add your selection criteria here
     },
     orderBy,
     take,

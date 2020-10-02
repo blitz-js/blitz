@@ -3475,10 +3475,22 @@
   resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.4.1.tgz#95f6cae48ff19c6177bb9f85816b27e1ffe5af53"
   integrity sha512-vAOBnouBgCYndXmTcGxanfmhVWUCpwr3akBXiQH+ZKzTYf/pwSsWYpeaXNQfVtUEJEQ0kumfLGdq6ZXnfX//aA==
 
+"@prisma/cli@2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/cli/-/cli-2.8.0.tgz#919d7f66023affa76d14823212b62a8512cfd37d"
+  integrity sha512-Kg1C47d75jdEIMmJif8TMlv/2Ihx08E1qWp0euwoZhjd807HGnjgC9tJYjTfkdf+NMJSAUbvoPXKInEX0HoOMw==
+
 "@prisma/client@2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.4.1.tgz#840d0905e9d05d84313e333a3e0370df3b9815fe"
   integrity sha512-13aphZb34ws8GuRxVsmgiQmUJRfcnnb5/Jy78/ZkpLyCk5ZpchO/Rr1KNiF/cfLHprdKOjSvUzthcx+tubaA2A==
+  dependencies:
+    pkg-up "^3.1.0"
+
+"@prisma/client@2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-2.8.0.tgz#a0f7247786c9b6ee804437acf8215854c5eb3946"
+  integrity sha512-5+GzRTkPnmv4OEV2tB8kwQt/xLLxBR/daJBcMt6pnnonJvrREsu0tSTdz2LJNPaj3kTT0fSS/OaeGMMdfVYSpw==
   dependencies:
     pkg-up "^3.1.0"
 
@@ -19771,11 +19783,6 @@ zip-stream@^3.0.1:
     archiver-utils "^2.1.0"
     compress-commons "^3.0.0"
     readable-stream "^3.6.0"
-
-zod@1.10.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-1.10.0.tgz#175286f09d480ac604014245d7215f67959b0d7a"
-  integrity sha512-u06UhgHEUzLN26qDI7Ei9sqWdiQjQnrjEJtAXmAHF3fH35sOkPmdAl4FNZOgsigv2Jki6yrx5wivQyYXB4B+aA==
 
 zod@1.11.9:
   version "1.11.9"

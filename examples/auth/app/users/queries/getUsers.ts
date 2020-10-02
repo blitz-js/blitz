@@ -1,28 +1,29 @@
-import {Ctx} from "blitz"
+import {protect} from "blitz"
 import db, {FindManyUserArgs} from "db"
 
-type GetUsersInput = {
-  where?: FindManyUserArgs["where"]
-  orderBy?: FindManyUserArgs["orderBy"]
-  cursor?: FindManyUserArgs["cursor"]
-  take?: FindManyUserArgs["take"]
-  skip?: FindManyUserArgs["skip"]
-}
+type GetUsersInput = Pick<FindManyUserArgs, "orderBy" | "skip" | "take">
 
-export default async function getUsers(
-  {where, orderBy, cursor, take, skip}: GetUsersInput,
-  {session}: Ctx,
+export default protect({}, async function getUsers(
+  {orderBy, skip = 0, take}: GetUsersInput,
+  {session},
 ) {
-  session.authorize(["admin", "user"])
-
   const users = await db.user.findMany({
-    where,
-    select: {id: true},
+    where: {
+      // add your selection criteria here
+    },
     orderBy,
-    cursor,
     take,
     skip,
   })
 
-  return users
-}
+  const count = await db.user.count()
+  const hasMore = typeof take === "number" ? skip + take < count : false
+  const nextPage = hasMore ? {take, skip: skip + take!} : null
+
+  return {
+    users,
+    nextPage,
+    hasMore,
+    count,
+  }
+})

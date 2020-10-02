@@ -9,9 +9,9 @@ export default protect(
       name: z.string(),
     }),
   },
-  async function update__ModelName__({id, ...data}, {session}) {
-    const __modelName__ = await db.__modelName__.update({where: {id}, data})
+  async function updateUser({id, ...data}, {session}) {
+    const user = await db.user.update({where: {id}, data})
 
-    return __modelName__
+    return user
   },
 )

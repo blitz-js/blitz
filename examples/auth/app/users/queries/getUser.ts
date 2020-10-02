@@ -1,18 +1,12 @@
-import {Ctx, NotFoundError} from "blitz"
-import db, {FindOneUserArgs} from "db"
+import {protect, NotFoundError} from "blitz"
+import db, {FindFirstUserArgs} from "db"
 
-type GetUserInput = {
-  where: FindOneUserArgs["where"]
-}
+type GetUserInput = Pick<FindFirstUserArgs, "where">
 
-export default async function getUser({where}: GetUserInput, {session}: Ctx) {
-  session.authorize(["admin", "user"])
+export default protect({}, async function getUser({where}: GetUserInput, {session}) {
+  const user = await db.user.findFirst({where})
 
-  const user = await db.user.findOne({where})
+  if (!user) throw new NotFoundError()
 
-  if (!user) throw new NotFoundError(`User with id ${where.id} does not exist`)
-
-  const {hashedPassword, ...rest} = user
-
-  return rest
-}
+  return user
+})
