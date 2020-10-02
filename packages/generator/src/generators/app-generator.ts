@@ -45,79 +45,33 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string
 
     switch (this.options.form) {
       case "React Final Form":
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs ? "_forms/finalform/Form.tsx" : "_forms/finalform/Form.js",
-          ),
-          this.destinationPath(
-            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
-          ),
-        )
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs
-              ? "_forms/finalform/LabeledTextField.tsx"
-              : "_forms/finalform/LabeledTextField.js",
-          ),
-          this.destinationPath(
-            this.options.useTs
-              ? "app/components/LabeledTextField.tsx"
-              : "app/components/LabeledTextField.js",
-          ),
-        )
+        type = "finalform"
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
       case "React Hook Form":
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs ? "_forms/hookform/Form.tsx" : "_forms/hookform/Form.js",
-          ),
-          this.destinationPath(
-            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
-          ),
-        )
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs
-              ? "_forms/hookform/LabeledTextField.tsx"
-              : "_forms/hookform/LabeledTextField.js",
-          ),
-          this.destinationPath(
-            this.options.useTs
-              ? "app/components/LabeledTextField.tsx"
-              : "app/components/LabeledTextField.js",
-          ),
-        )
+        type = "hookform"
         pkg.dependencies["react-hook-form"] = "6.x"
         break
       case "Formik":
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs ? "_forms/formik/Form.tsx" : "_forms/formik/Form.js",
-          ),
-          this.destinationPath(
-            this.options.useTs ? "app/components/Form.tsx" : "app/components/Form.js",
-          ),
-        )
-        this.fs.move(
-          this.destinationPath(
-            this.options.useTs
-              ? "_forms/formik/LabeledTextField.tsx"
-              : "_forms/formik/LabeledTextField.js",
-          ),
-          this.destinationPath(
-            this.options.useTs
-              ? "app/components/LabeledTextField.tsx"
-              : "app/components/LabeledTextField.js",
-          ),
-        )
+        type = "formik"
         pkg.dependencies["formik"] = "2.x"
         break
     }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+    )
+
     this.fs.delete(this.destinationPath("_forms"))
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
