@@ -8,7 +8,8 @@ import {
 } from "./types"
 import {isClient} from "./utils"
 import {IncomingMessage, ServerResponse} from "http"
-import {log} from "@blitzjs/display"
+import {baseLogger, log as displayLog, chalk} from "@blitzjs/display"
+import prettyMs from "pretty-ms"
 import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
@@ -62,17 +63,22 @@ export async function invokeWithMiddleware<TInput, TResult>(
   }
 
   middleware.push(async (_req, res, next) => {
-    // TODO - use new logging
-    const logPrefix = `${enhancedResolver._meta.name}`
-    log.newline()
+    const log = baseLogger.getChildLogger({prefix: [enhancedResolver._meta.name + "()"]})
+    displayLog.newline()
     try {
-      log.progress(`Running ${logPrefix}(${JSON.stringify(params, null, 2)})`)
+      log.info(chalk.dim("Starting with input:"), params)
+      const startTime = new Date().getTime()
+
       const result = await enhancedResolver(params, res.blitzCtx)
-      log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
+
+      const duration = prettyMs(new Date().getTime() - startTime)
+      log.info(chalk.dim("Finished", "in", duration))
+      displayLog.newline()
+
       res.blitzResult = result
       return next()
     } catch (error) {
-      log.error(`${logPrefix} failed: ${error}\n`)
+      log.error(error)
       throw error
     }
   })
