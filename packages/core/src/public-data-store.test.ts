@@ -66,10 +66,9 @@ describe("publicDataStore", () => {
   })
 
   describe("getData", () => {
-    const setPublicDataToken = (value: string, expireMs?: number) => {
+    const setPublicDataToken = (value: string) => {
       ;(parsePublicDataToken as jest.MockedFunction<typeof parsePublicDataToken>).mockReturnValue({
         publicData: value as any,
-        expireAt: expireMs ? new Date(expireMs) : undefined,
       })
     }
 
@@ -85,31 +84,11 @@ describe("publicDataStore", () => {
       beforeEach(() => {
         ;(readCookie as jest.MockedFunction<typeof readCookie>).mockReturnValue("readCookie")
       })
-      it("returns publicData if expireAt is empty", () => {
+      it("returns publicData", () => {
         setPublicDataToken("foo")
         const ret = publicDataStore.getData()
 
         expect(ret).toEqual("foo")
-      })
-
-      it("returns publicData if expireAt is greater or equal to than Date.now", () => {
-        const dateMs = 2
-        setPublicDataToken("bar", dateMs)
-        const dateNowSpy = jest.spyOn(Date, "now").mockImplementation(() => dateMs - 1)
-        const ret = publicDataStore.getData()
-
-        expect(ret).toEqual("bar")
-        dateNowSpy.mockRestore()
-      })
-
-      it("returns empty data if expireAt is less than Date.now", () => {
-        const dateMs = 2
-        setPublicDataToken("baz", dateMs)
-        const dateNowSpy = jest.spyOn(Date, "now").mockImplementation(() => dateMs + 1)
-        const ret = publicDataStore.getData()
-
-        expect(ret).toEqual(publicDataStore.emptyPublicData)
-        dateNowSpy.mockRestore()
       })
     })
   })

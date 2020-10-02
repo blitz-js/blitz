@@ -44,12 +44,7 @@ class PublicDataStore {
       return this.emptyPublicData
     }
 
-    const {publicData, expireAt} = parsePublicDataToken(publicDataToken)
-
-    if (expireAt && expireAt.getTime() < Date.now()) {
-      this.clear()
-      return this.emptyPublicData
-    }
+    const {publicData} = parsePublicDataToken(publicDataToken)
     return publicData
   }
 
