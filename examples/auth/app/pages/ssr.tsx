@@ -1,4 +1,4 @@
-import * as React from "react"
+import {FC} from "react"
 import {getSessionContext} from "@blitzjs/server"
 import {
   invokeWithMiddleware,
@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   }
 }
 
-const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
+const Test: FC<PageProps> = ({user, error}: PageProps) => {
   const router = useRouter()
   const [logoutMutation] = useMutation(logout)
 
