@@ -49,6 +49,16 @@ export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => 
   return fn
 })()
 
+export const validateQueryFn = <TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+) => {
+  if (!isEnhancedResolverRpcClient(queryFn)) {
+    throw new Error(
+      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
+    )
+  }
+}
+
 export const sanitize = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
@@ -57,11 +67,7 @@ export const sanitize = <TInput, TResult>(
     return emptyQueryFn
   }
 
-  if (!isEnhancedResolverRpcClient(queryFn)) {
-    throw new Error(
-      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
-    )
-  }
+  validateQueryFn(queryFn)
 
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
