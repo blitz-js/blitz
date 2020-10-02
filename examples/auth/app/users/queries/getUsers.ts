@@ -13,10 +13,11 @@ export default async function getUsers(
   {where, orderBy, cursor, take, skip}: GetUsersInput,
   {session}: Ctx,
 ) {
-  session.authorize(["admin"])
+  session.authorize(["admin", "user"])
 
   const users = await db.user.findMany({
     where,
+    select: {id: true},
     orderBy,
     cursor,
     take,
