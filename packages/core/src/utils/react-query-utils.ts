@@ -1,6 +1,6 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver, EnhancedResolverRpcClient} from "../types"
+import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
 
 type MutateOptions = {
@@ -56,19 +56,26 @@ export const sanitize = <TInput, TResult>(
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
-export function getQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
-  params: TInput,
-) {
-  if (typeof queryFn === "undefined") {
-    throw new Error("getQueryKey is missing the first argument - it must be a query function")
+export const getQueryKeyFromUrlAndParams = (url: string, params?: unknown) => {
+  const queryKey = [url]
+
+  if (params) {
+    const args = typeof params === "function" ? (params as Function)() : params
+    queryKey.push(serialize(args) as any)
   }
 
-  const queryKey: [string, Record<string, any>] = [
-    sanitize(queryFn)._meta.apiUrl,
-    serialize(typeof params === "function" ? (params as Function)() : params),
-  ]
-  return queryKey
+  return queryKey as [string] | [string, Record<string, any>]
+}
+
+export function getQueryKey<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params?: TInput,
+) {
+  if (typeof resolver === "undefined") {
+    throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
+  }
+
+  return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
 export function getInfiniteQueryKey<TInput, TResult>(

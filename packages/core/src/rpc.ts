@@ -1,6 +1,6 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {getQueryKey, isClient, isServer, clientDebug} from "./utils"
+import {isClient, isServer, clientDebug} from "./utils"
 import {
   getAntiCSRFToken,
   publicDataStore,
@@ -21,6 +21,7 @@ import {
   RpcOptions,
 } from "./types"
 import {SuperJSONResult} from "superjson/dist/types"
+import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
 
 export const executeRpcCall = <TInput, TResult>(
   apiUrl: string,
@@ -125,7 +126,7 @@ export const executeRpcCall = <TInput, TResult>(
             : deserialize({json: payload.result, meta: payload.meta?.result})
 
         if (!opts.fromQueryHook) {
-          const queryKey = getQueryKey(apiUrl, params)
+          const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
           queryCache.setQueryData(queryKey, data)
         }
         return data as TResult
