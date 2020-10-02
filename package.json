@@ -134,7 +134,8 @@
     "tsdx": "0.13.3",
     "tslib": "1.11.1",
     "typescript": "3.8.3",
-    "wait-on": "4.0.2"
+    "wait-on": "4.0.2",
+    "zod": "1.11.9"
   },
   "husky": {
     "hooks": {

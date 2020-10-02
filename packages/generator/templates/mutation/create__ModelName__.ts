@@ -1,37 +1,34 @@
-import {Ctx} from "blitz"
-import db, {__ModelName__CreateArgs} from "db"
+import {protect} from "blitz"
+import db from "db"
+import * as z from "zod"
 
 if (process.env.parentModel) {
-  type Create__ModelName__Input = {
-    data: Omit<__ModelName__CreateArgs["data"], "__parentModel__">
-    __parentModelId__: number
-  }
+  export default protect(
+    {
+      schema: z.object({
+        __parentModelId__: z.number(),
+        name: z.string(),
+      }),
+    },
+    async function create__ModelName__({__parentModelId__, ...input}, {session}) {
+      const __modelName__ = await db.__modelName__.create({
+        data: {...input, __parentModel__: {connect: {id: __parentModelId__}}},
+      })
+
+      return __modelName__
+    },
+  )
 } else {
-  type Create__ModelName__Input = Pick<__ModelName__CreateArgs, "data">
-}
+  export default protect(
+    {
+      schema: z.object({
+        name: z.string(),
+      }),
+    },
+    async function create__ModelName__(input, {session}) {
+      const __modelName__ = await db.__modelName__.create({data: input})
 
-if (process.env.parentModel) {
-  export default async function create__ModelName__(
-    {data, __parentModelId__}: Create__ModelName__Input,
-    {session}: Ctx,
-  ) {
-    session.authorize()
-
-    const __modelName__ = await db.__modelName__.create({
-      data: {...data, __parentModel__: {connect: {id: __parentModelId__}}},
-    })
-
-    return __modelName__
-  }
-} else {
-  export default async function create__ModelName__(
-    {data}: Create__ModelName__Input,
-    {session}: Ctx,
-  ) {
-    session.authorize()
-
-    const __modelName__ = await db.__modelName__.create({data})
-
-    return __modelName__
-  }
+      return __modelName__
+    },
+  )
 }

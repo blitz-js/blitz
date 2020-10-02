@@ -19776,3 +19776,8 @@ zod@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/zod/-/zod-1.10.0.tgz#175286f09d480ac604014245d7215f67959b0d7a"
   integrity sha512-u06UhgHEUzLN26qDI7Ei9sqWdiQjQnrjEJtAXmAHF3fH35sOkPmdAl4FNZOgsigv2Jki6yrx5wivQyYXB4B+aA==
+
+zod@1.11.9:
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-1.11.9.tgz#c6c503804d394f8ef009d44ce464bbf8aa3c1bd6"
+  integrity sha512-qZjs9DkvPYHOiOUdAtNcxOC0u5cv7tx9DCmlNZN0MxWeFvgqyr3XkXFqUlaSpmTiZ4A4YVkB2s1Zw2ENJ9/fSg==

@@ -19,7 +19,7 @@ model User {
   name           String?
   email          String    @unique
   hashedPassword String?
-  role           String    @default("user")
+  role           String
   sessions       Session[]
 }
 
