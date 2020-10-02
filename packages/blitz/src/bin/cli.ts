@@ -19,9 +19,10 @@ async function main() {
   if (parseSemver(process.version).major < 12) {
     console.log(
       chalk.yellow(
-        `You are using an unsupported version of Node.js. Consider switching to v12 or newer.\n`,
+        `You are using an unsupported version of Node.js. Please switch to v12 or newer.\n`,
       ),
     )
+    process.exit(1)
   }
 
   const globalBlitzPath = resolveFrom(__dirname, "blitz")
