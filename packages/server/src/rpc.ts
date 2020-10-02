@@ -1,14 +1,38 @@
-import {log} from "@blitzjs/display"
-import type {Middleware, BlitzApiRequest, BlitzApiResponse, EnhancedResolver} from "@blitzjs/core"
+import {
+  Middleware,
+  BlitzApiRequest,
+  BlitzApiResponse,
+  EnhancedResolver,
+  AuthenticationError,
+  AuthorizationError,
+} from "@blitzjs/core"
 import {serializeError} from "serialize-error"
 import {serialize, deserialize} from "superjson"
+import {Logger} from "tslog"
+import chalk from "chalk"
+import prettyMs from "pretty-ms"
+
+const baseLogger = new Logger({
+  dateTimePattern:
+    process.env.NODE_ENV === "production"
+      ? "year-month-day hour:minute:second.millisecond"
+      : "hour:minute:second.millisecond",
+  displayFunctionName: false,
+  displayFilePath: "hidden",
+  displayRequestId: false,
+  dateTimeTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  prettyInspectHighlightStyles: {name: "black"},
+  maskValuesOfKeys: ["password", "passwordConfirmation"],
+})
+
+const printNewLine = () => console.log("")
 
 const rpcMiddleware = <TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,
   connectDb?: () => any,
 ): Middleware => {
   return async (req, res, next) => {
-    const logPrefix = `${resolver._meta.name}`
+    const log = baseLogger.getChildLogger({prefix: [resolver._meta.name + "()"]})
 
     if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
@@ -19,12 +43,10 @@ const rpcMiddleware = <TInput, TResult>(
       return next()
     } else if (req.method === "POST") {
       // Handle RPC call
-      console.log("") // New line
-      log.progress(`Running ${logPrefix}(${JSON.stringify(req.body?.params, null, 2)})`)
 
       if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
+        log.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -37,9 +59,15 @@ const rpcMiddleware = <TInput, TResult>(
           ? undefined
           : deserialize({json: req.body.params, meta: req.body.meta?.params})) as TInput
 
+        log.info(chalk.dim("Starting with input:"), data)
+        const startTime = new Date().getTime()
+
         const result = await resolver(data, res.blitzCtx)
 
-        log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
+        const duration = prettyMs(new Date().getTime() - startTime)
+        log.info(chalk.dim("Finished", "in", duration))
+        printNewLine()
+
         res.blitzResult = result
 
         const serializedResult = serialize(result as any)
@@ -53,8 +81,13 @@ const rpcMiddleware = <TInput, TResult>(
         })
         return next()
       } catch (error) {
-        log.error(`${logPrefix} failed: ${error}\n`)
-        console.error(error)
+        log.error(error)
+
+        if (error! instanceof AuthenticationError && error! instanceof AuthorizationError) {
+          // console.error(error)
+        }
+        printNewLine()
+
         res.json({
           result: null,
           error: serializeError(error),
@@ -63,7 +96,7 @@ const rpcMiddleware = <TInput, TResult>(
       }
     } else {
       // Everything else is error
-      log.error(`${logPrefix} not found\n`)
+      log.error("Not Found\n")
       res.status(404).end()
       return next()
     }

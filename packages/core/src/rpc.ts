@@ -92,6 +92,9 @@ export const executeRpcCall = <TInput, TResult>(
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
         }
+        if (error.name === "AuthenticationError" || error.name === "AuthorizationError") {
+          delete error.stack
+        }
         throw error
       } else {
         const data =

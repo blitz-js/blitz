@@ -28,6 +28,10 @@ const withX = (str: string) => {
   return `${chalk.red.bold("✕")} ${str}`
 }
 
+const withProgress = (str: string) => {
+  return withCaret(chalk.bold(str))
+}
+
 /**
  * Logs a branded purple message to stdout.
  *
@@ -135,6 +139,7 @@ export const log = {
   withCaret,
   withCheck,
   withX,
+  withProgress,
   branded,
   clearLine,
   error,
