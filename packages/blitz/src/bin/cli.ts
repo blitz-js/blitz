@@ -22,7 +22,7 @@ async function main() {
         `You are using an unsupported version of Node.js. Please switch to v12 or newer.\n`,
       ),
     )
-    process.exit(1)
+    process.exit()
   }
 
   const globalBlitzPath = resolveFrom(__dirname, "blitz")
