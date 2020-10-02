@@ -43,8 +43,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
       res.end()
       return {props: {}}
     } else if (error.name === "AuthenticationError") {
-      res.writeHead(302, {location: "/login"})
-      res.end()
+      res.writeHead(302, {location: "/login"}).end()
       return {props: {}}
     } else if (error.name === "AuthorizationError") {
       return {

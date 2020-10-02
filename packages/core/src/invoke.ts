@@ -78,7 +78,6 @@ export async function invokeWithMiddleware<TInput, TResult>(
       res.blitzResult = result
       return next()
     } catch (error) {
-      log.error(error)
       throw error
     }
   })
