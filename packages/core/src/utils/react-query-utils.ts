@@ -7,6 +7,10 @@ type MutateOptions = {
   refetch?: boolean
 }
 
+function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
+  return !!f._meta
+}
+
 export interface QueryCacheFunctions<T> {
   mutate: (
     newData: T | ((oldData: T | undefined) => T),
@@ -51,6 +55,12 @@ export const sanitize = <TInput, TResult>(
   if (isServer) {
     // Prevents logging garbage during static pre-rendering
     return emptyQueryFn
+  }
+
+  if (!isEnhancedResolverRpcClient(queryFn)) {
+    throw new Error(
+      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
+    )
   }
 
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
