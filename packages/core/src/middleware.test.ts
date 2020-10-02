@@ -21,7 +21,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
@@ -40,7 +40,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
@@ -59,7 +59,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
@@ -77,7 +77,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
@@ -94,7 +94,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })

@@ -4,6 +4,7 @@ import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
 import {log, baseLogger} from "@blitzjs/display"
 import {EnhancedResolver} from "./types"
+import {CSRFTokenMismatchError} from "./errors"
 
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
@@ -88,19 +89,22 @@ export async function handleRequestWithMiddleware(
     log.newline()
     if (req.method === "GET") {
       // This GET method check is so we don't .end() the request for SSR requests
-      baseLogger.error("Error while processing the request", error)
+      baseLogger.error("Error while processing the request")
+    } else if (res.writableFinished) {
+      baseLogger.error(
+        "Error occured in middleware after the response was already sent to the browser",
+      )
     } else {
-      if (!res.writableFinished) {
-        res.statusCode = (error as any).statusCode || (error as any).status || 500
-        res.end(error.message || res.statusCode.toString())
-        baseLogger.error("Error while processing the request")
-      } else {
-        baseLogger.error(
-          "Error occured in middleware after the response was already sent to the browser:\n",
-        )
-      }
+      res.statusCode = (error as any).statusCode || (error as any).status || 500
+      res.end(error.message || res.statusCode.toString())
+      console.log("Sett")
+      baseLogger.error("Error while processing the request")
     }
-    throw error
+    if (error instanceof CSRFTokenMismatchError) {
+      delete error.stack
+    }
+    baseLogger.prettyError(error)
+    log.newline()
   }
 }
 

@@ -75,7 +75,9 @@ export const executeRpcCall = <TInput, TResult>(
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
-          throw new CSRFTokenMismatchError()
+          const err = new CSRFTokenMismatchError()
+          delete err.stack
+          throw err
         }
       }
 
