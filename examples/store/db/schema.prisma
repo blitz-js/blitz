@@ -1,10 +1,17 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource postgresql {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+datasource sqlite {
+  provider = "sqlite"
+  url      = "file:./db.sqlite"
 }
+
+// SQLite is easy to start with, but if you use Postgres in production
+// you should also use it in development with the following:
+//datasource postgresql {
+//  provider = "postgresql"
+//  url      = env("DATABASE_URL")
+//}
 
 generator client {
   provider = "prisma-client-js"
@@ -15,6 +22,8 @@ generator client {
 
 model User {
   id      Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   email   String   @unique
   name    String?
   role    String?
@@ -23,6 +32,8 @@ model User {
 
 model Product {
   id          Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   handle      String   @unique
   name        String?
   description String?

@@ -1,4 +1,4 @@
-import {resolve} from 'path'
+import {resolve} from "path"
 
 // TODO: Eventually use a proper reporting mechanism
 export const reporter = {

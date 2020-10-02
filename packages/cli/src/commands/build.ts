@@ -1,9 +1,8 @@
-import {Command} from '@oclif/command'
-import {build} from '@blitzjs/server'
+import {Command} from "@oclif/command"
 
-export default class Build extends Command {
-  static description = 'Create a production build'
-  static aliases = ['b']
+export class Build extends Command {
+  static description = "Create a production build"
+  static aliases = ["b"]
 
   async run() {
     const config = {
@@ -11,8 +10,9 @@ export default class Build extends Command {
     }
 
     try {
-      await build(config)
+      await require("@blitzjs/server").build(config)
     } catch (err) {
+      console.error(err)
       process.exit(1) // clean up?
     }
   }

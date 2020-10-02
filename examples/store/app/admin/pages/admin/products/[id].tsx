@@ -1,17 +1,26 @@
-import {Suspense} from 'react'
-import {Link, useRouter, useQuery} from 'blitz'
-import getProduct from 'app/products/queries/getProduct'
-import ProductForm from 'app/products/components/ProductForm'
+import {Suspense} from "react"
+import {Link, useRouter, useQuery, useParam} from "blitz"
+import getProduct from "app/products/queries/getProduct"
+import ProductForm from "app/products/components/ProductForm"
+import {queryCache} from "react-query"
 
 function Product() {
   const router = useRouter()
-  const id = parseInt(router?.query.id as string)
+  const id = useParam("id", "number")
   const [product] = useQuery(getProduct, {where: {id}})
 
-  return <ProductForm product={product} onSuccess={() => router.push('/admin/products')} />
+  return (
+    <ProductForm
+      product={product}
+      onSuccess={async () => {
+        await router.push("/admin/products")
+        queryCache.invalidateQueries("/api/products/queries/getProducts")
+      }}
+    />
+  )
 }
 
-export default function () {
+function EditProductPage() {
   return (
     <div>
       <h1>Edit Product</h1>
@@ -28,3 +37,5 @@ export default function () {
     </div>
   )
 }
+
+export default EditProductPage

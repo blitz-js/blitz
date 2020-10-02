@@ -1,4 +1,13 @@
-import {Head, Link} from 'blitz'
+import React, {Suspense} from "react"
+import {Head, Link, useQuery} from "blitz"
+import getReferer from "app/queries/getReferer"
+
+const Referer = () => {
+  // This is here mainly as an integration test for global middleware
+  const [referer] = useQuery(getReferer, {})
+
+  return <div id="referer">Referer: {referer}</div>
+}
 
 const Home = () => (
   <div className="container">
@@ -11,25 +20,46 @@ const Home = () => (
       <h1 className="title" style={{marginBottom: 24}}>
         Blitz Store Example
       </h1>
-      <p>
-        <Link href="/products">
-          <a>View Static Public Product Listings</a>
-        </Link>
-      </p>
-      <p>
-        <Link href="/admin">
-          <a>View Dynamic Admin Section</a>
-        </Link>
-      </p>
+      <ul>
+        <li>
+          <Link href="/products">
+            <a>Static Product Listings</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/products/ssr">
+            <a>SSR Product Listings</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/products/paginated">
+            <a>Paginated Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/products/infinite">
+            <a>Infinite Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/products">
+            <a>Admin Section (client-rendered)</a>
+          </Link>
+        </li>
+      </ul>
     </main>
 
     <footer>
       <a
         href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
         target="_blank"
-        rel="noopener noreferrer">
+        rel="noopener noreferrer"
+      >
         Powered by Blitz.js
       </a>
+      <Suspense fallback={null}>
+        <Referer />
+      </Suspense>
     </footer>
 
     <style jsx>{`
@@ -56,6 +86,7 @@ const Home = () => (
         height: 100px;
         border-top: 1px solid #eaeaea;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
       }
@@ -75,6 +106,10 @@ const Home = () => (
         text-decoration: none;
       }
 
+      li + li {
+        margin-top: 0.5rem;
+      }
+
       .title a:hover,
       .title a:focus,
       .title a:active {
@@ -84,7 +119,7 @@ const Home = () => (
       .title {
         margin: 0;
         line-height: 1.15;
-        font-size: 4rem;
+        font-size: 3rem;
       }
 
       .title,
@@ -159,8 +194,8 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
-          Droid Sans, Helvetica Neue, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+          Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {

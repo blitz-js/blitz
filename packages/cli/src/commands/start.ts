@@ -1,16 +1,28 @@
-import {Command, flags} from '@oclif/command'
-import {dev, prod} from '@blitzjs/server'
+import {dev, prod} from "@blitzjs/server"
+import {Command, flags} from "@oclif/command"
 
-import {runPrismaGeneration} from './db'
-
-export default class Start extends Command {
-  static description = 'Start a development server'
-  static aliases = ['s']
+export class Start extends Command {
+  static description = "Start a development server"
+  static aliases = ["s"]
 
   static flags = {
     production: flags.boolean({
-      char: 'p',
-      description: 'Create and start a production server',
+      description: "Create and start a production server",
+    }),
+    port: flags.integer({
+      char: "p",
+      description: "Set port number",
+    }),
+    hostname: flags.string({
+      char: "H",
+      description: "Set server hostname",
+    }),
+    inspect: flags.boolean({
+      description: "Enable the Node.js inspector",
+    }),
+    ["no-incremental-build"]: flags.boolean({
+      description:
+        "Disable incremental build and start from a fresh cache. Incremental build is automatically enabled for development mode and disabled during `blitz build` or when the `--production` flag is supplied.",
     }),
   }
 
@@ -19,16 +31,21 @@ export default class Start extends Command {
 
     const config = {
       rootFolder: process.cwd(),
+      port: flags.port,
+      hostname: flags.hostname,
+      inspect: flags.inspect,
+      clean: flags["no-incremental-build"],
     }
 
-    if (flags.production) {
-      await prod(config)
-    } else {
-      try {
-        await dev(config, runPrismaGeneration({silent: true}))
-      } catch (err) {
-        process.exit(1) // clean up?
+    try {
+      if (flags.production) {
+        await prod(config)
+      } else {
+        await dev(config)
       }
+    } catch (err) {
+      console.error(err)
+      process.exit(1) // clean up?
     }
   }
 }

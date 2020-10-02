@@ -1,28 +1,27 @@
-import {spawn} from 'cross-spawn'
-import {Command} from '@oclif/command'
-import hasYarn from 'has-yarn'
+import {spawn} from "cross-spawn"
+import {Command} from "@oclif/command"
 
-export default class Test extends Command {
-  static description = 'Run project tests'
-  static aliases = ['t']
+export class Test extends Command {
+  static description = "Run project tests"
+  static aliases = ["t"]
 
   static args = [
     {
-      name: 'watch',
-      description: 'Run test:watch',
+      name: "watch",
+      description: "Run test:watch",
     },
   ]
 
   async run() {
     const {args} = this.parse(Test)
     let watchMode: boolean = false
-    const watch = args['watch']
+    const watch = args["watch"]
     if (watch) {
-      watchMode = watch === 'watch' || watch === 'w'
+      watchMode = watch === "watch" || watch === "w"
     }
-    const packageManager = hasYarn() ? 'yarn' : 'npm'
+    const packageManager = require("has-yarn")() ? "yarn" : "npm"
 
-    if (watchMode) spawn(packageManager, ['test:watch'], {stdio: 'inherit'})
-    else spawn(packageManager, ['test'], {stdio: 'inherit'})
+    if (watchMode) spawn(packageManager, ["test:watch"], {stdio: "inherit"})
+    else spawn(packageManager, ["test"], {stdio: "inherit"})
   }
 }

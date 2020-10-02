@@ -1,0 +1,36 @@
+{
+  "name": "@blitzjs/display",
+  "version": "0.23.2-canary.3",
+  "description": "Display package for the Blitz CLI",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "dist/index.js",
+  "module": "dist/display.esm.js",
+  "types": "dist/packages/display/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "blitz",
+    "display"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "dependencies": {
+    "chalk": "4.0.0",
+    "ora": "4.0.4"
+  }
+}

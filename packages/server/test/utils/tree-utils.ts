@@ -1,4 +1,4 @@
-import directoryTreeParser from 'directory-tree'
+import directoryTreeParser from "directory-tree"
 
 // there is an issue with directoryTree where stats filtering doesnt work as expected
 export function stripNode(node: any, stripper: (a: any) => any) {

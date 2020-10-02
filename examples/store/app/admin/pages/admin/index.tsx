@@ -1,6 +1,6 @@
-import {Link} from 'blitz'
+import {Link} from "blitz"
 
-export default function () {
+function StoreAdminPage() {
   return (
     <div>
       <h1>Store Admin</h1>
@@ -14,3 +14,5 @@ export default function () {
     </div>
   )
 }
+
+export default StoreAdminPage

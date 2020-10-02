@@ -1,37 +1,33 @@
-import {resolve} from 'path'
-import {synchronizeFiles} from './synchronizer'
-import {ServerConfig, enhance} from './config'
-import {nextStartDev} from './next-utils'
+import {normalize, ServerConfig} from "./config"
+import {nextStartDev} from "./next-utils"
+import {configureStages} from "./stages"
 
 export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
   const {
     rootFolder,
+    transformFiles,
     nextBin,
     devFolder,
-    ignoredPaths,
-    manifestPath,
+    ignore,
+    include,
+    isTypescript,
     writeManifestFile,
-    includePaths,
-    watch = true,
-  } = await enhance({
-    ...config,
-    interceptNextErrors: true,
-  })
-  const src = resolve(rootFolder)
-  const dest = resolve(rootFolder, devFolder)
+    watch,
+    clean,
+  } = await normalize({...config, env: "dev"})
+
+  const stages = configureStages({writeManifestFile, isTypescript})
 
   const [{manifest}] = await Promise.all([
-    synchronizeFiles({
-      src,
-      dest,
+    transformFiles(rootFolder, stages, devFolder, {
+      ignore,
+      include,
       watch,
-      ignoredPaths,
-      includePaths,
-      manifestPath,
-      writeManifestFile,
+      clean,
     }),
+    // Ensure next does not start until parallel processing completes
     readyForNextDev,
   ])
 
-  nextStartDev(nextBin, dest, manifest, devFolder)
+  await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
 }

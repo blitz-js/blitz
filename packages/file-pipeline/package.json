@@ -1,0 +1,50 @@
+{
+  "name": "@blitzjs/file-pipeline",
+  "version": "0.23.2-canary.3",
+  "description": "Display package for the Blitz CLI",
+  "homepage": "https://github.com/blitz-js/blitz#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "test:watch": "tsdx test --watch"
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "main": "dist/index.js",
+  "module": "dist/file-pipeline.esm.js",
+  "types": "dist/packages/file-pipeline/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "blitz",
+    "display"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blitz-js/blitz.git"
+  },
+  "dependencies": {
+    "chalk": "4.0.0",
+    "chokidar": "3.4.2",
+    "flush-write-stream": "2.0.0",
+    "from2": "2.3.0",
+    "fs-extra": "9.0.0",
+    "gulp-if": "3.0.0",
+    "merge-stream": "2.0.0",
+    "ora": "4.0.4",
+    "parallel-transform": "1.2.0",
+    "pump": "3.0.0",
+    "pumpify": "2.0.1",
+    "slash": "3.0.0",
+    "through2": "3.0.1",
+    "vinyl": "2.2.0",
+    "vinyl-file": "3.0.0",
+    "vinyl-fs": "3.0.3"
+  }
+}
