@@ -8,7 +8,7 @@ import UserForm from "app/users/components/UserForm"
 export const EditUser = () => {
   const router = useRouter()
   const userId = useParam("userId", "number")
-  const [user, {mutate}] = useQuery(getUser, {where: {id: userId}})
+  const [user, {mutate}] = useQuery(getUser, {id: userId})
   const [updateUserMutation] = useMutation(updateUser)
 
   return (
@@ -21,8 +21,8 @@ export const EditUser = () => {
         onSubmit={async () => {
           try {
             const updated = await updateUserMutation({
-              where: {id: user.id},
-              data: {name: "MyNewName"},
+              id: user.id,
+              name: "MyNewName",
             })
             await mutate(updated)
             alert("Success!" + JSON.stringify(updated))

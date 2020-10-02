@@ -11,7 +11,7 @@ export const Edit__ModelName__ = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
-  const [__modelName__, {mutate}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [__modelName__, {mutate}] = useQuery(get__ModelName__, {id: __modelId__})
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
 
   return (
@@ -24,8 +24,8 @@ export const Edit__ModelName__ = () => {
         onSubmit={async () => {
           try {
             const updated = await update__ModelName__Mutation({
-              where: {id: __modelName__.id},
-              data: {name: "MyNewName"},
+              id: __modelName__.id,
+              name: "MyNewName",
             })
             await mutate(updated)
             alert("Success!" + JSON.stringify(updated))

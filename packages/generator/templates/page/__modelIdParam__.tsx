@@ -10,7 +10,7 @@ export const __ModelName__ = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
-  const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [__modelName__] = useQuery(get__ModelName__, {id: __modelId__})
 
   return (
     <div>
@@ -38,7 +38,7 @@ export const __ModelName__ = () => {
         type="button"
         onClick={async () => {
           if (window.confirm("This will be deleted")) {
-            await delete__ModelName__({where: {id: __modelName__.id}})
+            await delete__ModelName__({id: __modelName__.id})
             if (process.env.parentModel) {
               router.push(
                 "/__parentModels__/__parentModelParam__/__modelNames__",

@@ -7,7 +7,7 @@ import deleteUser from "app/users/mutations/deleteUser"
 export const User = () => {
   const router = useRouter()
   const userId = useParam("userId", "number")
-  const [user] = useQuery(getUser, {where: {id: userId}})
+  const [user] = useQuery(getUser, {id: userId})
 
   return (
     <div>
@@ -22,7 +22,7 @@ export const User = () => {
         type="button"
         onClick={async () => {
           if (window.confirm("This will be deleted")) {
-            await deleteUser({where: {id: user.id}})
+            await deleteUser({id: user.id})
             router.push("/users")
           }
         }}

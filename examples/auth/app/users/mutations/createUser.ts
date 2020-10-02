@@ -6,7 +6,6 @@ export default protect(
   {
     schema: z.object({
       name: z.string(),
-      email: z.string().email(),
     }),
   },
   async function createUser(input, {session}) {

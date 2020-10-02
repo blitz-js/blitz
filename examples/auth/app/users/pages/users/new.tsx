@@ -16,7 +16,7 @@ const NewUserPage: BlitzPage = () => {
         initialValues={{}}
         onSubmit={async () => {
           try {
-            const user = await createUserMutation({data: {name: "MyName"}})
+            const user = await createUserMutation({name: "MyName"})
             alert("Success!" + JSON.stringify(user))
             router.push("/users/[userId]", `/users/${user.id}`)
           } catch (error) {

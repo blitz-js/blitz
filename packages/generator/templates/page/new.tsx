@@ -24,9 +24,7 @@ const New__ModelName__Page: BlitzPage = () => {
         onSubmit={async () => {
           try {
             const __modelName__ = await create__ModelName__Mutation(
-              process.env.parentModel
-                ? {data: {name: "MyName"}, __parentModelId__}
-                : {data: {name: "MyName"}},
+              process.env.parentModel ? {name: "MyName", __parentModelId__} : {name: "MyName"},
             )
             alert("Success!" + JSON.stringify(__modelName__))
             router.push(
