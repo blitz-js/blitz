@@ -73,7 +73,7 @@ export interface SessionContext {
   revokeAll: () => Promise<void>
   getPrivateData: () => Promise<Record<any, any>>
   setPrivateData: (data: Record<any, any>) => Promise<void>
-  setPublicData: (data: Record<any, any>) => Promise<void>
+  setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
 }
 
 // Taken from https://github.com/HenrikJoreteg/cookie-getter

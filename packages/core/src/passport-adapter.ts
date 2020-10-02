@@ -76,7 +76,7 @@ export function passportAuth(config: BlitzPassportConfig) {
         middleware.push(async (req, res, next) => {
           const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
-          await session.setPublicData({[INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl})
+          await session.setPublicData({[INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl} as any)
           return next()
         })
       }
@@ -115,7 +115,7 @@ export function passportAuth(config: BlitzPassportConfig) {
                 result && typeof result === "object" && (result as any).redirectUrl
               let redirectUrl =
                 redirectUrlFromVerifyResult ||
-                session.publicData[INTERNAL_REDIRECT_URL_KEY] ||
+                (session.publicData as any)[INTERNAL_REDIRECT_URL_KEY] ||
                 (error ? config.errorRedirectUrl : config.successRedirectUrl) ||
                 "/"
 
@@ -129,10 +129,9 @@ export function passportAuth(config: BlitzPassportConfig) {
 
               assert(isVerifyCallbackResult(result), "Passport verify callback is invalid")
 
-              await session.create(
-                {...result.publicData, [INTERNAL_REDIRECT_URL_KEY]: undefined},
-                result.privateData,
-              )
+              delete (result.publicData as any)[INTERNAL_REDIRECT_URL_KEY]
+
+              await session.create(result.publicData, result.privateData)
 
               res.setHeader("Location", redirectUrl)
               res.statusCode = 302
