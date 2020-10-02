@@ -27,6 +27,12 @@ export const executeRpcCall = <TInput, TResult>(
   params: TInput,
   opts: RpcOptions = {},
 ) => {
+  if (!opts.fromQueryHook && !opts.fromInvoke) {
+    console.warn(
+      "[Deprecation] Directly calling queries/mutations is deprecated in favor of invoke(queryFn, params)",
+    )
+  }
+
   if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
   clientDebug("Starting request for", apiUrl)
 

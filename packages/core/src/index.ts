@@ -3,6 +3,7 @@ import {AppProps as NextAppProps} from "next/app"
 
 export * from "./use-query-hooks"
 export {useMutation} from "./use-mutation"
+export {invoke} from "./invoke"
 export * from "./use-params"
 export * from "./ssr-query"
 export * from "./rpc"
