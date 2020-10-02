@@ -7,5 +7,6 @@ declare module "blitz" {
   }
   export interface PublicData extends DefaultPublicData {
     userId: User["id"]
+    views?: number
   }
 }
