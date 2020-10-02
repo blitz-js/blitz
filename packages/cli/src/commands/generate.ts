@@ -102,6 +102,7 @@ export class Generate extends Command {
       char: "c",
       description:
         "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
+      default: "modules",
     }),
     parent: flags.string({
       char: "p",
