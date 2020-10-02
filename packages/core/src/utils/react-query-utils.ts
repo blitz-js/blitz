@@ -56,15 +56,13 @@ export const sanitize = <TInput, TResult>(
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
-export const getQueryKeyFromUrlAndParams = (url: string, params?: unknown) => {
+export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
   const queryKey = [url]
 
-  if (params) {
-    const args = typeof params === "function" ? (params as Function)() : params
-    queryKey.push(serialize(args) as any)
-  }
+  const args = typeof params === "function" ? (params as Function)() : params
+  queryKey.push(serialize(args) as any)
 
-  return queryKey as [string] | [string, Record<string, any>]
+  return queryKey as [string, any]
 }
 
 export function getQueryKey<TInput, TResult, T extends QueryFn>(

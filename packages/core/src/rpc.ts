@@ -59,6 +59,9 @@ export const executeRpcCall = <TInput, TResult>(
   } else {
     serialized = serialize(params)
   }
+  console.log("DEBUG opts", opts)
+  console.log("DEBUG params", params)
+  console.log("DEBUG serialized", serialized)
 
   // Create a new AbortController instance for this request
   const controller = new AbortController()
