@@ -101,16 +101,16 @@ export const executeRpcCall = <TInput, TResult>(
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
         }
-        if (error.name === "AuthenticationError" || error.name === "AuthorizationError") {
-          delete error.stack
-        }
 
         const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
         if (prismaError) {
           error = new Error(prismaError[0])
           error.statusCode = 500
-          delete error.stack
         }
+
+        // Prevent client-side error popop from showing
+        delete error.stack
+
         throw error
       } else {
         const data =

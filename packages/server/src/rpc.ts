@@ -71,6 +71,9 @@ const rpcMiddleware = <TInput, TResult>(
         log.error(error)
         displayLog.newline()
 
+        // Don't transmit the server stack trace via HTTP
+        delete error.stack
+
         res.json({
           result: null,
           error: serializeError(error),
