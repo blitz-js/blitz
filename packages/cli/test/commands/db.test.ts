@@ -9,12 +9,7 @@ let onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
 })
 const spawn = jest.fn(() => ({on: onSpy, off: jest.fn()}))
 
-let disconnect: jest.Mock
 jest.doMock("cross-spawn", () => ({spawn}))
-jest.doMock("../__fixtures__/db", () => {
-  disconnect = jest.fn()
-  return {default: {disconnect}}
-})
 
 pkgDir.sync = jest.fn(() => join(__dirname, "../__fixtures__/"))
 
@@ -206,6 +201,14 @@ describe("Db command", () => {
   })
 
   describe("runs db seed", () => {
+    let $disconnect: jest.Mock
+    beforeAll(() => {
+      jest.doMock("../__fixtures__/db", () => {
+        $disconnect = jest.fn()
+        return {default: {$disconnect}}
+      })
+    })
+
     it("runs migrations and closes db at the end", async () => {
       await Db.run(["seed"])
       expectDbSeedOutcome()
@@ -213,7 +216,7 @@ describe("Db command", () => {
 
     it("closes connection at the end", async () => {
       await Db.run(["seed"])
-      expect(disconnect).toBeCalled()
+      expect($disconnect).toBeCalled()
     })
   })
 })

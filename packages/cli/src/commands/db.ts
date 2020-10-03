@@ -182,7 +182,7 @@ async function runSeed() {
   }
 
   const db = require(dbPath).default
-  await db.disconnect()
+  await db.$disconnect()
   log.success("Done seeding")
 }
 
