@@ -1,6 +1,6 @@
+import getProducts from "app/modules/products/queries/getProducts"
+import {invalidateQuery, Link, useQuery, useRouterQuery} from "blitz"
 import {Suspense} from "react"
-import {useQuery, Link, useRouterQuery, invalidateQuery} from "blitz"
-import getProducts from "app/products/queries/getProducts"
 // import getProduct from "app/products/queries/getProduct"
 
 function ProductsList() {

@@ -1,7 +1,7 @@
+import ProductForm from "app/modules/products/components/ProductForm"
+import getProduct from "app/modules/products/queries/getProduct"
+import {Link, useParam, useQuery, useRouter} from "blitz"
 import {Suspense} from "react"
-import {Link, useRouter, useQuery, useParam} from "blitz"
-import getProduct from "app/products/queries/getProduct"
-import ProductForm from "app/products/components/ProductForm"
 
 function Product() {
   const router = useRouter()

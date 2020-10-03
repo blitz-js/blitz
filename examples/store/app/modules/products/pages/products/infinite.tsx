@@ -1,6 +1,6 @@
-import {Suspense, Fragment} from "react"
-import {BlitzPage, useInfiniteQuery, Link} from "blitz"
-import getProducts from "app/products/queries/getProducts"
+import getProducts from "app/modules/products/queries/getProducts"
+import {BlitzPage, Link, useInfiniteQuery} from "blitz"
+import {Fragment, Suspense} from "react"
 
 const Products = () => {
   const [groupedProducts, {isFetching, isFetchingMore, fetchMore, canFetchMore}] = useInfiniteQuery(

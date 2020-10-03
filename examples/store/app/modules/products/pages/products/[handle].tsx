@@ -1,8 +1,8 @@
-import {useMemo} from "react"
-import {Link, BlitzPage, GetStaticProps, GetStaticPaths} from "blitz"
-import getProduct from "app/products/queries/getProduct"
-import getProducts from "app/products/queries/getProducts"
+import getProduct from "app/modules/products/queries/getProduct"
+import getProducts from "app/modules/products/queries/getProducts"
+import {BlitzPage, GetStaticPaths, GetStaticProps, Link} from "blitz"
 import {Product} from "db"
+import {useMemo} from "react"
 import superjson from "superjson"
 
 type StaticProps = {

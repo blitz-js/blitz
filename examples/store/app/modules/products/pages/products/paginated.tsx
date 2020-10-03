@@ -1,6 +1,6 @@
+import getProducts from "app/modules/products/queries/getProducts"
+import {BlitzPage, Link, usePaginatedQuery, useRouter} from "blitz"
 import {Suspense} from "react"
-import {Link, BlitzPage, usePaginatedQuery, useRouter} from "blitz"
-import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
 

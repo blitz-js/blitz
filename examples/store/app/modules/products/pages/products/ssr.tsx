@@ -1,6 +1,6 @@
+import getProducts from "app/modules/products/queries/getProducts"
+import {BlitzPage, GetServerSideProps, invokeWithMiddleware, Link, PromiseReturnType} from "blitz"
 import {useMemo} from "react"
-import {invokeWithMiddleware, GetServerSideProps, Link, BlitzPage, PromiseReturnType} from "blitz"
-import getProducts from "app/products/queries/getProducts"
 import superjson from "superjson"
 
 type PageProps = {
