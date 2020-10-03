@@ -60,8 +60,8 @@ Blitz is defining a standard file structure to answer the age old question of "H
 │   │   ├── pages/
 │   │   │   └── projects/
 │   │   │       ├── [id]/
-│   │   │       │   └── edit.js
-│   │   │       ├── [id].js
+│   │   │       │   ├── edit.js
+│   │   │       │   └── index.js
 │   │   │       ├── index.js
 │   │   │       └── new.js
 │   │   └── queries/
@@ -184,7 +184,7 @@ Example: You have a `Project` model and a `Task` model which belongs to a `Proje
 | ------------------------------------- | ------------------------------------------------------- |
 | /projects                             | app/projects/pages/projects/index.js                    |
 | /projects/new                         | app/projects/pages/projects/new.js                      |
-| /projects/[id]                        | app/projects/pages/projects/[id].js                     |
+| /projects/[id]                        | app/projects/pages/projects/[id]/index.js               |
 | /projects/[id]/edit                   | app/projects/pages/projects/[id]/edit.js                |
 |                                       |                                                         |
 | /projects/[projectId]/tasks           | app/tasks/pages/projects/[projectId]/tasks/index.js     |
