@@ -163,8 +163,8 @@ async function runSeed() {
       throw new Error(`Cant find default export from db/seeds`)
     }
   } catch (err) {
-    log.error(err)
     log.error(`Couldn't import default from db/seeds.ts or db/seeds/index.ts file`)
+    throw err
   }
   spinner.succeed()
 
@@ -178,6 +178,7 @@ async function runSeed() {
   } catch (err) {
     log.error(err)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
+    throw err
   }
 
   const db = require(dbPath).default
@@ -304,7 +305,11 @@ ${require("chalk").bold(
     }
 
     if (command === "seed") {
-      return await runSeed()
+      try {
+        return await runSeed()
+      } catch {
+        process.exit(1)
+      }
     }
 
     this.log("\nUh oh, Blitz does not support that command.")
