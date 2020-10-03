@@ -3,6 +3,9 @@ import {serialize} from "superjson"
 import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
 
+// Use setTimeout when requestIdleCallback is unavailable i.e. on Safari
+const requestIdleCallback = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+
 type MutateOptions = {
   refetch?: boolean
 }
@@ -28,7 +31,7 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
       }
       if (isClient) {
         // Fix for https://github.com/blitz-js/blitz/issues/1174
-        window.requestIdleCallback(() => {
+        requestIdleCallback(() => {
           res(result)
         })
       } else {
