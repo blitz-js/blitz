@@ -1,9 +1,5 @@
 import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
-import {join} from "path";
-import pkgDir from "pkg-dir";
-
-const projectRoot = pkgDir.sync() || process.cwd()
 
 const getPrismaBin = () => require("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
 let prismaBin: string
@@ -153,14 +149,16 @@ export function getDbName(connectionString: string): string {
 }
 
 async function runSeed() {
+  const projectRoot = require("../utils/get-project-root").projectRoot
+  const seedPath = require("path").join(projectRoot, "db/seeds")
+  const dbPath = require("path").join(projectRoot, "db/index")
+
   log.branded("Seeding database")
-  let spinner = log.spinner("Loading seeds").start()
+  let spinner = log.spinner("Loading seeds\n").start()
 
-  let seeds: Function
-
+  let seeds: Function | undefined
   try {
-    seeds = require(join(projectRoot, "db/seeds")).default
-
+    seeds = require(seedPath).default
     if (seeds === undefined) {
       throw new Error(`Cant find default export from db/seeds`)
     }
@@ -171,18 +169,18 @@ async function runSeed() {
   spinner.succeed()
 
   spinner = log.spinner("Checking for database migrations\n").start()
-  await runMigrate({}, `--schema=${join(process.cwd(), "db", "schema.prisma")}`)
+  await runMigrate({}, `--schema=${require("path").join(process.cwd(), "db", "schema.prisma")}`)
   spinner.succeed()
 
   try {
     console.log(log.withCaret("Seeding..."))
-    await seeds()
+    seeds && await seeds()
   } catch (err) {
     log.error(err)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
   }
 
-  const db = require(join(projectRoot, "db/index")).default
+  const db = require(dbPath).default
   await db.disconnect()
   log.success("Done seeding")
 }
