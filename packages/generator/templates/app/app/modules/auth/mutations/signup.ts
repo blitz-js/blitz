@@ -1,7 +1,7 @@
 import { Ctx } from "blitz"
 import db from "db"
-import { hashPassword } from "app/auth/auth-utils"
-import { SignupInput, SignupInputType } from "app/auth/validations"
+import { hashPassword } from "app/modules/auth/auth-utils"
+import { SignupInput, SignupInputType } from "app/modules/auth/validations"
 
 export default async function signup(input: SignupInputType, { session }: Ctx) {
   // This throws an error if input is invalid

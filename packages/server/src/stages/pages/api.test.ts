@@ -5,17 +5,17 @@ describe("createPagesPathTransformer", () => {
   const tests = [
     {
       name: "extracts paths folder to the root in a basic transformation",
-      input: normalize("app/users/api/one/two/three.tsx"),
+      input: normalize("app/modules/users/api/one/two/three.tsx"),
       expected: normalize("pages/api/one/two/three.tsx"),
     },
     {
       name: "handles leading /",
-      input: normalize("/app/users/api/one/two/three.tsx"),
+      input: normalize("/app/modules/users/api/one/two/three.tsx"),
       expected: normalize("pages/api/one/two/three.tsx"),
     },
     {
       name: "handles nested api folders",
-      input: normalize("app/users/api/one/two/api/three.tsx"),
+      input: normalize("app/modules/users/api/one/two/api/three.tsx"),
       expected: normalize("pages/api/one/two/api/three.tsx"),
     },
     {
@@ -25,7 +25,7 @@ describe("createPagesPathTransformer", () => {
     },
     {
       name: "Ignore absolute paths",
-      input: normalize("/User/foo/bar/app/users/api/one/two/three.tsx"),
+      input: normalize("/User/foo/bar/app/modules/users/api/one/two/three.tsx"),
       expected: normalize("pages/api/one/two/three.tsx"),
     },
   ]

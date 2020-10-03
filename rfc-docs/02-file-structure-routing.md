@@ -40,54 +40,55 @@ Blitz is defining a standard file structure to answer the age old question of "H
 │   │       ├── features.js
 │   │       ├── index.js
 │   │       └── pricing.js
+│   ├── modules
+│   │   ├── projects/
+│   │   │   ├── components/
+│   │   │   │   ├── Project.js
+│   │   │   │   ├── ProjectForm.js
+│   │   │   │   └── Projects.js
+│   │   │   ├── mutations/
+│   │   │   │   ├── createProject.js
+│   │   |   │   ├── createProject.test.js
+│   │   │   │   ├── deleteProject.js
+│   │   │   │   ├── deleteProject.test.js
+│   │   │   │   ├── updateProject.js
+│   │   │   │   └── updateProject.test.js
+│   │   │   ├── pages/
+│   │   │   │   └── projects/
+│   │   │   │       ├── [id]/
+│   │   │   │       │   └── edit.js
+│   │   │   │       ├── [id].js
+│   │   │   │       ├── index.js
+│   │   │   │       └── new.js
+│   │   │   └── queries/
+│   │   │       ├── getProject.js
+│   │   │       └── getProjects.js
+│   │   ├── tasks/
+│   │   │   ├── components/
+│   │   │   │   ├── Task.js
+│   │   │   │   ├── TaskForm.js
+│   │   │   │   └── Tasks.js
+│   │   │   ├── mutations/
+│   │   │   │   ├── createTask.js
+│   │   │   │   ├── deleteTask.js
+│   │   │   │   └── updateTask.js
+│   │   │   ├── pages/
+│   │   │   │   └── projects/
+│   │   │   │       └── [projectId]/
+│   │   │   │           └── tasks/
+│   │   │   │               ├── [id]/
+│   │   │   │               │   └── edit.js
+│   │   │   │               ├── [id].js
+│   │   │   │               ├── index.js
+│   │   │   │               └── new.js
+│   │   │   └── queries/
+│   │   │       ├── getTask.js
+│   │   │       └── getTasks.js
 │   ├── pages/
 │   │   ├── dashboard.js
 │   │   ├── log-in.js
 │   │   ├── settings.js
 │   │   └── sign-up.js
-│   ├── projects/
-│   │   ├── components/
-│   │   │   ├── Project.js
-│   │   │   ├── ProjectForm.js
-│   │   │   └── Projects.js
-│   │   ├── mutations/
-│   │   │   ├── createProject.js
-│   │   │   ├── createProject.test.js
-│   │   │   ├── deleteProject.js
-│   │   │   ├── deleteProject.test.js
-│   │   │   ├── updateProject.js
-│   │   │   └── updateProject.test.js
-│   │   ├── pages/
-│   │   │   └── projects/
-│   │   │       ├── [id]/
-│   │   │       │   └── edit.js
-│   │   │       ├── [id].js
-│   │   │       ├── index.js
-│   │   │       └── new.js
-│   │   └── queries/
-│   │       ├── getProject.js
-│   │       └── getProjects.js
-│   ├── tasks/
-│   │   ├── components/
-│   │   │   ├── Task.js
-│   │   │   ├── TaskForm.js
-│   │   │   └── Tasks.js
-│   │   ├── mutations/
-│   │   │   ├── createTask.js
-│   │   │   ├── deleteTask.js
-│   │   │   └── updateTask.js
-│   │   ├── pages/
-│   │   │   └── projects/
-│   │   │       └── [projectId]/
-│   │   │           └── tasks/
-│   │   │               ├── [id]/
-│   │   │               │   └── edit.js
-│   │   │               ├── [id].js
-│   │   │               ├── index.js
-│   │   │               └── new.js
-│   │   └── queries/
-│   │       ├── getTask.js
-│   │       └── getTasks.js
 │   └── tests/
 │       ├── userAuthentication.js
 │       └── userOnboarding.js
@@ -157,7 +158,7 @@ A configuration file with the same format as `next.config.js`
 
 ### Other Notes
 
-- All top level folders are automatically aliased. So for example you can import from `app/projects/queries/getProject` from anywhere in our app.
+- All top level folders are automatically aliased. So for example you can import from `app/modules/projects/queries/getProject` from anywhere in our app.
 - The Blitz CLI will have a `routes` command that makes it easy to see a full aggregated view of all your app routes.
 
 ## Routing
@@ -167,7 +168,7 @@ Blitz uses the [file-system based router provided by Next.js](https://nextjs.org
 - All components in `pages/` are mapped to a URL.
 - All http handlers in `api` are mapped to a URL.
 - Queries and mutations are automatically exposed as an API endpoint
-  - The `app/projects/queries/getProjects.js` query will be exposed at `/api/projects/queries/getProjects`
+  - The `app/modules/projects/queries/getProjects.js` query will be exposed at `/api/projects/queries/getProjects`
 
 ### Conventions
 
@@ -180,14 +181,14 @@ We copied the conventions from Ruby on Rails, where it has stood the test of tim
 
 Example: You have a `Project` model and a `Task` model which belongs to a `Project`. Your routes will be:
 
-| Path                                  | File                                                    |
-| ------------------------------------- | ------------------------------------------------------- |
-| /projects                             | app/projects/pages/projects/index.js                    |
-| /projects/new                         | app/projects/pages/projects/new.js                      |
-| /projects/[id]                        | app/projects/pages/projects/[id].js                     |
-| /projects/[id]/edit                   | app/projects/pages/projects/[id]/edit.js                |
-|                                       |                                                         |
-| /projects/[projectId]/tasks           | app/tasks/pages/projects/[projectId]/tasks/index.js     |
-| /projects/[projectId]/tasks/new       | app/tasks/pages/projects/[projectId]/tasks/new.js       |
-| /projects/[projectId]/tasks/[id]      | app/tasks/pages/projects/[projectId]/tasks/[id].js      |
-| /projects/[projectId]/tasks/[id]/edit | app/tasks/pages/projects/[projectId]/tasks/[id]/edit.js |
+| Path                                  | File                                                            |
+| ------------------------------------- | --------------------------------------------------------------- |
+| /projects                             | app/modules/projects/pages/projects/index.js                    |
+| /projects/new                         | app/modules/projects/pages/projects/new.js                      |
+| /projects/[id]                        | app/modules/projects/pages/projects/[id].js                     |
+| /projects/[id]/edit                   | app/modules/projects/pages/projects/[id]/edit.js                |
+|                                       |                                                                 |
+| /projects/[projectId]/tasks           | app/modules/tasks/pages/projects/[projectId]/tasks/index.js     |
+| /projects/[projectId]/tasks/new       | app/modules/tasks/pages/projects/[projectId]/tasks/new.js       |
+| /projects/[projectId]/tasks/[id]      | app/modules/tasks/pages/projects/[projectId]/tasks/[id].js      |
+| /projects/[projectId]/tasks/[id]/edit | app/modules/tasks/pages/projects/[projectId]/tasks/[id]/edit.js |

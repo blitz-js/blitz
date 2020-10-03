@@ -1,7 +1,7 @@
 import React from "react"
 import { useRouter, BlitzPage } from "blitz"
 import Layout from "app/layouts/Layout"
-import { LoginForm } from "app/auth/components/LoginForm"
+import { LoginForm } from "app/modules/auth/components/LoginForm"
 
 const LoginPage: BlitzPage = () => {
   const router = useRouter()

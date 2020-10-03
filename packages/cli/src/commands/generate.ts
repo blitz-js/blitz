@@ -1,14 +1,14 @@
-import {Command} from "../command"
-import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
-  PageGenerator,
-  MutationGenerator,
-  QueriesGenerator,
   FormGenerator,
   ModelGenerator,
+  MutationGenerator,
+  PageGenerator,
+  QueriesGenerator,
   QueryGenerator,
 } from "@blitzjs/generator"
+import {flags} from "@oclif/command"
+import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 const debug = require("debug")("blitz:generate")
@@ -130,7 +130,7 @@ export class Generate extends Command {
     `,
     `# To generate nested routes for dependent models (e.g. Projects that contain
 # Tasks), specify a parent model. For example, this command generates pages under
-# app/tasks/pages/projects/[projectId]/tasks/
+# app/modules/tasks/pages/projects/[projectId]/tasks/
 > blitz generate all tasks --parent=projects
     `,
     `# Database models can also be generated directly from the CLI

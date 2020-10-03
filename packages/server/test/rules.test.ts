@@ -1,7 +1,10 @@
 /* eslint-disable import/first */
 
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+// Import with mocks applied
+import {dev} from "../src/dev"
+import {multiMock} from "./utils/multi-mock"
+import {directoryTree} from "./utils/tree-utils"
 const mocks = multiMock(
   {
     "next-utils": {
@@ -15,10 +18,6 @@ const mocks = multiMock(
   resolve(__dirname, "../src"),
 )
 
-// Import with mocks applied
-import {dev} from "../src/dev"
-import {directoryTree} from "./utils/tree-utils"
-
 describe("Dev command", () => {
   const rootFolder = resolve("")
   const buildFolder = resolve(rootFolder, ".blitz-build")
@@ -26,7 +25,7 @@ describe("Dev command", () => {
 
   beforeEach(async () => {
     mocks.mockFs({
-      "app/posts/pages/foo.tsx": "",
+      "app/modules/posts/pages/foo.tsx": "",
       "pages/bar.tsx": "",
     })
     jest.clearAllMocks()

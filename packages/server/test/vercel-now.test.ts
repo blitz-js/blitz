@@ -1,7 +1,10 @@
 /* eslint-disable import/first */
 
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+// Import with mocks applied
+import {build} from "../src/build"
+import {multiMock} from "./utils/multi-mock"
+import {directoryTree} from "./utils/tree-utils"
 const mocks = multiMock(
   {
     "next-utils": {
@@ -15,10 +18,6 @@ const mocks = multiMock(
   resolve(__dirname, "../src"),
 )
 
-// Import with mocks applied
-import {build} from "../src/build"
-import {directoryTree} from "./utils/tree-utils"
-
 describe("Build command Vercel", () => {
   const rootFolder = resolve("")
   const buildFolder = resolve(rootFolder, ".blitz-build")
@@ -27,7 +26,7 @@ describe("Build command Vercel", () => {
   beforeEach(async () => {
     process.env.NOW_BUILDER = "1"
     mocks.mockFs({
-      "app/posts/pages/foo.tsx": "",
+      "app/modules/posts/pages/foo.tsx": "",
       "pages/bar.tsx": "",
       "next.config.js": 'module.exports = {target: "experimental-serverless-trace"}',
     })

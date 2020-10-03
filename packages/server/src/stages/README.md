@@ -26,7 +26,7 @@ Creates a file error manifest for errors displayed in the browser that redirects
 Assemble a single /pages folder from the BlitzJS folder structure.
 
 ```diff
-- app/products/pages/index.tsx
+- app/modules/products/pages/index.tsx
 + app/pages/products.html
 ```
 
@@ -35,9 +35,9 @@ Assemble a single /pages folder from the BlitzJS folder structure.
 Converts relative file paths to absolute file paths.
 
 ```diff
-app/products/pages/products/index.tsx
+app/modules/products/pages/products/index.tsx
 - import getProducts from '../../queries/getProducts'
-+ import getProducts from 'app/products/queries/getProducts'
++ import getProducts from 'app/modules/products/queries/getProducts'
 ```
 
 ## [RPC](./rpc/index.ts)

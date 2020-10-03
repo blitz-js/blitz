@@ -1,7 +1,7 @@
 import getProducts from "app/modules/products/queries/getProducts"
 import {invalidateQuery, Link, useQuery, useRouterQuery} from "blitz"
 import {Suspense} from "react"
-// import getProduct from "app/products/queries/getProduct"
+// import getProduct from "app/modules/products/queries/getProduct"
 
 function ProductsList() {
   const {orderby = "id", order = "desc"} = useRouterQuery()

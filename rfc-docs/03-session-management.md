@@ -87,10 +87,10 @@ This will be the default security level for new Blitz apps.
 #### Access Session Data in UI Components
 
 ```ts
-import {useSession} from 'blitz'
+import {useSession} from "blitz"
 // These are regular Blitz mutations
-import login from 'app/auth/mutations/login'
-import logout from 'app/auth/mutations/logout'
+import login from "app/modules/auth/mutations/login"
+import logout from "app/modules/auth/mutations/logout"
 
 export default function AccountComponent() {
   // This hook returns the `publicData` session object (see Login Mutation below)`
@@ -116,7 +116,7 @@ export default function AccountComponent() {
 #### Login Mutation
 
 ```ts
-// app/auth/mutations/login.ts
+// app/modules/auth/mutations/login.ts
 
 export default async function login(args: UserCredentials, ctx: Context) {
   // Perform identity verification here
@@ -130,7 +130,7 @@ export default async function login(args: UserCredentials, ctx: Context) {
       // Put anything here that's not sensitive
       publicData: {
         userId: user.id, // required
-        role: 'admin', // required
+        role: "admin", // required
         teamIds: user.teams.map((team) => team.id),
       },
       // privateData is stored in the DB with the session and is not directly
@@ -151,7 +151,7 @@ export default async function login(args: UserCredentials, ctx: Context) {
 #### Logout Mutation
 
 ```ts
-// app/auth/mutations/logout.ts
+// app/modules/auth/mutations/logout.ts
 
 export default async function logout(args: SomArgs, ctx: Context) {
   // The following will take care of clearing all cookies.
@@ -164,7 +164,7 @@ export default async function logout(args: SomArgs, ctx: Context) {
 #### Accessing Session Data in Queries/Mutations
 
 ```ts
-// app/products/queries/getProducts.ts
+// app/modules/products/queries/getProducts.ts
 
 export default async function getProducts(args: SomArgs, ctx: Context) {
   // Read the userId
@@ -181,7 +181,7 @@ export default async function getProducts(args: SomArgs, ctx: Context) {
     // ... some new data
   })
 
-  if (ctx.session.role === 'admin') {
+  if (ctx.session.role === "admin") {
     return await db.product.findMany()
   } else {
     return await db.product.findMany({where: {published: true}})
@@ -198,8 +198,8 @@ You can get all session handles belonging to a user. With these handles you can:
 3. Revoke all sessions belonging to a user.
 
 ```ts
-// app/auth/queries/exampleQuery.ts
-import {Session} from 'blitz'
+// app/modules/auth/queries/exampleQuery.ts
+import {Session} from "blitz"
 
 export default async function exampleQuery(args: SomArgs, ctx: Context) {
   // this is a unique ID per session
@@ -209,7 +209,9 @@ export default async function exampleQuery(args: SomArgs, ctx: Context) {
   await Session.revokeAllSessionsForUser(ctx.session.userId)
 
   // Can get all sessions for a user and loop through them
-  let allSessionsForThisUser: string[] = await Session.getAllSessionHandlesForUser(ctx.session.userId)
+  let allSessionsForThisUser: string[] = await Session.getAllSessionHandlesForUser(
+    ctx.session.userId,
+  )
   for (let session of allSessionsForThisUser) {
     try {
       // Can use publicData to get the role or other public info of this session.

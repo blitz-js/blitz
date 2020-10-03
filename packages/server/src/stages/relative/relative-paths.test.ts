@@ -14,7 +14,7 @@ describe("relativeToAbsolute", () => {
       name: "Provides an absolute path within app",
       input: {
         relativeImport: "../components/three",
-        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/users/pages.ts"),
+        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/modules/users/pages.ts"),
         cwd: platformSensitiveAbsolutePath("/projects/blitz/blitz"),
       },
       expected: "app/components/three",
@@ -23,7 +23,7 @@ describe("relativeToAbsolute", () => {
       name: "Works outside app",
       input: {
         relativeImport: "../../extras/foo",
-        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/users/pages.ts"),
+        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/modules/users/pages.ts"),
         cwd: platformSensitiveAbsolutePath("/projects/blitz/blitz"),
       },
       expected: "extras/foo",
@@ -32,7 +32,7 @@ describe("relativeToAbsolute", () => {
       name: "Leaves absolute paths alone",
       input: {
         relativeImport: "app/one/two",
-        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/users/pages.ts"),
+        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/modules/users/pages.ts"),
         cwd: platformSensitiveAbsolutePath("/projects/blitz/blitz"),
       },
       expected: "app/one/two",

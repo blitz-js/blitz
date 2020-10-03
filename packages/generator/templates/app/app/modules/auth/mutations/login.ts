@@ -1,5 +1,5 @@
 import { Ctx } from "blitz"
-import { authenticateUser } from "app/auth/auth-utils"
+import { authenticateUser } from "app/modules/auth/auth-utils"
 import { LoginInput, LoginInputType } from "../validations"
 
 export default async function login(input: LoginInputType, { session }: Ctx) {
