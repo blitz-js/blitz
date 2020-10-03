@@ -1,6 +1,6 @@
-import {Suspense} from "react"
+import getProjects from "app/modules/projects/queries/getProjects"
 import {Head, Link, useQuery} from "blitz"
-import getProjects from "app/projects/queries/getProjects"
+import {Suspense} from "react"
 
 export const ProjectsList = () => {
   const [projects] = useQuery(getProjects, {})

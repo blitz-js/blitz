@@ -1,7 +1,7 @@
+import deleteProject from "app/modules/projects/mutations/deleteProject"
+import getProject from "app/modules/projects/queries/getProject"
+import {Head, Link, useQuery, useRouter} from "blitz"
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery} from "blitz"
-import getProject from "app/projects/queries/getProject"
-import deleteProject from "app/projects/mutations/deleteProject"
 export const Project = () => {
   const router = useRouter()
   const id = parseInt(router?.query.id)

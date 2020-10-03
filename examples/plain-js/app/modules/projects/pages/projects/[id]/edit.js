@@ -1,7 +1,7 @@
+import updateProject from "app/modules/projects/mutations/updateProject"
+import getProject from "app/modules/projects/queries/getProject"
+import {Head, Link, useQuery, useRouter} from "blitz"
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery} from "blitz"
-import getProject from "app/projects/queries/getProject"
-import updateProject from "app/projects/mutations/updateProject"
 export const EditProject = () => {
   const router = useRouter()
   const id = parseInt(router?.query.id)
