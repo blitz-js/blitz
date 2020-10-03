@@ -1,10 +1,10 @@
-import {Suspense} from "react"
-import {Head, Link, useSession, useRouterQuery, useMutation, invoke} from "blitz"
-import getUser from "app/users/queries/getUser"
-import trackView from "app/users/mutations/trackView"
-import Layout from "app/layouts/Layout"
 import {useCurrentUser} from "app/hooks/useCurrentUser"
-// import getUsers from "app/users/queries/getUsers"
+import Layout from "app/layouts/Layout"
+import trackView from "app/modules/users/mutations/trackView"
+import getUser from "app/modules/users/queries/getUser"
+import {Head, invoke, Link, useMutation, useRouterQuery, useSession} from "blitz"
+import {Suspense} from "react"
+// import getUsers from "app/modules/users/queries/getUsers"
 
 const CurrentUserInfo = () => {
   const currentUser = useCurrentUser()

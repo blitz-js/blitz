@@ -1,7 +1,7 @@
+import LoginForm from "app/modules/auth/components/LoginForm"
 import {AppProps, ErrorComponent, useRouter} from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
-import LoginForm from "app/auth/components/LoginForm"
 
 if (typeof window !== "undefined") {
   window["DEBUG_BLITZ"] = 1

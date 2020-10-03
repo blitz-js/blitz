@@ -1,5 +1,5 @@
-import {useSession, useRouter, useMutation} from "blitz"
-import logout from "app/auth/mutations/logout"
+import logout from "app/modules/auth/mutations/logout"
+import {useMutation, useRouter, useSession} from "blitz"
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const session = useSession()

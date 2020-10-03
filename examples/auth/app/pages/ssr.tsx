@@ -1,16 +1,16 @@
-import {FC} from "react"
 import {getSessionContext} from "@blitzjs/server"
+import logout from "app/modules/auth/mutations/logout"
+import getUser from "app/modules/users/queries/getUser"
 import {
-  invokeWithMiddleware,
-  useRouter,
-  GetServerSideProps,
-  PromiseReturnType,
   ErrorComponent as ErrorPage,
+  GetServerSideProps,
+  invokeWithMiddleware,
+  PromiseReturnType,
   useMutation,
+  useRouter,
 } from "blitz"
-import getUser from "app/users/queries/getUser"
-import logout from "app/auth/mutations/logout"
 import path from "path"
+import {FC} from "react"
 
 type PageProps = {
   user?: PromiseReturnType<typeof getUser>

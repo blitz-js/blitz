@@ -1,5 +1,5 @@
-import {Head, useRouter, BlitzPage} from "blitz"
-import {LoginForm} from "app/auth/components/LoginForm"
+import {LoginForm} from "app/modules/auth/components/LoginForm"
+import {BlitzPage, Head, useRouter} from "blitz"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
