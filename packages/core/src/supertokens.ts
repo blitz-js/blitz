@@ -27,14 +27,16 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
-export interface PublicData extends Record<any, any> {
+export interface DefaultPublicData {
   userId: any
   roles: string[]
 }
 
+export interface PublicData extends DefaultPublicData {}
+
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: any
+  userId?: PublicData["userId"]
   expiresAt?: Date
   hashedSessionToken?: string
   antiCSRFToken?: string
@@ -47,7 +49,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: any) => Promise<SessionModel[]>
+  getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
@@ -58,7 +60,7 @@ export interface SessionContext {
   /**
    * null if anonymous
    */
-  userId: any
+  userId: PublicData["userId"] | null
   roles: string[]
   handle: string | null
   publicData: PublicData
@@ -71,7 +73,7 @@ export interface SessionContext {
   revokeAll: () => Promise<void>
   getPrivateData: () => Promise<Record<any, any>>
   setPrivateData: (data: Record<any, any>) => Promise<void>
-  setPublicData: (data: Record<any, any>) => Promise<void>
+  setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
@@ -102,10 +104,8 @@ export const useSession = () => {
     return subscription.unsubscribe
   }, [])
 
-  return {...publicData, isLoading}
+  return {...publicData, isLoading} as PublicData & {isLoading: boolean}
 }
-
-export {publicDataStore}
 
 /*
  * This will ensure a user is logged in before using the query/mutation.

@@ -24,6 +24,8 @@ const UserStuff = () => {
 
   if (session.isLoading) return <div>Loading...</div>
 
+  console.log(session.views)
+
   return (
     <div>
       {!session.userId && (

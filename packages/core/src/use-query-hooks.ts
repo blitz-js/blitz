@@ -18,7 +18,7 @@ import {
   sanitize,
   defaultQueryConfig,
 } from "./utils/react-query-utils"
-import {Router} from "./index"
+import Router from "next/router"
 
 Router.events.on("routeChangeComplete", async () => {
   await queryCache.invalidateQueries()
