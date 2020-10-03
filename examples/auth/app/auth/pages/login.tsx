@@ -1,4 +1,3 @@
-import React from "react"
 import {Head, useRouter, BlitzPage} from "blitz"
 import {LoginForm} from "app/auth/components/LoginForm"
 

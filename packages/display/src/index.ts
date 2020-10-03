@@ -1,6 +1,9 @@
-import chalk from "chalk"
+import c from "chalk"
 import ora from "ora"
 import readline from "readline"
+import {Logger} from "tslog"
+
+export const chalk = c
 
 // const blitzTrueBrandColor = '6700AB'
 const blitzBrightBrandColor = "8a3df0"
@@ -9,23 +12,27 @@ const blitzBrightBrandColor = "8a3df0"
 const brandColor = blitzBrightBrandColor
 
 const withBrand = (str: string) => {
-  return chalk.hex(brandColor).bold(str)
+  return c.hex(brandColor).bold(str)
 }
 
 const withWarning = (str: string) => {
-  return `⚠️  ${chalk.yellow(str)}`
+  return `⚠️  ${c.yellow(str)}`
 }
 
 const withCaret = (str: string) => {
-  return `${chalk.gray(">")} ${str}`
+  return `${c.gray(">")} ${str}`
 }
 
 const withCheck = (str: string) => {
-  return `${chalk.green("✔")} ${str}`
+  return `${c.green("✔")} ${str}`
 }
 
 const withX = (str: string) => {
-  return `${chalk.red.bold("✕")} ${str}`
+  return `${c.red.bold("✕")} ${str}`
+}
+
+const withProgress = (str: string) => {
+  return withCaret(c.bold(str))
 }
 
 /**
@@ -34,7 +41,7 @@ const withX = (str: string) => {
  * @param {string} msg
  */
 const branded = (msg: string) => {
-  console.log(chalk.hex(brandColor).bold(msg))
+  console.log(c.hex(brandColor).bold(msg))
 }
 
 /**
@@ -63,7 +70,7 @@ const warning = (msg: string) => {
  * @param {string} msg
  */
 const error = (msg: string) => {
-  console.error(withX(chalk.red.bold(msg)))
+  console.error(withX(c.red.bold(msg)))
 }
 
 /**
@@ -72,7 +79,7 @@ const error = (msg: string) => {
  * @param {string} msg
  */
 const meta = (msg: string) => {
-  console.log(withCaret(chalk.gray(msg)))
+  console.log(withCaret(c.gray(msg)))
 }
 
 /**
@@ -81,11 +88,11 @@ const meta = (msg: string) => {
  * @param {string} msg
  */
 const progress = (msg: string) => {
-  console.log(withCaret(chalk.bold(msg)))
+  console.log(withCaret(c.bold(msg)))
 }
 
 const info = (msg: string) => {
-  console.log(chalk.bold(msg))
+  console.log(c.bold(msg))
 }
 
 const spinner = (str: string) => {
@@ -105,7 +112,7 @@ const spinner = (str: string) => {
  * @param {string} msg
  */
 const success = (msg: string) => {
-  console.log(withCheck(chalk.green(msg)))
+  console.log(withCheck(c.green(msg)))
 }
 
 const newline = () => {
@@ -118,7 +125,7 @@ const newline = () => {
  * @param {string} val
  */
 const variable = (val: any) => {
-  return chalk.cyan.bold(`${val}`)
+  return c.cyan.bold(`${val}`)
 }
 
 /**
@@ -135,6 +142,7 @@ export const log = {
   withCaret,
   withCheck,
   withX,
+  withProgress,
   branded,
   clearLine,
   error,
@@ -148,3 +156,20 @@ export const log = {
   info,
   debug,
 }
+
+export const baseLogger = new Logger({
+  dateTimePattern:
+    process.env.NODE_ENV === "production"
+      ? "year-month-day hour:minute:second.millisecond"
+      : "hour:minute:second.millisecond",
+  displayFunctionName: false,
+  displayFilePath: "hidden",
+  displayRequestId: false,
+  dateTimeTimezone:
+    process.env.NODE_ENV === "production"
+      ? "utc"
+      : Intl.DateTimeFormat().resolvedOptions().timeZone,
+  prettyInspectHighlightStyles: {name: "black"},
+  maskValuesOfKeys: ["password", "passwordConfirmation"],
+  exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+})

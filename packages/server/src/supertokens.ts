@@ -209,10 +209,14 @@ export class SessionContextClass implements SessionContext {
   }
 
   authorize(input?: any) {
-    if (!this.userId) throw new AuthenticationError()
+    const e = new AuthenticationError()
+    Error.captureStackTrace(e, this.authorize)
+    if (!this.userId) throw e
 
     if (!this.isAuthorized(input)) {
-      throw new AuthorizationError()
+      const e = new AuthorizationError()
+      Error.captureStackTrace(e, this.authorize)
+      throw e
     }
   }
 

@@ -1011,8 +1011,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/36962022?v=4",
       "profile": "https://github.com/engelkes-finstreet",
       "contributions": [
-        "code",
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -1194,6 +1194,33 @@
       "name": "Luke Bennett",
       "avatar_url": "https://avatars1.githubusercontent.com/u/135390?v=4",
       "profile": "https://lukebennett.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hmajid2301",
+      "name": "Haseeb Majid",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/998807?v=4",
+      "profile": "https://haseebmajid.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "phillippschmedt",
+      "name": "Phillipp Schmedt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16028406?v=4",
+      "profile": "https://github.com/phillippschmedt",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hasparus",
+      "name": "Piotr Monwid-Olechnowicz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15332326?v=4",
+      "profile": "https://haspar.us",
       "contributions": [
         "code"
       ]
