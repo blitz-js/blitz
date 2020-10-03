@@ -1,11 +1,16 @@
 import {Ctx} from "./middleware"
-import * as z from "zod"
+import {AuthenticatedSessionContext} from "./supertokens"
+import {ZodSchema, infer as zInfer} from "zod"
 
 export type ProtectArgs<T> = {schema?: T; authorize?: boolean | unknown}
 
-export const protect = <T extends z.ZodSchema<any, any>, U = z.infer<T>>(
+interface AuthenticatedCtx extends Ctx {
+  session: AuthenticatedSessionContext
+}
+
+export const protect = <T extends ZodSchema<any, any>, U = zInfer<T>>(
   {schema, authorize = true}: ProtectArgs<T>,
-  resolver: (args: U, ctx: Ctx) => any,
+  resolver: (args: U, ctx: AuthenticatedCtx) => any,
 ) => {
   return (rawInput: U, ctx: Ctx) => {
     if (authorize) {
@@ -18,6 +23,6 @@ export const protect = <T extends z.ZodSchema<any, any>, U = z.infer<T>>(
       ;(ctx as any).session.authorize(authorizeInput)
     }
     const input = schema ? schema.parse(rawInput) : rawInput
-    return resolver(input, ctx)
+    return resolver(input, ctx as AuthenticatedCtx)
   }
 }
