@@ -2,11 +2,9 @@ import {useState} from "react"
 import {publicDataStore} from "./public-data-store"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {readCookie} from "./utils/cookie"
-import getConfig from "next/config"
 
-const {publicRuntimeConfig = {}} = getConfig() || {}
-
-const sessionPrefix = publicRuntimeConfig.sessionPrefix || process.env.SESSION_PREFIX || "s"
+const sessionPrefix =
+  process.env.SESSION_PREFIX || process.env.sessionPrefix || process.env.npm_package_name
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"

@@ -14,9 +14,9 @@ export function withBlitz(nextConfig: any) {
         reactMode: "concurrent",
         ...(normalizedConfig.experimental || {}),
       },
-      publicRuntimeConfig: {
-        sessionPrefix: process.env.SESSION_PREFIX,
-        ...(normalizedConfig.publicRuntimeConfig || {}),
+      env: {
+        sessionPrefix: process.env.SESSION_PREFIX || process.env.npm_package_name,
+        ...(normalizedConfig.env || {}),
       },
       webpack(config: any, options: Record<any, any>) {
         if (options.isServer) {
