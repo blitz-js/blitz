@@ -11,9 +11,9 @@ type GetUsersInput = {
 
 export default async function getUsers(
   {where, orderBy, cursor, take, skip}: GetUsersInput,
-  {session}: Ctx,
+  ctx: Ctx,
 ) {
-  session.authorize(["admin", "user"])
+  ctx.session.authorize(["admin", "user"])
 
   const users = await db.user.findMany({
     where,

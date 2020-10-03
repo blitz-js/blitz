@@ -56,16 +56,13 @@ export type SessionConfig = {
   unstable_isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
-export interface SessionContext {
-  /**
-   * null if anonymous
-   */
-  userId: PublicData["userId"] | null
+export interface SessionContextBase {
+  userId: unknown
   roles: string[]
   handle: string | null
-  publicData: PublicData
-  authorize: (input?: any) => void
-  isAuthorized: (input?: any) => boolean
+  publicData: unknown
+  authorize(input?: any): asserts this is AuthenticatedSessionContext
+  isAuthorized(input?: any): boolean
   // authorize: (roleOrRoles?: string | string[]) => void
   // isAuthorized: (roleOrRoles?: string | string[]) => boolean
   create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
@@ -74,6 +71,17 @@ export interface SessionContext {
   getPrivateData: () => Promise<Record<any, any>>
   setPrivateData: (data: Record<any, any>) => Promise<void>
   setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
+}
+
+// Could be anonymous
+export interface SessionContext extends SessionContextBase {
+  userId: PublicData["userId"] | null
+  publicData: Partial<PublicData>
+}
+
+export interface AuthenticatedSessionContext extends SessionContextBase {
+  userId: PublicData["userId"]
+  publicData: PublicData
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
