@@ -1,4 +1,4 @@
-import {SessionContext} from "blitz"
+import {Ctx} from "blitz"
 import db, {__ModelName__UpdateArgs} from "db"
 
 if (process.env.parentModel) {
@@ -8,17 +8,14 @@ if (process.env.parentModel) {
     __parentModelId__: number
   }
 } else {
-  type Update__ModelName__Input = {
-    where: __ModelName__UpdateArgs["where"]
-    data: __ModelName__UpdateArgs["data"]
-  }
+  type Update__ModelName__Input = Pick<__ModelName__UpdateArgs, "where" | "data">
 }
 
 export default async function update__ModelName__(
   {where, data}: Update__ModelName__Input,
-  ctx: {session?: SessionContext} = {},
+  ctx: Ctx,
 ) {
-  ctx.session!.authorize()
+  ctx.session.authorize()
 
   if (process.env.parentModel) {
     // Don't allow updating

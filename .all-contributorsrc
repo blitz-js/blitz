@@ -353,7 +353,8 @@
       "profile": "https://github.com/ntgussoni",
       "contributions": [
         "test",
-        "code"
+        "code",
+        "review"
       ]
     },
     {
@@ -971,7 +972,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/37571416?v=4",
       "profile": "https://github.com/clgeoio",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -1009,8 +1011,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/36962022?v=4",
       "profile": "https://github.com/engelkes-finstreet",
       "contributions": [
-        "code",
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -1147,6 +1149,78 @@
       "name": "Enrico Schaaf",
       "avatar_url": "https://avatars1.githubusercontent.com/u/54645197?v=4",
       "profile": "http://enricoschaaf.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kitze",
+      "name": "Kitze",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1160594?v=4",
+      "profile": "http://kitze.io",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "drmas",
+      "name": "Mohamed Shaban",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/644440?v=4",
+      "profile": "https://github.com/drmas",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jorisre",
+      "name": "Joris",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7545547?v=4",
+      "profile": "https://github.com/jorisre",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Kamshak",
+      "name": "Valentin Funk",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/337968?v=4",
+      "profile": "https://github.com/Kamshak",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "lukebennett",
+      "name": "Luke Bennett",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/135390?v=4",
+      "profile": "https://lukebennett.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hmajid2301",
+      "name": "Haseeb Majid",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/998807?v=4",
+      "profile": "https://haseebmajid.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "phillippschmedt",
+      "name": "Phillipp Schmedt",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16028406?v=4",
+      "profile": "https://github.com/phillippschmedt",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hasparus",
+      "name": "Piotr Monwid-Olechnowicz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15332326?v=4",
+      "profile": "https://haspar.us",
       "contributions": [
         "code"
       ]

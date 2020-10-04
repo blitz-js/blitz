@@ -1,7 +1,7 @@
 import {Suspense} from "react"
-import {useQuery, Link, useRouterQuery} from "blitz"
+import {useQuery, Link, useRouterQuery, invalidateQuery} from "blitz"
 import getProducts from "app/products/queries/getProducts"
-import getProduct from "app/products/queries/getProduct"
+// import getProduct from "app/products/queries/getProduct"
 
 function ProductsList() {
   const {orderby = "id", order = "desc"} = useRouterQuery()
@@ -17,7 +17,12 @@ function ProductsList() {
       {products.map((product) => (
         <li key={product.id}>
           <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
-            <a onMouseEnter={() => getProduct({where: {id: product.id}})}>{product.name}</a>
+            <a
+            // Disable until prefetch api added
+            //onMouseEnter={() => getProduct({where: {id: product.id}})}
+            >
+              {product.name}
+            </a>
           </Link>{" "}
           - Created: {product.createdAt.toISOString()}
         </li>
@@ -30,6 +35,8 @@ function AdminProducts() {
   return (
     <div>
       <h1>Products</h1>
+
+      <button onClick={() => invalidateQuery(getProducts)}>Invalidate query</button>
 
       <p>
         <Link href="/admin/products/new">

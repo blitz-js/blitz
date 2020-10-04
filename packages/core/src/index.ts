@@ -3,22 +3,24 @@ import {AppProps as NextAppProps} from "next/app"
 
 export * from "./types"
 export * from "./errors"
-export {useQuery} from "./use-query"
-export {usePaginatedQuery} from "./use-paginated-query"
+export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
 export {useParam, useParams} from "./use-params"
-export {useInfiniteQuery} from "./use-infinite-query"
-export {ssrQuery} from "./ssr-query"
-export {getIsomorphicRpcHandler, EnhancedResolverModule} from "./rpc" // new
 export {withRouter} from "./with-router"
 export {useRouter} from "./use-router"
 export {useRouterQuery} from "./use-router-query"
 export {passportAuth} from "./passport-adapter"
+export {getIsomorphicEnhancedResolver} from "./rpc"
+export {useMutation} from "./use-mutation"
+export {invalidateQuery} from "./utils/react-query-utils"
+export {invoke, invokeWithMiddleware} from "./invoke"
 export {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
   MiddlewareResponse,
   MiddlewareRequest,
   connectMiddleware,
+  Ctx,
+  DefaultCtx,
 } from "./middleware"
 export {
   TOKEN_SEPARATOR,
@@ -37,11 +39,11 @@ export {
   HEADER_CSRF_ERROR,
   LOCALSTORAGE_PREFIX,
   getAntiCSRFToken,
-  getPublicDataToken,
   useSession,
   SessionConfig, // new
   PublicData,
   SessionContext,
+  DefaultPublicData,
 } from "./supertokens"
 
 // --------------------

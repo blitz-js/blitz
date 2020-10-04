@@ -31,6 +31,13 @@ export type StageArgs = {
   input: Writable
   bus: Writable
   getInputCache: () => FileCache
+  processNewFile: (file: File) => void
+  processNewChildFile: (a: {
+    parent: EventedFile
+    child: File
+    stageId: string
+    subfileId: string
+  }) => void
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Link, BlitzPage } from "blitz"
+import { Link, BlitzPage, useMutation } from "blitz"
 import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
@@ -11,6 +11,7 @@ import { Suspense } from "react"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
     return (
@@ -18,7 +19,7 @@ const UserInfo = () => {
         <button
           className="button small"
           onClick={async () => {
-            await logout()
+            await logoutMutation()
           }}
         >
           Logout
@@ -58,7 +59,7 @@ const Home: BlitzPage = () => {
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
         </p>
-        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "5rem" }}>
+        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
@@ -77,7 +78,10 @@ const Home: BlitzPage = () => {
         </pre>
 
         <p>
-          Then go to{" "}
+          Then <strong>restart the server</strong>
+            <pre><code>Ctrl + c</code></pre>
+            <pre><code>blitz start</code></pre>
+            and go to{" "}
           <Link href="/projects">
             <a>/projects</a>
           </Link>

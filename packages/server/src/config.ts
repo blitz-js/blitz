@@ -11,6 +11,7 @@ export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
   devFolder?: string
+  clean?: boolean
   // -
   isTypescript?: boolean
   watch?: boolean
@@ -28,6 +29,7 @@ export type ServerConfig = {
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
   devFolder: string
+  clean?: boolean
   // -
   isTypescript: boolean
   watch: boolean
@@ -95,6 +97,7 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     // -
     isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
     watch: config.watch ?? env === "dev",
+    clean: config.clean,
     // -
     transformFiles: config.transformFiles ?? transformFiles,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,

@@ -1,26 +1,29 @@
 import React from "react"
+import { useMutation } from "blitz"
 import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"
 import signup from "app/auth/mutations/signup"
-import { SignupInput, SignupInputType } from "app/auth/validations"
+import { SignupInput } from "app/auth/validations"
 
 type SignupFormProps = {
   onSuccess?: () => void
 }
 
 export const SignupForm = (props: SignupFormProps) => {
+  const [signupMutation] = useMutation(signup)
+
   return (
     <div>
       <h1>Create an Account</h1>
 
-      <Form<SignupInputType>
+      <Form
         submitText="Create Account"
         schema={SignupInput}
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await signup({ email: values.email, password: values.password })
-            props.onSuccess && props.onSuccess()
+            await signupMutation(values)
+            props.onSuccess?.()
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma

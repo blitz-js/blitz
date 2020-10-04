@@ -24,7 +24,12 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-floating-promises": "error",
-    "no-use-before-define": ["error", {functions: false, classes: false}],
+    // note you must disable the base rule as it can report incorrect errors
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    // note you must disable the base rule as it can report incorrect errors
+    "no-redeclare": "off",
+    "@typescript-eslint/no-redeclare": ["error"],
   },
   ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
   overrides: [
