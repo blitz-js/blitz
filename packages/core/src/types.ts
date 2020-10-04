@@ -1,4 +1,37 @@
-import {Middleware} from "./middleware"
+import {BlitzApiRequest, BlitzApiResponse} from "."
+
+export interface DefaultPublicData {
+  userId: any
+  roles: string[]
+}
+
+export interface PublicData extends DefaultPublicData {}
+
+export interface MiddlewareRequest extends BlitzApiRequest {
+  protocol?: string
+}
+export interface MiddlewareResponse extends BlitzApiResponse {
+  /**
+   * This will be passed as the second argument to Blitz queries/mutations.
+   *
+   * You must set blitzCtx BEFORE calling next()
+   */
+  blitzCtx: Record<string, unknown>
+  /**
+   * This is the exact result returned from the Blitz query/mutation
+   *
+   * You must first `await next()` before reading this
+   */
+  blitzResult: unknown
+}
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+
+export type Middleware = (
+  req: MiddlewareRequest,
+
+  res: MiddlewareResponse,
+  next: MiddlewareNext,
+) => Promise<void> | void
 
 /**
  * Infer the type of the parameter from function that takes a single argument

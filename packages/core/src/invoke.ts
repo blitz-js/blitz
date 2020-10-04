@@ -5,17 +5,14 @@ import {
   Resolver,
   EnhancedResolver,
   EnhancedResolverRpcClient,
+  Middleware,
+  MiddlewareResponse,
 } from "./types"
 import {isClient} from "./utils"
 import {IncomingMessage, ServerResponse} from "http"
 import {baseLogger, log as displayLog, chalk} from "@blitzjs/display"
 import prettyMs from "pretty-ms"
-import {
-  getAllMiddlewareForModule,
-  handleRequestWithMiddleware,
-  MiddlewareResponse,
-  Middleware,
-} from "./middleware"
+import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
 
 export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = PromiseReturnType<T>>(
   queryFn: T,

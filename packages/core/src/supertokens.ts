@@ -2,37 +2,8 @@ import {useState} from "react"
 import {publicDataStore} from "./public-data-store"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {readCookie} from "./utils/cookie"
-
-export const TOKEN_SEPARATOR = ";"
-export const HANDLE_SEPARATOR = ":"
-export const SESSION_TYPE_OPAQUE_TOKEN_SIMPLE = "ots"
-export const SESSION_TYPE_ANONYMOUS_JWT = "ajwt"
-export const SESSION_TOKEN_VERSION_0 = "v0"
-
-export const COOKIE_ANONYMOUS_SESSION_TOKEN = "sAnonymousSessionToken"
-export const COOKIE_SESSION_TOKEN = "sSessionToken"
-export const COOKIE_REFRESH_TOKEN = "sIdRefreshToken"
-export const COOKIE_CSRF_TOKEN = "sAntiCrfToken"
-export const COOKIE_PUBLIC_DATA_TOKEN = "sPublicDataToken"
-
-// Headers always all lower case
-export const HEADER_CSRF = "anti-csrf"
-export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
-export const HEADER_SESSION_REVOKED = "session-revoked"
-export const HEADER_CSRF_ERROR = "csrf-error"
-
-export const LOCALSTORAGE_PREFIX = "_blitz-"
-
-function assert(condition: any, message: string): asserts condition {
-  if (!condition) throw new Error(message)
-}
-
-export interface DefaultPublicData {
-  userId: any
-  roles: string[]
-}
-
-export interface PublicData extends DefaultPublicData {}
+import {PublicData} from "./types"
+import {COOKIE_CSRF_TOKEN} from "./constants"
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -85,20 +56,6 @@ export interface AuthenticatedSessionContext extends SessionContextBase {
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
-
-export const parsePublicDataToken = (token: string) => {
-  assert(token, "[parsePublicDataToken] Failed: token is empty")
-
-  const [publicDataStr] = atob(token).split(TOKEN_SEPARATOR)
-  try {
-    const publicData: PublicData = JSON.parse(publicDataStr)
-    return {
-      publicData,
-    }
-  } catch (error) {
-    throw new Error(`[parsePublicDataToken] Failed to parse publicDataStr: ${publicDataStr}`)
-  }
-}
 
 export const useSession = () => {
   const [publicData, setPublicData] = useState(publicDataStore.emptyPublicData)

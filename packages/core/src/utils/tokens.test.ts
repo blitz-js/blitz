@@ -1,4 +1,5 @@
-import {parsePublicDataToken, TOKEN_SEPARATOR} from "./supertokens"
+import {TOKEN_SEPARATOR} from "../constants"
+import {parsePublicDataToken} from "./tokens"
 
 describe("supertokens", () => {
   describe("parsePublicDataToken", () => {

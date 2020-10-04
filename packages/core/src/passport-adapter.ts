@@ -5,14 +5,14 @@ import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
   connectMiddleware,
-  Middleware,
 } from "./middleware"
-import {SessionContext, PublicData} from "./supertokens"
+import {SessionContext} from "./supertokens"
 import {log} from "@blitzjs/display"
 import passport, {AuthenticateOptions, Strategy} from "passport"
 import cookieSession from "cookie-session"
 import {isLocalhost} from "./utils/index"
 import {secureProxyMiddleware} from "./secure-proxy-middleware"
+import {Middleware, PublicData} from "./types"
 
 export type BlitzPassportConfig = {
   successRedirectUrl?: string

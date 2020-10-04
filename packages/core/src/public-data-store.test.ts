@@ -1,7 +1,9 @@
 import {publicDataStore} from "./public-data-store"
-import {COOKIE_PUBLIC_DATA_TOKEN, parsePublicDataToken} from "./supertokens"
+import {COOKIE_PUBLIC_DATA_TOKEN} from "./constants"
 import {deleteCookie, readCookie} from "./utils/cookie"
 import {queryCache} from "react-query"
+import {parsePublicDataToken} from "./utils/tokens"
+
 jest.mock("./supertokens", () => ({
   parsePublicDataToken: jest.fn(),
 }))

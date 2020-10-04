@@ -15,6 +15,7 @@ export * from "./types"
 export * from "./supertokens"
 export * from "./passport-adapter"
 export * from "./errors"
+export * from "./constants"
 
 // --------------------
 // Exports from Next.js
