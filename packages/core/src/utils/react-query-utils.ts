@@ -3,8 +3,20 @@ import {serialize} from "superjson"
 import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
 
-// Use setTimeout when requestIdleCallback is unavailable i.e. on Safari
-const requestIdleCallback = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+// Shim from https://developers.google.com/web/updates/2015/08/using-requestidlecallback
+const requestIdleCallback =
+  window.requestIdleCallback ||
+  function (cb: any) {
+    var start = Date.now()
+    return setTimeout(function () {
+      cb({
+        didTimeout: false,
+        timeRemaining: function () {
+          return Math.max(0, 50 - (Date.now() - start))
+        },
+      })
+    }, 1)
+  }
 
 type MutateOptions = {
   refetch?: boolean
