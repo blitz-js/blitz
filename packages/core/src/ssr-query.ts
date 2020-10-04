@@ -1,19 +1,11 @@
-import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
-import {InferUnaryParam} from "./types"
+import {InferUnaryParam, QueryFn, SsrQueryContext} from "./types"
 import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
   MiddlewareResponse,
 } from "./middleware"
 import {EnhancedResolverModule} from "./rpc"
-
-type QueryFn = (...args: any) => Promise<any>
-
-type SsrQueryContext = {
-  req: IncomingMessage
-  res: ServerResponse
-}
 
 export async function ssrQuery<T extends QueryFn>(
   queryFn: T,

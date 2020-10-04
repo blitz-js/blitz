@@ -1,4 +1,5 @@
-import {executeRpcCall, getIsomorphicRpcHandler} from "@blitzjs/core"
+import {getIsomorphicRpcHandler} from "@blitzjs/core"
+import {executeRpcCall} from "../src/rpc"
 
 global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
 

@@ -1,8 +1,7 @@
 import {useRouter} from "next/router"
 import {useRouterQuery} from "./use-router-query"
 import {fromPairs} from "lodash"
-
-type ParsedUrlQueryValue = string | string[] | undefined
+import {ParsedUrlQueryValue} from "./types"
 
 export interface ParsedUrlQuery {
   [key: string]: ParsedUrlQueryValue

@@ -1,7 +1,6 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {getQueryKey} from "./utils"
-import {ResolverModule, Middleware} from "./middleware"
 import {
   getAntiCSRFToken,
   publicDataStore,
@@ -13,11 +12,7 @@ import {
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
 import merge from "deepmerge"
-
-type Options = {
-  fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
-}
+import {Options, Middleware, ResolverModule} from "./types"
 
 export function executeRpcCall(url: string, params: any, opts: Options = {}) {
   if (typeof window === "undefined") return

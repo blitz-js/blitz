@@ -5,6 +5,7 @@ import {IncomingMessage, ServerResponse} from "http"
 import {EnhancedResolverModule} from "./rpc"
 import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
+import {Middleware, MiddlewareNext, ConnectMiddleware} from "./types"
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -22,24 +23,6 @@ export interface MiddlewareResponse extends BlitzApiResponse {
    * You must first `await next()` before reading this
    */
   blitzResult: unknown
-}
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
-
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void> | void
-
-export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: (error?: Error) => void,
-) => void
-
-export type ResolverModule = {
-  default: (args: any, ctx: any) => Promise<unknown>
-  middleware?: Middleware[]
 }
 
 export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
