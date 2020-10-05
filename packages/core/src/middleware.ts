@@ -3,7 +3,7 @@ import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
 import {log, baseLogger} from "@blitzjs/display"
-import {EnhancedResolver} from "./types"
+import {Middleware, MiddlewareNext, ConnectMiddleware, EnhancedResolver} from "./types"
 
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
@@ -25,19 +25,6 @@ export interface MiddlewareResponse extends BlitzApiResponse {
    */
   blitzResult: unknown
 }
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
-
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void> | void
-
-export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: (error?: Error) => void,
-) => void
 
 export function getAllMiddlewareForModule<TInput, TResult>(
   resolverModule: EnhancedResolver<TInput, TResult>,

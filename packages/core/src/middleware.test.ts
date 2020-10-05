@@ -4,7 +4,8 @@ import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 
 import {BlitzApiRequest, BlitzApiResponse} from "."
-import {Middleware, handleRequestWithMiddleware} from "./middleware"
+import {handleRequestWithMiddleware} from "./middleware"
+import {Middleware} from "./types"
 
 describe("handleRequestWithMiddleware", () => {
   it("works without await", async () => {
