@@ -12,7 +12,6 @@ export {useRouterQuery} from "./use-router-query"
 export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
-export {invalidateQuery} from "./utils/react-query-utils"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {
   getAllMiddlewareForModule,
