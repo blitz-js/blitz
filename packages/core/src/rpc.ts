@@ -110,7 +110,7 @@ export const executeRpcCall = <TInput, TResult>(
         }
 
         const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
-        if (prismaError) {
+        if (prismaError && !("code" in error)) {
           error = new Error(prismaError[0])
           error.statusCode = 500
         }
