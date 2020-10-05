@@ -7,8 +7,6 @@ import {BlitzApiRequest, BlitzApiResponse} from "."
 import {handleRequestWithMiddleware} from "./middleware"
 import {Middleware} from "./types"
 
-const testIfNotWindows = process.platform === "win32" ? it.skip : it
-
 describe("handleRequestWithMiddleware", () => {
   it("works without await", async () => {
     const middleware: Middleware[] = [
@@ -69,7 +67,7 @@ describe("handleRequestWithMiddleware", () => {
   })
 
   // Failing on windows for unknown reason
-  testIfNotWindows("middleware can throw", async () => {
+  it("middleware can throw", async () => {
     console.log = jest.fn()
     console.error = jest.fn()
     const forbiddenMiddleware = jest.fn()
@@ -88,7 +86,7 @@ describe("handleRequestWithMiddleware", () => {
   })
 
   // Failing on windows for unknown reason
-  testIfNotWindows("middleware can return error", async () => {
+  it("middleware can return error", async () => {
     console.log = jest.fn()
     const forbiddenMiddleware = jest.fn()
     const middleware: Middleware[] = [
@@ -108,8 +106,13 @@ describe("handleRequestWithMiddleware", () => {
 
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
   const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    await handleRequestWithMiddleware(req, res, middleware)
-    res.end()
+    try {
+      await handleRequestWithMiddleware(req, res, middleware)
+    } catch (err) {
+      res.status(500)
+    } finally {
+      res.end()
+    }
     return
   }
 
