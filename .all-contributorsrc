@@ -1224,6 +1224,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mizchi",
+      "name": "Kotaro Chikuba",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/73962?v=4",
+      "profile": "https://mizchi.dev",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
