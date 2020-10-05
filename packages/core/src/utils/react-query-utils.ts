@@ -2,6 +2,7 @@ import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
+import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
   refetch?: boolean
@@ -20,21 +21,6 @@ export interface QueryCacheFunctions<T> {
 
 export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctions<T> => ({
   mutate: (newData, opts = {refetch: true}) => {
-    // Shim from https://developers.google.com/web/updates/2015/08/using-requestidlecallback
-    const requestIdleCallback =
-      window.requestIdleCallback ||
-      function (cb: any) {
-        var start = Date.now()
-        return setTimeout(function () {
-          cb({
-            didTimeout: false,
-            timeRemaining: function () {
-              return Math.max(0, 50 - (Date.now() - start))
-            },
-          })
-        }, 1)
-      }
-
     return new Promise((res) => {
       queryCache.setQueryData(queryKey, newData)
       let result: void | ReturnType<typeof queryCache.invalidateQueries>
