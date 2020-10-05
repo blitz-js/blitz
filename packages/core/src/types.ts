@@ -27,11 +27,6 @@ export type QueryFn = (...args: any) => Promise<any>
 
 export type ParsedUrlQueryValue = string | string[] | undefined
 
-export type SsrQueryContext = {
-  req: IncomingMessage
-  res: ServerResponse
-}
-
 export type Options = {
   fromQueryHook?: boolean
   resultOfGetFetchMore?: any
