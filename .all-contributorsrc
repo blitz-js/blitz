@@ -1234,6 +1234,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "konradkalemba",
+      "name": "Konrad Kalemba",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/8682104?v=4",
+      "profile": "https://github.com/konradkalemba",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
