@@ -89,7 +89,7 @@ const Home: BlitzPage = () => {
         <div className="buttons" style={{ marginTop: "5rem" }}>
           <a
             className="button"
-            href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+            href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
             target="_blank"
             rel="noopener noreferrer"
           >
