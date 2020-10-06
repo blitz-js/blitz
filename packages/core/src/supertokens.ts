@@ -3,9 +3,13 @@ import {publicDataStore} from "./public-data-store"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 import {readCookie} from "./utils/cookie"
 
-const sessionPrefix = (process.env.SESSION_PREFIX ||
-  process.env.sessionPrefix ||
-  process.env.npm_package_name)!.replace(/[^a-zA-Z0-9-_]/g, "_")
+const sessionPrefix =
+  (
+    process.env.SESSION_PREFIX ||
+    process.env.sessionPrefix ||
+    process.env.npm_package_name ||
+    ""
+  ).replace(/[^a-zA-Z0-9-_]/g, "_") + "_"
 
 export const TOKEN_SEPARATOR = ";"
 export const HANDLE_SEPARATOR = ":"
