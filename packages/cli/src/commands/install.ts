@@ -1,9 +1,11 @@
-import {Command} from "../command"
+import {flags} from "@oclif/command"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {log} from "@blitzjs/display"
-import {dedent} from "../utils/dedent"
 import {Stream} from "stream"
 import {promisify} from "util"
+
+import {Command} from "../command"
+import {dedent} from "../utils/dedent"
 
 const pipeline = promisify(Stream.pipeline)
 
@@ -42,6 +44,10 @@ export class Install extends Command {
   static description = "Install a Recipe into your Blitz app"
   static aliases = ["i"]
   static strict = false
+
+  static flags = {
+    help: flags.help({char: "h"}),
+  }
 
   static args = [
     {
@@ -144,6 +150,10 @@ export class Install extends Command {
   }
 
   async run() {
+    // @ts-ignore noUnusedLocals
+    // This is needed to make sure that help flag is working correctly
+    const {flags}: {flags: Flags} = this.parse(Install)
+
     require("../utils/setup-ts-node").setupTsnode()
     const {args} = this.parse(Install)
     const pkgManager = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))

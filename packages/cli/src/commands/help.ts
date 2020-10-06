@@ -1,5 +1,4 @@
 import {Command, flags} from "@oclif/command"
-
 import Help from "@oclif/plugin-help"
 
 export class HelpCommand extends Command {

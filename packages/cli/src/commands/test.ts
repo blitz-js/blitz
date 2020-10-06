@@ -1,5 +1,5 @@
 import {spawn} from "cross-spawn"
-import {Command} from "@oclif/command"
+import {Command, flags} from "@oclif/command"
 
 export class Test extends Command {
   static description = "Run project tests"
@@ -12,8 +12,15 @@ export class Test extends Command {
     },
   ]
 
+  static flags = {
+    help: flags.help({char: "h"}),
+  }
+
   async run() {
-    const {args} = this.parse(Test)
+    // @ts-ignore noUnusedLocals
+    // This is needed to make sure that help flag is working correctly
+    const {args, flags} = this.parse(Test)
+
     let watchMode: boolean = false
     const watch = args["watch"]
     if (watch) {

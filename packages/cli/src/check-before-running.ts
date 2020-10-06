@@ -3,11 +3,22 @@ import chalk from "chalk"
 
 import {isBlitzRoot, IsBlitzRootError} from "./utils/is-blitz-root"
 
-const whitelistGlobal = ["-h", "--help", "help", "new", "autocomplete", "autocomplete:script"]
+const commandAllowListGlobal = [
+  "-h",
+  "--help",
+  "help",
+  "new",
+  "autocomplete",
+  "autocomplete:script",
+]
+const argumentAllowListGlobal = ["-h", "--help", "help"]
 
 export const hook: Hook<"init"> = async function (options) {
-  const {id} = options
-  if (id && whitelistGlobal.includes(id)) return
+  const {argv, id} = options
+  console.log(options)
+  if (argv.length > 0 && argumentAllowListGlobal.some((arg) => argv.includes(arg))) return
+  if (id && commandAllowListGlobal.includes(id)) return
+  if (id === "db" && argv.length === 0) return
 
   const {err, message, depth} = await isBlitzRoot()
 

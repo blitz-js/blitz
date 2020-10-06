@@ -1,10 +1,11 @@
 import {flags} from "@oclif/command"
-import {Command} from "../command"
 import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 const debug = require("debug")("blitz:new")
+
+import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 export interface Flags {
@@ -122,7 +123,6 @@ export class New extends Command {
       this.log("") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
-
       this.error(err)
     }
   }
