@@ -14,6 +14,10 @@ export function withBlitz(nextConfig: any) {
         reactMode: "concurrent",
         ...(normalizedConfig.experimental || {}),
       },
+      env: {
+        sessionPrefix: process.env.SESSION_PREFIX || process.env.npm_package_name,
+        ...(normalizedConfig.env || {}),
+      },
       webpack(config: any, options: Record<any, any>) {
         if (options.isServer) {
           const originalEntry = config.entry
