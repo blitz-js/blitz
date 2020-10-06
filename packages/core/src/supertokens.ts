@@ -100,7 +100,11 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-export const useSession = () => {
+export interface PublicDataWithLoading extends PublicData {
+  isLoading: boolean
+}
+
+export const useSession: () => PublicDataWithLoading = () => {
   const [publicData, setPublicData] = useState(publicDataStore.emptyPublicData)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -112,7 +116,7 @@ export const useSession = () => {
     return subscription.unsubscribe
   }, [])
 
-  return {...publicData, isLoading} as PublicData & {isLoading: boolean}
+  return {...publicData, isLoading}
 }
 
 /*
