@@ -1,6 +1,6 @@
 {
   "name": "@examples/store",
-  "version": "0.24.0-canary.4",
+  "version": "0.24.0",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@prisma/cli": "2.8.0",
     "@prisma/client": "2.8.0",
-    "blitz": "0.24.0-canary.4",
+    "blitz": "0.24.0",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8",
