@@ -1,6 +1,11 @@
 import pkgDir from "pkg-dir"
 import path from "path"
 import fs from "fs"
+import {getPackageJson} from "@blitzjs/config"
+
+if (!process.env.SESSION_PREFIX) {
+  process.env.SESSION_PREFIX = getPackageJson().name
+}
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
@@ -15,7 +20,7 @@ export function withBlitz(nextConfig: any) {
         ...(normalizedConfig.experimental || {}),
       },
       env: {
-        sessionPrefix: process.env.SESSION_PREFIX || process.env.npm_package_name,
+        SESSION_PREFIX: process.env.SESSION_PREFIX,
         ...(normalizedConfig.env || {}),
       },
       webpack(config: any, options: Record<any, any>) {

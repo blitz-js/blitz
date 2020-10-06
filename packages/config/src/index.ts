@@ -3,7 +3,17 @@ import {join} from "path"
 import {existsSync} from "fs"
 import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
 
+export const getProjectRoot = () => {
+  return pkgDir.sync() || process.cwd()
+}
+
+export const getPackageJson = () => {
+  const projectRoot = getProjectRoot()
+  return require(join(projectRoot, "package.json"))
+}
+
 const configFiles = ["blitz.config.js", "next.config.js"]
+
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
@@ -13,7 +23,7 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
   }
 
   let blitzConfig = {}
-  const projectRoot = pkgDir.sync() || process.cwd()
+  const projectRoot = getProjectRoot()
 
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {
