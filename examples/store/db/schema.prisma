@@ -17,23 +17,22 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 // --------------------------------------
 
 model User {
-  id      Int      @default(autoincrement()) @id
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email   String   @unique
-  name    String?
-  role    String?
-  storeId Int?
+  updatedAt DateTime @default(now()) @updatedAt
+  email     String   @unique
+  name      String?
+  role      String?
+  storeId   Int?
 }
 
 model Product {
-  id          Int      @default(autoincrement()) @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
   handle      String   @unique
   name        String?
   description String?

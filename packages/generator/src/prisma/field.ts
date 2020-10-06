@@ -201,7 +201,7 @@ export class Field {
   }
 
   private getIsUpdatedAt() {
-    return this.isUpdatedAt ? "@updatedAt" : ""
+    return this.isUpdatedAt ? "@default(now()) @updatedAt" : ""
   }
 
   private getRelation() {

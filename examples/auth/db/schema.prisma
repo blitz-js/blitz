@@ -22,7 +22,7 @@ generator client {
 model User {
   id             Int       @default(autoincrement()) @id
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  updatedAt      DateTime  @default(now()) @updatedAt
   name           String?
   email          String    @unique
   hashedPassword String?
@@ -33,7 +33,7 @@ model User {
 model Session {
   id                 Int       @default(autoincrement()) @id
   createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  updatedAt          DateTime  @default(now()) @updatedAt
   expiresAt          DateTime?
   handle             String    @unique
   user               User?     @relation(fields: [userId], references: [id])
