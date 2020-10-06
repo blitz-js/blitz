@@ -1,4 +1,4 @@
-import {dev, prod} from "@blitzjs/server"
+import {dev as Dev, prod as Prod} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
 
 export class Start extends Command {
@@ -39,8 +39,10 @@ export class Start extends Command {
 
     try {
       if (flags.production) {
+        const prod: typeof Prod = require("@blitzjs/server").prod
         await prod(config)
       } else {
+        const dev: typeof Dev = require("@blitzjs/server").dev
         await dev(config)
       }
     } catch (err) {
