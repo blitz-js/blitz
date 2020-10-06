@@ -16,9 +16,6 @@ describe("withBlitz", () => {
       experimental: {
         reactMode: "concurrent",
       },
-      env: {
-        sessionPrefix: "@blitzjs/server",
-      },
       webpack: null,
       webpackDevMiddleware: null,
     })
@@ -37,9 +34,6 @@ describe("withBlitz", () => {
       foo: "bar",
       experimental: {
         reactMode: "concurrent",
-      },
-      env: {
-        sessionPrefix: "@blitzjs/server",
       },
       webpack: null,
       webpackDevMiddleware: null,
