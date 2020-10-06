@@ -1252,6 +1252,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Dohxis",
+      "name": "Domantas Mauruča",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8768909?v=4",
+      "profile": "https://github.com/Dohxis",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "sandulat",
+      "name": "Stratulat Alexandru",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7345874?v=4",
+      "profile": "https://sandulat.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
