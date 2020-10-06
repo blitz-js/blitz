@@ -16,6 +16,8 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   skipInstall: boolean
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
+  database: "SQLite" | "PostgreSQL"
+  databaseUrl: string
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -35,6 +37,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return {
       name: this.options.appName,
       username: await username(),
+      database: this.options.database === "SQLite" ? "sqlite" : "postgresql",
+      databaseUrl: this.options.databaseUrl,
     }
   }
 

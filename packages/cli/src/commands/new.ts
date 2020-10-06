@@ -2,6 +2,7 @@ import {flags} from "@oclif/command"
 import {Command} from "../command"
 import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
+import username from "username"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 const debug = require("debug")("blitz:new")
@@ -66,7 +67,29 @@ export class New extends Command {
         {name: "Formik"},
       ]
 
-      const promptResult: any = await this.enquirer.prompt({
+      const databaseChoices: Array<{name: AppGeneratorOptions["database"]; message?: string}> = [
+        {name: "SQLite", message: "SQLite (default)"},
+        {name: "PostgreSQL"},
+      ]
+
+      const databasePromptResult: any = await this.enquirer.prompt({
+        type: "select",
+        name: "database",
+        message: "Pick a database engine (you can switch to something else later if you want)",
+        choices: databaseChoices,
+      })
+
+      const databaseUrlPromptResult: any = await this.enquirer.prompt({
+        type: "input",
+        name: "databaseUrl",
+        message: `Specify url for ${databasePromptResult.database} (you can change to something else later if you want)`,
+        initial:
+          databasePromptResult.database === "SQLite"
+            ? "file:./db.sqlite"
+            : `postgresql://${await username()}@localhost:5432/${appName}`,
+      })
+
+      const formPromptResult: any = await this.enquirer.prompt({
         type: "select",
         name: "form",
         message: "Pick a form library (you can switch to something else later if you want)",
@@ -81,7 +104,9 @@ export class New extends Command {
         dryRun,
         useTs: !flags.js,
         yarn: !npm,
-        form: promptResult.form,
+        form: formPromptResult.form,
+        database: databasePromptResult.database,
+        databaseUrl: databaseUrlPromptResult.databaseUrl,
         version: this.config.version,
         skipInstall,
         skipGit: flags["no-git"],
@@ -97,7 +122,7 @@ export class New extends Command {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
       } else {
-        const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
+        const spinner = log.spinner(log.withBrand(`Initializing ${databasePromptResult.database} database`)).start()
 
         try {
           // Required in order for DATABASE_URL to be available
