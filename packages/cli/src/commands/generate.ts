@@ -30,6 +30,7 @@ enum ResourceType {
 }
 
 interface Flags {
+  root?: string
   context?: string
   "dry-run"?: boolean
   parent?: string
@@ -98,11 +99,16 @@ export class Generate extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    root: flags.string({
+      char: "r",
+      description:
+        "Provide a root folder which will be considered as base path when creating nested context.",
+      default: "modules",
+    }),
     context: flags.string({
       char: "c",
       description:
         "Provide a context folder within which we'll place the generated files for better code organization. You can also supply this in the name of the model to be generated (e.g. `blitz generate query admin/projects`). Combining the `--context` flags and supplying context via the model name in the same command is not supported.",
-      default: "modules",
     }),
     parent: flags.string({
       char: "p",
@@ -120,10 +126,20 @@ export class Generate extends Command {
 > blitz generate crud productVariant
     `,
     `# The 'all' generator will scaffold out everything possible for a model
-> blitz generate all products
+# For example, this command generates all stuff about products under 'app/modules/products'
+> blitz generate all product
+    `,
+    `# The '--root' flag will allow you to specify custom base path
+# For example, this command generates only project pages under 'app/sections/projects/pages'
+> blitz generate pages project --root=sections
     `,
     `# The '--context' flag will allow you to generate files in a nested folder
-> blitz generate pages projects --admin
+# For example, this command generates project pages under 'app/modules/admin/projects/pages'
+> blitz generate pages project --context=admin
+    `,
+    `# Context and root flags can also be combined
+# For example, this command generates project pages under 'app/sections/admin/projects/pages'
+> blitz generate pages projects --root=sections --context=admin
     `,
     `# Context can also be supplied in the model name directly
 > blitz generate pages admin/projects
@@ -184,27 +200,36 @@ export class Generate extends Command {
     }
   }
 
-  getModelNameAndContext(modelName: string, context?: string): {model: string; context?: string} {
+  getModelNameAndContext(
+    modelName: string,
+    context?: string,
+    root?: string,
+  ): {model: string; context?: string} {
+    const contextRoot = root || ""
     const modelSegments = modelName.split(/[\\/]/)
 
     if (modelSegments.length > 1) {
+      const pathSegments = [contextRoot, ...modelSegments.slice(0, modelSegments.length - 1)]
+
       return {
         model: modelSegments[modelSegments.length - 1],
-        context: require("path").join(...modelSegments.slice(0, modelSegments.length - 1)),
+        context: require("path").join(...pathSegments),
       }
     }
 
     if (Boolean(context)) {
       const contextSegments = (context as string).split(/[\\/]/)
+      const pathSegments = [contextRoot, ...contextSegments]
 
       return {
         model: modelName,
-        context: require("path").join(...contextSegments),
+        context: require("path").join(...pathSegments),
       }
     }
 
     return {
       model: modelName,
+      context: contextRoot,
     }
   }
 
@@ -214,7 +239,7 @@ export class Generate extends Command {
     debug("flags: ", flags)
 
     try {
-      const {model, context} = this.getModelNameAndContext(args.model, flags.context)
+      const {model, context} = this.getModelNameAndContext(args.model, flags.context, flags.root)
       const singularRootContext = modelName(model)
 
       const generators = generatorMap[args.type]
