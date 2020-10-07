@@ -83,14 +83,20 @@ export const Propose: Executor["Propose"] = ({cliArgs, step, onProposalAccepted}
   )
 }
 
-function getPackageManager() {
+/**
+ * Exported for unit testing purposes
+ */
+export function getPackageManager() {
   if (fs.existsSync(path.resolve("package-lock.json"))) {
     return "npm"
   }
   return "yarn"
 }
 
-async function installPackages(packages: NpmPackage[], isDev = false) {
+/**
+ * Exported for unit testing purposes
+ */
+export async function installPackages(packages: NpmPackage[], isDev = false) {
   const packageManager = getPackageManager()
   const args: string[] = ["add"]
 

@@ -1,6 +1,6 @@
 import React, {Suspense} from "react"
 import Layout from "app/layouts/Layout"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
+import {Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
 import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
@@ -12,6 +12,7 @@ export const Edit__ModelName__ = () => {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
   const [__modelName__, {mutate}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [update__ModelName__Mutation] = useMutation(update__ModelName__)
 
   return (
     <div>
@@ -22,11 +23,11 @@ export const Edit__ModelName__ = () => {
         initialValues={__modelName__}
         onSubmit={async () => {
           try {
-            const updated = await update__ModelName__({
+            const updated = await update__ModelName__Mutation({
               where: {id: __modelName__.id},
               data: {name: "MyNewName"},
             })
-            mutate(updated)
+            await mutate(updated)
             alert("Success!" + JSON.stringify(updated))
             router.push(
               process.env.parentModel
@@ -53,31 +54,25 @@ const Edit__ModelName__Page: BlitzPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Edit __ModelName__</title>
-      </Head>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Edit__ModelName__ />
+      </Suspense>
 
-      <main>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Edit__ModelName__ />
-        </Suspense>
-
-        <p>
-          <if condition="parentModel">
-            <Link
-              as="/__parentModels__/__parentModelId__/__modelNames__"
-              href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
-            >
+      <p>
+        <if condition="parentModel">
+          <Link
+            as="/__parentModels__/__parentModelId__/__modelNames__"
+            href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
+          >
+            <a>__ModelNames__</a>
+          </Link>
+          <else>
+            <Link href="/__modelNames__">
               <a>__ModelNames__</a>
             </Link>
-            <else>
-              <Link href="/__modelNames__">
-                <a>__ModelNames__</a>
-              </Link>
-            </else>
-          </if>
-        </p>
-      </main>
+          </else>
+        </if>
+      </p>
     </div>
   )
 }

@@ -51,7 +51,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
           )
         }
       })
-      program.find(j.ImportDeclaration, {source: "blitz"}).forEach((blitzImportPath) => {
+      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
         if (
           !blitzImportPath.value.specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
