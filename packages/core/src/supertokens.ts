@@ -100,8 +100,8 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
-export const useSession = () => {
-  const [publicData, setPublicData] = useState(publicDataStore.emptyPublicData)
+export const useSession = (initialPublicData?: PublicData) => {
+  const [publicData, setPublicData] = useState(initialPublicData ?? publicDataStore.emptyPublicData)
   const [isLoading, setIsLoading] = useState(true)
 
   useIsomorphicLayoutEffect(() => {
