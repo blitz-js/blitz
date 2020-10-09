@@ -40,7 +40,9 @@ You need Node.js 12 or newer
 
 #### Install Blitz
 
-Run `npm install -g blitz`
+Run `npm install -g blitz` or `yarn global add blitz`
+
+_You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 #### Create a New App
 
