@@ -102,12 +102,15 @@ export const parsePublicDataToken = (token: string) => {
 
 export const useSession = (initialPublicData?: PublicData) => {
   const [publicData, setPublicData] = useState(initialPublicData ?? publicDataStore.emptyPublicData)
-  const [isLoading, setIsLoading] = useState(true)
+  // skip loading if initial public data is provided
+  const [isLoading, setIsLoading] = useState(!initialPublicData)
 
   useIsomorphicLayoutEffect(() => {
-    // Initialize on mount
-    setPublicData(publicDataStore.getData())
-    setIsLoading(false)
+    if (!initialPublicData) {
+      // Initialize on mount
+      setPublicData(publicDataStore.getData())
+      setIsLoading(false)
+    }
     const subscription = publicDataStore.observable.subscribe(setPublicData)
     return subscription.unsubscribe
   }, [])
