@@ -19,7 +19,7 @@ export default async function resetPassword(
   // was used in forgotPassword.ts when sending to the browser
   const hashedToken = hashToken(decodeURIComponent(token))
   const possibleToken = await db.token.findOne({
-    where: { hashedToken, type: "RESET_PASSSWORD" },
+    where: { hashedToken_type: { hashedToken, type: "RESET_PASSSWORD" } },
     include: { user: true },
   })
 
