@@ -100,7 +100,6 @@ describe("AppGenerator", () => {
     skipInstall: false,
     form: "React Final Form",
     database: "SQLite",
-    databaseUrl: "file:./db.sqlite",
     skipGit: false,
   })
 
