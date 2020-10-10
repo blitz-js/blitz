@@ -18,7 +18,7 @@ export default async function resetPassword(
   // Have to first decodeURIComponent(token) because encodeURIComponent
   // was used in forgotPassword.ts when sending to the browser
   const hashedToken = hashToken(decodeURIComponent(token))
-  const possibleToken = await db.token.findOne({
+  const possibleToken = await db.token.findFirst({
     where: { hashedToken, type: "RESET_PASSSWORD" },
     include: { user: true },
   })
