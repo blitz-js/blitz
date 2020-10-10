@@ -1271,6 +1271,34 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "aericson",
+      "name": "André Ericson",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/692542?v=4",
+      "profile": "https://github.com/aericson",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "cajotafer",
+      "name": "Carlos Fernández",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/41461969?v=4",
+      "profile": "http://Cajotafer.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Kosai106",
+      "name": "Kevin Østerkilde",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6379824?v=4",
+      "profile": "https://oesterkilde.dk/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
