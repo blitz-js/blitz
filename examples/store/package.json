@@ -19,20 +19,20 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.8.0",
+    "@prisma/cli": "2.7.1",
     "@prisma/client": "2.8.0",
     "blitz": "0.24.1",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8",
-    "react-error-boundary": "2.3.1",
+    "react-error-boundary": "3.0.2",
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"
   },
   "devDependencies": {
-    "@types/react": "16.9.34",
-    "cypress": "4.11.0",
-    "eslint-plugin-cypress": "2.10.3",
-    "start-server-and-test": "1.11.2"
+    "@types/react": "16.9.51",
+    "cypress": "5.3.0",
+    "eslint-plugin-cypress": "2.11.2",
+    "start-server-and-test": "1.11.4"
   }
 }
