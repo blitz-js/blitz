@@ -1,22 +1,7 @@
 import React from "react"
 import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
 import {useQuery} from "../src/use-query-hooks"
-import {deserialize} from "superjson"
-
-// This enhance fn does what getIsomorphicEnhancedResolver does during build time
-const enhance = (fn: any) => {
-  const newFn = (...args: any) => {
-    const [data, ...rest] = args
-    return fn(deserialize(data), ...rest)
-  }
-  newFn._meta = {
-    name: "testResolver",
-    type: "query",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
-  return newFn
-}
+import {enhanceQueryFn} from "./test-utils"
 
 describe("useQuery", () => {
   const setupHook = (
@@ -46,7 +31,7 @@ describe("useQuery", () => {
       return args.toUpperCase()
     }
     it("should work with Blitz queries", async () => {
-      const [res] = setupHook("test", enhance(upcase))
+      const [res] = setupHook("test", enhanceQueryFn(upcase))
       await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
       await act(async () => {
         await screen.findByText("Ready")

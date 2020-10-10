@@ -53,7 +53,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<TResult>(queryKey),
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
   return [data as TResult, rest as RestQueryResult<TResult>]
@@ -89,7 +89,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<TResult>(queryKey),
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
   return [resolvedData as TResult, rest as RestPaginatedResult<TResult>]
@@ -138,7 +138,7 @@ export function useInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<TResult>(queryKey),
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
   return [data as TResult[], rest as RestInfiniteResult<TResult>]
