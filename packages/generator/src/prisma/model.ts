@@ -71,6 +71,12 @@ export class Model {
       .join("")
   }
 
+  public getNewFields() {
+    return stringifyFieldsForPrinting([...this.fields])
+      .map((field) => `  ${field}\n`)
+      .join("")
+  }
+
   toString() {
     return `model ${this.name} {${this.getFields()}\n}`
   }
