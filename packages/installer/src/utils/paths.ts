@@ -15,6 +15,9 @@ export const paths = {
   entry() {
     return `app/pages/index${ext(true)}`
   },
+  babelConfig() {
+    return "babel.config.js"
+  },
   blitzConfig() {
     return "blitz.config.js"
   },

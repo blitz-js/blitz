@@ -237,7 +237,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       ["git", ["add", "."], {stdio: "ignore"}],
       [
         "git",
-        ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
         {stdio: "ignore", timeout: 10000},
       ],
     ]
