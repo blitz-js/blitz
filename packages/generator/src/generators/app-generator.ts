@@ -1,7 +1,6 @@
 import {Generator, GeneratorOptions} from "../generator"
 import spawn from "cross-spawn"
 import chalk from "chalk"
-import username from "username"
 import {readJSONSync, writeJson} from "fs-extra"
 import {resolve, join} from "path"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
@@ -17,7 +16,6 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
   database: "SQLite" | "PostgreSQL"
-  databaseUrl: string
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -33,12 +31,19 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ["jsconfig.json"]
   }
 
+  // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
       name: this.options.appName,
-      username: await username(),
       database: this.options.database === "SQLite" ? "sqlite" : "postgresql",
-      databaseUrl: this.options.databaseUrl,
+      databaseUrl:
+        this.options.database === "SQLite"
+          ? "file:./db.sqlite"
+          : `postgresql://postgres@localhost:5432/${this.options.appName}`,
+      testingDatabaseUrl:
+        this.options.database === "SQLite"
+          ? "file:./db_test.sqlite"
+          : `postgresql://postgres@localhost:5432/${this.options.appName}_test`,
     }
   }
 

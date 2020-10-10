@@ -29,13 +29,10 @@ const testIfNotWindows = process.platform === "win32" ? test.skip : test
 jest.mock("enquirer", () => {
   return jest.fn().mockImplementation(() => {
     return {
-      prompt: jest
-        .fn()
-        .mockImplementation(() => ({
-          form: "React Final Form",
-          database: "SQLite",
-          databaseUrl: "file:./db.sqlite",
-        })),
+      prompt: jest.fn().mockImplementation(() => ({
+        form: "React Final Form",
+        database: "SQLite",
+      })),
     }
   })
 })
