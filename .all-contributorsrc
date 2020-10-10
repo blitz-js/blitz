@@ -1280,6 +1280,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cajotafer",
+      "name": "Carlos Fernández",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/41461969?v=4",
+      "profile": "http://Cajotafer.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
