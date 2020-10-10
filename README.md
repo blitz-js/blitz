@@ -394,11 +394,13 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   <tr>
     <td align="center"><a href="https://github.com/aericson"><img src="https://avatars3.githubusercontent.com/u/692542?v=4" width="100px;" alt=""/><br /><sub><b>André Ericson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=aericson" title="Code">💻</a></td>
     <td align="center"><a href="http://Cajotafer.com"><img src="https://avatars2.githubusercontent.com/u/41461969?v=4" width="100px;" alt=""/><br /><sub><b>Carlos Fernández</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=cajotafer" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://oesterkilde.dk/"><img src="https://avatars1.githubusercontent.com/u/6379824?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Østerkilde</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=Kosai106" title="Documentation">📖</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
