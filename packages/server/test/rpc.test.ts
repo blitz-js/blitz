@@ -132,7 +132,7 @@ describe("rpcMiddleware", () => {
         expect(resolverModule).toHaveBeenCalledTimes(0)
         expect(res.status).toBe(500)
       })
-    })
+    }, 30000)
 
     it("handles a query error", async () => {
       console.log = jest.fn()
