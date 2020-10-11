@@ -1,4 +1,5 @@
-import {executeRpcCall, getIsomorphicEnhancedResolver} from "@blitzjs/core"
+import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
+import {executeRpcCall} from "../src/rpc"
 
 declare global {
   namespace NodeJS {

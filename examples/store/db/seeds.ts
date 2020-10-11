@@ -22,9 +22,9 @@ const randomProduct = () => {
 
 const seed = async () => {
   for (let i = 0; i < 5; i++) {
-    await db.product.create({ data: randomProduct() })
+    await db.product.create({data: randomProduct()})
   }
-  await db.user.create({ data: { email: "foo@bar.com", name: "Foobar" } })
+  await db.user.create({data: {email: "foo@bar.com", name: "Foobar"}})
 }
 
 export default seed

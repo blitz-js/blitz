@@ -1,21 +1,32 @@
 import {NextPage, NextComponentType, NextPageContext} from "next"
 import {AppProps as NextAppProps} from "next/app"
 
-export * from "./use-query-hooks"
-export {useMutation} from "./use-mutation"
-export {invoke, invokeWithMiddleware} from "./invoke"
-export {getQueryKey, invalidateQuery} from "./utils/react-query-utils"
-export * from "./use-params"
-export * from "./rpc"
-export * from "./with-router"
-export * from "./use-router"
-export * from "./use-router-query"
-export * from "./middleware"
 export * from "./types"
-export * from "./supertokens"
-export * from "./passport-adapter"
 export * from "./errors"
 export * from "./constants"
+export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
+export {getQueryKey, invalidateQuery} from "./utils/react-query-utils"
+export {useParam, useParams} from "./use-params"
+export {withRouter, RouterContext, BlitzRouter} from "./with-router"
+export {useRouter} from "./use-router"
+export {useRouterQuery} from "./use-router-query"
+export {passportAuth} from "./passport-adapter"
+export {getIsomorphicEnhancedResolver} from "./rpc"
+export {useMutation} from "./use-mutation"
+export {invoke, invokeWithMiddleware} from "./invoke"
+export {
+  getAllMiddlewareForModule,
+  handleRequestWithMiddleware,
+  connectMiddleware,
+  Ctx,
+  DefaultCtx,
+} from "./middleware"
+export {
+  getAntiCSRFToken,
+  useSession,
+  SessionConfig, // new
+  SessionContext,
+} from "./supertokens"
 
 // --------------------
 // Exports from Next.js

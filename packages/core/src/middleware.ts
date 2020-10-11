@@ -9,16 +9,11 @@ import {
   MiddlewareNext,
   MiddlewareRequest,
   MiddlewareResponse,
+  ConnectMiddleware,
 } from "./types"
 
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
-
-export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: (error?: Error) => void,
-) => void
 
 export function getAllMiddlewareForModule<TInput, TResult>(
   resolverModule: EnhancedResolver<TInput, TResult>,

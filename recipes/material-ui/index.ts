@@ -51,7 +51,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
           )
         }
       })
-      program.find(j.ImportDeclaration, {source: "blitz"}).forEach((blitzImportPath) => {
+      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
         if (
           !blitzImportPath.value.specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
@@ -298,27 +298,30 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
           node.body.body.splice(0, 0, removeServerSideInjectedCss)
         }
       })
-      program.find(j.JSXElement, {openingElement: {name: {name: "Component"}}}).forEach((path) => {
-        const {node} = path
-        path.replace(
-          j.jsxElement(
-            j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-              j.jsxAttribute(
-                j.jsxIdentifier("theme"),
-                j.jsxExpressionContainer(j.identifier("theme")),
-              ),
-            ]),
-            j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-            [
-              j.literal("\n"),
-              j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
-              j.literal("\n"),
-              node,
-              j.literal("\n"),
-            ],
-          ),
-        )
-      })
+
+      program
+        .find(j.JSXExpressionContainer, {expression: {callee: {name: "getLayout"}}})
+        .forEach((path) => {
+          const {node} = path
+          path.replace(
+            j.jsxElement(
+              j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+                j.jsxAttribute(
+                  j.jsxIdentifier("theme"),
+                  j.jsxExpressionContainer(j.identifier("theme")),
+                ),
+              ]),
+              j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+              [
+                j.literal("\n"),
+                j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
+                j.literal("\n"),
+                node,
+                j.literal("\n"),
+              ],
+            ),
+          )
+        })
 
       // import React if it wasn't already imported
       if (!isReactImported) {

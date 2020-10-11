@@ -76,20 +76,27 @@ const Home: BlitzPage = () => {
         <pre>
           <code>blitz db migrate</code>
         </pre>
-
-        <p>
-          Then <strong>restart the server</strong>
-            <pre><code>Ctrl + c</code></pre>
-            <pre><code>blitz start</code></pre>
+        <div>
+          <p>
+            Then <strong>restart the server</strong>
+          </p>
+          <pre>
+            <code>Ctrl + c</code>
+          </pre>
+          <pre>
+            <code>blitz start</code>
+          </pre>
+          <p>
             and go to{" "}
-          <Link href="/projects">
-            <a>/projects</a>
-          </Link>
-        </p>
+            <Link href="/projects">
+              <a>/projects</a>
+            </Link>
+          </p>
+        </div>
         <div className="buttons" style={{ marginTop: "5rem" }}>
           <a
             className="button"
-            href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+            href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -231,6 +238,7 @@ const Home: BlitzPage = () => {
           background: #fafafa;
           border-radius: 5px;
           padding: 0.75rem;
+          text-align: center;
         }
         code {
           font-size: 0.9rem;

@@ -1,4 +1,7 @@
 import {BlitzApiRequest, BlitzApiResponse} from "."
+import {IncomingMessage, ServerResponse} from "http"
+import {AuthenticateOptions, Strategy} from "passport"
+import {MutationResult, MutateConfig} from "react-query"
 
 export interface DefaultPublicData {
   userId: any
@@ -28,7 +31,6 @@ export type MiddlewareNext = (error?: Error) => Promise<void> | void
 
 export type Middleware = (
   req: MiddlewareRequest,
-
   res: MiddlewareResponse,
   next: MiddlewareNext,
 ) => Promise<void> | void
@@ -53,6 +55,33 @@ export interface CancellablePromise<T> extends Promise<T> {
 }
 
 export type QueryFn = (...args: any) => Promise<any>
+
+export type ParsedUrlQueryValue = string | string[] | undefined
+
+export type Options = {
+  fromQueryHook?: boolean
+  resultOfGetFetchMore?: any
+}
+
+export type ConnectMiddleware = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: (error?: Error) => void,
+) => void
+
+export type BlitzPassportConfig = {
+  successRedirectUrl?: string
+  errorRedirectUrl?: string
+  authenticateOptions?: AuthenticateOptions
+  strategies: Required<Strategy>[]
+  secureProxy?: boolean
+}
+
+export type VerifyCallbackResult = {
+  publicData: PublicData
+  privateData?: Record<string, any>
+  redirectUrl?: string
+}
 
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
@@ -118,3 +147,30 @@ declare global {
     cancelIdleCallback: (handle: RequestIdleCallbackHandle) => void
   }
 }
+
+export type InvokeWithMiddlewareConfig = {
+  req: IncomingMessage
+  res: ServerResponse
+  middleware?: Middleware[]
+  [prop: string]: any
+}
+
+export declare type MutateFunction<
+  TResult,
+  TError = unknown,
+  TVariables = unknown,
+  TSnapshot = unknown
+> = (
+  variables?: TVariables,
+  config?: MutateConfig<TResult, TError, TVariables, TSnapshot>,
+) => Promise<TResult>
+
+export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [
+  MutateFunction<TResult, TError, TVariables, TSnapshot>,
+  MutationResult<TResult, TError>,
+]
+
+export declare type MutationFunction<TResult, TVariables = unknown> = (
+  variables: TVariables,
+  ctx?: any,
+) => Promise<TResult>

@@ -5,11 +5,10 @@ import {
   Resolver,
   EnhancedResolver,
   EnhancedResolverRpcClient,
-  Middleware,
   MiddlewareResponse,
+  InvokeWithMiddlewareConfig,
 } from "./types"
 import {isClient} from "./utils"
-import {IncomingMessage, ServerResponse} from "http"
 import {baseLogger, log as displayLog, chalk} from "@blitzjs/display"
 import prettyMs from "pretty-ms"
 import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
@@ -31,13 +30,6 @@ export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = Prom
     const fn = (queryFn as unknown) as EnhancedResolver<TInput, TResult>
     return fn(params) as ReturnType<T>
   }
-}
-
-export type InvokeWithMiddlewareConfig = {
-  req: IncomingMessage
-  res: ServerResponse
-  middleware?: Middleware[]
-  [prop: string]: any
 }
 
 export async function invokeWithMiddleware<TInput, TResult>(

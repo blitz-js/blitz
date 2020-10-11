@@ -8,25 +8,11 @@ import {
 } from "./middleware"
 import {SessionContext} from "./supertokens"
 import {log} from "@blitzjs/display"
-import passport, {AuthenticateOptions, Strategy} from "passport"
+import passport from "passport"
 import cookieSession from "cookie-session"
 import {isLocalhost} from "./utils/index"
 import {secureProxyMiddleware} from "./secure-proxy-middleware"
-import {Middleware, PublicData} from "./types"
-
-export type BlitzPassportConfig = {
-  successRedirectUrl?: string
-  errorRedirectUrl?: string
-  authenticateOptions?: AuthenticateOptions
-  strategies: Required<Strategy>[]
-  secureProxy?: boolean
-}
-
-export type VerifyCallbackResult = {
-  publicData: PublicData
-  privateData?: Record<string, any>
-  redirectUrl?: string
-}
+import {VerifyCallbackResult, BlitzPassportConfig, Middleware} from "./types"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
