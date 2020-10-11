@@ -28,7 +28,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
       if (!this.fs.exists(path.resolve("db/schema.prisma"))) {
         throw new Error("Prisma schema file was not found")
       }
-      let updatedOrCreated = 'created';
+      let updatedOrCreated = "created"
 
       const extraArgs =
         this.options.extraArgs.length === 1 && this.options.extraArgs[0].includes(" ")
@@ -59,7 +59,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
             //replace all content with the newly added fields for the already existing model
             this.fs.write(path.resolve("db/schema.prisma"), schema.replace(model, newModel))
-            updatedOrCreated = "updated";
+            updatedOrCreated = "updated"
           }
         }
       }

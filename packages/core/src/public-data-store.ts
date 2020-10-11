@@ -1,12 +1,9 @@
-import {
-  LOCALSTORAGE_PREFIX,
-  COOKIE_PUBLIC_DATA_TOKEN,
-  PublicData,
-  parsePublicDataToken,
-} from "./supertokens"
+import {LOCALSTORAGE_PREFIX, COOKIE_PUBLIC_DATA_TOKEN} from "./constants"
 import {readCookie, deleteCookie} from "./utils/cookie"
 import BadBehavior from "bad-behavior"
 import {queryCache} from "react-query"
+import {parsePublicDataToken} from "./utils/tokens"
+import {PublicData} from "./types"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
