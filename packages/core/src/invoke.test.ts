@@ -31,7 +31,7 @@ describe("invokeWithMiddleware", () => {
         expect(res.status).toBe(200)
       },
     )
-  })
+  }, 30000)
 
   it("works with middleware", async () => {
     console.log = jest.fn()

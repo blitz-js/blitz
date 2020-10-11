@@ -4,7 +4,7 @@ import {deleteCookie, readCookie} from "./utils/cookie"
 import {queryCache} from "react-query"
 import {parsePublicDataToken} from "./utils/tokens"
 
-jest.mock("./supertokens", () => ({
+jest.mock("./utils/tokens", () => ({
   parsePublicDataToken: jest.fn(),
 }))
 jest.mock("./utils/cookie", () => ({

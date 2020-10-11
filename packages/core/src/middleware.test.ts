@@ -83,7 +83,7 @@ describe("handleRequestWithMiddleware", () => {
       expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
-  })
+  }, 30000)
 
   // Failing on windows for unknown reason
   it("middleware can return error", async () => {
