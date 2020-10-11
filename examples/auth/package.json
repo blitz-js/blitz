@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.23.2-canary.2",
+  "version": "0.24.1",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -15,6 +15,9 @@
   "browserslist": [
     "defaults"
   ],
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "prettier": {
     "semi": false,
     "printWidth": 100,
@@ -33,9 +36,9 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.4.1",
-    "@prisma/client": "2.4.1",
-    "blitz": "0.23.2-canary.2",
+    "@prisma/cli": "2.8.0",
+    "@prisma/client": "2.8.0",
+    "blitz": "0.24.1",
     "final-form": "4.20.1",
     "passport-auth0": "1.3.3",
     "passport-github2": "0.1.11",

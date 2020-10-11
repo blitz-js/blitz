@@ -1,18 +1,13 @@
 import {Ctx} from "blitz"
 import db, {FindMany__ModelName__Args} from "db"
 
-type Get__ModelNames__Input = {
-  where?: FindMany__ModelName__Args["where"]
-  orderBy?: FindMany__ModelName__Args["orderBy"]
-  skip?: FindMany__ModelName__Args["skip"]
-  take?: FindMany__ModelName__Args["take"]
-}
+type Get__ModelNames__Input = Pick<FindMany__ModelName__Args, "where" | "orderBy" | "skip" | "take">
 
 export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
-  {session}: Ctx,
+  ctx: Ctx,
 ) {
-  session.authorize()
+  ctx.session.authorize()
 
   const __modelNames__ = await db.__modelName__.findMany({
     where,

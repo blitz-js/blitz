@@ -1,5 +1,5 @@
 import {useMemo} from "react"
-import {ssrQuery, GetServerSideProps, Link, BlitzPage, PromiseReturnType} from "blitz"
+import {invokeWithMiddleware, GetServerSideProps, Link, BlitzPage, PromiseReturnType} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 import superjson from "superjson"
 
@@ -10,7 +10,7 @@ type PageProps = {
 type Products = PromiseReturnType<typeof getProducts>
 
 export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  const products = await ssrQuery(getProducts, {orderBy: {id: "desc"}}, {req, res})
+  const products = await invokeWithMiddleware(getProducts, {orderBy: {id: "desc"}}, {req, res})
   const dataString = superjson.stringify(products)
   return {
     props: {

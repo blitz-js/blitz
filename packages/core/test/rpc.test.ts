@@ -1,6 +1,5 @@
-import {executeRpcCall, getIsomorphicEnhancedResolver} from "@blitzjs/core"
-
-global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
+import {executeRpcCall} from "../src/rpc"
 
 declare global {
   namespace NodeJS {
@@ -9,6 +8,8 @@ declare global {
     }
   }
 }
+
+global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
 
 describe("RPC", () => {
   describe("HEAD", () => {
@@ -41,7 +42,7 @@ describe("RPC", () => {
       )
 
       try {
-        const result = await rpcFn({paramOne: 1234})
+        const result = await rpcFn({paramOne: 1234}, {fromQueryHook: true})
         expect(result).toBe("result")
         expect(fetchMock).toBeCalled()
       } finally {
@@ -69,7 +70,9 @@ describe("RPC", () => {
       )
 
       try {
-        await expect(rpcFn({paramOne: 1234})).rejects.toThrowError(/something broke/)
+        await expect(rpcFn({paramOne: 1234}, {fromQueryHook: true})).rejects.toThrowError(
+          /something broke/,
+        )
       } finally {
         fetchMock.mockRestore()
       }

@@ -1,10 +1,15 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver, EnhancedResolverRpcClient} from "../types"
+import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
 import {isServer, isClient} from "."
+import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
   refetch?: boolean
+}
+
+function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
+  return !!f._meta
 }
 
 export interface QueryCacheFunctions<T> {
@@ -24,7 +29,7 @@ export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctio
       }
       if (isClient) {
         // Fix for https://github.com/blitz-js/blitz/issues/1174
-        window.requestIdleCallback(() => {
+        requestIdleCallback(() => {
           res(result)
         })
       } else {
@@ -45,6 +50,16 @@ export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => 
   return fn
 })()
 
+export const validateQueryFn = <TInput, TResult>(
+  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+) => {
+  if (!isEnhancedResolverRpcClient(queryFn)) {
+    throw new Error(
+      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
+    )
+  }
+}
+
 export const sanitize = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
@@ -53,40 +68,50 @@ export const sanitize = <TInput, TResult>(
     return emptyQueryFn
   }
 
+  validateQueryFn(queryFn)
+
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
-export function getQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
-  params: TInput,
-) {
-  if (typeof queryFn === "undefined") {
-    throw new Error("getQueryKey is missing the first argument - it must be a query function")
-  }
+export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
+  const queryKey = [url]
 
-  const queryKey: [string, Record<string, any>] = [
-    sanitize(queryFn)._meta.apiUrl,
-    serialize(typeof params === "function" ? (params as Function)() : params),
-  ]
-  return queryKey
+  const args = typeof params === "function" ? (params as Function)() : params
+  queryKey.push(serialize(args) as any)
+
+  return queryKey as [string, any]
 }
 
-export function getInfiniteQueryKey<TInput, TResult>(
-  queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+export function getQueryKey<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params?: TInput,
 ) {
-  if (typeof queryFn === "undefined") {
+  if (typeof resolver === "undefined") {
+    throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
+  }
+
+  return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
+}
+
+export function invalidateQuery<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params?: TInput,
+) {
+  if (typeof resolver === "undefined") {
     throw new Error(
-      "getInfiniteQueryKey is missing the first argument - it must be a query function",
+      "invalidateQuery is missing the first argument - it must be a resolver function",
     )
   }
 
-  const queryKey: ["infinite", string] = [
-    // we need an extra cache key for infinite loading so that the cache for
-    // for this query is stored separately since the hook result is an array of results. Without this cache for usePaginatedQuery and this will conflict and break.
-    "infinite",
-    sanitize(queryFn)._meta.apiUrl,
-  ]
-  return queryKey
+  const fullQueryKey = getQueryKey(resolver, params)
+  let queryKey: any
+  if (params) {
+    queryKey = fullQueryKey
+  } else {
+    // Params not provided, only use first query key item (url)
+    queryKey = fullQueryKey[0]
+  }
+  return queryCache.invalidateQueries(queryKey)
 }
 
 export const retryFunction = (failureCount: number, error: any) => {

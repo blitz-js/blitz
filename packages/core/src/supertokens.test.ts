@@ -1,11 +1,10 @@
-import {parsePublicDataToken, TOKEN_SEPARATOR} from "./supertokens"
-import {setMilliseconds} from "date-fns"
+import {parsePublicDataToken, TOKEN_SEPARATOR, useSession} from "./supertokens"
+import {renderHook} from "../test/test-utils"
+import {publicDataStore} from "./public-data-store"
+import {act} from "@testing-library/react-hooks"
+
 describe("supertokens", () => {
   describe("parsePublicDataToken", () => {
-    // sets milliseconds to zero because of precision loss between strings and Dates
-    // const d = new Date()
-    // d != new Date(atob(btoa(d)))
-    const date = setMilliseconds(new Date(), 0)
     it("throws if token is empty", () => {
       const ret = () => parsePublicDataToken("")
       expect(ret).toThrow("[parsePublicDataToken] Failed: token is empty")
@@ -25,26 +24,67 @@ describe("supertokens", () => {
       })
     })
 
-    it("returns no expireAt value if not set", () => {
-      const data = `"foo"${TOKEN_SEPARATOR}`
+    it("only uses the first separated tokens", () => {
+      const data = `"foo"${TOKEN_SEPARATOR}123`
       expect(parsePublicDataToken(btoa(data))).toEqual({
         publicData: "foo",
       })
     })
+  })
 
-    it("parses the expireAt date", () => {
-      const data = `"foo"${TOKEN_SEPARATOR}${date}`
-      expect(parsePublicDataToken(btoa(data))).toEqual({
-        publicData: "foo",
-        expireAt: date,
+  describe("useSession", () => {
+    it("returns empty at when no value is set", () => {
+      const {result} = renderHook(() => useSession())
+
+      expect(result.current).toEqual({
+        isLoading: false,
+        ...publicDataStore.emptyPublicData,
       })
     })
 
-    it("only uses the first two separated tokens", () => {
-      const data = `"foo"${TOKEN_SEPARATOR}${date}${TOKEN_SEPARATOR}123`
-      expect(parsePublicDataToken(btoa(data))).toEqual({
-        publicData: "foo",
-        expireAt: date,
+    it("subscribes to the public data store", async () => {
+      const {result} = renderHook(() => useSession())
+
+      await act(() => {
+        publicDataStore.updateState({roles: ["foo"], userId: "bar"})
+      })
+
+      expect(result.current).toEqual({
+        isLoading: false,
+        roles: ["foo"],
+        userId: "bar",
+      })
+
+      await act(() => {
+        publicDataStore.updateState({roles: ["baz"], userId: "boo"})
+      })
+
+      expect(result.current).toEqual({
+        isLoading: false,
+        roles: ["baz"],
+        userId: "boo",
+      })
+    })
+
+    it("un-subscribes from the public data store on unmount", async () => {
+      const {result, unmount} = renderHook(() => useSession())
+
+      await act(() => {
+        publicDataStore.updateState({roles: ["foo"], userId: "bar"})
+      })
+
+      await act(() => {
+        unmount()
+      })
+
+      await act(() => {
+        publicDataStore.updateState({roles: ["baz"], userId: "boo"})
+      })
+
+      expect(result.current).toEqual({
+        isLoading: false,
+        roles: ["foo"],
+        userId: "bar",
       })
     })
   })

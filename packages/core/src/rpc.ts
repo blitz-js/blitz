@@ -1,14 +1,14 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {getQueryKey, isClient, isServer} from "./utils"
+import {isClient, isServer, clientDebug} from "./utils"
 import {
   getAntiCSRFToken,
-  publicDataStore,
   HEADER_CSRF,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
 } from "./supertokens"
+import {publicDataStore} from "./public-data-store"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"
 import {
@@ -21,13 +21,21 @@ import {
   RpcOptions,
 } from "./types"
 import {SuperJSONResult} from "superjson/dist/types"
+import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
 
 export const executeRpcCall = <TInput, TResult>(
   apiUrl: string,
   params: TInput,
   opts: RpcOptions = {},
 ) => {
+  if (!opts.fromQueryHook && !opts.fromInvoke) {
+    console.warn(
+      "[Deprecation] Directly calling queries/mutations is deprecated in favor of invoke(queryFn, params)",
+    )
+  }
+
   if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
+  clientDebug("Starting request for", apiUrl)
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -35,7 +43,10 @@ export const executeRpcCall = <TInput, TResult>(
 
   const antiCSRFToken = getAntiCSRFToken()
   if (antiCSRFToken) {
+    clientDebug("Adding antiCSRFToken cookie header", antiCSRFToken)
     headers[HEADER_CSRF] = antiCSRFToken
+  } else {
+    clientDebug("No antiCSRFToken cookie found")
   }
 
   let serialized: SuperJSONResult
@@ -67,15 +78,20 @@ export const executeRpcCall = <TInput, TResult>(
       signal: controller.signal,
     })
     .then(async (result) => {
+      clientDebug("Received request for", apiUrl)
       if (result.headers) {
         if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
           publicDataStore.updateState()
+          clientDebug("Public data updated")
         }
         if (result.headers.get(HEADER_SESSION_REVOKED)) {
+          clientDebug("Sessin revoked")
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
-          throw new CSRFTokenMismatchError()
+          const err = new CSRFTokenMismatchError()
+          delete err.stack
+          throw err
         }
       }
 
@@ -87,11 +103,21 @@ export const executeRpcCall = <TInput, TResult>(
       }
 
       if (payload.error) {
-        const error = deserializeError(payload.error)
+        let error = deserializeError(payload.error) as any
         // We don't clear the publicDataStore for anonymous users
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
         }
+
+        const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
+        if (prismaError && !("code" in error)) {
+          error = new Error(prismaError[0])
+          error.statusCode = 500
+        }
+
+        // Prevent client-side error popop from showing
+        delete error.stack
+
         throw error
       } else {
         const data =
@@ -100,7 +126,7 @@ export const executeRpcCall = <TInput, TResult>(
             : deserialize({json: payload.result, meta: payload.meta?.result})
 
         if (!opts.fromQueryHook) {
-          const queryKey = getQueryKey(apiUrl, params)
+          const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
           queryCache.setQueryData(queryKey, data)
         }
         return data as TResult
