@@ -77,6 +77,8 @@ export {
 
 export {default as dynamic} from "next/dynamic"
 
+export {getConfig} from "next/config"
+
 export {default as ErrorComponent} from "next/error"
 
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
