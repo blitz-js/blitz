@@ -1,18 +1,28 @@
 import React from "react"
-import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
+import {queryCache} from "react-query"
+import {act, render, waitForElementToBeRemoved, screen, waitFor} from "./test-utils"
 import {useQuery} from "../src/use-query-hooks"
 import {enhanceQueryFn} from "./test-utils"
+
+beforeEach(() => {
+  queryCache.clear()
+})
 
 describe("useQuery", () => {
   const setupHook = (
     params: any,
     queryFn: (...args: any) => Promise<any>,
-  ): [{data?: any}, Function] => {
+  ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
     function TestHarness() {
-      const [data] = useQuery(queryFn, params)
-      Object.assign(res, {data})
-      return <div id="harness">{data ? "Ready" : "Missing Dependency"}</div>
+      const [data, {setQueryData}] = useQuery(queryFn, params)
+      Object.assign(res, {data, setQueryData})
+      return (
+        <div id="harness">
+          <span>{data ? "Ready" : "Missing Dependency"}</span>
+          <span>{data}</span>
+        </div>
+      )
     }
 
     const ui = () => (
@@ -36,6 +46,17 @@ describe("useQuery", () => {
       await act(async () => {
         await screen.findByText("Ready")
         expect(res.data).toBe("TEST")
+      })
+    })
+
+    it("should be able to change the data with setQueryData", async () => {
+      const [res] = setupHook("test", enhanceQueryFn(upcase))
+      await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
+      await act(async () => {
+        await screen.findByText("Ready")
+        expect(res.data).toBe("TEST")
+        res.setQueryData((p: string) => p.substr(1, 2), {refetch: false})
+        await waitFor(() => screen.getByText("ES"))
       })
     })
 
