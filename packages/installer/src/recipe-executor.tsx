@@ -5,6 +5,7 @@ import * as FileTransformExecutor from "./executors/file-transform-executor"
 import {log} from "@blitzjs/display"
 import {render} from "ink"
 import {RecipeRenderer} from "./recipe-renderer"
+import {RecipeMeta} from "./types"
 
 type ExecutorConfig =
   | AddDependencyExecutor.Config
@@ -12,13 +13,6 @@ type ExecutorConfig =
   | NewFileExecutor.Config
 
 export {ExecutorConfig as ExecutorConfigUnion}
-
-export interface RecipeMeta {
-  name: string
-  description: string
-  owner: string
-  repoLink: string
-}
 
 export class RecipeExecutor<Options extends RecipeMeta> {
   private readonly steps: ExecutorConfig[]

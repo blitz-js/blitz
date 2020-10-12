@@ -188,7 +188,7 @@ describe("Db command", () => {
   it("runs db studio", async () => {
     await Db.run(["studio"])
 
-    expect(spawn).toHaveBeenCalledWith(prismaBin, ["studio", schemaArg, "--experimental"], {
+    expect(spawn).toHaveBeenCalledWith(prismaBin, ["studio", schemaArg], {
       stdio: "inherit",
       env: process.env,
     })

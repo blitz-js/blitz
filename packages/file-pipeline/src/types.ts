@@ -1,6 +1,20 @@
 import {Writable} from "stream"
 import File from "vinyl"
-import {FileCache} from "./helpers/file-cache"
+
+export type FileCacheEntry = {path: string}
+
+abstract class AbstractFileCache {
+  static create: () => AbstractFileCache
+}
+export interface FileCacheInterface extends AbstractFileCache {
+  delete(file: File): void
+  add(file: File): void
+
+  filterByPath: (filterFn: (a: string) => boolean) => FileCacheEntry[]
+  filter: (filterFn: (a: FileCacheEntry) => boolean) => FileCacheEntry[]
+  toString: () => string
+  toPaths: () => string[]
+}
 
 export type EventedFile = {
   event: "add" | "change" | "unlink" | "unlinkDir"
@@ -30,7 +44,7 @@ export type StageArgs = {
   config: StageConfig
   input: Writable
   bus: Writable
-  getInputCache: () => FileCache
+  getInputCache: () => FileCacheInterface
   processNewFile: (file: File) => void
   processNewChildFile: (a: {
     parent: EventedFile
