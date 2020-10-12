@@ -14,6 +14,7 @@ export const createStageConfig: Stage = ({config, processNewFile, processNewChil
   // Preconditions
   const hasNextConfig = pathExistsSync(resolve(config.src, "next.config.js"))
   const hasBlitzConfig = pathExistsSync(resolve(config.src, "blitz.config.js"))
+  const hasBlitzTsConfig = pathExistsSync(resolve(config.src, "blitz.config.ts"))
 
   if (hasNextConfig && !isNowBuild()) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
@@ -24,7 +25,7 @@ export const createStageConfig: Stage = ({config, processNewFile, processNewChil
     throw err
   }
 
-  if (!hasBlitzConfig) {
+  if (!hasBlitzConfig && !hasBlitzTsConfig) {
     // Assume a bare blitz config
     processNewFile(
       new File({
