@@ -1,7 +1,7 @@
 import React from "react"
 import {Box, Text, Color, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
-import {RecipeMeta} from "./recipe-executor"
+import {RecipeMeta} from "./types"
 import {Branded} from "./components/branded"
 import {Newline} from "./components/newline"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"

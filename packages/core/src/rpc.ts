@@ -1,13 +1,13 @@
 import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
 import {isClient, isServer, clientDebug} from "./utils"
+import {getAntiCSRFToken} from "./supertokens"
 import {
-  getAntiCSRFToken,
   HEADER_CSRF,
   HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
-} from "./supertokens"
+} from "./constants"
 import {publicDataStore} from "./public-data-store"
 import {CSRFTokenMismatchError} from "./errors"
 import {serialize, deserialize} from "superjson"

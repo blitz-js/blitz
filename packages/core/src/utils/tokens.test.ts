@@ -1,6 +1,8 @@
-import {parsePublicDataToken, TOKEN_SEPARATOR, useSession} from "./supertokens"
-import {renderHook} from "../test/test-utils"
-import {publicDataStore} from "./public-data-store"
+import {TOKEN_SEPARATOR} from "../constants"
+import {parsePublicDataToken} from "./tokens"
+import {useSession} from "../supertokens"
+import {renderHook} from "../../test/test-utils"
+import {publicDataStore} from "../public-data-store"
 import {act} from "@testing-library/react-hooks"
 
 describe("supertokens", () => {
