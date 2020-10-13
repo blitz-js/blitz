@@ -9,6 +9,13 @@ import {Stage} from "@blitzjs/file-pipeline"
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isBlitzTsConfigPath = (p: string) => /blitz\.config\.ts/.test(p)
 const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
+
+const nextConfigSupportError = (msg: string): Error => {
+  const err = new Error(msg)
+  err.name = "NextConfigSupportError"
+  return err
+}
+
 /**
  * Returns a Stage that manages converting from blitz.config.js to next.config.js
  */
@@ -20,11 +27,15 @@ export const createStageConfig: Stage = ({config, processNewFile, processNewChil
 
   if (hasNextConfig && !isNowBuild()) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
-    const err = new Error(
+    throw nextConfigSupportError(
       "Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js",
     )
-    err.name = "NextConfigSupportError"
-    throw err
+  }
+
+  if (hasBlitzConfig && hasBlitzTsConfig) {
+    throw nextConfigSupportError(
+      "Blitz has found blitz.config.js and blitz.config.ts. Please delete one of these configuration files.",
+    )
   }
 
   if (!hasBlitzConfig && !hasBlitzTsConfig) {
