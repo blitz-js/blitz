@@ -201,6 +201,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
     <td align="center"><a href="https://twitter.com/sandulat"><img src="https://avatars2.githubusercontent.com/u/7345874?v=4" width="100px;" alt=""/><br /><sub><b>Alexandru Stratulat</b></sub></a></td>
     </tr>
     <tr>
+    <td align="center"><a href="https://github.com/engelkes-finstreet"><img src="https://avatars0.githubusercontent.com/u/36962022?s=460&u=34cfc4a3d6da0a87026f6068c371779c68daa3a2&v=4" width="100px;" alt=""/><br /><sub><b>Patrick Engelkes</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/jdavenport97"><img src="https://avatars2.githubusercontent.com/u/1329874?v=4" width="100px;" alt=""/><br /><sub><b>Jamie Davenport</b></sub></a></td>
   </tr>
 </table>
