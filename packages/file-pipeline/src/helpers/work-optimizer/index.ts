@@ -26,7 +26,7 @@ const defaultReadCache = (filePath: string) => {
 export function createWorkOptimizer(
   src: string,
   dest: string,
-  saveCache: (filePath: string, data: object) => Promise<void> = defaultSaveCache,
+  saveCache: (filePath: string, data: object) => Promise<void> | undefined = defaultSaveCache,
   readCache: (filePath: string) => string = defaultReadCache,
 ) {
   const getOriginalPathHash = (file: File) => {

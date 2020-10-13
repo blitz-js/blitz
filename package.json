@@ -73,6 +73,7 @@
     "@types/pump": "1.1.0",
     "@types/pumpify": "1.4.1",
     "@types/react": "16.9.51",
+    "@types/react-dom": "16.9.8",
     "@types/readable-stream": "2.3.9",
     "@types/rimraf": "3.0.0",
     "@types/tar": "4.0.3",

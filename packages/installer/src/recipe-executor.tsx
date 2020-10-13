@@ -33,9 +33,6 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     try {
       const {waitUntilExit} = render(
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
-        {
-          experimental: true,
-        },
       )
       await waitUntilExit()
     } catch (e) {
