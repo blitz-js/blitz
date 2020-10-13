@@ -1,7 +1,7 @@
 import React from "react"
 import {Box, Text, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
-import {RecipeMeta} from "./recipe-executor"
+import {RecipeMeta} from "./types"
 import {Newline} from "./components/newline"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
@@ -77,8 +77,12 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
     <Box flexDirection="column">
       <Box flexDirection="column">
-        <Text color="#8a3df0" bold>Welcome to the recipe for {recipeMeta.name}</Text>
-        <Text color="#8a3df0" bold>{recipeMeta.description}</Text>
+        <Text color="#8a3df0" bold>
+          Welcome to the recipe for {recipeMeta.name}
+        </Text>
+        <Text color="#8a3df0" bold>
+          {recipeMeta.description}
+        </Text>
       </Box>
       <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
       <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
@@ -164,7 +168,7 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   return (
     <DispatchContext.Provider value={dispatch}>
       <Static items={messages}>
-        {msg => (
+        {(msg) => (
           <Text key={msg + Math.random()} color="green">
             {msg === "\n" ? "" : "✅"} {msg}
           </Text>

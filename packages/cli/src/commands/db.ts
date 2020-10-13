@@ -174,7 +174,7 @@ async function runSeed() {
 
   try {
     console.log(log.withCaret("Seeding..."))
-    seeds && await seeds()
+    seeds && (await seeds())
   } catch (err) {
     log.error(err)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
@@ -255,7 +255,7 @@ ${require("chalk").bold(
     }
 
     if (command === "studio") {
-      return runPrismaExitOnError(["studio", schemaArg, "--experimental"])
+      return runPrismaExitOnError(["studio", schemaArg])
     }
 
     if (command === "reset") {
