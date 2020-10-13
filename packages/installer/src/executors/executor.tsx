@@ -1,7 +1,6 @@
 import * as React from "react"
 import {Box, Text} from "ink"
 import {Newline} from "../components/newline"
-import {Branded} from "../components/branded"
 
 export interface ExecutorConfig {
   stepId: string | number
@@ -38,13 +37,11 @@ export function Frontmatter({executor}: {executor: ExecutorConfig}) {
   return (
     <Box flexDirection="column" paddingBottom={1}>
       <Newline />
-      <Branded>
-        <Box flexDirection="column">
-          <Text>{verticalBorder}</Text>
-          <Text>⎪&nbsp;&nbsp;&nbsp;{executor.stepName}&nbsp;&nbsp;&nbsp;⎪</Text>
-          <Text>{verticalBorder}</Text>
-        </Box>
-      </Branded>
+      <Box flexDirection="column">
+        <Text color="#8a3df0" bold>{verticalBorder}</Text>
+        <Text color="#8a3df0" bold>⎪&nbsp;&nbsp;&nbsp;{executor.stepName}&nbsp;&nbsp;&nbsp;⎪</Text>
+        <Text color="#8a3df0" bold>{verticalBorder}</Text>
+      </Box>
       <Text bold>{executor.explanation}</Text>
     </Box>
   )
