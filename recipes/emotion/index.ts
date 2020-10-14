@@ -5,7 +5,12 @@ import {Collection} from "jscodeshift/src/Collection"
 
 function wrapComponentWithCacheProvider(program: Collection<j.Program>) {
   program
-    .find(j.JSXExpressionContainer, {expression: {callee: {name: "getLayout"}}})
+    .find(j.JSXElement)
+    .filter(
+      (path) =>
+        path.parent?.parent?.parent?.value?.id?.name === "App" &&
+        path.parent?.value.type === j.ReturnStatement.toString(),
+    )
     .forEach((path) => {
       const {node} = path
       path.replace(
