@@ -1,6 +1,6 @@
 import React, {Suspense} from "react"
 import Layout from "app/layouts/Layout"
-import {Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
+import {Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
 
@@ -11,6 +11,7 @@ export const __ModelName__ = () => {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [delete__ModelName__Mutation] = useMutation(delete__ModelName__)
 
   return (
     <div>
@@ -38,7 +39,7 @@ export const __ModelName__ = () => {
         type="button"
         onClick={async () => {
           if (window.confirm("This will be deleted")) {
-            await delete__ModelName__({where: {id: __modelName__.id}})
+            await delete__ModelName__Mutation({where: {id: __modelName__.id}})
             if (process.env.parentModel) {
               router.push(
                 "/__parentModels__/__parentModelParam__/__modelNames__",

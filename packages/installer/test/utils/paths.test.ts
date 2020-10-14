@@ -9,8 +9,9 @@ describe("path utils", () => {
     expect(paths.document()).toBe("app/pages/_document.tsx")
     expect(paths.app()).toBe("app/pages/_app.tsx")
     expect(paths.entry()).toBe("app/pages/index.tsx")
-    // blitz config is always JS, we shouldn't transform this extension
+    // Blitz and Babel configs are always JS, we shouldn't transform this extension
     expect(paths.blitzConfig()).toBe("blitz.config.js")
+    expect(paths.babelConfig()).toBe("babel.config.js")
   })
 
   // SKIP test because the fs mock is failing on windows
@@ -20,5 +21,6 @@ describe("path utils", () => {
     expect(paths.app()).toBe("app/pages/_app.js")
     expect(paths.entry()).toBe("app/pages/index.js")
     expect(paths.blitzConfig()).toBe("blitz.config.js")
+    expect(paths.babelConfig()).toBe("babel.config.js")
   })
 })

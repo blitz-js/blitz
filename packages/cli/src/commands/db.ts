@@ -255,7 +255,7 @@ ${require("chalk").bold(
     }
 
     if (command === "studio") {
-      return runPrismaExitOnError(["studio", schemaArg, "--experimental"])
+      return runPrismaExitOnError(["studio", schemaArg])
     }
 
     if (command === "reset") {
