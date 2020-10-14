@@ -1,7 +1,41 @@
 import {
   chokidarRulesFromGitignore,
   isControlledByUser,
+  getAllGitIgnores,
 } from "../src/parse-chokidar-rules-from-gitignore"
+import spawn from "cross-spawn"
+import {multiMock} from "./utils/multi-mock"
+import {resolve} from "path"
+const mocks = multiMock({}, resolve(__dirname, ".."))
+const originalSync = spawn.sync
+
+const globalIgnore = `
+/user/lib/something
+.history/**
+`
+
+const localIgnoreValue = `
+.foo
+.bar
+`
+const nestedIgnoreValue = `
+.bip
+.bop
+`
+
+beforeEach(() => {
+  // @ts-ignore (TS complains about reassign)
+  spawn.sync = jest.fn().mockImplementation((command, options) => {
+    if (command === "git" && options[0] === "config") {
+      return {status: 0, stdout: "/global/.gitignore"}
+    }
+  })
+})
+
+afterEach(() => {
+  // @ts-ignore (TS complains about reassign)
+  spawn.sync = originalSync
+})
 
 describe("isControlledByUser", () => {
   describe("given a .gitignore from a dependency", () => {
@@ -13,6 +47,77 @@ describe("isControlledByUser", () => {
   describe("given a nested, but user-controlled file", () => {
     it("returns true", () => {
       expect(isControlledByUser("app/myassets/.gitignore")).toBe(true)
+    })
+  })
+})
+
+describe("getAllGitIgnores", () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+    mocks.mockFs.restore()
+  })
+
+  describe("given a global .gitignore file", () => {
+    beforeEach(() => {
+      mocks.mockFs({
+        "/global": {
+          ".gitignore": globalIgnore,
+        },
+      })
+    })
+    it("returns the file", () => {
+      expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([
+        {
+          prefix: "",
+          gitIgnore: globalIgnore,
+        },
+      ])
+    })
+  })
+
+  describe("given a .git/info/exclude file at the root", () => {
+    beforeAll(() => {
+      mocks.mockFs({
+        ".git": {
+          info: {
+            exclude: localIgnoreValue,
+          },
+        },
+      })
+    })
+    it("returns the file", () => {
+      expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([
+        {
+          prefix: "",
+          gitIgnore: localIgnoreValue,
+        },
+      ])
+    })
+  })
+
+  describe("given a .git/info/exclude file in some nested submodule", () => {
+    beforeAll(() => {
+      mocks.mockFs({
+        some: {
+          nested: {
+            submodule: {
+              ".git": {
+                info: {
+                  exclude: nestedIgnoreValue,
+                },
+              },
+            },
+          },
+        },
+      })
+    })
+    it("returns the file", () => {
+      expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([
+        {
+          prefix: "some/nested/submodule/",
+          gitIgnore: nestedIgnoreValue,
+        },
+      ])
     })
   })
 })
