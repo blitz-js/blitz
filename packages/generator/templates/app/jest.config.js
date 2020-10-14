@@ -15,7 +15,7 @@ module.exports = {
     "^.+\\.(ts|tsx)$": "babel-jest",
   },
   // This makes absolute imports work
-  moduleDirectories: ["node_modules", "."],
+  moduleDirectories: ["node_modules", "<rootDir>"],
   modulePathIgnorePatterns: [".blitz"],
   moduleNameMapper: {
     // This ensures any path aliases in tsconfig also work in jest
