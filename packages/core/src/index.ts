@@ -26,6 +26,7 @@ export {
   useSession,
   SessionConfig, // new
   SessionContext,
+  AuthenticatedSessionContext,
 } from "./supertokens"
 
 // --------------------
