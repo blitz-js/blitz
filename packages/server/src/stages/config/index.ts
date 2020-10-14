@@ -72,16 +72,10 @@ module.exports = withBlitz(config);
         throw new Error("Blitz was unable to transpile your blitz.config.ts file")
       }
 
-      processNewChildFile({
-        parent: file,
-        child: new File({
-          cwd: config.src,
-          path: resolve(config.src, "blitz.config.js"),
-          contents: Buffer.from(result.code),
-        }),
-        stageId: "config",
-        subfileId: "blitz-config-js",
-      })
+      file.path = "blitz.config.js"
+      file.contents = Buffer.from(result.code)
+
+      return file
     }
 
     if (!isNextConfigPath(file.path)) return file
