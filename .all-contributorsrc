@@ -609,7 +609,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1329874?v=4",
       "profile": "https://jamiedavenport.dev",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -993,7 +994,8 @@
       "contributions": [
         "code",
         "maintenance",
-        "question"
+        "question",
+        "doc"
       ]
     },
     {
@@ -1012,7 +1014,8 @@
       "profile": "https://github.com/engelkes-finstreet",
       "contributions": [
         "doc",
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -1269,7 +1272,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/7345874?v=4",
       "profile": "https://sandulat.com/",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {
@@ -1308,6 +1312,42 @@
       "contributions": [
         "code",
         "question"
+      ]
+    },
+    {
+      "login": "alexnaiman",
+      "name": "Alexandru Naiman",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/25799714?v=4",
+      "profile": "https://github.com/alexnaiman",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "davidlutta",
+      "name": "David Ezekiel Lutta",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/14890315?v=4",
+      "profile": "https://davidlutta.github.io/portfolio/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "wanjuntham",
+      "name": "wanjuntham",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/49380551?v=4",
+      "profile": "https://github.com/wanjuntham",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nahue",
+      "name": "Victor Nahuel Chaves",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/96837?v=4",
+      "profile": "http://www.nahuelchaves.xyz",
+      "contributions": [
+        "code"
       ]
     }
   ],
