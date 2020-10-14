@@ -1,7 +1,7 @@
 import {pathExistsSync} from "fs-extra"
 import {resolve} from "path"
 import File from "vinyl"
-import {transformFileSync as babelTransform} from "@babel/core"
+import bundle from "@vercel/ncc"
 
 import {transform} from "@blitzjs/file-pipeline"
 import {Stage} from "@blitzjs/file-pipeline"
@@ -64,16 +64,20 @@ module.exports = withBlitz(config);
   }
 
   // No need to filter yet
-  const stream = transform.file((file) => {
-    if (isBlitzTsConfigPath(file.path)) {
-      const result = babelTransform(resolve(config.src, "blitz.config.ts"))
+  const stream = transform.file(async (file) => {
+    console.log("Hello")
 
-      if (!result || !result.code) {
-        throw new Error("Blitz was unable to transpile your blitz.config.ts file")
-      }
+    if (isBlitzTsConfigPath(file.path)) {
+      const res = await bundle(file.path, {
+        externals: ["@blitzjs/server"], // FIXME: Figure out why this wouldn't work? Do we need to bundle everything?
+      })
+
+      // if (!result || !result.code) {
+      //   throw new Error("Blitz was unable to transpile your blitz.config.ts file")
+      // }
 
       file.path = "blitz.config.js"
-      file.contents = Buffer.from(result.code)
+      file.contents = Buffer.from(res.code)
 
       return file
     }

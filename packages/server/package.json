@@ -29,10 +29,10 @@
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@babel/core": "7.11.6",
     "@blitzjs/config": "0.24.2",
     "@blitzjs/display": "0.24.2",
     "@blitzjs/file-pipeline": "0.24.2",
+    "@vercel/ncc": "0.24.1",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.3",
