@@ -24,7 +24,7 @@ export default RecipeBuilder()
     stepId: "addStyletronUtil",
     stepName: "Add Styletron util file",
     explanation: `Next, we need to add a util file that will help us to make Styletron work both client- and server-side.`,
-    targetDirectory: "./app/utils",
+    targetDirectory: "./utils",
     templatePath: join(__dirname, "templates", "utils"),
     templateValues: {},
   })
@@ -41,7 +41,7 @@ export default RecipeBuilder()
 
       const styletronAndDebugImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("styletron")), j.importSpecifier(j.identifier("debug"))],
-        j.literal("app/utils/styletron"),
+        j.literal("utils/styletron"),
       )
 
       const themeAndBaseProviderImport = j.importDeclaration(
@@ -113,7 +113,7 @@ export default RecipeBuilder()
 
       const styletronImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("styletron"))],
-        j.literal("app/utils/styletron"),
+        j.literal("utils/styletron"),
       )
 
       addImport(program, styletronProviderImport)
