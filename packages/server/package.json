@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.24.1",
+  "version": "0.24.2",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -29,9 +29,9 @@
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
   "dependencies": {
-    "@blitzjs/config": "0.24.1",
-    "@blitzjs/display": "0.24.1",
-    "@blitzjs/file-pipeline": "0.24.1",
+    "@blitzjs/config": "0.24.2",
+    "@blitzjs/display": "0.24.2",
+    "@blitzjs/file-pipeline": "0.24.2",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.3",
@@ -48,7 +48,7 @@
     "lodash-es": "^4.17.15",
     "merge-stream": "2.0.0",
     "nanoid": "3.1.12",
-    "next": "9.5.3",
+    "next": "9.5.5",
     "null-loader": "4.0.0",
     "ora": "5.1.0",
     "parallel-transform": "1.2.0",
@@ -68,7 +68,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.24.1",
+    "@blitzjs/core": "0.24.2",
     "next-transpile-modules": "4.1.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

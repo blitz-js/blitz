@@ -3,28 +3,17 @@ import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
 import {log, baseLogger} from "@blitzjs/display"
-import {Middleware, MiddlewareNext, ConnectMiddleware, EnhancedResolver} from "./types"
+import {
+  EnhancedResolver,
+  Middleware,
+  MiddlewareNext,
+  MiddlewareRequest,
+  MiddlewareResponse,
+  ConnectMiddleware,
+} from "./types"
 
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
-
-export interface MiddlewareRequest extends BlitzApiRequest {
-  protocol?: string
-}
-export interface MiddlewareResponse extends BlitzApiResponse {
-  /**
-   * This will be passed as the second argument to Blitz queries/mutations.
-   *
-   * You must set blitzCtx BEFORE calling next()
-   */
-  blitzCtx: Record<string, unknown>
-  /**
-   * This is the exact result returned from the Blitz query/mutation
-   *
-   * You must first `await next()` before reading this
-   */
-  blitzResult: unknown
-}
 
 export function getAllMiddlewareForModule<TInput, TResult>(
   resolverModule: EnhancedResolver<TInput, TResult>,

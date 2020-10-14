@@ -56,18 +56,17 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
         .slice(2)
         .map((line, idx) => {
           let styleProps: any = {}
-          let colorProps: any = {}
           if (line.startsWith("-") && !line.startsWith("---")) {
             styleProps.bold = true
-            colorProps.color = "red"
+            styleProps.color = "red"
           } else if (line.startsWith("+") && !line.startsWith("+++")) {
             styleProps.bold = true
-            colorProps.color = "green"
+            styleProps.color = "green"
           }
 
           return (
-            <Text {...colorProps} key={idx}>
-              <Text {...styleProps}>{line}</Text>
+            <Text {...styleProps} key={idx}>
+              {line}
             </Text>
           )
         })}
