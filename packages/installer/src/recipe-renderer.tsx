@@ -1,5 +1,5 @@
 import React from "react"
-import {Box, Text, Color, useApp, Static} from "ink"
+import {Box, Text, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
 import {RecipeMeta} from "./recipe-executor"
 import {Branded} from "./components/branded"
@@ -166,14 +166,16 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <Static>
-        {messages.map((msg, idx) => (
-          <Color key={msg + idx + Math.random()} green>
-            <Text>
-              {msg === "\n" ? "" : "✅"} {msg}
+      <Static items={messages}>
+        {(msg, idx) => {
+          return (
+            <Text key={msg + idx + Math.random()} color={"green"}>
+              <Text>
+                {msg === "\n" ? "" : "✅"} {msg}
+              </Text>
             </Text>
-          </Color>
-        ))}
+          )
+        }}
       </Static>
       {state.current === -1 && <WelcomeMessage recipeMeta={recipeMeta} />}
       {state.current > -1 && (

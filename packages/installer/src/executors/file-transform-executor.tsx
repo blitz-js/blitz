@@ -5,7 +5,7 @@ import {createPatch} from "diff"
 import * as fs from "fs-extra"
 import * as React from "react"
 import Spinner from "ink-spinner"
-import {Box, Text, Color} from "ink"
+import {Box, Text} from "ink"
 import {Newline} from "../components/newline"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 
@@ -59,16 +59,16 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
           let colorProps: any = {}
           if (line.startsWith("-") && !line.startsWith("---")) {
             styleProps.bold = true
-            colorProps.red = true
+            colorProps.color = "red"
           } else if (line.startsWith("+") && !line.startsWith("+++")) {
             styleProps.bold = true
-            colorProps.green = true
+            colorProps.color = "green"
           }
 
           return (
-            <Color {...colorProps} key={idx}>
+            <Text {...colorProps} key={idx}>
               <Text {...styleProps}>{line}</Text>
-            </Color>
+            </Text>
           )
         })}
       <Newline />

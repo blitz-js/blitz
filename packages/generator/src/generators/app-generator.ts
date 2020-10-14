@@ -45,37 +45,40 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
-    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const pkg: any = this.fs.readJSON(this.destinationPath("package.json"))
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
 
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
-        pkg.dependencies["final-form"] = "4.x"
-        pkg.dependencies["react-final-form"] = "6.x"
-        break
-      case "React Hook Form":
-        type = "hookform"
-        pkg.dependencies["react-hook-form"] = "6.x"
-        break
-      case "Formik":
-        type = "formik"
-        pkg.dependencies["formik"] = "2.x"
-        break
+    if (pkg && pkg.dependencies) {
+      switch (this.options.form) {
+        case "React Final Form":
+          type = "finalform"
+          pkg.dependencies["final-form"] = "4.x"
+          pkg.dependencies["react-final-form"] = "6.x"
+          break
+        case "React Hook Form":
+          type = "hookform"
+          pkg.dependencies["react-hook-form"] = "6.x"
+          break
+        case "Formik":
+          type = "formik"
+          pkg.dependencies["formik"] = "2.x"
+          break
+      }
+
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`app/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`app/components/LabeledTextField.${ext}`),
+      )
+
+      this.fs.delete(this.destinationPath("_forms"))
+
+      this.fs.writeJSON(this.destinationPath("package.json"), pkg)
     }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/components/LabeledTextField.${ext}`),
-    )
-
-    this.fs.delete(this.destinationPath("_forms"))
-
-    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }
 
   async postWrite() {
