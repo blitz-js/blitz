@@ -3,7 +3,7 @@ import {join} from "path"
 import {existsSync} from "fs"
 import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
 
-const configFiles = ["blitz.config.js", "next.config.js"]
+const configFiles = ["blitz.config.js", "next.config.js", "_blitz.config.js"]
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
