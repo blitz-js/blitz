@@ -20,7 +20,6 @@ export function withBlitz(nextConfig: any) {
           config.entry = async () => ({
             ...(await originalEntry()),
             ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
-            "../__blitz.config": "blitz.config",
           })
         } else {
           config.module = config.module || {}
