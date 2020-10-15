@@ -3,7 +3,7 @@ import {join} from "path"
 import {existsSync} from "fs"
 import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
 
-const configFiles = ["blitz.config.js", "next.config.js"]
+const configFiles = ["blitz.config.js", ".next/blitz.config.js", "next.config.js"]
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
@@ -18,7 +18,9 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {
       const path = join(projectRoot, configFile)
-      const file = require(path)
+      let file = require(path)
+      file = file.default ?? file
+
       let contents
       if (typeof file === "function") {
         const phase =
@@ -27,6 +29,7 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
       } else {
         contents = file
       }
+
       blitzConfig = {
         ...blitzConfig,
         ...contents,

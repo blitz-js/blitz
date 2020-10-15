@@ -74,7 +74,6 @@ describe("Build command", () => {
           ],
           name: ".vercel",
         },
-        {name: "_blitz.config.js"},
         {name: "one"},
         {name: "two"},
       ],

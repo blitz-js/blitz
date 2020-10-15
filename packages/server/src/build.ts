@@ -43,6 +43,13 @@ export async function build(
   }
 
   if (await pathExists(buildNextFolder)) {
+    // Ensure the `blitz.config.js` file is copied over
+    const blitzConfig = resolve(buildFolder, "blitz.config.js")
+    if (await pathExists(blitzConfig)) {
+      const blitzConfigDest = resolve(buildNextFolder, "blitz.config.js")
+      await move(blitzConfig, blitzConfigDest)
+    }
+
     await move(buildNextFolder, rootNextFolder)
   }
 
