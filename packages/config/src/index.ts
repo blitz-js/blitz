@@ -17,7 +17,6 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
 
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {
-      console.log(`Found Config File: ${configFile}`)
       const path = join(projectRoot, configFile)
       const file = require(path)
       let contents
