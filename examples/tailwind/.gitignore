@@ -13,7 +13,6 @@ web_modules/
 *.sqlite
 .now
 .blitz-console-history
-_blitz.config.js
 
 # misc
 .DS_Store

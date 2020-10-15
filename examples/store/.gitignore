@@ -17,7 +17,6 @@ cypress/screenshots
 *.sqlite
 .generated-prisma-client
 .blitz-console-history
-_blitz.config.js
 
 # production
 /build

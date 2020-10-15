@@ -68,13 +68,12 @@ module.exports = withBlitz(config);
     if (isBlitzTsConfigPath(file.path)) {
       const res = await bundle(file.path, {
         quiet: true,
-        externals: ["@blitzjs/server"], // FIXME: Figure out why this wouldn't work? Do we need to bundle everything?
+        externals: ["@blitzjs/server", "@next/bundle-analyzer"], // FIXME: Figure out why this wouldn't work? Do we need to bundle everything?
       })
-      // if (!result || !result.code) {
-      //   throw new Error("Blitz was unable to transpile your blitz.config.ts file")
-      // }
+
       file.path = "blitz.config.js"
       file.contents = Buffer.from(res.code)
+
       return file
     }
 
