@@ -11019,10 +11019,10 @@ ink-spinner@4.0.1:
   dependencies:
     cli-spinners "^2.3.0"
 
-ink@3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/ink/-/ink-3.0.6.tgz#d40d7a3b84b4521c1a05944a936c284170299ffc"
-  integrity sha512-MOaRUKlDdyzBr6IhiBpBA5+9tv+OlVvQrEErQlN2dfofJ0Q52Xc3gZ5YtgGj0UVD24Ex79WL2QZGJh0emz+jDQ==
+ink@3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/ink/-/ink-3.0.7.tgz#acf8f3da628f3fff6d0e48642a57d82a6720bb5d"
+  integrity sha512-DF/Ena9E8af4+dYu4rrk60WwWB54CPL4s4OspDnBk0uZqntmNZLfc4PftreHeW3sUeQJK+2MdQvPLORro7mDQQ==
   dependencies:
     ansi-escapes "^4.2.1"
     auto-bind "4.0.0"
@@ -11033,7 +11033,7 @@ ink@3.0.6:
     code-excerpt "^3.0.0"
     indent-string "^4.0.0"
     is-ci "^2.0.0"
-    lodash.throttle "^4.1.1"
+    lodash "^4.17.20"
     patch-console "^1.0.0"
     react-devtools-core "^4.6.0"
     react-reconciler "^0.24.0"
@@ -12916,11 +12916,6 @@ lodash.templatesettings@^4.0.0:
   integrity sha512-stgLz+i3Aa9mZgnjr/O+v9ruKZsPsndy7qPZOchbqk2cnTU1ZaldKK+v7m54WoKIyxiuMZTKT2H81F8BeAc3ZQ==
   dependencies:
     lodash._reinterpolate "^3.0.0"
-
-lodash.throttle@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
-  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash.toarray@^4.4.0:
   version "4.4.0"
