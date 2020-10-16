@@ -44,7 +44,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   if (!diff) {
     return (
       <Box>
-        <Spinner /> Generating file diff...
+        <Text>
+          <Spinner />
+          Generating file diff...
+        </Text>
       </Box>
     )
   }
@@ -63,9 +66,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
             styleProps.bold = true
             styleProps.color = "green"
           }
-
           return (
-            <Text {...styleProps} key={idx}>{line}</Text>
+            <Text {...styleProps} key={idx}>
+              {line}
+            </Text>
           )
         })}
       <Newline />
@@ -97,7 +101,8 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   if (loading) {
     return (
       <Box>
-        <Spinner /> Applying file changes
+        <Spinner />
+        <Text>Applying file changes</Text>
       </Box>
     )
   }

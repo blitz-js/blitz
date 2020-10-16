@@ -30,7 +30,7 @@ export class RecipeExecutor<Options extends RecipeMeta> {
       )
       await waitUntilExit()
     } catch (e) {
-      console.error(e)
+      log.error(e)
       return
     }
 
