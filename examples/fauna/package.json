@@ -1,0 +1,71 @@
+{
+  "name": "@examples/fauna",
+  "version": "0.24.2",
+  "scripts": {
+    "start": "blitz start",
+    "studio": "blitz db studio",
+    "build": "blitz build",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc && lint-staged && pretty-quick --staged",
+      "pre-push": "npm run lint && npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "blitz": "0.24.2",
+    "react": "0.0.0-experimental-7f28234f8",
+    "react-dom": "0.0.0-experimental-7f28234f8",
+    "react-error-boundary": "2.3.2",
+    "secure-password": "4.0.0",
+    "zod": "1.11.9",
+    "final-form": "4.20.1",
+    "react-final-form": "6.5.1",
+    "graphql-request": "3.1.0",
+    "graphql": "15.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.1.0",
+    "@testing-library/react-hooks": "3.4.2",
+    "@types/jest": "26.0.14",
+    "@types/react": "16.9.52",
+    "@types/secure-password": "3.1.0",
+    "@typescript-eslint/eslint-plugin": "4.4.1",
+    "@typescript-eslint/parser": "4.4.1",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.11.0",
+    "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-react": "7.21.4",
+    "eslint-plugin-react-hooks": "4.1.2",
+    "husky": "4.3.0",
+    "jest": "26.5.3",
+    "jest-environment-jsdom-fourteen": "1.0.1",
+    "jest-watch-typeahead": "0.6.1",
+    "react-test-renderer": "16.14.0",
+    "lint-staged": "10.4.0",
+    "prettier": "2.1.2",
+    "pretty-quick": "3.1.0",
+    "typescript": "4.0.3",
+    "ts-jest": "26.4.1"
+  },
+  "private": true
+}
