@@ -12,7 +12,9 @@ describe("Binary blitz", () => {
     expect(result.status).toBe(0)
   })
   it("should return exit code 1 if command is unsuccessful", () => {
-    const result = spawn.sync(blitzBin, ["notAvailableCommand"])
+    const result = spawn.sync(blitzBin, ["install", "notExistingRecipe"], {
+      cwd: exampleProject,
+    })
     expect(result.status).toBe(1)
   })
 })
