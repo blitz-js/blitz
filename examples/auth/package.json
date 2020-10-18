@@ -9,8 +9,10 @@
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3099",
-    "test": "cross-env NODE_ENV=test start-server-and-test test:start http://localhost:3099 cy:run"
+    "test": "yarn test:jest && yarn test:e2e",
+    "test:jest": "jest",
+    "test:server": "blitz db migrate && blitz start --production -p 3099",
+    "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "browserslist": [
     "defaults"
@@ -53,10 +55,18 @@
   "devDependencies": {
     "@cypress/skip-test": "2.5.0",
     "@next/bundle-analyzer": "latest",
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.1.0",
+    "@testing-library/react-hooks": "3.4.2",
     "@types/passport-auth0": "1.0.4",
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
     "@types/react": "16.9.38",
+    "@types/jest": "26.0.14",
+    "jest": "26.5.3",
+    "jest-environment-jsdom-fourteen": "1.0.1",
+    "jest-watch-typeahead": "0.6.1",
+    "ts-jest": "26.4.1",
     "@types/secure-password": "3.1.0",
     "@typescript-eslint/eslint-plugin": "2.34.1-alpha.2",
     "@typescript-eslint/parser": "2.34.1-alpha.2",

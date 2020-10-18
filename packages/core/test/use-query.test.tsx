@@ -61,6 +61,7 @@ describe("useQuery", () => {
     })
 
     it("shouldn't work with regular functions", () => {
+      console.error = jest.fn()
       expect(() => setupHook("test", upcase)).toThrowErrorMatchingSnapshot()
     })
   })
