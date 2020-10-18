@@ -1394,6 +1394,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "markhaehnel",
+      "name": "Mark Hähnel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1516205?v=4",
+      "profile": "https://markhaehnel.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
