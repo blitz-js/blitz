@@ -32,7 +32,7 @@ describe("useMutation", () => {
   describe("useMutation calls the resolver with the argument", () => {
     // eslint-disable-next-line require-await
     const mutateFn = jest.fn()
-    it("should work with Blitz queries", async () => {
+    it("should work with Blitz mutations", async () => {
       const [res] = setupHook(enhance(mutateFn))
       await act(async () => {
         await res.mutate!("data")
@@ -40,6 +40,10 @@ describe("useMutation", () => {
         expect(mutateFn).toHaveBeenCalledTimes(1)
         expect(mutateFn).toHaveBeenCalledWith("data", {fromQueryHook: true})
       })
+    })
+
+    it("shouldn't work with regular functions", () => {
+      expect(() => setupHook(mutateFn)).toThrowErrorMatchingSnapshot()
     })
   })
 })
