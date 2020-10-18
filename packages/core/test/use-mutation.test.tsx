@@ -43,6 +43,7 @@ describe("useMutation", () => {
     })
 
     it("shouldn't work with regular functions", () => {
+      console.error = jest.fn()
       expect(() => setupHook(mutateFn)).toThrowErrorMatchingSnapshot()
     })
   })

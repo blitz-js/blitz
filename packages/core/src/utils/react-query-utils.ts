@@ -39,10 +39,16 @@ export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => 
   return fn
 })()
 
+const isNotInUserTestEnvironment = () => {
+  if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
+  return false
+}
+
 export const validateQueryFn = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
-  if (!isEnhancedResolverRpcClient(queryFn)) {
+  if (!isEnhancedResolverRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
       `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
     )
