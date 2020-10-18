@@ -118,5 +118,5 @@ describe("config stage", () => {
         "name": "dest",
       }
     `)
-  })
+  }, 20000)
 })
