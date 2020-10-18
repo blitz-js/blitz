@@ -1,8 +1,7 @@
 import React from "react"
-import {Box, Text, Color, useApp, Static} from "ink"
+import {Box, Text, useApp, Static} from "ink"
 import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
 import {RecipeMeta} from "./types"
-import {Branded} from "./components/branded"
 import {Newline} from "./components/newline"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
@@ -77,12 +76,14 @@ const DispatchContext = React.createContext<React.Dispatch<{type: Action; data?:
 function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
     <Box flexDirection="column">
-      <Branded>
-        <Box flexDirection="column">
-          <Text>Welcome to the recipe for {recipeMeta.name}</Text>
-          <Text>{recipeMeta.description}</Text>
-        </Box>
-      </Branded>
+      <Box flexDirection="column">
+        <Text color="#8a3df0" bold>
+          Welcome to the recipe for {recipeMeta.name}
+        </Text>
+        <Text color="#8a3df0" bold>
+          {recipeMeta.description}
+        </Text>
+      </Box>
       <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
       <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
       <Newline />
@@ -128,18 +129,18 @@ function StepExecutor({
 
   return (
     <Box flexDirection="column">
-      {status !== Status.Committed && <Frontmatter executor={step} />}
-      {[Status.Pending, Status.Proposed].includes(status) && (
+      {status !== Status.Committed ? <Frontmatter executor={step} /> : null}
+      {[Status.Pending, Status.Proposed].includes(status) ? (
         <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
-      )}
-      {[Status.ReadyToCommit, Status.Committing].includes(status) && (
+      ) : null}
+      {[Status.ReadyToCommit, Status.Committing].includes(status) ? (
         <Commit
           cliArgs={cliArgs}
           proposalData={proposalData}
           step={step}
           onChangeCommitted={handleChangeCommitted}
         />
-      )}
+      ) : null}
     </Box>
   )
 }
@@ -166,24 +167,22 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <Static>
-        {messages.map((msg, idx) => (
-          <Color key={msg + idx + Math.random()} green>
-            <Text>
-              {msg === "\n" ? "" : "✅"} {msg}
-            </Text>
-          </Color>
-        ))}
+      <Static items={messages}>
+        {(msg) => (
+          <Text key={msg + Math.random()} color="green">
+            {msg === "\n" ? "" : "✅"} {msg}
+          </Text>
+        )}
       </Static>
-      {state.current === -1 && <WelcomeMessage recipeMeta={recipeMeta} />}
-      {state.current > -1 && (
+      {state.current === -1 ? <WelcomeMessage recipeMeta={recipeMeta} /> : null}
+      {state.current > -1 ? (
         <StepExecutor
           cliArgs={cliArgs}
           proposalData={state.steps[state.current]?.proposalData}
           step={state.steps[state.current]?.executor}
           status={state.steps[state.current]?.status}
         />
-      )}
+      ) : null}
     </DispatchContext.Provider>
   )
 }

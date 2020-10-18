@@ -54,7 +54,7 @@ export const sanitize = <TInput, TResult>(
 ) => {
   if (isServer) {
     // Prevents logging garbage during static pre-rendering
-    return emptyQueryFn
+    return emptyQueryFn as EnhancedResolverRpcClient<TInput, TResult>
   }
 
   validateQueryFn(queryFn)

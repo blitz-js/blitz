@@ -6,7 +6,12 @@ import {Collection} from "jscodeshift/src/Collection"
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   program
-    .find(j.JSXExpressionContainer, {expression: {callee: {name: "getLayout"}}})
+    .find(j.JSXElement)
+    .filter(
+      (path) =>
+        path.parent?.parent?.parent?.value?.id?.name === "App" &&
+        path.parent?.value.type === j.ReturnStatement.toString(),
+    )
     .forEach((path: NodePath) => {
       const {node} = path
       path.replace(
