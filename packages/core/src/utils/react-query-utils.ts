@@ -13,29 +13,18 @@ function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any
 }
 
 export interface QueryCacheFunctions<T> {
-  mutate: (
+  setQueryData: (
     newData: T | ((oldData: T | undefined) => T),
     opts?: MutateOptions,
-  ) => Promise<void | ReturnType<typeof queryCache.invalidateQueries>>
+  ) => ReturnType<typeof setQueryData>
 }
 
-export const getQueryCacheFunctions = <T>(queryKey: QueryKey): QueryCacheFunctions<T> => ({
-  mutate: (newData, opts = {refetch: true}) => {
-    return new Promise((res) => {
-      queryCache.setQueryData(queryKey, newData)
-      let result: void | ReturnType<typeof queryCache.invalidateQueries>
-      if (opts.refetch) {
-        result = res(queryCache.invalidateQueries(queryKey, {refetchActive: true}))
-      }
-      if (isClient) {
-        // Fix for https://github.com/blitz-js/blitz/issues/1174
-        requestIdleCallback(() => {
-          res(result)
-        })
-      } else {
-        res(result)
-      }
-    })
+export const getQueryCacheFunctions = <TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params: TInput,
+): QueryCacheFunctions<TResult> => ({
+  setQueryData: (newData, opts = {refetch: true}) => {
+    return setQueryData(resolver, params, newData, opts)
   },
 })
 
@@ -104,7 +93,7 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: any
+  let queryKey: QueryKey
   if (params) {
     queryKey = fullQueryKey
   } else {
@@ -112,6 +101,34 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
     queryKey = fullQueryKey[0]
   }
   return queryCache.invalidateQueries(queryKey)
+}
+
+export function setQueryData<TInput, TResult, T extends QueryFn>(
+  resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
+  params: TInput,
+  newData: TResult | ((oldData: TResult | undefined) => TResult),
+  opts: MutateOptions = {refetch: true},
+): Promise<void | ReturnType<typeof queryCache.invalidateQueries>> {
+  if (typeof resolver === "undefined") {
+    throw new Error("setQueryData is missing the first argument - it must be a resolver function")
+  }
+  const queryKey = getQueryKey(resolver, params)
+
+  return new Promise((res) => {
+    queryCache.setQueryData(queryKey, newData)
+    let result: void | ReturnType<typeof queryCache.invalidateQueries>
+    if (opts.refetch) {
+      result = invalidateQuery(resolver, params)
+    }
+    if (isClient) {
+      // Fix for https://github.com/blitz-js/blitz/issues/1174
+      requestIdleCallback(() => {
+        res(result)
+      })
+    } else {
+      res(result)
+    }
+  })
 }
 
 export const retryFunction = (failureCount: number, error: any) => {
