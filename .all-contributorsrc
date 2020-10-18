@@ -1376,6 +1376,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "zanedb",
+      "name": "Zane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16865690?v=4",
+      "profile": "https://zane.sh",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
