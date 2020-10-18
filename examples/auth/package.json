@@ -2,6 +2,7 @@
   "name": "@examples/auth",
   "version": "0.24.3",
   "scripts": {
+    "postinstall": "prisma generate",
     "start": "blitz start",
     "studio": "blitz db studio",
     "build": "blitz build",
