@@ -1,10 +1,12 @@
 import {createStageConfig} from "../../src/stages/config"
-import {through} from "@blitzjs/file-pipeline"
+import {through, transformFiles} from "@blitzjs/file-pipeline"
 import {mockFs} from "../utils/multi-mock"
+import path from "path"
+import {directoryTree} from "../utils/tree-utils"
 
 describe("config stage", () => {
-  const processNewFile = jest.fn()
-  const processNewChildFile = jest.fn()
+  const processNewFile = () => {}
+  const processNewChildFile = () => {}
   const getInputCache = jest.fn()
 
   beforeEach(() => {
@@ -74,7 +76,47 @@ describe("config stage", () => {
     )
   })
 
-  it.todo("it creates a default config when one doesn't exist", () => {})
+  it("transpiles the `blitz.config.ts` file", async () => {
+    const nodeModulesDir = path.resolve(__dirname, "../../../../node_modules")
 
-  it.todo("it transpiles the `blitz.config.ts` file", () => {})
+    mockFs({
+      "src/blitz.config.ts": `export default {}`,
+      "src/tsconfig.json": `{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+  },
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+}`,
+      [nodeModulesDir]: mockFs.load(nodeModulesDir),
+    })
+
+    const options = {
+      watch: false,
+      ignore: [],
+      include: ["**/*"],
+    }
+    await transformFiles("src", [createStageConfig], "dest", options)
+
+    expect(directoryTree("dest")).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "name": ".blitz.incache.json",
+          },
+          Object {
+            "name": "blitz.config.js",
+          },
+          Object {
+            "name": "next.config.js",
+          },
+          Object {
+            "name": "tsconfig.json",
+          },
+        ],
+        "name": "dest",
+      }
+    `)
+  })
 })

@@ -71,7 +71,7 @@ module.exports = withBlitz(config.default ? config.default : config);
         externals: ["@blitzjs/server", "@next/bundle-analyzer"], // FIXME: Figure out why this wouldn't work? Do we need to bundle everything?
       })
 
-      file.path = "blitz.config.js"
+      file.path = resolve(config.src, "blitz.config.js")
       file.contents = Buffer.from(res.code)
 
       return file

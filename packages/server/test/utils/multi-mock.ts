@@ -11,6 +11,7 @@ export const mockFs = (...args: any[]) => {
 
 // We may need to add more methods here if we need them
 mockFs.restore = mockFileSystem.restore
+mockFs.load = mockFileSystem.load
 
 /**
  * Mock multiple dependencies at once for a test. Returns a mock
