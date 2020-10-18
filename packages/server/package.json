@@ -70,6 +70,7 @@
   },
   "devDependencies": {
     "@blitzjs/core": "0.24.2",
+    "@blitzjs/file-pipeline": "0.24.2",
     "next-transpile-modules": "3.2.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

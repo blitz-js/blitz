@@ -1,6 +1,6 @@
 import mockFileSystem from "mock-fs"
 
-const mockFs = (...args: any[]) => {
+export const mockFs = (...args: any[]) => {
   // Fixes an issue with mockFs around console log in tests and dependencies
   // This is a magic workaround until mock-fs provides an overlay functionality
   // Tried using union fs and memfs but it wasn't working properly
