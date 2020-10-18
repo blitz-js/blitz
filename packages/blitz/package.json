@@ -7,7 +7,8 @@
     "clean": "rimraf dist",
     "predev": "wait-on ../core/dist/packages/core/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts && wait-on ../generator/dist/packages/generator/src/index.d.ts && wait-on ../cli/lib/src/index.js",
     "dev": "rollup -c rollup.config.js --watch",
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js",
+    "test": "tsdx test"
   },
   "author": {
     "name": "Brandon Bayer",
