@@ -26,10 +26,10 @@ export class NotFoundError extends Error {
   }
 }
 
-export class PaginationPayloadInvalidError extends Error {
-  name = "PaginationPayloadInvalidError"
+export class PaginationArgumentError extends Error {
+  name = "PaginationArgumentError"
   statusCode = 422
-  constructor(message = "The skip or take parameters are invalid") {
+  constructor(message = "The pagination arguments are invalid") {
     super(message)
   }
 }

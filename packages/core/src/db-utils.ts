@@ -1,5 +1,5 @@
 import {PromiseReturnType} from "types"
-import {PaginationPayloadInvalidError} from "./errors"
+import {PaginationArgumentError} from "./errors"
 
 type SeederOptions<T> = {
   amount?: number
@@ -25,8 +25,8 @@ export const seeder = <T extends Promise<any>, U>(seeder: Seeder<T, U>) => ({
 export const paginate = async <T extends Promise<object[]>>({
   skip,
   take,
-  takeMax = 100,
-  count,
+  takeMax = 500,
+  count: countQuery,
   query,
 }: {
   skip: number
@@ -38,18 +38,23 @@ export const paginate = async <T extends Promise<object[]>>({
   const skipValid = typeof skip === "number" && skip % 1 === 0 && skip >= 0
   const takeValid = typeof take === "number" && take % 1 === 0 && take > 0 && take <= takeMax
 
-  if (!skipValid || !takeValid) {
-    throw new PaginationPayloadInvalidError()
+  if (!skipValid) {
+    throw new PaginationArgumentError("The skip argument is invalid")
   }
 
-  const itemsCount = await count()
-  const hasMore = skip + take < itemsCount
+  if (!takeValid) {
+    throw new PaginationArgumentError("The take argument is invalid")
+  }
+
+  const [count, items] = await Promise.all([countQuery(), query({skip, take})])
+
+  const hasMore = skip + take < count
   const nextPage = hasMore ? {take, skip: skip + take} : null
 
   return {
-    items: await query({skip, take}),
+    items,
     nextPage,
     hasMore,
-    itemsCount,
+    count,
   }
 }

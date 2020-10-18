@@ -13,7 +13,7 @@ export * from "./middleware"
 export * from "./types"
 export * from "./supertokens"
 export * from "./passport-adapter"
-export * from "./db-utils"
+export {paginate, seeder} from "./db-utils"
 export * from "./errors"
 
 // --------------------

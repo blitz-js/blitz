@@ -1,7 +1,8 @@
 import {paginate, seeder} from "../src"
 
 describe("paginate", () => {
-  const paginationPayloadInvalidErrorMessage = "The skip or take parameters are invalid"
+  const invalidSkipArgumentErrorMessage = "The skip argument is invalid"
+  const invalidTakeArgumentErrorMessage = "The take argument is invalid"
 
   const dummyPaginationPromises = {
     count: () => new Promise<number>((resolve) => resolve(1)),
@@ -11,42 +12,42 @@ describe("paginate", () => {
   it("throws an error if skip is not a positive integer", () => {
     const invalidSkipValues = [-1, 0.1, "1"]
 
-    const pagination = async (skip: unknown) =>
+    const pagination = async (skip: any) =>
       await paginate({
         take: 1,
-        skip: skip as number,
+        skip,
         ...dummyPaginationPromises,
       })
 
     invalidSkipValues.forEach((skip) =>
-      expect(pagination(skip)).rejects.toThrow(paginationPayloadInvalidErrorMessage),
+      expect(pagination(skip)).rejects.toThrow(invalidSkipArgumentErrorMessage),
     )
   })
 
   it("throws an error if take is not an integer greater than 0", () => {
     const invalidTakeValues = [-1, 0, 0.1, "1"]
 
-    const pagination = async (take: unknown) =>
+    const pagination = async (take: any) =>
       await paginate({
         skip: 1,
-        take: take as number,
+        take,
         ...dummyPaginationPromises,
       })
 
     invalidTakeValues.forEach((take) =>
-      expect(pagination(take)).rejects.toThrow(paginationPayloadInvalidErrorMessage),
+      expect(pagination(take)).rejects.toThrow(invalidTakeArgumentErrorMessage),
     )
   })
 
-  it("throws an error if take is greater than 100", () => {
+  it("throws an error if take is greater than 500", () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
-        take: 101,
+        take: 501,
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow(paginationPayloadInvalidErrorMessage)
+    expect(pagination()).rejects.toThrow(invalidTakeArgumentErrorMessage)
   })
 
   it("throws an error if take is greater than takeMax", () => {
@@ -58,7 +59,7 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow(paginationPayloadInvalidErrorMessage)
+    expect(pagination()).rejects.toThrow(invalidTakeArgumentErrorMessage)
   })
 
   it("returns correct data", () => {
@@ -74,7 +75,7 @@ describe("paginate", () => {
           items: [],
           nextPage: null,
           hasMore: false,
-          itemsCount: 3,
+          count: 3,
         },
       },
       {
@@ -88,7 +89,7 @@ describe("paginate", () => {
           items: [],
           nextPage: {skip: 3, take: 2},
           hasMore: true,
-          itemsCount: 4,
+          count: 4,
         },
       },
     ]
