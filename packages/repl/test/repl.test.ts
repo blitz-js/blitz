@@ -27,7 +27,7 @@ jest.mock(`${process.cwd()}/package.json`, () => ({
 }))
 
 const pathToModulesMock = ["/module", "module2"]
-const loadBlitzMock = {blitz: "app"}
+const loadBlitzMock = [{blitz: "app"}]
 
 describe("Console command", () => {
   beforeEach(() => {

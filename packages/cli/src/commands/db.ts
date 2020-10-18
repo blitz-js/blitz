@@ -148,6 +148,44 @@ export function getDbName(connectionString: string): string {
   return dbName
 }
 
+async function runSeed() {
+  const projectRoot = require("../utils/get-project-root").projectRoot
+  const seedPath = require("path").join(projectRoot, "db/seeds")
+  const dbPath = require("path").join(projectRoot, "db/index")
+
+  log.branded("Seeding database")
+  let spinner = log.spinner("Loading seeds\n").start()
+
+  let seeds: Function | undefined
+  try {
+    seeds = require(seedPath).default
+    if (seeds === undefined) {
+      throw new Error(`Cant find default export from db/seeds`)
+    }
+  } catch (err) {
+    log.error(`Couldn't import default from db/seeds.ts or db/seeds/index.ts file`)
+    throw err
+  }
+  spinner.succeed()
+
+  spinner = log.spinner("Checking for database migrations\n").start()
+  await runMigrate({}, `--schema=${require("path").join(process.cwd(), "db", "schema.prisma")}`)
+  spinner.succeed()
+
+  try {
+    console.log(log.withCaret("Seeding..."))
+    seeds && (await seeds())
+  } catch (err) {
+    log.error(err)
+    log.error(`Couldn't run imported function, are you sure it's a function?`)
+    throw err
+  }
+
+  const db = require(dbPath).default
+  await db.$disconnect()
+  log.success("Done seeding")
+}
+
 export class Db extends Command {
   static description = `Run database commands
 
@@ -166,6 +204,10 @@ ${require("chalk").bold(
 ${require("chalk").bold(
   "reset",
 )}   Reset the database and run a fresh migration via Prisma 2. You can also pass --force to skip all the user prompts.
+
+${require("chalk").bold(
+  "seed",
+)}   Generates seeded data in database via Prisma 2. You need db/seeds.ts or db/seeds/index.ts.
 `
 
   static args = [
@@ -213,7 +255,7 @@ ${require("chalk").bold(
     }
 
     if (command === "studio") {
-      return runPrismaExitOnError(["studio", schemaArg, "--experimental"])
+      return runPrismaExitOnError(["studio", schemaArg])
     }
 
     if (command === "reset") {
@@ -260,6 +302,14 @@ ${require("chalk").bold(
 
     if (command === "help") {
       return Db.run(["--help"])
+    }
+
+    if (command === "seed") {
+      try {
+        return await runSeed()
+      } catch {
+        process.exit(1)
+      }
     }
 
     this.log("\nUh oh, Blitz does not support that command.")

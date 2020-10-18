@@ -13,9 +13,9 @@ if (process.env.parentModel) {
 if (process.env.parentModel) {
   export default async function create__ModelName__(
     {data, __parentModelId__}: Create__ModelName__Input,
-    {session}: Ctx,
+    ctx: Ctx,
   ) {
-    session.authorize()
+    ctx.session.authorize()
 
     const __modelName__ = await db.__modelName__.create({
       data: {...data, __parentModel__: {connect: {id: __parentModelId__}}},
@@ -24,11 +24,8 @@ if (process.env.parentModel) {
     return __modelName__
   }
 } else {
-  export default async function create__ModelName__(
-    {data}: Create__ModelName__Input,
-    {session}: Ctx,
-  ) {
-    session.authorize()
+  export default async function create__ModelName__({data}: Create__ModelName__Input, ctx: Ctx) {
+    ctx.session.authorize()
 
     const __modelName__ = await db.__modelName__.create({data})
 

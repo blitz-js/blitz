@@ -1,3 +1,4 @@
+import {build as ServerBuild} from "@blitzjs/server"
 import {Command} from "@oclif/command"
 
 export class Build extends Command {
@@ -10,7 +11,8 @@ export class Build extends Command {
     }
 
     try {
-      await require("@blitzjs/server").build(config)
+      const build: typeof ServerBuild = require("@blitzjs/server").build
+      await build(config)
     } catch (err) {
       console.error(err)
       process.exit(1) // clean up?

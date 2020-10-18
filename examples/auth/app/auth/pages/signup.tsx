@@ -1,4 +1,3 @@
-import React from "react"
 import {Head, useRouter, BlitzPage, useMutation} from "blitz"
 import {Form, FORM_ERROR} from "app/components/Form"
 import {LabeledTextField} from "app/components/LabeledTextField"

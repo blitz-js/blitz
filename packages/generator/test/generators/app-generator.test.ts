@@ -120,7 +120,7 @@ describe("AppGenerator", () => {
     //
     expect(spawn.sync).toHaveBeenCalledWith(
       "git",
-      ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+      ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
       {
         stdio: "ignore",
         timeout: 10000,

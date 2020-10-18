@@ -2,8 +2,7 @@ import {useMemo} from "react"
 import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
 import {useRouterQuery} from "./use-router-query"
-
-type ParsedUrlQueryValue = string | string[] | undefined
+import {ParsedUrlQueryValue} from "./types"
 
 export interface ParsedUrlQuery {
   [key: string]: ParsedUrlQueryValue
