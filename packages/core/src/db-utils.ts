@@ -1,24 +1,51 @@
-import {PromiseReturnType} from "types"
+import {PromiseType} from "types"
 import {PaginationArgumentError} from "./errors"
 
 type SeederOptions<T> = {
   amount?: number
+  batchSize?: number
+  batchInterval?: number
   options?: T
 }
 
 type Seeder<T extends Promise<any>, U> = (index: number, options?: U) => T
 
+type Promisable<T> = T | Promise<T>
+
+type Iterator<T, U> = (item: T) => Promisable<U>
+
+type BatchPromises = <T, U>(
+  batchSize: number,
+  collection: Promisable<T[]>,
+  callback: Iterator<T, U>,
+) => Promise<U[]>
+
+const batchPromises: BatchPromises = (batchSize, collection, callback) =>
+  Promise.resolve(collection).then((arr) =>
+    arr
+      .map((_, i) => (i % batchSize ? [] : arr.slice(i, i + batchSize)))
+      .map((group) => (res: any) => Promise.all(group.map(callback)).then((r) => res.concat(r)))
+      .reduce((chain, work) => chain.then(work), Promise.resolve([])),
+  )
+
 export const seeder = <T extends Promise<any>, U>(seeder: Seeder<T, U>) => ({
-  seed: async (options?: SeederOptions<U>) => {
-    const seeds: PromiseReturnType<typeof seeder>[] = []
+  seed: (options?: SeederOptions<U>) => {
+    const seeds: T[] = []
 
-    for (const index in [...Array(options?.amount || 1)]) {
-      const data = await seeder(Number(index), options?.options)
-
-      seeds.push(data)
+    for (let i = 0; i < (options?.amount || 1); i++) {
+      seeds.push(seeder(i, options?.options))
     }
 
-    return seeds
+    return batchPromises<T, PromiseType<T>>(
+      options?.batchSize || 500,
+      seeds,
+      (i) =>
+        new Promise((resolve) =>
+          setTimeout(() => {
+            resolve(i)
+          }, options?.batchInterval || 10),
+        ),
+    )
   },
 })
 
