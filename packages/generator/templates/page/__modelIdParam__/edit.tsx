@@ -11,7 +11,7 @@ export const Edit__ModelName__ = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
-  const [__modelName__, {mutate}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [__modelName__, {setQueryData}] = useQuery(get__ModelName__, {where: {id: __modelId__}})
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
 
   return (
@@ -27,7 +27,7 @@ export const Edit__ModelName__ = () => {
               where: {id: __modelName__.id},
               data: {name: "MyNewName"},
             })
-            await mutate(updated)
+            await setQueryData(updated)
             alert("Success!" + JSON.stringify(updated))
             router.push(
               process.env.parentModel

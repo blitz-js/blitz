@@ -3,6 +3,7 @@ import {render as defaultRender} from "@testing-library/react"
 import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
+import {deserialize} from "superjson"
 
 export * from "@testing-library/react"
 
@@ -73,4 +74,19 @@ export function renderHook(
   }
 
   return defaultRenderHook(hook, {wrapper, ...options})
+}
+
+// This enhance fn does what getIsomorphicEnhancedResolver does during build time
+export function enhanceQueryFn(fn: any) {
+  const newFn = (...args: any) => {
+    const [data, ...rest] = args
+    return fn(deserialize(data), ...rest)
+  }
+  newFn._meta = {
+    name: "testResolver",
+    type: "query",
+    path: "app/test",
+    apiUrl: "test/url",
+  }
+  return newFn
 }
