@@ -163,11 +163,11 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
         devDepsLoading={!devDepsInstalled}
         packages={getExecutorArgument(step.packages, cliArgs)}
       />
-      {depsInstalled && devDepsInstalled && (
+      {depsInstalled && devDepsInstalled ? (
         <Box paddingTop={1}>
           <Text>Dependencies installed! Press ENTER to continue</Text>
         </Box>
-      )}
+      ) : null}
     </>
   )
 }

@@ -129,18 +129,18 @@ function StepExecutor({
 
   return (
     <Box flexDirection="column">
-      {status !== Status.Committed && <Frontmatter executor={step} />}
-      {[Status.Pending, Status.Proposed].includes(status) && (
+      {status !== Status.Committed ? <Frontmatter executor={step} /> : null}
+      {[Status.Pending, Status.Proposed].includes(status) ? (
         <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
-      )}
-      {[Status.ReadyToCommit, Status.Committing].includes(status) && (
+      ) : null}
+      {[Status.ReadyToCommit, Status.Committing].includes(status) ? (
         <Commit
           cliArgs={cliArgs}
           proposalData={proposalData}
           step={step}
           onChangeCommitted={handleChangeCommitted}
         />
-      )}
+      ) : null}
     </Box>
   )
 }
@@ -174,15 +174,15 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
           </Text>
         )}
       </Static>
-      {state.current === -1 && <WelcomeMessage recipeMeta={recipeMeta} />}
-      {state.current > -1 && (
+      {state.current === -1 ? <WelcomeMessage recipeMeta={recipeMeta} /> : null}
+      {state.current > -1 ? (
         <StepExecutor
           cliArgs={cliArgs}
           proposalData={state.steps[state.current]?.proposalData}
           step={state.steps[state.current]?.executor}
           status={state.steps[state.current]?.status}
         />
-      )}
+      ) : null}
     </DispatchContext.Provider>
   )
 }
