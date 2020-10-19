@@ -21,3 +21,5 @@ dist
 .blitz-*
 .blitz-cli-cache
 todo-list.md
+.vscode
+*.code-workspace
