@@ -34,7 +34,7 @@ describe("index page", () => {
 
     cy.contains("Email").find("input").type(user.email)
     cy.contains("Password").find("input").type(user.password)
-    cy.contains("button", "Log In").click()
+    cy.contains("button", "Login").click()
 
     cy.location("pathname").should("equal", "/")
     cy.contains("button", "Logout")
