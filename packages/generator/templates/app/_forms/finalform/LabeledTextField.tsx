@@ -18,6 +18,8 @@ export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFi
       meta: {touched, error, submitError, submitting},
     } = useField(name)
 
+    const normalizedError = Array.isArray(error) ? error.join(", ") : error || submitError
+
     return (
       <div {...outerProps}>
         <label>
@@ -25,9 +27,9 @@ export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFi
           <input {...input} disabled={submitting} {...props} ref={ref} />
         </label>
 
-        {touched && (error || submitError) && (
+        {touched && normalizedError && (
           <div role="alert" style={{color: "red"}}>
-            {error || submitError}
+            {normalizedError}
           </div>
         )}
 

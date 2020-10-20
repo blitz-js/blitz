@@ -2,7 +2,7 @@ import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
-  modelName: string
+  rawInput: string
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
@@ -12,7 +12,7 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
-      modelName: this.options.modelName,
+      rawInput: this.options.rawInput,
     }
   }
 

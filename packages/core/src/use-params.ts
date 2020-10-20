@@ -1,7 +1,8 @@
+import {useMemo} from "react"
+import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
 import {useRouterQuery} from "./use-router-query"
-
-type ParsedUrlQueryValue = string | string[] | undefined
+import {ParsedUrlQueryValue} from "./types"
 
 export interface ParsedUrlQuery {
   [key: string]: ParsedUrlQueryValue
@@ -31,7 +32,7 @@ function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQuery
 }
 
 export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUrlQuery) {
-  return Object.fromEntries(
+  return fromPairs(
     Object.entries(routerQuery).filter(
       ([key, value]) =>
         typeof query[key] === "undefined" || !areQueryValuesEqual(value, query[key]),
@@ -47,39 +48,43 @@ export function useParams(returnType?: "string" | "number" | "array") {
   const router = useRouter()
   const query = useRouterQuery()
 
-  const rawParams = extractRouterParams(router.query, query)
+  const params = useMemo(() => {
+    const rawParams = extractRouterParams(router.query, query)
 
-  if (returnType === "string") {
-    const params: Record<string, string> = {}
-    for (const [key, value] of Object.entries(rawParams)) {
-      if (typeof value === "string") {
-        params[key] = value
+    if (returnType === "string") {
+      const params: Record<string, string> = {}
+      for (const key in rawParams) {
+        if (typeof rawParams[key] === "string") {
+          params[key] = rawParams[key] as string
+        }
       }
+      return params
     }
-    return params
-  }
 
-  if (returnType === "number") {
-    const params: Record<string, number> = {}
-    for (const [key, value] of Object.entries(rawParams)) {
-      if (value) {
-        params[key] = Number(value)
+    if (returnType === "number") {
+      const params: Record<string, number> = {}
+      for (const key in rawParams) {
+        if (rawParams[key]) {
+          params[key] = Number(rawParams[key])
+        }
       }
+      return params
     }
-    return params
-  }
 
-  if (returnType === "array") {
-    const params: Record<string, Array<string | undefined>> = {}
-    for (const [key, value] of Object.entries(rawParams)) {
-      if (Array.isArray(value)) {
-        params[key] = value
+    if (returnType === "array") {
+      const params: Record<string, Array<string | undefined>> = {}
+      for (const key in rawParams) {
+        if (Array.isArray(rawParams[key])) {
+          params[key] = rawParams[key] as Array<string | undefined>
+        }
       }
+      return params
     }
-    return params
-  }
 
-  return rawParams
+    return rawParams
+  }, [router.query, query, returnType])
+
+  return params
 }
 
 export function useParam(key: string): undefined | string | string[]

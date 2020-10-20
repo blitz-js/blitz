@@ -5,7 +5,7 @@ import {createPatch} from "diff"
 import * as fs from "fs-extra"
 import * as React from "react"
 import Spinner from "ink-spinner"
-import {Box, Text, Color} from "ink"
+import {Box, Text} from "ink"
 import {Newline} from "../components/newline"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 
@@ -44,7 +44,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   if (!diff) {
     return (
       <Box>
-        <Spinner /> Generating file diff...
+        <Text>
+          <Spinner />
+          Generating file diff...
+        </Text>
       </Box>
     )
   }
@@ -56,19 +59,17 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
         .slice(2)
         .map((line, idx) => {
           let styleProps: any = {}
-          let colorProps: any = {}
           if (line.startsWith("-") && !line.startsWith("---")) {
             styleProps.bold = true
-            colorProps.red = true
+            styleProps.color = "red"
           } else if (line.startsWith("+") && !line.startsWith("+++")) {
             styleProps.bold = true
-            colorProps.green = true
+            styleProps.color = "green"
           }
-
           return (
-            <Color {...colorProps} key={idx}>
-              <Text {...styleProps}>{line}</Text>
-            </Color>
+            <Text {...styleProps} key={idx}>
+              {line}
+            </Text>
           )
         })}
       <Newline />
@@ -100,7 +101,8 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   if (loading) {
     return (
       <Box>
-        <Spinner /> Applying file changes
+        <Spinner />
+        <Text>Applying file changes</Text>
       </Box>
     )
   }

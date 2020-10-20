@@ -1,11 +1,12 @@
-import * as React from "react"
+import {FC} from "react"
 import {getSessionContext} from "@blitzjs/server"
 import {
-  ssrQuery,
+  invokeWithMiddleware,
   useRouter,
   GetServerSideProps,
   PromiseReturnType,
   ErrorComponent as ErrorPage,
+  useMutation,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
@@ -30,9 +31,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   const session = await getSessionContext(req, res)
   console.log("Session id:", session.userId)
   try {
-    const user = await ssrQuery(
+    const user = await invokeWithMiddleware(
       getUser,
-      {where: {id: Number(session.userId)}, select: {id: true}},
+      {where: {id: Number(session.userId)}},
       {res, req},
     )
     return {props: {user}}
@@ -42,8 +43,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
       res.end()
       return {props: {}}
     } else if (error.name === "AuthenticationError") {
-      res.writeHead(302, {location: "/login"})
-      res.end()
+      res.writeHead(302, {location: "/login"}).end()
       return {props: {}}
     } else if (error.name === "AuthorizationError") {
       return {
@@ -60,8 +60,9 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   }
 }
 
-const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
+const Test: FC<PageProps> = ({user, error}: PageProps) => {
   const router = useRouter()
+  const [logoutMutation] = useMutation(logout)
 
   if (error) {
     return <ErrorPage statusCode={error.statusCode} title={error.message} />
@@ -72,7 +73,7 @@ const Test: React.FC<PageProps> = ({user, error}: PageProps) => {
       <div>Logged in user id: {user?.id}</div>
       <button
         onClick={async () => {
-          await logout()
+          await logoutMutation()
           router.push("/")
         }}
       >

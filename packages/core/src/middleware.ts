@@ -1,46 +1,23 @@
+/* eslint-disable es5/no-es6-methods  -- file only used on the server */
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
-import {EnhancedResolverModule} from "./rpc"
 import {getConfig} from "@blitzjs/config"
-import {log} from "@blitzjs/display"
+import {log, baseLogger} from "@blitzjs/display"
+import {
+  EnhancedResolver,
+  Middleware,
+  MiddlewareNext,
+  MiddlewareRequest,
+  MiddlewareResponse,
+  ConnectMiddleware,
+} from "./types"
 
-export interface MiddlewareRequest extends BlitzApiRequest {
-  protocol?: string
-}
-export interface MiddlewareResponse extends BlitzApiResponse {
-  /**
-   * This will be passed as the second argument to Blitz queries/mutations.
-   *
-   * You must set blitzCtx BEFORE calling next()
-   */
-  blitzCtx: Record<string, unknown>
-  /**
-   * This is the exact result returned from the Blitz query/mutation
-   *
-   * You must first `await next()` before reading this
-   */
-  blitzResult: unknown
-}
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void> | void
-
-export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: (error?: Error) => void,
-) => void
-
-export type ResolverModule = {
-  default: (args: any, ctx: any) => Promise<unknown>
-  middleware?: Middleware[]
-}
-
-export function getAllMiddlewareForModule(resolverModule: EnhancedResolverModule) {
+export function getAllMiddlewareForModule<TInput, TResult>(
+  resolverModule: EnhancedResolver<TInput, TResult>,
+) {
   const middleware: Middleware[] = []
   const config = getConfig()
   if (config.middleware) {
@@ -62,6 +39,7 @@ export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
+  {throwOnError = true}: {throwOnError?: boolean} = {},
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {}
@@ -87,20 +65,22 @@ export async function handleRequestWithMiddleware(
     log.newline()
     if (req.method === "GET") {
       // This GET method check is so we don't .end() the request for SSR requests
-      log.error("Error while processing the request:\n")
-      log.error(error)
+      baseLogger.error("Error while processing the request")
+    } else if (res.writableFinished) {
+      baseLogger.error(
+        "Error occured in middleware after the response was already sent to the browser",
+      )
     } else {
-      if (!res.writableFinished) {
-        res.statusCode = (error as any).statusCode || (error as any).status || 500
-        res.end(error.message || res.statusCode.toString())
-        log.error("Error while processing the request:\n")
-      } else {
-        log.error(
-          "Error occured in middleware after the response was already sent to the browser:\n",
-        )
-      }
+      res.statusCode = (error as any).statusCode || (error as any).status || 500
+      res.end(error.message || res.statusCode.toString())
+      baseLogger.error("Error while processing the request")
     }
-    throw error
+    if (error._clearStack) {
+      delete error.stack
+    }
+    baseLogger.prettyError(error)
+    log.newline()
+    if (throwOnError) throw error
   }
 }
 

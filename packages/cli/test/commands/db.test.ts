@@ -1,15 +1,17 @@
 import * as path from "path"
 import {resolveBinAsync} from "@blitzjs/server"
+import pkgDir from "pkg-dir"
+import {join} from "path"
+import {Db} from "../../src/commands/db"
 
 let onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
   callback(0)
 })
-
 const spawn = jest.fn(() => ({on: onSpy, off: jest.fn()}))
 
 jest.doMock("cross-spawn", () => ({spawn}))
 
-import {Db} from "../../src/commands/db"
+pkgDir.sync = jest.fn(() => join(__dirname, "../__fixtures__/"))
 
 let schemaArg: string
 let prismaBin: string
@@ -18,6 +20,7 @@ let migrateUpDevParams: any[]
 let migrateUpProdParams: any[]
 let migrateSaveWithNameParams: any[]
 let migrateSaveWithUnknownParams: any[]
+
 beforeAll(async () => {
   schemaArg = `--schema=${path.join(process.cwd(), "db", "schema.prisma")}`
   prismaBin = await resolveBinAsync("@prisma/cli", "prisma")
@@ -89,6 +92,13 @@ describe("Db command", () => {
     expect(onSpy).toHaveBeenCalledTimes(3)
   }
 
+  function expectDbSeedOutcome() {
+    expect(spawn).toBeCalledWith(...migrateSaveParams)
+    expect(spawn.mock.calls.length).toBe(3)
+    expect(onSpy).toHaveBeenCalledTimes(3)
+    expect(spawn).toBeCalledWith(...migrateUpDevParams)
+  }
+
   it("runs db help when no command given", async () => {
     // When running the help command oclif exits with code 0
     // Unfortantely it treats this as an exception and throws accordingly
@@ -157,7 +167,7 @@ describe("Db command", () => {
   })
 
   it("runs db migrate. (with unknown flags)", async () => {
-    await Db.run(["migrate", "--hoge", 'aaa'])
+    await Db.run(["migrate", "--hoge", "aaa"])
 
     expectDbMigrateWithUnknownFlag()
   })
@@ -178,7 +188,7 @@ describe("Db command", () => {
   it("runs db studio", async () => {
     await Db.run(["studio"])
 
-    expect(spawn).toHaveBeenCalledWith(prismaBin, ["studio", schemaArg, "--experimental"], {
+    expect(spawn).toHaveBeenCalledWith(prismaBin, ["studio", schemaArg], {
       stdio: "inherit",
       env: process.env,
     })
@@ -188,5 +198,25 @@ describe("Db command", () => {
     await Db.run(["invalid"])
 
     expect(spawn.mock.calls.length).toBe(0)
+  })
+
+  describe("runs db seed", () => {
+    let $disconnect: jest.Mock
+    beforeAll(() => {
+      jest.doMock("../__fixtures__/db", () => {
+        $disconnect = jest.fn()
+        return {default: {$disconnect}}
+      })
+    })
+
+    it("runs migrations and closes db at the end", async () => {
+      await Db.run(["seed"])
+      expectDbSeedOutcome()
+    })
+
+    it("closes connection at the end", async () => {
+      await Db.run(["seed"])
+      expect($disconnect).toBeCalled()
+    })
   })
 })

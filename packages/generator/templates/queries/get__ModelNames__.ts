@@ -1,20 +1,13 @@
-import {SessionContext} from "blitz"
+import {Ctx} from "blitz"
 import db, {FindMany__ModelName__Args} from "db"
 
-type Get__ModelNames__Input = {
-  where?: FindMany__ModelName__Args["where"]
-  orderBy?: FindMany__ModelName__Args["orderBy"]
-  skip?: FindMany__ModelName__Args["skip"]
-  take?: FindMany__ModelName__Args["take"]
-  // Only available if a model relationship exists
-  // include?: FindMany__ModelName__Args['include']
-}
+type Get__ModelNames__Input = Pick<FindMany__ModelName__Args, "where" | "orderBy" | "skip" | "take">
 
 export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
-  ctx: {session?: SessionContext} = {},
+  ctx: Ctx,
 ) {
-  ctx.session!.authorize()
+  ctx.session.authorize()
 
   const __modelNames__ = await db.__modelName__.findMany({
     where,
@@ -31,5 +24,6 @@ export default async function get__ModelNames__(
     __modelNames__,
     nextPage,
     hasMore,
+    count,
   }
 }

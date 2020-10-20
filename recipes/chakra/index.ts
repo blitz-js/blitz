@@ -5,21 +5,29 @@ import {Collection} from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
-  program.find(j.JSXIdentifier, {name: "Component"}).forEach((path: NodePath) => {
-    j(path.parent).replaceWith(
-      j.jsxElement(
-        j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider")),
-        j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-        [
-          j.jsxText("\n"),
-          j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CSSReset"), [], true)),
-          j.jsxText("\n"),
-          path.parent.parent.node,
-          j.jsxText("\n"),
-        ],
-      ),
+  program
+    .find(j.JSXElement)
+    .filter(
+      (path) =>
+        path.parent?.parent?.parent?.value?.id?.name === "App" &&
+        path.parent?.value.type === j.ReturnStatement.toString(),
     )
-  })
+    .forEach((path: NodePath) => {
+      const {node} = path
+      path.replace(
+        j.jsxElement(
+          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider")),
+          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+          [
+            j.jsxText("\n"),
+            j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CSSReset"), [], true)),
+            j.jsxText("\n"),
+            node,
+            j.jsxText("\n"),
+          ],
+        ),
+      )
+    })
   return program
 }
 

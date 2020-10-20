@@ -1,4 +1,4 @@
-import { Link, BlitzPage } from "blitz"
+import { Link, BlitzPage, useMutation } from "blitz"
 import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
@@ -11,6 +11,7 @@ import { Suspense } from "react"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
     return (
@@ -18,7 +19,7 @@ const UserInfo = () => {
         <button
           className="button small"
           onClick={async () => {
-            await logout()
+            await logoutMutation()
           }}
         >
           Logout
@@ -58,7 +59,7 @@ const Home: BlitzPage = () => {
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
         </p>
-        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "5rem" }}>
+        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
@@ -75,17 +76,27 @@ const Home: BlitzPage = () => {
         <pre>
           <code>blitz db migrate</code>
         </pre>
-
-        <p>
-          Then go to{" "}
-          <Link href="/projects">
-            <a>/projects</a>
-          </Link>
-        </p>
+        <div>
+          <p>
+            Then <strong>restart the server</strong>
+          </p>
+          <pre>
+            <code>Ctrl + c</code>
+          </pre>
+          <pre>
+            <code>blitz start</code>
+          </pre>
+          <p>
+            and go to{" "}
+            <Link href="/projects">
+              <a>/projects</a>
+            </Link>
+          </p>
+        </div>
         <div className="buttons" style={{ marginTop: "5rem" }}>
           <a
             className="button"
-            href="https://github.com/blitz-js/blitz/blob/master/USER_GUIDE.md?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
+            href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -227,6 +238,7 @@ const Home: BlitzPage = () => {
           background: #fafafa;
           border-radius: 5px;
           padding: 0.75rem;
+          text-align: center;
         }
         code {
           font-size: 0.9rem;

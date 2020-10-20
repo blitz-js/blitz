@@ -4,17 +4,28 @@ import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 
 function wrapComponentWithCacheProvider(program: Collection<j.Program>) {
-  program.find(j.JSXIdentifier, {name: "Component"}).forEach((path) => {
-    j(path.parent).replaceWith(
-      j.jsxElement(
-        j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
-          j.jsxAttribute(j.jsxIdentifier("value"), j.jsxExpressionContainer(j.identifier("cache"))),
-        ]),
-        j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
-        [j.jsxText("\n"), path.parent.parent.node, j.jsxText("\n")],
-      ),
+  program
+    .find(j.JSXElement)
+    .filter(
+      (path) =>
+        path.parent?.parent?.parent?.value?.id?.name === "App" &&
+        path.parent?.value.type === j.ReturnStatement.toString(),
     )
-  })
+    .forEach((path) => {
+      const {node} = path
+      path.replace(
+        j.jsxElement(
+          j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
+            j.jsxAttribute(
+              j.jsxIdentifier("value"),
+              j.jsxExpressionContainer(j.identifier("cache")),
+            ),
+          ]),
+          j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
+          [j.jsxText("\n"), node, j.jsxText("\n")],
+        ),
+      )
+    })
   return program
 }
 

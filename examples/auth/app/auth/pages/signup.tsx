@@ -1,12 +1,12 @@
-import React from "react"
-import {Head, useRouter, BlitzPage} from "blitz"
+import {Head, useRouter, BlitzPage, useMutation} from "blitz"
 import {Form, FORM_ERROR} from "app/components/Form"
 import {LabeledTextField} from "app/components/LabeledTextField"
 import signup from "app/auth/mutations/signup"
-import {SignupInput, SignupInputType} from "app/auth/validations"
+import {SignupInput} from "app/auth/validations"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
+  const [signupMutation] = useMutation(signup)
 
   return (
     <>
@@ -18,12 +18,12 @@ const SignupPage: BlitzPage = () => {
       <div>
         <h1>Create an Account</h1>
 
-        <Form<SignupInputType>
+        <Form
           submitText="Create Account"
           schema={SignupInput}
           onSubmit={async (values) => {
             try {
-              await signup({email: values.email, password: values.password})
+              await signupMutation(values)
               router.push("/")
             } catch (error) {
               if (error.code === "P2002" && error.meta?.target?.includes("email")) {

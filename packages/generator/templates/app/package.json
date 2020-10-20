@@ -12,14 +12,17 @@
   "browserslist": [
     "defaults"
   ],
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "prettier": {
     "semi": false,
     "printWidth": 100
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "blitz test"
+      "pre-commit": "tsc && lint-staged && pretty-quick --staged",
+      "pre-push": "npm run lint && npm run test"
     }
   },
   "lint-staged": {

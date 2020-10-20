@@ -39,7 +39,7 @@ export const isBlitzRoot = async (): Promise<{
   try {
     const local = await readJSON("./package.json")
     if (local) {
-      if (local.dependencies["blitz"] || local.devDependencies["blitz"]) {
+      if (local.dependencies?.["blitz"] || local.devDependencies?.["blitz"]) {
         return {err: false}
       } else {
         return {

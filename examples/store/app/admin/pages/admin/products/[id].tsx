@@ -6,14 +6,13 @@ import ProductForm from "app/products/components/ProductForm"
 function Product() {
   const router = useRouter()
   const id = useParam("id", "number")
-  const [product, {mutate}] = useQuery(getProduct, {where: {id}})
+  const [product] = useQuery(getProduct, {where: {id}})
 
   return (
     <ProductForm
       product={product}
-      onSuccess={(updatedProduct) => {
-        mutate(updatedProduct)
-        router.push("/admin/products")
+      onSuccess={async () => {
+        await router.push("/admin/products")
       }}
     />
   )
