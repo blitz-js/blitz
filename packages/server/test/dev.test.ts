@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
+import {join, resolve} from "path"
 import {multiMock} from "./utils/multi-mock"
-import {resolve, join} from "path"
 const mocks = multiMock(
   {
     "next-utils": {

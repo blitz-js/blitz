@@ -1,5 +1,5 @@
-import {getLatestVersion} from "./get-latest-version"
 import {Fallbackable} from "./fallbackable"
+import {getLatestVersion} from "./get-latest-version"
 
 function fromEntries<K extends number | string, V extends any>(entries: [K, V][]): Record<K, V> {
   return entries.reduce<Record<K, V>>((result, [key, value]) => {

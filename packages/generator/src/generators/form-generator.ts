@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
+import {Generator, GeneratorOptions} from "../generator"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string

@@ -1,7 +1,7 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import {join} from "path"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
+import {join} from "path"
 
 function wrapComponentWithCacheProvider(program: Collection<j.Program>) {
   program

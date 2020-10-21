@@ -1,6 +1,6 @@
 import React from "react"
-import {act, render, screen} from "./test-utils"
 import {useMutation} from "../src/use-mutation"
+import {act, render, screen} from "./test-utils"
 
 // This enhance fn does what getIsomorphicEnhancedResolver does during build time
 const enhance = (fn: any) => {

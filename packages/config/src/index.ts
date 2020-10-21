@@ -1,7 +1,7 @@
-import pkgDir from "pkg-dir"
-import {join} from "path"
 import {existsSync} from "fs"
 import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
+import {join} from "path"
+import pkgDir from "pkg-dir"
 
 const configFiles = ["blitz.config.js", "next.config.js"]
 /**

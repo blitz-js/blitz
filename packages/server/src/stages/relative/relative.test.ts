@@ -1,8 +1,8 @@
-import {createStageRelative} from "."
-import {mockStageArgs} from "../stage-test-utils"
-import File from "vinyl"
-import {testStreamItems} from "../stage-test-utils"
 import {normalize} from "path"
+import File from "vinyl"
+import {mockStageArgs} from "../stage-test-utils"
+import {testStreamItems} from "../stage-test-utils"
+import {createStageRelative} from "."
 describe("relative", () => {
   test("test relative stream", async () => {
     const expected = [

@@ -1,9 +1,8 @@
+import {transform} from "@blitzjs/file-pipeline"
+import {Stage} from "@blitzjs/file-pipeline"
 import {pathExistsSync} from "fs-extra"
 import {resolve} from "path"
 import File from "vinyl"
-
-import {transform} from "@blitzjs/file-pipeline"
-import {Stage} from "@blitzjs/file-pipeline"
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER

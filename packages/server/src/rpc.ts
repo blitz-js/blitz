@@ -1,15 +1,15 @@
 import {
-  Middleware,
   BlitzApiRequest,
   BlitzApiResponse,
   EnhancedResolver,
   handleRequestWithMiddleware,
+  Middleware,
 } from "@blitzjs/core"
-import {serializeError} from "serialize-error"
-import {serialize, deserialize} from "superjson"
+import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
 import prettyMs from "pretty-ms"
-import {baseLogger, log as displayLog} from "@blitzjs/display"
+import {serializeError} from "serialize-error"
+import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,

@@ -1,8 +1,8 @@
-import {Generator, GeneratorOptions} from "../generator"
-import path from "path"
-import {Model} from "../prisma/model"
-import {Field} from "../prisma/field"
 import {log} from "@blitzjs/display"
+import path from "path"
+import {Generator, GeneratorOptions} from "../generator"
+import {Field} from "../prisma/field"
+import {Model} from "../prisma/model"
 import {matchBetween} from "../utils/match-between"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
