@@ -43,12 +43,12 @@ describe("Console command", () => {
   })
 
   it("runs repl", async () => {
-    await Console.prototype.run()
+    await Console.run()
     expect(repl.runRepl).toHaveBeenCalled()
   })
 
   it("runs repl with replOptions", async () => {
-    await Console.prototype.run()
+    await Console.run()
     expect(repl.runRepl).toHaveBeenCalledWith(Console.replOptions)
   })
 })
