@@ -17,8 +17,6 @@ export class Test extends Command {
   }
 
   async run() {
-    // @ts-ignore noUnusedLocals
-    // This is needed to make sure that help flag is working correctly
     const {args} = this.parse(Test)
 
     let watchMode: boolean = false
