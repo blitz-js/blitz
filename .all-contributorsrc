@@ -1004,7 +1004,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1430136?v=4",
       "profile": "https://github.com/sirmyron",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -1346,6 +1347,60 @@
       "name": "Victor Nahuel Chaves",
       "avatar_url": "https://avatars3.githubusercontent.com/u/96837?v=4",
       "profile": "http://www.nahuelchaves.xyz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "peter50216",
+      "name": "Peter Shih",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/891109?v=4",
+      "profile": "https://github.com/peter50216",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sewerynkalemba",
+      "name": "Seweryn Kalemba",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/37031328?v=4",
+      "profile": "http://seweryn.kale.mba",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nksaraf",
+      "name": "Nikhil Saraf",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11255148?v=4",
+      "profile": "https://nksaraf.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "zanedb",
+      "name": "Zane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16865690?v=4",
+      "profile": "https://zane.sh",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dulcehc",
+      "name": "Dulce Hernández",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19391835?v=4",
+      "profile": "https://github.com/dulcehc",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "markhaehnel",
+      "name": "Mark Hähnel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1516205?v=4",
+      "profile": "https://markhaehnel.de",
       "contributions": [
         "code"
       ]

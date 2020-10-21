@@ -5,7 +5,7 @@ export * from "./types"
 export * from "./errors"
 export * from "./constants"
 export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
-export {getQueryKey, invalidateQuery} from "./utils/react-query-utils"
+export {getQueryKey, invalidateQuery, setQueryData} from "./utils/react-query-utils"
 export {useParam, useParams} from "./use-params"
 export {withRouter, RouterContext, BlitzRouter} from "./with-router"
 export {useRouter} from "./use-router"
@@ -26,6 +26,7 @@ export {
   useSession,
   SessionConfig, // new
   SessionContext,
+  AuthenticatedSessionContext,
 } from "./supertokens"
 
 // --------------------

@@ -1,33 +1,28 @@
 import React from "react"
-import {act, render, waitForElementToBeRemoved, screen} from "./test-utils"
+import {queryCache} from "react-query"
+import {act, render, waitForElementToBeRemoved, screen, waitFor} from "./test-utils"
 import {useQuery} from "../src/use-query-hooks"
-import {deserialize} from "superjson"
+import {enhanceQueryFn} from "./test-utils"
 
-// This enhance fn does what getIsomorphicEnhancedResolver does during build time
-const enhance = (fn: any) => {
-  const newFn = (...args: any) => {
-    const [data, ...rest] = args
-    return fn(deserialize(data), ...rest)
-  }
-  newFn._meta = {
-    name: "testResolver",
-    type: "query",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
-  return newFn
-}
+beforeEach(() => {
+  queryCache.clear()
+})
 
 describe("useQuery", () => {
   const setupHook = (
     params: any,
     queryFn: (...args: any) => Promise<any>,
-  ): [{data?: any}, Function] => {
+  ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
     function TestHarness() {
-      const [data] = useQuery(queryFn, params)
-      Object.assign(res, {data})
-      return <div id="harness">{data ? "Ready" : "Missing Dependency"}</div>
+      const [data, {setQueryData}] = useQuery(queryFn, params)
+      Object.assign(res, {data, setQueryData})
+      return (
+        <div id="harness">
+          <span>{data ? "Ready" : "Missing Dependency"}</span>
+          <span>{data}</span>
+        </div>
+      )
     }
 
     const ui = () => (
@@ -46,7 +41,7 @@ describe("useQuery", () => {
       return args.toUpperCase()
     }
     it("should work with Blitz queries", async () => {
-      const [res] = setupHook("test", enhance(upcase))
+      const [res] = setupHook("test", enhanceQueryFn(upcase))
       await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
       await act(async () => {
         await screen.findByText("Ready")
@@ -54,7 +49,19 @@ describe("useQuery", () => {
       })
     })
 
+    it("should be able to change the data with setQueryData", async () => {
+      const [res] = setupHook("test", enhanceQueryFn(upcase))
+      await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
+      await act(async () => {
+        await screen.findByText("Ready")
+        expect(res.data).toBe("TEST")
+        res.setQueryData((p: string) => p.substr(1, 2), {refetch: false})
+        await waitFor(() => screen.getByText("ES"))
+      })
+    })
+
     it("shouldn't work with regular functions", () => {
+      console.error = jest.fn()
       expect(() => setupHook("test", upcase)).toThrowErrorMatchingSnapshot()
     })
   })

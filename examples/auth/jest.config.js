@@ -1,5 +1,5 @@
-const { pathsToModuleNameMapper } = require("ts-jest/utils")
-const { compilerOptions } = require("./tsconfig")
+const {pathsToModuleNameMapper} = require("ts-jest/utils")
+const {compilerOptions} = require("./tsconfig")
 
 module.exports = {
   // Test setup file
@@ -16,8 +16,7 @@ module.exports = {
   },
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>"],
-  // Ignore the build directories
-  modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
+  modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next", "<rootDir>/cypress"],
   moduleNameMapper: {
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),

@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/repl",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "description": "Repl package for Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz/packages/repl/#readme",
   "license": "MIT",
@@ -33,7 +33,11 @@
   "dependencies": {
     "chokidar": "3.4.2",
     "globby": "11.0.0",
-    "pkg-dir": "4.2.0"
+    "pkg-dir": "4.2.0",
+    "progress": "^2.0.3"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
+  "devDependencies": {
+    "@types/progress": "^2.0.3"
+  }
 }

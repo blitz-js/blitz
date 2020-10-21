@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/display",
-  "version": "0.24.2",
+  "version": "0.24.3",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -32,6 +32,6 @@
   "dependencies": {
     "chalk": "4.0.0",
     "ora": "4.0.4",
-    "tslog": "2.9.0"
+    "tslog": "2.9.1"
   }
 }

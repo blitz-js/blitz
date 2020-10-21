@@ -300,7 +300,12 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
       })
 
       program
-        .find(j.JSXExpressionContainer, {expression: {callee: {name: "getLayout"}}})
+        .find(j.JSXElement)
+        .filter(
+          (path) =>
+            path.parent?.parent?.parent?.value?.id?.name === "App" &&
+            path.parent?.value.type === j.ReturnStatement.toString(),
+        )
         .forEach((path) => {
           const {node} = path
           path.replace(
