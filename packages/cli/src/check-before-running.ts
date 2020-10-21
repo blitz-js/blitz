@@ -15,7 +15,6 @@ const argumentAllowListGlobal = ["-h", "--help", "help"]
 
 export const hook: Hook<"init"> = async function (options) {
   const {argv, id} = options
-  console.log(options)
   if (argv.length > 0 && argumentAllowListGlobal.some((arg) => argv.includes(arg))) return
   if (id && commandAllowListGlobal.includes(id)) return
   if (id === "db" && argv.length === 0) return
