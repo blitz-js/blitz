@@ -15,12 +15,9 @@ export class Build extends Command {
     const config = {
       rootFolder: process.cwd(),
     }
+    this.parse(Build)
 
     try {
-      // @ts-ignore noUnusedLocals
-      // This is needed to make sure that help flag is working correctly
-      const {flags}: {flags: Flags} = this.parse(Build)
-
       const build: typeof ServerBuild = require("@blitzjs/server").build
       await build(config)
     } catch (err) {

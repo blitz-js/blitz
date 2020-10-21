@@ -17,10 +17,7 @@ export class Console extends Command {
   }
 
   async run() {
-    // @ts-ignore noUnusedLocals
-    // This is needed to make sure that help flag is working correctly
-    const {flags} = this.parse(Console)
-
+    this.parse(Console)
     const {log} = require("@blitzjs/display")
     const chalk = require("chalk")
     log.branded("You have entered the Blitz console")

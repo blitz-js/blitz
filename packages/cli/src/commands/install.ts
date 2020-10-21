@@ -150,9 +150,7 @@ export class Install extends Command {
   }
 
   async run() {
-    // @ts-ignore noUnusedLocals
-    // This is needed to make sure that help flag is working correctly
-    const {flags}: {flags: Flags} = this.parse(Install)
+    this.parse(Install)
 
     require("../utils/setup-ts-node").setupTsnode()
     const {args} = this.parse(Install)
