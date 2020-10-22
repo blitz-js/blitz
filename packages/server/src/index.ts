@@ -5,5 +5,7 @@ export {prod} from "./prod"
 export {normalize} from "./config"
 export {resolveBinAsync} from "./resolve-bin-async"
 export {ManifestLoader} from "./manifest-loader"
+
+export * from "./next-plugins"
 export * from "./rpc"
 export * from "./supertokens"
