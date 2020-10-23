@@ -1,4 +1,4 @@
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, Prompt, PromptRunner} from "../generator"
 import spawn from "cross-spawn"
 import chalk from "chalk"
 import username from "username"
@@ -15,10 +15,13 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
+}
+
+export interface AppGeneratorPromptOptions {
   form: "React Final Form" | "React Hook Form" | "Formik"
 }
 
-export class AppGenerator extends Generator<AppGeneratorOptions> {
+export class AppGenerator extends Generator<AppGeneratorOptions, AppGeneratorPromptOptions> {
   sourceRoot: string = resolve(__dirname, "./templates/app")
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
@@ -38,6 +41,22 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
+  getPromptRunner(): PromptRunner {
+    const formChoices: Array<{name: AppGeneratorPromptOptions["form"]; message?: string}> = [
+      {name: "React Final Form", message: "React Final Form (recommended)"},
+      {name: "React Hook Form"},
+      {name: "Formik"},
+    ]
+
+    const formPrompt: Prompt = {
+      name: "form",
+      message: "Pick a form library (you can switch to something else later if you want)",
+      choices: formChoices,
+    }
+
+    return new PromptRunner([formPrompt])
+  }
+
   getTargetDirectory() {
     return ""
   }
@@ -49,31 +68,34 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
 
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
-        pkg.dependencies["final-form"] = "4.x"
-        pkg.dependencies["react-final-form"] = "6.x"
-        break
-      case "React Hook Form":
-        type = "hookform"
-        pkg.dependencies["react-hook-form"] = "6.x"
-        break
-      case "Formik":
-        type = "formik"
-        pkg.dependencies["formik"] = "2.x"
-        break
-    }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/components/LabeledTextField.${ext}`),
-    )
+    if (this.promptResults?.form) {
+      switch (this.promptResults?.form) {
+        case "React Final Form":
+          type = "finalform"
+          pkg.dependencies["final-form"] = "4.x"
+          pkg.dependencies["react-final-form"] = "6.x"
+          break
+        case "React Hook Form":
+          type = "hookform"
+          pkg.dependencies["react-hook-form"] = "6.x"
+          break
+        case "Formik":
+          type = "formik"
+          pkg.dependencies["formik"] = "2.x"
+          break
+      }
 
-    this.fs.delete(this.destinationPath("_forms"))
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`app/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`app/components/LabeledTextField.${ext}`),
+      )
+
+      this.fs.delete(this.destinationPath("_forms"))
+    }
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }

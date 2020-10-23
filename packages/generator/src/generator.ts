@@ -111,12 +111,45 @@ function replaceJsxConditionals(program: Collection<j.Program>, templateValues: 
   return program
 }
 
+export type Prompt = {
+  name: string
+  message: string
+  choices: any
+}
+
+export class PromptRunner {
+  protected readonly enquirer: Enquirer
+
+  constructor(protected readonly prompts: Array<Prompt>) {
+    this.enquirer = new Enquirer()
+  }
+
+  async run(): Promise<any> {
+    let result = {}
+
+    for (let prompt of this.prompts) {
+      const promptResult = await this.enquirer.prompt({
+        ...prompt,
+        type: "select",
+      })
+
+      result = {
+        ...result,
+        ...promptResult,
+      }
+    }
+
+    return result
+  }
+}
+
 /**
  * The base generator class.
  * Every generator must extend this class.
  */
 export abstract class Generator<
-  T extends GeneratorOptions = GeneratorOptions
+  T extends GeneratorOptions = GeneratorOptions,
+  S extends object = {}
 > extends EventEmitter {
   private readonly store: Store
 
@@ -127,6 +160,7 @@ export abstract class Generator<
   private useTs: boolean
   private prettier: typeof import("prettier") | undefined
 
+  promptResults?: S
   prettierDisabled: boolean = false
   unsafe_disableConflictChecker = false
   returnResults: boolean = false
@@ -149,6 +183,10 @@ export abstract class Generator<
   abstract async getTemplateValues(): Promise<any>
 
   abstract getTargetDirectory(): string
+
+  getPromptRunner(): PromptRunner | undefined {
+    return undefined
+  }
 
   filesToIgnore(): string[] {
     // allow subclasses to conditionally ignore certain template files
@@ -280,6 +318,7 @@ export abstract class Generator<
       process.chdir(this.options.destinationRoot!)
     }
 
+    this.promptResults = await this.getPromptRunner()?.run()
     await this.write()
     await this.preCommit()
 

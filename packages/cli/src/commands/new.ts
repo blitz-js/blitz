@@ -1,6 +1,5 @@
 import {flags} from "@oclif/command"
 import {Command} from "../command"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
@@ -60,19 +59,6 @@ export class New extends Command {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
-        {name: "React Final Form", message: "React Final Form (recommended)"},
-        {name: "React Hook Form"},
-        {name: "Formik"},
-      ]
-
-      const promptResult: any = await this.enquirer.prompt({
-        type: "select",
-        name: "form",
-        message: "Pick a form library (you can switch to something else later if you want)",
-        choices: formChoices,
-      })
-
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
 
       const generator = new (require("@blitzjs/generator").AppGenerator)({
@@ -81,7 +67,6 @@ export class New extends Command {
         dryRun,
         useTs: !flags.js,
         yarn: !npm,
-        form: promptResult.form,
         version: this.config.version,
         skipInstall,
         skipGit: flags["no-git"],
