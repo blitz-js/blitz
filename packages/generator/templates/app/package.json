@@ -38,6 +38,7 @@
     "react-dom": "0.0.0-experimental-7f28234f8",
     "react-error-boundary": "2.x",
     "secure-password": "4.x",
+    "typescript": "4.x",
     "zod": "1.x"
   },
   "devDependencies": {
@@ -65,7 +66,6 @@
     "lint-staged": "10.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
-    "typescript": "4.x",
     "ts-jest": "26.x"
   },
   "private": true
