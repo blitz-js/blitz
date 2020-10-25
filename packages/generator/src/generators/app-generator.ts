@@ -1,11 +1,11 @@
-import {Generator, GeneratorOptions} from "../generator"
-import spawn from "cross-spawn"
-import chalk from "chalk"
-import username from "username"
-import {readJSONSync, writeJson} from "fs-extra"
-import {resolve, join} from "path"
-import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {log} from "@blitzjs/display"
+import chalk from "chalk"
+import spawn from "cross-spawn"
+import {readJSONSync, writeJson} from "fs-extra"
+import {join, resolve} from "path"
+import username from "username"
+import {Generator, GeneratorOptions} from "../generator"
+import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
 export interface AppGeneratorOptions extends GeneratorOptions {

@@ -1,11 +1,11 @@
+import spawn from "cross-spawn"
+import {resolve} from "path"
 import {
   chokidarRulesFromGitignore,
-  isControlledByUser,
   getAllGitIgnores,
+  isControlledByUser,
 } from "../src/parse-chokidar-rules-from-gitignore"
-import spawn from "cross-spawn"
 import {multiMock} from "./utils/multi-mock"
-import {resolve} from "path"
 const mocks = multiMock({}, resolve(__dirname, ".."))
 const originalSync = spawn.sync
 

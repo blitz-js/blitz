@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.24.3",
+  "version": "0.25.0-canary.0",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -9,8 +9,10 @@
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3099",
-    "test": "cross-env NODE_ENV=test start-server-and-test test:start http://localhost:3099 cy:run"
+    "test": "prisma generate && yarn test:jest && yarn test:e2e",
+    "test:jest": "jest",
+    "test:server": "blitz db migrate && blitz start --production -p 3099",
+    "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "browserslist": [
     "defaults"
@@ -38,7 +40,7 @@
   "dependencies": {
     "@prisma/cli": "2.8.0",
     "@prisma/client": "2.8.0",
-    "blitz": "0.24.3",
+    "blitz": "0.25.0-canary.0",
     "final-form": "4.20.1",
     "passport-auth0": "1.3.3",
     "passport-github2": "0.1.11",
@@ -53,6 +55,10 @@
   "devDependencies": {
     "@cypress/skip-test": "2.5.0",
     "@next/bundle-analyzer": "latest",
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.1.0",
+    "@testing-library/react-hooks": "3.4.2",
+    "@types/jest": "26.0.14",
     "@types/passport-auth0": "1.0.4",
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
@@ -72,10 +78,14 @@
     "eslint-plugin-react": "7.20.5",
     "eslint-plugin-react-hooks": "4.0.8",
     "husky": "4.2.5",
+    "jest": "26.5.3",
+    "jest-environment-jsdom-fourteen": "1.0.1",
+    "jest-watch-typeahead": "0.6.1",
     "lint-staged": "10.2.13",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "start-server-and-test": "1.11.2",
+    "ts-jest": "26.4.1",
     "typescript": "3.9.5"
   },
   "private": true

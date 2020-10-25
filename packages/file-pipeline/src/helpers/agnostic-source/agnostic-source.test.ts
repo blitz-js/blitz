@@ -1,7 +1,7 @@
 import fs from "fs"
 import {resolve} from "path"
-import {agnosticSource} from "."
 import {testStreamItems} from "../../test-utils"
+import {agnosticSource} from "."
 
 const cwd = resolve(__dirname, "fixtures")
 

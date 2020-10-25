@@ -1,4 +1,5 @@
-import {useRouter as useNextRouter, NextRouter} from "next/router"
+import {NextRouter, useRouter as useNextRouter} from "next/router"
+import {useMemo} from "react"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
@@ -11,5 +12,7 @@ export function useRouter(): NextRouter &
   const query = useRouterQuery()
   const params = useParams()
 
-  return {...router, query, params}
+  return useMemo(() => {
+    return {...router, query, params}
+  }, [params, query, router])
 }

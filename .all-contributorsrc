@@ -1004,7 +1004,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/1430136?v=4",
       "profile": "https://github.com/sirmyron",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -1364,6 +1365,70 @@
       "name": "Seweryn Kalemba",
       "avatar_url": "https://avatars3.githubusercontent.com/u/37031328?v=4",
       "profile": "http://seweryn.kale.mba",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nksaraf",
+      "name": "Nikhil Saraf",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11255148?v=4",
+      "profile": "https://nksaraf.github.io",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "zanedb",
+      "name": "Zane",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16865690?v=4",
+      "profile": "https://zane.sh",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dulcehc",
+      "name": "Dulce Hernández",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19391835?v=4",
+      "profile": "https://github.com/dulcehc",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "markhaehnel",
+      "name": "Mark Hähnel",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1516205?v=4",
+      "profile": "https://markhaehnel.de",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nemesv",
+      "name": "Viktor Nemes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/251330?v=4",
+      "profile": "http://stackoverflow.com/users/872395/nemesv",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "goleary",
+      "name": "Gabe O'Leary",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16123225?v=4",
+      "profile": "http://gabeoleary.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "machadolucasvp",
+      "name": "Lucas Machado",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/44952113?v=4",
+      "profile": "https://github.com/machadolucasvp",
       "contributions": [
         "code"
       ]
