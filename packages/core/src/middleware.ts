@@ -1,15 +1,15 @@
 /* eslint-disable es5/no-es6-methods  -- file only used on the server */
-import {BlitzApiRequest, BlitzApiResponse} from "."
-import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
-import {log, baseLogger} from "@blitzjs/display"
+import {baseLogger, log} from "@blitzjs/display"
+import {IncomingMessage, ServerResponse} from "http"
+import {BlitzApiRequest, BlitzApiResponse} from "."
 import {
+  ConnectMiddleware,
   EnhancedResolver,
   Middleware,
   MiddlewareNext,
   MiddlewareRequest,
   MiddlewareResponse,
-  ConnectMiddleware,
 } from "./types"
 
 export interface DefaultCtx {}

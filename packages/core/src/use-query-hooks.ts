@@ -1,24 +1,24 @@
+import Router from "next/router"
 import {
-  useQuery as useReactQuery,
-  QueryResult,
-  QueryConfig,
-  usePaginatedQuery as usePaginatedReactQuery,
-  PaginatedQueryResult,
-  PaginatedQueryConfig,
-  useInfiniteQuery as useInfiniteReactQuery,
-  InfiniteQueryResult,
   InfiniteQueryConfig as RQInfiniteQueryConfig,
+  InfiniteQueryResult,
+  PaginatedQueryConfig,
+  PaginatedQueryResult,
   queryCache,
+  QueryConfig,
+  QueryResult,
+  useInfiniteQuery as useInfiniteReactQuery,
+  usePaginatedQuery as usePaginatedReactQuery,
+  useQuery as useReactQuery,
 } from "react-query"
-import {FirstParam, QueryFn, PromiseReturnType} from "./types"
+import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {
-  QueryCacheFunctions,
+  defaultQueryConfig,
   getQueryCacheFunctions,
   getQueryKey,
+  QueryCacheFunctions,
   sanitize,
-  defaultQueryConfig,
 } from "./utils/react-query-utils"
-import Router from "next/router"
 
 Router.events.on("routeChangeComplete", async () => {
   await queryCache.invalidateQueries()

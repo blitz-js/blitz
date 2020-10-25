@@ -1,7 +1,7 @@
-import {ServerConfig, normalize} from "./config"
-import {nextStart} from "./next-utils"
 import {build} from "./build"
 import {alreadyBuilt} from "./build-hash"
+import {normalize, ServerConfig} from "./config"
+import {nextStart} from "./next-utils"
 
 export async function prod(
   config: ServerConfig,

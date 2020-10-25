@@ -1,7 +1,7 @@
-import * as path from "path"
-import resolveFrom from "resolve-from"
-import pkgDir from "pkg-dir"
 import chalk from "chalk"
+import * as path from "path"
+import pkgDir from "pkg-dir"
+import resolveFrom from "resolve-from"
 import {parseSemver} from "../utils/parse-semver"
 
 async function main() {

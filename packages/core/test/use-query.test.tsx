@@ -1,7 +1,7 @@
 import React from "react"
 import {queryCache} from "react-query"
-import {act, render, waitForElementToBeRemoved, screen, waitFor} from "./test-utils"
 import {useQuery} from "../src/use-query-hooks"
+import {act, render, screen, waitFor, waitForElementToBeRemoved} from "./test-utils"
 import {enhanceQueryFn} from "./test-utils"
 
 beforeEach(() => {
