@@ -1,7 +1,7 @@
-import * as AddDependencyExecutor from "../../src/executors/add-dependency-executor"
-import {existsSync} from "fs-extra"
 import {spawn} from "cross-spawn"
+import {existsSync} from "fs-extra"
 import {mocked} from "ts-jest/utils"
+import * as AddDependencyExecutor from "../../src/executors/add-dependency-executor"
 
 jest.mock("fs-extra")
 jest.mock("cross-spawn")

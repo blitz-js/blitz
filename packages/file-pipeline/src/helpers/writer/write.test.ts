@@ -1,9 +1,9 @@
-import {createWrite} from "."
-import {through} from "../../streams"
-import {testStreamItems} from "../../test-utils"
 import {normalize} from "path"
 import File from "vinyl"
 import {FILE_DELETED, FILE_WRITTEN} from "../../events"
+import {through} from "../../streams"
+import {testStreamItems} from "../../test-utils"
+import {createWrite} from "."
 
 describe("writer", () => {
   it("should write files", async () => {

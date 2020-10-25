@@ -1,5 +1,5 @@
+import {NextRouter, useRouter as useNextRouter} from "next/router"
 import {useMemo} from "react"
-import {useRouter as useNextRouter, NextRouter} from "next/router"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 

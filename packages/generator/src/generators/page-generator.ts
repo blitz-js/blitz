@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
+import {Generator, GeneratorOptions} from "../generator"
 import {camelCaseToKebabCase} from "../utils/kebab-case"
 
 export interface PageGeneratorOptions extends GeneratorOptions {

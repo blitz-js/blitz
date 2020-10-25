@@ -1,8 +1,8 @@
-import React from "react"
 import {render as defaultRender} from "@testing-library/react"
 import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
+import React from "react"
 import {deserialize} from "superjson"
 
 export * from "@testing-library/react"

@@ -1,5 +1,5 @@
-import {getQueryCacheFunctions, invalidateQuery, setQueryData} from "../src/utils/react-query-utils"
 import {queryCache} from "react-query"
+import {getQueryCacheFunctions, invalidateQuery, setQueryData} from "../src/utils/react-query-utils"
 import {enhanceQueryFn} from "./test-utils"
 
 jest.mock("react-query")

@@ -1,11 +1,11 @@
 // Mostly concerned with solving the Dirty Sync problem
 import {log} from "@blitzjs/display"
+import {existsSync, readFileSync, writeFile} from "fs-extra"
+import debounce from "lodash/debounce"
+import {relative, resolve} from "path"
+import File from "vinyl"
 import {transform} from "../../transform"
 import {hash} from "../../utils"
-import debounce from "lodash/debounce"
-import {writeFile, existsSync, readFileSync} from "fs-extra"
-import {resolve, relative} from "path"
-import File from "vinyl"
 
 const defaultSaveCache = debounce((filePath: string, data: object) => {
   return writeFile(filePath, Buffer.from(JSON.stringify(data, null, 2)))

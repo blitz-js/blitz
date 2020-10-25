@@ -1,7 +1,7 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
-import {isServer, isClient} from "."
+import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
+import {isClient, isServer} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {

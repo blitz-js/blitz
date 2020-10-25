@@ -1,7 +1,7 @@
-import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
 import {AuthenticateOptions, Strategy} from "passport"
-import {MutationResult, MutateConfig} from "react-query"
+import {MutateConfig, MutationResult} from "react-query"
+import {BlitzApiRequest, BlitzApiResponse} from "."
 
 export interface DefaultPublicData {
   userId: any

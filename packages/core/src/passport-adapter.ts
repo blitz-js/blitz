@@ -1,18 +1,18 @@
 /* eslint-disable es5/no-for-of  -- file only used on the server */
 /* eslint-disable es5/no-es6-methods  -- file only used on the server */
+import {log} from "@blitzjs/display"
+import cookieSession from "cookie-session"
+import passport from "passport"
 import {BlitzApiRequest, BlitzApiResponse, ConnectMiddleware} from "."
 import {
+  connectMiddleware,
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
-  connectMiddleware,
 } from "./middleware"
-import {SessionContext} from "./supertokens"
-import {log} from "@blitzjs/display"
-import passport from "passport"
-import cookieSession from "cookie-session"
-import {isLocalhost} from "./utils/index"
 import {secureProxyMiddleware} from "./secure-proxy-middleware"
-import {VerifyCallbackResult, BlitzPassportConfig, Middleware} from "./types"
+import {SessionContext} from "./supertokens"
+import {BlitzPassportConfig, Middleware, VerifyCallbackResult} from "./types"
+import {isLocalhost} from "./utils/index"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)

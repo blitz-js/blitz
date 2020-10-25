@@ -1,6 +1,6 @@
-import {useMutation as useReactQueryMutation, MutationConfig} from "react-query"
-import {sanitize} from "./utils/react-query-utils"
+import {MutationConfig, useMutation as useReactQueryMutation} from "react-query"
 import {MutationFunction, MutationResultPair} from "./types"
+import {sanitize} from "./utils/react-query-utils"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair

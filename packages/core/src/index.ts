@@ -1,4 +1,4 @@
-import {NextPage, NextComponentType, NextPageContext} from "next"
+import {NextComponentType, NextPage, NextPageContext} from "next"
 import {AppProps as NextAppProps} from "next/app"
 
 export * from "./types"

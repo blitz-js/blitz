@@ -1,14 +1,14 @@
+import {Stats} from "fs"
 import {Writable} from "stream"
 import File from "vinyl"
-import {pipeline, through} from "./streams"
-import {Stage, StageArgs, StageConfig, EventedFile} from "./types"
 import {agnosticSource} from "./helpers/agnostic-source"
 import {createEnrichFiles} from "./helpers/enrich-files"
 import {createFileCache, FileCache} from "./helpers/file-cache"
 import {createIdleHandler} from "./helpers/idle-handler"
 import {createWorkOptimizer} from "./helpers/work-optimizer"
 import {createWrite} from "./helpers/writer"
-import {Stats} from "fs"
+import {pipeline, through} from "./streams"
+import {EventedFile, Stage, StageArgs, StageConfig} from "./types"
 export function isSourceFile(file: File) {
   return file.hash?.indexOf(":") === -1
 }

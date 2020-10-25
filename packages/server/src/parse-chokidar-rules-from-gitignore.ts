@@ -1,10 +1,10 @@
-import parseGitignore from "parse-gitignore"
+import {log} from "@blitzjs/display"
+import spawn from "cross-spawn"
+import expandTilde from "expand-tilde"
+import fastGlob from "fast-glob"
 import fs from "fs"
 import partition from "lodash/partition"
-import fastGlob from "fast-glob"
-import spawn from "cross-spawn"
-import {log} from "@blitzjs/display"
-import expandTilde from "expand-tilde"
+import parseGitignore from "parse-gitignore"
 
 const {GIT_DIR = ".git"} = process.env
 
