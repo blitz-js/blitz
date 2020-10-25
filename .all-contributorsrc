@@ -1413,6 +1413,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "goleary",
+      "name": "Gabe O'Leary",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16123225?v=4",
+      "profile": "http://gabeoleary.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
