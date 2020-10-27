@@ -6,6 +6,7 @@ export class Start extends Command {
   static aliases = ["s"]
 
   static flags = {
+    help: flags.help({char: "h"}),
     production: flags.boolean({
       description: "Create and start a production server",
     }),
