@@ -38,3 +38,9 @@ export class NotFoundError extends Error {
     return true
   }
 }
+
+export type BlitzError =
+  | AuthenticationError
+  | CSRFTokenMismatchError
+  | AuthorizationError
+  | NotFoundError
