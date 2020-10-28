@@ -1,6 +1,0 @@
-.gitkeep
-.env
-*.ico
-*.lock
-db/migrations
-
