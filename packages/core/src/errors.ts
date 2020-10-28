@@ -39,6 +39,16 @@ export class NotFoundError extends Error {
   }
 }
 
+export const isAuthenticationError = (
+  maybeAuthenticationError: any,
+): maybeAuthenticationError is AuthenticationError =>
+  maybeAuthenticationError.name === AuthenticationError.name
+
+export const isAuthorizationError = (
+  maybeAuthorizationError: any,
+): maybeAuthorizationError is AuthorizationError =>
+  maybeAuthorizationError.name === AuthorizationError.name
+
 export type BlitzError =
   | AuthenticationError
   | CSRFTokenMismatchError
