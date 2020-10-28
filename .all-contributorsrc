@@ -1375,7 +1375,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/11255148?v=4",
       "profile": "https://nksaraf.github.io",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1401,6 +1402,51 @@
       "name": "Mark Hähnel",
       "avatar_url": "https://avatars2.githubusercontent.com/u/1516205?v=4",
       "profile": "https://markhaehnel.de",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nemesv",
+      "name": "Viktor Nemes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/251330?v=4",
+      "profile": "http://stackoverflow.com/users/872395/nemesv",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "goleary",
+      "name": "Gabe O'Leary",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16123225?v=4",
+      "profile": "http://gabeoleary.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "machadolucasvp",
+      "name": "Lucas Machado",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/44952113?v=4",
+      "profile": "https://github.com/machadolucasvp",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "maciekgrzybek",
+      "name": "maciek_grzybek",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16546428?v=4",
+      "profile": "https://github.com/maciekgrzybek",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mweibel",
+      "name": "Michael Weibel",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/307427?v=4",
+      "profile": "https://github.com/mweibel",
       "contributions": [
         "code"
       ]

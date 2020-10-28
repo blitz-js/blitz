@@ -1,4 +1,3 @@
-import {Command} from "../command"
 import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
@@ -9,6 +8,8 @@ import {
   ModelGenerator,
   QueryGenerator,
 } from "@blitzjs/generator"
+
+import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 const debug = require("debug")("blitz:generate")

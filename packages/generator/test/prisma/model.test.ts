@@ -1,5 +1,5 @@
-import {Model} from "../../src/prisma/model"
 import {Field} from "../../src/prisma/field"
+import {Model} from "../../src/prisma/model"
 
 describe("Prisma Model", () => {
   it("generates a proper model", () => {

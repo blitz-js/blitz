@@ -1,8 +1,8 @@
-import {useMemo} from "react"
 import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
-import {useRouterQuery} from "./use-router-query"
+import {useMemo} from "react"
 import {ParsedUrlQueryValue} from "./types"
+import {useRouterQuery} from "./use-router-query"
 
 export interface ParsedUrlQuery {
   [key: string]: ParsedUrlQueryValue

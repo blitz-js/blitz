@@ -1,6 +1,6 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import j from "jscodeshift"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
+import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
