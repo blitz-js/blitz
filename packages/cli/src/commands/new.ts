@@ -65,7 +65,7 @@ export class New extends Command {
     debug("flags: ", flags)
 
     if (!flags["skip-upgrade"]) {
-      const latestVersion = (await getLatestVersion("blitz")).value
+      const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
       if (lt(this.config.version, latestVersion)) {
         const upgradeChoices: Array<{name: string; message?: string}> = [
           {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
@@ -83,36 +83,53 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const upgradeOpts = flags.npm ? ["i", "-g", "blitz@latest"] : ["global", "add", "blitz"]
-          const upgradeResult = spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {
+          const upgradeOpts = flags.npm
+            ? ["i", "-g", "blitz@latest"]
+            : ["global", "add", "blitz"]
+
+          spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {
             stdio: "inherit",
           })
 
-          if (upgradeResult.error !== null) {
-            this.error(
-              "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
-            )
+          const versionResult = spawn.sync("blitz", ["--version"], {
+            stdio: "pipe",
+          })
+          
+          if (versionResult.stdout) {
+            const newVersion = versionResult.stdout
+              .toString()
+              .match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+
+            if (newVersion[0] && newVersion[0] === latestVersion) {
+              this.log(
+                chalk.green(
+                  `Upgraded blitz global package to ${newVersion}, running blitz new command...`,
+                ),
+              )
+
+              const flagsArr = Object.keys(flags).reduce(
+                (arr: Array<string>, key: string) => (flags[key] ? [...arr, `--${key}`] : arr),
+                [],
+              )
+
+              const cmdResult = spawn.sync(
+                "blitz",
+                ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"],
+                {
+                  stdio: "inherit",
+                },
+              )
+
+              if (cmdResult.error !== null) {
+                this.error("Error while running blitz new command, please try again")
+              }
+
+              return
+            }
           }
-          this.log(
-            chalk.green(
-              `Upgraded blitz global package to ${latestVersion}, running blitz new command...`,
-            ),
+          this.error(
+            "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
           )
-          const flagsArr = Object.keys(flags).reduce(
-            (arr: Array<string>, key: string) => (flags[key] ? [...arr, `--${key}`] : arr),
-            [],
-          )
-          const cmdResult = spawn.sync(
-            "blitz",
-            ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"],
-            {
-              stdio: "inherit",
-            },
-          )
-          if (cmdResult.error !== null) {
-            this.error("Error while running blitz new command, please try again")
-          }
-          return
         }
       }
     }
