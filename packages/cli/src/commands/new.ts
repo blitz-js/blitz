@@ -28,7 +28,7 @@ export class New extends Command {
     },
   ]
 
-  static flags = {
+  static flags: {[flag: string]: any} = {
     help: flags.help({char: "h"}),
     js: flags.boolean({
       description: "Generates a JS project. TypeScript is the default unless you add this flag.",
@@ -83,18 +83,15 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const upgradeOpts = flags.npm
-            ? ["i", "-g", "blitz@latest"]
-            : ["global", "add", "blitz"]
+          const upgradeOpts = flags.npm ? ["i", "-g", "blitz@latest"] : ["global", "add", "blitz"]
 
           spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {stdio: "inherit"})
 
           const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
-          
+
           if (versionResult.stdout) {
-            const newVersion = versionResult.stdout
-              .toString()
-              .match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+            const newVersion =
+              versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
 
             if (newVersion[0] && newVersion[0] === latestVersion) {
               this.log(
@@ -108,11 +105,9 @@ export class New extends Command {
                 [],
               )
 
-              spawn.sync(
-                "blitz",
-                ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"],
-                {stdio: "inherit"},
-              )
+              spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
+                stdio: "inherit",
+              })
 
               return
             }
