@@ -121,7 +121,7 @@ export function useInfiniteQuery<
   }
 
   const enhancedResolverRpcClient = sanitize(queryFn)
-  const queryKey = getQueryKey(queryFn)
+  const queryKey = getQueryKey(queryFn, params(undefined!))
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
