@@ -87,13 +87,9 @@ export class New extends Command {
             ? ["i", "-g", "blitz@latest"]
             : ["global", "add", "blitz"]
 
-          spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {
-            stdio: "inherit",
-          })
+          spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {stdio: "inherit"})
 
-          const versionResult = spawn.sync("blitz", ["--version"], {
-            stdio: "pipe",
-          })
+          const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
           
           if (versionResult.stdout) {
             const newVersion = versionResult.stdout
@@ -112,17 +108,11 @@ export class New extends Command {
                 [],
               )
 
-              const cmdResult = spawn.sync(
+              spawn.sync(
                 "blitz",
                 ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"],
-                {
-                  stdio: "inherit",
-                },
+                {stdio: "inherit"},
               )
-
-              if (cmdResult.error !== null) {
-                this.error("Error while running blitz new command, please try again")
-              }
 
               return
             }
