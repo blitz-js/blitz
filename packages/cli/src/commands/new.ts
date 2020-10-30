@@ -103,7 +103,7 @@ export class New extends Command {
             if (newVersion[0] && newVersion[0] === latestVersion) {
               this.log(
                 chalk.green(
-                  `Upgraded blitz global package to ${newVersion}, running blitz new command...`,
+                  `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
                 ),
               )
 
