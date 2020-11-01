@@ -26,9 +26,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json"]
+      return ["tsconfig.json", "package.ts.json"]
+
     }
-    return ["jsconfig.json"]
+    return ["jsconfig.json", "package.js.json"]
   }
 
   async getTemplateValues() {
@@ -45,6 +46,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
+    this.fs.move(this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"), this.destinationPath("package.json"))
     const pkg = this.fs.readJSON(this.destinationPath("package.json"))
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
@@ -64,6 +66,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
+
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
       this.destinationPath(`app/components/Form.${ext}`),
