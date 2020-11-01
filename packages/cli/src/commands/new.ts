@@ -83,9 +83,11 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const upgradeOpts = flags.npm ? ["i", "-g", "blitz@latest"] : ["global", "add", "blitz"]
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          const useYarn = checkYarn.stdout.toString().includes("blitz@")
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
 
-          spawn.sync(flags.npm ? "npm" : "yarn", upgradeOpts, {stdio: "inherit"})
+          spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
 
           const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
 
