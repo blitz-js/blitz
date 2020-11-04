@@ -19,16 +19,12 @@ export const __ModelName__ = () => {
       <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
       <if condition="parentModel">
-        <Link
-          href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
-          as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
-        >
+        <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}>
           <a>Edit</a>
         </Link>
         <else>
           <Link
-            href="/__modelNames__/__modelIdParam__/edit"
-            as={`/__modelNames__/${__modelName__.id}/edit`}
+            href={`/__modelNames__/${__modelName__.id}/edit`}
           >
             <a>Edit</a>
           </Link>
@@ -41,10 +37,7 @@ export const __ModelName__ = () => {
           if (window.confirm("This will be deleted")) {
             await delete__ModelName__Mutation({where: {id: __modelName__.id}})
             if (process.env.parentModel) {
-              router.push(
-                "/__parentModels__/__parentModelParam__/__modelNames__",
-                `/__parentModels__/${__parentModelId__}/__modelNames__`,
-              )
+              router.push(`/__parentModels__/${__parentModelId__}/__modelNames__`)
             } else {
               router.push("/__modelNames__")
             }
@@ -66,10 +59,7 @@ const Show__ModelName__Page: BlitzPage = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link
-            href="/__parentModels__/__parentModelId__/__modelNames__"
-            as={`/__parentModels__/${__parentModelId__}/__modelNames__`}
-          >
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
             <a>__ModelNames__</a>
           </Link>
           <else>
