@@ -29,7 +29,7 @@ export const EditProject = () => {
               },
             })
             alert("Success!" + JSON.stringify(updated))
-            router.push("/projects/[id]", `/projects/${updated.id}`)
+            router.push(`/projects/${updated.id}`)
           } catch (error) {
             alert("Error creating project " + JSON.stringify(error, null, 2))
           }

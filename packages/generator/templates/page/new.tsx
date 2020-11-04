@@ -31,11 +31,8 @@ const New__ModelName__Page: BlitzPage = () => {
             alert("Success!" + JSON.stringify(__modelName__))
             router.push(
               process.env.parentModel
-                ? "/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
-                : "/__modelNames__/__modelIdParam__",
-              process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
-                : `/__modelNames__/${__modelName__.id}`,
+                : `/__modelNames__/${__modelName__.id}`
             )
           } catch (error) {
             alert("Error creating __modelName__ " + JSON.stringify(error, null, 2))
@@ -45,10 +42,7 @@ const New__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link
-            as="/__parentModels__/__parentModelId__/__modelNames__"
-            href={`/__parentModels__/${__parentModelId__}/__modelNames__`}
-          >
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
             <a>__ModelNames__</a>
           </Link>
           <else>
