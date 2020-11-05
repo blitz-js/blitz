@@ -3,6 +3,9 @@ import type {AppGeneratorOptions} from "@blitzjs/generator"
 import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
+import {lt} from "semver"
+import {getLatestVersion} from "@blitzjs/generator/src/utils/get-latest-version"
+import spawn from "cross-spawn"
 const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
@@ -25,7 +28,7 @@ export class New extends Command {
     },
   ]
 
-  static flags = {
+  static flags: {[flag: string]: any} = {
     help: flags.help({char: "h"}),
     js: flags.boolean({
       description: "Generates a JS project. TypeScript is the default unless you add this flag.",
@@ -50,12 +53,73 @@ export class New extends Command {
       description: "Skip git repository creation",
       default: false,
     }),
+    "skip-upgrade": flags.boolean({
+      description: "Skip blitz upgrade if outdated",
+      default: false,
+    }),
   }
 
   async run() {
     const {args, flags} = this.parse(New)
     debug("args: ", args)
     debug("flags: ", flags)
+
+    if (!flags["skip-upgrade"]) {
+      const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
+      if (lt(this.config.version, latestVersion)) {
+        const upgradeChoices: Array<{name: string; message?: string}> = [
+          {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
+          {
+            name: "no",
+            message: `No - Continue with old version (${this.config.version}) - NOT recommended`,
+          },
+        ]
+
+        const promptUpgrade: any = await this.enquirer.prompt({
+          type: "select",
+          name: "upgrade",
+          message: "Your global blitz version is outdated. Upgrade?",
+          choices: upgradeChoices,
+        })
+
+        if (promptUpgrade.upgrade === "yes") {
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          const useYarn = checkYarn.stdout.toString().includes("blitz@")
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+
+          spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
+
+          const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
+
+          if (versionResult.stdout) {
+            const newVersion =
+              versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+
+            if (newVersion[0] && newVersion[0] === latestVersion) {
+              this.log(
+                chalk.green(
+                  `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
+                ),
+              )
+
+              const flagsArr = Object.keys(flags).reduce(
+                (arr: Array<string>, key: string) => (flags[key] ? [...arr, `--${key}`] : arr),
+                [],
+              )
+
+              spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
+                stdio: "inherit",
+              })
+
+              return
+            }
+          }
+          this.error(
+            "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
+          )
+        }
+      }
+    }
 
     try {
       const destinationRoot = require("path").resolve(args.name)
