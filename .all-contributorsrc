@@ -1486,6 +1486,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "wobsoriano",
+      "name": "Robert Soriano",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13049130?v=4",
+      "profile": "https://robsoriano.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
