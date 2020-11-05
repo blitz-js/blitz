@@ -1,3 +1,5 @@
+import sj from "superjson"
+
 export class AuthenticationError extends Error {
   name = "AuthenticationError"
   statusCode = 401
@@ -8,6 +10,7 @@ export class AuthenticationError extends Error {
     return true
   }
 }
+sj.registerClass(AuthenticationError)
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
@@ -16,6 +19,7 @@ export class CSRFTokenMismatchError extends Error {
     return true
   }
 }
+sj.registerClass(CSRFTokenMismatchError)
 
 export class AuthorizationError extends Error {
   name = "AuthorizationError"
@@ -27,6 +31,7 @@ export class AuthorizationError extends Error {
     return true
   }
 }
+sj.registerClass(AuthorizationError)
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
@@ -38,3 +43,4 @@ export class NotFoundError extends Error {
     return true
   }
 }
+sj.registerClass(NotFoundError)

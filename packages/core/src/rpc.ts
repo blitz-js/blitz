@@ -1,5 +1,4 @@
 import {queryCache} from "react-query"
-import {deserializeError} from "serialize-error"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {
@@ -103,7 +102,7 @@ export const executeRpcCall = <TInput, TResult>(
       }
 
       if (payload.error) {
-        let error = deserializeError(payload.error) as any
+        let error = deserialize({json: payload.error, meta: payload.meta?.error}) as any
         // We don't clear the publicDataStore for anonymous users
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
@@ -120,10 +119,7 @@ export const executeRpcCall = <TInput, TResult>(
 
         throw error
       } else {
-        const data =
-          payload.result === undefined
-            ? undefined
-            : deserialize({json: payload.result, meta: payload.meta?.result})
+        const data = deserialize({json: payload.result, meta: payload.meta?.result})
 
         if (!opts.fromQueryHook) {
           const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
