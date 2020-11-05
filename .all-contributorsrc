@@ -1477,6 +1477,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "leggsimon",
+      "name": "Simon Legg",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11544418?v=4",
+      "profile": "https://github.com/leggsimon",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
