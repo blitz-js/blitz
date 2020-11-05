@@ -54,4 +54,14 @@ describe("products#ssr page", () => {
   })
 })
 
+describe("products#infinite page", () => {
+  beforeEach(() => {
+    cy.visit("/products/infinite")
+  })
+
+  it("shows 3 products", () => {
+    cy.get('[data-test="productName"]').should("have.length", 3)
+  })
+})
+
 export {}
