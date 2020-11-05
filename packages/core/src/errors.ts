@@ -10,7 +10,9 @@ export class AuthenticationError extends Error {
     return true
   }
 }
-sj.registerClass(AuthenticationError)
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(AuthenticationError, "BlitzAuthenticationError")
+}
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
@@ -19,7 +21,9 @@ export class CSRFTokenMismatchError extends Error {
     return true
   }
 }
-sj.registerClass(CSRFTokenMismatchError)
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(CSRFTokenMismatchError, "BlitzCSRFTokenMismatchError")
+}
 
 export class AuthorizationError extends Error {
   name = "AuthorizationError"
@@ -31,7 +35,9 @@ export class AuthorizationError extends Error {
     return true
   }
 }
-sj.registerClass(AuthorizationError)
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(AuthorizationError, "BlitzAuthorizationError")
+}
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
@@ -43,4 +49,6 @@ export class NotFoundError extends Error {
     return true
   }
 }
-sj.registerClass(NotFoundError)
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(NotFoundError, "BlitzNotFoundError")
+}
