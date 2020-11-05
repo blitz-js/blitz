@@ -1468,6 +1468,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ericsakmar",
+      "name": "Eric Sakmar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5620709?v=4",
+      "profile": "https://github.com/ericsakmar",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
