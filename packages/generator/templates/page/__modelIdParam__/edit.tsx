@@ -1,4 +1,4 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
 import Layout from "app/layouts/Layout"
 import {Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"

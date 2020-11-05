@@ -1,4 +1,4 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
 import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"

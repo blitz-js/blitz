@@ -1,4 +1,3 @@
-import React from "react"
 import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Link, useRouter, useMutation, useParam, BlitzPage} from "blitz"
