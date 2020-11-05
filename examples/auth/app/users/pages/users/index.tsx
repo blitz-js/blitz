@@ -1,4 +1,4 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
 import Layout from "app/layouts/Layout"
 import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 import getUsers from "app/users/queries/getUsers"
@@ -55,6 +55,6 @@ const UsersPage: BlitzPage = () => {
   )
 }
 
-UsersPage.getLayout = (page) => <Layout title={"Users"}>{page}</Layout>
+UsersPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default UsersPage
