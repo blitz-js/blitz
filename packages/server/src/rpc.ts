@@ -8,7 +8,6 @@ import {
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
 import prettyMs from "pretty-ms"
-import {serializeError} from "serialize-error"
 import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
@@ -39,9 +38,7 @@ const rpcMiddleware = <TInput, TResult>(
       }
 
       try {
-        const data = (req.body.params === undefined
-          ? undefined
-          : deserialize({json: req.body.params, meta: req.body.meta?.params})) as TInput
+        const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
         log.info(chalk.dim("Starting with input:"), data)
         const startTime = new Date().getTime()
@@ -54,7 +51,7 @@ const rpcMiddleware = <TInput, TResult>(
 
         res.blitzResult = result
 
-        const serializedResult = serialize(result as any)
+        const serializedResult = serialize(result)
 
         res.json({
           result: serializedResult.json,
@@ -78,9 +75,14 @@ const rpcMiddleware = <TInput, TResult>(
           error.statusCode = 500
         }
 
+        const serializedError = serialize(error)
+
         res.json({
           result: null,
-          error: serializeError(error),
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
         })
         return next()
       }
