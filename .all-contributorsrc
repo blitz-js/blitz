@@ -1450,6 +1450,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "isoppp",
+      "name": "Hiroki Isogai",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16318727?v=4",
+      "profile": "https://isoppp.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "matamatanot",
+      "name": "matamatanot",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/39780486?v=4",
+      "profile": "https://github.com/matamatanot",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ericsakmar",
+      "name": "Eric Sakmar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5620709?v=4",
+      "profile": "https://github.com/ericsakmar",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "leggsimon",
+      "name": "Simon Legg",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11544418?v=4",
+      "profile": "https://github.com/leggsimon",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

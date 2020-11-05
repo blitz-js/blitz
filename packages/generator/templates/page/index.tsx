@@ -29,10 +29,7 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link
-                href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
-                as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
-              >
+              <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}>
                 <a>{__modelName__.name}</a>
               </Link>
             </li>
@@ -63,8 +60,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
-                href="/__modelNames__/__modelIdParam__"
-                as={`/__modelNames__/${__modelName__.id}`}
+                href={`/__modelNames__/${__modelName__.id}`}
               >
                 <a>{__modelName__.name}</a>
               </Link>
@@ -92,10 +88,7 @@ const __ModelNames__Page: BlitzPage = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link
-            href="/__parentModels__/__parentModelId__/__modelNames__/new"
-            as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}
-          >
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
             <a>Create __ModelName__</a>
           </Link>
           <else>
