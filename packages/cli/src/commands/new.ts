@@ -78,7 +78,7 @@ export class New extends Command {
         const promptUpgrade: any = await this.enquirer.prompt({
           type: "select",
           name: "upgrade",
-          message: "Your blitz CLI version is outdated. Upgrade?",
+          message: "Your global blitz version is outdated. Upgrade?",
           choices: upgradeChoices,
         })
 
