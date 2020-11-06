@@ -1,12 +1,12 @@
 {
   "name": "@examples/store",
-  "version": "0.25.0-canary.0",
+  "version": "0.25.0-canary.2",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3099",
+    "test:start": "blitz db migrate && blitz db seed && blitz start --production -p 3099",
     "test": "start-server-and-test test:start http://localhost:3099 cy:run"
   },
   "prisma": {
@@ -19,9 +19,9 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.9.0",
-    "@prisma/client": "2.9.0",
-    "blitz": "0.25.0-canary.0",
+    "@prisma/cli": "2.10.0",
+    "@prisma/client": "2.10.0",
+    "blitz": "0.25.0-canary.2",
     "final-form": "4.19.1",
     "react": "0.0.0-experimental-7f28234f8",
     "react-dom": "0.0.0-experimental-7f28234f8",

@@ -121,15 +121,19 @@ export function useInfiniteQuery<
   }
 
   const enhancedResolverRpcClient = sanitize(queryFn)
-  const queryKey = getQueryKey(queryFn)
+  const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: [...queryKey, "infinite"],
-    queryFn: (_apiUrl: string, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
-      enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true}),
+    queryFn: (
+      _apiUrl: string,
+      _args: any,
+      _infinite: string,
+      resultOfGetFetchMore: TFetchMoreResult,
+    ) => enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true}),
     config: {
       ...defaultQueryConfig,
       ...options,

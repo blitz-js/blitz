@@ -90,3 +90,17 @@ export function enhanceQueryFn(fn: any) {
   }
   return newFn
 }
+// This one doesn't call deserialize
+export function enhanceInfiniteQueryFn(fn: any) {
+  const newFn = (...args: any) => {
+    const [data, ...rest] = args
+    return fn(data, ...rest)
+  }
+  newFn._meta = {
+    name: "testResolver",
+    type: "query",
+    path: "app/test",
+    apiUrl: "test/url",
+  }
+  return newFn
+}
