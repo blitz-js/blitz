@@ -42,13 +42,21 @@ let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}
 try {
   db = require('db').default
-  connect = require('db').connect ?? db?.$connect ?? db?.connect ?? (() => {})
-} catch(err) {}
+  if (require('db').connect) {
+    connect = require('db').connect
+  } else if (db?.$connect || db?.connect) {
+    connect = () => db.$connect ? db.$connect() : db.connect()
+  } else {
+    connect = () => {}
+  }
+} catch(_) {}
+
 export default rpcApiHandler(
   enhancedResolver,
   getAllMiddlewareForModule(enhancedResolver),
   () => db && connect?.(),
 )
+
 export const config = {
   api: {
     externalResolver: true,
