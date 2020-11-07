@@ -12,6 +12,7 @@ import {
   useQuery as useReactQuery,
 } from "react-query"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
+import {useRouterIsReady} from "./use-router"
 import {
   defaultQueryConfig,
   getQueryCacheFunctions,
@@ -38,6 +39,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -47,6 +49,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
       enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
     config: {
       ...defaultQueryConfig,
+      enabled: routerIsReady,
       ...options,
     },
   })
@@ -74,6 +77,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -83,6 +87,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
       enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
     config: {
       ...defaultQueryConfig,
+      enabled: routerIsReady,
       ...options,
     },
   })
@@ -120,6 +125,7 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -136,6 +142,7 @@ export function useInfiniteQuery<
     ) => enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true}),
     config: {
       ...defaultQueryConfig,
+      enabled: routerIsReady,
       ...options,
     },
   })

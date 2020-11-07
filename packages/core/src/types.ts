@@ -1,7 +1,15 @@
 import {IncomingMessage, ServerResponse} from "http"
+import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateConfig, MutationResult} from "react-query"
 import {BlitzApiRequest, BlitzApiResponse} from "."
+import {useParams} from "./use-params"
+import {useRouterQuery} from "./use-router-query"
+
+export interface BlitzRouter extends NextRouter {
+  query: ReturnType<typeof useRouterQuery>
+  params: ReturnType<typeof useParams>
+}
 
 export interface DefaultPublicData {
   userId: any
