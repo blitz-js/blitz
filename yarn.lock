@@ -15969,10 +15969,10 @@ react-is@16.13.1, react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-react-query@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.6.0.tgz#a1ec81dd4c8cb9ef8b19dde7380d0d754d793eea"
-  integrity sha512-eaigvwT/Rq6yhjmo5hP2CRGT4+CSoj2dcYK12e4HmWvDptEALlA3yoU6KQBAhstCRUAlpF48MxVZlykm/AuasQ==
+react-query@2.5.12:
+  version "2.5.12"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-2.5.12.tgz#f48be402886b9d95f892d836c2476ee3fdd3e479"
+  integrity sha512-ni2Hrz8tU/WCc5EQj+QB0jzSgxKdVL3tznFvTrXDmGjTxFj9hg1vXoxEPAn8d4pXy+lgPAflcjxht3IakUgHzg==
   dependencies:
     ts-toolbelt "^6.9.4"
 
