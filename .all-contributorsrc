@@ -1504,6 +1504,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Talor-A",
+      "name": "Talor Anderson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11509865?v=4",
+      "profile": "http://taloranderson.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
