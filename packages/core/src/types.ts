@@ -1,7 +1,7 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
-import {MutateConfig, MutationResult} from "react-query"
+import {MutateOptions, MutationResult} from "react-query"
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
@@ -170,7 +170,7 @@ export declare type MutateFunction<
   TSnapshot = unknown
 > = (
   variables?: TVariables,
-  config?: MutateConfig<TResult, TError, TVariables, TSnapshot>,
+  config?: MutateOptions<TResult, TError, TVariables, TSnapshot>,
 ) => Promise<TResult>
 
 export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [

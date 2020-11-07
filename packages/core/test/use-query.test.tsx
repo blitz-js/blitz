@@ -82,7 +82,7 @@ describe("useInfiniteQuery", () => {
     function TestHarness() {
       // TODO - fix typing
       //@ts-ignore
-      const [groupedData] = useInfiniteQuery(queryFn, params)
+      const [groupedData] = useInfiniteQuery(queryFn, params, {getFetchMore: () => {}})
       Object.assign(res, {groupedData})
       return (
         <div id="harness">
