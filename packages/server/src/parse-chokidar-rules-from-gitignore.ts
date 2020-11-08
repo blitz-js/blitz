@@ -9,13 +9,17 @@ import parseGitignore from "parse-gitignore"
 const {GIT_DIR = ".git"} = process.env
 
 function globalGitIgnore() {
+  const versionResult = spawn.sync("git", ["version"])
+  if (!(versionResult.status === 0)) {
+    log.warning("Git doesn't seem to be installed. Get it here: https://git-scm.com/downloads.")
+    return null
+  }
+
   const configResult = spawn.sync("git", ["config", "--get", "core.excludesfile"], {
     stdio: "pipe",
   })
-
   if (!(configResult.status === 0)) {
-    log.warning("Failed to run git config --get core.excludesFile.")
-    log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+    log.warning("Git config core.excludesFile is unset. Inferring .gitignore file locations.")
     return null
   }
 
