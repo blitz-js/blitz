@@ -26,8 +26,13 @@ const nestedIgnoreValue = `
 beforeEach(() => {
   // @ts-ignore (TS complains about reassign)
   spawn.sync = jest.fn().mockImplementation((command, options) => {
-    if (command === "git" && options[0] === "config") {
-      return {status: 0, stdout: "/global/.gitignore"}
+    if (command === "git") {
+      switch (options[0]) {
+        case "config":
+          return {status: 0, stdout: "/global/.gitignore"}
+        case "version":
+          return {status: 0, stdout: "git version 1.2.3"}
+      }
     }
   })
 })
@@ -72,6 +77,37 @@ describe("getAllGitIgnores", () => {
           gitIgnore: globalIgnore,
         },
       ])
+    })
+    describe("when git isn't installed", () => {
+      beforeEach(() => {
+        // @ts-ignore (TS complains about reassign)
+        spawn.sync = jest.fn().mockImplementation((command, options) => {
+          if (command === "git" && options[0] === "version") {
+            return {status: 1}
+          }
+        })
+      })
+      it("excludes the file", () => {
+        expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([])
+      })
+    })
+    describe("when git config core.excludesFile isn't set", () => {
+      beforeEach(() => {
+        // @ts-ignore (TS complains about reassign)
+        spawn.sync = jest.fn().mockImplementation((command, options) => {
+          if (command === "git") {
+            switch (options[0]) {
+              case "config":
+                return {status: 1, stdout: ""}
+              case "version":
+                return {status: 0, stdout: "git version 1.2.3"}
+            }
+          }
+        })
+      })
+      it("excludes the file", () => {
+        expect(getAllGitIgnores(resolve(__dirname, ".."))).toEqual([])
+      })
     })
   })
 
