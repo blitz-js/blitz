@@ -131,6 +131,7 @@ describe("Dev command", () => {
             children: [
               {name: "blitz.config.js"},
               {name: "next.config.js"},
+              {name: "blitz-version"},
               {name: "one"},
               {name: "two"},
             ],
