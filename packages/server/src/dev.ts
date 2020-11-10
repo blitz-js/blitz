@@ -1,3 +1,4 @@
+import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
 import {nextStartDev} from "./next-utils"
 import {configureStages} from "./stages"
@@ -16,6 +17,9 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     clean,
   } = await normalize({...config, env: "dev"})
 
+  // if blitz version is mismatched, we need to bust the cache by cleaning the devFolder
+  const versionMatched = await isVersionMatched(devFolder)
+
   const stages = configureStages({writeManifestFile, isTypescript})
 
   const [{manifest}] = await Promise.all([
@@ -23,11 +27,13 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
       ignore,
       include,
       watch,
-      clean,
+      clean: !versionMatched || clean,
     }),
     // Ensure next does not start until parallel processing completes
     readyForNextDev,
   ])
+
+  if (!versionMatched) await saveBlitzVersion(devFolder)
 
   await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
 }
