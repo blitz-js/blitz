@@ -12,6 +12,7 @@ import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouterIsReady} from "./use-router"
 import {
   defaultQueryConfig,
+  emptyQueryFn,
   getQueryCacheFunctions,
   getQueryKey,
   QueryCacheFunctions,
@@ -39,10 +40,11 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   const {data, ...queryRest} = useReactQuery({
     queryKey,
     queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+      (routerIsReady
+        ? enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+        : emptyQueryFn) as any,
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
@@ -77,10 +79,11 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
     queryKey,
     queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+      (routerIsReady
+        ? enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+        : emptyQueryFn) as any,
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
@@ -136,10 +139,12 @@ export function useInfiniteQuery<
       _args: any,
       _infinite: string,
       resultOfGetFetchMore: TFetchMoreResult,
-    ) => enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})) as any,
+    ) =>
+      routerIsReady
+        ? enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
+        : emptyQueryFn) as any,
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
