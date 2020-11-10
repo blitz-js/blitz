@@ -1,9 +1,14 @@
 import {pathExists, readFile, writeFile} from "fs-extra"
-import {join, resolve} from "path"
+import {resolve} from "path"
 
-export function getBlitzVersion(): string {
-  const pkgJson = require(join(require.resolve("blitz/package.json")))
-  return pkgJson.version
+export function getBlitzVersion(): string | null {
+  try {
+    const path = require.resolve("blitz/package.json")
+    const pkgJson = require(path)
+    return pkgJson.version
+  } catch {
+    return null
+  }
 }
 
 export async function isVersionMatched(buildFolder: string = ".blitz/caches") {
