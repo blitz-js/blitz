@@ -4,7 +4,7 @@ import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 import {lt} from "semver"
-import {getLatestVersion} from "@blitzjs/generator/src/utils/get-latest-version"
+import {getLatestVersion} from "@blitzjs/generator"
 import spawn from "cross-spawn"
 const debug = require("debug")("blitz:new")
 
