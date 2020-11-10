@@ -11,7 +11,9 @@
     "esModuleInterop": true,
     "types": [],
     "noEmit": false,
-    "lib": ["dom", "dom.iterable", "ES2018"]
+    "lib": ["dom", "dom.iterable", "ES2018"],
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": ["src/**/*", "types"],
   "exclude": ["node_modules"]
