@@ -88,7 +88,7 @@ const rpcMiddleware = <TInput, TResult>(
       }
     } else {
       // Everything else is error
-      log.error("Not Found\n")
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return next()
     }
