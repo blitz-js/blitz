@@ -12,6 +12,7 @@ import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouterIsReady} from "./use-router"
 import {
   defaultQueryConfig,
+  emptyQueryFn,
   getQueryCacheFunctions,
   getQueryKey,
   QueryCacheFunctions,
@@ -37,12 +38,13 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
-    queryKey,
-    queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, params: any) =>
+          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
@@ -75,12 +77,13 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   const queryKey = getQueryKey(queryFn, params)
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
-    queryKey,
-    queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, params: any) =>
+          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
@@ -130,16 +133,13 @@ export function useInfiniteQuery<
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
-    queryKey: [...queryKey, "infinite"],
-    queryFn: ((
-      _apiUrl: string,
-      _args: any,
-      _infinite: string,
-      resultOfGetFetchMore: TFetchMoreResult,
-    ) => enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})) as any,
+    queryKey: routerIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, _args: any, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
+          enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
-      enabled: routerIsReady,
       ...options,
     },
   })
