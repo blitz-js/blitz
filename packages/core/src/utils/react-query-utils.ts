@@ -29,7 +29,10 @@ export const getQueryCacheFunctions = <TInput, TResult, T extends QueryFn>(
 })
 
 export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => {
-  const fn = () => new Promise(() => {})
+  const fn = () =>
+    new Promise(() => {
+      console.log("Running emptyQueryFn")
+    })
   fn._meta = {
     name: "emptyQueryFn",
     type: "n/a" as any,

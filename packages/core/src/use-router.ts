@@ -25,7 +25,9 @@ export function useRouterIsReady() {
   const router = useNextRouter()
 
   const hasParams = /\[.+\]/.test(router.route) || /\?./.test(router.asPath)
-  const ready = !hasParams || Object.keys(router.query).length > 0
+  const queryKeys = Object.keys(router.query)
+  const queryIsEmpty = queryKeys.length === 0 || (queryKeys.length === 1 && queryKeys[0] === "amp")
+  const ready = !hasParams || !queryIsEmpty
 
   return ready
 }
