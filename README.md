@@ -53,6 +53,12 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 <br><br>
 
+<a aria-label="Bytes Newsletter" href="https://ui.dev/bytes/?r=brandon">
+<img alt="Bytes Newsletter" src="https://files-8wtskjofb.vercel.app/smarter-16x1.jpg">
+</a>
+
+<br><br>
+
 ![Architecture diagram](https://blitzjs.now.sh/img/architecture-diagram.png)
 
 <br><br>
@@ -117,6 +123,7 @@ There's still a lot of work to do, so you are especially invited to join us in b
 Your financial contributions help ensure Blitz continues to be developed and maintained! We have monthly sponsorship options starting at $5/month.
 
 👉 View options and contribute at [GitHub Sponsors](https://github.com/sponsors/blitz-js), [PayPal](https://paypal.me/thebayers), or [Open Collective](https://opencollective.com/blitzjs)
+
 
 ### 🌱 Seedling Sponsors
 
