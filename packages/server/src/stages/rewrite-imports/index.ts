@@ -1,6 +1,5 @@
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import path from "path"
-// import slash from "slash"
 
 const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
 
@@ -20,7 +19,7 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
 
     const contents = filecontents.toString()
 
-    const newContents = replaceImports(contents, rewriteImports(cwd, filepath))
+    const newContents = replaceImports(contents, rewriteImports)
     file.contents = Buffer.from(newContents)
 
     return file
@@ -39,24 +38,18 @@ export function replaceImports(content: string, replacer: (s: string) => string)
   })
 }
 
-export function rewriteImports(_cwd: string, _filename: string) {
-  return (importPath: string) => {
-    let parts = importPath.split("/")
+export function rewriteImports(importPath: string) {
+  const parts = importPath.split("/")
 
-    if (parts.includes("pages")) {
-      if (parts[0] === "app") {
-        parts = parts.slice(1)
-      }
+  if (parts.includes("pages")) {
+    if (parts[0] === "app") {
+      parts.splice(0, 1)
     }
-
-    if (parts.includes("queries")) {
-      return importPath
-    }
-
-    if (parts.includes("mutations")) {
-      return importPath
-    }
-
-    return parts.join("/")
   }
+
+  if (parts.includes("api")) {
+    parts.splice(0, parts.indexOf("api"), "pages")
+  }
+
+  return parts.join("/")
 }

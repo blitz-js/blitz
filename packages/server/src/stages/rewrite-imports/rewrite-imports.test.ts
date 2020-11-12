@@ -61,9 +61,9 @@ describe("rewrite-imports", () => {
     }
   }
 
-  describe("an import from app/pages/index.tsx", () => {
+  describe("an import from app/pages/index", () => {
     it(
-      "is rewritten to pages/index.tsx",
+      "is rewritten to pages/index",
       makeTest({
         input: [
           {
@@ -76,7 +76,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-              import { someFunction } from "app/pages/index.tsx";
+              import { someFunction } from "app/pages/index";
               export function someOtherFunction() {
                 return someFunction();
               }
@@ -94,7 +94,51 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-              import { someFunction } from "pages/index.tsx";
+              import { someFunction } from "pages/index";
+              export function someOtherFunction() {
+                return someFunction();
+              }
+            `,
+          },
+        ],
+      }),
+    )
+  })
+
+  describe("an import from app/users/api/getUser", () => {
+    it(
+      "is rewritten to pages/api/getUser",
+      makeTest({
+        input: [
+          {
+            path: normalize("/projects/blitz/blitz/app/users/api/getUser.ts"),
+            contents: `
+              export function someFunction() { return "foo"; }
+              export default function Index() { return <p>Hello World</p> }
+            `,
+          },
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+              import { someFunction } from "app/users/api/getUser";
+              export function someOtherFunction() {
+                return someFunction();
+              }
+            `,
+          },
+        ],
+        expectedOutput: [
+          {
+            path: normalize("/projects/blitz/blitz/app/users/api/getUser.ts"),
+            contents: `
+              export function someFunction() { return "foo"; }
+              export default function Index() { return <p>Hello World</p> }
+            `,
+          },
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+              import { someFunction } from "pages/api/getUser";
               export function someOtherFunction() {
                 return someFunction();
               }
