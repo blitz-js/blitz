@@ -19,21 +19,14 @@ describe("rewrite-imports", () => {
       "import './bar/baz'",
       "import './bar/baz';",
       `
-      import { someFunction } from "app/pages/index.tsx";
+      import { someFunction } from "app/pages/index";
       `,
+      'import Default from "app/some/file"',
     ]
 
     successes.forEach((success) => {
       test(success, () => {
         expect(success.match(patternImport)).not.toBeNull()
-      })
-    })
-
-    const fails = ['import { a, b } of "./bar/baz"']
-
-    fails.forEach((fail) => {
-      test(fail, () => {
-        expect(fail.match(patternImport)).toBeNull()
       })
     })
   })
