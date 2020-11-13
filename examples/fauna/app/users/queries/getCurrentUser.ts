@@ -5,11 +5,11 @@ import { gql } from "graphql-request"
 export default async function getCurrentUser(_ = null, { session }: Ctx) {
   if (!session.userId) return null
 
-  const user = await db.request(
+  const { user } = await db.request(
     gql`
-      query getUser($id: ID) {
-        findUserByID(id: $id) {
-          _id
+      query getUser($id: ID!) {
+        user: findUserByID(id: $id) {
+          id: _id
           email
           name
           role

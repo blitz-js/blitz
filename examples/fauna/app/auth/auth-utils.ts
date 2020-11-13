@@ -1,6 +1,7 @@
 import { AuthenticationError } from "blitz"
 import SecurePassword from "secure-password"
 import db from "db"
+import { gql } from "graphql-request"
 
 const SP = new SecurePassword()
 
@@ -18,7 +19,20 @@ export const verifyPassword = async (hashedPassword: string, password: string) =
 }
 
 export const authenticateUser = async (email: string, password: string) => {
-  const user = await db.user.findOne({ where: { email: email.toLowerCase() } })
+  const { user } = await db.request(
+    gql`
+      query getUser($email: String!) {
+        user: findUserByEmail(email: $email) {
+          id: _id
+          email
+          name
+          role
+          hashedPassword
+        }
+      }
+    `,
+    { email: email.toLowerCase() }
+  )
 
   if (!user || !user.hashedPassword) throw new AuthenticationError()
 
@@ -28,7 +42,21 @@ export const authenticateUser = async (email: string, password: string) => {
     case SecurePassword.VALID_NEEDS_REHASH:
       // Upgrade hashed password with a more secure hash
       const improvedHash = await hashPassword(password)
-      await db.user.update({ where: { id: user.id }, data: { hashedPassword: improvedHash } })
+      await db.request(
+        gql`
+          mutation UpdateUser($data: UserInput!) {
+            updateUser(data: $data) {
+              id: _id
+            }
+          }
+        `,
+        {
+          data: {
+            id: user.id,
+            hashedPassword: improvedHash,
+          },
+        }
+      )
       break
     default:
       throw new AuthenticationError()

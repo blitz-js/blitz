@@ -7,6 +7,16 @@ const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {
   },
 })
 
+const normalizeSession = (faunaSession) => {
+  if (!faunaSession) return null
+  const { user, expiresAt, ...rest } = faunaSession
+  return {
+    ...rest,
+    userId: user.id,
+    expiresAt: new Date(expiresAt),
+  }
+}
+
 module.exports = {
   middleware: [
     sessionMiddleware({
@@ -31,36 +41,113 @@ module.exports = {
           `,
           { handle: handle }
         )
-        console.log(session)
-        const { user, ...rest } = session
+        if (!session) return null
+        const { user, expiresAt, ...rest } = session
         return {
           ...rest,
           userId: user.id,
+          expiresAt: new Date(expiresAt),
         }
       },
-      getSessions: (userId) => getDb().session.findMany({ where: { userId } }),
-      createSession: (session) => {
-        let user
-        if (session.userId) {
-          user = { connect: { id: session.userId } }
-        }
-        return getDb().session.create({
-          data: { ...session, userId: undefined, user },
-        })
-      },
-      updateSession: async (handle, session) => {
-        try {
-          return await getDb().session.update({ where: { handle }, data: session })
-        } catch (error) {
-          // Session doesn't exist in DB for some reason, so create it
-          if (error.code === "P2016") {
-            log.warning("Could not update session because it's not in the DB")
-          } else {
-            throw error
+      // getSessions: (userId) => getDb().session.findMany({ where: { userId } }),
+      createSession: async (session) => {
+        const { userId, ...sessionInput } = session
+        const userInput = { connect: userId }
+
+        const { createSession: sessionRes } = await graphQLClient.request(
+          gql`
+            mutation CreateSession($data: SessionInput!) {
+              createSession(data: $data) {
+                id: _id
+                publicData
+                privateData
+                antiCSRFToken
+                expiresAt
+                hashedSessionToken
+                handle
+                user {
+                  id: _id
+                }
+              }
+            }
+          `,
+          {
+            data: {
+              ...sessionInput,
+              expiresAt: sessionInput.expiresAt.toISOString(),
+              user: userInput,
+            },
           }
-        }
+        )
+        return normalizeSession(sessionRes)
       },
-      deleteSession: (handle) => getDb().session.delete({ where: { handle } }),
+      updateSession: async (sessionHandle, session) => {
+        const { findSessionByHandle: existingSession } = await graphQLClient.request(
+          gql`
+            query getSession($handle: String!) {
+              findSessionByHandle(handle: $handle) {
+                id: _id
+              }
+            }
+          `,
+          { handle: sessionHandle }
+        )
+
+        const { userId, handle, ...sessionInput } = session
+
+        const { updateSession: sessionRes } = await graphQLClient.request(
+          gql`
+            mutation UpdateSession($data: SessionInput!) {
+              updateSession(data: $data) {
+                id: _id
+                publicData
+                privateData
+                antiCSRFToken
+                expiresAt
+                hashedSessionToken
+                handle
+                user {
+                  id: _id
+                }
+              }
+            }
+          `,
+          {
+            data: {
+              ...sessionInput,
+              id: existingSession.id,
+              expiresAt: sessionInput.expiresAt.toISOString(),
+            },
+          }
+        )
+        return normalizeSession(sessionRes)
+      },
+      deleteSession: async (handle) => {
+        const { findSessionByHandle: existingSession } = await graphQLClient.request(
+          gql`
+            query getSession($handle: String!) {
+              findSessionByHandle(handle: $handle) {
+                id: _id
+              }
+            }
+          `,
+          { handle: handle }
+        )
+
+        await graphQLClient.request(
+          gql`
+            mutation DeleteSession($id ID!) {
+              deleteSession(id: $id) {
+                id: _id
+                handle
+              }
+            }
+          `,
+          {
+            id: existingSession.id,
+          }
+        )
+      },
     }),
   ],
   /* Uncomment this to customize the webpack config
