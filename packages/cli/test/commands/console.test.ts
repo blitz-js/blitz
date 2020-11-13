@@ -37,18 +37,22 @@ jest.mock(
   }),
 )
 
+Console.prototype.parse = jest.fn()
+
 describe("Console command", () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
 
   it("runs repl", async () => {
-    await Console.prototype.run()
+    await Console.run()
+    expect(Console.prototype.parse).toHaveBeenCalled()
     expect(repl.runRepl).toHaveBeenCalled()
   })
 
   it("runs repl with replOptions", async () => {
-    await Console.prototype.run()
+    await Console.run()
+    expect(Console.prototype.parse).toHaveBeenCalled()
     expect(repl.runRepl).toHaveBeenCalledWith(Console.replOptions)
   })
 })

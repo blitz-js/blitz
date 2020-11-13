@@ -1,22 +1,22 @@
-import * as REPL from "repl"
-import path from "path"
-import fs from "fs"
-import {REPLCommand, REPLServer} from "repl"
 import {watch} from "chokidar"
-import pkgDir from "pkg-dir"
+import fs from "fs"
 import os from "os"
-
+import path from "path"
+import pkgDir from "pkg-dir"
+import * as REPL from "repl"
+import {REPLCommand, REPLServer} from "repl"
 // import {loadDependencies} from '../utils/load-dependencies'
 import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
-const loadBlitzModules = async (repl: REPLServer) => {
-  Object.assign(repl.context, await loadBlitz())
+const loadBlitzModules = (repl: REPLServer, modules: any) => {
+  Object.assign(repl.context, modules)
 }
+
 const loadModules = async (repl: REPLServer) => {
   // loadBlitzDependencies(repl)
-  await loadBlitzModules(repl)
+  loadBlitzModules(repl, await loadBlitz())
 }
 
 const commands = {
@@ -67,10 +67,12 @@ const setupHistory = (repl: any) => {
 }
 
 const initializeRepl = async (replOptions: REPL.ReplOptions) => {
+  const modules = await loadBlitz()
+
   const repl = REPL.start(replOptions)
 
+  loadBlitzModules(repl, modules)
   defineCommands(repl, commands)
-  await loadModules(repl)
   setupHistory(repl)
 
   return repl
@@ -81,7 +83,7 @@ const setupFileWatchers = async (repl: REPLServer) => {
     // watch('package.json').on('change', () => Console.loadDependencies(repl)),
     watch(await getBlitzModulePaths(), {
       ignoreInitial: true,
-    }).on("all", () => loadBlitzModules(repl)),
+    }).on("all", () => loadModules(repl)),
   ]
 
   repl.on("reset", () => loadModules(repl))

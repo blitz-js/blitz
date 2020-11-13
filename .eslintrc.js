@@ -8,7 +8,7 @@ module.exports = {
     },
     project: `./tsconfig.json`,
   },
-  plugins: ["@typescript-eslint", "import", "unicorn"],
+  plugins: ["@typescript-eslint", "import", "unicorn", "simple-import-sort"],
   extends: ["react-app"],
   rules: {
     "react/react-in-jsx-scope": "off", // React is always in scope with Blitz
@@ -30,6 +30,26 @@ module.exports = {
     // note you must disable the base rule as it can report incorrect errors
     "no-redeclare": "off",
     "@typescript-eslint/no-redeclare": ["error"],
+    "simple-import-sort/sort": [
+      "warn",
+      {
+        groups: [
+          [
+            // Side effect imports.
+            "^\\u0000",
+            // Packages.
+            // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+            "^@?\\w",
+            // Absolute imports and other imports such as Vue-style `@/foo`.
+            // Anything that does not start with a dot.
+            "^[^.]",
+            // Relative imports.
+            // Anything that starts with a dot.
+            "^\\.",
+          ],
+        ],
+      },
+    ],
   },
   ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
   overrides: [

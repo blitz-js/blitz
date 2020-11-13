@@ -1,6 +1,6 @@
-import pkgDir from "pkg-dir"
-import path from "path"
 import fs from "fs"
+import path from "path"
+import pkgDir from "pkg-dir"
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {

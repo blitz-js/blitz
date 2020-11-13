@@ -1,7 +1,8 @@
-import {forceRequire} from "./module"
-import path from "path"
 import globby from "globby"
+import path from "path"
 import pkgDir from "pkg-dir"
+import ProgressBar from "progress"
+import {forceRequire} from "./module"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 
@@ -22,7 +23,12 @@ export async function getBlitzModulePaths() {
 
 export const loadBlitz = async () => {
   const paths = await getBlitzModulePaths()
-  return Object.assign(
+
+  const percentage = new ProgressBar("Loading Modules :current/:total", {
+    total: paths.length,
+  })
+
+  const modules: Record<string, any>[] = Object.assign(
     {},
     ...paths.map((modulePath) => {
       let name = path.parse(modulePath).name
@@ -34,6 +40,9 @@ export const loadBlitz = async () => {
       try {
         const module = forceRequire(modulePath)
         const contextObj = module.default || module
+
+        percentage.tick()
+
         //TODO: include all exports here, not just default
         return {
           [name]: contextObj,
@@ -43,4 +52,8 @@ export const loadBlitz = async () => {
       }
     }),
   )
+
+  percentage.terminate()
+
+  return modules
 }

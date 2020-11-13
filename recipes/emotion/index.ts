@@ -1,11 +1,16 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import {join} from "path"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
+import {join} from "path"
 
 function wrapComponentWithCacheProvider(program: Collection<j.Program>) {
   program
-    .find(j.JSXExpressionContainer, {expression: {callee: {name: "getLayout"}}})
+    .find(j.JSXElement)
+    .filter(
+      (path) =>
+        path.parent?.parent?.parent?.value?.id?.name === "App" &&
+        path.parent?.value.type === j.ReturnStatement.toString(),
+    )
     .forEach((path) => {
       const {node} = path
       path.replace(

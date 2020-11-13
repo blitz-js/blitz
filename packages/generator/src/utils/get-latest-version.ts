@@ -1,7 +1,7 @@
-import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
 import {log} from "@blitzjs/display"
-import {Fallbackable} from "./fallbackable"
 import chalk from "chalk"
+import {Fallbackable} from "./fallbackable"
+import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
 
 export const logFailedVersionFetch = (dependency: string, fallback: string) => {
   log.clearLine(

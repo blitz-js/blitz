@@ -1,10 +1,9 @@
-import * as repl from "repl"
 import * as chokidar from "chokidar"
-import {REPLServer} from "repl"
 import {FSWatcher} from "chokidar"
-
-import * as loadBlitzFunctions from "../src/utils/load-blitz"
+import * as repl from "repl"
+import {REPLServer} from "repl"
 import {runRepl} from "../src/repl"
+import * as loadBlitzFunctions from "../src/utils/load-blitz"
 
 jest.spyOn(global.console, "log").mockImplementation()
 
@@ -27,7 +26,7 @@ jest.mock(`${process.cwd()}/package.json`, () => ({
 }))
 
 const pathToModulesMock = ["/module", "module2"]
-const loadBlitzMock = {blitz: "app"}
+const loadBlitzMock = [{blitz: "app"}]
 
 describe("Console command", () => {
   beforeEach(() => {

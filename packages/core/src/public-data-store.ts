@@ -1,9 +1,9 @@
-import {LOCALSTORAGE_PREFIX, COOKIE_PUBLIC_DATA_TOKEN} from "./constants"
-import {readCookie, deleteCookie} from "./utils/cookie"
 import BadBehavior from "bad-behavior"
 import {queryCache} from "react-query"
-import {parsePublicDataToken} from "./utils/tokens"
+import {COOKIE_PUBLIC_DATA_TOKEN, LOCALSTORAGE_PREFIX} from "./constants"
 import {PublicData} from "./types"
+import {deleteCookie, readCookie} from "./utils/cookie"
+import {parsePublicDataToken} from "./utils/tokens"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
@@ -12,20 +12,24 @@ class PublicDataStore {
 
   constructor() {
     if (typeof window !== "undefined") {
-      // Set default value
-      this.updateState()
+      // Set default value & prevent infinite loop
+      this.updateState(undefined, {suppressEvent: true})
       window.addEventListener("storage", (event) => {
         if (event.key === this.eventKey) {
-          this.updateState()
+          // Prevent infinite loop
+          this.updateState(undefined, {suppressEvent: true})
         }
       })
     }
   }
 
-  updateState(value?: PublicData) {
+  updateState(value?: PublicData, opts?: {suppressEvent: boolean}) {
     // We use localStorage as a message bus between tabs.
     // Setting the current time in ms will cause other tabs to receive the `storage` event
-    localStorage.setItem(this.eventKey, Date.now().toString())
+    if (!opts?.suppressEvent) {
+      // Prevent infinite loop
+      localStorage.setItem(this.eventKey, Date.now().toString())
+    }
     this.observable.next(value ?? this.getData())
   }
 

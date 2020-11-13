@@ -1,11 +1,11 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
 import {Generator, GeneratorOptions} from "@blitzjs/generator"
-import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Box, Text} from "ink"
+import Spinner from "ink-spinner"
 import {useEffect, useState} from "react"
 import * as React from "react"
-import {Box, Text} from "ink"
 import {Newline} from "../components/newline"
-import Spinner from "ink-spinner"
+import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface Config extends ExecutorConfig {
   targetDirectory?: executorArgument<string>
@@ -84,7 +84,7 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
         created:
       </Text>
       <Newline />
-      {dryRunOutput && <Text>{dryRunOutput}</Text>}
+      {dryRunOutput ? <Text>{dryRunOutput}</Text> : null}
       <Newline />
       <Text>If this looks ok to you, press ENTER to create the files.</Text>
     </Box>
@@ -127,21 +127,21 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
 
   return (
     <Box flexDirection="column">
-      {!fileCreateOutput && (
+      {!fileCreateOutput ? (
         <Text>
           <Spinner /> Creating files...
         </Text>
-      )}
-      {fileCreateOutput && (
+      ) : null}
+      {fileCreateOutput ? (
         <>
           {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
           <Text>The file generation is complete! 🎉 Here are the results:</Text>
           <Newline />
-          {fileCreateOutput && <Text>{fileCreateOutput}</Text>}
+          {fileCreateOutput ? <Text>{fileCreateOutput}</Text> : null}
           <Newline />
           <Text>Once you've had a chance to confirm the changes, press ENTER to continue.</Text>
         </>
-      )}
+      ) : null}
     </Box>
   )
 }

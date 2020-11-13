@@ -20,3 +20,5 @@ dist
 **/.envrc
 .blitz-*
 .blitz-cli-cache
+.vscode
+.tsbuildinfo

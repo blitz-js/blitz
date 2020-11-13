@@ -1,8 +1,8 @@
 import * as fs from "fs-extra"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
-import * as babel from "recast/parsers/babel"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
+import * as babel from "recast/parsers/babel"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {

@@ -28,9 +28,9 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.24.2",
-    "react": "0.0.0-experimental-7f28234f8",
-    "react-dom": "0.0.0-experimental-7f28234f8",
+    "blitz": "0.25.0",
+    "react": "0.0.0-experimental-4ead6b530",
+    "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.2",
     "secure-password": "4.0.0",
     "zod": "1.11.9",

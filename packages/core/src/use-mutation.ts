@@ -1,6 +1,6 @@
-import {useMutation as useReactQueryMutation, MutationConfig} from "react-query"
-import {validateQueryFn} from "./utils/react-query-utils"
+import {MutationOptions, useMutation as useReactQueryMutation} from "react-query"
 import {MutationFunction, MutationResultPair} from "./types"
+import {sanitize} from "./utils/react-query-utils"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair
@@ -13,12 +13,15 @@ import {MutationFunction, MutationResultPair} from "./types"
 
 export function useMutation<TResult, TError = unknown, TVariables = undefined, TSnapshot = unknown>(
   mutationResolver: MutationFunction<TResult, TVariables>,
-  config?: MutationConfig<TResult, TError, TVariables, TSnapshot>,
+  config?: MutationOptions<TResult, TError, TVariables, TSnapshot>,
 ) {
-  validateQueryFn(mutationResolver)
+  const enhancedResolverRpcClient = sanitize(mutationResolver)
 
-  return useReactQueryMutation(mutationResolver, {
-    throwOnError: true,
-    ...config,
-  }) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
+  return useReactQueryMutation(
+    (variables: TVariables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
+    {
+      throwOnError: true,
+      ...config,
+    } as any,
+  ) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
 }

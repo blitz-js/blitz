@@ -1,8 +1,7 @@
-import {through} from "./streams"
-
-import {isEvent} from "./utils"
-import {EventedFile, PipelineItem} from "./types"
 import {DuplexOptions, Transform} from "stream"
+import {through} from "./streams"
+import {EventedFile, PipelineItem} from "./types"
+import {isEvent} from "./utils"
 
 /**
  * Stream API for utilizing stream functions

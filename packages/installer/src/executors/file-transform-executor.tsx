@@ -1,13 +1,13 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
-import {filePrompt} from "./file-prompt"
-import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
 import {createPatch} from "diff"
 import * as fs from "fs-extra"
-import * as React from "react"
-import Spinner from "ink-spinner"
 import {Box, Text} from "ink"
+import Spinner from "ink-spinner"
+import * as React from "react"
 import {Newline} from "../components/newline"
+import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
@@ -44,7 +44,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   if (!diff) {
     return (
       <Box>
-        <Spinner /> Generating file diff...
+        <Text>
+          <Spinner />
+          Generating file diff...
+        </Text>
       </Box>
     )
   }
@@ -63,9 +66,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
             styleProps.bold = true
             styleProps.color = "green"
           }
-
           return (
-            <Text {...styleProps} key={idx}>{line}</Text>
+            <Text {...styleProps} key={idx}>
+              {line}
+            </Text>
           )
         })}
       <Newline />
@@ -97,7 +101,8 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   if (loading) {
     return (
       <Box>
-        <Spinner /> Applying file changes
+        <Spinner />
+        <Text>Applying file changes</Text>
       </Box>
     )
   }

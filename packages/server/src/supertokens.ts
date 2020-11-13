@@ -1,42 +1,42 @@
-import hasha, {HashaInput} from "hasha"
-import cookie from "cookie"
-import {nanoid} from "nanoid"
-import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {getConfig} from "@blitzjs/config"
 import {
-  BlitzApiRequest,
-  BlitzApiResponse,
-  Middleware,
   AuthenticationError,
   AuthorizationError,
-  CSRFTokenMismatchError,
-  SessionConfig,
-  PublicData,
-  SessionContext,
-  TOKEN_SEPARATOR,
-  HANDLE_SEPARATOR,
-  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
-  SESSION_TYPE_ANONYMOUS_JWT,
-  SESSION_TOKEN_VERSION_0,
+  BlitzApiRequest,
+  BlitzApiResponse,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
-  COOKIE_SESSION_TOKEN,
-  COOKIE_REFRESH_TOKEN,
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_SESSION_TOKEN,
+  CSRFTokenMismatchError,
+  HANDLE_SEPARATOR,
   HEADER_CSRF,
-  HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
-  MiddlewareResponse,
+  HEADER_SESSION_REVOKED,
   isLocalhost,
+  Middleware,
+  MiddlewareResponse,
+  PublicData,
+  SESSION_TOKEN_VERSION_0,
+  SESSION_TYPE_ANONYMOUS_JWT,
+  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
+  SessionConfig,
+  SessionContext,
+  TOKEN_SEPARATOR,
 } from "@blitzjs/core"
-import {getConfig} from "@blitzjs/config"
-import pkgDir from "pkg-dir"
-import {join} from "path"
-import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
-import {btoa, atob} from "b64-lite"
-import {getCookieParser} from "next/dist/next-server/server/api-utils"
-import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
+import {atob, btoa} from "b64-lite"
+import cookie from "cookie"
+import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
+import hasha, {HashaInput} from "hasha"
+import {IncomingMessage, ServerResponse} from "http"
+import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {nanoid} from "nanoid"
+import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {join} from "path"
+import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {

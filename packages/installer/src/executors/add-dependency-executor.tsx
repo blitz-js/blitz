@@ -1,12 +1,12 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
-import * as fs from "fs-extra"
-import * as path from "path"
 import {spawn} from "cross-spawn"
-import * as React from "react"
+import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-import {Newline} from "../components/newline"
 import Spinner from "ink-spinner"
+import * as path from "path"
+import * as React from "react"
+import {Newline} from "../components/newline"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 interface NpmPackage {
   name: string
@@ -163,11 +163,11 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
         devDepsLoading={!devDepsInstalled}
         packages={getExecutorArgument(step.packages, cliArgs)}
       />
-      {depsInstalled && devDepsInstalled && (
+      {depsInstalled && devDepsInstalled ? (
         <Box paddingTop={1}>
           <Text>Dependencies installed! Press ENTER to continue</Text>
         </Box>
-      )}
+      ) : null}
     </>
   )
 }

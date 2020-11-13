@@ -21,8 +21,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsc && lint-staged && pretty-quick --staged",
-      "pre-push": "npm run lint && npm run test"
+      "pre-commit": "lint-staged && pretty-quick --staged",
+      "pre-push": "tsc && npm run lint && npm run test"
     }
   },
   "lint-staged": {
@@ -34,10 +34,11 @@
     "@prisma/cli": "2.x",
     "@prisma/client": "2.x",
     "blitz": "canary",
-    "react": "0.0.0-experimental-7f28234f8",
-    "react-dom": "0.0.0-experimental-7f28234f8",
+    "react": "0.0.0-experimental-4ead6b530",
+    "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.x",
     "secure-password": "4.x",
+    "typescript": "4.x",
     "zod": "1.x"
   },
   "devDependencies": {
@@ -65,7 +66,6 @@
     "lint-staged": "10.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
-    "typescript": "4.x",
     "ts-jest": "26.x"
   },
   "private": true
