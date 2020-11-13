@@ -6,7 +6,4 @@ const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {
   },
 })
 
-// Because of bug: https://github.com/blitz-js/blitz/issues/1331
-export const connect = () => {}
-
 export default graphQLClient
