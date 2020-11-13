@@ -1,5 +1,20 @@
 # Blitz Fauna Example
 
+## Intro
+
+This example shows how to use [Fauna](https://fauna.com) instead of Prisma and Postgres.
+
+The bulk of the integration is in the following files:
+
+- `blitz.config.js`
+- `db/index.ts`
+
+And then also the queries and mutations use Fauna.
+
+By far the main integration work is providing the auth session hooks for reading and writing session data to Fauna. All this is in `blitz.config.js`.
+
+This example use the Fauna GraphQL API since it's more familiar to most people than FQL.
+
 ## Getting Started
 
 1. Sign up for a Fauna account
