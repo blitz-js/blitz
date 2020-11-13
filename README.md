@@ -53,7 +53,7 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 <br><br>
 
-<a aria-label="Bytes Newsletter" href="https://ui.dev/bytes/?r=brandon">
+<a aria-label="Bytes Newsletter" href="https://ui.dev/bytes/?r=blitzjs">
 <img alt="Bytes Newsletter" src="https://files-8wtskjofb.vercel.app/smarter-16x1.jpg">
 </a>
 
