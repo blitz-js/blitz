@@ -47,14 +47,18 @@ export function getAllGitIgnores(rootFolder: string) {
 
   return files.filter(isControlledByUser).map((file) => {
     let prefix = ""
+    let isGlobal = false
 
     if (file.match(localRepoIgnore)) prefix = file.split(localRepoIgnore)[0]
-    else if (file.match(globalIgnore)) prefix = ""
-    else prefix = file.split(".gitignore")[0]
+    else if (file.match(globalIgnore)) {
+      prefix = ""
+      isGlobal = true
+    } else prefix = file.split(".gitignore")[0]
 
     return {
       gitIgnore: fs.readFileSync(file, {encoding: "utf8"}),
       prefix,
+      isGlobal,
     }
   })
 }
@@ -62,14 +66,16 @@ export function getAllGitIgnores(rootFolder: string) {
 export function chokidarRulesFromGitignore({
   gitIgnore,
   prefix,
+  isGlobal,
 }: {
   gitIgnore: string
   prefix: string
+  isGlobal: boolean
 }) {
   const rules = parseGitignore(gitIgnore)
 
   const isInclusionRule = (rule: string) => rule.startsWith("!")
-  const [includePaths, ignoredPaths] = partition(rules, isInclusionRule)
+  let [includePaths, ignoredPaths] = partition(rules, isInclusionRule)
 
   const trimExclamationMark = (rule: string) => rule.substring(1)
   const prefixPath = (_rule: string) => {
@@ -80,6 +86,9 @@ export function chokidarRulesFromGitignore({
     } else {
       return prefix + rule
     }
+  }
+  if (isGlobal) {
+    includePaths = []
   }
 
   return {

@@ -75,6 +75,7 @@ describe("getAllGitIgnores", () => {
         {
           prefix: "",
           gitIgnore: globalIgnore,
+          isGlobal: true,
         },
       ])
     })
@@ -126,6 +127,7 @@ describe("getAllGitIgnores", () => {
         {
           prefix: "",
           gitIgnore: localIgnoreValue,
+          isGlobal: false,
         },
       ])
     })
@@ -152,6 +154,7 @@ describe("getAllGitIgnores", () => {
         {
           prefix: "some/nested/submodule/",
           gitIgnore: nestedIgnoreValue,
+          isGlobal: false,
         },
       ])
     })
@@ -168,6 +171,7 @@ describe("chokidarRulesFromGitignore", () => {
 .db_log
 !migrations
         `,
+          isGlobal: false,
         }),
       ).toEqual({
         ignoredPaths: ["src/app/db/.db_log"],
