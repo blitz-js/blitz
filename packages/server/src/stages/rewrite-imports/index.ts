@@ -28,7 +28,7 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
   return {stream}
 }
 
-export const patternImport = /(import(?:\s|\()(?:[\S\s]*)?(?:\sfrom\s+)?(?=(?:['"])(?:[^'"]+)(?:['"]))(?:['"]))([^'"]+)(['"])/g
+export const patternImport = /(import(?:\s|\()(?:.*?)?(?:\sfrom\s+)?(?=(?:['"])(?:[^'"]+)(?:['"]))(?:['"]))([^'"]+)(['"]\)?)/gs
 
 export function replaceImports(content: string, replacer: (s: string) => string) {
   return content.replace(patternImport, (...args) => {

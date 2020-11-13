@@ -12,9 +12,9 @@ type StagesConfig = {writeManifestFile: boolean; isTypescript: boolean}
 export const configureStages = (config: StagesConfig) => [
   // Order is important
   createStageRelative,
+  createStageRewriteImports,
   createStagePages,
   createStageRpc(config.isTypescript),
-  createStageRewriteImports,
   createStageConfig,
   createStageManifest(config.writeManifestFile),
 ]

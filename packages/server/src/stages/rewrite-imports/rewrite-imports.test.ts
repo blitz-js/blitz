@@ -6,27 +6,43 @@ import {createStageRewriteImports, patternImport} from "."
 
 describe("rewrite-imports", () => {
   describe("import regex pattern", () => {
-    const successes = [
-      'import "./bar/baz"',
-      `import {
+    const successes = {
+      'import "./bar/baz"': ['import "', "./bar/baz", '"'],
+      [`import {
         foo,
         bar
-      } from "./ding"`,
-      'import("../bar/baz")',
-      'import "app/bar/baz"',
-      `import { foo, bar } from "app/ding"`,
-      'import("app/bar/baz")',
-      "import './bar/baz'",
-      "import './bar/baz';",
-      `
+      } from "./ding"`]: [
+        `import {
+        foo,
+        bar
+      } from "`,
+        "./ding",
+        '"',
+      ],
+      'import("../bar/baz")': ['import("', "../bar/baz", '")'],
+      'import "app/bar/baz"': ['import "', "app/bar/baz", '"'],
+      'import { foo, bar } from "app/ding"': ['import { foo, bar } from "', "app/ding", '"'],
+      'import("app/bar/baz")': ['import("', "app/bar/baz", '")'],
+      "import './bar/baz'": ["import '", "./bar/baz", "'"],
+      "import './bar/baz';": ["import '", "./bar/baz", "'"],
+      [`
       import { someFunction } from "app/pages/index";
-      `,
-      'import Default from "app/some/file"',
-    ]
+      `]: ['import { someFunction } from "', "app/pages/index", '"'],
+      'import Default from "app/some/file"': ['import Default from "', "app/some/file", '"'],
+      'import {Suspense, useState} from "react"\n': [
+        'import {Suspense, useState} from "',
+        "react",
+        '"',
+      ],
+      [`import db, {ProductCreateArgs} from "db"
+      type CreateProductInput = {
+        data: ProductCreateArgs["data"]
+      }`]: ['import db, {ProductCreateArgs} from "', "db", '"'],
+    }
 
-    successes.forEach((success) => {
-      test(success, () => {
-        expect(success.match(patternImport)).not.toBeNull()
+    Object.entries(successes).forEach(([input, expectedOutput]) => {
+      test(input, () => {
+        expect(input.matchAll(patternImport).next().value.slice(1)).toEqual(expectedOutput)
       })
     })
   })
