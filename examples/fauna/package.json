@@ -6,8 +6,7 @@
     "studio": "blitz db studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo \"No tests yet\""
   },
   "browserslist": [
     "defaults"
