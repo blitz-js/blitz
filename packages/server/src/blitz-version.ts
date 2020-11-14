@@ -12,10 +12,6 @@ export function getBlitzVersion(): string {
     return ""
   }
 }
-// export function getBlitzVersion(): string {
-//   const pkgJson = require(require.resolve("blitz/package.json"))
-//   return pkgJson.version
-// }
 
 export async function isVersionMatched(buildFolder: string = ".blitz/caches") {
   const versionStore = resolve(buildFolder, blitzVersionFilename)
