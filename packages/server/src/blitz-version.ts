@@ -1,7 +1,7 @@
 import {pathExists, readFile, writeFile} from "fs-extra"
 import {resolve} from "path"
 
-export const blitzVersionFilename = "blitz-version.txt"
+export const blitzVersionFilename = "_blitz-version.txt"
 
 export function getBlitzVersion(): string {
   try {
