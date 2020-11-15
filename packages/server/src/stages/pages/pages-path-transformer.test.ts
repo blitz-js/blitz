@@ -29,6 +29,11 @@ describe("createPagesPathTransformer", () => {
       expected: normalize("pages/one/two/three.mjs"),
     },
     {
+      name: "Transforms mdx",
+      input: normalize("app/users/pages/one/two/three.mdx"),
+      expected: normalize("pages/one/two/three.mdx"),
+    },
+    {
       name: "Ignores non tjsx paths: css",
       input: normalize("app/users/pages/one/two/three.css"),
       expected: normalize("app/users/pages/one/two/three.css"),
@@ -37,6 +42,11 @@ describe("createPagesPathTransformer", () => {
       name: "Ignores non tjsx paths: scss",
       input: normalize("app/users/pages/one/two/three.scss"),
       expected: normalize("app/users/pages/one/two/three.scss"),
+    },
+    {
+      name: "Ignores test pages: tsx",
+      input: normalize("app/users/pages/one/two/three.test.tsx"),
+      expected: normalize("app/users/pages/one/two/three.test.tsx"),
     },
     {
       name: "handles leading /",
@@ -57,6 +67,11 @@ describe("createPagesPathTransformer", () => {
       name: "extracts paths folder to the root in a basic transformation",
       input: normalize("/User/foo/bar/app/users/pages/one/two/three.tsx"),
       expected: normalize("pages/one/two/three.tsx"),
+    },
+    {
+      name: "Transforms app/pages/test.tsx",
+      input: normalize("app/pages/test.tsx"),
+      expected: normalize("pages/test.tsx"),
     },
   ]
 

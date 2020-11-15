@@ -7,5 +7,5 @@ packages/server/**/* @ryardley
 packages/file-pipeline/**/* @ryardley
 packages/cli/**/* @aem
 packages/generator/**/* @aem
-packages/gui/**/* @merelinguist
+packages/generator/templates**/* @flybayer
 packages/installer/**/* @aem

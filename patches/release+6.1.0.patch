@@ -1,8 +1,8 @@
 diff --git a/node_modules/release/bin/release.js b/node_modules/release/bin/release.js
-index a5ab985..ce9475a 100755
+index a5ab985..e324528 100755
 --- a/node_modules/release/bin/release.js
 +++ b/node_modules/release/bin/release.js
-@@ -52,25 +52,37 @@ let githubConnection;
+@@ -52,25 +52,49 @@ let githubConnection;
  let repoDetails;
  
  const changeTypes = [
@@ -44,6 +44,18 @@ index a5ab985..ce9475a 100755
 +    description: 'backwards-compatible bug fix',
 +  },
 +  {
++    handle: 'newapp',
++    name: 'New App Template',
++    pluralName: '⚡️ Changes to the New App Template',
++    description: 'change to new app template',
++  },
++  {
++    handle: 'recipe',
++    name: 'Recipe',
++    pluralName: '👩‍🍳 Recipes',
++    description: 'change to a recipe',
++  },
++  {
 +    handle: 'example',
 +    name: 'Example App',
 +    pluralName: '👀 Changes to Example Apps',
@@ -59,3 +71,42 @@ index a5ab985..ce9475a 100755
  
  const getReleaseURL = (release, edit = false) => {
  	if (!release || !release.html_url) {
+diff --git a/node_modules/release/lib/choices.js b/node_modules/release/lib/choices.js
+index 6d08754..ee1a3be 100644
+--- a/node_modules/release/lib/choices.js
++++ b/node_modules/release/lib/choices.js
+@@ -13,20 +13,20 @@ module.exports = (changeTypes, tags) => {
+ 
+ 	const releaseType = semVer.diff(tags[1].version, tags[0].version);
+ 
+-	switch (releaseType) {
+-	case 'minor':
+-		notNeeded = 1;
+-		break;
+-	case 'patch':
+-		notNeeded = 2;
+-		break;
+-	default:
+-		notNeeded = 0;
+-	}
+-
+-	if (notNeeded) {
+-		changeTypes.splice(0, notNeeded);
+-	}
++	// switch (releaseType) {
++	// case 'minor':
++	// 	notNeeded = 1;
++	// 	break;
++	// case 'patch':
++	// 	notNeeded = 2;
++	// 	break;
++	// default:
++	// 	notNeeded = 0;
++	// }
++  //
++	// if (notNeeded) {
++	// 	changeTypes.splice(0, notNeeded);
++	// }
+ 
+ 	for (const type of changeTypes) {
+ 		const short = type.handle;

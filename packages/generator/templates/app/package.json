@@ -6,11 +6,15 @@
     "studio": "blitz db studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "echo \"No tests yet\""
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "browserslist": [
     "defaults"
   ],
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "prettier": {
     "semi": false,
     "printWidth": 100
@@ -18,7 +22,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "blitz test"
+      "pre-push": "tsc && npm run lint && npm run test"
     }
   },
   "lint-staged": {
@@ -30,26 +34,39 @@
     "@prisma/cli": "2.x",
     "@prisma/client": "2.x",
     "blitz": "canary",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284"
+    "react": "0.0.0-experimental-4ead6b530",
+    "react-dom": "0.0.0-experimental-4ead6b530",
+    "react-error-boundary": "2.x",
+    "secure-password": "4.x",
+    "typescript": "4.x",
+    "zod": "1.x"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "5.x",
+    "@testing-library/react": "11.x",
+    "@testing-library/react-hooks": "3.x",
+    "@types/jest": "26.x",
     "@types/react": "16.x",
-    "@typescript-eslint/eslint-plugin": "2.x",
-    "@typescript-eslint/parser": "2.x",
+    "@types/secure-password": "3.x",
+    "@typescript-eslint/eslint-plugin": "4.x",
+    "@typescript-eslint/parser": "4.x",
     "babel-eslint": "10.x",
-    "eslint": "6.x",
+    "eslint": "7.x",
     "eslint-config-react-app": "5.x",
-    "eslint-plugin-flowtype": "4.x",
+    "eslint-plugin-flowtype": "5.x",
     "eslint-plugin-import": "2.x",
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
-    "eslint-plugin-react-hooks": "3.x",
+    "eslint-plugin-react-hooks": "4.x",
     "husky": "4.x",
+    "jest": "26.x",
+    "jest-environment-jsdom-fourteen": "1.x",
+    "jest-watch-typeahead": "0.x",
+    "react-test-renderer": "16.x",
     "lint-staged": "10.x",
     "prettier": "2.x",
-    "pretty-quick": "2.x",
-    "typescript": "3.x"
+    "pretty-quick": "3.x",
+    "ts-jest": "26.x"
   },
   "private": true
 }

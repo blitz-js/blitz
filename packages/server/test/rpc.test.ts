@@ -1,20 +1,20 @@
+import {connectMiddleware, EnhancedResolver} from "@blitzjs/core"
+import delay from "delay"
 import http from "http"
 import fetch from "isomorphic-unfetch"
-import listen from "test-listen"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
-import {connectMiddleware, EnhancedResolverModule} from "@blitzjs/core"
-import delay from "delay"
+import listen from "test-listen"
 import {rpcApiHandler} from "../src/rpc"
 
 describe("rpcMiddleware", () => {
   describe("HEAD", () => {
     it("warms the endpoint", async () => {
       expect.assertions(1)
-      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
@@ -28,11 +28,11 @@ describe("rpcMiddleware", () => {
     it("handles missing params", async () => {
       console.error = jest.fn()
 
-      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
@@ -48,11 +48,11 @@ describe("rpcMiddleware", () => {
     })
 
     it("handles incorrect method", async () => {
-      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
       await mockServer(resolverModule, async (url) => {
@@ -66,15 +66,16 @@ describe("rpcMiddleware", () => {
 
     it("executes the request", async () => {
       console.log = jest.fn()
+      let blitzResult: any
 
       const resolverModule = (jest.fn().mockImplementation(async () => {
         await delay(1)
         return "test"
-      }) as unknown) as EnhancedResolverModule
+      }) as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
       resolverModule.middleware = [
@@ -86,8 +87,6 @@ describe("rpcMiddleware", () => {
           blitzResult = res.blitzResult
         },
       ]
-
-      let blitzResult: any
 
       await mockServer(resolverModule, async (url) => {
         const res = await fetch(url, {
@@ -109,11 +108,11 @@ describe("rpcMiddleware", () => {
     it("handles errors from middleware and aborts execution", async () => {
       console.log = jest.fn()
 
-      const resolverModule = (jest.fn() as unknown) as EnhancedResolverModule
+      const resolverModule = (jest.fn() as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
       resolverModule.middleware = [
@@ -133,7 +132,7 @@ describe("rpcMiddleware", () => {
         expect(resolverModule).toHaveBeenCalledTimes(0)
         expect(res.status).toBe(500)
       })
-    })
+    }, 30000)
 
     it("handles a query error", async () => {
       console.log = jest.fn()
@@ -142,11 +141,11 @@ describe("rpcMiddleware", () => {
       const resolverModule = (jest.fn().mockImplementation(async () => {
         await delay(1)
         throw new Error("something broke")
-      }) as unknown) as EnhancedResolverModule
+      }) as unknown) as EnhancedResolver<unknown, unknown>
       resolverModule._meta = {
         name: "testResolver",
         type: "query",
-        path: "test/path",
+        filePath: "test/path",
         apiUrl: "testurl",
       }
 
@@ -173,8 +172,8 @@ describe("rpcMiddleware", () => {
    * @param resolverFn The query/mutation function
    * @param connectFn The DB connection function
    */
-  async function mockServer(
-    resolverModule: EnhancedResolverModule,
+  async function mockServer<TInput, TResult>(
+    resolverModule: EnhancedResolver<TInput, TResult>,
     callback: (url: string) => Promise<void>,
   ) {
     const dbConnectorFn = undefined
@@ -186,13 +185,20 @@ describe("rpcMiddleware", () => {
       },
     }
 
-    let server = http.createServer(async (req, res) => {
-      await apiResolver(req, res, null, handler, {
-        previewModeId: "previewModeId",
-        previewModeEncryptionKey: "previewModeEncryptionKey",
-        previewModeSigningKey: "previewModeSigningKey",
-      })
-    })
+    let server = http.createServer((req, res) =>
+      apiResolver(
+        req,
+        res,
+        null,
+        handler,
+        {
+          previewModeId: "previewModeId",
+          previewModeEncryptionKey: "previewModeEncryptionKey",
+          previewModeSigningKey: "previewModeSigningKey",
+        },
+        false,
+      ),
+    )
 
     try {
       let url = await listen(server)

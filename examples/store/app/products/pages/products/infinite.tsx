@@ -1,10 +1,10 @@
 import {Suspense, Fragment} from "react"
-import {BlitzPage, useInfiniteQuery} from "blitz"
-import getProductsInfinite from "app/products/queries/getProductsInfinite"
+import {BlitzPage, useInfiniteQuery, Link} from "blitz"
+import getProducts from "app/products/queries/getProducts"
 
 const Products = () => {
   const [groupedProducts, {isFetching, isFetchingMore, fetchMore, canFetchMore}] = useInfiniteQuery(
-    getProductsInfinite,
+    getProducts,
     (page = {take: 3, skip: 0}) => page,
     {
       getFetchMore: (lastGroup) => lastGroup.nextPage,
@@ -16,7 +16,9 @@ const Products = () => {
       {groupedProducts.map((group, i) => (
         <Fragment key={i}>
           {group.products.map((product) => (
-            <p key={product.id}>{product.name}</p>
+            <p key={product.id} data-test="productName">
+              {product.name}
+            </p>
           ))}
         </Fragment>
       ))}
@@ -36,6 +38,9 @@ const Page: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Infinite</h1>
+      <Link href="/products/paginated">
+        <a>Go to Paginated Product List</a>
+      </Link>
       <Suspense fallback={<div>Loading...</div>}>
         <Products />
       </Suspense>

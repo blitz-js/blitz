@@ -1,8 +1,8 @@
-import {createStageRelative} from "."
-import {mockStageArgs} from "../stage-test-utils"
-import File from "vinyl"
-import {testStreamItems} from "../stage-test-utils"
 import {normalize} from "path"
+import File from "vinyl"
+import {mockStageArgs} from "../stage-test-utils"
+import {testStreamItems} from "../stage-test-utils"
+import {createStageRelative} from "."
 describe("relative", () => {
   test("test relative stream", async () => {
     const expected = [
@@ -11,7 +11,8 @@ describe("relative", () => {
         contents: `import {getFoo} from 'app/foo/bar';
 import from "app/thing/bar"
 import from 'app/thing/bar'
-import 'app/thing/bar'`,
+import 'app/thing/bar'
+const Component = dynamic(() => import("app/thing/bar"), {})`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),
@@ -39,7 +40,8 @@ import from 'app/thing/bar'`,
         contents: `import {getFoo} from 'app/foo/bar';
 import from "../thing/bar"
 import from '../thing/bar'
-import '../thing/bar'`,
+import '../thing/bar'
+const Component = dynamic(() => import("../thing/bar"), {})`,
       },
       {
         path: normalize("/projects/blitz/blitz/app/users/foo.jpeg"),

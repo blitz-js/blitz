@@ -1,28 +1,21 @@
-import {log} from "@blitzjs/display"
-import type {
-  Middleware,
+import {
   BlitzApiRequest,
   BlitzApiResponse,
-  EnhancedResolverModule,
+  EnhancedResolver,
+  handleRequestWithMiddleware,
+  Middleware,
 } from "@blitzjs/core"
-import {serializeError} from "serialize-error"
+import {baseLogger, log as displayLog} from "@blitzjs/display"
+import chalk from "chalk"
+import prettyMs from "pretty-ms"
+import {deserialize, serialize} from "superjson"
 
-export function rpcApiHandler(
-  resolver: EnhancedResolverModule,
-  middleware: Middleware[] = [],
+const rpcMiddleware = <TInput, TResult>(
+  resolver: EnhancedResolver<TInput, TResult>,
   connectDb?: () => any,
-) {
-  // RPC Middleware is always the last middleware to run
-  middleware.push(rpcMiddleware(resolver, connectDb))
-
-  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    return require("@blitzjs/core").handleRequestWithMiddleware(req, res, middleware)
-  }
-}
-
-const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any): Middleware => {
+): Middleware => {
   return async (req, res, next) => {
-    const logPrefix = `${resolver._meta.name}`
+    const log = baseLogger.getChildLogger({prefix: [resolver._meta.name + "()"]})
 
     if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
@@ -33,12 +26,10 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
       return next()
     } else if (req.method === "POST") {
       // Handle RPC call
-      console.log("") // New line
-      log.progress(`Running ${logPrefix}(${JSON.stringify(req.body?.params, null, 2)})`)
 
       if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        log.error(`${logPrefix} failed: ${JSON.stringify(error)}\n`)
+        log.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -47,28 +38,74 @@ const rpcMiddleware = (resolver: EnhancedResolverModule, connectDb?: () => any):
       }
 
       try {
-        const result = await resolver(req.body.params, res.blitzCtx)
+        const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
-        log.success(`${logPrefix} returned ${log.variable(JSON.stringify(result, null, 2))}\n`)
+        log.info(chalk.dim("Starting with input:"), data)
+        const startTime = new Date().getTime()
+
+        const result = await resolver(data, res.blitzCtx)
+
+        const duration = prettyMs(new Date().getTime() - startTime)
+        log.info(chalk.dim("Finished", "in", duration))
+        displayLog.newline()
+
         res.blitzResult = result
+
+        const serializedResult = serialize(result)
+
         res.json({
-          result,
+          result: serializedResult.json,
           error: null,
+          meta: {
+            result: serializedResult.meta,
+          },
         })
         return next()
       } catch (error) {
-        log.error(`${logPrefix} failed: ${error}\n`)
+        if (error._clearStack) {
+          delete error.stack
+        }
+        log.error(error)
+        displayLog.newline()
+
+        // Don't transmit the server stack trace via HTTP
+        delete error.stack
+
+        if (!error.statusCode) {
+          error.statusCode = 500
+        }
+
+        const serializedError = serialize(error)
+
         res.json({
           result: null,
-          error: serializeError(error),
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
         })
         return next()
       }
     } else {
       // Everything else is error
-      log.error(`${logPrefix} not found\n`)
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return next()
     }
+  }
+}
+
+export function rpcApiHandler<TInput, TResult>(
+  resolver: EnhancedResolver<TInput, TResult>,
+  middleware: Middleware[] = [],
+  connectDb?: () => any,
+) {
+  // RPC Middleware is always the last middleware to run
+  middleware.push(rpcMiddleware(resolver, connectDb))
+
+  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
+    return handleRequestWithMiddleware(req, res, middleware, {
+      throwOnError: false,
+    })
   }
 }

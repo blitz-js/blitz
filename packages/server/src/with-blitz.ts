@@ -1,57 +1,70 @@
-const withPlugins = require("next-compose-plugins")
-const withTM = require("next-transpile-modules")(["@blitzjs/core"])
+import fs from "fs"
+import path from "path"
+import pkgDir from "pkg-dir"
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
-    // Need to grab the normalized config based on the phase we are in incase we are given a functional config to extend
+    // Need to grab the normalized config based on the phase
+    // we are in incase we are given a functional config to extend
     const normalizedConfig =
       typeof nextConfig === "function" ? nextConfig(phase, nextOpts) : nextConfig
 
-    const plugins = []
-    if (process.env.NODE_ENV === "development") {
-      // This is needed during monorepo development so that examples auto reload when packages change
-      plugins.push(withTM)
+    const newConfig = Object.assign({}, normalizedConfig, {
+      experimental: {
+        reactMode: "concurrent",
+        ...(normalizedConfig.experimental || {}),
+      },
+      webpack(config: any, options: Record<any, any>) {
+        if (options.isServer) {
+          const originalEntry = config.entry
+          config.entry = async () => ({
+            ...(await originalEntry()),
+            ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
+          })
+        } else {
+          config.module = config.module || {}
+          config.module.rules = config.module.rules || []
+          config.module.rules.push({test: /_resolvers/, use: {loader: "null-loader"}})
+          config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: "null-loader"}})
+          config.module.rules.push({test: /@blitzjs[\\/]config/, use: {loader: "null-loader"}})
+          config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: "null-loader"}})
+          config.module.rules.push({test: /passport/, use: {loader: "null-loader"}})
+          config.module.rules.push({test: /cookie-session/, use: {loader: "null-loader"}})
+          config.module.rules.push({
+            test: /blitz[\\/]packages[\\/]config/,
+            use: {loader: "null-loader"},
+          })
+          config.module.rules.push({
+            test: /blitz[\\/]packages[\\/]display/,
+            use: {loader: "null-loader"},
+          })
+        }
+
+        if (typeof normalizedConfig.webpack === "function") {
+          return normalizedConfig.webpack(config, options)
+        }
+
+        return config
+      },
+    })
+
+    function doesDbModuleExist() {
+      const projectRoot = pkgDir.sync() || process.cwd()
+      return (
+        fs.existsSync(path.join(projectRoot, "db/index.js")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.ts")) ||
+        fs.existsSync(path.join(projectRoot, "db/index.tsx"))
+      )
     }
 
-    return withPlugins(
-      plugins,
-      Object.assign({}, normalizedConfig, {
-        experimental: {
-          reactMode: "concurrent",
-          ...(normalizedConfig.experimental || {}),
-        },
-        webpack(config: any, options: Record<any, any>) {
-          if (!options.isServer) {
-            config.module = config.module || {}
-            config.module.rules = config.module.rules || []
-            config.module.rules.push({test: /_resolvers/, use: {loader: "null-loader"}})
-            config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: "null-loader"}})
-            config.module.rules.push({test: /@blitzjs[\\/]config/, use: {loader: "null-loader"}})
-            config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: "null-loader"}})
-            config.module.rules.push({
-              test: /blitz[\\/]packages[\\/]config/,
-              use: {loader: "null-loader"},
-            })
-            config.module.rules.push({
-              test: /blitz[\\/]packages[\\/]display/,
-              use: {loader: "null-loader"},
-            })
-          }
-
-          // This is needed because, for an unknown reason, the next build fails when
-          // importing directly from the `blitz` package, complaining about child_process
-          // Somehow our server code is getting into the next build that way.
-          // This alias eliminates that problem.
-          // Anyone is welcome to investigate this further sometime
-          config.resolve.alias.blitz = "@blitzjs/core"
-
-          if (typeof normalizedConfig.webpack === "function") {
-            return normalizedConfig.webpack(config, options)
-          }
-
-          return config
-        },
-      }),
-    )(phase, nextOpts)
+    // We add next-transpile-modules during internal blitz development so that changes in blitz
+    // framework code will trigger a hot reload of any example apps that are running
+    const isInternalBlitzDevelopment = __dirname.includes("packages/server/src")
+    if (isInternalBlitzDevelopment) {
+      const withTM = require("next-transpile-modules")(["@blitzjs/core", "@blitzjs/server"])
+      return withTM(newConfig)
+    } else {
+      return newConfig
+    }
   }
 }

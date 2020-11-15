@@ -1,11 +1,10 @@
-import {pipe} from "../streams"
-import {createPipeline} from "../pipeline"
-import {pathExists, ensureDir, remove} from "fs-extra"
-import {through} from "../streams"
-import {createDisplay} from "../display"
-import {READY, ERROR_THROWN} from "../events"
-import {Stage} from "../types"
+import {ensureDir, pathExists, remove} from "fs-extra"
 import {Transform} from "stream"
+import {createDisplay} from "../display"
+import {ERROR_THROWN, READY} from "../events"
+import {createPipeline} from "../pipeline"
+import {pipe, through} from "../streams"
+import {Stage} from "../types"
 
 type FSStreamer = {stream: NodeJS.ReadWriteStream}
 
@@ -16,7 +15,7 @@ type SynchronizeFilesOptions = {
   bus?: Transform
   source?: FSStreamer
   writer?: FSStreamer
-  noclean?: boolean
+  clean?: boolean
 }
 
 const defaultBus = through.obj()
@@ -40,16 +39,13 @@ export async function transformFiles(
     bus = defaultBus,
     source,
     writer,
-    noclean = false,
+    clean: requestClean,
   } = options
 
-  // HACK: cleaning the dev folder on every restart means we do more work than necessary
-  // TODO: remove this clean and devise a way to resolve differences in stream
-  if (!noclean) await clean(dest)
+  if (requestClean) await clean(dest)
 
-  // const errors = createErrorsStream(reporter.stream)
   const display = createDisplay()
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     const config = {
       cwd: src,
       src,
@@ -58,14 +54,13 @@ export async function transformFiles(
       ignore,
       watch,
     }
+    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     bus.on("data", ({type}) => {
       if (type === READY) {
         resolve(fileTransformPipeline.ready)
       }
     })
-
-    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     // Send source to fileTransformPipeline
     fileTransformPipeline.stream.on("error", (err) => {

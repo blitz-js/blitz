@@ -1,11 +1,11 @@
-import {Generator, GeneratorOptions} from "../generator"
-import spawn from "cross-spawn"
-import chalk from "chalk"
-import username from "username"
-import {readJSONSync, writeJson} from "fs-extra"
-import {resolve, join} from "path"
-import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {log} from "@blitzjs/display"
+import chalk from "chalk"
+import spawn from "cross-spawn"
+import {readJSONSync, writeJson} from "fs-extra"
+import {join, resolve} from "path"
+import username from "username"
+import {Generator, GeneratorOptions} from "../generator"
+import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
 export interface AppGeneratorOptions extends GeneratorOptions {
@@ -14,12 +14,15 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   yarn: boolean
   version: string
   skipInstall: boolean
+  skipGit: boolean
+  form: "React Final Form" | "React Hook Form" | "Formik"
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: string = resolve(__dirname, "./templates/app")
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
+  packageInstallSuccess: boolean = false
 
   filesToIgnore() {
     if (!this.options.useTs) {
@@ -42,13 +45,52 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
+    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string
+
+    switch (this.options.form) {
+      case "React Final Form":
+        type = "finalform"
+        pkg.dependencies["final-form"] = "4.x"
+        pkg.dependencies["react-final-form"] = "6.x"
+        break
+      case "React Hook Form":
+        type = "hookform"
+        pkg.dependencies["react-hook-form"] = "6.x"
+        break
+      case "Formik":
+        type = "formik"
+        pkg.dependencies["formik"] = "2.x"
+        break
+    }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+    )
+
+    this.fs.delete(this.destinationPath("_forms"))
+
+    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }
 
   async postWrite() {
-    const gitInitResult = spawn.sync("git", ["init"], {
-      stdio: "ignore",
-    })
+    let gitInitSuccessful
+    if (!this.options.skipGit) {
+      const initResult = spawn.sync("git", ["init"], {
+        stdio: "ignore",
+      })
 
+      gitInitSuccessful = initResult.status === 0
+      if (!gitInitSuccessful) {
+        log.warning("Failed to run git init.")
+        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+      }
+    }
     const pkgJsonLocation = join(this.destinationPath(), "package.json")
     const pkg = readJSONSync(pkgJsonLocation)
 
@@ -135,6 +177,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
             if (code !== 0) spinners[spinners.length - 1].fail()
             else {
               spinners[spinners.length - 1].succeed()
+              this.packageInstallSuccess = true
             }
           }
           resolve()
@@ -150,16 +193,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       // Ensure the generated files are formatted with the installed prettier version
-      const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
-      const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
-      if (prettierResult.status !== 0) {
-        formattingSpinner.fail(
-          chalk.yellow.bold(
-            "We had an error running Prettier, but don't worry your app will still run fine :)",
-          ),
-        )
-      } else {
-        formattingSpinner.succeed()
+      if (this.packageInstallSuccess) {
+        const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
+        const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
+        if (prettierResult.status !== 0) {
+          formattingSpinner.fail(
+            chalk.yellow.bold(
+              "We had an error running Prettier, but don't worry your app will still run fine :)",
+            ),
+          )
+        } else {
+          formattingSpinner.succeed()
+        }
       }
     } else {
       console.log("") // New line needed
@@ -172,25 +217,32 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       )
     }
 
-    if (gitInitResult.status === 0) {
+    if (!this.options.skipGit && gitInitSuccessful) {
       this.commitChanges()
-    } else {
-      log.warning("Failed to run git init.")
-      log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
     }
   }
 
   commitChanges() {
+    const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
-      ["git", ["commit", "-m", "New baby Blitz app!"], {stdio: "ignore"}],
+      [
+        "git",
+        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+        {stdio: "ignore", timeout: 10000},
+      ],
     ]
     for (let command of commands) {
       const result = spawn.sync(...command)
       if (result.status !== 0) {
-        log.error(`Failed to run command ${command[0]} with ${command[1].join(" ")} options.`)
-        break
+        commitSpinner.fail(
+          chalk.red.bold(
+            `Failed to run command ${command[0]} with ${command[1].join(" ")} options.`,
+          ),
+        )
+        return
       }
     }
+    commitSpinner.succeed()
   }
 }

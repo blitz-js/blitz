@@ -1,16 +1,19 @@
+import {Ctx, NotFoundError} from "blitz"
 import db, {FindOneUserArgs} from "db"
 
 type GetUserInput = {
   where: FindOneUserArgs["where"]
-  // Only available if a model relationship exists
-  // include?: FindOneUserArgs['include']
 }
 
-export default async function getUser(
-  {where /* include */}: GetUserInput,
-  ctx: Record<any, any> = {},
-) {
+export default async function getUser({where}: GetUserInput, ctx: Ctx) {
+  ctx.session.authorize()
+  console.log(ctx.session.userId)
+
   const user = await db.user.findOne({where})
 
-  return user
+  if (!user) throw new NotFoundError(`User with id ${where.id} does not exist`)
+
+  const {hashedPassword, ...rest} = user
+
+  return rest
 }

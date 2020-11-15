@@ -1,49 +1,80 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
+import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
-  import {Head, Link, useQuery, useParam, BlitzPage} from "blitz"
+  import {Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
 } else {
-  import {Head, Link, useQuery, BlitzPage} from "blitz"
+  import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 }
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
 
+const ITEMS_PER_PAGE = 100
+
 export const __ModelNames__List = () => {
+  const router = useRouter()
+  const page = Number(router.query.page) || 0
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
-    const [__modelNames__] = useQuery(get__ModelNames__, {
+    const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
-      orderBy: {id: "desc"},
+      orderBy: {id: "asc"},
+      skip: ITEMS_PER_PAGE * page,
+      take: ITEMS_PER_PAGE,
     })
 
-    return (
-      <ul>
-        {__modelNames__.map((__modelName__) => (
-          <li key={__modelName__.id}>
-            <Link
-              href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
-            >
-              <a>{__modelName__.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    )
-  } else {
-    const [__modelNames__] = useQuery(get__ModelNames__, {orderBy: {id: "desc"}})
+    const goToPreviousPage = () => router.push({query: {page: page - 1}})
+    const goToNextPage = () => router.push({query: {page: page + 1}})
 
     return (
-      <ul>
-        {__modelNames__.map((__modelName__) => (
-          <li key={__modelName__.id}>
-            <Link
-              href="/__modelNames__/__modelIdParam__"
-              as={`/__modelNames__/${__modelName__.id}`}
-            >
-              <a>{__modelName__.name}</a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div>
+        <ul>
+          {__modelNames__.map((__modelName__) => (
+            <li key={__modelName__.id}>
+              <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}>
+                <a>{__modelName__.name}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <button disabled={page === 0} onClick={goToPreviousPage}>
+          Previous
+        </button>
+        <button disabled={!hasMore} onClick={goToNextPage}>
+          Next
+        </button>
+      </div>
+    )
+  } else {
+    const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
+      orderBy: {id: "asc"},
+      skip: ITEMS_PER_PAGE * page,
+      take: ITEMS_PER_PAGE,
+    })
+
+    const goToPreviousPage = () => router.push({query: {page: page - 1}})
+    const goToNextPage = () => router.push({query: {page: page + 1}})
+
+    return (
+      <div>
+        <ul>
+          {__modelNames__.map((__modelName__) => (
+            <li key={__modelName__.id}>
+              <Link
+                href={`/__modelNames__/${__modelName__.id}`}
+              >
+                <a>{__modelName__.name}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <button disabled={page === 0} onClick={goToPreviousPage}>
+          Previous
+        </button>
+        <button disabled={!hasMore} onClick={goToNextPage}>
+          Next
+        </button>
+      </div>
     )
   }
 }
@@ -55,35 +86,26 @@ const __ModelNames__Page: BlitzPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>__ModelNames__</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1>__ModelNames__</h1>
-
-        <p>
-          {process.env.parentModel ? (
-            <Link
-              href="/__parentModels__/__parentModelId__/__modelNames__/new"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}
-            >
-              <a>Create __ModelName__</a>
-            </Link>
-          ) : (
+      <p>
+        <if condition="parentModel">
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+            <a>Create __ModelName__</a>
+          </Link>
+          <else>
             <Link href="/__modelNames__/new">
               <a>Create __ModelName__</a>
             </Link>
-          )}
-        </p>
+          </else>
+        </if>
+      </p>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <__ModelNames__List />
-        </Suspense>
-      </main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <__ModelNames__List />
+      </Suspense>
     </div>
   )
 }
+
+__ModelNames__Page.getLayout = (page) => <Layout title={"__ModelNames__"}>{page}</Layout>
 
 export default __ModelNames__Page

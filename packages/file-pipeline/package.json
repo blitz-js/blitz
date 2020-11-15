@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.16.3",
+  "version": "0.25.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "chalk": "4.0.0",
-    "chokidar": "3.4.0",
+    "chokidar": "3.4.2",
     "flush-write-stream": "2.0.0",
     "from2": "2.3.0",
     "fs-extra": "9.0.0",

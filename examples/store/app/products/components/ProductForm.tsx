@@ -2,11 +2,12 @@ import {Form, Field} from "react-final-form"
 import {Product, ProductCreateInput, ProductUpdateInput} from "db"
 import createProduct from "../mutations/createProduct"
 import updateProduct from "../mutations/updateProduct"
+import {useMutation} from "blitz"
 
-type ProductInput = ProductCreateInput | ProductUpdateInput
+type ProductInput = ProductCreateInput | Product
 
 function isNew(product: ProductInput): product is ProductCreateInput {
-  return (product as ProductUpdateInput).id === undefined
+  return (product as any).id === undefined
 }
 
 type ProductFormProps = {
@@ -16,20 +17,25 @@ type ProductFormProps = {
 }
 
 function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
+  const [createProductMutation] = useMutation(createProduct)
+  const [updateProductMutation] = useMutation(updateProduct)
   return (
     <Form
       initialValues={product || {name: null, handle: null, description: null, price: null}}
-      onSubmit={async (data: ProductInput) => {
+      onSubmit={async (data: any) => {
         if (isNew(data)) {
           try {
-            const product = await createProduct({data})
+            const product = await createProductMutation({data})
             onSuccess(product)
           } catch (error) {
             alert("Error creating product " + JSON.stringify(error, null, 2))
           }
         } else {
           try {
-            const product = await updateProduct({where: {id: data.id}, data})
+            // Can't update id
+            const id = data.id
+            delete data.id
+            const product = await updateProductMutation({where: {id}, data})
             onSuccess(product)
           } catch (error) {
             alert("Error updating product " + JSON.stringify(error, null, 2))

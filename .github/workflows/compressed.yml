@@ -1,0 +1,25 @@
+name: Compressed Size
+
+on:
+  pull_request:
+    branches: [master, canary]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: Install dependencies
+        run: |
+          yarn && yarn build
+        env:
+          CI: true
+      - name: Count size
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

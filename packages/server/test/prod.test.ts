@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
   {
@@ -18,9 +18,9 @@ const mocks = multiMock(
 )
 
 // Import with mocks applied
-import {prod} from "../src/prod"
 import {ensureDir, writeFile} from "fs-extra"
 import {getInputArtefactsHash} from "../src/build-hash"
+import {prod} from "../src/prod"
 
 describe("Prod command", () => {
   const rootFolder = resolve("build")

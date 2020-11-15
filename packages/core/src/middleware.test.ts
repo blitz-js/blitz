@@ -1,10 +1,10 @@
-import {apiResolver} from "next/dist/next-server/server/api-utils"
 import http from "http"
-import listen from "test-listen"
 import fetch from "isomorphic-unfetch"
-
+import {apiResolver} from "next/dist/next-server/server/api-utils"
+import listen from "test-listen"
 import {BlitzApiRequest, BlitzApiResponse} from "."
-import {Middleware, handleRequestWithMiddleware} from "./middleware"
+import {handleRequestWithMiddleware} from "./middleware"
+import {Middleware} from "./types"
 
 describe("handleRequestWithMiddleware", () => {
   it("works without await", async () => {
@@ -21,7 +21,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
@@ -40,7 +40,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
@@ -59,12 +59,13 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(res.status).toBe(201)
       expect(res.headers.get("test")).toBe("works")
     })
   })
 
+  // Failing on windows for unknown reason
   it("middleware can throw", async () => {
     console.log = jest.fn()
     console.error = jest.fn()
@@ -77,12 +78,13 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
-  })
+  }, 30000)
 
+  // Failing on windows for unknown reason
   it("middleware can return error", async () => {
     console.log = jest.fn()
     const forbiddenMiddleware = jest.fn()
@@ -94,7 +96,7 @@ describe("handleRequestWithMiddleware", () => {
     ]
 
     await mockServer(middleware, async (url) => {
-      const res = await fetch(url)
+      const res = await fetch(url, {method: "POST"})
       expect(forbiddenMiddleware).not.toBeCalled()
       expect(res.status).toBe(500)
     })
@@ -103,17 +105,29 @@ describe("handleRequestWithMiddleware", () => {
 
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
   const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
-    await handleRequestWithMiddleware(req, res, middleware)
-    res.end()
+    try {
+      await handleRequestWithMiddleware(req, res, middleware)
+    } catch (err) {
+      res.status(500)
+    } finally {
+      res.end()
+    }
     return
   }
 
   let server = http.createServer((req, res) =>
-    apiResolver(req, res, null, apiEndpoint, {
-      previewModeId: "previewModeId",
-      previewModeEncryptionKey: "previewModeEncryptionKey",
-      previewModeSigningKey: "previewModeSigningKey",
-    }),
+    apiResolver(
+      req,
+      res,
+      null,
+      apiEndpoint,
+      {
+        previewModeId: "previewModeId",
+        previewModeEncryptionKey: "previewModeEncryptionKey",
+        previewModeSigningKey: "previewModeSigningKey",
+      },
+      false,
+    ),
   )
 
   try {

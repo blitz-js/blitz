@@ -1,9 +1,8 @@
 import {Command, flags} from "@oclif/command"
-
 import Help from "@oclif/plugin-help"
 
 export class HelpCommand extends Command {
-  static description = "display help for <%= config.bin %>"
+  static description = "Display help for <%= config.bin %>"
 
   static aliases = ["h"]
 

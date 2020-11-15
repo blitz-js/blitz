@@ -1,6 +1,6 @@
 {
-  "name": "plain-js",
-  "version": "0.16.3",
+  "name": "@examples/plain-js",
+  "version": "0.25.0",
   "scripts": {
     "start": "blitz start",
     "build": "blitz db migrate && blitz build",
@@ -29,24 +29,24 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.0.0",
-    "@prisma/client": "2.0.0",
-    "blitz": "0.16.3",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284"
+    "@prisma/cli": "2.10.0",
+    "@prisma/client": "2.10.0",
+    "blitz": "0.25.0",
+    "react": "0.0.0-experimental-4ead6b530",
+    "react-dom": "0.0.0-experimental-4ead6b530"
   },
   "devDependencies": {
     "@types/react": "16.9.35",
     "@typescript-eslint/eslint-plugin": "2.31.0",
     "@typescript-eslint/parser": "2.31.0",
     "babel-eslint": "10.1.0",
-    "eslint": "6.8.0",
+    "eslint": "7.6.0",
     "eslint-config-react-app": "5.2.1",
-    "eslint-plugin-flowtype": "4.7.0",
-    "eslint-plugin-import": "2.20.2",
-    "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-hooks": "3.0.0",
+    "eslint-plugin-flowtype": "5.2.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-react": "7.20.5",
+    "eslint-plugin-react-hooks": "4.0.8",
     "husky": "4.2.5",
     "lint-staged": "10.2.2",
     "prettier": "2.0.5",

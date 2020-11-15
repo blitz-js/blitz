@@ -1,8 +1,8 @@
-import through2 from "through2"
-import {testStreamItems} from "../test-utils"
-import File from "vinyl"
-import {transformFiles} from "."
 import {normalize} from "path"
+import through2 from "through2"
+import File from "vinyl"
+import {testStreamItems} from "../test-utils"
+import {transformFiles} from "."
 function logFile(file: File | string) {
   if (typeof file === "string") {
     return file
@@ -53,7 +53,7 @@ describe("transformFiles", () => {
         ["/foo/one", "/foo/two", "/foo/three"].map(normalize).concat(["ready"]),
         logFile,
       ),
-      transformFiles(normalize("/foo"), [], normalize("/bar"), {source, writer, noclean: true}),
+      transformFiles(normalize("/foo"), [], normalize("/bar"), {source, writer}),
     ])
   })
 })

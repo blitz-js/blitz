@@ -1,23 +1,20 @@
-import * as fs from "fs-extra"
-import * as path from "path"
-import {EventEmitter} from "events"
-import {create as createStore, Store} from "mem-fs"
-import {create as createEditor, Editor} from "mem-fs-editor"
-import Enquirer from "enquirer"
-import {log} from "@blitzjs/display"
-import readDirRecursive from "fs-readdir-recursive"
 import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from "@babel/plugin-transform-typescript"
-import {ConflictChecker} from "./conflict-checker"
-import {parse, print} from "recast"
-import {namedTypes} from "ast-types/gen/namedTypes"
-import * as babelParser from "recast/parsers/babel"
+import {log} from "@blitzjs/display"
+import Enquirer from "enquirer"
+import {EventEmitter} from "events"
+import * as fs from "fs-extra"
+import readDirRecursive from "fs-readdir-recursive"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
+import {create as createStore, Store} from "mem-fs"
+import {create as createEditor, Editor} from "mem-fs-editor"
+import * as path from "path"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
-import {ASTNode, visit} from "ast-types"
-import {StatementKind, ExpressionKind} from "ast-types/gen/kinds"
-import {Context} from "ast-types/lib/path-visitor"
-import {NodePath} from "ast-types/lib/node-path"
+import * as babelParser from "recast/parsers/babel"
+import {ConflictChecker} from "./conflict-checker"
+import {pipe} from "./utils/pipe"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
@@ -40,49 +37,78 @@ const ignoredExtensions = [".ico", ".png", ".jpg"]
 const tsExtension = /\.(tsx?)$/
 const codeFileExtensions = /\.(tsx?|jsx?)$/
 
-function getInnerStatements(
-  s?: StatementKind | ExpressionKind,
-): Array<StatementKind | ExpressionKind> {
-  if (!s) return []
-  if (namedTypes.BlockStatement.check(s)) {
-    return s.body
+function getStatements(node: j.BlockStatement | j.Statement): j.Statement[] {
+  return j.BlockStatement.check(node) ? node.body : [node]
+}
+
+function replaceConditionalNode(
+  path: j.ASTPath<j.IfStatement | j.ConditionalExpression>,
+  templateValues: any,
+) {
+  // @ts-ignore
+  const condition = path.node.test.property.name
+  if (!Object.keys(templateValues).includes(condition)) return
+  const derivedCondition = templateValues[condition]
+  if (derivedCondition) {
+    j(path).replaceWith(getStatements(path.node.consequent))
+  } else {
+    if (path.node.alternate) {
+      j(path).replaceWith(getStatements(path.node.alternate))
+    } else {
+      j(path).remove()
+    }
   }
-  return [s]
 }
 
 // process any template expressions that access process.env, but bypass any
 // expressions that aren't targeting templateValues so templates can include
 // checks for other env variables
-function conditionalExpressionVisitor(
-  this: Context,
-  path: NodePath<namedTypes.IfStatement | namedTypes.ConditionalExpression, any>,
+function replaceConditionalStatements(
+  program: Collection<j.Program>,
   templateValues: any,
-): void {
-  const statement = path.node
-  // only enter if the condition is a compount statement, otherwise
-  // it's definitely not a valid template condition
-  if (namedTypes.MemberExpression.check(statement.test)) {
-    if (
-      // condition statement starts with `process.` and has a second accessor
-      namedTypes.MemberExpression.check(statement.test.object) &&
-      namedTypes.Identifier.check(statement.test.object.object) &&
-      statement.test.object.object.name === "process" &&
-      // condition statement continues with `env.`
-      namedTypes.Identifier.check(statement.test.object.property) &&
-      statement.test.object.property.name === "env" &&
-      // condition ends with valid templateVariable
-      namedTypes.Identifier.check(statement.test.property) &&
-      Object.keys(templateValues).includes(statement.test.property.name)
-    ) {
-      const derivedCondition = templateValues[statement.test.property.name]
-      if (derivedCondition) {
-        path.replace(...getInnerStatements(statement.consequent))
+): Collection<j.Program> {
+  const processEnvRequirements = {
+    test: {
+      object: {
+        object: {name: "process"},
+        property: {name: "env"},
+      },
+    },
+  }
+  program
+    .find(j.IfStatement, processEnvRequirements)
+    .forEach((path) => replaceConditionalNode(path, templateValues))
+  program
+    .find(j.ConditionalExpression, processEnvRequirements)
+    .forEach((path) => replaceConditionalNode(path, templateValues))
+  return program
+}
+
+function replaceJsxConditionals(program: Collection<j.Program>, templateValues: any) {
+  program.find(j.JSXIdentifier, {name: "if"}).forEach((path) => {
+    if (j.JSXOpeningElement.check(path.parent.node)) {
+      const conditionPath = j(path.parent)
+        .find(j.JSXAttribute, {name: {name: "condition"}})
+        .at(0)
+      const condition = (conditionPath.paths()[0].value.value! as j.StringLiteral).value
+      if (!Object.keys(templateValues).includes(condition)) return
+      const useConsequent = templateValues[condition]
+      const innerElements = path.parent.parent.node.children.filter(
+        j.JSXElement.check.bind(j.JSXElement),
+      )
+      const consequent = innerElements[0]
+      const alternate =
+        innerElements[1] &&
+        j(innerElements[1]).paths()[0].node.children.filter(j.JSXElement.check.bind(j.JSXElement))
+      const result = useConsequent ? consequent : alternate
+      if (!result) {
+        j(path.parent.parent).remove()
       } else {
-        path.replace(...getInnerStatements(statement.alternate || undefined))
+        j(path.parent.parent).replaceWith(result)
       }
     }
-  }
-  this.traverse(path)
+  })
+  return program
 }
 
 /**
@@ -131,19 +157,18 @@ export abstract class Generator<
     return []
   }
 
-  replaceConditionals(input: string, templateValues: any): string {
-    let ast: ASTNode = parse(input, {parser: customTsParser})
-    // reassign `this` since recast depends on a bound `this` context
-    // in visitors
-    visit(ast, {
-      visitIfStatement(this, path) {
-        conditionalExpressionVisitor.call(this, path, templateValues)
-      },
-      visitConditionalExpression(this, path) {
-        conditionalExpressionVisitor.call(this, path, templateValues)
-      },
-    })
-    return print(ast).code
+  replaceConditionals(
+    input: string,
+    templateValues: any,
+    prettierOptions: import("prettier").Options = {},
+  ): string {
+    const source = j(input, {parser: customTsParser})
+    const program = source.find(j.Program)
+    const result = pipe(replaceConditionalStatements, replaceJsxConditionals)(
+      program,
+      templateValues,
+    )
+    return result.toSource({...prettierOptions, lineTerminator: "\n"})
   }
 
   replaceTemplateValues(input: string, templateValues: any) {
@@ -169,7 +194,7 @@ export abstract class Generator<
     const inputStr = input.toString("utf-8")
     let templatedFile = inputStr
     if (codeFileExtensions.test(pathEnding)) {
-      templatedFile = this.replaceConditionals(inputStr, templateValues)
+      templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {

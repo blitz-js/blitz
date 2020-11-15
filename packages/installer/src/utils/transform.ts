@@ -1,9 +1,8 @@
 import * as fs from "fs-extra"
-import {parse, print, types} from "recast"
-import {builders} from "ast-types/gen/builders"
-import {namedTypes, NamedTypes} from "ast-types/gen/namedTypes"
-import * as babel from "recast/parsers/babel"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
+import * as babel from "recast/parsers/babel"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
@@ -23,16 +22,11 @@ export interface TransformResult {
   filename: string
   error?: Error
 }
-export type Transformer = (
-  ast: types.ASTNode,
-  builder: builders,
-  types: NamedTypes,
-) => types.ASTNode
+export type Transformer = (program: Collection<j.Program>) => Collection<j.Program>
 
 export function processFile(original: string, transformerFn: Transformer): string {
-  const ast = parse(original, {parser: customTsParser})
-  const transformedCode = print(transformerFn(ast, types.builders, namedTypes)).code
-  return transformedCode
+  const program = j(original, {parser: customTsParser})
+  return transformerFn(program).toSource()
 }
 
 export function transform(

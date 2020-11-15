@@ -1,6 +1,5 @@
-import spawn from "cross-spawn"
 import {log} from "@blitzjs/display"
-
+import spawn from "cross-spawn"
 import {AppGenerator} from "../../src/generators/app-generator"
 
 // Spies process to avoid trying to chdir to a non existing folder
@@ -72,8 +71,14 @@ jest.mock(
       create: jest.fn().mockImplementation(() => {
         return {
           move: jest.fn(),
+          readJSON: jest.fn().mockImplementation(() => ({
+            dependencies: {},
+            devDependencies: {},
+          })),
+          writeJSON: jest.fn(),
           commit: (_: any, callback: any) => callback(),
           copy: jest.fn(),
+          delete: jest.fn(),
         }
       }),
     }
@@ -92,6 +97,8 @@ describe("AppGenerator", () => {
     yarn: true,
     version: "1.0",
     skipInstall: false,
+    form: "React Final Form",
+    skipGit: false,
   })
 
   it("calls git init", async () => {
@@ -109,9 +116,15 @@ describe("AppGenerator", () => {
   it("calls git commit", async () => {
     await generator.run()
 
-    expect(spawn.sync).toHaveBeenCalledWith("git", ["commit", "-m", "New baby Blitz app!"], {
-      stdio: "ignore",
-    })
+    //
+    expect(spawn.sync).toHaveBeenCalledWith(
+      "git",
+      ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+      {
+        stdio: "ignore",
+        timeout: 10000,
+      },
+    )
   })
 
   describe("when git init fails", () => {
