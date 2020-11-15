@@ -211,6 +211,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
     <td align="center"><a href="https://github.com/engelkes-finstreet"><img src="https://avatars0.githubusercontent.com/u/36962022?s=460&u=34cfc4a3d6da0a87026f6068c371779c68daa3a2&v=4" width="100px;" alt=""/><br /><sub><b>Patrick Engelkes</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/jdavenport97"><img src="https://avatars2.githubusercontent.com/u/1329874?v=4" width="100px;" alt=""/><br /><sub><b>Jamie Davenport</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/myrondavis"><img src="https://avatars2.githubusercontent.com/u/1430136?v=4" width="100px;" alt=""/><br /><sub><b>Myron Davis</b></sub></a></td>
+    <td align="center"><a href="https://flavioander.com/"><img src="https://avatars2.githubusercontent.com/u/14948074?s=460&u=31d7ea58b5c5cd9f724d684ed578f68896c4af71&v=4" width="100px;" alt=""/><br /><sub><b>Flavio Andrade</b></sub></a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
