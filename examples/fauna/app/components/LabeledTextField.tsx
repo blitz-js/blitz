@@ -1,4 +1,4 @@
-import React, { PropsWithoutRef } from "react"
+import { PropsWithoutRef } from "react"
 import { useField } from "react-final-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
