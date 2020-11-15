@@ -19,6 +19,10 @@ const mocks = multiMock(
 import {build} from "../src/build"
 import {directoryTree} from "./utils/tree-utils"
 
+jest.mock("@blitzjs/config")
+import {getConfig} from "@blitzjs/config"
+;(getConfig as any).mockImplementation(() => ({}))
+
 describe("Build command Vercel", () => {
   const rootFolder = resolve("")
   const buildFolder = resolve(rootFolder, ".blitz-build")
