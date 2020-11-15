@@ -157,4 +157,48 @@ describe("rewrite-imports", () => {
       }),
     )
   })
+
+  describe("an import from app/users/queries/getUsers", () => {
+    it(
+      "is rewritten to app/_resolvers/users/queries/getUsers",
+      makeTest({
+        input: [
+          {
+            path: normalize("/projects/blitz/blitz/app/users/queries/getUsers.ts"),
+            contents: `
+              export function someFunction() { return "foo"; }
+              export default async function getUsers() { return [] }
+            `,
+          },
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+              import { someFunction } from "app/users/queries/getUsers";
+              export function someOtherFunction() {
+                return someFunction();
+              }
+            `,
+          },
+        ],
+        expectedOutput: [
+          {
+            path: normalize("/projects/blitz/blitz/app/users/queries/getUsers.ts"),
+            contents: `
+              export function someFunction() { return "foo"; }
+              export default async function getUsers() { return [] }
+            `,
+          },
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+              import { someFunction } from "app/_resolvers/users/queries/getUsers";
+              export function someOtherFunction() {
+                return someFunction();
+              }
+            `,
+          },
+        ],
+      }),
+    )
+  })
 })
