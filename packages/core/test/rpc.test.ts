@@ -26,7 +26,6 @@ describe("RPC", () => {
       expect.assertions(2)
       const fetchMock = jest
         .spyOn(global, "fetch")
-        .mockImplementationOnce(() => Promise.resolve())
         .mockImplementationOnce(() =>
           Promise.resolve({json: () => ({result: "result", error: null})}),
         )

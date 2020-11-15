@@ -1,4 +1,3 @@
-import React from "react"
 import { useMutation } from "blitz"
 import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"

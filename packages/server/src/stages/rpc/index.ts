@@ -1,3 +1,4 @@
+import {getConfig} from "@blitzjs/config"
 import {ResolverType} from "@blitzjs/core"
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import {relative} from "path"
@@ -13,6 +14,7 @@ const isomorhicHandlerTemplate = (
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
+  warmApiEndpoints: boolean,
 ) => `
 import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
 import * as resolverModule from '${resolverFilePath}'
@@ -21,6 +23,10 @@ export default getIsomorphicEnhancedResolver(
   '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
+  undefined,
+  {
+    warmApiEndpoints: ${warmApiEndpoints}
+  }
 )
 `
 
@@ -74,6 +80,9 @@ export const createStageRpc = (isTypescript = true): Stage =>
     const getResolverPath = fileTransformer(resolverFilePath)
     const getApiHandlerPath = fileTransformer(apiHandlerPath)
 
+    const {target}: {target?: string} = getConfig()
+    const warmApiEndpoints = target?.includes("serverless") ?? false
+
     const stream = transform.file((file, {next, push}) => {
       if (!isResolverPath(file.path)) {
         return file
@@ -114,7 +123,7 @@ export const createStageRpc = (isTypescript = true): Stage =>
       // Isomorphic client
       const isomorphicHandlerFile = file.clone()
       isomorphicHandlerFile.contents = Buffer.from(
-        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType),
+        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, warmApiEndpoints),
       )
       push(isomorphicHandlerFile)
 
