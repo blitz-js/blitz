@@ -16,6 +16,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   skipInstall: boolean
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
+  onPostInstall?: () => Promise<void>
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -183,6 +184,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
           resolve()
         })
       })
+
+      await this.options.onPostInstall?.()
 
       const runLocalNodeCLI = (command: string) => {
         if (this.options.yarn) {
