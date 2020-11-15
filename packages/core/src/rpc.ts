@@ -161,6 +161,8 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
+  target?: undefined,
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
