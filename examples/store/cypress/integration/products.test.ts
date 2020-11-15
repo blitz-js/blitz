@@ -34,6 +34,10 @@ describe("products#show page", () => {
     cy.get("a").first().click()
     cy.location("pathname").should("equal", "/products")
   })
+
+  it("shows the average price", () => {
+    cy.contains(/Average price: \d+.\d/)
+  })
 })
 
 describe("products#ssr page", () => {
