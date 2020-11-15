@@ -51,9 +51,5 @@ export function rewriteImports(importPath: string) {
     parts.splice(0, parts.indexOf("api"), "pages")
   }
 
-  if (parts.includes("queries") || parts.includes("mutations")) {
-    parts.splice(1, 0, "_resolvers")
-  }
-
   return parts.join("/")
 }
