@@ -38,6 +38,9 @@ export function withBlitz(nextConfig: any) {
             test: /blitz[\\/]packages[\\/]display/,
             use: {loader: "null-loader"},
           })
+
+          config.node = config.node || {}
+          config.node.fs = "empty"
         }
 
         if (typeof normalizedConfig.webpack === "function") {
