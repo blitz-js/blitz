@@ -34,24 +34,24 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/plugin-transform-typescript": "7.9.4",
+    "@babel/core": "7.12.3",
+    "@babel/plugin-transform-typescript": "7.12.1",
     "@blitzjs/display": "0.25.0",
     "@blitzjs/generator": "0.25.0",
     "@types/jscodeshift": "0.7.1",
-    "chokidar": "3.4.2",
+    "chokidar": "3.4.3",
     "cross-spawn": "7.0.3",
     "diff": "4.0.2",
-    "enquirer": "2.3.5",
-    "fs-extra": "9.0.0",
-    "globby": "11.0.0",
-    "ink": "3.0.7",
+    "enquirer": "2.3.6",
+    "fs-extra": "9.0.1",
+    "globby": "11.0.1",
+    "ink": "3.0.8",
     "ink-link": "2.0.0",
     "ink-spinner": "4.0.1",
-    "jscodeshift": "0.10.0",
+    "jscodeshift": "0.11.0",
     "react": "0.0.0-experimental-4ead6b530",
-    "recast": "0.19.1",
-    "ts-node": "8.9.1"
+    "recast": "0.20.4",
+    "ts-node": "9.0.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
