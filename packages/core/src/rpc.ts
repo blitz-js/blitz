@@ -137,11 +137,11 @@ export const executeRpcCall = <TInput, TResult>(
 }
 
 executeRpcCall.warm = (apiUrl: string) => {
-  if (isClient) {
-    return window.fetch(apiUrl, {method: "HEAD"})
-  } else {
+  if (!isClient) {
     return
   }
+
+  return window.fetch(apiUrl, {method: "HEAD"})
 }
 
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
