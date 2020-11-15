@@ -39,8 +39,8 @@ export function withBlitz(nextConfig: any) {
           })
 
           config.module.rules.push({
-            test: /_resolvers/,
-            resourceQuery: /serverOnly/,
+            issuer: /\/mutations|queries\//,
+            resource: /\/_resolvers\//,
             use: {loader: "null-loader"},
           })
         }
