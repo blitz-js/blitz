@@ -16,7 +16,6 @@ const isomorhicHandlerTemplate = (
 ) => `
 import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
 import * as resolverModule from '${resolverFilePath}'
-export * from '${resolverFilePath}'
 export default getIsomorphicEnhancedResolver(
   resolverModule,
   '${resolverFilePath}',

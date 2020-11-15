@@ -7,37 +7,59 @@ import {createStageRewriteImports, patternImport} from "."
 describe("rewrite-imports", () => {
   describe("import regex pattern", () => {
     const successes = {
-      'import "./bar/baz"': ['import "', "./bar/baz", '"'],
       [`import {
         foo,
         bar
       } from "./ding"`]: [
-        `import {
+        "import ",
+        ,
+        ,
+        ,
+        `{
         foo,
         bar
-      } from "`,
+      }`,
+        ' from "',
         "./ding",
         '"',
       ],
-      'import("../bar/baz")': ['import("', "../bar/baz", '")'],
-      'import "app/bar/baz"': ['import "', "app/bar/baz", '"'],
-      'import { foo, bar } from "app/ding"': ['import { foo, bar } from "', "app/ding", '"'],
-      'import("app/bar/baz")': ['import("', "app/bar/baz", '")'],
-      "import './bar/baz'": ["import '", "./bar/baz", "'"],
-      "import './bar/baz';": ["import '", "./bar/baz", "'"],
+      'import { foo, bar } from "app/ding"': [
+        "import ",
+        ,
+        ,
+        ,
+        "{ foo, bar }",
+        ' from "',
+        "app/ding",
+        '"',
+      ],
       [`
       import { someFunction } from "app/pages/index";
-      `]: ['import { someFunction } from "', "app/pages/index", '"'],
-      'import Default from "app/some/file"': ['import Default from "', "app/some/file", '"'],
+      `]: ["import ", , , , "{ someFunction }", ' from "', "app/pages/index", '"'],
+      'import Default from "app/some/file"': [
+        "import ",
+        ,
+        "Default",
+        ,
+        ,
+        ' from "',
+        "app/some/file",
+        '"',
+      ],
       'import {Suspense, useState} from "react"\n': [
-        'import {Suspense, useState} from "',
+        "import ",
+        ,
+        ,
+        ,
+        "{Suspense, useState}",
+        ' from "',
         "react",
         '"',
       ],
       [`import db, {ProductCreateArgs} from "db"
       type CreateProductInput = {
         data: ProductCreateArgs["data"]
-      }`]: ['import db, {ProductCreateArgs} from "', "db", '"'],
+      }`]: ["import ", , "db", ", ", "{ProductCreateArgs}", ' from "', "db", '"'],
     }
 
     Object.entries(successes).forEach(([input, expectedOutput]) => {
@@ -151,6 +173,37 @@ describe("rewrite-imports", () => {
               export function someOtherFunction() {
                 return someFunction();
               }
+            `,
+          },
+        ],
+      }),
+    )
+  })
+
+  describe("an import from app/users/queries/getUser", () => {
+    it(
+      "is rewritten to app/_resolvers/users/queries/getUser and app/users/queries/getUser",
+      makeTest({
+        input: [
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+import query, { someFunction } from "app/users/queries/getUser";
+export function someOtherFunction() {
+  return someFunction();
+}
+            `,
+          },
+        ],
+        expectedOutput: [
+          {
+            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
+            contents: `
+import query from "app/users/queries/getUser"
+import { someFunction } from "app/_resolvers/users/queries/getUser";
+export function someOtherFunction() {
+  return someFunction();
+}
             `,
           },
         ],
