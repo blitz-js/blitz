@@ -1,4 +1,3 @@
-import React from "react"
 import { RouterContext, BlitzRouter } from "blitz"
 import { render as defaultRender } from "@testing-library/react"
 import { renderHook as defaultRenderHook } from "@testing-library/react-hooks"
@@ -13,6 +12,14 @@ export * from "@testing-library/react"
 //
 // This is the place to add any other context providers you need while testing.
 // --------------------------------------------------------------------------------
+
+type DefaultParams = Parameters<typeof defaultRender>
+type RenderUI = DefaultParams[0]
+type RenderOptions = DefaultParams[1] & { router?: Partial<BlitzRouter> }
+
+type DefaultHookParams = Parameters<typeof defaultRenderHook>
+type RenderHook = DefaultHookParams[0]
+type RenderHookOptions = DefaultHookParams[1] & { router?: Partial<BlitzRouter> }
 
 // --------------------------------------------------
 // render()
@@ -83,11 +90,3 @@ export const mockRouter: BlitzRouter = {
   },
   isFallback: false,
 }
-
-type DefaultParams = Parameters<typeof defaultRender>
-type RenderUI = DefaultParams[0]
-type RenderOptions = DefaultParams[1] & { router?: Partial<BlitzRouter> }
-
-type DefaultHookParams = Parameters<typeof defaultRenderHook>
-type RenderHook = DefaultHookParams[0]
-type RenderHookOptions = DefaultHookParams[1] & { router?: Partial<BlitzRouter> }

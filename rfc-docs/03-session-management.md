@@ -87,10 +87,10 @@ This will be the default security level for new Blitz apps.
 #### Access Session Data in UI Components
 
 ```ts
-import {useSession} from 'blitz'
+import {useSession} from "blitz"
 // These are regular Blitz mutations
-import login from 'app/auth/mutations/login'
-import logout from 'app/auth/mutations/logout'
+import login from "app/auth/mutations/login"
+import logout from "app/auth/mutations/logout"
 
 export default function AccountComponent() {
   // This hook returns the `publicData` session object (see Login Mutation below)`
@@ -130,7 +130,7 @@ export default async function login(args: UserCredentials, ctx: Context) {
       // Put anything here that's not sensitive
       publicData: {
         userId: user.id, // required
-        role: 'admin', // required
+        role: "admin", // required
         teamIds: user.teams.map((team) => team.id),
       },
       // privateData is stored in the DB with the session and is not directly
@@ -181,7 +181,7 @@ export default async function getProducts(args: SomArgs, ctx: Context) {
     // ... some new data
   })
 
-  if (ctx.session.role === 'admin') {
+  if (ctx.session.role === "admin") {
     return await db.product.findMany()
   } else {
     return await db.product.findMany({where: {published: true}})
@@ -199,7 +199,7 @@ You can get all session handles belonging to a user. With these handles you can:
 
 ```ts
 // app/auth/queries/exampleQuery.ts
-import {Session} from 'blitz'
+import {Session} from "blitz"
 
 export default async function exampleQuery(args: SomArgs, ctx: Context) {
   // this is a unique ID per session
@@ -209,7 +209,9 @@ export default async function exampleQuery(args: SomArgs, ctx: Context) {
   await Session.revokeAllSessionsForUser(ctx.session.userId)
 
   // Can get all sessions for a user and loop through them
-  let allSessionsForThisUser: string[] = await Session.getAllSessionHandlesForUser(ctx.session.userId)
+  let allSessionsForThisUser: string[] = await Session.getAllSessionHandlesForUser(
+    ctx.session.userId,
+  )
   for (let session of allSessionsForThisUser) {
     try {
       // Can use publicData to get the role or other public info of this session.
