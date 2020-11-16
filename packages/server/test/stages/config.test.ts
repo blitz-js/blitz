@@ -1,7 +1,7 @@
-import {createStageConfig} from "../../src/stages/config"
 import {through, transformFiles} from "@blitzjs/file-pipeline"
-import {mockFs} from "../utils/multi-mock"
 import path from "path"
+import {createStageConfig} from "../../src/stages/config"
+import {mockFs} from "../utils/multi-mock"
 import {directoryTree} from "../utils/tree-utils"
 
 describe("config stage", () => {
