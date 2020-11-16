@@ -19,7 +19,7 @@ export const configureStages = (config: StagesConfig) => [
 ]
 
 export const configureRouteStages = (config: StagesConfig) => [
-  createStageRelative,
+  // createStageRelative,
   createStagePages,
   createStageRpc(config.isTypescript),
   createStageRoutes,

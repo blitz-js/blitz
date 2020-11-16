@@ -3,6 +3,7 @@ import {RouteCacheEntry, RouteCacheInterface, RouteType, RouteVerb} from "../typ
 
 export class RouteCache implements RouteCacheInterface {
   routeCache: Record<string, RouteCacheEntry> = {}
+  additionalUri = "(.:format)"
 
   delete(file: File) {
     delete this.routeCache[file.path]
@@ -11,7 +12,8 @@ export class RouteCache implements RouteCacheInterface {
   getUrifromPath(path: string) {
     const findStr = "/pages"
     const findStrIdx = path.indexOf(findStr)
-    return path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    const uri = path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    return uri.replace("index", "")
   }
 
   getVerb(type: RouteType): RouteVerb {
@@ -25,11 +27,24 @@ export class RouteCache implements RouteCacheInterface {
     }
   }
 
+  isErrorCode(uri: string) {
+    if (uri.length === 4) {
+      // need better way to check HTTP error code
+      const regex = /^[1-5][0-9][0-9]$/
+      return regex.test(uri.substring(1))
+    }
+    return false
+  }
+
   add(file: File, type: RouteType) {
-    this.routeCache[file.path] = {
-      uri: this.getUrifromPath(file.path),
-      verb: this.getVerb(type),
-      type,
+    const uri = this.getUrifromPath(file.path)
+    const isErrorCode = this.isErrorCode(uri)
+    if (!isErrorCode) {
+      this.routeCache[file.path] = {
+        uri: type !== "rpc" ? `${uri}${this.additionalUri}` : uri,
+        verb: this.getVerb(type),
+        type,
+      }
     }
   }
 
@@ -61,7 +76,10 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   set(key: string, value: RouteCacheEntry) {
-    this.routeCache[key] = value
+    this.routeCache[key] = {
+      ...value,
+      uri: `${value.uri}${this.additionalUri}`,
+    }
   }
 
   toString() {

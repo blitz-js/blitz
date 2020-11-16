@@ -1,7 +1,6 @@
 import {Command, flags} from "@oclif/command"
 import {routes as ServerRoutes} from "@blitzjs/server"
 import {log, table as Table} from "@blitzjs/display"
-
 export class Routes extends Command {
   static description = "Output Blitz Routes"
   static aliases = ["r"]
@@ -39,6 +38,15 @@ export class Routes extends Command {
           {name: "URI", alignment: "left"},
           {name: "Type", alignment: "left"},
         ],
+        sort: (q, r) => {
+          if (q.Type > r.Type) {
+            return 1
+          }
+          if (q.Type < r.Type) {
+            return -1
+          }
+          return 0
+        },
       })
       routesResult.forEach(({uri, verb, type}: any) => {
         table.addRow(
@@ -46,7 +54,7 @@ export class Routes extends Command {
           {color: this.getColor(type)},
         )
       })
-      table.printTable()
+      log.info(table.render())
     } catch (err) {
       console.error(err)
       process.exit(1) // clean up?
