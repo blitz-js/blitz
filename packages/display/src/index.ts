@@ -1,8 +1,10 @@
 import c from "chalk"
+import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
 import {Logger} from "tslog"
 
+export const table = Table
 export const chalk = c
 
 // const blitzTrueBrandColor = '6700AB'
@@ -155,6 +157,7 @@ export const log = {
   variable,
   info,
   debug,
+  Table,
 }
 
 export const baseLogger = new Logger({

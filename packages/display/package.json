@@ -32,6 +32,7 @@
   "dependencies": {
     "chalk": "4.0.0",
     "ora": "4.0.4",
-    "tslog": "2.9.1"
+    "tslog": "2.9.1",
+    "console-table-printer": "2.5.1"
   }
 }

@@ -3,6 +3,10 @@ import File from "vinyl"
 
 export type FileCacheEntry = {path: string}
 
+export type RouteType = "pages" | "rpc" | "api"
+export type RouteVerb = "get" | "post" | "patch" | "head" | "delete" | "any"
+export type RouteCacheEntry = {uri: string; verb: string; type: RouteType}
+
 abstract class AbstractFileCache {
   static create: () => AbstractFileCache
 }
@@ -14,6 +18,22 @@ export interface FileCacheInterface extends AbstractFileCache {
   filter: (filterFn: (a: FileCacheEntry) => boolean) => FileCacheEntry[]
   toString: () => string
   toPaths: () => string[]
+}
+
+export interface RouteCacheInterface extends AbstractFileCache {
+  delete(file: File): void
+  add(file: File, type: RouteType): void
+
+  get(): Record<string, RouteCacheEntry>
+  get(key: string): RouteCacheEntry
+
+  set(key: string, value: RouteCacheEntry): void
+
+  filterByPath: (filterFn: (a: string) => boolean) => RouteCacheEntry[]
+  filter: (filterFn: (a: RouteCacheEntry) => boolean) => RouteCacheEntry[]
+
+  toString: () => string
+  toArray: () => RouteCacheEntry[]
 }
 
 export type EventedFile = {
@@ -45,6 +65,7 @@ export type StageArgs = {
   input: Writable
   bus: Writable
   getInputCache: () => FileCacheInterface
+  getRouteCache: () => RouteCacheInterface
   processNewFile: (file: File) => void
   processNewChildFile: (a: {
     parent: EventedFile

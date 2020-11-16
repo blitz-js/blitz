@@ -5,6 +5,7 @@ import {agnosticSource} from "./helpers/agnostic-source"
 import {createEnrichFiles} from "./helpers/enrich-files"
 import {createFileCache, FileCache} from "./helpers/file-cache"
 import {createIdleHandler} from "./helpers/idle-handler"
+import {createRouteCache, RouteCache} from "./helpers/route-cache"
 import {createWorkOptimizer} from "./helpers/work-optimizer"
 import {createWrite} from "./helpers/writer"
 import {pipeline, through} from "./streams"
@@ -13,13 +14,19 @@ export function isSourceFile(file: File) {
   return file.hash?.indexOf(":") === -1
 }
 
+export function isPageFile(file: File) {
+  return file.path
+}
+
 function createStageArgs(
   config: StageConfig,
   input: Writable,
   bus: Writable,
-  cache: FileCache,
+  fileCache: FileCache,
+  routeCache: RouteCache,
 ): StageArgs {
-  const getInputCache = () => cache
+  const getInputCache = () => fileCache
+  const getRouteCache = () => routeCache
 
   function processNewFile(file: File) {
     if (!file.stat) {
@@ -53,6 +60,7 @@ function createStageArgs(
     input,
     bus,
     getInputCache,
+    getRouteCache,
     processNewFile,
     processNewChildFile,
   }
@@ -78,10 +86,11 @@ export function createPipeline(
   const optimizer = createWorkOptimizer(config.src, config.dest)
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
+  const routeCache = createRouteCache()
   const idleHandler = createIdleHandler(bus)
 
   // Send this object to every stage
-  const api = createStageArgs(config, input, bus, srcCache.cache)
+  const api = createStageArgs(config, input, bus, srcCache.cache, routeCache.cache)
 
   // Initialize each stage
   const initializedStages = stages.map((stage) => stage(api))

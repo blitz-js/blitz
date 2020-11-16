@@ -7273,6 +7273,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
+console-table-printer@2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/console-table-printer/-/console-table-printer-2.5.1.tgz#dfbd7cc9b5a0e9bae8f88e2d8061fad740867bdd"
+  integrity sha512-mBHNuisXIcYPkyjBfV/LUox+JbDFZYax4NHHzZJSh7eaprArNqIZz7iUFNfcfJtfJlOtWwsbbqyF7+42Ztsfgw==
+
 constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
