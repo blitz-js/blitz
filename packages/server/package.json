@@ -32,7 +32,7 @@
     "@blitzjs/config": "0.25.0",
     "@blitzjs/display": "0.25.0",
     "@blitzjs/file-pipeline": "0.25.0",
-    "@vercel/ncc": "0.24.1",
+    "@vercel/ncc": "0.25.1",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.3",
