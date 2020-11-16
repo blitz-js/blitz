@@ -1,0 +1,23 @@
+type User {
+  name: String
+  email: String! @unique
+  hashedPassword: String
+  role: String!
+  sessions: [Session!] @relation
+}
+
+type Session {
+  expiresAt: Time
+  handle: String! @unique
+  user: User
+  hashedSessionToken: String
+  antiCSRFToken: String
+  publicData: String
+  privateData: String
+}
+
+type Query {
+  allUsers: [User!]
+  findUserByEmail(email: String!): User @index(name: "unique_User_email")
+  findSessionByHandle(handle: String!): Session @index(name: "unique_Session_handle")
+}

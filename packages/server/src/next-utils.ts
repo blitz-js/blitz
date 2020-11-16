@@ -1,9 +1,9 @@
+import {log} from "@blitzjs/display"
+import {ServerConfig} from "config"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import {Manifest} from "./stages/manifest"
 import {through} from "./streams"
-import {ServerConfig} from "config"
-import {log} from "@blitzjs/display"
 
 function createOutputTransformer(manifest: Manifest, devFolder: string) {
   const stream = through((data, _, next) => {

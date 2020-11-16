@@ -1,26 +1,25 @@
-import {deserializeError} from "serialize-error"
 import {queryCache} from "react-query"
-import {isClient, isServer, clientDebug} from "./utils"
-import {getAntiCSRFToken} from "./supertokens"
+import {deserialize, serialize} from "superjson"
+import {SuperJSONResult} from "superjson/dist/types"
 import {
   HEADER_CSRF,
-  HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_REVOKED,
 } from "./constants"
-import {publicDataStore} from "./public-data-store"
 import {CSRFTokenMismatchError} from "./errors"
-import {serialize, deserialize} from "superjson"
+import {publicDataStore} from "./public-data-store"
+import {getAntiCSRFToken} from "./supertokens"
 import {
-  ResolverType,
-  ResolverModule,
+  CancellablePromise,
   EnhancedResolver,
   EnhancedResolverRpcClient,
-  CancellablePromise,
+  ResolverModule,
   ResolverRpc,
+  ResolverType,
   RpcOptions,
 } from "./types"
-import {SuperJSONResult} from "superjson/dist/types"
+import {clientDebug, isClient, isServer} from "./utils"
 import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
 
 export const executeRpcCall = <TInput, TResult>(
@@ -103,7 +102,7 @@ export const executeRpcCall = <TInput, TResult>(
       }
 
       if (payload.error) {
-        let error = deserializeError(payload.error) as any
+        let error = deserialize({json: payload.error, meta: payload.meta?.error}) as any
         // We don't clear the publicDataStore for anonymous users
         if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
           publicDataStore.clear()
@@ -120,10 +119,7 @@ export const executeRpcCall = <TInput, TResult>(
 
         throw error
       } else {
-        const data =
-          payload.result === undefined
-            ? undefined
-            : deserialize({json: payload.result, meta: payload.meta?.result})
+        const data = deserialize({json: payload.result, meta: payload.meta?.result})
 
         if (!opts.fromQueryHook) {
           const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
@@ -151,6 +147,10 @@ executeRpcCall.warm = (apiUrl: string) => {
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
   resolverFilePath.replace(/^app\/_resolvers/, "/api")
 
+type IsomorphicEnhancedResolverOptions = {
+  warmApiEndpoints?: boolean
+}
+
 /*
  * Overloading signature so you can specify server/client and get the
  * correct return type
@@ -161,6 +161,8 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
+  target?: undefined,
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -169,6 +171,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "client",
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolverRpcClient<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -177,6 +180,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "server",
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolver<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -185,6 +189,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "server" | "client" = isClient ? "client" : "server",
+  options: IsomorphicEnhancedResolverOptions = {},
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult> {
   const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
 
@@ -201,8 +206,10 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
     }
 
     // Warm the lambda
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    executeRpcCall.warm(apiUrl)
+    if (options.warmApiEndpoints) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      executeRpcCall.warm(apiUrl)
+    }
 
     return enhancedResolverRpcClient
   } else {

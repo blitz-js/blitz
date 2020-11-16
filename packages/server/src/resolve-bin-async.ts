@@ -1,6 +1,6 @@
-import resolveCwd from "resolve-cwd"
-import pkgDir from "pkg-dir"
 import path from "path"
+import pkgDir from "pkg-dir"
+import resolveCwd from "resolve-cwd"
 
 export async function resolveBinAsync(pkg: string, executable = pkg) {
   const packageDir = await pkgDir(resolveCwd(pkg))

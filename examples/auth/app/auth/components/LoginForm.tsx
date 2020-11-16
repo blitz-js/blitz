@@ -1,4 +1,4 @@
-import {Link, useMutation} from "blitz"
+import {Link, useMutation, AuthenticationError} from "blitz"
 import {LabeledTextField} from "app/components/LabeledTextField"
 import {Form, FORM_ERROR} from "app/components/Form"
 import login from "app/auth/mutations/login"
@@ -14,7 +14,7 @@ export const LoginForm = (props: LoginFormProps) => {
     <div>
       <h1>Login</h1>
       <Form
-        submitText="Log In"
+        submitText="Login"
         schema={LoginInput}
         initialValues={{email: undefined, password: undefined}}
         onSubmit={async (values) => {
@@ -22,7 +22,7 @@ export const LoginForm = (props: LoginFormProps) => {
             await loginMutation(values)
             props.onSuccess && props.onSuccess()
           } catch (error) {
-            if (error.name === "AuthenticationError") {
+            if (error instanceof AuthenticationError) {
               return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
               return {

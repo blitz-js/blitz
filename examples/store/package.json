@@ -1,13 +1,13 @@
 {
   "name": "@examples/store",
-  "version": "0.24.3",
+  "version": "0.25.0",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3099",
-    "test": "start-server-and-test test:start http://localhost:3099 cy:run"
+    "test:server": "blitz db migrate && blitz db seed && blitz start --production -p 3099",
+    "test": "start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -19,12 +19,12 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.8.0",
-    "@prisma/client": "2.8.0",
-    "blitz": "0.24.3",
+    "@prisma/cli": "2.10.0",
+    "@prisma/client": "2.10.0",
+    "blitz": "0.25.0",
     "final-form": "4.19.1",
-    "react": "0.0.0-experimental-7f28234f8",
-    "react-dom": "0.0.0-experimental-7f28234f8",
+    "react": "0.0.0-experimental-4ead6b530",
+    "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.1",
     "react-final-form": "6.4.0",
     "typescript": "3.8.3"

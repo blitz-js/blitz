@@ -1,10 +1,9 @@
+import {transform} from "@blitzjs/file-pipeline"
+import {Stage} from "@blitzjs/file-pipeline"
+import bundle from "@vercel/ncc"
 import {pathExistsSync} from "fs-extra"
 import {resolve} from "path"
 import File from "vinyl"
-import bundle from "@vercel/ncc"
-
-import {transform} from "@blitzjs/file-pipeline"
-import {Stage} from "@blitzjs/file-pipeline"
 
 const isNextConfigPath = (p: string) => /next\.config\.(js|ts)/.test(p)
 const isBlitzTsConfigPath = (p: string) => /blitz\.config\.ts/.test(p)

@@ -1,8 +1,7 @@
 import http from "http"
-import listen from "test-listen"
 import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
-
+import listen from "test-listen"
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {handleRequestWithMiddleware} from "./middleware"
 import {Middleware} from "./types"
