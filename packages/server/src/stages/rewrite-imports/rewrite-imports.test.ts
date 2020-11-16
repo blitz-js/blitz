@@ -6,67 +6,58 @@ import {createStageRewriteImports, patternImport} from "."
 
 describe("rewrite-imports", () => {
   describe("import regex pattern", () => {
-    const successes = {
-      [`import {
-        foo,
-        bar
-      } from "./ding"`]: [
-        "import ",
-        ,
-        ,
-        ,
-        `{
-        foo,
-        bar
-      }`,
-        ' from "',
-        "./ding",
-        '"',
-      ],
-      'import { foo, bar } from "app/ding"': [
-        "import ",
-        ,
-        ,
-        ,
-        "{ foo, bar }",
-        ' from "',
-        "app/ding",
-        '"',
-      ],
-      [`
-      import { someFunction } from "app/pages/index";
-      `]: ["import ", , , , "{ someFunction }", ' from "', "app/pages/index", '"'],
-      'import Default from "app/some/file"': [
-        "import ",
-        ,
-        "Default",
-        ,
-        ,
-        ' from "',
-        "app/some/file",
-        '"',
-      ],
-      'import {Suspense, useState} from "react"\n': [
-        "import ",
-        ,
-        ,
-        ,
-        "{Suspense, useState}",
-        ' from "',
-        "react",
-        '"',
-      ],
-      [`import db, {ProductCreateArgs} from "db"
-      type CreateProductInput = {
-        data: ProductCreateArgs["data"]
-      }`]: ["import ", , "db", ", ", "{ProductCreateArgs}", ' from "', "db", '"'],
-    }
+    const tests = [
+      {
+        input: `import {
+          foo,
+          bar
+        } from "./ding"`,
+        expected: [
+          "import ",
+          ,
+          ,
+          ,
+          `{
+          foo,
+          bar
+        }`,
+          ' from "',
+          "./ding",
+          '"',
+        ],
+      },
+      {
+        input: 'import { foo, bar } from "app/ding"',
+        expected: ["import ", , , , "{ foo, bar }", ' from "', "app/ding", '"'],
+      },
+      {
+        input: `
+        import { someFunction } from "app/pages/index";
+        `,
+        expected: ["import ", , , , "{ someFunction }", ' from "', "app/pages/index", '"'],
+      },
+      {
+        input: 'import Default from "app/some/file"',
+        expected: ["import ", , "Default", , , ' from "', "app/some/file", '"'],
+      },
+      {
+        input: 'import {Suspense, useState} from "react"\n',
+        expected: ["import ", , , , "{Suspense, useState}", ' from "', "react", '"'],
+      },
+      {
+        input: `import db, {ProductCreateArgs} from "db"
+        type CreateProductInput = {
+          data: ProductCreateArgs["data"]
+        }`,
+        expected: ["import ", , "db", ", ", "{ProductCreateArgs}", ' from "', "db", '"'],
+      },
+    ]
 
-    Object.entries(successes).forEach(([input, expectedOutput]) => {
+    for (const {expected, input} of tests) {
       test(input, () => {
-        expect(input.matchAll(patternImport).next().value.slice(1)).toEqual(expectedOutput)
+        expect(input.matchAll(patternImport).next().value.slice(1)).toEqual(expected)
       })
-    })
+    }
   })
 
   function makeTest({
