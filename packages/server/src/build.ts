@@ -1,4 +1,4 @@
-import {copy, move, pathExists, remove} from "fs-extra"
+import {copy, pathExists, remove} from "fs-extra"
 import {resolve} from "path"
 import {saveBuild} from "./build-hash"
 import {normalize, ServerConfig} from "./config"
@@ -47,7 +47,7 @@ export async function build(
     const blitzConfig = resolve(buildFolder, "blitz.config.js")
     if (await pathExists(blitzConfig)) {
       const blitzConfigDest = resolve(buildNextFolder, "blitz.config.js")
-      await move(blitzConfig, blitzConfigDest)
+      await copy(blitzConfig, blitzConfigDest)
     }
 
     await copy(buildNextFolder, rootNextFolder)
