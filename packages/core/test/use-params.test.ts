@@ -137,7 +137,7 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("empty", "string"), {router: {query}}))
     expect(result.current).toEqual("")
     ;({result} = renderHook(() => useParam("doesnt-exist", "string"), {router: {query}}))
-    expect(result.current).toEqual("")
+    expect(result.current).toBeUndefined()
   })
 
   it("works with number", () => {
@@ -158,7 +158,7 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("empty", "number"), {router: {query}}))
     expect(result.current).toEqual(NaN)
     ;({result} = renderHook(() => useParam("doesnt-exist", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
   })
 
   it("works with array", () => {
@@ -179,6 +179,6 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("empty", "array"), {router: {query}}))
     expect(result.current).toEqual([""])
     ;({result} = renderHook(() => useParam("doesnt-exist", "array"), {router: {query}}))
-    expect(result.current).toEqual([])
+    expect(result.current).toBeUndefined()
   })
 })

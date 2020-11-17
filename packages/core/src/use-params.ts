@@ -97,6 +97,11 @@ export function useParam(
 ): undefined | number | string | Array<string | undefined> {
   const params = useParams()
   const rawValue = params[key]
+  const exists = params.hasOwnProperty(key)
+
+  if (!exists) {
+    return undefined
+  }
 
   if (returnType === "number") {
     // Special case because Number("") === 0
