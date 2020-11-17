@@ -171,18 +171,18 @@ describe("rewrite-imports", () => {
     )
   })
 
-  describe("an import from app/users/queries/getUser", () => {
+  describe("a combined import from app/users/queries/getUser", () => {
     it(
-      "is rewritten to app/_resolvers/users/queries/getUser and app/users/queries/getUser",
+      "is rewritten to app/users/queries/getUser.named",
       makeTest({
         input: [
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-import query, { someFunction } from "app/users/queries/getUser";
-export function someOtherFunction() {
-  return someFunction();
-}
+              import query, { someFunction } from "app/users/queries/getUser";
+              export function someOtherFunction() {
+                return someFunction();
+              }
             `,
           },
         ],
@@ -190,11 +190,10 @@ export function someOtherFunction() {
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-import query from "app/users/queries/getUser"
-import { someFunction } from "app/_resolvers/users/queries/getUser";
-export function someOtherFunction() {
-  return someFunction();
-}
+              import query, { someFunction } from "app/users/queries/getUser.named";
+              export function someOtherFunction() {
+                return someFunction();
+              }
             `,
           },
         ],

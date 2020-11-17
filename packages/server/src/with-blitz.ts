@@ -39,7 +39,7 @@ export function withBlitz(nextConfig: any) {
           })
 
           config.module.rules.push({
-            issuer: /mutations|queries/,
+            issuer: /(mutations|queries)(?!.*\.named)/,
             resource: /_resolvers/,
             use: {loader: "null-loader"},
           })

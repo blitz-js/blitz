@@ -42,44 +42,47 @@ export function replaceImports(content: string) {
       ,
       origin,
       ,
-    ] = args as string[]
+    ] = args as (string | undefined)[]
 
-    const parts = origin.split("/")
+    const importsNamed = starImport || namedImportNames
 
-    if (parts.includes("pages")) {
-      if (parts[0] === "app") {
-        parts.splice(0, 1)
-      }
-    }
+    const newOrigin = rewriteImportOrigin(origin!, !!importsNamed)
 
-    if (parts.includes("api")) {
-      parts.splice(0, parts.indexOf("api"), "pages")
-    }
-
-    if (starImport) {
-      // I don't know yet what to do
-      return args[0]
-    }
-
-    if (parts.includes("queries") || parts.includes("mutations")) {
-      const adaptedImportPath = [...parts]
-      adaptedImportPath.splice(1, 0, "_resolvers")
-      const adpatedOrigin = adaptedImportPath.join("/")
-
-      if (combinedComma) {
-        return [
-          `import ${defaultImportName} from "${origin}"`,
-          `import ${namedImportNames} from "${adpatedOrigin}"`,
-        ].join("\n")
-      }
-
-      if (namedImportNames) {
-        return `import ${namedImportNames} from "${adpatedOrigin}"`
-      }
-    }
-
-    return `import ${defaultImportName ?? ""}${combinedComma ?? ""}${
+    return `import ${starImport ?? ""}${defaultImportName ?? ""}${combinedComma ?? ""}${
       namedImportNames ?? ""
-    } from "${parts.join("/")}"`
+    } from "${newOrigin}"`
   })
+}
+
+export function rewriteImportOrigin(origin: string, importsNamedExports: boolean): string {
+  const parts = origin.split("/")
+
+  if (parts.includes("pages")) {
+    if (parts[0] === "app") {
+      parts.splice(0, 1)
+    }
+  }
+
+  if (parts.includes("api")) {
+    if (parts.indexOf("api") === parts.length - 1) {
+      parts.push("index")
+    }
+
+    parts.splice(0, parts.indexOf("api"), "pages")
+  }
+
+  if (importsNamedExports) {
+    const indexOfQueries = parts.lastIndexOf("queries")
+    const indexOfMutations = parts.lastIndexOf("mutations")
+
+    if (indexOfQueries !== -1 || indexOfMutations !== -1) {
+      if (indexOfQueries === parts.length - 1 || indexOfMutations === parts.length - 1) {
+        parts.push("index")
+      }
+
+      parts[parts.length - 1] = parts[parts.length - 1] + ".named"
+    }
+  }
+
+  return parts.join("/")
 }
