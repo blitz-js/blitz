@@ -28,29 +28,38 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
   return {stream}
 }
 
-export const patternImport = /(import\s+)(?:(?:(\*\s+as\s+\w+)|(\w+\s*)?(,\s*)?(?:(\{\s*\w+\s*(?:,\s*\w+\s*)*\}))?))(\s+from\s+["'])?([\w\.\\\/]+)(["']\)?)/gs
+export const patternImport = /(import\s*)(?:(\*\s+as\s+\w+)|(?:(\w+\s*)(,\s*)?)?(?:({\s*\w+\s*(?:,\s*\w+\s*)*}))?)(\s+from\s+)?((?:\(\s*)?["'])([\w\.\\\/]+)(["'](?:\s*\))?)/gs
 
 export function replaceImports(content: string) {
   return content.replace(patternImport, (...args) => {
     const [
       ,
-      ,
+      importToken,
       starImport,
       defaultImportName,
       combinedComma,
       namedImportNames,
-      ,
+      fromToken,
+      openingQuotes,
       origin,
-      ,
+      closingQuotes,
     ] = args as (string | undefined)[]
 
-    const importsNamed = starImport || namedImportNames
+    const importsOnlyDefault = !!defaultImportName && !(starImport || namedImportNames)
 
-    const newOrigin = rewriteImportOrigin(origin!, !!importsNamed)
+    const newOrigin = rewriteImportOrigin(origin!, !importsOnlyDefault)
 
-    return `import ${starImport ?? ""}${defaultImportName ?? ""}${combinedComma ?? ""}${
-      namedImportNames ?? ""
-    } from "${newOrigin}"`
+    return [
+      importToken,
+      starImport ?? "",
+      defaultImportName ?? "",
+      combinedComma ?? "",
+      namedImportNames ?? "",
+      fromToken ?? "",
+      openingQuotes,
+      newOrigin,
+      closingQuotes,
+    ].join("")
   })
 }
 
