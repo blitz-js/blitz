@@ -4,7 +4,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 })
 
 module.exports = withBundleAnalyzer({
-  sitemap: () => [{uri: "/wow", type: "pages", verb: "get"}],
+  // sitemap: () => [{uri: "/wow", type: "pages", verb: "get"}],
   middleware: [
     sessionMiddleware({
       unstable_isAuthorized: unstable_simpleRolesIsAuthorized,

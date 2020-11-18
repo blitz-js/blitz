@@ -33,13 +33,15 @@ describe("Routes command", () => {
     console.log = originalLog
   })
 
-  describe("throw in nextStartDev", () => {
+  describe("when run normally", () => {
     beforeEach(() => {
-      //   mocks["next-utils"].nextStartDev.mockRejectedValue("pow")
+      rootFolder = resolve("dev")
+      buildFolder = resolve(rootFolder, ".blitz")
+      devFolder = resolve(rootFolder, ".blitz-dev")
+      routeFolder = resolve(rootFolder, ".blitz-routes")
     })
-
     afterEach(() => {
-      //   mocks["next-utils"].nextStartDev.mockReturnValue(Promise.resolve())
+      mocks.mockFs.restore()
     })
 
     it("should not blow up", async () => {
@@ -53,18 +55,6 @@ describe("Routes command", () => {
         port: 3000,
         hostname: "localhost",
       })
-    })
-  })
-
-  describe("when run normally", () => {
-    beforeEach(() => {
-      rootFolder = resolve("dev")
-      buildFolder = resolve(rootFolder, ".blitz")
-      devFolder = resolve(rootFolder, ".blitz-dev")
-      routeFolder = resolve(rootFolder, ".blitz-routes")
-    })
-    afterEach(() => {
-      mocks.mockFs.restore()
     })
 
     it("should get the right routes serialization", async () => {
