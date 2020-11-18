@@ -40,11 +40,14 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUr
   )
 }
 
-export function useParams(): Record<string, undefined | string | string[]>
-export function useParams(returnType: "string"): Record<string, string | undefined>
-export function useParams(returnType: "number"): Record<string, number>
-export function useParams(returnType: "array"): Record<string, Array<string | undefined>>
-export function useParams(returnType?: "string" | "number" | "array") {
+export type Dict<T> = Record<string, T | undefined>
+type ReturnTypes = "string" | "number" | "array"
+
+export function useParams(returnType?: unknown): Dict<undefined | string | string[]>
+export function useParams(returnType: "string"): Dict<string>
+export function useParams(returnType: "number"): Dict<number>
+export function useParams(returnType: "array"): Dict<string[]>
+export function useParams(returnType?: ReturnTypes | unknown) {
   const router = useRouter()
   const query = useRouterQuery()
 
@@ -52,7 +55,7 @@ export function useParams(returnType?: "string" | "number" | "array") {
     const rawParams = extractRouterParams(router.query, query)
 
     if (returnType === "string") {
-      const params: Record<string, string> = {}
+      const params: Dict<string> = {}
       for (const key in rawParams) {
         if (typeof rawParams[key] === "string") {
           params[key] = rawParams[key] as string
@@ -62,20 +65,24 @@ export function useParams(returnType?: "string" | "number" | "array") {
     }
 
     if (returnType === "number") {
-      const params: Record<string, number> = {}
+      const params: Dict<number> = {}
       for (const key in rawParams) {
         if (rawParams[key]) {
-          params[key] = Number(rawParams[key])
+          const num = Number(rawParams[key])
+          params[key] = isNaN(num) ? undefined : num
         }
       }
       return params
     }
 
     if (returnType === "array") {
-      const params: Record<string, Array<string | undefined>> = {}
+      const params: Dict<string[]> = {}
       for (const key in rawParams) {
+        const rawValue = rawParams[key]
         if (Array.isArray(rawParams[key])) {
-          params[key] = rawParams[key] as Array<string | undefined>
+          params[key] = rawValue as string[]
+        } else if (typeof rawValue === "string") {
+          params[key] = [rawValue]
         }
       }
       return params
@@ -90,38 +97,13 @@ export function useParams(returnType?: "string" | "number" | "array") {
 export function useParam(key: string): undefined | string | string[]
 export function useParam(key: string, returnType: "string"): string | undefined
 export function useParam(key: string, returnType: "number"): number | undefined
-export function useParam(key: string, returnType: "array"): Array<string | undefined>
+export function useParam(key: string, returnType: "array"): string[] | undefined
 export function useParam(
   key: string,
-  returnType?: "string" | "number" | "array",
-): undefined | number | string | Array<string | undefined> {
-  const params = useParams()
+  returnType?: ReturnTypes,
+): undefined | number | string | string[] {
+  const params = useParams(returnType)
   const rawValue = params[key]
-
-  if (returnType === "number") {
-    // Special case because Number("") === 0
-    if (rawValue === "") {
-      return NaN
-    }
-    return Number(rawValue)
-  }
-
-  if (returnType === "string") {
-    if (typeof rawValue !== "string") {
-      return ""
-    }
-    return rawValue
-  }
-
-  if (returnType === "array") {
-    if (typeof rawValue === "undefined") {
-      return []
-    }
-    if (!Array.isArray(rawValue)) {
-      return [rawValue]
-    }
-    return rawValue
-  }
 
   return rawValue
 }

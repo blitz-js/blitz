@@ -76,8 +76,8 @@ describe("useParams", () => {
     const {result} = renderHook(() => useParams("number"), {router: {query}})
     expect(result.current).toEqual({
       id: 1,
-      cat: NaN,
-      slug: NaN,
+      cat: undefined,
+      slug: undefined,
     })
   })
 
@@ -92,7 +92,10 @@ describe("useParams", () => {
 
     const {result} = renderHook(() => useParams("array"), {router: {query}})
     expect(result.current).toEqual({
+      id: ["1"],
+      cat: ["category"],
       slug: ["example", "multiple", "slugs"],
+      empty: [""],
     })
   })
 })
@@ -152,13 +155,14 @@ describe("useParam", () => {
     let {result} = renderHook(() => useParam("id", "number"), {router: {query}})
     expect(result.current).toEqual(1)
     ;({result} = renderHook(() => useParam("cat", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toEqual(undefined)
     ;({result} = renderHook(() => useParam("slug", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toEqual(undefined)
     ;({result} = renderHook(() => useParam("empty", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toEqual(undefined)
     ;({result} = renderHook(() => useParam("doesnt-exist", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toEqual(undefined)
+    ;({result} = renderHook(() => useParam("bigNumber", "number"), {router: {query}}))
   })
 
   it("works with array", () => {
