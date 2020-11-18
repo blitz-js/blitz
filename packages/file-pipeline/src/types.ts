@@ -4,8 +4,13 @@ import File from "vinyl"
 export type FileCacheEntry = {path: string}
 
 export type RouteType = "pages" | "rpc" | "api"
-export type RouteVerb = "get" | "post" | "patch" | "head" | "delete" | "any"
-export type RouteCacheEntry = {uri: string; verb: string; type: RouteType}
+export type RouteVerb = "get" | "post" | "patch" | "head" | "delete" | "*"
+export type RouteCacheEntry = {
+  path: string
+  uri: string
+  verb: string
+  type: RouteType
+}
 
 abstract class AbstractFileCache {
   static create: () => AbstractFileCache

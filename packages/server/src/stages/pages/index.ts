@@ -102,6 +102,8 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
       )
     }
 
+    file.originalPath = file.path
+    file.originalRelative = file.relative
     file.path = apiTransformer(pagesTransformer(file.path))
 
     return file

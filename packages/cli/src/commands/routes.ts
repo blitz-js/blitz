@@ -1,6 +1,7 @@
 import {Command, flags} from "@oclif/command"
 import {routes as ServerRoutes} from "@blitzjs/server"
 import {log, table as Table} from "@blitzjs/display"
+
 export class Routes extends Command {
   static description = "Output Blitz Routes"
   static aliases = ["r"]
@@ -34,9 +35,10 @@ export class Routes extends Command {
       log.newline()
       const table = new Table({
         columns: [
-          {name: "Verb", alignment: "left"},
+          {name: "Verb", alignment: "center"},
+          {name: "Relative Path", alignment: "left"},
           {name: "URI", alignment: "left"},
-          {name: "Type", alignment: "left"},
+          {name: "Type", alignment: "center"},
         ],
         sort: (q, r) => {
           if (q.Type > r.Type) {
@@ -48,9 +50,9 @@ export class Routes extends Command {
           return 0
         },
       })
-      routesResult.forEach(({uri, verb, type}: any) => {
+      routesResult.forEach(({path, uri, verb, type}: any) => {
         table.addRow(
-          {Verb: verb.toUpperCase(), URI: uri, Type: type.toUpperCase()},
+          {Verb: verb.toUpperCase(), "Relative Path": path, URI: uri, Type: type.toUpperCase()},
           {color: this.getColor(type)},
         )
       })

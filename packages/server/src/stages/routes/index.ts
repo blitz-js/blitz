@@ -24,7 +24,7 @@ export const createStageRoutes: Stage = ({getRouteCache}) => {
     return file
   })
 
-  return {stream, ready: {routes: getRouteCache()}}
+  return {stream, ready: {routeCache: getRouteCache()}}
 }
 
 export const createStageSitemap: Stage = ({config, getRouteCache}) => {
