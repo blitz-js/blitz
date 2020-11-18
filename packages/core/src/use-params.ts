@@ -97,9 +97,8 @@ export function useParam(
 ): undefined | number | string | Array<string | undefined> {
   const params = useParams()
   const rawValue = params[key]
-  const exists = params.hasOwnProperty(key)
 
-  if (!exists) {
+  if (typeof rawValue === "undefined") {
     return undefined
   }
 
@@ -119,9 +118,6 @@ export function useParam(
   }
 
   if (returnType === "array") {
-    if (typeof rawValue === "undefined") {
-      return []
-    }
     if (!Array.isArray(rawValue)) {
       return [rawValue]
     }
