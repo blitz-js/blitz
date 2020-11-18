@@ -1,3 +1,4 @@
+import path from "path"
 import File from "vinyl"
 import {RouteCacheEntry, RouteCacheInterface, RouteType, RouteVerb} from "../types"
 
@@ -6,6 +7,11 @@ export class RouteCache implements RouteCacheInterface {
 
   delete(file: File) {
     delete this.routeCache[file.originalRelative]
+  }
+
+  normalizePath(input: string) {
+    if (path.sep === path.posix.sep) return input
+    return input.split(path.sep).join(path.posix.sep)
   }
 
   getUrifromPath(path: string) {
@@ -37,7 +43,7 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   add(file: File, type: RouteType) {
-    const uri = this.getUrifromPath(file.path)
+    const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)
     if (!isErrorCode) {
       this.routeCache[file.originalRelative] = {

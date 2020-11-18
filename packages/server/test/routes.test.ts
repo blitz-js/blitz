@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
 
-import {join, resolve} from "path"
+import {join, normalize, resolve} from "path"
 import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
@@ -78,16 +78,16 @@ describe("Routes command", () => {
       })
 
       expect(routes).toEqual([
-        {path: "app/api/auth.ts", uri: "/api/auth", type: "api", verb: "*"},
-        {path: "app/auth/pages/login.ts", uri: "/login", type: "pages", verb: "get"},
+        {path: normalize("app/api/auth.ts"), uri: "/api/auth", type: "api", verb: "*"},
+        {path: normalize("app/auth/pages/login.ts"), uri: "/login", type: "pages", verb: "get"},
         {
-          path: "app/products/mutations/updateProduct.ts",
+          path: normalize("app/products/mutations/updateProduct.ts"),
           uri: "/api/products/mutations/updateProduct",
           type: "rpc",
           verb: "post",
         },
         {
-          path: "app/products/queries/getProducts.ts",
+          path: normalize("app/products/queries/getProducts.ts"),
           uri: "/api/products/queries/getProducts",
           type: "rpc",
           verb: "post",
