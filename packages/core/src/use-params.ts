@@ -1,12 +1,8 @@
 import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
 import {useMemo} from "react"
-import {ParsedUrlQueryValue} from "./types"
+import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "./types"
 import {useRouterQuery} from "./use-router-query"
-
-export interface ParsedUrlQuery {
-  [key: string]: ParsedUrlQueryValue
-}
 
 function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQueryValue) {
   // Check if their type match
@@ -40,14 +36,15 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUr
   )
 }
 
-export type Dict<T> = Record<string, T | undefined>
 type ReturnTypes = "string" | "number" | "array"
 
-export function useParams(returnType?: unknown): Dict<undefined | string | string[]>
+export function useParams(): Dict<string | string[]>
+export function useParams(returnType: undefined): Dict<string | string[]>
 export function useParams(returnType: "string"): Dict<string>
 export function useParams(returnType: "number"): Dict<number>
 export function useParams(returnType: "array"): Dict<string[]>
-export function useParams(returnType?: ReturnTypes | unknown) {
+
+export function useParams(returnType?: ReturnTypes | undefined) {
   const router = useRouter()
   const query = useRouterQuery()
 
@@ -102,8 +99,8 @@ export function useParam(
   key: string,
   returnType?: ReturnTypes,
 ): undefined | number | string | string[] {
-  const params = useParams(returnType)
-  const rawValue = params[key]
+  const params = useParams(returnType as any) // unsure why i need to typecast here
+  const value = params[key]
 
-  return rawValue
+  return value
 }
