@@ -12,20 +12,24 @@ class PublicDataStore {
 
   constructor() {
     if (typeof window !== "undefined") {
-      // Set default value
-      this.updateState()
+      // Set default value & prevent infinite loop
+      this.updateState(undefined, {suppressEvent: true})
       window.addEventListener("storage", (event) => {
         if (event.key === this.eventKey) {
-          this.updateState()
+          // Prevent infinite loop
+          this.updateState(undefined, {suppressEvent: true})
         }
       })
     }
   }
 
-  updateState(value?: PublicData) {
+  updateState(value?: PublicData, opts?: {suppressEvent: boolean}) {
     // We use localStorage as a message bus between tabs.
     // Setting the current time in ms will cause other tabs to receive the `storage` event
-    localStorage.setItem(this.eventKey, Date.now().toString())
+    if (!opts?.suppressEvent) {
+      // Prevent infinite loop
+      localStorage.setItem(this.eventKey, Date.now().toString())
+    }
     this.observable.next(value ?? this.getData())
   }
 

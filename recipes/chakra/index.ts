@@ -1,10 +1,10 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import { addImport, paths, RecipeBuilder } from "@blitzjs/installer"
+import { NodePath } from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import { Collection } from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -13,14 +13,12 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
         path.parent?.value.type === j.ReturnStatement.toString(),
     )
     .forEach((path: NodePath) => {
-      const {node} = path
+      const { node } = path
       path.replace(
         j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider")),
-          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+          j.jsxOpeningElement(j.jsxIdentifier("ChakraProvider")),
+          j.jsxClosingElement(j.jsxIdentifier("ChakraProvider")),
           [
-            j.jsxText("\n"),
-            j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CSSReset"), [], true)),
             j.jsxText("\n"),
             node,
             j.jsxText("\n"),
@@ -43,28 +41,25 @@ export default RecipeBuilder()
     stepName: "Add npm dependencies",
     explanation: `Chakra requires some other dependencies like emotion to work`,
     packages: [
-      {name: "@chakra-ui/core", version: "latest"},
-      {name: "@emotion/core", version: "latest"},
-      {name: "@emotion/styled", version: "latest"},
-      {name: "emotion-theming", version: "latest"},
+      { name: "@chakra-ui/react", version: "latest" },
+      { name: "@emotion/react", version: "latest" },
+      { name: "@emotion/styled", version: "latest" },
+      { name: "framer-motion", version: "latest" },
     ],
   })
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
-    stepName: "Import ThemeProvider and CSSReset component",
+    stepName: "Import ChakraProvider component",
     explanation: `We can import the chakra provider into _app, so it is accessibly in the whole app`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
-        [
-          j.importSpecifier(j.identifier("CSSReset")),
-          j.importSpecifier(j.identifier("ThemeProvider")),
-        ],
-        j.literal("@chakra-ui/core"),
+        [j.importSpecifier(j.identifier("ChakraProvider"))],
+        j.literal("@chakra-ui/react"),
       )
 
       addImport(program, stylesImport)
-      return wrapComponentWithThemeProvider(program)
+      return wrapComponentWithChakraProvider(program)
     },
   })
   .build()

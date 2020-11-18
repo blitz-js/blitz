@@ -1,4 +1,4 @@
-import {move, pathExists, remove} from "fs-extra"
+import {copy, pathExists, remove} from "fs-extra"
 import {resolve} from "path"
 import {saveBuild} from "./build-hash"
 import {normalize, ServerConfig} from "./config"
@@ -43,7 +43,7 @@ export async function build(
   }
 
   if (await pathExists(buildNextFolder)) {
-    await move(buildNextFolder, rootNextFolder)
+    await copy(buildNextFolder, rootNextFolder)
   }
 
   await saveBuild(buildFolder)

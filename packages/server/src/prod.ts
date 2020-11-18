@@ -7,9 +7,9 @@ export async function prod(
   config: ServerConfig,
   readyForNextProd: Promise<any> = Promise.resolve(),
 ) {
-  const {rootFolder, buildFolder, nextBin} = await normalize(config)
+  const {buildFolder, nextBin} = await normalize(config)
   if (!(await alreadyBuilt(buildFolder))) {
     await build(config, readyForNextProd)
   }
-  await nextStart(nextBin, rootFolder, config)
+  await nextStart(nextBin, buildFolder, config)
 }

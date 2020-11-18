@@ -99,7 +99,7 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey
+  let queryKey: QueryKey<any>
   if (params) {
     queryKey = fullQueryKey
   } else {

@@ -1495,6 +1495,51 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benediktms",
+      "name": "Benedikt Schnatterbeck",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/48836135?v=4",
+      "profile": "https://github.com/benediktms",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Talor-A",
+      "name": "Talor Anderson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11509865?v=4",
+      "profile": "http://taloranderson.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "akirabaruah",
+      "name": "Akira Baruah",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6751517?v=4",
+      "profile": "https://github.com/akirabaruah",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "cwray-tech",
+      "name": "Christopher Wray",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/53663762?v=4",
+      "profile": "https://chriswray.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "piotrski",
+      "name": "Piotrek Tomczewski",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/244174?v=4",
+      "profile": "https://github.com/piotrski",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -147,6 +147,10 @@ executeRpcCall.warm = (apiUrl: string) => {
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
   resolverFilePath.replace(/^app\/_resolvers/, "/api")
 
+type IsomorphicEnhancedResolverOptions = {
+  warmApiEndpoints?: boolean
+}
+
 /*
  * Overloading signature so you can specify server/client and get the
  * correct return type
@@ -157,6 +161,8 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
+  target?: undefined,
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -165,6 +171,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "client",
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolverRpcClient<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -173,6 +180,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "server",
+  options?: IsomorphicEnhancedResolverOptions,
 ): EnhancedResolver<TInput, TResult>
 export function getIsomorphicEnhancedResolver<TInput, TResult>(
   // resolver is undefined on the client
@@ -181,6 +189,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   resolverName: string,
   resolverType: ResolverType,
   target: "server" | "client" = isClient ? "client" : "server",
+  options: IsomorphicEnhancedResolverOptions = {},
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult> {
   const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
 
@@ -197,8 +206,10 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
     }
 
     // Warm the lambda
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    executeRpcCall.warm(apiUrl)
+    if (options.warmApiEndpoints) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      executeRpcCall.warm(apiUrl)
+    }
 
     return enhancedResolverRpcClient
   } else {

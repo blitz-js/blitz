@@ -150,7 +150,7 @@ export function getDbName(connectionString: string): string {
 
 async function runSeed() {
   require("../utils/setup-ts-node").setupTsnode()
-                                                      
+
   const projectRoot = require("../utils/get-project-root").projectRoot
   const seedPath = require("path").join(projectRoot, "db/seeds")
   const dbPath = require("path").join(projectRoot, "db/index")

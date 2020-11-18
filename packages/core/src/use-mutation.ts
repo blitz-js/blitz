@@ -1,4 +1,4 @@
-import {MutationConfig, useMutation as useReactQueryMutation} from "react-query"
+import {MutationOptions, useMutation as useReactQueryMutation} from "react-query"
 import {MutationFunction, MutationResultPair} from "./types"
 import {sanitize} from "./utils/react-query-utils"
 
@@ -13,7 +13,7 @@ import {sanitize} from "./utils/react-query-utils"
 
 export function useMutation<TResult, TError = unknown, TVariables = undefined, TSnapshot = unknown>(
   mutationResolver: MutationFunction<TResult, TVariables>,
-  config?: MutationConfig<TResult, TError, TVariables, TSnapshot>,
+  config?: MutationOptions<TResult, TError, TVariables, TSnapshot>,
 ) {
   const enhancedResolverRpcClient = sanitize(mutationResolver)
 
@@ -22,6 +22,6 @@ export function useMutation<TResult, TError = unknown, TVariables = undefined, T
     {
       throwOnError: true,
       ...config,
-    },
+    } as any,
   ) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
 }

@@ -4,7 +4,7 @@ import chalk from "chalk"
 import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
 import {lt} from "semver"
-import {getLatestVersion} from "@blitzjs/generator/src/utils/get-latest-version"
+import {getLatestVersion} from "@blitzjs/generator"
 import spawn from "cross-spawn"
 const debug = require("debug")("blitz:new")
 
@@ -139,6 +139,8 @@ export class New extends Command {
       })
 
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
+      const needsInstall = dryRun || skipInstall
+      const postInstallSteps = [`cd ${args.name}`]
 
       const generator = new (require("@blitzjs/generator").AppGenerator)({
         destinationRoot,
@@ -150,31 +152,29 @@ export class New extends Command {
         version: this.config.version,
         skipInstall,
         skipGit: flags["no-git"],
+        onPostInstall: async () => {
+          const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
+
+          try {
+            // Required in order for DATABASE_URL to be available
+            require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+            await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
+            spinner.succeed()
+          } catch {
+            spinner.fail()
+            postInstallSteps.push(
+              "blitz db migrate (when asked, you can name the migration anything)",
+            )
+          }
+        },
       })
 
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
 
-      const postInstallSteps = [`cd ${args.name}`]
-      const needsInstall = dryRun || skipInstall
-
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
-      } else {
-        const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
-
-        try {
-          // Required in order for DATABASE_URL to be available
-          require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-          await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
-          spinner.succeed()
-        } catch {
-          spinner.fail()
-          postInstallSteps.push(
-            "blitz db migrate (when asked, you can name the migration anything)",
-          )
-        }
       }
 
       postInstallSteps.push("blitz start")

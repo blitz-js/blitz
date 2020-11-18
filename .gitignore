@@ -21,3 +21,4 @@ dist
 .blitz-*
 .blitz-cli-cache
 .vscode
+.tsbuildinfo
