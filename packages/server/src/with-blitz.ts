@@ -31,6 +31,7 @@ export function withBlitz(nextConfig: any) {
             /@prisma[\\/]client/,
             /passport/,
             /cookie-session/,
+            /secure-password/,
             /blitz[\\/]packages[\\/]config/,
             /blitz[\\/]packages[\\/]display/,
           ]
