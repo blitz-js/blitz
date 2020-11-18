@@ -5,7 +5,7 @@ export class RouteCache implements RouteCacheInterface {
   routeCache: Record<string, RouteCacheEntry> = {}
 
   delete(file: File) {
-    delete this.routeCache[file.path]
+    delete this.routeCache[file.originalRelative]
   }
 
   getUrifromPath(path: string) {
