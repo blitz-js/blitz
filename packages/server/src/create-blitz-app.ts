@@ -1,7 +1,8 @@
 import next from "next"
+import {build} from "./build"
+import {alreadyBuilt} from "./build-hash"
 import {normalize, ServerConfig} from "./config"
 import {configureStages} from "./stages"
-
 interface CreateBlitzAppConfig {
   dev: boolean
 }
@@ -25,9 +26,11 @@ export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
     writeManifestFile,
     watch,
     clean,
+    buildFolder,
   } = await normalize({...serverConfig, env: "dev"})
 
   if (dev) {
+    // dev
     const stages = configureStages({writeManifestFile, isTypescript})
 
     await transformFiles(rootFolder, stages, devFolder, {
@@ -36,16 +39,22 @@ export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
       watch,
       clean,
     })
-
-    const app = next({dev, dir: devFolder})
-    const requestHandler = app.getRequestHandler()
-
-    await app.prepare()
-
-    return {
-      requestHandler,
+  } else {
+    // prod
+    if (!(await alreadyBuilt(buildFolder))) {
+      console.log("not built - building")
+      await build(serverConfig)
+    } else {
+      console.log("already built")
     }
   }
+  const dir = dev ? devFolder : buildFolder
+  const app = next({dev, dir})
+  const requestHandler = app.getRequestHandler()
 
-  throw new Error("Unimplemented")
+  await app.prepare()
+
+  return {
+    requestHandler,
+  }
 }
