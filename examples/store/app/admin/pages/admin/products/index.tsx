@@ -1,7 +1,7 @@
 import {Suspense, useState} from "react"
 import {useQuery, Link, useRouterQuery, invalidateQuery, setQueryData} from "blitz"
 import getProducts from "app/products/queries/getProducts"
-// import getProduct from "app/products/queries/getProduct"
+import {meanPrice} from "app/admin/api/users"
 
 function reversedProductList(productsList) {
   return {...productsList, products: [...productsList.products].reverse()}
@@ -48,6 +48,8 @@ function ProductsList() {
           </li>
         ))}
       </ul>
+
+      <p>Mean price: {meanPrice(products)}</p>
     </>
   )
 }
