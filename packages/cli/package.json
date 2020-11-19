@@ -68,6 +68,11 @@
     "nock": "13.0.0-beta.3",
     "stdout-stderr": "0.1.13"
   },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
+  },
   "oclif": {
     "commands": "./lib/src/commands",
     "bin": "blitz",

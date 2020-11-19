@@ -28,6 +28,11 @@
   "main": "dist/index.js",
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
+  },
   "dependencies": {
     "@blitzjs/config": "0.25.1-canary.0",
     "@blitzjs/display": "0.25.1-canary.0",
