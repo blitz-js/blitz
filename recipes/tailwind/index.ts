@@ -16,7 +16,7 @@ export default RecipeBuilder()
     explanation: `Tailwind CSS requires a couple of dependencies to get up and running.
 We'll install the Tailwind library itself, as well as PostCSS for removing unused styles from our production bundles.`,
     packages: [
-      {name: "tailwindcss", version: "1"},
+      {name: "tailwindcss", version: "2"},
       {name: "postcss-preset-env", version: "latest", isDevDep: true},
     ],
   })
