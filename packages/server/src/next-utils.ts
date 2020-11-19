@@ -59,6 +59,7 @@ export async function nextStartDev(
   const transform = createOutputTransformer(manifest, devFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
+  console.log({spawnCommand, cwd, spawnEnv})
   return new Promise((res, rej) => {
     if (config.port && availablePort !== config.port) {
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)

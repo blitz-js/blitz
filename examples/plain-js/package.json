@@ -2,6 +2,7 @@
   "name": "@examples/plain-js",
   "version": "0.25.1-canary.1",
   "scripts": {
+    "dev": "node server",
     "start": "blitz start",
     "build": "blitz db migrate && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
