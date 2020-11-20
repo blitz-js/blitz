@@ -36,7 +36,5 @@ export async function routes(config: ServerConfig) {
     routeCache.set(sitemap_.uri, sitemap_)
   })
 
-  console.log(routeCache.get())
-
   return Object.values(routeCache.get())
 }
