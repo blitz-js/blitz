@@ -1,19 +1,9 @@
+import {Routes} from "../../src/commands/routes"
+
 const routes = jest.fn(() => {
   return []
 })
-jest.mock("@blitzjs/server", () => ({routes, resolveBinAsync: jest.fn()}))
-
-let onSpy: jest.Mock
-const spawn = jest.fn(() => {
-  onSpy = jest.fn(function on(_: string, callback: (_: number) => {}) {
-    callback(0)
-  })
-  return {on: onSpy, off: jest.fn()}
-})
-
-jest.doMock("cross-spawn", () => ({spawn}))
-
-import {Routes} from "../../src/commands/routes"
+jest.mock("@blitzjs/server", () => ({routes}))
 
 describe("Routes command", () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command"
-import {routes as ServerRoutes} from "@blitzjs/server"
+import {routes as ServerRoutes, ServerConfig} from "@blitzjs/server"
 import {log, table as Table} from "@blitzjs/display"
 
 export class Routes extends Command {
@@ -22,7 +22,7 @@ export class Routes extends Command {
   }
 
   async run() {
-    const config = {
+    const config: ServerConfig = {
       rootFolder: process.cwd(),
     }
     this.parse(Routes)

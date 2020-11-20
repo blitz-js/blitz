@@ -3,11 +3,10 @@ import File from "vinyl"
 import {RouteCacheEntry, RouteCacheInterface, RouteType, RouteVerb} from "../types"
 
 export class RouteCache implements RouteCacheInterface {
-  routeCache: Record<string, RouteCacheEntry> = {}
+  static singleton: RouteCacheInterface | null = null
 
-  delete(file: File) {
-    delete this.routeCache[file.originalRelative]
-  }
+  routeCache: Record<string, RouteCacheEntry> = {}
+  lengthOfHTTPErrorURI = 4
 
   normalizePath(input: string) {
     if (path.sep === path.posix.sep) return input
@@ -34,7 +33,7 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   isErrorCode(uri: string) {
-    if (uri.length === 4) {
+    if (uri.length === this.lengthOfHTTPErrorURI) {
       // need better way to check HTTP error code
       const regex = /^[1-5][0-9][0-9]$/
       return regex.test(uri.substring(1))
@@ -43,6 +42,8 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   add(file: File, type: RouteType) {
+    if (!this.routeCache[file.orginalRelative]) return
+
     const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)
     if (!isErrorCode) {
@@ -55,8 +56,12 @@ export class RouteCache implements RouteCacheInterface {
     }
   }
 
-  filterByPath(filterFn: (a: string) => boolean) {
-    let found = []
+  delete(file: File) {
+    delete this.routeCache[file.originalRelative]
+  }
+
+  filterByPath(filterFn: (givenPath: string) => boolean) {
+    const found = []
     for (let path in this.routeCache) {
       if (filterFn(path)) {
         found.push(this.routeCache[path])
@@ -65,7 +70,7 @@ export class RouteCache implements RouteCacheInterface {
     return found
   }
 
-  filter(filterFn: (a: RouteCacheEntry) => boolean) {
+  filter(filterFn: (entry: RouteCacheEntry) => boolean) {
     let found = []
     for (let path in this.routeCache) {
       if (filterFn(this.routeCache[path])) {
@@ -98,6 +103,7 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   static create() {
+    if (RouteCache.singleton) return RouteCache.singleton
     return new RouteCache()
   }
 }

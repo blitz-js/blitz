@@ -30,6 +30,22 @@ export default getIsomorphicEnhancedResolver(
 )
 `
 
+const isomorhicHandlerTemplateWithExport = (
+  resolverFilePath: string,
+  resolverName: string,
+  resolverType: ResolverType,
+) => `
+import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
+import * as resolverModule from '${resolverFilePath}'
+export * from '${resolverFilePath}'
+export default getIsomorphicEnhancedResolver(
+  resolverModule,
+  '${resolverFilePath}',
+  '${resolverName}',
+  '${resolverType}',
+)
+`
+
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
@@ -129,6 +145,16 @@ export const createStageRpc = (isTypescript = true): Stage =>
       )
       push(isomorphicHandlerFile)
 
+      // Isomorphic client with export
+      const isomorphicHandlerFileWithExport = file.clone()
+      isomorphicHandlerFileWithExport.basename = namedResolverBasename(
+        isomorphicHandlerFileWithExport.basename,
+      )
+      isomorphicHandlerFileWithExport.contents = Buffer.from(
+        isomorhicHandlerTemplateWithExport(resolverImportPath, resolverName, resolverType),
+      )
+      push(isomorphicHandlerFileWithExport)
+
       return next()
     })
 
@@ -162,4 +188,15 @@ function resolverFilePath(path: string) {
 
 function apiHandlerPath(path: string) {
   return path.replace(/^app/, "pages/api")
+}
+
+/**
+ * "query.ts" => "query.named.ts"
+ */
+function namedResolverBasename(basename: string) {
+  const parts = basename.split(".")
+
+  parts.splice(parts.length - 1, 0, "named")
+
+  return parts.join(".")
 }

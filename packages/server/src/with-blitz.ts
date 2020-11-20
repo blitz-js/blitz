@@ -24,18 +24,24 @@ export function withBlitz(nextConfig: any) {
         } else {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
-          config.module.rules.push({test: /_resolvers/, use: {loader: "null-loader"}})
-          config.module.rules.push({test: /@blitzjs[\\/]display/, use: {loader: "null-loader"}})
-          config.module.rules.push({test: /@blitzjs[\\/]config/, use: {loader: "null-loader"}})
-          config.module.rules.push({test: /@prisma[\\/]client/, use: {loader: "null-loader"}})
-          config.module.rules.push({test: /passport/, use: {loader: "null-loader"}})
-          config.module.rules.push({test: /cookie-session/, use: {loader: "null-loader"}})
-          config.module.rules.push({
-            test: /blitz[\\/]packages[\\/]config/,
-            use: {loader: "null-loader"},
+          const excluded = [
+            /db/,
+            /@blitzjs[\\/]display/,
+            /@blitzjs[\\/]config/,
+            /@prisma[\\/]client/,
+            /passport/,
+            /cookie-session/,
+            /secure-password/,
+            /blitz[\\/]packages[\\/]config/,
+            /blitz[\\/]packages[\\/]display/,
+          ]
+          excluded.forEach((excluded) => {
+            config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
           })
+
           config.module.rules.push({
-            test: /blitz[\\/]packages[\\/]display/,
+            issuer: /(mutations|queries)(?!.*\.named)/,
+            resource: /_resolvers/,
             use: {loader: "null-loader"},
           })
         }
