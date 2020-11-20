@@ -3,7 +3,7 @@ import File from "vinyl"
 import {RouteCacheEntry, RouteCacheInterface, RouteType, RouteVerb} from "../types"
 
 export class RouteCache implements RouteCacheInterface {
-  static singleton: RouteCacheInterface | null = null
+  static singleton: RouteCache | null = null
 
   routeCache: Record<string, RouteCacheEntry> = {}
   lengthOfHTTPErrorURI = 4
@@ -42,7 +42,7 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   add(file: File, type: RouteType) {
-    if (!this.routeCache[file.orginalRelative]) return
+    if (this.routeCache[file.orginalRelative]) return
 
     const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)
@@ -104,7 +104,8 @@ export class RouteCache implements RouteCacheInterface {
 
   static create() {
     if (RouteCache.singleton) return RouteCache.singleton
-    return new RouteCache()
+    RouteCache.singleton = new RouteCache()
+    return RouteCache.singleton
   }
 }
 
