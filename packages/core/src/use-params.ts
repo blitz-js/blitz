@@ -39,12 +39,12 @@ export function extractRouterParams(routerQuery: ParsedUrlQuery, query: ParsedUr
 type ReturnTypes = "string" | "number" | "array"
 
 export function useParams(): Dict<string | string[]>
-export function useParams(returnType: undefined): Dict<string | string[]>
+export function useParams(returnType?: ReturnTypes): Dict<string | string[]>
 export function useParams(returnType: "string"): Dict<string>
 export function useParams(returnType: "number"): Dict<number>
 export function useParams(returnType: "array"): Dict<string[]>
 
-export function useParams(returnType?: ReturnTypes | undefined) {
+export function useParams(returnType?: "string" | "number" | "array" | undefined) {
   const router = useRouter()
   const query = useRouterQuery()
 
@@ -99,7 +99,7 @@ export function useParam(
   key: string,
   returnType?: ReturnTypes,
 ): undefined | number | string | string[] {
-  const params = useParams(returnType as any) // unsure why i need to typecast here
+  const params = useParams(returnType)
   const value = params[key]
 
   return value
