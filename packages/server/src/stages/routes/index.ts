@@ -26,15 +26,3 @@ export const createStageRoutes: Stage = ({getRouteCache}) => {
 
   return {stream, ready: {routeCache: getRouteCache()}}
 }
-
-export const createStageSitemap: Stage = ({config, getRouteCache}) => {
-  const stream: NodeJS.ReadWriteStream = transform.file(async (file) => {
-    // console.log(getRouteCache().get())
-    await ensureFile(`${config.dest}/route.json`)
-    await writeFile(`${config.dest}/route.json`, JSON.stringify(getRouteCache().get(), null, 2))
-
-    return file
-  })
-
-  return {stream}
-}
