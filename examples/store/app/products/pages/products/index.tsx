@@ -1,6 +1,6 @@
 import {useMemo} from "react"
 import {Link, BlitzPage, GetStaticProps} from "blitz"
-import getProducts from "../../queries/getProducts"
+import getProducts, {averagePrice} from "../../queries/getProducts"
 import {Product} from "db"
 import superjson from "superjson"
 
@@ -31,6 +31,7 @@ const Page: BlitzPage<StaticProps> = function ({dataString}) {
           </p>
         ))}
       </div>
+      <p>Average price: {averagePrice(products).toFixed(1)}</p>
     </div>
   )
 }

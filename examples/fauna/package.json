@@ -1,6 +1,6 @@
 {
   "name": "@examples/fauna",
-  "version": "0.24.2",
+  "version": "0.25.1-canary.1",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -27,16 +27,16 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.25.0",
+    "blitz": "0.25.1-canary.1",
     "final-form": "4.20.1",
+    "graphql": "15.3.0",
+    "graphql-request": "3.1.0",
     "react": "0.0.0-experimental-4ead6b530",
     "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.1",
     "react-final-form": "6.5.1",
     "secure-password": "4.0.0",
-    "zod": "1.10.0",
-    "graphql-request": "3.1.0",
-    "graphql": "15.3.0"
+    "zod": "1.10.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.11.4",
