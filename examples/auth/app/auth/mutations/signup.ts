@@ -1,7 +1,13 @@
 import {Ctx} from "blitz"
 import db from "db"
 import {hashPassword} from "app/auth/auth-utils"
-import {SignupInput, SignupInputType} from "app/auth/validations"
+import * as z from "zod"
+
+export const SignupInput = z.object({
+  email: z.string().email(),
+  password: z.string().min(10).max(100),
+})
+export type SignupInputType = z.infer<typeof SignupInput>
 
 export default async function signup(input: SignupInputType, {session}: Ctx) {
   // This throws an error if input is invalid
