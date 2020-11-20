@@ -4,7 +4,10 @@ import slash from "slash"
 
 const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
 
-const isInAppFolder = (s: string, cwd: string) => s.replace(cwd + path.sep, "").indexOf("app") === 0
+const isInSpecialFolderInAppFolder = (s: string, cwd: string) => {
+  const filepath = s.replace(cwd + path.sep, "")
+  return /^app\/.*(pages|queries|mutations)\//.test(filepath)
+}
 
 /**
  * Returns a Stage that converts relative files paths to absolute
@@ -15,7 +18,11 @@ export const createStageRelative: Stage = ({config: {cwd}}) => {
     const filecontents = file.contents
     const filepath = file.path
 
-    if (!isJavaScriptFile(filepath) || !isInAppFolder(filepath, cwd) || filecontents === null) {
+    if (
+      !isJavaScriptFile(filepath) ||
+      !isInSpecialFolderInAppFolder(filepath, cwd) ||
+      filecontents === null
+    ) {
       return file
     }
 
