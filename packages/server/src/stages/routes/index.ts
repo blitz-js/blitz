@@ -1,11 +1,8 @@
-// import {log} from "@blitzjs/display"
 import type {Stage} from "@blitzjs/file-pipeline"
 import {transform} from "@blitzjs/file-pipeline"
-import {ensureFile, writeFile} from "fs-extra"
 
 /**
- * Returns a Stage to assemble NextJS `/pages` folder from within
- * the BlitzJS folder structure
+ * Returns a Stage to popoulate route cache based on the regex path
  */
 export const createStageRoutes: Stage = ({getRouteCache}) => {
   const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
