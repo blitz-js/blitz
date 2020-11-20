@@ -105,7 +105,7 @@ export function useParam(
   if (returnType === "number") {
     // Special case because Number("") === 0
     if (rawValue === "") {
-      return NaN
+      return undefined
     }
     return Number(rawValue)
   }

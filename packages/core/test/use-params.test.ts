@@ -156,7 +156,7 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("slug", "number"), {router: {query}}))
     expect(result.current).toEqual(NaN)
     ;({result} = renderHook(() => useParam("empty", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("doesnt-exist", "number"), {router: {query}}))
     expect(result.current).toBeUndefined()
   })
