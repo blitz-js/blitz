@@ -1,0 +1,4 @@
+/* integration test for css modules */
+.red {
+  border: 2px solid red;
+}
