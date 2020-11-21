@@ -1,0 +1,4 @@
+# .kodiak.toml
+# Minimal config. version is the only required field.
+version = 1
+merge.automerge_label = "0 - <(^_^)> -  merge it! ✌️"
