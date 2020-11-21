@@ -16,7 +16,6 @@ export async function routes(config: ServerConfig) {
     include,
     isTypescript,
     writeManifestFile,
-    // clean,
   } = await normalize({...config, env: "dev"})
 
   const {sitemap = defaultSitemapFunction} = getConfig() as Record<string, unknown> & {

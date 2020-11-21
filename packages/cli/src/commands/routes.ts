@@ -59,7 +59,7 @@ export class Routes extends Command {
       log.info(table.render())
     } catch (err) {
       console.error(err)
-      process.exit(1) // clean up?
+      process.exit(1)
     }
   }
 }

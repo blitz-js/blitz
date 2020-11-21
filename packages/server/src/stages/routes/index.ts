@@ -2,7 +2,7 @@ import type {Stage} from "@blitzjs/file-pipeline"
 import {transform} from "@blitzjs/file-pipeline"
 
 /**
- * Returns a Stage to popoulate route cache based on the regex path
+ * Returns a Stage to populate route cache based on the regex path
  */
 export const createStageRoutes: Stage = ({getRouteCache}) => {
   const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
