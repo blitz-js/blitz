@@ -3,7 +3,7 @@ import {normalize, ServerConfig} from "./config"
 import {nextStartDev} from "./next-utils"
 import {configureStages} from "./stages"
 
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
+export async function dev(config: ServerConfig) {
   const {
     rootFolder,
     transformFiles,
@@ -21,17 +21,13 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
   const versionMatched = await isVersionMatched(devFolder)
 
   const stages = configureStages({writeManifestFile, isTypescript})
-
-  const [{manifest}] = await Promise.all([
-    transformFiles(rootFolder, stages, devFolder, {
-      ignore,
-      include,
-      watch,
-      clean: !versionMatched || clean,
-    }),
-    // Ensure next does not start until parallel processing completes
-    readyForNextDev,
-  ])
+  
+  const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
+    ignore,
+    include,
+    watch,
+    clean: !versionMatched || clean,
+  })
 
   if (!versionMatched) await saveBlitzVersion(devFolder)
 
