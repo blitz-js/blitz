@@ -1549,6 +1549,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "KATT",
+      "name": "Alex Johansson",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/459267?v=4",
+      "profile": "http://kattcorp.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
