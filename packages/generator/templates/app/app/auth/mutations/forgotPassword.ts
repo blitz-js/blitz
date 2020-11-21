@@ -28,7 +28,7 @@ export default async function forgotPassword(
   // 3. If user with this email was found
   if (user) {
     // 4. Delete any existing password reset tokens
-    await db.token.deleteMany({ where: { type: "RESET_PSSSWORD", userId: user.id } })
+    await db.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
     // 5. Save this new token in the database.
     await db.token.create({
       data: {
