@@ -1540,6 +1540,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rap2hpoutre",
+      "name": "Raphaël Huchet",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1575946?v=4",
+      "profile": "http://raph.site",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
