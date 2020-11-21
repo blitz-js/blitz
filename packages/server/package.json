@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.25.1-canary.1",
+  "version": "0.25.1-canary.3",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -34,9 +34,9 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/config": "0.25.1-canary.1",
-    "@blitzjs/display": "0.25.1-canary.1",
-    "@blitzjs/file-pipeline": "0.25.1-canary.1",
+    "@blitzjs/config": "0.25.1-canary.3",
+    "@blitzjs/display": "0.25.1-canary.3",
+    "@blitzjs/file-pipeline": "0.25.1-canary.3",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.3",
@@ -73,7 +73,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.25.1-canary.1",
+    "@blitzjs/core": "0.25.1-canary.3",
     "next-transpile-modules": "3.2.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

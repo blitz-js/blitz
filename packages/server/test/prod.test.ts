@@ -53,7 +53,7 @@ describe("Prod command", () => {
   describe("When not already built", () => {
     it("should trigger build step", async () => {
       await prod(prodArgs)
-      expect(mocks.build.build.mock.calls).toEqual([[prodArgs, Promise.resolve()]])
+      expect(mocks.build.build.mock.calls).toEqual([[prodArgs]])
     })
   })
 

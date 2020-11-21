@@ -5,7 +5,7 @@ import {absolutePathTransform} from "../utils"
 import {DuplicatePathError, handleErrors} from "./errors"
 
 export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!\.test))$/
   return (regex.exec(path) || [])[1] || path
 }
 
