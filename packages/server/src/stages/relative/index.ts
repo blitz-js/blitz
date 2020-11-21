@@ -6,7 +6,7 @@ const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)
 
 const isInSpecialFolderInAppFolder = (s: string, cwd: string) => {
   const filepath = s.replace(cwd + path.sep, "")
-  return /^app\/.*(pages|queries|mutations)\//.test(filepath)
+  return /^app[/\\].*(pages|queries|mutations)[/\\]/.test(filepath)
 }
 
 /**
