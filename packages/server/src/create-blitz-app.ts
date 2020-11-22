@@ -1,13 +1,15 @@
 import next from "next"
-import {build} from "./build"
-import {alreadyBuilt} from "./build-hash"
-import {normalize, ServerConfig} from "./config"
-import {configureStages} from "./stages"
+import { build } from "./build"
+import { alreadyBuilt } from "./build-hash"
+import { normalize, ServerConfig } from "./config"
+import { configureStages } from "./stages"
+
+const debug = require("debug")("blitz:create-blitz-app")
 interface CreateBlitzAppConfig {
   dev: boolean
 }
 
-export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
+export async function createBlitzApp({ dev }: CreateBlitzAppConfig) {
   const serverConfig: ServerConfig = {
     env: dev ? "dev" : "prod",
     rootFolder: process.cwd(),
@@ -27,11 +29,11 @@ export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
     watch,
     clean,
     buildFolder,
-  } = await normalize({...serverConfig, env: "dev"})
+  } = await normalize({ ...serverConfig, env: "dev" })
 
   if (dev) {
     // dev
-    const stages = configureStages({writeManifestFile, isTypescript})
+    const stages = configureStages({ writeManifestFile, isTypescript })
 
     await transformFiles(rootFolder, stages, devFolder, {
       ignore,
@@ -42,14 +44,15 @@ export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
   } else {
     // prod
     if (!(await alreadyBuilt(buildFolder))) {
-      console.log("not built - building")
+      debug("not built - building..")
       await build(serverConfig)
+      debug('build done.')
     } else {
-      console.log("already built")
+      debug("already built")
     }
   }
   const dir = dev ? devFolder : buildFolder
-  const app = next({dev, dir})
+  const app = next({ dev, dir })
   const requestHandler = app.getRequestHandler()
 
   await app.prepare()
