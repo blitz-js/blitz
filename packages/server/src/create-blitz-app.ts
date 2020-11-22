@@ -1,8 +1,7 @@
 import next from "next"
-import { build } from "./build"
-import { alreadyBuilt } from "./build-hash"
-import { normalize, ServerConfig } from "./config"
-import { configureStages } from "./stages"
+import {alreadyBuilt} from "./build-hash"
+import {normalize,ServerConfig} from "./config"
+import {configureStages} from "./stages"
 
 const debug = require("debug")("blitz:create-blitz-app")
 interface CreateBlitzAppConfig {
@@ -29,8 +28,14 @@ export async function createBlitzApp({ dev }: CreateBlitzAppConfig) {
     watch,
     clean,
     buildFolder,
+    env,
   } = await normalize({ ...serverConfig, env: "dev" })
 
+  debug(`createBlitzApp`, {
+    devFolder,
+    buildFolder,
+    env,
+  })
   if (dev) {
     // dev
     const stages = configureStages({ writeManifestFile, isTypescript })
@@ -44,11 +49,7 @@ export async function createBlitzApp({ dev }: CreateBlitzAppConfig) {
   } else {
     // prod
     if (!(await alreadyBuilt(buildFolder))) {
-      debug("not built - building..")
-      await build(serverConfig)
-      debug('build done.')
-    } else {
-      debug("already built")
+      throw new Error('Blitz is not built - make sure to run `blitz build` before starting in production.')
     }
   }
   const dir = dev ? devFolder : buildFolder

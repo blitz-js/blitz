@@ -51,7 +51,7 @@ describe("Build command", () => {
         {
           children: [
             {name: "blitz.config.js"},
-            {name: "last-build"},
+            {name: "last-build.json"},
             {name: "next.config.js"},
             {name: "one"},
             {name: "two"},

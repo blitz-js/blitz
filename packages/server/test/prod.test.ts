@@ -5,7 +5,7 @@ import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
   {
-    build: {build: jest.fn().mockReturnValue(Promise.resolve())},
+    build: { build: jest.fn().mockReturnValue(Promise.resolve()) },
     "next-utils": {
       nextStart: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
@@ -18,8 +18,8 @@ const mocks = multiMock(
 )
 
 // Import with mocks applied
-import {ensureDir, writeFile} from "fs-extra"
-import {getInputArtefactsHash} from "../src/build-hash"
+import {ensureDir,writeFile} from "fs-extra"
+import {getInputArtifacts} from "../src/build-hash"
 import {prod} from "../src/prod"
 
 describe("Prod command", () => {
@@ -60,7 +60,7 @@ describe("Prod command", () => {
   describe("When already built", () => {
     it("should not trigger build step", async () => {
       await ensureDir(buildFolder)
-      await writeFile(`${buildFolder}/last-build`, await getInputArtefactsHash())
+      await writeFile(`${buildFolder}/last-build.json`, JSON.stringify(await getInputArtifacts()))
       await prod(prodArgs)
       expect(mocks.build.build.mock.calls).toEqual([])
     })

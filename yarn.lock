@@ -3949,6 +3949,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/folder-hash@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@types/folder-hash/-/folder-hash-3.3.0.tgz#74647518d306b3fa6385633d6e7c58d428907f83"
+  integrity sha512-Qk9EBZ44pMo2ZcLGXpWtqvtCNd+EFVGpHGH/Wc53d/+Bqaw8ha6zfV1t4lj/wH4v4QAwgQmFxJUmSyE02fr6hw==
+
 "@types/from2@2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@types/from2/-/from2-2.3.0.tgz#5a3dd8d9db0363bc1ee6b98e0538fe0ae356ac3a"
