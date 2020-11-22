@@ -1,16 +1,22 @@
 {
-  "name": "custom-server",
+  "name": "@examples/custom-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "NODE_ENV=production SESSION_SECRET_KEY=rEQgid3znV81sEA3IAwoPwVTq9YbQPdm node dist/index.js",
-    "dev": "NODE_ENV=development nodemon --watch server --ext ts,js,tsx --exec \"ts-node --project tsconfig.server.json ./server/index.ts\"",
+    "start": "node dist/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon --watch server --ext ts,js,tsx --exec \"ts-node --project tsconfig.server.json ./server/index.ts\"",
     "studio": "blitz db studio",
     "build:blitz": "blitz build",
     "build:server": "tsc --project tsconfig.server.json",
     "build": "run-s build:*",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "cy-open": "cypress open",
+    "cy-run": "cypress run",
+    "test:migrate": "blitz db migrate",
+    "test:jest": "jest",
+    "test:build": "yarn build",
+    "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test start http://localhost:3099 cy-run",
+    "test": "run-s test:*"
   },
   "browserslist": [
     "defaults"
@@ -47,6 +53,7 @@
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
+    "@cypress/skip-test": "2.5.0",
     "@testing-library/jest-dom": "5.11.6",
     "@testing-library/react": "11.2.2",
     "@testing-library/react-hooks": "3.4.2",
@@ -56,8 +63,11 @@
     "@typescript-eslint/eslint-plugin": "4.8.1",
     "@typescript-eslint/parser": "4.8.1",
     "babel-eslint": "10.1.0",
+    "cross-env": "latest",
+    "cypress": "4.11.0",
     "eslint": "7.14.0",
     "eslint-config-react-app": "5.2.1",
+    "eslint-plugin-cypress": "2.11.1",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
@@ -72,8 +82,10 @@
     "prettier": "2.2.0",
     "pretty-quick": "3.1.0",
     "react-test-renderer": "16.14.0",
+    "start-server-and-test": "1.11.2",
     "ts-jest": "26.4.4",
-    "ts-node": "9.0.0"
+    "ts-node": "9.0.0",
+    "wait-on": "4.0.2"
   },
   "private": true
 }
