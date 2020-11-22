@@ -2,9 +2,9 @@ import { createServer } from "http";
 import { parse } from "url";
 import { createBlitzApp } from "@blitzjs/server";
 
-const { PORT = "3000", NODE_ENV } = process.env
+const { PORT = "3000", NODE_ENV = "development" } = process.env
 
-const dev = NODE_ENV !== "production"
+const dev = NODE_ENV === "development"
 
 async function main() {
   const { requestHandler } = await createBlitzApp({ dev })
