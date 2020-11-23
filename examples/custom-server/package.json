@@ -2,10 +2,12 @@
   "name": "@examples/custom-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=production blitz start --production",
-    "dev": "cross-env NODE_ENV=development nodemon --watch ./server --ext ts,js,tsx --exec \"blitz start\"",
+    "start": "node build/server/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon --watch server --ext ts,js,tsx --exec \"ts-node --project tsconfig.server.json ./server/index.ts\"",
     "studio": "blitz db studio",
-    "build": "blitz build",
+    "build:blitz": "blitz build",
+    "build:server": "tsc --project tsconfig.server.json",
+    "build": "run-s build:*",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test-watch": "jest --watch",
     "cy-open": "cypress open",
@@ -14,8 +16,7 @@
     "test:jest": "jest",
     "test:build": "yarn build",
     "test:e2e": "cross-env NODE_ENV=test PORT=3099 DEBUG=blitz:* start-server-and-test start http://localhost:3099 cy-run",
-    "test": "run-s test:*",
-    "postinstall": "blitz db migrate"
+    "test": "run-s test:*"
   },
   "browserslist": [
     "defaults"

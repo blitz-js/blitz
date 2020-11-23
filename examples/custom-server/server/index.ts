@@ -14,13 +14,13 @@ async function main() {
     const { pathname } = parsedUrl
 
     if (pathname === "/hello") {
-      res.writeHead(200).end("worlds")
+      res.writeHead(200).end("world")
       return
     }
 
     requestHandler(req, res, parsedUrl)
   }).listen(PORT, () => {
-    console.log(`🎉 Ready on http://localhost:${PORT} (NODE_ENV: ${NODE_ENV})`)
+    console.log(`🎉 Ready on http://localhost:${PORT}`)
   })
 }
 
