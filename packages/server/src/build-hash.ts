@@ -1,6 +1,6 @@
-import {hashElement,HashElementNode} from "folder-hash"
-import {pathExists,readFile,writeFile} from "fs-extra"
-import {resolve} from "path"
+import { hashElement, HashElementNode } from "folder-hash"
+import { pathExists, readFile, writeFile } from "fs-extra"
+import { resolve } from "path"
 
 const debug = require("debug")("blitz:build-hash")
 
@@ -8,10 +8,7 @@ export async function getInputArtifacts() {
   const options = {
     algo: "md5",
     folders: {
-      exclude: [".*", "node_modules", "cypress", "test", "tests", "spec", "specs", "build", "dist"],
-    },
-    files: {
-      exclude: [".tsbuildinfo"],
+      exclude: [".*", "node_modules", "cypress", "test", "tests", "spec", "specs"],
     },
   }
   const tree = await hashElement(".", options)
