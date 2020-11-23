@@ -1,6 +1,7 @@
 import { createServer } from "http";
 import { parse } from "url";
 import { createBlitzApp } from "@blitzjs/server";
+import { log } from "@blitzjs/display"
 
 const { PORT = "3000", NODE_ENV = "development" } = process.env
 
@@ -20,7 +21,7 @@ async function main() {
 
     requestHandler(req, res, parsedUrl)
   }).listen(PORT, () => {
-    console.log(`🎉 Ready on http://localhost:${PORT}`)
+    log.success(`Ready on http://localhost:${PORT}`)
   })
 }
 
