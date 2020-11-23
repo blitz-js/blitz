@@ -1,7 +1,7 @@
 import {Ctx} from "blitz"
-import db, {__ModelName__DeleteArgs} from "db"
+import db, {Prisma} from "db"
 
-type Delete__ModelName__Input = Pick<__ModelName__DeleteArgs, "where">
+type Delete__ModelName__Input = Pick<Prisma.__ModelName__DeleteArgs, "where">
 
 export default async function delete__ModelName__({where}: Delete__ModelName__Input, ctx: Ctx) {
   ctx.session.authorize()
