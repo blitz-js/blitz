@@ -51,13 +51,16 @@ export function passportAuth(config: BlitzPassportConfig) {
       "No Passport strategies found! Please add at least one strategy.",
     )
 
-    const strategy = config.strategies.find((strategy) => strategy.name === req.query.auth[0])
-    assert(strategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
+    const blitzStrategy = config.strategies.find(
+      (strategy) => strategy.strategy.name === req.query.auth[0],
+    )
+    assert(blitzStrategy?.strategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
 
-    passport.use(strategy)
+    passport.use(blitzStrategy.strategy)
+    const strategyName = blitzStrategy.strategy.name as string
 
     if (req.query.auth.length === 1) {
-      log.info(`Starting authentication via ${strategy.name}...`)
+      log.info(`Starting authentication via ${blitzStrategy.strategy.name}...`)
       if (req.query.redirectUrl) {
         middleware.push(async (req, res, next) => {
           const session = res.blitzCtx.session as SessionContext
@@ -67,33 +70,35 @@ export function passportAuth(config: BlitzPassportConfig) {
         })
       }
       middleware.push(
-        connectMiddleware(passport.authenticate(strategy.name, {...config.authenticateOptions})),
+        connectMiddleware(
+          passport.authenticate(strategyName, {...blitzStrategy.authenticateOptions}),
+        ),
       )
     } else if (req.query.auth[1] === "callback") {
-      log.info(`Processing callback for ${strategy.name}...`)
+      log.info(`Processing callback for ${blitzStrategy.strategy.name}...`)
       middleware.push(
         connectMiddleware((req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
 
-          passport.authenticate(strategy.name, async (err: any, result: unknown) => {
+          passport.authenticate(strategyName, async (err: any, result: unknown) => {
             try {
               let error = err
 
               if (!error) {
                 if (result === false) {
                   log.warning(
-                    `Login via ${strategy.name} failed - usually this means the user did not authenticate properly with the provider`,
+                    `Login via ${strategyName} failed - usually this means the user did not authenticate properly with the provider`,
                   )
                   error = `Login failed`
                 }
                 assert(
                   typeof result === "object" && result !== null,
-                  `Your '${strategy.name}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
+                  `Your '${strategyName}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
                 )
                 assert(
                   (result as any).publicData,
-                  `'publicData' is missing from your '${strategy.name}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
+                  `'publicData' is missing from your '${strategyName}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1, roles: ['myRole']}})')`,
                 )
               }
 
