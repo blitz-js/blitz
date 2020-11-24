@@ -1,3 +1,5 @@
+import shadesOfPurple from "@theme-ui/prism/presets/shades-of-purple.json"
+
 export default {
   initialColorModeName: "light",
   useColorSchemeMediaQuery: true,
@@ -37,6 +39,14 @@ export default {
         color: "secondary",
         textDecoration: "underline",
       },
+    },
+    pre: {
+      ".highlight": {
+        background: "hsla(0, 0%, 30%, .5)",
+      },
+    },
+    code: {
+      ...shadesOfPurple,
     },
   },
 }

@@ -1,0 +1,51 @@
+import Layout from "app/layouts/MdxLayout"
+import {Container} from "@reflexjs/ui"
+import {Flex} from "theme-ui"
+
+export default ({children}) => <Layout title="Blocks">{children}</Layout>
+
+# Blocks 🌟
+
+Wow such an awesome demo page!
+
+## Prism Codeblock Example
+
+Check out this code block":
+
+```tsx
+import {Container, Text} from "theme-ui"
+
+import LoadingSpinner from "app/components/LoadingSpinner"
+
+const ItemsList = ({itemId}) => {
+  const {data: items} = useQuery(
+    "items",
+    async () => {
+      const {data} = await axios.get("/api/items", {
+        params: {
+          id: itemId,
+        },
+      })
+
+      return data
+    },
+    {suspense: true},
+  )
+
+  return (
+    <Container>
+      <SuspenseList revealOrder="forwards">
+        {items.map((item) => {
+          return (
+            <Suspense fallback={<LoadingSpinner />} key={item.slug}>
+              <ItemPreview id={item.id} />
+            </Suspense>
+          )
+        })}
+      </SuspenseList>
+    </Container>
+  )
+}
+
+export default ItemsList
+```

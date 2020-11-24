@@ -1,8 +1,8 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import j from "jscodeshift"
-import {join} from "path"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
+import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
+import {join} from "path"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
@@ -20,6 +20,10 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
             j.jsxAttribute(
               j.jsxIdentifier("theme"),
               j.jsxExpressionContainer(j.identifier("theme")),
+            ),
+            j.jsxAttribute(
+              j.jsxIdentifier("components"),
+              j.jsxExpressionContainer(j.identifier("components")),
             ),
           ]),
           j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
@@ -47,8 +51,6 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
   })
   return program
 }
-
-function optionallyAddMdx(program: Collection<j.Program>) {}
 
 export default RecipeBuilder()
   .setName("Theme UI")
@@ -108,8 +110,14 @@ export default RecipeBuilder()
         j.literal("theme"),
       )
 
+      const mdxComponentsImport = j.importDeclaration(
+        [j.importDefaultSpecifier(j.identifier("app/theme/components"))],
+        j.literal("components"),
+      )
+
       addImport(program, providerImport)
       addImport(program, baseThemeImport)
+      addImport(program, mdxComponentsImport)
       return wrapComponentWithThemeProvider(program)
     },
   })
@@ -117,8 +125,25 @@ export default RecipeBuilder()
     stepId: "addStyles",
     stepName: "Add a base theme file",
     explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to just using classnames in your components.`,
-    targetDirectory: "./app/theme/index.ts",
+    targetDirectory: "./app/theme",
     templatePath: join(__dirname, "templates", "theme"),
+    templateValues: {},
+  })
+  .addNewFilesStep({
+    stepId: "addMdxLayout",
+    stepName: "Create a layout MDX pages",
+    explanation:
+      "Now we add a layout component for MDX pages. We'll add a layout called `MdxLayout.tsx` to the `app/layouts` directory. ",
+    targetDirectory: "./app/layouts",
+    templatePath: join(__dirname, "templates", "layouts"),
+    templateValues: {},
+  })
+  .addNewFilesStep({
+    stepId: "addMdxPage",
+    stepName: "Add a page with an `.mdx` extension",
+    explanation: "Finally, we'll add a page called `blocks.mdx` to the `app/pages` directory. ",
+    targetDirectory: "./app/pages",
+    templatePath: join(__dirname, "templates", "mdx"),
     templateValues: {},
   })
   .build()
