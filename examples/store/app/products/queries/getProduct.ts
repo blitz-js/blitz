@@ -1,10 +1,10 @@
 import {NotFoundError, Ctx} from "blitz"
-import db, {FindOneProductArgs} from "db"
+import db, {FindFirstProductArgs} from "db"
 
 type GetProductInput = {
-  where: FindOneProductArgs["where"]
+  where: FindFirstProductArgs["where"]
   // Only available if a model relationship exists
-  // include?: FindOneProductArgs['include']
+  // include?: FindFirstProductArgs['include']
 }
 
 export default async function getProduct({where}: GetProductInput, _ctx: Ctx) {
