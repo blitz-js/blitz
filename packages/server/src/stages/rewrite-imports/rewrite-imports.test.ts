@@ -1,3 +1,4 @@
+/* eslint-disable no-sparse-arrays */
 import {normalize} from "path"
 import File from "vinyl"
 import {mockStageArgs} from "../stage-test-utils"
