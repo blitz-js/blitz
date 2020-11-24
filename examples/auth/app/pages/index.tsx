@@ -35,7 +35,7 @@ const UserStuff = () => {
             <Link href="/signup">Sign Up</Link>
           </div>
           <div>
-            <Link href="/login">Log In</Link>
+            <Link href="/login">Login</Link>
           </div>
           <a href="/api/auth/twitter" style={{display: "block"}}>
             Login with Twitter

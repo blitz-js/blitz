@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "next-utils": {
@@ -49,6 +49,7 @@ describe("Dev command", () => {
     expect(directoryTree(devFolder)).toEqual({
       name: ".blitz-stages",
       children: [
+        {name: "_blitz-version.txt"},
         {name: "blitz.config.js"},
         {name: "next.config.js"},
         {

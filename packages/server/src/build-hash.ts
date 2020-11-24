@@ -6,21 +6,7 @@ export async function getInputArtefactsHash() {
   const options = {
     algo: "md5",
     folders: {
-      exclude: [
-        "node_modules",
-        ".blitz-build",
-        ".blitz",
-        "cypress",
-        ".next",
-        ".heroku",
-        ".profile.d",
-        ".cache",
-        ".config",
-        "test",
-        "tests",
-        "spec",
-        "specs",
-      ],
+      exclude: [".*", "node_modules", "cypress", "test", "tests", "spec", "specs"],
     },
   }
   const tree = await hashElement(".", options)

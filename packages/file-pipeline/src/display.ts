@@ -1,8 +1,8 @@
-import {through} from "./streams"
-import File from "vinyl"
 import {log} from "@blitzjs/display"
 import chalk from "chalk"
-import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from "./events"
+import File from "vinyl"
+import {ERROR_THROWN, Event, FILE_WRITTEN, INIT, READY} from "./events"
+import {through} from "./streams"
 
 /**
  * Display is a stream that converts build status events and prepares them for the console.

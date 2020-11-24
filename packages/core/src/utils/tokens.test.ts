@@ -1,9 +1,10 @@
-import {TOKEN_SEPARATOR} from "../constants"
-import {parsePublicDataToken} from "./tokens"
-import {useSession} from "../supertokens"
-import {renderHook} from "../../test/test-utils"
-import {publicDataStore} from "../public-data-store"
+/* eslint @typescript-eslint/no-floating-promises: off */
 import {act} from "@testing-library/react-hooks"
+import {renderHook} from "../../test/test-utils"
+import {TOKEN_SEPARATOR} from "../constants"
+import {publicDataStore} from "../public-data-store"
+import {useSession} from "../supertokens"
+import {parsePublicDataToken} from "./tokens"
 
 describe("supertokens", () => {
   describe("parsePublicDataToken", () => {
@@ -44,10 +45,10 @@ describe("supertokens", () => {
       })
     })
 
-    it("subscribes to the public data store", async () => {
+    it("subscribes to the public data store", () => {
       const {result} = renderHook(() => useSession())
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["foo"], userId: "bar"})
       })
 
@@ -57,7 +58,7 @@ describe("supertokens", () => {
         userId: "bar",
       })
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["baz"], userId: "boo"})
       })
 
@@ -68,18 +69,18 @@ describe("supertokens", () => {
       })
     })
 
-    it("un-subscribes from the public data store on unmount", async () => {
+    it("un-subscribes from the public data store on unmount", () => {
       const {result, unmount} = renderHook(() => useSession())
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["foo"], userId: "bar"})
       })
 
-      await act(() => {
+      act(() => {
         unmount()
       })
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["baz"], userId: "boo"})
       })
 

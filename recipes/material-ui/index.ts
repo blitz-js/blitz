@@ -1,4 +1,4 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 

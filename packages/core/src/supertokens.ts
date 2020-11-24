@@ -1,9 +1,9 @@
 import {useState} from "react"
-import {publicDataStore} from "./public-data-store"
-import {useIsomorphicLayoutEffect} from "./utils/hooks"
-import {readCookie} from "./utils/cookie"
-import {PublicData} from "./types"
 import {COOKIE_CSRF_TOKEN} from "./constants"
+import {publicDataStore} from "./public-data-store"
+import {PublicData} from "./types"
+import {readCookie} from "./utils/cookie"
+import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export interface SessionModel extends Record<any, any> {
   handle: string

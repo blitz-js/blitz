@@ -1,28 +1,23 @@
 import {
-  useQuery as useReactQuery,
-  QueryResult,
-  QueryConfig,
-  usePaginatedQuery as usePaginatedReactQuery,
-  PaginatedQueryResult,
-  PaginatedQueryConfig,
-  useInfiniteQuery as useInfiniteReactQuery,
+  InfiniteQueryOptions as RQInfiniteQueryConfig,
   InfiniteQueryResult,
-  InfiniteQueryConfig as RQInfiniteQueryConfig,
-  queryCache,
+  PaginatedQueryResult,
+  QueryOptions,
+  QueryResult,
+  useInfiniteQuery as useInfiniteReactQuery,
+  usePaginatedQuery as usePaginatedReactQuery,
+  useQuery as useReactQuery,
 } from "react-query"
-import {FirstParam, QueryFn, PromiseReturnType} from "./types"
+import {FirstParam, PromiseReturnType, QueryFn} from "./types"
+import {useRouterIsReady} from "./use-router"
 import {
-  QueryCacheFunctions,
+  defaultQueryConfig,
+  emptyQueryFn,
   getQueryCacheFunctions,
   getQueryKey,
+  QueryCacheFunctions,
   sanitize,
-  defaultQueryConfig,
 } from "./utils/react-query-utils"
-import Router from "next/router"
-
-Router.events.on("routeChangeComplete", async () => {
-  await queryCache.invalidateQueries()
-})
 
 // -------------------------
 // useQuery
@@ -32,19 +27,22 @@ type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheF
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: QueryConfig<TResult>,
+  options?: QueryOptions<TResult>,
 ): [TResult, RestQueryResult<TResult>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
-    queryKey,
-    queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, params: any) =>
+          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
       ...options,
@@ -68,19 +66,22 @@ type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolve
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: PaginatedQueryConfig<TResult>,
+  options?: QueryOptions<TResult>,
 ): [TResult, RestPaginatedResult<TResult>] {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
-    queryKey,
-    queryFn: (_apiUrl: string, params: any) =>
-      enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true}),
+    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, params: any) =>
+          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
       ...options,
@@ -98,11 +99,15 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
 // -------------------------
 // useInfiniteQuery
 // -------------------------
-type RestInfiniteResult<TResult> = Omit<InfiniteQueryResult<TResult>, "resolvedData"> &
+type RestInfiniteResult<TResult, TMoreVariable> = Omit<
+  InfiniteQueryResult<TResult, TMoreVariable>,
+  "resolvedData"
+> &
   QueryCacheFunctions<TResult>
 
-interface InfiniteQueryConfig<TResult, TFetchMoreResult> extends RQInfiniteQueryConfig<TResult> {
-  getFetchMore?: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
+interface InfiniteQueryConfig<TResult, TFetchMoreResult>
+  extends RQInfiniteQueryConfig<TResult, TFetchMoreResult> {
+  getFetchMore: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
 }
 
 // TODO - Fix TFetchMoreResult not actually taking affect in apps.
@@ -115,21 +120,24 @@ export function useInfiniteQuery<
   queryFn: T,
   params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
-): [TResult[], RestInfiniteResult<TResult>] {
+): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult>] {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
+  const routerIsReady = useRouterIsReady()
   const enhancedResolverRpcClient = sanitize(queryFn)
-  const queryKey = getQueryKey(queryFn)
+  const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
-    queryKey: [...queryKey, "infinite"],
-    queryFn: (_apiUrl: string, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
-      enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true}),
+    queryKey: routerIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
+    queryFn: routerIsReady
+      ? (_apiUrl: string, _args: any, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
+          enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
+      : (emptyQueryFn as any),
     config: {
       ...defaultQueryConfig,
       ...options,
@@ -141,5 +149,5 @@ export function useInfiniteQuery<
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [data as TResult[], rest as RestInfiniteResult<TResult>]
+  return [data as TResult[], rest as RestInfiniteResult<TResult, TFetchMoreResult>]
 }

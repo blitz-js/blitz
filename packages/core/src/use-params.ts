@@ -1,8 +1,8 @@
-import {useMemo} from "react"
 import {fromPairs} from "lodash"
 import {useRouter} from "next/router"
-import {useRouterQuery} from "./use-router-query"
+import {useMemo} from "react"
 import {ParsedUrlQueryValue} from "./types"
+import {useRouterQuery} from "./use-router-query"
 
 export interface ParsedUrlQuery {
   [key: string]: ParsedUrlQueryValue
@@ -98,10 +98,14 @@ export function useParam(
   const params = useParams()
   const rawValue = params[key]
 
+  if (typeof rawValue === "undefined") {
+    return undefined
+  }
+
   if (returnType === "number") {
     // Special case because Number("") === 0
     if (rawValue === "") {
-      return NaN
+      return undefined
     }
     return Number(rawValue)
   }
@@ -114,9 +118,6 @@ export function useParam(
   }
 
   if (returnType === "array") {
-    if (typeof rawValue === "undefined") {
-      return []
-    }
     if (!Array.isArray(rawValue)) {
       return [rawValue]
     }

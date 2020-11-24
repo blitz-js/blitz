@@ -1,4 +1,4 @@
-import {dev as Dev, prod as Prod} from "@blitzjs/server"
+import {dev as Dev, prod as Prod, ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
 
 export class Start extends Command {
@@ -6,6 +6,7 @@ export class Start extends Command {
   static aliases = ["s"]
 
   static flags = {
+    help: flags.help({char: "h"}),
     production: flags.boolean({
       description: "Create and start a production server",
     }),
@@ -29,7 +30,7 @@ export class Start extends Command {
   async run() {
     const {flags} = this.parse(Start)
 
-    const config = {
+    const config: ServerConfig = {
       rootFolder: process.cwd(),
       port: flags.port,
       hostname: flags.hostname,

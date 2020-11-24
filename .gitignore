@@ -20,6 +20,11 @@ dist
 **/.envrc
 .blitz-*
 .blitz-cli-cache
+<<<<<<< HEAD
 todo-list.md
 .vscode
 *.code-workspace
+=======
+.vscode
+.tsbuildinfo
+>>>>>>> upstream/canary

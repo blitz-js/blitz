@@ -1,4 +1,5 @@
 import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
+import {serialize} from "superjson"
 import {executeRpcCall} from "../src/rpc"
 
 declare global {
@@ -25,7 +26,6 @@ describe("RPC", () => {
       expect.assertions(2)
       const fetchMock = jest
         .spyOn(global, "fetch")
-        .mockImplementationOnce(() => Promise.resolve())
         .mockImplementationOnce(() =>
           Promise.resolve({json: () => ({result: "result", error: null})}),
         )
@@ -52,9 +52,17 @@ describe("RPC", () => {
 
     it("handles errors", async () => {
       expect.assertions(1)
+      const error = new Error("something broke")
+      const serializedError = serialize(error)
       const fetchMock = jest.spyOn(global, "fetch").mockImplementation(() =>
         Promise.resolve({
-          json: () => ({result: null, error: {name: "Error", message: "something broke"}}),
+          json: () => ({
+            result: null,
+            error: serializedError.json,
+            meta: {
+              error: serializedError.meta,
+            },
+          }),
         }),
       )
 

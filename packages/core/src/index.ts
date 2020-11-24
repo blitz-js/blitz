@@ -1,4 +1,4 @@
-import {NextPage, NextComponentType, NextPageContext} from "next"
+import {NextComponentType, NextPage, NextPageContext} from "next"
 import {AppProps as NextAppProps} from "next/app"
 
 export * from "./types"
@@ -47,6 +47,8 @@ export {default as Head} from "next/head"
 export {default as Link} from "next/link"
 
 export {default as Router} from "next/router"
+
+export {default as Image} from "next/image"
 
 export {
   default as Document,

@@ -1,5 +1,5 @@
-import * as React from "react"
 import {Box, Text} from "ink"
+import * as React from "react"
 import {Newline} from "../components/newline"
 
 export interface ExecutorConfig {
@@ -38,9 +38,15 @@ export function Frontmatter({executor}: {executor: ExecutorConfig}) {
     <Box flexDirection="column" paddingBottom={1}>
       <Newline />
       <Box flexDirection="column">
-        <Text color="#8a3df0" bold>{verticalBorder}</Text>
-        <Text color="#8a3df0" bold>⎪&nbsp;&nbsp;&nbsp;{executor.stepName}&nbsp;&nbsp;&nbsp;⎪</Text>
-        <Text color="#8a3df0" bold>{verticalBorder}</Text>
+        <Text color="#8a3df0" bold>
+          {verticalBorder}
+        </Text>
+        <Text color="#8a3df0" bold>
+          ⎪&nbsp;&nbsp;&nbsp;{executor.stepName}&nbsp;&nbsp;&nbsp;⎪
+        </Text>
+        <Text color="#8a3df0" bold>
+          {verticalBorder}
+        </Text>
       </Box>
       <Text bold>{executor.explanation}</Text>
     </Box>

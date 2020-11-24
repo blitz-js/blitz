@@ -1,8 +1,7 @@
 // @ts-ignore
 import {Request} from "express"
-
-import {secureProxyMiddleware} from "./secure-proxy-middleware"
 import {Socket} from "net"
+import {secureProxyMiddleware} from "./secure-proxy-middleware"
 
 // @ts-ignore
 let reqSecure: Request = {

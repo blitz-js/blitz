@@ -1,13 +1,13 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
-import {filePrompt} from "./file-prompt"
-import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
 import {createPatch} from "diff"
 import * as fs from "fs-extra"
-import * as React from "react"
-import Spinner from "ink-spinner"
 import {Box, Text} from "ink"
+import Spinner from "ink-spinner"
+import * as React from "react"
 import {Newline} from "../components/newline"
+import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
