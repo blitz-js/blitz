@@ -1,14 +1,14 @@
 import {Ctx} from "blitz"
-import db, {__ModelName__UpdateArgs} from "db"
+import db, {Prisma} from "db"
 
 if (process.env.parentModel) {
   type Update__ModelName__Input = {
-    where: __ModelName__UpdateArgs["where"]
-    data: Omit<__ModelName__UpdateArgs["data"], "__parentModel__">
+    where: Prisma.__ModelName__UpdateArgs["where"]
+    data: Omit<Prisma.__ModelName__UpdateArgs["data"], "__parentModel__">
     __parentModelId__: number
   }
 } else {
-  type Update__ModelName__Input = Pick<__ModelName__UpdateArgs, "where" | "data">
+  type Update__ModelName__Input = Pick<Prisma.__ModelName__UpdateArgs, "where" | "data">
 }
 
 export default async function update__ModelName__(
