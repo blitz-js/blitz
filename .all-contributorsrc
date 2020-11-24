@@ -1540,6 +1540,44 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rap2hpoutre",
+      "name": "Raphaël Huchet",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1575946?v=4",
+      "profile": "http://raph.site",
+      "contributions": [
+        "doc",
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "KATT",
+      "name": "Alex Johansson",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/459267?v=4",
+      "profile": "http://kattcorp.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dmzza",
+      "name": "David Mazza",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/120893?v=4",
+      "profile": "http://davidmazza.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rayandrews",
+      "name": "Ray Andrew",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4437323?v=4",
+      "profile": "https://github.com/rayandrews",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

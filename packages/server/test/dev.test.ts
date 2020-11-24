@@ -1,7 +1,9 @@
 /* eslint-disable import/first */
 
 import {join, resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
+
 const mocks = multiMock(
   {
     "next-utils": {
@@ -10,6 +12,11 @@ const mocks = multiMock(
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
+    },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
     },
   },
   resolve(__dirname, "../src"),
@@ -40,10 +47,16 @@ describe("Dev command", () => {
   describe("throw in nextStartDev", () => {
     beforeEach(() => {
       mocks["next-utils"].nextStartDev.mockRejectedValue("pow")
+      mocks["blitz-version"].getBlitzVersion.mockRejectedValue("pow")
+      mocks["blitz-version"].isVersionMatched.mockRejectedValue("pow")
+      mocks["blitz-version"].saveBlitzVersion.mockRejectedValue("pow")
     })
 
     afterEach(() => {
       mocks["next-utils"].nextStartDev.mockReturnValue(Promise.resolve())
+      mocks["blitz-version"].getBlitzVersion.mockReturnValue(blitzVersion.getBlitzVersion())
+      mocks["blitz-version"].isVersionMatched.mockImplementation(blitzVersion.isVersionMatched)
+      mocks["blitz-version"].saveBlitzVersion.mockImplementation(blitzVersion.saveBlitzVersion)
     })
 
     it("should blow up", async (done) => {
@@ -129,6 +142,7 @@ describe("Dev command", () => {
         children: [
           {
             children: [
+              {name: "_blitz-version.txt"},
               {name: "blitz.config.js"},
               {name: "next.config.js"},
               {name: "one"},

@@ -75,6 +75,7 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
     read: true,
     dot: true,
     cwd,
+    allowEmpty: true,
   })
 
   const watcher = getWatcher(watching, cwd, include, ignore)

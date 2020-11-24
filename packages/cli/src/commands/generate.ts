@@ -11,6 +11,7 @@ import {
 
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import chalk from "chalk"
 
 const debug = require("debug")("blitz:generate")
 const pascalCase = (str: string) => require("camelcase")(str, {pascalCase: true})
@@ -116,27 +117,27 @@ export class Generate extends Command {
   }
 
   static examples = [
-    `# The 'crud' type will generate all queries & mutations for a model
+    `${chalk.dim("# The 'crud' type will generate all queries & mutations for a model")}
 > blitz generate crud productVariant
     `,
-    `# The 'all' generator will scaffold out everything possible for a model
+    `${chalk.dim("# The 'all' generator will scaffold out everything possible for a model")}
 > blitz generate all products
     `,
-    `# The '--context' flag will allow you to generate files in a nested folder
+    `${chalk.dim("# The '--context' flag will allow you to generate files in a nested folder")}
 > blitz generate pages projects --admin
     `,
-    `# Context can also be supplied in the model name directly
+    `${chalk.dim("# Context can also be supplied in the model name directly")}
 > blitz generate pages admin/projects
     `,
-    `# To generate nested routes for dependent models (e.g. Projects that contain
+    `${chalk.dim(`# To generate nested routes for dependent models (e.g. Projects that contain
 # Tasks), specify a parent model. For example, this command generates pages under
-# app/tasks/pages/projects/[projectId]/tasks/
+# app/tasks/pages/projects/[projectId]/tasks/`)}
 > blitz generate all tasks --parent=projects
     `,
-    `# Database models can also be generated directly from the CLI
+    `${chalk.dim(`# Database models can also be generated directly from the CLI
 # Model fields can be specified with any generator that generates
 # a database model ("all", "model", "resource"). Both of the below
-# will generate the proper database model for a Task.
+# will generate the proper database model for a Task.`)}
 > blitz generate model task \\
     name:string \\
     completed:boolean:default[false] \\
@@ -146,9 +147,9 @@ export class Generate extends Command {
     completed:boolean:default[false] \\
     belongsTo:project?
     `,
-    `# Sometimes you want just a single query with no generated
+    `${chalk.dim(`# Sometimes you want just a single query with no generated
 # logic. Generating "query" instead of "queries" will give you a more
-# customizable template.
+# customizable template.`)}
 > blitz generate query getUserSession`,
   ]
 

@@ -46,4 +46,37 @@ describe("agnosticSource", () => {
     await testStreamItems(stream, expected, logItem)
     await close()
   })
+
+  test("include a folder that doesn't exist", (done) => {
+    const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
+    const {stream} = agnosticSource({
+      ignore: [],
+      include: ["**/*", "folder-that-doesnt-exist/"],
+      cwd,
+      watch: false,
+    })
+    const log: any[] = []
+    stream.on("data", (data) => {
+      if (data === "ready") {
+        stream.end()
+        expect(log).toEqual(expected)
+        return done()
+      }
+      log.push(data.path)
+    })
+  })
+
+  test("ignore a file", (done) => {
+    const expected = [resolve(cwd, "one")]
+    const {stream} = agnosticSource({ignore: ["two"], include: ["**/*"], cwd, watch: false})
+    const log: any[] = []
+    stream.on("data", (data) => {
+      if (data === "ready") {
+        stream.end()
+        expect(log).toEqual(expected)
+        return done()
+      }
+      log.push(data.path)
+    })
+  })
 })

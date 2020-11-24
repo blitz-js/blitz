@@ -57,6 +57,7 @@ describe("Dev command", () => {
     expect(directoryTree(devFolder)).toEqual({
       name: ".blitz-stages",
       children: [
+        {name: "_blitz-version.txt"},
         {name: "blitz.config.js"},
         {name: "next.config.js"},
         {
