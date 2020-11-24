@@ -1,6 +1,8 @@
 import React, {Suspense} from "react"
 import {Head, Link, useQuery} from "blitz"
 import getReferer from "app/queries/getReferer"
+// integration test for css modules
+import styles from "./index.module.css"
 
 const Referer = () => {
   // This is here mainly as an integration test for global middleware
@@ -49,7 +51,7 @@ const Home = () => (
       </ul>
     </main>
 
-    <footer>
+    <footer className={styles.red}>
       <a
         href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
         target="_blank"

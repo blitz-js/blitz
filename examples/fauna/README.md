@@ -2,7 +2,7 @@
 
 ## Intro
 
-This example shows how to use [Fauna](https://fauna.com) instead of Prisma and Postgres.
+This example shows how to use [Fauna](https://dashboard.fauna.com/accounts/register?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020) instead of Prisma and Postgres.
 
 The bulk of the integration is in the following files:
 
