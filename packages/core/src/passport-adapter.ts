@@ -60,7 +60,7 @@ export function passportAuth(config: BlitzPassportConfig) {
     const strategyName = blitzStrategy.strategy.name as string
 
     if (req.query.auth.length === 1) {
-      log.info(`Starting authentication via ${blitzStrategy.strategy.name}...`)
+      log.info(`Starting authentication via ${strategyName}...`)
       if (req.query.redirectUrl) {
         middleware.push(async (req, res, next) => {
           const session = res.blitzCtx.session as SessionContext
@@ -75,7 +75,7 @@ export function passportAuth(config: BlitzPassportConfig) {
         ),
       )
     } else if (req.query.auth[1] === "callback") {
-      log.info(`Processing callback for ${blitzStrategy.strategy.name}...`)
+      log.info(`Processing callback for ${strategyName}...`)
       middleware.push(
         connectMiddleware((req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
