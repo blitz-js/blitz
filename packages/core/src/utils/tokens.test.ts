@@ -28,6 +28,13 @@ describe("supertokens", () => {
       })
     })
 
+    it("parses the public data containing unicode chars", () => {
+      const data = '"foo-κόσμε-żółć-平仮名"'
+      expect(parsePublicDataToken(toBase64(data))).toEqual({
+        publicData: "foo-κόσμε-żółć-平仮名",
+      })
+    })
+
     it("only uses the first separated tokens", () => {
       const data = `"foo"${TOKEN_SEPARATOR}123`
       expect(parsePublicDataToken(toBase64(data))).toEqual({
