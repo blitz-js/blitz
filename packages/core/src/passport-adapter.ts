@@ -54,10 +54,12 @@ export function passportAuth(config: BlitzPassportConfig) {
     const blitzStrategy = config.strategies.find(
       (strategy) => strategy.strategy.name === req.query.auth[0],
     )
-    assert(blitzStrategy?.strategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
+    assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
 
-    passport.use(blitzStrategy.strategy)
-    const strategyName = blitzStrategy.strategy.name as string
+    const {strategy, authenticateOptions} = blitzStrategy
+
+    passport.use(strategy)
+    const strategyName = strategy.name as string
 
     if (req.query.auth.length === 1) {
       log.info(`Starting authentication via ${strategyName}...`)
@@ -70,9 +72,7 @@ export function passportAuth(config: BlitzPassportConfig) {
         })
       }
       middleware.push(
-        connectMiddleware(
-          passport.authenticate(strategyName, {...blitzStrategy.authenticateOptions}),
-        ),
+        connectMiddleware(passport.authenticate(strategyName, {...authenticateOptions})),
       )
     } else if (req.query.auth[1] === "callback") {
       log.info(`Processing callback for ${strategyName}...`)
