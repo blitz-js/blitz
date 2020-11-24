@@ -17,7 +17,7 @@ export default RecipeBuilder()
 We'll install the Tailwind library itself, as well as PostCSS for removing unused styles from our production bundles.`,
     packages: [
       {name: "tailwindcss", version: "2"},
-      {name: "postcss-preset-env", version: "latest", isDevDep: true},
+      {name: "autoprefixer", version: "10", isDevDep: true},
     ],
   })
   .addNewFilesStep({
