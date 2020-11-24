@@ -19,7 +19,7 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.10.0",
+    "@prisma/cli": "2.12.0",
     "@prisma/client": "2.10.0",
     "blitz": "0.25.1-canary.3",
     "final-form": "4.19.1",

@@ -64,7 +64,7 @@
     "@blitzjs/server": "0.25.1-canary.3",
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
-    "@prisma/cli": "2.10.0",
+    "@prisma/cli": "2.12.0",
     "nock": "13.0.0-beta.3",
     "stdout-stderr": "0.1.13"
   },
