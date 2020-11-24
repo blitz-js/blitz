@@ -1,8 +1,8 @@
 import {Ctx, NotFoundError} from "blitz"
-import db, {FindOneUserArgs} from "db"
+import db, {Prisma} from "db"
 
 type GetUserInput = {
-  where: FindOneUserArgs["where"]
+  where: Prisma.FindUniqueUserArgs["where"]
 }
 
 export default async function getUser({where}: GetUserInput, ctx: Ctx) {

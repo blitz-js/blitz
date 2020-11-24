@@ -28,7 +28,7 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
   return {stream}
 }
 
-export const patternImport = /(import\s*)(?:(\*\s+as\s+\w+)|(?:(\w+\s*)(,\s*)?)?(?:(\{\s*\w+\s*(?:,\s*\w+\s*)*\}))?)(\s+from\s+)?((?:\(\s*)?["'])([\w\.\\\/]+)(["'](?:\s*\))?)/gs
+export const patternImport = /(import\s*)(?:(\*\s+as\s+\w+)|(?:(\w+\s*)(,\s*)?)?(?:(\{\s*\w+\s*(?:,\s*\w+\s*)*\}))?)(\s+from\s+)?((?:\(\s*)?["'])([\w.\\/]+)(["'](?:\s*\))?)/gs
 
 // Whenever we see smth like `import { myFunc } from "app/queries/myQuery"`,
 //  we rewrite that to app/_resolvers/queries/myQuery

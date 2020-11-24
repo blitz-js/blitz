@@ -1,7 +1,10 @@
 import {Ctx} from "blitz"
-import db, {FindMany__ModelName__Args} from "db"
+import db, {Prisma} from "db"
 
-type Get__ModelNames__Input = Pick<FindMany__ModelName__Args, "where" | "orderBy" | "skip" | "take">
+type Get__ModelNames__Input = Pick<
+  Prisma.FindMany__ModelName__Args,
+  "where" | "orderBy" | "skip" | "take"
+>
 
 export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
