@@ -59,7 +59,7 @@ const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   sameSite: "lax",
-  getSession: (handle) => getDb().session.findOne({where: {handle}}),
+  getSession: (handle) => getDb().session.findFirst({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
     let user

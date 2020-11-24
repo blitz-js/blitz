@@ -8,7 +8,7 @@ type GetProductInput = {
 }
 
 export default async function getProduct({where}: GetProductInput, _ctx: Ctx) {
-  const product = await db.product.findOne({where})
+  const product = await db.product.findFirst({where})
 
   if (!product) throw new NotFoundError()
 
