@@ -5,7 +5,7 @@ import { ForgotPasswordInput, ForgotPasswordInputType } from "../validations"
 import {
   generateToken,
   hashToken,
-  RESET_PASSSWORD_TOKEN_EXPIRATION_IN_HOURS,
+  RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS,
 } from "app/auth/auth-utils"
 
 export default async function forgotPassword(
@@ -23,17 +23,17 @@ export default async function forgotPassword(
   const urlSafeToken = encodeURIComponent(token)
   const hashedToken = hashToken(token)
   const expiresAt = new Date()
-  expiresAt.setHours(expiresAt.getHours() + RESET_PASSSWORD_TOKEN_EXPIRATION_IN_HOURS)
+  expiresAt.setHours(expiresAt.getHours() + RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS)
 
   // 3. If user with this email was found
   if (user) {
     // 4. Delete any existing password reset tokens
-    await db.token.deleteMany({ where: { type: "RESET_PASSSWORD", userId: user.id } })
+    await db.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
     // 5. Save this new token in the database.
     await db.token.create({
       data: {
         user: { connect: { id: user.id } },
-        type: "RESET_PASSSWORD",
+        type: "RESET_PASSWORD",
         expiresAt,
         hashedToken,
         sentTo: user.email,

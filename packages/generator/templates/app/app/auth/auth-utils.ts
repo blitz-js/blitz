@@ -6,7 +6,7 @@ import db from "db"
 
 const SP = new SecurePassword()
 
-export const RESET_PASSSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
+export const RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 
 export const hashPassword = async (password: string) => {
   const hashedBuffer = await SP.hash(Buffer.from(password))
