@@ -43,6 +43,7 @@
     "@blitzjs/config": "0.26.0",
     "@blitzjs/display": "0.26.0",
     "bad-behavior": "1.0.1",
+    "b64-lite": "1.4.0",
     "cookie-session": "1.4.0",
     "deepmerge": "4.2.2",
     "lodash": "^4.17.19",
