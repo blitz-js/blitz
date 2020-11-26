@@ -1587,6 +1587,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "williamkwao",
+      "name": "William Kwao",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8839514?v=4",
+      "profile": "http://kwao.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
