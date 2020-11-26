@@ -53,9 +53,7 @@ export function replaceImports(content: string) {
       closingQuotes,
     ] = args as (string | undefined)[]
 
-    const importsOnlyDefault = !!defaultImportName && !(starImport || namedImportNames)
-
-    const newOrigin = rewriteImportOrigin(origin!, !importsOnlyDefault)
+    const newOrigin = rewriteImportOrigin(origin!)
 
     return [
       importToken,
@@ -71,7 +69,7 @@ export function replaceImports(content: string) {
   })
 }
 
-export function rewriteImportOrigin(origin: string, importsNamedExports: boolean): string {
+export function rewriteImportOrigin(origin: string): string {
   const parts = origin.split("/")
 
   // If it's an import from a page, say from app/pages/mypage,
@@ -90,19 +88,6 @@ export function rewriteImportOrigin(origin: string, importsNamedExports: boolean
     }
 
     parts.splice(0, parts.indexOf("api"), "pages")
-  }
-
-  if (importsNamedExports) {
-    const indexOfQueries = parts.lastIndexOf("queries")
-    const indexOfMutations = parts.lastIndexOf("mutations")
-
-    if (indexOfQueries !== -1 || indexOfMutations !== -1) {
-      if (indexOfQueries === parts.length - 1 || indexOfMutations === parts.length - 1) {
-        parts.push("index")
-      }
-
-      parts[parts.length - 1] = parts[parts.length - 1] + ".named"
-    }
   }
 
   return parts.join("/")
