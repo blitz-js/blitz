@@ -28,44 +28,13 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
   return {stream}
 }
 
-export const patternImport = /(import\s*)(?:(\*\s+as\s+\w+)|(?:(\w+\s*)(,\s*)?)?(?:(\{\s*\w+\s*(?:,\s*\w+\s*)*\}))?)(\s+from\s+)?((?:\(\s*)?["'])([\w.\\/]+)(["'](?:\s*\))?)/gs
-
-// Whenever we see smth like `import { myFunc } from "app/queries/myQuery"`,
-//  we rewrite that to app/_resolvers/queries/myQuery
-//
-// When we see smth like `import myQuery, { myFunc } from "app/queries/myQuery"`,
-//  we rewrite it to the following two:
-//   import myQuery from "app/queries/myQuery"
-//   import { myFunc } from "app/_resolvers/queries/myQuery"
+export const patternImport = /(import.*?["'])(.+?)(["'])/gs
 
 export function replaceImports(content: string) {
   return content.replace(patternImport, (...args) => {
-    const [
-      ,
-      importToken,
-      starImport,
-      defaultImportName,
-      combinedComma,
-      namedImportNames,
-      fromToken,
-      openingQuotes,
-      origin,
-      closingQuotes,
-    ] = args as (string | undefined)[]
+    const [, start, resource, end] = args as string[]
 
-    const newOrigin = rewriteImportOrigin(origin!)
-
-    return [
-      importToken,
-      starImport ?? "",
-      defaultImportName ?? "",
-      combinedComma ?? "",
-      namedImportNames ?? "",
-      fromToken ?? "",
-      openingQuotes,
-      newOrigin,
-      closingQuotes,
-    ].join("")
+    return start + rewriteImportOrigin(resource) + end
   })
 }
 
