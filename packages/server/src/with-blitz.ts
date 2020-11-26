@@ -41,7 +41,7 @@ export function withBlitz(nextConfig: any) {
 
           config.plugins.push(
             new options.webpack.NormalModuleReplacementPlugin(
-              /[\\\/]?(mutations|queries)[\\\/]/,
+              /[/\\]?(mutations|queries)[/\\]/,
               (resource: any) => {
                 const request = resource.request as string
                 if (request.includes("_resolvers")) {
