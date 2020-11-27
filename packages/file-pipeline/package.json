@@ -37,7 +37,6 @@
     "fs-extra": "9.0.0",
     "gulp-if": "3.0.0",
     "merge-stream": "2.0.0",
-    "micromatch": "4.0.2",
     "ora": "4.0.4",
     "parallel-transform": "1.2.0",
     "pump": "3.0.0",
