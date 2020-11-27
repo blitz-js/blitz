@@ -106,7 +106,7 @@ describe("handleRequestWithMiddleware", () => {
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
   const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     try {
-      await handleRequestWithMiddleware(req, res, middleware)
+      await handleRequestWithMiddleware(req, res, middleware, {stackPrintOnError: false})
     } catch (err) {
       res.status(500)
     } finally {
