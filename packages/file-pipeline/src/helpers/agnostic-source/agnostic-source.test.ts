@@ -14,8 +14,12 @@ function logItem(fileOrString: {path: string} | string) {
 
 describe("agnosticSource", () => {
   afterEach(() => {
-    if (fs.existsSync(resolve(cwd, "three"))) {
-      fs.unlinkSync(resolve(cwd, "three"))
+    try {
+      if (fs.existsSync(resolve(cwd, "three"))) {
+        fs.unlinkSync(resolve(cwd, "three"))
+      }
+    } catch {
+      // Ignore any errors like ENOENT: no such file or directory
     }
   })
 
