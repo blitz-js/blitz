@@ -14,8 +14,12 @@ function logItem(fileOrString: {path: string} | string) {
 
 describe("agnosticSource", () => {
   afterEach(() => {
-    if (fs.existsSync(resolve(cwd, "three"))) {
-      fs.unlinkSync(resolve(cwd, "three"))
+    try {
+      if (fs.existsSync(resolve(cwd, "three"))) {
+        fs.unlinkSync(resolve(cwd, "three"))
+      }
+    } catch {
+      // Ignore any errors like ENOENT: no such file or directory
     }
   })
 
@@ -47,29 +51,33 @@ describe("agnosticSource", () => {
     await close()
   })
 
-  test("include a folder that doesn't exist", async (done) => {
+  test("include a folder that doesn't exist", (done) => {
+    console.log("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
-    const {stream, close} = agnosticSource({
+    console.log("expected", expected)
+    const {stream} = agnosticSource({
       ignore: [],
       include: ["**/*", "folder-that-doesnt-exist/"],
       cwd,
       watch: false,
     })
+    console.log("started stream")
     const log: any[] = []
     stream.on("data", (data) => {
       if (data === "ready") {
+        console.log("stream ready")
         stream.end()
+        console.log("stream ended")
         expect(log).toEqual(expected)
         return done()
       }
       log.push(data.path)
     })
-    await close()
   })
 
-  test("ignore a file", async (done) => {
+  test("ignore a file", (done) => {
     const expected = [resolve(cwd, "one")]
-    const {stream, close} = agnosticSource({ignore: ["two"], include: ["**/*"], cwd, watch: false})
+    const {stream} = agnosticSource({ignore: ["two"], include: ["**/*"], cwd, watch: false})
     const log: any[] = []
     stream.on("data", (data) => {
       if (data === "ready") {
@@ -79,6 +87,5 @@ describe("agnosticSource", () => {
       }
       log.push(data.path)
     })
-    await close()
   })
 })
