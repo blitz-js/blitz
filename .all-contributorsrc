@@ -1596,6 +1596,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "sakulstra",
+      "name": "Lukas Strassel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4396533?v=4",
+      "profile": "https://github.com/sakulstra",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
