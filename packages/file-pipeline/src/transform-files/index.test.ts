@@ -75,7 +75,7 @@ describe("transformFiles", () => {
       transformFiles(normalize("/foo"), [], normalize("/bar"), {
         source,
         writer,
-        ignore: [".DS_Store", "*.log", ".blitz"],
+        ignore: ["**/.DS_Store", "**/*.log", "**/.blitz/**/*"],
       }),
     ])
   })
