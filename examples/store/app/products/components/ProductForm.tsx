@@ -3,6 +3,8 @@ import {Product, ProductCreateInput, ProductUpdateInput} from "db"
 import createProduct from "../mutations/createProduct"
 import updateProduct from "../mutations/updateProduct"
 import {useMutation} from "blitz"
+// integration test for css modules
+import styles from "./ProductForm.module.scss"
 
 type ProductInput = ProductCreateInput | Product
 
@@ -43,7 +45,12 @@ function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
         }
       }}
       render={({handleSubmit}) => (
-        <form onSubmit={handleSubmit} style={{maxWidth: 400, ...style}} {...props}>
+        <form
+          onSubmit={handleSubmit}
+          style={{maxWidth: 400, ...style}}
+          className={styles.red}
+          {...props}
+        >
           <div style={{marginBottom: 16}}>
             <label style={{display: "flex", flexDirection: "column"}}>
               Product Name
