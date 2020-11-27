@@ -52,17 +52,22 @@ describe("agnosticSource", () => {
   })
 
   test("include a folder that doesn't exist", (done) => {
+    console.log("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
+    console.log("expected", expected)
     const {stream} = agnosticSource({
       ignore: [],
       include: ["**/*", "folder-that-doesnt-exist/"],
       cwd,
       watch: false,
     })
+    console.log("started stream")
     const log: any[] = []
     stream.on("data", (data) => {
       if (data === "ready") {
+        console.log("stream ready")
         stream.end()
+        console.log("stream ended")
         expect(log).toEqual(expected)
         return done()
       }
