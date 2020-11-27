@@ -88,12 +88,9 @@ export function createPipeline(
   const initializedStages = stages.map((stage) => stage(api))
 
   // Discard git ignored files
-  const globIgnore = config.ignore
-    .map((pattern) => ["**/" + pattern, "**/" + pattern + "/**/*"])
-    .flat()
   const ignorer = through.obj((file, _, next) => {
     if (file && file.path) {
-      const match = micromatch.isMatch(file.path, globIgnore)
+      const match = micromatch.isMatch(file.path, config.ignore)
       if (match) {
         return next() // skip chunk
       }
