@@ -4,6 +4,59 @@ import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
+function createRequireStatement(name: string, module: string) {
+  return j.template.statement([`const ${name} = require('${module}')\n\n`])
+}
+
+// based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
+function addRequire(program: Collection<j.Program>, name: string, module: string) {
+  // check if plugin is already required in config and return as is if so
+  let existingRequire = findExistingRequire(program, module)
+  if (existingRequire.find(j.Identifier, {value: module}).length) return program
+
+  const requireToAdd = createRequireStatement(name, module)
+
+  if (!existingRequire.length) {
+    program.find(j.Statement).at(0).insertBefore(requireToAdd)
+
+    return program
+  }
+
+  const pattern = existingRequire.find(j.ObjectPattern)
+  console.dir(pattern, {
+    colors: true,
+    depth: null,
+  })
+
+  let {properties} = pattern.get(0).node
+  let property = j.objectProperty(j.identifier(name), j.identifier(name))
+
+  property.shorthand = true
+  pattern.get(`properties`, properties.length - 1).insertAfter(property)
+
+  return program
+}
+
+function findExistingRequire(program: Collection<j.Program>, module: string) {
+  const requires = program.find(j.VariableDeclarator, {
+    init: {
+      callee: {name: `require`},
+    },
+  })
+
+  let string = requires.find(j.VariableDeclarator, {
+    init: {arguments: [{value: "@next/mdx"}]},
+  })
+
+  if (string.length) return string
+  // require(`@next/mdx`)
+  return requires.filter((path) => {
+    let template = path.get(`init`, `arguments`, 0, `quasis`, 0).node
+    console.dir(template, {colors: true, depth: null})
+    return !!template && template.value.raw === module
+  })
+}
+
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   program
@@ -46,6 +99,7 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
+          j.literal("\n"),
           ...node.children,
         ],
       ),
@@ -68,9 +122,19 @@ export default RecipeBuilder()
     explanation: `Theme UI requires some other dependencies to support features like MDX`,
     packages: [
       {name: "theme-ui", version: "latest"},
-      {name: "@mdx-js/loader", version: "latest"},
       {name: "@next/mdx", version: "latest"},
+      {name: "@mdx-js/loader", version: "latest"},
     ],
+  })
+  .addTransformFilesStep({
+    stepId: "createOrModifyBlitzConfig",
+    stepName: "Add the '@next/mdx' plugin to the blitz config file",
+    explanation: `Now we have to update our blitz config to support MDX`,
+    singleFileSearch: paths.blitzConfig(),
+
+    transform(program: Collection<j.Program>) {
+      return addRequire(program, "withMDX", "@next/mdx")
+    },
   })
   .addTransformFilesStep({
     stepId: "importInitializeColorMode",
