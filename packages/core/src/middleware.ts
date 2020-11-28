@@ -39,13 +39,7 @@ export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
-  {
-    throwOnError = true,
-    stackPrintOnError = true,
-  }: {
-    throwOnError?: boolean
-    stackPrintOnError?: boolean
-  } = {},
+  {throwOnError = true}: {throwOnError?: boolean} = {},
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {}
@@ -71,28 +65,20 @@ export async function handleRequestWithMiddleware(
     log.newline()
     if (req.method === "GET") {
       // This GET method check is so we don't .end() the request for SSR requests
-      if (stackPrintOnError) {
-        baseLogger.error("Error while processing the request")
-      }
+      baseLogger.error("Error while processing the request")
     } else if (res.writableFinished) {
-      if (stackPrintOnError) {
-        baseLogger.error(
-          "Error occured in middleware after the response was already sent to the browser",
-        )
-      }
+      baseLogger.error(
+        "Error occured in middleware after the response was already sent to the browser",
+      )
     } else {
       res.statusCode = (error as any).statusCode || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
-      if (stackPrintOnError) {
-        baseLogger.error("Error while processing the request")
-      }
+      baseLogger.error("Error while processing the request")
     }
     if (error._clearStack) {
       delete error.stack
     }
-    if (stackPrintOnError) {
-      baseLogger.prettyError(error)
-    }
+    baseLogger.prettyError(error, true, false, false)
     log.newline()
     if (throwOnError) throw error
   }
