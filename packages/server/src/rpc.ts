@@ -46,7 +46,9 @@ const rpcMiddleware = <TInput, TResult>(
         const result = await resolver(data, res.blitzCtx)
 
         const duration = prettyMs(new Date().getTime() - startTime)
-        log.info(chalk.dim("Finished", "in", duration) + "\n")
+        log.debug(chalk.dim("Result:"), result)
+        log.info(chalk.dim("Finished", "in", duration))
+        displayLog.newline()
 
         res.blitzResult = result
 

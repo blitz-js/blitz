@@ -11,7 +11,7 @@ module.exports = withBundleAnalyzer({
     }),
   ],
   log: {
-    // level: "fatal",
+    level: "trace",
   },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {

@@ -5,16 +5,22 @@ import readline from "readline"
 import {Logger} from "tslog"
 
 type LogConfig = {
-  level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+  level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+}
+
+const defaultConfig: LogConfig = {
+  level: "info",
 }
 
 const getLogConfig = (): LogConfig => {
   const config = getConfig()
 
   // TODO - validate log config and print helpfull error if invalid
-  if (config.log && typeof config.log === "object") return config.log as any
+  if (config.log && typeof config.log === "object") {
+    return {...defaultConfig, ...config.log} as any
+  }
 
-  return {}
+  return defaultConfig
 }
 
 export const chalk = c
@@ -170,7 +176,7 @@ export const baseLogger = () => {
   globalThis._blitz_baseLogger =
     globalThis._blitz_baseLogger ??
     new Logger({
-      minLevel: getLogConfig().level ?? "trace",
+      minLevel: getLogConfig().level,
       dateTimePattern:
         process.env.NODE_ENV === "production"
           ? "year-month-day hour:minute:second.millisecond"
