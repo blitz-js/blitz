@@ -36,7 +36,7 @@ export const Edit__ModelName__ = () => {
             )
           } catch (error) {
             console.log(error)
-            alert("Error creating __modelName__ " + JSON.stringify(error, null, 2))
+            alert("Error editing __modelName__ " + JSON.stringify(error, null, 2))
           }
         }}
       />
