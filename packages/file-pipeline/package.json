@@ -5,9 +5,10 @@
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
-    "predev": "yarn wait:display",
     "wait:display": "wait-on ../display/dist/packages/display/src/index.d.ts",
+    "predev": "yarn wait:display",
     "dev": "tsdx watch --verbose",
+    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch"
