@@ -1812,64 +1812,6 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@blitzjs/display@0.24.3":
-  version "0.24.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.24.3.tgz#f9f0f4325ad59658cf65a5f9762ebb991857257c"
-  integrity sha512-VZh4R0jOEecnqG4lbbQy4RywPxy9V80VIWXlZ8nBK7ANyD6xZ+KT9gff3J5ptKGCF/BfUAj3mQ50Pu8ttFkgoQ==
-  dependencies:
-    chalk "4.0.0"
-    ora "4.0.4"
-    tslog "2.9.0"
-
-"@blitzjs/generator@0.24.3":
-  version "0.24.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.24.3.tgz#5b9f5b568366878f29bc454533758fe23396fc56"
-  integrity sha512-GUg9lthVv+2mlIZKY9cEVrCSM8vLD3F3TZr5uy0YBhPzGdQg4CwpnSlkRdXdYSt31cgYmBRPgc7SSzCZiQNJkA==
-  dependencies:
-    "@babel/core" "7.9.0"
-    "@babel/plugin-transform-typescript" "7.9.4"
-    "@blitzjs/display" "0.24.3"
-    "@types/jscodeshift" "0.7.1"
-    chalk "4.0.0"
-    cross-spawn "7.0.3"
-    diff "4.0.2"
-    enquirer "2.3.5"
-    fs-extra "9.0.0"
-    fs-readdir-recursive "1.1.0"
-    got "11.1.3"
-    jscodeshift "0.10.0"
-    mem-fs "1.1.3"
-    mem-fs-editor "6.0.0"
-    node-fetch "2.6.1"
-    pluralize "8.0.0"
-    recast "0.19.1"
-    username "5.1.0"
-    vinyl "2.2.0"
-
-"@blitzjs/installer@0.24.3":
-  version "0.24.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/installer/-/installer-0.24.3.tgz#1ac2354b91ad2b1d91179f5f5a8ab27fbb89c1a1"
-  integrity sha512-e5Pf+BDP1KJK9oqamsa40wvr97Z9kt5Q0mNnP8qRlkglUaCHud7TK7/mdc6Mg91A2/ZSjGEIbFK22BlY/tnSCw==
-  dependencies:
-    "@babel/core" "7.9.0"
-    "@babel/plugin-transform-typescript" "7.9.4"
-    "@blitzjs/display" "0.24.3"
-    "@blitzjs/generator" "0.24.3"
-    "@types/jscodeshift" "0.7.1"
-    chokidar "3.4.2"
-    cross-spawn "7.0.3"
-    diff "4.0.2"
-    enquirer "2.3.5"
-    fs-extra "9.0.0"
-    globby "11.0.0"
-    ink "3.0.7"
-    ink-link "2.0.0"
-    ink-spinner "4.0.1"
-    jscodeshift "0.10.0"
-    react "0.0.0-experimental-7f28234f8"
-    recast "0.19.1"
-    ts-node "8.9.1"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -15871,14 +15813,6 @@ react@0.0.0-experimental-4ead6b530:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
-react@0.0.0-experimental-7f28234f8:
-  version "0.0.0-experimental-7f28234f8"
-  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-7f28234f8.tgz#683959941b917be77c2c5e290f67980bccb87c65"
-  integrity sha512-UaFnSv3OZ0txscOqqZO5vkeSjWjecteReawUPXDWWNvgtQzZGbce4CH5OjoF/YqyPu3kn/QJivQKSPxoxfiZtQ==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-
 read-cmd-shim@^1.0.1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/read-cmd-shim/-/read-cmd-shim-1.0.5.tgz#87e43eba50098ba5a32d0ceb583ab8e43b961c16"
@@ -18550,13 +18484,6 @@ tslib@^2.0.0, tslib@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
   integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
-
-tslog@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/tslog/-/tslog-2.9.0.tgz#0c9cbf902d2a3c48b7c6652e7f06bf964777df5e"
-  integrity sha512-xT2LwyfQHBeBlghEbAzHQJ+WASK4YA9Hb3TXm7njfVSh47eArKnlt7qDRLjUrcUCkgapnjRIXXIFnesngdrzuw==
-  dependencies:
-    source-map-support "^0.5.19"
 
 tslog@2.9.1:
   version "2.9.1"

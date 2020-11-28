@@ -14,6 +14,7 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
         path.parent?.value.type === j.ReturnStatement.toString(),
     )
     .forEach((path: NodePath) => {
+      const {node} = path
       path.replace(
         j.jsxElement(
           j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
@@ -27,9 +28,11 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
             ),
           ]),
           j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+          [j.jsxText("\n"), node, j.jsxText("\n")],
         ),
       )
     })
+
   return program
 }
 
@@ -49,6 +52,7 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
       ),
     )
   })
+
   return program
 }
 
