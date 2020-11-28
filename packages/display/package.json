@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/display",
-  "version": "0.26.2",
+  "version": "0.27.0-canary.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
