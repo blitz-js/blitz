@@ -1,7 +1,21 @@
+import {getConfig} from "@blitzjs/config"
 import c from "chalk"
 import ora from "ora"
 import readline from "readline"
 import {Logger} from "tslog"
+
+type LogConfig = {
+  level?: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+}
+
+const getLogConfig = (): LogConfig => {
+  const config = getConfig()
+
+  // TODO - validate log config and print helpfull error if invalid
+  if (config.log && typeof config.log === "object") return config.log as any
+
+  return {}
+}
 
 export const chalk = c
 
@@ -116,7 +130,19 @@ const success = (msg: string) => {
 }
 
 const newline = () => {
-  console.log(" ")
+  const logLevel = getLogConfig().level
+  switch (logLevel) {
+    case "trace":
+    case "debug":
+    case "info":
+      console.log(" ")
+      break
+    case "warn":
+    case "error":
+    case "fatal":
+      //nothing
+      break
+  }
 }
 
 /**
@@ -134,6 +160,39 @@ const variable = (val: any) => {
  */
 const debug = (str: string) => {
   process.env.DEBUG && console.log(str)
+}
+
+declare module globalThis {
+  let _blitz_baseLogger: Logger
+}
+
+export const baseLogger = () => {
+  globalThis._blitz_baseLogger =
+    globalThis._blitz_baseLogger ??
+    new Logger({
+      minLevel: getLogConfig().level ?? "trace",
+      dateTimePattern:
+        process.env.NODE_ENV === "production"
+          ? "year-month-day hour:minute:second.millisecond"
+          : "hour:minute:second.millisecond",
+      displayFunctionName: false,
+      displayFilePath: "hidden",
+      displayRequestId: false,
+      dateTimeTimezone:
+        process.env.NODE_ENV === "production"
+          ? "utc"
+          : Intl.DateTimeFormat().resolvedOptions().timeZone,
+      prettyInspectHighlightStyles: {
+        name: "yellow",
+        number: "blue",
+        bigint: "blue",
+        boolean: "blue",
+      },
+      maskValuesOfKeys: ["password", "passwordConfirmation"],
+      exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
+    })
+
+  return globalThis._blitz_baseLogger
 }
 
 export const log = {
@@ -156,20 +215,3 @@ export const log = {
   info,
   debug,
 }
-
-export const baseLogger = new Logger({
-  dateTimePattern:
-    process.env.NODE_ENV === "production"
-      ? "year-month-day hour:minute:second.millisecond"
-      : "hour:minute:second.millisecond",
-  displayFunctionName: false,
-  displayFilePath: "hidden",
-  displayRequestId: false,
-  dateTimeTimezone:
-    process.env.NODE_ENV === "production"
-      ? "utc"
-      : Intl.DateTimeFormat().resolvedOptions().timeZone,
-  prettyInspectHighlightStyles: {name: "yellow", number: "blue", bigint: "blue", boolean: "blue"},
-  maskValuesOfKeys: ["password", "passwordConfirmation"],
-  exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
-})

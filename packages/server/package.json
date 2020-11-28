@@ -34,8 +34,6 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/config": "0.26.2",
-    "@blitzjs/display": "0.26.2",
     "@blitzjs/file-pipeline": "0.26.2",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",

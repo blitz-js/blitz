@@ -45,6 +45,8 @@
     "@blitzjs/generator": "0.26.2",
     "@blitzjs/installer": "0.26.2",
     "@blitzjs/server": "0.26.2",
+    "@blitzjs/config": "0.26.2",
+    "@blitzjs/display": "0.26.2",
     "envinfo": "7.7.2",
     "os-name": "3.1.0",
     "pkg-dir": "4.2.0",
