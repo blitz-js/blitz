@@ -17,6 +17,7 @@
     "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
     "predev": "yarn wait:config && yarn wait:file-pipeline && yarn wait:core",
     "dev": "tsdx watch --verbose",
+    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test"
   },
@@ -34,8 +35,6 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/config": "0.26.2",
-    "@blitzjs/display": "0.26.2",
     "@blitzjs/file-pipeline": "0.26.2",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
