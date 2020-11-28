@@ -46,7 +46,6 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          j.literal("\n"),
           ...node.children,
         ],
       ),
@@ -72,14 +71,6 @@ export default RecipeBuilder()
       {name: "@mdx-js/loader", version: "latest"},
       {name: "@next/mdx", version: "latest"},
     ],
-  })
-  .addNewFilesStep({
-    stepId: "addStyles",
-    stepName: "Add a base theme file",
-    explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to just using classnames in your components.`,
-    targetDirectory: "./app/theme/index.ts",
-    templatePath: join(__dirname, "templates", "theme"),
-    templateValues: {},
   })
   .addTransformFilesStep({
     stepId: "importInitializeColorMode",
@@ -110,13 +101,13 @@ export default RecipeBuilder()
       )
 
       const baseThemeImport = j.importDeclaration(
-        [j.importDefaultSpecifier(j.identifier("app/theme"))],
-        j.literal("theme"),
+        [j.importDefaultSpecifier(j.identifier("theme"))],
+        j.literal("app/theme"),
       )
 
       const mdxComponentsImport = j.importDeclaration(
-        [j.importDefaultSpecifier(j.identifier("app/theme/components"))],
-        j.literal("components"),
+        [j.importDefaultSpecifier(j.identifier("components"))],
+        j.literal("app/theme/components"),
       )
 
       addImport(program, providerImport)
@@ -129,7 +120,7 @@ export default RecipeBuilder()
     stepId: "addStyles",
     stepName: "Add a base theme file",
     explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to just using classnames in your components.`,
-    targetDirectory: "./app/theme",
+    targetDirectory: "./app",
     templatePath: join(__dirname, "templates", "theme"),
     templateValues: {},
   })
@@ -147,7 +138,7 @@ export default RecipeBuilder()
     stepName: "Add a page with an `.mdx` extension",
     explanation: "Finally, we'll add a page called `blocks.mdx` to the `app/pages` directory. ",
     targetDirectory: "./app/pages",
-    templatePath: join(__dirname, "templates", "mdx"),
+    templatePath: join(__dirname, "templates", "pages"),
     templateValues: {},
   })
   .build()
