@@ -1,13 +1,14 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.26.2",
+  "version": "0.27.0-canary.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
-    "predev": "yarn wait:display",
     "wait:display": "wait-on ../display/dist/packages/display/src/index.d.ts",
+    "predev": "yarn wait:display",
     "dev": "tsdx watch --verbose",
+    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test --env=jest-environment-jsdom-sixteen",
     "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
@@ -40,8 +41,6 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/config": "0.26.2",
-    "@blitzjs/display": "0.26.2",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "cookie-session": "1.4.0",
