@@ -52,7 +52,6 @@ function findExistingRequire(program: Collection<j.Program>, module: string) {
   // require(`@next/mdx`)
   return requires.filter((path) => {
     let template = path.get(`init`, `arguments`, 0, `quasis`, 0).node
-    console.dir(template, {colors: true, depth: null})
     return !!template && template.value.raw === module
   })
 }
@@ -200,7 +199,7 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addMdxPage",
     stepName: "Add a page with an `.mdx` extension",
-    explanation: "Finally, we'll add a page called `blocks.mdx` to the `app/pages` directory. ",
+    explanation: "Finally, we'll add a page called `example.mdx` to the `app/pages` directory. ",
     targetDirectory: "./app/pages",
     templatePath: join(__dirname, "templates", "pages"),
     templateValues: {},
