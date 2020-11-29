@@ -1,4 +1,5 @@
 import {Stats} from "fs"
+import micromatch from "micromatch"
 import {Writable} from "stream"
 import File from "vinyl"
 import {agnosticSource} from "./helpers/agnostic-source"
@@ -86,6 +87,17 @@ export function createPipeline(
   // Initialize each stage
   const initializedStages = stages.map((stage) => stage(api))
 
+  // Discard git ignored files
+  const ignorer = through.obj((file, _, next) => {
+    if (file && file.path) {
+      const match = micromatch.isMatch(file.path, config.ignore)
+      if (match) {
+        return next() // skip chunk
+      }
+    }
+    next(null, file)
+  })
+
   const stream = pipeline(
     source.stream, // files come from file system
     input, // files coming via internal API
@@ -94,6 +106,9 @@ export function createPipeline(
     enrichFiles.stream,
     srcCache.stream,
     optimizer.triage,
+
+    // Filter files
+    ignorer,
 
     // Run business stages
     ...initializedStages.map((stage) => stage.stream),

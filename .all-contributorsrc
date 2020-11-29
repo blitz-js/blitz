@@ -1587,6 +1587,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "williamkwao",
+      "name": "William Kwao",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8839514?v=4",
+      "profile": "http://kwao.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sakulstra",
+      "name": "Lukas Strassel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4396533?v=4",
+      "profile": "https://github.com/sakulstra",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tpatel",
+      "name": "Thibaut Patel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/494686?v=4",
+      "profile": "https://thibpat.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jonstuebe",
+      "name": "Jon Stuebe",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/156722?v=4",
+      "profile": "http://jonstuebe.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
