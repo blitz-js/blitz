@@ -33,10 +33,15 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
   program.find(j.Identifier, {name: "module"}).forEach((path) => {
     const exports = path.get("exports").name
     if (exports === "exports") {
-      const config = path.parentPath.parentPath.node.right
+      const expression: NodePath = path.parentPath.parentPath
+      const {
+        node: {right: config},
+      } = expression
+
       const configWithPluginWrapper = j.callExpression(j.identifier("withMDX"), [config])
 
-      path.parentPath.parentPath.node.right = configWithPluginWrapper
+      const {node} = path.parentPath.parentPath
+      node.right = configWithPluginWrapper
     }
   })
 
@@ -151,7 +156,6 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          j.literal("\n"),
           ...node.children,
         ],
       ),
