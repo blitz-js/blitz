@@ -1,12 +1,57 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
-import j from "jscodeshift"
+import j, {
+  CallExpression,
+  Identifier,
+  ObjectExpression,
+  ObjectProperty,
+  SpreadProperty,
+  VariableDeclaration,
+  variableDeclarator,
+} from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function createRequireStatement(name: string, module: string) {
-  return j.template.statement([`const ${name} = require('${module}')\n\n`])
+const nextMdxPluginInit = j.objectExpression([
+  j.objectProperty(j.identifier("extension"), j.regExpLiteral("\\.mdx?$", "")),
+])
+
+function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
+  const newConfigOptions = [
+    j.objectProperty(
+      j.identifier("pageExtensions"),
+      j.arrayExpression([
+        j.literal("js"),
+        j.literal("jsx"),
+        j.literal("ts"),
+        j.literal("tsx"),
+        j.literal("md"),
+        j.literal("mdx"),
+      ]),
+    ),
+  ]
+
+  program.find(j.ExpressionStatement, {name: "module"}).forEach((path) => {
+    const config = path.getValueProperty("exports")
+    console.log(config)
+  })
 }
+
+function createRequireStatement(name: string, module: string, init?: ObjectExpression) {
+  const requireWithoutCallExpression: CallExpression = j.callExpression(j.identifier("require"), [
+    j.literal(module),
+  ])
+
+  const require = init
+    ? j.callExpression(requireWithoutCallExpression, [init])
+    : requireWithoutCallExpression
+
+  return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
+}
+
+// function createRequireStatement(name: string, module: string) {
+//   return j.template.statement([`const ${name} = require('${module}')\n`])
+// }
 
 // based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
 function addRequire(program: Collection<j.Program>, name: string, module: string) {
@@ -33,6 +78,12 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
 
   property.shorthand = true
   pattern.get(`properties`, properties.length - 1).insertAfter(property)
+
+  const requires = program.find(j.VariableDeclarator, {
+    init: {
+      callee: {name: `require`},
+    },
+  })
 
   return program
 }
