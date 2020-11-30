@@ -1,14 +1,6 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
-import j, {
-  CallExpression,
-  Identifier,
-  ObjectExpression,
-  ObjectProperty,
-  SpreadProperty,
-  VariableDeclaration,
-  variableDeclarator,
-} from "jscodeshift"
+import j, {CallExpression, ObjectExpression, variableDeclarator} from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
