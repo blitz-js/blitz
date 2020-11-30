@@ -32,9 +32,10 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
   ]
 
   program.find(j.ExpressionStatement, {name: "module"}).forEach((path) => {
-    const config = path.getValueProperty("exports")
-    console.log(config)
+    console.log("***MODULE EXPORTS***", path)
   })
+
+  return program
 }
 
 function createRequireStatement(name: string, module: string, init?: ObjectExpression) {
@@ -68,10 +69,6 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
   }
 
   const pattern = existingRequire.find(j.ObjectPattern)
-  console.dir(pattern, {
-    colors: true,
-    depth: null,
-  })
 
   let {properties} = pattern.get(0).node
   let property = j.objectProperty(j.identifier(name), j.identifier(name))
@@ -183,7 +180,8 @@ export default RecipeBuilder()
     singleFileSearch: paths.blitzConfig(),
 
     transform(program: Collection<j.Program>) {
-      return addRequire(program, "withMDX", "@next/mdx")
+      addRequire(program, "withMDX", "@next/mdx")
+      return wrapBlitzConfigWithNextMdxPlugin(program)
     },
   })
   .addTransformFilesStep({
