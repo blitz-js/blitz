@@ -1,6 +1,13 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
-import j, {CallExpression, ObjectExpression, variableDeclarator} from "jscodeshift"
+import j, {
+  AssignmentExpression,
+  CallExpression,
+  MemberExpression,
+  Node,
+  ObjectExpression,
+  variableDeclarator,
+} from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
@@ -23,8 +30,14 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
     ),
   ]
 
-  program.find(j.ExpressionStatement, {name: "module"}).forEach((path) => {
-    console.log("***MODULE EXPORTS***", path)
+  program.find(j.Identifier, {name: "module"}).forEach((path) => {
+    const exports = path.get("exports").name
+    if (exports === "exports") {
+      const config = path.parentPath.parentPath.node.right
+      const configWithPluginWrapper = j.callExpression(j.identifier("withMDX"), [config])
+
+      path.parentPath.parentPath.node.right = configWithPluginWrapper
+    }
   })
 
   return program
