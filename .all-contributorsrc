@@ -1623,6 +1623,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ugogo",
+      "name": "Ugo Onali",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5040476?v=4",
+      "profile": "https://ugogo.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
