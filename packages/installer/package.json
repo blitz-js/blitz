@@ -36,7 +36,6 @@
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/config": "0.27.0-canary.1",
     "@blitzjs/display": "0.27.0-canary.1",
     "@blitzjs/generator": "0.27.0-canary.1",
     "@types/jscodeshift": "0.7.1",

@@ -1,4 +1,3 @@
-import {getConfig} from "@blitzjs/config"
 import c from "chalk"
 import ora from "ora"
 import readline from "readline"
@@ -13,6 +12,7 @@ const defaultConfig: LogConfig = {
 }
 
 const getLogConfig = (): LogConfig => {
+  const {getConfig} = require("@blitzjs/config")
   const config = getConfig()
 
   // TODO - validate log config and print helpfull error if invalid
