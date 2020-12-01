@@ -89,7 +89,7 @@ export type BlitzPassportStrategy = {
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
   errorRedirectUrl?: string
-  strategies: Required<BlitzPassportStrategy>[]
+  strategies: BlitzPassportStrategy[]
   secureProxy?: boolean
 }
 
