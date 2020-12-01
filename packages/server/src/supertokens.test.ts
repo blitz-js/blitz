@@ -9,7 +9,7 @@ import {
   SessionContext,
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
-import {atob} from "b64-lite"
+import {fromBase64} from "b64-lite"
 import http from "http"
 import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
@@ -72,7 +72,7 @@ describe("supertokens", () => {
       expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).toBe("updated")
       expect(cookie(COOKIE_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
 
-      const [publicDataStr, expireAtStr] = atob(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
+      const [publicDataStr, expireAtStr] = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
         TOKEN_SEPARATOR,
       )
 
@@ -105,7 +105,7 @@ describe("supertokens", () => {
       expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
       expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
 
-      const [publicDataStr, expireAtStr] = atob(
+      const [publicDataStr, expireAtStr] = fromBase64(
         res.headers.get(HEADER_PUBLIC_DATA_TOKEN) as string,
       ).split(TOKEN_SEPARATOR)
 

@@ -25,6 +25,8 @@ export default async function getProducts(
     console.log("HTTP referer:", ctx.referer)
   }
 
+  console.log("this line should not be included in the frontend bundle")
+
   const products = await db.product.findMany({
     where,
     orderBy,

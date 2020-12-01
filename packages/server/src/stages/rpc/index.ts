@@ -10,16 +10,16 @@ export function isResolverPath(filePath: string) {
   return /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/.exec(filePath)
 }
 
-const isomorhicHandlerTemplate = (
+const isomorhicHandlerTemplateClient = (
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
   warmApiEndpoints: boolean,
 ) => `
 import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
-import * as resolverModule from '${resolverFilePath}'
+export * from '${resolverFilePath}'
 export default getIsomorphicEnhancedResolver(
-  resolverModule,
+  undefined,
   '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
@@ -30,10 +30,11 @@ export default getIsomorphicEnhancedResolver(
 )
 `
 
-const isomorhicHandlerTemplateWithExport = (
+const isomorhicHandlerTemplateServer = (
   resolverFilePath: string,
   resolverName: string,
   resolverType: ResolverType,
+  warmApiEndpoints: boolean,
 ) => `
 import {getIsomorphicEnhancedResolver} from '@blitzjs/core'
 import * as resolverModule from '${resolverFilePath}'
@@ -43,6 +44,10 @@ export default getIsomorphicEnhancedResolver(
   '${resolverFilePath}',
   '${resolverName}',
   '${resolverType}',
+  undefined,
+  {
+    warmApiEndpoints: ${warmApiEndpoints}
+  }
 )
 `
 
@@ -139,17 +144,27 @@ export const createStageRpc = (isTypescript = true): Stage =>
       // Isomorphic client
       const isomorphicHandlerFile = file.clone()
       isomorphicHandlerFile.contents = Buffer.from(
-        isomorhicHandlerTemplate(resolverImportPath, resolverName, resolverType, warmApiEndpoints),
+        isomorhicHandlerTemplateServer(
+          resolverImportPath,
+          resolverName,
+          resolverType,
+          warmApiEndpoints,
+        ),
       )
       push(isomorphicHandlerFile)
 
       // Isomorphic client with export
       const isomorphicHandlerFileWithExport = file.clone()
-      isomorphicHandlerFileWithExport.basename = namedResolverBasename(
+      isomorphicHandlerFileWithExport.basename = clientResolverBasename(
         isomorphicHandlerFileWithExport.basename,
       )
       isomorphicHandlerFileWithExport.contents = Buffer.from(
-        isomorhicHandlerTemplateWithExport(resolverImportPath, resolverName, resolverType),
+        isomorhicHandlerTemplateClient(
+          resolverImportPath,
+          resolverName,
+          resolverType,
+          warmApiEndpoints,
+        ),
       )
       push(isomorphicHandlerFileWithExport)
 
@@ -189,12 +204,12 @@ function apiHandlerPath(path: string) {
 }
 
 /**
- * "query.ts" => "query.named.ts"
+ * "query.ts" => "query.client.ts"
  */
-function namedResolverBasename(basename: string) {
+function clientResolverBasename(basename: string) {
   const parts = basename.split(".")
 
-  parts.splice(parts.length - 1, 0, "named")
+  parts.splice(parts.length - 1, 0, "client")
 
   return parts.join(".")
 }

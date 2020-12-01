@@ -18,6 +18,7 @@ We'll install the Tailwind library itself, as well as PostCSS for removing unuse
     packages: [
       {name: "tailwindcss", version: "2"},
       {name: "autoprefixer", version: "10", isDevDep: true},
+      {name: "postcss", version: "8", isDevDep: true},
     ],
   })
   .addNewFilesStep({
