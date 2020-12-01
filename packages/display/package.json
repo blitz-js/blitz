@@ -34,6 +34,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "@blitzjs/config": "0.27.0-canary.1",
     "chalk": "4.0.0",
     "ora": "4.0.4",
     "tslog": "2.9.1"
