@@ -11,9 +11,9 @@ import j, {
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-const nextMdxPluginInit = j.objectExpression([
+const initNextMdxPluginProperties = [
   j.objectProperty(j.identifier("extension"), j.regExpLiteral("\\.mdx?$", "")),
-])
+]
 
 function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
   const newConfigOptions = [
@@ -48,21 +48,11 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
   return program
 }
 
-function createRequireStatement(name: string, module: string, init?: ObjectExpression) {
-  const requireWithoutCallExpression: CallExpression = j.callExpression(j.identifier("require"), [
-    j.literal(module),
-  ])
-
-  const require = init
-    ? j.callExpression(requireWithoutCallExpression, [init])
-    : requireWithoutCallExpression
+function createRequireStatement(name: string, module: string) {
+  const require = j.callExpression(j.identifier("require"), [j.literal(module)])
 
   return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
 }
-
-// function createRequireStatement(name: string, module: string) {
-//   return j.template.statement([`const ${name} = require('${module}')\n`])
-// }
 
 // based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
 function addRequire(program: Collection<j.Program>, name: string, module: string) {
@@ -78,13 +68,13 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
     return program
   }
 
-  const pattern = existingRequire.find(j.ObjectPattern)
+  // const pattern = existingRequire.find(j.ObjectPattern)
 
-  let {properties} = pattern.get(0).node
-  let property = j.objectProperty(j.identifier(name), j.identifier(name))
+  // let {properties} = pattern.get(0).node
+  // let property = j.objectProperty(j.identifier(name), j.identifier(name))
 
-  property.shorthand = true
-  pattern.get(`properties`, properties.length - 1).insertAfter(property)
+  // property.shorthand = true
+  // pattern.get(`properties`, properties.length - 1).insertAfter(property)
 
   const requires = program.find(j.VariableDeclarator, {
     init: {
@@ -92,6 +82,13 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
     },
   })
 
+  return program
+}
+
+function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
+  const blitzConfig = paths.blitzConfig().node
+
+  console.dir(blitzConfig)
   return program
 }
 
@@ -190,6 +187,7 @@ export default RecipeBuilder()
 
     transform(program: Collection<j.Program>) {
       addRequire(program, "withMDX", "@next/mdx")
+      updateBlitzConfigProperty(program, "pageExtensions")
       return wrapBlitzConfigWithNextMdxPlugin(program)
     },
   })
