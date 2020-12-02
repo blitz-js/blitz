@@ -101,20 +101,26 @@ function initializeRequire(
   module: string,
   expression: ObjectExpression,
 ) {
-  const initCallee = j.callExpression(j.identifier("require"), [j.literal(NEXT_MDX_PLUGIN_MODULE)])
+  const initCallee = j.callExpression(j.identifier("require"), [j.literal(module)])
+
+  console.log("***")
+  console.dir(initCallee, {colors: true, depth: 2})
   const initializedModule = j.variableDeclarator(
-    j.identifier(NEXT_MDX_PLUGIN_NAME),
+    j.identifier(module),
     j.callExpression(initCallee, [expression]),
   )
 
   console.dir(initializedModule, {colors: true, depth: 2})
 
   program
-    .find(j.VariableDeclarator, {
-      init: {callee: {name: "require"}, arguments: {value: module}},
+    .find(j.CallExpression, {
+      callee: {name: "require"},
     })
     .forEach((path) => {
-      console.log("path", path)
+      console.log("*** NODE ***")
+      console.dir(path.node, {colors: true, depth: 2})
+      console.log("*** PARENT PARENT NODE ***")
+      console.dir(path.parentPath.parentPath.node, {colors: true, depth: 2})
     })
 
   return program
@@ -141,7 +147,7 @@ function initializeRequire(
 // }
 
 function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
-  const blitzConfig = paths.blitzConfig().node
+  const blitzConfig = paths.blitzConfig()
 
   return program
 }
