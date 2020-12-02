@@ -41,108 +41,68 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
   return program
 }
 
+export function findRequires(program: Collection<j.Program>, module: string) {
+  return program
+    .find(j.CallExpression, {
+      callee: {name: "require"},
+      arguments: (arg: any) => arg[0].value === module,
+    })
+    .filter((p: any) => p.value.arguments.length === 1)
+}
+
 function createRequireStatement(name: string, module: string) {
   const require = j.callExpression(j.identifier("require"), [j.literal(module)])
 
   return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
 }
 
-function initializeRequire(
-  program: Collection<j.Program>,
-  module: string,
-  expression: ObjectExpression,
-) {
-  const requiredModules = program
-    .find(j.VariableDeclarator, {
-      init: {
-        callee: {name: "require"},
-      },
-    })
-    .get(-1)
+// function initializeRequire(
+//   program: Collection<j.Program>,
+//   module: string,
+//   expression: ObjectExpression,
+// ) {
+//   const requiredModule = findRequires(program, module)
+//   console.dir(requiredModule, {colors: true, depth: 2})
 
-  const initializedModule = j.variableDeclarator(requiredModules, expression)
+//   const initializedModule = j.callExpression(requiredModule)
 
-  program
-    .find(j.VariableDeclarator, {
-      init: {
-        callee: {name: "require"},
-        arguments: {value: module},
-      },
-    })
-    .get(-1)
-    .replaceWith(initializedModule)
+//   program
+//     .find(j.VariableDeclarator, {
+//       init: {
+//         callee: {name: "require"},
+//         arguments: {value: module},
+//       },
+//     })
+//     .get(-1)
+//     .replaceWith(initializedModule)
 
-  return program
-}
+//   return program
+// }
 
-// based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
-function addRequire(program: Collection<j.Program>, name: string, module: string) {
-  // check if plugin is already required in config and return as is if so
-  let existingRequire = findExistingRequire(program, module)
-  if (existingRequire.find(j.Identifier, {value: module}).length) return program
+export function addRequireOrImport(program: Collection<j.Program>, localName: string, pkg: string) {
+  const {statement} = j.template
 
-  const requireToAdd = createRequireStatement(name, module)
-
-  if (!existingRequire.length) {
-    program.find(j.Statement).at(0).insertBefore(requireToAdd)
-  }
-
-  // const pattern = existingRequire.find(j.ObjectPattern)
-
-  // let {properties} = pattern.get(0).node
-  // let property = j.objectProperty(j.identifier(name), j.identifier(name))
-
-  // property.shorthand = true
-  // pattern.get(`properties`, properties.length - 1).insertAfter(property)
-
-  return program
-}
-
-function getRequireDeclaration(program: Collection<j.Program>, module: string) {
-  const declaration = program
-    .find(j.VariableDeclarator, {
-      init: {
-        callee: {name: module},
-      },
-    })
-    .at(-1)
-
-  return declaration
-}
-
-function getRequiredModules(program: Collection<j.Program>) {
-  const requires = program.find(j.VariableDeclarator, {
-    init: {
-      callee: {name: `require`},
-    },
+  const requires = program.find(j.CallExpression, {
+    callee: {name: "require"},
   })
 
-  return requires
+  let requireStatement
+  if (requires.size()) {
+    requireStatement = statement`const ${localName} = require(${j.literal(pkg)});`
+  } else {
+    requireStatement = j.importDeclaration(
+      [j.importDefaultSpecifier(j.identifier(localName))],
+      j.literal(pkg),
+    )
+  }
+
+  program.find(j.Program).get("body", 0).insertBefore(requireStatement)
 }
 
 function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
   const blitzConfig = paths.blitzConfig().node
 
   return program
-}
-
-function findExistingRequire(program: Collection<j.Program>, module: string) {
-  const requires = program.find(j.VariableDeclarator, {
-    init: {
-      callee: {name: `require`},
-    },
-  })
-
-  let string = requires.find(j.VariableDeclarator, {
-    init: {arguments: [{value: "@next/mdx"}]},
-  })
-
-  if (string.length) return string
-  // require(`@next/mdx`)
-  return requires.filter((path) => {
-    let template = path.get(`init`, `arguments`, 0, `quasis`, 0).node
-    return !!template && template.value.raw === module
-  })
 }
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
@@ -220,10 +180,12 @@ export default RecipeBuilder()
     singleFileSearch: paths.blitzConfig(),
 
     transform(program: Collection<j.Program>) {
-      const requires = getRequiredModules(program)
-      addRequire(program, "withMDX", "@next/mdx")
+      const requires = findRequires(program, "@next/mdx")
+      console.dir(requires, {colors: true, depth: 2})
+
+      addRequireOrImport(program, "withMDX", "@next/mdx")
       // initializeRequire(program, "@next/mdx", j.objectExpression(initNextMdxPluginProperties))
-      updateBlitzConfigProperty(program, "pageExtensions")
+      // updateBlitzConfigProperty(program, "pageExtensions")
       return wrapBlitzConfigWithNextMdxPlugin(program)
     },
   })
