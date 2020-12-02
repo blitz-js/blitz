@@ -1,5 +1,6 @@
 import {existsSync} from "fs"
 import {join} from "path"
+import pkgDir from "pkg-dir"
 
 const configFiles = ["blitz.config.js", "next.config.js"]
 /**
@@ -10,8 +11,15 @@ export const getConfig = (reload?: boolean): Record<string, unknown> => {
     return global.blitzConfig
   }
 
-  const pkgDir = require("pkg-dir")
-  const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
+  let PHASE_PRODUCTION_SERVER
+  let PHASE_DEVELOPMENT_SERVER
+  try {
+    const constants = require("next/constants")
+    PHASE_PRODUCTION_SERVER = constants.PHASE_PRODUCTION_SERVER
+    PHASE_DEVELOPMENT_SERVER = constants.PHASE_DEVELOPMENT_SERVER
+  } catch (error) {
+    if (!process.env.BLITZ_TEST_ENVIRONMENT) throw error
+  }
 
   let blitzConfig = {}
   const projectRoot = pkgDir.sync() || process.cwd()
