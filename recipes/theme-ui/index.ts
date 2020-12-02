@@ -1,13 +1,6 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
-import j, {
-  AssignmentExpression,
-  CallExpression,
-  MemberExpression,
-  Node,
-  ObjectExpression,
-  variableDeclarator,
-} from "jscodeshift"
+import j, {ObjectExpression, variableDeclarator} from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
@@ -54,6 +47,34 @@ function createRequireStatement(name: string, module: string) {
   return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
 }
 
+function initializeRequire(
+  program: Collection<j.Program>,
+  module: string,
+  expression: ObjectExpression,
+) {
+  const requiredModules = program
+    .find(j.VariableDeclarator, {
+      init: {
+        callee: {name: "require"},
+      },
+    })
+    .get(-1)
+
+  const initializedModule = j.variableDeclarator(requiredModules, expression)
+
+  program
+    .find(j.VariableDeclarator, {
+      init: {
+        callee: {name: "require"},
+        arguments: {value: module},
+      },
+    })
+    .get(-1)
+    .replaceWith(initializedModule)
+
+  return program
+}
+
 // based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
 function addRequire(program: Collection<j.Program>, name: string, module: string) {
   // check if plugin is already required in config and return as is if so
@@ -64,8 +85,6 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
 
   if (!existingRequire.length) {
     program.find(j.Statement).at(0).insertBefore(requireToAdd)
-
-    return program
   }
 
   // const pattern = existingRequire.find(j.ObjectPattern)
@@ -76,19 +95,34 @@ function addRequire(program: Collection<j.Program>, name: string, module: string
   // property.shorthand = true
   // pattern.get(`properties`, properties.length - 1).insertAfter(property)
 
+  return program
+}
+
+function getRequireDeclaration(program: Collection<j.Program>, module: string) {
+  const declaration = program
+    .find(j.VariableDeclarator, {
+      init: {
+        callee: {name: module},
+      },
+    })
+    .at(-1)
+
+  return declaration
+}
+
+function getRequiredModules(program: Collection<j.Program>) {
   const requires = program.find(j.VariableDeclarator, {
     init: {
       callee: {name: `require`},
     },
   })
 
-  return program
+  return requires
 }
 
 function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
   const blitzConfig = paths.blitzConfig().node
 
-  console.dir(blitzConfig)
   return program
 }
 
@@ -169,16 +203,16 @@ export default RecipeBuilder()
   )
   .setOwner("tundera <stackshuffle@gmail.com>")
   .setRepoLink("https://github.com/blitz-js/blitz")
-  .addAddDependenciesStep({
-    stepId: "addDeps",
-    stepName: "Add npm dependencies",
-    explanation: `Theme UI requires some other dependencies to support features like MDX`,
-    packages: [
-      {name: "theme-ui", version: "latest"},
-      {name: "@next/mdx", version: "latest"},
-      {name: "@mdx-js/loader", version: "latest"},
-    ],
-  })
+  // .addAddDependenciesStep({
+  //   stepId: "addDeps",
+  //   stepName: "Add npm dependencies",
+  //   explanation: `Theme UI requires some other dependencies to support features like MDX`,
+  //   packages: [
+  //     {name: "theme-ui", version: "latest"},
+  //     {name: "@next/mdx", version: "latest"},
+  //     {name: "@mdx-js/loader", version: "latest"},
+  //   ],
+  // })
   .addTransformFilesStep({
     stepId: "createOrModifyBlitzConfig",
     stepName: "Add the '@next/mdx' plugin to the blitz config file",
@@ -186,7 +220,9 @@ export default RecipeBuilder()
     singleFileSearch: paths.blitzConfig(),
 
     transform(program: Collection<j.Program>) {
+      const requires = getRequiredModules(program)
       addRequire(program, "withMDX", "@next/mdx")
+      // initializeRequire(program, "@next/mdx", j.objectExpression(initNextMdxPluginProperties))
       updateBlitzConfigProperty(program, "pageExtensions")
       return wrapBlitzConfigWithNextMdxPlugin(program)
     },
