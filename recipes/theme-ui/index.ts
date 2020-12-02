@@ -4,24 +4,23 @@ import j, {ObjectExpression, variableDeclarator} from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-const initNextMdxPluginProperties = [
+const NEXT_MDX_PLUGIN_NAME = "withMDX"
+const NEXT_MDX_PLUGIN_MODULE = "@next/mdx"
+const NEXT_MDX_PLUGIN_OPTIONS = [
   j.objectProperty(j.identifier("extension"), j.regExpLiteral("\\.mdx?$", "")),
 ]
 
+const PAGE_EXTENSIONS = j.arrayExpression([
+  j.literal("js"),
+  j.literal("jsx"),
+  j.literal("ts"),
+  j.literal("tsx"),
+  j.literal("md"),
+  j.literal("mdx"),
+])
+
 function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
-  const newConfigOptions = [
-    j.objectProperty(
-      j.identifier("pageExtensions"),
-      j.arrayExpression([
-        j.literal("js"),
-        j.literal("jsx"),
-        j.literal("ts"),
-        j.literal("tsx"),
-        j.literal("md"),
-        j.literal("mdx"),
-      ]),
-    ),
-  ]
+  const newConfigOptions = [j.objectProperty(j.identifier("pageExtensions"), PAGE_EXTENSIONS)]
 
   program.find(j.Identifier, {name: "module"}).forEach((path) => {
     const exports = path.get("exports").name
@@ -31,7 +30,7 @@ function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
         node: {right: config},
       } = expression
 
-      const configWithPluginWrapper = j.callExpression(j.identifier("withMDX"), [config])
+      const configWithPluginWrapper = j.callExpression(j.identifier(NEXT_MDX_PLUGIN_NAME), [config])
 
       const {node} = path.parentPath.parentPath
       node.right = configWithPluginWrapper
@@ -50,54 +49,96 @@ export function findRequires(program: Collection<j.Program>, module: string) {
     .filter((p: any) => p.value.arguments.length === 1)
 }
 
+function findExistingRequire(program: Collection<j.Program>, module: string) {
+  const requires = program.find(j.VariableDeclarator, {
+    init: {
+      callee: {name: `require`},
+    },
+  })
+
+  let string = requires.find(j.VariableDeclarator, {
+    init: {arguments: [{value: NEXT_MDX_PLUGIN_MODULE}]},
+  })
+
+  if (string.length) return string
+  return requires.filter((path) => {
+    let template = path.get(`init`, `arguments`, 0, `quasis`, 0).node
+    return !!template && template.value.raw === module
+  })
+}
+
+// based on https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-codemods/src/transforms/global-graphql-calls.js
+function addRequire(program: Collection<j.Program>, name: string, module: string) {
+  // check if plugin is already required in config and return as is if so
+  let existingRequire = findExistingRequire(program, module)
+  if (existingRequire.find(j.Identifier, {value: module}).length) return program
+
+  const requireToAdd = createRequireStatement(name, module)
+
+  if (!existingRequire.length) {
+    program.find(j.Program).get("body", 0).insertBefore(requireToAdd)
+  }
+
+  // const pattern = existingRequire.find(j.ObjectPattern)
+
+  // let {properties} = pattern.get(0).node
+  // let property = j.objectProperty(j.identifier(name), j.identifier(name))
+
+  // property.shorthand = true
+  // pattern.get(`properties`, properties.length - 1).insertAfter(property)
+
+  return program
+}
+
 function createRequireStatement(name: string, module: string) {
   const require = j.callExpression(j.identifier("require"), [j.literal(module)])
 
   return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
 }
 
-// function initializeRequire(
-//   program: Collection<j.Program>,
-//   module: string,
-//   expression: ObjectExpression,
-// ) {
-//   const requiredModule = findRequires(program, module)
-//   console.dir(requiredModule, {colors: true, depth: 2})
+function initializeRequire(
+  program: Collection<j.Program>,
+  module: string,
+  expression: ObjectExpression,
+) {
+  const initCallee = j.callExpression(j.identifier("require"), [j.literal(NEXT_MDX_PLUGIN_MODULE)])
+  const initializedModule = j.variableDeclarator(
+    j.identifier(NEXT_MDX_PLUGIN_NAME),
+    j.callExpression(initCallee, [expression]),
+  )
 
-//   const initializedModule = j.callExpression(requiredModule)
+  console.dir(initializedModule, {colors: true, depth: 2})
 
-//   program
-//     .find(j.VariableDeclarator, {
-//       init: {
-//         callee: {name: "require"},
-//         arguments: {value: module},
-//       },
-//     })
-//     .get(-1)
-//     .replaceWith(initializedModule)
+  program
+    .find(j.VariableDeclarator, {
+      init: {callee: {name: "require"}, arguments: {value: module}},
+    })
+    .forEach((path) => {
+      console.log("path", path)
+    })
 
-//   return program
-// }
-
-export function addRequireOrImport(program: Collection<j.Program>, localName: string, pkg: string) {
-  const {statement} = j.template
-
-  const requires = program.find(j.CallExpression, {
-    callee: {name: "require"},
-  })
-
-  let requireStatement
-  if (requires.size()) {
-    requireStatement = statement`const ${localName} = require(${j.literal(pkg)});`
-  } else {
-    requireStatement = j.importDeclaration(
-      [j.importDefaultSpecifier(j.identifier(localName))],
-      j.literal(pkg),
-    )
-  }
-
-  program.find(j.Program).get("body", 0).insertBefore(requireStatement)
+  return program
 }
+
+// export function addRequireOrImport(program: Collection<j.Program>, localName: string, pkg: string) {
+//   const {statement} = j.template
+
+//   const requires = program.find(j.CallExpression, {
+//     callee: {name: "require"},
+//   })
+
+//   let requireStatement
+//   if (requires.size()) {
+//     requireStatement = statement`const ${localName} = require(${j.literal(pkg)});`
+//   } else {
+//     requireStatement = j.importDeclaration(
+//       [j.importDefaultSpecifier(j.identifier(localName))],
+//       j.literal(pkg),
+//     )
+//   }
+
+//   program.find(j.Program).get("body", 0).insertBefore(requireStatement)
+// }
 
 function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
   const blitzConfig = paths.blitzConfig().node
@@ -169,7 +210,7 @@ export default RecipeBuilder()
   //   explanation: `Theme UI requires some other dependencies to support features like MDX`,
   //   packages: [
   //     {name: "theme-ui", version: "latest"},
-  //     {name: "@next/mdx", version: "latest"},
+  //     {name: NEXT_MDX_PLUGIN_MODULE, version: "latest"},
   //     {name: "@mdx-js/loader", version: "latest"},
   //   ],
   // })
@@ -180,13 +221,17 @@ export default RecipeBuilder()
     singleFileSearch: paths.blitzConfig(),
 
     transform(program: Collection<j.Program>) {
-      const requires = findRequires(program, "@next/mdx")
+      const requires = findRequires(program, NEXT_MDX_PLUGIN_MODULE)
       console.dir(requires, {colors: true, depth: 2})
 
-      addRequireOrImport(program, "withMDX", "@next/mdx")
-      // initializeRequire(program, "@next/mdx", j.objectExpression(initNextMdxPluginProperties))
+      const initExpression = j.objectExpression([
+        j.objectProperty(j.identifier("extension"), j.regExpLiteral("\\.mdx?$", "")),
+      ])
+
+      addRequire(program, NEXT_MDX_PLUGIN_NAME, NEXT_MDX_PLUGIN_MODULE)
+      return initializeRequire(program, NEXT_MDX_PLUGIN_MODULE, initExpression)
       // updateBlitzConfigProperty(program, "pageExtensions")
-      return wrapBlitzConfigWithNextMdxPlugin(program)
+      // return wrapBlitzConfigWithNextMdxPlugin(program)
     },
   })
   .addTransformFilesStep({
