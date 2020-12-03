@@ -42,7 +42,6 @@ export async function transformFiles(
     clean: requestClean,
   } = options
 
-  console.log("tranformFiles dest:", dest)
   if (requestClean) await clean(dest)
 
   const display = createDisplay()
@@ -55,7 +54,6 @@ export async function transformFiles(
       ignore,
       watch,
     }
-    console.log("createPipeline")
     const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
 
     bus.on("data", ({type}) => {
@@ -78,7 +76,6 @@ export async function transformFiles(
 }
 
 async function clean(path: string) {
-  console.log("Cleaning...")
   if (await pathExists(path)) {
     await remove(path)
   }
