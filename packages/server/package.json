@@ -17,7 +17,6 @@
     "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
     "predev": "yarn wait:config && yarn wait:file-pipeline && yarn wait:core",
     "dev": "tsdx watch --verbose",
-    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test"
   },
