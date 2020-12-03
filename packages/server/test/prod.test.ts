@@ -17,6 +17,12 @@ const mocks = multiMock(
   resolve(__dirname, "../src"),
 )
 
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
+
 // Import with mocks applied
 import {ensureDir, writeFile} from "fs-extra"
 import {getInputArtefactsHash} from "../src/build-hash"

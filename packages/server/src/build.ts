@@ -18,14 +18,17 @@ export async function build(config: ServerConfig) {
     writeManifestFile,
   } = await normalize(config)
 
+  console.log("before configureStages")
   const stages = configureStages({isTypescript, writeManifestFile})
 
+  console.log("before tranform")
   await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
     include,
     watch,
     clean: true, // always clean in build
   })
+  console.log("after tranform")
 
   await nextBuild(nextBin, buildFolder)
 
