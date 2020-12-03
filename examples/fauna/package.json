@@ -1,6 +1,6 @@
 {
   "name": "@examples/fauna",
-  "version": "0.27.0-canary.1",
+  "version": "0.27.0-canary.2",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz db studio",
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.27.0-canary.1",
+    "blitz": "0.27.0-canary.2",
     "final-form": "4.20.1",
     "graphql": "15.3.0",
     "graphql-request": "3.1.0",
