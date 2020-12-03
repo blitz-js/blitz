@@ -14,6 +14,12 @@ const mocks = multiMock(
   resolve(__dirname, "../src"),
 )
 
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
+
 // Import with mocks applied
 import {build} from "../src/build"
 import {directoryTree} from "./utils/tree-utils"

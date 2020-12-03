@@ -8,7 +8,6 @@
     "wait:display": "wait-on ../display/dist/packages/display/src/index.d.ts",
     "predev": "yarn wait:display",
     "dev": "tsdx watch --verbose",
-    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test --env=jest-environment-jsdom-sixteen",
     "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
@@ -41,6 +40,7 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
+    "@blitzjs/display": "0.27.0-canary.1",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "cookie-session": "1.4.0",
