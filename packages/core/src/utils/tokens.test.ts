@@ -1,9 +1,11 @@
-import {TOKEN_SEPARATOR} from "../constants"
-import {parsePublicDataToken} from "./tokens"
-import {useSession} from "../supertokens"
-import {renderHook} from "../../test/test-utils"
-import {publicDataStore} from "../public-data-store"
+/* eslint @typescript-eslint/no-floating-promises: off */
 import {act} from "@testing-library/react-hooks"
+import {toBase64} from "b64-lite"
+import {renderHook} from "../../test/test-utils"
+import {TOKEN_SEPARATOR} from "../constants"
+import {publicDataStore} from "../public-data-store"
+import {useSession} from "../supertokens"
+import {parsePublicDataToken} from "./tokens"
 
 describe("supertokens", () => {
   describe("parsePublicDataToken", () => {
@@ -14,21 +16,28 @@ describe("supertokens", () => {
 
     it("throws if the token cannot be parsed", () => {
       const invalidJSON = "{"
-      const ret = () => parsePublicDataToken(btoa(invalidJSON))
+      const ret = () => parsePublicDataToken(toBase64(invalidJSON))
 
       expect(ret).toThrowError("[parsePublicDataToken] Failed to parse publicDataStr: {")
     })
 
     it("parses the public data", () => {
       const validJSON = '"foo"'
-      expect(parsePublicDataToken(btoa(validJSON))).toEqual({
+      expect(parsePublicDataToken(toBase64(validJSON))).toEqual({
         publicData: "foo",
+      })
+    })
+
+    it("parses the public data containing unicode chars", () => {
+      const data = '"foo-κόσμε-żółć-平仮名"'
+      expect(parsePublicDataToken(toBase64(data))).toEqual({
+        publicData: "foo-κόσμε-żółć-平仮名",
       })
     })
 
     it("only uses the first separated tokens", () => {
       const data = `"foo"${TOKEN_SEPARATOR}123`
-      expect(parsePublicDataToken(btoa(data))).toEqual({
+      expect(parsePublicDataToken(toBase64(data))).toEqual({
         publicData: "foo",
       })
     })
@@ -44,10 +53,10 @@ describe("supertokens", () => {
       })
     })
 
-    it("subscribes to the public data store", async () => {
+    it("subscribes to the public data store", () => {
       const {result} = renderHook(() => useSession())
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["foo"], userId: "bar"})
       })
 
@@ -57,7 +66,7 @@ describe("supertokens", () => {
         userId: "bar",
       })
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["baz"], userId: "boo"})
       })
 
@@ -68,18 +77,18 @@ describe("supertokens", () => {
       })
     })
 
-    it("un-subscribes from the public data store on unmount", async () => {
+    it("un-subscribes from the public data store on unmount", () => {
       const {result, unmount} = renderHook(() => useSession())
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["foo"], userId: "bar"})
       })
 
-      await act(() => {
+      act(() => {
         unmount()
       })
 
-      await act(() => {
+      act(() => {
         publicDataStore.updateState({roles: ["baz"], userId: "boo"})
       })
 

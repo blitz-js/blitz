@@ -34,6 +34,10 @@ describe("products#show page", () => {
     cy.get("a").first().click()
     cy.location("pathname").should("equal", "/products")
   })
+
+  it("shows the average price", () => {
+    cy.contains(/Average price: \d+.\d/)
+  })
 })
 
 describe("products#ssr page", () => {
@@ -51,6 +55,16 @@ describe("products#ssr page", () => {
 
     cy.get("a").first().click()
     cy.location("pathname").should("equal", "/products")
+  })
+})
+
+describe("products#infinite page", () => {
+  beforeEach(() => {
+    cy.visit("/products/infinite")
+  })
+
+  it("shows 3 products", () => {
+    cy.get('[data-test="productName"]').should("have.length", 3)
   })
 })
 

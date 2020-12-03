@@ -1,7 +1,15 @@
-import {BlitzApiRequest, BlitzApiResponse} from "."
 import {IncomingMessage, ServerResponse} from "http"
+import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
-import {MutationResult, MutateConfig} from "react-query"
+import {MutateOptions, MutationResult} from "react-query"
+import {BlitzApiRequest, BlitzApiResponse} from "."
+import {useParams} from "./use-params"
+import {useRouterQuery} from "./use-router-query"
+
+export interface BlitzRouter extends NextRouter {
+  query: ReturnType<typeof useRouterQuery>
+  params: ReturnType<typeof useParams>
+}
 
 export interface DefaultPublicData {
   userId: any
@@ -55,6 +63,10 @@ export interface CancellablePromise<T> extends Promise<T> {
 }
 
 export type QueryFn = (...args: any) => Promise<any>
+
+export type Dict<T> = Record<string, T | undefined>
+
+export type ParsedUrlQuery = Dict<string | string[]>
 
 export type ParsedUrlQueryValue = string | string[] | undefined
 
@@ -162,7 +174,7 @@ export declare type MutateFunction<
   TSnapshot = unknown
 > = (
   variables?: TVariables,
-  config?: MutateConfig<TResult, TError, TVariables, TSnapshot>,
+  config?: MutateOptions<TResult, TError, TVariables, TSnapshot>,
 ) => Promise<TResult>
 
 export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [

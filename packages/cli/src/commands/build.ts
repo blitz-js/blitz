@@ -1,14 +1,19 @@
+import {Command, flags} from "@oclif/command"
 import {build as ServerBuild} from "@blitzjs/server"
-import {Command} from "@oclif/command"
 
 export class Build extends Command {
-  static description = "Create a production build"
+  static description = "Creates a production build"
   static aliases = ["b"]
+
+  static flags = {
+    help: flags.help({char: "h"}),
+  }
 
   async run() {
     const config = {
       rootFolder: process.cwd(),
     }
+    this.parse(Build)
 
     try {
       const build: typeof ServerBuild = require("@blitzjs/server").build

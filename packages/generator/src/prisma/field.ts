@@ -1,5 +1,5 @@
-import {singlePascal, uncapitalize, capitalize} from "../utils/plurals"
 import {log} from "@blitzjs/display"
+import {capitalize, singlePascal, uncapitalize} from "../utils/plurals"
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -11,8 +11,6 @@ export enum FieldType {
 }
 
 export enum Relation {
-  hasOne,
-  hasMany,
   belongsTo,
 }
 
@@ -86,16 +84,6 @@ export class Field {
       fieldType = singlePascal(fieldType)
 
       switch (relationType) {
-        case Relation.hasOne:
-          // current model gets single association field
-          isList = false
-          break
-        case Relation.hasMany:
-          // current model gets single association field
-          fieldName = uncapitalize(fieldName)
-          isList = true
-          isRequired = true
-          break
         case Relation.belongsTo:
           // current model gets two fields:
           //   modelName    ModelName   @relation(fields: [modelNameId], references: [id])

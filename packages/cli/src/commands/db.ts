@@ -149,6 +149,8 @@ export function getDbName(connectionString: string): string {
 }
 
 async function runSeed() {
+  require("../utils/setup-ts-node").setupTsnode()
+
   const projectRoot = require("../utils/get-project-root").projectRoot
   const seedPath = require("path").join(projectRoot, "db/seeds")
   const dbPath = require("path").join(projectRoot, "db/index")
@@ -307,7 +309,9 @@ ${require("chalk").bold(
     if (command === "seed") {
       try {
         return await runSeed()
-      } catch {
+      } catch (err) {
+        log.error("Could not seed database:")
+        log.error(err)
         process.exit(1)
       }
     }

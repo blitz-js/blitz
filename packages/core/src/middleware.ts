@@ -1,15 +1,15 @@
 /* eslint-disable es5/no-es6-methods  -- file only used on the server */
-import {BlitzApiRequest, BlitzApiResponse} from "."
-import {IncomingMessage, ServerResponse} from "http"
 import {getConfig} from "@blitzjs/config"
-import {log, baseLogger} from "@blitzjs/display"
+import {baseLogger, log} from "@blitzjs/display"
+import {IncomingMessage, ServerResponse} from "http"
+import {BlitzApiRequest, BlitzApiResponse} from "."
 import {
+  ConnectMiddleware,
   EnhancedResolver,
   Middleware,
   MiddlewareNext,
   MiddlewareRequest,
   MiddlewareResponse,
-  ConnectMiddleware,
 } from "./types"
 
 export interface DefaultCtx {}
@@ -65,20 +65,20 @@ export async function handleRequestWithMiddleware(
     log.newline()
     if (req.method === "GET") {
       // This GET method check is so we don't .end() the request for SSR requests
-      baseLogger.error("Error while processing the request")
+      baseLogger().error("Error while processing the request")
     } else if (res.writableFinished) {
-      baseLogger.error(
+      baseLogger().error(
         "Error occured in middleware after the response was already sent to the browser",
       )
     } else {
       res.statusCode = (error as any).statusCode || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
-      baseLogger.error("Error while processing the request")
+      baseLogger().error("Error while processing the request")
     }
     if (error._clearStack) {
       delete error.stack
     }
-    baseLogger.prettyError(error)
+    baseLogger().prettyError(error)
     log.newline()
     if (throwOnError) throw error
   }

@@ -1,7 +1,7 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {Resolver, EnhancedResolverRpcClient, QueryFn} from "../types"
-import {isServer, isClient} from "."
+import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
+import {isClient, isServer} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
@@ -39,10 +39,16 @@ export const emptyQueryFn: EnhancedResolverRpcClient<unknown, unknown> = (() => 
   return fn
 })()
 
+const isNotInUserTestEnvironment = () => {
+  if (process.env.JEST_WORKER_ID === undefined) return true
+  if (process.env.BLITZ_TEST_ENVIRONMENT !== undefined) return true
+  return false
+}
+
 export const validateQueryFn = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
-  if (!isEnhancedResolverRpcClient(queryFn)) {
+  if (!isEnhancedResolverRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
       `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
     )
@@ -93,7 +99,7 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey
+  let queryKey: QueryKey<any>
   if (params) {
     queryKey = fullQueryKey
   } else {

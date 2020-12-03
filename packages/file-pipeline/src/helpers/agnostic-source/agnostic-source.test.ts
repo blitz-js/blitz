@@ -1,7 +1,7 @@
 import fs from "fs"
 import {resolve} from "path"
-import {agnosticSource} from "."
 import {testStreamItems} from "../../test-utils"
+import {agnosticSource} from "."
 
 const cwd = resolve(__dirname, "fixtures")
 
@@ -14,8 +14,12 @@ function logItem(fileOrString: {path: string} | string) {
 
 describe("agnosticSource", () => {
   afterEach(() => {
-    if (fs.existsSync(resolve(cwd, "three"))) {
-      fs.unlinkSync(resolve(cwd, "three"))
+    try {
+      if (fs.existsSync(resolve(cwd, "three"))) {
+        fs.unlinkSync(resolve(cwd, "three"))
+      }
+    } catch {
+      // Ignore any errors like ENOENT: no such file or directory
     }
   })
 
@@ -45,5 +49,43 @@ describe("agnosticSource", () => {
 
     await testStreamItems(stream, expected, logItem)
     await close()
+  })
+
+  test("include a folder that doesn't exist", (done) => {
+    console.log("Starting test: include a folder doesn't exist")
+    const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
+    console.log("expected", expected)
+    const {stream} = agnosticSource({
+      ignore: [],
+      include: ["**/*", "folder-that-doesnt-exist/"],
+      cwd,
+      watch: false,
+    })
+    console.log("started stream")
+    const log: any[] = []
+    stream.on("data", (data) => {
+      if (data === "ready") {
+        console.log("stream ready")
+        stream.end()
+        console.log("stream ended")
+        expect(log).toEqual(expected)
+        return done()
+      }
+      log.push(data.path)
+    })
+  })
+
+  test("ignore a file", (done) => {
+    const expected = [resolve(cwd, "one")]
+    const {stream} = agnosticSource({ignore: ["two"], include: ["**/*"], cwd, watch: false})
+    const log: any[] = []
+    stream.on("data", (data) => {
+      if (data === "ready") {
+        stream.end()
+        expect(log).toEqual(expected)
+        return done()
+      }
+      log.push(data.path)
+    })
   })
 })

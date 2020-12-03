@@ -1,7 +1,7 @@
 import {patternRelativeImportSingle} from "."
 describe("patternRelativeImport", () => {
   it("matches an import statement", () => {
-    const matches = `import from "./bar/baz"`.match(patternRelativeImportSingle)
+    const matches = `import "./bar/baz"`.match(patternRelativeImportSingle)
 
     expect(matches && matches[2]).toEqual("./bar/baz")
   })
@@ -17,7 +17,7 @@ describe("patternRelativeImport", () => {
   })
 
   it("matches an import statement with no specifier", () => {
-    const input = `import from "./ding"`
+    const input = `import "./ding"`
     const matches = input.match(patternRelativeImportSingle)
 
     expect(matches && matches[2]).toEqual("./ding")

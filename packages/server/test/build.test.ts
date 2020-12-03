@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
   {

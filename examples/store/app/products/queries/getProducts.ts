@@ -1,5 +1,11 @@
 import {Middleware} from "blitz"
-import db, {FindManyProductArgs} from "db"
+import db, {FindManyProductArgs, Product} from "db"
+import {sum} from "lodash"
+
+export function averagePrice(products: Product[]) {
+  const prices = products.map((p) => p.price ?? 0)
+  return sum(prices) / prices.length
+}
 
 type GetProductsInput = {
   where?: FindManyProductArgs["where"]
@@ -18,6 +24,8 @@ export default async function getProducts(
   if (ctx.referer) {
     console.log("HTTP referer:", ctx.referer)
   }
+
+  console.log("this line should not be included in the frontend bundle")
 
   const products = await db.product.findMany({
     where,

@@ -1,22 +1,21 @@
 import {
-  Middleware,
   BlitzApiRequest,
   BlitzApiResponse,
   EnhancedResolver,
   handleRequestWithMiddleware,
+  Middleware,
 } from "@blitzjs/core"
-import {serializeError} from "serialize-error"
-import {serialize, deserialize} from "superjson"
+import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
 import prettyMs from "pretty-ms"
-import {baseLogger, log as displayLog} from "@blitzjs/display"
+import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,
   connectDb?: () => any,
 ): Middleware => {
   return async (req, res, next) => {
-    const log = baseLogger.getChildLogger({prefix: [resolver._meta.name + "()"]})
+    const log = baseLogger().getChildLogger({prefix: [resolver._meta.name + "()"]})
 
     if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
@@ -39,9 +38,7 @@ const rpcMiddleware = <TInput, TResult>(
       }
 
       try {
-        const data = (req.body.params === undefined
-          ? undefined
-          : deserialize({json: req.body.params, meta: req.body.meta?.params})) as TInput
+        const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
         log.info(chalk.dim("Starting with input:"), data)
         const startTime = new Date().getTime()
@@ -49,12 +46,13 @@ const rpcMiddleware = <TInput, TResult>(
         const result = await resolver(data, res.blitzCtx)
 
         const duration = prettyMs(new Date().getTime() - startTime)
+        log.debug(chalk.dim("Result:"), result)
         log.info(chalk.dim("Finished", "in", duration))
         displayLog.newline()
 
         res.blitzResult = result
 
-        const serializedResult = serialize(result as any)
+        const serializedResult = serialize(result)
 
         res.json({
           result: serializedResult.json,
@@ -78,15 +76,20 @@ const rpcMiddleware = <TInput, TResult>(
           error.statusCode = 500
         }
 
+        const serializedError = serialize(error)
+
         res.json({
           result: null,
-          error: serializeError(error),
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
         })
         return next()
       }
     } else {
       // Everything else is error
-      log.error("Not Found\n")
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return next()
     }
