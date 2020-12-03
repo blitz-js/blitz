@@ -23,8 +23,11 @@ import {getInputArtefactsHash} from "../src/build-hash"
 import {prod} from "../src/prod"
 
 describe("Prod command", () => {
+  console.log("Starting prod test...")
   const rootFolder = resolve("build")
+  console.log("rootFolder", rootFolder)
   const buildFolder = resolve(rootFolder, ".blitz-build")
+  console.log("buildFolder", buildFolder)
   const devFolder = resolve(rootFolder, ".blitz")
   const prodArgs = {
     rootFolder,
@@ -52,6 +55,7 @@ describe("Prod command", () => {
 
   describe("When not already built", () => {
     it("should trigger build step", async () => {
+      console.log("Starting not built...")
       await prod(prodArgs)
       expect(mocks.build.build.mock.calls).toEqual([[prodArgs]])
     })
@@ -59,6 +63,7 @@ describe("Prod command", () => {
 
   describe("When already built", () => {
     it("should not trigger build step", async () => {
+      console.log("Starting already built...")
       await ensureDir(buildFolder)
       await writeFile(`${buildFolder}/last-build`, await getInputArtefactsHash())
       await prod(prodArgs)

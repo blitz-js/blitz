@@ -42,7 +42,11 @@ export async function transformFiles(
     clean: requestClean,
   } = options
 
-  if (requestClean) await clean(dest)
+  if (requestClean) {
+    await clean(dest)
+  } else {
+    await ensureDir(path)
+  }
 
   const display = createDisplay()
   return await new Promise((resolve, reject) => {
