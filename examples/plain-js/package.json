@@ -1,6 +1,6 @@
 {
   "name": "@examples/plain-js",
-  "version": "0.25.1-canary.3",
+  "version": "0.27.0-canary.1",
   "scripts": {
     "start": "blitz start",
     "build": "blitz db migrate && blitz build",
@@ -29,9 +29,9 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.10.0",
-    "@prisma/client": "2.10.0",
-    "blitz": "0.25.1-canary.3",
+    "@prisma/cli": "2.12.0",
+    "@prisma/client": "2.12.0",
+    "blitz": "0.27.0-canary.1",
     "react": "0.0.0-experimental-4ead6b530",
     "react-dom": "0.0.0-experimental-4ead6b530"
   },

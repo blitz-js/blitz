@@ -27,7 +27,7 @@ import {
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
 import {log} from "@blitzjs/display"
-import {atob, btoa} from "b64-lite"
+import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import hasha, {HashaInput} from "hasha"
@@ -59,7 +59,7 @@ const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   sameSite: "lax",
-  getSession: (handle) => getDb().session.findOne({where: {handle}}),
+  getSession: (handle) => getDb().session.findFirst({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
     let user
@@ -284,14 +284,14 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
   } else {
     publicDataString = JSON.stringify(publicData)
   }
-  return btoa(
+  return toBase64(
     [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
 }
 export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
+  const [handle, id, hashedPublicData, version] = fromBase64(token).split(TOKEN_SEPARATOR)
 
   if (!handle || !id || !hashedPublicData || !version) {
     throw new AuthenticationError("Failed to parse session token")
@@ -307,7 +307,7 @@ export const parseSessionToken = (token: string) => {
 
 export const createPublicDataToken = (publicData: string | PublicData) => {
   const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  return btoa(payload.join(TOKEN_SEPARATOR))
+  return toBase64(payload.join(TOKEN_SEPARATOR))
 }
 
 export const createAntiCSRFToken = () => generateToken()

@@ -52,7 +52,7 @@ export async function invokeWithMiddleware<TInput, TResult>(
   }
 
   middleware.push(async (_req, res, next) => {
-    const log = baseLogger.getChildLogger({prefix: [enhancedResolver._meta.name + "()"]})
+    const log = baseLogger().getChildLogger({prefix: [enhancedResolver._meta.name + "()"]})
     displayLog.newline()
     try {
       log.info(chalk.dim("Starting with input:"), params)

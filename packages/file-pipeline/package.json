@@ -1,11 +1,14 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.25.1-canary.3",
+  "version": "0.27.0-canary.1",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
+    "wait:display": "wait-on ../display/dist/packages/display/src/index.d.ts",
+    "predev": "yarn wait:display",
     "dev": "tsdx watch --verbose",
+    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch"
