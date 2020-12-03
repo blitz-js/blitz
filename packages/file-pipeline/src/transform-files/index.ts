@@ -45,7 +45,7 @@ export async function transformFiles(
   if (requestClean) {
     await clean(dest)
   } else {
-    await ensureDir(path)
+    await ensureDir(dest)
   }
 
   const display = createDisplay()
