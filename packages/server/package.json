@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.27.0-canary.0",
+  "version": "0.27.0-canary.3",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -17,7 +17,6 @@
     "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
     "predev": "yarn wait:config && yarn wait:file-pipeline && yarn wait:core",
     "dev": "tsdx watch --verbose",
-    "prebuild": "yarn predev",
     "build": "tsdx build",
     "test": "tsdx test"
   },
@@ -35,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/file-pipeline": "0.27.0-canary.0",
+    "@blitzjs/file-pipeline": "0.27.0-canary.3",
     "b64-lite": "1.4.0",
     "cookie": "0.4.1",
     "cross-spawn": "7.0.3",
@@ -53,7 +52,7 @@
     "lodash-es": "^4.17.15",
     "merge-stream": "2.0.0",
     "nanoid": "3.1.10",
-    "next": "10.0.2",
+    "next": "10.0.3",
     "null-loader": "4.0.0",
     "ora": "4.0.4",
     "parallel-transform": "1.2.0",
@@ -72,7 +71,7 @@
     "vinyl-fs": "3.0.3"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.27.0-canary.0",
+    "@blitzjs/core": "0.27.0-canary.3",
     "next-transpile-modules": "3.2.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
