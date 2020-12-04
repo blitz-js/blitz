@@ -10,15 +10,6 @@ const NEXT_MDX_PLUGIN_OPTIONS = [
   j.property("init", j.identifier("extension"), j.literal(RegExp("mdx?$", ""))),
 ]
 
-const PAGE_EXTENSIONS = [
-  j.literal("js"),
-  j.literal("jsx"),
-  j.literal("ts"),
-  j.literal("tsx"),
-  j.literal("md"),
-  j.literal("mdx"),
-]
-
 function findRequires(program: Collection<j.Program>, module: string) {
   return program
     .find(j.CallExpression, {
