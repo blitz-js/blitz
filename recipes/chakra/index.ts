@@ -1,7 +1,7 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import { addImport, paths, RecipeBuilder } from "@blitzjs/installer"
+import { NodePath } from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import { Collection } from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
 function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
@@ -37,10 +37,10 @@ export default RecipeBuilder()
     stepName: "Add npm dependencies",
     explanation: `Chakra requires some other dependencies like emotion to work`,
     packages: [
-      {name: "@chakra-ui/react", version: "latest"},
-      {name: "@emotion/react", version: "latest"},
-      {name: "@emotion/styled", version: "latest"},
-      {name: "framer-motion", version: "latest"},
+      { name: "@chakra-ui/react", version: "latest" },
+      { name: "@emotion/react", version: "latest" },
+      { name: "@emotion/styled", version: "latest" },
+      { name: "framer-motion", version: "latest" },
     ],
   })
   .addTransformFilesStep({
