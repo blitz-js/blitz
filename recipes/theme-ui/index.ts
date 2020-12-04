@@ -157,10 +157,18 @@ export default RecipeBuilder()
       {name: "@mdx-js/loader", version: "latest"},
     ],
   })
+  .addNewFilesStep({
+    stepId: "addStyles",
+    stepName: "Add a base theme file to `app/theme`.",
+    explanation: `Add a basic theme definition to use with Theme UI.`,
+    targetDirectory: "./app",
+    templatePath: join(__dirname, "templates", "theme"),
+    templateValues: {},
+  })
   .addTransformFilesStep({
-    stepId: "createOrModifyBlitzConfig",
-    stepName: "Add the '@next/mdx' plugin to the blitz config file",
-    explanation: `Now we have to update our blitz config to support MDX`,
+    stepId: "updateBlitzConfig",
+    stepName: "Configure '@next/mdx' plugin",
+    explanation: `Next, configure the '@next/mdx' plugin in 'blitz.config.js'.`,
     singleFileSearch: paths.blitzConfig(),
 
     transform(program: Collection<j.Program>) {
@@ -174,7 +182,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "importInitializeColorMode",
     stepName: "Add InitializeColorMode component to _document",
-    explanation: `We need to import the InitializeColorMode component to support color mode features in Theme UI`,
+    explanation: "Add the InitializeColorMode component to _document.",
     singleFileSearch: paths.document(),
 
     transform(program: Collection<j.Program>) {
@@ -189,8 +197,8 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "importProviderAndBaseTheme",
-    stepName: "Import ThemeProvider component and base theme",
-    explanation: `We can import the theme provider into _app, so it is accessible in the whole app`,
+    stepName: "Import ThemeProvider component and base theme.",
+    explanation: `Add ThemeProvider wrapper component to _app`,
     singleFileSearch: paths.app(),
 
     transform(program: Collection<j.Program>) {
@@ -214,14 +222,6 @@ export default RecipeBuilder()
       addImport(program, mdxComponentsImport)
       return wrapComponentWithThemeProvider(program)
     },
-  })
-  .addNewFilesStep({
-    stepId: "addStyles",
-    stepName: "Add a base theme file",
-    explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to just using classnames in your components.`,
-    targetDirectory: "./app",
-    templatePath: join(__dirname, "templates", "theme"),
-    templateValues: {},
   })
   .addNewFilesStep({
     stepId: "addMdxLayout",
