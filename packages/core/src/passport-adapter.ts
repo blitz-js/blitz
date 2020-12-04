@@ -52,7 +52,7 @@ export function passportAuth(config: BlitzPassportConfig) {
     )
 
     const blitzStrategy = config.strategies.find(
-      (strategy) => strategy.strategy.name === req.query.auth[0],
+      ({strategy}) => strategy.name === req.query.auth[0],
     )
     assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
 
