@@ -15,7 +15,7 @@ const rpcMiddleware = <TInput, TResult>(
   connectDb?: () => any,
 ): Middleware => {
   return async (req, res, next) => {
-    const log = baseLogger.getChildLogger({prefix: [resolver._meta.name + "()"]})
+    const log = baseLogger().getChildLogger({prefix: [resolver._meta.name + "()"]})
 
     if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
@@ -46,6 +46,7 @@ const rpcMiddleware = <TInput, TResult>(
         const result = await resolver(data, res.blitzCtx)
 
         const duration = prettyMs(new Date().getTime() - startTime)
+        log.debug(chalk.dim("Result:"), result)
         log.info(chalk.dim("Finished", "in", duration))
         displayLog.newline()
 

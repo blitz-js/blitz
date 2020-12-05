@@ -1547,7 +1547,9 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1575946?v=4",
       "profile": "http://raph.site",
       "contributions": [
-        "doc"
+        "doc",
+        "test",
+        "code"
       ]
     },
     {
@@ -1575,6 +1577,69 @@
       "profile": "https://github.com/rayandrews",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "Mzaien",
+      "name": "Abdullah Mzaien",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/43112535?v=4",
+      "profile": "http://Dal.Design",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "williamkwao",
+      "name": "William Kwao",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/8839514?v=4",
+      "profile": "http://kwao.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sakulstra",
+      "name": "Lukas Strassel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/4396533?v=4",
+      "profile": "https://github.com/sakulstra",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tpatel",
+      "name": "Thibaut Patel",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/494686?v=4",
+      "profile": "https://thibpat.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jonstuebe",
+      "name": "Jon Stuebe",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/156722?v=4",
+      "profile": "http://jonstuebe.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ugogo",
+      "name": "Ugo Onali",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5040476?v=4",
+      "profile": "https://ugogo.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "saintmalik",
+      "name": "SaintMalik",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/37118134?v=4",
+      "profile": "https://saintmalik.me",
+      "contributions": [
+        "doc"
       ]
     }
   ],

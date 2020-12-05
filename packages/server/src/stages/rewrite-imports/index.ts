@@ -28,50 +28,17 @@ export const createStageRewriteImports: Stage = ({config: {cwd}}) => {
   return {stream}
 }
 
-export const patternImport = /(import\s*)(?:(\*\s+as\s+\w+)|(?:(\w+\s*)(,\s*)?)?(?:(\{\s*\w+\s*(?:,\s*\w+\s*)*\}))?)(\s+from\s+)?((?:\(\s*)?["'])([\w\.\\\/]+)(["'](?:\s*\))?)/gs
-
-// Whenever we see smth like `import { myFunc } from "app/queries/myQuery"`,
-//  we rewrite that to app/_resolvers/queries/myQuery
-//
-// When we see smth like `import myQuery, { myFunc } from "app/queries/myQuery"`,
-//  we rewrite it to the following two:
-//   import myQuery from "app/queries/myQuery"
-//   import { myFunc } from "app/_resolvers/queries/myQuery"
+export const patternImport = /(import.*?["'])(.+?)(["'])/gs
 
 export function replaceImports(content: string) {
   return content.replace(patternImport, (...args) => {
-    const [
-      ,
-      importToken,
-      starImport,
-      defaultImportName,
-      combinedComma,
-      namedImportNames,
-      fromToken,
-      openingQuotes,
-      origin,
-      closingQuotes,
-    ] = args as (string | undefined)[]
+    const [, start, resource, end] = args as string[]
 
-    const importsOnlyDefault = !!defaultImportName && !(starImport || namedImportNames)
-
-    const newOrigin = rewriteImportOrigin(origin!, !importsOnlyDefault)
-
-    return [
-      importToken,
-      starImport ?? "",
-      defaultImportName ?? "",
-      combinedComma ?? "",
-      namedImportNames ?? "",
-      fromToken ?? "",
-      openingQuotes,
-      newOrigin,
-      closingQuotes,
-    ].join("")
+    return start + rewriteImportOrigin(resource) + end
   })
 }
 
-export function rewriteImportOrigin(origin: string, importsNamedExports: boolean): string {
+export function rewriteImportOrigin(origin: string): string {
   const parts = origin.split("/")
 
   // If it's an import from a page, say from app/pages/mypage,
@@ -90,19 +57,6 @@ export function rewriteImportOrigin(origin: string, importsNamedExports: boolean
     }
 
     parts.splice(0, parts.indexOf("api"), "pages")
-  }
-
-  if (importsNamedExports) {
-    const indexOfQueries = parts.lastIndexOf("queries")
-    const indexOfMutations = parts.lastIndexOf("mutations")
-
-    if (indexOfQueries !== -1 || indexOfMutations !== -1) {
-      if (indexOfQueries === parts.length - 1 || indexOfMutations === parts.length - 1) {
-        parts.push("index")
-      }
-
-      parts[parts.length - 1] = parts[parts.length - 1] + ".named"
-    }
   }
 
   return parts.join("/")

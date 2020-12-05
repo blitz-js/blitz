@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.25.1-canary.3",
+  "version": "0.27.0-canary.3",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -30,14 +30,14 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.25.1-canary.3",
-    "@blitzjs/repl": "0.25.1-canary.3",
+    "@blitzjs/display": "0.27.0-canary.3",
+    "@blitzjs/repl": "0.27.0-canary.3",
     "@oclif/command": "1.5.20",
     "@oclif/config": "1.15.1",
     "@oclif/plugin-autocomplete": "0.2.0",
     "@oclif/plugin-help": "2.2.3",
     "@oclif/plugin-not-found": "1.2.3",
-    "@prisma/sdk": "2.10.0",
+    "@prisma/sdk": "2.12.0",
     "@salesforce/lazy-require": "0.3.2",
     "camelcase": "6.0.0",
     "chalk": "4.0.0",
@@ -59,12 +59,12 @@
     "v8-compile-cache": "2.1.1"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.25.1-canary.3",
-    "@blitzjs/installer": "0.25.1-canary.3",
-    "@blitzjs/server": "0.25.1-canary.3",
+    "@blitzjs/generator": "0.27.0-canary.3",
+    "@blitzjs/installer": "0.27.0-canary.3",
+    "@blitzjs/server": "0.27.0-canary.3",
     "@oclif/dev-cli": "1.22.2",
     "@oclif/test": "1.2.5",
-    "@prisma/cli": "2.10.0",
+    "@prisma/cli": "2.12.0",
     "nock": "13.0.0-beta.3",
     "stdout-stderr": "0.1.13"
   },

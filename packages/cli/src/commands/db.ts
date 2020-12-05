@@ -309,7 +309,9 @@ ${require("chalk").bold(
     if (command === "seed") {
       try {
         return await runSeed()
-      } catch {
+      } catch (err) {
+        log.error("Could not seed database:")
+        log.error(err)
         process.exit(1)
       }
     }

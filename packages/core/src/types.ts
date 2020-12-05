@@ -64,6 +64,10 @@ export interface CancellablePromise<T> extends Promise<T> {
 
 export type QueryFn = (...args: any) => Promise<any>
 
+export type Dict<T> = Record<string, T | undefined>
+
+export type ParsedUrlQuery = Dict<string | string[]>
+
 export type ParsedUrlQueryValue = string | string[] | undefined
 
 export type Options = {
