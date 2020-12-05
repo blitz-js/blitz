@@ -3,7 +3,7 @@ import File from "vinyl"
 
 export type FileCacheEntry = {path: string}
 
-export type RouteType = "pages" | "rpc" | "api"
+export type RouteType = "page" | "rpc" | "api"
 export type RouteVerb = "get" | "post" | "patch" | "head" | "delete" | "*"
 export type RouteCacheEntry = {
   path: string

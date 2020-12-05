@@ -15,7 +15,7 @@ export const createStageRoutes: Stage = ({getRouteCache}) => {
     } else if (apiPathRegex.test(file.path)) {
       getRouteCache().add(file, "api")
     } else if (pagesPathRegex.test(file.path)) {
-      getRouteCache().add(file, "pages")
+      getRouteCache().add(file, "page")
     }
 
     return file
