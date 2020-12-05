@@ -152,9 +152,9 @@ export default RecipeBuilder()
     stepName: "Add npm dependencies",
     explanation: `First, we'll install the dependencies needed to use Theme UI in our Blitz app.`,
     packages: [
-      {name: "theme-ui", version: "latest"},
-      {name: NEXT_MDX_PLUGIN_MODULE, version: "latest"},
-      {name: "@mdx-js/loader", version: "latest"},
+      {name: "theme-ui", version: "0.x"},
+      {name: NEXT_MDX_PLUGIN_MODULE, version: "10.x"},
+      {name: "@mdx-js/loader", version: "1.x"},
     ],
   })
   .addTransformFilesStep({
