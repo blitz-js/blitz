@@ -1,6 +1,6 @@
 import shadesOfPurple from "@theme-ui/prism/presets/shades-of-purple.json"
 
-export default {
+const theme = {
   initialColorModeName: "light",
   useColorSchemeMediaQuery: true,
   colors: {
@@ -44,12 +44,16 @@ export default {
       },
     },
     pre: {
+      borderRadius: "10px",
       ".highlight": {
         background: "hsla(0, 0%, 30%, .5)",
       },
     },
     code: {
+      padding: "20px",
       ...shadesOfPurple,
     },
   },
 }
+
+export default theme
