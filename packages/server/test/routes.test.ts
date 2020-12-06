@@ -79,7 +79,7 @@ describe("Routes command", () => {
 
       expect(routes).toEqual([
         {path: normalize("app/api/auth.ts"), uri: "/api/auth", type: "api", verb: "*"},
-        {path: normalize("app/auth/pages/login.ts"), uri: "/login", type: "pages", verb: "get"},
+        {path: normalize("app/auth/pages/login.ts"), uri: "/login", type: "page", verb: "get"},
         {
           path: normalize("app/products/mutations/updateProduct.ts"),
           uri: "/api/products/mutations/updateProduct",
