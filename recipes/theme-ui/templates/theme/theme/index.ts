@@ -17,6 +17,9 @@ export default {
       },
     },
   },
+  sizes: {
+    container: 768,
+  },
   fonts: {
     body:
       'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',

@@ -81,11 +81,15 @@ export type ConnectMiddleware = (
   next: (error?: Error) => void,
 ) => void
 
+export type BlitzPassportStrategy = {
+  authenticateOptions?: AuthenticateOptions
+  strategy: Strategy
+}
+
 export type BlitzPassportConfig = {
   successRedirectUrl?: string
   errorRedirectUrl?: string
-  authenticateOptions?: AuthenticateOptions
-  strategies: Required<Strategy>[]
+  strategies: BlitzPassportStrategy[]
   secureProxy?: boolean
 }
 
