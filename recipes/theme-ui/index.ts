@@ -121,6 +121,20 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   return program
 }
 
+function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
+  const moduleExportsExpression = program
+    .find(j.AssignmentExpression, {
+      operator: "=",
+      left: {object: {name: "module"}, property: {name: "exports"}},
+    })
+    .forEach((path) => {
+      console.log(`ADD BLITZ CONFIG PROPERTY: ${property}`)
+      console.dir(path, {colors: true, depth: 2})
+    })
+
+  console.dir(moduleExportsExpression)
+}
+
 function injectInitializeColorMode(program: Collection<j.Program>) {
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
@@ -169,6 +183,7 @@ export default RecipeBuilder()
 
       addRequire(program, NEXT_MDX_PLUGIN_NAME, NEXT_MDX_PLUGIN_MODULE)
       initializeRequire(program, NEXT_MDX_PLUGIN_NAME, NEXT_MDX_PLUGIN_MODULE, initExpression)
+      updateBlitzConfigProperty(program, "pageExtensions")
       return wrapBlitzConfigWithNextMdxPlugin(program)
     },
   })
