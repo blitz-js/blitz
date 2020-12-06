@@ -39,7 +39,13 @@ export async function handleRequestWithMiddleware(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
   middleware: Middleware | Middleware[],
-  {throwOnError = true}: {throwOnError?: boolean} = {},
+  {
+    throwOnError = true,
+    stackPrintOnError = true,
+  }: {
+    throwOnError?: boolean
+    stackPrintOnError?: boolean
+  } = {},
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {}
@@ -78,7 +84,11 @@ export async function handleRequestWithMiddleware(
     if (error._clearStack) {
       delete error.stack
     }
-    baseLogger().prettyError(error, true, false, false)
+    if (stackPrintOnError) {
+      baseLogger().prettyError(error)
+    } else {
+      baseLogger().prettyError(error, true, false, false)
+    }
     log.newline()
     if (throwOnError) throw error
   }
