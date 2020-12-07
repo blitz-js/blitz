@@ -1,8 +1,8 @@
 {
-  "name": "@blitzjs/recipe-emotion",
+  "name": "@blitzjs/recipe-theme-ui",
   "private": true,
   "version": "0.27.0",
-  "description": "The Blitz Recipe for installing Emotion",
+  "description": "The Blitz Recipe for installing Theme UI",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"No tests yet\""
@@ -13,9 +13,10 @@
   },
   "keywords": [
     "blitz",
-    "blitzjs"
+    "blitzjs",
+    "theme-ui"
   ],
-  "author": "Justin Hall <justin.r.hall@gmail.com>",
+  "author": "tundera <stackshuffle@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/blitz-js/blitz/issues"

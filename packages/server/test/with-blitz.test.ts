@@ -1,3 +1,9 @@
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
+
 import {withBlitz} from "../src"
 
 describe("withBlitz", () => {
