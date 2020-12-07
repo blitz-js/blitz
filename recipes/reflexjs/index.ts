@@ -54,7 +54,6 @@ function findModuleExportsExpressions(program: Collection<j.Program>) {
   return program.find(j.AssignmentExpression).filter((path) => {
     return (
       path.value.left.type === "MemberExpression" &&
-      // TODO: figure out if there's a better way to type path.value.left
       (path.value.left.object as any).name === "module" &&
       (path.value.left.property as any).name === "exports" &&
       path.value.right.type === "ObjectExpression"
@@ -62,27 +61,14 @@ function findModuleExportsExpressions(program: Collection<j.Program>) {
   })
 }
 
-function addBabelPlugin(program: Collection<j.Program>) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: "plugins"}})
-      .forEach((plugins) => {
-        // TODO: figure out if there's a better way to type plugins.node.value
-        ;(plugins.node.value as j.ArrayExpression).elements.push(j.literal("@emotion"))
-      })
-  })
-
-  return program
-}
-
-function replaceBabelPreset(program: Collection<j.Program>) {
+function addBabelPreset(program: Collection<j.Program>, name: string) {
   findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
     j(moduleExportsExpression)
       .find(j.ObjectProperty, {key: {name: "presets"}})
-      .forEach((presets) => {
-        j(presets)
-          .find(j.Literal, {value: "next/babel"})
-          .replaceWith(j.arrayExpression([j.literal("next/babel"), j.literal("reflexjs/babel")]))
+      .forEach((path) => {
+        // TODO: figure out if there's a better way to type plugins.node.value
+        const presets = path.node.value as j.ArrayExpression
+        presets.elements.push(j.literal(name))
       })
   })
 
@@ -153,13 +139,14 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "updateBabelConfig",
-    stepName: "Add Babel plugin and preset",
+    stepName: "Add Babel preset",
     explanation:
       "Finally, we'll update the Babel configuration to use the Reflfexjs preset. This automatically sets the jsx pragma in your Blitz app so you won't need to import it in your files.",
     singleFileSearch: paths.babelConfig(),
+
     transform(program: Collection<j.Program>) {
-      addBabelPlugin(program)
-      return replaceBabelPreset(program)
+      console.log("here")
+      return addBabelPreset(program, "reflexjs/babel")
     },
   })
   .build()
