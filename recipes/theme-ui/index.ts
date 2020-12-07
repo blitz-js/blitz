@@ -122,17 +122,28 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
 }
 
 function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
-  const moduleExportsExpression = program
+  return program
     .find(j.AssignmentExpression, {
       operator: "=",
       left: {object: {name: "module"}, property: {name: "exports"}},
+      right: {type: "ObjectExpression"},
     })
     .forEach((path) => {
-      console.log(`ADD BLITZ CONFIG PROPERTY: ${property}`)
-      console.dir(path, {colors: true, depth: 2})
-    })
+      const configProperty = j.objectProperty(
+        j.identifier(property),
+        j.arrayExpression([
+          j.literal("js"),
+          j.literal("jsx"),
+          j.literal("ts"),
+          j.literal("tsx"),
+          j.literal("md"),
+          j.literal("mdx"),
+        ]),
+      )
 
-  console.dir(moduleExportsExpression)
+      const properties = path.get(0).node.right.properties
+      path.get(0).node.right.properties = [...properties, configProperty]
+    })
 }
 
 function injectInitializeColorMode(program: Collection<j.Program>) {
@@ -241,9 +252,18 @@ export default RecipeBuilder()
   })
   .addNewFilesStep({
     stepId: "addMdxLayout",
-    stepName: "Create a layout MDX pages",
+    stepName: "Create a layout for MDX content",
     explanation:
       "Now we add a layout component for MDX content. We'll add a layout called `MdxLayout.tsx` to the `app/layouts` directory. ",
+    targetDirectory: "./app/layouts",
+    templatePath: join(__dirname, "templates", "layouts"),
+    templateValues: {},
+  })
+  .addNewFilesStep({
+    stepId: "addMdxLayout",
+    stepName: "Add an MDX page",
+    explanation:
+      "Finally, we'll add a page to `app/pages` called `demo.mdx`. Notice the MDX components defined in `apps/theme/components.tsx` appear in place of their corresponding markdown elements.",
     targetDirectory: "./app/layouts",
     templatePath: join(__dirname, "templates", "layouts"),
     templateValues: {},
