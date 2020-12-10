@@ -1,0 +1,23 @@
+import MdxLayout from "app/layouts/MdxLayout"
+
+export default ({children}) => <MdxLayout title="MDX Demo">{children}</MdxLayout>
+
+# MDX Demo
+
+This page uses Theme UI markdown components defined in `app/theme/components.tsx`
+
+## Code Blocks
+
+We can define components to replace markdown specifiers like code blocks:
+
+```tsx
+import Prism from "@theme-ui/prism"
+import React from "react"
+
+const components = {
+  pre: ({children}) => <>{children}</>,
+  code: Prism,
+}
+
+export default components
+```
