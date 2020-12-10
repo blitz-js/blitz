@@ -30,7 +30,7 @@ export function createDisplay() {
       }
 
       case READY: {
-        spinner.succeed(chalk.green.bold("Prepped for launch"))
+        spinner.succeed(chalk.green.bold("Prepared for launch"))
         break
       }
     }
