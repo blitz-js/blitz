@@ -1679,6 +1679,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "beeplin",
+      "name": "Beep LIN",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13058150?v=4",
+      "profile": "https://github.com/beeplin",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
