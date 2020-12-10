@@ -1669,6 +1669,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "AkifumiSato",
+      "name": "Akifumi Sato",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/25711332?v=4",
+      "profile": "https://akfm.dev/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
