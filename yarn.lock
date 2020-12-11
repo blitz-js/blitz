@@ -1812,6 +1812,64 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@blitzjs/display@0.25.1-canary.3":
+  version "0.25.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.25.1-canary.3.tgz#ce21accdc6ac9f5832fd81111210a254be768d1e"
+  integrity sha512-kefdY0oxg3Y3I6dy2hGJ9GSIurpQYWNlqts0MIyHjlDdkVNWnhYK2ZvKYKbHXA/5JgapgMYq1+iNPmNCk24gLw==
+  dependencies:
+    chalk "4.0.0"
+    ora "4.0.4"
+    tslog "2.9.1"
+
+"@blitzjs/generator@0.25.1-canary.3":
+  version "0.25.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.25.1-canary.3.tgz#b53c7a87f20d1c27a11725d1ba9f1adb54354851"
+  integrity sha512-VDnAy640f8mk5M8up1TtzIGnqtMg4rkMMy+O4nw2dRikLuiKyvRisf/1rD1gjZbJmvneRUFj4h+uZJUkUcDbBA==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.25.1-canary.3"
+    "@types/jscodeshift" "0.7.1"
+    chalk "4.0.0"
+    cross-spawn "7.0.3"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    fs-readdir-recursive "1.1.0"
+    got "11.1.3"
+    jscodeshift "0.10.0"
+    mem-fs "1.1.3"
+    mem-fs-editor "6.0.0"
+    node-fetch "2.6.1"
+    pluralize "8.0.0"
+    recast "0.19.1"
+    username "5.1.0"
+    vinyl "2.2.0"
+
+"@blitzjs/installer@0.25.1-canary.3":
+  version "0.25.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/installer/-/installer-0.25.1-canary.3.tgz#747771e560e201a88da1d59b2467dd9d54c58f45"
+  integrity sha512-2zOOhfk2EjPC+z8Od0XJQXjRLhCyBoDqKaa2hN7b75Rk1VS0hIPwLXq4Se4F13WHnEJnT+ZgrEXLZ6mE3pFlxw==
+  dependencies:
+    "@babel/core" "7.9.0"
+    "@babel/plugin-transform-typescript" "7.9.4"
+    "@blitzjs/display" "0.25.1-canary.3"
+    "@blitzjs/generator" "0.25.1-canary.3"
+    "@types/jscodeshift" "0.7.1"
+    chokidar "3.4.2"
+    cross-spawn "7.0.3"
+    diff "4.0.2"
+    enquirer "2.3.5"
+    fs-extra "9.0.0"
+    globby "11.0.0"
+    ink "3.0.7"
+    ink-link "2.0.0"
+    ink-spinner "4.0.1"
+    jscodeshift "0.10.0"
+    react "0.0.0-experimental-4ead6b530"
+    recast "0.19.1"
+    ts-node "8.9.1"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
