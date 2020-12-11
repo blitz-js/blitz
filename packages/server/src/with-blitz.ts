@@ -25,13 +25,13 @@ export function withBlitz(nextConfig: any) {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
           const excluded = [
-            /db/,
-            /@blitzjs[\\/]display/,
-            /@blitzjs[\\/]config/,
-            /@prisma[\\/]client/,
-            /passport/,
-            /cookie-session/,
-            /secure-password/,
+            path.resolve("./db"),
+            /node_modules[\\/]@blitzjs[\\/]display/,
+            /node_modules[\\/]@blitzjs[\\/]config/,
+            /node_modules[\\/]@prisma[\\/]client/,
+            /node_modules[\\/]passport/,
+            /node_modules[\\/]cookie-session/,
+            /node_modules[\\/]secure-password/,
             /blitz[\\/]packages[\\/]config/,
             /blitz[\\/]packages[\\/]display/,
           ]
