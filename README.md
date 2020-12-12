@@ -127,17 +127,12 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🌱 Seedling Sponsors
 
-<table>
-  <tr>
-    <td><a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
-    <img alt="" src="https://reactbricks.com/reactbricks_icon.svg" width="30px">
-    </a></td>
-
-    <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
-    <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="30px">
-    </a></td>
-  </tr>
-</table>
+<a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
+ <img alt="" src="https://reactbricks.com/reactbricks_icon.svg" width="30px"/>
+ </a>
+ <a aria-label="Andreas Asprou" href="https://andreas.fyi">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="30px"/>
+</a>
 
 
 ### 🥉 Bronze Sponsors
