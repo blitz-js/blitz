@@ -24,7 +24,7 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  unstable_isAuthorized: (userRoles: string[], input?: any) => boolean
+  isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
 export interface SessionContextBase {
