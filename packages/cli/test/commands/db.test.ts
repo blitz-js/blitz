@@ -15,39 +15,27 @@ pkgDir.sync = jest.fn(() => join(__dirname, "../__fixtures__/"))
 
 let schemaArg: string
 let prismaBin: string
-let migrateSaveParams: any[]
-let migrateUpDevParams: any[]
-let migrateUpProdParams: any[]
-let migrateSaveWithNameParams: any[]
-let migrateSaveWithUnknownParams: any[]
+let migrateParams: any[]
+let migrateWithNameParams: any[]
+let migrateWithUnknownParams: any[]
 
 beforeAll(async () => {
   schemaArg = `--schema=${path.join(process.cwd(), "db", "schema.prisma")}`
   prismaBin = await resolveBinAsync("@prisma/cli", "prisma")
 
-  migrateSaveParams = [
+  migrateParams = [
     prismaBin,
-    ["migrate", "save", schemaArg, "--create-db", "--experimental"],
+    ["migrate", "dev", schemaArg, "--preview-feature"],
     {stdio: "inherit", env: process.env},
   ]
-  migrateUpDevParams = [
+  migrateWithNameParams = [
     prismaBin,
-    ["migrate", "up", schemaArg, "--create-db", "--experimental"],
-    {stdio: "inherit", env: process.env},
-  ]
-  migrateUpProdParams = [
-    prismaBin,
-    ["migrate", "up", schemaArg, "--create-db", "--experimental", "--auto-approve"],
-    {stdio: "inherit", env: process.env},
-  ]
-  migrateSaveWithNameParams = [
-    prismaBin,
-    ["migrate", "save", schemaArg, "--create-db", "--experimental", "--name", "name"],
+    ["migrate", "dev", schemaArg, "--preview-feature", "--name", "name"],
     {stdio: "ignore", env: process.env},
   ]
-  migrateSaveWithUnknownParams = [
+  migrateWithUnknownParams = [
     prismaBin,
-    ["migrate", "save", schemaArg, "--create-db", "--experimental"],
+    ["migrate", "dev", schemaArg, "--preview-feature"],
     {stdio: "inherit", env: process.env},
   ]
 })
@@ -62,41 +50,36 @@ describe("Db command", () => {
   })
 
   function expectDbMigrateOutcome() {
-    expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn).toHaveBeenCalledTimes(3)
+    expect(spawn).toBeCalledWith(...migrateParams)
+    expect(spawn).toHaveBeenCalledTimes(1)
 
-    expect(onSpy).toHaveBeenCalledTimes(3)
-
-    expect(spawn).toBeCalledWith(...migrateUpDevParams)
+    expect(onSpy).toHaveBeenCalledTimes(1)
   }
 
   function expectProductionDbMigrateOutcome() {
-    expect(spawn).toHaveBeenCalledTimes(2)
+    expect(spawn).toHaveBeenCalledTimes(1)
 
-    expect(onSpy).toHaveBeenCalledTimes(2)
-
-    expect(spawn).toBeCalledWith(...migrateUpProdParams)
+    expect(onSpy).toHaveBeenCalledTimes(1)
   }
 
   function expectDbMigrateWithNameOutcome() {
-    expect(spawn).toBeCalledWith(...migrateSaveWithNameParams)
-    expect(spawn).toHaveBeenCalledTimes(3)
+    expect(spawn).toBeCalledWith(...migrateWithNameParams)
+    expect(spawn).toHaveBeenCalledTimes(1)
 
-    expect(onSpy).toHaveBeenCalledTimes(3)
+    expect(onSpy).toHaveBeenCalledTimes(1)
   }
 
   function expectDbMigrateWithUnknownFlag() {
-    expect(spawn).toBeCalledWith(...migrateSaveWithUnknownParams)
-    expect(spawn).toHaveBeenCalledTimes(3)
+    expect(spawn).toBeCalledWith(...migrateWithUnknownParams)
+    expect(spawn).toHaveBeenCalledTimes(1)
 
-    expect(onSpy).toHaveBeenCalledTimes(3)
+    expect(onSpy).toHaveBeenCalledTimes(1)
   }
 
   function expectDbSeedOutcome() {
-    expect(spawn).toBeCalledWith(...migrateSaveParams)
-    expect(spawn.mock.calls.length).toBe(3)
-    expect(onSpy).toHaveBeenCalledTimes(3)
-    expect(spawn).toBeCalledWith(...migrateUpDevParams)
+    expect(spawn).toBeCalledWith(...migrateParams)
+    expect(spawn.mock.calls.length).toBe(1)
+    expect(onSpy).toHaveBeenCalledTimes(1)
   }
 
   it("runs db help when no command given", async () => {
