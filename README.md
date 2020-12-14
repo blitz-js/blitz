@@ -137,7 +137,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🥉 Bronze Sponsors
 
-<a aria-label="Render.com" href="https://render.com">
+<a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color.png" width="140px">
 </a>
 
