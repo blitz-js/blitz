@@ -43,41 +43,20 @@ export const runPrismaGeneration = async ({silent = false, failSilently = false}
   }
 }
 
-const runMigrateUp = async ({silent = false} = {}, schemaArgLocal = schemaArg) => {
-  const args = ["migrate", "up", schemaArgLocal, "--create-db", "--experimental"]
-
-  if (process.env.NODE_ENV === "production" || silent) {
-    args.push("--auto-approve")
-  }
-
-  const success = await runPrisma(args, silent)
-
-  if (!success) {
-    throw new Error("Migration failed")
-  }
-
-  return runPrismaGeneration({silent})
-}
-
 export const runMigrate = async (flags: object = {}, schemaArgLocal = schemaArg) => {
-  if (process.env.NODE_ENV === "production") {
-    return runMigrateUp({}, schemaArgLocal)
-  }
   // @ts-ignore escape:TS7053
   const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
   const options = ([] as string[]).concat(...nestedFlags)
 
   const silent = options.includes("--name")
 
-  const args = ["migrate", "save", schemaArgLocal, "--create-db", "--experimental", ...options]
+  const args = ["migrate", "dev", schemaArgLocal, "--preview-feature", ...options]
 
   const success = await runPrisma(args, silent)
 
   if (!success) {
     throw new Error("Migration failed")
   }
-
-  return runMigrateUp({silent}, schemaArgLocal)
 }
 
 export async function resetPostgres(connectionString: string, db: any): Promise<void> {
