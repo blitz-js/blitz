@@ -138,7 +138,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 ### 🥉 Bronze Sponsors
 
 <a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color.png" width="140px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color.png" width="110px">
 </a>
 
 ### 🥈 Silver Sponsors
@@ -468,6 +468,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
