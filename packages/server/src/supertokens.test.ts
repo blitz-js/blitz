@@ -15,7 +15,7 @@ import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 import listen from "test-listen"
 import {rpcApiHandler} from "./rpc"
-import {sessionMiddleware, unstable_simpleRolesIsAuthorized} from "./supertokens"
+import {sessionMiddleware, simpleRolesIsAuthorized} from "./supertokens"
 
 const isIsoDate = (str: string) => {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
@@ -137,7 +137,7 @@ async function mockServer<TInput, TResult>(
   const handler = rpcApiHandler(
     resolverModule,
     [
-      sessionMiddleware({unstable_isAuthorized: unstable_simpleRolesIsAuthorized}),
+      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized}),
       ...(resolverModule.middleware || []),
     ],
     dbConnectorFn,
