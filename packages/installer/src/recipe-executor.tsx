@@ -7,6 +7,8 @@ import * as NewFileExecutor from "./executors/new-file-executor"
 import {RecipeRenderer} from "./recipe-renderer"
 import {RecipeMeta} from "./types"
 
+let hasExecuted:boolean = true;
+
 type ExecutorConfig =
   | AddDependencyExecutor.Config
   | FileTransformExecutor.Config
@@ -31,11 +33,12 @@ export class RecipeExecutor<Options extends RecipeMeta> {
       await waitUntilExit()
     } catch (e) {
       log.error(e)
+      hasExecuted=false
       return
     }
-
-    log.info(
-      `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-    )
+    if(hasExecuted){
+      log.info(
+        `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
+    )} 
   }
 }
