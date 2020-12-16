@@ -1697,6 +1697,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jackbravo",
+      "name": "Joaquin Bravo Contreras",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15214?v=4",
+      "profile": "http://joaquin.axai.mx",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
