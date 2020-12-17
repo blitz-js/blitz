@@ -169,7 +169,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <table>
   <tr>
     <td align="center"><a href="https://twitter.com/flybayer"><img src="https://avatars3.githubusercontent.com/u/8813276?v=4" width="100px;" alt=""/><br /><sub><b>Brandon Bayer</b></sub></a><br />Creator</td>
-    <td align="center"><a href="https://merelinguist.now.sh"><img src="https://avatars3.githubusercontent.com/u/24858006?v=4" width="100px;" alt=""/><br /><sub><b>Dylan Brookes</b></sub></a><br />Friendly Generalist</td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
