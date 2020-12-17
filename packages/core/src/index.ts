@@ -48,8 +48,7 @@ export {default as Link, LinkProps} from "next/link"
 
 export {default as Router} from "next/router"
 
-export {default as Image} from "next/image"
-export {ImageProps} from "next/image"
+export {default as Image, ImageProps} from "next/image"
 
 export {
   default as Document,
