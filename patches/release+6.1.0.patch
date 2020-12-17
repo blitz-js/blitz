@@ -110,3 +110,61 @@ index 6d08754..ee1a3be 100644
  
  	for (const type of changeTypes) {
  		const short = type.handle;
+diff --git a/node_modules/release/lib/definitions.js b/node_modules/release/lib/definitions.js
+index ce5ece4..62b4a35 100644
+--- a/node_modules/release/lib/definitions.js
++++ b/node_modules/release/lib/definitions.js
+@@ -1,28 +1,32 @@
+ exports.type = (text, changeTypes) => {
+-	const list = [
+-		...changeTypes,
+-		{
+-			handle: 'ignore'
+-		}
+-	];
++  const list = [
++    ...changeTypes,
++    {
++      handle: "ignore",
++    },
++  ]
+ 
+-	for (const type of list) {
+-		const handle = `(${type.handle})`;
++  for (const type of list) {
++    const handle = `(${type.handle})`
+ 
+-		if (text.includes(handle)) {
+-			return type.handle;
+-		}
+-	}
++    if (text.includes(handle)) {
++      return type.handle
++    }
+ 
+-	return false;
+-};
++    if (text.includes("allcontributors")) {
++      return "meta"
++    }
++  }
+ 
+-exports.reference = title => {
+-	const match = / \(#[-0-9]+\)/.exec(title);
++  return false
++}
+ 
+-	if (!match) {
+-		return false;
+-	}
++exports.reference = (title) => {
++  const match = / \(#[-0-9]+\)/.exec(title)
+ 
+-	return match[0].replace(' (', '').replace(')', '');
+-};
++  if (!match) {
++    return false
++  }
++
++  return match[0].replace(" (", "").replace(")", "")
++}
