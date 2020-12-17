@@ -157,8 +157,8 @@ export class New extends Command {
 
           try {
             // Required in order for DATABASE_URL to be available
-            require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-            await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
+            require("dotenv-expand")(require("dotenv-flow").config({silent: true})) // this probably won't work
+            spawn.sync("npx", ["prisma", "migrate", "dev", "--name", "Initial Migration"], {stdio: "inherit"})
             spinner.succeed()
           } catch {
             spinner.fail()
