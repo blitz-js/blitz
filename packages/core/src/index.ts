@@ -44,8 +44,7 @@ export {
 
 export {default as Head} from "next/head"
 
-export {default as Link} from "next/link"
-export {LinkProps} from "next/link"
+export {default as Link, LinkProps} from "next/link"
 
 export {default as Router} from "next/router"
 
