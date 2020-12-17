@@ -63,8 +63,7 @@ export {
 
 export {default as dynamic} from "next/dynamic"
 
-export {default as ErrorComponent} from "next/error"
-export {ErrorProps} from "next/error"
+export {default as ErrorComponent, ErrorProps} from "next/error"
 
 export {default as getConfig} from "next/config"
 
