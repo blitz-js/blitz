@@ -6,7 +6,7 @@
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:server": "blitz db migrate && blitz db seed && blitz start --production -p 3099",
+    "test:server": "blitz db migrate && blitz db seed && blitz build && blitz start --production -p 3099",
     "test": "./assert-tree-shaking-works.js && start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "prisma": {
