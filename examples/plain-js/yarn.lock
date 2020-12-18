@@ -1483,7 +1483,6 @@
     expand-tilde "2.0.2"
     fast-glob "3.2.2"
     flush-write-stream "2.0.0"
-    folder-hash "3.3.1"
     from2 "2.3.0"
     gulp-if "3.0.0"
     hasha "5.2.0"
@@ -4942,15 +4941,6 @@ flush-write-stream@^1.0.0, flush-write-stream@^1.0.2:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
-
-folder-hash@3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/folder-hash/-/folder-hash-3.3.1.tgz#72ca3593a43c3873e27a8edce2423f30f8ee6096"
-  integrity sha512-M5Rxur/jgIWfr0gbJBRY9aMLXCieM6Gy1xB/KqC2Nd4ZvxZJAccWvg+7SmbfALntmYj51wHWzcE4cqgXQPWaBA==
-  dependencies:
-    debug "^4.1.1"
-    graceful-fs "~4.2.0"
-    minimatch "~3.0.4"
 
 for-in@^1.0.2:
   version "1.0.2"
