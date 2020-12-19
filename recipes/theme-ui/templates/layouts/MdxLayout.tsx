@@ -2,12 +2,12 @@ import {Head} from "blitz"
 import {FC, ReactNode} from "react"
 import {Container} from "theme-ui"
 
-type LayoutProps = {
+type MdxLayoutProps = {
   title: string
   children: ReactNode
 }
 
-const Layout: FC<LayoutProps> = ({title, children}) => {
+const MdxLayout: FC<MdxLayoutProps> = ({title, children}) => {
   return (
     <>
       <Head>
@@ -19,4 +19,4 @@ const Layout: FC<LayoutProps> = ({title, children}) => {
   )
 }
 
-export default Layout
+export default MdxLayout

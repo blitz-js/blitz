@@ -83,12 +83,12 @@ const defaultConfig: SessionConfig = {
     }
   },
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
-  unstable_isAuthorized: () => {
-    throw new Error("No unstable_isAuthorized implementation provided")
+  isAuthorized: () => {
+    throw new Error("No isAuthorized implementation provided")
   },
 }
 
-export function unstable_simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
   // No roles required, so all roles allowed
   if (!input) return true
 
@@ -111,8 +111,8 @@ let config: Required<SessionConfig>
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
   assert(
-    sessionConfig.unstable_isAuthorized,
-    "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
+    sessionConfig.isAuthorized,
+    "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
   config = {
     ...defaultConfig,
@@ -223,7 +223,7 @@ export class SessionContextClass implements SessionContext {
   isAuthorized(input?: any) {
     if (!this.userId) return false
 
-    return config.unstable_isAuthorized(this.roles, input)
+    return config.isAuthorized(this.roles, input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {

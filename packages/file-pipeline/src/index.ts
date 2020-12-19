@@ -1,5 +1,6 @@
 export {transformFiles} from "./transform-files"
-export {Stage, PipelineItem} from "./types"
+export {Stage, PipelineItem, RouteCacheEntry} from "./types"
 export * from "./events"
 export {transform} from "./transform"
 export {FileCache} from "./helpers/file-cache"
+export {RouteCache} from "./helpers/route-cache"

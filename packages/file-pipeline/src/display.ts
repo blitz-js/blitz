@@ -11,7 +11,7 @@ import {through} from "./streams"
 export function createDisplay() {
   let lastEvent: Event<any> = {type: INIT, payload: null}
 
-  let spinner = log.spinner("Preparing for launch").start()
+  let spinner = log.spinner("Compiling").start()
 
   const stream = through({objectMode: true}, (event: Event<File>, _, next) => {
     switch (event.type) {
@@ -30,7 +30,7 @@ export function createDisplay() {
       }
 
       case READY: {
-        spinner.succeed(chalk.green.bold("Prepped for launch"))
+        spinner.succeed(chalk.green.bold("Compiled"))
         break
       }
     }

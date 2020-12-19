@@ -138,6 +138,8 @@ export const createStageRpc = (isTypescript = true): Stage =>
           // this file came to be here
           hash: [file.hash, "rpc", "handler"].join("|"),
           event: "add",
+          originalPath: file.path,
+          originalRelative: file.relative,
         }),
       )
 

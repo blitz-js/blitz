@@ -46,7 +46,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
     stepName: "Import ChakraProvider component",
-    explanation: `We can import the chakra provider into _app, so it is accessibly in the whole app`,
+    explanation: `We can import the chakra provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const stylesImport = j.importDeclaration(

@@ -29,13 +29,12 @@ export class RecipeExecutor<Options extends RecipeMeta> {
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
       )
       await waitUntilExit()
-    } catch (e) {
+      log.info(
+        `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
+      )
+     } catch (e) {
       log.error(e)
       return
     }
-
-    log.info(
-      `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-    )
   }
 }
