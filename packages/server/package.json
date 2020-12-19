@@ -59,7 +59,6 @@
     "parse-gitignore": "1.0.1",
     "pirates": "4.0.1",
     "pkg-dir": "4.2.0",
-    "pretty-ms": "6.0.1",
     "pumpify": "2.0.1",
     "readable-stream": "3.6.0",
     "resolve-cwd": "3.0.0",

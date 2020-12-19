@@ -1,5 +1,4 @@
 import {baseLogger, chalk, log as displayLog} from "@blitzjs/display"
-import prettyMs from "pretty-ms"
 import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
 import {
   EnhancedResolver,
@@ -60,8 +59,8 @@ export async function invokeWithMiddleware<TInput, TResult>(
 
       const result = await enhancedResolver(params, res.blitzCtx)
 
-      const duration = prettyMs(new Date().getTime() - startTime)
-      log.info(chalk.dim("Finished", "in", duration))
+      const duration = new Date().getTime() - startTime
+      log.info(chalk.dim(`Finished in ${duration}ms`))
       displayLog.newline()
 
       res.blitzResult = result
