@@ -47,7 +47,7 @@ describe("agnosticSource", () => {
     await close()
   })
 
-  test("include a folder that doesn't exist", (done) => {
+  test.only("include a folder that doesn't exist", (done) => {
     console.log("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
     console.log("expected", expected)
