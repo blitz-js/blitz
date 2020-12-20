@@ -6,7 +6,6 @@ import File from "vinyl"
 import vinyl from "vinyl-file"
 import vfs from "vinyl-fs"
 import {through} from "../../streams"
-const debug = require("debug")("blitz:agnostic-source")
 
 export const watch = (includePaths: string[] | string, options: chokidar.WatchOptions) => {
   function resolveFilepath(filepath: string) {
@@ -84,7 +83,6 @@ export function agnosticSource({ignore, include, cwd, watch: watching = false}: 
   const stream = mergeStream(vinylFsStream, watcher.stream) as NodeJS.ReadWriteStream
 
   vinylFsStream.on("end", () => {
-    debug("stream end event")
     // Send ready event when our initial scan of the folder is done
     stream.write("ready")
   })
