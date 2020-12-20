@@ -49,7 +49,11 @@ describe("agnosticSource", () => {
     await close()
   })
 
-  test("include a folder that doesn't exist", (done) => {
+  /**
+   * FIXME temporarily disabled as the test is flaky on windows
+   * @link https://github.com/blitz-js/blitz/pull/1635
+   */
+  test.skip("include a folder that doesn't exist", (done) => {
     debug("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
     debug("expected", expected)
