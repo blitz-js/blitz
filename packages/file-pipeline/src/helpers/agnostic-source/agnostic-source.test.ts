@@ -49,7 +49,7 @@ describe("agnosticSource", () => {
     await close()
   })
 
-  test.only("include a folder that doesn't exist", (done) => {
+  test("include a folder that doesn't exist", (done) => {
     debug("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
     debug("expected", expected)
