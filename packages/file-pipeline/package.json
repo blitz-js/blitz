@@ -34,7 +34,7 @@
   "dependencies": {
     "@blitzjs/display": "0.28.0-canary.0",
     "chalk": "4.0.0",
-    "chokidar": "3.4.2",
+    "chokidar": "3.4.3",
     "flush-write-stream": "2.0.0",
     "from2": "2.3.0",
     "fs-extra": "9.0.0",
@@ -44,7 +44,7 @@
     "pump": "3.0.0",
     "pumpify": "2.0.1",
     "through2": "3.0.1",
-    "vinyl": "2.2.0",
+    "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"
   }
