@@ -28,7 +28,7 @@
     "test:examples": "yarn run build && yarn testonly:examples",
     "testonly": "yarn test:packages && yarn test:examples",
     "testonly:packages": "lerna run test --scope blitz && lerna run test --stream --scope @blitzjs/*",
-    "testonly:examples": "lerna run test --stream --scope @examples/* --concurrency 1",
+    "testonly:examples": "lerna run test --stream --scope @examples/store --concurrency 1",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
     "publish-prep": "lerna run clean && yarn && yarn build",
     "prepack": "cpy README.md packages/blitz/",
