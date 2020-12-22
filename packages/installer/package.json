@@ -40,7 +40,7 @@
     "@blitzjs/display": "0.28.0-canary.0",
     "@blitzjs/generator": "0.28.0-canary.0",
     "@types/jscodeshift": "0.7.1",
-    "chokidar": "3.4.2",
+    "chokidar": "3.4.3",
     "cross-spawn": "7.0.3",
     "diff": "4.0.2",
     "enquirer": "2.3.5",
