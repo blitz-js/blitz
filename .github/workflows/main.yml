@@ -85,7 +85,7 @@ jobs:
         env:
           CI: true
   build_and_test_examples:
-    timeout-minutes: 20
+    timeout-minutes: 25
     name: Build & Test Examples
     strategy:
       matrix:
