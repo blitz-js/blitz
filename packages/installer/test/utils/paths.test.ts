@@ -3,6 +3,8 @@ import * as fs from "fs-extra"
 
 jest.mock("fs-extra")
 
+const testIfNotWindows = process.platform === "win32" ? test.skip : test
+
 describe("path utils", () => {
   it("returns proper file paths in a TS project", () => {
     fs.existsSync.mockReturnValue(true)
@@ -15,7 +17,7 @@ describe("path utils", () => {
   })
 
   // SKIP test because the fs mock is failing on windows
-  it.skip("returns proper file paths in a JS project", () => {
+  testIfNotWindows("returns proper file paths in a JS project", () => {
     fs.existsSync.mockReturnValue(false)
     expect(paths.document()).toBe("app/pages/_document.js")
     expect(paths.app()).toBe("app/pages/_app.js")
