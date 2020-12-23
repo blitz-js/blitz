@@ -44,7 +44,7 @@ jobs:
         env:
           CI: true
   build_and_test_pkgs:
-    name: Build & Test Packages
+    name: Packages Tests
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -87,7 +87,7 @@ jobs:
           CI: true
   build_and_test_examples:
     timeout-minutes: 30
-    name: Build & Test Examples
+    name: Example Apps Tests
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
