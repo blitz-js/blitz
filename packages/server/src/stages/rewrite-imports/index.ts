@@ -43,10 +43,8 @@ export function rewriteImportOrigin(origin: string): string {
 
   // If it's an import from a page, say from app/pages/mypage,
   // we'll rewrite that import to pages/mypage.
-  if (parts.includes("pages")) {
-    if (parts[0] === "app") {
-      parts.splice(0, 1)
-    }
+  if (parts.indexOf("pages") > 0) {
+    parts.splice(0, parts.indexOf("pages"))
   }
 
   // If it's an import from an API Route, say from app/users/api/myRoute,
