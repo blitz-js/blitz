@@ -2,7 +2,7 @@
 
 * @flybayer
 
-packages/cli/**/* @aem
-packages/generator/**/* @aem
+packages/cli/**/* @aem, @flybayer
+packages/generator/**/* @aem, @flybayer
 packages/generator/templates**/* @flybayer
-packages/installer/**/* @aem
+packages/installer/**/* @aem, @flybayer
