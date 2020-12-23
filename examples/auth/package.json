@@ -68,7 +68,7 @@
     "@typescript-eslint/parser": "2.34.1-alpha.2",
     "babel-eslint": "10.1.0",
     "cross-env": "latest",
-    "cypress": "4.11.0",
+    "cypress": "6.2.0",
     "eslint": "7.6.0",
     "eslint-config-react-app": "5.2.1",
     "eslint-plugin-cypress": "2.11.1",
