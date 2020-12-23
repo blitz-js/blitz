@@ -4,6 +4,7 @@ import {
   EnhancedResolver,
   handleRequestWithMiddleware,
   Middleware,
+  prettyMs,
 } from "@blitzjs/core"
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
@@ -46,7 +47,7 @@ const rpcMiddleware = <TInput, TResult>(
 
         const duration = new Date().getTime() - startTime
         log.debug(chalk.dim("Result:"), result)
-        log.info(chalk.dim(`Finished in ${duration}ms`))
+        log.info(chalk.dim(`Finished in ${prettyMs(duration)}ms`))
         displayLog.newline()
 
         res.blitzResult = result

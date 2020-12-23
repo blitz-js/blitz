@@ -11,6 +11,7 @@ import {
   Resolver,
 } from "./types"
 import {isClient} from "./utils"
+import {prettyMs} from "./utils/pretty-ms"
 
 export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = PromiseReturnType<T>>(
   queryFn: T,
@@ -60,7 +61,7 @@ export async function invokeWithMiddleware<TInput, TResult>(
       const result = await enhancedResolver(params, res.blitzCtx)
 
       const duration = new Date().getTime() - startTime
-      log.info(chalk.dim(`Finished in ${duration}ms`))
+      log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
       displayLog.newline()
 
       res.blitzResult = result
