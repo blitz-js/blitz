@@ -9,7 +9,7 @@
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test": "prisma generate && yarn test:jest",
+    "test": "prisma generate && yarn test:jest && yarn test:e2e",
     "test:jest": "jest",
     "test:server": "blitz db migrate && blitz start --production -p 3099",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run"
