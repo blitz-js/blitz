@@ -3,6 +3,6 @@
 * @flybayer
 
 packages/cli/**/* @aem, @flybayer
-packages/generator/**/* @aem, @flybayer
+packages/generator/**/* @aem @flybayer
 packages/generator/templates**/* @flybayer
-packages/installer/**/* @aem, @flybayer
+packages/installer/**/* @aem @flybayer
