@@ -56,11 +56,11 @@ export async function invokeWithMiddleware<TInput, TResult>(
     displayLog.newline()
     try {
       log.info(chalk.dim("Starting with input:"), params)
-      const startTime = new Date().getTime()
+      const startTime = Date.now()
 
       const result = await enhancedResolver(params, res.blitzCtx)
 
-      const duration = new Date().getTime() - startTime
+      const duration = Date.now() - startTime
       log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
       displayLog.newline()
 
