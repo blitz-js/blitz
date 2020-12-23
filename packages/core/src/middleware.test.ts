@@ -65,7 +65,6 @@ describe("handleRequestWithMiddleware", () => {
     })
   })
 
-  // Failing on windows for unknown reason
   it("middleware can throw", async () => {
     console.log = jest.fn()
     console.error = jest.fn()
