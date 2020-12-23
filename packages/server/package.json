@@ -65,7 +65,7 @@
     "slash": "3.0.0",
     "superjson": "1.3.0",
     "through2": "3.0.1",
-    "vinyl": "2.2.0",
+    "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"
   },

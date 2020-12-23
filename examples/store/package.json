@@ -7,7 +7,8 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:server": "blitz db migrate && blitz db seed && blitz build && blitz start --production -p 3099",
-    "test": "./assert-tree-shaking-works.js && start-server-and-test test:server http://localhost:3099 cy:run"
+    "test": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
+    "posttest": "node assert-tree-shaking-works.js"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -31,7 +32,7 @@
   },
   "devDependencies": {
     "@types/react": "16.9.34",
-    "cypress": "4.11.0",
+    "cypress": "6.2.0",
     "eslint-plugin-cypress": "2.10.3",
     "sass": "1.29.0",
     "start-server-and-test": "1.11.2"
