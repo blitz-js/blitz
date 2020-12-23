@@ -10914,14 +10914,6 @@ init-package-json@^1.10.3:
     validate-npm-package-license "^3.0.1"
     validate-npm-package-name "^3.0.0"
 
-ink-link@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ink-link/-/ink-link-2.0.0.tgz#3e52135010398a4406f0e879baf8c118ddbb537f"
-  integrity sha512-1Ic1uU1df+2ThYUE6n04RXNs7eqQOSmxBlSbOKHIM3biLAkvyaAxzXAI4tOjWZBrS6mP1wZBEGxAH5LozQbeJg==
-  dependencies:
-    prop-types "^15.7.2"
-    terminal-link "^2.1.1"
-
 ink-spinner@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/ink-spinner/-/ink-spinner-4.0.1.tgz#f67a59ff6d4698a5d67b7bb66266ea6829a8a4e1"
