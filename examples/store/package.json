@@ -8,7 +8,7 @@
     "cy:run": "cypress run",
     "test:server": "blitz db migrate && blitz db seed && blitz start --production -p 3099",
     "test": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
-    "posttest": "./assert-tree-shaking-works.js"
+    "posttest": "node assert-tree-shaking-works.js"
   },
   "prisma": {
     "schema": "db/schema.prisma"

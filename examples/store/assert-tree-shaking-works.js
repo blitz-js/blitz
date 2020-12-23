@@ -1,9 +1,7 @@
-#!/usr/bin/env node
-
-const glob = require("glob")
-const fs = require("fs")
-
 if (process.platform !== "win32") {
+  const glob = require("glob")
+  const fs = require("fs")
+
   glob("./.next/static/chunks/**/*", {nodir: true}, (err, matches) => {
     if (err) {
       throw err
