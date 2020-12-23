@@ -45,6 +45,7 @@
     "bad-behavior": "1.0.1",
     "cookie-session": "1.4.0",
     "lodash": "^4.17.19",
+    "lodash-es": "^4.17.15",
     "passport": "0.4.1",
     "pretty-ms": "6.0.1",
     "react-query": "2.5.12",
