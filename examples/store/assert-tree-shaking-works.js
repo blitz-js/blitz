@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+const path = require("path")
 const glob = require("glob")
 const fs = require("fs")
 
-glob("./.next/static/chunks/**/*", {nodir: true}, (err, matches) => {
+glob(path.join(".", ".next/static/chunks/**/*"), {nodir: true}, (err, matches) => {
   if (err) {
     throw err
   }
