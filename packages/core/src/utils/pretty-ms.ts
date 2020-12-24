@@ -13,7 +13,7 @@ function round(num: number, decimalPlaces: number) {
  * @param ms
  */
 export function prettyMs(ms: number): string {
-  if (ms >= 1000) {
+  if (Math.abs(ms) >= 1000) {
     return `${round(ms / 1000, 1)}s`
   }
   return `${ms}ms`
