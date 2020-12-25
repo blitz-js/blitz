@@ -4,6 +4,11 @@ import getProducts, {averagePrice} from "../../queries/getProducts"
 import {Product} from "db"
 import superjson from "superjson"
 
+// regression test for #1646
+import {getMeSomeQualityHumor} from "../../api"
+
+console.log("Attention! Must read: " + getMeSomeQualityHumor())
+
 type StaticProps = {
   dataString: string
 }
