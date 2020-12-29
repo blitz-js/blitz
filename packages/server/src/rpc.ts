@@ -4,10 +4,10 @@ import {
   EnhancedResolver,
   handleRequestWithMiddleware,
   Middleware,
+  prettyMs,
 } from "@blitzjs/core"
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
-import prettyMs from "pretty-ms"
 import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
@@ -41,13 +41,13 @@ const rpcMiddleware = <TInput, TResult>(
         const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
         log.info(chalk.dim("Starting with input:"), data)
-        const startTime = new Date().getTime()
+        const startTime = Date.now()
 
         const result = await resolver(data, res.blitzCtx)
 
-        const duration = prettyMs(new Date().getTime() - startTime)
+        const duration = Date.now() - startTime
         log.debug(chalk.dim("Result:"), result)
-        log.info(chalk.dim("Finished", "in", duration))
+        log.info(chalk.dim(`Finished in ${prettyMs(duration)}ms`))
         displayLog.newline()
 
         res.blitzResult = result
