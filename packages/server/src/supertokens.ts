@@ -29,8 +29,8 @@ import {
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
+import * as crypto from "crypto"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
-import hasha, {HashaInput} from "hasha"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {nanoid} from "nanoid"
@@ -262,7 +262,7 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
+const hash = (input: string = "") => crypto.createHash("sha256").update(input).digest("hex")
 
 export const generateToken = () => nanoid(32)
 

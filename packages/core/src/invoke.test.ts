@@ -1,6 +1,6 @@
 import delay from "delay"
 import http, {IncomingMessage, ServerResponse} from "http"
-import fetch from "isomorphic-unfetch"
+import fetch from "node-fetch"
 import listen from "test-listen"
 import {invokeWithMiddleware} from "./invoke"
 import {EnhancedResolver} from "./types"
