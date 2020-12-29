@@ -14,6 +14,7 @@ export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
+
 export {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
@@ -77,3 +78,4 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
 }
 export {isLocalhost} from "./utils/index"
+export {prettyMs} from "./utils/pretty-ms"
