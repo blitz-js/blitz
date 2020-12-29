@@ -1734,6 +1734,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "timReynolds",
+      "name": "Tim Reynolds",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/168870?v=4",
+      "profile": "http://timothyreynolds.co.uk",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
