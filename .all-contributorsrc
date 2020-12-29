@@ -1725,6 +1725,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "phillipkregg",
+      "name": "phillipkregg",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1066044?v=4",
+      "profile": "https://github.com/phillipkregg",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
