@@ -9,10 +9,8 @@ const runPrisma = async (args: string[], silent = false) => {
   if (!prismaBin) {
     try {
       prismaBin = await getPrismaBin()
-    } catch {
-      throw new Error(
-        "Oops, we can't find Prisma Client. Please make sure it's installed in your project",
-      )
+    } catch (err) {
+      throw err
     }
   }
 
