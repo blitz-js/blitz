@@ -1,5 +1,6 @@
+import {log} from "@blitzjs/display"
 import next from "next"
-import {alreadyBuilt} from "./build-hash"
+import * as fs from "fs"
 import {normalize,ServerConfig} from "./config"
 import {configureStages} from "./stages"
 
@@ -48,9 +49,10 @@ export async function createBlitzApp({ dev }: CreateBlitzAppConfig) {
     })
   } else {
     // prod
-    if (!(await alreadyBuilt(buildFolder))) {
-      throw new Error('Blitz is not built - make sure to run `blitz build` before starting in production.')
-    }
+  if (!fs.existsSync(buildFolder)) {
+    log.error("Build folder not found, make sure to run `blitz build` before starting")
+    process.exit(1)
+
   }
   const dir = dev ? devFolder : buildFolder
   const app = next({ dev, dir })

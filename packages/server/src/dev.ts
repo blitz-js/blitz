@@ -21,7 +21,7 @@ export async function dev(config: ServerConfig) {
   const versionMatched = await isVersionMatched(devFolder)
 
   const stages = configureStages({writeManifestFile, isTypescript})
-  
+
   const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
     ignore,
     include,

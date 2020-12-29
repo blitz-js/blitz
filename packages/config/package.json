@@ -1,13 +1,7 @@
 {
   "name": "@blitzjs/config",
+  "version": "0.28.0-canary.1",
   "description": "Loads the blitz app config",
-  "keywords": [
-    "next.config.js",
-    "blitz.config.js",
-    "config"
-  ],
-  "author": "Fran Zekan <zekan.fran369@gmail.com>",
-  "version": "0.26.0",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -27,6 +21,12 @@
       "<rootDir>/jest.setup.js"
     ]
   },
+  "keywords": [
+    "next.config.js",
+    "blitz.config.js",
+    "config"
+  ],
+  "author": "Fran Zekan <zekan.fran369@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"

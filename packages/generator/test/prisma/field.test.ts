@@ -46,6 +46,22 @@ describe("Field model", () => {
     expect(Field.parse("name").toString()).toMatchInlineSnapshot(`"name  String"`)
   })
 
+  it("allow number characters in model name", () => {
+    expect(Field.parse("name2").toString()).toMatchInlineSnapshot(`"name2  String"`)
+  })
+
+  it("allow underscore characters in model name", () => {
+    expect(Field.parse("first_name").toString()).toMatchInlineSnapshot(`"first_name  String"`)
+  })
+
+  it("disallows number as a first character in model name", () => {
+    expect(() => Field.parse("2first").toString()).toThrow()
+  })
+
+  it("disallows underscore as a first character in model name", () => {
+    expect(() => Field.parse("_first").toString()).toThrow()
+  })
+
   it("disallows special characters in model name", () => {
     expect(() => Field.parse("app-user:int")).toThrow()
   })

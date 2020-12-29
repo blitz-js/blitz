@@ -14,7 +14,7 @@ export function withBlitz(nextConfig: any) {
         reactMode: "concurrent",
         ...(normalizedConfig.experimental || {}),
       },
-      webpack(config: any, options: Record<any, any>) {
+      webpack(config: any, options: {isServer: boolean; webpack: any}) {
         if (options.isServer) {
           const originalEntry = config.entry
           config.entry = async () => ({
@@ -25,13 +25,13 @@ export function withBlitz(nextConfig: any) {
           config.module = config.module || {}
           config.module.rules = config.module.rules || []
           const excluded = [
-            /db/,
-            /@blitzjs[\\/]display/,
-            /@blitzjs[\\/]config/,
-            /@prisma[\\/]client/,
-            /passport/,
-            /cookie-session/,
-            /secure-password/,
+            path.resolve("./db"),
+            /node_modules[\\/]@blitzjs[\\/]display/,
+            /node_modules[\\/]@blitzjs[\\/]config/,
+            /node_modules[\\/]@prisma[\\/]client/,
+            /node_modules[\\/]passport/,
+            /node_modules[\\/]cookie-session/,
+            /node_modules[\\/]secure-password/,
             /blitz[\\/]packages[\\/]config/,
             /blitz[\\/]packages[\\/]display/,
           ]
@@ -39,11 +39,36 @@ export function withBlitz(nextConfig: any) {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
           })
 
-          config.module.rules.push({
-            issuer: /(mutations|queries)(?!.*\.named)/,
-            resource: /_resolvers/,
-            use: {loader: "null-loader"},
-          })
+          if (normalizedConfig.experimental?.isomorphicResolverImports) {
+            config.plugins.push(
+              new options.webpack.NormalModuleReplacementPlugin(
+                /[/\\]?(mutations|queries)[/\\]/,
+                (resource: any) => {
+                  const request = resource.request as string
+                  if (request.includes("_resolvers")) {
+                    return
+                  }
+
+                  if (
+                    request.endsWith(".js") ||
+                    request.endsWith(".ts") ||
+                    request.endsWith(".jsx") ||
+                    request.endsWith(".tsx")
+                  ) {
+                    return
+                  }
+
+                  resource.request = resource.request + ".client"
+                },
+              ),
+            )
+          } else {
+            config.module.rules.push({
+              issuer: /(mutations|queries)(?!.*\.client)/,
+              resource: /_resolvers/,
+              use: {loader: "null-loader"},
+            })
+          }
         }
 
         if (typeof normalizedConfig.webpack === "function") {

@@ -11,6 +11,7 @@ export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
   devFolder?: string
+  routeFolder?: string
   clean?: boolean
   // -
   isTypescript?: boolean
@@ -29,6 +30,7 @@ export type ServerConfig = {
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
   devFolder: string
+  routeFolder: string
   clean?: boolean
   // -
   isTypescript: boolean
@@ -49,27 +51,28 @@ const defaults = {
   // -
   buildFolder: ".blitz/caches/build",
   devFolder: ".blitz/caches/dev",
+  routeFolder: ".blitz/caches/routes",
   // -
   writeManifestFile: true,
   // -
   ignoredPaths: [
     "./build/**/*",
-    "./.blitz-*/**/*",
-    "./.blitz/**/*",
-    "./.heroku/**/*",
-    "./.profile.d/**/*",
-    "./.cache/**/*",
+    "**/.blitz-*/**/*",
+    "**/.blitz/**/*",
+    "**/.heroku/**/*",
+    "**/.profile.d/**/*",
+    "**/.cache/**/*",
     "./.config/**/*",
-    ".DS_Store",
-    ".git/**/*",
-    ".next/**/*",
-    "*.log",
-    ".vercel/**/*",
-    ".now/**/*",
-    "*.pnp.js",
+    "**/.DS_Store",
+    "**/.git/**/*",
+    "**/.next/**/*",
+    "**/*.log",
+    "**/.vercel/**/*",
+    "**/.now/**/*",
+    "**/*.pnp.js",
     "coverage/**/*",
     "dist/**/*",
-    "node_modules/**/*",
+    "**/node_modules/**/*",
     "cypress/**/*",
     "test/**/*",
     "tests/**/*",
@@ -94,6 +97,7 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
     devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
+    routeFolder: resolve(rootFolder, config.routeFolder ?? defaults.routeFolder),
     // -
     isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
     watch: config.watch ?? env === "dev",

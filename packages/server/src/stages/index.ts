@@ -3,6 +3,7 @@ import {createStageManifest} from "./manifest"
 import {createStagePages} from "./pages"
 import {createStageRelative} from "./relative"
 import {createStageRewriteImports} from "./rewrite-imports"
+import {createStageRoutes} from "./routes"
 import {createStageRpc} from "./rpc"
 
 type StagesConfig = {writeManifestFile: boolean; isTypescript: boolean}
@@ -17,4 +18,10 @@ export const configureStages = (config: StagesConfig) => [
   createStageRpc(config.isTypescript),
   createStageConfig,
   createStageManifest(config.writeManifestFile),
+]
+
+export const configureRouteStages = (config: StagesConfig) => [
+  createStagePages,
+  createStageRpc(config.isTypescript),
+  createStageRoutes,
 ]

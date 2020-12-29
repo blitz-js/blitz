@@ -14,44 +14,38 @@ describe("rewrite-imports", () => {
           bar
         } from "./ding"`,
         expected: [
-          "import ",
-          ,
-          ,
-          ,
-          `{
+          `import {
           foo,
           bar
-        }`,
-          " from ",
-          '"',
+        } from "`,
           "./ding",
           '"',
         ],
       },
       {
         input: 'import { foo, bar } from "app/ding"',
-        expected: ["import ", , , , "{ foo, bar }", " from ", '"', "app/ding", '"'],
+        expected: ['import { foo, bar } from "', "app/ding", '"'],
       },
       {
         input: `
         import { someFunction } from "app/pages/index";
         `,
-        expected: ["import ", , , , "{ someFunction }", " from ", '"', "app/pages/index", '"'],
+        expected: ['import { someFunction } from "', "app/pages/index", '"'],
       },
       {
         input: 'import Default from "app/some/file"',
-        expected: ["import ", , "Default", , , " from ", '"', "app/some/file", '"'],
+        expected: ['import Default from "', "app/some/file", '"'],
       },
       {
         input: 'import {Suspense, useState} from "react"\n',
-        expected: ["import ", , , , "{Suspense, useState}", " from ", '"', "react", '"'],
+        expected: ['import {Suspense, useState} from "', "react", '"'],
       },
       {
         input: `import db, {ProductCreateArgs} from "db"
         type CreateProductInput = {
           data: ProductCreateArgs["data"]
         }`,
-        expected: ["import ", , "db", ", ", "{ProductCreateArgs}", " from ", '"', "db", '"'],
+        expected: [`import db, {ProductCreateArgs} from "`, "db", `"`],
       },
     ]
 
@@ -93,6 +87,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/pages/index.tsx"),
             contents: `
+              import styles from "app/pages/index.module.css"
               export function someFunction() { return "foo"; }
               export default function Index() { return <p>Hello World</p> }
             `,
@@ -111,6 +106,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/pages/index.tsx"),
             contents: `
+              import styles from "pages/index.module.css"
               export function someFunction() { return "foo"; }
               export default function Index() { return <p>Hello World</p> }
             `,
@@ -122,6 +118,30 @@ describe("rewrite-imports", () => {
               export function someOtherFunction() {
                 return someFunction();
               }
+            `,
+          },
+        ],
+      }),
+    )
+  })
+
+  describe("an import from app/admin/pages/admin/index", () => {
+    it(
+      "is rewritten to pages/admin/index",
+      makeTest({
+        input: [
+          {
+            path: normalize("/projects/blitz/blitz/app/admin/pages/admin/index.tsx"),
+            contents: `
+              import styles from "app/admin/pages/admin/index.module.scss"
+            `,
+          },
+        ],
+        expectedOutput: [
+          {
+            path: normalize("/projects/blitz/blitz/app/admin/pages/admin/index.tsx"),
+            contents: `
+              import styles from "pages/admin/index.module.scss"
             `,
           },
         ],
@@ -165,66 +185,6 @@ describe("rewrite-imports", () => {
               import { someFunction } from "pages/api/getUser";
               export function someOtherFunction() {
                 return someFunction();
-              }
-            `,
-          },
-        ],
-      }),
-    )
-  })
-
-  describe("a combined import from app/users/queries/getUser", () => {
-    it(
-      "is rewritten to app/users/queries/getUser.named",
-      makeTest({
-        input: [
-          {
-            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
-            contents: `
-              import query, { someFunction } from "app/users/queries/getUser";
-              export function someOtherFunction() {
-                return someFunction();
-              }
-            `,
-          },
-        ],
-        expectedOutput: [
-          {
-            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
-            contents: `
-              import query, { someFunction } from "app/users/queries/getUser.named";
-              export function someOtherFunction() {
-                return someFunction();
-              }
-            `,
-          },
-        ],
-      }),
-    )
-  })
-
-  describe("a dynamic import from app/users/queries/getUser", () => {
-    it(
-      "is rewritten to app/users/queries/getUser.named",
-      makeTest({
-        input: [
-          {
-            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
-            contents: `
-              export async function someOtherFunction() {
-                const getUser = await import("app/users/queries/getUser");
-                return getUser.someFunction();
-              }
-            `,
-          },
-        ],
-        expectedOutput: [
-          {
-            path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
-            contents: `
-              export async function someOtherFunction() {
-                const getUser = await import("app/users/queries/getUser.named");
-                return getUser.someFunction();
               }
             `,
           },

@@ -13,16 +13,12 @@ function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
         path.parent?.value.type === j.ReturnStatement.toString(),
     )
     .forEach((path: NodePath) => {
-      const { node } = path
+      const {node} = path
       path.replace(
         j.jsxElement(
           j.jsxOpeningElement(j.jsxIdentifier("ChakraProvider")),
           j.jsxClosingElement(j.jsxIdentifier("ChakraProvider")),
-          [
-            j.jsxText("\n"),
-            node,
-            j.jsxText("\n"),
-          ],
+          [j.jsxText("\n"), node, j.jsxText("\n")],
         ),
       )
     })
@@ -50,7 +46,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
     stepName: "Import ChakraProvider component",
-    explanation: `We can import the chakra provider into _app, so it is accessibly in the whole app`,
+    explanation: `We can import the chakra provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const stylesImport = j.importDeclaration(

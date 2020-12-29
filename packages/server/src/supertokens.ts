@@ -27,10 +27,10 @@ import {
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
 import {log} from "@blitzjs/display"
-import {atob, btoa} from "b64-lite"
+import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
+import * as crypto from "crypto"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
-import hasha, {HashaInput} from "hasha"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {nanoid} from "nanoid"
@@ -83,12 +83,12 @@ const defaultConfig: SessionConfig = {
     }
   },
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
-  unstable_isAuthorized: () => {
-    throw new Error("No unstable_isAuthorized implementation provided")
+  isAuthorized: () => {
+    throw new Error("No isAuthorized implementation provided")
   },
 }
 
-export function unstable_simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
   // No roles required, so all roles allowed
   if (!input) return true
 
@@ -111,8 +111,8 @@ let config: Required<SessionConfig>
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
   assert(
-    sessionConfig.unstable_isAuthorized,
-    "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
+    sessionConfig.isAuthorized,
+    "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
   config = {
     ...defaultConfig,
@@ -223,7 +223,7 @@ export class SessionContextClass implements SessionContext {
   isAuthorized(input?: any) {
     if (!this.userId) return false
 
-    return config.unstable_isAuthorized(this.roles, input)
+    return config.isAuthorized(this.roles, input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -262,7 +262,7 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
+const hash = (input: string = "") => crypto.createHash("sha256").update(input).digest("hex")
 
 export const generateToken = () => nanoid(32)
 
@@ -284,14 +284,14 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
   } else {
     publicDataString = JSON.stringify(publicData)
   }
-  return btoa(
+  return toBase64(
     [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
 }
 export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
+  const [handle, id, hashedPublicData, version] = fromBase64(token).split(TOKEN_SEPARATOR)
 
   if (!handle || !id || !hashedPublicData || !version) {
     throw new AuthenticationError("Failed to parse session token")
@@ -307,7 +307,7 @@ export const parseSessionToken = (token: string) => {
 
 export const createPublicDataToken = (publicData: string | PublicData) => {
   const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  return btoa(payload.join(TOKEN_SEPARATOR))
+  return toBase64(payload.join(TOKEN_SEPARATOR))
 }
 
 export const createAntiCSRFToken = () => generateToken()

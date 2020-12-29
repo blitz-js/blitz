@@ -3,7 +3,15 @@ import {resolve} from "path"
 import {testStreamItems} from "../../test-utils"
 import {agnosticSource} from "."
 
+const debug = require("debug")("blitz:test:agnostic-source")
+
 const cwd = resolve(__dirname, "fixtures")
+
+/**
+ * FIXME temporarily disabled as the test is flaky on windows
+ * @link https://github.com/blitz-js/blitz/pull/1635
+ */
+const testIfNotWindows = process.platform === "win32" ? test.skip : test
 
 function logItem(fileOrString: {path: string} | string) {
   if (typeof fileOrString === "string") {
@@ -13,13 +21,13 @@ function logItem(fileOrString: {path: string} | string) {
 }
 
 describe("agnosticSource", () => {
-  afterEach(() => {
+  beforeEach(() => {
     if (fs.existsSync(resolve(cwd, "three"))) {
       fs.unlinkSync(resolve(cwd, "three"))
     }
   })
 
-  test("when watching = false", (done) => {
+  testIfNotWindows("when watching = false", (done) => {
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
     const {stream} = agnosticSource({ignore: [], include: ["**/*"], cwd, watch: false})
     const log: any[] = []
@@ -33,7 +41,7 @@ describe("agnosticSource", () => {
     })
   })
 
-  test("when watching = true", async () => {
+  testIfNotWindows("when watching = true", async () => {
     const expected = [resolve(cwd, "one"), resolve(cwd, "two"), "ready", resolve(cwd, "three")]
     const {stream, close} = agnosticSource({ignore: [], include: ["**/*"], cwd, watch: true})
 
@@ -47,18 +55,24 @@ describe("agnosticSource", () => {
     await close()
   })
 
-  test("include a folder that doesn't exist", (done) => {
+  testIfNotWindows("include a folder that doesn't exist", (done) => {
+    debug("Starting test: include a folder doesn't exist")
     const expected = [resolve(cwd, "one"), resolve(cwd, "two")]
+    debug("expected", expected)
     const {stream} = agnosticSource({
       ignore: [],
       include: ["**/*", "folder-that-doesnt-exist/"],
       cwd,
       watch: false,
     })
+    debug("started stream")
     const log: any[] = []
     stream.on("data", (data) => {
+      debug("got data", data)
       if (data === "ready") {
+        debug("stream ready")
         stream.end()
+        debug("stream ended")
         expect(log).toEqual(expected)
         return done()
       }
@@ -66,7 +80,7 @@ describe("agnosticSource", () => {
     })
   })
 
-  test("ignore a file", (done) => {
+  testIfNotWindows("ignore a file", (done) => {
     const expected = [resolve(cwd, "one")]
     const {stream} = agnosticSource({ignore: ["two"], include: ["**/*"], cwd, watch: false})
     const log: any[] = []

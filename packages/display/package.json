@@ -1,10 +1,13 @@
 {
   "name": "@blitzjs/display",
-  "version": "0.26.0",
+  "version": "0.28.0-canary.1",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf dist",
+    "wait:config": "wait-on ../config/dist/packages/config/src/index.d.ts",
+    "predev": "yarn wait:config",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
@@ -30,7 +33,9 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "@blitzjs/display": "0.28.0-canary.1",
     "chalk": "4.0.0",
+    "console-table-printer": "2.5.1",
     "ora": "4.0.4",
     "tslog": "2.9.1"
   }

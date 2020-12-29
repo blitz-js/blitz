@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/repl",
-  "version": "0.26.0",
+  "version": "0.28.0-canary.1",
   "description": "Repl package for Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz/packages/repl/#readme",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "chokidar": "3.4.2",
+    "chokidar": "3.4.3",
     "globby": "11.0.0",
     "pkg-dir": "4.2.0",
     "progress": "^2.0.3"

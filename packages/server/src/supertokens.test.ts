@@ -9,13 +9,13 @@ import {
   SessionContext,
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
-import {atob} from "b64-lite"
+import {fromBase64} from "b64-lite"
 import http from "http"
-import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
+import fetch from "node-fetch"
 import listen from "test-listen"
 import {rpcApiHandler} from "./rpc"
-import {sessionMiddleware, unstable_simpleRolesIsAuthorized} from "./supertokens"
+import {sessionMiddleware, simpleRolesIsAuthorized} from "./supertokens"
 
 const isIsoDate = (str: string) => {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false
@@ -72,7 +72,7 @@ describe("supertokens", () => {
       expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).toBe("updated")
       expect(cookie(COOKIE_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
 
-      const [publicDataStr, expireAtStr] = atob(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
+      const [publicDataStr, expireAtStr] = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
         TOKEN_SEPARATOR,
       )
 
@@ -105,7 +105,7 @@ describe("supertokens", () => {
       expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
       expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
 
-      const [publicDataStr, expireAtStr] = atob(
+      const [publicDataStr, expireAtStr] = fromBase64(
         res.headers.get(HEADER_PUBLIC_DATA_TOKEN) as string,
       ).split(TOKEN_SEPARATOR)
 
@@ -137,7 +137,7 @@ async function mockServer<TInput, TResult>(
   const handler = rpcApiHandler(
     resolverModule,
     [
-      sessionMiddleware({unstable_isAuthorized: unstable_simpleRolesIsAuthorized}),
+      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized}),
       ...(resolverModule.middleware || []),
     ],
     dbConnectorFn,

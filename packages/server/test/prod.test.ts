@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
-import {resolve} from "path"
-import {multiMock} from "./utils/multi-mock"
+import { resolve } from "path"
+import { multiMock } from "./utils/multi-mock"
 
 const mocks = multiMock(
   {
@@ -17,10 +17,15 @@ const mocks = multiMock(
   resolve(__dirname, "../src"),
 )
 
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
+
 // Import with mocks applied
-import {ensureDir,writeFile} from "fs-extra"
-import {getInputArtifacts} from "../src/build-hash"
-import {prod} from "../src/prod"
+import { ensureDir } from "fs-extra"
+import { prod } from "../src/prod"
 
 describe("Prod command", () => {
   const rootFolder = resolve("build")
@@ -50,17 +55,9 @@ describe("Prod command", () => {
     mocks.mockFs.restore()
   })
 
-  describe("When not already built", () => {
-    it("should trigger build step", async () => {
-      await prod(prodArgs)
-      expect(mocks.build.build.mock.calls).toEqual([[prodArgs]])
-    })
-  })
-
   describe("When already built", () => {
     it("should not trigger build step", async () => {
       await ensureDir(buildFolder)
-      await writeFile(`${buildFolder}/last-build.json`, JSON.stringify(await getInputArtifacts()))
       await prod(prodArgs)
       expect(mocks.build.build.mock.calls).toEqual([])
     })
