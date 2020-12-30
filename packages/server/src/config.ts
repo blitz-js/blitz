@@ -71,6 +71,7 @@ const defaults = {
     "**/.now/**/*",
     "**/*.pnp.js",
     "coverage/**/*",
+    ".coverage/**/*",
     "dist/**/*",
     "**/node_modules/**/*",
     "cypress/**/*",
