@@ -42,7 +42,7 @@
   "dependencies": {
     "@prisma/cli": "2.11.0",
     "@prisma/client": "2.11.0",
-    "blitz": "0.26.0",
+    "blitz": "0.28.0-canary.1",
     "react": "0.0.0-experimental-4ead6b530",
     "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.2",
