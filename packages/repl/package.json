@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "chokidar": "3.4.3",
-    "globby": "11.0.0",
+    "globby": "11.0.1",
     "pkg-dir": "4.2.0",
     "progress": "^2.0.3"
   },
