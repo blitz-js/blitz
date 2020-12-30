@@ -50,7 +50,7 @@ export const validateQueryFn = <TInput, TResult>(
 ) => {
   if (!isEnhancedResolverRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
-      `Either the file path to your query resolver is incorrect (must be in a "queries" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`,
+      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`,
     )
   }
 }
