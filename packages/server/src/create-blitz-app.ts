@@ -13,10 +13,6 @@ export async function createBlitzApp({dev}: CreateBlitzAppConfig) {
   const serverConfig: ServerConfig = {
     env: dev ? "dev" : "prod",
     rootFolder: process.cwd(),
-    // port
-    // hostname
-    // inspect
-    // clean: flags["no-incremental-build"],
   }
   const {
     rootFolder,
