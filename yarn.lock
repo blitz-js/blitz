@@ -936,7 +936,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@7.12.5", "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.5", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@7.12.5", "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.12.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
   integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
@@ -14565,12 +14565,12 @@ react-dom@0.0.0-experimental-4ead6b530:
     object-assign "^4.1.1"
     scheduler "0.0.0-experimental-4ead6b530"
 
-react-error-boundary@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-2.3.1.tgz#bd6c8a9777224b6a1153c5f63e1ac86bf039f657"
-  integrity sha512-w1i++MM5GV6WTnM3MtLdw9CNXxqydkZwbwNDT9GBFBaWs0sp21z27DGIevb3fism1T+LGfdWgTFlhaq7G1pIMA==
+react-error-boundary@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.0.tgz#9487443df2f9ba1db90d8ab52351814907ea4af3"
+  integrity sha512-lmPrdi5SLRJR+AeJkqdkGlW/CRkAUvZnETahK58J4xb5wpbfDngasEGu+w0T1iXEhVrYBJZeW+c4V1hILCnMWQ==
   dependencies:
-    "@babel/runtime" "^7.10.5"
+    "@babel/runtime" "^7.12.5"
 
 react-final-form@6.5.2:
   version "6.5.2"
@@ -14984,10 +14984,10 @@ regjsparser@^0.6.4:
   dependencies:
     jsesc "~0.5.0"
 
-release@6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/release/-/release-6.1.0.tgz#e4231d6c99b2ac41f058ef6db5f4b1136bf723ca"
-  integrity sha512-YnwR5Rb001UisihQKvYvEKvwj5OrMTScrh03d/+/u7YBqe2dITRNQsLTS8rIoGWSoy65sLtQgibwVYgjkW4Pzg==
+release@6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/release/-/release-6.3.0.tgz#bbd351d7460948f1ed55ea02b4b2393f98a1637a"
+  integrity sha512-p2dQcsNzCwI0LMHFb/BAd49NrTbIlt2krjaDVHsjV40tScLIRHVatEtN+4MV4Xx9jKKGiZGoM2gtrSn6vJeM1g==
   dependencies:
     "@octokit/rest" "15.2.6"
     args "4.0.0"
