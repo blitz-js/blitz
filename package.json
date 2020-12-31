@@ -39,6 +39,10 @@
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
+  "resolutions": {
+    "jest": "24.9.0",
+    "ts-jest": "24.3.0"
+  },
   "devDependencies": {
     "@rollup/pluginutils": "3.0.8",
     "@testing-library/jest-dom": "5.11.8",
@@ -150,12 +154,6 @@
     "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
-  },
-  "resolutions": {
-    "jest": "24.9.0",
-    "@types/react": "16.9.34",
-    "@types/react-dom": "16.9.8",
-    "ts-jest": "24.3.0"
   },
   "version": "0.0.0"
 }

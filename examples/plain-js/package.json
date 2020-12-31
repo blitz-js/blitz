@@ -36,7 +36,6 @@
     "react-dom": "0.0.0-experimental-4ead6b530"
   },
   "devDependencies": {
-    "@types/react": "17.0.0",
     "@typescript-eslint/eslint-plugin": "2.31.0",
     "@typescript-eslint/parser": "2.31.0",
     "babel-eslint": "10.1.0",
