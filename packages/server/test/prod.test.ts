@@ -1,11 +1,11 @@
 /* eslint-disable import/first */
 
-import { resolve } from "path"
-import { multiMock } from "./utils/multi-mock"
+import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
   {
-    build: { build: jest.fn().mockReturnValue(Promise.resolve()) },
+    build: {build: jest.fn().mockReturnValue(Promise.resolve())},
     "next-utils": {
       nextStart: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
@@ -24,8 +24,8 @@ jest.mock("@blitzjs/config", () => {
 })
 
 // Import with mocks applied
-import { ensureDir } from "fs-extra"
-import { prod } from "../src/prod"
+import {ensureDir} from "fs-extra"
+import {prod} from "../src/prod"
 
 describe("Prod command", () => {
   const rootFolder = resolve("build")
