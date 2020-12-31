@@ -146,7 +146,7 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  abstract async getTemplateValues(): Promise<any>
+  abstract getTemplateValues(): Promise<any>
 
   abstract getTargetDirectory(): string
 
@@ -292,7 +292,7 @@ export abstract class Generator<
         }
       })
     } else {
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         const conflictChecker = new ConflictChecker({
           dryRun: this.options.dryRun,
         })

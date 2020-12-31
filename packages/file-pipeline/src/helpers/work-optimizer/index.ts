@@ -11,7 +11,7 @@ const defaultSaveCache = debounce((filePath: string, data: object) => {
   return writeFile(filePath, Buffer.from(JSON.stringify(data, null, 2)))
     .then(() => {})
     .catch(() => {})
-}, 500)
+}, 500) as (filePath: string, data: object) => Promise<void>
 
 const defaultReadCache = (filePath: string) => {
   // We need to do sync file reading here as this cache
