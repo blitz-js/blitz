@@ -8,6 +8,10 @@ import {Generator, GeneratorOptions} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
+
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   useTs: boolean
@@ -46,7 +50,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
-    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
 
