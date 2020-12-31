@@ -50,11 +50,11 @@
     "hasbin": "1.2.3",
     "minimist": "1.2.5",
     "p-event": "4.2.0",
-    "pkg-dir": "4.2.0",
+    "pkg-dir": "5.0.0",
     "pluralize": "8.0.0",
     "rimraf": "3.0.2",
     "tar": "6.0.5",
-    "ts-node": "8.9.0",
+    "ts-node": "9.1.1",
     "tsconfig-paths": "3.9.0",
     "v8-compile-cache": "2.2.0"
   },

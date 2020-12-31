@@ -43,7 +43,7 @@
     "parallel-transform": "1.2.0",
     "pump": "3.0.0",
     "pumpify": "2.0.1",
-    "through2": "3.0.1",
+    "through2": "4.0.2",
     "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"

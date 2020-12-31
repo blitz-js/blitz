@@ -41,7 +41,7 @@
     "@blitzjs/generator": "0.28.0-canary.1",
     "@types/jscodeshift": "0.7.2",
     "cross-spawn": "7.0.3",
-    "diff": "4.0.2",
+    "diff": "5.0.0",
     "enquirer": "2.3.6",
     "fs-extra": "9.0.1",
     "globby": "11.0.1",
@@ -49,8 +49,8 @@
     "ink-spinner": "4.0.1",
     "jscodeshift": "0.11.0",
     "react": "0.0.0-experimental-4ead6b530",
-    "recast": "0.19.1",
-    "ts-node": "8.9.1"
+    "recast": "0.20.4",
+    "ts-node": "9.1.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

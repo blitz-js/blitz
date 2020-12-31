@@ -51,22 +51,22 @@
     "nanoid": "3.1.20",
     "next": "10.0.4",
     "null-loader": "4.0.1",
-    "ora": "4.0.4",
+    "ora": "5.2.0",
     "parallel-transform": "1.2.0",
     "parse-gitignore": "1.0.1",
     "pirates": "4.0.1",
-    "pkg-dir": "4.2.0",
+    "pkg-dir": "5.0.0",
     "pumpify": "2.0.1",
     "readable-stream": "3.6.0",
     "resolve-cwd": "3.0.0",
     "slash": "3.0.0",
     "superjson": "1.4.1",
-    "through2": "3.0.1",
+    "through2": "4.0.2",
     "vinyl": "2.2.1"
   },
   "devDependencies": {
     "@blitzjs/core": "0.28.0-canary.1",
-    "next-transpile-modules": "3.2.0"
+    "next-transpile-modules": "6.0.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
