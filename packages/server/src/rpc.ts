@@ -40,13 +40,13 @@ const rpcMiddleware = <TInput, TResult>(
       try {
         const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
-        log.info(chalk.dim("Starting with input:"), data)
+        log.info(chalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
 
         const result = await resolver(data, res.blitzCtx)
 
         const duration = Date.now() - startTime
-        log.debug(chalk.dim("Result:"), result)
+        log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
         log.info(chalk.dim(`Finished in ${prettyMs(duration)}ms`))
         displayLog.newline()
 

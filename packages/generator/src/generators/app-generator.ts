@@ -127,7 +127,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!fallbackUsed && !this.options.skipInstall) {
       spinner.succeed()
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         const logFlag = this.options.yarn ? "--json" : "--loglevel=error"
         const cp = spawn(this.options.yarn ? "yarn" : "npm", ["install", logFlag], {
           stdio: ["inherit", "pipe", "pipe"],
