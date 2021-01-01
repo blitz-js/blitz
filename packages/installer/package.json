@@ -50,7 +50,7 @@
     "jscodeshift": "0.11.0",
     "react": "0.0.0-experimental-4ead6b530",
     "recast": "0.20.4",
-    "ts-node": "9.1.1"
+    "ts-node": "^9.1.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
