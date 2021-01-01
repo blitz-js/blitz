@@ -32,8 +32,8 @@
     "@prisma/cli": "2.12.0",
     "@prisma/client": "2.12.0",
     "blitz": "0.28.0-canary.1",
-    "react": "0.0.0-experimental-4ead6b530",
-    "react-dom": "0.0.0-experimental-4ead6b530"
+    "react": "0.0.0-experimental-3310209d0",
+    "react-dom": "0.0.0-experimental-3310209d0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.11.1",

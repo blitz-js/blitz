@@ -48,7 +48,7 @@
     "ink": "3.0.8",
     "ink-spinner": "4.0.1",
     "jscodeshift": "0.11.0",
-    "react": "0.0.0-experimental-4ead6b530",
+    "react": "0.0.0-experimental-3310209d0",
     "recast": "0.20.4",
     "ts-node": "^9.1.1"
   },
