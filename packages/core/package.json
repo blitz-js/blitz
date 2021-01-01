@@ -41,9 +41,9 @@
   },
   "dependencies": {
     "@blitzjs/display": "0.28.0-canary.1",
-    "b64-lite": "1.4.0",
-    "bad-behavior": "1.0.1",
-    "cookie-session": "1.4.0",
+    "b64-lite": "^1.4.0",
+    "bad-behavior": "^1.0.1",
+    "cookie-session": "^1.4.0",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.20",
     "passport": "0.4.1",

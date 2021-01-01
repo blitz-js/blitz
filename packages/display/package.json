@@ -34,9 +34,9 @@
   },
   "dependencies": {
     "@blitzjs/display": "0.28.0-canary.1",
-    "chalk": "4.1.0",
-    "console-table-printer": "2.7.5",
-    "ora": "5.2.0",
-    "tslog": "3.0.3"
+    "chalk": "^4.1.0",
+    "console-table-printer": "^2.7.5",
+    "ora": "^5.2.0",
+    "tslog": "^3.0.3"
   }
 }
