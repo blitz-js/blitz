@@ -59,7 +59,7 @@ export async function nextStartDev(
   const transform = createOutputTransformer(manifest, devFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)
       rej("")
@@ -79,7 +79,7 @@ export async function nextStartDev(
 }
 
 export function nextBuild(nextBin: string, cwd: string) {
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     spawn(nextBin, ["build"], {
       cwd,
       stdio: "inherit",
@@ -94,7 +94,7 @@ export function nextBuild(nextBin: string, cwd: string) {
 export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
 
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)
       rej("")

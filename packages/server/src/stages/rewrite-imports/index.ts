@@ -1,6 +1,6 @@
 import {Stage, transform} from "@blitzjs/file-pipeline"
-import path from "path"
 import fastGlob from "fast-glob"
+import path from "path"
 
 const isJavaScriptFile = (filepath: string) => filepath.match(/\.(ts|tsx|js|jsx)$/)
 

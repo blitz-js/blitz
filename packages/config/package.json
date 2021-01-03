@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/config",
-  "version": "0.28.0-canary.1",
+  "version": "0.28.0-canary.2",
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {

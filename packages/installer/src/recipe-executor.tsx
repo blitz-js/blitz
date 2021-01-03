@@ -32,7 +32,7 @@ export class RecipeExecutor<Options extends RecipeMeta> {
       log.info(
         `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
       )
-     } catch (e) {
+    } catch (e) {
       log.error(e)
       return
     }
