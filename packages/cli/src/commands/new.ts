@@ -156,9 +156,22 @@ export class New extends Command {
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
 
           try {
-            // Required in order for DATABASE_URL to be available
-            require("dotenv-expand")(require("dotenv-flow").config({silent: true})) // this probably won't work
-            spawn.sync("npx", ["prisma", "migrate", "dev", "--name", "Initial Migration"], {stdio: "inherit"})
+            // dotenv-cli used for DATABASE_URL to be available
+            spawn.sync(
+              "npx",
+              [
+                "dotenv",
+                "-e",
+                ".env.local",
+                "prisma",
+                "migrate",
+                "dev",
+                "--preview-feature",
+                "--name",
+                "Initial Migration",
+              ],
+              {stdio: "inherit"},
+            )
             spinner.succeed()
           } catch {
             spinner.fail()
