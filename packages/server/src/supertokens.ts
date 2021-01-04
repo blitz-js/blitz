@@ -408,6 +408,7 @@ export const setSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -429,6 +430,7 @@ export const setAnonymousSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -450,6 +452,7 @@ export const setCSRFCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -471,6 +474,7 @@ export const setPublicDataCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
