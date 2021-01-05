@@ -44,7 +44,7 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 // ----------------------------------------------------------------------------------------
-// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// IMPORTANT: blitz.config.js must be loaded for session management config to be initialized
 // This line ensures that blitz.config.js is loaded
 // ----------------------------------------------------------------------------------------
 process.nextTick(getConfig)
