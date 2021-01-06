@@ -306,8 +306,8 @@ export const parseSessionToken = (token: string) => {
 }
 
 export const createPublicDataToken = (publicData: string | PublicData) => {
-  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  return toBase64(payload.join(TOKEN_SEPARATOR))
+  const payload = typeof publicData === "string" ? publicData : JSON.stringify(publicData)
+  return toBase64(payload)
 }
 
 export const createAntiCSRFToken = () => generateToken()

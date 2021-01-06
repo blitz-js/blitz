@@ -2,7 +2,6 @@
 import {act} from "@testing-library/react-hooks"
 import {toBase64} from "b64-lite"
 import {renderHook} from "../../test/test-utils"
-import {TOKEN_SEPARATOR} from "../constants"
 import {publicDataStore} from "../public-data-store"
 import {useSession} from "../supertokens"
 import {parsePublicDataToken} from "./tokens"
@@ -22,9 +21,9 @@ describe("supertokens", () => {
     })
 
     it("parses the public data", () => {
-      const validJSON = '"foo"'
+      const validJSON = '{"foo": "bar"}'
       expect(parsePublicDataToken(toBase64(validJSON))).toEqual({
-        publicData: "foo",
+        publicData: {foo: "bar"},
       })
     })
 
@@ -32,13 +31,6 @@ describe("supertokens", () => {
       const data = '"foo-κόσμε-żółć-平仮名"'
       expect(parsePublicDataToken(toBase64(data))).toEqual({
         publicData: "foo-κόσμε-żółć-平仮名",
-      })
-    })
-
-    it("only uses the first separated tokens", () => {
-      const data = `"foo"${TOKEN_SEPARATOR}123`
-      expect(parsePublicDataToken(toBase64(data))).toEqual({
-        publicData: "foo",
       })
     })
   })
