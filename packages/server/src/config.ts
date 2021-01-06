@@ -24,7 +24,7 @@ export type ServerConfig = {
   hostname?: string
   inspect?: boolean
   // –
-  env?: ServerEnvironment
+  env: ServerEnvironment
 }
 
 type NormalizedConfig = ServerConfig & {

@@ -2,20 +2,17 @@
   "name": "@examples/custom-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "node build/server/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon --watch server --ext ts,js,tsx --exec \"ts-node --project tsconfig.server.json ./server/index.ts\"",
+    "start": "blitz start",
+    "build": "blitz build",
     "studio": "blitz db studio",
-    "build:blitz": "blitz build",
-    "build:server": "tsc --project tsconfig.server.json",
-    "build": "run-s build:*",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test-watch": "jest --watch",
     "cy-open": "cypress open",
     "cy-run": "cypress run",
     "test:migrate": "blitz db migrate",
     "test:jest": "jest",
-    "test:build": "yarn build",
-    "test:e2e": "cross-env NODE_ENV=test PORT=3099 DEBUG=blitz:* start-server-and-test start http://localhost:3099 cy-run",
+    "test-server": "blitz build && blitz start --production",
+    "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
     "test": "run-s test:*"
   },
   "browserslist": [
@@ -40,15 +37,15 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.11.0",
-    "@prisma/client": "2.11.0",
-    "blitz": "0.28.0-canary.2",
+    "@prisma/cli": "2.12.0",
+    "@prisma/client": "2.12.0",
+    "blitz": "0.28.0",
     "react": "0.0.0-experimental-4ead6b530",
     "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.2",
     "secure-password": "4.0.0",
-    "typescript": "4.1.2",
-    "zod": "1.11.10",
+    "typescript": "4.1.3",
+    "zod": "1.11.11",
     "final-form": "4.20.1",
     "react-final-form": "6.5.2"
   },
@@ -63,7 +60,6 @@
     "@typescript-eslint/eslint-plugin": "4.8.1",
     "@typescript-eslint/parser": "4.8.1",
     "babel-eslint": "10.1.0",
-    "cross-env": "latest",
     "cypress": "4.11.0",
     "eslint": "7.14.0",
     "eslint-config-react-app": "5.2.1",
@@ -83,9 +79,7 @@
     "pretty-quick": "3.1.0",
     "react-test-renderer": "16.14.0",
     "start-server-and-test": "1.11.2",
-    "ts-jest": "26.4.4",
-    "ts-node": "9.0.0",
-    "wait-on": "4.0.2"
+    "ts-jest": "26.4.4"
   },
   "private": true
 }

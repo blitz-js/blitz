@@ -2,6 +2,8 @@ import {log} from "@blitzjs/display"
 import {ServerConfig} from "config"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
+import fs from "fs"
+import path from "path"
 import {Manifest} from "./stages/manifest"
 import {through} from "./streams"
 
@@ -30,9 +32,18 @@ function createOutputTransformer(manifest: Manifest, devFolder: string) {
   return {stream}
 }
 
+function getSpawnEnv(config: ServerConfig) {
+  let spawnEnv: NodeJS.ProcessEnv = process.env
+
+  if (config.inspect) {
+    spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
+  }
+
+  return spawnEnv
+}
+
 async function createCommandAndPort(config: ServerConfig, command: string) {
   let spawnCommand: string[] = [command]
-  let spawnEnv: NodeJS.ProcessEnv = process.env
   let availablePort: number
 
   availablePort = await detect({port: config.port ? config.port : 3000})
@@ -42,9 +53,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
   }
 
-  if (config.inspect) {
-    spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
-  }
+  const spawnEnv = getSpawnEnv(config)
 
   return {spawnCommand, spawnEnv, availablePort}
 }
@@ -112,5 +121,36 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
           rej(err)
         })
     }
+  })
+}
+
+export function getCustomServerPath(cwd: string) {
+  return path.resolve(cwd, "server.js")
+}
+export function customServerExists(cwd: string) {
+  return fs.existsSync(getCustomServerPath(cwd))
+}
+
+export function startCustomServer(cwd: string, config: ServerConfig) {
+  const serverPath = getCustomServerPath(cwd)
+
+  let spawnEnv = getSpawnEnv(config)
+  if (config.env === "prod") {
+    spawnEnv = {...spawnEnv, NODE_ENV: "production"}
+  }
+
+  return new Promise<void>((res, rej) => {
+    spawn("node", [serverPath], {
+      cwd,
+      env: spawnEnv,
+      stdio: "inherit",
+    })
+      .on("exit", (code: number) => {
+        code === 0 ? res() : rej(`server.js failed with status code: ${code}`)
+      })
+      .on("error", (err) => {
+        console.error(err)
+        rej(err)
+      })
   })
 }
