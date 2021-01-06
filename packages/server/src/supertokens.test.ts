@@ -84,6 +84,34 @@ describe("supertokens", () => {
     })
   })
 
+  it("accepts a custom domain attribute", async () => {
+    const resolverModule = ((() => {
+      return
+    }) as unknown) as EnhancedResolver<unknown, unknown>
+    resolverModule.middleware = [
+      (_req, res, next) => {
+        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        return next()
+      },
+    ]
+
+    await mockServer(resolverModule, async (url) => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({params: {}}),
+      })
+
+      const cookieHeader = res.headers.get("Set-Cookie") as string
+      const cookie = (name: string) => readCookie(cookieHeader, name)
+
+      expect(res.status).toBe(200)
+      expect(cookie("Domain")).toBe("test")
+    })
+  })
+
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
@@ -137,7 +165,7 @@ async function mockServer<TInput, TResult>(
   const handler = rpcApiHandler(
     resolverModule,
     [
-      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized}),
+      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized, domain: "test"}),
       ...(resolverModule.middleware || []),
     ],
     dbConnectorFn,

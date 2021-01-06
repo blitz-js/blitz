@@ -44,7 +44,7 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 // ----------------------------------------------------------------------------------------
-// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// IMPORTANT: blitz.config.js must be loaded for session management config to be initialized
 // This line ensures that blitz.config.js is loaded
 // ----------------------------------------------------------------------------------------
 process.nextTick(getConfig)
@@ -306,8 +306,8 @@ export const parseSessionToken = (token: string) => {
 }
 
 export const createPublicDataToken = (publicData: string | PublicData) => {
-  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  return toBase64(payload.join(TOKEN_SEPARATOR))
+  const payload = typeof publicData === "string" ? publicData : JSON.stringify(publicData)
+  return toBase64(payload)
 }
 
 export const createAntiCSRFToken = () => generateToken()
@@ -408,6 +408,7 @@ export const setSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -429,6 +430,7 @@ export const setAnonymousSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -450,6 +452,7 @@ export const setCSRFCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -471,6 +474,7 @@ export const setPublicDataCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
