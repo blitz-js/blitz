@@ -2,7 +2,7 @@
   "name": "@examples/custom-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "blitz start",
+    "start": "nodemon --watch server.js --exec 'blitz start'",
     "build": "blitz build",
     "studio": "blitz db studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
@@ -79,7 +79,8 @@
     "pretty-quick": "3.1.0",
     "react-test-renderer": "16.14.0",
     "start-server-and-test": "1.11.2",
-    "ts-jest": "26.4.4"
+    "ts-jest": "26.4.4",
+    "nodemon": "2.0.7"
   },
   "private": true
 }
