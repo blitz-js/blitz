@@ -1770,6 +1770,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rembrandtreyes",
+      "name": "Rembrandt Reyes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15057964?v=4",
+      "profile": "https://rembrandtreyes.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
