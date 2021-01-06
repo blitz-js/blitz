@@ -9,6 +9,7 @@ const mocks = multiMock(
     "next-utils": {
       nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
@@ -75,6 +76,7 @@ describe("Dev command", () => {
           watch: false,
           port: 3000,
           hostname: "localhost",
+          env: "dev",
         })
       } catch (err) {
         expect(err).toBe("pow")
@@ -107,6 +109,7 @@ describe("Dev command", () => {
           watch: false,
           port: 3000,
           hostname: "localhost",
+          env: "dev",
         }),
       ).rejects.toThrowError("Blitz does not support")
 
@@ -143,6 +146,7 @@ describe("Dev command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
       expect(directoryTree(rootFolder)).toEqual({
         children: [
@@ -194,6 +198,7 @@ describe("Dev command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
       const nextPatched = resolve(rootFolder, "@blitzjs/server", "next-patched")
       const blitzDev = join(rootFolder, ".blitz-dev")

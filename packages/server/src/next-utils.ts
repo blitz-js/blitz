@@ -127,6 +127,7 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
 export function getCustomServerPath(cwd: string) {
   return path.resolve(cwd, "server.js")
 }
+
 export function customServerExists(cwd: string) {
   return fs.existsSync(getCustomServerPath(cwd))
 }

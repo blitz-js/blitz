@@ -8,6 +8,7 @@ const mocks = multiMock(
     "next-utils": {
       nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve("")),
@@ -52,6 +53,7 @@ describe("Dev command", () => {
       watch: false,
       port: 3000,
       hostname: "localhost",
+      env: "dev",
     })
   })
 

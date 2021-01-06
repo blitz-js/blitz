@@ -44,6 +44,7 @@ describe("Build command", () => {
       writeManifestFile: false,
       port: 3000,
       hostname: "localhost",
+      env: "prod",
     })
   })
 
