@@ -1761,6 +1761,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "kyken",
+      "name": "Tsuyoshi Osawa",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20137120?v=4",
+      "profile": "https://github.com/kyken",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
