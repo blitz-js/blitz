@@ -1,6 +1,6 @@
 {
   "name": "@examples/custom-server",
-  "version": "1.0.0",
+  "version": "0.29.0-canary.0",
   "scripts": {
     "start": "nodemon --watch server.js --exec 'blitz start'",
     "build": "blitz build",
@@ -39,15 +39,15 @@
   "dependencies": {
     "@prisma/cli": "2.12.0",
     "@prisma/client": "2.12.0",
-    "blitz": "0.28.0",
+    "blitz": "0.29.0-canary.0",
+    "final-form": "4.20.1",
     "react": "0.0.0-experimental-4ead6b530",
     "react-dom": "0.0.0-experimental-4ead6b530",
     "react-error-boundary": "2.3.2",
+    "react-final-form": "6.5.2",
     "secure-password": "4.0.0",
     "typescript": "4.1.3",
-    "zod": "1.11.11",
-    "final-form": "4.20.1",
-    "react-final-form": "6.5.2"
+    "zod": "1.11.11"
   },
   "devDependencies": {
     "@cypress/skip-test": "2.5.0",
@@ -74,13 +74,13 @@
     "jest-environment-jsdom-fourteen": "1.0.1",
     "jest-watch-typeahead": "0.6.1",
     "lint-staged": "10.5.1",
+    "nodemon": "2.0.7",
     "npm-run-all": "4.1.5",
     "prettier": "2.2.0",
     "pretty-quick": "3.1.0",
     "react-test-renderer": "16.14.0",
     "start-server-and-test": "1.11.2",
-    "ts-jest": "26.4.4",
-    "nodemon": "2.0.7"
+    "ts-jest": "26.4.4"
   },
   "private": true
 }
