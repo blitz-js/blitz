@@ -30,7 +30,7 @@ export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>
 }
 
 export class PrismaCommand extends Command {
-  static description = "Loads env variables then proxies all args to Prisma CLi"
+  static description = "Loads env variables then proxies all args to Prisma CLI"
   static aliases = ["p"]
 
   static flags = {
