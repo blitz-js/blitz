@@ -1,6 +1,7 @@
+import {log} from "@blitzjs/display"
 import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
-import {nextStartDev} from "./next-utils"
+import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
 import {configureStages} from "./stages"
 
 export async function dev(config: ServerConfig) {
@@ -31,5 +32,10 @@ export async function dev(config: ServerConfig) {
 
   if (!versionMatched) await saveBlitzVersion(devFolder)
 
-  await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+  if (customServerExists(devFolder)) {
+    log.success("Using your custom server")
+    await startCustomServer(devFolder, config)
+  } else {
+    await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+  }
 }

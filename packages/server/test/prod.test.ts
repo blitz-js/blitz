@@ -9,6 +9,7 @@ const mocks = multiMock(
     "next-utils": {
       nextStart: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve("")),
@@ -25,19 +26,21 @@ jest.mock("@blitzjs/config", () => {
 
 // Import with mocks applied
 import {ensureDir} from "fs-extra"
+import {ServerConfig} from "../src"
 import {prod} from "../src/prod"
 
 describe("Prod command", () => {
   const rootFolder = resolve("build")
   const buildFolder = resolve(rootFolder, ".blitz-build")
   const devFolder = resolve(rootFolder, ".blitz")
-  const prodArgs = {
+  const prodArgs: ServerConfig = {
     rootFolder,
     buildFolder,
     devFolder,
     writeManifestFile: false,
     port: 3000,
     hostname: "localhost",
+    env: "prod",
   }
 
   beforeEach(() => {

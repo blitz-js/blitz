@@ -4,7 +4,7 @@ jest.mock("@blitzjs/config", () => {
   }
 })
 
-import {withBlitz} from "../src"
+import {withBlitz} from "../src/with-blitz"
 
 describe("withBlitz", () => {
   it("alters the webpack config as expected", () => {

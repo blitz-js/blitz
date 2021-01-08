@@ -36,6 +36,7 @@ export class Start extends Command {
       hostname: flags.hostname,
       inspect: flags.inspect,
       clean: flags["no-incremental-build"],
+      env: flags.production ? "prod" : "dev",
     }
 
     try {

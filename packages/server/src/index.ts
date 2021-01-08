@@ -8,3 +8,15 @@ export {resolveBinAsync} from "./resolve-bin-async"
 export {ManifestLoader} from "./manifest-loader"
 export * from "./rpc"
 export * from "./supertokens"
+
+// -----------------
+// For custom server
+// -----------------
+import next from "next"
+
+// Support commonjs `require('blitz')`
+module.exports = next
+exports = module.exports
+
+// eslint-disable-next-line import/no-default-export
+export default next
