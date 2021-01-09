@@ -1,16 +1,70 @@
+import {Stats} from "fs"
+import micromatch from "micromatch"
 import {Writable} from "stream"
 import File from "vinyl"
-import {pipeline, through} from "./streams"
-import {Stage, StageArgs, StageConfig} from "./types"
 import {agnosticSource} from "./helpers/agnostic-source"
 import {createEnrichFiles} from "./helpers/enrich-files"
-import {createFileCache} from "./helpers/file-cache"
+import {createFileCache, FileCache} from "./helpers/file-cache"
 import {createIdleHandler} from "./helpers/idle-handler"
+import {createRouteCache, RouteCache} from "./helpers/route-cache"
 import {createWorkOptimizer} from "./helpers/work-optimizer"
 import {createWrite} from "./helpers/writer"
-
+import {pipeline, through} from "./streams"
+import {EventedFile, Stage, StageArgs, StageConfig} from "./types"
 export function isSourceFile(file: File) {
-  return file.hash.indexOf(":") === -1
+  return file.hash?.indexOf(":") === -1
+}
+
+export function isPageFile(file: File) {
+  return file.path
+}
+
+function createStageArgs(
+  config: StageConfig,
+  input: Writable,
+  bus: Writable,
+  fileCache: FileCache,
+  routeCache: RouteCache,
+): StageArgs {
+  const getInputCache = () => fileCache
+  const getRouteCache = () => routeCache
+
+  function processNewFile(file: File) {
+    if (!file.stat) {
+      // Add a stats here so we can then generate a new ID
+      // during enrichment
+      const stat = new Stats()
+      file.stat = stat
+      file.event = "add"
+    }
+    input.write(file)
+  }
+
+  function processNewChildFile({
+    parent,
+    child,
+    stageId,
+    subfileId,
+  }: {
+    parent: EventedFile
+    child: File
+    stageId: string
+    subfileId: string
+  }) {
+    child.hash = [parent.hash, stageId, subfileId].join("|")
+
+    processNewFile(child)
+  }
+
+  return {
+    config,
+    input,
+    bus,
+    getInputCache,
+    getRouteCache,
+    processNewFile,
+    processNewChildFile,
+  }
 }
 
 /**
@@ -30,21 +84,28 @@ export function createPipeline(
 ) {
   // Helper streams don't account for business stages
   const input = through.obj()
-  const optimizer = createWorkOptimizer()
+  const optimizer = createWorkOptimizer(config.src, config.dest)
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
+  const routeCache = createRouteCache()
   const idleHandler = createIdleHandler(bus)
 
   // Send this object to every stage
-  const api: StageArgs = {
-    config,
-    input,
-    bus,
-    getInputCache: () => srcCache.cache,
-  }
+  const api = createStageArgs(config, input, bus, srcCache.cache, routeCache.cache)
 
   // Initialize each stage
   const initializedStages = stages.map((stage) => stage(api))
+
+  // Discard git ignored files
+  const ignorer = through.obj((file, _, next) => {
+    if (file && file.path) {
+      const match = micromatch.isMatch(file.path, config.ignore)
+      if (match) {
+        return next() // skip chunk
+      }
+    }
+    next(null, file)
+  })
 
   const stream = pipeline(
     source.stream, // files come from file system
@@ -54,6 +115,9 @@ export function createPipeline(
     enrichFiles.stream,
     srcCache.stream,
     optimizer.triage,
+
+    // Filter files
+    ignorer,
 
     // Run business stages
     ...initializedStages.map((stage) => stage.stream),

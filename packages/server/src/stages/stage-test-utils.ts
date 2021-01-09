@@ -1,4 +1,4 @@
-import {FileCache} from "@blitzjs/file-pipeline"
+import {FileCache, RouteCache} from "@blitzjs/file-pipeline"
 import {StageArgs, StageConfig} from "@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types"
 import {pipeline, through} from "../streams"
 
@@ -19,9 +19,14 @@ export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs 
         },
       } as any) as FileCache
     },
+    getRouteCache() {
+      return ({} as any) as RouteCache
+    },
     bus: through.obj(),
     input: through.obj(),
     config,
+    processNewFile: () => {},
+    processNewChildFile: () => {},
   }
 }
 
@@ -31,7 +36,7 @@ export function testStreamItems(
   expected: any[],
   logger: (a: any) => any = defaultLogger,
 ) {
-  return new Promise((done) => {
+  return new Promise<void>((done) => {
     const log: string[] = []
 
     const st = pipeline(

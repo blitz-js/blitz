@@ -1,29 +1,26 @@
+import {Ctx} from "blitz"
 import db, {FindManyUserArgs} from "db"
-import {SessionContext} from "blitz"
 
-type GetUsersInput = {
-  where?: FindManyUserArgs["where"]
-  orderBy?: FindManyUserArgs["orderBy"]
-  cursor?: FindManyUserArgs["cursor"]
-  take?: FindManyUserArgs["take"]
-  skip?: FindManyUserArgs["skip"]
-  // Only available if a model relationship exists
-  // include?: FindManyUserArgs['include']
-}
+type GetUsersInput = Pick<FindManyUserArgs, "where" | "orderBy" | "skip" | "take">
 
-export default async function getUsers(
-  {where, orderBy, cursor, take, skip}: GetUsersInput,
-  ctx: {session?: SessionContext} = {},
-) {
-  ctx.session!.authorize(["admin"])
+export default async function getUsers({where, orderBy, skip = 0, take}: GetUsersInput, ctx: Ctx) {
+  ctx.session.authorize()
 
   const users = await db.user.findMany({
     where,
     orderBy,
-    cursor,
     take,
     skip,
   })
 
-  return users
+  const count = await db.user.count()
+  const hasMore = typeof take === "number" ? skip + take < count : false
+  const nextPage = hasMore ? {take, skip: skip + take!} : null
+
+  return {
+    users,
+    nextPage,
+    hasMore,
+    count,
+  }
 }

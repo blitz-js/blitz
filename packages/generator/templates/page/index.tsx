@@ -1,9 +1,9 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
 import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
-  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
+  import {Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
 } else {
-  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+  import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 }
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
 
@@ -29,10 +29,7 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link
-                href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__"
-                as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
-              >
+              <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}>
                 <a>{__modelName__.name}</a>
               </Link>
             </li>
@@ -63,8 +60,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
-                href="/__modelNames__/__modelIdParam__"
-                as={`/__modelNames__/${__modelName__.id}`}
+                href={`/__modelNames__/${__modelName__.id}`}
               >
                 <a>{__modelName__.name}</a>
               </Link>
@@ -90,33 +86,22 @@ const __ModelNames__Page: BlitzPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>__ModelNames__</title>
-      </Head>
-
-      <main>
-        <h1>__ModelNames__</h1>
-
-        <p>
-          <if condition="parentModel">
-            <Link
-              href="/__parentModels__/__parentModelId__/__modelNames__/new"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}
-            >
+      <p>
+        <if condition="parentModel">
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+            <a>Create __ModelName__</a>
+          </Link>
+          <else>
+            <Link href="/__modelNames__/new">
               <a>Create __ModelName__</a>
             </Link>
-            <else>
-              <Link href="/__modelNames__/new">
-                <a>Create __ModelName__</a>
-              </Link>
-            </else>
-          </if>
-        </p>
+          </else>
+        </if>
+      </p>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <__ModelNames__List />
-        </Suspense>
-      </main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <__ModelNames__List />
+      </Suspense>
     </div>
   )
 }

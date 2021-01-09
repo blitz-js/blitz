@@ -1,4 +1,4 @@
-const {sessionMiddleware, unstable_simpleRolesIsAuthorized} = require("@blitzjs/server")
+const {sessionMiddleware, simpleRolesIsAuthorized} = require("@blitzjs/server")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
@@ -6,10 +6,16 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
-      unstable_isAuthorized: unstable_simpleRolesIsAuthorized,
-      // sessionExpiryMinutes: 1,
+      isAuthorized: simpleRolesIsAuthorized,
+      sessionExpiryMinutes: 4,
     }),
   ],
+  log: {
+    level: "trace",
+  },
+  experimental: {
+    isomorphicResolverImports: true,
+  },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     // Note: we provide webpack above so you should not `require` it

@@ -1,6 +1,45 @@
 import {Writable} from "stream"
 import File from "vinyl"
-import {FileCache} from "./helpers/file-cache"
+
+export type FileCacheEntry = {path: string}
+
+export type RouteType = "page" | "rpc" | "api"
+export type RouteVerb = "get" | "post" | "patch" | "head" | "delete" | "*"
+export type RouteCacheEntry = {
+  path: string
+  uri: string
+  verb: string
+  type: RouteType
+}
+
+abstract class AbstractFileCache {
+  static create: () => AbstractFileCache
+}
+export interface FileCacheInterface extends AbstractFileCache {
+  delete(file: File): void
+  add(file: File): void
+
+  filterByPath: (filterFn: (a: string) => boolean) => FileCacheEntry[]
+  filter: (filterFn: (a: FileCacheEntry) => boolean) => FileCacheEntry[]
+  toString: () => string
+  toPaths: () => string[]
+}
+
+export interface RouteCacheInterface extends AbstractFileCache {
+  delete(file: File): void
+  add(file: File, type: RouteType): void
+
+  get(): Record<string, RouteCacheEntry>
+  get(key: string): RouteCacheEntry
+
+  set(key: string, value: RouteCacheEntry): void
+
+  filterByPath: (filterFn: (a: string) => boolean) => RouteCacheEntry[]
+  filter: (filterFn: (a: RouteCacheEntry) => boolean) => RouteCacheEntry[]
+
+  toString: () => string
+  toArray: () => RouteCacheEntry[]
+}
 
 export type EventedFile = {
   event: "add" | "change" | "unlink" | "unlinkDir"
@@ -30,7 +69,15 @@ export type StageArgs = {
   config: StageConfig
   input: Writable
   bus: Writable
-  getInputCache: () => FileCache
+  getInputCache: () => FileCacheInterface
+  getRouteCache: () => RouteCacheInterface
+  processNewFile: (file: File) => void
+  processNewChildFile: (a: {
+    parent: EventedFile
+    child: File
+    stageId: string
+    subfileId: string
+  }) => void
 }
 
 /**

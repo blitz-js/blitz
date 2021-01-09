@@ -1,22 +1,18 @@
-import db, {FindOneUserArgs} from "db"
-import {SessionContext, NotFoundError} from "blitz"
+import {Ctx, NotFoundError} from "blitz"
+import db, {Prisma} from "db"
 
 type GetUserInput = {
-  where: FindOneUserArgs["where"]
-  select?: FindOneUserArgs["select"]
-  // Only available if a model relationship exists
-  // include?: FindOneUserArgs['include']
+  where: Prisma.FindUniqueUserArgs["where"]
 }
 
-export default async function getUser(
-  {where, select}: GetUserInput,
-  ctx: {session?: SessionContext} = {},
-) {
-  ctx.session?.authorize(["admin", "user"])
+export default async function getUser({where}: GetUserInput, ctx: Ctx) {
+  ctx.session.authorize()
 
-  const user = await db.user.findOne({where, select})
+  const user = await db.user.findFirst({where})
 
   if (!user) throw new NotFoundError(`User with id ${where.id} does not exist`)
 
-  return user
+  const {hashedPassword, ...rest} = user
+
+  return rest
 }

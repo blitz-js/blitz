@@ -1,7 +1,7 @@
-import {RecipeBuilder, paths, addImport} from "@blitzjs/installer"
-import {join} from "path"
+import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
+import {join} from "path"
 
 export default RecipeBuilder()
   .setName("Tailwind CSS")
@@ -16,8 +16,9 @@ export default RecipeBuilder()
     explanation: `Tailwind CSS requires a couple of dependencies to get up and running.
 We'll install the Tailwind library itself, as well as PostCSS for removing unused styles from our production bundles.`,
     packages: [
-      {name: "tailwindcss", version: "1"},
-      {name: "postcss-preset-env", version: "latest", isDevDep: true},
+      {name: "tailwindcss", version: "2"},
+      {name: "autoprefixer", version: "10", isDevDep: true},
+      {name: "postcss", version: "8", isDevDep: true},
     ],
   })
   .addNewFilesStep({

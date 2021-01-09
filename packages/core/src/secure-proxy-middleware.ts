@@ -1,4 +1,4 @@
-import {Middleware, MiddlewareRequest, MiddlewareResponse} from "middleware"
+import {Middleware, MiddlewareRequest, MiddlewareResponse} from "./types"
 
 export const secureProxyMiddleware: Middleware = function (
   req: MiddlewareRequest,

@@ -1,13 +1,28 @@
+import sj from "superjson"
+
 export class AuthenticationError extends Error {
   name = "AuthenticationError"
   statusCode = 401
   constructor(message = "You must be logged in to access this") {
     super(message)
   }
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(AuthenticationError, "BlitzAuthenticationError")
 }
 
-export class CSRFTokenMismatchError extends AuthenticationError {
+export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
+  statusCode = 401
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(CSRFTokenMismatchError, "BlitzCSRFTokenMismatchError")
 }
 
 export class AuthorizationError extends Error {
@@ -16,6 +31,12 @@ export class AuthorizationError extends Error {
   constructor(message = "You are not authorized to access this") {
     super(message)
   }
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(AuthorizationError, "BlitzAuthorizationError")
 }
 
 export class NotFoundError extends Error {
@@ -24,4 +45,10 @@ export class NotFoundError extends Error {
   constructor(message = "This could not be found") {
     super(message)
   }
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  sj.registerClass(NotFoundError, "BlitzNotFoundError")
 }

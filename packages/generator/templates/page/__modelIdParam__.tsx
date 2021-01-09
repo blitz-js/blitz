@@ -1,6 +1,6 @@
-import React, {Suspense} from "react"
+import {Suspense} from "react"
 import Layout from "app/layouts/Layout"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage} from "blitz"
+import {Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
 
@@ -11,6 +11,7 @@ export const __ModelName__ = () => {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
   const [__modelName__] = useQuery(get__ModelName__, {where: {id: __modelId__}})
+  const [delete__ModelName__Mutation] = useMutation(delete__ModelName__)
 
   return (
     <div>
@@ -18,16 +19,12 @@ export const __ModelName__ = () => {
       <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
       <if condition="parentModel">
-        <Link
-          href="/__parentModels__/__parentModelParam__/__modelNames__/__modelIdParam__/edit"
-          as={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
-        >
+        <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}>
           <a>Edit</a>
         </Link>
         <else>
           <Link
-            href="/__modelNames__/__modelIdParam__/edit"
-            as={`/__modelNames__/${__modelName__.id}/edit`}
+            href={`/__modelNames__/${__modelName__.id}/edit`}
           >
             <a>Edit</a>
           </Link>
@@ -38,12 +35,9 @@ export const __ModelName__ = () => {
         type="button"
         onClick={async () => {
           if (window.confirm("This will be deleted")) {
-            await delete__ModelName__({where: {id: __modelName__.id}})
+            await delete__ModelName__Mutation({where: {id: __modelName__.id}})
             if (process.env.parentModel) {
-              router.push(
-                "/__parentModels__/__parentModelParam__/__modelNames__",
-                `/__parentModels__/${__parentModelId__}/__modelNames__`,
-              )
+              router.push(`/__parentModels__/${__parentModelId__}/__modelNames__`)
             } else {
               router.push("/__modelNames__")
             }
@@ -63,31 +57,22 @@ const Show__ModelName__Page: BlitzPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>__ModelName__</title>
-      </Head>
-
-      <main>
-        <p>
-          <if condition="parentModel">
-            <Link
-              href="/__parentModels__/__parentModelId__/__modelNames__"
-              as={`/__parentModels__/${__parentModelId__}/__modelNames__`}
-            >
+      <p>
+        <if condition="parentModel">
+          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+            <a>__ModelNames__</a>
+          </Link>
+          <else>
+            <Link href="/__modelNames__">
               <a>__ModelNames__</a>
             </Link>
-            <else>
-              <Link href="/__modelNames__">
-                <a>__ModelNames__</a>
-              </Link>
-            </else>
-          </if>
-        </p>
+          </else>
+        </if>
+      </p>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <__ModelName__ />
-        </Suspense>
-      </main>
+      <Suspense fallback={<div>Loading...</div>}>
+        <__ModelName__ />
+      </Suspense>
     </div>
   )
 }

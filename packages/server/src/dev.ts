@@ -1,8 +1,10 @@
+import {log} from "@blitzjs/display"
+import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
-import {nextStartDev} from "./next-utils"
+import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
 import {configureStages} from "./stages"
 
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
+export async function dev(config: ServerConfig) {
   const {
     rootFolder,
     transformFiles,
@@ -13,19 +15,27 @@ export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = 
     isTypescript,
     writeManifestFile,
     watch,
+    clean,
   } = await normalize({...config, env: "dev"})
+
+  // if blitz version is mismatched, we need to bust the cache by cleaning the devFolder
+  const versionMatched = await isVersionMatched(devFolder)
 
   const stages = configureStages({writeManifestFile, isTypescript})
 
-  const [{manifest}] = await Promise.all([
-    transformFiles(rootFolder, stages, devFolder, {
-      ignore,
-      include,
-      watch,
-    }),
-    // Ensure next does not start until parallel processing completes
-    readyForNextDev,
-  ])
+  const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
+    ignore,
+    include,
+    watch,
+    clean: !versionMatched || clean,
+  })
 
-  await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+  if (!versionMatched) await saveBlitzVersion(devFolder)
+
+  if (customServerExists(devFolder)) {
+    log.success("Using your custom server")
+    await startCustomServer(devFolder, config)
+  } else {
+    await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+  }
 }

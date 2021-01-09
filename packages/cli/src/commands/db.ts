@@ -1,37 +1,8 @@
 import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
+import {runPrisma, runPrismaExitOnError} from "./prisma"
 
-const getPrismaBin = () => require("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
-let prismaBin: string
 let schemaArg: string
-
-const runPrisma = async (args: string[], silent = false) => {
-  if (!prismaBin) {
-    try {
-      prismaBin = await getPrismaBin()
-    } catch {
-      throw new Error(
-        "Oops, we can't find Prisma Client. Please make sure it's installed in your project",
-      )
-    }
-  }
-
-  const cp = require("cross-spawn").spawn(prismaBin, args, {
-    stdio: silent ? "ignore" : "inherit",
-    env: process.env,
-  })
-  const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
-
-  return code === 0
-}
-
-const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>) => {
-  const success = await runPrisma(...args)
-
-  if (!success) {
-    process.exit(1)
-  }
-}
 
 // Prisma client generation will fail if no model is defined in the schema.
 // So the silent option is here to ignore that failure
@@ -43,8 +14,8 @@ export const runPrismaGeneration = async ({silent = false, failSilently = false}
   }
 }
 
-const runMigrateUp = async ({silent = false} = {}) => {
-  const args = ["migrate", "up", schemaArg, "--create-db", "--experimental"]
+const runMigrateUp = async ({silent = false} = {}, schemaArgLocal = schemaArg) => {
+  const args = ["migrate", "up", schemaArgLocal, "--create-db", "--experimental"]
 
   if (process.env.NODE_ENV === "production" || silent) {
     args.push("--auto-approve")
@@ -59,9 +30,9 @@ const runMigrateUp = async ({silent = false} = {}) => {
   return runPrismaGeneration({silent})
 }
 
-export const runMigrate = async (flags: object = {}) => {
+export const runMigrate = async (flags: object = {}, schemaArgLocal = schemaArg) => {
   if (process.env.NODE_ENV === "production") {
-    return runMigrateUp()
+    return runMigrateUp({}, schemaArgLocal)
   }
   // @ts-ignore escape:TS7053
   const nestedFlags = Object.keys(flags).map((key) => [`--${key}`, flags[key]])
@@ -69,7 +40,7 @@ export const runMigrate = async (flags: object = {}) => {
 
   const silent = options.includes("--name")
 
-  const args = ["migrate", "save", schemaArg, "--create-db", "--experimental", ...options]
+  const args = ["migrate", "save", schemaArgLocal, "--create-db", "--experimental", ...options]
 
   const success = await runPrisma(args, silent)
 
@@ -77,7 +48,7 @@ export const runMigrate = async (flags: object = {}) => {
     throw new Error("Migration failed")
   }
 
-  return runMigrateUp({silent})
+  return runMigrateUp({silent}, schemaArgLocal)
 }
 
 export async function resetPostgres(connectionString: string, db: any): Promise<void> {
@@ -148,6 +119,46 @@ export function getDbName(connectionString: string): string {
   return dbName
 }
 
+async function runSeed() {
+  require("../utils/setup-ts-node").setupTsnode()
+
+  const projectRoot = require("../utils/get-project-root").projectRoot
+  const seedPath = require("path").join(projectRoot, "db/seeds")
+  const dbPath = require("path").join(projectRoot, "db/index")
+
+  log.branded("Seeding database")
+  let spinner = log.spinner("Loading seeds\n").start()
+
+  let seeds: Function | undefined
+  try {
+    seeds = require(seedPath).default
+    if (seeds === undefined) {
+      throw new Error(`Cant find default export from db/seeds`)
+    }
+  } catch (err) {
+    log.error(`Couldn't import default from db/seeds.ts or db/seeds/index.ts file`)
+    throw err
+  }
+  spinner.succeed()
+
+  spinner = log.spinner("Checking for database migrations\n").start()
+  await runMigrate({}, `--schema=${require("path").join(process.cwd(), "db", "schema.prisma")}`)
+  spinner.succeed()
+
+  try {
+    console.log(log.withCaret("Seeding..."))
+    seeds && (await seeds())
+  } catch (err) {
+    log.error(err)
+    log.error(`Couldn't run imported function, are you sure it's a function?`)
+    throw err
+  }
+
+  const db = require(dbPath).default
+  await db.$disconnect()
+  log.success("Done seeding")
+}
+
 export class Db extends Command {
   static description = `Run database commands
 
@@ -166,6 +177,10 @@ ${require("chalk").bold(
 ${require("chalk").bold(
   "reset",
 )}   Reset the database and run a fresh migration via Prisma 2. You can also pass --force to skip all the user prompts.
+
+${require("chalk").bold(
+  "seed",
+)}   Generates seeded data in database via Prisma 2. You need db/seeds.ts or db/seeds/index.ts.
 `
 
   static args = [
@@ -213,7 +228,7 @@ ${require("chalk").bold(
     }
 
     if (command === "studio") {
-      return runPrismaExitOnError(["studio", schemaArg, "--experimental"])
+      return runPrismaExitOnError(["studio", schemaArg])
     }
 
     if (command === "reset") {
@@ -260,6 +275,16 @@ ${require("chalk").bold(
 
     if (command === "help") {
       return Db.run(["--help"])
+    }
+
+    if (command === "seed") {
+      try {
+        return await runSeed()
+      } catch (err) {
+        log.error("Could not seed database:")
+        log.error(err)
+        process.exit(1)
+      }
     }
 
     this.log("\nUh oh, Blitz does not support that command.")

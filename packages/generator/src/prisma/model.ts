@@ -1,5 +1,5 @@
-import {Field, FieldType} from "./field"
 import {singlePascal} from "../utils/plurals"
+import {Field, FieldType} from "./field"
 
 function stringifyFieldsForPrinting(fields: Field[]) {
   let maxNameLength = 1
@@ -68,6 +68,12 @@ export class Model {
       ...this.fields,
     ])
       .map((field) => `\n  ${field}`)
+      .join("")
+  }
+
+  public getNewFields() {
+    return stringifyFieldsForPrinting([...this.fields])
+      .map((field) => `  ${field}\n`)
       .join("")
   }
 

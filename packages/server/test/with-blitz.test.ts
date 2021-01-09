@@ -1,4 +1,10 @@
-import {withBlitz} from "../src"
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
+
+import {withBlitz} from "../src/with-blitz"
 
 describe("withBlitz", () => {
   it("alters the webpack config as expected", () => {

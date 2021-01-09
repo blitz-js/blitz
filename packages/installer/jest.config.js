@@ -1,7 +1,7 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
-  moduleFileExtensions: ["ts", "js", "json"],
+  moduleFileExtensions: ["ts", "tsx", "js", "json"],
   coverageReporters: ["json", "lcov", "text", "clover"],
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ["src/**/*.ts"],
@@ -18,7 +18,7 @@ module.exports = {
 
   globals: {
     "ts-jest": {
-      tsConfig: "test/tsconfig.json",
+      tsconfig: "test/tsconfig.json",
       isolatedModules: true,
     },
   },

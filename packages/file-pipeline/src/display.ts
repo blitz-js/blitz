@@ -1,8 +1,8 @@
-import {through} from "./streams"
-import File from "vinyl"
 import {log} from "@blitzjs/display"
 import chalk from "chalk"
-import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from "./events"
+import File from "vinyl"
+import {ERROR_THROWN, Event, FILE_WRITTEN, INIT, READY} from "./events"
+import {through} from "./streams"
 
 /**
  * Display is a stream that converts build status events and prepares them for the console.
@@ -11,7 +11,7 @@ import {Event, FILE_WRITTEN, INIT, ERROR_THROWN, READY} from "./events"
 export function createDisplay() {
   let lastEvent: Event<any> = {type: INIT, payload: null}
 
-  let spinner = log.spinner("Preparing for launch").start()
+  let spinner = log.spinner("Compiling").start()
 
   const stream = through({objectMode: true}, (event: Event<File>, _, next) => {
     switch (event.type) {
@@ -30,7 +30,7 @@ export function createDisplay() {
       }
 
       case READY: {
-        spinner.succeed(chalk.green.bold("Prepped for launch"))
+        spinner.succeed(chalk.green.bold("Compiled"))
         break
       }
     }

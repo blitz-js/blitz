@@ -1,4 +1,3 @@
-import React from "react"
 import {Head, useRouter, BlitzPage} from "blitz"
 import {LoginForm} from "app/auth/components/LoginForm"
 
@@ -8,7 +7,7 @@ const SignupPage: BlitzPage = () => {
   return (
     <>
       <Head>
-        <title>Log In</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

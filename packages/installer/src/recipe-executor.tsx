@@ -1,10 +1,11 @@
-import * as AddDependencyExecutor from "./executors/add-dependency-executor"
-import * as NewFileExecutor from "./executors/new-file-executor"
-import * as FileTransformExecutor from "./executors/file-transform-executor"
 import {log} from "@blitzjs/display"
-import * as React from "react"
 import {render} from "ink"
+import React from "react"
+import * as AddDependencyExecutor from "./executors/add-dependency-executor"
+import * as FileTransformExecutor from "./executors/file-transform-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
 import {RecipeRenderer} from "./recipe-renderer"
+import {RecipeMeta} from "./types"
 
 type ExecutorConfig =
   | AddDependencyExecutor.Config
@@ -12,13 +13,6 @@ type ExecutorConfig =
   | NewFileExecutor.Config
 
 export {ExecutorConfig as ExecutorConfigUnion}
-
-export interface RecipeMeta {
-  name: string
-  description: string
-  owner: string
-  repoLink: string
-}
 
 export class RecipeExecutor<Options extends RecipeMeta> {
   private readonly steps: ExecutorConfig[]
@@ -33,18 +27,14 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     try {
       const {waitUntilExit} = render(
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
-        {
-          experimental: true,
-        },
       )
       await waitUntilExit()
+      log.info(
+        `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
+      )
     } catch (e) {
-      console.error(e)
+      log.error(e)
       return
     }
-
-    log.info(
-      `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-    )
   }
 }

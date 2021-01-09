@@ -1,12 +1,16 @@
-import {Generator, GeneratorOptions} from "../generator"
-import spawn from "cross-spawn"
-import chalk from "chalk"
-import username from "username"
-import {readJSONSync, writeJson} from "fs-extra"
-import {resolve, join} from "path"
-import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {log} from "@blitzjs/display"
+import chalk from "chalk"
+import spawn from "cross-spawn"
+import {readJSONSync, writeJson} from "fs-extra"
+import {join, resolve} from "path"
+import username from "username"
+import {Generator, GeneratorOptions} from "../generator"
+import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
@@ -16,12 +20,14 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   skipInstall: boolean
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
+  onPostInstall?: () => Promise<void>
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: string = resolve(__dirname, "./templates/app")
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
+  packageInstallSuccess: boolean = false
 
   filesToIgnore() {
     if (!this.options.useTs) {
@@ -44,44 +50,37 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
-    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string
 
     switch (this.options.form) {
       case "React Final Form":
-        this.fs.move(
-          this.destinationPath("_forms/finalform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/finalform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "finalform"
         pkg.dependencies["final-form"] = "4.x"
         pkg.dependencies["react-final-form"] = "6.x"
         break
       case "React Hook Form":
-        this.fs.move(
-          this.destinationPath("_forms/hookform/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/hookform/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "hookform"
         pkg.dependencies["react-hook-form"] = "6.x"
         break
       case "Formik":
-        this.fs.move(
-          this.destinationPath("_forms/formik/Form.tsx"),
-          this.destinationPath("app/components/Form.tsx"),
-        )
-        this.fs.move(
-          this.destinationPath("_forms/formik/LabeledTextField.tsx"),
-          this.destinationPath("app/components/LabeledTextField.tsx"),
-        )
+        type = "formik"
         pkg.dependencies["formik"] = "2.x"
         break
     }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+    )
+
     this.fs.delete(this.destinationPath("_forms"))
 
     this.fs.writeJSON(this.destinationPath("package.json"), pkg)
@@ -128,7 +127,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!fallbackUsed && !this.options.skipInstall) {
       spinner.succeed()
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         const logFlag = this.options.yarn ? "--json" : "--loglevel=error"
         const cp = spawn(this.options.yarn ? "yarn" : "npm", ["install", logFlag], {
           stdio: ["inherit", "pipe", "pipe"],
@@ -186,11 +185,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
             if (code !== 0) spinners[spinners.length - 1].fail()
             else {
               spinners[spinners.length - 1].succeed()
+              this.packageInstallSuccess = true
             }
           }
           resolve()
         })
       })
+
+      await this.options.onPostInstall?.()
 
       const runLocalNodeCLI = (command: string) => {
         if (this.options.yarn) {
@@ -201,16 +203,18 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
 
       // Ensure the generated files are formatted with the installed prettier version
-      const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
-      const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
-      if (prettierResult.status !== 0) {
-        formattingSpinner.fail(
-          chalk.yellow.bold(
-            "We had an error running Prettier, but don't worry your app will still run fine :)",
-          ),
-        )
-      } else {
-        formattingSpinner.succeed()
+      if (this.packageInstallSuccess) {
+        const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
+        const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
+        if (prettierResult.status !== 0) {
+          formattingSpinner.fail(
+            chalk.yellow.bold(
+              "We had an error running Prettier, but don't worry your app will still run fine :)",
+            ),
+          )
+        } else {
+          formattingSpinner.succeed()
+        }
       }
     } else {
       console.log("") // New line needed
@@ -234,7 +238,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       ["git", ["add", "."], {stdio: "ignore"}],
       [
         "git",
-        ["commit", "--no-gpg-sign", "-m", "New baby Blitz app!"],
+        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
         {stdio: "ignore", timeout: 10000},
       ],
     ]

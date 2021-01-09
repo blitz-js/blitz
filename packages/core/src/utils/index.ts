@@ -1,12 +1,8 @@
-import {QueryKeyPart} from "react-query"
-import {BlitzApiRequest} from "../"
 import {IncomingMessage} from "http"
+import {BlitzApiRequest} from "../"
 
 export const isServer = typeof window === "undefined"
-
-export function getQueryKey(cacheKey: string, params: any): readonly [string, ...QueryKeyPart[]] {
-  return [cacheKey, typeof params === "function" ? (params as Function)() : params]
-}
+export const isClient = typeof window !== "undefined"
 
 export function isLocalhost(req: BlitzApiRequest | IncomingMessage): boolean {
   let {host} = req.headers
@@ -16,4 +12,10 @@ export function isLocalhost(req: BlitzApiRequest | IncomingMessage): boolean {
     localhost = host === "localhost"
   }
   return localhost
+}
+
+export function clientDebug(...args: any) {
+  if (typeof window !== "undefined" && (window as any)["DEBUG_BLITZ"]) {
+    console.log("[BLITZ]", ...args)
+  }
 }

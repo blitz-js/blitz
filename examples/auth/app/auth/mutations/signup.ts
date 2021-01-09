@@ -1,19 +1,24 @@
+import {Ctx, SecurePassword} from "blitz"
 import db from "db"
-import {SessionContext} from "blitz"
-import {hashPassword} from "app/auth/auth-utils"
-import {SignupInput, SignupInputType} from "app/auth/validations"
+import * as z from "zod"
 
-export default async function signup(input: SignupInputType, ctx: {session?: SessionContext} = {}) {
+export const SignupInput = z.object({
+  email: z.string().email(),
+  password: z.string().min(10).max(100),
+})
+export type SignupInputType = z.infer<typeof SignupInput>
+
+export default async function signup(input: SignupInputType, {session}: Ctx) {
   // This throws an error if input is invalid
   const {email, password} = SignupInput.parse(input)
 
-  const hashedPassword = await hashPassword(password)
+  const hashedPassword = await SecurePassword.hash(password)
   const user = await db.user.create({
     data: {email, hashedPassword, role: "user"},
     select: {id: true, name: true, email: true, role: true},
   })
 
-  await ctx.session!.create({userId: user.id, roles: [user.role]})
+  await session.create({userId: user.id, roles: [user.role]})
 
   return user
 }

@@ -1,5 +1,5 @@
-import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
+import {Generator, GeneratorOptions} from "../generator"
 import {camelCaseToKebabCase} from "../utils/kebab-case"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
@@ -47,8 +47,11 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   getModelNamesPath() {
-    const context = this.options.context ? `${this.options.context}/` : ""
-    return context + this.options.modelNames
+    const kebabCaseContext = this.options.context
+      ? `${camelCaseToKebabCase(this.options.context)}/`
+      : ""
+    const kebabCaseModelNames = camelCaseToKebabCase(this.options.modelNames)
+    return kebabCaseContext + kebabCaseModelNames
   }
 
   getTargetDirectory() {

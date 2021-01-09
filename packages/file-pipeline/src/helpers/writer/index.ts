@@ -1,14 +1,16 @@
-import {pipeline} from "../../streams"
 import gulpIf from "gulp-if"
-import {unlink} from "../unlink"
-import {dest} from "vinyl-fs"
-import File from "vinyl"
-import {FILE_WRITTEN, FILE_DELETED} from "../../events"
 import {Writable} from "stream"
-import {isFile} from "../../utils"
+import File from "vinyl"
+import {dest} from "vinyl-fs"
+import {FILE_DELETED, FILE_WRITTEN} from "../../events"
+import {pipeline} from "../../streams"
 import {transform} from "../../transform"
+import {isFile} from "../../utils"
+import {unlink} from "../unlink"
 
-const isUnlinkFile = (file: File) => file.event === "unlink" || file.event === "unlinkDir"
+const isUnlinkFile = (file: File) => {
+  return file.event === "unlink" || file.event === "unlinkDir"
+}
 
 /**
  * Returns a Stage that writes files to the destination path

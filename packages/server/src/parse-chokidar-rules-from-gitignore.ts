@@ -1,7 +1,31 @@
-import parseGitignore from "parse-gitignore"
+import {log} from "@blitzjs/display"
+import spawn from "cross-spawn"
+import expandTilde from "expand-tilde"
+import fastGlob from "fast-glob"
 import fs from "fs"
 import partition from "lodash/partition"
-import fastGlob from "fast-glob"
+import parseGitignore from "parse-gitignore"
+
+const {GIT_DIR = ".git"} = process.env
+
+function globalGitIgnore() {
+  const versionResult = spawn.sync("git", ["version"])
+  if (!(versionResult.status === 0)) {
+    log.warning("Git doesn't seem to be installed. Get it here: https://git-scm.com/downloads.")
+    return null
+  }
+
+  const configResult = spawn.sync("git", ["config", "--get", "core.excludesfile"], {
+    stdio: "pipe",
+  })
+  if (!(configResult.status === 0)) {
+    // Git config core.excludesFile is unset. Inferring .gitignore file locations.
+    return null
+  }
+
+  const output = String(configResult.stdout).trim()
+  return process.platform === "win32" ? output : expandTilde(output)
+}
 
 export function isControlledByUser(file: string) {
   if (file.startsWith("node_modules")) {
@@ -11,10 +35,23 @@ export function isControlledByUser(file: string) {
   return true
 }
 
-function getAllGitIgnores(rootFolder: string) {
-  const files = fastGlob.sync("**/.gitignore", {cwd: rootFolder})
+export function getAllGitIgnores(rootFolder: string) {
+  const globalIgnore = globalGitIgnore()
+  const localRepoIgnore = `${GIT_DIR}/info/exclude`
+
+  const files = fastGlob.sync([localRepoIgnore, "**/.gitignore", `**/${localRepoIgnore}`], {
+    cwd: rootFolder,
+  })
+
+  if (fs.existsSync(globalIgnore)) files.push(globalIgnore)
+
   return files.filter(isControlledByUser).map((file) => {
-    const [prefix] = file.split(".gitignore")
+    let prefix = ""
+
+    if (file.match(localRepoIgnore)) prefix = file.split(localRepoIgnore)[0]
+    else if (file.match(globalIgnore)) prefix = ""
+    else prefix = file.split(".gitignore")[0]
+
     return {
       gitIgnore: fs.readFileSync(file, {encoding: "utf8"}),
       prefix,
