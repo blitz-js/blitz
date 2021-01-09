@@ -1780,6 +1780,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "doi-t",
+      "name": "Toshiya Doi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5877477?v=4",
+      "profile": "https://doi-t.net",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
