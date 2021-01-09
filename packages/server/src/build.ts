@@ -1,41 +1,41 @@
-import {resolve} from 'path'
-import {synchronizeFiles} from './synchronizer'
-import {move, remove, pathExists} from 'fs-extra'
-import {ServerConfig, enhance} from './config'
-import {nextBuild} from './next-utils'
+import {copy, pathExists, remove} from "fs-extra"
+import {resolve} from "path"
+import {normalize, ServerConfig} from "./config"
+import {nextBuild} from "./next-utils"
+import {configureStages} from "./stages"
 
 export async function build(config: ServerConfig) {
   const {
     rootFolder,
+    transformFiles,
     buildFolder,
     nextBin,
-    ignoredPaths,
-    manifestPath,
-    writeManifestFile,
-    includePaths,
-    watch = false,
-  } = await enhance(config)
-
-  await synchronizeFiles({
-    src: rootFolder,
-    dest: buildFolder,
+    ignore,
+    include,
     watch,
-    manifestPath,
+    isTypescript,
     writeManifestFile,
-    ignoredPaths,
-    includePaths,
+  } = await normalize(config)
+
+  const stages = configureStages({isTypescript, writeManifestFile})
+
+  await transformFiles(rootFolder, stages, buildFolder, {
+    ignore,
+    include,
+    watch,
+    clean: true, // always clean in build
   })
 
   await nextBuild(nextBin, buildFolder)
 
-  const rootNextFolder = resolve(rootFolder, '.next')
-  const buildNextFolder = resolve(buildFolder, '.next')
+  const rootNextFolder = resolve(rootFolder, ".next")
+  const buildNextFolder = resolve(buildFolder, ".next")
 
   if (await pathExists(rootNextFolder)) {
     await remove(rootNextFolder)
   }
 
   if (await pathExists(buildNextFolder)) {
-    await move(buildNextFolder, rootNextFolder)
+    await copy(buildNextFolder, rootNextFolder)
   }
 }

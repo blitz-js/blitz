@@ -1,4 +1,15 @@
-import {Head, Link} from 'blitz'
+import React, {Suspense} from "react"
+import {Head, Link, useQuery} from "blitz"
+import getReferer from "app/queries/getReferer"
+// integration test for css modules
+import styles from "./index.module.css"
+
+const Referer = () => {
+  // This is here mainly as an integration test for global middleware
+  const [referer] = useQuery(getReferer, {})
+
+  return <div id="referer">Referer: {referer}</div>
+}
 
 const Home = () => (
   <div className="container">
@@ -28,6 +39,11 @@ const Home = () => (
           </Link>
         </li>
         <li>
+          <Link href="/products/infinite">
+            <a>Infinite Product Listings (client-rendered)</a>
+          </Link>
+        </li>
+        <li>
           <Link href="/admin/products">
             <a>Admin Section (client-rendered)</a>
           </Link>
@@ -35,13 +51,17 @@ const Home = () => (
       </ul>
     </main>
 
-    <footer>
+    <footer className={styles.red}>
       <a
         href="https://blitzjs.com?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"
         target="_blank"
-        rel="noopener noreferrer">
+        rel="noopener noreferrer"
+      >
         Powered by Blitz.js
       </a>
+      <Suspense fallback={null}>
+        <Referer />
+      </Suspense>
     </footer>
 
     <style jsx>{`
@@ -68,6 +88,7 @@ const Home = () => (
         height: 100px;
         border-top: 1px solid #eaeaea;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
       }
@@ -175,8 +196,8 @@ const Home = () => (
       body {
         padding: 0;
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
-          Droid Sans, Helvetica Neue, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+          Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       * {

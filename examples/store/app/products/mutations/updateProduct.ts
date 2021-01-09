@@ -1,10 +1,13 @@
-import db, {ProductUpdateArgs} from 'db'
+import db, {ProductUpdateArgs} from "db"
+import {Ctx} from "blitz"
 
-export default async function updateProduct(args: ProductUpdateArgs) {
-  // Don't allow updating ID
-  delete args.data.id
+type UpdateProductInput = {
+  where: ProductUpdateArgs["where"]
+  data: ProductUpdateArgs["data"]
+}
 
-  const product = await db.product.update(args)
+export default async function updateProduct({where, data}: UpdateProductInput, _ctx: Ctx) {
+  const product = await db.product.update({where, data})
 
   return product
 }

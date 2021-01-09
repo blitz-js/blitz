@@ -1,43 +1,45 @@
 /* eslint-disable import/first */
 
-const nextUtilsMock = {
-  nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
-  nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
-}
-// Quieten reporter
-jest.doMock('../src/reporter', () => ({
-  reporter: {copy: jest.fn(), remove: jest.fn()},
-}))
+import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 
-// Assume next works
-jest.doMock('../src/next-utils', () => nextUtilsMock)
+const mocks = multiMock(
+  {
+    "next-utils": {
+      nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
+      nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
+    },
+    "resolve-bin-async": {
+      resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve("")),
+    },
+  },
+  resolve(__dirname, "../src"),
+)
 
-// Mock where the next bin is
-jest.doMock('../src/resolve-bin-async', () => ({
-  resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve('')),
-}))
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
-import {dev} from '../src/dev'
-import {directoryTree} from './utils/tree-utils'
-
-import mockfs from 'mock-fs'
-import {resolve} from 'path'
-
-describe('Dev command', () => {
-  const rootFolder = resolve('')
-  const buildFolder = resolve(rootFolder, '.blitz-build')
-  const devFolder = resolve(rootFolder, '.blitz-rules')
+import {dev} from "../src/dev"
+import {directoryTree} from "./utils/tree-utils"
+describe("Dev command", () => {
+  const rootFolder = resolve("")
+  const buildFolder = resolve(rootFolder, ".blitz-build")
+  const devFolder = resolve(rootFolder, ".blitz-stages")
 
   beforeEach(async () => {
-    mockfs({
+    mocks.mockFs({
       app: {
         api: {
-          'bar.ts': 'test',
+          "bar.ts": "test",
         },
         foo: {
           api: {
-            'foo.ts': 'test',
+            "foo.ts": "test",
           },
         },
       },
@@ -50,24 +52,25 @@ describe('Dev command', () => {
       writeManifestFile: false,
       watch: false,
       port: 3000,
-      hostname: 'localhost',
+      hostname: "localhost",
+      env: "dev",
     })
   })
 
   afterEach(() => {
-    mockfs.restore()
+    mocks.mockFs.restore()
   })
 
-  it('should copy the correct files to the dev folder', async () => {
-    const tree = directoryTree(devFolder)
-    expect(tree).toEqual({
-      name: '.blitz-rules',
+  it("should copy the correct files to the dev folder", () => {
+    expect(directoryTree(devFolder)).toEqual({
+      name: ".blitz-stages",
       children: [
-        {name: 'blitz.config.js'},
-        {name: 'next.config.js'},
+        {name: "_blitz-version.txt"},
+        {name: "blitz.config.js"},
+        {name: "next.config.js"},
         {
-          name: 'pages',
-          children: [{name: 'api', children: [{name: 'bar.ts'}, {name: 'foo.ts'}]}],
+          name: "pages",
+          children: [{name: "api", children: [{name: "bar.ts"}, {name: "foo.ts"}]}],
         },
       ],
     })

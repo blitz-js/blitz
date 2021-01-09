@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.11.0",
+  "version": "0.29.0-canary.0",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -15,13 +15,7 @@
     "build": "tsdx build && yarn build:templates",
     "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
-    "lint": "tsdx lint",
     "test:watch": "tsdx test --watch"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "author": {
     "name": "Brandon Bayer",
@@ -40,24 +34,24 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/plugin-transform-typescript": "7.9.4",
-    "ast-types": "0.13.3",
-    "chalk": "4.0.0",
-    "cross-spawn": "7.0.2",
-    "diff": "4.0.2",
-    "enquirer": "2.3.5",
-    "fs-extra": "9.0.0",
+    "@babel/core": "7.12.10",
+    "@babel/plugin-transform-typescript": "7.12.1",
+    "@blitzjs/display": "0.29.0-canary.0",
+    "@types/jscodeshift": "0.7.2",
+    "chalk": "^4.1.0",
+    "cross-spawn": "7.0.3",
+    "diff": "5.0.0",
+    "enquirer": "2.3.6",
+    "fs-extra": "^9.0.1",
     "fs-readdir-recursive": "1.1.0",
-    "mem-fs": "1.1.3",
-    "mem-fs-editor": "6.0.0",
-    "node-fetch": "2.6.0",
-    "recast": "0.19.1",
-    "username": "5.1.0",
-    "vinyl": "2.2.0"
+    "got": "^11.8.1",
+    "jscodeshift": "0.11.0",
+    "mem-fs": "1.2.0",
+    "mem-fs-editor": "8.0.0",
+    "pluralize": "^8.0.0",
+    "recast": "0.20.4",
+    "username": "^5.1.0",
+    "vinyl": "2.2.1"
   },
-  "devDependencies": {
-    "@blitzjs/server": "0.11.0"
-  },
-  "gitHead": "2461caa685c949d130272db8ed9ca4dd3cbe40a8"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

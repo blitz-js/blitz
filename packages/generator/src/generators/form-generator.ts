@@ -1,5 +1,6 @@
-import {Generator, GeneratorOptions} from '../generator'
-import {join} from 'path'
+import {join} from "path"
+import {Generator, GeneratorOptions} from "../generator"
+import {camelCaseToKebabCase} from "../utils/kebab-case"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -13,19 +14,20 @@ export interface FormGeneratorOptions extends GeneratorOptions {
 }
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
-  static subdirectory = 'queries'
-  sourceRoot = join(__dirname, './templates/form')
+  static subdirectory = "queries"
+  sourceRoot = join(__dirname, "./templates/form")
 
-  private getId(input: string = '') {
+  private getId(input: string = "") {
     if (!input) return input
     return `${input}Id`
   }
 
-  private getParam(input: string = '') {
+  private getParam(input: string = "") {
     if (!input) return input
     return `[${input}]`
   }
 
+  // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
       parentModelId: this.getId(this.options.parentModel),
@@ -44,7 +46,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ''
+    const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     return `app/${context}${this.options.modelNames}/components`
   }
 }

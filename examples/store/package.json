@@ -1,32 +1,40 @@
 {
-  "name": "store",
-  "version": "0.11.0",
+  "name": "@examples/store",
+  "version": "0.29.0-canary.0",
   "private": true,
   "scripts": {
     "build": "blitz db migrate && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:start": "blitz db migrate && blitz start --production -p 3099",
-    "test": "start-server-and-test test:start http://localhost:3099 cy:run"
+    "test:server": "blitz db migrate && blitz db seed && blitz build && blitz start --production -p 3099",
+    "test": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
+    "posttest": "node assert-tree-shaking-works.js"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
   },
   "prettier": {
     "semi": false,
-    "printWidth": 100
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "trailingComma": "all"
   },
   "dependencies": {
-    "@prisma/cli": "2.0.0-beta.5",
-    "@prisma/client": "2.0.0-beta.5",
-    "blitz": "0.11.0",
-    "final-form": "4.19.1",
-    "react": "0.0.0-experimental-33c3af284",
-    "react-dom": "0.0.0-experimental-33c3af284",
-    "react-final-form": "6.4.0",
-    "typescript": "3.8.3"
+    "@prisma/cli": "2.12.0",
+    "@prisma/client": "2.12.0",
+    "blitz": "0.29.0-canary.0",
+    "final-form": "4.20.1",
+    "react": "0.0.0-experimental-3310209d0",
+    "react-dom": "0.0.0-experimental-3310209d0",
+    "react-error-boundary": "3.1.0",
+    "react-final-form": "6.5.2",
+    "typescript": "4.1.3"
   },
   "devDependencies": {
-    "@types/react": "16.9.34",
-    "cypress": "4.5.0",
-    "eslint-plugin-cypress": "2.10.3",
-    "start-server-and-test": "1.11.0"
+    "@types/react": "17.0.0",
+    "cypress": "6.2.0",
+    "eslint-plugin-cypress": "2.11.2",
+    "sass": "1.32.0",
+    "start-server-and-test": "1.11.7"
   }
 }

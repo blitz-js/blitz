@@ -1,15 +1,19 @@
-import { Suspense, useState } from "react"
-import { Link, BlitzPage, usePaginatedQuery } from "blitz"
+import {Suspense} from "react"
+import {Link, BlitzPage, usePaginatedQuery, useRouter} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
 
 const Products = () => {
-  const [page, setPage] = useState(0)
-  const [products] = usePaginatedQuery(getProducts, {
+  const router = useRouter()
+  const page = Number(router.query.page) || 0
+  const [{products, hasMore}] = usePaginatedQuery(getProducts, {
     skip: ITEMS_PER_PAGE * page,
-    first: ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
   })
+
+  const goToPreviousPage = () => router.push({query: {page: page - 1}})
+  const goToNextPage = () => router.push({query: {page: page + 1}})
 
   return (
     <div>
@@ -20,10 +24,10 @@ const Products = () => {
           </Link>
         </p>
       ))}
-      <button disabled={page === 0} onClick={() => setPage(page - 1)}>
+      <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous
       </button>
-      <button disabled={products.length !== ITEMS_PER_PAGE} onClick={() => setPage(page + 1)}>
+      <button disabled={!hasMore} onClick={goToNextPage}>
         Next
       </button>
     </div>
@@ -34,6 +38,9 @@ const Page: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Paginated</h1>
+      <Link href="/products/infinite">
+        <a>Go to Infinite Product List</a>
+      </Link>
       <Suspense fallback={<div>Loading...</div>}>
         <Products />
       </Suspense>

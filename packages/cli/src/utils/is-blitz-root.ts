@@ -1,6 +1,6 @@
-import {readJSON} from 'fs-extra'
-import pkgDir from 'pkg-dir'
-import {resolve} from 'path'
+import {readJSON} from "fs-extra"
+import pkgDir from "pkg-dir"
+import {resolve} from "path"
 
 export enum IsBlitzRootError {
   NotBlitz,
@@ -9,13 +9,13 @@ export enum IsBlitzRootError {
 }
 
 const checkParent = async (): Promise<false | number> => {
-  const rootDir = await pkgDir('./')
+  const rootDir = await pkgDir("./")
 
   if (rootDir) {
-    const file = await readJSON(resolve(rootDir, 'package.json'))
+    const file = await readJSON(resolve(rootDir, "package.json"))
 
-    if (file && Object.keys(file.dependencies || {}).includes('blitz')) {
-      return process.cwd().slice(rootDir.length).split('/').length - 1
+    if (file && Object.keys(file.dependencies || {}).includes("blitz")) {
+      return process.cwd().slice(rootDir.length).split("/").length - 1
     }
   }
 
@@ -31,11 +31,15 @@ const checkParent = async (): Promise<false | number> => {
  * badPackageJson -> an error occurred while reading local package.json
  */
 
-export const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRootError; depth?: number}> => {
+export const isBlitzRoot = async (): Promise<{
+  err: boolean
+  message?: IsBlitzRootError
+  depth?: number
+}> => {
   try {
-    const local = await readJSON('./package.json')
+    const local = await readJSON("./package.json")
     if (local) {
-      if (local.dependencies['blitz'] || local.devDependencies['blitz']) {
+      if (local.dependencies?.["blitz"] || local.devDependencies?.["blitz"]) {
         return {err: false}
       } else {
         return {
@@ -47,7 +51,7 @@ export const isBlitzRoot = async (): Promise<{err: boolean; message?: IsBlitzRoo
     return {err: true, message: IsBlitzRootError.BadPackageJson}
   } catch (err) {
     // No local package.json
-    if (err.code === 'ENOENT') {
+    if (err.code === "ENOENT") {
       const out = await checkParent()
 
       if (out === false) {

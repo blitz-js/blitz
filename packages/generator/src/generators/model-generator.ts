@@ -1,46 +1,77 @@
-import {Generator, GeneratorOptions} from '../generator'
-import enquirer from 'enquirer'
-import path from 'path'
+import {log} from "@blitzjs/display"
+import path from "path"
+import {Generator, GeneratorOptions} from "../generator"
+import {Field} from "../prisma/field"
+import {Model} from "../prisma/model"
+import {matchBetween} from "../utils/match-between"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
   modelName: string
-  modelNames: string
+  extraArgs: string[]
 }
 
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   // default subdirectory is /app/[name], we need to back out of there to generate the model
-  static subdirectory = '../..'
-  sourceRoot: string = ''
+  static subdirectory = "../.."
+  sourceRoot: string = ""
+  unsafe_disableConflictChecker = true
 
   async getTemplateValues() {}
 
   getTargetDirectory() {
-    return ''
+    return ""
   }
 
+  // eslint-disable-next-line require-await
   async write() {
     try {
-      if (!this.fs.exists(path.resolve('db/schema.prisma'))) {
-        throw new Error('Prisma schema file was not found')
+      if (!this.fs.exists(path.resolve("db/schema.prisma"))) {
+        throw new Error("Prisma schema file was not found")
       }
-      const {fields: fieldsString} = await enquirer.prompt({
-        name: 'fields',
-        type: 'input',
-        message: `Please input all fields which should exist on a ${this.options.ModelName} as a space-separated list of key:value pairs.
-An 'id' column will be auto-generated and should not be entered.
-Modifiers can be denoted with a trailing '?' (e.g. 'lastname:string?' or 'users:User[]')`,
-      })
-      const fields = fieldsString.split(' ')
-      let modelDefinition = `\nmodel ${this.options.ModelName} {
-  id      Int  @id @default(autoincrement())`
-      for (const field of fields) {
-        const [fieldName, fieldType] = field.split(':')
-        modelDefinition += `\n  ${fieldName}  ${fieldType}`
+      let updatedOrCreated = "created"
+
+      const extraArgs =
+        this.options.extraArgs.length === 1 && this.options.extraArgs[0].includes(" ")
+          ? this.options.extraArgs[0].split(" ")
+          : this.options.extraArgs
+      const modelDefinition = new Model(
+        this.options.modelName,
+        extraArgs.flatMap((def) => Field.parse(def)),
+      )
+      if (!this.options.dryRun) {
+        // wrap in newlines to put a space below the previously generated model and
+        // to preserve the EOF newline
+        const schema = this.fs.read(path.resolve("db/schema.prisma"))
+
+        if (schema.indexOf(`model ${modelDefinition.name}`) === -1) {
+          //model does not exist in schema - just add it
+          this.fs.append(path.resolve("db/schema.prisma"), `\n${modelDefinition.toString()}\n`)
+        } else {
+          const model = matchBetween(schema, `model ${modelDefinition.name}`, "}")
+          if (model) {
+            //filter out all fields that are already defined
+            modelDefinition.fields = modelDefinition.fields.filter((field) => {
+              return model.indexOf(field.name) === -1
+            })
+
+            //add new fields to the selected model
+            const newModel = model.replace("}", `${modelDefinition.getNewFields()}}`)
+
+            //replace all content with the newly added fields for the already existing model
+            this.fs.write(path.resolve("db/schema.prisma"), schema.replace(model, newModel))
+            updatedOrCreated = "updated"
+          }
+        }
       }
-      modelDefinition += '\n}\n'
-      this.fs.append(path.resolve('db/schema.prisma'), modelDefinition)
+      log.success(
+        `Model for '${this.options.modelName}'${
+          this.options.dryRun ? "" : ` ${updatedOrCreated} successfully`
+        }:\n`,
+      )
+      modelDefinition.toString().split("\n").map(log.progress)
+      log.info(
+        "\nNow run " + log.variable("blitz db migrate") + " to add this model to your database\n",
+      )
     } catch (error) {
       throw error
     }

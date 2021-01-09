@@ -1,3 +1,2 @@
-require('@testing-library/jest-dom')
-
-global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+require("@testing-library/jest-dom")
+process.env.BLITZ_TEST_ENVIRONMENT = true

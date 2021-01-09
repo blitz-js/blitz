@@ -1,4 +1,6 @@
-import {rpc, isomorphicRpc} from '@blitzjs/core'
+import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
+import {serialize} from "superjson"
+import {executeRpcCall} from "../src/rpc"
 
 declare global {
   namespace NodeJS {
@@ -8,48 +10,77 @@ declare global {
   }
 }
 
-describe('RPC', () => {
-  describe('HEAD', () => {
-    it('warms the endpoint', async () => {
+global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+
+describe("RPC", () => {
+  describe("HEAD", () => {
+    it("warms the endpoint", async () => {
       expect.assertions(1)
-      await rpc.warm('/api/endpoint')
+      await executeRpcCall.warm("/api/endpoint")
       expect(global.fetch).toBeCalled()
     })
   })
 
-  describe('POST', () => {
-    it('makes the request', async () => {
+  describe("POST", () => {
+    it("makes the request", async () => {
       expect.assertions(2)
       const fetchMock = jest
-        .spyOn(global, 'fetch')
-        .mockImplementationOnce(() => Promise.resolve())
-        .mockImplementationOnce(() => Promise.resolve({json: () => ({result: 'result', error: null})}))
+        .spyOn(global, "fetch")
+        .mockImplementationOnce(() =>
+          Promise.resolve({json: () => ({result: "result", error: null})}),
+        )
 
-      const resolverSpy = jest.fn()
-      const rpcFn = isomorphicRpc(resolverSpy, 'app/_rpc/queries/getProduct')
+      const resolverModule = {
+        default: jest.fn(),
+      }
+      const rpcFn = getIsomorphicEnhancedResolver(
+        resolverModule,
+        "app/_resolvers/queries/getProduct",
+        "testResolver",
+        "query",
+        "client",
+      )
 
       try {
-        const result = await rpcFn('/api/endpoint', {paramOne: 1234})
-        expect(result).toBe('result')
+        const result = await rpcFn({paramOne: 1234}, {fromQueryHook: true})
+        expect(result).toBe("result")
         expect(fetchMock).toBeCalled()
       } finally {
         fetchMock.mockRestore()
       }
     })
 
-    it('handles errors', async () => {
+    it("handles errors", async () => {
       expect.assertions(1)
-      const fetchMock = jest
-        .spyOn(global, 'fetch')
-        .mockImplementation(() =>
-          Promise.resolve({json: () => ({result: null, error: {name: 'Error', message: 'something broke'}})}),
-        )
+      const error = new Error("something broke")
+      const serializedError = serialize(error)
+      const fetchMock = jest.spyOn(global, "fetch").mockImplementation(() =>
+        Promise.resolve({
+          json: () => ({
+            result: null,
+            error: serializedError.json,
+            meta: {
+              error: serializedError.meta,
+            },
+          }),
+        }),
+      )
 
-      const resolverSpy = jest.fn()
-      const rpcFn = isomorphicRpc(resolverSpy, 'app/_rpc/queries/getProduct')
+      const resolverModule = {
+        default: jest.fn(),
+      }
+      const rpcFn = getIsomorphicEnhancedResolver(
+        resolverModule,
+        "app/_resolvers/queries/getProduct",
+        "testResolver",
+        "query",
+        "client",
+      )
 
       try {
-        expect(rpcFn('/api/endpoint', {paramOne: 1234})).rejects.toThrowError(/something broke/)
+        await expect(rpcFn({paramOne: 1234}, {fromQueryHook: true})).rejects.toThrowError(
+          /something broke/,
+        )
       } finally {
         fetchMock.mockRestore()
       }

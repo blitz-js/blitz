@@ -1,77 +1,132 @@
-import {resolve} from 'path'
-import {ciLog} from './ci-log'
-import {resolveBinAsync} from './resolve-bin-async'
-import {synchronizeFiles} from './synchronizer'
-import {parseChokidarRulesFromGitignore} from './parse-chokidar-rules-from-gitignore'
+import {transformFiles} from "@blitzjs/file-pipeline"
+import {promises} from "fs"
+import {join, resolve} from "path"
+import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
+import {resolveBinAsync} from "./resolve-bin-async"
+
+type Synchronizer = typeof transformFiles
+type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
   rootFolder: string
-  port: number
-  hostname: string
-  interceptNextErrors?: boolean
-  devFolder?: string
   buildFolder?: string
-  manifestPath?: string
-  writeManifestFile?: boolean
+  devFolder?: string
+  routeFolder?: string
+  clean?: boolean
+  // -
+  isTypescript?: boolean
   watch?: boolean
-  synchronizer?: typeof synchronizeFiles
+  // -
+  transformFiles?: Synchronizer
+  writeManifestFile?: boolean
+  // -
+  port?: number
+  hostname?: string
+  inspect?: boolean
+  // –
+  env: ServerEnvironment
+}
+
+type NormalizedConfig = ServerConfig & {
+  buildFolder: string
+  devFolder: string
+  routeFolder: string
+  clean?: boolean
+  // -
+  isTypescript: boolean
+  watch: boolean
+  // -
+  transformFiles: Synchronizer
+  writeManifestFile: boolean
+  // -
+  ignore: string[]
+  include: string[]
+  // -
+  nextBin: string
+  env: ServerEnvironment
 }
 
 const defaults = {
-  ignoredPaths: [
-    './build/**/*',
-    './.blitz-*/**/*',
-    './.blitz/**/*',
-    '.DS_Store',
-    '.git',
-    '.next/**/*',
-    '*.log',
-    '.now',
-    '*.pnp.js',
-    'coverage/**/*',
-    'dist/**/*',
-    'node_modules/**/*',
-    'cypress/**/*',
-  ],
-  includePaths: ['**/*'],
-  devFolder: '.blitz/caches/dev',
-  buildFolder: '.blitz/caches/build',
-  nextBinPatched: './node_modules/.bin/next-patched',
-  manifestPath: '_manifest.json',
+  env: "prod" as ServerEnvironment,
+  // -
+  buildFolder: ".blitz/caches/build",
+  devFolder: ".blitz/caches/dev",
+  routeFolder: ".blitz/caches/routes",
+  // -
   writeManifestFile: true,
+  // -
+  ignoredPaths: [
+    "./build/**/*",
+    "**/.blitz-*/**/*",
+    "**/.blitz/**/*",
+    "**/.heroku/**/*",
+    "**/.profile.d/**/*",
+    "**/.cache/**/*",
+    "./.config/**/*",
+    "**/.DS_Store",
+    "**/.git/**/*",
+    "**/.next/**/*",
+    "**/*.log",
+    "**/.vercel/**/*",
+    "**/.now/**/*",
+    "**/*.pnp.js",
+    "coverage/**/*",
+    ".coverage/**/*",
+    "dist/**/*",
+    "**/node_modules/**/*",
+    "cypress/**/*",
+    "test/**/*",
+    "tests/**/*",
+    "spec/**/*",
+    "specs/**/*",
+    "**/*.test.*",
+    "**/*.spec.*",
+  ],
+  includePaths: ["**/*"],
 }
 
-export async function enhance(config: ServerConfig) {
-  const devFolder = resolve(config.rootFolder, config.devFolder || defaults.devFolder)
-  const buildFolder = resolve(config.rootFolder, config.buildFolder || defaults.buildFolder)
-  const manifestPath = resolve(devFolder, config.manifestPath || defaults.manifestPath)
-  const writeManifestFile =
-    typeof config.writeManifestFile === 'undefined' ? defaults.writeManifestFile : config.writeManifestFile
+export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
+  const rootFolder = resolve(process.cwd(), config.rootFolder)
+  const git = parseChokidarRulesFromGitignore(rootFolder)
 
-  const nextBinOrig = await resolveBinAsync('next')
-  const nextBinPatched = await resolveBinAsync('@blitzjs/server', 'next-patched')
+  const env = config.env || defaults.env
 
-  const nextBin = resolve(config.rootFolder, config.interceptNextErrors ? nextBinPatched : nextBinOrig)
+  return {
+    ...config,
+    env,
+    // -
+    rootFolder,
+    buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
+    devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
+    routeFolder: resolve(rootFolder, config.routeFolder ?? defaults.routeFolder),
+    // -
+    isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
+    watch: config.watch ?? env === "dev",
+    clean: config.clean,
+    // -
+    transformFiles: config.transformFiles ?? transformFiles,
+    writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
+    // -
+    ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
+    include: defaults.includePaths.concat(git.includePaths),
+    // -
+    nextBin: await getNextBin(rootFolder, env === "dev"),
+  }
+}
 
-  const {ignoredPaths: gitIgnoredPaths, includePaths: gitIncludePaths} = parseChokidarRulesFromGitignore(
-    resolve(process.cwd(), config.rootFolder),
-  )
+async function getNextBin(rootFolder: string, usePatched: boolean = false): Promise<string> {
+  // do not await for both bin-pkg because just one is used at a time
+  const nextBinPkg = usePatched ? "@blitzjs/server" : "next"
+  const nextBinExec = usePatched ? "next-patched" : undefined
+  const nextBin = await resolveBinAsync(nextBinPkg, nextBinExec)
+  return resolve(rootFolder, nextBin)
+}
 
-  return ciLog(
-    `
-Logging the following to understand what is happening in our CI environment
-and investigate why we have been getting random CI test failures.
-This will be temporary.
-`,
-    {
-      ...config,
-      ignoredPaths: defaults.ignoredPaths.concat(gitIgnoredPaths),
-      includePaths: defaults.includePaths.concat(gitIncludePaths),
-      manifestPath,
-      nextBin,
-      buildFolder,
-      devFolder,
-      writeManifestFile,
-    },
-  )
+async function getIsTypescript(rootFolder: string): Promise<boolean> {
+  try {
+    await promises.access(join(rootFolder, "tsconfig.json"))
+    return true
+  } catch {
+    return false
+  }
 }

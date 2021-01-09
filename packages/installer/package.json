@@ -1,16 +1,18 @@
 {
   "name": "@blitzjs/installer",
-  "version": "0.11.0",
+  "version": "0.29.0-canary.0",
   "description": "Package installation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
-    "predev": "wait-on ../generator/dist/packages/generator/src/index.d.ts && wait-on ../server/dist/packages/server/src/index.d.ts",
+    "clean": "rimraf dist",
+    "predev": "yarn wait:server && yarn wait:generator",
+    "wait:generator": "wait-on ../generator/dist/packages/generator/src/index.d.ts",
+    "wait:server": "wait-on ../server/dist/packages/server/src/index.d.ts",
     "dev": "tsdx watch --verbose",
     "build": "tsdx build",
     "test": "tsdx test",
-    "test:watch": "tsdx test --watch",
-    "lint": "tsdx lint"
+    "test:watch": "tsdx test --watch"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -23,11 +25,6 @@
   "files": [
     "dist"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "keywords": [
     "blitz",
     "installer"
@@ -37,21 +34,23 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/generator": "0.11.0",
-    "@blitzjs/server": "0.11.0",
-    "ast-types": "0.13.3",
-    "chokidar": "3.3.1",
-    "cross-spawn": "7.0.2",
-    "diff": "4.0.2",
-    "enquirer": "2.3.5",
-    "fs-extra": "9.0.0",
-    "globby": "11.0.0",
-    "recast": "0.19.1",
-    "ts-node": "8.9.1"
+    "@babel/core": "7.12.10",
+    "@babel/plugin-transform-typescript": "7.12.1",
+    "@blitzjs/config": "0.29.0-canary.0",
+    "@blitzjs/display": "0.29.0-canary.0",
+    "@blitzjs/generator": "0.29.0-canary.0",
+    "@types/jscodeshift": "0.7.2",
+    "cross-spawn": "7.0.3",
+    "diff": "5.0.0",
+    "enquirer": "2.3.6",
+    "fs-extra": "9.0.1",
+    "globby": "11.0.1",
+    "ink": "3.0.8",
+    "ink-spinner": "4.0.1",
+    "jscodeshift": "0.11.0",
+    "react": "0.0.0-experimental-3310209d0",
+    "recast": "0.20.4",
+    "ts-node": "^9.1.1"
   },
-  "devDependencies": {
-    "@types/node": "13.13.4"
-  }
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

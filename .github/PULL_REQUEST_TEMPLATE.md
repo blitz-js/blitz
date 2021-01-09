@@ -5,10 +5,6 @@ Closes: ??
 ### Checklist
 
 - [ ] Tests added for changes
-- [ ] User facing changes documented
-
-### Breaking change: yes/no
-
-### Other information
+- [ ] PR submitted to [blitzjs.com](https://github.com/blitz-js/blitzjs.com) for any user facing changes
 
 <!-- IMPORTANT: Make sure to check the "Allow edits from maintainers" box below this window -->

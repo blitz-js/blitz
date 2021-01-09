@@ -1,38 +1,41 @@
-import {resolve} from 'path'
-import {synchronizeFiles as defaultSynchronizer} from './synchronizer'
-import {ServerConfig, enhance} from './config'
-import {nextStartDev} from './next-utils'
+import {log} from "@blitzjs/display"
+import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
+import {normalize, ServerConfig} from "./config"
+import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
+import {configureStages} from "./stages"
 
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
+export async function dev(config: ServerConfig) {
   const {
     rootFolder,
+    transformFiles,
     nextBin,
     devFolder,
-    ignoredPaths,
-    manifestPath,
+    ignore,
+    include,
+    isTypescript,
     writeManifestFile,
-    includePaths,
-    synchronizer: synchronizeFiles = defaultSynchronizer,
-    watch = true,
-  } = await enhance({
-    ...config,
-    interceptNextErrors: true,
+    watch,
+    clean,
+  } = await normalize({...config, env: "dev"})
+
+  // if blitz version is mismatched, we need to bust the cache by cleaning the devFolder
+  const versionMatched = await isVersionMatched(devFolder)
+
+  const stages = configureStages({writeManifestFile, isTypescript})
+
+  const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
+    ignore,
+    include,
+    watch,
+    clean: !versionMatched || clean,
   })
-  const src = resolve(rootFolder)
-  const dest = resolve(rootFolder, devFolder)
 
-  const [{manifest}] = await Promise.all([
-    synchronizeFiles({
-      src,
-      dest,
-      watch,
-      ignoredPaths,
-      includePaths,
-      manifestPath,
-      writeManifestFile,
-    }),
-    readyForNextDev,
-  ])
+  if (!versionMatched) await saveBlitzVersion(devFolder)
 
-  await nextStartDev(nextBin, dest, manifest, devFolder, config)
+  if (customServerExists(devFolder)) {
+    log.success("Using your custom server")
+    await startCustomServer(devFolder, config)
+  } else {
+    await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+  }
 }

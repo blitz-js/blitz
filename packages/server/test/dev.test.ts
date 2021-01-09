@@ -1,32 +1,41 @@
 /* eslint-disable import/first */
 
-import {join, resolve} from 'path'
+import {join, resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
+import {multiMock} from "./utils/multi-mock"
 
-const nextUtilsMock = {
-  nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
-  nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
-}
-// Quieten reporter
-jest.doMock('../src/reporter', () => ({
-  reporter: {copy: jest.fn(), remove: jest.fn()},
-}))
+const mocks = multiMock(
+  {
+    "next-utils": {
+      nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
+      nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
+    },
+    "resolve-bin-async": {
+      resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
+    },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
+    },
+  },
+  resolve(__dirname, "../src"),
+)
 
-// Assume next works
-jest.doMock('../src/next-utils', () => nextUtilsMock)
-const originalLog = console.log
-
-// Mock where the next bin is
-jest.doMock('../src/resolve-bin-async', () => ({
-  resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
-}))
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
-import {dev} from '../src/dev'
-import {Manifest} from '../src/synchronizer/pipeline/rules/manifest/index'
-import {directoryTree} from './utils/tree-utils'
-import mockfs from 'mock-fs'
+import {dev} from "../src/dev"
+import {Manifest} from "../src/stages/manifest"
+import {directoryTree} from "./utils/tree-utils"
 
-describe('Dev command', () => {
+const originalLog = console.log
+describe("Dev command", () => {
   let rootFolder: string
   let buildFolder: string
   let devFolder: string
@@ -38,53 +47,58 @@ describe('Dev command', () => {
     jest.clearAllMocks()
   })
 
-  afterEach(async () => {
+  afterEach(() => {
     console.log = originalLog
   })
 
-  describe('throw in nextStartDev', () => {
+  describe("throw in nextStartDev", () => {
     beforeEach(() => {
-      nextUtilsMock.nextStartDev.mockRejectedValue('pow')
+      mocks["next-utils"].nextStartDev.mockRejectedValue("pow")
+      mocks["blitz-version"].getBlitzVersion.mockRejectedValue("pow")
+      mocks["blitz-version"].isVersionMatched.mockRejectedValue("pow")
+      mocks["blitz-version"].saveBlitzVersion.mockRejectedValue("pow")
     })
 
     afterEach(() => {
-      nextUtilsMock.nextStartDev.mockReturnValue(Promise.resolve())
+      mocks["next-utils"].nextStartDev.mockReturnValue(Promise.resolve())
+      mocks["blitz-version"].getBlitzVersion.mockReturnValue(blitzVersion.getBlitzVersion())
+      mocks["blitz-version"].isVersionMatched.mockImplementation(blitzVersion.isVersionMatched)
+      mocks["blitz-version"].saveBlitzVersion.mockImplementation(blitzVersion.saveBlitzVersion)
     })
 
-    it('should blow up', (done) => {
-      const mockSynchronizer = () => Promise.resolve({manifest: Manifest.create()})
-      ;(async () => {
-        try {
-          await dev({
-            synchronizer: mockSynchronizer,
-            rootFolder: '',
-            writeManifestFile: false,
-            watch: false,
-            port: 3000,
-            hostname: 'localhost',
-          })
-        } catch (err) {
-          expect(err).toBe('pow')
-          done()
-        }
-      })()
+    it("should blow up", async (done) => {
+      const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
+      try {
+        await dev({
+          transformFiles,
+          rootFolder: "",
+          writeManifestFile: false,
+          watch: false,
+          port: 3000,
+          hostname: "localhost",
+          env: "dev",
+        })
+      } catch (err) {
+        expect(err).toBe("pow")
+        done()
+      }
     })
   })
 
-  describe.skip('when with next.config', () => {
-    beforeEach(async () => {
-      rootFolder = resolve('bad')
-      buildFolder = resolve(rootFolder, '.blitz')
-      devFolder = resolve(rootFolder, '.blitz')
-      mockfs({
-        'bad/next.config.js': 'yo',
+  describe.skip("when with next.config", () => {
+    beforeEach(() => {
+      rootFolder = resolve("bad")
+      buildFolder = resolve(rootFolder, ".blitz")
+      devFolder = resolve(rootFolder, ".blitz")
+      mocks.mockFs({
+        "bad/next.config.js": "yo",
       })
     })
     afterEach(() => {
-      mockfs.restore()
+      mocks.mockFs.restore()
     })
 
-    it('should fail when passed a next.config.js', async () => {
+    it("should fail when passed a next.config.js", async () => {
       expect.assertions(2)
       await expect(
         dev({
@@ -94,33 +108,35 @@ describe('Dev command', () => {
           writeManifestFile: false,
           watch: false,
           port: 3000,
-          hostname: 'localhost',
+          hostname: "localhost",
+          env: "dev",
         }),
-      ).rejects.toThrowError('Blitz does not support')
+      ).rejects.toThrowError("Blitz does not support")
 
       expect(
         consoleOutput.includes(
-          'Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js',
+          "Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js",
         ),
       ).toBeTruthy()
     })
   })
 
-  describe('when run normally', () => {
-    beforeEach(async () => {
-      rootFolder = resolve('dev')
-      buildFolder = resolve(rootFolder, '.blitz')
-      devFolder = resolve(rootFolder, '.blitz-dev')
+  describe("when run normally", () => {
+    beforeEach(() => {
+      rootFolder = resolve("dev")
+      buildFolder = resolve(rootFolder, ".blitz")
+      devFolder = resolve(rootFolder, ".blitz-dev")
     })
     afterEach(() => {
-      mockfs.restore()
+      mocks.mockFs.restore()
     })
 
-    it('should copy the correct files to the dev folder', async () => {
-      mockfs({
-        'dev/.now': '',
-        'dev/one': '',
-        'dev/two': '',
+    it("should copy the correct files to the dev folder", async () => {
+      mocks.mockFs({
+        "dev/.git/hooks": "",
+        "dev/.vercel/project.json": "",
+        "dev/one": "",
+        "dev/two": "",
       })
       await dev({
         rootFolder,
@@ -129,27 +145,48 @@ describe('Dev command', () => {
         writeManifestFile: false,
         watch: false,
         port: 3000,
-        hostname: 'localhost',
+        hostname: "localhost",
+        env: "dev",
       })
-      const tree = directoryTree(rootFolder)
-      expect(tree).toEqual({
+      expect(directoryTree(rootFolder)).toEqual({
         children: [
           {
-            children: [{name: 'blitz.config.js'}, {name: 'next.config.js'}, {name: 'one'}, {name: 'two'}],
-            name: '.blitz-dev',
+            children: [
+              {name: "_blitz-version.txt"},
+              {name: "blitz.config.js"},
+              {name: "next.config.js"},
+              {name: "one"},
+              {name: "two"},
+            ],
+            name: ".blitz-dev",
           },
-          {name: '.now'},
-          {name: 'one'},
-          {name: 'two'},
+          {
+            children: [
+              {
+                name: "hooks",
+              },
+            ],
+            name: ".git",
+          },
+          {
+            children: [
+              {
+                name: "project.json",
+              },
+            ],
+            name: ".vercel",
+          },
+          {name: "one"},
+          {name: "two"},
         ],
-        name: 'dev',
+        name: "dev",
       })
     })
 
-    it('calls spawn with the patched next cli bin', async () => {
-      mockfs(
+    it("calls spawn with the patched next cli bin", async () => {
+      mocks.mockFs(
         {
-          'dev/@blitzjs/server/next-patched': '',
+          "dev/@blitzjs/server/next-patched": "",
         },
         {createCwd: false, createTmp: false},
       )
@@ -160,15 +197,16 @@ describe('Dev command', () => {
         writeManifestFile: false,
         watch: false,
         port: 3000,
-        hostname: 'localhost',
+        hostname: "localhost",
+        env: "dev",
       })
-      const nextPatched = resolve(rootFolder, '@blitzjs/server', 'next-patched')
-      const blitzDev = join(rootFolder, '.blitz-dev')
-      expect(nextUtilsMock.nextStartDev.mock.calls[0].length).toBe(5)
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][0]).toBe(nextPatched)
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][1]).toBe(blitzDev)
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][4]).toHaveProperty('port')
-      expect(nextUtilsMock.nextStartDev.mock.calls[0][4]).toHaveProperty('hostname')
+      const nextPatched = resolve(rootFolder, "@blitzjs/server", "next-patched")
+      const blitzDev = join(rootFolder, ".blitz-dev")
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0].length).toBe(5)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][0]).toBe(nextPatched)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][1]).toBe(blitzDev)
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][4]).toHaveProperty("port")
+      expect(mocks["next-utils"].nextStartDev.mock.calls[0][4]).toHaveProperty("hostname")
     })
   })
 })

@@ -1,5 +1,5 @@
-import {Link, useRouter} from 'blitz'
-import ProductForm from 'app/products/components/ProductForm'
+import {Link, useRouter} from "blitz"
+import ProductForm from "app/products/components/ProductForm"
 
 function AdminNewProductPage() {
   const router = useRouter()
@@ -12,7 +12,7 @@ function AdminNewProductPage() {
         </Link>
       </p>
       <div>
-        <ProductForm onSuccess={() => router.push('/admin/products')} />
+        <ProductForm onSuccess={() => router.push("/admin/products")} />
       </div>
     </div>
   )

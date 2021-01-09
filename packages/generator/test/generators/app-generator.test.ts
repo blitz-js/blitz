@@ -1,14 +1,13 @@
-import spawn from 'cross-spawn'
-import {log} from '@blitzjs/server'
-
-import {AppGenerator} from '../../src/generators/app-generator'
+import {log} from "@blitzjs/display"
+import spawn from "cross-spawn"
+import {AppGenerator} from "../../src/generators/app-generator"
 
 // Spies process to avoid trying to chdir to a non existing folder
-jest.spyOn(process, 'chdir').mockImplementation(() => true)
-jest.spyOn(global.console, 'log').mockImplementation()
+jest.spyOn(process, "chdir").mockImplementation(() => true)
+jest.spyOn(global.console, "log").mockImplementation()
 // Mocks the log output
 jest.mock(
-  '@blitzjs/server',
+  "@blitzjs/display",
   jest.fn(() => {
     return {
       log: {
@@ -28,7 +27,7 @@ jest.mock(
 )
 
 // Mocks spawn
-jest.mock('cross-spawn', () => {
+jest.mock("cross-spawn", () => {
   const spawn = jest.fn().mockImplementation(() => {
     return {
       stdout: {
@@ -47,15 +46,15 @@ jest.mock('cross-spawn', () => {
 
 // Mocks fs-extra used by both AppGenerator and Generator base class
 jest.mock(
-  'fs-extra',
+  "fs-extra",
   jest.fn(() => {
     return {
       readJSONSync: jest.fn().mockImplementation(() => ({
         dependencies: {
-          react: '^16.8.0',
+          react: "^16.8.0",
         },
         devDependencies: {
-          debug: '^4.1.1',
+          debug: "^4.1.1",
         },
       })),
       ensureDir: jest.fn(),
@@ -66,68 +65,82 @@ jest.mock(
 )
 
 jest.mock(
-  'mem-fs-editor',
+  "mem-fs-editor",
   jest.fn(() => {
     return {
       create: jest.fn().mockImplementation(() => {
         return {
           move: jest.fn(),
+          readJSON: jest.fn().mockImplementation(() => ({
+            dependencies: {},
+            devDependencies: {},
+          })),
+          writeJSON: jest.fn(),
           commit: (_: any, callback: any) => callback(),
           copy: jest.fn(),
+          delete: jest.fn(),
         }
       }),
     }
   }),
 )
 
-describe('AppGenerator', () => {
+describe("AppGenerator", () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   const generator = new AppGenerator({
-    appName: 'new-app',
+    appName: "new-app",
     dryRun: false,
     useTs: true,
     yarn: true,
-    version: '1.0',
+    version: "1.0",
     skipInstall: false,
+    form: "React Final Form",
+    skipGit: false,
   })
 
-  it('calls git init', async () => {
+  it("calls git init", async () => {
     await generator.run()
 
-    expect(spawn.sync).toHaveBeenCalledWith('git', ['init'], {stdio: 'ignore'})
+    expect(spawn.sync).toHaveBeenCalledWith("git", ["init"], {stdio: "ignore"})
   })
 
-  it('calls git add', async () => {
+  it("calls git add", async () => {
     await generator.run()
 
-    expect(spawn.sync).toHaveBeenCalledWith('git', ['add', '.'], {stdio: 'ignore'})
+    expect(spawn.sync).toHaveBeenCalledWith("git", ["add", "."], {stdio: "ignore"})
   })
 
-  it('calls git commit', async () => {
+  it("calls git commit", async () => {
     await generator.run()
 
-    expect(spawn.sync).toHaveBeenCalledWith('git', ['commit', '-m', 'New baby Blitz app!'], {
-      stdio: 'ignore',
-    })
+    //
+    expect(spawn.sync).toHaveBeenCalledWith(
+      "git",
+      ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+      {
+        stdio: "ignore",
+        timeout: 10000,
+      },
+    )
   })
 
-  describe('when git init fails', () => {
-    it('logs warn with instructions', async () => {
+  describe("when git init fails", () => {
+    it("logs warn with instructions", async () => {
       // @ts-ignore (TS complains about reassign)
       spawn.sync = jest.fn().mockImplementation((command, options) => {
-        if (command === 'git' && options[0] === 'init') {
+        if (command === "git" && options[0] === "init") {
           return {status: 1}
         }
         return {status: 0}
       })
       await generator.run()
 
-      expect(log.warning).toHaveBeenCalledWith('Failed to run git init.')
+      expect(log.warning).toHaveBeenCalledWith("Failed to run git init.")
       expect(log.warning).toHaveBeenCalledWith(
-        'Find out more about how to install git here: https://git-scm.com/downloads.',
+        "Find out more about how to install git here: https://git-scm.com/downloads.",
       )
     })
   })

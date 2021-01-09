@@ -1,5 +1,5 @@
-import { Suspense } from "react"
-import { Head, Link, useRouter, useQuery } from "blitz"
+import {Suspense} from "react"
+import {Head, Link, useRouter, useQuery} from "blitz"
 import getProject from "app/projects/queries/getProject"
 import updateProject from "app/projects/mutations/updateProject"
 export const EditProject = () => {
@@ -29,7 +29,7 @@ export const EditProject = () => {
               },
             })
             alert("Success!" + JSON.stringify(updated))
-            router.push("/projects/[id]", `/projects/${updated.id}`)
+            router.push(`/projects/${updated.id}`)
           } catch (error) {
             alert("Error creating project " + JSON.stringify(error, null, 2))
           }

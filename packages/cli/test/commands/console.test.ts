@@ -1,46 +1,58 @@
-import * as repl from 'repl'
-import * as chokidar from 'chokidar'
-import {Console} from '../../src/commands/console'
-import {getBlitzModulePaths} from '../../src/utils/load-blitz'
-import {REPLServer} from 'repl'
-import {FSWatcher} from 'chokidar'
+import {Console} from "../../src/commands/console"
+import * as path from "path"
 
-const mockRepl = ({
-  defineCommand: jest.fn(),
-  on: jest.fn(),
-  context: {},
-} as any) as REPLServer
-const mockWatcher = ({
-  on: jest.fn(),
-} as any) as FSWatcher
+import * as repl from "@blitzjs/repl"
+import * as db from "../../src/commands/db"
 
-jest.mock('repl')
-jest.mock('chokidar')
-jest.mock(`${process.cwd()}/package.json`, () => ({
+jest.spyOn(global.console, "log").mockImplementation()
+
+jest.mock(
+  "@blitzjs/server",
+  jest.fn(() => {
+    return {
+      log: {
+        branded: jest.fn(),
+        spinner: () => {
+          return {
+            start: jest.fn().mockImplementation(() => ({succeed: jest.fn()})),
+          }
+        },
+      },
+    }
+  }),
+)
+
+jest.mock("../../package.json", () => ({
   dependencies: {
-    ramda: '1.0.0',
+    ramda: "1.0.0",
   },
 }))
-jest.mock('@blitzjs/generator/src/utils/load-dependencies')
-jest.mock('../../src/utils/load-blitz')
 
-describe('Console command', () => {
+jest.mock(
+  "@blitzjs/repl",
+  jest.fn(() => {
+    return {
+      runRepl: jest.fn(),
+    }
+  }),
+)
+
+Console.prototype.parse = jest.fn()
+
+describe("Console command", () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
 
-  it('runs REPL', async () => {
-    jest.spyOn(Console.prototype, 'log')
-    jest.spyOn(repl, 'start').mockReturnValue(mockRepl)
-    jest.spyOn(chokidar, 'watch').mockReturnValue(mockWatcher)
-    jest.spyOn(mockRepl, 'on').mockReturnValue(mockRepl)
+  it("runs repl", async () => {
+    await Console.run()
+    expect(Console.prototype.parse).toHaveBeenCalled()
+    expect(repl.runRepl).toHaveBeenCalled()
+  })
 
-    await Console.prototype.run()
-
-    expect(repl.start).toBeCalledWith(Console.replOptions)
-    expect(mockRepl.defineCommand).toBeCalledWith('reload', Console.commands.reload)
-
-    // expect(chokidar.watch).toBeCalledWith('package.json')
-    expect(chokidar.watch).toBeCalledWith(getBlitzModulePaths())
+  it("runs repl with replOptions", async () => {
+    await Console.run()
+    expect(Console.prototype.parse).toHaveBeenCalled()
+    expect(repl.runRepl).toHaveBeenCalledWith(Console.replOptions)
   })
 })

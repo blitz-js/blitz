@@ -1,7 +1,18 @@
 #!/usr/bin/env node
+const spawn = require('cross-spawn')
+
+const nodeOpts = ['--experimental-repl-await']
+
+if (process.env.INSPECT_BRK === 'true') {
+  nodeOpts.push('--inspect-brk')
+}
 
 try {
-    require('../dist/cli')
+  const cliBin = require.resolve('../dist/cli')
+  const binArgs = process.argv.slice(2)
+  const result = spawn.sync('node', [...nodeOpts, cliBin, ...binArgs], { stdio: 'inherit' })
+  process.exit(result.status)
 } catch (e) {
-    console.error('Blitz is not available yet, make sure "yarn build" or "yarn dev" has completed compiling')
+  console.error('Blitz is not available yet, make sure "yarn build" or "yarn dev" has completed compiling')
+  process.exit(1)
 }

@@ -1,4 +1,4 @@
-import { Head, Link, useRouter } from "blitz"
+import {Head, Link, useRouter} from "blitz"
 import createProject from "app/projects/mutations/createProject"
 
 const NewProjectPage = () => {
@@ -24,7 +24,7 @@ const NewProjectPage = () => {
                 },
               })
               alert("Success!" + JSON.stringify(project))
-              router.push("/projects/[id]", `/projects/${project.id}`)
+              router.push(`/projects/${project.id}`)
             } catch (error) {
               alert("Error creating project " + JSON.stringify(error, null, 2))
             }
