@@ -1789,6 +1789,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "koolii",
+      "name": "t.kuriyama",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3866581?v=4",
+      "profile": "https://www.koolii.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
