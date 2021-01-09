@@ -17,9 +17,9 @@ import resetPassword from "app/auth/mutations/resetPassword"
  * email and sends password reset instructions.
  *
  * When they click the link in that email, they will be sent back to this same
- * page but with the token set as a query paramater like `?token=XXXXX`.
+ * page but with the token set as a query parameter like `?token=XXXXX`.
  *
- * The ResetPasswordForm is rendered if the `?token=` paramater is present in the URL
+ * The ResetPasswordForm is rendered if the `?token=` parameter is present in the URL
  */
 
 const ForgotPasswordForm = () => {

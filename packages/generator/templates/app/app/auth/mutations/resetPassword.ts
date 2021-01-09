@@ -1,7 +1,7 @@
-import { SessionContext } from "blitz"
+import { SessionContext, SecurePassword } from "blitz"
 import db from "db"
 import { ResetPasswordInput, ResetPasswordInputType } from "../validations"
-import { hashToken, hashPassword } from "../auth-utils"
+import { hashToken } from "../auth-utils"
 
 export class ResetPasswordError extends Error {
   name = "ResetPasswordError"
@@ -38,7 +38,7 @@ export default async function resetPassword(
   }
 
   // 5. Since token is valid, now we can update the user's password
-  const hashedPassword = await hashPassword(password)
+  const hashedPassword = await SecurePassword.hash(password)
   const user = await db.user.update({
     where: { id: savedToken.userId },
     data: { hashedPassword },
