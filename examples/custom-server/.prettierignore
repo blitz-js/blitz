@@ -1,0 +1,7 @@
+.gitkeep
+.env*
+*.ico
+*.lock
+db/migrations
+.next
+.blitz

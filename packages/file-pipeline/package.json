@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.28.0-canary.1",
+  "version": "0.29.0-canary.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -32,18 +32,18 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@blitzjs/display": "0.28.0-canary.1",
-    "chalk": "4.0.0",
+    "@blitzjs/display": "0.29.0-canary.0",
+    "chalk": "^4.1.0",
     "chokidar": "3.4.3",
     "flush-write-stream": "2.0.0",
     "from2": "2.3.0",
-    "fs-extra": "9.0.0",
+    "fs-extra": "^9.0.1",
     "gulp-if": "3.0.0",
     "merge-stream": "2.0.0",
     "parallel-transform": "1.2.0",
     "pump": "3.0.0",
     "pumpify": "2.0.1",
-    "through2": "3.0.1",
+    "through2": "4.0.2",
     "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"

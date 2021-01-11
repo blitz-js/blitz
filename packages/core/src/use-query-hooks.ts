@@ -9,7 +9,7 @@ import {
   useQuery as useReactQuery,
 } from "react-query"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
-import {useRouterIsReady} from "./use-router"
+import {useRouter} from "./use-router"
 import {
   defaultQueryConfig,
   emptyQueryFn,
@@ -33,7 +33,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const routerIsReady = useRouterIsReady()
+  const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -72,7 +72,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  const routerIsReady = useRouterIsReady()
+  const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -125,7 +125,7 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  const routerIsReady = useRouterIsReady()
+  const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 

@@ -5,7 +5,6 @@ import ora from "ora"
 import readline from "readline"
 import {Logger} from "tslog"
 
-
 type LogConfig = {
   level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
 }

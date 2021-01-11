@@ -19,6 +19,7 @@ export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
+  domain?: string
   getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>

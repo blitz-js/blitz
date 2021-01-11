@@ -54,6 +54,7 @@ describe("Routes command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
     })
 
@@ -75,6 +76,7 @@ describe("Routes command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
 
       expect(routes).toEqual([

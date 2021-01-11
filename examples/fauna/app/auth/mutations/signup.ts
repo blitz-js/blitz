@@ -1,6 +1,5 @@
-import { Ctx } from "blitz"
+import { Ctx, SecurePassword } from "blitz"
 import db from "db"
-import { hashPassword } from "app/auth/auth-utils"
 import { SignupInput, SignupInputType } from "app/auth/validations"
 import { gql } from "graphql-request"
 
@@ -8,7 +7,7 @@ export default async function signup(input: SignupInputType, { session }: Ctx) {
   // This throws an error if input is invalid
   const { email, password } = SignupInput.parse(input)
 
-  const hashedPassword = await hashPassword(password)
+  const hashedPassword = await SecurePassword.hash(password)
   const { user } = await db.request(
     gql`
       mutation createUser($email: String!, $hashedPassword: String, $role: String!) {

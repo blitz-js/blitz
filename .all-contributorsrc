@@ -1743,6 +1743,61 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "linbudu599",
+      "name": "Linbudu",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/48507806?v=4",
+      "profile": "https://linbudu.top/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "creimers",
+      "name": "C Reimers",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6090492?v=4",
+      "profile": "http://www.superservice-international.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kyken",
+      "name": "Tsuyoshi Osawa",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20137120?v=4",
+      "profile": "https://github.com/kyken",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rembrandtreyes",
+      "name": "Rembrandt Reyes",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15057964?v=4",
+      "profile": "https://rembrandtreyes.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "doi-t",
+      "name": "Toshiya Doi",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5877477?v=4",
+      "profile": "https://doi-t.net",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "koolii",
+      "name": "t.kuriyama",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3866581?v=4",
+      "profile": "https://www.koolii.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

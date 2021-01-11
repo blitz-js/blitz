@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/display",
-  "version": "0.28.0-canary.1",
+  "version": "0.29.0-canary.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -33,10 +33,10 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@blitzjs/display": "0.28.0-canary.1",
-    "chalk": "4.0.0",
-    "console-table-printer": "2.5.1",
-    "ora": "4.0.4",
-    "tslog": "2.9.1"
+    "@blitzjs/display": "0.29.0-canary.0",
+    "chalk": "^4.1.0",
+    "console-table-printer": "^2.7.5",
+    "ora": "^5.2.0",
+    "tslog": "^3.0.5"
   }
 }
