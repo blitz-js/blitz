@@ -10,6 +10,7 @@ const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import {runPrisma} from "./prisma"
 
 export interface Flags {
   ts: boolean
@@ -156,22 +157,17 @@ export class New extends Command {
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
 
           try {
-            // dotenv-cli used for DATABASE_URL to be available
-            spawn.sync(
-              "npx",
-              [
-                "dotenv",
-                "-e",
-                ".env.local",
-                "prisma",
-                "migrate",
-                "dev",
-                "--preview-feature",
-                "--name",
-                "Initial Migration",
-              ],
-              {stdio: "inherit"},
-            )
+            // Required in order for DATABASE_URL to be available
+            require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+            const result = await runPrisma([
+              "migrate",
+              "dev",
+              "--preview-feature",
+              "--name",
+              "Initial migration",
+            ])
+            if (!result) throw new Error()
+
             spinner.succeed()
           } catch {
             spinner.fail()

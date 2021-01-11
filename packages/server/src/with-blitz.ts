@@ -28,7 +28,6 @@ export function withBlitz(nextConfig: any) {
             path.resolve("./db"),
             /node_modules[\\/]@blitzjs[\\/]display/,
             /node_modules[\\/]@blitzjs[\\/]config/,
-            /node_modules[\\/]@prisma[\\/]client/,
             /node_modules[\\/]passport/,
             /node_modules[\\/]cookie-session/,
             /node_modules[\\/]secure-password/,
