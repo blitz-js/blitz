@@ -1,6 +1,6 @@
 import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
-import {runPrisma, runPrismaExitOnError} from "./prisma"
+import {runPrismaExitOnError} from "./prisma"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
@@ -30,12 +30,11 @@ async function runSeed() {
   }
   spinner.succeed()
 
-  spinner = log.spinner("Checking for database migrations\n").start()
-  await runMigrate({}, `--schema=${require("path").join(process.cwd(), "db", "schema.prisma")}`)
-  spinner.succeed()
+  log.info("Running database migrations...")
+  await runPrismaExitOnError(["migrate", "dev", "--preview-feature"])
 
   try {
-    console.log(log.withCaret("Seeding..."))
+    console.log("\n" + log.withCaret("Seeding..."))
     seeds && (await seeds())
   } catch (err) {
     log.error(err)
@@ -66,16 +65,12 @@ ${require("chalk").bold(
 
   static flags = {
     help: flags.help({char: "h"}),
-    // Used by `new` command to perform the initial migration
-    name: flags.string({hidden: true}),
-    // Used by `reset` command to skip the confirmation prompt
-    force: flags.boolean({char: "f", hidden: true}),
   }
 
   static strict = false
 
   async run() {
-    const {args, flags} = this.parse(Db)
+    const {args} = this.parse(Db)
     const command = args["command"]
 
     if (command === "help") {
@@ -92,10 +87,8 @@ ${require("chalk").bold(
       }
     }
 
-    this.log("\nUh oh, Blitz does not support that command.")
-    this.log("You can try running a prisma command directly with:")
-    this.log("\n  `npm run prisma COMMAND` or `yarn prisma COMMAND`\n")
-    this.log("Or you can list available db commands with with:")
-    this.log("\n  `npm run blitz db --help` or `yarn blitz db --help`\n")
+    this.log("\nThat command is no longer available..")
+    this.log("For any prisma related commands, use the `blitz prisma` command instead:")
+    this.log("\n  `blitz prisma COMMAND`\n")
   }
 }
