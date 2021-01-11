@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import { BlitzPage, useRouterQuery, Link } from "blitz"
+import { BlitzPage, useRouterQuery, Link, useMutation } from "blitz"
 import Layout from "app/layouts/Layout"
 import { LabeledTextField } from "app/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/components/Form"
@@ -23,12 +22,12 @@ import resetPassword from "app/auth/mutations/resetPassword"
  */
 
 const ForgotPasswordForm = () => {
-  const [success, setSuccess] = useState(false)
+  const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
   return (
     <div>
       <h1>Forgot your password?</h1>
 
-      {success ? (
+      {isSuccess ? (
         <div>
           <h2>Request Submitted</h2>
           <p>
@@ -43,8 +42,7 @@ const ForgotPasswordForm = () => {
           initialValues={{ email: "" }}
           onSubmit={async (values) => {
             try {
-              await forgotPassword(values)
-              setSuccess(true)
+              await forgotPasswordMutation(values)
             } catch (error) {
               return {
                 [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
@@ -61,12 +59,12 @@ const ForgotPasswordForm = () => {
 
 const ResetPasswordForm = () => {
   const query = useRouterQuery()
-  const [success, setSuccess] = useState(false)
+  const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
   return (
     <div>
       <h1>Set a New Password</h1>
 
-      {success ? (
+      {isSuccess ? (
         <div>
           <h2>Password Reset Successfully</h2>
           <p>
@@ -80,8 +78,7 @@ const ResetPasswordForm = () => {
           initialValues={{ password: "", passwordConfirmation: "", token: query.token as string }}
           onSubmit={async (values) => {
             try {
-              await resetPassword(values)
-              setSuccess(true)
+              await resetPasswordMutation(values)
             } catch (error) {
               if (error.name === "ResetPasswordError") {
                 return {
@@ -110,6 +107,7 @@ const ResetPasswordForm = () => {
 const ForgotPasswordPage: BlitzPage = () => {
   const query = useRouterQuery()
 
+  // TODO - need to use keys like I have in my client app?
   return query.token ? <ResetPasswordForm /> : <ForgotPasswordForm />
 }
 
