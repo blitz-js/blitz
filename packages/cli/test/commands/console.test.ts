@@ -35,6 +35,9 @@ jest.mock(
   }),
 )
 
+// @ts-ignore
+Console.prototype.parse = jest.fn()
+
 describe("Console command", () => {
   beforeEach(() => {
     jest.resetAllMocks()
