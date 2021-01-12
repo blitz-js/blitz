@@ -47,7 +47,7 @@ const rpcMiddleware = <TInput, TResult>(
 
         const duration = Date.now() - startTime
         log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
-        log.info(chalk.dim(`Finished in ${prettyMs(duration)}ms`))
+        log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
         displayLog.newline()
 
         res.blitzResult = result
