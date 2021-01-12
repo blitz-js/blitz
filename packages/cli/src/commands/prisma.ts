@@ -1,4 +1,4 @@
-import {Command, flags} from "@oclif/command"
+import {Command} from "@oclif/command"
 
 const getPrismaBin = () => require("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
 let prismaBin: string
@@ -32,10 +32,6 @@ export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>
 export class PrismaCommand extends Command {
   static description = "Loads env variables then proxies all args to Prisma CLI"
   static aliases = ["p"]
-
-  static flags = {
-    help: flags.help({char: "h"}),
-  }
 
   static strict = false
 
