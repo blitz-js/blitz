@@ -29,7 +29,7 @@ FAUNA_SECRET=YOUR_AUTH_KEY
 ```
 
 ```
-yarn blitz db migrate
+yarn blitz prisma migrate deploy --preview-feature
 ```
 
 2. Start the dev server

@@ -9,7 +9,7 @@
     "test-watch": "jest --watch",
     "cy-open": "cypress open",
     "cy-run": "cypress run",
-    "test:migrate": "blitz db migrate",
+    "test:migrate": "blitz prisma migrate deploy --preview-feature",
     "test:jest": "jest",
     "test-server": "blitz build && blitz start --production",
     "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
