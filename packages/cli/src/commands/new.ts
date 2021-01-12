@@ -169,7 +169,8 @@ export class New extends Command {
             if (!result) throw new Error()
 
             spinner.succeed()
-          } catch {
+          } catch (error) {
+            console.log("error", error)
             spinner.fail()
             postInstallSteps.push(
               "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",

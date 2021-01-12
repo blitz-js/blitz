@@ -16,7 +16,7 @@ export const runPrisma = async (args: string[], silent = false) => {
     stdio: silent ? "ignore" : "inherit",
     env: process.env,
   })
-  const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
+  const code = await require("p-event")(cp, "exit")
 
   return code === 0
 }
