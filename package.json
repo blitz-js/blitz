@@ -16,7 +16,7 @@
     "node": ">=12.20.0"
   },
   "scripts": {
-    "postinstall": "npm rebuild husky && patch-package && lerna run postinstall --scope @examples/*",
+    "postinstall": "npm rebuild husky && patch-package",
     "predev": "lerna run clean --no-private --stream --parallel",
     "dev": "lerna run dev --no-private --stream --parallel",
     "link-cli": "yarn workspace blitz link",
