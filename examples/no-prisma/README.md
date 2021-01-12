@@ -11,12 +11,6 @@ model Project {
 }
 ```
 
-2. DB migrate
-
-```
-blitz db migrate
-```
-
 3. Start the dev server
 
 ```

@@ -1,8 +1,8 @@
-import { Link, BlitzPage, useMutation } from "blitz"
+import {Link, BlitzPage, useMutation} from "blitz"
 import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
-import { useCurrentUser } from "app/hooks/useCurrentUser"
-import { Suspense } from "react"
+import {useCurrentUser} from "app/hooks/useCurrentUser"
+import {Suspense} from "react"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -59,7 +59,7 @@ const Home: BlitzPage = () => {
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
         </p>
-        <div className="buttons" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+        <div className="buttons" style={{marginTop: "1rem", marginBottom: "1rem"}}>
           <Suspense fallback="Loading...">
             <UserInfo />
           </Suspense>
@@ -74,7 +74,7 @@ const Home: BlitzPage = () => {
           <code>blitz generate all project name:string</code>
         </pre>
         <pre>
-          <code>blitz db migrate</code>
+          <code>blitz prisma migrate dev --preview-feature</code>
         </pre>
         <div>
           <p>
@@ -93,7 +93,7 @@ const Home: BlitzPage = () => {
             </Link>
           </p>
         </div>
-        <div className="buttons" style={{ marginTop: "5rem" }}>
+        <div className="buttons" style={{marginTop: "5rem"}}>
           <a
             className="button"
             href="https://blitzjs.com/docs/getting-started?utm_source=blitz-new&utm_medium=app-template&utm_campaign=blitz-new"

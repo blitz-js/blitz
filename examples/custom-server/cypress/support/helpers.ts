@@ -3,5 +3,5 @@ export const createRandomUser = () => {
   const email = `test_${random}@example.com`
   const password = `password_${random}`
 
-  return {email, password}
+  return { email, password }
 }

@@ -52,4 +52,4 @@ describe("index page", () => {
   })
 })
 
-export { }
+export {}

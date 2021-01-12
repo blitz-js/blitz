@@ -10,7 +10,7 @@
 //
 //
 
-Cypress.Commands.add("signup", ({email, password}) => {
+Cypress.Commands.add("signup", ({ email, password }) => {
   cy.contains("a", "Sign Up").click()
 
   cy.contains("Email").find("input").type(email)

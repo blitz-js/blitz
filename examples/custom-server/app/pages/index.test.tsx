@@ -2,10 +2,10 @@ import React from "react"
 import { render } from "test/utils"
 
 import Home from "./index"
-import {useCurrentUser} from "app/hooks/useCurrentUser"
+import { useCurrentUser } from "app/hooks/useCurrentUser"
 
 jest.mock("app/hooks/useCurrentUser")
-const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurrentUser>;
+const mockUseCurrentUser = useCurrentUser as jest.MockedFunction<typeof useCurrentUser>
 
 test.skip("renders blitz documentation link", () => {
   // This is an example of how to ensure a specific item is in the document
@@ -15,10 +15,10 @@ test.skip("renders blitz documentation link", () => {
   // This is an example on how to mock api hooks when testing
   mockUseCurrentUser.mockReturnValue({
     id: 1,
-    name: 'User',
-    email: 'user@email.com',
-    role: 'user'
-  });
+    name: "User",
+    email: "user@email.com",
+    role: "user",
+  })
 
   const { getByText } = render(<Home />)
   const linkElement = getByText(/Documentation/i)
