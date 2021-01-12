@@ -38,8 +38,8 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.13.0",
-    "@prisma/client": "2.13.0",
+    "@prisma/cli": "2.14.0",
+    "@prisma/client": "2.14.0",
     "blitz": "0.29.0-canary.0",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",

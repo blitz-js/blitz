@@ -31,8 +31,8 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "~2.13",
-    "@prisma/client": "~2.13",
+    "@prisma/cli": "~2.14",
+    "@prisma/client": "~2.14",
     "blitz": "canary",
     "react": "0.0.0-experimental-3310209d0",
     "react-dom": "0.0.0-experimental-3310209d0",
