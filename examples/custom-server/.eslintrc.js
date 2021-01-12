@@ -1,9 +1,10 @@
 module.exports = {
+  parser: "@typescript-eslint/parser",
   env: {
     es2020: true,
   },
   extends: ["react-app", "plugin:jsx-a11y/recommended"],
-  plugins: ["jsx-a11y"],
+  plugins: ["@typescript-eslint", "jsx-a11y"],
   rules: {
     "import/no-anonymous-default-export": "error",
     "import/no-webpack-loader-syntax": "off",

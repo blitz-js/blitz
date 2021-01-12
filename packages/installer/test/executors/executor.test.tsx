@@ -1,5 +1,5 @@
-import React from "react"
 import {render} from "ink-testing-library"
+import React from "react"
 import {Frontmatter} from "../../src/executors/executor"
 describe("Executor", () => {
   const executorConfig = {
