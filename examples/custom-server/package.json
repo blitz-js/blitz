@@ -2,6 +2,7 @@
   "name": "@examples/custom-server",
   "version": "0.29.0-canary.0",
   "scripts": {
+    "postinstall": "prisma generate",
     "start": "nodemon --watch server.js --exec 'blitz start'",
     "build": "blitz build",
     "studio": "blitz db studio",

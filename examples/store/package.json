@@ -3,6 +3,7 @@
   "version": "0.29.0-canary.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
     "build": "blitz prisma migrate deploy --preview-feature && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
