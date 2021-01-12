@@ -172,7 +172,7 @@ export class New extends Command {
           } catch {
             spinner.fail()
             postInstallSteps.push(
-              "blitz prisma migrate deploy --preview-feature (when asked, you can name the migration anything)",
+              "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
             )
           }
         },
@@ -184,7 +184,7 @@ export class New extends Command {
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push(
-          "blitz prisma migrate deploy --preview-feature (when asked, you can name the migration anything)",
+          "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
         )
       }
 

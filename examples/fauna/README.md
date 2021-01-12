@@ -28,10 +28,6 @@ This example use the Fauna GraphQL API since it's more familiar to most people t
 FAUNA_SECRET=YOUR_AUTH_KEY
 ```
 
-```
-yarn blitz prisma migrate deploy --preview-feature
-```
-
 2. Start the dev server
 
 ```

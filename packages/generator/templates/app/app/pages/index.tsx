@@ -74,7 +74,7 @@ const Home: BlitzPage = () => {
           <code>blitz generate all project name:string</code>
         </pre>
         <pre>
-          <code>blitz prisma migrate deploy --preview-feature</code>
+          <code>blitz prisma migrate dev --preview-feature</code>
         </pre>
         <div>
           <p>

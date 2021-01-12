@@ -115,7 +115,7 @@ describe("`new` command", () => {
           expect(getStepsFromOutput()).toStrictEqual([
             `cd ${dirName}`,
             "yarn",
-            "blitz prisma migrate deploy --preview-feature (when asked, you can name the migration anything)",
+            "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
             "blitz start",
           ])
         }),
