@@ -86,8 +86,6 @@ export const executeRpcCall = <TInput, TResult>(
         if (result.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
           queryCache.clear()
-          //@ts-ignore -- TS type is wrong for invalidateQueries
-          await queryCache.invalidateQueries()
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {

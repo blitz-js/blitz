@@ -8,6 +8,7 @@ import {
   usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
+import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouter} from "./use-router"
 import {
@@ -33,6 +34,8 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
+  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
+  useSession()
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -72,6 +75,8 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
+  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
+  useSession()
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -125,6 +130,8 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
+  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
+  useSession()
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
