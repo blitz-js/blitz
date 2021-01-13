@@ -70,6 +70,7 @@ const defaults = {
     "**/.vercel/**/*",
     "**/.now/**/*",
     "**/*.pnp.js",
+    "**/*.sqlite*",
     "coverage/**/*",
     ".coverage/**/*",
     "dist/**/*",
