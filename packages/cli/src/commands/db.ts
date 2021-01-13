@@ -1,6 +1,5 @@
 import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
-import {runPrismaExitOnError} from "./prisma"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
@@ -29,9 +28,6 @@ async function runSeed() {
     throw err
   }
   spinner.succeed()
-
-  log.info("Running database migrations...")
-  await runPrismaExitOnError(["migrate", "dev", "--preview-feature"])
 
   try {
     console.log("\n" + log.withCaret("Seeding..."))
