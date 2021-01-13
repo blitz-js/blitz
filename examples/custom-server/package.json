@@ -4,7 +4,7 @@
   "scripts": {
     "start": "nodemon --watch server.js --exec 'blitz start'",
     "build": "blitz build",
-    "studio": "blitz db studio",
+    "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test-watch": "jest --watch",
     "cy-open": "cypress open",
