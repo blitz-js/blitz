@@ -1,4 +1,4 @@
-import {Command, flags} from "@oclif/command"
+import {Command} from "@oclif/command"
 
 // @blitzjs/server imports react, so we must import the @blitzjs/server version of the
 // local app instead of the global.
@@ -37,10 +37,6 @@ export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>
 export class PrismaCommand extends Command {
   static description = "Loads env variables then proxies all args to Prisma CLI"
   static aliases = ["p"]
-
-  static flags = {
-    help: flags.help({char: "h"}),
-  }
 
   static strict = false
 
