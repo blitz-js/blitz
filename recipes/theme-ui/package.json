@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-theme-ui",
   "private": true,
-  "version": "0.29.1",
+  "version": "0.29.2",
   "description": "The Blitz Recipe for installing Theme UI",
   "main": "index.ts",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "@blitzjs/installer": "0.29.1",
+    "@blitzjs/installer": "0.29.2",
     "jscodeshift": "0.11.0"
   },
   "devDependencies": {
