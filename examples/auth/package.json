@@ -3,7 +3,7 @@
   "version": "0.29.1",
   "scripts": {
     "start": "blitz start",
-    "studio": "blitz db studio",
+    "studio": "blitz prisma studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "analyze": "cross-env ANALYZE=true blitz build",
