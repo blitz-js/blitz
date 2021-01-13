@@ -35,6 +35,8 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   }
 
   // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
+  //      https://github.com/blitz-js/blitz/issues/1711
+  //      NOTE: bug did not present in local dev build. Only via npm bundle
   useSession()
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
