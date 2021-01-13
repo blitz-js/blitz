@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.29.0",
+  "version": "0.29.1",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -30,8 +30,8 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.29.0",
-    "@blitzjs/repl": "0.29.0",
+    "@blitzjs/display": "0.29.1",
+    "@blitzjs/repl": "0.29.1",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
@@ -48,6 +48,7 @@
     "got": "^11.8.1",
     "has-yarn": "2.1.0",
     "hasbin": "1.2.3",
+    "import-cwd": "3.0.0",
     "minimist": "1.2.5",
     "p-event": "4.2.0",
     "pkg-dir": "^5.0.0",
@@ -56,13 +57,12 @@
     "tar": "^6.0.5",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "3.9.0",
-    "v8-compile-cache": "2.2.0",
-    "import-cwd": "3.0.0"
+    "v8-compile-cache": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.29.0",
-    "@blitzjs/installer": "0.29.0",
-    "@blitzjs/server": "0.29.0",
+    "@blitzjs/generator": "0.29.1",
+    "@blitzjs/installer": "0.29.1",
+    "@blitzjs/server": "0.29.1",
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "@prisma/cli": "2.14.0",
