@@ -56,7 +56,8 @@
     "tar": "^6.0.5",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "3.9.0",
-    "v8-compile-cache": "2.2.0"
+    "v8-compile-cache": "2.2.0",
+    "import-cwd": "3.0.0"
   },
   "devDependencies": {
     "@blitzjs/generator": "0.29.0",

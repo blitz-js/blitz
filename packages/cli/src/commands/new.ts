@@ -159,17 +159,14 @@ export class New extends Command {
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-            const result = await runPrisma([
-              "migrate",
-              "dev",
-              "--preview-feature",
-              "--name",
-              "Initial migration",
-            ])
+            const result = await runPrisma(
+              ["migrate", "dev", "--preview-feature", "--name", "Initial migration"],
+              true,
+            )
             if (!result) throw new Error()
 
             spinner.succeed()
-          } catch {
+          } catch (error) {
             spinner.fail()
             postInstallSteps.push(
               "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
