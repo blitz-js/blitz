@@ -1,6 +1,5 @@
 import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
-import {runPrismaExitOnError} from "./prisma"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
