@@ -30,9 +30,6 @@ async function runSeed() {
   }
   spinner.succeed()
 
-  log.info("Running database migrations...")
-  await runPrismaExitOnError(["migrate", "dev", "--preview-feature"])
-
   try {
     console.log("\n" + log.withCaret("Seeding..."))
     seeds && (await seeds())
