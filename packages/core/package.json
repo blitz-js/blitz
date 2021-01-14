@@ -52,5 +52,6 @@
     "secure-password": "4.0.0",
     "superjson": "1.4.1"
   },
+  "devDependencies": {},
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
