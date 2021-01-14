@@ -10,7 +10,9 @@ import {
   COOKIE_REFRESH_TOKEN,
   COOKIE_SESSION_TOKEN,
   CSRFTokenMismatchError,
+  generateToken,
   HANDLE_SEPARATOR,
+  hash256,
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
@@ -29,11 +31,9 @@ import {
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
-import * as crypto from "crypto"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {nanoid} from "nanoid"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
 import pkgDir from "pkg-dir"
@@ -262,16 +262,14 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: string = "") => crypto.createHash("sha256").update(input).digest("hex")
-
-export const generateToken = () => nanoid(32)
+const TOKEN_LENGTH = 32
 
 export const generateEssentialSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
 }
 
 export const generateAnonymousSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
 }
 
 export const createSessionToken = (handle: string, publicData: PublicData | string) => {
@@ -285,7 +283,7 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
     publicDataString = JSON.stringify(publicData)
   }
   return toBase64(
-    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
+    [handle, generateToken(TOKEN_LENGTH), hash256(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
@@ -310,7 +308,7 @@ export const createPublicDataToken = (publicData: string | PublicData) => {
   return toBase64(payload)
 }
 
-export const createAntiCSRFToken = () => generateToken()
+export const createAntiCSRFToken = () => generateToken(TOKEN_LENGTH)
 
 export type AnonymousSessionPayload = {
   isAnonymous: true
@@ -515,10 +513,10 @@ export async function getSession(
       debug("Session not found in DB")
       return null
     }
-    if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
+    if (persistedSession.hashedSessionToken !== hash256(sessionToken)) {
       debug("sessionToken hash did not match")
       debug("persisted: ", persistedSession.hashedSessionToken)
-      debug("in req: ", hash(sessionToken))
+      debug("in req: ", hash256(sessionToken))
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -542,7 +540,7 @@ export async function getSession(
     if (req.method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
-      const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+      const hasPublicDataChanged = hash256(persistedSession.publicData) !== hashedPublicData
       if (hasPublicDataChanged) {
         debug("PublicData has changed since the last request")
       }
@@ -691,7 +689,7 @@ export async function createNewSession(
       expiresAt,
       handle,
       userId: newPublicData.userId,
-      hashedSessionToken: hash(sessionToken),
+      hashedSessionToken: hash256(sessionToken),
       antiCSRFToken,
       publicData: JSON.stringify(newPublicData),
       privateData: JSON.stringify(newPrivateData),
@@ -769,7 +767,7 @@ export async function refreshSession(
     if (publicDataChanged) {
       await config.updateSession(sessionKernel.handle, {
         expiresAt,
-        hashedSessionToken: hash(sessionToken),
+        hashedSessionToken: hash256(sessionToken),
         publicData: JSON.stringify(sessionKernel.publicData),
       })
     } else {

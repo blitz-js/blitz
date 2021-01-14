@@ -26,6 +26,7 @@ export function withBlitz(nextConfig: any) {
           config.module.rules = config.module.rules || []
           const excluded = [
             path.resolve("./db"),
+            path.resolve("crypto"),
             /node_modules[\\/]@blitzjs[\\/]display/,
             /node_modules[\\/]@blitzjs[\\/]config/,
             /node_modules[\\/]passport/,
