@@ -1,6 +1,6 @@
 import {Suspense} from "react"
-import Layout from "app/layouts/Layout"
 import {Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
+import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
 import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
@@ -32,7 +32,7 @@ export const Edit__ModelName__ = () => {
             router.push(
               process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${updated.id}`
-                : `/__modelNames__/${updated.id}`
+                : `/__modelNames__/${updated.id}`,
             )
           } catch (error) {
             console.log(error)

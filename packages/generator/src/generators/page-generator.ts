@@ -59,6 +59,6 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     const parent = this.options.parentModels
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
-    return `app/${this.getModelNamesPath()}/pages/${parent}${kebabCaseModelName}`
+    return `app/pages/${parent}${kebabCaseModelName}`
   }
 }

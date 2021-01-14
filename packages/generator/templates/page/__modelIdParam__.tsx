@@ -1,6 +1,6 @@
 import {Suspense} from "react"
-import Layout from "app/layouts/Layout"
 import {Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
 
@@ -19,13 +19,13 @@ export const __ModelName__ = () => {
       <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
       <if condition="parentModel">
-        <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}>
+        <Link
+          href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
+        >
           <a>Edit</a>
         </Link>
         <else>
-          <Link
-            href={`/__modelNames__/${__modelName__.id}/edit`}
-          >
+          <Link href={`/__modelNames__/${__modelName__.id}/edit`}>
             <a>Edit</a>
           </Link>
         </else>
