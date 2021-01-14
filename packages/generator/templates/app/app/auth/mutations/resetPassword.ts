@@ -1,17 +1,15 @@
-import { SessionContext, SecurePassword } from "blitz"
+import { Ctx, SecurePassword } from "blitz"
 import db from "db"
 import { ResetPasswordInput, ResetPasswordInputType } from "../validations"
 import { hashToken } from "../auth-utils"
+import login from "./login"
 
 export class ResetPasswordError extends Error {
   name = "ResetPasswordError"
   message = "Reset password link is invalid or it has expired."
 }
 
-export default async function resetPassword(
-  input: ResetPasswordInputType,
-  _ctx: { session?: SessionContext } = {}
-) {
+export default async function resetPassword(input: ResetPasswordInputType, ctx: Ctx) {
   const { password, token } = ResetPasswordInput.parse(input)
 
   // 1. Try to find this token in the database
@@ -46,6 +44,9 @@ export default async function resetPassword(
 
   // 6. Revoke all existing login sessions for this user
   await db.session.deleteMany({ where: { userId: user.id } })
+
+  // 7. Now log the user in with the new credentials
+  await login({ email: user.email, password }, ctx)
 
   return true
 }

@@ -1,4 +1,3 @@
-import { SessionContext } from "blitz"
 import db from "db"
 import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
 import { ForgotPasswordInput, ForgotPasswordInputType } from "../validations"
@@ -8,10 +7,7 @@ import {
   RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS,
 } from "app/auth/auth-utils"
 
-export default async function forgotPassword(
-  input: ForgotPasswordInputType,
-  _ctx: { session?: SessionContext } = {}
-) {
+export default async function forgotPassword(input: ForgotPasswordInputType) {
   const { email } = ForgotPasswordInput.parse(input)
 
   // 1. Get the user
