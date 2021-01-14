@@ -33,6 +33,8 @@ export function withBlitz(nextConfig: any) {
             /node_modules[\\/]secure-password/,
             /blitz[\\/]packages[\\/]config/,
             /blitz[\\/]packages[\\/]display/,
+            /node-libs-browser/,
+            /crypto-browserify/,
           ]
           excluded.forEach((excluded) => {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
