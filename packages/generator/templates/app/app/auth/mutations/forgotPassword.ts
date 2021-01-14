@@ -1,23 +1,20 @@
+import { generateToken, hash256 } from "blitz"
 import db from "db"
 import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
 import { ForgotPasswordInput, ForgotPasswordInputType } from "../validations"
-import {
-  generateToken,
-  hashToken,
-  RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS,
-} from "app/auth/auth-utils"
+import { RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS } from "app/auth/auth-utils"
 
 export default async function forgotPassword(input: ForgotPasswordInputType) {
   const { email } = ForgotPasswordInput.parse(input)
 
   // 1. Get the user
-  const user = await db.user.findOne({ where: { email: email.toLowerCase() } })
+  const user = await db.user.findFirst({ where: { email: email.toLowerCase() } })
 
   // 2. Generate the token and expiration date.
   // We use encodeURIComponent(token) since it will be used in the URL
   const token = generateToken()
   const urlSafeToken = encodeURIComponent(token)
-  const hashedToken = hashToken(token)
+  const hashedToken = hash256(token)
   const expiresAt = new Date()
   expiresAt.setHours(expiresAt.getHours() + RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS)
 

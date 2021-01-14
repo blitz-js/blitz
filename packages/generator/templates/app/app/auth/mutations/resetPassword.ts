@@ -1,7 +1,6 @@
-import { Ctx, SecurePassword } from "blitz"
+import { Ctx, SecurePassword, hash256 } from "blitz"
 import db from "db"
 import { ResetPasswordInput, ResetPasswordInputType } from "../validations"
-import { hashToken } from "../auth-utils"
 import login from "./login"
 
 export class ResetPasswordError extends Error {
@@ -15,7 +14,7 @@ export default async function resetPassword(input: ResetPasswordInputType, ctx: 
   // 1. Try to find this token in the database
   // Have to first decodeURIComponent(token) because encodeURIComponent
   // was used in forgotPassword.ts when sending to the browser
-  const hashedToken = hashToken(decodeURIComponent(token))
+  const hashedToken = hash256(decodeURIComponent(token))
   const possibleToken = await db.token.findFirst({
     where: { hashedToken, type: "RESET_PASSWORD" },
     include: { user: true },

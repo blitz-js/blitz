@@ -1,11 +1,7 @@
 import { SecurePassword, AuthenticationError } from "blitz"
-import hasha, { HashaInput } from "hasha"
-import { nanoid } from "nanoid"
 import db from "db"
 
 export const RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
-export const generateToken = () => nanoid(32)
-export const hashToken = (input: HashaInput) => hasha(input, { algorithm: "sha256" })
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findFirst({ where: { email } })
@@ -22,4 +18,3 @@ export const authenticateUser = async (email: string, password: string) => {
   const { hashedPassword, ...rest } = user
   return rest
 }
-
