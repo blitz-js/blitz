@@ -1,9 +1,9 @@
 {
   "name": "@examples/fauna",
-  "version": "0.29.0-canary.0",
+  "version": "0.29.2",
   "scripts": {
     "start": "blitz start",
-    "studio": "blitz db studio",
+    "studio": "blitz prisma studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "echo \"No tests yet\""
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.29.0-canary.0",
+    "blitz": "0.29.2",
     "final-form": "4.20.1",
     "graphql": "15.4.0",
     "graphql-request": "3.4.0",
@@ -45,8 +45,8 @@
     "@types/jest": "26.0.19",
     "@types/react": "17.0.0",
     "@types/secure-password": "3.1.0",
-    "@typescript-eslint/eslint-plugin": "4.11.1",
-    "@typescript-eslint/parser": "4.11.1",
+    "@typescript-eslint/eslint-plugin": "4.12.0",
+    "@typescript-eslint/parser": "4.12.0",
     "babel-eslint": "10.1.0",
     "eslint": "7.16.0",
     "eslint-config-react-app": "6.0.0",

@@ -1778,7 +1778,8 @@
       "profile": "https://rembrandtreyes.com/",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -1795,6 +1796,24 @@
       "name": "t.kuriyama",
       "avatar_url": "https://avatars1.githubusercontent.com/u/3866581?v=4",
       "profile": "https://www.koolii.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "malkomalko",
+      "name": "Robert Malko",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/763?v=4",
+      "profile": "https://github.com/malkomalko",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ranjan-purbey",
+      "name": "Ranjan Purbey",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6953187?v=4",
+      "profile": "https://github.com/ranjan-purbey",
       "contributions": [
         "code"
       ]

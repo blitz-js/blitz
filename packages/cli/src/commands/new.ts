@@ -10,6 +10,7 @@ const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import {runPrisma} from "./prisma"
 
 export interface Flags {
   ts: boolean
@@ -158,12 +159,17 @@ export class New extends Command {
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-            await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
+            const result = await runPrisma(
+              ["migrate", "dev", "--preview-feature", "--name", "Initial migration"],
+              true,
+            )
+            if (!result) throw new Error()
+
             spinner.succeed()
-          } catch {
+          } catch (error) {
             spinner.fail()
             postInstallSteps.push(
-              "blitz db migrate (when asked, you can name the migration anything)",
+              "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
             )
           }
         },
@@ -174,7 +180,9 @@ export class New extends Command {
 
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
-        postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
+        postInstallSteps.push(
+          "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+        )
       }
 
       postInstallSteps.push("blitz start")

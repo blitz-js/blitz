@@ -84,7 +84,8 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Public data updated")
         }
         if (result.headers.get(HEADER_SESSION_REVOKED)) {
-          clientDebug("Sessin revoked")
+          clientDebug("Session revoked")
+          queryCache.clear()
           publicDataStore.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {

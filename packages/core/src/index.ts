@@ -30,7 +30,7 @@ export {
   AuthenticatedSessionContext,
 } from "./supertokens"
 
-export {SecurePassword} from "./auth-utils"
+export {SecurePassword, hash256, generateToken} from "./auth-utils"
 
 // --------------------
 // Exports from Next.js

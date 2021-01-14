@@ -1,5 +1,4 @@
 import BadBehavior from "bad-behavior"
-import {queryCache} from "react-query"
 import {COOKIE_PUBLIC_DATA_TOKEN, LOCALSTORAGE_PREFIX} from "./constants"
 import {PublicData} from "./types"
 import {deleteCookie, readCookie} from "./utils/cookie"
@@ -35,7 +34,6 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
-    queryCache.clear()
     this.updateState(this.emptyPublicData)
   }
 

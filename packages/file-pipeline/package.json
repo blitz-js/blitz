@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.29.0-canary.0",
+  "version": "0.29.2",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@blitzjs/display": "0.29.0-canary.0",
+    "@blitzjs/display": "0.29.2",
     "chalk": "^4.1.0",
     "chokidar": "3.4.3",
     "flush-write-stream": "2.0.0",

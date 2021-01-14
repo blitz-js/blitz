@@ -1,9 +1,9 @@
 {
   "name": "@examples/auth",
-  "version": "0.29.0-canary.0",
+  "version": "0.29.2",
   "scripts": {
     "start": "blitz start",
-    "studio": "blitz db studio",
+    "studio": "blitz prisma studio",
     "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "analyze": "cross-env ANALYZE=true blitz build",
@@ -11,7 +11,7 @@
     "cy:run": "cypress run",
     "test": "prisma generate && yarn test:jest && yarn test:e2e",
     "test:jest": "jest",
-    "test:server": "blitz db migrate && blitz build && blitz start --production -p 3099",
+    "test:server": "blitz prisma migrate deploy --preview-feature && blitz build && blitz start --production -p 3099",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "browserslist": [
@@ -38,9 +38,9 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.12.0",
-    "@prisma/client": "2.12.0",
-    "blitz": "0.29.0-canary.0",
+    "@prisma/cli": "2.14.0",
+    "@prisma/client": "2.14.0",
+    "blitz": "0.29.2",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",
@@ -62,8 +62,8 @@
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
     "@types/react": "17.0.0",
-    "@typescript-eslint/eslint-plugin": "4.11.1",
-    "@typescript-eslint/parser": "4.11.1",
+    "@typescript-eslint/eslint-plugin": "4.12.0",
+    "@typescript-eslint/parser": "4.12.0",
     "babel-eslint": "10.1.0",
     "cross-env": "7.0.3",
     "cypress": "6.2.0",
