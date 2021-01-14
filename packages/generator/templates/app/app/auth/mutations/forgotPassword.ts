@@ -11,9 +11,7 @@ export default async function forgotPassword(input: ForgotPasswordInputType) {
   const user = await db.user.findFirst({ where: { email: email.toLowerCase() } })
 
   // 2. Generate the token and expiration date.
-  // We use encodeURIComponent(token) since it will be used in the URL
   const token = generateToken()
-  const urlSafeToken = encodeURIComponent(token)
   const hashedToken = hash256(token)
   const expiresAt = new Date()
   expiresAt.setHours(expiresAt.getHours() + RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS)
@@ -33,7 +31,7 @@ export default async function forgotPassword(input: ForgotPasswordInputType) {
       },
     })
     // 6. Send the email
-    await forgotPasswordMailer({ to: user.email, token: urlSafeToken }).send()
+    await forgotPasswordMailer({ to: user.email, token }).send()
   } else {
     // 7. If no user found wait the same time so attackers can't tell the difference
     await new Promise((resolve) => setTimeout(resolve, 750))
