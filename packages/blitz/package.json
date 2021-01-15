@@ -22,7 +22,9 @@
   "module": "dist/blitz.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "jest-preset.js",
+    "jest-preset"
   ],
   "husky": {
     "hooks": {}
