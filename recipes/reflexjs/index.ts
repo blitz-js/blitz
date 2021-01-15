@@ -145,7 +145,6 @@ export default RecipeBuilder()
     singleFileSearch: paths.babelConfig(),
 
     transform(program: Collection<j.Program>) {
-      console.log("here")
       return addBabelPreset(program, "reflexjs/babel")
     },
   })
