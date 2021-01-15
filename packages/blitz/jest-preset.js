@@ -23,12 +23,20 @@ module.exports = {
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>"],
   // Ignore the build directories
-  modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
+  modulePathIgnorePatterns: [
+    "<rootDir>/.blitz",
+    "<rootDir>/.next",
+    "<rootDir>/test/e2e",
+    "<rootDir>/cypress",
+  ],
   moduleNameMapper: {
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
-    "\\.(css|less|sass|scss)$": "identity-obj-proxy",
-    "\\.(gif|ttf|eot|svg|png|jpg|jpeg)$": "<rootDir>/test/__mocks__/fileMock.js",
+    "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": path.resolve(
+      __dirname,
+      "./jest-preset/file-mock.js",
+    ),
   },
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
   // Coverage output

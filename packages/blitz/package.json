@@ -50,7 +50,16 @@
     "envinfo": "^7.7.3",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
-    "resolve-from": "^5.0.0"
+    "resolve-from": "^5.0.0",
+    "@types/jest": "^26.0.20",
+    "@testing-library/jest-dom": "5.11.9",
+    "@testing-library/react": "^11.2.3",
+    "@testing-library/react-hooks": "^5.0.0",
+    "react-test-renderer": "0.0.0-experimental-3310209d0",
+    "jest": "^26.6.3",
+    "jest-environment-jsdom-fourteen": "^1.0.1",
+    "jest-watch-typeahead": "^0.6.1",
+    "ts-jest": "^26.4.4"
   },
   "keywords": [
     "blitz",
