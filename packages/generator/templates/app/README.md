@@ -60,81 +60,80 @@ You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-ov
 
 ## What's included?
 
-Here is the structure of your app.
+Here is the starting structure of your app.
 
 ```
 __name__
-├── app
-│   |── auth
-│   │   ├── components
-│   │   │   └── LoginForm.tsx
-│   │   ├── mutations
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   └── signup.ts
-│   │   └── pages
-│   │       ├── login.tsx
-│   │       └── signup.tsx
-│   ├── auth-utils.ts
-│   ├── validations.ts
-│   ├── components
-│   │   ├── Form.tsx
-│   │   └── LabeledTextField.tsx
-│   ├── hooks
-│   │   └── useCurrentUser.ts
-│   ├── layouts
-│   │   └── Layout.tsx
-│   │── pages
-│   │   ├── _app.tsx
-│   │   ├── _document.tsx
-│   │   ├── 404.tsx
-│   │   ├── index.tsx
-│   │   └── index.test.tsx
-│   └── users
-│   │   └── queries
-│   │       └── getCurrentUser.ts
-├── db
-│   ├── migrations
+├── app/
+│   ├── core/
+│   │   ├── components/
+│   │   │   ├── Form.tsx
+│   │   │   └── LabeledTextField.tsx
+│   │   ├── hooks/
+│   │   │   └── useCurrentUser.ts
+│   │   └── layouts/
+│   │       └── Layout.tsx
+│   ├── pages/
+│   │   ├── 404.tsx
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── index.test.tsx
+│   │   └── index.tsx
+│   ├── api/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   ├── LoginForm.tsx
+│   │   │   └── SignupForm.tsx
+│   │   ├── mutations/
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   └── signup.ts
+│   │   ├── pages/
+│   │   │   ├── login.tsx
+│   │   │   └── signup.tsx
+│   │   ├── auth-utils.ts
+│   │   └── validations.ts
+│   └── users/
+│       └── queries/
+│           └── getCurrentUser.ts
+├── db/
 │   ├── index.ts
-│   └── schema.prisma
-├── integrations
-├── node_modules
-├── public
-│   ├── favicon.ico
+│   ├── schema.prisma
+│   └── seeds.ts
+├── integrations/
+├── public/
+│   ├── favicon.ico*
 │   └── logo.png
-├── test
-│   ├── __mocks__
-│   │       └── fileMock.js
+├── test/
+│   ├── __mocks__/
+│   │   └── fileMock.js
 │   ├── setup.ts
 │   └── utils.tsx
-├── utils
-├── .env
-├── .eslintrc.js
-├── .gitignore
-├── .npmrc
-├── .prettierignore
+├── README.md
 ├── babel.config.js
 ├── blitz.config.js
 ├── jest.config.js
 ├── package.json
-├── README.md
 ├── tsconfig.json
+├── types.ts
 └── yarn.lock
 ```
 
 These files are:
 
-- The `app/` directory is a container for most of your project. This is where you’ll put any pages or API routes.
+- The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
-- `db`/ is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
+- `db/` is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
 
-- `node_modules/` is where your “dependencies” are stored. This directory is updated by your package manager, so you don’t have to worry too much about it.
+- `public/` is a folder where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
 
-- `public/` is a directory where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
+- `integrations/` is a folder to put all third-party integrations like with Stripe, Sentry, etc.
 
-- `test/` is a directory where you can put your unit and integration tests.
+- `test/` is a folder where you can put test utilities and integration tests.
 
-- `utils/` is a good place to put any shared utility files which you might use across different sections of your app.
+- `package.json` contains information about your dependencies and devDependencies. If you’re using a tool like `npm` or `yarn`, you won’t have to worry about this much.
+
+- `tsconfig.json` is our recommended setup for TypeScript.
 
 - `.babelrc.js`, `.env`, etc. ("dotfiles") are configuration files for various bits of JavaScript tooling.
 
@@ -142,23 +141,11 @@ These files are:
 
 - `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
 
-- `package.json` contains information about your dependencies and devDependencies. If you’re using a tool like `npm` or `yarn`, you won’t have to worry about this much.
-
-- `tsconfig.json` is our recommended setup for TypeScript.
-
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
 
 ## Learn more
 
 Read the [Blitz.js Documentation](https://blitzjs.com/docs/getting-started) to learn more.
-
-### The Blitz.js Manifesto
-
-Read the [Blitz Manifesto](https://blitzjs.com/docs/manifesto) to learn the Blitz foundational principles.
-
-Blitz is built on Next.js. For more info on this see [Why use Blitz instead of Next.js](https://blitzjs.com/docs/why-blitz)
-
-## Get in touch
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to reach out to us in any of our communication channels.
 
@@ -166,5 +153,5 @@ The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to rea
 - [Slack](https://slack.blitzjs.com/)
 - [Report an issue](https://github.com/blitz-js/blitz/issues/new/choose)
 - [Forum discussions](https://github.com/blitz-js/blitz/discussions)
-- [Sponsors and donations](https://github.com/blitz-js/blitz#sponsors-and-donations)
-- [Contributing Guide](https://blitzjs.com/docs/contributing)
+- [How to Contribute](https://blitzjs.com/docs/contributing)
+- [Sponsor or donate](https://github.com/blitz-js/blitz#sponsors-and-donations)
