@@ -1,5 +1,6 @@
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
+import {getBlitzConfig} from "../config"
 import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
 import {isClient, isServer} from "."
 import {requestIdleCallback} from "./request-idle-callback"
@@ -146,7 +147,9 @@ export const retryFunction = (failureCount: number, error: any) => {
   return false
 }
 
+let suspense = getBlitzConfig()?.experimental?.reactMode !== "legacy"
+
 export const defaultQueryConfig = {
-  suspense: true,
+  suspense,
   retry: retryFunction,
 }
