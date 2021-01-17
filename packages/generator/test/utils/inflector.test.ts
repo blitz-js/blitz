@@ -7,7 +7,7 @@ import {
   singlePascal,
   singular,
   uncapitalize,
-} from "../../src/utils/plurals"
+} from "../../src/utils/inflector"
 
 describe("plurals utility function", () => {
   describe("works only first char", () => {
