@@ -147,6 +147,6 @@ export const retryFunction = (failureCount: number, error: any) => {
 }
 
 export const defaultQueryConfig = {
-  suspense: true,
+  suspense: process.env.__NEXT_REACT_MODE !== "legacy",
   retry: retryFunction,
 }
