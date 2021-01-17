@@ -8,6 +8,7 @@ export interface BlitzConfig extends Record<string, unknown> {
   target?: string
   experimental?: {
     isomorphicResolverImports?: boolean
+    reactMode?: string
   }
 }
 

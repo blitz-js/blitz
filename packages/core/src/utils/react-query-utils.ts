@@ -1,3 +1,4 @@
+import {getConfig} from "@blitzjs/config"
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
@@ -146,7 +147,23 @@ export const retryFunction = (failureCount: number, error: any) => {
   return false
 }
 
-export const defaultQueryConfig = {
-  suspense: process.env.__NEXT_REACT_MODE !== "legacy",
-  retry: retryFunction,
+export function getDefaultQueryConfig() {
+  let suspense = true
+
+  if (isServer) {
+    const config = getConfig()
+
+    if (config.experimental?.reactMode === "legacy") {
+      suspense = false
+    }
+  } else {
+    if (process.env.__NEXT_REACT_MODE === "legacy") {
+      suspense = false
+    }
+  }
+
+  return {
+    suspense,
+    retry: retryFunction,
+  }
 }
