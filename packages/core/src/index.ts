@@ -15,6 +15,7 @@ export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
+export {getBlitzConfig} from "./config"
 
 export {
   getAllMiddlewareForModule,
