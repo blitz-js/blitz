@@ -148,22 +148,26 @@ export const retryFunction = (failureCount: number, error: any) => {
 }
 
 export function getDefaultQueryConfig() {
-  let suspense = true
+  // Default next.js reactMode
+  let reactMode = "legacy"
 
+  // On the server side load reactMode from the config
   if (isServer) {
     const config = getConfig()
 
-    if (config.experimental?.reactMode === "legacy") {
-      suspense = false
+    if (config.experimental?.reactMode) {
+      reactMode = config.experimental.reactMode
     }
   } else {
-    if (process.env.__NEXT_REACT_MODE === "legacy") {
-      suspense = false
+    // On the client side load reactMode from the env variable
+    if (process.env.__NEXT_REACT_MODE) {
+      reactMode = process.env.__NEXT_REACT_MODE
     }
   }
 
   return {
-    suspense,
+    // Set default value for suspense option to true only when concurrent react mode is active
+    suspense: reactMode === "concurrent" ? true : undefined,
     retry: retryFunction,
   }
 }
