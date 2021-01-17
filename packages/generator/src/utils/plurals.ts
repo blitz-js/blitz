@@ -18,5 +18,6 @@ export function uncapitalize(input: string): string {
 }
 
 export const singlePascal = pipe(singular, capitalize)
-
 export const singleCamel = pipe(singular, uncapitalize)
+export const pluralPascal = pipe(plural, capitalize)
+export const pluralCamel = pipe(plural, uncapitalize)

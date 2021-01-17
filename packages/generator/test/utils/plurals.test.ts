@@ -1,6 +1,8 @@
 import {
   capitalize,
   plural,
+  pluralCamel,
+  pluralPascal,
   singleCamel,
   singlePascal,
   singular,
@@ -104,6 +106,46 @@ describe("plurals utility function", () => {
       expect(singlePascal("002")).toBe("002")
       expect(singlePascal("suffix001")).toBe("Suffix001")
       expect(singlePascal("suffix001-")).toBe("Suffix001-")
+    })
+  })
+
+  describe("pluralCamel", () => {
+    it("uncapitals", () => {
+      expect(pluralCamel("foo")).toBe("foos")
+      expect(pluralCamel("bar")).toBe("bars")
+    })
+    it("plurals", () => {
+      expect(pluralCamel("foobars")).toBe("foobars")
+      expect(pluralCamel("blitz-js")).toBe("blitz-js")
+      expect(pluralCamel("multi-single-words")).toBe("multi-single-words")
+    })
+    it("others", () => {
+      expect(pluralCamel("")).toBe("")
+      expect(pluralCamel("s")).toBe("s")
+      expect(pluralCamel("css")).toBe("csses")
+      expect(pluralCamel("002")).toBe("002s")
+      expect(pluralCamel("suffix001")).toBe("suffix001s")
+      expect(pluralCamel("suffix001-")).toBe("suffix001-s")
+    })
+  })
+
+  describe("pluralPascal", () => {
+    it("uncapitals", () => {
+      expect(pluralPascal("foo")).toBe("Foos")
+      expect(pluralPascal("bar")).toBe("Bars")
+    })
+    it("plurals", () => {
+      expect(pluralPascal("foobars")).toBe("Foobars")
+      expect(pluralPascal("blitz-js")).toBe("Blitz-js")
+      expect(pluralPascal("multi-single-words")).toBe("Multi-single-words")
+    })
+    it("others", () => {
+      expect(pluralPascal("")).toBe("")
+      expect(pluralPascal("s")).toBe("S")
+      expect(pluralPascal("css")).toBe("Csses")
+      expect(pluralPascal("002")).toBe("002s")
+      expect(pluralPascal("suffix001")).toBe("Suffix001s")
+      expect(pluralPascal("suffix001-")).toBe("Suffix001-s")
     })
   })
 })
