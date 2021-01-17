@@ -14,7 +14,7 @@ export type ServerConfig = {
   routeFolder?: string
   clean?: boolean
   // -
-  isTypescript?: boolean
+  isTypeScript?: boolean
   watch?: boolean
   // -
   transformFiles?: Synchronizer
@@ -33,7 +33,7 @@ type NormalizedConfig = ServerConfig & {
   routeFolder: string
   clean?: boolean
   // -
-  isTypescript: boolean
+  isTypeScript: boolean
   watch: boolean
   // -
   transformFiles: Synchronizer
@@ -101,7 +101,7 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
     routeFolder: resolve(rootFolder, config.routeFolder ?? defaults.routeFolder),
     // -
-    isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
+    isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",
     clean: config.clean,
     // -
@@ -123,7 +123,7 @@ async function getNextBin(rootFolder: string, usePatched: boolean = false): Prom
   return resolve(rootFolder, nextBin)
 }
 
-async function getIsTypescript(rootFolder: string): Promise<boolean> {
+async function getIsTypeScript(rootFolder: string): Promise<boolean> {
   try {
     await promises.access(join(rootFolder, "tsconfig.json"))
     return true
