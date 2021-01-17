@@ -1,4 +1,5 @@
 import {
+  camelCaseToKebabCase,
   capitalize,
   plural,
   pluralCamel,
@@ -9,7 +10,7 @@ import {
   uncapitalize,
 } from "../../src/utils/inflector"
 
-describe("plurals utility function", () => {
+describe("inflector utility function", () => {
   describe("works only first char", () => {
     it("capitalize", () => {
       expect(capitalize("blitz-js")).toBe("Blitz-js")
@@ -146,6 +147,32 @@ describe("plurals utility function", () => {
       expect(pluralPascal("002")).toBe("002s")
       expect(pluralPascal("suffix001")).toBe("Suffix001s")
       expect(pluralPascal("suffix001-")).toBe("Suffix001-s")
+    })
+  })
+
+  describe("kebabCase utility function", () => {
+    describe("transform a camelCase string to kebab case", () => {
+      it("works for 2 word camelCase", () => {
+        const result = camelCaseToKebabCase("testResult")
+        expect(result).toBe("test-result")
+      })
+
+      it("works for multiple camelCase words", () => {
+        const result = camelCaseToKebabCase("longTestStringResult")
+        expect(result).toBe("long-test-string-result")
+      })
+    })
+
+    describe("do not transform strings that are not camelCase", () => {
+      it("does not modify a kebabCase string", () => {
+        const result = camelCaseToKebabCase("test-result")
+        expect(result).toBe("test-result")
+      })
+
+      it("does not modify single word string", () => {
+        const result = camelCaseToKebabCase("testresult")
+        expect(result).toBe("testresult")
+      })
     })
   })
 })
