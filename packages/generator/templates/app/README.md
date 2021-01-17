@@ -105,8 +105,6 @@ __name__
 │   ├── favicon.ico*
 │   └── logo.png
 ├── test/
-│   ├── __mocks__/
-│   │   └── fileMock.js
 │   ├── setup.ts
 │   └── utils.tsx
 ├── README.md
