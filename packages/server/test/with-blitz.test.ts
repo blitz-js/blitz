@@ -24,6 +24,9 @@ describe("withBlitz", () => {
       },
       webpack: null,
       webpackDevMiddleware: null,
+      env: {
+        NEXT_PUBLIC_REACT_MODE: "concurrent",
+      },
     })
   })
 
@@ -43,6 +46,9 @@ describe("withBlitz", () => {
       },
       webpack: null,
       webpackDevMiddleware: null,
+      env: {
+        NEXT_PUBLIC_REACT_MODE: "concurrent",
+      },
     })
   })
 })

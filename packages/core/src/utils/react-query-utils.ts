@@ -148,8 +148,8 @@ export const retryFunction = (failureCount: number, error: any) => {
 }
 
 export function getDefaultQueryConfig() {
-  // Default next.js reactMode
-  let reactMode = "legacy"
+  // Default blitz reactMode
+  let reactMode = "concurrent"
 
   // On the server side load reactMode from the config
   if (isServer) {
@@ -160,8 +160,8 @@ export function getDefaultQueryConfig() {
     }
   } else {
     // On the client side load reactMode from the env variable
-    if (process.env.__NEXT_REACT_MODE) {
-      reactMode = process.env.__NEXT_REACT_MODE
+    if (process.env.NEXT_PUBLIC_REACT_MODE) {
+      reactMode = process.env.NEXT_PUBLIC_REACT_MODE
     }
   }
 

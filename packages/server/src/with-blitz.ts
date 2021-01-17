@@ -9,11 +9,13 @@ export function withBlitz(nextConfig: any) {
     const normalizedConfig =
       typeof nextConfig === "function" ? nextConfig(phase, nextOpts) : nextConfig
 
+    const experimental = {
+      reactMode: "concurrent",
+      ...(normalizedConfig.experimental || {}),
+    }
+
     const newConfig = Object.assign({}, normalizedConfig, {
-      experimental: {
-        reactMode: "concurrent",
-        ...(normalizedConfig.experimental || {}),
-      },
+      experimental,
       webpack(config: any, options: {isServer: boolean; webpack: any}) {
         if (options.isServer) {
           const originalEntry = config.entry
@@ -76,6 +78,10 @@ export function withBlitz(nextConfig: any) {
         }
 
         return config
+      },
+      env: {
+        ...(normalizedConfig.env || {}),
+        NEXT_PUBLIC_REACT_MODE: experimental.reactMode,
       },
     })
 
