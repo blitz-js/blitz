@@ -1,3 +1,4 @@
+import {BlitzConfig} from "@blitzjs/config"
 import {IncomingMessage, ServerResponse} from "http"
 import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
@@ -156,6 +157,7 @@ type RequestIdleCallbackDeadline = {
 
 declare global {
   interface Window {
+    __BLITZ_DATA__?: {config?: BlitzConfig}
     requestIdleCallback: (
       callback: (deadline: RequestIdleCallbackDeadline) => void,
       opts?: RequestIdleCallbackOptions,
