@@ -12,8 +12,8 @@ import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouter} from "./use-router"
 import {
-  defaultQueryConfig,
   emptyQueryFn,
+  getDefaultQueryConfig,
   getQueryCacheFunctions,
   getQueryKey,
   QueryCacheFunctions,
@@ -49,7 +49,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     config: {
-      ...defaultQueryConfig,
+      ...getDefaultQueryConfig(),
       ...options,
     },
   })
@@ -90,7 +90,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     config: {
-      ...defaultQueryConfig,
+      ...getDefaultQueryConfig(),
       ...options,
     },
   })
@@ -148,7 +148,7 @@ export function useInfiniteQuery<
           enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
       : (emptyQueryFn as any),
     config: {
-      ...defaultQueryConfig,
+      ...getDefaultQueryConfig(),
       ...options,
     },
   })
