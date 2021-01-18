@@ -1,6 +1,6 @@
 import {join} from "path"
 import {Generator, GeneratorOptions} from "../generator"
-import {camelCaseToKebabCase} from "../utils/kebab-case"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
   ModelName: string
