@@ -1,3 +1,4 @@
+import {useMemo} from "react"
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
@@ -147,10 +148,12 @@ export const retryFunction = (failureCount: number, error: any) => {
   return false
 }
 
-export function getDefaultQueryConfig() {
-  const {suspenseEnabled} = getBlitzRuntimeData()
-  return {
-    suspense: !!suspenseEnabled,
-    retry: retryFunction,
-  }
+export function useDefaultQueryConfig() {
+  return useMemo(() => {
+    const {suspenseEnabled} = getBlitzRuntimeData()
+    return {
+      suspense: !!suspenseEnabled,
+      retry: retryFunction,
+    }
+  }, [])
 }

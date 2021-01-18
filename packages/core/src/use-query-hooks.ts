@@ -13,11 +13,11 @@ import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouter} from "./use-router"
 import {
   emptyQueryFn,
-  getDefaultQueryConfig,
   getQueryCacheFunctions,
   getQueryKey,
   QueryCacheFunctions,
   sanitize,
+  useDefaultQueryConfig,
 } from "./utils/react-query-utils"
 
 // -------------------------
@@ -49,7 +49,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     config: {
-      ...getDefaultQueryConfig(),
+      ...useDefaultQueryConfig(),
       ...options,
     },
   })
@@ -90,7 +90,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     config: {
-      ...getDefaultQueryConfig(),
+      ...useDefaultQueryConfig(),
       ...options,
     },
   })
@@ -148,7 +148,7 @@ export function useInfiniteQuery<
           enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
       : (emptyQueryFn as any),
     config: {
-      ...getDefaultQueryConfig(),
+      ...useDefaultQueryConfig(),
       ...options,
     },
   })
