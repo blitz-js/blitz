@@ -91,7 +91,6 @@ __name__
 │   │   ├── pages/
 │   │   │   ├── login.tsx
 │   │   │   └── signup.tsx
-│   │   ├── auth-utils.ts
 │   │   └── validations.ts
 │   └── users/
 │       └── queries/
