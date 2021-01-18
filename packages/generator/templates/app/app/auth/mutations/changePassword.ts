@@ -3,7 +3,7 @@ import db from "db"
 import { authenticateUser } from "./login"
 import { ChangePasswordInput, ChangePasswordInputType } from "../validations"
 
-export default async function updatePassword(input: ChangePasswordInputType, ctx: Ctx) {
+export default async function changePassword(input: ChangePasswordInputType, ctx: Ctx) {
   ctx.session.authorize()
   const { currentPassword, newPassword } = ChangePasswordInput.parse(input)
 
