@@ -154,8 +154,18 @@ type RequestIdleCallbackDeadline = {
   timeRemaining: () => number
 }
 
+export type BlitzRuntimeData = {
+  suspenseEnabled: boolean
+}
+
 declare global {
+  namespace NodeJS {
+    interface Global {
+      __BLITZ_DATA__: BlitzRuntimeData
+    }
+  }
   interface Window {
+    __BLITZ_DATA__: BlitzRuntimeData
     requestIdleCallback: (
       callback: (deadline: RequestIdleCallbackDeadline) => void,
       opts?: RequestIdleCallbackOptions,
