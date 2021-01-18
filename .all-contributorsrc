@@ -1826,6 +1826,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bacongravy",
+      "name": "David Kramer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16848768?v=4",
+      "profile": "http://www.bacongravy.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

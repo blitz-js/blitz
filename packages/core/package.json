@@ -41,10 +41,12 @@
   },
   "dependencies": {
     "@blitzjs/display": "0.29.2",
+    "@types/htmlescape": "^1.1.1",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
     "cookie-session": "^1.4.0",
+    "htmlescape": "^1.1.1",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.20",
     "passport": "0.4.1",
