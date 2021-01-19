@@ -1,11 +1,11 @@
 import {queryCache} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {HEADER_SESSION_CREATED} from "."
 import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from "./constants"
 import {CSRFTokenMismatchError} from "./errors"
