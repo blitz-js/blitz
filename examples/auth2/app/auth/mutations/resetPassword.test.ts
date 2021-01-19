@@ -7,11 +7,6 @@ beforeEach(async () => {
   await db.$reset()
 })
 
-// TODO - move this into blitz jest setup config
-afterAll(async () => {
-  await db.$disconnect()
-})
-
 const mockCtx: any = {
   session: {
     create: jest.fn,

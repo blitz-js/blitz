@@ -8,11 +8,6 @@ beforeEach(async () => {
   await db.$reset()
 })
 
-// TODO - move this into blitz jest setup config
-afterAll(async () => {
-  await db.$disconnect()
-})
-
 const generatedToken = "plain-token"
 jest.mock("blitz", () => ({
   ...jest.requireActual("blitz")!,
