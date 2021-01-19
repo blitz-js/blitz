@@ -18,5 +18,10 @@ export function uncapitalize(input: string): string {
 }
 
 export const singlePascal = pipe(singular, capitalize)
-
 export const singleCamel = pipe(singular, uncapitalize)
+export const pluralPascal = pipe(plural, capitalize)
+export const pluralCamel = pipe(plural, uncapitalize)
+
+export function camelCaseToKebabCase(transformString: string) {
+  return transformString.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase()
+}

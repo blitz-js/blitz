@@ -82,6 +82,7 @@ const defaults = {
     "specs/**/*",
     "**/*.test.*",
     "**/*.spec.*",
+    "**/.yalc/**/*",
   ],
   includePaths: ["**/*"],
 }

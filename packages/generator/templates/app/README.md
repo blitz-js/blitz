@@ -85,13 +85,13 @@ __name__
 │   │   │   ├── LoginForm.tsx
 │   │   │   └── SignupForm.tsx
 │   │   ├── mutations/
+│   │   │   ├── changePassword.ts
 │   │   │   ├── login.ts
 │   │   │   ├── logout.ts
 │   │   │   └── signup.ts
 │   │   ├── pages/
 │   │   │   ├── login.tsx
 │   │   │   └── signup.tsx
-│   │   ├── auth-utils.ts
 │   │   └── validations.ts
 │   └── users/
 │       └── queries/
@@ -105,8 +105,6 @@ __name__
 │   ├── favicon.ico*
 │   └── logo.png
 ├── test/
-│   ├── __mocks__/
-│   │   └── fileMock.js
 │   ├── setup.ts
 │   └── utils.tsx
 ├── README.md

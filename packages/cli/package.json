@@ -54,7 +54,7 @@
     "pkg-dir": "^5.0.0",
     "pluralize": "^8.0.0",
     "rimraf": "^3.0.2",
-    "tar": "^6.0.5",
+    "tar": "^6.1.0",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "3.9.0",
     "v8-compile-cache": "2.2.0"

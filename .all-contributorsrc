@@ -1817,6 +1817,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tarunama",
+      "name": "tarunama",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6047881?v=4",
+      "profile": "https://github.com/tarunama",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bacongravy",
+      "name": "David Kramer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16848768?v=4",
+      "profile": "http://www.bacongravy.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mikeesto",
+      "name": "Michael Esteban",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21051488?v=4",
+      "profile": "https://mikeesto.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "marina-ki",
+      "name": "marina",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/54174518?v=4",
+      "profile": "https://github.com/marina-ki",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

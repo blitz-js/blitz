@@ -5,6 +5,7 @@ import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from "./constants"
 import {CSRFTokenMismatchError} from "./errors"
@@ -87,6 +88,10 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Session revoked")
           queryCache.clear()
           publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_SESSION_CREATED)) {
+          clientDebug("Session created")
+          queryCache.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()

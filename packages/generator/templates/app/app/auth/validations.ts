@@ -14,12 +14,6 @@ export const LoginInput = z.object({
 })
 export type LoginInputType = z.infer<typeof LoginInput>
 
-export const UpdatePasswordInput = z.object({
-  currentPassword: z.string(),
-  newPassword: password,
-})
-export type UpdatePasswordInputType = z.infer<typeof UpdatePasswordInput>
-
 export const ForgotPasswordInput = z.object({
   email: z.string().email(),
 })
@@ -36,3 +30,9 @@ export const ResetPasswordInput = z
     path: ["passwordConfirmation"], // set the path of the error
   })
 export type ResetPasswordInputType = z.infer<typeof ResetPasswordInput>
+
+export const ChangePasswordInput = z.object({
+  currentPassword: z.string(),
+  newPassword: password,
+})
+export type ChangePasswordInputType = z.infer<typeof ChangePasswordInput>
