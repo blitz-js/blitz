@@ -1835,6 +1835,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mikeesto",
+      "name": "Michael Esteban",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21051488?v=4",
+      "profile": "https://mikeesto.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
