@@ -18,7 +18,7 @@ export async function routes(config: ServerConfig) {
     writeManifestFile,
   } = await normalize({...config, env: "dev"})
 
-  const {sitemap = defaultSitemapFunction} = getConfig() as Record<string, unknown> & {
+  const {sitemap = defaultSitemapFunction} = getConfig() as ReturnType<typeof getConfig> & {
     sitemap: typeof defaultSitemapFunction
   }
 

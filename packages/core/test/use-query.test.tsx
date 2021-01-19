@@ -1,5 +1,6 @@
 import React from "react"
 import {queryCache} from "react-query"
+import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {
   act,
@@ -14,6 +15,8 @@ import {enhanceQueryFn} from "./test-utils"
 beforeEach(() => {
   queryCache.clear()
 })
+
+window.__BLITZ_DATA__ = getBlitzRuntimeData()
 
 describe("useQuery", () => {
   const setupHook = (

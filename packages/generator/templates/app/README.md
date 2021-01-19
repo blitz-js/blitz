@@ -85,13 +85,13 @@ __name__
 │   │   │   ├── LoginForm.tsx
 │   │   │   └── SignupForm.tsx
 │   │   ├── mutations/
+│   │   │   ├── changePassword.ts
 │   │   │   ├── login.ts
 │   │   │   ├── logout.ts
 │   │   │   └── signup.ts
 │   │   ├── pages/
 │   │   │   ├── login.tsx
 │   │   │   └── signup.tsx
-│   │   ├── auth-utils.ts
 │   │   └── validations.ts
 │   └── users/
 │       └── queries/

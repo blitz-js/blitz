@@ -3,6 +3,7 @@ import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzApiRequest, BlitzApiResponse} from "."
+import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
@@ -155,7 +156,13 @@ type RequestIdleCallbackDeadline = {
 }
 
 declare global {
+  namespace NodeJS {
+    interface Global {
+      __BLITZ_DATA__: BlitzRuntimeData
+    }
+  }
   interface Window {
+    __BLITZ_DATA__: BlitzRuntimeData
     requestIdleCallback: (
       callback: (deadline: RequestIdleCallbackDeadline) => void,
       opts?: RequestIdleCallbackOptions,

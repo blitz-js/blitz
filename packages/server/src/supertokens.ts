@@ -398,7 +398,7 @@ export const setSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
       secure:
@@ -420,7 +420,7 @@ export const setAnonymousSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
       secure:
@@ -443,7 +443,7 @@ export const setCSRFCookie = (
   debug("setCSRFCookie", antiCSRFToken)
   setCookie(
     res,
-    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
@@ -465,7 +465,7 @@ export const setPublicDataCookie = (
   setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
     res,
-    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
@@ -485,9 +485,9 @@ export async function getSession(
   req: BlitzApiRequest,
   res: ServerResponse,
 ): Promise<SessionKernel | null> {
-  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
-  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
-  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
+  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
+  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
+  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
     req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string

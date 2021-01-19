@@ -4,6 +4,7 @@ import {AppProps as NextAppProps} from "next/app"
 export * from "./types"
 export * from "./errors"
 export * from "./constants"
+export {BlitzScript} from "./blitz-script"
 export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
 export {getQueryKey, invalidateQuery, setQueryData} from "./utils/react-query-utils"
 export {useParam, useParams} from "./use-params"
@@ -14,6 +15,7 @@ export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
+export {getBlitzRuntimeData} from "./blitz-data"
 
 export {
   getAllMiddlewareForModule,
@@ -58,7 +60,6 @@ export {
   Html,
   Head as DocumentHead,
   Main,
-  NextScript as BlitzScript,
   DocumentContext,
   DocumentInitialProps,
 } from "next/document"
