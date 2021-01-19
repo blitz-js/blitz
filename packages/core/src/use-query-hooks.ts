@@ -34,17 +34,14 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
-  //      https://github.com/blitz-js/blitz/issues/1711
-  //      NOTE: bug did not present in local dev build. Only via npm bundle
-  useSession()
-  const routerIsReady = useRouter().isReady
+  const session = useSession()
+  const inputDataIsReady = useRouter().isReady && !session.isLoading
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
-    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
-    queryFn: routerIsReady
+    queryKey: inputDataIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: inputDataIsReady
       ? (_apiUrl: string, params: any) =>
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
@@ -77,15 +74,14 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
-  useSession()
-  const routerIsReady = useRouter().isReady
+  const session = useSession()
+  const inputDataIsReady = useRouter().isReady && !session.isLoading
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {resolvedData, ...queryRest} = usePaginatedReactQuery({
-    queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
-    queryFn: routerIsReady
+    queryKey: inputDataIsReady ? queryKey : ["_routerNotReady_"],
+    queryFn: inputDataIsReady
       ? (_apiUrl: string, params: any) =>
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
@@ -132,9 +128,8 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
-  useSession()
-  const routerIsReady = useRouter().isReady
+  const session = useSession()
+  const inputDataIsReady = useRouter().isReady && !session.isLoading
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -142,8 +137,8 @@ export function useInfiniteQuery<
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
-    queryKey: routerIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
-    queryFn: routerIsReady
+    queryKey: inputDataIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
+    queryFn: inputDataIsReady
       ? (_apiUrl: string, _args: any, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
           enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
       : (emptyQueryFn as any),
