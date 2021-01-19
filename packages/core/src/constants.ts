@@ -20,6 +20,7 @@ export const COOKIE_PUBLIC_DATA_TOKEN = () =>
 // Headers always all lower case
 export const HEADER_CSRF = "anti-csrf"
 export const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
+export const HEADER_SESSION_CREATED = "session-created"
 export const HEADER_SESSION_REVOKED = "session-revoked"
 export const HEADER_CSRF_ERROR = "csrf-error"
 
