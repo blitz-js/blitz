@@ -49,6 +49,7 @@
     "@blitzjs/generator": "0.29.2",
     "@blitzjs/installer": "0.29.2",
     "@blitzjs/server": "0.29.2",
+    "eslint-config-blitz": "0.29.2",
     "envinfo": "^7.7.3",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
