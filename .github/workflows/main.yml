@@ -32,9 +32,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -67,9 +67,9 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -110,9 +110,9 @@ jobs:
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
