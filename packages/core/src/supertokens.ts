@@ -56,7 +56,7 @@ export interface AuthenticatedSessionContext extends SessionContextBase {
   publicData: PublicData
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
+export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
 export interface PublicDataWithLoading extends PublicData {
   isLoading: boolean

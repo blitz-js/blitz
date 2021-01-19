@@ -33,7 +33,7 @@ class PublicDataStore {
   }
 
   clear() {
-    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
+    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
     this.updateState(this.emptyPublicData)
   }
 
@@ -48,7 +48,7 @@ class PublicDataStore {
   }
 
   private getToken() {
-    return readCookie(COOKIE_PUBLIC_DATA_TOKEN)
+    return readCookie(COOKIE_PUBLIC_DATA_TOKEN())
   }
 }
 export const publicDataStore = new PublicDataStore()
