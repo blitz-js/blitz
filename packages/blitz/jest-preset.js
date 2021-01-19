@@ -5,6 +5,7 @@ const projectRoot = pkgDir.sync() || process.cwd()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
 module.exports = {
+  maxWorkers: 1,
   globalSetup: path.resolve(__dirname, "./jest-preset/global-setup.js"),
   setupFilesAfterEnv: [
     path.resolve(__dirname, "./jest-preset/setup-after-env.js"),
