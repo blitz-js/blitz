@@ -1,6 +1,6 @@
 import React from "react"
 import {queryCache} from "react-query"
-import {_getBlitzRuntimeData} from "../src/blitz-data"
+import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {
   act,
@@ -15,6 +15,8 @@ import {enhanceQueryFn} from "./test-utils"
 beforeEach(() => {
   queryCache.clear()
 })
+
+window.__BLITZ_DATA__ = getBlitzRuntimeData()
 
 describe("useQuery", () => {
   const setupHook = (
@@ -39,7 +41,6 @@ describe("useQuery", () => {
       </React.Suspense>
     )
 
-    window.__BLITZ_DATA__ = _getBlitzRuntimeData()
     const {rerender} = render(ui())
     return [res, () => rerender(ui())]
   }
@@ -104,7 +105,6 @@ describe("useInfiniteQuery", () => {
       </React.Suspense>
     )
 
-    window.__BLITZ_DATA__ = _getBlitzRuntimeData()
     const {rerender} = render(ui())
     return [res, () => rerender(ui())]
   }

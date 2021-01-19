@@ -17,7 +17,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
 }
 
 export function getBlitzRuntimeData() {
-  if (isClient) {
+  if (isClient && process.env.JEST_WORKER_ID === "undefined") {
     return window.__BLITZ_DATA__
   } else {
     if (!global.__BLITZ_DATA__) {
