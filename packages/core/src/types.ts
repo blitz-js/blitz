@@ -3,6 +3,7 @@ import {NextRouter} from "next/router"
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzApiRequest, BlitzApiResponse} from "."
+import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
@@ -152,10 +153,6 @@ type RequestIdleCallbackOptions = {
 type RequestIdleCallbackDeadline = {
   readonly didTimeout: boolean
   timeRemaining: () => number
-}
-
-export type BlitzRuntimeData = {
-  suspenseEnabled: boolean
 }
 
 declare global {

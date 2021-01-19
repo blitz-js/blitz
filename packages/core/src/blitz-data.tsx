@@ -3,8 +3,17 @@ import htmlescape from "htmlescape"
 import React from "react"
 import {isClient} from "./utils"
 
-export function _getBlitzRuntimeData() {
-  return {suspenseEnabled: getConfig().experimental?.reactMode !== "legacy"}
+export type BlitzRuntimeData = {
+  suspenseEnabled: boolean
+  sessionCookiePrefix: string
+}
+
+export function _getBlitzRuntimeData(): BlitzRuntimeData {
+  const config = getConfig()
+  return {
+    sessionCookiePrefix: config._meta.packageName.replace(/[^a-zA-Z0-9-_]/g, "_"),
+    suspenseEnabled: config.experimental?.reactMode !== "legacy",
+  }
 }
 
 export function getBlitzRuntimeData() {

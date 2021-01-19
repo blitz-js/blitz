@@ -10,6 +10,17 @@ export interface BlitzConfig extends Record<string, unknown> {
     isomorphicResolverImports?: boolean
     reactMode?: string
   }
+  _meta: {
+    packageName: string
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      blitzConfig: BlitzConfig
+    }
+  }
 }
 
 /**
@@ -22,8 +33,14 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
-  let blitzConfig = {}
   const projectRoot = pkgDir.sync() || process.cwd()
+  const pkgJson = require(join(projectRoot, "package.json"))
+
+  let blitzConfig = {
+    _meta: {
+      packageName: pkgJson.name,
+    },
+  }
 
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {
