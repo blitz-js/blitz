@@ -1,6 +1,7 @@
 import React from "react"
 import {queryCache} from "react-query"
 import {getBlitzRuntimeData} from "../src/blitz-data"
+import {useSession} from "../src/supertokens"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {
   act,
@@ -17,6 +18,14 @@ beforeEach(() => {
 })
 
 window.__BLITZ_DATA__ = getBlitzRuntimeData()
+
+jest.mock("../src/supertokens")
+const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
+mockUseSession.mockReturnValue({
+  userId: undefined,
+  isLoading: false,
+  roles: [],
+})
 
 describe("useQuery", () => {
   const setupHook = (
