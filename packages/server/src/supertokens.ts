@@ -16,6 +16,7 @@ import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
   isLocalhost,
   Middleware,
@@ -645,6 +646,8 @@ export async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, "", new Date(0))
+    removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -701,6 +704,7 @@ export async function createNewSession(
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, "", new Date(0))
     removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,

@@ -1,6 +1,7 @@
 import {queryCache} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
+import {HEADER_SESSION_CREATED} from "."
 import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
@@ -87,6 +88,10 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Session revoked")
           queryCache.clear()
           publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_SESSION_CREATED)) {
+          clientDebug("Session created")
+          queryCache.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
