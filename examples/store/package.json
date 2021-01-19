@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/react": "17.0.0",
-    "cypress": "6.2.1",
+    "cypress": "6.2.0",
     "eslint-plugin-cypress": "2.11.2",
     "sass": "1.32.0",
     "start-server-and-test": "1.11.7"
