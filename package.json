@@ -72,6 +72,7 @@
     "@types/passport": "1.0.5",
     "@types/pluralize": "0.0.29",
     "@types/prettier": "2.1.6",
+    "@types/npm-run": "5.0.0",
     "@types/pump": "1.1.0",
     "@types/pumpify": "1.4.1",
     "@types/react": "17.0.0",
