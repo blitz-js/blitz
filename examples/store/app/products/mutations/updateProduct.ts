@@ -1,9 +1,9 @@
-import db, {ProductUpdateArgs} from "db"
+import db, {Prisma} from "db"
 import {Ctx} from "blitz"
 
 type UpdateProductInput = {
-  where: ProductUpdateArgs["where"]
-  data: ProductUpdateArgs["data"]
+  where: Prisma.ProductUpdateArgs["where"]
+  data: Prisma.ProductUpdateArgs["data"]
 }
 
 export default async function updateProduct({where, data}: UpdateProductInput, _ctx: Ctx) {

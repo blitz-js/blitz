@@ -1,7 +1,7 @@
-import { makeServerOnlyPrisma } from "blitz"
+import { enhancePrisma } from "blitz"
 import { PrismaClient } from "@prisma/client"
 
-const ServerOnlyPrisma = makeServerOnlyPrisma(PrismaClient)
+const EnhancedPrisma = enhancePrisma(PrismaClient)
 
 export * from "@prisma/client"
-export default new ServerOnlyPrisma()
+export default new EnhancedPrisma()

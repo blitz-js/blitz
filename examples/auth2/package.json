@@ -31,8 +31,8 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.15.0-dev.51",
-    "@prisma/client": "2.15.0-dev.51",
+    "@prisma/cli": "2.15.0",
+    "@prisma/client": "2.15.0",
     "blitz": "0.29.2",
     "react": "0.0.0-experimental-3310209d0",
     "react-dom": "0.0.0-experimental-3310209d0",

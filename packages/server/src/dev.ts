@@ -12,7 +12,7 @@ export async function dev(config: ServerConfig) {
     devFolder,
     ignore,
     include,
-    isTypescript,
+    isTypeScript,
     writeManifestFile,
     watch,
     clean,
@@ -21,7 +21,7 @@ export async function dev(config: ServerConfig) {
   // if blitz version is mismatched, we need to bust the cache by cleaning the devFolder
   const versionMatched = await isVersionMatched(devFolder)
 
-  const stages = configureStages({writeManifestFile, isTypescript})
+  const stages = configureStages({writeManifestFile, isTypeScript})
 
   const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
     ignore,

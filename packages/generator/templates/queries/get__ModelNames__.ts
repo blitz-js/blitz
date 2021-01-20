@@ -2,7 +2,7 @@ import {Ctx} from "blitz"
 import db, {Prisma} from "db"
 
 type Get__ModelNames__Input = Pick<
-  Prisma.FindMany__ModelName__Args,
+  Prisma.__ModelName__FindManyArgs,
   "where" | "orderBy" | "skip" | "take"
 >
 
