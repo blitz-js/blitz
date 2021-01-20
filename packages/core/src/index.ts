@@ -83,4 +83,4 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
 export {isLocalhost} from "./utils/index"
 export {prettyMs} from "./utils/pretty-ms"
 
-export {makeServerOnlyPrisma} from "./prisma-utils"
+export {enhancePrisma} from "./prisma-utils"

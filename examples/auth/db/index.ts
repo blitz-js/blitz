@@ -1,7 +1,10 @@
-import {makeServerOnlyPrisma} from "blitz"
+import {enhancePrisma} from "blitz"
 import {PrismaClient} from "@prisma/client"
 
-const ServerOnlyPrisma = makeServerOnlyPrisma(PrismaClient)
+const BlitzPrisma = enhancePrisma(PrismaClient)
 
 export * from "@prisma/client"
-export default new ServerOnlyPrisma()
+const db = new BlitzPrisma()
+
+// TODO fix type here
+db.$reset
