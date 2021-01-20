@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.29.2",
+  "version": "0.29.3",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -40,7 +40,7 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/display": "0.29.2",
+    "@blitzjs/display": "0.29.3",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
