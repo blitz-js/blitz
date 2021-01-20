@@ -5,12 +5,13 @@ const projectRoot = pkgDir.sync() || process.cwd()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
 module.exports = {
+  maxWorkers: 1,
   globalSetup: path.resolve(__dirname, "./jest-preset/global-setup.js"),
   setupFilesAfterEnv: [
     path.resolve(__dirname, "./jest-preset/setup-after-env.js"),
     "<rootDir>/test/setup.ts",
   ],
-  // Add type checking to Typescript test files
+  // Add type checking to TypeScript test files
   preset: "ts-jest",
   testEnvironment: "jest-environment-jsdom-fourteen",
   // Automatically clear mock calls and instances between every test

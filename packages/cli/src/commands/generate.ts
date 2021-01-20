@@ -18,7 +18,7 @@ import {PromptAbortedError} from "../errors/prompt-aborted"
 import chalk from "chalk"
 
 const debug = require("debug")("blitz:generate")
-const getIsTypescript = () =>
+const getIsTypeScript = () =>
   require("fs").existsSync(
     require("path").join(require("../utils/get-project-root").projectRoot, "tsconfig.json"),
   )
@@ -229,7 +229,7 @@ export class Generate extends Command {
           rawInput: model,
           dryRun: flags["dry-run"],
           context: context,
-          useTs: getIsTypescript(),
+          useTs: getIsTypeScript(),
         })
         await generator.run()
       }

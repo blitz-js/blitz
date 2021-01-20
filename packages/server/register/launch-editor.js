@@ -1,5 +1,5 @@
 // NOTE: This is here to support deep linking into this package
-//       It would be nice to be able to write this code in typescript
+//       It would be nice to be able to write this code in TypeScript
 // TODO: Incorporate this deep linked file into our TS build
 const ManifestLoader = require("@blitzjs/server").ManifestLoader
 const resolve = require("path").resolve
