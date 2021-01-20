@@ -25,6 +25,11 @@ export const enhancePrisma = <T extends Base>(
         const client = new target(...args) as EnhancedPrismaClient
 
         client.$reset = function reset() {
+          if (process.env.NODE_ENV === "production") {
+            throw new Error(
+              "You are calling db.$reset() in a production environment. We think you probably didn't mean to do that, so we are throwing this error instead of destroying your life's work.",
+            )
+          }
           return new Promise<void>((res, rej) =>
             exec("prisma migrate reset --force --skip-generate --preview-feature", function (err) {
               if (err) {
