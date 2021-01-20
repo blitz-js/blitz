@@ -1,15 +1,9 @@
 import resetPassword from "./resetPassword"
 import db from "db"
-import { hash256 } from "blitz"
+import { hash256, SecurePassword } from "blitz"
 
 beforeEach(async () => {
-  //@ts-ignore
   await db.$reset()
-})
-
-// TODO - move this into blitz jest setup config
-afterAll(async () => {
-  await db.$disconnect()
 })
 
 const mockCtx: any = {
@@ -54,6 +48,8 @@ describe("resetPassword mutation", () => {
       include: { tokens: true },
     })
 
+    const newPassword = "newPassword"
+
     // Non-existent token
     await expect(
       resetPassword({ token: "no-token", password: "", passwordConfirmation: "" }, mockCtx)
@@ -62,31 +58,25 @@ describe("resetPassword mutation", () => {
     // Expired token
     await expect(
       resetPassword(
-        { token: expiredToken, password: "newPassword", passwordConfirmation: "newPassword" },
+        { token: expiredToken, password: newPassword, passwordConfirmation: newPassword },
         mockCtx
       )
     ).rejects.toThrowError()
 
     // Good token
     await resetPassword(
-      { token: goodToken, password: "newPassword", passwordConfirmation: "newPassword" },
+      { token: goodToken, password: newPassword, passwordConfirmation: newPassword },
       mockCtx
     )
 
-    // TODO finish here
+    // Delete's the token
+    const numberOfTokens = await db.token.count({ where: { userId: user.id } })
+    expect(numberOfTokens).toBe(0)
 
-    // const tokens = await db.token.findMany({ where: { userId: user.id } })
-    // // delete's existing tokens
-    // expect(tokens.length).toBe(1)
-    // const token = tokens[0]
-    //
-    // expect(token.id).not.toBe(user.tokens[0].id)
-    // expect(token.type).toBe("RESET_PASSWORD")
-    // expect(token.sentTo).toBe(user.email)
-    // // Ensure token is hashed
-    // expect(token.hashedToken).not.toBe(generatedToken)
-    // // Ensure expires in the future
-    // expect(token.expiresAt > new Date()).toBe(true)
-    // expect(previewEmail).toBeCalled()
+    // Updates user's password
+    const updatedUser = await db.user.findFirst({ where: { id: user.id } })
+    expect(await SecurePassword.verify(updatedUser!.hashedPassword, newPassword)).toBe(
+      SecurePassword.VALID
+    )
   })
 })

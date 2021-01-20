@@ -4,13 +4,7 @@ import db from "db"
 import previewEmail from "preview-email"
 
 beforeEach(async () => {
-  //@ts-ignore
   await db.$reset()
-})
-
-// TODO - move this into blitz jest setup config
-afterAll(async () => {
-  await db.$disconnect()
 })
 
 const generatedToken = "plain-token"
@@ -47,16 +41,15 @@ describe("forgotPassword mutation", () => {
     await forgotPassword({ email: user.email })
 
     const tokens = await db.token.findMany({ where: { userId: user.id } })
+    const token = tokens[0]
+
     // delete's existing tokens
     expect(tokens.length).toBe(1)
-    const token = tokens[0]
 
     expect(token.id).not.toBe(user.tokens[0].id)
     expect(token.type).toBe("RESET_PASSWORD")
     expect(token.sentTo).toBe(user.email)
-    // Ensure token is hashed
     expect(token.hashedToken).toBe(hash256(generatedToken))
-    // Ensure expires in the future
     expect(token.expiresAt > new Date()).toBe(true)
     expect(previewEmail).toBeCalled()
   })
