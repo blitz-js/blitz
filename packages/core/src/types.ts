@@ -159,6 +159,7 @@ declare global {
   namespace NodeJS {
     interface Global {
       __BLITZ_DATA__: BlitzRuntimeData
+      _blitz_prismaClient: any
     }
   }
   interface Window {
