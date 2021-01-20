@@ -67,7 +67,7 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 ⚡️ Built on Next.js<br>
 ⚡️ Don't have to build an API for client-side rendering<br>
 ⚡️ Client-side rendering, Server-side rendering, and fully static pages all in the same app<br>
-⚡️ Full Typescript support with static, end-to-end typing (no code generation step needed like with GraphQL)<br>
+⚡️ Full TypeScript support with static, end-to-end typing (no code generation step needed like with GraphQL)<br>
 ⚡️ React Concurrent Mode enabled<br>
 ⚡️ Database/ORM agnostic, but Prisma 2 is default<br>
 ⚡️ CLI with code scaffolding, Rails-style console REPL, etc<br>

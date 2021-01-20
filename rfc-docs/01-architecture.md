@@ -224,7 +224,7 @@ Blitz does some fancy stuff at compile time to convert the imported queries and 
 We love this approach for all the following reasons:
 
 1. Extremely simple. Just import the function and call it like any other function.
-2. Everything has complete Typescript types without a compiler (unlike GraphQL).
+2. Everything has complete TypeScript types without a compiler (unlike GraphQL).
 3. The entire network layer is abstracted away so you can focus on what makes your app unique.
 4. Queries and mutations are highly composable and easily testable.
 
@@ -320,8 +320,8 @@ Anyone deploying a sizable GraphQL API via serverless Lambda functions does so b
 
 Other reasons include:
 
-1. A lot of boilerplate, especially for use with Typescript
-2. Typescript types require a code watcher and compiler
+1. A lot of boilerplate, especially for use with TypeScript
+2. TypeScript types require a code watcher and compiler
 3. Extra code dependencies
 
 ## 9. Blitz is GraphQL Ready
