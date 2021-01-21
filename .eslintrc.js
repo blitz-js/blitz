@@ -51,7 +51,12 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
+  ignorePatterns: [
+    "packages/cli/",
+    "packages/generator/templates",
+    ".eslintrc.js",
+    "recipes/*/templates",
+  ],
   overrides: [
     {
       files: ["examples/**", "packages/gui/**", "recipes/**"],
