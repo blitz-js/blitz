@@ -37,16 +37,6 @@ export {SecurePassword, hash256, generateToken} from "./auth-utils"
 // --------------------
 // Exports from Next.js
 // --------------------
-export {
-  GetStaticProps,
-  GetStaticPaths,
-  GetServerSideProps,
-  InferGetStaticPropsType,
-  InferGetServerSidePropsType,
-  NextApiRequest as BlitzApiRequest,
-  NextApiResponse as BlitzApiResponse,
-} from "next"
-
 export {default as Head} from "next/head"
 
 export {default as Link, LinkProps} from "next/link"
