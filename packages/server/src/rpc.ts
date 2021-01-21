@@ -71,9 +71,6 @@ const rpcMiddleware = <TInput, TResult>(
         log.error(error)
         displayLog.newline()
 
-        // Don't transmit the server stack trace via HTTP
-        delete error.stack
-
         if (!error.statusCode) {
           error.statusCode = 500
         }

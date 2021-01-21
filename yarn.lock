@@ -17173,10 +17173,10 @@ stylis@3.5.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.4.tgz#f665f25f5e299cf3d64654ab949a57c768b73fbe"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.4.1.tgz#c96501fc0cc32cc9cb25ecc3fb476db631eceba2"
-  integrity sha512-+PjOQNj7mW4I0t3KphIgwwQvQObd5Tc1DtUoIMj3iN7RXQyoWr2R8LXLtQw/UNEItSd0Al+qn0I/8yCnTXiAIw==
+superjson@1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.5.0.tgz#88c8ead3afa8d2ef47e7bdbee85c645d1653957f"
+  integrity sha512-unM/AG3zy0NbKV4bkNQrxCPZVEJNoCuAihKpNMKqZUCTf30XV4nkJjnKdRTa2G1xJgkoxUxJAoUJ64+wuRQJjw==
   dependencies:
     lodash "^4.17.20"
     lodash-es "^4.17.15"

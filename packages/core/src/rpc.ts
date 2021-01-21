@@ -120,9 +120,6 @@ export const executeRpcCall = <TInput, TResult>(
           error.statusCode = 500
         }
 
-        // Prevent client-side error popop from showing
-        delete error.stack
-
         throw error
       } else {
         const data = deserialize({json: payload.result, meta: payload.meta?.result})
