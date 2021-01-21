@@ -5,16 +5,6 @@ import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ForgotPasswordInput } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
 
-/*
- * By default this page renders the ForgotPasswordForm form which gets the user
- * email and sends password reset instructions.
- *
- * When they click the link in that email, they will be sent back to this same
- * page but with the token set as a query parameter like `?token=XXXXX`.
- *
- * The ResetPasswordForm is rendered if the `?token=` parameter is present in the URL
- */
-
 const ForgotPasswordPage: BlitzPage = () => {
   const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
 
