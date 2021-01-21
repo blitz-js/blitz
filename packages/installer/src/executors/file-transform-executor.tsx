@@ -4,7 +4,14 @@ import {Box, Text} from "ink"
 import Spinner from "ink-spinner"
 import * as React from "react"
 import {Newline} from "../components/newline"
-import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
+import {
+  processFile,
+  stringProcessFile,
+  StringTransformer,
+  transform,
+  Transformer,
+  TransformStatus,
+} from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
@@ -12,11 +19,15 @@ import {filePrompt} from "./file-prompt"
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
   singleFileSearch?: executorArgument<string>
-  transform: Transformer
+  transform?: Transformer
+  transformPlain?: StringTransformer
 }
 
 export function isFileTransformExecutor(executor: ExecutorConfig): executor is Config {
-  return (executor as Config).transform !== undefined
+  return (
+    (executor as Config).transform !== undefined ||
+    (executor as Config).transformPlain !== undefined
+  )
 }
 
 export const type = "file-transform"
@@ -34,7 +45,9 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
       })
       filePathRef.current = fileToTransform
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
-      const newFile = processFile(originalFile, (step as Config).transform)
+      const newFile = (step as Config).transformPlain
+        ? stringProcessFile(originalFile, (step as Config).transformPlain!)
+        : processFile(originalFile, (step as Config).transform!)
       return createPatch(fileToTransform, originalFile, newFile)
     }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -91,7 +104,13 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   useEnterToContinue(handleChangeCommitted, !loading)
 
   React.useEffect(() => {
-    const results = transform(transformFn, [filePath])
+    const results = transform(
+      (original) =>
+        (step as Config).transformPlain
+          ? stringProcessFile(original, (step as Config).transformPlain!)
+          : processFile(original, (step as Config).transform!),
+      [filePath],
+    )
     if (results.some((r) => r.status === TransformStatus.Failure)) {
       console.error(results)
     }
