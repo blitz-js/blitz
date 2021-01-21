@@ -1,5 +1,5 @@
 {
-  "name": "babel-preset-blitz",
+  "name": "@blitzjs/babel-preset",
   "version": "0.29.2",
   "license": "MIT",
   "main": "dist/index.js",
@@ -27,11 +27,11 @@
   "module": "dist/babel-preset.esm.js",
   "size-limit": [
     {
-      "path": "dist/babel-preset-blitz.cjs.production.min.js",
+      "path": "dist/babel-preset.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/babel-preset-blitz.esm.js",
+      "path": "dist/babel-preset.esm.js",
       "limit": "10 KB"
     }
   ],

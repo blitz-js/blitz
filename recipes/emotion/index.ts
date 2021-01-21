@@ -53,10 +53,10 @@ function replaceBabelPreset(program: Collection<j.Program>) {
       .find(j.ObjectProperty, {key: {name: "presets"}})
       .forEach((presets) => {
         j(presets)
-          .find(j.Literal, {value: "next/babel"})
+          .find(j.Literal, {value: "blitz/babel"})
           .replaceWith(
             j.arrayExpression([
-              j.stringLiteral("next/babel"),
+              j.stringLiteral("blitz/babel"),
               j.objectExpression([
                 j.property(
                   "init",
