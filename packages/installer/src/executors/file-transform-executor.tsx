@@ -93,8 +93,6 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   )
 }
 export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
-  const transformFn = (step as Config).transform
-
   const [loading, setLoading] = React.useState(true)
 
   const handleChangeCommitted = React.useCallback(() => {
@@ -115,7 +113,7 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
       console.error(results)
     }
     setLoading(false)
-  }, [filePath, transformFn])
+  }, [filePath, step])
 
   if (loading) {
     return (
