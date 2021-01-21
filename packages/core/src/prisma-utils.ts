@@ -1,19 +1,22 @@
 import {exec} from "npm-run"
 
-interface Constructor<T> {
-  new (...args: any): T
+interface Constructor<T = unknown> {
+  new (...args: unknown[]): T
 }
 
-interface Base {}
-
-interface EnhancedPrismaClient {
+interface EnhancedPrismaClientAddedMethods {
   $reset: () => Promise<void>
 }
 
-export const enhancePrisma = <T extends Base>(
-  PrismaClient: Constructor<T>,
-): Constructor<EnhancedPrismaClient & T> => {
-  return new Proxy(PrismaClient as any, {
+interface EnhancedPrismaClientConstructor<TPrismaClientCtor extends Constructor> {
+  new (...args: ConstructorParameters<TPrismaClientCtor>): InstanceType<TPrismaClientCtor> &
+    EnhancedPrismaClientAddedMethods
+}
+
+export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
+  client: TPrismaClientCtor,
+): EnhancedPrismaClientConstructor<TPrismaClientCtor> => {
+  return new Proxy(client as EnhancedPrismaClientConstructor<TPrismaClientCtor>, {
     construct(target, args) {
       if (typeof window !== "undefined" && process.env.JEST_WORKER_ID === undefined) {
         // Return empty object if in the browser
@@ -22,7 +25,7 @@ export const enhancePrisma = <T extends Base>(
       }
 
       if (!global._blitz_prismaClient) {
-        const client = new target(...args) as EnhancedPrismaClient
+        const client = new target(...args)
 
         client.$reset = function reset() {
           if (process.env.NODE_ENV === "production") {
