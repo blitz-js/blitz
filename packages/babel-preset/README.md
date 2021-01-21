@@ -1,17 +1,17 @@
-[![npm version](https://badge.fury.io/js/babel-preset-blitz.svg)](https://badge.fury.io/js/babel-preset-blitz)
+[![npm version](https://badge.fury.io/js/@blitzjs/babel-preset.svg)](https://badge.fury.io/js/@blitzjs/babel-preset)
 
-# babel-preset-blitz
+# @blitzjs/babel-preset
 
 ## Setup
 
-1. Install it using npm: `npm install -D babel-preset-blitz`.
+1. Install it using npm: `npm install -D @blitzjs/babel-preset`.
 2. Add `blitz` preset in your `babel.config.js`.
 
 Example `babel.config.js`:
 
 ```js
 module.exports = {
-  presets: ['blitz'],
+  presets: ['@blitzjs'],
   presets: [],
 };
 ```
