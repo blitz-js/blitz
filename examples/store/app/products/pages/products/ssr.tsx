@@ -2,11 +2,7 @@ import {invokeWithMiddleware, Link, BlitzPage, InferGetServerSidePropsType} from
 import getProducts from "app/products/queries/getProducts"
 
 export const getServerSideProps = async ({req, res}) => {
-  const result = await invokeWithMiddleware(
-    getProducts,
-    {take: 2, orderBy: {id: "desc"}},
-    {req, res},
-  )
+  const result = await invokeWithMiddleware(getProducts, {orderBy: {id: "desc"}}, {req, res})
   return {
     props: {
       products: result.products,
@@ -16,7 +12,6 @@ export const getServerSideProps = async ({req, res}) => {
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>
 
 const Page: BlitzPage<PageProps> = function (props) {
-  console.log("PROPS", props)
   return (
     <div>
       <h1>Products</h1>
