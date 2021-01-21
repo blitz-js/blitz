@@ -1,4 +1,5 @@
 import {paths, RecipeBuilder} from "@blitzjs/installer"
+import path from "path"
 
 export default RecipeBuilder()
   .setName("Quirrel")
@@ -38,5 +39,13 @@ export default RecipeBuilder()
         return [start, command, end].join("")
       })
     },
+  })
+  .addNewFilesStep({
+    stepId: "addExamples",
+    stepName: "Add example files",
+    explanation: "Create one example Queue and CronJob that illustrate Quirrel usage.",
+    targetDirectory: "app",
+    templatePath: path.join(__dirname, "templates", "app"),
+    templateValues: {},
   })
   .build()
