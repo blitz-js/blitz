@@ -68,6 +68,8 @@ export async function nextStartDev(
   const transform = createOutputTransformer(manifest, devFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
+  process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
+
   return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)

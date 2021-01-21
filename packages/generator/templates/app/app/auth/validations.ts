@@ -14,6 +14,23 @@ export const LoginInput = z.object({
 })
 export type LoginInputType = z.infer<typeof LoginInput>
 
+export const ForgotPasswordInput = z.object({
+  email: z.string().email(),
+})
+export type ForgotPasswordInputType = z.infer<typeof ForgotPasswordInput>
+
+export const ResetPasswordInput = z
+  .object({
+    password: password,
+    passwordConfirmation: password,
+    token: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"], // set the path of the error
+  })
+export type ResetPasswordInputType = z.infer<typeof ResetPasswordInput>
+
 export const ChangePasswordInput = z.object({
   currentPassword: z.string(),
   newPassword: password,

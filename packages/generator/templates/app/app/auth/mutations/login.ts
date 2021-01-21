@@ -18,14 +18,14 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default async function login(input: LoginInputType, { session }: Ctx) {
+export default async function login(input: LoginInputType, ctx: Ctx) {
   // This throws an error if input is invalid
   const { email, password } = LoginInput.parse(input)
 
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
-  await session.create({ userId: user.id, roles: [user.role] })
+  await ctx.session.create({ userId: user.id, roles: [user.role] })
 
   return user
 }

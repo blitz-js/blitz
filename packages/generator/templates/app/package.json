@@ -42,11 +42,13 @@
   },
   "devDependencies": {
     "@types/react": "17.x",
+    "@types/preview-email": "2.x",
     "eslint": "7.x",
     "husky": "4.x",
     "lint-staged": "10.x",
     "prettier": "2.x",
-    "pretty-quick": "3.x"
+    "pretty-quick": "3.x",
+    "preview-email": "3.x"
   },
   "private": true
 }
