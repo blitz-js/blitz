@@ -21,4 +21,7 @@ export const paths = {
   blitzConfig() {
     return "blitz.config.js"
   },
+  packageJson() {
+    return "package.json"
+  },
 }

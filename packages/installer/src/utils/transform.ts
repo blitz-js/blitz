@@ -22,7 +22,13 @@ export interface TransformResult {
   filename: string
   error?: Error
 }
+
+export type StringTransformer = (program: string) => string
 export type Transformer = (program: Collection<j.Program>) => Collection<j.Program>
+
+export function stringProcessFile(original: string, transformerFn: StringTransformer): string {
+  return transformerFn(original)
+}
 
 export function processFile(original: string, transformerFn: Transformer): string {
   const program = j(original, {parser: customTsParser})
@@ -30,7 +36,7 @@ export function processFile(original: string, transformerFn: Transformer): strin
 }
 
 export function transform(
-  transformerFn: Transformer,
+  processFile: (original: string) => string,
   targetFilePaths: string[],
 ): TransformResult[] {
   const results: TransformResult[] = []
@@ -45,7 +51,7 @@ export function transform(
     try {
       const fileBuffer = fs.readFileSync(filePath)
       const fileSource = fileBuffer.toString("utf-8")
-      const transformedCode = processFile(fileSource, transformerFn)
+      const transformedCode = processFile(fileSource)
       fs.writeFileSync(filePath, transformedCode)
       results.push({
         status: TransformStatus.Success,
