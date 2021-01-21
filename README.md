@@ -36,7 +36,7 @@ Blitz brings back the **simplicity and conventions** of server-rendered framewor
 
 ### Quick Start
 
-You need Node.js 12 or newer
+You need Node.js 12.20.0 or newer
 
 #### Install Blitz
 
