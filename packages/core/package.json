@@ -52,7 +52,7 @@
     "passport": "0.4.1",
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
-    "superjson": "1.4.1",
+    "superjson": "1.5.0",
     "npm-run": "^5.0.1"
   },
   "devDependencies": {},
