@@ -30,6 +30,7 @@ export default async function getProducts(
   const products = await db.product.findMany({
     where,
     orderBy,
+    select: {id: true, name: true, handle: true, createdAt: true},
     skip,
     cursor,
     take,

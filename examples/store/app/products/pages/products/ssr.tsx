@@ -1,32 +1,27 @@
-import {useMemo} from "react"
-import {invokeWithMiddleware, GetServerSideProps, Link, BlitzPage, PromiseReturnType} from "blitz"
+import {invokeWithMiddleware, Link, BlitzPage, InferGetServerSidePropsType} from "blitz"
 import getProducts from "app/products/queries/getProducts"
-import superjson from "superjson"
 
-type PageProps = {
-  dataString: string
-}
-
-type Products = PromiseReturnType<typeof getProducts>
-
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  const products = await invokeWithMiddleware(getProducts, {orderBy: {id: "desc"}}, {req, res})
-  const dataString = superjson.stringify(products)
+export const getServerSideProps = async ({req, res}) => {
+  const result = await invokeWithMiddleware(
+    getProducts,
+    {take: 2, orderBy: {id: "desc"}},
+    {req, res},
+  )
   return {
     props: {
-      dataString,
+      products: result.products,
     },
   }
 }
+type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Page: BlitzPage<PageProps> = function ({dataString}) {
-  const {products} = useMemo(() => superjson.parse(dataString), [dataString]) as Products
-
+const Page: BlitzPage<PageProps> = function (props) {
+  console.log("PROPS", props)
   return (
     <div>
       <h1>Products</h1>
       <div id="products">
-        {products.map((product) => (
+        {props.products.map((product) => (
           <p key={product.id}>
             <Link href="/products/[handle]" as={`/products/${product.handle}`}>
               <a>{product.name}</a>
