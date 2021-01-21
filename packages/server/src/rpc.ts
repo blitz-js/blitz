@@ -44,7 +44,11 @@ const rpcMiddleware = <TInput, TResult>(
         const startTime = Date.now()
 
         const result = await resolver(data, res.blitzCtx)
+        log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
+
+        const serializationStartTime = Date.now()
         const serializedResult = serialize(result)
+        log.debug(chalk.dim(`Serialized in ${prettyMs(Date.now() - serializationStartTime)}`))
 
         res.blitzResult = result
         res.json({
@@ -56,7 +60,6 @@ const rpcMiddleware = <TInput, TResult>(
         })
 
         const duration = Date.now() - startTime
-        log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
         log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
         displayLog.newline()
 
