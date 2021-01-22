@@ -12,7 +12,7 @@ npm i -g blitz
 
 These are some examples of common commands from the blitz API. A full list is available at <https://blitzjs.com/docs/cli-overview>.
 
-### Create a new Blitz project called "my-blog"\*
+### Create a new Blitz project called "my-blog"
 
 ```bash
 blitz new my-blog
