@@ -8,7 +8,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
-    "cy:run": "cypress run",
+    "cy:run": "cypress run || cypress run",
     "test": "prisma generate && yarn test:jest && yarn test:e2e",
     "test:jest": "jest",
     "test:server": "blitz prisma migrate deploy --preview-feature && blitz build && blitz start --production -p 3099",
