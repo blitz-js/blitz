@@ -1,4 +1,4 @@
-import { Head, ErrorComponent } from "blitz"
+import {Head, ErrorComponent} from "blitz"
 
 // ------------------------------------------------------
 // This page is rendered if a route match is not found

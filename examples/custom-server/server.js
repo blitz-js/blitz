@@ -1,17 +1,17 @@
-const { createServer } = require("http")
-const { parse } = require("url")
+const {createServer} = require("http")
+const {parse} = require("url")
 const blitz = require("@blitzjs/server")
-const { log } = require("@blitzjs/display")
+const {log} = require("@blitzjs/display")
 
-const { PORT = "3000" } = process.env
+const {PORT = "3000"} = process.env
 const dev = process.env.NODE_ENV !== "production"
-const app = blitz({ dev })
+const app = blitz({dev})
 const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   createServer((req, res) => {
     const parsedUrl = parse(req.url, true)
-    const { pathname } = parsedUrl
+    const {pathname} = parsedUrl
 
     if (pathname === "/hello") {
       res.writeHead(200).end("world")
