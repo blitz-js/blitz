@@ -1,9 +1,9 @@
-import http from "http"
-import fetch from "isomorphic-unfetch"
-import listen from "test-listen"
-import {apiResolver} from "next/dist/next-server/server/api-utils"
 import {connectMiddleware, EnhancedResolver} from "@blitzjs/core"
 import delay from "delay"
+import http from "http"
+import {apiResolver} from "next/dist/next-server/server/api-utils"
+import fetch from "node-fetch"
+import listen from "test-listen"
 import {rpcApiHandler} from "../src/rpc"
 
 describe("rpcMiddleware", () => {

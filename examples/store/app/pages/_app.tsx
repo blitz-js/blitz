@@ -2,6 +2,10 @@ import {AppProps, ErrorComponent} from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
 
+if (typeof window !== "undefined") {
+  window["DEBUG_BLITZ"] = 1
+}
+
 export default function App({Component, pageProps}: AppProps) {
   return (
     <ErrorBoundary

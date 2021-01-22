@@ -1,10 +1,10 @@
-import {Transform, TransformCallback} from "stream"
-import * as path from "path"
-import File from "vinyl"
-import {diffLines, Change} from "diff"
-import * as fs from "fs-extra"
 import chalk from "chalk"
+import {Change, diffLines} from "diff"
 import enquirer from "enquirer"
+import * as fs from "fs-extra"
+import * as path from "path"
+import {Transform, TransformCallback} from "stream"
+import File from "vinyl"
 import {PromptAbortedError} from "./errors/prompt-aborted"
 
 interface PromptAnswer {

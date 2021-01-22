@@ -1,8 +1,7 @@
 import http from "http"
-import listen from "test-listen"
-import fetch from "isomorphic-unfetch"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
-
+import fetch from "node-fetch"
+import listen from "test-listen"
 import {BlitzApiRequest, BlitzApiResponse} from "."
 import {handleRequestWithMiddleware} from "./middleware"
 import {Middleware} from "./types"
@@ -66,7 +65,6 @@ describe("handleRequestWithMiddleware", () => {
     })
   })
 
-  // Failing on windows for unknown reason
   it("middleware can throw", async () => {
     console.log = jest.fn()
     console.error = jest.fn()
@@ -107,7 +105,7 @@ describe("handleRequestWithMiddleware", () => {
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
   const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
     try {
-      await handleRequestWithMiddleware(req, res, middleware)
+      await handleRequestWithMiddleware(req, res, middleware, {stackPrintOnError: false})
     } catch (err) {
       res.status(500)
     } finally {

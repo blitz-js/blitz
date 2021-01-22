@@ -1,8 +1,8 @@
-import {forceRequire} from "./module"
-import path from "path"
 import globby from "globby"
+import path from "path"
 import pkgDir from "pkg-dir"
 import ProgressBar from "progress"
+import {forceRequire} from "./module"
 
 const projectRoot = pkgDir.sync() || process.cwd()
 

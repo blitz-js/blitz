@@ -1,19 +1,46 @@
-import pkgDir from "pkg-dir"
-import {join} from "path"
 import {existsSync} from "fs"
-import {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} from "next/constants"
+import {join} from "path"
+import pkgDir from "pkg-dir"
 
 const configFiles = ["blitz.config.js", "next.config.js"]
+
+export interface BlitzConfig extends Record<string, unknown> {
+  target?: string
+  experimental?: {
+    isomorphicResolverImports?: boolean
+    reactMode?: string
+  }
+  _meta: {
+    packageName: string
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      blitzConfig: BlitzConfig
+    }
+  }
+}
+
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
-export const getConfig = (reload?: boolean): Record<string, unknown> => {
+export const getConfig = (reload?: boolean): BlitzConfig => {
   if (global.blitzConfig && Object.keys(global.blitzConfig).length > 0 && !reload) {
     return global.blitzConfig
   }
 
-  let blitzConfig = {}
+  const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
+
   const projectRoot = pkgDir.sync() || process.cwd()
+  const pkgJson = require(join(projectRoot, "package.json"))
+
+  let blitzConfig = {
+    _meta: {
+      packageName: pkgJson.name,
+    },
+  }
 
   for (const configFile of configFiles) {
     if (existsSync(join(projectRoot, configFile))) {

@@ -1,6 +1,5 @@
-import spawn from "cross-spawn"
 import {log} from "@blitzjs/display"
-
+import spawn from "cross-spawn"
 import {AppGenerator} from "../../src/generators/app-generator"
 
 // Spies process to avoid trying to chdir to a non existing folder

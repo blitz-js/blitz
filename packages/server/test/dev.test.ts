@@ -1,19 +1,33 @@
 /* eslint-disable import/first */
 
+import {join, resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
-import {resolve, join} from "path"
+
 const mocks = multiMock(
   {
     "next-utils": {
       nextStartDev: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
+      customServerExists: jest.fn().mockReturnValue(false),
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
     },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
+    },
   },
   resolve(__dirname, "../src"),
 )
+
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
 import {dev} from "../src/dev"
@@ -40,10 +54,16 @@ describe("Dev command", () => {
   describe("throw in nextStartDev", () => {
     beforeEach(() => {
       mocks["next-utils"].nextStartDev.mockRejectedValue("pow")
+      mocks["blitz-version"].getBlitzVersion.mockRejectedValue("pow")
+      mocks["blitz-version"].isVersionMatched.mockRejectedValue("pow")
+      mocks["blitz-version"].saveBlitzVersion.mockRejectedValue("pow")
     })
 
     afterEach(() => {
       mocks["next-utils"].nextStartDev.mockReturnValue(Promise.resolve())
+      mocks["blitz-version"].getBlitzVersion.mockReturnValue(blitzVersion.getBlitzVersion())
+      mocks["blitz-version"].isVersionMatched.mockImplementation(blitzVersion.isVersionMatched)
+      mocks["blitz-version"].saveBlitzVersion.mockImplementation(blitzVersion.saveBlitzVersion)
     })
 
     it("should blow up", async (done) => {
@@ -56,6 +76,7 @@ describe("Dev command", () => {
           watch: false,
           port: 3000,
           hostname: "localhost",
+          env: "dev",
         })
       } catch (err) {
         expect(err).toBe("pow")
@@ -88,6 +109,7 @@ describe("Dev command", () => {
           watch: false,
           port: 3000,
           hostname: "localhost",
+          env: "dev",
         }),
       ).rejects.toThrowError("Blitz does not support")
 
@@ -124,11 +146,13 @@ describe("Dev command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
       expect(directoryTree(rootFolder)).toEqual({
         children: [
           {
             children: [
+              {name: "_blitz-version.txt"},
               {name: "blitz.config.js"},
               {name: "next.config.js"},
               {name: "one"},
@@ -174,6 +198,7 @@ describe("Dev command", () => {
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
       const nextPatched = resolve(rootFolder, "@blitzjs/server", "next-patched")
       const blitzDev = join(rootFolder, ".blitz-dev")

@@ -1,42 +1,43 @@
-import hasha, {HashaInput} from "hasha"
-import cookie from "cookie"
-import {nanoid} from "nanoid"
-import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {getConfig} from "@blitzjs/config"
 import {
-  BlitzApiRequest,
-  BlitzApiResponse,
-  Middleware,
   AuthenticationError,
   AuthorizationError,
-  CSRFTokenMismatchError,
-  SessionConfig,
-  PublicData,
-  SessionContext,
-  TOKEN_SEPARATOR,
-  HANDLE_SEPARATOR,
-  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
-  SESSION_TYPE_ANONYMOUS_JWT,
-  SESSION_TOKEN_VERSION_0,
+  BlitzApiRequest,
+  BlitzApiResponse,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
-  COOKIE_SESSION_TOKEN,
-  COOKIE_REFRESH_TOKEN,
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_SESSION_TOKEN,
+  CSRFTokenMismatchError,
+  generateToken,
+  HANDLE_SEPARATOR,
+  hash256,
   HEADER_CSRF,
-  HEADER_SESSION_REVOKED,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
-  MiddlewareResponse,
+  HEADER_SESSION_CREATED,
+  HEADER_SESSION_REVOKED,
   isLocalhost,
+  Middleware,
+  MiddlewareResponse,
+  PublicData,
+  SESSION_TOKEN_VERSION_0,
+  SESSION_TYPE_ANONYMOUS_JWT,
+  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
+  SessionConfig,
+  SessionContext,
+  TOKEN_SEPARATOR,
 } from "@blitzjs/core"
-import {getConfig} from "@blitzjs/config"
-import pkgDir from "pkg-dir"
-import {join} from "path"
-import {addMinutes, addYears, isPast, differenceInMinutes} from "date-fns"
-import {btoa, atob} from "b64-lite"
-import {getCookieParser} from "next/dist/next-server/server/api-utils"
-import {IncomingMessage, ServerResponse} from "http"
 import {log} from "@blitzjs/display"
+import {fromBase64, toBase64} from "b64-lite"
+import cookie from "cookie"
+import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
+import {IncomingMessage, ServerResponse} from "http"
+import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {join} from "path"
+import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
@@ -44,7 +45,7 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 // ----------------------------------------------------------------------------------------
-// IMPORTANT: blitz.config.js must be loaded for session managment config to be initialized
+// IMPORTANT: blitz.config.js must be loaded for session management config to be initialized
 // This line ensures that blitz.config.js is loaded
 // ----------------------------------------------------------------------------------------
 process.nextTick(getConfig)
@@ -59,7 +60,7 @@ const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   sameSite: "lax",
-  getSession: (handle) => getDb().session.findOne({where: {handle}}),
+  getSession: (handle) => getDb().session.findFirst({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
     let user
@@ -83,12 +84,12 @@ const defaultConfig: SessionConfig = {
     }
   },
   deleteSession: (handle) => getDb().session.delete({where: {handle}}),
-  unstable_isAuthorized: () => {
-    throw new Error("No unstable_isAuthorized implementation provided")
+  isAuthorized: () => {
+    throw new Error("No isAuthorized implementation provided")
   },
 }
 
-export function unstable_simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
   // No roles required, so all roles allowed
   if (!input) return true
 
@@ -111,8 +112,8 @@ let config: Required<SessionConfig>
 // --------------------------------
 export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): Middleware => {
   assert(
-    sessionConfig.unstable_isAuthorized,
-    "You must provide an authorization implementation to sessionMiddleware as unstable_isAuthorized(userRoles, input)",
+    sessionConfig.isAuthorized,
+    "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
   config = {
     ...defaultConfig,
@@ -223,7 +224,7 @@ export class SessionContextClass implements SessionContext {
   isAuthorized(input?: any) {
     if (!this.userId) return false
 
-    return config.unstable_isAuthorized(this.roles, input)
+    return config.isAuthorized(this.roles, input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -262,16 +263,14 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: HashaInput = "") => hasha(input, {algorithm: "sha256"})
-
-export const generateToken = () => nanoid(32)
+const TOKEN_LENGTH = 32
 
 export const generateEssentialSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
 }
 
 export const generateAnonymousSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
 }
 
 export const createSessionToken = (handle: string, publicData: PublicData | string) => {
@@ -284,14 +283,14 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
   } else {
     publicDataString = JSON.stringify(publicData)
   }
-  return btoa(
-    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
+  return toBase64(
+    [handle, generateToken(TOKEN_LENGTH), hash256(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
 }
 export const parseSessionToken = (token: string) => {
-  const [handle, id, hashedPublicData, version] = atob(token).split(TOKEN_SEPARATOR)
+  const [handle, id, hashedPublicData, version] = fromBase64(token).split(TOKEN_SEPARATOR)
 
   if (!handle || !id || !hashedPublicData || !version) {
     throw new AuthenticationError("Failed to parse session token")
@@ -306,11 +305,11 @@ export const parseSessionToken = (token: string) => {
 }
 
 export const createPublicDataToken = (publicData: string | PublicData) => {
-  const payload = [typeof publicData === "string" ? publicData : JSON.stringify(publicData)]
-  return btoa(payload.join(TOKEN_SEPARATOR))
+  const payload = typeof publicData === "string" ? publicData : JSON.stringify(publicData)
+  return toBase64(payload)
 }
 
-export const createAntiCSRFToken = () => generateToken()
+export const createAntiCSRFToken = () => generateToken(TOKEN_LENGTH)
 
 export type AnonymousSessionPayload = {
   isAnonymous: true
@@ -400,7 +399,7 @@ export const setSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
       secure:
@@ -408,6 +407,7 @@ export const setSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -421,7 +421,7 @@ export const setAnonymousSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
       secure:
@@ -429,6 +429,7 @@ export const setAnonymousSessionCookie = (
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -443,13 +444,14 @@ export const setCSRFCookie = (
   debug("setCSRFCookie", antiCSRFToken)
   setCookie(
     res,
-    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -464,13 +466,14 @@ export const setPublicDataCookie = (
   setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
     res,
-    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
         process.env.NODE_ENV === "production" &&
         !isLocalhost(req),
       sameSite: config.sameSite,
+      domain: config.domain,
       expires: expiresAt,
     }),
   )
@@ -483,9 +486,9 @@ export async function getSession(
   req: BlitzApiRequest,
   res: ServerResponse,
 ): Promise<SessionKernel | null> {
-  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
-  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
-  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
+  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
+  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
+  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
     req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
@@ -511,10 +514,10 @@ export async function getSession(
       debug("Session not found in DB")
       return null
     }
-    if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
+    if (persistedSession.hashedSessionToken !== hash256(sessionToken)) {
       debug("sessionToken hash did not match")
       debug("persisted: ", persistedSession.hashedSessionToken)
-      debug("in req: ", hash(sessionToken))
+      debug("in req: ", hash256(sessionToken))
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -538,7 +541,7 @@ export async function getSession(
     if (req.method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
-      const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+      const hasPublicDataChanged = hash256(persistedSession.publicData) !== hashedPublicData
       if (hasPublicDataChanged) {
         debug("PublicData has changed since the last request")
       }
@@ -643,6 +646,8 @@ export async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, "", new Date(0))
+    removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -687,7 +692,7 @@ export async function createNewSession(
       expiresAt,
       handle,
       userId: newPublicData.userId,
-      hashedSessionToken: hash(sessionToken),
+      hashedSessionToken: hash256(sessionToken),
       antiCSRFToken,
       publicData: JSON.stringify(newPublicData),
       privateData: JSON.stringify(newPrivateData),
@@ -699,6 +704,7 @@ export async function createNewSession(
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, "", new Date(0))
     removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -765,7 +771,7 @@ export async function refreshSession(
     if (publicDataChanged) {
       await config.updateSession(sessionKernel.handle, {
         expiresAt,
-        hashedSessionToken: hash(sessionToken),
+        hashedSessionToken: hash256(sessionToken),
         publicData: JSON.stringify(sessionKernel.publicData),
       })
     } else {

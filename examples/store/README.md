@@ -3,7 +3,7 @@
 1. DB migrate
 
 ```
-yarn blitz db migrate
+yarn blitz prisma migrate dev --preview-feature
 ```
 
 2. Start the dev server

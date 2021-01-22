@@ -1,8 +1,8 @@
-import {createStagePages} from "."
-import File from "vinyl"
-import {DuplicatePathError} from "./errors"
 import {normalize} from "path"
+import File from "vinyl"
 import {mockStageArgs} from "../stage-test-utils"
+import {createStagePages} from "."
+import {DuplicatePathError} from "./errors"
 
 function getStreamWithInputCache(entries: string[]) {
   return createStagePages(mockStageArgs({entries})).stream

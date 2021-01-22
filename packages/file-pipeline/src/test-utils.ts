@@ -1,4 +1,4 @@
-import {through, pipeline} from "./streams"
+import {pipeline, through} from "./streams"
 
 const defaultLogger = (file: any) => (typeof file === "string" ? file : file.path)
 
@@ -8,7 +8,7 @@ export function testStreamItems(
   expected: any[],
   logger: (a: any) => any = defaultLogger,
 ) {
-  return new Promise((done) => {
+  return new Promise<void>((done) => {
     const log: string[] = []
 
     const st = pipeline(

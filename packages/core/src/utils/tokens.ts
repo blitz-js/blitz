@@ -1,4 +1,4 @@
-import {TOKEN_SEPARATOR} from "../constants"
+import {fromBase64} from "b64-lite"
 import {PublicData} from "../types"
 
 function assert(condition: any, message: string): asserts condition {
@@ -8,7 +8,7 @@ function assert(condition: any, message: string): asserts condition {
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")
 
-  const [publicDataStr] = atob(token).split(TOKEN_SEPARATOR)
+  const publicDataStr = fromBase64(token)
   try {
     const publicData: PublicData = JSON.parse(publicDataStr)
     return {

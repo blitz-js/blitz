@@ -1,8 +1,9 @@
-import React from "react"
 import {render as defaultRender} from "@testing-library/react"
 import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
+import React from "react"
+import {deserialize} from "superjson"
 
 export * from "@testing-library/react"
 
@@ -25,6 +26,7 @@ const mockRouter: NextRouter = {
   route: "/",
   asPath: "/",
   query: {},
+  isReady: true,
   push: jest.fn(),
   replace: jest.fn(),
   reload: jest.fn(),
@@ -73,4 +75,33 @@ export function renderHook(
   }
 
   return defaultRenderHook(hook, {wrapper, ...options})
+}
+
+// This enhance fn does what getIsomorphicEnhancedResolver does during build time
+export function enhanceQueryFn(fn: any) {
+  const newFn = (...args: any) => {
+    const [data, ...rest] = args
+    return fn(deserialize(data), ...rest)
+  }
+  newFn._meta = {
+    name: "testResolver",
+    type: "query",
+    path: "app/test",
+    apiUrl: "test/url",
+  }
+  return newFn
+}
+// This one doesn't call deserialize
+export function enhanceInfiniteQueryFn(fn: any) {
+  const newFn = (...args: any) => {
+    const [data, ...rest] = args
+    return fn(data, ...rest)
+  }
+  newFn._meta = {
+    name: "testResolver",
+    type: "query",
+    path: "app/test",
+    apiUrl: "test/url",
+  }
+  return newFn
 }

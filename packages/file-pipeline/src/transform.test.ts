@@ -1,10 +1,10 @@
-import {transform} from "./transform"
-import {testStreamItems} from "./test-utils"
-import {PipelineItem} from "types"
-import {isFile, isEvent} from "./utils"
-import File from "vinyl"
-import through2 from "through2"
 import {normalize} from "path"
+import through2 from "through2"
+import {PipelineItem} from "types"
+import File from "vinyl"
+import {testStreamItems} from "./test-utils"
+import {transform} from "./transform"
+import {isEvent, isFile} from "./utils"
 
 describe("transform", () => {
   describe("when it uses the files filter", () => {

@@ -11,9 +11,10 @@ export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
   devFolder?: string
+  routeFolder?: string
   clean?: boolean
   // -
-  isTypescript?: boolean
+  isTypeScript?: boolean
   watch?: boolean
   // -
   transformFiles?: Synchronizer
@@ -23,15 +24,16 @@ export type ServerConfig = {
   hostname?: string
   inspect?: boolean
   // –
-  env?: ServerEnvironment
+  env: ServerEnvironment
 }
 
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
   devFolder: string
+  routeFolder: string
   clean?: boolean
   // -
-  isTypescript: boolean
+  isTypeScript: boolean
   watch: boolean
   // -
   transformFiles: Synchronizer
@@ -49,27 +51,30 @@ const defaults = {
   // -
   buildFolder: ".blitz/caches/build",
   devFolder: ".blitz/caches/dev",
+  routeFolder: ".blitz/caches/routes",
   // -
   writeManifestFile: true,
   // -
   ignoredPaths: [
     "./build/**/*",
-    "./.blitz-*/**/*",
-    "./.blitz/**/*",
-    "./.heroku/**/*",
-    "./.profile.d/**/*",
-    "./.cache/**/*",
+    "**/.blitz-*/**/*",
+    "**/.blitz/**/*",
+    "**/.heroku/**/*",
+    "**/.profile.d/**/*",
+    "**/.cache/**/*",
     "./.config/**/*",
-    ".DS_Store",
-    ".git/**/*",
-    ".next/**/*",
-    "*.log",
-    ".vercel/**/*",
-    ".now/**/*",
-    "*.pnp.js",
+    "**/.DS_Store",
+    "**/.git/**/*",
+    "**/.next/**/*",
+    "**/*.log",
+    "**/.vercel/**/*",
+    "**/.now/**/*",
+    "**/*.pnp.js",
+    "**/*.sqlite*",
     "coverage/**/*",
+    ".coverage/**/*",
     "dist/**/*",
-    "node_modules/**/*",
+    "**/node_modules/**/*",
     "cypress/**/*",
     "test/**/*",
     "tests/**/*",
@@ -77,6 +82,7 @@ const defaults = {
     "specs/**/*",
     "**/*.test.*",
     "**/*.spec.*",
+    "**/.yalc/**/*",
   ],
   includePaths: ["**/*"],
 }
@@ -94,8 +100,9 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
     devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
+    routeFolder: resolve(rootFolder, config.routeFolder ?? defaults.routeFolder),
     // -
-    isTypescript: config.isTypescript ?? (await getIsTypescript(rootFolder)),
+    isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",
     clean: config.clean,
     // -
@@ -117,7 +124,7 @@ async function getNextBin(rootFolder: string, usePatched: boolean = false): Prom
   return resolve(rootFolder, nextBin)
 }
 
-async function getIsTypescript(rootFolder: string): Promise<boolean> {
+async function getIsTypeScript(rootFolder: string): Promise<boolean> {
   try {
     await promises.access(join(rootFolder, "tsconfig.json"))
     return true

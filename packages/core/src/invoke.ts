@@ -1,17 +1,17 @@
+import {baseLogger, chalk, log as displayLog} from "@blitzjs/display"
+import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
 import {
-  QueryFn,
-  FirstParam,
-  PromiseReturnType,
-  Resolver,
   EnhancedResolver,
   EnhancedResolverRpcClient,
-  MiddlewareResponse,
+  FirstParam,
   InvokeWithMiddlewareConfig,
+  MiddlewareResponse,
+  PromiseReturnType,
+  QueryFn,
+  Resolver,
 } from "./types"
 import {isClient} from "./utils"
-import {baseLogger, log as displayLog, chalk} from "@blitzjs/display"
-import prettyMs from "pretty-ms"
-import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
+import {prettyMs} from "./utils/pretty-ms"
 
 export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = PromiseReturnType<T>>(
   queryFn: T,
@@ -52,16 +52,16 @@ export async function invokeWithMiddleware<TInput, TResult>(
   }
 
   middleware.push(async (_req, res, next) => {
-    const log = baseLogger.getChildLogger({prefix: [enhancedResolver._meta.name + "()"]})
+    const log = baseLogger().getChildLogger({prefix: [enhancedResolver._meta.name + "()"]})
     displayLog.newline()
     try {
       log.info(chalk.dim("Starting with input:"), params)
-      const startTime = new Date().getTime()
+      const startTime = Date.now()
 
       const result = await enhancedResolver(params, res.blitzCtx)
 
-      const duration = prettyMs(new Date().getTime() - startTime)
-      log.info(chalk.dim("Finished", "in", duration))
+      const duration = Date.now() - startTime
+      log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
       displayLog.newline()
 
       res.blitzResult = result

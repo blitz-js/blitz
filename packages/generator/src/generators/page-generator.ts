@@ -1,6 +1,6 @@
-import {Generator, GeneratorOptions} from "../generator"
 import {join} from "path"
-import {camelCaseToKebabCase} from "../utils/kebab-case"
+import {Generator, GeneratorOptions} from "../generator"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -59,6 +59,6 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     const parent = this.options.parentModels
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
-    return `app/${this.getModelNamesPath()}/pages/${parent}${kebabCaseModelName}`
+    return `app/pages/${parent}${kebabCaseModelName}`
   }
 }

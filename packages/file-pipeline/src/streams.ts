@@ -1,9 +1,8 @@
 // The following are a loose collaction of stream
 // helpers based on the missisippi library
 
-import {Stream} from "stream"
-
 import pipe from "pump"
+import {Stream} from "stream"
 export {pipe}
 
 import through from "through2"

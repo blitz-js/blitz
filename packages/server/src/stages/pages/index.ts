@@ -1,16 +1,16 @@
+import {Stage, transform} from "@blitzjs/file-pipeline"
+import flow from "lodash/flow"
 import {join} from "path"
 import {absolutePathTransform} from "../utils"
-import {Stage, transform} from "@blitzjs/file-pipeline"
-import {handleErrors, DuplicatePathError} from "./errors"
-import flow from "lodash/flow"
+import {DuplicatePathError, handleErrors} from "./errors"
 
 export function pagesPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(pages[\\/].+(?<!\.test))$/
   return (regex.exec(path) || [])[1] || path
 }
 
 export function apiPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+(?<!\.test))$/
   const matchedPath = (regex.exec(path) || [])[1]
   return matchedPath ? join("pages", matchedPath) : path
 }
@@ -102,6 +102,8 @@ export const createStagePages: Stage = ({config, bus, getInputCache}) => {
       )
     }
 
+    file.originalPath = file.path
+    file.originalRelative = file.relative
     file.path = apiTransformer(pagesTransformer(file.path))
 
     return file

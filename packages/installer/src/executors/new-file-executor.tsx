@@ -1,11 +1,11 @@
-import {ExecutorConfig, executorArgument, getExecutorArgument, Executor} from "./executor"
 import {Generator, GeneratorOptions} from "@blitzjs/generator"
-import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Box, Text} from "ink"
+import Spinner from "ink-spinner"
 import {useEffect, useState} from "react"
 import * as React from "react"
-import {Box, Text} from "ink"
 import {Newline} from "../components/newline"
-import Spinner from "ink-spinner"
+import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface Config extends ExecutorConfig {
   targetDirectory?: executorArgument<string>

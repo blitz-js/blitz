@@ -1,7 +1,7 @@
-import db, {ProductCreateArgs} from "db"
+import db, {Prisma} from "db"
 
 type CreateProductInput = {
-  data: ProductCreateArgs["data"]
+  data: Prisma.ProductCreateArgs["data"]
 }
 export default async function createProduct({data}: CreateProductInput) {
   const product = await db.product.create({data})

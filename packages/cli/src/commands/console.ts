@@ -1,7 +1,7 @@
-import {Command} from "@oclif/command"
+import {Command, flags} from "@oclif/command"
 
 const projectRoot = require("pkg-dir").sync() || process.cwd()
-const isTypescript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
+const isTypeScript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
 
 export class Console extends Command {
   static description = "Run the Blitz console REPL"
@@ -12,7 +12,12 @@ export class Console extends Command {
     useColors: true,
   }
 
+  static flags = {
+    help: flags.help({char: "h"}),
+  }
+
   async run() {
+    this.parse(Console)
     const {log} = require("@blitzjs/display")
     const chalk = require("chalk")
     log.branded("You have entered the Blitz console")
@@ -20,7 +25,7 @@ export class Console extends Command {
     console.log(chalk.yellow("      - Use your db like this: await db.project.findMany()"))
     console.log(chalk.yellow("      - Use your queries/mutations like this: await getProjects({})"))
 
-    if (isTypescript) {
+    if (isTypeScript) {
       require("../utils/setup-ts-node").setupTsnode()
     }
 

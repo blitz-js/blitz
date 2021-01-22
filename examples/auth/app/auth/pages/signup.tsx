@@ -1,8 +1,7 @@
 import {Head, useRouter, BlitzPage, useMutation} from "blitz"
 import {Form, FORM_ERROR} from "app/components/Form"
 import {LabeledTextField} from "app/components/LabeledTextField"
-import signup from "app/auth/mutations/signup"
-import {SignupInput} from "app/auth/validations"
+import signup, {SignupInput} from "app/auth/mutations/signup"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()

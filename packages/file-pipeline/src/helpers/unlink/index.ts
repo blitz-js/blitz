@@ -1,8 +1,7 @@
 import * as fs from "fs-extra"
-
 import {relative, resolve} from "path"
-import {transform} from "../../transform"
 import {EventedFile} from "types"
+import {transform} from "../../transform"
 
 function getDestPath(folder: string, file: EventedFile) {
   return resolve(folder, relative(file.cwd, file.path))

@@ -1,6 +1,6 @@
 /* eslint-disable import/first */
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
   {
@@ -13,6 +13,12 @@ const mocks = multiMock(
   },
   resolve(__dirname, "../src"),
 )
+
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
 import {build} from "../src/build"
@@ -38,6 +44,7 @@ describe("Build command", () => {
       writeManifestFile: false,
       port: 3000,
       hostname: "localhost",
+      env: "prod",
     })
   })
 
@@ -51,7 +58,6 @@ describe("Build command", () => {
         {
           children: [
             {name: "blitz.config.js"},
-            {name: "last-build"},
             {name: "next.config.js"},
             {name: "one"},
             {name: "two"},

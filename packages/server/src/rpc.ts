@@ -1,22 +1,21 @@
 import {
-  Middleware,
   BlitzApiRequest,
   BlitzApiResponse,
   EnhancedResolver,
   handleRequestWithMiddleware,
+  Middleware,
+  prettyMs,
 } from "@blitzjs/core"
-import {serializeError} from "serialize-error"
-import {serialize, deserialize} from "superjson"
-import chalk from "chalk"
-import prettyMs from "pretty-ms"
 import {baseLogger, log as displayLog} from "@blitzjs/display"
+import chalk from "chalk"
+import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,
   connectDb?: () => any,
 ): Middleware => {
   return async (req, res, next) => {
-    const log = baseLogger.getChildLogger({prefix: [resolver._meta.name + "()"]})
+    const log = baseLogger().getChildLogger({prefix: [resolver._meta.name + "()"]})
 
     if (req.method === "HEAD") {
       // Warm the lamda and connect to DB
@@ -39,23 +38,19 @@ const rpcMiddleware = <TInput, TResult>(
       }
 
       try {
-        const data = (req.body.params === undefined
-          ? undefined
-          : deserialize({json: req.body.params, meta: req.body.meta?.params})) as TInput
+        const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
-        log.info(chalk.dim("Starting with input:"), data)
-        const startTime = new Date().getTime()
+        log.info(chalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        const startTime = Date.now()
 
         const result = await resolver(data, res.blitzCtx)
+        log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
 
-        const duration = prettyMs(new Date().getTime() - startTime)
-        log.info(chalk.dim("Finished", "in", duration))
-        displayLog.newline()
+        const serializationStartTime = Date.now()
+        const serializedResult = serialize(result)
+        log.debug(chalk.dim(`Serialized in ${prettyMs(Date.now() - serializationStartTime)}`))
 
         res.blitzResult = result
-
-        const serializedResult = serialize(result as any)
-
         res.json({
           result: serializedResult.json,
           error: null,
@@ -63,6 +58,11 @@ const rpcMiddleware = <TInput, TResult>(
             result: serializedResult.meta,
           },
         })
+
+        const duration = Date.now() - startTime
+        log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
+        displayLog.newline()
+
         return next()
       } catch (error) {
         if (error._clearStack) {
@@ -71,22 +71,24 @@ const rpcMiddleware = <TInput, TResult>(
         log.error(error)
         displayLog.newline()
 
-        // Don't transmit the server stack trace via HTTP
-        delete error.stack
-
         if (!error.statusCode) {
           error.statusCode = 500
         }
 
+        const serializedError = serialize(error)
+
         res.json({
           result: null,
-          error: serializeError(error),
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
         })
         return next()
       }
     } else {
       // Everything else is error
-      log.error("Not Found\n")
+      log.warn(`${req.method} method not supported`)
       res.status(404).end()
       return next()
     }

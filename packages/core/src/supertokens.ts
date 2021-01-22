@@ -1,9 +1,9 @@
 import {useState} from "react"
-import {publicDataStore} from "./public-data-store"
-import {useIsomorphicLayoutEffect} from "./utils/hooks"
-import {readCookie} from "./utils/cookie"
-import {PublicData} from "./types"
 import {COOKIE_CSRF_TOKEN} from "./constants"
+import {publicDataStore} from "./public-data-store"
+import {PublicData} from "./types"
+import {readCookie} from "./utils/cookie"
+import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -19,12 +19,13 @@ export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
+  domain?: string
   getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  unstable_isAuthorized: (userRoles: string[], input?: any) => boolean
+  isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
 export interface SessionContextBase {
@@ -55,7 +56,7 @@ export interface AuthenticatedSessionContext extends SessionContextBase {
   publicData: PublicData
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
+export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
 export interface PublicDataWithLoading extends PublicData {
   isLoading: boolean

@@ -1,4 +1,4 @@
-import {extractRouterParams, useParams, useParam} from "../src/use-params"
+import {extractRouterParams, useParam, useParams} from "../src/use-params"
 import {renderHook} from "./test-utils"
 
 describe("extractRouterParams", () => {
@@ -76,8 +76,8 @@ describe("useParams", () => {
     const {result} = renderHook(() => useParams("number"), {router: {query}})
     expect(result.current).toEqual({
       id: 1,
-      cat: NaN,
-      slug: NaN,
+      cat: undefined,
+      slug: undefined,
     })
   })
 
@@ -92,7 +92,10 @@ describe("useParams", () => {
 
     const {result} = renderHook(() => useParams("array"), {router: {query}})
     expect(result.current).toEqual({
+      id: ["1"],
+      cat: ["category"],
       slug: ["example", "multiple", "slugs"],
+      empty: [""],
     })
   })
 })
@@ -133,11 +136,11 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("cat", "string"), {router: {query}}))
     expect(result.current).toEqual("category")
     ;({result} = renderHook(() => useParam("slug", "string"), {router: {query}}))
-    expect(result.current).toEqual("")
+    expect(result.current).toEqual(undefined)
     ;({result} = renderHook(() => useParam("empty", "string"), {router: {query}}))
     expect(result.current).toEqual("")
     ;({result} = renderHook(() => useParam("doesnt-exist", "string"), {router: {query}}))
-    expect(result.current).toEqual("")
+    expect(result.current).toBeUndefined()
   })
 
   it("works with number", () => {
@@ -152,13 +155,13 @@ describe("useParam", () => {
     let {result} = renderHook(() => useParam("id", "number"), {router: {query}})
     expect(result.current).toEqual(1)
     ;({result} = renderHook(() => useParam("cat", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("slug", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("empty", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("doesnt-exist", "number"), {router: {query}}))
-    expect(result.current).toEqual(NaN)
+    expect(result.current).toBeUndefined()
   })
 
   it("works with array", () => {
@@ -179,6 +182,6 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("empty", "array"), {router: {query}}))
     expect(result.current).toEqual([""])
     ;({result} = renderHook(() => useParam("doesnt-exist", "array"), {router: {query}}))
-    expect(result.current).toEqual([])
+    expect(result.current).toBeUndefined()
   })
 })

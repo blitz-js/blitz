@@ -1,9 +1,9 @@
-import {createWorkOptimizer} from "."
-import {take} from "../../test-utils"
-import {hash} from "../../utils"
-import {pipeline} from "../../streams"
 import {normalize, resolve} from "path"
 import File from "vinyl"
+import {pipeline} from "../../streams"
+import {take} from "../../test-utils"
+import {hash} from "../../utils"
+import {createWorkOptimizer} from "."
 
 const pathToOneHash = hash(normalize("to/one"))
 const pathToTwoHash = hash(normalize("to/two"))

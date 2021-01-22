@@ -2,11 +2,9 @@
 // helpers based on the missisippi library
 
 import {Stream} from "stream"
-
 // Remove error 'default' is imported from external module 'pump' but never used
 // import pipe from 'pump'
 // export {pipe}
-
 import through from "through2"
 export {through}
 

@@ -1,6 +1,6 @@
 import React from "react"
-import {act, render, screen} from "./test-utils"
 import {useMutation} from "../src/use-mutation"
+import {act, render, screen} from "./test-utils"
 
 // This enhance fn does what getIsomorphicEnhancedResolver does during build time
 const enhance = (fn: any) => {
@@ -32,7 +32,7 @@ describe("useMutation", () => {
   describe("useMutation calls the resolver with the argument", () => {
     // eslint-disable-next-line require-await
     const mutateFn = jest.fn()
-    it("should work with Blitz queries", async () => {
+    it("should work with Blitz mutations", async () => {
       const [res] = setupHook(enhance(mutateFn))
       await act(async () => {
         await res.mutate!("data")
@@ -40,6 +40,11 @@ describe("useMutation", () => {
         expect(mutateFn).toHaveBeenCalledTimes(1)
         expect(mutateFn).toHaveBeenCalledWith("data", {fromQueryHook: true})
       })
+    })
+
+    it("shouldn't work with regular functions", () => {
+      console.error = jest.fn()
+      expect(() => setupHook(mutateFn)).toThrowErrorMatchingSnapshot()
     })
   })
 })

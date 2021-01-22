@@ -1,12 +1,12 @@
+import {Box, Static, Text, useApp} from "ink"
 import React from "react"
-import {Box, Text, useApp, Static} from "ink"
-import {ExecutorConfig, Executor, Frontmatter} from "./executors/executor"
-import {RecipeMeta} from "./types"
 import {Newline} from "./components/newline"
-import {useEnterToContinue} from "./utils/use-enter-to-continue"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
-import * as NewFileExecutor from "./executors/new-file-executor"
+import {Executor, ExecutorConfig, Frontmatter} from "./executors/executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
+import {RecipeMeta} from "./types"
+import {useEnterToContinue} from "./utils/use-enter-to-continue"
 
 enum Action {
   SkipStep,

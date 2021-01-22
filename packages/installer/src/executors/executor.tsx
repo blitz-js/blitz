@@ -1,5 +1,5 @@
-import * as React from "react"
 import {Box, Text} from "ink"
+import * as React from "react"
 import {Newline} from "../components/newline"
 
 export interface ExecutorConfig {

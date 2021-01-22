@@ -1,13 +1,13 @@
 import {Ctx} from "blitz"
-import db, {__ModelName__CreateArgs} from "db"
+import db, {Prisma} from "db"
 
 if (process.env.parentModel) {
   type Create__ModelName__Input = {
-    data: Omit<__ModelName__CreateArgs["data"], "__parentModel__">
+    data: Omit<Prisma.__ModelName__CreateArgs["data"], "__parentModel__">
     __parentModelId__: number
   }
 } else {
-  type Create__ModelName__Input = Pick<__ModelName__CreateArgs, "data">
+  type Create__ModelName__Input = Pick<Prisma.__ModelName__CreateArgs, "data">
 }
 
 if (process.env.parentModel) {

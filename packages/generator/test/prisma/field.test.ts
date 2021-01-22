@@ -46,6 +46,22 @@ describe("Field model", () => {
     expect(Field.parse("name").toString()).toMatchInlineSnapshot(`"name  String"`)
   })
 
+  it("allow number characters in model name", () => {
+    expect(Field.parse("name2").toString()).toMatchInlineSnapshot(`"name2  String"`)
+  })
+
+  it("allow underscore characters in model name", () => {
+    expect(Field.parse("first_name").toString()).toMatchInlineSnapshot(`"first_name  String"`)
+  })
+
+  it("disallows number as a first character in model name", () => {
+    expect(() => Field.parse("2first").toString()).toThrow()
+  })
+
+  it("disallows underscore as a first character in model name", () => {
+    expect(() => Field.parse("_first").toString()).toThrow()
+  })
+
   it("disallows special characters in model name", () => {
     expect(() => Field.parse("app-user:int")).toThrow()
   })
@@ -56,25 +72,6 @@ describe("Field model", () => {
 
   it("requires a name", () => {
     expect(() => Field.parse(":int")).toThrow()
-  })
-
-  it("handles hasOne relations", () => {
-    expect(Field.parse("hasOne:task").toString()).toMatchInlineSnapshot(`"task  Task"`)
-    expect(Field.parse("hasOne:tasks").toString()).toMatchInlineSnapshot(`"tasks  Task"`)
-    expect(Field.parse("hasOne:task?").toString()).toMatchInlineSnapshot(`"task  Task?"`)
-    expect(Field.parse("hasOne:tasks?").toString()).toMatchInlineSnapshot(`"tasks  Task?"`)
-    // list identifier should be ignored for singular relations
-    expect(Field.parse("hasOne:task[]").toString()).toMatchInlineSnapshot(`"task  Task"`)
-    expect(Field.parse("hasOne:tasks[]").toString()).toMatchInlineSnapshot(`"tasks  Task"`)
-  })
-
-  it("handles hasMany relations", () => {
-    expect(Field.parse("hasMany:task").toString()).toMatchInlineSnapshot(`"task  Task[]"`)
-    expect(Field.parse("hasMany:tasks").toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
-    expect(Field.parse("hasMany:task[]").toString()).toMatchInlineSnapshot(`"task  Task[]"`)
-    expect(Field.parse("hasMany:tasks[]").toString()).toMatchInlineSnapshot(`"tasks  Task[]"`)
-    // can't have optional lists, should erase optional param
-    expect(Field.parse("hasMany:task?").toString()).toMatchInlineSnapshot(`"task  Task[]"`)
   })
 
   it("handles belongsTo relations", () => {

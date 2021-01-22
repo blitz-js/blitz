@@ -1,17 +1,19 @@
 import {Form, Field} from "react-final-form"
-import {Product, ProductCreateInput, ProductUpdateInput} from "db"
+import {Product, Prisma} from "db"
 import createProduct from "../mutations/createProduct"
 import updateProduct from "../mutations/updateProduct"
 import {useMutation} from "blitz"
+// integration test for css modules
+import styles from "./ProductForm.module.scss"
 
-type ProductInput = ProductCreateInput | Product
+type ProductInput = Prisma.ProductCreateInput | Product
 
-function isNew(product: ProductInput): product is ProductCreateInput {
+function isNew(product: ProductInput): product is Prisma.ProductCreateInput {
   return (product as any).id === undefined
 }
 
 type ProductFormProps = {
-  product?: ProductUpdateInput
+  product?: Prisma.ProductUpdateInput
   style?: React.CSSProperties
   onSuccess: (product: Product) => any
 }
@@ -43,7 +45,12 @@ function ProductForm({product, style, onSuccess, ...props}: ProductFormProps) {
         }
       }}
       render={({handleSubmit}) => (
-        <form onSubmit={handleSubmit} style={{maxWidth: 400, ...style}} {...props}>
+        <form
+          onSubmit={handleSubmit}
+          style={{maxWidth: 400, ...style}}
+          className={styles.red}
+          {...props}
+        >
           <div style={{marginBottom: 16}}>
             <label style={{display: "flex", flexDirection: "column"}}>
               Product Name

@@ -1,5 +1,5 @@
+import {singlePascal} from "../utils/inflector"
 import {Field, FieldType} from "./field"
-import {singlePascal} from "../utils/plurals"
 
 function stringifyFieldsForPrinting(fields: Field[]) {
   let maxNameLength = 1

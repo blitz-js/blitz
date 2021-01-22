@@ -1,5 +1,5 @@
-import {BlitzApiRequest} from "../"
 import {IncomingMessage} from "http"
+import {BlitzApiRequest} from "../"
 
 export const isServer = typeof window === "undefined"
 export const isClient = typeof window !== "undefined"

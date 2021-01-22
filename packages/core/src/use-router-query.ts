@@ -1,5 +1,5 @@
-import {useMemo} from "react"
 import {useRouter} from "next/router"
+import {useMemo} from "react"
 import {parse} from "url"
 
 export function useRouterQuery() {

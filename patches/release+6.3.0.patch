@@ -1,0 +1,170 @@
+diff --git a/node_modules/release/bin/release.js b/node_modules/release/bin/release.js
+index b005c99..713205f 100755
+--- a/node_modules/release/bin/release.js
++++ b/node_modules/release/bin/release.js
+@@ -53,25 +53,49 @@ let githubConnection;
+ let repoDetails;
+ 
+ const changeTypes = [
+-	{
+-		handle: 'major',
+-		name: 'Major Change',
+-		pluralName: 'Major Changes',
+-		description: 'incompatible API change'
+-	},
+-	{
+-		handle: 'minor',
+-		name: 'Minor Change',
+-		pluralName: 'Minor Changes',
+-		description: 'backwards-compatible functionality'
+-	},
+-	{
+-		handle: 'patch',
+-		name: 'Patch',
+-		pluralName: 'Patches',
+-		description: 'backwards-compatible bug fix'
+-	}
+-];
++  {
++    handle: 'major',
++    name: 'Breaking Change',
++    pluralName: '💥 Breaking Changes',
++    description: 'incompatible API change',
++  },
++  {
++    handle: 'minor',
++    name: 'Minor - New Feature',
++    pluralName: '🚀 New Features',
++    description: 'backwards-compatible functionality',
++  },
++  {
++    handle: 'patch',
++    name: 'Patch',
++    pluralName: '🐞 Patches',
++    description: 'backwards-compatible bug fix',
++  },
++  {
++    handle: 'newapp',
++    name: 'New App Template',
++    pluralName: '⚡️ Changes to the New App Template',
++    description: 'change to new app template',
++  },
++  {
++    handle: 'recipe',
++    name: 'Recipe',
++    pluralName: '👩‍🍳 Recipes',
++    description: 'change to a recipe',
++  },
++  {
++    handle: 'example',
++    name: 'Example App',
++    pluralName: '👀 Changes to Example Apps',
++    description: 'change to example app',
++  },
++  {
++    handle: 'meta',
++    name: 'Meta',
++    pluralName: 'Internal Meta Changes',
++    description: 'internal meta change',
++  },
++]
+ 
+ const getReleaseURL = (release, edit = false) => {
+ 	if (!release || !release.html_url) {
+diff --git a/node_modules/release/lib/choices.js b/node_modules/release/lib/choices.js
+index 6d08754..ee1a3be 100644
+--- a/node_modules/release/lib/choices.js
++++ b/node_modules/release/lib/choices.js
+@@ -13,20 +13,20 @@ module.exports = (changeTypes, tags) => {
+ 
+ 	const releaseType = semVer.diff(tags[1].version, tags[0].version);
+ 
+-	switch (releaseType) {
+-	case 'minor':
+-		notNeeded = 1;
+-		break;
+-	case 'patch':
+-		notNeeded = 2;
+-		break;
+-	default:
+-		notNeeded = 0;
+-	}
+-
+-	if (notNeeded) {
+-		changeTypes.splice(0, notNeeded);
+-	}
++	// switch (releaseType) {
++	// case 'minor':
++	// 	notNeeded = 1;
++	// 	break;
++	// case 'patch':
++	// 	notNeeded = 2;
++	// 	break;
++	// default:
++	// 	notNeeded = 0;
++	// }
++  //
++	// if (notNeeded) {
++	// 	changeTypes.splice(0, notNeeded);
++	// }
+ 
+ 	for (const type of changeTypes) {
+ 		const short = type.handle;
+diff --git a/node_modules/release/lib/definitions.js b/node_modules/release/lib/definitions.js
+index ce5ece4..62b4a35 100644
+--- a/node_modules/release/lib/definitions.js
++++ b/node_modules/release/lib/definitions.js
+@@ -1,28 +1,32 @@
+ exports.type = (text, changeTypes) => {
+-	const list = [
+-		...changeTypes,
+-		{
+-			handle: 'ignore'
+-		}
+-	];
++  const list = [
++    ...changeTypes,
++    {
++      handle: "ignore",
++    },
++  ]
+ 
+-	for (const type of list) {
+-		const handle = `(${type.handle})`;
++  for (const type of list) {
++    const handle = `(${type.handle})`
+ 
+-		if (text.includes(handle)) {
+-			return type.handle;
+-		}
+-	}
++    if (text.includes(handle)) {
++      return type.handle
++    }
+ 
+-	return false;
+-};
++    if (text.includes("allcontributors")) {
++      return "meta"
++    }
++  }
+ 
+-exports.reference = title => {
+-	const match = / \(#[-0-9]+\)/.exec(title);
++  return false
++}
+ 
+-	if (!match) {
+-		return false;
+-	}
++exports.reference = (title) => {
++  const match = / \(#[-0-9]+\)/.exec(title)
+ 
+-	return match[0].replace(' (', '').replace(')', '');
+-};
++  if (!match) {
++    return false
++  }
++
++  return match[0].replace(" (", "").replace(")", "")
++}

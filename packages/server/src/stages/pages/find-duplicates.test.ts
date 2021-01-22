@@ -1,5 +1,5 @@
-import {fullTransformer, findDuplicates, filterBy} from "."
 import {normalize} from "path"
+import {filterBy, findDuplicates, fullTransformer} from "."
 
 test("should filter by path", () => {
   expect(fullTransformer(normalize("app/foo/pages/api/bar.ts"))).toBe(normalize("pages/api/bar.ts"))

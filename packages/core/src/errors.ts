@@ -1,3 +1,10 @@
+import SuperJson from "superjson"
+
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.allowErrorProps("code")
+  SuperJson.allowErrorProps("meta")
+}
+
 export class AuthenticationError extends Error {
   name = "AuthenticationError"
   statusCode = 401
@@ -8,6 +15,9 @@ export class AuthenticationError extends Error {
     return true
   }
 }
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(AuthenticationError, "BlitzAuthenticationError")
+}
 
 export class CSRFTokenMismatchError extends Error {
   name = "CSRFTokenMismatchError"
@@ -15,6 +25,9 @@ export class CSRFTokenMismatchError extends Error {
   get _clearStack() {
     return true
   }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(CSRFTokenMismatchError, "BlitzCSRFTokenMismatchError")
 }
 
 export class AuthorizationError extends Error {
@@ -27,6 +40,9 @@ export class AuthorizationError extends Error {
     return true
   }
 }
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(AuthorizationError, "BlitzAuthorizationError")
+}
 
 export class NotFoundError extends Error {
   name = "NotFoundError"
@@ -38,6 +54,9 @@ export class NotFoundError extends Error {
     return true
   }
 }
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(NotFoundError, "BlitzNotFoundError")
+}
 
 export class PaginationArgumentError extends Error {
   name = "PaginationArgumentError"
@@ -45,4 +64,7 @@ export class PaginationArgumentError extends Error {
   constructor(message = "The pagination arguments are invalid") {
     super(message)
   }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(PaginationArgumentError, "PaginationArgumentError")
 }

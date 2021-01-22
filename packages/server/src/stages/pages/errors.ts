@@ -1,6 +1,6 @@
 import {log} from "@blitzjs/display"
-import {Writable} from "stream"
 import {ERROR_THROWN} from "@blitzjs/file-pipeline"
+import {Writable} from "stream"
 
 export type Event<T> = {type: string; payload: T}
 

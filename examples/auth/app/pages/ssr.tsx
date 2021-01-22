@@ -7,6 +7,8 @@ import {
   PromiseReturnType,
   ErrorComponent as ErrorPage,
   useMutation,
+  AuthenticationError,
+  AuthorizationError,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
@@ -42,10 +44,10 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
       res.statusCode = 404
       res.end()
       return {props: {}}
-    } else if (error.name === "AuthenticationError") {
+    } else if (error instanceof AuthenticationError) {
       res.writeHead(302, {location: "/login"}).end()
       return {props: {}}
-    } else if (error.name === "AuthorizationError") {
+    } else if (error instanceof AuthorizationError) {
       return {
         props: {
           error: {

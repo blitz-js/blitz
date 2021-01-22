@@ -1,4 +1,4 @@
-name: Compressed Size
+name: CI
 
 on:
   pull_request:
@@ -6,14 +6,15 @@ on:
 
 jobs:
   build:
+    name: Compressed Size
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
       - name: Use Node and Yarn
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: "12.x"
+          node-version: "14"
       - name: Install dependencies
         run: |
           yarn && yarn build

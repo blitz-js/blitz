@@ -8,6 +8,8 @@
     "downlevelIteration": true,
     "paths": {
       "*": ["src/*", "node_modules/*"]
-    }
+    },
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   }
 }

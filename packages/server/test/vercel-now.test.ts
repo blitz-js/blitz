@@ -1,7 +1,7 @@
 /* eslint-disable import/first */
 
-import {multiMock} from "./utils/multi-mock"
 import {resolve} from "path"
+import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "next-utils": {
@@ -18,6 +18,10 @@ const mocks = multiMock(
 // Import with mocks applied
 import {build} from "../src/build"
 import {directoryTree} from "./utils/tree-utils"
+
+jest.mock("@blitzjs/config")
+import {getConfig} from "@blitzjs/config"
+;(getConfig as any).mockImplementation(() => ({}))
 
 describe("Build command Vercel", () => {
   const rootFolder = resolve("")
@@ -39,6 +43,7 @@ describe("Build command Vercel", () => {
       writeManifestFile: false,
       port: 3000,
       hostname: "localhost",
+      env: "prod",
     })
   })
 
@@ -52,7 +57,6 @@ describe("Build command Vercel", () => {
       name: ".blitz-build",
       children: [
         {name: "blitz.config.js"},
-        {name: "last-build"},
         {name: "next-vercel.config.js"},
         {name: "next.config.js"},
         {

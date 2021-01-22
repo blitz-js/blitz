@@ -1,7 +1,7 @@
-import * as path from "path"
-import resolveFrom from "resolve-from"
-import pkgDir from "pkg-dir"
 import chalk from "chalk"
+import * as path from "path"
+import pkgDir from "pkg-dir"
+import resolveFrom from "resolve-from"
 import {parseSemver} from "../utils/parse-semver"
 
 async function main() {
@@ -10,7 +10,7 @@ async function main() {
   if (options._[0] !== "autocomplete:script" || Object.keys(options).length > 1) {
     console.log(
       chalk.yellow(
-        `You are using alpha software - if you have any problems, please open an issue here:
+        `You are using beta software - if you have any problems, please open an issue here:
       https://github.com/blitz-js/blitz/issues/new/choose\n`,
       ),
     )

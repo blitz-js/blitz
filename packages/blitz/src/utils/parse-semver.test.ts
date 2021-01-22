@@ -3,7 +3,11 @@ import {parseSemver} from "./parse-semver"
 describe("parseSemver", () => {
   describe("when given a non-semver-string", () => {
     it("throws", () => {
-      expect(() => parseSemver("non-semver")).toThrow()
+      expect(parseSemver("non-semver")).toEqual({
+        major: NaN,
+        minor: undefined,
+        patch: undefined,
+      })
     })
   })
 

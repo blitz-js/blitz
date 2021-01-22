@@ -1,6 +1,6 @@
-import File from "vinyl"
-import {Stage, PipelineItem, transform} from "@blitzjs/file-pipeline"
+import {PipelineItem, Stage, transform} from "@blitzjs/file-pipeline"
 import debounce from "lodash/debounce"
+import File from "vinyl"
 
 type ManifestVO = {
   keys: {[k: string]: string}

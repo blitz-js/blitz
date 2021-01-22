@@ -1,7 +1,12 @@
+// tailwind.config.js
 module.exports = {
-  future: "all",
   purge: ["{app,pages}/**/*.{js,jsx,ts,tsx}"],
-  theme: {},
-  variants: {},
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
   plugins: [],
 }

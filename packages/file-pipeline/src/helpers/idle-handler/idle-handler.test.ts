@@ -1,7 +1,7 @@
-import {createIdleHandler} from "."
+import {IDLE, READY} from "../../events"
 import {pipeline, through} from "../../streams"
 import {testStreamItems} from "../../test-utils"
-import {IDLE, READY} from "../../events"
+import {createIdleHandler} from "."
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

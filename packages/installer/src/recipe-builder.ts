@@ -1,7 +1,7 @@
-import {RecipeExecutor, ExecutorConfigUnion} from "./recipe-executor"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
-import * as NewFileExecutor from "./executors/new-file-executor"
 import * as TransformFileExecutor from "./executors/file-transform-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
+import {ExecutorConfigUnion, RecipeExecutor} from "./recipe-executor"
 import {RecipeMeta} from "./types"
 
 export interface IRecipeBuilder {

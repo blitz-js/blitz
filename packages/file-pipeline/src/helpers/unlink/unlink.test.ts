@@ -1,7 +1,7 @@
-import {unlink} from "."
 import {normalize, resolve} from "path"
-import {take} from "../../test-utils"
 import File from "vinyl"
+import {take} from "../../test-utils"
+import {unlink} from "."
 
 describe("unlink", () => {
   it("should unlink the correct path", async () => {

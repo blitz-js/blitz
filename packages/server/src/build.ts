@@ -1,14 +1,10 @@
-import {move, pathExists, remove} from "fs-extra"
+import {copy, pathExists, remove} from "fs-extra"
 import {resolve} from "path"
-import {saveBuild} from "./build-hash"
 import {normalize, ServerConfig} from "./config"
 import {nextBuild} from "./next-utils"
 import {configureStages} from "./stages"
 
-export async function build(
-  config: ServerConfig,
-  readyForNextBuild: Promise<any> = Promise.resolve(),
-) {
+export async function build(config: ServerConfig) {
   const {
     rootFolder,
     transformFiles,
@@ -17,21 +13,18 @@ export async function build(
     ignore,
     include,
     watch,
-    isTypescript,
+    isTypeScript,
     writeManifestFile,
   } = await normalize(config)
 
-  const stages = configureStages({isTypescript, writeManifestFile})
+  const stages = configureStages({isTypeScript, writeManifestFile})
 
-  await Promise.all([
-    transformFiles(rootFolder, stages, buildFolder, {
-      ignore,
-      include,
-      watch,
-      clean: true, // always clean in build
-    }),
-    readyForNextBuild,
-  ])
+  await transformFiles(rootFolder, stages, buildFolder, {
+    ignore,
+    include,
+    watch,
+    clean: true, // always clean in build
+  })
 
   await nextBuild(nextBin, buildFolder)
 
@@ -43,8 +36,6 @@ export async function build(
   }
 
   if (await pathExists(buildNextFolder)) {
-    await move(buildNextFolder, rootNextFolder)
+    await copy(buildNextFolder, rootNextFolder)
   }
-
-  await saveBuild(buildFolder)
 }

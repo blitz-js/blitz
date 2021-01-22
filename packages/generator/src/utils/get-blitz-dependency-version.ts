@@ -1,6 +1,6 @@
-import {fetchDistTags} from "./npm-fetch"
 import {Fallbackable} from "./fallbackable"
 import {logFailedVersionFetch} from "./get-latest-version"
+import {fetchDistTags} from "./npm-fetch"
 
 export const getBlitzDependencyVersion = async (
   cliVersion: string,

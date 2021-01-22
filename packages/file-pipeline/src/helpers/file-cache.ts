@@ -1,7 +1,7 @@
-import {transform} from "../transform"
 import File from "vinyl"
+import {transform} from "../transform"
+import {FileCacheEntry, FileCacheInterface} from "../types"
 import {isEvent} from "../utils"
-import {FileCacheInterface, FileCacheEntry} from "../types"
 
 export class FileCache implements FileCacheInterface {
   fileCache: Record<string, FileCacheEntry> = {}

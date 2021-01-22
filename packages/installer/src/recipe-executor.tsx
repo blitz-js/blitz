@@ -1,9 +1,9 @@
-import React from "react"
-import * as AddDependencyExecutor from "./executors/add-dependency-executor"
-import * as NewFileExecutor from "./executors/new-file-executor"
-import * as FileTransformExecutor from "./executors/file-transform-executor"
 import {log} from "@blitzjs/display"
 import {render} from "ink"
+import React from "react"
+import * as AddDependencyExecutor from "./executors/add-dependency-executor"
+import * as FileTransformExecutor from "./executors/file-transform-executor"
+import * as NewFileExecutor from "./executors/new-file-executor"
 import {RecipeRenderer} from "./recipe-renderer"
 import {RecipeMeta} from "./types"
 
@@ -29,13 +29,12 @@ export class RecipeExecutor<Options extends RecipeMeta> {
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
       )
       await waitUntilExit()
+      log.info(
+        `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
+      )
     } catch (e) {
       log.error(e)
       return
     }
-
-    log.info(
-      `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-    )
   }
 }
