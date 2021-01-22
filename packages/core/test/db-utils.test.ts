@@ -50,12 +50,12 @@ describe("paginate", () => {
     expect(pagination()).rejects.toThrow(invalidTakeArgumentErrorMessage)
   })
 
-  it("throws an error if take is greater than takeMax", () => {
+  it("throws an error if take is greater than maxTake", () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
         take: 11,
-        takeMax: 10,
+        maxTake: 10,
         ...dummyPaginationPromises,
       })
 

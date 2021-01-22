@@ -38,4 +38,15 @@ model Product {
   name        String?
   description String?
   price       Int?
+
+  variants   Variant[]
+}
+
+model Variant {
+  id        Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
 }
