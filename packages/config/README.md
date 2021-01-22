@@ -1,11 +1,13 @@
 # `config`
 
-> TODO: description
+> A centralized source for reading project configurations from `blitz.config.js`.
 
 ## Usage
 
-```
-const config = require('config');
+```js
+import {getConfig} from "@blitzjs/config"
 
-// TODO: DEMONSTRATE API
+const config = getConfig()
+
+console.log(config._meta.packageName)
 ```
