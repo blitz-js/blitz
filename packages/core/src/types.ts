@@ -7,7 +7,20 @@ import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
-export * from "next/types"
+export {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticPaths,
+  GetStaticPathsContext,
+  GetStaticPathsResult,
+  GetStaticProps,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+  PageConfig,
+  Redirect,
+} from "next"
 export type BlitzApiRequest = NextApiRequest
 export type BlitzApiResponse = NextApiResponse
 export type BlitzComponentType = NextComponentType
