@@ -24,7 +24,8 @@
   "files": [
     "dist",
     "jest-preset.js",
-    "jest-preset"
+    "jest-preset",
+    "babel.js"
   ],
   "husky": {
     "hooks": {}
@@ -49,6 +50,7 @@
     "@blitzjs/generator": "0.29.2",
     "@blitzjs/installer": "0.29.2",
     "@blitzjs/server": "0.29.2",
+    "@blitzjs/babel-preset": "0.29.2",
     "eslint-config-blitz": "0.29.2",
     "envinfo": "^7.7.3",
     "os-name": "^4.0.0",

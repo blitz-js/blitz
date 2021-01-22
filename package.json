@@ -110,6 +110,8 @@
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-unicorn": "25.0.1",
     "husky": "4.3.7",
+    "@size-limit/preset-small-lib": "4.9.1",
+    "size-limit": "4.9.1",
     "jest": "26.6.3",
     "jest-environment-jsdom-sixteen": "1.0.3",
     "lerna": "3.22.1",
