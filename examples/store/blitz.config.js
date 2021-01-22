@@ -6,7 +6,7 @@ module.exports = {
     },
   ],
   log: {
-    level: "trace",
+    // level: "trace",
   },
   experimental: {
     isomorphicResolverImports: true,
