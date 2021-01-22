@@ -35,7 +35,7 @@ export default RecipeBuilder()
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add npm dependencies",
-    explanation: `Chakra requires some other dependencies like emotion to work`,
+    explanation: `Chakra UI requires some other dependencies like emotion to work`,
     packages: [
       {name: "@chakra-ui/react", version: "1.1.2"},
       {name: "@emotion/react", version: "11.1.4"},
@@ -46,7 +46,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
     stepName: "Import ChakraProvider component",
-    explanation: `We can import the chakra provider into _app, so it is accessible in the whole app`,
+    explanation: `We can import the chakra-ui provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
