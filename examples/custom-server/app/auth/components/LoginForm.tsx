@@ -1,9 +1,9 @@
 import React from "react"
-import { AuthenticationError, Link, useMutation } from "blitz"
-import { LabeledTextField } from "app/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/components/Form"
+import {AuthenticationError, Link, useMutation} from "blitz"
+import {LabeledTextField} from "app/components/LabeledTextField"
+import {Form, FORM_ERROR} from "app/components/Form"
 import login from "app/auth/mutations/login"
-import { LoginInput } from "app/auth/validations"
+import {LoginInput} from "app/auth/validations"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -19,14 +19,14 @@ export const LoginForm = (props: LoginFormProps) => {
       <Form
         submitText="Login"
         schema={LoginInput}
-        initialValues={{ email: "", password: "" }}
+        initialValues={{email: "", password: ""}}
         onSubmit={async (values) => {
           try {
             await loginMutation(values)
             props.onSuccess?.()
           } catch (error) {
             if (error instanceof AuthenticationError) {
-              return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
+              return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
               return {
                 [FORM_ERROR]:
@@ -40,7 +40,7 @@ export const LoginForm = (props: LoginFormProps) => {
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
       </Form>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div style={{marginTop: "1rem"}}>
         Or <Link href="/signup">Sign Up</Link>
       </div>
     </div>
