@@ -1,4 +1,4 @@
-import {Box, Static, Text, useApp} from "ink"
+import {Box, Static, Text, useApp, useInput} from "ink"
 import React from "react"
 import {Newline} from "./components/newline"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
@@ -76,18 +76,18 @@ const DispatchContext = React.createContext<React.Dispatch<{type: Action; data?:
 function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
     <Box flexDirection="column">
-      <Box flexDirection="column">
-        <Text color="#8a3df0" bold>
-          Welcome to the recipe for {recipeMeta.name}
-        </Text>
-        <Text color="#8a3df0" bold>
-          {recipeMeta.description}
-        </Text>
-      </Box>
-      <Text bold={false}>This recipe is authored and supported by {recipeMeta.owner}.</Text>
-      <Text>For additional documentation and support please visit {recipeMeta.repoLink}</Text>
+      <Text color="#8a3df0" bold>
+        Installing Recipe: {recipeMeta.name}
+      </Text>
+      <Text color="gray" italic>
+        Authored by {recipeMeta.owner}
+      </Text>
       <Newline />
-      <Text>Press ENTER to begin the recipe</Text>
+      <Text color="gray" italic>
+        {recipeMeta.description}
+      </Text>
+      <Newline />
+      <Text bold>Press ENTER to continue</Text>
     </Box>
   )
 }
@@ -125,15 +125,18 @@ function StepExecutor({
     } else if (status === Status.ReadyToCommit) {
       dispatch({type: Action.ApplyChange})
     }
-  }, [dispatch, status])
+    if (status === Status.Proposed && !Propose) {
+      dispatch({type: Action.CommitApproved})
+    }
+  }, [dispatch, status, Propose])
 
   return (
     <Box flexDirection="column">
       {status !== Status.Committed ? <Frontmatter executor={step} /> : null}
-      {[Status.Pending, Status.Proposed].includes(status) ? (
+      {[Status.Proposed].includes(status) && Propose ? (
         <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
       ) : null}
-      {[Status.ReadyToCommit, Status.Committing].includes(status) ? (
+      {[Status.Committing].includes(status) ? (
         <Commit
           cliArgs={cliArgs}
           proposalData={proposalData}
@@ -150,6 +153,13 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   const [state, dispatch] = React.useReducer(recipeReducer, {
     ...initialState,
     steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ""})),
+  })
+
+  useInput((input, key) => {
+    if (input === "c" && key.ctrl) {
+      exit(new Error("You aborted installation"))
+      return
+    }
   })
 
   useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
