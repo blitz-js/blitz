@@ -1,5 +1,5 @@
 {
-  "name": "@blitzjs/recipe-chakra",
+  "name": "@blitzjs/recipe-chakra-ui",
   "private": true,
   "version": "0.29.2",
   "description": "The Blitz Recipe for installing Chakra UI",
@@ -14,7 +14,8 @@
   "keywords": [
     "blitz",
     "blitzjs",
-    "chakra"
+    "chakra",
+    "chakra-ui"
   ],
   "author": "zeko369 <zekan.fran369@gmail.com>",
   "license": "MIT",
