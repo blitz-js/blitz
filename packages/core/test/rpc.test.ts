@@ -1,7 +1,6 @@
-import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../src/blitz-data"
-import {executeRpcCall} from "../src/rpc"
+import {executeRpcCall, getIsomorphicEnhancedResolver} from "../src/rpc"
 
 declare global {
   namespace NodeJS {
