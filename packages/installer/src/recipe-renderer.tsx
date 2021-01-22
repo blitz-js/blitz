@@ -1,4 +1,4 @@
-import {Box, Static, Text, useApp, useInput} from "ink"
+import {Box, Text, useApp, useInput} from "ink"
 import React from "react"
 import {Newline} from "./components/newline"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
@@ -77,14 +77,18 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
   return (
     <Box flexDirection="column">
       <Text color="#8a3df0" bold>
-        Installing Recipe: {recipeMeta.name}
-      </Text>
-      <Text color="gray" italic>
-        Authored by {recipeMeta.owner}
+        Recipe: {recipeMeta.name}
       </Text>
       <Newline />
-      <Text color="gray" italic>
-        {recipeMeta.description}
+      <Text color="gray">
+        <Text italic>{recipeMeta.description}</Text>
+      </Text>
+      <Newline />
+      <Text color="gray">
+        Repo: <Text italic>{recipeMeta.repoLink}</Text>
+      </Text>
+      <Text color="gray">
+        Author: <Text italic>{recipeMeta.owner}</Text>
       </Text>
       <Newline />
       <Text bold>Press ENTER to continue</Text>
@@ -177,13 +181,11 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
 
   return (
     <DispatchContext.Provider value={dispatch}>
-      <Static items={messages}>
-        {(msg) => (
-          <Text key={msg + Math.random()} color="green">
-            {msg === "\n" ? "" : "✅"} {msg}
-          </Text>
-        )}
-      </Static>
+      {messages.map((msg, index) => (
+        <Text key={msg + index} color="green">
+          {msg === "\n" ? "" : "✅"} {msg}
+        </Text>
+      ))}
       {state.current === -1 ? <WelcomeMessage recipeMeta={recipeMeta} /> : null}
       {state.current > -1 ? (
         <StepExecutor

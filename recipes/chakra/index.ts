@@ -28,7 +28,7 @@ function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
 export default RecipeBuilder()
   .setName("Chakra UI")
   .setDescription(
-    `Configure your Blitz app's styling with Chakra UI. This recipe will install all necessary dependencies and configure Chakra UI for immediate use.`,
+    `Configure your Blitz app's styling with Chakra UI. This recipe will install all necessary dependencies and configure Chakra UI for use.`,
   )
   .setOwner("zekan.fran369@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")

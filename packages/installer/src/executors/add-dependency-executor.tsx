@@ -47,23 +47,21 @@ const DependencyList = ({
   devDepsLoading?: boolean
   packages: NpmPackage[]
 }) => {
+  const prodPackages = packages.filter((p) => !p.isDevDep)
+  const devPackages = packages.filter((p) => p.isDevDep)
   return (
     <Box flexDirection="column">
       <Text>{lede}</Text>
       <Newline />
-      <Text>Dependencies to be installed:</Text>
-      {packages
-        .filter((p) => !p.isDevDep)
-        .map((pkg) => (
-          <Package key={pkg.name} pkg={pkg} loading={depsLoading} />
-        ))}
+      {prodPackages.length ? <Text>Dependencies to be installed:</Text> : null}
+      {prodPackages.map((pkg) => (
+        <Package key={pkg.name} pkg={pkg} loading={depsLoading} />
+      ))}
       <Newline />
-      <Text>Dev Dependencies to be installed:</Text>
-      {packages
-        .filter((p) => p.isDevDep)
-        .map((pkg) => (
-          <Package key={pkg.name} pkg={pkg} loading={devDepsLoading} />
-        ))}
+      {devPackages.length ? <Text>Dev Dependencies to be installed:</Text> : null}
+      {devPackages.map((pkg) => (
+        <Package key={pkg.name} pkg={pkg} loading={devDepsLoading} />
+      ))}
     </Box>
   )
 }
@@ -138,9 +136,9 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
 
   React.useEffect(() => {
     if (depsInstalled && devDepsInstalled) {
-      onChangeCommitted()
+      handleChangeCommitted()
     }
-  }, [depsInstalled, devDepsInstalled, onChangeCommitted])
+  }, [depsInstalled, devDepsInstalled, handleChangeCommitted])
 
   if (!isAddDependencyExecutor(step)) {
     onChangeCommitted()
