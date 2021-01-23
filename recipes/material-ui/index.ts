@@ -11,7 +11,7 @@ NOTE: Material-UI currently doesn't support concurrent mode. For the most part y
 
 module.exports = {
   experimental: {
-    reactNode: "legacy"
+    reactMode: "legacy"
   },
 
   // keep the other parts of the config as is
