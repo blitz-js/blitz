@@ -45,7 +45,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -90,7 +90,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -115,7 +115,7 @@ describe("supertokens", () => {
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.create({userId: 1, roles: ["admin"]})
+      await ctx.session.$create({userId: 1, roles: ["admin"]})
       return
     }) as EnhancedResolver<unknown, unknown>
 
