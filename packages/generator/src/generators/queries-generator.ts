@@ -47,6 +47,7 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
-    return `app/${context}${this.options.modelNames}/queries`
+    const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    return `app/${context}${kebabCaseModelName}/queries`
   }
 }
