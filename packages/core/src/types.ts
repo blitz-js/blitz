@@ -32,8 +32,7 @@ export interface BlitzRouter extends NextRouter {
 }
 
 export interface DefaultPublicData {
-  userId: any
-  roles: string[]
+  userId: string | number | null
 }
 
 export interface PublicData extends DefaultPublicData {}

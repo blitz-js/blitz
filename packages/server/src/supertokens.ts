@@ -202,9 +202,6 @@ export class SessionContextClass implements SessionContext {
   get userId() {
     return this._kernel.publicData.userId
   }
-  get roles() {
-    return this._kernel.publicData.roles
-  }
   get publicData() {
     return this._kernel.publicData
   }
@@ -224,7 +221,7 @@ export class SessionContextClass implements SessionContext {
   isAuthorized(input?: any) {
     if (!this.userId) return false
 
-    return config.isAuthorized(this.roles, input)
+    return config.isAuthorized(input)
   }
 
   async create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -246,8 +243,8 @@ export class SessionContextClass implements SessionContext {
   }
 
   async setPublicData(data: Record<any, any>) {
-    if (this.userId && data.roles) {
-      await updateAllPublicDataRolesForUser(this.userId, data.roles)
+    if (this.userId) {
+      await updateAllPublicDataRolesForUser(this.userId)
     }
     this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
@@ -624,7 +621,6 @@ export async function createNewSession(
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
   assert(publicData.userId !== undefined, "You must provide publicData.userId")
-  assert(publicData.roles, "You must provide publicData.roles")
 
   const antiCSRFToken = createAntiCSRFToken()
 
@@ -723,7 +719,7 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
-  return await createNewSession(req, res, {userId: null, roles: []}, undefined, {anonymous: true})
+  return await createNewSession(req, res, {userId: null}, undefined, {anonymous: true})
 }
 
 // --------------------------------
@@ -786,13 +782,12 @@ export async function getAllSessionHandlesForUser(userId: string) {
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export async function updateAllPublicDataRolesForUser(userId: string | number, roles: string[]) {
+export async function updateAllPublicDataRolesForUser(userId: string | number) {
   const sessions = await config.getSessions(userId)
 
   for (const session of sessions) {
     const publicData = JSON.stringify({
       ...(session.publicData ? JSON.parse(session.publicData) : {}),
-      roles,
     })
     await config.updateSession(session.handle, {publicData})
   }

@@ -49,22 +49,20 @@ describe("supertokens", () => {
       const {result} = renderHook(() => useSession())
 
       act(() => {
-        publicDataStore.updateState({roles: ["foo"], userId: "bar"})
+        publicDataStore.updateState({userId: "bar"})
       })
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["foo"],
         userId: "bar",
       })
 
       act(() => {
-        publicDataStore.updateState({roles: ["baz"], userId: "boo"})
+        publicDataStore.updateState({userId: "boo"})
       })
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["baz"],
         userId: "boo",
       })
     })
@@ -73,7 +71,7 @@ describe("supertokens", () => {
       const {result, unmount} = renderHook(() => useSession())
 
       act(() => {
-        publicDataStore.updateState({roles: ["foo"], userId: "bar"})
+        publicDataStore.updateState({userId: "bar"})
       })
 
       act(() => {
@@ -81,12 +79,11 @@ describe("supertokens", () => {
       })
 
       act(() => {
-        publicDataStore.updateState({roles: ["baz"], userId: "boo"})
+        publicDataStore.updateState({userId: "boo"})
       })
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["foo"],
         userId: "bar",
       })
     })

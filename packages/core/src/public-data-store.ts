@@ -6,7 +6,7 @@ import {parsePublicDataToken} from "./utils/tokens"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
-  readonly emptyPublicData: PublicData = {userId: null, roles: []}
+  readonly emptyPublicData: PublicData = {userId: null}
   readonly observable = BadBehavior<PublicData>()
 
   constructor() {
