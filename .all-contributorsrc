@@ -1853,6 +1853,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jonasthiesen",
+      "name": "Jonas Thiesen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23408018?v=4",
+      "profile": "https://github.com/jonasthiesen",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
