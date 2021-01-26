@@ -3,7 +3,7 @@ import path from "path"
 
 export default RecipeBuilder()
   .setName("Quirrel")
-  .setDescription("Configure Quirrel locally and set it up for immediate use.")
+  .setDescription("Configure Quirrel locally and set it up for use.")
   .setOwner("Simon Knott <info@quirrel.dev>")
   .setRepoLink("https://quirrel.dev")
   .addAddDependenciesStep({

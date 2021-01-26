@@ -148,7 +148,7 @@ Read the [Blitz.js Documentation](https://blitzjs.com/docs/getting-started) to l
 The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to reach out to us in any of our communication channels.
 
 - [Website](https://blitzjs.com/)
-- [Slack](https://slack.blitzjs.com/)
+- [Discord](https://discord.blitzjs.com/)
 - [Report an issue](https://github.com/blitz-js/blitz/issues/new/choose)
 - [Forum discussions](https://github.com/blitz-js/blitz/discussions)
 - [How to Contribute](https://blitzjs.com/docs/contributing)

@@ -112,11 +112,11 @@ const Home: BlitzPage = () => {
           </a>
           <a
             className="button-outline"
-            href="https://slack.blitzjs.com"
+            href="https://discord.blitzjs.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Slack Community
+            Discord Community
           </a>
         </div>
       </main>

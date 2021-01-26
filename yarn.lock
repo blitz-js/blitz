@@ -1027,15 +1027,10 @@
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-"@cypress/skip-test@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/@cypress/skip-test/-/skip-test-2.5.0.tgz#ba3fc8c441a9dda5fa410e783006107ff3b9d050"
-  integrity sha512-OqyToxRLUG/EAfZa0w8sAooOW6tr8pYCBpo3SLsKycrV2RTj9Sy7rB+5U0MvES87kWCHtO10qMIESuw8RiEYyQ==
-
-"@cypress/skip-test@2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@cypress/skip-test/-/skip-test-2.5.1.tgz#ff54461510e8e00c9328075284732da841ef49a1"
-  integrity sha512-0AhFUeOqJ5GyJ74lIJx/qplEV+Yjtx84lO3zeQhiBpyDJTLTie4weXAN20i/r3HrZrw8UAz6hLC3K+vJTt20Mg==
+"@cypress/skip-test@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@cypress/skip-test/-/skip-test-2.6.0.tgz#73fc58477b436638cfdfaa212b5378ff81b9b3ee"
+  integrity sha512-H5dnS+o0HaSKPexR5wuwF2YGq5praxRZMVodba/Ar9/SuDEWVlW3qxbn9ar06MFjtQnMsHjo4QHQoZzrUPLrHA==
 
 "@cypress/xvfb@^1.2.4":
   version "1.2.4"
@@ -2322,10 +2317,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@next/bundle-analyzer@latest":
-  version "10.0.4"
-  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-10.0.4.tgz#7aaae96e69d2ce186d1d6bf2bc9e4377f418cc78"
-  integrity sha512-A0Qcy/Q9D4eGd+WM3acA4LwkCT3zZHC9KQ6PVIyraVIHm8rjgQAHNc5r/XVLLyE/oMt6yCKMvDLEAUmrXqU9kQ==
+"@next/bundle-analyzer@^10.0.5":
+  version "10.0.5"
+  resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-10.0.5.tgz#02eda5d88bc1ee8efff03902083bcb2c537e787d"
+  integrity sha512-fDhursKrqycV7u6crESINKQKp5/Q17Xd9mI1n0BFhIvpfp8br/gSqLHeaN2DXfcOS/Rb0/FmY4pdIFjXnwdZbg==
   dependencies:
     webpack-bundle-analyzer "4.3.0"
 
@@ -2861,10 +2856,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@salesforce/lazy-require@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@salesforce/lazy-require/-/lazy-require-0.3.3.tgz#09199df6febbc3a586c5307341e92be09ed693d3"
-  integrity sha512-H/POPxWqU5JkZZM8EjJWRLZ1k0lBy9perv3CZCGOLNK8ZflAqLfrrSaFutWbCC2jjb2Q4RTjH05K6KUpdKMfyw==
+"@salesforce/lazy-require@0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@salesforce/lazy-require/-/lazy-require-0.3.4.tgz#be6e46a49ad0366ce3dd216c2481e3ca5e3c793d"
+  integrity sha512-fRZtb1KWQd2dXqkjVXa6O+pOqENsN2F7cEZpdD+tItU0XeI5EySoSf/XCGhiz6znY0lfG5AJ5lY+WQijeJY12Q==
   dependencies:
     debug "^3.2.6"
     tslib "^1.10.0"
@@ -3454,10 +3449,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node-fetch@2.5.7":
-  version "2.5.7"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
-  integrity sha512-o2WVNf5UhWRkxlf6eq+jMZDu7kjgpgJfl4xVNlvryc95O/6F2ld8ztKX+qu+Rjyet93WAWm5LjeX9H5FGkODvw==
+"@types/node-fetch@2.5.8":
+  version "2.5.8"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.8.tgz#e199c835d234c7eb0846f6618012e558544ee2fb"
+  integrity sha512-fbjI6ja0N5ZA8TV53RUqzsKNkl9fv8Oj3T7zxW7FGv1GSH7gwJaNF8dzCjrqKaxKeUpTz4yT1DaJFq/omNpGfw==
   dependencies:
     "@types/node" "*"
     form-data "^3.0.0"
@@ -5851,10 +5846,10 @@ chokidar@3.4.3, "chokidar@>=2.0.0 <4.0.0", chokidar@^3.4.1:
   optionalDependencies:
     fsevents "~2.1.2"
 
-chokidar@3.5.0, chokidar@^3.2.2:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.0.tgz#458a4816a415e9d3b3caa4faec2b96a6935a9e65"
-  integrity sha512-JgQM9JS92ZbFR4P90EvmzNpSGhpPBGBSj10PILeDyYFwp4h2/D9OM03wsJ4zW1fEp4ka2DGrnUeD7FuvQ2aZ2Q==
+chokidar@3.5.1, chokidar@^3.4.3:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
+  integrity sha512-9+s+Od+W0VJJzawDma/gvBNQqkTiqYTWLuZoyAsivsI4AaWTCzHG06/TMjsf1cYe9Cb97UCEhjz7HvnPk2p/tw==
   dependencies:
     anymatch "~3.1.1"
     braces "~3.0.2"
@@ -5885,10 +5880,10 @@ chokidar@^2.1.8:
   optionalDependencies:
     fsevents "^1.2.7"
 
-chokidar@^3.4.3:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
-  integrity sha512-9+s+Od+W0VJJzawDma/gvBNQqkTiqYTWLuZoyAsivsI4AaWTCzHG06/TMjsf1cYe9Cb97UCEhjz7HvnPk2p/tw==
+chokidar@^3.2.2:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.0.tgz#458a4816a415e9d3b3caa4faec2b96a6935a9e65"
+  integrity sha512-JgQM9JS92ZbFR4P90EvmzNpSGhpPBGBSj10PILeDyYFwp4h2/D9OM03wsJ4zW1fEp4ka2DGrnUeD7FuvQ2aZ2Q==
   dependencies:
     anymatch "~3.1.1"
     braces "~3.0.2"
@@ -8358,7 +8353,7 @@ eslint_d@9.1.2:
     nanolru "^1.0.0"
     optionator "^0.9.1"
 
-esm@^3.2.25:
+esm@3.2.25, esm@^3.2.25:
   version "3.2.25"
   resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
   integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
@@ -8794,10 +8789,10 @@ fast-diff@^1.1.2:
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
-fast-glob@3.2.4, fast-glob@^3.0.3, fast-glob@^3.1.1:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.4.tgz#d20aefbf99579383e7f3cc66529158c9b98554d3"
-  integrity sha512-kr/Oo6PX51265qeuCYsyGypiO5uJFgBS0jksyG7FUeCyQzNwYnzrNIMR1NXfkZXsMYXYLRAHgISHBz8gQcxKHQ==
+fast-glob@3.2.5:
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.5.tgz#7939af2a656de79a4f1901903ee8adcaa7cb9661"
+  integrity sha512-2DtFcgT68wiTTiwZ2hNdJfcHNke9XOfnwmBRWXhmeKM8rF0TGwmC/Qto3S7RoZKp5cilZbxzO5iTNTQsJ+EeDg==
   dependencies:
     "@nodelib/fs.stat" "^2.0.2"
     "@nodelib/fs.walk" "^1.2.3"
@@ -8817,6 +8812,18 @@ fast-glob@^2.2.6:
     is-glob "^4.0.0"
     merge2 "^1.2.3"
     micromatch "^3.1.10"
+
+fast-glob@^3.0.3, fast-glob@^3.1.1:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.2.4.tgz#d20aefbf99579383e7f3cc66529158c9b98554d3"
+  integrity sha512-kr/Oo6PX51265qeuCYsyGypiO5uJFgBS0jksyG7FUeCyQzNwYnzrNIMR1NXfkZXsMYXYLRAHgISHBz8gQcxKHQ==
+  dependencies:
+    "@nodelib/fs.stat" "^2.0.2"
+    "@nodelib/fs.walk" "^1.2.3"
+    glob-parent "^5.1.0"
+    merge2 "^1.3.0"
+    micromatch "^4.0.2"
+    picomatch "^2.2.1"
 
 fast-json-stable-stringify@2.x, fast-json-stable-stringify@^2.0.0:
   version "2.1.0"
@@ -12397,10 +12404,10 @@ klona@^2.0.4:
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
 
-knex@0.21.15:
-  version "0.21.15"
-  resolved "https://registry.yarnpkg.com/knex/-/knex-0.21.15.tgz#4f5cb5c147ee354c93d3edbf3643ef248360e77f"
-  integrity sha512-STHnPIIkExZVz0X3zIDaWC/q9EcTAfuuRE5Rev7NpOhF1QVh24K5iT2FXD0nWoJ1BUSeDs5QdgdTaz9H8oEtfg==
+knex@0.21.16:
+  version "0.21.16"
+  resolved "https://registry.yarnpkg.com/knex/-/knex-0.21.16.tgz#5431efe66d7194cdcf34ba3a874c6c66d7229c1a"
+  integrity sha512-M3FTFfby49AEngsx/0UXEJEMnKMjPjeKOtvk+AY6d6kboz9NsT7xDudl0wRNj+S0lq0yearCSb1v+YxgbU/kWA==
   dependencies:
     colorette "1.2.1"
     commander "^6.2.0"

@@ -1851,6 +1851,16 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/54174518?v=4",
       "profile": "https://github.com/marina-ki",
       "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "jonasthiesen",
+      "name": "Jonas Thiesen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23408018?v=4",
+      "profile": "https://github.com/jonasthiesen",
+      "contributions": [
         "doc"
       ]
     }

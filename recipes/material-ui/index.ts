@@ -5,13 +5,13 @@ import {Collection} from "jscodeshift/src/Collection"
 export default RecipeBuilder()
   .setName("Material-UI")
   .setDescription(
-    `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for immediate usage.
-    
-NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @material-ui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js - 
-    
-module.exports = {    
+    `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for usage.
+
+NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @material-ui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js -
+
+module.exports = {
   experimental: {
-    reactNode: "legacy"
+    reactMode: "legacy"
   },
 
   // keep the other parts of the config as is

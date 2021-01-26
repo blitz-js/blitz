@@ -55,8 +55,8 @@
     "@types/ramda": "latest"
   },
   "devDependencies": {
-    "@cypress/skip-test": "2.5.1",
-    "@next/bundle-analyzer": "latest",
+    "@cypress/skip-test": "2.6.0",
+    "@next/bundle-analyzer": "^10.0.5",
     "@testing-library/react": "11.2.3",
     "@testing-library/react-hooks": "4.0.1",
     "@types/passport-auth0": "1.0.4",
