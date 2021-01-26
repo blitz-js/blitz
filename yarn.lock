@@ -8346,7 +8346,7 @@ eslint_d@9.1.2:
     nanolru "^1.0.0"
     optionator "^0.9.1"
 
-esm@^3.2.25:
+esm@3.2.25, esm@^3.2.25:
   version "3.2.25"
   resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"
   integrity sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==
