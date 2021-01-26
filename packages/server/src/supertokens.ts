@@ -89,7 +89,7 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+export function simpleRolesIsAuthorized(ctx: any, input?: any) {
   // No roles required, so all roles allowed
   if (!input) return true
 
@@ -100,7 +100,7 @@ export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
     rolesToAuthorize.push(input)
   }
   for (const role of rolesToAuthorize) {
-    if (userRoles.includes(role)) return true
+    if (ctx.session.publicData.roles.includes(role)) return true
   }
   return false
 }
@@ -146,25 +146,42 @@ type AuthedSessionKernel = {
 }
 type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
-const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
-  "cookies" in req
-const isMiddlewareApResponse = (
-  res: MiddlewareResponse | ServerResponse,
-): res is MiddlewareResponse => "blitzCtx" in res
+// const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest => {
+//   return "cookies" in req
+// }
+function ensureBlitzApiRequest(
+  req: BlitzApiRequest | IncomingMessage,
+): asserts req is BlitzApiRequest {
+  if (!("cookies" in req)) {
+    // Cookie parser isn't include inside getServerSideProps, so we have to add it
+    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
+  }
+}
+// const isMiddlewareApResponse = (
+//   res: MiddlewareResponse | ServerResponse,
+// ): res is MiddlewareResponse => {
+//   return "blitzCtx" in res
+// }
+function ensureMiddlewareResponse(
+  res: BlitzApiResponse | ServerResponse,
+): asserts res is MiddlewareResponse {
+  if (!("blitzCtx" in res)) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+}
 
 export async function getSessionContext(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
 ): Promise<SessionContext> {
-  if (!("cookies" in req)) {
-    // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
-  }
-  assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
+  ensureBlitzApiRequest(req)
+  ensureMiddlewareResponse(res)
 
-  if (isMiddlewareApResponse(res) && res.blitzCtx.session) {
+  if (res.blitzCtx.session) {
     return res.blitzCtx.session as SessionContext
   }
+
+  // ensureMiddlewareResponse(res)
 
   let sessionKernel = await getSession(req, res)
 
@@ -178,11 +195,7 @@ export async function getSessionContext(
   }
 
   const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
-
-  if (!("blitzCtx" in res)) {
-    ;(res as MiddlewareResponse).blitzCtx = {}
-  }
-  ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
+  res.blitzCtx.session = sessionContext
   return sessionContext
 }
 
@@ -199,11 +212,11 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
 }
 
 export class SessionContextClass implements SessionContext {
-  private _req: IncomingMessage
-  private _res: ServerResponse
+  private _req: BlitzApiRequest
+  private _res: MiddlewareResponse
   private _kernel: SessionKernel
 
-  constructor(req: IncomingMessage, res: ServerResponse, kernel: SessionKernel) {
+  constructor(req: BlitzApiRequest, res: MiddlewareResponse, kernel: SessionKernel) {
     this._req = req
     this._res = res
     this._kernel = kernel
@@ -237,7 +250,7 @@ export class SessionContextClass implements SessionContext {
   $isAuthorized(input?: any) {
     if (!this.userId) return false
 
-    return config.isAuthorized(this.roles, input)
+    return config.isAuthorized(this._res.blitzCtx, input)
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {

@@ -1,5 +1,6 @@
 import {useState} from "react"
 import {COOKIE_CSRF_TOKEN} from "./constants"
+import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
 import {PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
@@ -25,7 +26,7 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  isAuthorized: (userRoles: string[], input?: any) => boolean
+  isAuthorized: (ctx: Ctx, input?: any) => boolean
 }
 
 export interface SessionContextBase extends PublicData {
@@ -33,8 +34,6 @@ export interface SessionContextBase extends PublicData {
   $publicData: unknown
   $authorize(input?: any): asserts this is AuthenticatedSessionContext
   $isAuthorized(input?: any): boolean
-  // authorize: (roleOrRoles?: string | string[]) => void
-  // isAuthorized: (roleOrRoles?: string | string[]) => boolean
   $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   $revoke: () => Promise<void>
   $revokeAll: () => Promise<void>
@@ -74,46 +73,3 @@ export const useSession: () => PublicDataWithLoading = () => {
 
   return {...publicData, isLoading}
 }
-
-/*
- * This will ensure a user is logged in before using the query/mutation.
- * Optionally, as the second argument you can pass an array of roles
- * which will also be enforce.
- * Not logged in -> throw AuthenticationError
- * Role not matched -> throw AuthorizationError
- */
-// TODO - returned type should accept the ctx argument with `session`
-/*
- * DISABLING THIS FOR NOW - I think ctx.session.authorize is probably the best way
- */
-// export const authorize = <T extends (input: any, ctx?: any) => any>(
-//   resolverOrRoles: T | string[],
-//   maybeResolver?: T,
-// ) => {
-//   let resolver: T
-//   let roles: string[]
-//   if (Array.isArray(resolverOrRoles)) {
-//     roles = resolverOrRoles
-//     resolver = maybeResolver as T
-//   } else {
-//     roles = []
-//     resolver = resolverOrRoles
-//   }
-//
-//   assert(resolver, "You must pass a query or mutation resolver function to authorize()")
-//
-//   return ((input: any, ctx?: {session?: SessionContext}) => {
-//     if (!ctx?.session?.userId) throw new AuthenticationError()
-//
-//     // If user doesn't supply roles, then authorization is not checked
-//     if (roles.length) {
-//       let isAuthorized = false
-//       for (const role of roles) {
-//         if (ctx?.session?.roles.includes(role)) isAuthorized = true
-//       }
-//       if (!isAuthorized) throw new AuthorizationError()
-//     }
-//
-//     return resolver(input, ctx)
-//   }) as T
-// }
