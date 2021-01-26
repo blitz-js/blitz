@@ -311,7 +311,7 @@ export abstract class Generator<
     }
 
     if (!this.returnResults) {
-      this.performedActions.forEach((action) => {
+      this.performedActions.sort().forEach((action) => {
         console.log(action)
       })
     }

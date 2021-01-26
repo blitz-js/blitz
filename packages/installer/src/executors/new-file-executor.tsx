@@ -1,6 +1,5 @@
 import {Generator, GeneratorOptions} from "@blitzjs/generator"
 import {Box, Text} from "ink"
-import Spinner from "ink-spinner"
 import {useEffect, useState} from "react"
 import * as React from "react"
 import {Newline} from "../components/newline"
@@ -48,49 +47,6 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
   }
 }
 
-export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
-  const generatorArgs = React.useMemo(
-    () => ({
-      destinationRoot: ".",
-      targetDirectory: getExecutorArgument((step as Config).targetDirectory, cliArgs),
-      templateRoot: getExecutorArgument((step as Config).templatePath, cliArgs),
-      templateValues: getExecutorArgument((step as Config).templateValues, cliArgs),
-      dryRun: true,
-    }),
-    [cliArgs, step],
-  )
-  useEnterToContinue(() => {
-    onProposalAccepted(generatorArgs)
-  })
-
-  const [dryRunOutput, setDryRunOutput] = useState("")
-
-  useEffect(() => {
-    async function proposeFileAdditions() {
-      if (!dryRunOutput) {
-        const dryRunGenerator = new TempGenerator(generatorArgs)
-        const results = ((await dryRunGenerator.run()) as unknown) as string
-        setDryRunOutput(results)
-      }
-    }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    proposeFileAdditions()
-  }, [dryRunOutput, generatorArgs])
-
-  return (
-    <Box flexDirection="column">
-      <Text>
-        Before creating any new files, we'll do a dry run. Here's a list of files that would be
-        created:
-      </Text>
-      <Newline />
-      {dryRunOutput ? <Text>{dryRunOutput}</Text> : null}
-      <Newline />
-      <Text>If this looks ok to you, press ENTER to create the files.</Text>
-    </Box>
-  )
-}
-
 export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) => {
   const generatorArgs = React.useMemo(
     () => ({
@@ -127,19 +83,12 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
 
   return (
     <Box flexDirection="column">
-      {!fileCreateOutput ? (
-        <Text>
-          <Spinner /> Creating files...
-        </Text>
-      ) : null}
       {fileCreateOutput ? (
         <>
           {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
-          <Text>The file generation is complete! 🎉 Here are the results:</Text>
-          <Newline />
           {fileCreateOutput ? <Text>{fileCreateOutput}</Text> : null}
           <Newline />
-          <Text>Once you've had a chance to confirm the changes, press ENTER to continue.</Text>
+          <Text bold>Press ENTER to continue</Text>
         </>
       ) : null}
     </Box>

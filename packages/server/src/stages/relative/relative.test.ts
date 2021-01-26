@@ -58,6 +58,12 @@ import from '../thing/bar'`,
 import from "../thing/bar"
 import from '../thing/bar'`,
       },
+      {
+        path: normalize("/projects/blitz/blitz/app/auth/api/auth/foo.js"),
+        contents: `import {getFoo} from 'app/foo/bar';
+import from "../thing/bar"
+import from '../../thing/bar'`,
+      },
     ]
 
     const expected = [
@@ -112,6 +118,12 @@ import from 'app/thing/bar'`,
         contents: `import {getFoo} from 'app/foo/bar';
 import from "app/thing/bar"
 import from 'app/thing/bar'`,
+      },
+      {
+        path: normalize("/projects/blitz/blitz/app/auth/api/auth/foo.js"),
+        contents: `import {getFoo} from 'app/foo/bar';
+import from "app/auth/api/thing/bar"
+import from 'app/auth/thing/bar'`,
       },
     ]
     const {stream} = createStageRelative(mockStageArgs({cwd: normalize("/projects/blitz/blitz")}))

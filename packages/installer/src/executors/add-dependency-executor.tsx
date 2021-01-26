@@ -47,39 +47,22 @@ const DependencyList = ({
   devDepsLoading?: boolean
   packages: NpmPackage[]
 }) => {
+  const prodPackages = packages.filter((p) => !p.isDevDep)
+  const devPackages = packages.filter((p) => p.isDevDep)
   return (
     <Box flexDirection="column">
       <Text>{lede}</Text>
       <Newline />
-      <Text>Dependencies to be installed:</Text>
-      {packages
-        .filter((p) => !p.isDevDep)
-        .map((pkg) => (
-          <Package key={pkg.name} pkg={pkg} loading={depsLoading} />
-        ))}
+      {prodPackages.length ? <Text>Dependencies to be installed:</Text> : null}
+      {prodPackages.map((pkg) => (
+        <Package key={pkg.name} pkg={pkg} loading={depsLoading} />
+      ))}
       <Newline />
-      <Text>Dev Dependencies to be installed:</Text>
-      {packages
-        .filter((p) => p.isDevDep)
-        .map((pkg) => (
-          <Package key={pkg.name} pkg={pkg} loading={devDepsLoading} />
-        ))}
+      {devPackages.length ? <Text>Dev Dependencies to be installed:</Text> : null}
+      {devPackages.map((pkg) => (
+        <Package key={pkg.name} pkg={pkg} loading={devDepsLoading} />
+      ))}
     </Box>
-  )
-}
-
-export const Propose: Executor["Propose"] = ({cliArgs, step, onProposalAccepted}) => {
-  useEnterToContinue(onProposalAccepted)
-
-  if (!isAddDependencyExecutor(step)) {
-    onProposalAccepted()
-    return null
-  }
-  return (
-    <DependencyList
-      lede={"Adding some shiny new dependencies.\nIf this list looks good, press ENTER to install."}
-      packages={getExecutorArgument(step.packages, cliArgs)}
-    />
   )
 }
 
@@ -151,6 +134,12 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
     installDevDeps()
   }, [cliArgs, depsInstalled, step])
 
+  React.useEffect(() => {
+    if (depsInstalled && devDepsInstalled) {
+      handleChangeCommitted()
+    }
+  }, [depsInstalled, devDepsInstalled, handleChangeCommitted])
+
   if (!isAddDependencyExecutor(step)) {
     onChangeCommitted()
     return null
@@ -158,16 +147,11 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
   return (
     <>
       <DependencyList
-        lede={"Hang tight! Fetching the latest dependencies..."}
+        lede={"Hang tight! Installing dependencies..."}
         depsLoading={!depsInstalled}
         devDepsLoading={!devDepsInstalled}
         packages={getExecutorArgument(step.packages, cliArgs)}
       />
-      {depsInstalled && devDepsInstalled ? (
-        <Box paddingTop={1}>
-          <Text>Dependencies installed! Press ENTER to continue</Text>
-        </Box>
-      ) : null}
     </>
   )
 }

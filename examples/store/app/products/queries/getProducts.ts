@@ -1,5 +1,5 @@
 import {Middleware} from "blitz"
-import db, {FindManyProductArgs, Product} from "db"
+import db, {Prisma, Product} from "db"
 import {sum} from "lodash"
 
 export function averagePrice(products: Product[]) {
@@ -8,13 +8,13 @@ export function averagePrice(products: Product[]) {
 }
 
 type GetProductsInput = {
-  where?: FindManyProductArgs["where"]
-  orderBy?: FindManyProductArgs["orderBy"]
-  skip?: FindManyProductArgs["skip"]
-  cursor?: FindManyProductArgs["cursor"]
-  take?: FindManyProductArgs["take"]
+  where?: Prisma.ProductFindManyArgs["where"]
+  orderBy?: Prisma.ProductFindManyArgs["orderBy"]
+  skip?: Prisma.ProductFindManyArgs["skip"]
+  cursor?: Prisma.ProductFindManyArgs["cursor"]
+  take?: Prisma.ProductFindManyArgs["take"]
   // Only available if a model relationship exists
-  // include?: FindManyProductArgs['include']
+  // include?: Prisma.ProductFindManyArgs['include']
 }
 
 export default async function getProducts(

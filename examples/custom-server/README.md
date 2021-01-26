@@ -8,7 +8,7 @@
    ```
 2. Migrate
    ```sh
-   blitz db migrate
+   blitz prisma migrate dev --preview-feature
    ```
 3. Start the dev server
 

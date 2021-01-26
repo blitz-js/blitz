@@ -70,7 +70,9 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
       )
       modelDefinition.toString().split("\n").map(log.progress)
       log.info(
-        "\nNow run " + log.variable("blitz db migrate") + " to add this model to your database\n",
+        "\nNow run " +
+          log.variable("`blitz prisma migrate dev --preview-feature`") +
+          " to add this model to your database\n",
       )
     } catch (error) {
       throw error

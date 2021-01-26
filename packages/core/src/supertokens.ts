@@ -28,35 +28,33 @@ export type SessionConfig = {
   isAuthorized: (userRoles: string[], input?: any) => boolean
 }
 
-export interface SessionContextBase {
-  userId: unknown
-  roles: string[]
-  handle: string | null
-  publicData: unknown
-  authorize(input?: any): asserts this is AuthenticatedSessionContext
-  isAuthorized(input?: any): boolean
+export interface SessionContextBase extends PublicData {
+  $handle: string | null
+  $publicData: unknown
+  $authorize(input?: any): asserts this is AuthenticatedSessionContext
+  $isAuthorized(input?: any): boolean
   // authorize: (roleOrRoles?: string | string[]) => void
   // isAuthorized: (roleOrRoles?: string | string[]) => boolean
-  create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
-  revoke: () => Promise<void>
-  revokeAll: () => Promise<void>
-  getPrivateData: () => Promise<Record<any, any>>
-  setPrivateData: (data: Record<any, any>) => Promise<void>
-  setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
+  $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
+  $revoke: () => Promise<void>
+  $revokeAll: () => Promise<void>
+  $getPrivateData: () => Promise<Record<any, any>>
+  $setPrivateData: (data: Record<any, any>) => Promise<void>
+  $setPublicData: (data: Partial<Omit<PublicData, "userId">>) => Promise<void>
 }
 
 // Could be anonymous
 export interface SessionContext extends SessionContextBase {
   userId: PublicData["userId"] | null
-  publicData: Partial<PublicData>
+  $publicData: Partial<PublicData>
 }
 
 export interface AuthenticatedSessionContext extends SessionContextBase {
   userId: PublicData["userId"]
-  publicData: PublicData
+  $publicData: PublicData
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN)
+export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
 export interface PublicDataWithLoading extends PublicData {
   isLoading: boolean

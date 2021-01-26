@@ -1,4 +1,4 @@
-import {singlePascal} from "../utils/plurals"
+import {singlePascal} from "../utils/inflector"
 import {Field, FieldType} from "./field"
 
 function stringifyFieldsForPrinting(fields: Field[]) {

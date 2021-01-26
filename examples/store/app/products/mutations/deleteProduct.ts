@@ -1,7 +1,7 @@
-import db, {ProductDeleteArgs} from "db"
+import db, {Prisma} from "db"
 
 type DeleteProductInput = {
-  where: ProductDeleteArgs["where"]
+  where: Prisma.ProductDeleteArgs["where"]
 }
 
 export default async function deleteProduct({where}: DeleteProductInput) {

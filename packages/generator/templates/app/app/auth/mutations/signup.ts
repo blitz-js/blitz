@@ -2,7 +2,7 @@ import { Ctx, SecurePassword } from "blitz"
 import db from "db"
 import { SignupInput, SignupInputType } from "app/auth/validations"
 
-export default async function signup(input: SignupInputType, { session }: Ctx) {
+export default async function signup(input: SignupInputType, ctx: Ctx) {
   // This throws an error if input is invalid
   const { email, password } = SignupInput.parse(input)
 
@@ -12,7 +12,7 @@ export default async function signup(input: SignupInputType, { session }: Ctx) {
     select: { id: true, name: true, email: true, role: true },
   })
 
-  await session.create({ userId: user.id, roles: [user.role] })
+  await ctx.session.create({ userId: user.id, roles: [user.role] })
 
   return user
 }

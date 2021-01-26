@@ -14,15 +14,15 @@ export async function routes(config: ServerConfig) {
     transformFiles,
     ignore,
     include,
-    isTypescript,
+    isTypeScript,
     writeManifestFile,
   } = await normalize({...config, env: "dev"})
 
-  const {sitemap = defaultSitemapFunction} = getConfig() as Record<string, unknown> & {
+  const {sitemap = defaultSitemapFunction} = getConfig() as ReturnType<typeof getConfig> & {
     sitemap: typeof defaultSitemapFunction
   }
 
-  const stages = configureRouteStages({writeManifestFile, isTypescript})
+  const stages = configureRouteStages({writeManifestFile, isTypeScript})
 
   const {routeCache} = (await transformFiles(rootFolder, stages, routeFolder, {
     ignore,

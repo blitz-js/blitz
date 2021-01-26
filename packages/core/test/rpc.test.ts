@@ -1,6 +1,6 @@
-import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
 import {serialize} from "superjson"
-import {executeRpcCall} from "../src/rpc"
+import {getBlitzRuntimeData} from "../src/blitz-data"
+import {executeRpcCall, getIsomorphicEnhancedResolver} from "../src/rpc"
 
 declare global {
   namespace NodeJS {
@@ -11,6 +11,7 @@ declare global {
 }
 
 global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+window.__BLITZ_DATA__ = getBlitzRuntimeData()
 
 describe("RPC", () => {
   describe("HEAD", () => {

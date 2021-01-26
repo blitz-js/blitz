@@ -7,6 +7,10 @@ import {
   FormGenerator,
   ModelGenerator,
   QueryGenerator,
+  singleCamel,
+  singlePascal,
+  pluralCamel,
+  pluralPascal,
 } from "@blitzjs/generator"
 
 import {Command} from "../command"
@@ -14,8 +18,7 @@ import {PromptAbortedError} from "../errors/prompt-aborted"
 import chalk from "chalk"
 
 const debug = require("debug")("blitz:generate")
-const pascalCase = (str: string) => require("camelcase")(str, {pascalCase: true})
-const getIsTypescript = () =>
+const getIsTypeScript = () =>
   require("fs").existsSync(
     require("path").join(require("../utils/get-project-root").projectRoot, "tsconfig.json"),
   )
@@ -42,25 +45,17 @@ interface Args {
   model: string
 }
 
-function pluralize(input: string): string {
-  return require("pluralize").isPlural(input) ? input : require("pluralize").plural(input)
-}
-
-function singular(input: string): string {
-  return require("pluralize").isSingular(input) ? input : require("pluralize").singular(input)
-}
-
 function modelName(input: string = "") {
-  return require("camelcase")(singular(input))
+  return singleCamel(input)
 }
 function modelNames(input: string = "") {
-  return require("camelcase")(pluralize(input))
+  return pluralCamel(input)
 }
 function ModelName(input: string = "") {
-  return pascalCase(singular(input))
+  return singlePascal(input)
 }
 function ModelNames(input: string = "") {
-  return pascalCase(pluralize(input))
+  return pluralPascal(input)
 }
 
 const generatorMap = {
@@ -234,7 +229,7 @@ export class Generate extends Command {
           rawInput: model,
           dryRun: flags["dry-run"],
           context: context,
-          useTs: getIsTypescript(),
+          useTs: getIsTypeScript(),
         })
         await generator.run()
       }

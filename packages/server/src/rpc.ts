@@ -42,18 +42,15 @@ const rpcMiddleware = <TInput, TResult>(
 
         log.info(chalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
         const startTime = Date.now()
-
         const result = await resolver(data, res.blitzCtx)
-
-        const duration = Date.now() - startTime
+        const resolverDuration = Date.now() - startTime
         log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
-        log.info(chalk.dim(`Finished in ${prettyMs(duration)}ms`))
-        displayLog.newline()
 
-        res.blitzResult = result
-
+        const serializerStartTime = Date.now()
         const serializedResult = serialize(result)
 
+        const nextSerializerStartTime = Date.now()
+        res.blitzResult = result
         res.json({
           result: serializedResult.json,
           error: null,
@@ -61,6 +58,21 @@ const rpcMiddleware = <TInput, TResult>(
             result: serializedResult.meta,
           },
         })
+        log.debug(
+          chalk.dim(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`),
+        )
+        const serializerDuration = Date.now() - serializerStartTime
+        const duration = Date.now() - startTime
+
+        log.info(
+          chalk.dim(
+            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+              serializerDuration,
+            )} total:${prettyMs(duration)}`,
+          ),
+        )
+        displayLog.newline()
+
         return next()
       } catch (error) {
         if (error._clearStack) {
@@ -68,9 +80,6 @@ const rpcMiddleware = <TInput, TResult>(
         }
         log.error(error)
         displayLog.newline()
-
-        // Don't transmit the server stack trace via HTTP
-        delete error.stack
 
         if (!error.statusCode) {
           error.statusCode = 500

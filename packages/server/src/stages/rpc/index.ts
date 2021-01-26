@@ -94,7 +94,7 @@ export const config = {
 /**
  * Returns a Stage that manages generating the internal RPC commands and handlers
  */
-export const createStageRpc = (isTypescript = true): Stage =>
+export const createStageRpc = (isTypeScript = true): Stage =>
   function configure({config: {src}}) {
     const fileTransformer = absolutePathTransform(src)
 
@@ -131,7 +131,7 @@ export const createStageRpc = (isTypescript = true): Stage =>
       push(
         new File({
           path: getApiHandlerPath(file.path),
-          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypescript)),
+          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypeScript)),
           // Appending a new file to the output of this particular stream
           // We don't want to reprocess this file but simply add it to the output
           // of the stream here we provide a hash with some information for how

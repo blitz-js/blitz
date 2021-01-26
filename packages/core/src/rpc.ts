@@ -5,6 +5,7 @@ import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from "./constants"
 import {CSRFTokenMismatchError} from "./errors"
@@ -84,8 +85,13 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Public data updated")
         }
         if (result.headers.get(HEADER_SESSION_REVOKED)) {
-          clientDebug("Sessin revoked")
+          clientDebug("Session revoked")
+          queryCache.clear()
           publicDataStore.clear()
+        }
+        if (result.headers.get(HEADER_SESSION_CREATED)) {
+          clientDebug("Session created")
+          queryCache.clear()
         }
         if (result.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
@@ -113,9 +119,6 @@ export const executeRpcCall = <TInput, TResult>(
           error = new Error(prismaError[0])
           error.statusCode = 500
         }
-
-        // Prevent client-side error popop from showing
-        delete error.stack
 
         throw error
       } else {

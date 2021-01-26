@@ -1,9 +1,9 @@
-import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Link, useRouter, useMutation, useParam, BlitzPage} from "blitz"
 } else {
   import {Link, useRouter, useMutation, BlitzPage} from "blitz"
 }
+import Layout from "app/core/layouts/Layout"
 import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
 import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
 
@@ -31,7 +31,7 @@ const New__ModelName__Page: BlitzPage = () => {
             router.push(
               process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
-                : `/__modelNames__/${__modelName__.id}`
+                : `/__modelNames__/${__modelName__.id}`,
             )
           } catch (error) {
             alert("Error creating __modelName__ " + JSON.stringify(error, null, 2))

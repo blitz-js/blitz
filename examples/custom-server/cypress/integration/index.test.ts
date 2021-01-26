@@ -1,4 +1,4 @@
-import { createRandomUser } from "../support/helpers"
+import {createRandomUser} from "../support/helpers"
 
 describe("index page", () => {
   beforeEach(() => {

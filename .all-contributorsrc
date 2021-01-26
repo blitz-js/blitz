@@ -1778,7 +1778,8 @@
       "profile": "https://rembrandtreyes.com/",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -1786,6 +1787,79 @@
       "name": "Toshiya Doi",
       "avatar_url": "https://avatars2.githubusercontent.com/u/5877477?v=4",
       "profile": "https://doi-t.net",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "koolii",
+      "name": "t.kuriyama",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3866581?v=4",
+      "profile": "https://www.koolii.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "malkomalko",
+      "name": "Robert Malko",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/763?v=4",
+      "profile": "https://github.com/malkomalko",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ranjan-purbey",
+      "name": "Ranjan Purbey",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6953187?v=4",
+      "profile": "https://github.com/ranjan-purbey",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tarunama",
+      "name": "tarunama",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6047881?v=4",
+      "profile": "https://github.com/tarunama",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bacongravy",
+      "name": "David Kramer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/16848768?v=4",
+      "profile": "http://www.bacongravy.net/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mikeesto",
+      "name": "Michael Esteban",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21051488?v=4",
+      "profile": "https://mikeesto.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "marina-ki",
+      "name": "marina",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/54174518?v=4",
+      "profile": "https://github.com/marina-ki",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "jonasthiesen",
+      "name": "Jonas Thiesen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23408018?v=4",
+      "profile": "https://github.com/jonasthiesen",
       "contributions": [
         "doc"
       ]

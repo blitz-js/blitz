@@ -45,7 +45,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -65,14 +65,14 @@ describe("supertokens", () => {
 
       expect(res.status).toBe(200)
       expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
-      expect(cookie(COOKIE_ANONYMOUS_SESSION_TOKEN)).not.toBeUndefined()
-      expect(cookie(COOKIE_SESSION_TOKEN)).toBe("")
-      expect(cookie(COOKIE_REFRESH_TOKEN)).toBeUndefined()
+      expect(cookie(COOKIE_ANONYMOUS_SESSION_TOKEN())).not.toBeUndefined()
+      expect(cookie(COOKIE_SESSION_TOKEN())).toBe("")
+      expect(cookie(COOKIE_REFRESH_TOKEN())).toBeUndefined()
 
       expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).toBe("updated")
-      expect(cookie(COOKIE_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
+      expect(cookie(COOKIE_PUBLIC_DATA_TOKEN())).not.toBe(undefined)
 
-      const [publicDataStr, expireAtStr] = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN)).split(
+      const [publicDataStr, expireAtStr] = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN())).split(
         TOKEN_SEPARATOR,
       )
 
@@ -90,7 +90,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -115,7 +115,7 @@ describe("supertokens", () => {
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.create({userId: 1, roles: ["admin"]})
+      await ctx.session.$create({userId: 1, roles: ["admin"]})
       return
     }) as EnhancedResolver<unknown, unknown>
 
@@ -144,7 +144,7 @@ describe("supertokens", () => {
       expect(publicData.roles[0]).toBe("admin")
 
       const cookieHeader = res.headers.get("Set-Cookie") as string
-      expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN)).not.toBe(undefined)
+      expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN())).not.toBe(undefined)
     })
   })
 })

@@ -74,11 +74,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/components/Form.${ext}`),
+      this.destinationPath(`app/core/components/Form.${ext}`),
     )
     this.fs.move(
       this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
     )
 
     this.fs.delete(this.destinationPath("_forms"))

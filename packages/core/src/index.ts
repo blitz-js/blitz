@@ -4,6 +4,7 @@ import {AppProps as NextAppProps} from "next/app"
 export * from "./types"
 export * from "./errors"
 export * from "./constants"
+export {BlitzScript} from "./blitz-script"
 export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
 export {getQueryKey, invalidateQuery, setQueryData} from "./utils/react-query-utils"
 export {useParam, useParams} from "./use-params"
@@ -14,6 +15,7 @@ export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
+export {getBlitzRuntimeData} from "./blitz-data"
 
 export {
   getAllMiddlewareForModule,
@@ -30,21 +32,11 @@ export {
   AuthenticatedSessionContext,
 } from "./supertokens"
 
-export {SecurePassword} from "./auth-utils"
+export {SecurePassword, hash256, generateToken} from "./auth-utils"
 
 // --------------------
 // Exports from Next.js
 // --------------------
-export {
-  GetStaticProps,
-  GetStaticPaths,
-  GetServerSideProps,
-  InferGetStaticPropsType,
-  InferGetServerSidePropsType,
-  NextApiRequest as BlitzApiRequest,
-  NextApiResponse as BlitzApiResponse,
-} from "next"
-
 export {default as Head} from "next/head"
 
 export {default as Link, LinkProps} from "next/link"
@@ -58,7 +50,6 @@ export {
   Html,
   Head as DocumentHead,
   Main,
-  NextScript as BlitzScript,
   DocumentContext,
   DocumentInitialProps,
 } from "next/document"
@@ -81,3 +72,5 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
 }
 export {isLocalhost} from "./utils/index"
 export {prettyMs} from "./utils/pretty-ms"
+
+export {enhancePrisma} from "./prisma-utils"

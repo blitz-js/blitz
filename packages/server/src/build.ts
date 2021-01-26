@@ -13,11 +13,11 @@ export async function build(config: ServerConfig) {
     ignore,
     include,
     watch,
-    isTypescript,
+    isTypeScript,
     writeManifestFile,
   } = await normalize(config)
 
-  const stages = configureStages({isTypescript, writeManifestFile})
+  const stages = configureStages({isTypeScript, writeManifestFile})
 
   await transformFiles(rootFolder, stages, buildFolder, {
     ignore,

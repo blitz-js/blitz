@@ -10,7 +10,7 @@ export function pagesPathTransformer(path: string) {
 }
 
 export function apiPathTransformer(path: string) {
-  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+)$/
+  const regex = /(?:[\\/]?app[\\/].*?[\\/]?)(api[\\/].+(?<!\.test))$/
   const matchedPath = (regex.exec(path) || [])[1]
   return matchedPath ? join("pages", matchedPath) : path
 }

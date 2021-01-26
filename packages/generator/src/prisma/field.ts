@@ -1,5 +1,5 @@
 import {log} from "@blitzjs/display"
-import {capitalize, singlePascal, uncapitalize} from "../utils/plurals"
+import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 
 export enum FieldType {
   Boolean = "Boolean",

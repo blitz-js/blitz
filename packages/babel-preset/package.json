@@ -1,0 +1,42 @@
+{
+  "name": "@blitzjs/babel-preset",
+  "version": "0.29.2",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "dev": "tsdx watch --verbose",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "test:watch": "tsdx test --watch --passWithNoTests",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "author": "Brandon Bayer",
+  "module": "dist/babel-preset.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/babel-preset.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/babel-preset.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "dependencies": {
+    "babel-plugin-superjson-next": "0.1.11"
+  },
+  "devDependencies": {}
+}

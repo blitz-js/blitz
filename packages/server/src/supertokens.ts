@@ -10,10 +10,13 @@ import {
   COOKIE_REFRESH_TOKEN,
   COOKIE_SESSION_TOKEN,
   CSRFTokenMismatchError,
+  generateToken,
   HANDLE_SEPARATOR,
+  hash256,
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
   isLocalhost,
   Middleware,
@@ -29,11 +32,9 @@ import {
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
-import * as crypto from "crypto"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {nanoid} from "nanoid"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
 import pkgDir from "pkg-dir"
@@ -176,12 +177,25 @@ export async function getSessionContext(
     sessionKernel = await createAnonymousSession(req, res)
   }
 
-  const sessionContext = new SessionContextClass(req, res, sessionKernel)
+  const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
+
   if (!("blitzCtx" in res)) {
     ;(res as MiddlewareResponse).blitzCtx = {}
   }
   ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
   return sessionContext
+}
+
+const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
+  return new Proxy(ctxClass, {
+    get(target, prop, receiver) {
+      if (prop in target || prop === "then") {
+        return Reflect.get(target, prop, receiver)
+      } else {
+        return Reflect.get(target.$publicData, prop, receiver)
+      }
+    },
+  })
 }
 
 export class SessionContextClass implements SessionContext {
@@ -195,7 +209,7 @@ export class SessionContextClass implements SessionContext {
     this._kernel = kernel
   }
 
-  get handle() {
+  get $handle() {
     return this._kernel.handle
   }
   get userId() {
@@ -204,57 +218,57 @@ export class SessionContextClass implements SessionContext {
   get roles() {
     return this._kernel.publicData.roles
   }
-  get publicData() {
+  get $publicData() {
     return this._kernel.publicData
   }
 
-  authorize(input?: any) {
+  $authorize(input?: any) {
     const e = new AuthenticationError()
-    Error.captureStackTrace(e, this.authorize)
+    Error.captureStackTrace(e, this.$authorize)
     if (!this.userId) throw e
 
-    if (!this.isAuthorized(input)) {
+    if (!this.$isAuthorized(input)) {
       const e = new AuthorizationError()
-      Error.captureStackTrace(e, this.authorize)
+      Error.captureStackTrace(e, this.$authorize)
       throw e
     }
   }
 
-  isAuthorized(input?: any) {
+  $isAuthorized(input?: any) {
     if (!this.userId) return false
 
     return config.isAuthorized(this.roles, input)
   }
 
-  async create(publicData: PublicData, privateData?: Record<any, any>) {
+  async $create(publicData: PublicData, privateData?: Record<any, any>) {
     this._kernel = await createNewSession(this._req, this._res, publicData, privateData, {
       jwtPayload: this._kernel.jwtPayload,
     })
   }
 
-  revoke() {
-    return revokeSession(this._req, this._res, this.handle)
+  $revoke() {
+    return revokeSession(this._req, this._res, this.$handle)
   }
 
-  async revokeAll() {
-    if (!this.publicData.userId) {
+  async $revokeAll() {
+    if (!this.$publicData.userId) {
       throw new Error("session.revokeAll() cannot be used with anonymous sessions")
     }
-    await revokeAllSessionsForUser(this._req, this._res, this.publicData.userId)
+    await revokeAllSessionsForUser(this._req, this._res, this.$publicData.userId)
     return
   }
 
-  async setPublicData(data: Record<any, any>) {
+  async $setPublicData(data: Record<any, any>) {
     if (this.userId && data.roles) {
       await updateAllPublicDataRolesForUser(this.userId, data.roles)
     }
     this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
 
-  async getPrivateData() {
-    return (await getPrivateData(this.handle)) || {}
+  async $getPrivateData() {
+    return (await getPrivateData(this.$handle)) || {}
   }
-  setPrivateData(data: Record<any, any>) {
+  $setPrivateData(data: Record<any, any>) {
     return setPrivateData(this._kernel, data)
   }
 }
@@ -262,16 +276,14 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 // Token/handle utils
 // --------------------------------
-const hash = (input: string = "") => crypto.createHash("sha256").update(input).digest("hex")
-
-export const generateToken = () => nanoid(32)
+const TOKEN_LENGTH = 32
 
 export const generateEssentialSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_OPAQUE_TOKEN_SIMPLE
 }
 
 export const generateAnonymousSessionHandle = () => {
-  return generateToken() + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
+  return generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
 }
 
 export const createSessionToken = (handle: string, publicData: PublicData | string) => {
@@ -285,7 +297,7 @@ export const createSessionToken = (handle: string, publicData: PublicData | stri
     publicDataString = JSON.stringify(publicData)
   }
   return toBase64(
-    [handle, generateToken(), hash(publicDataString), SESSION_TOKEN_VERSION_0].join(
+    [handle, generateToken(TOKEN_LENGTH), hash256(publicDataString), SESSION_TOKEN_VERSION_0].join(
       TOKEN_SEPARATOR,
     ),
   )
@@ -310,7 +322,7 @@ export const createPublicDataToken = (publicData: string | PublicData) => {
   return toBase64(payload)
 }
 
-export const createAntiCSRFToken = () => generateToken()
+export const createAntiCSRFToken = () => generateToken(TOKEN_LENGTH)
 
 export type AnonymousSessionPayload = {
   isAnonymous: true
@@ -400,7 +412,7 @@ export const setSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_SESSION_TOKEN, sessionToken, {
+    cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
       secure:
@@ -422,7 +434,7 @@ export const setAnonymousSessionCookie = (
 ) => {
   setCookie(
     res,
-    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN, token, {
+    cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
       secure:
@@ -445,7 +457,7 @@ export const setCSRFCookie = (
   debug("setCSRFCookie", antiCSRFToken)
   setCookie(
     res,
-    cookie.serialize(COOKIE_CSRF_TOKEN, antiCSRFToken, {
+    cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
@@ -467,7 +479,7 @@ export const setPublicDataCookie = (
   setHeader(res, HEADER_PUBLIC_DATA_TOKEN, "updated")
   setCookie(
     res,
-    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN, publicDataToken, {
+    cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
       secure:
         !process.env.DISABLE_SECURE_COOKIES &&
@@ -487,9 +499,9 @@ export async function getSession(
   req: BlitzApiRequest,
   res: ServerResponse,
 ): Promise<SessionKernel | null> {
-  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN]
-  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN] // for essential method
-  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN] // for advanced method
+  const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]
+  const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
+  const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
     req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
@@ -515,10 +527,10 @@ export async function getSession(
       debug("Session not found in DB")
       return null
     }
-    if (persistedSession.hashedSessionToken !== hash(sessionToken)) {
+    if (persistedSession.hashedSessionToken !== hash256(sessionToken)) {
       debug("sessionToken hash did not match")
       debug("persisted: ", persistedSession.hashedSessionToken)
-      debug("in req: ", hash(sessionToken))
+      debug("in req: ", hash256(sessionToken))
       return null
     }
     if (persistedSession.expiresAt && isPast(persistedSession.expiresAt)) {
@@ -542,7 +554,7 @@ export async function getSession(
     if (req.method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
-      const hasPublicDataChanged = hash(persistedSession.publicData) !== hashedPublicData
+      const hasPublicDataChanged = hash256(persistedSession.publicData) !== hashedPublicData
       if (hasPublicDataChanged) {
         debug("PublicData has changed since the last request")
       }
@@ -647,6 +659,8 @@ export async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, "", new Date(0))
+    removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -691,7 +705,7 @@ export async function createNewSession(
       expiresAt,
       handle,
       userId: newPublicData.userId,
-      hashedSessionToken: hash(sessionToken),
+      hashedSessionToken: hash256(sessionToken),
       antiCSRFToken,
       publicData: JSON.stringify(newPublicData),
       privateData: JSON.stringify(newPrivateData),
@@ -703,6 +717,7 @@ export async function createNewSession(
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, "", new Date(0))
     removeHeader(res, HEADER_SESSION_REVOKED)
+    setHeader(res, HEADER_SESSION_CREATED, "true")
 
     return {
       handle,
@@ -769,7 +784,7 @@ export async function refreshSession(
     if (publicDataChanged) {
       await config.updateSession(sessionKernel.handle, {
         expiresAt,
-        hashedSessionToken: hash(sessionToken),
+        hashedSessionToken: hash256(sessionToken),
         publicData: JSON.stringify(sessionKernel.publicData),
       })
     } else {

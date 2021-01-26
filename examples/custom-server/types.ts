@@ -1,5 +1,5 @@
-import { DefaultCtx, SessionContext, DefaultPublicData } from "blitz"
-import { User } from "db"
+import {DefaultCtx, SessionContext, DefaultPublicData} from "blitz"
+import {User} from "db"
 import React from "react"
 
 declare module "blitz" {
