@@ -30,6 +30,7 @@ export {
   SessionConfig, // new
   SessionContext,
   AuthenticatedSessionContext,
+  IsAuthorizedArgs,
 } from "./supertokens"
 
 export {SecurePassword, hash256, generateToken} from "./auth-utils"

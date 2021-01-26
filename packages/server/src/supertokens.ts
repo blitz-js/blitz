@@ -18,6 +18,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
+  IsAuthorizedArgs,
   isLocalhost,
   Middleware,
   MiddlewareResponse,
@@ -29,10 +30,9 @@ import {
   SessionContext,
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
+// Must import this type from 'blitz'
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
-// Must import this type from 'blitz'
-import {Authorize} from "blitz"
 import cookie from "cookie"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import {IncomingMessage, ServerResponse} from "http"
@@ -243,7 +243,7 @@ export class SessionContextClass implements SessionContext {
     return this._kernel.publicData
   }
 
-  $authorize(...args: Parameters<Authorize>) {
+  $authorize(...args: IsAuthorizedArgs) {
     const e = new AuthenticationError()
     Error.captureStackTrace(e, this.$authorize)
     if (!this.userId) throw e
@@ -255,7 +255,7 @@ export class SessionContextClass implements SessionContext {
     }
   }
 
-  $isAuthorized(...args: Parameters<Authorize>) {
+  $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
     return config.isAuthorized({ctx: this._res.blitzCtx}, ...args)
