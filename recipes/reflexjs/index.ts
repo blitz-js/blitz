@@ -77,31 +77,27 @@ function addBabelPreset(program: Collection<j.Program>, name: string) {
 
 export default RecipeBuilder()
   .setName("Reflexjs")
-  .setDescription(
-    "Configure your Blitz app's styling with Reflexjs. This recipe will install all necessary dependencies and configure Reflexjs for immediate use.",
-  )
+  .setDescription("This will install all necessary dependencies and configure Reflexjs for use.")
   .setOwner("tundera <stackshuffle@gmail.com>")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
-    stepName: "Add npm dependencies",
-    explanation:
-      "First, install the `reflexjs` dependency needed to use Reflexjs in our Blitz app.",
+    stepName: "npm dependencies",
+    explanation: "",
     packages: [{name: "reflexjs", version: "1.x"}],
   })
   .addNewFilesStep({
     stepId: "createTheme",
-    stepName: "Define a theme",
-    explanation: "Define a theme definition in the `app/theme` directory.",
-    targetDirectory: "./app",
+    stepName: "Add theme",
+    explanation: "Adds a theme definition in the `app/core/theme` directory.",
+    targetDirectory: "./app/core",
     templatePath: join(__dirname, "templates", "theme"),
     templateValues: {},
   })
   .addTransformFilesStep({
     stepId: "importProviderAndBaseTheme",
     stepName: "Add ThemeProvider component and base theme",
-    explanation:
-      "Next, add the ThemeProvider component to `_app` and pass it the theme defined earlier.",
+    explanation: "Add ThemeProvider component to `_app` and pass it the theme we just created",
     singleFileSearch: paths.app(),
 
     transform(program: Collection<j.Program>) {
@@ -112,7 +108,7 @@ export default RecipeBuilder()
 
       const baseThemeImport = j.importDeclaration(
         [j.importDefaultSpecifier(j.identifier("theme"))],
-        j.literal("app/theme"),
+        j.literal("app/core/theme"),
       )
 
       addImport(program, providerImport)
@@ -141,7 +137,7 @@ export default RecipeBuilder()
     stepId: "updateBabelConfig",
     stepName: "Add Babel preset",
     explanation:
-      "Finally, we'll update the Babel configuration to use the Reflfexjs preset. This automatically sets the jsx pragma in your Blitz app so you won't need to import it in your files.",
+      "Finally, update the Babel configuration to use the Reflfexjs preset. This automatically sets the jsx pragma in your Blitz app so you won't need to import it in your files.",
     singleFileSearch: paths.babelConfig(),
 
     transform(program: Collection<j.Program>) {

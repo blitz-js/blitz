@@ -27,15 +27,13 @@ function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
 
 export default RecipeBuilder()
   .setName("Chakra UI")
-  .setDescription(
-    `Configure your Blitz app's styling with Chakra UI. This recipe will install all necessary dependencies and configure Chakra UI for immediate use.`,
-  )
+  .setDescription(`This will install all necessary dependencies and configure Chakra UI for use.`)
   .setOwner("zekan.fran369@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
-    stepName: "Add npm dependencies",
-    explanation: `Chakra requires some other dependencies like emotion to work`,
+    stepName: "npm dependencies",
+    explanation: `Chakra UI requires some other dependencies like emotion to work`,
     packages: [
       {name: "@chakra-ui/react", version: "1.1.2"},
       {name: "@emotion/react", version: "11.1.4"},
@@ -46,7 +44,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
     stepName: "Import ChakraProvider component",
-    explanation: `We can import the chakra provider into _app, so it is accessible in the whole app`,
+    explanation: `Import the chakra-ui provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
