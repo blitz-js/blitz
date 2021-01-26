@@ -1,14 +1,14 @@
 import {Suspense} from "react"
-import Layout from "app/layouts/Layout"
 import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
-import getUsers from "app/users/queries/getUsers"
+import Layout from "app/core/layouts/Layout"
+import getProjects from "app/projects/queries/getProjects"
 
 const ITEMS_PER_PAGE = 100
 
-export const UsersList = () => {
+export const ProjectsList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [{users, hasMore}] = usePaginatedQuery(getUsers, {
+  const [{projects, hasMore}] = usePaginatedQuery(getProjects, {
     orderBy: {id: "asc"},
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
@@ -20,10 +20,10 @@ export const UsersList = () => {
   return (
     <div>
       <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            <Link href="/users/[userId]" as={`/users/${user.id}`}>
-              <a>{user.email}</a>
+        {projects.map((project) => (
+          <li key={project.id}>
+            <Link href={`/projects/${project.id}`}>
+              <a>{project.name}</a>
             </Link>
           </li>
         ))}
@@ -39,22 +39,22 @@ export const UsersList = () => {
   )
 }
 
-const UsersPage: BlitzPage = () => {
+const ProjectsPage: BlitzPage = () => {
   return (
     <div>
       <p>
-        <Link href="/users/new">
-          <a>Create User</a>
+        <Link href="/projects/new">
+          <a>Create Project</a>
         </Link>
       </p>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <UsersList />
+        <ProjectsList />
       </Suspense>
     </div>
   )
 }
 
-UsersPage.getLayout = (page) => <Layout>{page}</Layout>
+ProjectsPage.getLayout = (page) => <Layout title={"Projects"}>{page}</Layout>
 
-export default UsersPage
+export default ProjectsPage

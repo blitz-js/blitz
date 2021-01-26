@@ -43,3 +43,10 @@ model Session {
   publicData         String?
   privateData        String?
 }
+
+model Project {
+  id        Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   
+}

@@ -2,7 +2,7 @@ import {Suspense} from "react"
 import {Head, Link, useSession, useRouterQuery, useMutation, invoke} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
-import Layout from "app/layouts/Layout"
+import Layout from "app/core/layouts/Layout"
 import {useCurrentUser} from "app/hooks/useCurrentUser"
 // import getUsers from "app/users/queries/getUsers"
 
