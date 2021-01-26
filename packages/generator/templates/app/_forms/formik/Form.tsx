@@ -6,7 +6,7 @@ type FormProps<S extends z.ZodType<any, any>> = {
   /** All your form fields */
   children: ReactNode
   /** Text to display in the submit button */
-  submitText: string
+  submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
   initialValues?: FormikProps<z.infer<S>>["initialValues"]
@@ -62,9 +62,11 @@ export function Form<S extends z.ZodType<any, any>>({
             </div>
           )}
 
-          <button type="submit" disabled={isSubmitting}>
-            {submitText}
-          </button>
+          {submitText && (
+            <button type="submit" disabled={isSubmitting}>
+              {submitText}
+            </button>
+          )}
 
           <style global jsx>{`
             .form > * + * {
