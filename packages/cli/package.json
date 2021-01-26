@@ -38,7 +38,7 @@
     "@oclif/plugin-help": "3.2.1",
     "@oclif/plugin-not-found": "1.2.4",
     "@prisma/sdk": "2.15.0",
-    "@salesforce/lazy-require": "0.3.3",
+    "@salesforce/lazy-require": "0.3.4",
     "camelcase": "^6.2.0",
     "chalk": "4.1.0",
     "cross-spawn": "7.0.3",
