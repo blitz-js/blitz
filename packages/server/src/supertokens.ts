@@ -31,6 +31,8 @@ import {
 } from "@blitzjs/core"
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
+// Must import this type from 'blitz'
+import {Authorize} from "blitz"
 import cookie from "cookie"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import {IncomingMessage, ServerResponse} from "http"
@@ -89,18 +91,24 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-export function simpleRolesIsAuthorized(ctx: any, input?: any) {
+export function simpleRolesIsAuthorized(
+  {ctx}: any,
+  roleOrRoles?: string | string[],
+  {if: condition = true}: {if?: boolean} = {},
+) {
   // No roles required, so all roles allowed
-  if (!input) return true
+  if (!roleOrRoles) return true
+  // Don't enforce the roles if condition is false
+  if (!condition) return true
 
   const rolesToAuthorize = []
-  if (Array.isArray(input)) {
-    rolesToAuthorize.push(...input)
-  } else if (input) {
-    rolesToAuthorize.push(input)
+  if (Array.isArray(roleOrRoles)) {
+    rolesToAuthorize.push(...roleOrRoles)
+  } else if (roleOrRoles) {
+    rolesToAuthorize.push(roleOrRoles)
   }
   for (const role of rolesToAuthorize) {
-    if (ctx.session.publicData.roles.includes(role)) return true
+    if ((ctx.session as SessionContext).$publicData.roles!.includes(role)) return true
   }
   return false
 }
@@ -235,22 +243,22 @@ export class SessionContextClass implements SessionContext {
     return this._kernel.publicData
   }
 
-  $authorize(input?: any) {
+  $authorize(...args: Parameters<Authorize>) {
     const e = new AuthenticationError()
     Error.captureStackTrace(e, this.$authorize)
     if (!this.userId) throw e
 
-    if (!this.$isAuthorized(input)) {
+    if (!this.$isAuthorized(...args)) {
       const e = new AuthorizationError()
       Error.captureStackTrace(e, this.$authorize)
       throw e
     }
   }
 
-  $isAuthorized(input?: any) {
+  $isAuthorized(...args: Parameters<Authorize>) {
     if (!this.userId) return false
 
-    return config.isAuthorized(this._res.blitzCtx, input)
+    return config.isAuthorized({ctx: this._res.blitzCtx}, ...args)
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {

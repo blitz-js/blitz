@@ -35,8 +35,12 @@ export interface DefaultPublicData {
   userId: any
   roles: string[]
 }
-
 export interface PublicData extends DefaultPublicData {}
+
+export interface DefaultAuthorize {
+  (...args: any[]): any
+}
+export interface Authorize extends DefaultAuthorize {}
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string

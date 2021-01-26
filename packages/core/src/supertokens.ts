@@ -2,7 +2,7 @@ import {useState} from "react"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {PublicData} from "./types"
+import {Authorize, PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
@@ -26,14 +26,14 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  isAuthorized: (ctx: Ctx, input?: any) => boolean
+  isAuthorized: (data: {ctx: Ctx}, ...args: any[]) => boolean
 }
 
 export interface SessionContextBase extends PublicData {
   $handle: string | null
   $publicData: unknown
-  $authorize(input?: any): asserts this is AuthenticatedSessionContext
-  $isAuthorized(input?: any): boolean
+  $authorize(...args: Parameters<Authorize>): asserts this is AuthenticatedSessionContext
+  $isAuthorized: Authorize
   $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   $revoke: () => Promise<void>
   $revokeAll: () => Promise<void>
