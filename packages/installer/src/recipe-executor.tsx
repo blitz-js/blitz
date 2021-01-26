@@ -27,11 +27,10 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     try {
       const {waitUntilExit} = render(
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
+        {exitOnCtrlC: false},
       )
       await waitUntilExit()
-      log.info(
-        `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-      )
+      log.info(`\n🎉 The ${this.options.name} recipe has been installed!\n`)
     } catch (e) {
       log.error(e)
       return
