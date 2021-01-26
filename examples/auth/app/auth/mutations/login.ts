@@ -1,4 +1,4 @@
-import {Ctx, SecurePassword, AuthenticationError} from "blitz"
+import {pipe, SecurePassword, AuthenticationError} from "blitz"
 import db from "db"
 import * as z from "zod"
 
@@ -22,16 +22,12 @@ export const LoginInput = z.object({
   email: z.string().email(),
   password: z.string(),
 })
-export type LoginInputType = z.infer<typeof LoginInput>
 
-export default async function login(input: LoginInputType, {session}: Ctx) {
-  // This throws an error if input is invalid
-  const {email, password} = LoginInput.parse(input)
-
+export default pipe.resolver(pipe.zod(LoginInput), async ({email, password}, {session}) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
   await session.$create({userId: user.id, roles: [user.role]})
 
   return user
-}
+})

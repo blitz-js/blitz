@@ -16,6 +16,7 @@ export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
+export {pipe} from "./pipes"
 
 export {
   getAllMiddlewareForModule,
