@@ -1,6 +1,6 @@
 import {infer as zInfer, ZodSchema} from "zod"
 import {Ctx} from "./middleware"
-import {IsAuthorizedArgs, SessionContext} from "./supertokens"
+import {SessionContext, SessionContextBase} from "./supertokens"
 
 type PipeFn<Prev, Next> = (i: Prev, c: Ctx) => Next
 
@@ -184,7 +184,7 @@ export const pipe = {
   zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
     return (input: Type): Type => schema.parse(input)
   },
-  authorize(...args: IsAuthorizedArgs) {
+  authorize(...args: Parameters<SessionContextBase["$authorize"]>) {
     return function <T>(input: T, ctx: any) {
       const session: SessionContext = ctx.session
       session.$authorize(...args)
