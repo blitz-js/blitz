@@ -77,58 +77,67 @@ export const executeRpcCall = <TInput, TResult>(
       }),
       signal: controller.signal,
     })
-    .then(async (result) => {
+    .then(async (response) => {
       clientDebug("Received request for", apiUrl)
-      if (result.headers) {
-        if (result.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+      if (response.headers) {
+        if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
           publicDataStore.updateState()
           clientDebug("Public data updated")
         }
-        if (result.headers.get(HEADER_SESSION_REVOKED)) {
+        if (response.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
           queryCache.clear()
           publicDataStore.clear()
         }
-        if (result.headers.get(HEADER_SESSION_CREATED)) {
+        if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
           queryCache.clear()
         }
-        if (result.headers.get(HEADER_CSRF_ERROR)) {
+        if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
           delete err.stack
           throw err
         }
       }
 
-      let payload
-      try {
-        payload = await result.json()
-      } catch (error) {
-        throw new Error(`Failed to parse json from request to ${apiUrl}`)
-      }
-
-      if (payload.error) {
-        let error = deserialize({json: payload.error, meta: payload.meta?.error}) as any
-        // We don't clear the publicDataStore for anonymous users
-        if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
-          publicDataStore.clear()
-        }
-
-        const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
-        if (prismaError && !("code" in error)) {
-          error = new Error(prismaError[0])
-          error.statusCode = 500
-        }
-
+      if (response.status < 200 || response.status >= 300) {
+        const error = new Error(response.statusText)
+        ;(error as any).statusCode = response.status
+        ;(error as any).path = apiUrl
+        delete error.stack
         throw error
       } else {
-        const data = deserialize({json: payload.result, meta: payload.meta?.result})
-
-        if (!opts.fromQueryHook) {
-          const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
-          queryCache.setQueryData(queryKey, data)
+        let payload
+        try {
+          payload = await response.json()
+        } catch (error) {
+          const err = new Error(`Failed to parse json from ${apiUrl}`)
+          delete err.stack
         }
-        return data as TResult
+
+        if (payload.error) {
+          let error = deserialize({json: payload.error, meta: payload.meta?.error}) as any
+          // We don't clear the publicDataStore for anonymous users
+          if (error.name === "AuthenticationError" && publicDataStore.getData().userId) {
+            publicDataStore.clear()
+          }
+
+          const prismaError = error.message.match(/invalid.*prisma.*invocation/i)
+          if (prismaError && !("code" in error)) {
+            error = new Error(prismaError[0])
+            error.statusCode = 500
+          }
+
+          throw error
+        } else {
+          const data = deserialize({json: payload.response, meta: payload.meta?.response})
+
+          if (!opts.fromQueryHook) {
+            const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
+            queryCache.setQueryData(queryKey, data)
+          }
+          return data as TResult
+        }
       }
     }) as CancellablePromise<TResult>
 
