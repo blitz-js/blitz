@@ -165,7 +165,7 @@ async function mockServer<TInput, TResult>(
   const handler = rpcApiHandler(
     resolverModule,
     [
-      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized, domain: "test"}),
+      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized as any, domain: "test"}),
       ...(resolverModule.middleware || []),
     ],
     dbConnectorFn,
