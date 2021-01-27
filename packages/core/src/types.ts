@@ -37,10 +37,9 @@ export interface DefaultPublicData {
 }
 export interface PublicData extends DefaultPublicData {}
 
-export interface DefaultAuthorize {
-  (...args: any[]): any
+export interface Authorization {
+  // isAuthorize can be injected here
 }
-export interface Authorize extends DefaultAuthorize {}
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string

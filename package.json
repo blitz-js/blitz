@@ -39,7 +39,9 @@
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
-  "resolutions": {},
+  "resolutions": {
+    "typescript": "4.1.3"
+  },
   "devDependencies": {
     "@rollup/pluginutils": "4.1.0",
     "@testing-library/jest-dom": "5.11.8",
