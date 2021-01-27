@@ -33,7 +33,9 @@ export interface SessionContextBase extends PublicData {
   $handle: string | null
   $publicData: unknown
   $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
-  $isAuthorized: (...args: IsAuthorizedArgs) => this is AuthenticatedSessionContext
+  // $isAuthorized cannot have assertion return type because it breaks advanced use cases
+  // with multiple isAuthorized calls
+  $isAuthorized: (...args: IsAuthorizedArgs) => boolean
   $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   $revoke: () => Promise<void>
   $revokeAll: () => Promise<void>
