@@ -1,6 +1,6 @@
 import {infer as zInfer, ZodSchema} from "zod"
 import {Ctx} from "./middleware"
-import {SessionContext} from "./supertokens"
+import {IsAuthorizedArgs, SessionContext} from "./supertokens"
 
 type PipeFn<Prev, Next> = (i: Prev, c: Ctx) => Next
 
@@ -167,9 +167,8 @@ function resolver<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q>(
   op: PipeFn<O, P>,
   pq: PipeFn<P, Q>,
 ): (input: A, ctx: Ctx) => Q
-function resolver(..._args: unknown[]): unknown {
-  // Convert to real array
-  const functions: PipeFn<unknown, unknown>[] = [].slice.call(arguments)
+function resolver(...args: unknown[]): unknown {
+  const functions = args as PipeFn<unknown, unknown>[]
 
   return async function (input: unknown, ctx: Ctx) {
     let lastResult = input
@@ -185,7 +184,7 @@ export const pipe = {
   zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
     return (input: Type): Type => schema.parse(input)
   },
-  authorize(...args: Parameters<SessionContext["$authorize"]>) {
+  authorize(...args: IsAuthorizedArgs) {
     return function <T>(input: T, ctx: any) {
       const session: SessionContext = ctx.session
       session.$authorize(...args)
