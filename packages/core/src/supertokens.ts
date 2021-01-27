@@ -35,8 +35,6 @@ export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
     : unknown[]
   : unknown[]
 
-// type Tail<L extends any[]> = L extends readonly [any, ...infer LTail] ? LTail : L
-
 export interface SessionContextBase extends PublicData {
   $handle: string | null
   $publicData: unknown
