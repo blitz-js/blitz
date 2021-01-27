@@ -12207,7 +12207,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash-es@^4.17.15, lodash-es@^4.17.20:
+lodash-es@^4.17.20:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.20.tgz#29f6332eefc60e849f869c264bc71126ad61e8f7"
   integrity sha512-JD1COMZsq8maT6mnuz1UMV0jvYD0E0aUsSOdrr1/nAG3dhqQXwRRgeW0cSqH1U43INKcqxaiVIQNOUDld7gRDA==
@@ -17120,13 +17120,10 @@ stylis@3.5.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.4.tgz#f665f25f5e299cf3d64654ab949a57c768b73fbe"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.4.1.tgz#c96501fc0cc32cc9cb25ecc3fb476db631eceba2"
-  integrity sha512-+PjOQNj7mW4I0t3KphIgwwQvQObd5Tc1DtUoIMj3iN7RXQyoWr2R8LXLtQw/UNEItSd0Al+qn0I/8yCnTXiAIw==
-  dependencies:
-    lodash "^4.17.20"
-    lodash-es "^4.17.15"
+superjson@1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.5.2.tgz#bf8620adcc35dc77834d3fc69b2c929cb152f236"
+  integrity sha512-ko6wjKha8KwUdl6K9NwnRcRTsylW8bt3E7bp0ixIiO8nVJP+qzHzwLLZ1WARIxPmrqkxvEB79w4xLtis1QlT3g==
 
 supports-color@^2.0.0:
   version "2.0.0"
