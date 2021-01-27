@@ -7,7 +7,7 @@ declare module "blitz" {
   }
   export interface Session {
     isAuthorized: typeof simpleRolesIsAuthorized
-    publicData: {
+    PublicData: {
       userId: string
       roles: string[]
     }
