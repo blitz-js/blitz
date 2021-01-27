@@ -2,7 +2,7 @@ import {useState} from "react"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {Authorization, PublicData} from "./types"
+import {PublicData, Session} from "./types"
 import {readCookie} from "./utils/cookie"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
@@ -29,8 +29,8 @@ export type SessionConfig = {
   isAuthorized: (data: {ctx: Ctx}, ...args: any[]) => boolean
 }
 
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Authorization
-  ? Tail<Parameters<Authorization["isAuthorized"]>>
+export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
+  ? Tail<Parameters<Session["isAuthorized"]>>
   : unknown[]
 
 type Tail<L extends any[]> = L extends readonly [any, ...infer LTail] ? LTail : L

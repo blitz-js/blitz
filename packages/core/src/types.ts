@@ -37,7 +37,7 @@ export interface DefaultPublicData {
 }
 export interface PublicData extends DefaultPublicData {}
 
-export interface Authorization {
+export interface Session {
   // isAuthorize can be injected here
 }
 

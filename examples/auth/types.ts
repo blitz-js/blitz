@@ -11,7 +11,7 @@ declare module "blitz" {
     userId: User["id"]
     views?: number
   }
-  export interface Authorization {
+  export interface Session {
     isAuthorized: typeof simpleRolesIsAuthorized
   }
 }
