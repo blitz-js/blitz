@@ -1,5 +1,4 @@
 import {DefaultCtx, SessionContext, DefaultPublicData} from "blitz"
-
 import {simpleRolesIsAuthorized} from "@blitzjs/server"
 import {User} from "db"
 
