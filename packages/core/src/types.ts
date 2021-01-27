@@ -31,15 +31,18 @@ export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof useParams>
 }
 
-export interface DefaultPublicData {
-  userId: any
-  roles: string[]
-}
-export interface PublicData extends DefaultPublicData {}
-
 export interface Session {
-  // isAuthorize can be injected here
+  // isAuthorize can be injected here (see supertokens.ts)
+  // PublicData can be injected here (see supertokens.ts)
 }
+
+export type PublicData = "PublicData" extends keyof Session ? Session["PublicData"] : {userId: any}
+
+export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
+  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
+    ? Parameters<Session["isAuthorized"]>[0]["args"]
+    : unknown[]
+  : unknown[]
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string

@@ -115,7 +115,7 @@ describe("supertokens", () => {
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.$create({userId: 1, roles: ["admin"]})
+      await ctx.session.$create({userId: 1, roles: ["admin"]} as any)
       return
     }) as EnhancedResolver<unknown, unknown>
 
