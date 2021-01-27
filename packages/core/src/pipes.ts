@@ -191,4 +191,16 @@ export const pipe = {
       return input
     }
   },
+  authorizeIf<T>(
+    conditionCallback: (input: T, ctx: Ctx) => boolean,
+    ...args: Parameters<SessionContextBase["$authorize"]>
+  ) {
+    return function (input: T, ctx: any) {
+      const session: SessionContext = ctx.session
+      if (conditionCallback(input, ctx)) {
+        session.$authorize(...args)
+      }
+      return input
+    }
+  },
 }
