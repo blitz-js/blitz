@@ -2,7 +2,7 @@ import {useState} from "react"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {PublicData, Session} from "./types"
+import {IsAuthorizedArgs, PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
@@ -28,12 +28,6 @@ export type SessionConfig = {
   deleteSession: (handle: string) => Promise<SessionModel>
   isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
 }
-
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
 
 export interface SessionContextBase extends PublicData {
   $handle: string | null
