@@ -91,11 +91,15 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-export function simpleRolesIsAuthorized(
-  {ctx}: any,
-  roleOrRoles?: string | string[],
-  {if: condition = true}: {if?: boolean} = {},
-) {
+type SimpleRolesIsAuthorizedArgs = {
+  ctx: any
+  args: [roleOrRoles?: string | string[], options?: {if?: boolean}]
+}
+
+export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs) {
+  const [roleOrRoles, options = {}] = args
+  const condition = options.if ?? true
+
   // No roles required, so all roles allowed
   if (!roleOrRoles) return true
   // Don't enforce the roles if condition is false
@@ -258,7 +262,7 @@ export class SessionContextClass implements SessionContext {
   $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
-    return config.isAuthorized({ctx: this._res.blitzCtx}, ...args)
+    return config.isAuthorized({ctx: this._res.blitzCtx, args})
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {

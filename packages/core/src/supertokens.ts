@@ -26,14 +26,16 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  isAuthorized: (data: {ctx: Ctx}, ...args: any[]) => boolean
+  isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
 }
 
 export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? Tail<Parameters<Session["isAuthorized"]>>
+  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
+    ? Parameters<Session["isAuthorized"]>[0]["args"]
+    : unknown[]
   : unknown[]
 
-type Tail<L extends any[]> = L extends readonly [any, ...infer LTail] ? LTail : L
+// type Tail<L extends any[]> = L extends readonly [any, ...infer LTail] ? LTail : L
 
 export interface SessionContextBase extends PublicData {
   $handle: string | null
