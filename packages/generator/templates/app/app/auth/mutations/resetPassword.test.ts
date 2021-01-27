@@ -8,7 +8,7 @@ beforeEach(async () => {
 
 const mockCtx: any = {
   session: {
-    create: jest.fn,
+    $create: jest.fn,
   },
 }
 
