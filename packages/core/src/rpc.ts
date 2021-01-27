@@ -130,7 +130,7 @@ export const executeRpcCall = <TInput, TResult>(
 
           throw error
         } else {
-          const data = deserialize({json: payload.response, meta: payload.meta?.response})
+          const data = deserialize({json: payload.result, meta: payload.meta?.result})
 
           if (!opts.fromQueryHook) {
             const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
