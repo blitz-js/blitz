@@ -1,11 +1,25 @@
-import {Ctx} from "blitz"
-import db, {Prisma} from "db"
+import {pipe} from "blitz"
+import db from "db"
+import * as z from "zod"
 
-type CreateProjectInput = Pick<Prisma.ProjectCreateArgs, "data">
-export default async function createProject({data}: CreateProjectInput, ctx: Ctx) {
-  ctx.session.$authorize()
+export const CreateProject = z.object({
+  name: z.string(),
+  dueDate: z.date().optional(),
+})
 
-  const project = await db.project.create({data})
+export default pipe.resolver(
+  pipe.zod(CreateProject),
+  pipe.authorize(),
+  pipe.authorizeIf((input, ctx) => input.name === ctx.session.roles[0], "admin"),
+  // How to set a default input value
+  (input, _ctx) => ({dueDate: new Date(), ...input}),
+  async (input, _ctx) => {
+    console.log("Creating project...")
+    const project = await db.project.create({
+      data: input,
+    })
+    console.log("Created project")
 
-  return project
-}
+    return project
+  },
+)
