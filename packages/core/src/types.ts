@@ -35,8 +35,11 @@ export interface DefaultPublicData {
   userId: any
   roles: string[]
 }
-
 export interface PublicData extends DefaultPublicData {}
+
+export interface Session {
+  // isAuthorize can be injected here
+}
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
