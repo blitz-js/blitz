@@ -100,7 +100,7 @@ export const executeRpcCall = <TInput, TResult>(
         }
       }
 
-      if (response.status < 200 || response.status >= 300) {
+      if (!response.ok) {
         const error = new Error(response.statusText)
         ;(error as any).statusCode = response.status
         ;(error as any).path = apiUrl
