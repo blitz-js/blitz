@@ -162,7 +162,11 @@ export class Install extends Command {
 
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
-      const packageJsonPath = `${apiUrl}/contents/package.json`
+      const packageJsonPath = require("path").join(
+        `${apiUrl}/contents`,
+        recipeInfo.subdirectory ?? "",
+        "package.json",
+      )
 
       if (!(await isUrlValid(packageJsonPath))) {
         log.error(dedent`[blitz install] Recipe path "${args.recipe}" isn't valid. Please provide:
