@@ -13,7 +13,7 @@
     "dev": "run-p watch build:templates",
     "watch": "tsdx watch --verbose",
     "build": "tsdx build && yarn build:templates",
-    "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
+    "build:templates": "wait-on dist/index.js && rimraf dist/templates/** && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
     "test": "tsdx test",
     "test:watch": "tsdx test --watch"
   },
