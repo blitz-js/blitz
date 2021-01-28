@@ -10,7 +10,7 @@ export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
   ctx: Ctx,
 ) {
-  ctx.session.authorize()
+  ctx.session.$authorize()
 
   const __modelNames__ = await db.__modelName__.findMany({
     where,

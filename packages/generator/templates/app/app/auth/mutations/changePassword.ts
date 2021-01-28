@@ -4,7 +4,7 @@ import { authenticateUser } from "./login"
 import { ChangePasswordInput, ChangePasswordInputType } from "../validations"
 
 export default async function changePassword(input: ChangePasswordInputType, ctx: Ctx) {
-  ctx.session.authorize()
+  ctx.session.$authorize()
   const { currentPassword, newPassword } = ChangePasswordInput.parse(input)
 
   const user = await db.user.findFirst({ where: { id: ctx.session.userId } })
