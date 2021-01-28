@@ -174,6 +174,7 @@ export class Install extends Command {
           2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
           3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
           4. A file path to a locally-written recipe.`)
+        process.exit(1)
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
