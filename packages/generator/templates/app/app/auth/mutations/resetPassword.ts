@@ -1,6 +1,6 @@
-import { Ctx, SecurePassword, hash256 } from "blitz"
+import { pipe, SecurePassword, hash256 } from "blitz"
 import db from "db"
-import { ResetPasswordInput, ResetPasswordInputType } from "../validations"
+import { ResetPassword } from "../validations"
 import login from "./login"
 
 export class ResetPasswordError extends Error {
@@ -8,9 +8,7 @@ export class ResetPasswordError extends Error {
   message = "Reset password link is invalid or it has expired."
 }
 
-export default async function resetPassword(input: ResetPasswordInputType, ctx: Ctx) {
-  const { password, token } = ResetPasswordInput.parse(input)
-
+export default pipe.resolver(pipe.zod(ResetPassword), async ({ password, token }, ctx) => {
   // 1. Try to find this token in the database
   const hashedToken = hash256(token)
   const possibleToken = await db.token.findFirst({
@@ -46,4 +44,4 @@ export default async function resetPassword(input: ResetPasswordInputType, ctx: 
   await login({ email: user.email, password }, ctx)
 
   return true
-}
+})
