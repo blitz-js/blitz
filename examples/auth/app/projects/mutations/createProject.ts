@@ -10,7 +10,6 @@ export const CreateProject = z.object({
 export default resolver.pipe(
   resolver.zod(CreateProject),
   resolver.authorize(),
-  resolver.authorizeIf((input, ctx) => input.name === ctx.session.roles[0], "admin"),
   // How to set a default input value
   (input, _ctx) => ({dueDate: new Date(), ...input}),
   async (input, _ctx) => {
