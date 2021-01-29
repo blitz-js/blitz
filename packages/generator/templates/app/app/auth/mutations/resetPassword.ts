@@ -1,4 +1,4 @@
-import { pipe, SecurePassword, hash256 } from "blitz"
+import { resolver, SecurePassword, hash256 } from "blitz"
 import db from "db"
 import { ResetPassword } from "../validations"
 import login from "./login"
@@ -8,7 +8,7 @@ export class ResetPasswordError extends Error {
   message = "Reset password link is invalid or it has expired."
 }
 
-export default pipe.resolver(pipe.zod(ResetPassword), async ({ password, token }, ctx) => {
+export default resolver.pipe(resolver.zod(ResetPassword), async ({ password, token }, ctx) => {
   // 1. Try to find this token in the database
   const hashedToken = hash256(token)
   const possibleToken = await db.token.findFirst({

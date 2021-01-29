@@ -1,4 +1,4 @@
-import {pipe} from "blitz"
+import {resolver} from "blitz"
 import db from "db"
 import * as z from "zod"
 
@@ -7,10 +7,10 @@ export const CreateProject = z.object({
   dueDate: z.date().optional(),
 })
 
-export default pipe.resolver(
-  pipe.zod(CreateProject),
-  pipe.authorize(),
-  pipe.authorizeIf((input, ctx) => input.name === ctx.session.roles[0], "admin"),
+export default resolver.pipe(
+  resolver.zod(CreateProject),
+  resolver.authorize(),
+  resolver.authorizeIf((input, ctx) => input.name === ctx.session.roles[0], "admin"),
   // How to set a default input value
   (input, _ctx) => ({dueDate: new Date(), ...input}),
   async (input, _ctx) => {
