@@ -5,12 +5,11 @@ import {Stream} from "stream"
 import {promisify} from "util"
 
 import {Command} from "../command"
-import {dedent} from "../utils/dedent"
 
 const pipeline = promisify(Stream.pipeline)
 
 async function got(url: string) {
-  return require("got")(url).catch((e: any) => Boolean(console.error(e)) || e)
+  return require("got")(url).catch((e: any) => e)
 }
 
 async function gotJSON(url: string) {
@@ -159,6 +158,7 @@ export class Install extends Command {
       : "npm"
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
+    const chalk = (await import("chalk")).default
 
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
@@ -169,11 +169,16 @@ export class Install extends Command {
       )
 
       if (!(await isUrlValid(packageJsonPath))) {
-        log.error(dedent`[blitz install] Recipe path "${args.recipe}" isn't valid. Please provide:
-          1. The name of a recipe to install (e.g. "tailwind") Available recipes are listed at https://github.com/blitz-js/blitz/tree/canary/recipes,
-          2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
-          3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
-          4. A file path to a locally-written recipe.`)
+        log.error(`Could not find recipe "${args.recipe}"\n`)
+        console.log(`${chalk.bold("Please provide one of the following:")}
+
+1. The name of a recipe to install (e.g. "tailwind")
+   ${chalk.dim(
+     "- Available recipes listed at https://github.com/blitz-js/blitz/tree/canary/recipes",
+   )}
+2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
+3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
+4. A file path to a locally-written recipe.\n`)
         process.exit(1)
       } else {
         const repoInfo = await gotJSON(apiUrl)
