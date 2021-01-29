@@ -36,6 +36,6 @@
     }
   ],
   "dependencies": {
-    "babel-plugin-superjson-next": "0.1.11"
+    "babel-plugin-superjson-next": "0.2.1"
   }
 }
