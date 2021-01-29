@@ -170,7 +170,7 @@ export class Install extends Command {
 
       if (!(await isUrlValid(packageJsonPath))) {
         log.error(dedent`[blitz install] Recipe path "${args.recipe}" isn't valid. Please provide:
-          1. The name of a dependency to install (e.g. "tailwind"),
+          1. The name of a recipe to install (e.g. "tailwind") Available recipes are listed at https://github.com/blitz-js/blitz/tree/canary/recipes,
           2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
           3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
           4. A file path to a locally-written recipe.`)
