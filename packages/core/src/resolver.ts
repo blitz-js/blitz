@@ -1,8 +1,9 @@
 import {infer as zInfer, ZodSchema} from "zod"
 import {Ctx} from "./middleware"
 import {SessionContext, SessionContextBase} from "./supertokens"
+import {Await} from "./types"
 
-type PipeFn<Prev, Next> = (i: Prev, c: Ctx) => Next
+type PipeFn<Prev, Next> = (i: Await<Prev>, c: Ctx) => Next
 
 function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => Z
 function pipe<A, B, C>(ab: PipeFn<A, B>, bc: PipeFn<B, C>): (input: A, ctx: Ctx) => C
