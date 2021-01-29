@@ -5030,10 +5030,10 @@ babel-plugin-polyfill-regenerator@^0.0.4:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.0.3"
 
-babel-plugin-superjson-next@0.1.11:
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/babel-plugin-superjson-next/-/babel-plugin-superjson-next-0.1.11.tgz#03ee814a6cbf70af6e2cc26b0ff58c875963879b"
-  integrity sha512-FSjhm4eHnygleUjBwGpCzIWDodmFsMKHDlWBTimSMgMmyOw+6xKIUrQCjE3Ly4Qi0FdE2IUyypMt7UsUiemkXA==
+babel-plugin-superjson-next@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/babel-plugin-superjson-next/-/babel-plugin-superjson-next-0.2.1.tgz#7a5834c78807e36820a326f4f5d8d02f5a06ee8a"
+  integrity sha512-6vBq2p2mFSa8Kq0AXtJ+3un+lkEymxHjpshk0J3Rx7klYBPiIUbfSw8ekwtinFcHOe+KnLpckOzrYEssD7XT1w==
   dependencies:
     "@babel/helper-module-imports" "^7.12.5"
     hoist-non-react-statics "^3.3.2"
@@ -20260,7 +20260,7 @@ zip-stream@^3.0.1:
     compress-commons "^3.0.0"
     readable-stream "^3.6.0"
 
-zod@1.11.11, zod@^1.5.0:
+zod@1.11.11, zod@>=1.0.0:
   version "1.11.11"
   resolved "https://registry.yarnpkg.com/zod/-/zod-1.11.11.tgz#1cc937e0b4ce08693de01b5bcd7c4d1a37d83993"
   integrity sha512-q1YeBpu+c7eUX5fDFMyfP97sD74TUQ+UN8va/nvbxnArr5euYsNO6fjiY0SdDkHKNZ+xBR2ZQToaeLgJ6fsB2A==

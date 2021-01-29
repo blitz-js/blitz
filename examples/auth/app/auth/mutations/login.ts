@@ -1,4 +1,4 @@
-import {pipe, SecurePassword, AuthenticationError} from "blitz"
+import {resolver, SecurePassword, AuthenticationError} from "blitz"
 import db from "db"
 import * as z from "zod"
 
@@ -23,7 +23,7 @@ export const LoginInput = z.object({
   password: z.string(),
 })
 
-export default pipe.resolver(pipe.zod(LoginInput), async ({email, password}, {session}) => {
+export default resolver.pipe(resolver.zod(LoginInput), async ({email, password}, {session}) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 

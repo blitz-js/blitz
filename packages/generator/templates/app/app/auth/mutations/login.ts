@@ -1,4 +1,4 @@
-import { pipe, SecurePassword, AuthenticationError } from "blitz"
+import { resolver, SecurePassword, AuthenticationError } from "blitz"
 import db from "db"
 import { Login } from "../validations"
 
@@ -18,7 +18,7 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default pipe.resolver(pipe.zod(Login), async ({ email, password }, ctx) => {
+export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
