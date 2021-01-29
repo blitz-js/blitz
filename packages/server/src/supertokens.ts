@@ -93,12 +93,11 @@ const defaultConfig: SessionConfig = {
 
 type SimpleRolesIsAuthorizedArgs = {
   ctx: any
-  args: [roleOrRoles?: string | string[], options?: {if?: boolean}]
+  args: [roleOrRoles?: string | string[]]
 }
 
 export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs) {
-  const [roleOrRoles, options = {}] = args
-  const condition = options.if ?? true
+  const [roleOrRoles] = args
   const $publicData = (ctx.session as SessionContext).$publicData
   const publicData = $publicData as typeof $publicData & {roles: unknown}
   if (!("roles" in publicData)) {
@@ -110,8 +109,6 @@ export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs
 
   // No roles required, so all roles allowed
   if (!roleOrRoles) return true
-  // Don't enforce the roles if condition is false
-  if (!condition) return true
 
   const rolesToAuthorize = []
   if (Array.isArray(roleOrRoles)) {
