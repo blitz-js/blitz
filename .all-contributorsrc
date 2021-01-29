@@ -1872,6 +1872,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rince",
+      "name": "Kazuma Suzuki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/933895?v=4",
+      "profile": "https://github.com/rince",
+      "contributions": [
+        "design",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
