@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "baseUrl": "./",
