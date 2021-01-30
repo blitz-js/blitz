@@ -24,29 +24,29 @@ type PipeFn<Prev, Next, PrevCtx extends Ctx, NextCtx = PrevCtx> = (
 ) => Next extends ResultWithContext ? never : Next | ResultWithContext<Next, NextCtx>
 
 function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => Z
-function pipe<A, B, C, CA, CB = CA, CC = CB>(
+function pipe<A, B, C, CA = Ctx, CB = CA, CC = CB>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
 ): (input: A, ctx: CC) => C
-function pipe<A, B, C, D, CA, CB = CA, CC = CB, CD = CC>(
+function pipe<A, B, C, D, CA = Ctx, CB = CA, CC = CB, CD = CC>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
 ): (input: A, ctx: CD) => D
-function pipe<A, B, C, D, E, CA, CB = CA, CC = CB, CD = CC, CE = CD>(
+function pipe<A, B, C, D, E, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
 ): (input: A, ctx: CE) => E
-function pipe<A, B, C, D, E, F, CA, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE>(
+function pipe<A, B, C, D, E, F, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
 ): (input: A, ctx: CF) => F
-function pipe<A, B, C, D, E, F, G, CA, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE, CG = CF>(
+function pipe<A, B, C, D, E, F, G, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE, CG = CF>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
@@ -63,7 +63,7 @@ function pipe<
   F,
   G,
   H,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -90,7 +90,7 @@ function pipe<
   G,
   H,
   I,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -120,7 +120,7 @@ function pipe<
   H,
   I,
   J,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -153,7 +153,7 @@ function pipe<
   I,
   J,
   K,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -189,7 +189,7 @@ function pipe<
   J,
   K,
   L,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -228,7 +228,7 @@ function pipe<
   K,
   L,
   M,
-  CA,
+  CA = Ctx,
   CB = CA,
   CC = CB,
   CD = CC,
@@ -272,9 +272,9 @@ function pipe(...args: unknown[]): unknown {
 }
 
 interface ResolverAuthorize {
-  (...args: Parameters<SessionContextBase["$authorize"]>): <T>(
+  (...args: Parameters<SessionContextBase["$authorize"]>): <T, C>(
     input: T,
-    ctx: Ctx,
+    ctx: C,
   ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
 }
 
