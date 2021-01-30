@@ -1,7 +1,7 @@
 import {exec} from "npm-run"
 
 interface Constructor<T = unknown> {
-  new (...args: any[]): T
+  new (...args: never[]): T
 }
 
 interface EnhancedPrismaClientAddedMethods {
