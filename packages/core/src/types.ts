@@ -223,3 +223,8 @@ export declare type MutationFunction<TResult, TVariables = unknown> = (
   variables: TVariables,
   ctx?: any,
 ) => Promise<TResult>
+
+export interface ErrorFallbackProps {
+  error: Error & Record<any, any>
+  resetErrorBoundary: (...args: Array<unknown>) => void
+}

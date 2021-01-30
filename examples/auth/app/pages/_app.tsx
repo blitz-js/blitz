@@ -1,10 +1,17 @@
-import {AppProps, ErrorComponent, useRouter, AuthenticationError, AuthorizationError} from "blitz"
+import {
+  AppProps,
+  ErrorComponent,
+  useRouter,
+  AuthenticationError,
+  AuthorizationError,
+  ErrorFallbackProps,
+} from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
 if (typeof window !== "undefined") {
-  window["DEBUG_BLITZ"] = 1
+  ;(window as any)["DEBUG_BLITZ"] = 1
 }
 
 export default function App({Component, pageProps}: AppProps) {
@@ -24,7 +31,7 @@ export default function App({Component, pageProps}: AppProps) {
   )
 }
 
-function RootErrorFallback({error, resetErrorBoundary}) {
+function RootErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
     return <LoginForm onSuccess={resetErrorBoundary} />
   } else if (error instanceof AuthorizationError) {
