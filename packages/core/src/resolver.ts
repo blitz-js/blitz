@@ -272,9 +272,9 @@ function pipe(...args: unknown[]): unknown {
 }
 
 interface ResolverAuthorize {
-  (...args: Parameters<SessionContextBase["$authorize"]>): <T>(
+  (...args: Parameters<SessionContextBase["$authorize"]>): <T, C>(
     input: T,
-    ctx: Ctx,
+    ctx: C,
   ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
 }
 
