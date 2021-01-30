@@ -4,6 +4,7 @@
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "importHelpers": true,
+    "skipLibCheck": false,
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./",

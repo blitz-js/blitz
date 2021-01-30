@@ -1,9 +1,9 @@
 import {normalize} from "path"
 import through2 from "through2"
-import {PipelineItem} from "types"
 import File from "vinyl"
 import {testStreamItems} from "./test-utils"
 import {transform} from "./transform"
+import {PipelineItem} from "./types"
 import {isEvent, isFile} from "./utils"
 
 describe("transform", () => {
