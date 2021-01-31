@@ -9,6 +9,7 @@ export const CreateProject = z.object({
 
 export default resolver.pipe(
   resolver.zod(CreateProject),
+  (input, _ctx) => ({extraFieldForIntegrationTesting: _ctx.session.userId, ...input}),
   resolver.authorize(),
   // How to set a default input value
   (input, _ctx) => ({dueDate: new Date(), ...input}),
