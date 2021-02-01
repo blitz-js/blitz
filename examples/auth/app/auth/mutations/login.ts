@@ -1,5 +1,6 @@
 import {resolver, SecurePassword, AuthenticationError} from "blitz"
 import db from "db"
+import {logger} from "utils/logger"
 import * as z from "zod"
 
 export const authenticateUser = async (email: string, password: string) => {
@@ -24,8 +25,10 @@ export const LoginInput = z.object({
 })
 
 export default resolver.pipe(resolver.zod(LoginInput), async ({email, password}, {session}) => {
+  logger.debug("Starting login...")
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
+  logger.debug("Authenticated user", {user})
 
   await session.$create({userId: user.id, roles: [user.role]})
 
