@@ -35,7 +35,7 @@ function RootErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
   } else if (error instanceof AuthorizationError) {
     return (
       <ErrorComponent
-        statusCode={(error as any).statusCode}
+        statusCode={error.statusCode}
         title="Sorry, you are not authorized to access this"
       />
     )
