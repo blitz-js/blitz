@@ -62,7 +62,7 @@
     "@types/react": "17.0.0",
     "cross-env": "7.0.3",
     "cypress": "6.2.1",
-    "eslint": "7.17.0",
+    "eslint": "7.18.0",
     "husky": "4.3.7",
     "lint-staged": "10.5.3",
     "prettier": "2.2.1",
