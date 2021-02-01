@@ -40,36 +40,44 @@ export function withBlitz(nextConfig: any) {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
           })
 
-          if (normalizedConfig.experimental?.isomorphicResolverImports) {
-            config.plugins.push(
-              new options.webpack.NormalModuleReplacementPlugin(
-                /[/\\]?(mutations|queries)[/\\]/,
-                (resource: any) => {
-                  const request = resource.request as string
-                  if (request.includes("_resolvers")) {
-                    return
-                  }
-
-                  if (
-                    request.endsWith(".js") ||
-                    request.endsWith(".ts") ||
-                    request.endsWith(".jsx") ||
-                    request.endsWith(".tsx")
-                  ) {
-                    return
-                  }
-
-                  resource.request = resource.request + ".client"
-                },
-              ),
-            )
-          } else {
-            config.module.rules.push({
-              issuer: /(mutations|queries)(?!.*\.client)/,
-              resource: /_resolvers/,
-              use: {loader: "null-loader"},
-            })
-          }
+          // if (normalizedConfig.experimental?.isomorphicResolverImports) {
+          //   config.plugins.push(
+          //     new options.webpack.NormalModuleReplacementPlugin(
+          //       /[/\\]?(mutations|queries)[/\\]/,
+          //       (resource: any) => {
+          //         const request = resource.request as string
+          //         if (request.includes("_resolvers")) {
+          //           return
+          //         }
+          //
+          //         if (
+          //           request.endsWith(".js") ||
+          //           request.endsWith(".ts") ||
+          //           request.endsWith(".jsx") ||
+          //           request.endsWith(".tsx")
+          //         ) {
+          //           return
+          //         }
+          //
+          //         resource.request = resource.request + ".client"
+          //       },
+          //     ),
+          //   )
+          //   // config.module.rules.push({
+          //   //   // resource: /(mutations|queries)/,
+          //   //   // test: /(mutations|queries)/,
+          //   //   test: /.*/,
+          //   //   // resource: /_resolvers/,
+          //   //   // use: {loader: "null-loader"},
+          //   //   sideEffects: false,
+          //   // })
+          // } else {
+          //   config.module.rules.push({
+          //     issuer: /(mutations|queries)(?!.*\.client)/,
+          //     resource: /_resolvers/,
+          //     use: {loader: "null-loader"},
+          //   })
+          // }
         }
 
         if (typeof normalizedConfig.webpack === "function") {
