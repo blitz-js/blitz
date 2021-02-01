@@ -36,7 +36,7 @@
     "@blitzjs/display": "0.30.0-canary.4",
     "chalk": "^4.1.0",
     "console-table-printer": "^2.7.5",
-    "ora": "^5.2.0",
+    "ora": "^5.3.0",
     "tslog": "^3.1.0"
   }
 }

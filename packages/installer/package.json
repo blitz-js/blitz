@@ -43,7 +43,7 @@
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
-    "fs-extra": "9.0.1",
+    "fs-extra": "9.1.0",
     "globby": "11.0.2",
     "ink": "3.0.8",
     "ink-spinner": "4.0.1",
