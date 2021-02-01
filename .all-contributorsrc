@@ -1882,6 +1882,15 @@
         "design",
         "code"
       ]
+    },
+    {
+      "login": "queq1890",
+      "name": "Yuji Matsumoto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32263803?v=4",
+      "profile": "http://queq1890.info",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
