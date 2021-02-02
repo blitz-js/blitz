@@ -236,9 +236,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
+      ["git", ["config", "user.name", "'The Blitz.js CLI'"], {stdio: "ignore"}],
+      ["git", ["config", "user.email", "'noop@blitzjs.com'"], {stdio: "ignore"}],
       [
         "git",
-        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+        ["commit", "--no-gpg-sign", "--no-verify", "-m", "'New Blitz App Initialized.'"],
         {stdio: "ignore", timeout: 10000},
       ],
     ]
