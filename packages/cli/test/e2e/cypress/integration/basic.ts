@@ -1,4 +1,4 @@
-describe("Google Test", () => {
+describe("Basic Test", () => {
   it("Shows Google", () => {
     cy.visit("https://www.google.com/")
 
