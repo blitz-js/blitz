@@ -65,13 +65,32 @@ function wrapInHOF(
 ): t.Expression {
   const data = extractResolverMetadata(filePath);
 
+  const program = path.findParent(t.isProgram) as NodePath<t.Program>;
+  if (!program) throw new Error('Missing parent');
+  const hasMiddlewareExport = program.node.body.find((path) => {
+    if (!t.isExportNamedDeclaration(path)) return null;
+    if (!path.declaration) return null;
+    if (!t.isVariableDeclaration(path.declaration)) return null;
+    const variableDeclarator = path.declaration.declarations.find((path) =>
+      t.isVariableDeclarator(path)
+    );
+    if (!variableDeclarator) return null;
+    return (variableDeclarator.id as any).name === 'middleware';
+  });
+
+  const metadataProperties = [
+    t.objectProperty(t.identifier('name'), t.stringLiteral(data.name)),
+    t.objectProperty(t.identifier('type'), t.stringLiteral(data.type)),
+    t.objectProperty(t.identifier('filePath'), t.stringLiteral(filePath)),
+  ];
+  if (hasMiddlewareExport) {
+    metadataProperties.push(
+      t.objectProperty(t.identifier('middleware'), t.identifier('middleware'))
+    );
+  }
   return t.callExpression(addWithSuperJSONPageImport(path), [
     expr,
-    t.objectExpression([
-      t.objectProperty(t.identifier('name'), t.stringLiteral(data.name)),
-      t.objectProperty(t.identifier('type'), t.stringLiteral(data.type)),
-      t.objectProperty(t.identifier('filePath'), t.stringLiteral(filePath)),
-    ]),
+    t.objectExpression(metadataProperties),
   ]);
 }
 
