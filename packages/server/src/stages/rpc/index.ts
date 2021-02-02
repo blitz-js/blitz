@@ -81,8 +81,8 @@ try {
 } catch(_) {}
 
 export default rpcApiHandler(
-  enhancedResolver,
-  getAllMiddlewareForModule(enhancedResolver),
+  enhancedResolver as any,
+  getAllMiddlewareForModule(enhancedResolver as any),
   () => db && connect?.(),
 )
 
@@ -202,7 +202,9 @@ function extractTemplateVars(resolverImportPath: string) {
     resolverName,
   }
 }
+*/
 
+/*
 function resolverFilePath(path: string) {
   return path.replace(/^app/, "app/_resolvers")
 }

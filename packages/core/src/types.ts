@@ -126,7 +126,7 @@ export type VerifyCallbackResult = {
 }
 
 // The actual resolver source definition
-export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
+export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => TResult | Promise<TResult>
 
 // Resolver type when imported with require()
 export type ResolverModule<TInput, TResult> = {
@@ -147,8 +147,8 @@ export type ResolverRpc<TInput, TResult> = (
 ) => CancellablePromise<TResult>
 
 export interface ResolverRpcExecutor<TInput, TResult> {
-  (apiUrl: string, params: TInput, opts?: RpcOptions): CancellablePromise<TResult>
-  warm: (apiUrl: string) => undefined | Promise<unknown>
+  (apiPath: string, params: TInput, opts?: RpcOptions): CancellablePromise<TResult>
+  warm: (apiPath: string) => undefined | Promise<unknown>
 }
 
 export type ResolverType = "query" | "mutation"
@@ -158,7 +158,7 @@ export interface ResolverEnhancement {
     name: string
     type: ResolverType
     filePath: string
-    apiUrl: string
+    apiPath: string
   }
 }
 

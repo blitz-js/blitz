@@ -15,6 +15,8 @@ import {
   CancellablePromise,
   EnhancedResolver,
   EnhancedResolverRpcClient,
+  Middleware,
+  Resolver,
   ResolverModule,
   ResolverRpc,
   ResolverType,
@@ -156,8 +158,8 @@ executeRpcCall.warm = (apiUrl: string) => {
   return window.fetch(apiUrl, {method: "HEAD"})
 }
 
-const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
-  resolverFilePath.replace(/^app\/_resolvers/, "/api")
+const getApiPathFromResolverFilePath = (resolverFilePath: string) =>
+  resolverFilePath.replace(/^\/app/, "/api")
 
 type IsomorphicEnhancedResolverOptions = {
   warmApiEndpoints?: boolean
@@ -203,24 +205,24 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   target: "server" | "client" = isClient ? "client" : "server",
   options: IsomorphicEnhancedResolverOptions = {},
 ): EnhancedResolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult> {
-  const apiUrl = getApiUrlFromResolverFilePath(resolverFilePath)
+  const apiPath = getApiPathFromResolverFilePath(resolverFilePath)
 
   if (target === "client") {
     const resolverRpc: ResolverRpc<TInput, TResult> = (params, opts) =>
-      executeRpcCall(apiUrl, params, opts)
+      executeRpcCall(apiPath, params, opts)
     const enhancedResolverRpcClient = resolverRpc as EnhancedResolverRpcClient<TInput, TResult>
 
     enhancedResolverRpcClient._meta = {
       name: resolverName,
       type: resolverType,
       filePath: resolverFilePath,
-      apiUrl: apiUrl,
+      apiPath: apiPath,
     }
 
     // Warm the lambda
     if (options.warmApiEndpoints) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      executeRpcCall.warm(apiUrl)
+      executeRpcCall.warm(apiPath)
     }
 
     return enhancedResolverRpcClient
@@ -232,8 +234,30 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
       name: resolverName,
       type: resolverType,
       filePath: resolverFilePath,
-      apiUrl: apiUrl,
+      apiPath: apiPath,
     }
     return enhancedResolver
   }
+}
+
+interface EnhancedResolverData {
+  name: string
+  type: ResolverType
+  filePath: string
+  middleware?: Middleware[]
+}
+export function enhanceResolver<TInput, TResult>(
+  resolver: Resolver<TInput, TResult>,
+  data: EnhancedResolverData,
+) {
+  const enhancedResolver = resolver as EnhancedResolver<TInput, TResult>
+
+  enhancedResolver.middleware = data.middleware
+  enhancedResolver._meta = {
+    name: data.name,
+    type: data.type,
+    filePath: data.filePath,
+    apiPath: getApiPathFromResolverFilePath(data.filePath),
+  }
+  return enhancedResolver
 }
