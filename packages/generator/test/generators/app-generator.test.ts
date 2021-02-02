@@ -112,6 +112,18 @@ describe("AppGenerator", () => {
 
     expect(spawn.sync).toHaveBeenCalledWith("git", ["add", "."], {stdio: "ignore"})
   })
+  
+    it("calls git config user.name", async () => {
+    await generator.run()
+
+    expect(spawn.sync).toHaveBeenCalledWith("git", ["config", "user.name","The Blitz.js CLI"], {stdio: "ignore"})
+  })
+  
+      it("calls git config user.email", async () => {
+    await generator.run()
+
+    expect(spawn.sync).toHaveBeenCalledWith("git", ["config", "user.email","noop@blitzjs.com"], {stdio: "ignore"})
+  })
 
   it("calls git commit", async () => {
     await generator.run()
@@ -119,7 +131,7 @@ describe("AppGenerator", () => {
     //
     expect(spawn.sync).toHaveBeenCalledWith(
       "git",
-      ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+      ["commit", "--no-gpg-sign", "--no-verify", "-m", "Initialize a Brand New Blitz.js App."],
       {
         stdio: "ignore",
         timeout: 10000,
