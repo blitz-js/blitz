@@ -16,7 +16,7 @@ export class AuthenticationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthenticationError, "BlitzAuthenticationError")
+  SuperJson.registerClass(AuthenticationError, {identifier: "BlitzAuthenticationError"})
 }
 
 export class CSRFTokenMismatchError extends Error {
@@ -27,7 +27,7 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(CSRFTokenMismatchError, "BlitzCSRFTokenMismatchError")
+  SuperJson.registerClass(CSRFTokenMismatchError, {identifier: "BlitzCSRFTokenMismatchError"})
 }
 
 export class AuthorizationError extends Error {
@@ -41,7 +41,7 @@ export class AuthorizationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthorizationError, "BlitzAuthorizationError")
+  SuperJson.registerClass(AuthorizationError, {identifier: "BlitzAuthorizationError"})
 }
 
 export class NotFoundError extends Error {
@@ -55,5 +55,5 @@ export class NotFoundError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(NotFoundError, "BlitzNotFoundError")
+  SuperJson.registerClass(NotFoundError, {identifier: "BlitzNotFoundError"})
 }
