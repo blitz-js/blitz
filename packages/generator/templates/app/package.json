@@ -48,7 +48,8 @@
     "lint-staged": "10.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
-    "preview-email": "3.x"
+    "preview-email": "3.x",
+    "prettier-plugin-prisma": "0.x"
   },
   "private": true
 }
