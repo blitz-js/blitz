@@ -247,7 +247,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
           "--no-gpg-sign",
           "--no-verify",
           "-m",
-          "New baby Blitz app!",
+          "Brand new Blitz app!",
         ],
         {stdio: "ignore", timeout: 10000},
       ],
