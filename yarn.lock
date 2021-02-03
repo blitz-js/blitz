@@ -18006,10 +18006,10 @@ stylis@3.5.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.5.4.tgz#f665f25f5e299cf3d64654ab949a57c768b73fbe"
   integrity sha512-8/3pSmthWM7lsPBKv7NXkzn2Uc9W7NotcwGNpJaa3k7WMM1XDCA4MgT5k/8BIexd5ydZdboXtU90XH9Ec4Bv/Q==
 
-superjson@1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.5.2.tgz#bf8620adcc35dc77834d3fc69b2c929cb152f236"
-  integrity sha512-ko6wjKha8KwUdl6K9NwnRcRTsylW8bt3E7bp0ixIiO8nVJP+qzHzwLLZ1WARIxPmrqkxvEB79w4xLtis1QlT3g==
+superjson@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.6.0.tgz#dbd1e99bb736edd8db77e677b963050cda7ec895"
+  integrity sha512-RUkJSslcP6dEnOnvo+8MmIBN9zZoppMaugssm+1ZPlGLOAFpri/srrluphR9I9PktQ14ICc7ayYd8aMpUsYZ8w==
 
 supports-color@^2.0.0:
   version "2.0.0"
