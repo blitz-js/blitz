@@ -10,11 +10,13 @@
     "test": "tsdx test --env=jest-environment-jsdom-sixteen --passWithNoTests",
     "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
   },
+  "browser": "index-browser.js",
   "main": "dist/index.js",
   "module": "dist/config.esm.js",
   "types": "dist/packages/config/src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index-browser.js"
   ],
   "jest": {
     "setupFilesAfterEnv": [

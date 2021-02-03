@@ -62,6 +62,7 @@
     "@types/gulp-if": "0.0.33",
     "@types/ink-spinner": "3.0.0",
     "@types/jest": "26.0.20",
+    "@types/module-alias": "2.0.0",
     "@types/jsonwebtoken": "8.5.0",
     "@types/lodash": "4.14.168",
     "@types/mem-fs": "1.1.2",

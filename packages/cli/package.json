@@ -58,7 +58,8 @@
     "tar": "^6.1.0",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "3.9.0",
-    "v8-compile-cache": "2.2.0"
+    "v8-compile-cache": "2.2.0",
+    "module-alias": "2.2.2"
   },
   "devDependencies": {
     "@blitzjs/generator": "0.30.0-canary.4",

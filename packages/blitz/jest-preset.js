@@ -1,7 +1,7 @@
 const path = require("path")
-const pkgDir = require("pkg-dir")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const projectRoot = pkgDir.sync() || process.cwd()
+const getProjectRoot = require("@blitzjs/config").getProjectRoot
+const projectRoot = getProjectRoot()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
 module.exports = {

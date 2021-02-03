@@ -1,4 +1,5 @@
 import {getConfig} from "@blitzjs/config"
+import {getProjectRoot} from "@blitzjs/config"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -39,7 +40,6 @@ import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
-import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
@@ -53,7 +53,7 @@ function assert(condition: any, message: string): asserts condition {
 process.nextTick(getConfig)
 
 const getDb = () => {
-  const projectRoot = pkgDir.sync() || process.cwd()
+  const projectRoot = getProjectRoot()
   const path = join(projectRoot, ".next/__db.js")
   return require(path).default
 }

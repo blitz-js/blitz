@@ -1,6 +1,9 @@
+import {getProjectRoot, resolveAliases} from "@blitzjs/config"
 import fs from "fs"
+import moduleAlias from "module-alias"
 import path from "path"
-import pkgDir from "pkg-dir"
+
+moduleAlias.addAliases(resolveAliases.node)
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
@@ -15,6 +18,12 @@ export function withBlitz(nextConfig: any) {
         ...(normalizedConfig.experimental || {}),
       },
       webpack(config: any, options: {isServer: boolean; webpack: any}) {
+        config.resolve ??= {}
+        config.resolve.alias ??= {}
+        for (const [from, to] of Object.entries(resolveAliases.webpack)) {
+          config.resolve.alias[from] = to
+        }
+
         if (options.isServer) {
           const originalEntry = config.entry
           config.entry = async () => ({
@@ -22,19 +31,15 @@ export function withBlitz(nextConfig: any) {
             ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
           })
         } else {
-          config.module = config.module || {}
+          config.module ??= {}
           config.module.rules = config.module.rules || []
           const excluded = [
-            /node_modules[\\/]@blitzjs[\\/]display/,
-            /node_modules[\\/]@blitzjs[\\/]config/,
             /node_modules[\\/]passport/,
             /node_modules[\\/]cookie-session/,
             /node_modules[\\/]secure-password/,
             /node_modules[\\/]npm-run/,
-            /blitz[\\/]packages[\\/]config/,
-            /blitz[\\/]packages[\\/]display/,
-            /node-libs-browser/,
-            /crypto-browserify/,
+            /node_modules[\\/]node-libs-browser/,
+            /node_modules[\\/]crypto-browserify/,
           ]
           excluded.forEach((excluded) => {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
@@ -81,7 +86,7 @@ export function withBlitz(nextConfig: any) {
     })
 
     function doesDbModuleExist() {
-      const projectRoot = pkgDir.sync() || process.cwd()
+      const projectRoot = getProjectRoot()
       return (
         fs.existsSync(path.join(projectRoot, "db/index.js")) ||
         fs.existsSync(path.join(projectRoot, "db/index.ts")) ||

@@ -6,10 +6,6 @@
   "bin": {
     "next-patched": "./bin/next-patched"
   },
-  "files": [
-    "dist",
-    "register"
-  ],
   "scripts": {
     "clean": "rimraf dist",
     "wait:file-pipeline": "wait-on ../file-pipeline/dist/packages/file-pipeline/src/index.d.ts",
@@ -25,9 +21,15 @@
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
+  "browser": "index-browser.js",
   "main": "dist/index.js",
   "module": "dist/server.esm.js",
   "types": "dist/packages/server/src/index.d.ts",
+  "files": [
+    "dist",
+    "register",
+    "index-browser.js"
+  ],
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/jest.setup.js"
