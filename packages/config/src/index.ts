@@ -7,15 +7,19 @@ export function getProjectRoot() {
   return pkgDir.sync() || process.cwd()
 }
 
+const projectRoot = getProjectRoot()
+
 export const resolveAliases = {
   node: {
-    "__blitz__/config-file": process.cwd() + path.sep + "blitz.config.js",
+    "__blitz__/config-file": path.join(projectRoot, "blitz.config.js"),
   },
   webpack: {
     // In webpack build, next.config.js is always present which wraps blitz.config.js
-    "__blitz__/config-file": process.cwd() + path.sep + "next.config.js",
+    "__blitz__/config-file": path.join(projectRoot, "next.config.js"),
   },
 }
+
+require("module-alias").addAliases(resolveAliases.node)
 
 export interface BlitzConfig extends Record<string, unknown> {
   target?: string
