@@ -18,6 +18,9 @@ export function withBlitz(nextConfig: any) {
         ...(normalizedConfig.experimental || {}),
       },
       webpack(config: any, options: {isServer: boolean; webpack: any}) {
+        // ----------------------
+        // Set up resolve aliases
+        // ----------------------
         config.resolve ??= {}
         config.resolve.alias ??= {}
         for (const [from, to] of Object.entries(resolveAliases.webpack)) {
@@ -28,7 +31,7 @@ export function withBlitz(nextConfig: any) {
           const originalEntry = config.entry
           config.entry = async () => ({
             ...(await originalEntry()),
-            ...(doesDbModuleExist() ? {"../__db": "./db/index"} : {}),
+            ...(doesDbModuleExist() ? {"../blitz/db": "./db/index"} : {}),
           })
         } else {
           config.module ??= {}

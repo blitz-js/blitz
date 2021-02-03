@@ -5,8 +5,7 @@ export const blitzVersionFilename = "_blitz-version.txt"
 
 export function getBlitzVersion(): string {
   try {
-    const path = require.resolve("blitz/package.json")
-    const pkgJson = require(path)
+    const pkgJson = require("blitz/package.json")
     return pkgJson.version as string
   } catch {
     return ""

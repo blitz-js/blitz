@@ -9,11 +9,11 @@ export function getProjectRoot() {
 
 export const resolveAliases = {
   node: {
-    "@/blitz-config-file": process.cwd() + path.sep + "blitz.config.js",
+    "__blitz__/config-file": process.cwd() + path.sep + "blitz.config.js",
   },
   webpack: {
     // In webpack build, next.config.js is always present which wraps blitz.config.js
-    "@/blitz-config-file": process.cwd() + path.sep + "next.config.js",
+    "__blitz__/config-file": process.cwd() + path.sep + "next.config.js",
   },
 }
 
@@ -54,7 +54,7 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     },
   }
 
-  const file = require("@/blitz-config-file")
+  const file = require("__blitz__/config-file")
   let contents
   if (typeof file === "function") {
     const phase =

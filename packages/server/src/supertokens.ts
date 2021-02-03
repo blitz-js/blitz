@@ -54,8 +54,9 @@ process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = getProjectRoot()
-  const path = join(projectRoot, ".next/__db.js")
-  return require(path).default
+  const path = join(projectRoot, ".next/blitz/db.js")
+  // eslint-disable-next-line no-eval -- using eval to prevent webpack from trying to bundle
+  return eval("require")(path).default
 }
 
 const defaultConfig: SessionConfig = {
