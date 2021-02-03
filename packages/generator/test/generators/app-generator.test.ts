@@ -128,7 +128,7 @@ describe("AppGenerator", () => {
         "--no-gpg-sign",
         "--no-verify",
         "-m",
-        "New baby Blitz app!",
+        "Brand new Blitz app!",
       ],
       {
         stdio: "ignore",
