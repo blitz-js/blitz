@@ -27,13 +27,13 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
       if (!global._blitz_prismaClient) {
         const client = new target(...args)
 
-        client.$reset = function reset() {
+        client.$reset = async function reset() {
           if (process.env.NODE_ENV === "production") {
             throw new Error(
               "You are calling db.$reset() in a production environment. We think you probably didn't mean to do that, so we are throwing this error instead of destroying your life's work.",
             )
           }
-          return new Promise<void>((res, rej) =>
+          await new Promise<void>((res, rej) =>
             exec("prisma migrate reset --force --skip-generate --preview-feature", function (err) {
               if (err) {
                 rej(err)
@@ -42,6 +42,7 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
               }
             }),
           )
+          global._blitz_prismaClient.$disconnect()
         }
 
         global._blitz_prismaClient = client
