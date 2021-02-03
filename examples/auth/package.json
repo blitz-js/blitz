@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.30.0-canary.3",
+  "version": "0.30.0-canary.4",
   "scripts": {
     "start": "blitz start",
     "studio": "blitz prisma studio",
@@ -40,7 +40,7 @@
   "dependencies": {
     "@prisma/cli": "2.15.0",
     "@prisma/client": "2.15.0",
-    "blitz": "0.30.0-canary.3",
+    "blitz": "0.30.0-canary.4",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",
@@ -62,7 +62,7 @@
     "@types/react": "17.0.0",
     "cross-env": "7.0.3",
     "cypress": "6.2.1",
-    "eslint": "7.17.0",
+    "eslint": "7.18.0",
     "husky": "4.3.7",
     "lint-staged": "10.5.3",
     "prettier": "2.2.1",

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.30.0-canary.3",
+  "version": "0.30.0-canary.4",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/file-pipeline": "0.30.0-canary.3",
+    "@blitzjs/file-pipeline": "0.30.0-canary.4",
     "b64-lite": "^1.4.0",
     "cookie": "^0.4.1",
     "cross-spawn": "7.0.3",
@@ -51,7 +51,7 @@
     "nanoid": "^3.1.20",
     "next": "10.0.6",
     "null-loader": "4.0.1",
-    "ora": "^5.2.0",
+    "ora": "^5.3.0",
     "parallel-transform": "1.2.0",
     "parse-gitignore": "1.0.1",
     "pirates": "4.0.1",
@@ -65,7 +65,7 @@
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.30.0-canary.3",
+    "@blitzjs/core": "0.30.0-canary.4",
     "next-transpile-modules": "6.0.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"

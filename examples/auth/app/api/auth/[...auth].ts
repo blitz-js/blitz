@@ -1,4 +1,4 @@
-import {passportAuth} from "blitz"
+import {passportAuth, PublicData} from "blitz"
 import db from "db"
 import {Strategy as TwitterStrategy} from "passport-twitter"
 import {Strategy as GitHubStrategy} from "passport-github2"
@@ -67,7 +67,12 @@ export default passportAuth({
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/github/callback"
               : "http://localhost:3000/api/auth/github/callback",
         },
-        async function (_token, _tokenSecret, profile, done) {
+        async function (
+          _token: string,
+          _tokenSecret: string,
+          profile: any,
+          done: (err: Error | null, data?: {publicData: PublicData}) => void,
+        ) {
           const email = profile.emails && profile.emails[0]?.value
 
           if (!email) {
@@ -106,7 +111,7 @@ export default passportAuth({
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/auth0/callback"
               : "http://localhost:3000/api/auth/auth0/callback",
         },
-        async function (_token, _tokenSecret, extraParams, profile, done) {
+        async function (_token, _tokenSecret, _extraParams, profile, done) {
           const email = profile.emails && profile.emails[0]?.value
 
           if (!email) {

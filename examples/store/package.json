@@ -1,6 +1,6 @@
 {
   "name": "@examples/store",
-  "version": "0.30.0-canary.3",
+  "version": "0.30.0-canary.4",
   "private": true,
   "scripts": {
     "build": "blitz prisma migrate deploy --preview-feature && blitz build",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@prisma/cli": "2.15.0",
     "@prisma/client": "2.15.0",
-    "blitz": "0.30.0-canary.3",
+    "blitz": "0.30.0-canary.4",
     "final-form": "4.20.1",
     "react": "0.0.0-experimental-3310209d0",
     "react-dom": "0.0.0-experimental-3310209d0",
@@ -34,7 +34,7 @@
     "@types/react": "17.0.0",
     "cypress": "6.2.1",
     "eslint-plugin-cypress": "2.11.2",
-    "sass": "1.32.0",
+    "sass": "1.32.5",
     "start-server-and-test": "1.11.7"
   }
 }
