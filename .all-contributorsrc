@@ -1900,6 +1900,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "akbo",
+      "name": "Andreas Bollig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1926271?v=4",
+      "profile": "https://github.com/akbo",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
