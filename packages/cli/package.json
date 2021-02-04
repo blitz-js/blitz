@@ -69,7 +69,6 @@
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "@prisma/cli": "2.15.0",
-    "cypress": "^6.4.0",
     "nock": "13.0.6",
     "stdout-stderr": "0.1.13"
   },
