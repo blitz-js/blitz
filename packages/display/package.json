@@ -18,11 +18,13 @@
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
+  "browser": "index-browser.js",
   "main": "dist/index.js",
   "module": "dist/display.esm.js",
   "types": "dist/packages/display/src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index-browser.js"
   ],
   "keywords": [
     "blitz",

@@ -1,14 +1,14 @@
+import {getProjectRoot} from "@blitzjs/config"
 import {watch} from "chokidar"
 import fs from "fs"
 import os from "os"
 import path from "path"
-import pkgDir from "pkg-dir"
 import * as REPL from "repl"
 import {REPLCommand, REPLServer} from "repl"
 // import {loadDependencies} from '../utils/load-dependencies'
 import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
 
-const projectRoot = pkgDir.sync() || process.cwd()
+const projectRoot = getProjectRoot()
 
 const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
