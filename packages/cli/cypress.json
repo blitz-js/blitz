@@ -1,1 +1,3 @@
-{}
+{
+  "integrationFolder": "test/e2e/cypress/integration"
+}
