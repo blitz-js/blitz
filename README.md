@@ -495,7 +495,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://ajm.codes"><img src="https://avatars.githubusercontent.com/u/66390428?v=4?s=100" width="100px;" alt=""/><br /><sub><b>AJ Markow</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ajmarkow" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=ajmarkow" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://wafuwafu13.hateblo.jp/"><img src="https://avatars.githubusercontent.com/u/50798936?v=4?s=100" width="100px;" alt=""/><br /><sub><b>TagawaHirotaka</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=wafuwafu13" title="Code">💻</a></td>
+    <td align="center"><a href="https://wafuwafu13.hateblo.jp/"><img src="https://avatars.githubusercontent.com/u/50798936?v=4?s=100" width="100px;" alt=""/><br /><sub><b>TagawaHirotaka</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=wafuwafu13" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=wafuwafu13" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
