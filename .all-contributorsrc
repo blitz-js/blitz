@@ -1919,6 +1919,34 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "wafuwafu13",
+      "name": "TagawaHirotaka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50798936?v=4",
+      "profile": "https://wafuwafu13.hateblo.jp/",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "merodiro",
+      "name": "Amr A.Mohammed",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17033502?v=4",
+      "profile": "https://github.com/merodiro",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lcswillems",
+      "name": "Lucas Willems",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5437552?v=4",
+      "profile": "http://www.lucaswillems.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
