@@ -1,7 +1,7 @@
 const path = require("path")
-const pkgDir = require("pkg-dir")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const projectRoot = pkgDir.sync() || process.cwd()
+const {getProjectRoot, resolveAliases} = require("@blitzjs/config")
+const projectRoot = getProjectRoot()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
 module.exports = {
@@ -31,6 +31,7 @@ module.exports = {
     "<rootDir>/cypress",
   ],
   moduleNameMapper: {
+    ...resolveAliases.node,
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
