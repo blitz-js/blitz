@@ -1938,6 +1938,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lcswillems",
+      "name": "Lucas Willems",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5437552?v=4",
+      "profile": "http://www.lucaswillems.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
