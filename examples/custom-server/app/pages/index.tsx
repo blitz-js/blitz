@@ -84,7 +84,7 @@ const Home: BlitzPage = () => {
             <code>Ctrl + c</code>
           </pre>
           <pre>
-            <code>blitz dev</code>
+            <code>blitz start</code>
           </pre>
           <p>
             and go to{" "}

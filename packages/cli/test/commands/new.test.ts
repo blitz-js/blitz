@@ -116,7 +116,7 @@ describe("`new` command", () => {
             `cd ${dirName}`,
             "yarn",
             "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
-            "blitz dev",
+            "blitz start",
           ])
         }),
     )
@@ -139,7 +139,7 @@ describe("`new` command", () => {
       const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
       await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
 
-      expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz dev"])
+      expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz start"])
     })
 
     it("fetches latest version from template", async () => {

@@ -9,7 +9,7 @@ yarn blitz prisma migrate dev --preview-feature
 2. Start the dev server
 
 ```
-yarn blitz dev
+yarn blitz start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

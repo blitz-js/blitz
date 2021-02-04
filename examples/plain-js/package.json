@@ -2,9 +2,8 @@
   "name": "@examples/plain-js",
   "version": "0.30.0-canary.4",
   "scripts": {
-    "dev": "blitz dev",
-    "build": "blitz prisma migrate deploy --preview-feature && blitz build",
     "start": "blitz start",
+    "build": "blitz prisma migrate deploy --preview-feature && blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "echo \"DISABLED\""
   },

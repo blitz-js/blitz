@@ -31,7 +31,7 @@ FAUNA_SECRET=YOUR_AUTH_KEY
 2. Start the dev server
 
 ```
-yarn blitz dev
+yarn blitz start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
