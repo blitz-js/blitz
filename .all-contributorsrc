@@ -1891,6 +1891,34 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Gim3l",
+      "name": "Gimel Dick",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46765702?v=4",
+      "profile": "https://github.com/Gim3l",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "akbo",
+      "name": "Andreas Bollig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1926271?v=4",
+      "profile": "https://github.com/akbo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ajmarkow",
+      "name": "AJ Markow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66390428?v=4",
+      "profile": "https://ajm.codes",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
