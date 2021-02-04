@@ -4,8 +4,7 @@ services:
     env: node
     plan: starter
     buildCommand: yarn --frozen-lockfile --prod=false && blitz prisma migrate deploy --preview-feature && blitz build
-    # If you have an out of memory error, change startCommand to "yarn next start"
-    startCommand: blitz start --production
+    startCommand: blitz start
     envVars:
       # ⚠️  You must set SESSION_SECRET_KEY env var through the UI.
       # Add this env name, then a "generate" button will appear in the value box

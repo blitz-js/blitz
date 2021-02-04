@@ -9,7 +9,7 @@ This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 Run your app in the development mode.
 
 ```
-blitz start
+blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -47,12 +47,13 @@ Blitz comes with a powerful CLI that is designed to make development easy and fa
 ```
   blitz [COMMAND]
 
+  dev       Start a development server
   build     Create a production build
-  console   Run the Blitz console REPL
-  db        Run database commands
+  start     Start a production server
+  prisma    Run prisma commands
   generate  Generate new files for your Blitz project
+  console   Run the Blitz console REPL
   help      display help for blitz
-  start     Start a development server
   test      Run project tests
 ```
 

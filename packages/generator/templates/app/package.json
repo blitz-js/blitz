@@ -2,9 +2,10 @@
   "name": "__name__",
   "version": "1.0.0",
   "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
-    "build": "blitz build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
     "test:watch": "jest --watch"
