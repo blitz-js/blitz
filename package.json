@@ -96,6 +96,7 @@
     "concurrently": "5.3.0",
     "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
+    "cypress": "6.4.0",
     "debug": "4.3.1",
     "delay": "4.4.0",
     "directory-tree": "2.2.5",
