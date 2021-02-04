@@ -1919,6 +1919,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "wafuwafu13",
+      "name": "TagawaHirotaka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50798936?v=4",
+      "profile": "https://wafuwafu13.hateblo.jp/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
