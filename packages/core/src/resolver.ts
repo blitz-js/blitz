@@ -275,7 +275,7 @@ interface ResolverAuthorize {
   (...args: Parameters<SessionContextBase["$authorize"]>): <T, C>(
     input: T,
     ctx: C,
-  ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
+  ) => ResultWithContext<T, AuthenticatedMiddlewareCtx | Ctx>
 }
 
 const authorize: ResolverAuthorize = (...args) => {
