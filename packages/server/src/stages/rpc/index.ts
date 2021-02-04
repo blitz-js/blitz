@@ -55,10 +55,12 @@ export default getIsomorphicEnhancedResolver(
 
 // Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
+${useTypes ? "// @ts-nocheck" : ""}
 // This imports the output of getIsomorphicEnhancedResolver()
-import enhancedResolver from '${originalPath}'
+import * as resolverModule from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core'
 import {rpcApiHandler} from '@blitzjs/server'
+import {enhanceResolver} from '@blitzjs/core'
 import path from 'path'
 
 // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
@@ -67,23 +69,25 @@ path.resolve("blitz.config.js")
 path.resolve(".next/__db.js")
 // End anti-tree-shaking
 
-let db${useTypes ? ": any" : ""}
-let connect${useTypes ? ": any" : ""}
+const enhancedResolver = enhanceResolver(resolverModule.default, {
+  filePath: '${originalPath}',
+  middleware: resolverModule.middleware,
+})
+
+let connectFn = () => {}
 try {
-  db = require('db').default
-  if (require('db').connect) {
-    connect = require('db').connect
-  } else if (db?.$connect || db?.connect) {
-    connect = () => db.$connect ? db.$connect() : db.connect()
-  } else {
-    connect = () => {}
+  const dbModule = require('db')
+  if (dbModule?.connect) {
+    connectFn = dbModule.connect
+  } else if (dbModule?.default?.$connect) {
+    connectFn = () => dbModule.default.$connect()
   }
 } catch(_) {}
 
 export default rpcApiHandler(
-  enhancedResolver as any,
+  enhancedResolver,
   getAllMiddlewareForModule(enhancedResolver as any),
-  () => db && connect?.(),
+  connectFn,
 )
 
 export const config = {

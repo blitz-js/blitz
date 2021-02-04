@@ -240,9 +240,20 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
   }
 }
 
+function extractResolverMetadata(filePath: string) {
+  const [, typePlural, name] = /(queries|mutations)\/(.*)$/.exec(filePath) || []
+
+  const type: ResolverType = typePlural === "mutations" ? "mutation" : "query"
+
+  return {
+    name,
+    type,
+    filePath,
+    apiPath: filePath.replace(/^app/, "pages/api"),
+  }
+}
+
 interface EnhancedResolverData {
-  name: string
-  type: ResolverType
   filePath: string
   middleware?: Middleware[]
 }
@@ -251,13 +262,7 @@ export function enhanceResolver<TInput, TResult>(
   data: EnhancedResolverData,
 ) {
   const enhancedResolver = resolver as EnhancedResolver<TInput, TResult>
-
   enhancedResolver.middleware = data.middleware
-  enhancedResolver._meta = {
-    name: data.name,
-    type: data.type,
-    filePath: data.filePath,
-    apiPath: getApiPathFromResolverFilePath(data.filePath),
-  }
+  enhancedResolver._meta = extractResolverMetadata(data.filePath)
   return enhancedResolver
 }
