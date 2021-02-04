@@ -48,7 +48,7 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 1. `blitz new myAppName`
 2. `cd myAppName`
-3. `blitz start`
+3. `blitz dev`
 4. View your baby app at http://localhost:3000
 
 <br><br>

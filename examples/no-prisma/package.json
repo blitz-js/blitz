@@ -2,8 +2,9 @@
   "name": "no-prisma",
   "version": "0.30.0-canary.4",
   "scripts": {
-    "start": "blitz start",
+    "dev": "blitz dev",
     "build": "blitz build",
+    "start": "blitz start",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "echo \"No tests yet\""
   },
