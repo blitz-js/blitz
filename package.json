@@ -39,8 +39,10 @@
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "danger:push-all": "git push --no-verify && git push --no-verify --tags"
   },
+  "resolutions-NOTE1": "typescript and ts-jest pinned to here overside tsdx included versions",
   "resolutions": {
-    "typescript": "4.1.3"
+    "typescript": "4.1.3",
+    "ts-jest": "26.4.4"
   },
   "devDependencies": {
     "@rollup/pluginutils": "4.1.0",

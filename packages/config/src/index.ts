@@ -58,17 +58,21 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     },
   }
 
-  const file = require("__blitz__/config-file")
-  let contents
-  if (typeof file === "function") {
-    const phase =
-      process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
-    contents = file(phase, {})
-  } else {
-    contents = file
-  }
+  let file
+  let loadedConfig = {}
+  try {
+    // eslint-disable-next-line no-eval -- block webpack from following this module path
+    file = eval("require")("__blitz__/config-file")
+    if (typeof file === "function") {
+      const phase =
+        process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+      loadedConfig = file(phase, {})
+    } else {
+      loadedConfig = file
+    }
+  } catch {}
   blitzConfig = {
-    ...contents,
+    ...loadedConfig,
     ...blitzConfig,
   }
 

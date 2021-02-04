@@ -55,7 +55,7 @@ process.nextTick(getConfig)
 const getDb = () => {
   const projectRoot = getProjectRoot()
   const path = join(projectRoot, ".next/blitz/db.js")
-  // eslint-disable-next-line no-eval -- using eval to prevent webpack from trying to bundle
+  // eslint-disable-next-line no-eval -- block webpack from following this module path
   return eval("require")(path).default
 }
 
