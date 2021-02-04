@@ -2,6 +2,7 @@ import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
   PageGenerator,
+  MutationsGenerator,
   MutationGenerator,
   QueriesGenerator,
   FormGenerator,
@@ -29,10 +30,11 @@ enum ResourceType {
   All = "all",
   Crud = "crud",
   Model = "model",
-  Mutations = "mutations",
   Pages = "pages",
   Queries = "queries",
   Query = "query",
+  Mutations = "mutations",
+  Mutation = "mutation",
   Resource = "resource",
 }
 
@@ -66,15 +68,16 @@ const generatorMap = {
     PageGenerator,
     FormGenerator,
     QueriesGenerator,
-    MutationGenerator,
+    MutationsGenerator,
   ],
-  [ResourceType.Crud]: [MutationGenerator, QueriesGenerator],
+  [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator],
   [ResourceType.Model]: [ModelGenerator],
-  [ResourceType.Mutations]: [MutationGenerator],
   [ResourceType.Pages]: [PageGenerator, FormGenerator],
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
-  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationGenerator],
+  [ResourceType.Mutations]: [MutationsGenerator],
+  [ResourceType.Mutation]: [MutationGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationsGenerator],
 }
 
 export class Generate extends Command {

@@ -1,5 +1,6 @@
 export * from "./generators/app-generator"
 export * from "./generators/model-generator"
+export * from "./generators/mutations-generator"
 export * from "./generators/mutation-generator"
 export * from "./generators/page-generator"
 export * from "./generators/queries-generator"
