@@ -3,7 +3,7 @@ import {Command, flags} from "@oclif/command"
 
 export class Dev extends Command {
   static description = "Start a development server"
-  static aliases = ["s"]
+  static aliases = ["d"]
 
   static flags = {
     help: flags.help({char: "h"}),
