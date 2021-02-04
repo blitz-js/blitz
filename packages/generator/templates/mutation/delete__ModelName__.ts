@@ -1,12 +1,18 @@
-import {Ctx} from "blitz"
-import db, {Prisma} from "db"
+import {resolver} from "blitz"
+import db from "db"
+import * as z from "zod"
 
-type Delete__ModelName__Input = Pick<Prisma.__ModelName__DeleteArgs, "where">
+const Delete__ModelName__ = z.object({
+  id: z.number(),
+}).nonstrict()
 
-export default async function delete__ModelName__({where}: Delete__ModelName__Input, ctx: Ctx) {
-  ctx.session.$authorize()
+export default resolver.pipe(
+  resolver.zod(Delete__ModelName__),
+  resolver.authorize(),
+  async ({id}) => {
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const __modelName__ = await db.__modelName__.delete({where: {id}})
 
-  const __modelName__ = await db.__modelName__.delete({where})
-
-  return __modelName__
-}
+    return __modelName__
+  },
+)

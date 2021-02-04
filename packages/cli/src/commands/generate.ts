@@ -8,6 +8,8 @@ import {
   ModelGenerator,
   QueryGenerator,
   singleCamel,
+  capitalize,
+  uncapitalize,
   singlePascal,
   pluralCamel,
   pluralPascal,
@@ -20,7 +22,7 @@ import chalk from "chalk"
 const debug = require("debug")("blitz:generate")
 const getIsTypeScript = () =>
   require("fs").existsSync(
-    require("path").join(require("../utils/get-project-root").projectRoot, "tsconfig.json"),
+    require("path").join(require("@blitzjs/config").getProjectRoot(), "tsconfig.json"),
   )
 
 enum ResourceType {
@@ -226,7 +228,8 @@ export class Generate extends Command {
           parentModels: modelNames(flags.parent),
           ParentModel: ModelName(flags.parent),
           ParentModels: ModelNames(flags.parent),
-          rawInput: model,
+          name: uncapitalize(model),
+          Name: capitalize(model),
           dryRun: flags["dry-run"],
           context: context,
           useTs: getIsTypeScript(),

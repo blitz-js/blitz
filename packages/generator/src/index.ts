@@ -8,4 +8,11 @@ export * from "./generators/form-generator"
 export * from "./generator"
 export * from "./conflict-checker"
 export {getLatestVersion} from "./utils/get-latest-version"
-export {singleCamel, singlePascal, pluralCamel, pluralPascal} from "./utils/inflector"
+export {
+  singleCamel,
+  singlePascal,
+  pluralCamel,
+  pluralPascal,
+  capitalize,
+  uncapitalize,
+} from "./utils/inflector"
