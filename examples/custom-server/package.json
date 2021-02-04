@@ -2,8 +2,9 @@
   "name": "@examples/custom-server",
   "version": "0.30.0-canary.4",
   "scripts": {
-    "start": "nodemon --watch server.js --exec 'blitz start'",
+    "dev": "nodemon --watch server.js --exec 'blitz dev'",
     "build": "blitz build",
+    "start": "blitz start",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test-watch": "jest --watch",
@@ -11,7 +12,7 @@
     "cy-run": "cypress run",
     "test:migrate": "prisma generate && blitz prisma migrate deploy --preview-feature",
     "test:jest": "jest",
-    "test-server": "blitz build && blitz start --production",
+    "test-server": "blitz build && blitz start",
     "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
     "test": "run-s test:*"
   },

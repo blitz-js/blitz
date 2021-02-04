@@ -25,7 +25,7 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "startWithBlitz",
-    stepName: 'Start Quirrel with "blitz start"',
+    stepName: 'Start Quirrel with "blitz dev"',
     explanation: "Make sure that your local Quirrel server runs when you need it.",
     singleFileSearch: paths.packageJson(),
     transformPlain(program) {

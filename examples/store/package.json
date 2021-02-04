@@ -6,7 +6,7 @@
     "build": "blitz prisma migrate deploy --preview-feature && blitz build",
     "cy:open": "cypress open",
     "cy:run": "cypress run || cypress run",
-    "test:server": "prisma generate && blitz prisma migrate deploy --preview-feature && blitz db seed && blitz build && blitz start --production -p 3099",
+    "test:server": "prisma generate && blitz prisma migrate deploy --preview-feature && blitz db seed && blitz build && blitz start -p 3099",
     "test": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
     "posttest": "node assert-tree-shaking-works.js"
   },

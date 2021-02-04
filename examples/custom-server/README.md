@@ -13,10 +13,10 @@
 3. Start the dev server
 
 ```sh
-blitz start
+blitz dev
 
 // Or if you want hot-reloading of server.js, use:
-yarn start
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -25,5 +25,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ```sh
 blitz build
-blitz start --production
+blitz start
 ```
