@@ -255,7 +255,9 @@ function pipe<
   kl: PipeFn<K, L, CK, CL>,
   lm: PipeFn<L, M, CL, CM>,
 ): (input: A, ctx: CL) => M
-function pipe(...args: unknown[]): unknown {
+function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => unknown
+// ^ Escape hatch for people who don't validate inputs on system boundaries.
+function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => unknown {
   const functions = args as PipeFn<unknown, unknown, Ctx>[]
 
   return async function (input: unknown, ctx: Ctx) {
@@ -272,7 +274,7 @@ function pipe(...args: unknown[]): unknown {
 }
 
 interface ResolverAuthorize {
-  (...args: Parameters<SessionContextBase["$authorize"]>): <T, C>(
+  (...args: Parameters<SessionContextBase["$authorize"]>): <T, C = Ctx>(
     input: T,
     ctx: C,
   ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
