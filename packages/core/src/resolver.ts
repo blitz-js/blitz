@@ -22,30 +22,29 @@ type PipeFn<Prev, Next, PrevCtx extends Ctx, NextCtx = PrevCtx> = (
   i: Await<Prev>,
   c: PrevCtx,
 ) => Next extends ResultWithContext ? never : Next | ResultWithContext<Next, NextCtx>
-
-function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => Z
+function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => Promise<Z>
 function pipe<A, B, C, CA = Ctx, CB = CA, CC = CB>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
-): (input: A, ctx: CC) => C
+): (input: A, ctx: CC) => Promise<C>
 function pipe<A, B, C, D, CA = Ctx, CB = CA, CC = CB, CD = CC>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
-): (input: A, ctx: CD) => D
+): (input: A, ctx: CD) => Promise<D>
 function pipe<A, B, C, D, E, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
-): (input: A, ctx: CE) => E
+): (input: A, ctx: CE) => Promise<E>
 function pipe<A, B, C, D, E, F, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
-): (input: A, ctx: CF) => F
+): (input: A, ctx: CF) => Promise<F>
 function pipe<A, B, C, D, E, F, G, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE, CG = CF>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
@@ -53,7 +52,7 @@ function pipe<A, B, C, D, E, F, G, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD,
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
   fg: PipeFn<F, G, CF, CG>,
-): (input: A, ctx: CG) => CG
+): (input: A, ctx: CG) => Promise<CG>
 function pipe<
   A,
   B,
@@ -79,7 +78,7 @@ function pipe<
   ef: PipeFn<E, F, CE, CF>,
   fg: PipeFn<F, G, CF, CG>,
   gh: PipeFn<G, H, CG, CH>,
-): (input: A, ctx: CH) => H
+): (input: A, ctx: CH) => Promise<H>
 function pipe<
   A,
   B,
@@ -108,7 +107,7 @@ function pipe<
   fg: PipeFn<F, G, CF, CG>,
   gh: PipeFn<G, H, CG, CH>,
   hi: PipeFn<H, I, CH, CI>,
-): (input: A, ctx: CI) => I
+): (input: A, ctx: CI) => Promise<I>
 function pipe<
   A,
   B,
@@ -140,7 +139,7 @@ function pipe<
   gh: PipeFn<G, H, CG, CH>,
   hi: PipeFn<H, I, CH, CI>,
   ij: PipeFn<I, J, CI, CJ>,
-): (input: A, ctx: CJ) => J
+): (input: A, ctx: CJ) => Promise<J>
 function pipe<
   A,
   B,
@@ -175,7 +174,7 @@ function pipe<
   hi: PipeFn<H, I, CH, CI>,
   ij: PipeFn<I, J, CI, CJ>,
   jk: PipeFn<J, K, CJ, CK>,
-): (input: A, ctx: CK) => K
+): (input: A, ctx: CK) => Promise<K>
 function pipe<
   A,
   B,
@@ -213,7 +212,7 @@ function pipe<
   ij: PipeFn<I, J, CI, CJ>,
   jk: PipeFn<J, K, CJ, CK>,
   kl: PipeFn<K, L, CK, CL>,
-): (input: A, ctx: CL) => L
+): (input: A, ctx: CL) => Promise<L>
 function pipe<
   A,
   B,
@@ -254,10 +253,10 @@ function pipe<
   jk: PipeFn<J, K, CJ, CK>,
   kl: PipeFn<K, L, CK, CL>,
   lm: PipeFn<L, M, CL, CM>,
-): (input: A, ctx: CL) => M
-function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => unknown
+): (input: A, ctx: CL) => Promise<M>
+function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => Promise<unknown>
 // ^ Escape hatch for people who don't validate inputs on system boundaries.
-function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => unknown {
+function pipe(...args: unknown[]): (input: unknown, ctx: Ctx) => Promise<unknown> {
   const functions = args as PipeFn<unknown, unknown, Ctx>[]
 
   return async function (input: unknown, ctx: Ctx) {
@@ -292,7 +291,6 @@ const authorize: ResolverAuthorize = (...args) => {
     }
   }
 }
-
 export const resolver = {
   pipe,
   zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
