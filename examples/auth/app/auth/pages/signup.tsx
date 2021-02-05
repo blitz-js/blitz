@@ -1,6 +1,7 @@
-import React from "react"
-import {useRouter, BlitzPage} from "blitz"
+import {Head, useRouter, BlitzPage, useMutation} from "blitz"
 import Layout from "app/core/layouts/Layout"
+import {Form, FORM_ERROR} from "app/core/components/Form"
+import {LabeledTextField} from "app/core/components/LabeledTextField"
 import {SignupForm} from "app/auth/components/SignupForm"
 
 const SignupPage: BlitzPage = () => {

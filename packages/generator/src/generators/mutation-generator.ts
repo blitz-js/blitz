@@ -3,7 +3,8 @@ import {Generator, GeneratorOptions} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
-  rawInput: string
+  name: string
+  Name: string
 }
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
@@ -13,7 +14,8 @@ export class MutationGenerator extends Generator<MutationGeneratorOptions> {
   // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
-      rawInput: this.options.rawInput,
+      name: this.options.name,
+      Name: this.options.Name,
     }
   }
 

@@ -20,7 +20,7 @@ test("renders blitz documentation link", () => {
   })
 
   const {getByText} = render(<Home />)
-  const linkElement = getByText(/powered by blitz/i)
+  const element = getByText(/powered by blitz/i)
   // @ts-ignore
-  expect(linkElement).toBeInTheDocument()
+  expect(element).toBeInTheDocument()
 })

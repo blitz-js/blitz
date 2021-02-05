@@ -1,34 +1,25 @@
-import {Ctx} from "blitz"
-import db, {Prisma} from "db"
+import {resolver} from "blitz"
+import db from "db"
+import * as z from "zod"
 
 if (process.env.parentModel) {
-  type Create__ModelName__Input = {
-    data: Omit<Prisma.__ModelName__CreateArgs["data"], "__parentModel__">
-    __parentModelId__: number
-  }
+  const Create__ModelName__ = z.object({
+    name: z.string(),
+    __parentModelId__: z.number()
+  }).nonstrict()
 } else {
-  type Create__ModelName__Input = Pick<Prisma.__ModelName__CreateArgs, "data">
+  const Create__ModelName__ = z.object({
+    name: z.string(),
+  }).nonstrict()
 }
 
-if (process.env.parentModel) {
-  export default async function create__ModelName__(
-    {data, __parentModelId__}: Create__ModelName__Input,
-    ctx: Ctx,
-  ) {
-    ctx.session.$authorize()
-
-    const __modelName__ = await db.__modelName__.create({
-      data: {...data, __parentModel__: {connect: {id: __parentModelId__}}},
-    })
+export default resolver.pipe(
+  resolver.zod(Create__ModelName__),
+  resolver.authorize(),
+  async (input) => {
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const __modelName__ = await db.__modelName__.create({data: input})
 
     return __modelName__
-  }
-} else {
-  export default async function create__ModelName__({data}: Create__ModelName__Input, ctx: Ctx) {
-    ctx.session.$authorize()
-
-    const __modelName__ = await db.__modelName__.create({data})
-
-    return __modelName__
-  }
-}
+  },
+)
