@@ -66,3 +66,17 @@ export class NotFoundError extends Error {
 if (process.env.JEST_WORKER_ID === undefined) {
   SuperJson.registerClass(NotFoundError, {identifier: "BlitzNotFoundError", allowProps: errorProps})
 }
+
+export class PaginationArgumentError extends Error {
+  name = "PaginationArgumentError"
+  statusCode = 422
+  constructor(message = "The pagination arguments are invalid") {
+    super(message)
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+}

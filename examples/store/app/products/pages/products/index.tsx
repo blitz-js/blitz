@@ -16,7 +16,7 @@ export const getStaticProps = async () => {
 const Page: BlitzPage<InferGetStaticPropsType<typeof getStaticProps>> = function ({products}) {
   return (
     <div>
-      <h1>Products</h1>
+      <h1>First 100 Products</h1>
       <div id="products">
         {products.map((product) => (
           <p key={product.id}>
