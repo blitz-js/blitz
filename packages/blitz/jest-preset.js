@@ -54,7 +54,7 @@ module.exports = {
         color: "cyan",
       },
       testEnvironment: "jest-environment-jsdom-fourteen",
-      testRegex: ["^((?!queries|mutations|api).)*/*(test|spec).(j|t)sx?$"],
+      testRegex: ["^((?!queries|mutations|api|\\.server\\.).)*\\.(test|spec)\\.(j|t)sx?$"],
       setupFilesAfterEnv: [
         path.resolve(__dirname, "./jest-preset/client/setup-after-env.js"),
         "<rootDir>/test/setup.ts",
@@ -69,8 +69,8 @@ module.exports = {
       },
       testEnvironment: "node",
       testRegex: [
-        "(spec|test).server.(j|t)sx?$",
-        ".*/(queries|mutations|api)/.*(test|spec).(j|t)sx?$",
+        "\\.server\\.(spec|test)\\.(j|t)sx?$",
+        "[\\/](queries|mutations|api)[\\/].*\\.(test|spec)\\.(j|t)sx?$",
       ],
       setupFilesAfterEnv: [
         path.resolve(__dirname, "./jest-preset/server/setup-after-env.js"),
