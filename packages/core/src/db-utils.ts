@@ -49,63 +49,23 @@ export const seeder = <T extends Promise<any>, U>(seeder: Seeder<T, U>) => ({
   },
 })
 
-// type PaginateArgs<QueryResult> = {
-//   skip?: number
-//   take?: number
-//   maxTake?: number
-//   count: () => Promise<number>
-//   query: (args: {skip: number; take: number}) => Promise<QueryResult>
-// }
-//
-// export async function paginate<QueryResult>({
-//   skip = 0,
-//   take = 0,
-//   maxTake = 500,
-//   count: countQuery,
-//   query,
-// }: PaginateArgs<QueryResult>) {
-//   const skipValid = typeof skip === "number" && skip % 1 === 0 && skip >= 0
-//   const takeValid = typeof take === "number" && take % 1 === 0 && take > 0 && take <= maxTake
-//
-//   if (!skipValid) {
-//     throw new PaginationArgumentError("The skip argument is invalid")
-//   }
-//
-//   if (!takeValid) {
-//     throw new PaginationArgumentError("The take argument is invalid")
-//   }
-//
-//   const [count, items] = await Promise.all([countQuery(), query({skip, take})])
-//
-//   const hasMore = skip + take < count
-//   const nextPage = hasMore ? {take, skip: skip + take} : null
-//
-//   return {
-//     items,
-//     nextPage,
-//     hasMore,
-//     count,
-//   }
-// }
-
-interface FindManyArgs {
+type PaginateArgs<QueryResult> = {
   skip?: number
   take?: number
+  maxTake?: number
+  count: () => Promise<number>
+  query: (args: {skip: number; take: number}) => Promise<QueryResult>
 }
 
-interface PrismaDelegate {
-  count<T extends FindManyArgs>(findManyArgs: T): Promise<number>
-  findMany<T extends FindManyArgs>(findManyArgs: T): any
-}
-
-export async function paginate<PrismaModel extends PrismaDelegate>(
-  prismaModel: PrismaModel,
-  args: Parameters<PrismaModel["findMany"]>[0],
-) {
-  const maxTake = 500
-  const skipValid = typeof args.skip === "number" && args.skip % 1 === 0 && args.skip >= 0
-  const takeValid =
-    typeof args.take === "number" && args.take % 1 === 0 && args.take > 0 && args.take <= maxTake
+export async function paginate<QueryResult>({
+  skip = 0,
+  take = 0,
+  maxTake = 500,
+  count: countQuery,
+  query,
+}: PaginateArgs<QueryResult>) {
+  const skipValid = typeof skip === "number" && skip % 1 === 0 && skip >= 0
+  const takeValid = typeof take === "number" && take % 1 === 0 && take > 0 && take <= maxTake
 
   if (!skipValid) {
     throw new PaginationArgumentError("The skip argument is invalid")
@@ -115,17 +75,12 @@ export async function paginate<PrismaModel extends PrismaDelegate>(
     throw new PaginationArgumentError("The take argument is invalid")
   }
 
-  const {select, include, ...countArgs} = args as any
-  const [count, items] = await Promise.all([
-    prismaModel.count(countArgs),
-    prismaModel.findMany(args),
-  ])
+  const [count, items] = await Promise.all([countQuery(), query({skip, take})])
 
-  const hasMore = args.skip! + args.take! < count
-  const nextPage = hasMore ? {take: args.take, skip: args.skip! + args.take!} : null
+  const hasMore = skip + take < count
+  const nextPage = hasMore ? {take, skip: skip + take} : null
 
   return {
-    // items: items as PromiseReturnType<PrismaModel["findMany"]>,
     items,
     nextPage,
     hasMore,

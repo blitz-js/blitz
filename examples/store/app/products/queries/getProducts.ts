@@ -24,21 +24,11 @@ export default async function getProducts(
 
   console.log("this line should not be included in the frontend bundle")
 
-  // const {items: products, hasMore, nextPage, count} = await paginate({
-  //   skip,
-  //   take,
-  //   count: () => db.product.count({where}),
-  //   query: (args) => db.product.findMany({...args, where, orderBy}),
-  // })
-
-  const {items: products, hasMore, nextPage, count} = await paginate(db.product, {
-    where,
-    include: {
-      variants: true,
-    },
-    orderBy,
+  const {items: products, hasMore, nextPage, count} = await paginate({
     skip,
     take,
+    count: () => db.product.count({where}),
+    query: (args) => db.product.findMany({...args, where, orderBy}),
   })
 
   return {
