@@ -1,8 +1,8 @@
 import SuperJson from "superjson"
 
+const errorProps = ["message", "code", "meta"]
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.allowErrorProps("code")
-  SuperJson.allowErrorProps("meta")
+  SuperJson.allowErrorProps(...errorProps)
 }
 
 export class AuthenticationError extends Error {
@@ -16,7 +16,10 @@ export class AuthenticationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthenticationError, {identifier: "BlitzAuthenticationError"})
+  SuperJson.registerClass(AuthenticationError, {
+    identifier: "BlitzAuthenticationError",
+    allowProps: errorProps,
+  })
 }
 
 export class CSRFTokenMismatchError extends Error {
@@ -27,7 +30,10 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(CSRFTokenMismatchError, {identifier: "BlitzCSRFTokenMismatchError"})
+  SuperJson.registerClass(CSRFTokenMismatchError, {
+    identifier: "BlitzCSRFTokenMismatchError",
+    allowProps: errorProps,
+  })
 }
 
 export class AuthorizationError extends Error {
@@ -41,7 +47,10 @@ export class AuthorizationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(AuthorizationError, {identifier: "BlitzAuthorizationError"})
+  SuperJson.registerClass(AuthorizationError, {
+    identifier: "BlitzAuthorizationError",
+    allowProps: errorProps,
+  })
 }
 
 export class NotFoundError extends Error {
@@ -55,5 +64,5 @@ export class NotFoundError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(NotFoundError, {identifier: "BlitzNotFoundError"})
+  SuperJson.registerClass(NotFoundError, {identifier: "BlitzNotFoundError", allowProps: errorProps})
 }
