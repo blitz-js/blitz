@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-blitz",
-  "version": "0.30.0-canary.4",
+  "version": "0.30.0-canary.5",
   "description": "Blitz.js eslint config",
   "license": "MIT",
   "scripts": {
