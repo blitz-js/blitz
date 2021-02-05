@@ -8,6 +8,8 @@ type PaginateArgs<QueryResult> = {
   query: (args: {skip: number; take: number}) => Promise<QueryResult>
 }
 
+const isInteger = (value: unknown) => typeof value === "number" && value % 1 === 0
+
 export async function paginate<QueryResult>({
   skip = 0,
   take = 0,
@@ -15,15 +17,31 @@ export async function paginate<QueryResult>({
   count: countQuery,
   query,
 }: PaginateArgs<QueryResult>) {
-  const skipValid = typeof skip === "number" && skip % 1 === 0 && skip >= 0
-  const takeValid = typeof take === "number" && take % 1 === 0 && take > 0 && take <= maxTake
-
-  if (!skipValid) {
-    throw new PaginationArgumentError("The skip argument is invalid")
+  if (!isInteger(skip)) {
+    throw new PaginationArgumentError("`skip` argument must be a integer")
   }
-
-  if (!takeValid) {
-    throw new PaginationArgumentError("The take argument is invalid")
+  if (!isInteger(take)) {
+    throw new PaginationArgumentError("`take` argument must be a integer")
+  }
+  if (!isInteger(maxTake)) {
+    throw new PaginationArgumentError("`maxTake` argument must be a integer")
+  }
+  if (typeof countQuery !== "function") {
+    throw new PaginationArgumentError("`count` argument must be a function")
+  }
+  if (typeof query !== "function") {
+    throw new PaginationArgumentError("`query` argument must be a function")
+  }
+  if (skip < 0) {
+    throw new PaginationArgumentError("`skip` argument must be a positive number")
+  }
+  if (take < 0) {
+    throw new PaginationArgumentError("`take` argument must be a positive number")
+  }
+  if (take > maxTake) {
+    throw new PaginationArgumentError(
+      "`take` argument must less than `maxTake` which is currently " + maxTake,
+    )
   }
 
   const [count, items] = await Promise.all([countQuery(), query({skip, take})])

@@ -5,7 +5,7 @@ interface Get__ModelNames__Input
   extends Pick<Prisma.__ModelName__FindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
 
 export default async function get__ModelNames__(
-  {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
+  {where, orderBy, skip = 0, take = 100}: Get__ModelNames__Input,
   ctx: Ctx,
 ) {
   ctx.session.$authorize()

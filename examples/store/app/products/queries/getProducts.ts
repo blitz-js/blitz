@@ -15,7 +15,7 @@ type GetProductsInput = {
 }
 
 export default async function getProducts(
-  {where, orderBy, skip = 0, take}: GetProductsInput,
+  {where, orderBy, skip = 0, take = 100}: GetProductsInput,
   ctx: Record<any, unknown> = {},
 ) {
   if (ctx.referer) {

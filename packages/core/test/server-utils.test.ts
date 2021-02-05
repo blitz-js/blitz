@@ -1,16 +1,13 @@
 import {paginate} from "../src"
 
 describe("paginate", () => {
-  const invalidSkipArgumentErrorMessage = "The skip argument is invalid"
-  const invalidTakeArgumentErrorMessage = "The take argument is invalid"
-
   const dummyPaginationPromises = {
     count: () => new Promise<number>((resolve) => resolve(1)),
     query: () => new Promise<object[]>((resolve) => resolve([])),
   }
 
-  it("throws an error if skip is not a positive integer", () => {
-    const invalidSkipValues = [-1, 0.1, "1"]
+  it("throws an error if skip is not a positive integer", async () => {
+    const invalidSkipValues = [null, -1, 0.1, "1"]
 
     const pagination = async (skip: any) =>
       await paginate({
@@ -19,13 +16,13 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    invalidSkipValues.forEach((skip) =>
-      expect(pagination(skip)).rejects.toThrow(invalidSkipArgumentErrorMessage),
-    )
+    for (const skip of invalidSkipValues) {
+      await expect(pagination(skip)).rejects.toThrow()
+    }
   })
 
-  it("throws an error if take is not an integer greater than 0", () => {
-    const invalidTakeValues = [-1, 0, 0.1, "1"]
+  it("throws an error if take is not an integer greater than or equal to 0", async () => {
+    const invalidTakeValues = [null, -1, 0.1, "1"]
 
     const pagination = async (take: any) =>
       await paginate({
@@ -34,9 +31,9 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    invalidTakeValues.forEach((take) =>
-      expect(pagination(take)).rejects.toThrow(invalidTakeArgumentErrorMessage),
-    )
+    for (const take of invalidTakeValues) {
+      await expect(pagination(take)).rejects.toThrow()
+    }
   })
 
   it("throws an error if take is greater than 500", () => {
@@ -47,7 +44,7 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow(invalidTakeArgumentErrorMessage)
+    expect(pagination()).rejects.toThrow()
   })
 
   it("throws an error if take is greater than maxTake", () => {
@@ -59,10 +56,10 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow(invalidTakeArgumentErrorMessage)
+    expect(pagination()).rejects.toThrow()
   })
 
-  it("returns correct data", () => {
+  it("returns correct data", async () => {
     const tests = [
       {
         payload: {
@@ -94,10 +91,10 @@ describe("paginate", () => {
       },
     ]
 
-    tests.forEach((test) => {
+    for (const test of tests) {
       const pagination = async () => await paginate(test.payload)
 
-      expect(pagination()).resolves.toEqual(test.resolves)
-    })
+      await expect(pagination()).resolves.toEqual(test.resolves)
+    }
   })
 })
