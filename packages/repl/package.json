@@ -33,6 +33,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "@blitzjs/config": "0.30.0-canary.4",
     "chokidar": "3.5.1",
     "globby": "11.0.2",
     "pkg-dir": "^5.0.0",
