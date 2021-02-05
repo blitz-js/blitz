@@ -3,7 +3,7 @@ import path from "path"
 
 export default RecipeBuilder()
   .setName("Quirrel")
-  .setDescription("Configure Quirrel locally and set it up for immediate use.")
+  .setDescription("Configure Quirrel locally and set it up for use.")
   .setOwner("Simon Knott <info@quirrel.dev>")
   .setRepoLink("https://quirrel.dev")
   .addAddDependenciesStep({
@@ -25,7 +25,7 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "startWithBlitz",
-    stepName: 'Start Quirrel with "blitz start"',
+    stepName: 'Start Quirrel with "blitz dev"',
     explanation: "Make sure that your local Quirrel server runs when you need it.",
     singleFileSearch: paths.packageJson(),
     transformPlain(program) {

@@ -52,6 +52,10 @@ function getWatcher(watching: boolean, cwd: string, include: string[], ignore: s
       persistent: true,
       ignoreInitial: true,
       alwaysStat: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 2000,
+        pollInterval: 100,
+      },
     })
   }
 

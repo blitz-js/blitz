@@ -93,7 +93,7 @@ async function printEnvInfo() {
     {
       System: ["OS", "CPU", "Memory", "Shell"],
       Binaries: ["Node", "Yarn", "npm", "Watchman"],
-      npmPackages: ["blitz", "typescript", "react", "react-dom", "@prisma/cli", "@prisma/client"],
+      npmPackages: ["blitz", "typescript", "react", "react-dom", "prisma", "@prisma/client"],
     },
     {showNotFound: true},
   )

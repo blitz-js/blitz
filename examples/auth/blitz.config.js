@@ -11,10 +11,10 @@ module.exports = withBundleAnalyzer({
     }),
   ],
   log: {
-    level: "trace",
+    // level: "trace",
   },
   experimental: {
-    isomorphicResolverImports: true,
+    isomorphicResolverImports: false,
   },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {

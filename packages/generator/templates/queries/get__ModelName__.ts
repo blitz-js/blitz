@@ -1,14 +1,21 @@
-import {Ctx, NotFoundError} from "blitz"
-import db, {Prisma} from "db"
+import {resolver, NotFoundError} from "blitz"
+import db  from "db"
+import * as z from "zod"
 
-type Get__ModelName__Input = Pick<Prisma.__ModelName__FindFirstArgs, "where">
+const Get__ModelName__ = z.object({
+  // This accepts type of undefined, but is required at runtime
+  id: z.number().optional().refine(Boolean, 'Required'),
+})
 
-export default async function get__ModelName__({where}: Get__ModelName__Input, ctx: Ctx) {
-  ctx.session.authorize()
+export default resolver.pipe(
+  resolver.zod(Get__ModelName__),
+  resolver.authorize(),
+  async ({ id }) => {
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const __modelName__ = await db.__modelName__.findFirst({where: {id}})
 
-  const __modelName__ = await db.__modelName__.findFirst({where})
+    if (!__modelName__) throw new NotFoundError()
 
-  if (!__modelName__) throw new NotFoundError()
-
-  return __modelName__
-}
+    return __modelName__
+  }
+)

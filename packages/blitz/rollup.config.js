@@ -14,6 +14,8 @@ const common = {
     "next",
     "fs",
     "path",
+    "os",
+    "tty",
   ],
   plugins: [
     json(),

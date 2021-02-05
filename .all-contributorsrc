@@ -1851,6 +1851,100 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/54174518?v=4",
       "profile": "https://github.com/marina-ki",
       "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "jonasthiesen",
+      "name": "Jonas Thiesen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23408018?v=4",
+      "profile": "https://github.com/jonasthiesen",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "thakkaryash94",
+      "name": "Yash Thakkar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7349778?v=4",
+      "profile": "https://thakkaryash94.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rince",
+      "name": "Kazuma Suzuki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/933895?v=4",
+      "profile": "https://github.com/rince",
+      "contributions": [
+        "design",
+        "code"
+      ]
+    },
+    {
+      "login": "queq1890",
+      "name": "Yuji Matsumoto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32263803?v=4",
+      "profile": "http://queq1890.info",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Gim3l",
+      "name": "Gimel Dick",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46765702?v=4",
+      "profile": "https://github.com/Gim3l",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "akbo",
+      "name": "Andreas Bollig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1926271?v=4",
+      "profile": "https://github.com/akbo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ajmarkow",
+      "name": "AJ Markow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66390428?v=4",
+      "profile": "https://ajm.codes",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "wafuwafu13",
+      "name": "TagawaHirotaka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50798936?v=4",
+      "profile": "https://wafuwafu13.hateblo.jp/",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "merodiro",
+      "name": "Amr A.Mohammed",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17033502?v=4",
+      "profile": "https://github.com/merodiro",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lcswillems",
+      "name": "Lucas Willems",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5437552?v=4",
+      "profile": "http://www.lucaswillems.com",
+      "contributions": [
         "doc"
       ]
     }

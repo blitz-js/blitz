@@ -1,17 +1,16 @@
 import {Ctx} from "blitz"
 import db, {Prisma} from "db"
 
-type Get__ModelNames__Input = Pick<
-  Prisma.__ModelName__FindManyArgs,
-  "where" | "orderBy" | "skip" | "take"
->
+interface Get__ModelNames__Input
+  extends Pick<Prisma.__ModelName__FindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
 
 export default async function get__ModelNames__(
   {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
   ctx: Ctx,
 ) {
-  ctx.session.authorize()
+  ctx.session.$authorize()
 
+  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
   const __modelNames__ = await db.__modelName__.findMany({
     where,
     orderBy,
@@ -19,7 +18,7 @@ export default async function get__ModelNames__(
     skip,
   })
 
-  const count = await db.__modelName__.count()
+  const count = await db.__modelName__.count({where})
   const hasMore = typeof take === "number" ? skip + take < count : false
   const nextPage = hasMore ? {take, skip: skip + take!} : null
 

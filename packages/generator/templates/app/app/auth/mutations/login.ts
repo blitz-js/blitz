@@ -1,6 +1,6 @@
-import { Ctx, SecurePassword, AuthenticationError } from "blitz"
+import { resolver, SecurePassword, AuthenticationError } from "blitz"
 import db from "db"
-import { LoginInput, LoginInputType } from "../validations"
+import { Login } from "../validations"
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findFirst({ where: { email } })
@@ -18,14 +18,11 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default async function login(input: LoginInputType, ctx: Ctx) {
-  // This throws an error if input is invalid
-  const { email, password } = LoginInput.parse(input)
-
+export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
-  await ctx.session.create({ userId: user.id, roles: [user.role] })
+  await ctx.session.$create({ userId: user.id, roles: [user.role] })
 
   return user
-}
+})

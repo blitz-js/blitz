@@ -1,8 +1,8 @@
 import {Suspense} from "react"
 if (process.env.parentModel) {
-  import {Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
+  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
 } else {
-  import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 }
 import Layout from "app/core/layouts/Layout"
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
@@ -85,27 +85,33 @@ const __ModelNames__Page: BlitzPage = () => {
   }
 
   return (
-    <div>
-      <p>
-        <if condition="parentModel">
-          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
-            <a>Create __ModelName__</a>
-          </Link>
-          <else>
-            <Link href="/__modelNames__/new">
+    <>
+      <Head>
+        <title>__ModelNames__</title>
+      </Head>
+
+      <div>
+        <p>
+          <if condition="parentModel">
+            <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
               <a>Create __ModelName__</a>
             </Link>
-          </else>
-        </if>
-      </p>
+            <else>
+              <Link href="/__modelNames__/new">
+                <a>Create __ModelName__</a>
+              </Link>
+            </else>
+          </if>
+        </p>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <__ModelNames__List />
-      </Suspense>
-    </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <__ModelNames__List />
+        </Suspense>
+      </div>
+    </>
   )
 }
 
-__ModelNames__Page.getLayout = (page) => <Layout title={"__ModelNames__"}>{page}</Layout>
+__ModelNames__Page.getLayout = (page) => <Layout>{page}</Layout>
 
 export default __ModelNames__Page

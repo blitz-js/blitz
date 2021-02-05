@@ -375,7 +375,7 @@ Once we have sufficient feedback on this proposal and made any necessary changes
 ### How You Can Help
 
 1. **Contributions of any kind, including code, design, documentation, and translation.**
-   1. [Join the Blitz Slack group](https://slack.blitzjs.com)
-   2. Find an unclaimed issue that is marked as ready to work on. Then comment that you are working on it. **NOTE:** There's currently very few issues, but we'll soon be creating a lot of new issues for building everything defined in this RFC. You can watch Slack for new issues and/or watch this repo.
+   1. [Join the Blitz Discord group](https://discord.blitzjs.com)
+   2. Find an unclaimed issue that is marked as ready to work on. Then comment that you are working on it. **NOTE:** There's currently very few issues, but we'll soon be creating a lot of new issues for building everything defined in this RFC. You can watch Discord for new issues and/or watch this repo.
 2. **Donation or Sponsorship**
    1. Click the sponsor button at the top of this repo to see the options.

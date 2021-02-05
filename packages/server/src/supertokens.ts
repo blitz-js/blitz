@@ -1,4 +1,5 @@
 import {getConfig} from "@blitzjs/config"
+import {getProjectRoot} from "@blitzjs/config"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -18,6 +19,7 @@ import {
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
+  IsAuthorizedArgs,
   isLocalhost,
   Middleware,
   MiddlewareResponse,
@@ -29,6 +31,7 @@ import {
   SessionContext,
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
+// Must import this type from 'blitz'
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
@@ -37,7 +40,6 @@ import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
-import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
@@ -51,9 +53,10 @@ function assert(condition: any, message: string): asserts condition {
 process.nextTick(getConfig)
 
 const getDb = () => {
-  const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/__db.js")
-  return require(path).default
+  const projectRoot = getProjectRoot()
+  const path = join(projectRoot, ".next/blitz/db.js")
+  // eslint-disable-next-line no-eval -- block webpack from following this module path
+  return eval("require")(path).default
 }
 
 const defaultConfig: SessionConfig = {
@@ -89,18 +92,33 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-export function simpleRolesIsAuthorized(userRoles: string[], input?: any) {
+type SimpleRolesIsAuthorizedArgs = {
+  ctx: any
+  args: [roleOrRoles?: string | string[]]
+}
+
+export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs) {
+  const [roleOrRoles] = args
+  const $publicData = (ctx.session as SessionContext).$publicData
+  const publicData = $publicData as typeof $publicData & {roles: unknown}
+  if (!("roles" in publicData)) {
+    throw new Error("Session publicData is missing the required `roles` array field")
+  }
+  if (!Array.isArray(publicData.roles)) {
+    throw new Error("Session `publicData.roles` is not an array, but it must be")
+  }
+
   // No roles required, so all roles allowed
-  if (!input) return true
+  if (!roleOrRoles) return true
 
   const rolesToAuthorize = []
-  if (Array.isArray(input)) {
-    rolesToAuthorize.push(...input)
-  } else if (input) {
-    rolesToAuthorize.push(input)
+  if (Array.isArray(roleOrRoles)) {
+    rolesToAuthorize.push(...roleOrRoles)
+  } else if (roleOrRoles) {
+    rolesToAuthorize.push(roleOrRoles)
   }
   for (const role of rolesToAuthorize) {
-    if (userRoles.includes(role)) return true
+    if (publicData.roles.includes(role)) return true
   }
   return false
 }
@@ -146,25 +164,42 @@ type AuthedSessionKernel = {
 }
 type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
-const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest =>
-  "cookies" in req
-const isMiddlewareApResponse = (
-  res: MiddlewareResponse | ServerResponse,
-): res is MiddlewareResponse => "blitzCtx" in res
+// const isBlitzApiRequest = (req: BlitzApiRequest | IncomingMessage): req is BlitzApiRequest => {
+//   return "cookies" in req
+// }
+function ensureBlitzApiRequest(
+  req: BlitzApiRequest | IncomingMessage,
+): asserts req is BlitzApiRequest {
+  if (!("cookies" in req)) {
+    // Cookie parser isn't include inside getServerSideProps, so we have to add it
+    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
+  }
+}
+// const isMiddlewareApResponse = (
+//   res: MiddlewareResponse | ServerResponse,
+// ): res is MiddlewareResponse => {
+//   return "blitzCtx" in res
+// }
+function ensureMiddlewareResponse(
+  res: BlitzApiResponse | ServerResponse,
+): asserts res is MiddlewareResponse {
+  if (!("blitzCtx" in res)) {
+    ;(res as MiddlewareResponse).blitzCtx = {}
+  }
+}
 
 export async function getSessionContext(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
 ): Promise<SessionContext> {
-  if (!("cookies" in req)) {
-    // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    ;(req as BlitzApiRequest).cookies = getCookieParser(req)()
-  }
-  assert(isBlitzApiRequest(req), "[getSessionContext]: Request type isn't BlitzApiRequest")
+  ensureBlitzApiRequest(req)
+  ensureMiddlewareResponse(res)
 
-  if (isMiddlewareApResponse(res) && res.blitzCtx.session) {
+  if (res.blitzCtx.session) {
     return res.blitzCtx.session as SessionContext
   }
+
+  // ensureMiddlewareResponse(res)
 
   let sessionKernel = await getSession(req, res)
 
@@ -177,85 +212,91 @@ export async function getSessionContext(
     sessionKernel = await createAnonymousSession(req, res)
   }
 
-  const sessionContext = new SessionContextClass(req, res, sessionKernel)
-  if (!("blitzCtx" in res)) {
-    ;(res as MiddlewareResponse).blitzCtx = {}
-  }
-  ;(res as MiddlewareResponse).blitzCtx.session = sessionContext
+  const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
+  res.blitzCtx.session = sessionContext
   return sessionContext
 }
 
+const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T => {
+  return new Proxy(ctxClass, {
+    get(target, prop, receiver) {
+      if (prop in target || prop === "then") {
+        return Reflect.get(target, prop, receiver)
+      } else {
+        return Reflect.get(target.$publicData, prop, receiver)
+      }
+    },
+  })
+}
+
 export class SessionContextClass implements SessionContext {
-  private _req: IncomingMessage
-  private _res: ServerResponse
+  private _req: BlitzApiRequest
+  private _res: MiddlewareResponse
   private _kernel: SessionKernel
 
-  constructor(req: IncomingMessage, res: ServerResponse, kernel: SessionKernel) {
+  constructor(req: BlitzApiRequest, res: MiddlewareResponse, kernel: SessionKernel) {
     this._req = req
     this._res = res
     this._kernel = kernel
   }
 
-  get handle() {
+  get $handle() {
     return this._kernel.handle
   }
   get userId() {
     return this._kernel.publicData.userId
   }
-  get roles() {
-    return this._kernel.publicData.roles
-  }
-  get publicData() {
+  get $publicData() {
     return this._kernel.publicData
   }
 
-  authorize(input?: any) {
+  $authorize(...args: IsAuthorizedArgs) {
     const e = new AuthenticationError()
-    Error.captureStackTrace(e, this.authorize)
+    Error.captureStackTrace(e, this.$authorize)
     if (!this.userId) throw e
 
-    if (!this.isAuthorized(input)) {
+    if (!this.$isAuthorized(...args)) {
       const e = new AuthorizationError()
-      Error.captureStackTrace(e, this.authorize)
+      Error.captureStackTrace(e, this.$authorize)
       throw e
     }
   }
 
-  isAuthorized(input?: any) {
+  $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
-    return config.isAuthorized(this.roles, input)
+    return config.isAuthorized({ctx: this._res.blitzCtx, args})
   }
 
-  async create(publicData: PublicData, privateData?: Record<any, any>) {
+  async $create(publicData: PublicData, privateData?: Record<any, any>) {
     this._kernel = await createNewSession(this._req, this._res, publicData, privateData, {
       jwtPayload: this._kernel.jwtPayload,
     })
   }
 
-  revoke() {
-    return revokeSession(this._req, this._res, this.handle)
+  $revoke() {
+    return revokeSession(this._req, this._res, this.$handle)
   }
 
-  async revokeAll() {
-    if (!this.publicData.userId) {
+  async $revokeAll() {
+    if (!this.$publicData.userId) {
       throw new Error("session.revokeAll() cannot be used with anonymous sessions")
     }
-    await revokeAllSessionsForUser(this._req, this._res, this.publicData.userId)
+    await revokeAllSessionsForUser(this._req, this._res, this.$publicData.userId)
     return
   }
 
-  async setPublicData(data: Record<any, any>) {
+  async $setPublicData(data: Record<any, any>) {
     if (this.userId && data.roles) {
       await updateAllPublicDataRolesForUser(this.userId, data.roles)
     }
     this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
 
-  async getPrivateData() {
-    return (await getPrivateData(this.handle)) || {}
+  async $getPrivateData() {
+    return (await getPrivateData(this.$handle)) || {}
   }
-  setPrivateData(data: Record<any, any>) {
+  $setPrivateData(data: Record<any, any>) {
     return setPrivateData(this._kernel, data)
   }
 }
@@ -624,7 +665,6 @@ export async function createNewSession(
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
   assert(publicData.userId !== undefined, "You must provide publicData.userId")
-  assert(publicData.roles, "You must provide publicData.roles")
 
   const antiCSRFToken = createAntiCSRFToken()
 
@@ -723,7 +763,10 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
-  return await createNewSession(req, res, {userId: null, roles: []}, undefined, {anonymous: true})
+  // TODO remove `as any` after https://github.com/blitz-js/blitz/pull/1788 merged
+  return await createNewSession(req, res, {userId: null, roles: []} as any, undefined, {
+    anonymous: true,
+  })
 }
 
 // --------------------------------

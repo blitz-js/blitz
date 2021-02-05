@@ -17,6 +17,7 @@ export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
+export {resolver} from "./resolver"
 
 export {
   getAllMiddlewareForModule,
@@ -38,16 +39,6 @@ export {SecurePassword, hash256, generateToken} from "./auth-utils"
 // --------------------
 // Exports from Next.js
 // --------------------
-export {
-  GetStaticProps,
-  GetStaticPaths,
-  GetServerSideProps,
-  InferGetStaticPropsType,
-  InferGetServerSidePropsType,
-  NextApiRequest as BlitzApiRequest,
-  NextApiResponse as BlitzApiResponse,
-} from "next"
-
 export {default as Head} from "next/head"
 
 export {default as Link, LinkProps} from "next/link"

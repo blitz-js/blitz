@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/display",
-  "version": "0.29.2",
+  "version": "0.30.0-canary.4",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -18,11 +18,13 @@
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
+  "browser": "index-browser.js",
   "main": "dist/index.js",
   "module": "dist/display.esm.js",
   "types": "dist/packages/display/src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index-browser.js"
   ],
   "keywords": [
     "blitz",
@@ -33,10 +35,10 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@blitzjs/display": "0.29.2",
+    "@blitzjs/display": "0.30.0-canary.4",
     "chalk": "^4.1.0",
     "console-table-printer": "^2.7.5",
-    "ora": "^5.2.0",
-    "tslog": "^3.1.0"
+    "ora": "^5.3.0",
+    "tslog": "^3.1.1"
   }
 }
