@@ -1,4 +1,4 @@
-import {Ctx} from "blitz"
+import {paginate, Ctx} from "blitz"
 import db, {Prisma} from "db"
 
 interface Get__ModelNames__Input
@@ -11,16 +11,12 @@ export default async function get__ModelNames__(
   ctx.session.$authorize()
 
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const __modelNames__ = await db.__modelName__.findMany({
-    where,
-    orderBy,
-    take,
+  const {items: __modelNames__, hasMore, nextPage, count} = await paginate({
     skip,
+    take,
+    count: () => db.__modelName__.count({where}),
+    query: (paginateArgs) => db.__modelName__.findMany({...paginateArgs, where, orderBy}),
   })
-
-  const count = await db.__modelName__.count({where})
-  const hasMore = typeof take === "number" ? skip + take < count : false
-  const nextPage = hasMore ? {take, skip: skip + take!} : null
 
   return {
     __modelNames__,

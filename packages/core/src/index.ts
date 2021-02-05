@@ -4,7 +4,6 @@ import {AppProps as NextAppProps} from "next/app"
 export * from "./types"
 export * from "./errors"
 export * from "./constants"
-export {paginate, seeder} from "./db-utils"
 export {BlitzScript} from "./blitz-script"
 export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
 export {getQueryKey, invalidateQuery, setQueryData} from "./utils/react-query-utils"
@@ -18,6 +17,7 @@ export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
 export {resolver} from "./resolver"
+export {paginate} from "./server-utils"
 
 export {
   getAllMiddlewareForModule,

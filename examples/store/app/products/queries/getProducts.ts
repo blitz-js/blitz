@@ -28,7 +28,7 @@ export default async function getProducts(
     skip,
     take,
     count: () => db.product.count({where}),
-    query: (args) => db.product.findMany({...args, where, orderBy}),
+    query: (paginateArgs) => db.product.findMany({...paginateArgs, where, orderBy}),
   })
 
   return {

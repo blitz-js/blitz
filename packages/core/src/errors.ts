@@ -75,5 +75,8 @@ export class PaginationArgumentError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(PaginationArgumentError, "PaginationArgumentError")
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
 }

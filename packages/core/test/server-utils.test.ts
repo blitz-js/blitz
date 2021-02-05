@@ -1,4 +1,4 @@
-import {paginate, seeder} from "../src"
+import {paginate} from "../src"
 
 describe("paginate", () => {
   const invalidSkipArgumentErrorMessage = "The skip argument is invalid"
@@ -99,59 +99,5 @@ describe("paginate", () => {
 
       expect(pagination()).resolves.toEqual(test.resolves)
     })
-  })
-})
-
-describe("seeder", () => {
-  it("seeds 1 item", async () => {
-    const resolvedData = {foo: "bar"}
-
-    const testSeeder = seeder(() => {
-      return new Promise((resolve) => resolve(resolvedData))
-    })
-
-    const [item] = await testSeeder.seed()
-
-    expect(item).toEqual(resolvedData)
-  })
-
-  it("seeds a custom amount of data", async () => {
-    const resolvedData = {foo: "bar"}
-
-    const testSeeder = seeder(() => {
-      return new Promise((resolve) => resolve(resolvedData))
-    })
-
-    const items = await testSeeder.seed({
-      amount: 2,
-    })
-
-    expect(items).toEqual([resolvedData, resolvedData])
-  })
-
-  it("passes options to the callback", async () => {
-    const customOptions = {foo: "bar"}
-
-    const testSeeder = seeder((_, options) => {
-      return new Promise((resolve) => resolve(options))
-    })
-
-    const [item] = await testSeeder.seed({
-      options: customOptions,
-    })
-
-    expect(item).toEqual(customOptions)
-  })
-
-  it("passes iteration index to the callback", async () => {
-    const testSeeder = seeder((index) => {
-      return new Promise((resolve) => resolve(index))
-    })
-
-    const items = await testSeeder.seed({
-      amount: 3,
-    })
-
-    expect(items).toEqual([0, 1, 2])
   })
 })
