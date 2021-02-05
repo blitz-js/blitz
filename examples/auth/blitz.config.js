@@ -14,7 +14,7 @@ module.exports = withBundleAnalyzer({
     // level: "trace",
   },
   experimental: {
-    isomorphicResolverImports: true,
+    isomorphicResolverImports: false,
   },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
