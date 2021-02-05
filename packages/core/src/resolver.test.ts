@@ -3,7 +3,7 @@ import * as z from "zod"
 import {resolver} from "./resolver"
 
 describe("resolver", () => {
-  it("should typecheck and pass along value", () => {
+  it("should typecheck and pass along value", async () => {
     const f = resolver.pipe(
       resolver.zod(
         z.object({
@@ -16,15 +16,20 @@ describe("resolver", () => {
       },
     )
     expect(
-      f(
+      await f(
         {email: "test@example.com"},
-        {session: {$authorize: () => {}} as AuthenticatedSessionContext},
+        {session: {$authorize: (i) => i} as AuthenticatedSessionContext},
       ),
-    ).toStrictEqual("test@example.com")
+    ).toBe("test@example.com")
 
     const g = resolver.pipe(resolver.authorize(), (input: {email: string}) => {
       return input.email
     })
-    expect(g({email: "test@example.com"}, {})).toStrictEqual("test@example.com")
+    expect(
+      await g(
+        {email: "test@example.com"},
+        {session: {$authorize: (i) => i} as AuthenticatedSessionContext},
+      ),
+    ).toBe("test@example.com")
   })
 })
