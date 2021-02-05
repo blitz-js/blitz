@@ -149,11 +149,9 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🏆 Gold Sponsors
 
-<div>
-<a aria-label="G2i" href="http://g2i.co/sign-up?utm_source=blitz&utm_medium=referral&utm_campaign=blitz2020">
-<img alt="" src="https://files-5oz00y7xp.vercel.app/G2i_Logo_wwords.png" width="160px">
+<a aria-label="Your Company" href="#">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="300px">
 </a>
-</div>
 
 ### 💎 Diamond Sponsors
 
