@@ -1,7 +1,8 @@
-import {Link, useMutation, AuthenticationError} from "blitz"
+import {AuthenticationError, Link, useMutation} from "blitz"
 import {LabeledTextField} from "app/core/components/LabeledTextField"
 import {Form, FORM_ERROR} from "app/core/components/Form"
-import login, {LoginInput} from "app/auth/mutations/login"
+import login from "app/auth/mutations/login"
+import {Login} from "app/auth/validations"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -9,17 +10,19 @@ type LoginFormProps = {
 
 export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
+
   return (
     <div>
       <h1>Login</h1>
+
       <Form
         submitText="Login"
-        schema={LoginInput}
-        initialValues={{email: undefined, password: undefined}}
+        schema={Login}
+        initialValues={{email: "", password: ""}}
         onSubmit={async (values) => {
           try {
             await loginMutation(values)
-            props.onSuccess && props.onSuccess()
+            props.onSuccess?.()
           } catch (error) {
             if (error instanceof AuthenticationError) {
               return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
@@ -34,7 +37,13 @@ export const LoginForm = (props: LoginFormProps) => {
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <div>
+          <Link href="/forgot-password">
+            <a>Forgot your password?</a>
+          </Link>
+        </div>
       </Form>
+
       <div style={{marginTop: "1rem"}}>
         Or <Link href="/signup">Sign Up</Link>
       </div>
