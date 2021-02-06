@@ -1,12 +1,21 @@
-import {Ctx} from "blitz"
-import db, {Prisma} from "db"
+import {resolver} from "blitz"
+import db from "db"
+import * as z from "zod"
 
-type UpdateProjectInput = Pick<Prisma.ProjectUpdateArgs, "where" | "data">
+const UpdateProject = z
+  .object({
+    id: z.number(),
+    name: z.string(),
+  })
+  .nonstrict()
 
-export default async function updateProject({where, data}: UpdateProjectInput, ctx: Ctx) {
-  ctx.session.$authorize()
+export default resolver.pipe(
+  resolver.zod(UpdateProject),
+  resolver.authorize(),
+  async ({id, ...data}) => {
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const project = await db.project.update({where: {id}, data})
 
-  const project = await db.project.update({where, data})
-
-  return project
-}
+    return project
+  },
+)

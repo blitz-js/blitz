@@ -1,39 +1,51 @@
 import {Suspense} from "react"
-import {Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
+import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import updateProject from "app/projects/mutations/updateProject"
-import ProjectForm from "app/projects/components/ProjectForm"
+import {ProjectForm, FORM_ERROR} from "app/projects/components/ProjectForm"
 
 export const EditProject = () => {
   const router = useRouter()
   const projectId = useParam("projectId", "number")
-  const [project, {setQueryData}] = useQuery(getProject, {where: {id: projectId}})
+  const [project, {setQueryData}] = useQuery(getProject, {id: projectId})
   const [updateProjectMutation] = useMutation(updateProject)
 
   return (
-    <div>
-      <h1>Edit Project {project.id}</h1>
-      <pre>{JSON.stringify(project)}</pre>
+    <>
+      <Head>
+        <title>Edit Project {project.id}</title>
+      </Head>
 
-      <ProjectForm
-        initialValues={project}
-        onSubmit={async () => {
-          try {
-            const updated = await updateProjectMutation({
-              where: {id: project.id},
-              data: {name: "MyNewName"},
-            })
-            await setQueryData(updated)
-            alert("Success!" + JSON.stringify(updated))
-            router.push(`/projects/${updated.id}`)
-          } catch (error) {
-            console.log(error)
-            alert("Error editing project " + JSON.stringify(error, null, 2))
-          }
-        }}
-      />
-    </div>
+      <div>
+        <h1>Edit Project {project.id}</h1>
+        <pre>{JSON.stringify(project)}</pre>
+
+        <ProjectForm
+          submitText="Update Project"
+          // TODO use a zod schema for form validation
+          //  - Tip: extract mutation's schema into a shared `validations.ts` file and
+          //         then import and use it here
+          // schema={UpdateProject}
+          initialValues={project}
+          onSubmit={async (values) => {
+            try {
+              const updated = await updateProjectMutation({
+                id: project.id,
+                ...values,
+              })
+              await setQueryData(updated)
+              router.push(`/projects/${updated.id}`)
+            } catch (error) {
+              console.error(error)
+              return {
+                [FORM_ERROR]: error.toString(),
+              }
+            }
+          }}
+        />
+      </div>
+    </>
   )
 }
 
@@ -53,6 +65,6 @@ const EditProjectPage: BlitzPage = () => {
   )
 }
 
-EditProjectPage.getLayout = (page) => <Layout title={"Edit Project"}>{page}</Layout>
+EditProjectPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditProjectPage
