@@ -1947,6 +1947,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "alii",
+      "name": "Alistair Smith",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25351731?v=4",
+      "profile": "https://alistair.cloud",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
