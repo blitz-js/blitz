@@ -1,7 +1,7 @@
 import {infer as zInfer, ZodSchema} from "zod"
 import {Ctx} from "./middleware"
 import {AuthenticatedSessionContext, SessionContext, SessionContextBase} from "./supertokens"
-import {Await} from "./types"
+import {Await, EnsurePromise} from "./types"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
@@ -23,16 +23,16 @@ type PipeFn<Prev, Next, PrevCtx extends Ctx, NextCtx = PrevCtx> = (
   c: PrevCtx,
 ) => Next extends ResultWithContext ? never : Next | ResultWithContext<Next, NextCtx>
 
-function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => Z
+function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => EnsurePromise<Z>
 function pipe<A, B, C, CA = Ctx, CB = CA, CC = CB>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
-): (input: A, ctx: CA) => C
+): (input: A, ctx: CA) => EnsurePromise<C>
 function pipe<A, B, C, D, CA = Ctx, CB = CA, CC = CB, CD = CC>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
-): (input: A, ctx: CA) => D
+): (input: A, ctx: CA) => EnsurePromise<D>
 function pipe<A, B, C, D, E, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
@@ -272,7 +272,7 @@ function pipe(...args: unknown[]): unknown {
 }
 
 interface ResolverAuthorize {
-  (...args: Parameters<SessionContextBase["$authorize"]>): <T, C>(
+  <T, C = Ctx>(...args: Parameters<SessionContextBase["$authorize"]>): (
     input: T,
     ctx: C,
   ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
