@@ -13,20 +13,20 @@ generator client {
 // --------------------------------------
 
 model User {
-  id             Int       @default(autoincrement()) @id
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   name           String?
-  email          String    @unique
+  email          String   @unique
   hashedPassword String?
-  role           String    @default("user")
+  role           String   @default("USER")
 
-  tokens         Token[]
-  sessions       Session[]
+  tokens   Token[]
+  sessions Session[]
 }
 
 model Session {
-  id                 Int       @default(autoincrement()) @id
+  id                 Int       @id @default(autoincrement())
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   expiresAt          DateTime?
@@ -36,14 +36,14 @@ model Session {
   publicData         String?
   privateData        String?
 
-  user               User?     @relation(fields: [userId], references: [id])
-  userId             Int?
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
 }
 
 model Token {
-  id          Int       @default(autoincrement()) @id
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   hashedToken String
   type        String
   // See note below about TokenType enum
