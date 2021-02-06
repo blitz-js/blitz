@@ -3,6 +3,7 @@ import db from "db"
 import {Strategy as TwitterStrategy} from "passport-twitter"
 import {Strategy as GitHubStrategy} from "passport-github2"
 import {Strategy as Auth0Strategy} from "passport-auth0"
+import {Role} from "types"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -91,7 +92,7 @@ export default passportAuth({
 
           const publicData = {
             userId: user.id,
-            roles: [user.role],
+            roles: [user.role as Role],
             source: "github",
             githubUsername: profile.username,
           }

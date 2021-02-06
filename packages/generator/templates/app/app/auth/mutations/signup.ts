@@ -1,6 +1,7 @@
 import { resolver, SecurePassword } from "blitz"
 import db from "db"
 import { Signup } from "app/auth/validations"
+import { Role } from "types"
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, ctx) => {
   const hashedPassword = await SecurePassword.hash(password)
@@ -9,6 +10,6 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
     select: { id: true, name: true, email: true, role: true },
   })
 
-  await ctx.session.$create({ userId: user.id, roles: [user.role] })
+  await ctx.session.$create({ userId: user.id, roles: [user.role as Role] })
   return user
 })
