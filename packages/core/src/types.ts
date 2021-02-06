@@ -80,6 +80,11 @@ export type FirstParam<F extends QueryFn> = Parameters<F>[0]
 export type Await<T> = T extends PromiseLike<infer U> ? U : T
 
 /**
+ * Ensure the type is a promise
+ */
+export type EnsurePromise<T> = T extends PromiseLike<unknown> ? T : Promise<T>
+
+/**
  * Get the return type of a function which returns a Promise.
  */
 export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Await<ReturnType<T>>

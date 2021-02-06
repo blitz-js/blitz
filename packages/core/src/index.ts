@@ -16,7 +16,7 @@ export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
-export {resolver} from "./resolver"
+export {resolver, AuthenticatedMiddlewareCtx} from "./resolver"
 export {paginate} from "./server-utils"
 
 export {
