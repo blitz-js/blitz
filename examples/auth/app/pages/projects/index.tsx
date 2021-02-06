@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProjects from "app/projects/queries/getProjects"
 
@@ -41,20 +41,26 @@ export const ProjectsList = () => {
 
 const ProjectsPage: BlitzPage = () => {
   return (
-    <div>
-      <p>
-        <Link href="/projects/new">
-          <a>Create Project</a>
-        </Link>
-      </p>
+    <>
+      <Head>
+        <title>Projects</title>
+      </Head>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProjectsList />
-      </Suspense>
-    </div>
+      <div>
+        <p>
+          <Link href="/projects/new">
+            <a>Create Project</a>
+          </Link>
+        </p>
+
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProjectsList />
+        </Suspense>
+      </div>
+    </>
   )
 }
 
-ProjectsPage.getLayout = (page) => <Layout title={"Projects"}>{page}</Layout>
+ProjectsPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ProjectsPage

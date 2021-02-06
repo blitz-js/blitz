@@ -1,24 +1,22 @@
-import {Ctx} from "blitz"
+import {paginate, Ctx} from "blitz"
 import db, {Prisma} from "db"
 
-type GetProjectsInput = Pick<Prisma.ProjectFindManyArgs, "where" | "orderBy" | "skip" | "take">
+interface GetProjectsInput
+  extends Pick<Prisma.ProjectFindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
 
 export default async function getProjects(
-  {where, orderBy, skip = 0, take}: GetProjectsInput,
+  {where, orderBy, skip = 0, take = 100}: GetProjectsInput,
   ctx: Ctx,
 ) {
   ctx.session.$authorize()
 
-  const projects = await db.project.findMany({
-    where,
-    orderBy,
-    take,
+  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  const {items: projects, hasMore, nextPage, count} = await paginate({
     skip,
+    take,
+    count: () => db.project.count({where}),
+    query: (paginateArgs) => db.project.findMany({...paginateArgs, where, orderBy}),
   })
-
-  const count = await db.project.count()
-  const hasMore = typeof take === "number" ? skip + take < count : false
-  const nextPage = hasMore ? {take, skip: skip + take!} : null
 
   return {
     projects,
