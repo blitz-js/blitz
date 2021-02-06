@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
@@ -7,30 +7,37 @@ import deleteProject from "app/projects/mutations/deleteProject"
 export const Project = () => {
   const router = useRouter()
   const projectId = useParam("projectId", "number")
-  const [project] = useQuery(getProject, {where: {id: projectId}})
-  const [deleteProjectMutation] = useMutation(deleteProject)
+  const [deleteProjectMutation, {isSuccess}] = useMutation(deleteProject)
+  const [project] = useQuery(getProject, {id: projectId}, {enabled: !isSuccess})
 
   return (
-    <div>
-      <h1>Project {project.id}</h1>
-      <pre>{JSON.stringify(project, null, 2)}</pre>
+    <>
+      <Head>
+        <title>Project {project.id}</title>
+      </Head>
 
-      <Link href={`/projects/${project.id}/edit`}>
-        <a>Edit</a>
-      </Link>
+      <div>
+        <h1>Project {project.id}</h1>
+        <pre>{JSON.stringify(project, null, 2)}</pre>
 
-      <button
-        type="button"
-        onClick={async () => {
-          if (window.confirm("This will be deleted")) {
-            await deleteProjectMutation({where: {id: project.id}})
-            router.push("/projects")
-          }
-        }}
-      >
-        Delete
-      </button>
-    </div>
+        <Link href={`/projects/${project.id}/edit`}>
+          <a>Edit</a>
+        </Link>
+
+        <button
+          type="button"
+          onClick={async () => {
+            if (window.confirm("This will be deleted")) {
+              await deleteProjectMutation({id: project.id})
+              router.push("/projects")
+            }
+          }}
+          style={{marginLeft: "0.5rem"}}
+        >
+          Delete
+        </button>
+      </div>
+    </>
   )
 }
 
@@ -50,6 +57,6 @@ const ShowProjectPage: BlitzPage = () => {
   )
 }
 
-ShowProjectPage.getLayout = (page) => <Layout title={"Project"}>{page}</Layout>
+ShowProjectPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowProjectPage
