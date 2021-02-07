@@ -92,12 +92,11 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-type SimpleRolesIsAuthorizedArgs = {
-  ctx: any
-  args: [roleOrRoles?: string | string[]]
+export interface SimpleRolesIsAuthorized<RoleType = string> {
+  ({ctx, args}: {ctx: any; args: [roleOrRoles?: RoleType | RoleType[]]}): boolean
 }
 
-export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs) {
+export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) => {
   const [roleOrRoles] = args
   const $publicData = (ctx.session as SessionContext).$publicData
   const publicData = $publicData as typeof $publicData & {roles: unknown}
