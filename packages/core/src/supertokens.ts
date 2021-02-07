@@ -66,16 +66,16 @@ export interface PublicDataWithLoading extends PublicData {
 }
 
 interface PublicDataWithInitialValues {
-  publicData: PublicData
+  initialPublicData: PublicData
 }
 
-export const useSession: (initial?: PublicDataWithInitialValues) => PublicDataWithLoading = (
-  initial?: PublicDataWithInitialValues,
+export const useSession: (options?: PublicDataWithInitialValues) => PublicDataWithLoading = (
+  options?: PublicDataWithInitialValues,
 ) => {
   const [publicData, setPublicData] = useState(
-    initial?.publicData ?? publicDataStore.emptyPublicData,
+    options?.initialPublicData ?? publicDataStore.emptyPublicData,
   )
-  const [isLoading, setIsLoading] = useState(!initial)
+  const [isLoading, setIsLoading] = useState(!options?.initialPublicData)
 
   useIsomorphicLayoutEffect(() => {
     // Initialize on mount
