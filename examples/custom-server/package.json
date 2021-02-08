@@ -72,7 +72,7 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-hooks": "4.2.0",
-    "husky": "4.3.7",
+    "husky": "4.3.8",
     "jest": "26.6.3",
     "jest-environment-jsdom-fourteen": "1.0.1",
     "jest-watch-typeahead": "0.6.1",
@@ -83,7 +83,7 @@
     "pretty-quick": "3.1.0",
     "react-test-renderer": "16.14.0",
     "start-server-and-test": "1.11.2",
-    "ts-jest": "26.4.4"
+    "ts-jest": "26.5.0"
   },
   "private": true
 }
