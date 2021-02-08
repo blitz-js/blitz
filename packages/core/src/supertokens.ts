@@ -2,7 +2,7 @@ import {useState} from "react"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {PublicData, Session} from "./types"
+import {IsAuthorizedArgs, PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
@@ -29,17 +29,13 @@ export type SessionConfig = {
   isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
 }
 
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
-
 export interface SessionContextBase extends PublicData {
   $handle: string | null
   $publicData: unknown
   $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
-  $isAuthorized: (...args: IsAuthorizedArgs) => this is AuthenticatedSessionContext
+  // $isAuthorized cannot have assertion return type because it breaks advanced use cases
+  // with multiple isAuthorized calls
+  $isAuthorized: (...args: IsAuthorizedArgs) => boolean
   $create: (publicData: PublicData, privateData?: Record<any, any>) => Promise<void>
   $revoke: () => Promise<void>
   $revokeAll: () => Promise<void>

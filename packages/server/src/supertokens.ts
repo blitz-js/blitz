@@ -1,4 +1,5 @@
 import {getConfig} from "@blitzjs/config"
+import {getProjectRoot} from "@blitzjs/config"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -39,7 +40,6 @@ import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
-import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
@@ -53,9 +53,10 @@ function assert(condition: any, message: string): asserts condition {
 process.nextTick(getConfig)
 
 const getDb = () => {
-  const projectRoot = pkgDir.sync() || process.cwd()
-  const path = join(projectRoot, ".next/__db.js")
-  return require(path).default
+  const projectRoot = getProjectRoot()
+  const path = join(projectRoot, ".next/blitz/db.js")
+  // eslint-disable-next-line no-eval -- block webpack from following this module path
+  return eval("require")(path).default
 }
 
 const defaultConfig: SessionConfig = {
@@ -91,19 +92,23 @@ const defaultConfig: SessionConfig = {
   },
 }
 
-type SimpleRolesIsAuthorizedArgs = {
-  ctx: any
-  args: [roleOrRoles?: string | string[], options?: {if?: boolean}]
+export interface SimpleRolesIsAuthorized<RoleType = string> {
+  ({ctx, args}: {ctx: any; args: [roleOrRoles?: RoleType | RoleType[]]}): boolean
 }
 
-export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs) {
-  const [roleOrRoles, options = {}] = args
-  const condition = options.if ?? true
+export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) => {
+  const [roleOrRoles] = args
+  const $publicData = (ctx.session as SessionContext).$publicData
+  const publicData = $publicData as typeof $publicData & {roles: unknown}
+  if (!("roles" in publicData)) {
+    throw new Error("Session publicData is missing the required `roles` array field")
+  }
+  if (!Array.isArray(publicData.roles)) {
+    throw new Error("Session `publicData.roles` is not an array, but it must be")
+  }
 
   // No roles required, so all roles allowed
   if (!roleOrRoles) return true
-  // Don't enforce the roles if condition is false
-  if (!condition) return true
 
   const rolesToAuthorize = []
   if (Array.isArray(roleOrRoles)) {
@@ -112,7 +117,7 @@ export function simpleRolesIsAuthorized({ctx, args}: SimpleRolesIsAuthorizedArgs
     rolesToAuthorize.push(roleOrRoles)
   }
   for (const role of rolesToAuthorize) {
-    if ((ctx.session as SessionContext).$publicData.roles!.includes(role)) return true
+    if (publicData.roles.includes(role)) return true
   }
   return false
 }
@@ -239,9 +244,6 @@ export class SessionContextClass implements SessionContext {
   }
   get userId() {
     return this._kernel.publicData.userId
-  }
-  get roles() {
-    return this._kernel.publicData.roles
   }
   get $publicData() {
     return this._kernel.publicData
@@ -662,7 +664,6 @@ export async function createNewSession(
   opts: {anonymous?: boolean; jwtPayload?: JwtPayload} = {},
 ): Promise<SessionKernel> {
   assert(publicData.userId !== undefined, "You must provide publicData.userId")
-  assert(publicData.roles, "You must provide publicData.roles")
 
   const antiCSRFToken = createAntiCSRFToken()
 
@@ -761,7 +762,10 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
-  return await createNewSession(req, res, {userId: null, roles: []}, undefined, {anonymous: true})
+  // TODO remove `as any` after https://github.com/blitz-js/blitz/pull/1788 merged
+  return await createNewSession(req, res, {userId: null, roles: []} as any, undefined, {
+    anonymous: true,
+  })
 }
 
 // --------------------------------

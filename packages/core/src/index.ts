@@ -16,7 +16,8 @@ export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
-export {pipe} from "./pipes"
+export {resolver, AuthenticatedMiddlewareCtx} from "./resolver"
+export {paginate} from "./server-utils"
 
 export {
   getAllMiddlewareForModule,
@@ -31,7 +32,6 @@ export {
   SessionConfig, // new
   SessionContext,
   AuthenticatedSessionContext,
-  IsAuthorizedArgs,
 } from "./supertokens"
 
 export {SecurePassword, hash256, generateToken} from "./auth-utils"

@@ -31,15 +31,18 @@ export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof useParams>
 }
 
-export interface DefaultPublicData {
-  userId: any
-  roles: string[]
-}
-export interface PublicData extends DefaultPublicData {}
-
 export interface Session {
-  // isAuthorize can be injected here
+  // isAuthorize can be injected here (see supertokens.ts)
+  // PublicData can be injected here (see supertokens.ts)
 }
+
+export type PublicData = "PublicData" extends keyof Session ? Session["PublicData"] : {userId: any}
+
+export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
+  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
+    ? Parameters<Session["isAuthorized"]>[0]["args"]
+    : unknown[]
+  : unknown[]
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -72,14 +75,19 @@ export type Middleware = (
 export type FirstParam<F extends QueryFn> = Parameters<F>[0]
 
 /**
- * Get the type of the value, that the Promise holds.
+ * If type has a Promise, unwrap it. Otherwise return the original type
  */
-export type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
+export type Await<T> = T extends PromiseLike<infer U> ? U : T
+
+/**
+ * Ensure the type is a promise
+ */
+export type EnsurePromise<T> = T extends PromiseLike<unknown> ? T : Promise<T>
 
 /**
  * Get the return type of a function which returns a Promise.
  */
-export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
+export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Await<ReturnType<T>>
 
 export interface CancellablePromise<T> extends Promise<T> {
   cancel?: Function
@@ -220,3 +228,8 @@ export declare type MutationFunction<TResult, TVariables = unknown> = (
   variables: TVariables,
   ctx?: any,
 ) => Promise<TResult>
+
+export interface ErrorFallbackProps {
+  error: Error & Record<any, any>
+  resetErrorBoundary: (...args: Array<unknown>) => void
+}

@@ -2,17 +2,18 @@ import React, { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps } from "formik"
 import * as z from "zod"
 
-type FormProps<S extends z.ZodType<any, any>> = {
+export interface FormProps<S extends z.ZodType<any, any>>
+  extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
   /** All your form fields */
-  children: ReactNode
+  children?: ReactNode
   /** Text to display in the submit button */
   submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
   initialValues?: FormikProps<z.infer<S>>["initialValues"]
-} & Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit">
+}
 
-type OnSubmitResult = {
+interface OnSubmitResult {
   FORM_ERROR?: string
   [prop: string]: any
 }

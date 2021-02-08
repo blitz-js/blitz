@@ -18,6 +18,6 @@
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "**/*.e2e.ts", "cypress"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

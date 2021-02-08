@@ -2,12 +2,15 @@ import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
   PageGenerator,
+  MutationsGenerator,
   MutationGenerator,
   QueriesGenerator,
   FormGenerator,
   ModelGenerator,
   QueryGenerator,
   singleCamel,
+  capitalize,
+  uncapitalize,
   singlePascal,
   pluralCamel,
   pluralPascal,
@@ -20,17 +23,18 @@ import chalk from "chalk"
 const debug = require("debug")("blitz:generate")
 const getIsTypeScript = () =>
   require("fs").existsSync(
-    require("path").join(require("../utils/get-project-root").projectRoot, "tsconfig.json"),
+    require("path").join(require("@blitzjs/config").getProjectRoot(), "tsconfig.json"),
   )
 
 enum ResourceType {
   All = "all",
   Crud = "crud",
   Model = "model",
-  Mutations = "mutations",
   Pages = "pages",
   Queries = "queries",
   Query = "query",
+  Mutations = "mutations",
+  Mutation = "mutation",
   Resource = "resource",
 }
 
@@ -64,15 +68,16 @@ const generatorMap = {
     PageGenerator,
     FormGenerator,
     QueriesGenerator,
-    MutationGenerator,
+    MutationsGenerator,
   ],
-  [ResourceType.Crud]: [MutationGenerator, QueriesGenerator],
+  [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator],
   [ResourceType.Model]: [ModelGenerator],
-  [ResourceType.Mutations]: [MutationGenerator],
   [ResourceType.Pages]: [PageGenerator, FormGenerator],
   [ResourceType.Queries]: [QueriesGenerator],
   [ResourceType.Query]: [QueryGenerator],
-  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationGenerator],
+  [ResourceType.Mutations]: [MutationsGenerator],
+  [ResourceType.Mutation]: [MutationGenerator],
+  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationsGenerator],
 }
 
 export class Generate extends Command {
@@ -226,7 +231,8 @@ export class Generate extends Command {
           parentModels: modelNames(flags.parent),
           ParentModel: ModelName(flags.parent),
           ParentModels: ModelNames(flags.parent),
-          rawInput: model,
+          name: uncapitalize(model),
+          Name: capitalize(model),
           dryRun: flags["dry-run"],
           context: context,
           useTs: getIsTypeScript(),

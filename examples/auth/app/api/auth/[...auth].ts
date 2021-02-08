@@ -1,8 +1,9 @@
-import {passportAuth} from "blitz"
+import {passportAuth, PublicData} from "blitz"
 import db from "db"
 import {Strategy as TwitterStrategy} from "passport-twitter"
 import {Strategy as GitHubStrategy} from "passport-github2"
 import {Strategy as Auth0Strategy} from "passport-auth0"
+import {Role} from "types"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -67,7 +68,12 @@ export default passportAuth({
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/github/callback"
               : "http://localhost:3000/api/auth/github/callback",
         },
-        async function (_token, _tokenSecret, profile, done) {
+        async function (
+          _token: string,
+          _tokenSecret: string,
+          profile: any,
+          done: (err: Error | null, data?: {publicData: PublicData}) => void,
+        ) {
           const email = profile.emails && profile.emails[0]?.value
 
           if (!email) {
@@ -86,7 +92,7 @@ export default passportAuth({
 
           const publicData = {
             userId: user.id,
-            roles: [user.role],
+            roles: [user.role as Role],
             source: "github",
             githubUsername: profile.username,
           }
@@ -106,7 +112,7 @@ export default passportAuth({
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/auth0/callback"
               : "http://localhost:3000/api/auth/auth0/callback",
         },
-        async function (_token, _tokenSecret, extraParams, profile, done) {
+        async function (_token, _tokenSecret, _extraParams, profile, done) {
           const email = profile.emails && profile.emails[0]?.value
 
           if (!email) {

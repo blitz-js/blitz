@@ -3,8 +3,16 @@ import {Command} from "@oclif/command"
 // @blitzjs/server imports react, so we must import the @blitzjs/server version of the
 // local app instead of the global.
 // import-cwd is required so this works correctly during new app generation
-const getPrismaBin = () =>
-  require("import-cwd")("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
+const getPrismaBin = async () => {
+  let bin: any
+  try {
+    bin = require("import-cwd")("@blitzjs/server").resolveBinAsync("prisma", "prisma")
+  } catch {
+    // legacy compatability
+    bin = require("import-cwd")("@blitzjs/server").resolveBinAsync("@prisma/cli", "prisma")
+  }
+  return bin
+}
 
 let prismaBin: string
 

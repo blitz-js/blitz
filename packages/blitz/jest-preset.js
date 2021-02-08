@@ -1,22 +1,23 @@
 const path = require("path")
-const pkgDir = require("pkg-dir")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const projectRoot = pkgDir.sync() || process.cwd()
+const {getProjectRoot, resolveAliases} = require("@blitzjs/config")
+const projectRoot = getProjectRoot()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
-module.exports = {
-  maxWorkers: 1,
+const common = {
   globalSetup: path.resolve(__dirname, "./jest-preset/global-setup.js"),
-  setupFilesAfterEnv: [
-    path.resolve(__dirname, "./jest-preset/setup-after-env.js"),
-    "<rootDir>/test/setup.ts",
-  ],
   // Add type checking to TypeScript test files
   preset: "ts-jest",
-  testEnvironment: "jest-environment-jsdom-fourteen",
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
-  testPathIgnorePatterns: ["/node_modules/", "/.blitz/", "/.next/", "<rootDir>/db/migrations"],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/.blitz/",
+    "/.next/",
+    "<rootDir>/db/migrations",
+    "<rootDir>/test/e2e",
+    "<rootDir>/cypress",
+  ],
   transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$"],
   transform: {
     "^.+\\.(ts|tsx)$": "babel-jest",
@@ -24,13 +25,9 @@ module.exports = {
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>"],
   // Ignore the build directories
-  modulePathIgnorePatterns: [
-    "<rootDir>/.blitz",
-    "<rootDir>/.next",
-    "<rootDir>/test/e2e",
-    "<rootDir>/cypress",
-  ],
+  modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
   moduleNameMapper: {
+    ...resolveAliases.node,
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
@@ -43,4 +40,42 @@ module.exports = {
   // Coverage output
   coverageDirectory: ".coverage",
   collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
+}
+
+module.exports = {
+  // TODO - check on https://github.com/facebook/jest/issues/10936
+  maxWorkers: 1,
+  projects: [
+    {
+      ...common,
+      name: "client",
+      displayName: {
+        name: "CLIENT",
+        color: "cyan",
+      },
+      testEnvironment: "jest-environment-jsdom-fourteen",
+      testRegex: ["^((?!queries|mutations|api|\\.server\\.).)*\\.(test|spec)\\.(j|t)sx?$"],
+      setupFilesAfterEnv: [
+        path.resolve(__dirname, "./jest-preset/client/setup-after-env.js"),
+        "<rootDir>/test/setup.ts",
+      ],
+    },
+    {
+      ...common,
+      name: "server",
+      displayName: {
+        name: "SERVER",
+        color: "magenta",
+      },
+      testEnvironment: "node",
+      testRegex: [
+        "\\.server\\.(spec|test)\\.(j|t)sx?$",
+        "[\\/](queries|mutations|api)[\\/].*\\.(test|spec)\\.(j|t)sx?$",
+      ],
+      setupFilesAfterEnv: [
+        path.resolve(__dirname, "./jest-preset/server/setup-after-env.js"),
+        "<rootDir>/test/setup.ts",
+      ],
+    },
+  ],
 }

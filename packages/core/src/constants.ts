@@ -13,7 +13,7 @@ export const COOKIE_SESSION_TOKEN = () =>
   `${getBlitzRuntimeData().sessionCookiePrefix}_sSessionToken`
 export const COOKIE_REFRESH_TOKEN = () =>
   `${getBlitzRuntimeData().sessionCookiePrefix}_sIdRefreshToken`
-export const COOKIE_CSRF_TOKEN = () => `${getBlitzRuntimeData().sessionCookiePrefix}_sAntiCrfToken`
+export const COOKIE_CSRF_TOKEN = () => `${getBlitzRuntimeData().sessionCookiePrefix}_sAntiCsrfToken`
 export const COOKIE_PUBLIC_DATA_TOKEN = () =>
   `${getBlitzRuntimeData().sessionCookiePrefix}_sPublicDataToken`
 

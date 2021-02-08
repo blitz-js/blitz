@@ -6,7 +6,8 @@ import {parsePublicDataToken} from "./utils/tokens"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
-  readonly emptyPublicData: PublicData = {userId: null, roles: []}
+  // TODO remove `as any` after https://github.com/blitz-js/blitz/pull/1788 merged
+  readonly emptyPublicData: PublicData = {userId: null, roles: []} as any
   readonly observable = BadBehavior<PublicData>()
 
   constructor() {

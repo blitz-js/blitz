@@ -1,6 +1,9 @@
 jest.mock("@blitzjs/config", () => {
   return {
     getConfig: jest.fn().mockReturnValue({}),
+    resolveAliases: {
+      node: {},
+    },
   }
 })
 
