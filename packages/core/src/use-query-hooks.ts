@@ -38,10 +38,13 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   //      https://github.com/blitz-js/blitz/issues/1711
   //      NOTE: bug did not present in local dev build. Only via npm bundle
   // Also fixes https://github.com/blitz-js/blitz/issues/1752 since useSession now suspends.
-  useSession()
+  let defaultQueryConfig = useDefaultQueryConfig()
+  const session = useSession({suspense: options?.suspense || defaultQueryConfig.suspense})
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
+
+  const enabled = options?.enabled === undefined ? true : options?.enabled
 
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
@@ -50,8 +53,9 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     config: {
-      ...useDefaultQueryConfig(),
+      ...defaultQueryConfig,
       ...options,
+      enabled: enabled && !session.isLoading,
     },
   })
 

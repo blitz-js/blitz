@@ -1,8 +1,8 @@
 import {useState} from "react"
-import {suspend} from "suspense"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
+import {suspend} from "./suspense"
 import {IsAuthorizedArgs, PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
 import {useIsomorphicLayoutEffect} from "./utils/hooks"
@@ -80,7 +80,7 @@ const waitForPublicData = suspend(
     }))(),
 )
 
-export const useSession: () => PublicDataWithLoading = ({
+export const useSession: (options?: {suspense?: boolean}) => PublicDataWithLoading = ({
   suspense = true,
 }: {suspense?: boolean} = {}) => {
   let initialPublicData = publicDataStore.emptyPublicData
