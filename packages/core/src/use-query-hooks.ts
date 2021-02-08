@@ -37,7 +37,8 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
   //      https://github.com/blitz-js/blitz/issues/1711
   //      NOTE: bug did not present in local dev build. Only via npm bundle
-  useSession()
+  const session = useSession()
+  const enabled = options?.enabled ?? true
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -51,6 +52,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     config: {
       ...useDefaultQueryConfig(),
       ...options,
+      enabled: enabled && !session.isLoading,
     },
   })
 
@@ -78,7 +80,8 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   }
 
   // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
-  useSession()
+  const session = useSession()
+  const enabled = options?.enabled ?? true
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -92,6 +95,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     config: {
       ...useDefaultQueryConfig(),
       ...options,
+      enabled: enabled && !session.isLoading,
     },
   })
 
@@ -133,7 +137,8 @@ export function useInfiniteQuery<
   }
 
   // TODO - useSession here is a tempory fix for logout query invalidation until RQ v3
-  useSession()
+  const session = useSession()
+  const enabled = options?.enabled ?? true
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -150,6 +155,7 @@ export function useInfiniteQuery<
     config: {
       ...useDefaultQueryConfig(),
       ...options,
+      enabled: enabled && !session.isLoading,
     },
   })
 
