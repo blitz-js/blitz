@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react"
-import {isServer} from "utils"
 import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
 import {IsAuthorizedArgs, PublicData} from "./types"
+import {isServer} from "./utils"
 import {readCookie} from "./utils/cookie"
 
 export interface SessionModel extends Record<any, any> {
