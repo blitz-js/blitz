@@ -64,11 +64,11 @@ function ModelNames(input: string = "") {
 
 const generatorMap = {
   [ResourceType.All]: [
-    ModelGenerator,
     PageGenerator,
     FormGenerator,
     QueriesGenerator,
     MutationsGenerator,
+    ModelGenerator,
   ],
   [ResourceType.Crud]: [MutationsGenerator, QueriesGenerator],
   [ResourceType.Model]: [ModelGenerator],
@@ -77,7 +77,7 @@ const generatorMap = {
   [ResourceType.Query]: [QueryGenerator],
   [ResourceType.Mutations]: [MutationsGenerator],
   [ResourceType.Mutation]: [MutationGenerator],
-  [ResourceType.Resource]: [ModelGenerator, QueriesGenerator, MutationsGenerator],
+  [ResourceType.Resource]: [QueriesGenerator, MutationsGenerator, ModelGenerator],
 }
 
 export class Generate extends Command {
