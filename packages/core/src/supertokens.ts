@@ -61,7 +61,7 @@ export interface PublicDataWithLoading extends PublicData {
   isLoading: boolean
 }
 
-interface PublicDataWithInitialValues {
+interface UseSessionOptions {
   initialPublicData: PublicData
 }
 
