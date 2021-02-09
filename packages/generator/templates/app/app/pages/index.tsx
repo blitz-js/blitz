@@ -73,9 +73,7 @@ const Home: BlitzPage = () => {
         <pre>
           <code>blitz generate all project name:string</code>
         </pre>
-        <pre>
-          <code>blitz prisma migrate dev --preview-feature</code>
-        </pre>
+        <div style={{ marginBottom: "1rem" }}>(And select Yes to run prisma migrate)</div>
         <div>
           <p>
             Then <strong>restart the server</strong>

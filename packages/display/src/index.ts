@@ -54,7 +54,7 @@ const withX = (str: string) => {
 }
 
 const withProgress = (str: string) => {
-  return withCaret(c.bold(str))
+  return withCaret(str)
 }
 
 /**
@@ -110,7 +110,7 @@ const meta = (msg: string) => {
  * @param {string} msg
  */
 const progress = (msg: string) => {
-  console.log(withCaret(c.bold(msg)))
+  console.log(withProgress(msg))
 }
 
 const info = (msg: string) => {
