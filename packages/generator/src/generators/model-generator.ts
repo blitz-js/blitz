@@ -1,4 +1,5 @@
 import {log} from "@blitzjs/display"
+import {spawn} from "cross-spawn"
 import path from "path"
 import {Generator, GeneratorOptions} from "../generator"
 import {Field} from "../prisma/field"
@@ -20,6 +21,17 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   getTargetDirectory() {
     return ""
+  }
+
+  prismaMigratePrompt(): Promise<boolean> {
+    return require("enquirer")
+      .prompt({
+        name: "migrate",
+        type: "select",
+        message: "Do you want to run 'prisma migrate'?",
+        choices: ["Yes", "No"],
+      })
+      .then((resp: any) => resp.migrate === "Yes")
   }
 
   // eslint-disable-next-line require-await
@@ -69,11 +81,11 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
         }:\n`,
       )
       modelDefinition.toString().split("\n").map(log.progress)
-      log.info(
-        "\nNow run " +
-          log.variable("`blitz prisma migrate dev --preview-feature`") +
-          " to add this model to your database\n",
-      )
+
+      const shouldMigrate = await this.prismaMigratePrompt()
+      if (shouldMigrate) {
+        spawn("prisma", ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
+      }
     } catch (error) {
       throw error
     }
