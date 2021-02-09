@@ -1,5 +1,5 @@
 import {log} from "@blitzjs/display"
-import {spawn} from "cross-spawn"
+import {spawn} from "npm-run"
 import path from "path"
 import {Generator, GeneratorOptions} from "../generator"
 import {Field} from "../prisma/field"
@@ -23,15 +23,14 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     return ""
   }
 
-  prismaMigratePrompt(): Promise<boolean> {
-    return require("enquirer")
-      .prompt({
-        name: "migrate",
-        type: "select",
-        message: "Do you want to run 'prisma migrate'?",
-        choices: ["Yes", "No"],
-      })
-      .then((resp: any) => resp.migrate === "Yes")
+  async prismaMigratePrompt() {
+    const response: any = await this.enquirer.prompt({
+      name: "migrate",
+      type: "confirm",
+      message: "Run 'prisma migrate dev' to update your database?",
+      initial: "y",
+    })
+    return response.migrate === true
   }
 
   // eslint-disable-next-line require-await
@@ -75,19 +74,26 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
           }
         }
       }
+      log.newline()
       log.success(
         `Model for '${this.options.modelName}'${
-          this.options.dryRun ? "" : ` ${updatedOrCreated} successfully`
+          this.options.dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
         }:\n`,
       )
       modelDefinition.toString().split("\n").map(log.progress)
-
-      const shouldMigrate = await this.prismaMigratePrompt()
-      if (shouldMigrate) {
-        spawn("prisma", ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
-      }
+      log.newline()
     } catch (error) {
       throw error
+    }
+  }
+
+  async postWrite() {
+    const shouldMigrate = await this.prismaMigratePrompt()
+    if (shouldMigrate) {
+      await new Promise<void>((res, rej) => {
+        const child = spawn("prisma", ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
+        child.on("exit", (code) => (code === 0 ? res() : rej()))
+      })
     }
   }
 }
