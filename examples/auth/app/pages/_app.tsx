@@ -11,7 +11,7 @@ import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
-export default withBlitzAppRoot(function App({Component, pageProps}: AppProps) {
+export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
 
@@ -28,7 +28,7 @@ export default withBlitzAppRoot(function App({Component, pageProps}: AppProps) {
       {getLayout(<Component {...pageProps} />)}
     </ErrorBoundary>
   )
-})
+}
 
 function RootErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {

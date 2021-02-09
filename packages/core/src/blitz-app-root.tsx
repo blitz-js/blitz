@@ -2,7 +2,6 @@ import React from "react"
 import {AppProps} from "."
 
 export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
-  console.log("hello from app root")
   const BlitzAppRoot = (props: AppProps) => {
     // props comes afterwards so the can override the default ones.
     return <WrappedComponent {...(props as any)} />
