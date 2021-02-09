@@ -3,6 +3,12 @@ import {join} from "path"
 import path from "path"
 import pkgDir from "pkg-dir"
 
+// Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
+path.resolve("next.config.js")
+path.resolve("blitz.config.js")
+// path.resolve(".next/blitz/db.js")
+// End anti-tree-shaking
+
 export function getProjectRoot() {
   return pkgDir.sync() || process.cwd()
 }
