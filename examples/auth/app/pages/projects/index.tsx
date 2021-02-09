@@ -8,7 +8,7 @@ const ITEMS_PER_PAGE = 100
 export const ProjectsList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [data] = usePaginatedQuery(getProjects, {
+  const [{projects, hasMore}] = usePaginatedQuery(getProjects, {
     orderBy: {id: "asc"},
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
@@ -20,7 +20,7 @@ export const ProjectsList = () => {
   return (
     <div>
       <ul>
-        {data?.projects.map((project) => (
+        {projects.map((project) => (
           <li key={project.id}>
             <Link href={`/projects/${project.id}`}>
               <a>{project.name}</a>
@@ -32,7 +32,7 @@ export const ProjectsList = () => {
       <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous
       </button>
-      <button disabled={!data?.hasMore} onClick={goToNextPage}>
+      <button disabled={!hasMore} onClick={goToNextPage}>
         Next
       </button>
     </div>

@@ -7,7 +7,7 @@ const ITEMS_PER_PAGE = 3
 const Products = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [data] = usePaginatedQuery(getProducts, {
+  const [{products, hasMore}] = usePaginatedQuery(getProducts, {
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
   })
@@ -17,7 +17,7 @@ const Products = () => {
 
   return (
     <div>
-      {data?.products.map((product) => (
+      {products.map((product) => (
         <p key={product.id}>
           <Link href="/products/[handle]" as={`/products/${product.handle}`}>
             <a>{product.name}</a>
@@ -27,7 +27,7 @@ const Products = () => {
       <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous
       </button>
-      <button disabled={!data?.hasMore} onClick={goToNextPage}>
+      <button disabled={!hasMore} onClick={goToNextPage}>
         Next
       </button>
     </div>

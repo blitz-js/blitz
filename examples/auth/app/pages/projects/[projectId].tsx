@@ -10,7 +10,7 @@ export const Project = () => {
   const [deleteProjectMutation, {isSuccess}] = useMutation(deleteProject)
   const [project] = useQuery(getProject, {id: projectId}, {enabled: !isSuccess})
 
-  return project ? (
+  return (
     <>
       <Head>
         <title>Project {project.id}</title>
@@ -38,7 +38,7 @@ export const Project = () => {
         </button>
       </div>
     </>
-  ) : null
+  )
 }
 
 const ShowProjectPage: BlitzPage = () => {
