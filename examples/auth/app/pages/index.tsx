@@ -1,22 +1,15 @@
-import {Suspense, useEffect, useRef} from "react"
-import {Head, Link, useSession, useRouterQuery, useMutation, invoke} from "blitz"
+import {Suspense} from "react"
+import {Head, Link, useSession, useRouterQuery, useMutation, invoke, useQuery} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
-import {useCurrentUser} from "app/core/hooks/useCurrentUser"
-// import getUsers from "app/users/queries/getUsers"
 
 const CurrentUserInfo = () => {
-  const currentUser = useCurrentUser()
+  const session = useSession()
+  const [currentUser] = useQuery(getUser, {where: {id: session.userId}})
 
   return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
 }
-
-// const Users = () => {
-//   const [users] = useQuery(getUsers, {})
-//
-//   return <pre style={{maxWidth: "30rem"}}>{JSON.stringify(users, null, 2)}</pre>
-// }
 
 const UserStuff = () => {
   const session = useSession()

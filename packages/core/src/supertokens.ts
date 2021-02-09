@@ -1,11 +1,10 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
+import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {suspend} from "./suspense"
 import {IsAuthorizedArgs, PublicData} from "./types"
 import {readCookie} from "./utils/cookie"
-import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -65,46 +64,37 @@ export interface PublicDataWithLoading extends PublicData {
   isLoading: boolean
 }
 
-// Workaround for https://github.com/blitz-js/blitz/issues/1752
-const waitForPublicData = suspend(
-  (() =>
-    new Promise<PublicData>((resolve) => {
-      if (publicDataStore.lastState) {
-        resolve(publicDataStore.lastState)
-      } else {
-        const subscription = publicDataStore.observable.subscribe((data) => {
-          resolve(data)
-          subscription.unsubscribe()
-        })
-      }
-    }))(),
-)
-
 interface UseSessionOptions {
   initialPublicData?: PublicData
   suspense?: boolean
 }
 
-export const useSession = ({
-  suspense = true,
-  initialPublicData,
-}: UseSessionOptions = {}): PublicDataWithLoading => {
-  let initialState = initialPublicData ?? publicDataStore.emptyPublicData
+export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoading => {
+  const suspense = options?.suspense ?? getBlitzRuntimeData().suspenseEnabled
 
-  if (suspense && !initialPublicData) {
-    initialState = publicDataStore.lastState || waitForPublicData()
+  let initialState: PublicDataWithLoading
+  if (options.initialPublicData) {
+    initialState = {...options.initialPublicData, isLoading: false}
+  } else if (suspense) {
+    if (typeof window === "undefined") {
+      throw new Promise((_) => {})
+    } else {
+      initialState = {...publicDataStore.getData(), isLoading: false}
+    }
+  } else {
+    initialState = {...publicDataStore.emptyPublicData, isLoading: true}
   }
 
-  const [publicData, setPublicData] = useState(initialState)
-  const [isLoading, setIsLoading] = useState(!initialPublicData || !suspense)
+  const [session, setSession] = useState(initialState)
 
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
     // Initialize on mount
-    setPublicData(publicDataStore.getData())
-    setIsLoading(false)
-    const subscription = publicDataStore.observable.subscribe(setPublicData)
+    setSession({...publicDataStore.getData(), isLoading: false})
+    const subscription = publicDataStore.observable.subscribe((data) =>
+      setSession({...data, isLoading: false}),
+    )
     return subscription.unsubscribe
   }, [])
 
-  return {...publicData, isLoading}
+  return session
 }
