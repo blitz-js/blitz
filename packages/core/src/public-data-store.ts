@@ -30,6 +30,7 @@ class PublicDataStore {
       // Prevent infinite loop
       localStorage.setItem(this.eventKey, Date.now().toString())
     }
+    this.observable.next(value ?? this.getData())
   }
 
   clear() {
