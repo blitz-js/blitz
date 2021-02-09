@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react"
+import {isServer} from "utils"
 import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
@@ -73,7 +74,7 @@ export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoadi
   if (options.initialPublicData) {
     initialState = {...options.initialPublicData, isLoading: false}
   } else if (suspense) {
-    if (typeof window === "undefined") {
+    if (isServer) {
       throw new Promise((_) => {})
     } else {
       initialState = {...publicDataStore.getData(), isLoading: false}
