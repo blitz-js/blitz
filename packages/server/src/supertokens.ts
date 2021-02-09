@@ -56,7 +56,7 @@ process.nextTick(getConfig)
 // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
 // path.resolve("next.config.js")
 // path.resolve("blitz.config.js")
-path.resolve(".next/blitz/db.js")
+path.resolve(path.join(getProjectRoot(), ".next/blitz/db.js"))
 // End anti-tree-shaking
 
 const getDb = () => {
