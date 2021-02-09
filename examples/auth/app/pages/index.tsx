@@ -6,7 +6,7 @@ import Layout from "app/core/layouts/Layout"
 
 const CurrentUserInfo = () => {
   const session = useSession()
-  const [currentUser] = useQuery(getUser, {where: {id: session.userId}})
+  const [currentUser] = useQuery(getUser, {where: {id: session.userId!}})
 
   return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
 }
