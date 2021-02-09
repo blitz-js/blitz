@@ -16,9 +16,9 @@ function ProductsList() {
     },
   }
 
-  const [{products}] = useQuery(getProducts, params)
+  const [data] = useQuery(getProducts, params)
 
-  return (
+  return data?.products ? (
     <>
       <button onClick={() => setQueryData(getProducts, params, reversedProductList, {refetch})}>
         Reverse
@@ -34,7 +34,7 @@ function ProductsList() {
       </label>
 
       <ul>
-        {products.map((product) => (
+        {data.products.map((product) => (
           <li key={product.id}>
             <Link href="/admin/products/[id]" as={`/admin/products/${product.id}`}>
               <a
@@ -49,9 +49,9 @@ function ProductsList() {
         ))}
       </ul>
 
-      <p>Mean price: {meanPrice(products)}</p>
+      <p>Mean price: {meanPrice(data.products)}</p>
     </>
-  )
+  ) : null
 }
 
 function AdminProducts() {

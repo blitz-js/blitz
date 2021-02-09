@@ -11,7 +11,7 @@ export const EditProject = () => {
   const [project, {setQueryData}] = useQuery(getProject, {id: projectId})
   const [updateProjectMutation] = useMutation(updateProject)
 
-  return (
+  return project ? (
     <>
       <Head>
         <title>Edit Project {project.id}</title>
@@ -46,7 +46,7 @@ export const EditProject = () => {
         />
       </div>
     </>
-  )
+  ) : null
 }
 
 const EditProjectPage: BlitzPage = () => {

@@ -13,7 +13,7 @@ const Products = () => {
 
   return (
     <>
-      {groupedProducts.map((group, i) => (
+      {groupedProducts?.map((group, i) => (
         <Fragment key={i}>
           {group.products.map((product) => (
             <p key={product.id} data-test="productName">
