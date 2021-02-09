@@ -80,17 +80,23 @@ const waitForPublicData = suspend(
     }))(),
 )
 
-export const useSession: (options?: {suspense?: boolean}) => PublicDataWithLoading = ({
-  suspense = true,
-}: {suspense?: boolean} = {}) => {
-  let initialPublicData = publicDataStore.emptyPublicData
+interface UseSessionOptions {
+  initialPublicData?: PublicData
+  suspense?: boolean
+}
 
-  if (suspense) {
-    initialPublicData = publicDataStore.lastState || waitForPublicData()
+export const useSession = ({
+  suspense = true,
+  initialPublicData,
+}: UseSessionOptions = {}): PublicDataWithLoading => {
+  let initialState = initialPublicData ?? publicDataStore.emptyPublicData
+
+  if (suspense && !initialPublicData) {
+    initialState = publicDataStore.lastState || waitForPublicData()
   }
 
-  const [publicData, setPublicData] = useState(initialPublicData)
-  const [isLoading, setIsLoading] = useState(!suspense)
+  const [publicData, setPublicData] = useState(initialState)
+  const [isLoading, setIsLoading] = useState(!initialPublicData || !suspense)
 
   useIsomorphicLayoutEffect(() => {
     // Initialize on mount

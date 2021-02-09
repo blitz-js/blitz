@@ -55,7 +55,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     config: {
       ...defaultQueryConfig,
       ...options,
-      enabled: enabled && !session.isLoading,
+      enabled: enabled && session.isReady,
     },
   })
 

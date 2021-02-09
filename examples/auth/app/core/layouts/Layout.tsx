@@ -2,7 +2,7 @@ import {useSession, useRouter, useMutation, Head} from "blitz"
 import logout from "app/auth/mutations/logout"
 
 export default function Layout({title, children}: {title?: string; children: React.ReactNode}) {
-  const session = useSession()
+  const session = useSession({suspense: false})
   const router = useRouter()
   const [logoutMutation] = useMutation(logout)
   return (

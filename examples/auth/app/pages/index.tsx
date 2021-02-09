@@ -1,4 +1,4 @@
-import {Suspense} from "react"
+import {Suspense, useEffect, useRef} from "react"
 import {Head, Link, useSession, useRouterQuery, useMutation, invoke} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
@@ -23,8 +23,6 @@ const UserStuff = () => {
   const query = useRouterQuery()
   const [trackViewMutation] = useMutation(trackView)
 
-  if (session.isLoading) return <div>Loading...</div>
-
   return (
     <div>
       {!session.userId && (
@@ -48,11 +46,6 @@ const UserStuff = () => {
       <Suspense fallback="Loading...">
         <CurrentUserInfo />
       </Suspense>
-      {/*
-      <Suspense fallback="Loading...">
-        <Users />
-      </Suspense>
-        */}
       <button
         onClick={async () => {
           try {
@@ -94,7 +87,9 @@ const Home = () => (
           <img src="/logo.png" alt="blitz.js" />
         </div>
 
-        <UserStuff />
+        <Suspense fallback={"Loading..."}>
+          <UserStuff />
+        </Suspense>
       </main>
 
       <footer>
