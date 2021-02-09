@@ -1,5 +1,7 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
+// import {Router} from "."
 import {COOKIE_CSRF_TOKEN} from "./constants"
+import {AuthenticationError} from "./errors"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
 import {IsAuthorizedArgs, PublicData} from "./types"
@@ -74,4 +76,23 @@ export const useSession: () => PublicDataWithLoading = () => {
   }, [])
 
   return {...publicData, isLoading}
+}
+
+export const useAuthorize = () => {
+  useEffect(() => {
+    if (typeof window !== "undefined" && !publicDataStore.getData().userId) {
+      // window.location.replace("/login?next=" + encodeURIComponent(window.location.pathname + window.location.search))
+      const error = new AuthenticationError()
+      delete error.stack
+      throw error
+    }
+  })
+}
+
+export const useRedirectAuthenticatedUser = (to: string) => {
+  if (typeof window !== "undefined" && publicDataStore.getData().userId) {
+    //eslint-disable-next-line @typescript-eslint/no-floating-promises
+    // Router.push(to)
+    window.location.replace(to)
+  }
 }

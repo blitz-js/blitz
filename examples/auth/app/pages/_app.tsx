@@ -9,10 +9,16 @@ import {
 import {ErrorBoundary} from "react-error-boundary"
 import {queryCache} from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
+import "../index.css"
+import {useEffect} from "react"
 
 export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
+
+  useEffect(() => {
+    document.documentElement.classList.add("render")
+  }, [])
 
   return (
     <ErrorBoundary
