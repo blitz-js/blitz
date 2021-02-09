@@ -1957,6 +1957,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rodrigoehlers",
+      "name": "Rodrigo Ehlers",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19683042?v=4",
+      "profile": "https://rodrigoehlers.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
