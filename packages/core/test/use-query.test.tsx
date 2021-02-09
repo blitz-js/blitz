@@ -91,7 +91,7 @@ describe("useInfiniteQuery", () => {
         <div id="harness">
           <span>{groupedData ? "Ready" : "Missing Dependency"}</span>
           <div>
-            {groupedData.map((data: any) => (
+            {groupedData?.map((data: any) => (
               <div>{data}</div>
             ))}
           </div>
