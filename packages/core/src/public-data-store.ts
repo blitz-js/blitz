@@ -9,7 +9,6 @@ class PublicDataStore {
   // TODO remove `as any` after https://github.com/blitz-js/blitz/pull/1788 merged
   readonly emptyPublicData: PublicData = {userId: null, roles: []} as any
   readonly observable = BadBehavior<PublicData>()
-  lastState: PublicData | undefined
 
   constructor() {
     if (typeof window !== "undefined") {
@@ -31,16 +30,11 @@ class PublicDataStore {
       // Prevent infinite loop
       localStorage.setItem(this.eventKey, Date.now().toString())
     }
-    let nextValue = value ?? this.getData()
-
-    this.lastState = nextValue
-    this.observable.next(nextValue)
   }
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
     this.updateState(this.emptyPublicData)
-    this.lastState = undefined
   }
 
   getData() {
