@@ -39,7 +39,6 @@ import {addMinutes, addYears, differenceInMinutes, isPast} from "date-fns"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
-import path from "path"
 import {join} from "path"
 const debug = require("debug")("blitz:session")
 
@@ -52,12 +51,6 @@ function assert(condition: any, message: string): asserts condition {
 // This line ensures that blitz.config.js is loaded
 // ----------------------------------------------------------------------------------------
 process.nextTick(getConfig)
-
-// Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
-// path.resolve("next.config.js")
-// path.resolve("blitz.config.js")
-path.resolve(path.join(getProjectRoot(), ".next/blitz/db.js"))
-// End anti-tree-shaking
 
 const getDb = () => {
   const projectRoot = getProjectRoot()

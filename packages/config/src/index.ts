@@ -9,12 +9,6 @@ export function getProjectRoot() {
 
 const projectRoot = getProjectRoot()
 
-// Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
-path.resolve(path.join(getProjectRoot(), "next.config.js"))
-path.resolve(path.join(getProjectRoot(), "blitz.config.js"))
-// path.resolve(".next/blitz/db.js")
-// End anti-tree-shaking
-
 export const resolveAliases = {
   node: {
     "__blitz__/config-file": path.join(projectRoot, "blitz.config.js"),
