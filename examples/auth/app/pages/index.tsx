@@ -7,10 +7,9 @@ import {useCurrentUser} from "app/core/hooks/useCurrentUser"
 // import getUsers from "app/users/queries/getUsers"
 
 const CurrentUserInfo = () => {
-  // const currentUser = useCurrentUser()
+  const currentUser = useCurrentUser()
 
-  // return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
-  return null
+  return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
 }
 
 // const Users = () => {

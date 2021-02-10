@@ -96,7 +96,6 @@ export const useAuthorize = () => {
 
 export const useRedirectAuthenticatedUser = (to: string) => {
   if (typeof window !== "undefined" && publicDataStore.getData().userId) {
-    //eslint-disable-next-line @typescript-eslint/no-floating-promises
     window.location.replace(to)
   }
 }
