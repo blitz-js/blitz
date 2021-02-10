@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import {Head} from "./nextjs"
 import {publicDataStore} from "./public-data-store"
 import {useAuthorizeIf} from "./supertokens"
@@ -38,11 +38,14 @@ const NoPageFlicker = () => {
   )
 }
 
-export function withBlitzInnerWrapper(WrappedComponent: React.ComponentType<any>) {
-  const BlitzInnerRoot = (props: AppProps) => {
-    useAuthorizeIf((WrappedComponent as BlitzPage).authenticate === true)
+export function withBlitzInnerWrapper(Page: BlitzPage) {
+  const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
+    useAuthorizeIf(Page.authenticate === true)
 
-    return <WrappedComponent {...props} />
+    return <Page {...props} />
+  }
+  for (let [key, value] of Object.entries(Page)) {
+    ;(BlitzInnerRoot as any)[key] = value
   }
   if (process.env.NODE_ENV !== "production") {
     BlitzInnerRoot.displayName = `BlitzInnerRoot`
@@ -50,7 +53,7 @@ export function withBlitzInnerWrapper(WrappedComponent: React.ComponentType<any>
   return BlitzInnerRoot
 }
 
-export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
+export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
     if (typeof window !== "undefined") {
       if (publicDataStore.getData().userId) {
@@ -70,6 +73,7 @@ export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
         }
       }
     }
+
     const noPageFlicker =
       props.Component.suppressFirstRenderFlicker ||
       props.Component.authenticate !== undefined ||
@@ -82,7 +86,7 @@ export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
     return (
       <>
         {noPageFlicker && <NoPageFlicker />}
-        <WrappedComponent {...props} Component={withBlitzInnerWrapper(props.Component)} />
+        <UserAppRoot {...props} Component={withBlitzInnerWrapper(props.Component)} />
       </>
     )
   }
