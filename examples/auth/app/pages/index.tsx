@@ -1,5 +1,14 @@
 import {Suspense} from "react"
-import {Head, Link, useSession, useRouterQuery, useMutation, invoke, useQuery} from "blitz"
+import {
+  Head,
+  Link,
+  useSession,
+  useRouterQuery,
+  useMutation,
+  invoke,
+  useQuery,
+  BlitzPage,
+} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
@@ -67,7 +76,7 @@ const UserStuff = () => {
   )
 }
 
-const Home = () => (
+const Home: BlitzPage = () => (
   <Layout>
     <div className="container">
       <Head>
@@ -225,5 +234,7 @@ const Home = () => (
     </div>
   </Layout>
 )
+
+Home.suppressFirstRenderFlicker = true
 
 export default Home

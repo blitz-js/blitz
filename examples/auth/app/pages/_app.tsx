@@ -1,5 +1,4 @@
 import {
-  withBlitzAppRoot,
   AppProps,
   ErrorComponent,
   useRouter,

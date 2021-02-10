@@ -65,6 +65,7 @@ const EditProjectPage: BlitzPage = () => {
   )
 }
 
+EditProjectPage.authenticate = true
 EditProjectPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditProjectPage

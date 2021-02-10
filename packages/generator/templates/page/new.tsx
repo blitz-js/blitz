@@ -62,6 +62,7 @@ const New__ModelName__Page: BlitzPage = () => {
   )
 }
 
+New__ModelName__Page.authenticate = true
 New__ModelName__Page.getLayout = (page) => (
   <Layout title={"Create New __ModelName__"}>{page}</Layout>
 )

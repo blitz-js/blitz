@@ -40,6 +40,7 @@ const NewProjectPage: BlitzPage = () => {
   )
 }
 
+NewProjectPage.authenticate = true
 NewProjectPage.getLayout = (page) => <Layout title={"Create New Project"}>{page}</Layout>
 
 export default NewProjectPage
