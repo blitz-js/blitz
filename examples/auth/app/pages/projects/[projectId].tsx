@@ -10,6 +10,8 @@ export const Project = () => {
   const [deleteProjectMutation, {isSuccess}] = useMutation(deleteProject)
   const [project] = useQuery(getProject, {id: projectId}, {enabled: !isSuccess})
 
+  if (!project) return null
+
   return (
     <>
       <Head>

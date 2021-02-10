@@ -20,7 +20,11 @@ import {
   useDefaultQueryConfig,
 } from "./utils/react-query-utils"
 
-type QueryLazyOptions = {suspense: false} | {enabled: false}
+type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
+type QueryNonLazyOptions =
+  | {suspense: true; enabled?: never}
+  | {suspense?: never; enabled: true}
+  | {suspense: true; enabled: true}
 
 // -------------------------
 // useQuery
@@ -30,13 +34,13 @@ type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheF
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> & QueryLazyOptions,
-): [TResult | undefined, RestQueryResult<TResult>]
+  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+): [TResult, RestQueryResult<TResult>]
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: QueryOptions<TResult>,
-): [TResult, RestQueryResult<TResult>]
+  options: QueryOptions<TResult> & QueryLazyOptions,
+): [TResult | undefined, RestQueryResult<TResult>]
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
@@ -81,13 +85,13 @@ type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolve
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> & QueryLazyOptions,
-): [TResult | undefined, RestPaginatedResult<TResult>]
+  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+): [TResult, RestPaginatedResult<TResult>]
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: QueryOptions<TResult>,
-): [TResult, RestPaginatedResult<TResult>]
+  options: QueryOptions<TResult> & QueryLazyOptions,
+): [TResult | undefined, RestPaginatedResult<TResult>]
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
@@ -146,8 +150,8 @@ export function useInfiniteQuery<
 >(
   queryFn: T,
   params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TFetchMoreResult> & QueryLazyOptions,
-): [TResult[] | undefined, RestInfiniteResult<TResult, TFetchMoreResult>]
+  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
+): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult> & QueryNonLazyOptions]
 export function useInfiniteQuery<
   T extends QueryFn,
   TFetchMoreResult = any,
@@ -155,8 +159,8 @@ export function useInfiniteQuery<
 >(
   queryFn: T,
   params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
-): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult>]
+  options: InfiniteQueryConfig<TResult, TFetchMoreResult> & QueryLazyOptions,
+): [TResult[] | undefined, RestInfiniteResult<TResult, TFetchMoreResult>]
 export function useInfiniteQuery<
   T extends QueryFn,
   TFetchMoreResult = any,
