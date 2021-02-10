@@ -1,6 +1,13 @@
 import {IncomingMessage, ServerResponse} from "http"
+import {AppProps as NextAppProps} from "next/app"
 import {NextRouter} from "next/router"
-import {NextApiRequest, NextApiResponse, NextComponentType, NextPageContext} from "next/types"
+import {
+  NextApiRequest,
+  NextApiResponse,
+  NextComponentType,
+  NextPage,
+  NextPageContext,
+} from "next/types"
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
@@ -23,8 +30,19 @@ export {
 } from "next"
 export type BlitzApiRequest = NextApiRequest
 export type BlitzApiResponse = NextApiResponse
-export type BlitzComponentType = NextComponentType
 export type BlitzPageContext = NextPageContext
+
+export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
+
+export interface AppProps<P = {}> extends NextAppProps<P> {
+  Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
+}
+export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | {redirectTo?: string}
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: string
+}
 
 export interface BlitzRouter extends NextRouter {
   query: ReturnType<typeof useRouterQuery>

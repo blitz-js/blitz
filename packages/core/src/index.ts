@@ -1,6 +1,4 @@
-import {NextComponentType, NextPage, NextPageContext} from "next"
-import {AppProps as NextAppProps} from "next/app"
-
+export * from "./nextjs"
 export * from "./types"
 export * from "./errors"
 export * from "./constants"
@@ -39,43 +37,6 @@ export {
 
 export {SecurePassword, hash256, generateToken} from "./auth-utils"
 
-// --------------------
-// Exports from Next.js
-// --------------------
-export {default as Head} from "next/head"
-
-export {default as Link, LinkProps} from "next/link"
-
-export {default as Router} from "next/router"
-
-export {default as Image, ImageProps} from "next/image"
-
-export {
-  default as Document,
-  Html,
-  Head as DocumentHead,
-  Main,
-  DocumentContext,
-  DocumentInitialProps,
-} from "next/document"
-
-export {default as dynamic} from "next/dynamic"
-
-export {default as ErrorComponent, ErrorProps} from "next/error"
-
-export {default as getConfig} from "next/config"
-
-export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
-
-export interface AppProps<P = {}> extends NextAppProps<P> {
-  Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
-}
-export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean
-  supressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string
-}
 export {isLocalhost} from "./utils/index"
 export {prettyMs} from "./utils/pretty-ms"
 

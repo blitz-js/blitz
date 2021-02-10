@@ -235,6 +235,6 @@ const Home: BlitzPage = () => (
   </Layout>
 )
 
-Home.supressFirstRenderFlicker = true
+Home.suppressFirstRenderFlicker = true
 
 export default Home

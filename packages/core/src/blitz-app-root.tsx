@@ -1,7 +1,8 @@
 import React, {useEffect} from "react"
-import {AppProps, BlitzPage, Head} from "."
+import {Head} from "./nextjs"
 import {publicDataStore} from "./public-data-store"
 import {useAuthorizeIf} from "./supertokens"
+import {AppProps, BlitzPage} from "./types"
 
 const customCSS = `
   body::before {
@@ -39,26 +40,38 @@ const NoPageFlicker = () => {
 
 export function withBlitzInnerWrapper(WrappedComponent: React.ComponentType<any>) {
   const BlitzInnerRoot = (props: AppProps) => {
-    useAuthorizeIf((WrappedComponent as BlitzPage).authenticate)
+    useAuthorizeIf((WrappedComponent as BlitzPage).authenticate === true)
 
     return <WrappedComponent {...props} />
   }
-  BlitzInnerRoot.displayName = `BlitzInnerRoot`
+  if (process.env.NODE_ENV !== "production") {
+    BlitzInnerRoot.displayName = `BlitzInnerRoot`
+  }
   return BlitzInnerRoot
 }
 
 export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    if (
-      props.Component.redirectAuthenticatedTo &&
-      publicDataStore.getData().userId &&
-      typeof window !== "undefined"
-    ) {
-      window.location.replace(props.Component.redirectAuthenticatedTo)
+    if (typeof window !== "undefined") {
+      if (publicDataStore.getData().userId) {
+        if (props.Component.redirectAuthenticatedTo) {
+          window.location.replace(props.Component.redirectAuthenticatedTo)
+        }
+      } else {
+        const authenticate = props.Component.authenticate
+        if (
+          authenticate &&
+          typeof authenticate === "object" &&
+          typeof authenticate.redirectTo === "string"
+        ) {
+          const url = new URL(authenticate.redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          window.location.replace(url.toString())
+        }
+      }
     }
-
     const noPageFlicker =
-      props.Component.supressFirstRenderFlicker ||
+      props.Component.suppressFirstRenderFlicker ||
       props.Component.authenticate !== undefined ||
       props.Component.redirectAuthenticatedTo
 
@@ -73,6 +86,8 @@ export function withBlitzAppRoot(WrappedComponent: React.ComponentType<any>) {
       </>
     )
   }
-  BlitzOuterRoot.displayName = `BlitzOuterRoot`
+  if (process.env.NODE_ENV !== "production") {
+    BlitzOuterRoot.displayName = `BlitzOuterRoot`
+  }
   return BlitzOuterRoot
 }
