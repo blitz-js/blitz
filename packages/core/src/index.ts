@@ -31,7 +31,7 @@ export {
   getAntiCSRFToken,
   useSession,
   useAuthorize,
-  useRedirectAuthenticatedUser,
+  useRedirectAuthenticated,
   SessionConfig, // new
   SessionContext,
   AuthenticatedSessionContext,
