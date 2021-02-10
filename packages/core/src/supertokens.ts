@@ -1,10 +1,11 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
+import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
 import {IsAuthorizedArgs, PublicData} from "./types"
+import {isServer} from "./utils"
 import {readCookie} from "./utils/cookie"
-import {useIsomorphicLayoutEffect} from "./utils/hooks"
 
 export interface SessionModel extends Record<any, any> {
   handle: string
@@ -64,21 +65,35 @@ export interface PublicDataWithLoading extends PublicData {
 
 interface UseSessionOptions {
   initialPublicData?: PublicData
+  suspense?: boolean
 }
 
 export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoading => {
-  const [publicData, setPublicData] = useState(
-    options.initialPublicData ?? publicDataStore.emptyPublicData,
-  )
-  const [isLoading, setIsLoading] = useState(!options.initialPublicData)
+  const suspense = options?.suspense ?? getBlitzRuntimeData().suspenseEnabled
 
-  useIsomorphicLayoutEffect(() => {
+  let initialState: PublicDataWithLoading
+  if (options.initialPublicData) {
+    initialState = {...options.initialPublicData, isLoading: false}
+  } else if (suspense) {
+    if (isServer) {
+      throw new Promise((_) => {})
+    } else {
+      initialState = {...publicDataStore.getData(), isLoading: false}
+    }
+  } else {
+    initialState = {...publicDataStore.emptyPublicData, isLoading: true}
+  }
+
+  const [session, setSession] = useState(initialState)
+
+  useEffect(() => {
     // Initialize on mount
-    setPublicData(publicDataStore.getData())
-    setIsLoading(false)
-    const subscription = publicDataStore.observable.subscribe(setPublicData)
+    setSession({...publicDataStore.getData(), isLoading: false})
+    const subscription = publicDataStore.observable.subscribe((data) =>
+      setSession({...data, isLoading: false}),
+    )
     return subscription.unsubscribe
   }, [])
 
-  return {...publicData, isLoading}
+  return session
 }
