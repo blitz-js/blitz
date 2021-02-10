@@ -99,13 +99,26 @@ export interface SimpleRolesIsAuthorized<RoleType = string> {
 
 export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) => {
   const [roleOrRoles] = args
-  const $publicData = (ctx.session as SessionContext).$publicData
-  const publicData = $publicData as typeof $publicData & {roles: unknown}
-  if (!("roles" in publicData)) {
-    throw new Error("Session publicData is missing the required `roles` array field")
+  const publicData = (ctx.session as SessionContext).$publicData as PublicData &
+    ({roles: unknown} | {role: unknown})
+
+  if ("role" in publicData && "roles" in publicData) {
+    throw new Error("Session publicData can only have only `role` or `roles`, but not both.'")
   }
-  if (!Array.isArray(publicData.roles)) {
-    throw new Error("Session `publicData.roles` is not an array, but it must be")
+
+  let roles: string[] = []
+  if ("role" in publicData) {
+    if (typeof publicData.role !== "string") {
+      throw new Error("Session publicData.role field must be a string")
+    }
+    roles.push(publicData.role)
+  } else if ("roles" in publicData) {
+    if (!Array.isArray(publicData.roles)) {
+      throw new Error("Session `publicData.roles` is not an array, but it must be")
+    }
+    roles = publicData.roles
+  } else {
+    throw new Error("Session publicData is missing the required `role` or roles` field")
   }
 
   // No roles required, so all roles allowed
@@ -118,7 +131,7 @@ export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) =>
     rolesToAuthorize.push(roleOrRoles)
   }
   for (const role of rolesToAuthorize) {
-    if (publicData.roles.includes(role)) return true
+    if (roles.includes(role)) return true
   }
   return false
 }

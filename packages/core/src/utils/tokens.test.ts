@@ -65,6 +65,7 @@ describe("supertokens", () => {
       expect(result.current).toEqual({
         isLoading: false,
         userId: "boo",
+        roles: ["baz"],
       })
     })
 
