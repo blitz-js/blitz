@@ -1,8 +1,8 @@
 import {Suspense} from "react"
 if (process.env.parentModel) {
-  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
+  import {Head, Link, useAuthorize, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
 } else {
-  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+  import {Head, Link, useAuthorize, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 }
 import Layout from "app/core/layouts/Layout"
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
@@ -80,6 +80,7 @@ export const __ModelNames__List = () => {
 }
 
 const __ModelNames__Page: BlitzPage = () => {
+  useAuthorize()
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }

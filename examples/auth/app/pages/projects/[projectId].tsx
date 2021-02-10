@@ -1,5 +1,14 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import {
+  Head,
+  Link,
+  useAuthorize,
+  useRouter,
+  useQuery,
+  useParam,
+  BlitzPage,
+  useMutation,
+} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
@@ -42,6 +51,8 @@ export const Project = () => {
 }
 
 const ShowProjectPage: BlitzPage = () => {
+  useAuthorize()
+
   return (
     <div>
       <p>

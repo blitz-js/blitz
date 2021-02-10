@@ -1,10 +1,9 @@
-import {Head, useRouter, BlitzPage, useMutation} from "blitz"
+import {useRouter, BlitzPage, useRedirectAuthenticatedUser} from "blitz"
 import Layout from "app/core/layouts/Layout"
-import {Form, FORM_ERROR} from "app/core/components/Form"
-import {LabeledTextField} from "app/core/components/LabeledTextField"
 import {SignupForm} from "app/auth/components/SignupForm"
 
 const SignupPage: BlitzPage = () => {
+  useRedirectAuthenticatedUser("/")
   const router = useRouter()
 
   return (

@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import {Head, Link, useAuthorize, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
@@ -58,6 +58,7 @@ export const __ModelName__ = () => {
 }
 
 const Show__ModelName__Page: BlitzPage = () => {
+  useAuthorize()
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }

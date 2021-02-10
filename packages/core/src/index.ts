@@ -30,6 +30,8 @@ export {
 export {
   getAntiCSRFToken,
   useSession,
+  useAuthorize,
+  useRedirectAuthenticatedUser,
   SessionConfig, // new
   SessionContext,
   AuthenticatedSessionContext,

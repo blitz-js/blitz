@@ -1,9 +1,10 @@
-import {Link, useRouter, useMutation, BlitzPage} from "blitz"
+import {Link, useAuthorize, useRouter, useMutation, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import createProject from "app/projects/mutations/createProject"
 import {ProjectForm, FORM_ERROR} from "app/projects/components/ProjectForm"
 
 const NewProjectPage: BlitzPage = () => {
+  useAuthorize()
   const router = useRouter()
   const [createProjectMutation] = useMutation(createProject)
 

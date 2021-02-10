@@ -1,13 +1,14 @@
 if (process.env.parentModel) {
-  import {Link, useRouter, useMutation, useParam, BlitzPage} from "blitz"
+  import {Link, useAuthorize, useRouter, useMutation, useParam, BlitzPage} from "blitz"
 } else {
-  import {Link, useRouter, useMutation, BlitzPage} from "blitz"
+  import {Link, useAuthorize, useRouter, useMutation, BlitzPage} from "blitz"
 }
 import Layout from "app/core/layouts/Layout"
 import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
 
 const New__ModelName__Page: BlitzPage = () => {
+  useAuthorize()
   const router = useRouter()
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
