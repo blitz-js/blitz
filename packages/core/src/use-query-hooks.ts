@@ -20,6 +20,12 @@ import {
   useDefaultQueryConfig,
 } from "./utils/react-query-utils"
 
+type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
+type QueryNonLazyOptions =
+  | {suspense: true; enabled?: never}
+  | {suspense?: never; enabled: true}
+  | {suspense: true; enabled: true}
+
 // -------------------------
 // useQuery
 // -------------------------
@@ -28,8 +34,18 @@ type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheF
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
+  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+): [TResult, RestQueryResult<TResult>]
+export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: QueryOptions<TResult> & QueryLazyOptions,
+): [TResult | undefined, RestQueryResult<TResult>]
+export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: FirstParam<T>,
   options?: QueryOptions<TResult>,
-): [TResult, RestQueryResult<TResult>] {
+) {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
@@ -57,7 +73,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [data as TResult, rest as RestQueryResult<TResult>]
+  return [data, rest as RestQueryResult<TResult>]
 }
 
 // -------------------------
@@ -69,8 +85,18 @@ type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolve
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
+  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+): [TResult, RestPaginatedResult<TResult>]
+export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: FirstParam<T>,
+  options: QueryOptions<TResult> & QueryLazyOptions,
+): [TResult | undefined, RestPaginatedResult<TResult>]
+export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  queryFn: T,
+  params: FirstParam<T>,
   options?: QueryOptions<TResult>,
-): [TResult, RestPaginatedResult<TResult>] {
+) {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
@@ -98,7 +124,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [resolvedData as TResult, rest as RestPaginatedResult<TResult>]
+  return [resolvedData, rest as RestPaginatedResult<TResult>]
 }
 
 // -------------------------
@@ -106,7 +132,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
 // -------------------------
 type RestInfiniteResult<TResult, TMoreVariable> = Omit<
   InfiniteQueryResult<TResult, TMoreVariable>,
-  "resolvedData"
+  "data"
 > &
   QueryCacheFunctions<TResult>
 
@@ -125,7 +151,25 @@ export function useInfiniteQuery<
   queryFn: T,
   params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
   options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
-): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult>] {
+): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult> & QueryNonLazyOptions]
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TFetchMoreResult = any,
+  TResult = PromiseReturnType<T>
+>(
+  queryFn: T,
+  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
+  options: InfiniteQueryConfig<TResult, TFetchMoreResult> & QueryLazyOptions,
+): [TResult[] | undefined, RestInfiniteResult<TResult, TFetchMoreResult>]
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TFetchMoreResult = any,
+  TResult = PromiseReturnType<T>
+>(
+  queryFn: T,
+  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
+  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
+) {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
@@ -156,5 +200,5 @@ export function useInfiniteQuery<
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [data as TResult[], rest as RestInfiniteResult<TResult, TFetchMoreResult>]
+  return [data, rest as RestInfiniteResult<TResult, TFetchMoreResult>]
 }

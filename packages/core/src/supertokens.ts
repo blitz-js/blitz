@@ -113,7 +113,7 @@ export const useAuthorizeIf = (condition?: boolean) => {
   })
 }
 
-export const useRedirectAuthenticatedUser = (to: string) => {
+export const useRedirectAuthenticated = (to: string) => {
   if (typeof window !== "undefined" && publicDataStore.getData().userId) {
     window.location.replace(to)
   }

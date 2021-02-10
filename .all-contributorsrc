@@ -1975,6 +1975,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "LBrian",
+      "name": "Brian Liu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3888780?v=4",
+      "profile": "https://brianypliu.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
