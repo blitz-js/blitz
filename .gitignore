@@ -25,3 +25,5 @@ dist
 .tsbuildinfo
 .nvmrc
 **/.test*
+examples/auth2
+.idea
