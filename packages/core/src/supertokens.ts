@@ -85,8 +85,12 @@ export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoadi
 }
 
 export const useAuthorize = () => {
+  useAuthorizeIf(true)
+}
+
+export const useAuthorizeIf = (condition?: boolean) => {
   useEffect(() => {
-    if (!publicDataStore.getData().userId) {
+    if (condition && !publicDataStore.getData().userId) {
       const error = new AuthenticationError()
       delete error.stack
       throw error

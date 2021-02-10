@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Head, Link, usePaginatedQuery, useRouter, BlitzPage, useAuthorize} from "blitz"
+import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProjects from "app/projects/queries/getProjects"
 
@@ -40,8 +40,6 @@ export const ProjectsList = () => {
 }
 
 const ProjectsPage: BlitzPage = () => {
-  useAuthorize()
-
   return (
     <>
       <Head>
@@ -63,6 +61,7 @@ const ProjectsPage: BlitzPage = () => {
   )
 }
 
+ProjectsPage.authenticate = true
 ProjectsPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ProjectsPage

@@ -68,12 +68,13 @@ export {default as getConfig} from "next/config"
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
 
 export interface AppProps<P = {}> extends NextAppProps<P> {
-  Component: BlitzComponentType<NextPageContext, any, P> & {
-    getLayout?: (component: JSX.Element) => JSX.Element
-  }
+  Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
 }
 export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean
+  supressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: string
 }
 export {isLocalhost} from "./utils/index"
 export {prettyMs} from "./utils/pretty-ms"

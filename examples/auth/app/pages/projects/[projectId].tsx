@@ -57,6 +57,7 @@ const ShowProjectPage: BlitzPage = () => {
   )
 }
 
+ShowProjectPage.authenticate = true
 ShowProjectPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default ShowProjectPage

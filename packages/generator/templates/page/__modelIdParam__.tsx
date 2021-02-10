@@ -84,6 +84,7 @@ const Show__ModelName__Page: BlitzPage = () => {
   )
 }
 
+Show__ModelName__Page.authenticate = true
 Show__ModelName__Page.getLayout = (page) => <Layout>{page}</Layout>
 
 export default Show__ModelName__Page
