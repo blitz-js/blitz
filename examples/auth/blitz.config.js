@@ -7,7 +7,7 @@ module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
-      sessionExpiryMinutes: 4,
+      // sessionExpiryMinutes: 4,
     }),
   ],
   log: {
