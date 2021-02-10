@@ -41,8 +41,7 @@ export const ProjectsList = () => {
 
 const ProjectsPage: BlitzPage = () => {
   useAuthorize()
-  // if (typeof window !== "undefined" && !document.body.classList.contains("render")) {
-  // }
+
   return (
     <>
       <Head>
