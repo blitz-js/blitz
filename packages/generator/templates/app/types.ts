@@ -13,7 +13,7 @@ declare module "blitz" {
     isAuthorized: SimpleRolesIsAuthorized<Role>
     PublicData: {
       userId: User["id"]
-      roles: Role[]
+      role: Role
     }
   }
 }
