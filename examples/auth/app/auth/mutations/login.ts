@@ -1,6 +1,7 @@
-import {Ctx, SecurePassword, AuthenticationError} from "blitz"
+import {resolver, SecurePassword, AuthenticationError} from "blitz"
 import db from "db"
-import * as z from "zod"
+import {Login} from "../validations"
+import {Role} from "types"
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await db.user.findFirst({where: {email}})
@@ -18,20 +19,11 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export const LoginInput = z.object({
-  email: z.string().email(),
-  password: z.string(),
-})
-export type LoginInputType = z.infer<typeof LoginInput>
-
-export default async function login(input: LoginInputType, {session}: Ctx) {
-  // This throws an error if input is invalid
-  const {email, password} = LoginInput.parse(input)
-
+export default resolver.pipe(resolver.zod(Login), async ({email, password}, ctx) => {
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
-  await session.create({userId: user.id, role: user.role})
+  await ctx.session.$create({userId: user.id, role: user.role as Role})
 
   return user
-}
+})

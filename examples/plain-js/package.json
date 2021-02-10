@@ -1,9 +1,10 @@
 {
   "name": "@examples/plain-js",
-  "version": "0.29.2",
+  "version": "0.30.0-canary.7",
   "scripts": {
-    "start": "blitz start",
+    "dev": "blitz dev",
     "build": "blitz prisma migrate deploy --preview-feature && blitz build",
+    "start": "blitz start",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "echo \"DISABLED\""
   },
@@ -29,9 +30,9 @@
     ]
   },
   "dependencies": {
-    "@prisma/cli": "2.15.0",
-    "@prisma/client": "2.15.0",
-    "blitz": "0.29.2",
+    "@prisma/client": "2.16.0",
+    "blitz": "0.30.0-canary.7",
+    "prisma": "2.16.0",
     "react": "0.0.0-experimental-3310209d0",
     "react-dom": "0.0.0-experimental-3310209d0"
   },
@@ -39,14 +40,14 @@
     "@typescript-eslint/eslint-plugin": "4.12.0",
     "@typescript-eslint/parser": "4.12.0",
     "babel-eslint": "10.1.0",
-    "eslint": "7.17.0",
+    "eslint": "7.18.0",
     "eslint-config-react-app": "6.0.0",
     "eslint-plugin-flowtype": "5.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
-    "husky": "4.3.7",
+    "husky": "4.3.8",
     "lint-staged": "10.5.3",
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",

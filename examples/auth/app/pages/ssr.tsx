@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   // https://github.com/blitz-js/blitz/issues/794
   path.resolve("next.config.js")
   path.resolve("blitz.config.js")
-  path.resolve(".next/__db.js")
+  path.resolve(".next/blitz/db.js")
   // End anti-tree-shaking
 
   const session = await getSessionContext(req, res)

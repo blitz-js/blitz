@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.29.2",
+  "version": "0.30.0-canary.7",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf dist",
@@ -40,7 +40,7 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/display": "0.29.2",
+    "@blitzjs/display": "0.30.0-canary.7",
     "@types/htmlescape": "^1.1.1",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
@@ -49,12 +49,12 @@
     "htmlescape": "^1.1.1",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.20",
+    "npm-run": "^5.0.1",
     "passport": "0.4.1",
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
-    "superjson": "1.5.0",
-    "npm-run": "^5.0.1"
+    "superjson": "1.6.2",
+    "zod": ">=1.0.0"
   },
-  "devDependencies": {},
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

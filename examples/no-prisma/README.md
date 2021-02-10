@@ -14,7 +14,7 @@ model Project {
 3. Start the dev server
 
 ```
-blitz start
+blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

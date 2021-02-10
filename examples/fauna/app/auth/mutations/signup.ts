@@ -23,7 +23,7 @@ export default async function signup(input: SignupInputType, { session }: Ctx) {
   )
   console.log("Create user result:", user)
 
-  await session.create({ userId: user.id })
+  await session.$create({ userId: user.id })
 
   return user
 }

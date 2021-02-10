@@ -1,4 +1,4 @@
-import {Middleware} from "blitz"
+import {Middleware, paginate} from "blitz"
 import db, {Prisma, Product} from "db"
 import {sum} from "lodash"
 
@@ -10,15 +10,12 @@ export function averagePrice(products: Product[]) {
 type GetProductsInput = {
   where?: Prisma.ProductFindManyArgs["where"]
   orderBy?: Prisma.ProductFindManyArgs["orderBy"]
-  skip?: Prisma.ProductFindManyArgs["skip"]
-  cursor?: Prisma.ProductFindManyArgs["cursor"]
-  take?: Prisma.ProductFindManyArgs["take"]
-  // Only available if a model relationship exists
-  // include?: Prisma.ProductFindManyArgs['include']
+  skip?: number
+  take?: number
 }
 
 export default async function getProducts(
-  {where, orderBy, skip = 0, cursor, take}: GetProductsInput,
+  {where, orderBy, skip = 0, take = 100}: GetProductsInput,
   ctx: Record<any, unknown> = {},
 ) {
   if (ctx.referer) {
@@ -27,22 +24,18 @@ export default async function getProducts(
 
   console.log("this line should not be included in the frontend bundle")
 
-  const products = await db.product.findMany({
-    where,
-    orderBy,
+  const {items: products, hasMore, nextPage, count} = await paginate({
     skip,
-    cursor,
     take,
+    count: () => db.product.count({where}),
+    query: (paginateArgs) => db.product.findMany({...paginateArgs, where, orderBy}),
   })
-
-  const count = await db.product.count()
-  const hasMore = typeof take === "number" ? skip + take < count : false
-  const nextPage = hasMore ? {take, skip: skip + take!} : null
 
   return {
     products,
-    nextPage,
     hasMore,
+    nextPage,
+    count,
   }
 }
 

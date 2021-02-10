@@ -185,7 +185,7 @@ export class New extends Command {
         )
       }
 
-      postInstallSteps.push("blitz start")
+      postInstallSteps.push("blitz dev")
 
       this.log("\n" + log.withBrand("Your new Blitz app is ready! Next steps:") + "\n")
 

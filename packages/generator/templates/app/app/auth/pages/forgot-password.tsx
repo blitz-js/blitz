@@ -2,7 +2,7 @@ import { BlitzPage, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
-import { ForgotPasswordInput } from "app/auth/validations"
+import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
 
 const ForgotPasswordPage: BlitzPage = () => {
@@ -23,7 +23,7 @@ const ForgotPasswordPage: BlitzPage = () => {
       ) : (
         <Form
           submitText="Send Reset Password Instructions"
-          schema={ForgotPasswordInput}
+          schema={ForgotPassword}
           initialValues={{ email: "" }}
           onSubmit={async (values) => {
             try {
@@ -42,6 +42,7 @@ const ForgotPasswordPage: BlitzPage = () => {
   )
 }
 
+ForgotPasswordPage.redirectAuthenticatedTo = "/"
 ForgotPasswordPage.getLayout = (page) => <Layout title="Forgot Your Password?">{page}</Layout>
 
 export default ForgotPasswordPage

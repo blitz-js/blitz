@@ -4,7 +4,7 @@ import db, {Prisma} from "db"
 type GetUsersInput = Pick<Prisma.UserFindManyArgs, "where" | "orderBy" | "skip" | "take">
 
 export default async function getUsers({where, orderBy, skip = 0, take}: GetUsersInput, ctx: Ctx) {
-  ctx.session.authorize()
+  ctx.session.$authorize()
 
   const users = await db.user.findMany({
     where,

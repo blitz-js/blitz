@@ -167,15 +167,13 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
 
 export default RecipeBuilder()
   .setName("Theme UI")
-  .setDescription(
-    `Configure your Blitz app's styling with Theme UI. This recipe will install all necessary dependencies and configure Theme UI for immediate use.`,
-  )
+  .setDescription(`This will install all necessary dependencies and configure Theme UI for use.`)
   .setOwner("tundera <stackshuffle@gmail.com>")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
-    stepName: "Add npm dependencies",
-    explanation: `First, we'll install the dependencies needed to use Theme UI in our Blitz app.`,
+    stepName: "npm dependencies",
+    explanation: ``,
     packages: [
       {name: "theme-ui", version: "0.x"},
       {name: "@theme-ui/prism", version: "0.x"},
@@ -228,12 +226,12 @@ export default RecipeBuilder()
 
       const baseThemeImport = j.importDeclaration(
         [j.importDefaultSpecifier(j.identifier("theme"))],
-        j.literal("app/theme"),
+        j.literal("app/core/theme"),
       )
 
       const mdxComponentsImport = j.importDeclaration(
         [j.importDefaultSpecifier(j.identifier("components"))],
-        j.literal("app/theme/components"),
+        j.literal("app/core/theme/components"),
       )
 
       addImport(program, providerImport)
@@ -246,7 +244,7 @@ export default RecipeBuilder()
     stepId: "addStyles",
     stepName: "Add a base theme file",
     explanation: `Next, we need to actually create some stylesheets! These stylesheets can either be modified to include global styles for your app, or you can stick to just using classnames in your components.`,
-    targetDirectory: "./app",
+    targetDirectory: "./app/core",
     templatePath: join(__dirname, "templates", "theme"),
     templateValues: {},
   })
@@ -254,8 +252,8 @@ export default RecipeBuilder()
     stepId: "addMdxLayout",
     stepName: "Create a layout for MDX content",
     explanation:
-      "Now we add a layout component for MDX content. We'll add a layout called `MdxLayout.tsx` to the `app/layouts` directory. ",
-    targetDirectory: "./app/layouts",
+      "Now we add a layout component for MDX content. We'll add a layout called `MdxLayout.tsx` to the `app/core/layouts` directory. ",
+    targetDirectory: "./app/core/layouts",
     templatePath: join(__dirname, "templates", "layouts"),
     templateValues: {},
   })
@@ -263,8 +261,8 @@ export default RecipeBuilder()
     stepId: "addMdxLayout",
     stepName: "Add an MDX page",
     explanation:
-      "Finally, we'll add a page to `app/pages` called `demo.mdx`. Notice the MDX components defined in `apps/theme/components.tsx` appear in place of their corresponding markdown elements.",
-    targetDirectory: "./app/layouts",
+      "Finally, we'll add a page to `app/pages` called `demo.mdx`. Notice the MDX components defined in `apps/core/theme/components.tsx` appear in place of their corresponding markdown elements.",
+    targetDirectory: "./app/core/layouts",
     templatePath: join(__dirname, "templates", "layouts"),
     templateValues: {},
   })

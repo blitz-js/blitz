@@ -2,7 +2,7 @@ import { BlitzPage, useRouterQuery, Link, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
-import { ResetPasswordInput } from "app/auth/validations"
+import { ResetPassword } from "app/auth/validations"
 import resetPassword from "app/auth/mutations/resetPassword"
 
 const ResetPasswordPage: BlitzPage = () => {
@@ -23,11 +23,11 @@ const ResetPasswordPage: BlitzPage = () => {
       ) : (
         <Form
           submitText="Reset Password"
-          schema={ResetPasswordInput}
-          initialValues={{ password: "", passwordConfirmation: "", token: query.token as string }}
+          schema={ResetPassword.omit({ token: true })}
+          initialValues={{ password: "", passwordConfirmation: "" }}
           onSubmit={async (values) => {
             try {
-              await resetPasswordMutation(values)
+              await resetPasswordMutation({ ...values, token: query.token as string })
             } catch (error) {
               if (error.name === "ResetPasswordError") {
                 return {
@@ -53,6 +53,7 @@ const ResetPasswordPage: BlitzPage = () => {
   )
 }
 
+ResetPasswordPage.redirectAuthenticatedTo = "/"
 ResetPasswordPage.getLayout = (page) => <Layout title="Reset Your Password">{page}</Layout>
 
 export default ResetPasswordPage

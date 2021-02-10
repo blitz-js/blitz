@@ -6,7 +6,7 @@ type GetUserInput = {
 }
 
 export default async function getUser({where}: GetUserInput, ctx: Ctx) {
-  ctx.session.authorize()
+  if (!ctx.session.userId) return null
 
   const user = await db.user.findFirst({where})
 

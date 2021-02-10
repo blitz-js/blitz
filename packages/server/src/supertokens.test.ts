@@ -45,7 +45,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -89,7 +89,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).create).toBe("function")
+        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -114,7 +114,7 @@ describe("supertokens", () => {
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.create({userId: 1})
+      await ctx.session.$create({userId: 1, role: "admin"} as any)
       return
     }) as EnhancedResolver<unknown, unknown>
 
@@ -140,6 +140,7 @@ describe("supertokens", () => {
 
       const publicData = JSON.parse(publicDataStr)
       expect(publicData.userId).toBe(1)
+      expect(publicData.role).toBe("admin")
 
       const cookieHeader = res.headers.get("Set-Cookie") as string
       expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN())).not.toBe(undefined)
@@ -163,7 +164,7 @@ async function mockServer<TInput, TResult>(
   const handler = rpcApiHandler(
     resolverModule,
     [
-      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized, domain: "test"}),
+      sessionMiddleware({isAuthorized: simpleRolesIsAuthorized as any, domain: "test"}),
       ...(resolverModule.middleware || []),
     ],
     dbConnectorFn,

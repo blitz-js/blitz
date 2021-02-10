@@ -86,20 +86,12 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
           )
         })}
       <Newline />
-      <Text>
-        The above diff will be applied. If it looks okay to you, hit ENTER to apply the changes!
-      </Text>
+      <Text bold>The above changes will be made. Press ENTER to continue</Text>
     </Box>
   )
 }
 export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
   const [loading, setLoading] = React.useState(true)
-
-  const handleChangeCommitted = React.useCallback(() => {
-    onChangeCommitted(`Modified 1 file: ${filePath}`)
-  }, [filePath, onChangeCommitted])
-
-  useEnterToContinue(handleChangeCommitted, !loading)
 
   React.useEffect(() => {
     const results = transform(
@@ -123,11 +115,7 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
       </Box>
     )
   }
-  return (
-    <Box paddingBottom={1} flexDirection="column">
-      {/* Stop ESlint from complaining about the emoji */}
-      {/* eslint-disable-next-line */}
-      <Text>📝 File changes applied! Press ENTER to continue</Text>
-    </Box>
-  )
+
+  onChangeCommitted(`Modified file: ${filePath}`)
+  return null
 }

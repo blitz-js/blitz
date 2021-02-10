@@ -33,5 +33,5 @@ blitz build
 ### Launch the development server
 
 ```bash
-blitz start
+blitz dev
 ```

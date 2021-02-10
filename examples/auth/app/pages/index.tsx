@@ -1,29 +1,29 @@
 import {Suspense} from "react"
-import {Head, Link, useSession, useRouterQuery, useMutation, invoke} from "blitz"
+import {
+  Head,
+  Link,
+  useSession,
+  useRouterQuery,
+  useMutation,
+  invoke,
+  useQuery,
+  BlitzPage,
+} from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
-import Layout from "app/layouts/Layout"
-import {useCurrentUser} from "app/hooks/useCurrentUser"
-// import getUsers from "app/users/queries/getUsers"
+import Layout from "app/core/layouts/Layout"
 
 const CurrentUserInfo = () => {
-  const currentUser = useCurrentUser()
+  const session = useSession()
+  const [currentUser] = useQuery(getUser, {where: {id: session.userId!}})
 
   return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
 }
-
-// const Users = () => {
-//   const [users] = useQuery(getUsers, {})
-//
-//   return <pre style={{maxWidth: "30rem"}}>{JSON.stringify(users, null, 2)}</pre>
-// }
 
 const UserStuff = () => {
   const session = useSession()
   const query = useRouterQuery()
   const [trackViewMutation] = useMutation(trackView)
-
-  if (session.isLoading) return <div>Loading...</div>
 
   return (
     <div>
@@ -48,11 +48,6 @@ const UserStuff = () => {
       <Suspense fallback="Loading...">
         <CurrentUserInfo />
       </Suspense>
-      {/*
-      <Suspense fallback="Loading...">
-        <Users />
-      </Suspense>
-        */}
       <button
         onClick={async () => {
           try {
@@ -81,7 +76,7 @@ const UserStuff = () => {
   )
 }
 
-const Home = () => (
+const Home: BlitzPage = () => (
   <Layout>
     <div className="container">
       <Head>
@@ -94,7 +89,9 @@ const Home = () => (
           <img src="/logo.png" alt="blitz.js" />
         </div>
 
-        <UserStuff />
+        <Suspense fallback={"Loading..."}>
+          <UserStuff />
+        </Suspense>
       </main>
 
       <footer>
@@ -237,5 +234,7 @@ const Home = () => (
     </div>
   </Layout>
 )
+
+Home.suppressFirstRenderFlicker = true
 
 export default Home
