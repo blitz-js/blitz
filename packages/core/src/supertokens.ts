@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
+import {AuthenticationError} from "./errors"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
 import {IsAuthorizedArgs, PublicData} from "./types"
@@ -96,4 +97,24 @@ export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoadi
   }, [])
 
   return session
+}
+
+export const useAuthorize = () => {
+  useAuthorizeIf(true)
+}
+
+export const useAuthorizeIf = (condition?: boolean) => {
+  useEffect(() => {
+    if (condition && !publicDataStore.getData().userId) {
+      const error = new AuthenticationError()
+      delete error.stack
+      throw error
+    }
+  })
+}
+
+export const useRedirectAuthenticated = (to: string) => {
+  if (typeof window !== "undefined" && publicDataStore.getData().userId) {
+    window.location.replace(to)
+  }
 }
