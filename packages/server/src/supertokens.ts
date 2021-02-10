@@ -63,6 +63,7 @@ const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   sameSite: "lax",
+  publicDataKeysToSyncAcrossSessions: ["role", "roles"],
   getSession: (handle) => getDb().session.findFirst({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
@@ -286,9 +287,8 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPublicData(data: Record<any, any>) {
-    // TODO - how to sync AND remove roles
-    if (this.userId && data.roles) {
-      await updateAllPublicDataRolesForUser(this.userId, data.roles)
+    if (this.userId) {
+      await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
     this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
@@ -826,14 +826,23 @@ export async function getAllSessionHandlesForUser(userId: string) {
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export async function updateAllPublicDataRolesForUser(userId: string | number) {
-  const sessions = await config.getSessions(userId)
+export async function syncPubicDataFieldsForUserIfNeeded(
+  userId: string | number,
+  data: Record<string, unknown>,
+) {
+  const dataToSync: Record<string, unknown> = {}
+  config.publicDataKeysToSyncAcrossSessions.forEach((key) => (dataToSync[key] = data[key]))
 
-  for (const session of sessions) {
-    const publicData = JSON.stringify({
-      ...(session.publicData ? JSON.parse(session.publicData) : {}),
-    })
-    await config.updateSession(session.handle, {publicData})
+  if (Object.keys(dataToSync).length) {
+    const sessions = await config.getSessions(userId)
+
+    for (const session of sessions) {
+      const publicData = JSON.stringify({
+        ...(session.publicData ? JSON.parse(session.publicData) : {}),
+        ...dataToSync,
+      })
+      await config.updateSession(session.handle, {publicData})
+    }
   }
 }
 

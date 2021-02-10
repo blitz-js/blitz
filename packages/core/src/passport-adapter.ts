@@ -94,11 +94,11 @@ export function passportAuth(config: BlitzPassportConfig) {
                 }
                 assert(
                   typeof result === "object" && result !== null,
-                  `Your '${strategyName}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1}})')`,
+                  `Your '${strategyName}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
                 )
                 assert(
                   (result as any).publicData,
-                  `'publicData' is missing from your '${strategyName}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1}})')`,
+                  `'publicData' is missing from your '${strategyName}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
                 )
               }
 

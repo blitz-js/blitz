@@ -23,6 +23,7 @@ export type SessionConfig = {
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
   domain?: string
+  publicDataKeysToSyncAcrossSessions?: string[]
   getSession: (handle: string) => Promise<SessionModel | null>
   getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
   createSession: (session: SessionModel) => Promise<SessionModel>
@@ -31,7 +32,7 @@ export type SessionConfig = {
   isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
 }
 
-export interface SessionContextBase extends PublicData {
+export interface SessionContextBase extends Partial<PublicData> {
   $handle: string | null
   $publicData: unknown
   $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
@@ -59,7 +60,7 @@ export interface AuthenticatedSessionContext extends SessionContextBase {
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
-export interface PublicDataWithLoading extends PublicData {
+export interface PublicDataWithLoading extends Partial<PublicData> {
   userId: PublicData["userId"] | null
   isLoading: boolean
 }
