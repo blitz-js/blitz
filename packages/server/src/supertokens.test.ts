@@ -80,7 +80,6 @@ describe("supertokens", () => {
 
       const publicData = JSON.parse(publicDataStr)
       expect(publicData.userId).toBe(null)
-      expect(publicData.roles.length).toBe(0)
     })
   })
 
@@ -115,7 +114,7 @@ describe("supertokens", () => {
   it.skip("login works", async () => {
     // TODO - fix this test with a mock DB by passing custom config to sessionMiddleware
     const resolverModule = (async (_input: any, ctx: CtxWithSession) => {
-      await ctx.session.$create({userId: 1, roles: ["admin"]} as any)
+      await ctx.session.$create({userId: 1, role: "admin"} as any)
       return
     }) as EnhancedResolver<unknown, unknown>
 
@@ -141,7 +140,7 @@ describe("supertokens", () => {
 
       const publicData = JSON.parse(publicDataStr)
       expect(publicData.userId).toBe(1)
-      expect(publicData.roles[0]).toBe("admin")
+      expect(publicData.role).toBe("admin")
 
       const cookieHeader = res.headers.get("Set-Cookie") as string
       expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN())).not.toBe(undefined)

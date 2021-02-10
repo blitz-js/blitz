@@ -53,7 +53,7 @@ export default passportAuth({
             update: {email},
           })
 
-          const publicData = {userId: user.id, roles: [user.role], source: "twitter"}
+          const publicData = {userId: user.id, role: user.role, source: "twitter"}
           done(null, {publicData})
         },
       ),
@@ -92,7 +92,7 @@ export default passportAuth({
 
           const publicData = {
             userId: user.id,
-            roles: [user.role as Role],
+            role: user.role as Role,
             source: "github",
             githubUsername: profile.username,
           }
@@ -131,7 +131,7 @@ export default passportAuth({
 
           const publicData = {
             userId: user.id,
-            roles: [user.role],
+            role: user.role,
             source: "auth0",
             githubUsername: profile.username,
           }

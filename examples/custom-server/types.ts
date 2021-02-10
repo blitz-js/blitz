@@ -10,7 +10,6 @@ declare module "blitz" {
     isAuthorized: typeof simpleRolesIsAuthorized
     PublicData: {
       userId: number
-      roles: string[]
     }
   }
 }

@@ -54,8 +54,8 @@ describe("supertokens", () => {
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["foo"],
         userId: "bar",
+        roles: ["foo"],
       })
 
       act(() => {
@@ -64,8 +64,8 @@ describe("supertokens", () => {
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["baz"],
         userId: "boo",
+        roles: ["baz"],
       })
     })
 
@@ -86,8 +86,8 @@ describe("supertokens", () => {
 
       expect(result.current).toEqual({
         isLoading: false,
-        roles: ["foo"],
         userId: "bar",
+        roles: ["foo"],
       })
     })
   })

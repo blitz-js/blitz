@@ -63,6 +63,7 @@ const defaultConfig: SessionConfig = {
   sessionExpiryMinutes: 30 * 24 * 60, // Sessions expire after 30 days of being idle
   method: "essential",
   sameSite: "lax",
+  publicDataKeysToSyncAcrossSessions: ["role", "roles"],
   getSession: (handle) => getDb().session.findFirst({where: {handle}}),
   getSessions: (userId) => getDb().session.findMany({where: {userId}}),
   createSession: (session) => {
@@ -98,13 +99,26 @@ export interface SimpleRolesIsAuthorized<RoleType = string> {
 
 export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) => {
   const [roleOrRoles] = args
-  const $publicData = (ctx.session as SessionContext).$publicData
-  const publicData = $publicData as typeof $publicData & {roles: unknown}
-  if (!("roles" in publicData)) {
-    throw new Error("Session publicData is missing the required `roles` array field")
+  const publicData = (ctx.session as SessionContext).$publicData as PublicData &
+    ({roles: unknown} | {role: unknown})
+
+  if ("role" in publicData && "roles" in publicData) {
+    throw new Error("Session publicData can only have only `role` or `roles`, but not both.'")
   }
-  if (!Array.isArray(publicData.roles)) {
-    throw new Error("Session `publicData.roles` is not an array, but it must be")
+
+  let roles: string[] = []
+  if ("role" in publicData) {
+    if (typeof publicData.role !== "string") {
+      throw new Error("Session publicData.role field must be a string")
+    }
+    roles.push(publicData.role)
+  } else if ("roles" in publicData) {
+    if (!Array.isArray(publicData.roles)) {
+      throw new Error("Session `publicData.roles` is not an array, but it must be")
+    }
+    roles = publicData.roles
+  } else {
+    throw new Error("Session publicData is missing the required `role` or roles` field")
   }
 
   // No roles required, so all roles allowed
@@ -117,7 +131,7 @@ export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) =>
     rolesToAuthorize.push(roleOrRoles)
   }
   for (const role of rolesToAuthorize) {
-    if (publicData.roles.includes(role)) return true
+    if (roles.includes(role)) return true
   }
   return false
 }
@@ -286,8 +300,8 @@ export class SessionContextClass implements SessionContext {
   }
 
   async $setPublicData(data: Record<any, any>) {
-    if (this.userId && data.roles) {
-      await updateAllPublicDataRolesForUser(this.userId, data.roles)
+    if (this.userId) {
+      await syncPubicDataFieldsForUserIfNeeded(this.userId, data)
     }
     this._kernel.publicData = await setPublicData(this._req, this._res, this._kernel, data)
   }
@@ -762,10 +776,7 @@ export async function createNewSession(
 }
 
 export async function createAnonymousSession(req: IncomingMessage, res: ServerResponse) {
-  // TODO remove `as any` after https://github.com/blitz-js/blitz/pull/1788 merged
-  return await createNewSession(req, res, {userId: null, roles: []} as any, undefined, {
-    anonymous: true,
-  })
+  return await createNewSession(req, res, {userId: null}, undefined, {anonymous: true})
 }
 
 // --------------------------------
@@ -828,15 +839,23 @@ export async function getAllSessionHandlesForUser(userId: string) {
   return (await config.getSessions(userId)).map((session) => session.handle)
 }
 
-export async function updateAllPublicDataRolesForUser(userId: string | number, roles: string[]) {
-  const sessions = await config.getSessions(userId)
+export async function syncPubicDataFieldsForUserIfNeeded(
+  userId: string | number,
+  data: Record<string, unknown>,
+) {
+  const dataToSync: Record<string, unknown> = {}
+  config.publicDataKeysToSyncAcrossSessions.forEach((key) => (dataToSync[key] = data[key]))
 
-  for (const session of sessions) {
-    const publicData = JSON.stringify({
-      ...(session.publicData ? JSON.parse(session.publicData) : {}),
-      roles,
-    })
-    await config.updateSession(session.handle, {publicData})
+  if (Object.keys(dataToSync).length) {
+    const sessions = await config.getSessions(userId)
+
+    for (const session of sessions) {
+      const publicData = JSON.stringify({
+        ...(session.publicData ? JSON.parse(session.publicData) : {}),
+        ...dataToSync,
+      })
+      await config.updateSession(session.handle, {publicData})
+    }
   }
 }
 
