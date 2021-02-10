@@ -1,4 +1,4 @@
-import {BlitzPage, useRouterQuery, Link, useMutation, useRedirectAuthenticatedUser} from "blitz"
+import {BlitzPage, useRouterQuery, Link, useMutation} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import {LabeledTextField} from "app/core/components/LabeledTextField"
 import {Form, FORM_ERROR} from "app/core/components/Form"
@@ -6,7 +6,6 @@ import {ResetPassword} from "app/auth/validations"
 import resetPassword from "app/auth/mutations/resetPassword"
 
 const ResetPasswordPage: BlitzPage = () => {
-  useRedirectAuthenticatedUser("/")
   const query = useRouterQuery()
   const [resetPasswordMutation, {isSuccess}] = useMutation(resetPassword)
 

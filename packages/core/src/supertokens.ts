@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react"
-import {Router} from "."
 import {getBlitzRuntimeData} from "./blitz-data"
 import {COOKIE_CSRF_TOKEN} from "./constants"
 import {AuthenticationError} from "./errors"
@@ -101,8 +100,12 @@ export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoadi
 }
 
 export const useAuthorize = () => {
+  useAuthorizeIf(true)
+}
+
+export const useAuthorizeIf = (condition?: boolean) => {
   useEffect(() => {
-    if (!publicDataStore.getData().userId) {
+    if (condition && !publicDataStore.getData().userId) {
       const error = new AuthenticationError()
       delete error.stack
       throw error
@@ -112,7 +115,6 @@ export const useAuthorize = () => {
 
 export const useRedirectAuthenticatedUser = (to: string) => {
   if (typeof window !== "undefined" && publicDataStore.getData().userId) {
-    //eslint-disable-next-line @typescript-eslint/no-floating-promises
-    Router.push(to)
+    window.location.replace(to)
   }
 }

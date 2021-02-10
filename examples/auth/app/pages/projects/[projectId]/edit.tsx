@@ -1,14 +1,5 @@
 import {Suspense} from "react"
-import {
-  Head,
-  Link,
-  useAuthorize,
-  useRouter,
-  useQuery,
-  useMutation,
-  useParam,
-  BlitzPage,
-} from "blitz"
+import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import updateProject from "app/projects/mutations/updateProject"
@@ -59,8 +50,6 @@ export const EditProject = () => {
 }
 
 const EditProjectPage: BlitzPage = () => {
-  useAuthorize()
-
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
