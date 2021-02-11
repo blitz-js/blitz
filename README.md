@@ -503,7 +503,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="http://aleksandra.codes"><img src="https://avatars.githubusercontent.com/u/9019397?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksandra Sikora</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Code">💻</a></td>
-    <td align="center"><a href="https://juanm04.com"><img src="https://avatars.githubusercontent.com/u/16712703?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JuanM04</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Code">💻</a></td>
+    <td align="center"><a href="https://juanm04.com"><img src="https://avatars.githubusercontent.com/u/16712703?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JuanM04</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Documentation">📖</a></td>
   </tr>
 </table>
 
