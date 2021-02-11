@@ -30,16 +30,16 @@ describe("Field model", () => {
   })
 
   it("handles single default attribute", () => {
-    expect(Field.parse("isActive:boolean:default[true]").toString()).toMatchInlineSnapshot(
+    expect(Field.parse("isActive:boolean:default=true").toString()).toMatchInlineSnapshot(
       `"isActive  Boolean  @default(true)"`,
     )
   })
 
   it("handles built-in default attribute", () => {
-    expect(Field.parse("id:string:default[uuid]").toString()).toMatchInlineSnapshot(
+    expect(Field.parse("id:string:default=uuid").toString()).toMatchInlineSnapshot(
       `"id  String  @default(uuid())"`,
     )
-    expect(Field.parse("id:int:default[autoincrement]"))
+    expect(Field.parse("id:int:default=autoincrement"))
   })
 
   it("has default field type", () => {
