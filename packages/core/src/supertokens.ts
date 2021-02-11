@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react"
-import {COOKIE_LEGACY_CSRF_TOKEN} from "."
 import {getBlitzRuntimeData} from "./blitz-data"
-import {COOKIE_CSRF_TOKEN} from "./constants"
+import {COOKIE_CSRF_TOKEN, COOKIE_LEGACY_CSRF_TOKEN} from "./constants"
 import {AuthenticationError} from "./errors"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
