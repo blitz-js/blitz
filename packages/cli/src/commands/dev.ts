@@ -1,3 +1,4 @@
+import {log} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
 
@@ -37,6 +38,7 @@ export class Dev extends Command {
 
     try {
       const dev = (await import("@blitzjs/server")).dev
+      log.clearConsole()
       await dev(config)
     } catch (err) {
       console.error(err)
