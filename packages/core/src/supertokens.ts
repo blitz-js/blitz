@@ -32,7 +32,7 @@ export type SessionConfig = {
   isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
 }
 
-export interface SessionContextBase extends Partial<PublicData> {
+export interface SessionContextBase {
   $handle: string | null
   $publicData: unknown
   $authorize(...args: IsAuthorizedArgs): asserts this is AuthenticatedSessionContext
@@ -48,20 +48,24 @@ export interface SessionContextBase extends Partial<PublicData> {
 }
 
 // Could be anonymous
-export interface SessionContext extends SessionContextBase {
+export interface SessionContext extends SessionContextBase, Partial<PublicData> {
   userId: PublicData["userId"] | null
   $publicData: Partial<PublicData>
 }
 
-export interface AuthenticatedSessionContext extends SessionContextBase {
+export interface AuthenticatedSessionContext extends SessionContextBase, PublicData {
   userId: PublicData["userId"]
   $publicData: PublicData
 }
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
-export interface PublicDataWithLoading extends Partial<PublicData> {
+export interface ClientSessionContext extends Partial<PublicData> {
   userId: PublicData["userId"] | null
+  isLoading: boolean
+}
+
+export interface AuthorizedClientSessionContext extends PublicData {
   isLoading: boolean
 }
 
@@ -70,10 +74,10 @@ interface UseSessionOptions {
   suspense?: boolean
 }
 
-export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoading => {
+export const useSession = (options: UseSessionOptions = {}): ClientSessionContext => {
   const suspense = options?.suspense ?? getBlitzRuntimeData().suspenseEnabled
 
-  let initialState: PublicDataWithLoading
+  let initialState: ClientSessionContext
   if (options.initialPublicData) {
     initialState = {...options.initialPublicData, isLoading: false}
   } else if (suspense) {
@@ -98,6 +102,13 @@ export const useSession = (options: UseSessionOptions = {}): PublicDataWithLoadi
   }, [])
 
   return session
+}
+
+export const useAuthorizedSession = (
+  options: UseSessionOptions = {},
+): AuthorizedClientSessionContext => {
+  useAuthorize()
+  return useSession(options)
 }
 
 export const useAuthorize = () => {
