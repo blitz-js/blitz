@@ -140,11 +140,11 @@ export class Generate extends Command {
 # will generate the proper database model for a Task.`)}
 > blitz generate model task \\
     name:string \\
-    completed:boolean:default[false] \\
+    completed:boolean:default=false \\
     belongsTo:project?
 > blitz generate all tasks \\
     name:string \\
-    completed:boolean:default[false] \\
+    completed:boolean:default=false \\
     belongsTo:project?
     `,
     `${chalk.dim(`# Sometimes you want just a single query with no generated
