@@ -60,12 +60,12 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
 
 export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
 
-export interface ClientSessionContext extends Partial<PublicData> {
+export interface ClientSession extends Partial<PublicData> {
   userId: PublicData["userId"] | null
   isLoading: boolean
 }
 
-export interface AuthorizedClientSessionContext extends PublicData {
+export interface AuthenticatedClientSession extends PublicData {
   isLoading: boolean
 }
 
@@ -74,10 +74,10 @@ interface UseSessionOptions {
   suspense?: boolean
 }
 
-export const useSession = (options: UseSessionOptions = {}): ClientSessionContext => {
+export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   const suspense = options?.suspense ?? getBlitzRuntimeData().suspenseEnabled
 
-  let initialState: ClientSessionContext
+  let initialState: ClientSession
   if (options.initialPublicData) {
     initialState = {...options.initialPublicData, isLoading: false}
   } else if (suspense) {
@@ -104,9 +104,9 @@ export const useSession = (options: UseSessionOptions = {}): ClientSessionContex
   return session
 }
 
-export const useAuthorizedSession = (
+export const useAuthenticatedSession = (
   options: UseSessionOptions = {},
-): AuthorizedClientSessionContext => {
+): AuthenticatedClientSession => {
   useAuthorize()
   return useSession(options)
 }
