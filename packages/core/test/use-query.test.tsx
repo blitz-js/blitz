@@ -74,6 +74,11 @@ describe("useQuery", () => {
       expect(() => setupHook("test", upcase)).toThrowErrorMatchingSnapshot()
     })
   })
+
+  // it("works with options other than enabled & suspense without type error", () => {
+  //   const queryFn = ((() => true) as unknown) as () => Promise<boolean>
+  //   useQuery(queryFn, undefined, {refetchInterval: 10000})
+  // })
 })
 
 describe("useInfiniteQuery", () => {
