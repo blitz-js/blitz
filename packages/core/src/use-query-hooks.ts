@@ -71,7 +71,6 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      // enabled,
     },
   })
 
@@ -128,7 +127,6 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      // enabled,
     },
   })
 
@@ -210,7 +208,6 @@ export function useInfiniteQuery<
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      // enabled,
     },
   })
 
