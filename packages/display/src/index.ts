@@ -77,6 +77,14 @@ const clearLine = (msg?: string) => {
   msg && process.stdout.write(msg)
 }
 
+const clearConsole = () => {
+  if (process.platform === "win32") {
+    process.stdout.write("\x1B[2J\x1B[0f")
+  } else {
+    process.stdout.write("\x1B[2J\x1B[3J\x1B[H")
+  }
+}
+
 /**
  * Logs a red error message to stderr.
  *
@@ -212,6 +220,7 @@ export const log = {
   withProgress,
   branded,
   clearLine,
+  clearConsole,
   error,
   warning,
   meta,

@@ -37,6 +37,14 @@ export class Dev extends Command {
 
     try {
       const dev = (await import("@blitzjs/server")).dev
+      const {getConfig} = await import("@blitzjs/config")
+
+      const blitzConfig = getConfig()
+      if (blitzConfig.cli?.clearConsoleOnBlitzDev !== false) {
+        const {log} = await import("@blitzjs/display")
+        log.clearConsole()
+      }
+
       await dev(config)
     } catch (err) {
       console.error(err)
