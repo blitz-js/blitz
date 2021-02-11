@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import {getBlitzRuntimeData} from "./blitz-data"
-import {COOKIE_CSRF_TOKEN} from "./constants"
+import {COOKIE_CSRF_TOKEN, COOKIE_LEGACY_CSRF_TOKEN} from "./constants"
 import {AuthenticationError} from "./errors"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
@@ -58,7 +58,8 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
   $publicData: PublicData
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
+export const getAntiCSRFToken = () =>
+  readCookie(COOKIE_CSRF_TOKEN()) || readCookie(COOKIE_LEGACY_CSRF_TOKEN())
 
 export interface ClientSession extends Partial<PublicData> {
   userId: PublicData["userId"] | null

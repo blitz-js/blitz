@@ -14,6 +14,10 @@ export const COOKIE_SESSION_TOKEN = () =>
 export const COOKIE_REFRESH_TOKEN = () =>
   `${getBlitzRuntimeData().sessionCookiePrefix}_sIdRefreshToken`
 export const COOKIE_CSRF_TOKEN = () => `${getBlitzRuntimeData().sessionCookiePrefix}_sAntiCsrfToken`
+// TODO remove before 1.0 -
+// This is here for legacy compatability (misspelling)
+export const COOKIE_LEGACY_CSRF_TOKEN = () =>
+  `${getBlitzRuntimeData().sessionCookiePrefix}_sAntiCrfToken`
 export const COOKIE_PUBLIC_DATA_TOKEN = () =>
   `${getBlitzRuntimeData().sessionCookiePrefix}_sPublicDataToken`
 
