@@ -28,11 +28,14 @@ export {
 export {
   getAntiCSRFToken,
   useSession,
+  useAuthenticatedSession,
   useAuthorize,
   useRedirectAuthenticated,
-  SessionConfig, // new
+  SessionConfig,
   SessionContext,
   AuthenticatedSessionContext,
+  ClientSession,
+  AuthenticatedClientSession,
 } from "./supertokens"
 
 export {SecurePassword, hash256, generateToken} from "./auth-utils"
