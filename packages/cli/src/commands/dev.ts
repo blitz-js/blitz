@@ -1,5 +1,6 @@
 import {log} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
+import {getConfig} from "@blitzjs/config"
 import {Command, flags} from "@oclif/command"
 
 export class Dev extends Command {
@@ -22,9 +23,6 @@ export class Dev extends Command {
     ["no-incremental-build"]: flags.boolean({
       description: "Disable incremental build and start from a fresh cache",
     }),
-    ["no-clear-console"]: flags.boolean({
-      description: "Prevent console clearing",
-    }),
   }
 
   async run() {
@@ -42,7 +40,10 @@ export class Dev extends Command {
     try {
       const dev = (await import("@blitzjs/server")).dev
 
-      if (!flags["no-clear-console"]) log.clearConsole()
+      const blitzConfig = getConfig()
+      if (blitzConfig.cli?.clearConsoleOnBlitzDev !== false) {
+        log.clearConsole()
+      }
 
       await dev(config)
     } catch (err) {
