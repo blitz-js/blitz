@@ -72,7 +72,7 @@ export interface AuthenticatedClientSession extends PublicData {
 
 interface UseSessionOptions {
   initialPublicData?: PublicData
-  suspense?: boolean
+  suspense?: boolean | null
 }
 
 export const useSession = (options: UseSessionOptions = {}): ClientSession => {
