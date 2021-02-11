@@ -25,6 +25,7 @@ type QueryNonLazyOptions =
   | {suspense: true; enabled?: never}
   | {suspense?: never; enabled: true}
   | {suspense: true; enabled: true}
+  | {suspense?: never; enabled?: never}
 
 // -------------------------
 // useQuery
