@@ -51,7 +51,10 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const session = useSession({suspense: options?.suspense})
+  const suspense = options?.enabled === false ? false : options?.suspense
+  const session = useSession({suspense})
+  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -65,7 +68,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      enabled: options?.enabled ?? !session.isLoading,
+      enabled,
     },
   })
 
@@ -102,7 +105,10 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  const session = useSession({suspense: options?.suspense})
+  const suspense = options?.enabled === false ? false : options?.suspense
+  const session = useSession({suspense})
+  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -116,7 +122,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      enabled: options?.enabled ?? !session.isLoading,
+      enabled,
     },
   })
 
@@ -175,7 +181,10 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  const session = useSession({suspense: options?.suspense})
+  const suspense = options?.enabled === false ? false : options?.suspense
+  const session = useSession({suspense})
+  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
@@ -192,7 +201,7 @@ export function useInfiniteQuery<
     config: {
       ...useDefaultQueryConfig(),
       ...options,
-      enabled: options?.enabled ?? !session.isLoading,
+      enabled,
     },
   })
 
