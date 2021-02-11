@@ -51,9 +51,10 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const suspense = options?.enabled === false ? false : options?.suspense
+  const suspense =
+    options?.enabled === false || options?.enabled === null ? false : options?.suspense
   const session = useSession({suspense})
-  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+  const enabled = session.isLoading ? false : options?.enabled
 
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
@@ -105,9 +106,10 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  const suspense = options?.enabled === false ? false : options?.suspense
+  const suspense =
+    options?.enabled === false || options?.enabled === null ? false : options?.suspense
   const session = useSession({suspense})
-  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+  const enabled = session.isLoading ? false : options?.enabled
 
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
@@ -181,9 +183,10 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  const suspense = options?.enabled === false ? false : options?.suspense
+  const suspense =
+    options?.enabled === false || options?.enabled === null ? false : options?.suspense
   const session = useSession({suspense})
-  const enabled = options?.enabled !== undefined ? options.enabled : !session.isLoading
+  const enabled = session.isLoading ? false : options?.enabled
 
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
