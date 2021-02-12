@@ -8,7 +8,7 @@ import {
   usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
-import {isClient} from "./utils"
+import {isServer} from "./utils"
 import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouter} from "./use-router"
@@ -52,14 +52,14 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const suspense =
-    options?.enabled === false || options?.enabled === null ? false : options?.suspense
+  let enabled = isServer ? false : options?.enabled ?? true
+  const suspense = enabled === false ? false : options?.suspense
   const session = useSession({suspense})
   if (session.isLoading) {
-    options.enabled = false
+    enabled = false
   }
 
-  const routerIsReady = useRouter().isReady && isClient
+  const routerIsReady = useRouter().isReady || isServer
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -72,8 +72,19 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     config: {
       ...useDefaultQueryConfig(),
       ...options,
+      enabled,
     },
   })
+
+  if (
+    queryRest.isIdle &&
+    isServer &&
+    !data &&
+    (!options || !("suspense" in options) || options.suspense) &&
+    (!options || !("enabled" in options) || options.enabled)
+  ) {
+    throw new Promise(() => {})
+  }
 
   const rest = {
     ...queryRest,
