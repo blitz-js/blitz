@@ -19,6 +19,7 @@ describe("index page", () => {
     const user = createRandomUser()
 
     cy.signup(user)
+    cy.wait(500)
 
     cy.location("pathname").should("equal", "/")
     cy.contains("button", "Logout")
@@ -28,8 +29,8 @@ describe("index page", () => {
     const user = createRandomUser()
 
     cy.signup(user)
-
     cy.wait(500)
+
     cy.contains("button", "Logout").click()
     cy.contains("a", /login/i).click()
 
@@ -46,6 +47,7 @@ describe("index page", () => {
     const user = createRandomUser()
 
     cy.signup(user)
+    cy.wait(500)
 
     cy.contains("button", "Logout").click()
 
@@ -63,6 +65,7 @@ describe("index page", () => {
     cy.contains('"views": 2')
 
     cy.signup(user)
+    cy.wait(500)
 
     cy.contains('"views": 2')
   })
