@@ -3,7 +3,7 @@ import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
 import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
-import {isClient, isServer} from "."
+import {isClient} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
@@ -60,13 +60,7 @@ export const validateQueryFn = <TInput, TResult>(
 export const sanitize = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
-  if (isServer) {
-    // Prevents logging garbage during static pre-rendering
-    return emptyQueryFn as EnhancedResolverRpcClient<TInput, TResult>
-  }
-
   validateQueryFn(queryFn)
-
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 

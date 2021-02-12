@@ -8,6 +8,7 @@ import {
   usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
+import {isClient} from "./utils"
 import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {useRouter} from "./use-router"
@@ -58,7 +59,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     options.enabled = false
   }
 
-  const routerIsReady = useRouter().isReady
+  const routerIsReady = useRouter().isReady && isClient
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
