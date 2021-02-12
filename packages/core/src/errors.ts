@@ -1,6 +1,6 @@
 import SuperJson from "superjson"
 
-const errorProps = ["message", "code", "meta"]
+const errorProps = ["name", "message", "code", "meta"]
 if (process.env.JEST_WORKER_ID === undefined) {
   SuperJson.allowErrorProps(...errorProps)
 }
