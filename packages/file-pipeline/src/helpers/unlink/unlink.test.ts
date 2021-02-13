@@ -6,9 +6,8 @@ import {unlink} from "."
 describe("unlink", () => {
   it("should unlink the correct path", async () => {
     const unlinkFile = jest.fn(() => Promise.resolve())
-    const pathExists = jest.fn(() => Promise.resolve(true))
 
-    const unlinkStream = unlink(normalize("/dest"), unlinkFile, pathExists)
+    const unlinkStream = unlink(normalize("/dest"), unlinkFile)
 
     unlinkStream.write(
       new File({
@@ -21,10 +20,7 @@ describe("unlink", () => {
 
     await take(unlinkStream, 1)
 
-    // Test the file exists before attempting to unlink it
-    expect(pathExists).toHaveBeenCalledWith(resolve(normalize("/dest/bar/baz.tz")))
-
     // Remove the correct file
-    expect(unlinkFile).toHaveBeenCalledWith(resolve(normalize("/dest/bar/baz.tz")))
+    expect(unlinkFile).toHaveBeenCalledWith(resolve(normalize("/dest/bar/baz.tz")), {glob: false})
   })
 })

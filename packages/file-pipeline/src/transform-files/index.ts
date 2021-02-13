@@ -1,7 +1,7 @@
-import {ensureDir, pathExists, remove} from "fs-extra"
 import {Transform} from "stream"
 import {createDisplay} from "../display"
 import {ERROR_THROWN, READY} from "../events"
+import {rimraf} from "../helpers/rimraf-promise"
 import {createPipeline} from "../pipeline"
 import {pipe, through} from "../streams"
 import {Stage} from "../types"
@@ -42,7 +42,7 @@ export async function transformFiles(
     clean: requestClean,
   } = options
 
-  if (requestClean) await clean(dest)
+  if (requestClean) await rimraf(dest, {glob: false})
 
   const display = createDisplay()
   return await new Promise((resolve, reject) => {
@@ -73,11 +73,4 @@ export async function transformFiles(
       if (err) reject(err)
     })
   })
-}
-
-async function clean(path: string) {
-  if (await pathExists(path)) {
-    await remove(path)
-  }
-  return await ensureDir(path)
 }
