@@ -2003,6 +2003,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "arenddeboer",
+      "name": "Arend de Boer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7022204?v=4",
+      "profile": "https://github.com/arenddeboer",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
