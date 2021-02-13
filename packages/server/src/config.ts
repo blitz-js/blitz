@@ -42,10 +42,13 @@ type NormalizedConfig = ServerConfig & {
   env: ServerEnvironment
 }
 
+export const standardBuildFolderPath = ".blitz/build"
+export const standardBuildFolderPathRegex = /\.blitz[\\/]build[\\/]/
+
 const defaults = {
   env: "prod" as ServerEnvironment,
   // -
-  buildFolder: ".blitz/build",
+  buildFolder: standardBuildFolderPath,
   // -
   writeManifestFile: true,
   // -

@@ -20,7 +20,7 @@ export async function build(config: ServerConfig) {
 
   const stages = configureStages({isTypeScript, writeManifestFile})
 
-  await transformFiles(rootFolder, stages, buildFolder, {
+  const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
     include,
     watch,
@@ -29,7 +29,7 @@ export async function build(config: ServerConfig) {
 
   await saveBlitzVersion(buildFolder)
 
-  await nextBuild(nextBin, buildFolder)
+  await nextBuild(nextBin, buildFolder, manifest)
 
   const rootNextFolder = resolve(rootFolder, ".next")
   const buildNextFolder = resolve(buildFolder, ".next")

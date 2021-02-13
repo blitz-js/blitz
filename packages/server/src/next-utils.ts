@@ -1,39 +1,54 @@
 import {log} from "@blitzjs/display"
-import {ServerConfig} from "config"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import fs from "fs"
 import path from "path"
+import {ServerConfig, standardBuildFolderPathRegex} from "./config"
 import {Manifest} from "./stages/manifest"
 import {through} from "./streams"
 
-function createOutputTransformer(manifest: Manifest, devFolder: string) {
-  const stream = through((data, _, next) => {
-    const dataStr = data.toString()
+function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
+  const stream = through(function (data: Buffer, _, next) {
+    // console.log("\nEVENT\n")
+    let outputStr = data.toString()
 
-    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, "\\/")}\\/[^:]+)\\(\\d+,\\d+\\)`
+    outputStr = outputStr.replace(standardBuildFolderPathRegex, "")
 
-    const matches = new RegExp(buildError, "g").exec(dataStr)
+    if (outputStr.match(/Error:.*find.*production build/)) {
+      outputStr = log.withError(
+        "Could not find a production build, you must run `blitz build` before starting\n\n",
+      )
+    } else {
+      const buildError = `ERROR\\sin\\s(${buildFolder.replace(
+        /\//g,
+        "\\/",
+      )}\\/[^:]+)\\(\\d+,\\d+\\)`
 
-    if (matches) {
-      const [, filepath] = matches
+      const matches = new RegExp(buildError, "g").exec(outputStr)
 
-      if (filepath) {
-        const matchedPath = manifest.getByValue(filepath)
-        if (matchedPath) {
-          next(null, data.replace(filepath, matchedPath))
-          return
+      if (matches) {
+        console.log("*** FOUND matches", matches)
+        const [, filepath] = matches
+
+        if (filepath && manifest) {
+          const matchedPath = manifest.getByValue(filepath)
+          if (matchedPath) {
+            outputStr = outputStr.replace(filepath, matchedPath)
+          }
         }
       }
     }
-    next(null, data)
+
+    next(null, Buffer.from(outputStr))
   })
 
-  return {stream}
+  return stream
 }
 
 function getSpawnEnv(config: ServerConfig) {
   let spawnEnv: NodeJS.ProcessEnv = process.env
+
+  spawnEnv.FORCE_COLOR = "true"
 
   if (config.inspect) {
     spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
@@ -62,10 +77,9 @@ export async function nextStartDev(
   nextBin: string,
   cwd: string,
   manifest: Manifest,
-  devFolder: string,
+  buildFolder: string,
   config: ServerConfig,
 ) {
-  const transform = createOutputTransformer(manifest, devFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
   process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
@@ -75,34 +89,49 @@ export async function nextStartDev(
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)
       rej("")
     } else {
-      spawn(nextBin, spawnCommand, {
+      const nextjs = spawn(nextBin, spawnCommand, {
         cwd,
         env: spawnEnv,
-        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
+        stdio: [process.stdin, "pipe", "pipe"],
       })
         .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
+          if (code === 0) {
+            res()
+          } else {
+            process.exit(code)
+          }
         })
 
         .on("error", rej)
+
+      nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
+      nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
     }
   })
 }
 
-export function nextBuild(nextBin: string, cwd: string) {
+export function nextBuild(nextBin: string, buildFolder: string) {
   return new Promise<void>((res, rej) => {
-    spawn(nextBin, ["build"], {
-      cwd,
-      stdio: "inherit",
+    const nextjs = spawn(nextBin, ["build"], {
+      cwd: buildFolder,
+      stdio: [process.stdin, "pipe", "pipe"],
     })
       .on("exit", (code: number) => {
-        code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
+        if (code === 0) {
+          res()
+        } else {
+          process.exit(code)
+        }
       })
       .on("error", rej)
+
+    nextjs.stdout.pipe(createOutputTransformer(buildFolder)).pipe(process.stdout)
+    nextjs.stderr.pipe(createOutputTransformer(buildFolder)).pipe(process.stderr)
   })
 }
 
-export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
+export async function nextStart(nextBin: string, buildFolder: string, config: ServerConfig) {
+  // const transform = createOutputTransformer(buildFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
 
   return new Promise<void>((res, rej) => {
@@ -110,18 +139,25 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)
       rej("")
     } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
+      const nextjs = spawn(nextBin, spawnCommand, {
+        cwd: buildFolder,
         env: spawnEnv,
-        stdio: "inherit",
+        stdio: [process.stdin, "pipe", "pipe"],
       })
         .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next start' failed with status code: ${code}`)
+          if (code === 0) {
+            res()
+          } else {
+            process.exit(code)
+          }
         })
         .on("error", (err) => {
           console.error(err)
           rej(err)
         })
+
+      nextjs.stdout.pipe(createOutputTransformer(buildFolder)).pipe(process.stdout)
+      nextjs.stderr.pipe(createOutputTransformer(buildFolder)).pipe(process.stderr)
     }
   })
 }
