@@ -12,7 +12,7 @@ export function getBlitzVersion(): string {
   }
 }
 
-export async function isVersionMatched(buildFolder: string = ".blitz/caches") {
+export async function isVersionMatched(buildFolder: string = ".blitz/build") {
   const versionStore = resolve(buildFolder, blitzVersionFilename)
   if (!(await pathExists(versionStore))) return false
 
@@ -26,7 +26,7 @@ export async function isVersionMatched(buildFolder: string = ".blitz/caches") {
   }
 }
 
-export async function saveBlitzVersion(buildFolder: string = ".blitz/caches") {
+export async function saveBlitzVersion(buildFolder: string = ".blitz/build") {
   const versionStore = resolve(buildFolder, blitzVersionFilename)
   const version = getBlitzVersion()
   await writeFile(versionStore, version)

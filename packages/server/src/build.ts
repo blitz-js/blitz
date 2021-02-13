@@ -1,5 +1,6 @@
 import {copy, pathExists, remove} from "fs-extra"
 import {resolve} from "path"
+import {saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
 import {nextBuild} from "./next-utils"
 import {configureStages} from "./stages"
@@ -25,6 +26,8 @@ export async function build(config: ServerConfig) {
     watch,
     clean: true, // always clean in build
   })
+
+  await saveBlitzVersion(buildFolder)
 
   await nextBuild(nextBin, buildFolder)
 

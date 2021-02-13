@@ -32,11 +32,9 @@ import {prod} from "../src/prod"
 describe("Prod command", () => {
   const rootFolder = resolve("build")
   const buildFolder = resolve(rootFolder, ".blitz-build")
-  const devFolder = resolve(rootFolder, ".blitz")
   const prodArgs: ServerConfig = {
     rootFolder,
     buildFolder,
-    devFolder,
     writeManifestFile: false,
     port: 3000,
     hostname: "localhost",
