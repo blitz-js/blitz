@@ -10,9 +10,6 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "browserslist": [
-    "defaults"
-  ],
   "prisma": {
     "schema": "db/schema.prisma"
   },
