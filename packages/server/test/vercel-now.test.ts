@@ -26,7 +26,6 @@ import {getConfig} from "@blitzjs/config"
 describe("Build command Vercel", () => {
   const rootFolder = resolve("")
   const buildFolder = resolve(rootFolder, ".blitz-build")
-  const devFolder = resolve(rootFolder, ".blitz-dev")
 
   beforeEach(async () => {
     process.env.NOW_BUILDER = "1"
@@ -39,7 +38,6 @@ describe("Build command Vercel", () => {
     await build({
       rootFolder,
       buildFolder,
-      devFolder,
       writeManifestFile: false,
       port: 3000,
       hostname: "localhost",
@@ -56,6 +54,7 @@ describe("Build command Vercel", () => {
     expect(directoryTree(buildFolder)).toEqual({
       name: ".blitz-build",
       children: [
+        {name: "_blitz-version.txt"},
         {name: "blitz.config.js"},
         {name: "next-vercel.config.js"},
         {name: "next.config.js"},
