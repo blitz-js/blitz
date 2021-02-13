@@ -32,6 +32,7 @@ describe("index page", () => {
     cy.wait(500)
 
     cy.contains("button", "Logout").click()
+    cy.wait(500)
     cy.contains("a", /login/i).click()
 
     cy.contains("Email").find("input").type(user.email)
@@ -62,6 +63,7 @@ describe("index page", () => {
 
     cy.contains("button", "Track view").click()
     cy.contains("button", "Track view").click()
+    cy.wait(500)
     cy.contains('"views": 2')
 
     cy.signup(user)
