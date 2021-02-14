@@ -5,7 +5,7 @@ import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitig
 import {resolveBinAsync} from "./resolve-bin-async"
 
 type Synchronizer = typeof transformFiles
-type ServerEnvironment = "dev" | "prod"
+export type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
   rootFolder: string
@@ -43,7 +43,7 @@ type NormalizedConfig = ServerConfig & {
 }
 
 export const standardBuildFolderPath = ".blitz/build"
-export const standardBuildFolderPathRegex = /\.blitz[\\/]build[\\/]/
+export const standardBuildFolderPathRegex = /\.blitz[\\/]build[\\/]/g
 
 const defaults = {
   env: "prod" as ServerEnvironment,

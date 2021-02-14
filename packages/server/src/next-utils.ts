@@ -1,3 +1,4 @@
+import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
@@ -5,35 +6,54 @@ import fs from "fs"
 import path from "path"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
 import {Manifest} from "./stages/manifest"
+import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
 import {through} from "./streams"
 
+const pathToGlobalRegex = (path: string) => {
+  return new RegExp(path.replace(/\//g, "\\/"), "g")
+}
+
 function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
+  const projectRoot = getProjectRoot()
+
   const stream = through(function (data: Buffer, _, next) {
-    // console.log("\nEVENT\n")
     let outputStr = data.toString()
 
+    // Remove the blitz build path from the output path so that the
+    // printed path is the original file path
     outputStr = outputStr.replace(standardBuildFolderPathRegex, "")
+
+    // If find a resolver path, restore printed path to original path
+    if (outputStr.match(resolverFullBuildPathRegex)) {
+      outputStr = outputStr.replace(resolverBuildFolderReplaceRegex, "")
+    }
 
     if (outputStr.match(/Error:.*find.*production build/)) {
       outputStr = log.withError(
         "Could not find a production build, you must run `blitz build` before starting\n\n",
       )
-    } else {
-      const buildError = `ERROR\\sin\\s(${buildFolder.replace(
-        /\//g,
-        "\\/",
-      )}\\/[^:]+)\\(\\d+,\\d+\\)`
+    } else if (manifest) {
+      /*
+       * Here we look any page files that got moved during the compilation step.
+       * And then replace the compiled path with the original path
+       */
+      const pageMatches = /[\\/](pages[\\/].*.(j|t)sx?)/g.exec(outputStr)
+      if (pageMatches) {
+        const [fullMatch, simplePath] = pageMatches
+        // console.log(manifest)
+        // console.log("MATCH", fullMatch)
 
-      const matches = new RegExp(buildError, "g").exec(outputStr)
-
-      if (matches) {
-        console.log("*** FOUND matches", matches)
-        const [, filepath] = matches
-
-        if (filepath && manifest) {
-          const matchedPath = manifest.getByValue(filepath)
-          if (matchedPath) {
-            outputStr = outputStr.replace(filepath, matchedPath)
+        if (fullMatch) {
+          const builtPath = path.join(buildFolder, simplePath)
+          // console.log("builtPath", builtPath)
+          const originalPath = manifest.getByValue(builtPath)
+          if (originalPath) {
+            // console.log("originalPath", originalPath)
+            outputStr = outputStr.replace(
+              pathToGlobalRegex(fullMatch),
+              // fullMatch,
+              originalPath.replace(projectRoot, ""),
+            )
           }
         }
       }
@@ -48,7 +68,7 @@ function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
 function getSpawnEnv(config: ServerConfig) {
   let spawnEnv: NodeJS.ProcessEnv = process.env
 
-  spawnEnv.FORCE_COLOR = "true"
+  spawnEnv.FORCE_COLOR = "3"
 
   if (config.inspect) {
     spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
@@ -110,10 +130,18 @@ export async function nextStartDev(
   })
 }
 
-export function nextBuild(nextBin: string, buildFolder: string) {
+export function nextBuild(
+  nextBin: string,
+  buildFolder: string,
+  manifest: Manifest,
+  config: ServerConfig,
+) {
+  const spawnEnv = getSpawnEnv(config)
+
   return new Promise<void>((res, rej) => {
     const nextjs = spawn(nextBin, ["build"], {
       cwd: buildFolder,
+      env: spawnEnv,
       stdio: [process.stdin, "pipe", "pipe"],
     })
       .on("exit", (code: number) => {
@@ -125,13 +153,12 @@ export function nextBuild(nextBin: string, buildFolder: string) {
       })
       .on("error", rej)
 
-    nextjs.stdout.pipe(createOutputTransformer(buildFolder)).pipe(process.stdout)
-    nextjs.stderr.pipe(createOutputTransformer(buildFolder)).pipe(process.stderr)
+    nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
+    nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
   })
 }
 
 export async function nextStart(nextBin: string, buildFolder: string, config: ServerConfig) {
-  // const transform = createOutputTransformer(buildFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
 
   return new Promise<void>((res, rej) => {

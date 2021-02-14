@@ -1,3 +1,4 @@
+import {ServerEnvironment} from "../config"
 import {createStageConfig} from "./config"
 import {createStageManifest} from "./manifest"
 import {createStagePages} from "./pages"
@@ -6,18 +7,23 @@ import {createStageRewriteImports} from "./rewrite-imports"
 import {createStageRoutes} from "./routes"
 import {createStageRpc} from "./rpc"
 
-type StagesConfig = {writeManifestFile: boolean; isTypeScript: boolean}
+type StagesConfig = {
+  writeManifestFile: boolean
+  isTypeScript: boolean
+  buildFolder: string
+  env: ServerEnvironment
+}
 
 // These create pipeline stages that are run as the business rules for Blitz
 // Read this folders README for more information
-export const configureStages = (config: StagesConfig) => [
+export const configureStages = async (config: StagesConfig) => [
   // Order is important
   createStageRelative,
   createStageRewriteImports,
   createStagePages,
   createStageRpc(config.isTypeScript),
   createStageConfig,
-  createStageManifest(config.writeManifestFile),
+  await createStageManifest(config.writeManifestFile, config.buildFolder, config.env),
 ]
 
 export const configureRouteStages = (config: StagesConfig) => [

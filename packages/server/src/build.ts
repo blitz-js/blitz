@@ -1,4 +1,5 @@
-import {copy, pathExists, remove} from "fs-extra"
+import {rimraf} from "@blitzjs/file-pipeline"
+import {copy, pathExists} from "fs-extra"
 import {resolve} from "path"
 import {saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
@@ -16,9 +17,10 @@ export async function build(config: ServerConfig) {
     watch,
     isTypeScript,
     writeManifestFile,
+    env,
   } = await normalize(config)
 
-  const stages = configureStages({isTypeScript, writeManifestFile})
+  const stages = await configureStages({isTypeScript, writeManifestFile, buildFolder, env})
 
   const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
@@ -29,14 +31,12 @@ export async function build(config: ServerConfig) {
 
   await saveBlitzVersion(buildFolder)
 
-  await nextBuild(nextBin, buildFolder, manifest)
+  await nextBuild(nextBin, buildFolder, manifest, config)
 
   const rootNextFolder = resolve(rootFolder, ".next")
   const buildNextFolder = resolve(buildFolder, ".next")
 
-  if (await pathExists(rootNextFolder)) {
-    await remove(rootNextFolder)
-  }
+  await rimraf(rootNextFolder)
 
   if (await pathExists(buildNextFolder)) {
     await copy(buildNextFolder, rootNextFolder)

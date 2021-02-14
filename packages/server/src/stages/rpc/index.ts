@@ -6,8 +6,12 @@ import slash from "slash"
 import File from "vinyl"
 import {absolutePathTransform} from "../utils"
 
+export const resolverFullBuildPathRegex = /[\\/]app[\\/]_resolvers[\\/]/
+export const resolverBuildFolderReplaceRegex = /_resolvers[\\/]/g
+export const resolverPathRegex = /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/
+
 export function isResolverPath(filePath: string) {
-  return /(?:app[\\/])(?!_resolvers).*(?:queries|mutations)[\\/].+/.exec(filePath)
+  return resolverPathRegex.exec(filePath)
 }
 
 const isomorhicHandlerTemplateClient = (
