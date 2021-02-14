@@ -40,18 +40,13 @@ function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
       const pageMatches = /[\\/](pages[\\/].*.(j|t)sx?)/g.exec(outputStr)
       if (pageMatches) {
         const [fullMatch, simplePath] = pageMatches
-        // console.log(manifest)
-        // console.log("MATCH", fullMatch)
 
         if (fullMatch) {
           const builtPath = path.join(buildFolder, simplePath)
-          // console.log("builtPath", builtPath)
           const originalPath = manifest.getByValue(builtPath)
           if (originalPath) {
-            // console.log("originalPath", originalPath)
             outputStr = outputStr.replace(
               pathToGlobalRegex(fullMatch),
-              // fullMatch,
               originalPath.replace(projectRoot, ""),
             )
           }
