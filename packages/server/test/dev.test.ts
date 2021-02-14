@@ -133,6 +133,7 @@ describe("Dev command", () => {
         "dev/.vercel/project.json": "",
         "dev/one": "",
         "dev/two": "",
+        "dev/.blitz-build/_manifest.json": JSON.stringify({keys: {}, values: {}}),
       })
       await dev({
         rootFolder,
@@ -182,6 +183,7 @@ describe("Dev command", () => {
       mocks.mockFs(
         {
           "dev/@blitzjs/server/next-patched": "",
+          "dev/.blitz-build/_manifest.json": JSON.stringify({keys: {}, values: {}}),
         },
         {createCwd: false, createTmp: false},
       )

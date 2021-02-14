@@ -3,7 +3,7 @@ import Layout from "app/core/layouts/Layout"
 import {SignupForm} from "app/auth/components/SignupForm"
 
 const SignupPage: BlitzPage = () => {
-  const router = useRouter()
+  const router = null //useRouter()
 
   return (
     <div>

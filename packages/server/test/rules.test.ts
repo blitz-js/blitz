@@ -34,6 +34,7 @@ describe("Dev command", () => {
     mocks.mockFs({
       "app/posts/pages/foo.tsx": "",
       "pages/bar.tsx": "",
+      ".blitz-build/_manifest.json": JSON.stringify({keys: {}, values: {}}),
     })
     jest.clearAllMocks()
     await dev({
