@@ -18,6 +18,7 @@ export async function routes(config: ServerConfig) {
     isTypeScript,
     writeManifestFile,
     clean,
+    env,
   } = await normalize({...config, env: "dev"})
 
   // if blitz version is mismatched, we need to bust the cache by cleaning the buildFolder
@@ -27,7 +28,7 @@ export async function routes(config: ServerConfig) {
     sitemap: typeof defaultSitemapFunction
   }
 
-  const stages = configureRouteStages({writeManifestFile, isTypeScript})
+  const stages = configureRouteStages({writeManifestFile, isTypeScript, buildFolder, env})
 
   const {routeCache} = (await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
