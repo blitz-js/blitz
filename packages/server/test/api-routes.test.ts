@@ -42,6 +42,7 @@ describe("Dev command", () => {
           },
         },
       },
+      ".blitz-build/_manifest.json": JSON.stringify({keys: {}, values: {}}),
     })
     jest.clearAllMocks()
     await dev({

@@ -1,6 +1,10 @@
 import {PipelineItem, Stage, transform} from "@blitzjs/file-pipeline"
+import {readFile} from "fs"
+import {pathExists} from "fs-extra"
 import debounce from "lodash/debounce"
+import path from "path"
 import File from "vinyl"
+import {ServerEnvironment} from "../../config"
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -68,13 +72,21 @@ export class Manifest {
  * Returns a stage to create and write the file error manifest so we can
  * link to the correct files on a NextJS browser error.
  */
-export const createStageManifest = (
+export const createStageManifest = async (
   writeManifestFile: boolean = true,
+  buildFolder: string,
+  env: ServerEnvironment,
   manifestPath: string = "_manifest.json",
 ) => {
-  const stage: Stage = () => {
-    const manifest = Manifest.create()
+  let manifest: Manifest
 
+  if (env !== "prod" && pathExists(path.join(buildFolder, manifestPath))) {
+    manifest = await ManifestLoader.load(path.join(buildFolder, manifestPath))
+  } else {
+    manifest = Manifest.create()
+  }
+
+  const stage: Stage = () => {
     const debouncePushItem = debounce((push: (item: PipelineItem) => void, file: PipelineItem) => {
       push(file)
     }, 500)
@@ -110,4 +122,18 @@ export const createStageManifest = (
     return {stream, ready: {manifest}}
   }
   return stage
+}
+
+export const ManifestLoader = {
+  load(filename: string) {
+    return new Promise<Manifest>((resolve, reject) => {
+      readFile(filename, "utf8", (err, data) => {
+        if (err) {
+          return reject(err)
+        }
+        console.log("LOADED manifest", data)
+        resolve(Manifest.create(JSON.parse(data)))
+      })
+    })
+  },
 }

@@ -56,6 +56,9 @@ const withX = (str: string) => {
 const withProgress = (str: string) => {
   return withCaret(str)
 }
+const withError = (str: string) => {
+  return withX(c.red.bold(str))
+}
 
 /**
  * Logs a branded purple message to stdout.
@@ -218,6 +221,7 @@ export const log = {
   withCheck,
   withX,
   withProgress,
+  withError,
   branded,
   clearLine,
   clearConsole,
