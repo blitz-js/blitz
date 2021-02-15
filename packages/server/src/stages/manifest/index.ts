@@ -80,7 +80,7 @@ export const createStageManifest = async (
 ) => {
   let manifest: Manifest
 
-  if (env !== "prod" && pathExists(path.join(buildFolder, manifestPath))) {
+  if (env !== "prod" && (await pathExists(path.join(buildFolder, manifestPath)))) {
     manifest = await ManifestLoader.load(path.join(buildFolder, manifestPath))
   } else {
     manifest = Manifest.create()
