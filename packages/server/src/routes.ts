@@ -1,6 +1,6 @@
 import {getConfig} from "@blitzjs/config"
 import type {RouteCache, RouteCacheEntry} from "@blitzjs/file-pipeline"
-import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
+import {saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
 import {configureRouteStages} from "./stages"
 
@@ -17,12 +17,8 @@ export async function routes(config: ServerConfig) {
     include,
     isTypeScript,
     writeManifestFile,
-    clean,
     env,
   } = await normalize({...config, env: "dev"})
-
-  // if blitz version is mismatched, we need to bust the cache by cleaning the buildFolder
-  const versionMatched = await isVersionMatched(buildFolder)
 
   const {sitemap = defaultSitemapFunction} = getConfig() as ReturnType<typeof getConfig> & {
     sitemap: typeof defaultSitemapFunction
@@ -34,10 +30,12 @@ export async function routes(config: ServerConfig) {
     ignore,
     include,
     watch: false,
-    clean: !versionMatched || clean,
+    // MUST clean=true so that all files get added to route cache.
+    // Probably can optimize to read from cached manifest if present
+    clean: true,
   })) as {routeCache: RouteCache}
 
-  if (!versionMatched) await saveBlitzVersion(buildFolder)
+  await saveBlitzVersion(buildFolder)
 
   sitemap(routeCache).forEach((sitemap_) => {
     routeCache.set(sitemap_.uri, sitemap_)
