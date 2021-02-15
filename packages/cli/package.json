@@ -70,7 +70,7 @@
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "nock": "13.0.6",
-    "prisma": "2.16.0",
+    "prisma": "2.17.0-integration-postinstall-test.16",
     "stdout-stderr": "0.1.13"
   },
   "jest": {
