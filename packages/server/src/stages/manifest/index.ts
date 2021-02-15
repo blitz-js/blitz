@@ -131,7 +131,6 @@ export const ManifestLoader = {
         if (err) {
           return reject(err)
         }
-        console.log("LOADED manifest", data)
         resolve(Manifest.create(JSON.parse(data)))
       })
     })
