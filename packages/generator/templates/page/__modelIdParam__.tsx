@@ -10,8 +10,8 @@ export const __ModelName__ = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
-  const [delete__ModelName__Mutation, {isSuccess}] = useMutation(delete__ModelName__)
-  const [__modelName__] = useQuery(get__ModelName__, {id: __modelId__}, {enabled: !isSuccess})
+  const [delete__ModelName__Mutation] = useMutation(delete__ModelName__)
+  const [__modelName__] = useQuery(get__ModelName__, {id: __modelId__} )
 
   return (
     <>
