@@ -2021,6 +2021,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jxe",
+      "name": "Joe Edelman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13018?v=4",
+      "profile": "http://nxhx.org",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
