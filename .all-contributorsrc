@@ -2003,6 +2003,24 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "arenddeboer",
+      "name": "Arend de Boer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7022204?v=4",
+      "profile": "https://github.com/arenddeboer",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fmilani",
+      "name": "Felipe Milani",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1580375?v=4",
+      "profile": "https://github.com/fmilani",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

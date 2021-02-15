@@ -27,7 +27,6 @@ import {directoryTree} from "./utils/tree-utils"
 describe("Build command", () => {
   const rootFolder = resolve("build")
   const buildFolder = resolve(rootFolder, ".blitz-build")
-  const devFolder = resolve(rootFolder, ".blitz")
 
   beforeEach(async () => {
     mocks.mockFs({
@@ -40,7 +39,6 @@ describe("Build command", () => {
     await build({
       rootFolder,
       buildFolder,
-      devFolder,
       writeManifestFile: false,
       port: 3000,
       hostname: "localhost",
@@ -57,6 +55,7 @@ describe("Build command", () => {
       children: [
         {
           children: [
+            {name: "_blitz-version.txt"},
             {name: "blitz.config.js"},
             {name: "next.config.js"},
             {name: "one"},

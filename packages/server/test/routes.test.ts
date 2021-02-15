@@ -1,11 +1,17 @@
 /* eslint-disable import/first */
 
 import {join, normalize, resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
+    },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
     },
   },
   resolve(__dirname, "../src"),
@@ -19,8 +25,6 @@ const originalLog = console.log
 describe("Routes command", () => {
   let rootFolder: string
   let buildFolder: string
-  let devFolder: string
-  let routeFolder: string
   let consoleOutput: string[] = []
   const mockedLog = (output: string) => consoleOutput.push(output)
 
@@ -36,9 +40,7 @@ describe("Routes command", () => {
   describe("when run normally", () => {
     beforeEach(() => {
       rootFolder = resolve("dev")
-      buildFolder = resolve(rootFolder, ".blitz")
-      devFolder = resolve(rootFolder, ".blitz-dev")
-      routeFolder = resolve(rootFolder, ".blitz-routes")
+      buildFolder = resolve(rootFolder, ".blitz-build")
     })
     afterEach(() => {
       mocks.mockFs.restore()
@@ -49,7 +51,7 @@ describe("Routes command", () => {
       await getRoutes({
         transformFiles,
         rootFolder: "",
-        routeFolder: "",
+        buildFolder: "",
         writeManifestFile: false,
         watch: false,
         port: 3000,
@@ -70,8 +72,6 @@ describe("Routes command", () => {
       const routes = await getRoutes({
         rootFolder,
         buildFolder,
-        devFolder,
-        routeFolder,
         writeManifestFile: false,
         watch: false,
         port: 3000,

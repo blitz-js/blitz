@@ -29,7 +29,6 @@ import {directoryTree} from "./utils/tree-utils"
 describe("Dev command", () => {
   const rootFolder = resolve("")
   const buildFolder = resolve(rootFolder, ".blitz-build")
-  const devFolder = resolve(rootFolder, ".blitz-stages")
 
   beforeEach(async () => {
     mocks.mockFs({
@@ -43,12 +42,12 @@ describe("Dev command", () => {
           },
         },
       },
+      ".blitz-build/_manifest.json": JSON.stringify({keys: {}, values: {}}),
     })
     jest.clearAllMocks()
     await dev({
       rootFolder,
       buildFolder,
-      devFolder,
       writeManifestFile: false,
       watch: false,
       port: 3000,
@@ -62,8 +61,8 @@ describe("Dev command", () => {
   })
 
   it("should copy the correct files to the dev folder", () => {
-    expect(directoryTree(devFolder)).toEqual({
-      name: ".blitz-stages",
+    expect(directoryTree(buildFolder)).toEqual({
+      name: ".blitz-build",
       children: [
         {name: "_blitz-version.txt"},
         {name: "blitz.config.js"},

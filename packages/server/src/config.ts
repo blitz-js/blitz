@@ -5,13 +5,11 @@ import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitig
 import {resolveBinAsync} from "./resolve-bin-async"
 
 type Synchronizer = typeof transformFiles
-type ServerEnvironment = "dev" | "prod"
+export type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
-  devFolder?: string
-  routeFolder?: string
   clean?: boolean
   // -
   isTypeScript?: boolean
@@ -29,8 +27,6 @@ export type ServerConfig = {
 
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
-  devFolder: string
-  routeFolder: string
   clean?: boolean
   // -
   isTypeScript: boolean
@@ -46,12 +42,13 @@ type NormalizedConfig = ServerConfig & {
   env: ServerEnvironment
 }
 
+export const standardBuildFolderPath = ".blitz/build"
+export const standardBuildFolderPathRegex = /\.blitz[\\/]build[\\/]/g
+
 const defaults = {
   env: "prod" as ServerEnvironment,
   // -
-  buildFolder: ".blitz/caches/build",
-  devFolder: ".blitz/caches/dev",
-  routeFolder: ".blitz/caches/routes",
+  buildFolder: standardBuildFolderPath,
   // -
   writeManifestFile: true,
   // -
@@ -99,8 +96,6 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     // -
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
-    devFolder: resolve(rootFolder, config.devFolder ?? defaults.devFolder),
-    routeFolder: resolve(rootFolder, config.routeFolder ?? defaults.routeFolder),
     // -
     isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",

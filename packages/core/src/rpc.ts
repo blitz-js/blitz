@@ -91,7 +91,7 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
-          queryCache.clear()
+          await queryCache.invalidateQueries("")
         }
         if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()

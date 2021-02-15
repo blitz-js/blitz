@@ -9,33 +9,34 @@ export async function dev(config: ServerConfig) {
     rootFolder,
     transformFiles,
     nextBin,
-    devFolder,
+    buildFolder,
     ignore,
     include,
     isTypeScript,
     writeManifestFile,
     watch,
     clean,
+    env,
   } = await normalize({...config, env: "dev"})
 
-  // if blitz version is mismatched, we need to bust the cache by cleaning the devFolder
-  const versionMatched = await isVersionMatched(devFolder)
+  // if blitz version is mismatched, we need to bust the cache by cleaning the buildFolder
+  const versionMatched = await isVersionMatched(buildFolder)
 
-  const stages = configureStages({writeManifestFile, isTypeScript})
+  const stages = await configureStages({writeManifestFile, isTypeScript, buildFolder, env})
 
-  const {manifest} = await transformFiles(rootFolder, stages, devFolder, {
+  const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
     include,
     watch,
     clean: !versionMatched || clean,
   })
 
-  if (!versionMatched) await saveBlitzVersion(devFolder)
+  if (!versionMatched) await saveBlitzVersion(buildFolder)
 
-  if (customServerExists(devFolder)) {
+  if (customServerExists(buildFolder)) {
     log.success("Using your custom server")
-    await startCustomServer(devFolder, config)
+    await startCustomServer(buildFolder, config)
   } else {
-    await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+    await nextStartDev(nextBin, buildFolder, manifest, buildFolder, config)
   }
 }
