@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.30.0-canary.13",
+  "version": "0.30.0-canary.14",
   "license": "MIT",
   "scripts": {
     "b": "./bin/run",
@@ -32,8 +32,8 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.30.0-canary.13",
-    "@blitzjs/repl": "0.30.0-canary.13",
+    "@blitzjs/display": "0.30.0-canary.14",
+    "@blitzjs/repl": "0.30.0-canary.14",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
@@ -64,9 +64,9 @@
     "v8-compile-cache": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.30.0-canary.13",
-    "@blitzjs/installer": "0.30.0-canary.13",
-    "@blitzjs/server": "0.30.0-canary.13",
+    "@blitzjs/generator": "0.30.0-canary.14",
+    "@blitzjs/installer": "0.30.0-canary.14",
+    "@blitzjs/server": "0.30.0-canary.14",
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "nock": "13.0.6",

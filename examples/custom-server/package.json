@@ -1,6 +1,6 @@
 {
   "name": "@examples/custom-server",
-  "version": "0.30.0-canary.13",
+  "version": "0.30.0-canary.14",
   "scripts": {
     "dev": "nodemon --watch server.js --exec 'blitz dev'",
     "build": "blitz build",
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.16.0",
-    "blitz": "0.30.0-canary.13",
+    "blitz": "0.30.0-canary.14",
     "final-form": "4.20.1",
     "prisma": "2.16.0",
     "react": "0.0.0-experimental-3310209d0",
