@@ -34,8 +34,8 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.12.10",
-    "@babel/plugin-transform-typescript": "7.12.1",
+    "@babel/core": "7.12.13",
+    "@babel/plugin-transform-typescript": "7.12.13",
     "@blitzjs/display": "0.30.0-canary.13",
     "@types/jscodeshift": "0.7.2",
     "chalk": "^4.1.0",

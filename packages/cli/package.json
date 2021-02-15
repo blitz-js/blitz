@@ -37,7 +37,7 @@
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
-    "@oclif/plugin-help": "3.2.1",
+    "@oclif/plugin-help": "3.2.2",
     "@oclif/plugin-not-found": "1.2.4",
     "@prisma/sdk": "2.16.0",
     "@salesforce/lazy-require": "0.4.0",
