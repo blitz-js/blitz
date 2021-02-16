@@ -39,7 +39,7 @@
     "@oclif/plugin-autocomplete": "0.3.0",
     "@oclif/plugin-help": "3.2.1",
     "@oclif/plugin-not-found": "1.2.4",
-    "@prisma/sdk": "2.16.0",
+    "@prisma/sdk": "2.17.0",
     "@salesforce/lazy-require": "0.4.0",
     "camelcase": "^6.2.0",
     "chalk": "4.1.0",
@@ -70,7 +70,7 @@
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "nock": "13.0.6",
-    "prisma": "2.16.0",
+    "prisma": "2.17.0",
     "stdout-stderr": "0.1.13"
   },
   "jest": {
