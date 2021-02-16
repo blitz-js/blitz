@@ -51,7 +51,7 @@
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.20",
     "nanoid": "^3.1.20",
-    "next": "10.0.6",
+    "next": "10.0.7",
     "null-loader": "4.0.1",
     "ora": "^5.3.0",
     "parallel-transform": "1.2.0",
