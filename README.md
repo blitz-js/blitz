@@ -22,7 +22,6 @@
 <h1 align="center">The Fullstack React Framework</h1>
 
 <h5 align="center">"Zero-API" Data Layer — Built on Next.js — Inspired by Ruby on Rails</h3>
-<h3 align="center">Makes you far more productive than you ever dreamed was possible 😉</h3>
 <h3 align="center"><a href="https://blitzjs.com" target="_blank">Read the Documentation</a></h3>
 <br>
 
