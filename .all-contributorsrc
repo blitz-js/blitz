@@ -2030,6 +2030,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "garytube",
+      "name": "Gary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3823504?v=4",
+      "profile": "https://github.com/garytube",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
