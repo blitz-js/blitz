@@ -2048,6 +2048,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "DecadentIpsum",
+      "name": "Andreas Zaralis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32861532?v=4",
+      "profile": "https://decadentIpsum.me",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
