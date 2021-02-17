@@ -128,35 +128,35 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 ### 🌱 Seedling Sponsors
 
 <a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
- <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/reactbricks_icon.svg" width="30px"/>
+ <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/reactbricks_icon.svg" width="40px"/>
  </a>
  <a aria-label="Andreas Asprou" href="https://andreas.fyi">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="30px"/>
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
 </a>
 
 
 ### 🥉 Bronze Sponsors
 
 <a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color2.png" width="110px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color2.png" width="200px">
 </a>
 
 ### 🥈 Silver Sponsors
 
 <a aria-label="Fauna" href="https://dashboard.fauna.com/accounts/register?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="200px">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="300px">
 </a>
 
 ### 🏆 Gold Sponsors
 
 <a aria-label="Your Company" href="#">
-<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="300px">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="400px">
 </a>
 
 ### 💎 Diamond Sponsors
 
 <a aria-label="Your Company" href="#">
-<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="400px">
+<img alt="" src="https://dummyimage.com/1000x330/efe8ff/000000.png&text=Your+Logo+Here" width="500px">
 </a>
 
 <br>
