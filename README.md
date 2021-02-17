@@ -28,9 +28,10 @@
 
 “Zero-API” data layer **lets you import server code directly into your React components** instead of having to manually add API endpoints and do client-side fetching and caching.
 
-Includes everything you need for production apps. **Everything end-to-end from the database to the frontend.**
+New Blitz apps come with **all the boring stuff already set up for you!** Like ESLint, Prettier, Jest, user sign up, log in, and password reset.
 
-Blitz brings back the **simplicity and conventions** of server-rendered frameworks like Ruby on Rails while preserving everything we love about React and client-side rendering!
+Provides **helpful defaults and conventions** for things like routing, file structure, and authentication while also being extremely flexible.
+
 
 <br>
 
@@ -49,7 +50,7 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 1. `blitz new myAppName`
 2. `cd myAppName`
 3. `blitz dev`
-4. View your baby app at http://localhost:3000
+4. View your brand new app at http://localhost:3000
 
 <br><br>
 
@@ -57,32 +58,10 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 <img alt="Bytes Newsletter" src="https://files-8wtskjofb.vercel.app/smarter-16x1.jpg">
 </a>
 
-<br><br>
-
-![Architecture diagram](https://blitzjs.now.sh/img/architecture-diagram.png)
 
 <br><br>
 
-**Features:**<br>
-⚡️ Built on Next.js<br>
-⚡️ Don't have to build an API for client-side rendering<br>
-⚡️ Client-side rendering, Server-side rendering, and fully static pages all in the same app<br>
-⚡️ Full TypeScript support with static, end-to-end typing (no code generation step needed like with GraphQL)<br>
-⚡️ React Concurrent Mode enabled<br>
-⚡️ Database/ORM agnostic, but Prisma 2 is default<br>
-⚡️ CLI with code scaffolding, Rails-style console REPL, etc<br>
-⚡️ GraphQL Ready<br>
-⚡️ Deploy serverless or serverful<br>
-⚡️ Highly secure authentication <br>
-⚡️ Authorization you can use on both server and client<br>
-⚡️ Recipes for easily adding libraries like Tailwind, CSS-in-JS, etc.<br>
 
-**Other key features coming:**<br>
-⚡️ Model validation you can use on both server and client<br>
-⚡️ React native support<br>
-⚡️ GUI so you don't have to use the CLI<br>
-
-<br>
 
 ### The Foundational Principles
 
