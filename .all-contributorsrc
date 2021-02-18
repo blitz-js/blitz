@@ -2066,6 +2066,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "gusgard",
+      "name": "Gustavo Gard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2577356?v=4",
+      "profile": "https://github.com/gusgard",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
