@@ -1,3 +1,4 @@
+import {join} from "path"
 import {Transform} from "stream"
 import {createDisplay} from "../display"
 import {ERROR_THROWN, READY} from "../events"
@@ -43,6 +44,7 @@ export async function transformFiles(
   } = options
 
   if (requestClean) await rimraf(dest, {glob: false})
+  if (process.platform === "win32") await rimraf(join(dest, ".next"), {glob: false})
 
   const display = createDisplay()
   return await new Promise((resolve, reject) => {
