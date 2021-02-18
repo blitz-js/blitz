@@ -17,13 +17,12 @@ inputs:
       value: "1."
   - type: textarea
     attributes:
-      label: What
+      label: "Run `blitz -v` and paste the output here:"
       required: true
-      description: Run `blitz -v` and paste the output here
       value: |
         ```
         PASTE_HERE
         ```
   - type: description
     attributes:
-      value: Please include any other applicable logs and screenshots that show your problem.
+      value: "Please include below any other applicable logs and screenshots that show your problem:"
