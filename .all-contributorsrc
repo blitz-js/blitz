@@ -2030,6 +2030,69 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "garytube",
+      "name": "Gary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3823504?v=4",
+      "profile": "https://github.com/garytube",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "oliverloops",
+      "name": "Oliver Lopez ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33361399?v=4",
+      "profile": "http://oliverloops.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "DecadentIpsum",
+      "name": "Andreas Zaralis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32861532?v=4",
+      "profile": "https://decadentIpsum.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "davetorbeck",
+      "name": "David Torbeck",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5829885?v=4",
+      "profile": "https://github.com/davetorbeck",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "gusgard",
+      "name": "Gustavo Gard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2577356?v=4",
+      "profile": "https://github.com/gusgard",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Immortalin",
+      "name": "Immortalin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7126128?v=4",
+      "profile": "https://narrationbox.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "cristianbgp",
+      "name": "Cristian Granda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8507974?v=4",
+      "profile": "https://cristianbgp.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

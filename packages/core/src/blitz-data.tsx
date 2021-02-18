@@ -11,7 +11,7 @@ export type BlitzRuntimeData = {
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
   return {
-    sessionCookiePrefix: config._meta.packageName.replace(/[^a-zA-Z0-9-_]/g, "_"),
+    sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
     suspenseEnabled: config.experimental?.reactMode !== "legacy",
   }
 }

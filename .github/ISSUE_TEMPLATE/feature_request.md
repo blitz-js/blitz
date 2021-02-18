@@ -2,7 +2,7 @@
 name: Feature/change request
 about: Something new or better!
 title: ""
-labels: ""
+labels: "status/triage"
 assignees: ""
 ---
 

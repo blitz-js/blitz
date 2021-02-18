@@ -66,6 +66,26 @@ Here is the starting structure of your app.
 ```
 __name__
 ├── app/
+│   ├── api/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   ├── LoginForm.tsx
+│   │   │   └── SignupForm.tsx
+│   │   ├── mutations/
+│   │   │   ├── changePassword.ts
+│   │   │   ├── forgotPassword.test.ts
+│   │   │   ├── forgotPassword.ts
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   ├── resetPassword.test.ts
+│   │   │   ├── resetPassword.ts
+│   │   │   └── signup.ts
+│   │   ├── pages/
+│   │   │   ├── forgot-password.tsx
+│   │   │   ├── login.tsx
+│   │   │   ├── reset-password.tsx
+│   │   │   └── signup.tsx
+│   │   └── validations.ts
 │   ├── core/
 │   │   ├── components/
 │   │   │   ├── Form.tsx
@@ -80,20 +100,6 @@ __name__
 │   │   ├── _document.tsx
 │   │   ├── index.test.tsx
 │   │   └── index.tsx
-│   ├── api/
-│   ├── auth/
-│   │   ├── components/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SignupForm.tsx
-│   │   ├── mutations/
-│   │   │   ├── changePassword.ts
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   └── signup.ts
-│   │   ├── pages/
-│   │   │   ├── login.tsx
-│   │   │   └── signup.tsx
-│   │   └── validations.ts
 │   └── users/
 │       └── queries/
 │           └── getCurrentUser.ts
@@ -102,6 +108,8 @@ __name__
 │   ├── schema.prisma
 │   └── seeds.ts
 ├── integrations/
+├── mailers/
+│   └── forgotPasswordMailer.ts
 ├── public/
 │   ├── favicon.ico*
 │   └── logo.png
@@ -114,6 +122,7 @@ __name__
 ├── jest.config.js
 ├── package.json
 ├── tsconfig.json
+├── types.d.ts
 ├── types.ts
 └── yarn.lock
 ```

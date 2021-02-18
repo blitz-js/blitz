@@ -1,0 +1,28 @@
+name: Bug Report
+about: Something is not working right. Or error messages are unclear.
+labels: "kind/bug, status/triage"
+issue_body: true
+inputs:
+  - type: description
+    attributes:
+      value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
+  - type: textarea
+    attributes:
+      label: What is the problem?
+      required: true
+  - type: textarea
+    attributes:
+      label: What are detailed steps to reproduce this?
+      required: true
+      value: "1."
+  - type: textarea
+    attributes:
+      label: "Run `blitz -v` and paste the output here:"
+      required: true
+      value: |
+        ```
+        PASTE_HERE
+        ```
+  - type: description
+    attributes:
+      value: "Please include below any other applicable logs and screenshots that show your problem:"
