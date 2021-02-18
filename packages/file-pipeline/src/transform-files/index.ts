@@ -44,6 +44,7 @@ export async function transformFiles(
   } = options
 
   if (requestClean) await rimraf(dest, {glob: false})
+  // Fix windows EPERM issues
   if (process.platform === "win32") await rimraf(join(dest, ".next"), {glob: false})
 
   const display = createDisplay()
