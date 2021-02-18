@@ -1,5 +1,4 @@
 /* eslint-disable import/first */
-
 import {join, normalize, resolve} from "path"
 import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
@@ -16,6 +15,12 @@ const mocks = multiMock(
   },
   resolve(__dirname, "../src"),
 )
+
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
 import {RouteCache} from "@blitzjs/file-pipeline"
@@ -47,10 +52,13 @@ describe("Routes command", () => {
     })
 
     it("should not blow up", async () => {
+      mocks.mockFs({
+        "dev/_blitz-version.txt": "",
+      })
       const transformFiles = () => Promise.resolve({routeCache: RouteCache.create()})
       await getRoutes({
         transformFiles,
-        rootFolder: "",
+        rootFolder,
         buildFolder: "",
         writeManifestFile: false,
         watch: false,
