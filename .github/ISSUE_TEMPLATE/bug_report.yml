@@ -14,7 +14,7 @@ inputs:
     attributes:
       label: What are detailed steps to reproduce this?
       required: true
-      value: 1.
+      value: "1."
   - type: textarea
     attributes:
       label: What
