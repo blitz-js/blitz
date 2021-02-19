@@ -151,13 +151,20 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     ...sessionConfig,
   } as Required<SessionConfig>
 
-  return async (req, res, next) => {
+  const middleware: Middleware<{
+    cookiePrefix?: string
+  }> = async (req, res, next) => {
     if (req.method !== "HEAD" && !res.blitzCtx.session) {
       // This function also saves session to res.blitzCtx
       await getSessionContext(req, res)
     }
     return next()
   }
+  middleware.type = "blitzSessionMiddleware"
+  middleware.config = {
+    cookiePrefix: config.cookiePrefix,
+  }
+  return middleware
 }
 
 type JwtPayload = AnonymousSessionPayload | null

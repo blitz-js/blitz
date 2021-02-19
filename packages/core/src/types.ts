@@ -81,11 +81,11 @@ export interface MiddlewareResponse extends BlitzApiResponse {
 }
 export type MiddlewareNext = (error?: Error) => Promise<void> | void
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void> | void
+export type Middleware<MiddlewareConfig = {}> = {
+  (req: MiddlewareRequest, res: MiddlewareResponse, next: MiddlewareNext): Promise<void> | void
+  type?: string
+  config?: MiddlewareConfig
+}
 
 /**
  * Infer the type of the parameter from function that takes a single argument

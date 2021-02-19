@@ -4,6 +4,7 @@ module.exports = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
+      cookiePrefix: '__name__',
     }),
   ],
   /* Uncomment this to customize the webpack config
