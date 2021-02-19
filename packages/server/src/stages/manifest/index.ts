@@ -5,6 +5,7 @@ import debounce from "lodash/debounce"
 import path from "path"
 import File from "vinyl"
 import {ServerEnvironment} from "../../config"
+const debug = require("debug")("blitz:manifest")
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -32,12 +33,14 @@ export class Manifest {
   }
 
   setEntry(key: string, dest: string) {
+    debug("Setting key: " + key)
     this.keys[key] = dest
     this.values[dest] = key
     this.events.push(`set:${dest}`)
   }
 
   removeKey(key: string) {
+    debug("Removing key: " + key)
     const dest = this.getByKey(key)
     if (!dest) {
       throw new Error(`Key "${key}" returns`)
@@ -98,10 +101,12 @@ export const createStageManifest = async (
       const dest = file.path
 
       if (file.event === "add" || file.event === "change") {
+        debug("event:", file.event)
         manifest.setEntry(origin, dest)
       }
 
       if (file.event === "unlink" || file.event === "unlinkDir") {
+        debug("event:", file.event)
         manifest.removeKey(origin)
       }
 

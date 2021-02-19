@@ -5,6 +5,7 @@ import {relative} from "path"
 import slash from "slash"
 import File from "vinyl"
 import {absolutePathTransform} from "../utils"
+const debug = require("debug")("blitz:stage:rpc")
 
 export const resolverFullBuildPathRegex = /[\\/]app[\\/]_resolvers[\\/]/
 export const resolverBuildFolderReplaceRegex = /_resolvers[\\/]/g
@@ -113,66 +114,85 @@ export const createStageRpc = (isTypeScript = true): Stage =>
         return file
       }
 
+      debug("Event:", file.event)
+
       const originalPath = resolutionPath(src, file.path)
       const resolverImportPath = resolverFilePath(originalPath)
       const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
-      // Original function -> _resolvers path
+      // Isomorphic client - original file path
       push(
         new File({
-          path: getResolverPath(file.path),
-          contents: file.contents,
-          // Appending a new file to the output of this particular stream
-          // We don't want to reprocess this file but simply add it to the output
-          // of the stream here we provide a hash with some information for how
-          // this file came to be here
-          hash: [file.hash, "rpc", "resolver"].join("|"),
-          event: "add",
+          path: file.path,
+          contents: Buffer.from(
+            isomorhicHandlerTemplateServer(
+              resolverImportPath,
+              resolverName,
+              resolverType,
+              warmApiEndpoints,
+            ),
+          ),
+          event: file.event,
         }),
       )
+
+      // Original function -> _resolvers path
+      if (["add", "unlink"].includes(file.event)) {
+        push(
+          new File({
+            path: getResolverPath(file.path),
+            contents: file.contents,
+            // Appending a new file to the output of this particular stream
+            // We don't want to reprocess this file but simply add it to the output
+            // of the stream here we provide a hash with some information for how
+            // this file came to be here
+            hash: [file.hash, "rpc", "resolver"].join("|"),
+            event: file.event === "add" ? "add" : "unlink",
+          }),
+        )
+      }
 
       // File API route handler
-      push(
-        new File({
-          path: getApiHandlerPath(file.path),
-          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypeScript)),
-          // Appending a new file to the output of this particular stream
-          // We don't want to reprocess this file but simply add it to the output
-          // of the stream here we provide a hash with some information for how
-          // this file came to be here
-          hash: [file.hash, "rpc", "handler"].join("|"),
-          event: "add",
-          originalPath: file.path,
-          originalRelative: file.relative,
-        }),
-      )
-
-      // Isomorphic client
-      const isomorphicHandlerFile = file.clone()
-      isomorphicHandlerFile.contents = Buffer.from(
-        isomorhicHandlerTemplateServer(
-          resolverImportPath,
-          resolverName,
-          resolverType,
-          warmApiEndpoints,
-        ),
-      )
-      push(isomorphicHandlerFile)
+      if (["add", "unlink"].includes(file.event)) {
+        push(
+          new File({
+            path: getApiHandlerPath(file.path),
+            contents: Buffer.from(apiHandlerTemplate(originalPath, isTypeScript)),
+            // Appending a new file to the output of this particular stream
+            // We don't want to reprocess this file but simply add it to the output
+            // of the stream here we provide a hash with some information for how
+            // this file came to be here
+            hash: [file.hash, "rpc", "handler"].join("|"),
+            event: file.event === "add" ? "add" : "unlink",
+            originalPath: file.path,
+            originalRelative: file.relative,
+          }),
+        )
+      }
 
       // Isomorphic client with export
-      const isomorphicHandlerFileWithExport = file.clone()
-      isomorphicHandlerFileWithExport.basename = clientResolverBasename(
-        isomorphicHandlerFileWithExport.basename,
-      )
-      isomorphicHandlerFileWithExport.contents = Buffer.from(
-        isomorhicHandlerTemplateClient(
-          resolverImportPath,
-          resolverName,
-          resolverType,
-          warmApiEndpoints,
-        ),
-      )
-      push(isomorphicHandlerFileWithExport)
+      if (["add", "unlink"].includes(file.event)) {
+        // For some reason, setting `clientWithExport.basename` doesn't work like it should
+        // so we have to set the basename with this temp file
+        const temp = new File({path: file.path})
+        temp.basename = clientResolverBasename(temp.basename)
+        const clientWithExport = new File({
+          path: temp.path,
+          contents: Buffer.from(
+            isomorhicHandlerTemplateClient(
+              resolverImportPath,
+              resolverName,
+              resolverType,
+              warmApiEndpoints,
+            ),
+          ),
+          hash: [file.hash, "rpc", "client"].join("|"),
+          event: file.event === "add" ? "add" : "unlink",
+          originalPath: file.path,
+          originalRelative: file.relative,
+        })
+        push(clientWithExport)
+      }
 
       return next()
     })
