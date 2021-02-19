@@ -1,6 +1,7 @@
 /* eslint-disable import/first */
 
 import {resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
 
 const mocks = multiMock(
@@ -12,6 +13,11 @@ const mocks = multiMock(
     },
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockReturnValue(Promise.resolve("")),
+    },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
     },
   },
   resolve(__dirname, "../src"),
