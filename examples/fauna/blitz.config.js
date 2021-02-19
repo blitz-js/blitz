@@ -21,6 +21,7 @@ module.exports = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
+      cookiePrefix: "blitz-fauna-example",
       getSession: async (handle) => {
         const { findSessionByHandle: session } = await graphQLClient.request(
           gql`

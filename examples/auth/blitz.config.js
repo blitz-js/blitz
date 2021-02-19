@@ -7,6 +7,7 @@ module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
+      cookiePrefix: "blitz-auth-example",
       // sessionExpiryMinutes: 4,
     }),
   ],

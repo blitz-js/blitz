@@ -4,6 +4,7 @@ module.exports = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
+      cookiePrefix: "blitz-custom-server-example",
     }),
   ],
   /* Uncomment this to customize the webpack config
