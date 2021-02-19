@@ -177,9 +177,7 @@ const variable = (val: any) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = (str: string) => {
-  process.env.DEBUG && console.log(str)
-}
+const debug = require("debug")("blitz")
 
 declare module globalThis {
   let _blitz_baseLogger: Logger
