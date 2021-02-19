@@ -10,6 +10,7 @@ export type ServerEnvironment = "dev" | "prod"
 export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
+  routesFolder?: string
   clean?: boolean
   // -
   isTypeScript?: boolean
@@ -27,6 +28,7 @@ export type ServerConfig = {
 
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
+  routesFolder: string
   clean?: boolean
   // -
   isTypeScript: boolean
@@ -49,6 +51,7 @@ const defaults = {
   env: "prod" as ServerEnvironment,
   // -
   buildFolder: standardBuildFolderPath,
+  routesFolder: ".blitz/routes",
   // -
   writeManifestFile: true,
   // -
@@ -96,6 +99,7 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     // -
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
+    routesFolder: resolve(rootFolder, config.routesFolder ?? defaults.routesFolder),
     // -
     isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",
