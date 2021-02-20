@@ -48,7 +48,7 @@
     "jscodeshift": "0.11.0",
     "mem-fs": "1.2.0",
     "mem-fs-editor": "8.0.0",
-    "npm-run": "^5.0.1",
+    "npm-which": "^3.0.1",
     "pluralize": "^8.0.0",
     "recast": "0.20.4",
     "username": "^5.1.0",

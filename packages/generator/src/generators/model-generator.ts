@@ -1,5 +1,6 @@
 import {log} from "@blitzjs/display"
-import {spawn} from "npm-run"
+import {spawn} from "cross-spawn"
+import which from "npm-which"
 import path from "path"
 import {Generator, GeneratorOptions} from "../generator"
 import {Field} from "../prisma/field"
@@ -91,7 +92,8 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     const shouldMigrate = await this.prismaMigratePrompt()
     if (shouldMigrate) {
       await new Promise<void>((res, rej) => {
-        const child = spawn("prisma", ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
+        const prismaBin = which(process.cwd()).sync("prisma")
+        const child = spawn(prismaBin, ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
         child.on("exit", (code) => (code === 0 ? res() : rej()))
       })
     }
