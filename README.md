@@ -111,6 +111,9 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
 </a>
+ <a aria-label="Robert Malko" href="https://github.com/malkomalko">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rob_blitz.jpg" width="40px"/>
+</a>
 
 
 ### 🥉 Bronze Sponsors
