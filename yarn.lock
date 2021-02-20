@@ -3428,13 +3428,6 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/npm-which@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/npm-which/-/npm-which-3.0.0.tgz#53d51ca6719c2a92b38649071fdc4135cec53402"
-  integrity sha512-ERdjHazbre3n+anYM1db3LyctkXyLU5sNEjwpgJZ8N1mafkX/V8fvl00veZfYnZ519bnyK4mQru+PlE9RIWy5Q==
-  dependencies:
-    "@types/node" "*"
-
 "@types/oauth@*":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@types/oauth/-/oauth-0.9.1.tgz#e17221e7f7936b0459ae7d006255dff61adca305"
