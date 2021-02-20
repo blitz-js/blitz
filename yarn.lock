@@ -3428,13 +3428,6 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/npm-run@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@types/npm-run/-/npm-run-5.0.0.tgz#e2cf7bb4f5215c65ca14d286ccf0f176e951cb45"
-  integrity sha512-SbRnR2S0/CL9GW5mKng/V9T3uEPFSkGC5a71AcyCnT1ltK/kSv1A0nSO8AYI3FjuE4ep04HPi6eCuXWpnwD5HQ==
-  dependencies:
-    "@types/node" "*"
-
 "@types/oauth@*":
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/@types/oauth/-/oauth-0.9.1.tgz#e17221e7f7936b0459ae7d006255dff61adca305"
@@ -13896,7 +13889,7 @@ npm-packlist@^1.1.6, npm-packlist@^1.4.1, npm-packlist@^1.4.4:
     npm-bundled "^1.0.1"
     npm-normalize-package-bin "^1.0.1"
 
-npm-path@^2.0.2, npm-path@^2.0.4:
+npm-path@^2.0.2:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/npm-path/-/npm-path-2.0.4.tgz#c641347a5ff9d6a09e4d9bce5580c4f505278e64"
   integrity sha512-IFsj0R9C7ZdR5cP+ET342q77uSRdtWOlWpih5eC+lu29tIDbNEgDbzgVJ5UFvYHWhxDZ5TFkJafFioO0pPQjCw==
@@ -13940,16 +13933,6 @@ npm-run-path@^4.0.0, npm-run-path@^4.0.1:
   integrity sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==
   dependencies:
     path-key "^3.0.0"
-
-npm-run@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/npm-run/-/npm-run-5.0.1.tgz#1baea93389b50ae25a32382c8ca322398e50cd16"
-  integrity sha512-s7FyRpHUgaJfzkRgOnevX8rAWWsv1dofY1XS7hliWCF6LSQh+HtDfBvpigPS1krLvXw+Fi17CYMY8mUtblnyWw==
-  dependencies:
-    minimist "^1.2.0"
-    npm-path "^2.0.4"
-    npm-which "^3.0.1"
-    serializerr "^1.0.3"
 
 npm-which@^3.0.1:
   version "3.0.1"
@@ -15547,11 +15530,6 @@ proto-list@~1.2.1:
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
   integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
-protochain@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/protochain/-/protochain-1.0.5.tgz#991c407e99de264aadf8f81504b5e7faf7bfa260"
-  integrity sha1-mRxAfpneJkqt+PgVBLXn+ve/omA=
-
 protocols@^1.1.0, protocols@^1.4.0:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/protocols/-/protocols-1.4.8.tgz#48eea2d8f58d9644a4a32caae5d5db290a075ce8"
@@ -17026,13 +17004,6 @@ serialize-javascript@^4.0.0:
   integrity sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==
   dependencies:
     randombytes "^2.1.0"
-
-serializerr@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/serializerr/-/serializerr-1.0.3.tgz#12d4c5aa1c3ffb8f6d1dc5f395aa9455569c3f91"
-  integrity sha1-EtTFqhw/+49tHcXzlaqUVVacP5E=
-  dependencies:
-    protochain "^1.0.5"
 
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"

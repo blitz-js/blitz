@@ -13,6 +13,6 @@
     "noEmit": false,
     "lib": ["dom", "dom.iterable", "ES2018"]
   },
-  "include": ["src/**/*", "types"],
+  "include": ["src/**/*", "types", "../../types"],
   "exclude": ["node_modules"]
 }

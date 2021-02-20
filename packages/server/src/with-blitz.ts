@@ -40,7 +40,8 @@ export function withBlitz(nextConfig: any) {
             /node_modules[\\/]passport/,
             /node_modules[\\/]cookie-session/,
             /node_modules[\\/]secure-password/,
-            /node_modules[\\/]npm-run/,
+            /node_modules[\\/]npm-which/,
+            /node_modules[\\/]cross-spawn/,
             /node_modules[\\/]node-libs-browser/,
             /node_modules[\\/]crypto-browserify/,
           ]
