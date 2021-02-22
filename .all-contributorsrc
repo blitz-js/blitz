@@ -2103,6 +2103,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "andreadellacorte",
+      "name": "Andrea Della Corte",
+      "avatar_url": "https://avatars.githubusercontent.com/u/295683?v=4",
+      "profile": "http://dellacorte.me",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
