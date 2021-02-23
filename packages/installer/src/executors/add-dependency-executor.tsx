@@ -70,10 +70,10 @@ const DependencyList = ({
  * Exported for unit testing purposes
  */
 export function getPackageManager() {
-  if (fs.existsSync(path.resolve("package-lock.json"))) {
-    return "npm"
+  if (fs.existsSync(path.resolve("yarn.lock"))) {
+    return "yarn"
   }
-  return "yarn"
+  return "npm"
 }
 
 /**
