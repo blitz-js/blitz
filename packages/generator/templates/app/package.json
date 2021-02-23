@@ -48,7 +48,7 @@
     "preview-email": "3.x",
     "prettier-plugin-prisma": "0.x",
     "typescript": "4.x",
-    "typescript-plugin-css-modules": "^3.x",
+    "typescript-plugin-css-modules": "^3.x"
   },
   "private": true
 }
