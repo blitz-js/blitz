@@ -27,7 +27,7 @@ describe("add dependency executor", () => {
   })
 
   it("should choose proper package manager according to lock file", () => {
-    mocked(existsSync).mockReturnValueOnce(true)
+    mocked(existsSync).mockReturnValueOnce(false)
     expect(AddDependencyExecutor.getPackageManager()).toEqual("npm")
     expect(AddDependencyExecutor.getPackageManager()).toEqual("yarn")
   })
@@ -37,12 +37,12 @@ describe("add dependency executor", () => {
     mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
 
     // NPM
-    mocked(existsSync).mockReturnValue(true)
+    mocked(existsSync).mockReturnValue(false)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, true)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, false)
 
     // Yarn
-    mocked(existsSync).mockReturnValue(false)
+    mocked(existsSync).mockReturnValue(true)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, true)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, false)
 
