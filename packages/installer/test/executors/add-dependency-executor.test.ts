@@ -27,9 +27,9 @@ describe("add dependency executor", () => {
   })
 
   it("should choose proper package manager according to lock file", () => {
-    mocked(existsSync).mockReturnValueOnce(false)
-    expect(AddDependencyExecutor.getPackageManager()).toEqual("npm")
+    mocked(existsSync).mockReturnValueOnce(true)
     expect(AddDependencyExecutor.getPackageManager()).toEqual("yarn")
+    expect(AddDependencyExecutor.getPackageManager()).toEqual("npm")
   })
 
   it("should issue proper commands according to the specified packages", async () => {
