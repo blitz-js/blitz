@@ -158,7 +158,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ## Maintainers (Level 2) ✨
 
-_Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
+_Code ownership, pull request approvals and merging, etc_ (see [Maintainers L2](https://blitzjs.com/docs/maintainers#level-2-maintainers))
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -167,6 +167,7 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
     <td align="center"><a href="https://github.com/aem"><img src="https://avatars0.githubusercontent.com/u/1909883?v=4" width="100px;" alt=""/><br /><sub><b>Adam Markon</b></sub></a><br />CLI</td>
     <td align="center"><a href="http://robdrosenberg.com"><img src="https://avatars0.githubusercontent.com/u/20813991?v=4" width="100px;" alt=""/><br /><sub><b>Robert Rosenberg</b></sub></a><br />Website/Docs</td>
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a><br />SuperJSON</td>
+    <td align="center"><a href="https://juanm04.com"><img src="https://avatars0.githubusercontent.com/u/16712703?v=4" width="100px;" alt=""/><br /><sub><b>Juan Martín Seery</b></sub></a><br />Website/Docs</td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
@@ -176,7 +177,7 @@ _Code ownership, pull request approvals and merging, etc_ (see [MAINTAINERS.md](
 
 ## Maintainers (Level 1) ✨
 
-_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [MAINTAINERS.md](./MAINTAINERS.md))
+_Issue triage, pull request triage, community encouragement and moderation, etc_ (see [Maintainers L1](https://blitzjs.com/docs/maintainers#level-1-maintainers))
 
 
 <!-- prettier-ignore-start -->
