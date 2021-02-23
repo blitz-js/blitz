@@ -1,6 +1,6 @@
 {
   "name": "@examples/fauna",
-  "version": "0.30.2",
+  "version": "0.30.3",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.30.2",
+    "blitz": "0.30.3",
     "final-form": "4.20.1",
     "graphql": "15.5.0",
     "graphql-request": "3.4.0",
