@@ -2103,6 +2103,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "andreadellacorte",
+      "name": "Andrea Della Corte",
+      "avatar_url": "https://avatars.githubusercontent.com/u/295683?v=4",
+      "profile": "http://dellacorte.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "aditsachde",
+      "name": "Adit Sachde",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23707194?v=4",
+      "profile": "http://aditsachde.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "hirenchauhan2",
+      "name": "Hiren Chauhan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8999668?v=4",
+      "profile": "https://github.com/hirenchauhan2",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
