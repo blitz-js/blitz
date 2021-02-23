@@ -70,10 +70,10 @@ const DependencyList = ({
  * Exported for unit testing purposes
  */
 export function getPackageManager() {
-  if (fs.existsSync(path.resolve("package-lock.json"))) {
-    return "npm"
+  if (fs.existsSync(path.resolve("yarn.lock"))) {
+    return "yarn"
   }
-  return "yarn"
+  return "npm"
 }
 
 /**
@@ -81,10 +81,12 @@ export function getPackageManager() {
  */
 export async function installPackages(packages: NpmPackage[], isDev = false) {
   const packageManager = getPackageManager()
-  const args: string[] = ["add"]
+  const isNPM = packageManager === "npm"
+  const pkgInstallArg = isNPM ? "install" : "add"
+  const args: string[] = [pkgInstallArg]
 
   if (isDev) {
-    args.push(packageManager === "yarn" ? "-D" : "--save-dev")
+    args.push(isNPM ? "--save-dev" : "-D")
   }
   packages.forEach((pkg) => {
     pkg.version ? args.push(`${pkg.name}@${pkg.version}`) : args.push(pkg.name)
