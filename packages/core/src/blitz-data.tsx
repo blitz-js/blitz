@@ -17,7 +17,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
 }
 
 export function getBlitzRuntimeData() {
-  if (isClient && process.env.JEST_WORKER_ID === "undefined") {
+  if (isClient && !process.env.JEST_WORKER_ID) {
     return window.__BLITZ_DATA__
   } else {
     if (!global.__BLITZ_DATA__) {
@@ -29,9 +29,7 @@ export function getBlitzRuntimeData() {
 
 // Automatically deserialize __BLITZ_DATA__ in a browser environment
 if (isClient) {
-  if (document.getElementById("__BLITZ_DATA__")) {
-    deserializeAndSetBlitzDataOnWindow()
-  }
+  deserializeAndSetBlitzDataOnWindow()
 }
 
 export function deserializeAndSetBlitzDataOnWindow() {
@@ -41,7 +39,10 @@ export function deserializeAndSetBlitzDataOnWindow() {
     )
     window.__BLITZ_DATA__ = data
   } catch (e) {
-    console.error("Error deserializing __BLITZ__DATA__", e)
+    console.error(
+      "Error deserializing __BLITZ__DATA__. Make sure you have a custom _document.js/tsx page that uses <BlitzScript/>",
+      e,
+    )
   }
 }
 
