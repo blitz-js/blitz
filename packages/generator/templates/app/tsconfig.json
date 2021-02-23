@@ -16,7 +16,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "camelCase",
+          "customMatcher": "\\.module\\.scss$"
+        }
+      }
+    ]
   },
   "exclude": ["node_modules", "**/*.e2e.ts", "cypress"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
