@@ -28,7 +28,7 @@ export function getBlitzRuntimeData() {
 }
 
 // Automatically deserialize __BLITZ_DATA__ in a browser environment
-if (isClient) {
+if (isClient && !process.env.JEST_WORKER_ID) {
   deserializeAndSetBlitzDataOnWindow()
 }
 
