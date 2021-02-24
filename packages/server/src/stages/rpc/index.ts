@@ -136,21 +136,18 @@ export const createStageRpc = (isTypeScript = true): Stage =>
         }),
       )
 
-      // Original function -> _resolvers path
-      if (["add", "unlink"].includes(file.event)) {
-        push(
-          new File({
-            path: getResolverPath(file.path),
-            contents: file.contents,
-            // Appending a new file to the output of this particular stream
-            // We don't want to reprocess this file but simply add it to the output
-            // of the stream here we provide a hash with some information for how
-            // this file came to be here
-            hash: [file.hash, "rpc", "resolver"].join("|"),
-            event: file.event === "add" ? "add" : "unlink",
-          }),
-        )
-      }
+      push(
+        new File({
+          path: getResolverPath(file.path),
+          contents: file.contents,
+          // Appending a new file to the output of this particular stream
+          // We don't want to reprocess this file but simply add it to the output
+          // of the stream here we provide a hash with some information for how
+          // this file came to be here
+          hash: [file.hash, "rpc", "resolver"].join("|"),
+          event: file.event,
+        }),
+      )
 
       // File API route handler
       if (["add", "unlink"].includes(file.event)) {
