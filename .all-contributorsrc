@@ -2139,6 +2139,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "lewisblackburn",
+      "name": "Lewis Blackburn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51877955?v=4",
+      "profile": "https://lewisb.cloud/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
