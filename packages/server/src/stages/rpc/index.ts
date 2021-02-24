@@ -145,7 +145,7 @@ export const createStageRpc = (isTypeScript = true): Stage =>
           // of the stream here we provide a hash with some information for how
           // this file came to be here
           hash: [file.hash, "rpc", "resolver"].join("|"),
-          event: file.event, // === "add" ? "add" : "unlink",
+          event: file.event,
         }),
       )
 
