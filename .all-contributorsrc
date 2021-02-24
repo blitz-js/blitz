@@ -2130,6 +2130,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "remjx",
+      "name": "Mark Jackson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35121685?v=4",
+      "profile": "http://remjx.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
