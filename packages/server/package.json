@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.30.3",
+  "version": "0.30.4",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -36,7 +36,7 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/file-pipeline": "0.30.3",
+    "@blitzjs/file-pipeline": "0.30.4",
     "b64-lite": "^1.4.0",
     "cookie": "^0.4.1",
     "cross-spawn": "7.0.3",
@@ -67,7 +67,7 @@
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "@blitzjs/core": "0.30.3",
+    "@blitzjs/core": "0.30.4",
     "next-transpile-modules": "6.1.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
