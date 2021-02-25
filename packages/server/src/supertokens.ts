@@ -844,8 +844,11 @@ export async function syncPubicDataFieldsForUserIfNeeded(
   data: Record<string, unknown>,
 ) {
   const dataToSync: Record<string, unknown> = {}
-  config.publicDataKeysToSyncAcrossSessions.forEach((key) => (dataToSync[key] = data[key]))
-
+  config.publicDataKeysToSyncAcrossSessions.forEach((key) => {
+    if (data[key]) {
+      dataToSync[key] = data[key]
+    }
+  })
   if (Object.keys(dataToSync).length) {
     const sessions = await config.getSessions(userId)
 
