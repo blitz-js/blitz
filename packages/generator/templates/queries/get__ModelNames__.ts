@@ -1,32 +1,26 @@
-import {Ctx} from "blitz"
+import {paginate, resolver} from "blitz"
 import db, {Prisma} from "db"
 
-type Get__ModelNames__Input = Pick<
-  Prisma.FindMany__ModelName__Args,
-  "where" | "orderBy" | "skip" | "take"
->
+interface Get__ModelNames__Input
+  extends Pick<Prisma.__ModelName__FindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
 
-export default async function get__ModelNames__(
-  {where, orderBy, skip = 0, take}: Get__ModelNames__Input,
-  ctx: Ctx,
-) {
-  ctx.session.authorize()
+export default resolver.pipe(
+  resolver.authorize(),
+  async ({where, orderBy, skip = 0, take = 100}: Get__ModelNames__Input) => {
+    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+    const {items: __modelNames__, hasMore, nextPage, count} = await paginate({
+      skip,
+      take,
+      count: () => db.__modelName__.count({where}),
+      query: (paginateArgs) => db.__modelName__.findMany({...paginateArgs, where, orderBy}),
+    })
 
-  const __modelNames__ = await db.__modelName__.findMany({
-    where,
-    orderBy,
-    take,
-    skip,
-  })
-
-  const count = await db.__modelName__.count()
-  const hasMore = typeof take === "number" ? skip + take < count : false
-  const nextPage = hasMore ? {take, skip: skip + take!} : null
-
-  return {
-    __modelNames__,
-    nextPage,
-    hasMore,
-    count,
+    return {
+      __modelNames__,
+      nextPage,
+      hasMore,
+      count,
+    }
   }
-}
+)
+

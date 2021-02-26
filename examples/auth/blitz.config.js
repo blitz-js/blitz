@@ -7,14 +7,14 @@ module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
-      sessionExpiryMinutes: 4,
+      // sessionExpiryMinutes: 4,
     }),
   ],
   log: {
-    level: "trace",
+    // level: "trace",
   },
   experimental: {
-    isomorphicResolverImports: true,
+    isomorphicResolverImports: false,
   },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {

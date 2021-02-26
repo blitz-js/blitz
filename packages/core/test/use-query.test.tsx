@@ -1,5 +1,6 @@
 import React from "react"
 import {queryCache} from "react-query"
+import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {
   act,
@@ -15,18 +16,21 @@ beforeEach(() => {
   queryCache.clear()
 })
 
+window.__BLITZ_DATA__ = getBlitzRuntimeData()
+
 describe("useQuery", () => {
   const setupHook = (
     params: any,
     queryFn: (...args: any) => any,
+    options: Parameters<typeof useQuery>[2] = {} as any,
   ): [{data?: any; setQueryData?: any}, Function] => {
     let res = {}
     function TestHarness() {
-      const [data, {setQueryData}] = useQuery(queryFn, params)
+      const [data, {setQueryData}] = useQuery(queryFn, params, options as any)
       Object.assign(res, {data, setQueryData})
       return (
         <div id="harness">
-          <span>{data ? "Ready" : "Missing Dependency"}</span>
+          <span>{data ? "Ready" : "No data"}</span>
           <span>{data}</span>
         </div>
       )
@@ -70,7 +74,27 @@ describe("useQuery", () => {
       console.error = jest.fn()
       expect(() => setupHook("test", upcase)).toThrowErrorMatchingSnapshot()
     })
+
+    it("suspense disabled if enabled is false", async () => {
+      setupHook("test", enhanceQueryFn(upcase), {enabled: false})
+      await screen.findByText("No data")
+    })
+
+    it("suspense disabled if enabled is null", async () => {
+      setupHook("test", enhanceQueryFn(upcase), {enabled: null})
+      await screen.findByText("No data")
+    })
+
+    it("suspense disabled if enabled is false and suspense set", async () => {
+      setupHook("test", enhanceQueryFn(upcase), {enabled: false, suspense: true})
+      await screen.findByText("No data")
+    })
   })
+
+  // it("works with options other than enabled & suspense without type error", () => {
+  //   const queryFn = ((() => true) as unknown) as () => Promise<boolean>
+  //   useQuery(queryFn, undefined, {refetchInterval: 10000})
+  // })
 })
 
 describe("useInfiniteQuery", () => {
@@ -86,7 +110,7 @@ describe("useInfiniteQuery", () => {
       Object.assign(res, {groupedData})
       return (
         <div id="harness">
-          <span>{groupedData ? "Ready" : "Missing Dependency"}</span>
+          <span>{groupedData ? "Ready" : "No data"}</span>
           <div>
             {groupedData.map((data: any) => (
               <div>{data}</div>

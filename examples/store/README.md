@@ -3,13 +3,13 @@
 1. DB migrate
 
 ```
-yarn blitz db migrate
+yarn blitz prisma migrate dev --preview-feature
 ```
 
 2. Start the dev server
 
 ```
-yarn blitz start
+yarn blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

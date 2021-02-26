@@ -1,4 +1,9 @@
-import sj from "superjson"
+import SuperJson from "superjson"
+
+const errorProps = ["name", "message", "code", "statusCode", "meta"]
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.allowErrorProps(...errorProps)
+}
 
 export class AuthenticationError extends Error {
   name = "AuthenticationError"
@@ -11,7 +16,10 @@ export class AuthenticationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  sj.registerClass(AuthenticationError, "BlitzAuthenticationError")
+  SuperJson.registerClass(AuthenticationError, {
+    identifier: "BlitzAuthenticationError",
+    allowProps: errorProps,
+  })
 }
 
 export class CSRFTokenMismatchError extends Error {
@@ -22,7 +30,10 @@ export class CSRFTokenMismatchError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  sj.registerClass(CSRFTokenMismatchError, "BlitzCSRFTokenMismatchError")
+  SuperJson.registerClass(CSRFTokenMismatchError, {
+    identifier: "BlitzCSRFTokenMismatchError",
+    allowProps: errorProps,
+  })
 }
 
 export class AuthorizationError extends Error {
@@ -36,7 +47,10 @@ export class AuthorizationError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  sj.registerClass(AuthorizationError, "BlitzAuthorizationError")
+  SuperJson.registerClass(AuthorizationError, {
+    identifier: "BlitzAuthorizationError",
+    allowProps: errorProps,
+  })
 }
 
 export class NotFoundError extends Error {
@@ -50,5 +64,19 @@ export class NotFoundError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  sj.registerClass(NotFoundError, "BlitzNotFoundError")
+  SuperJson.registerClass(NotFoundError, {identifier: "BlitzNotFoundError", allowProps: errorProps})
+}
+
+export class PaginationArgumentError extends Error {
+  name = "PaginationArgumentError"
+  statusCode = 422
+  constructor(message = "The pagination arguments are invalid") {
+    super(message)
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
 }

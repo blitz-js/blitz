@@ -1,13 +1,45 @@
-import {existsSync} from "fs"
+import {readJSONSync} from "fs-extra"
 import {join} from "path"
+import path from "path"
 import pkgDir from "pkg-dir"
 
-const configFiles = ["blitz.config.js", "next.config.js"]
+export function getProjectRoot() {
+  return pkgDir.sync() || process.cwd()
+}
+
+const projectRoot = getProjectRoot()
+
+export const resolveAliases = {
+  node: {
+    "__blitz__/config-file": path.join(projectRoot, "blitz.config.js"),
+  },
+  webpack: {
+    // In webpack build, next.config.js is always present which wraps blitz.config.js
+    "__blitz__/config-file": path.join(projectRoot, "next.config.js"),
+  },
+}
+
+require("module-alias").addAliases(resolveAliases.node)
 
 export interface BlitzConfig extends Record<string, unknown> {
   target?: string
   experimental?: {
     isomorphicResolverImports?: boolean
+    reactMode?: string
+  }
+  cli?: {
+    clearConsoleOnBlitzDev?: boolean
+  }
+  _meta: {
+    packageName: string
+  }
+}
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      blitzConfig: BlitzConfig
+    }
   }
 }
 
@@ -21,29 +53,32 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
-  let blitzConfig = {}
-  const projectRoot = pkgDir.sync() || process.cwd()
+  const pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
 
-  for (const configFile of configFiles) {
-    if (existsSync(join(projectRoot, configFile))) {
-      const path = join(projectRoot, configFile)
-      const file = require(path)
-      let contents
-      if (typeof file === "function") {
-        const phase =
-          process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
-        contents = file(phase, {})
-      } else {
-        contents = file
-      }
-      blitzConfig = {
-        ...blitzConfig,
-        ...contents,
-      }
+  let blitzConfig = {
+    _meta: {
+      packageName: pkgJson.name,
+    },
+  }
+
+  let file
+  let loadedConfig = {}
+  try {
+    // eslint-disable-next-line no-eval -- block webpack from following this module path
+    file = eval("require")("__blitz__/config-file")
+    if (typeof file === "function") {
+      const phase =
+        process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+      loadedConfig = file(phase, {})
+    } else {
+      loadedConfig = file
     }
+  } catch {}
+  blitzConfig = {
+    ...loadedConfig,
+    ...blitzConfig,
   }
 
   global.blitzConfig = blitzConfig
-
   return blitzConfig
 }

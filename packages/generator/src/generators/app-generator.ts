@@ -8,6 +8,10 @@ import {Generator, GeneratorOptions} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
+
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   useTs: boolean
@@ -46,7 +50,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
-    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
 
@@ -67,11 +74,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/components/Form.${ext}`),
+      this.destinationPath(`app/core/components/Form.${ext}`),
     )
     this.fs.move(
       this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
     )
 
     this.fs.delete(this.destinationPath("_forms"))
@@ -120,7 +127,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!fallbackUsed && !this.options.skipInstall) {
       spinner.succeed()
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         const logFlag = this.options.yarn ? "--json" : "--loglevel=error"
         const cp = spawn(this.options.yarn ? "yarn" : "npm", ["install", logFlag], {
           stdio: ["inherit", "pipe", "pipe"],
@@ -231,7 +238,17 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       ["git", ["add", "."], {stdio: "ignore"}],
       [
         "git",
-        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+        [
+          "-c",
+          "user.name='Blitz.js CLI'",
+          "-c",
+          "user.email='noop@blitzjs.com'",
+          "commit",
+          "--no-gpg-sign",
+          "--no-verify",
+          "-m",
+          "Brand new Blitz app!",
+        ],
         {stdio: "ignore", timeout: 10000},
       ],
     ]

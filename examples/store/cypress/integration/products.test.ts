@@ -3,6 +3,15 @@ describe("products#index page", () => {
     cy.visit("/products")
     cy.contains("h1", "Products")
   })
+
+  it("Logs the XKCD (Regression #1646)", () => {
+    cy.visit("/products", {
+      onBeforeLoad(win) {
+        cy.stub(win.console, "log").as("consoleLog")
+      },
+    })
+    cy.get("@consoleLog").should("be.calledWithMatch", /Attention! Must read: .*/)
+  })
 })
 
 describe("products#show page", () => {

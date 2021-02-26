@@ -10,21 +10,27 @@ function defaultSitemapFunction(_: RouteCache): RouteCacheEntry[] {
 export async function routes(config: ServerConfig) {
   const {
     rootFolder,
-    routeFolder,
+    routesFolder,
     transformFiles,
     ignore,
     include,
-    isTypescript,
+    isTypeScript,
     writeManifestFile,
+    env,
   } = await normalize({...config, env: "dev"})
 
-  const {sitemap = defaultSitemapFunction} = getConfig() as Record<string, unknown> & {
+  const {sitemap = defaultSitemapFunction} = getConfig() as ReturnType<typeof getConfig> & {
     sitemap: typeof defaultSitemapFunction
   }
 
-  const stages = configureRouteStages({writeManifestFile, isTypescript})
+  const stages = configureRouteStages({
+    writeManifestFile,
+    isTypeScript,
+    buildFolder: routesFolder,
+    env,
+  })
 
-  const {routeCache} = (await transformFiles(rootFolder, stages, routeFolder, {
+  const {routeCache} = (await transformFiles(rootFolder, stages, routesFolder, {
     ignore,
     include,
     watch: false,

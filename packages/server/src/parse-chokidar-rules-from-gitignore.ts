@@ -19,7 +19,7 @@ function globalGitIgnore() {
     stdio: "pipe",
   })
   if (!(configResult.status === 0)) {
-    log.warning("Git config core.excludesFile is unset. Inferring .gitignore file locations.")
+    // Git config core.excludesFile is unset. Inferring .gitignore file locations.
     return null
   }
 

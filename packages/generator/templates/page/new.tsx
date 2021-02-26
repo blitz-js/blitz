@@ -1,11 +1,11 @@
-import Layout from "app/layouts/Layout"
 if (process.env.parentModel) {
   import {Link, useRouter, useMutation, useParam, BlitzPage} from "blitz"
 } else {
   import {Link, useRouter, useMutation, BlitzPage} from "blitz"
 }
+import Layout from "app/core/layouts/Layout"
 import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
-import __ModelName__Form from "app/__modelNamesPath__/components/__ModelName__Form"
+import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
 
 const New__ModelName__Page: BlitzPage = () => {
   const router = useRouter()
@@ -19,22 +19,29 @@ const New__ModelName__Page: BlitzPage = () => {
       <h1>Create New __ModelName__</h1>
 
       <__ModelName__Form
-        initialValues={{}}
-        onSubmit={async () => {
+        submitText="Create __ModelName__"
+        // TODO use a zod schema for form validation
+        //  - Tip: extract mutation's schema into a shared `validations.ts` file and
+        //         then import and use it here
+        // schema={Create__ModelName__}
+        // initialValues={{}}
+        onSubmit={async (values) => {
           try {
             const __modelName__ = await create__ModelName__Mutation(
               process.env.parentModel
-                ? {data: {name: "MyName"}, __parentModelId__}
-                : {data: {name: "MyName"}},
+                ? {...values, __parentModelId__}
+                : values,
             )
-            alert("Success!" + JSON.stringify(__modelName__))
             router.push(
               process.env.parentModel
                 ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
-                : `/__modelNames__/${__modelName__.id}`
+                : `/__modelNames__/${__modelName__.id}`,
             )
           } catch (error) {
-            alert("Error creating __modelName__ " + JSON.stringify(error, null, 2))
+            console.error(error)
+            return {
+              [FORM_ERROR]: error.toString(),
+            }
           }
         }}
       />
@@ -55,6 +62,7 @@ const New__ModelName__Page: BlitzPage = () => {
   )
 }
 
+New__ModelName__Page.authenticate = true
 New__ModelName__Page.getLayout = (page) => (
   <Layout title={"Create New __ModelName__"}>{page}</Layout>
 )

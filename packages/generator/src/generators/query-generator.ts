@@ -1,9 +1,10 @@
 import {join} from "path"
 import {Generator, GeneratorOptions} from "../generator"
-import {camelCaseToKebabCase} from "../utils/kebab-case"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
-  rawInput: string
+  name: string
+  Name: string
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
@@ -13,7 +14,8 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
-      rawInput: this.options.rawInput,
+      name: this.options.name,
+      Name: this.options.Name,
     }
   }
 

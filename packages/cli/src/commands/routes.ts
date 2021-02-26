@@ -24,6 +24,7 @@ export class Routes extends Command {
   async run() {
     const config: ServerConfig = {
       rootFolder: process.cwd(),
+      env: "dev",
     }
     this.parse(Routes)
 

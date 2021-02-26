@@ -1,9 +1,9 @@
-import {NextComponentType, NextPage, NextPageContext} from "next"
-import {AppProps as NextAppProps} from "next/app"
-
+export * from "./nextjs"
 export * from "./types"
 export * from "./errors"
 export * from "./constants"
+export {BlitzScript} from "./blitz-script"
+export {withBlitzAppRoot} from "./blitz-app-root"
 export {useQuery, usePaginatedQuery, useInfiniteQuery} from "./use-query-hooks"
 export {getQueryKey, invalidateQuery, setQueryData} from "./utils/react-query-utils"
 export {useParam, useParams} from "./use-params"
@@ -14,6 +14,10 @@ export {passportAuth} from "./passport-adapter"
 export {getIsomorphicEnhancedResolver} from "./rpc"
 export {useMutation} from "./use-mutation"
 export {invoke, invokeWithMiddleware} from "./invoke"
+export {getBlitzRuntimeData} from "./blitz-data"
+export {resolver, AuthenticatedMiddlewareCtx} from "./resolver"
+export {paginate} from "./server-utils"
+
 export {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
@@ -24,56 +28,19 @@ export {
 export {
   getAntiCSRFToken,
   useSession,
-  SessionConfig, // new
+  useAuthenticatedSession,
+  useAuthorize,
+  useRedirectAuthenticated,
+  SessionConfig,
   SessionContext,
   AuthenticatedSessionContext,
+  ClientSession,
+  AuthenticatedClientSession,
 } from "./supertokens"
 
-// --------------------
-// Exports from Next.js
-// --------------------
-export {
-  GetStaticProps,
-  GetStaticPaths,
-  GetServerSideProps,
-  InferGetStaticPropsType,
-  InferGetServerSidePropsType,
-  NextApiRequest as BlitzApiRequest,
-  NextApiResponse as BlitzApiResponse,
-} from "next"
+export {SecurePassword, hash256, generateToken} from "./auth-utils"
 
-export {default as Head} from "next/head"
-
-export {default as Link, LinkProps} from "next/link"
-
-export {default as Router} from "next/router"
-
-export {default as Image, ImageProps} from "next/image"
-
-export {
-  default as Document,
-  Html,
-  Head as DocumentHead,
-  Main,
-  NextScript as BlitzScript,
-  DocumentContext,
-  DocumentInitialProps,
-} from "next/document"
-
-export {default as dynamic} from "next/dynamic"
-
-export {default as ErrorComponent, ErrorProps} from "next/error"
-
-export {default as getConfig} from "next/config"
-
-export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
-
-export interface AppProps<P = {}> extends NextAppProps<P> {
-  Component: BlitzComponentType<NextPageContext, any, P> & {
-    getLayout?: (component: JSX.Element) => JSX.Element
-  }
-}
-export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (component: JSX.Element) => JSX.Element
-}
 export {isLocalhost} from "./utils/index"
+export {prettyMs} from "./utils/pretty-ms"
+
+export {enhancePrisma} from "./prisma-utils"

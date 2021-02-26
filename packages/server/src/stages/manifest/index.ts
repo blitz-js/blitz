@@ -1,6 +1,11 @@
 import {PipelineItem, Stage, transform} from "@blitzjs/file-pipeline"
+import {readFile} from "fs"
+import {pathExists} from "fs-extra"
 import debounce from "lodash/debounce"
+import path from "path"
 import File from "vinyl"
+import {ServerEnvironment} from "../../config"
+const debug = require("debug")("blitz:manifest")
 
 type ManifestVO = {
   keys: {[k: string]: string}
@@ -28,12 +33,14 @@ export class Manifest {
   }
 
   setEntry(key: string, dest: string) {
+    debug("Setting key: " + key)
     this.keys[key] = dest
     this.values[dest] = key
     this.events.push(`set:${dest}`)
   }
 
   removeKey(key: string) {
+    debug("Removing key: " + key)
     const dest = this.getByKey(key)
     if (!dest) {
       throw new Error(`Key "${key}" returns`)
@@ -68,13 +75,21 @@ export class Manifest {
  * Returns a stage to create and write the file error manifest so we can
  * link to the correct files on a NextJS browser error.
  */
-export const createStageManifest = (
+export const createStageManifest = async (
   writeManifestFile: boolean = true,
+  buildFolder: string,
+  env: ServerEnvironment,
   manifestPath: string = "_manifest.json",
 ) => {
-  const stage: Stage = () => {
-    const manifest = Manifest.create()
+  let manifest: Manifest
 
+  if (env !== "prod" && (await pathExists(path.join(buildFolder, manifestPath)))) {
+    manifest = await ManifestLoader.load(path.join(buildFolder, manifestPath))
+  } else {
+    manifest = Manifest.create()
+  }
+
+  const stage: Stage = () => {
     const debouncePushItem = debounce((push: (item: PipelineItem) => void, file: PipelineItem) => {
       push(file)
     }, 500)
@@ -86,10 +101,12 @@ export const createStageManifest = (
       const dest = file.path
 
       if (file.event === "add" || file.event === "change") {
+        debug("event:", file.event)
         manifest.setEntry(origin, dest)
       }
 
       if (file.event === "unlink" || file.event === "unlinkDir") {
+        debug("event:", file.event)
         manifest.removeKey(origin)
       }
 
@@ -110,4 +127,17 @@ export const createStageManifest = (
     return {stream, ready: {manifest}}
   }
   return stage
+}
+
+export const ManifestLoader = {
+  load(filename: string) {
+    return new Promise<Manifest>((resolve, reject) => {
+      readFile(filename, "utf8", (err, data) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(Manifest.create(JSON.parse(data)))
+      })
+    })
+  },
 }

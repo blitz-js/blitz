@@ -28,14 +28,10 @@ This example use the Fauna GraphQL API since it's more familiar to most people t
 FAUNA_SECRET=YOUR_AUTH_KEY
 ```
 
-```
-yarn blitz db migrate
-```
-
 2. Start the dev server
 
 ```
-yarn blitz start
+yarn blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

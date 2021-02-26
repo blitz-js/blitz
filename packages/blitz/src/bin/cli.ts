@@ -10,7 +10,7 @@ async function main() {
   if (options._[0] !== "autocomplete:script" || Object.keys(options).length > 1) {
     console.log(
       chalk.yellow(
-        `You are using alpha software - if you have any problems, please open an issue here:
+        `You are using beta software - if you have any problems, please open an issue here:
       https://github.com/blitz-js/blitz/issues/new/choose\n`,
       ),
     )
@@ -93,7 +93,7 @@ async function printEnvInfo() {
     {
       System: ["OS", "CPU", "Memory", "Shell"],
       Binaries: ["Node", "Yarn", "npm", "Watchman"],
-      npmPackages: ["blitz", "typescript", "react", "react-dom", "@prisma/cli", "@prisma/client"],
+      npmPackages: ["blitz", "typescript", "react", "react-dom", "prisma", "@prisma/client"],
     },
     {showNotFound: true},
   )

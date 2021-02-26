@@ -1,5 +1,4 @@
 import BadBehavior from "bad-behavior"
-import {queryCache} from "react-query"
 import {COOKIE_PUBLIC_DATA_TOKEN, LOCALSTORAGE_PREFIX} from "./constants"
 import {PublicData} from "./types"
 import {deleteCookie, readCookie} from "./utils/cookie"
@@ -7,7 +6,7 @@ import {parsePublicDataToken} from "./utils/tokens"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
-  readonly emptyPublicData: PublicData = {userId: null, roles: []}
+  readonly emptyPublicData: PublicData = {userId: null}
   readonly observable = BadBehavior<PublicData>()
 
   constructor() {
@@ -34,8 +33,7 @@ class PublicDataStore {
   }
 
   clear() {
-    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN)
-    queryCache.clear()
+    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
     this.updateState(this.emptyPublicData)
   }
 
@@ -50,7 +48,7 @@ class PublicDataStore {
   }
 
   private getToken() {
-    return readCookie(COOKIE_PUBLIC_DATA_TOKEN)
+    return readCookie(COOKIE_PUBLIC_DATA_TOKEN())
   }
 }
 export const publicDataStore = new PublicDataStore()

@@ -36,7 +36,7 @@ export function testStreamItems(
   expected: any[],
   logger: (a: any) => any = defaultLogger,
 ) {
-  return new Promise((done) => {
+  return new Promise<void>((done) => {
     const log: string[] = []
 
     const st = pipeline(

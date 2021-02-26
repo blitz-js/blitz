@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/config",
-  "version": "0.28.0-canary.0",
+  "version": "0.30.5",
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
@@ -10,11 +10,13 @@
     "test": "tsdx test --env=jest-environment-jsdom-sixteen --passWithNoTests",
     "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
   },
+  "browser": "index-browser.js",
   "main": "dist/index.js",
   "module": "dist/config.esm.js",
   "types": "dist/packages/config/src/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index-browser.js"
   ],
   "jest": {
     "setupFilesAfterEnv": [
@@ -31,5 +33,8 @@
     "type": "git",
     "url": "https://github.com/blitz-js/blitz"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
+  "dependencies": {
+    "module-alias": "2.2.2"
+  }
 }

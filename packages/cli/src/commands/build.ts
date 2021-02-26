@@ -1,5 +1,5 @@
 import {Command, flags} from "@oclif/command"
-import {build as ServerBuild} from "@blitzjs/server"
+import {build as ServerBuild, ServerConfig} from "@blitzjs/server"
 
 export class Build extends Command {
   static description = "Creates a production build"
@@ -10,8 +10,9 @@ export class Build extends Command {
   }
 
   async run() {
-    const config = {
+    const config: ServerConfig = {
       rootFolder: process.cwd(),
+      env: "prod",
     }
     this.parse(Build)
 

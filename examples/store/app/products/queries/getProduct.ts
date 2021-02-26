@@ -1,8 +1,8 @@
 import {NotFoundError, Ctx} from "blitz"
-import db, {FindFirstProductArgs} from "db"
+import db, {Prisma} from "db"
 
 type GetProductInput = {
-  where: FindFirstProductArgs["where"]
+  where: Prisma.ProductFindFirstArgs["where"]
   // Only available if a model relationship exists
   // include?: FindFirstProductArgs['include']
 }

@@ -1,4 +1,3 @@
-import {queryCache} from "react-query"
 import {COOKIE_PUBLIC_DATA_TOKEN} from "./constants"
 import {publicDataStore} from "./public-data-store"
 import {deleteCookie, readCookie} from "./utils/cookie"
@@ -11,7 +10,6 @@ jest.mock("./utils/cookie", () => ({
   readCookie: jest.fn(),
   deleteCookie: jest.fn(),
 }))
-jest.mock("react-query")
 
 describe("publicDataStore", () => {
   afterEach(() => {
@@ -19,7 +17,7 @@ describe("publicDataStore", () => {
   })
   it("calls readCookie token on init", () => {
     // note: As public-data-store has side effects, this test might be fickle
-    expect(readCookie).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN)
+    expect(readCookie).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN())
   })
 
   describe("updateState", () => {
@@ -50,11 +48,10 @@ describe("publicDataStore", () => {
   describe("clear", () => {
     it("clears the cookie", () => {
       publicDataStore.clear()
-      expect(deleteCookie).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN)
+      expect(deleteCookie).toHaveBeenCalledWith(COOKIE_PUBLIC_DATA_TOKEN())
     })
     it("clears the cache", () => {
       publicDataStore.clear()
-      expect(queryCache.clear).toHaveBeenCalledTimes(1)
     })
 
     it("publishes empty data", () => {

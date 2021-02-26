@@ -1,5 +1,5 @@
 import {log} from "@blitzjs/display"
-import {capitalize, singlePascal, uncapitalize} from "../utils/plurals"
+import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -35,7 +35,7 @@ const fallbackIfUndef = <T extends any>(defaultValue: T, input?: T) => {
   return input
 }
 
-const defaultValueTest = /\[([\w]+)\]/
+const defaultValueTest = /=([\w]+)$/
 const builtInGenerators = ["autoincrement", "now", "uuid", "cuid"]
 
 class MissingFieldNameError extends Error {}

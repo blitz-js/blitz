@@ -1,7 +1,9 @@
+import {useMemo} from "react"
 import {queryCache, QueryKey} from "react-query"
 import {serialize} from "superjson"
+import {getBlitzRuntimeData} from "../blitz-data"
 import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
-import {isClient, isServer} from "."
+import {isClient} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
@@ -50,7 +52,7 @@ export const validateQueryFn = <TInput, TResult>(
 ) => {
   if (!isEnhancedResolverRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
-      `It looks like you are trying to use Blitz's useQuery to fetch from third-party APIs. To do that, import useQuery directly from "react-query"`,
+      `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`,
     )
   }
 }
@@ -58,13 +60,7 @@ export const validateQueryFn = <TInput, TResult>(
 export const sanitize = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
-  if (isServer) {
-    // Prevents logging garbage during static pre-rendering
-    return emptyQueryFn as EnhancedResolverRpcClient<TInput, TResult>
-  }
-
   validateQueryFn(queryFn)
-
   return queryFn as EnhancedResolverRpcClient<TInput, TResult>
 }
 
@@ -146,7 +142,12 @@ export const retryFunction = (failureCount: number, error: any) => {
   return false
 }
 
-export const defaultQueryConfig = {
-  suspense: true,
-  retry: retryFunction,
+export function useDefaultQueryConfig() {
+  return useMemo(() => {
+    const {suspenseEnabled} = getBlitzRuntimeData()
+    return {
+      suspense: !!suspenseEnabled,
+      retry: retryFunction,
+    }
+  }, [])
 }

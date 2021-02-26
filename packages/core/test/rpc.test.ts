@@ -1,6 +1,6 @@
-import {getIsomorphicEnhancedResolver} from "@blitzjs/core"
 import {serialize} from "superjson"
-import {executeRpcCall} from "../src/rpc"
+import {getBlitzRuntimeData} from "../src/blitz-data"
+import {executeRpcCall, getIsomorphicEnhancedResolver} from "../src/rpc"
 
 declare global {
   namespace NodeJS {
@@ -10,7 +10,8 @@ declare global {
   }
 }
 
-global.fetch = jest.fn(() => Promise.resolve({json: () => ({result: null, error: null})}))
+global.fetch = jest.fn(() => Promise.resolve({ok: true, json: () => ({result: null, error: null})}))
+window.__BLITZ_DATA__ = getBlitzRuntimeData()
 
 describe("RPC", () => {
   describe("HEAD", () => {
@@ -27,7 +28,7 @@ describe("RPC", () => {
       const fetchMock = jest
         .spyOn(global, "fetch")
         .mockImplementationOnce(() =>
-          Promise.resolve({json: () => ({result: "result", error: null})}),
+          Promise.resolve({ok: true, json: () => ({result: "result", error: null})}),
         )
 
       const resolverModule = {
@@ -56,6 +57,7 @@ describe("RPC", () => {
       const serializedError = serialize(error)
       const fetchMock = jest.spyOn(global, "fetch").mockImplementation(() =>
         Promise.resolve({
+          ok: true,
           json: () => ({
             result: null,
             error: serializedError.json,

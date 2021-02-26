@@ -1,22 +1,66 @@
 import {IncomingMessage, ServerResponse} from "http"
+import {AppProps as NextAppProps} from "next/app"
 import {NextRouter} from "next/router"
+import {
+  NextApiRequest,
+  NextApiResponse,
+  NextComponentType,
+  NextPage,
+  NextPageContext,
+} from "next/types"
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
-import {BlitzApiRequest, BlitzApiResponse} from "."
+import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
+
+export {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticPaths,
+  GetStaticPathsContext,
+  GetStaticPathsResult,
+  GetStaticProps,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+  PageConfig,
+  Redirect,
+} from "next"
+export type BlitzApiRequest = NextApiRequest
+export type BlitzApiResponse = NextApiResponse
+export type BlitzPageContext = NextPageContext
+
+export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
+
+export interface AppProps<P = {}> extends NextAppProps<P> {
+  Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
+}
+export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | {redirectTo?: string}
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: string
+}
 
 export interface BlitzRouter extends NextRouter {
   query: ReturnType<typeof useRouterQuery>
   params: ReturnType<typeof useParams>
 }
 
-export interface DefaultPublicData {
-  userId: any
-  roles: string[]
+export interface Session {
+  // isAuthorize can be injected here (see supertokens.ts)
+  // PublicData can be injected here (see supertokens.ts)
 }
 
-export interface PublicData extends DefaultPublicData {}
+export type PublicData = "PublicData" extends keyof Session ? Session["PublicData"] : {userId: any}
+
+export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
+  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
+    ? Parameters<Session["isAuthorized"]>[0]["args"]
+    : unknown[]
+  : unknown[]
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -49,14 +93,19 @@ export type Middleware = (
 export type FirstParam<F extends QueryFn> = Parameters<F>[0]
 
 /**
- * Get the type of the value, that the Promise holds.
+ * If type has a Promise, unwrap it. Otherwise return the original type
  */
-export type PromiseType<T extends PromiseLike<any>> = T extends PromiseLike<infer U> ? U : T
+export type Await<T> = T extends PromiseLike<infer U> ? U : T
+
+/**
+ * Ensure the type is a promise
+ */
+export type EnsurePromise<T> = T extends PromiseLike<unknown> ? T : Promise<T>
 
 /**
  * Get the return type of a function which returns a Promise.
  */
-export type PromiseReturnType<T extends (...args: any) => Promise<any>> = PromiseType<ReturnType<T>>
+export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Await<ReturnType<T>>
 
 export interface CancellablePromise<T> extends Promise<T> {
   cancel?: Function
@@ -155,7 +204,14 @@ type RequestIdleCallbackDeadline = {
 }
 
 declare global {
+  namespace NodeJS {
+    interface Global {
+      __BLITZ_DATA__: BlitzRuntimeData
+      _blitz_prismaClient: any
+    }
+  }
   interface Window {
+    __BLITZ_DATA__: BlitzRuntimeData
     requestIdleCallback: (
       callback: (deadline: RequestIdleCallbackDeadline) => void,
       opts?: RequestIdleCallbackOptions,
@@ -190,3 +246,8 @@ export declare type MutationFunction<TResult, TVariables = unknown> = (
   variables: TVariables,
   ctx?: any,
 ) => Promise<TResult>
+
+export interface ErrorFallbackProps {
+  error: Error & Record<any, any>
+  resetErrorBoundary: (...args: Array<unknown>) => void
+}

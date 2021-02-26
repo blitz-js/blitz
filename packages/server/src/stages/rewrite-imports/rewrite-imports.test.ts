@@ -87,6 +87,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/pages/index.tsx"),
             contents: `
+              import styles from "app/pages/index.module.css"
               export function someFunction() { return "foo"; }
               export default function Index() { return <p>Hello World</p> }
             `,
@@ -105,6 +106,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/pages/index.tsx"),
             contents: `
+              import styles from "pages/index.module.css"
               export function someFunction() { return "foo"; }
               export default function Index() { return <p>Hello World</p> }
             `,
@@ -116,6 +118,30 @@ describe("rewrite-imports", () => {
               export function someOtherFunction() {
                 return someFunction();
               }
+            `,
+          },
+        ],
+      }),
+    )
+  })
+
+  describe("an import from app/admin/pages/admin/index", () => {
+    it(
+      "is rewritten to pages/admin/index",
+      makeTest({
+        input: [
+          {
+            path: normalize("/projects/blitz/blitz/app/admin/pages/admin/index.tsx"),
+            contents: `
+              import styles from "app/admin/pages/admin/index.module.scss"
+            `,
+          },
+        ],
+        expectedOutput: [
+          {
+            path: normalize("/projects/blitz/blitz/app/admin/pages/admin/index.tsx"),
+            contents: `
+              import styles from "pages/admin/index.module.scss"
             `,
           },
         ],

@@ -30,7 +30,7 @@ module.exports = {
     // note you must disable the base rule as it can report incorrect errors
     "no-redeclare": "off",
     "@typescript-eslint/no-redeclare": ["error"],
-    "simple-import-sort/sort": [
+    "simple-import-sort/imports": [
       "warn",
       {
         groups: [
@@ -51,7 +51,12 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
+  ignorePatterns: [
+    "packages/cli/",
+    "packages/generator/templates",
+    ".eslintrc.js",
+    "recipes/*/templates",
+  ],
   overrides: [
     {
       files: ["examples/**", "packages/gui/**", "recipes/**"],

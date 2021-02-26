@@ -4,10 +4,10 @@ import {
   EnhancedResolver,
   handleRequestWithMiddleware,
   Middleware,
+  prettyMs,
 } from "@blitzjs/core"
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
-import prettyMs from "pretty-ms"
 import {deserialize, serialize} from "superjson"
 
 const rpcMiddleware = <TInput, TResult>(
@@ -40,20 +40,17 @@ const rpcMiddleware = <TInput, TResult>(
       try {
         const data = deserialize({json: req.body.params, meta: req.body.meta?.params}) as TInput
 
-        log.info(chalk.dim("Starting with input:"), data)
-        const startTime = new Date().getTime()
-
+        log.info(chalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        const startTime = Date.now()
         const result = await resolver(data, res.blitzCtx)
+        const resolverDuration = Date.now() - startTime
+        log.debug(chalk.dim("Result:"), result ? result : JSON.stringify(result))
 
-        const duration = prettyMs(new Date().getTime() - startTime)
-        log.debug(chalk.dim("Result:"), result)
-        log.info(chalk.dim("Finished", "in", duration))
-        displayLog.newline()
-
-        res.blitzResult = result
-
+        const serializerStartTime = Date.now()
         const serializedResult = serialize(result)
 
+        const nextSerializerStartTime = Date.now()
+        res.blitzResult = result
         res.json({
           result: serializedResult.json,
           error: null,
@@ -61,6 +58,21 @@ const rpcMiddleware = <TInput, TResult>(
             result: serializedResult.meta,
           },
         })
+        log.debug(
+          chalk.dim(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`),
+        )
+        const serializerDuration = Date.now() - serializerStartTime
+        const duration = Date.now() - startTime
+
+        log.info(
+          chalk.dim(
+            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+              serializerDuration,
+            )} total:${prettyMs(duration)}`,
+          ),
+        )
+        displayLog.newline()
+
         return next()
       } catch (error) {
         if (error._clearStack) {
@@ -68,9 +80,6 @@ const rpcMiddleware = <TInput, TResult>(
         }
         log.error(error)
         displayLog.newline()
-
-        // Don't transmit the server stack trace via HTTP
-        delete error.stack
 
         if (!error.statusCode) {
           error.statusCode = 500

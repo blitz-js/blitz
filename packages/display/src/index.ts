@@ -5,7 +5,6 @@ import ora from "ora"
 import readline from "readline"
 import {Logger} from "tslog"
 
-
 type LogConfig = {
   level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
 }
@@ -55,7 +54,10 @@ const withX = (str: string) => {
 }
 
 const withProgress = (str: string) => {
-  return withCaret(c.bold(str))
+  return withCaret(str)
+}
+const withError = (str: string) => {
+  return withX(c.red.bold(str))
 }
 
 /**
@@ -76,6 +78,14 @@ const clearLine = (msg?: string) => {
   readline.clearLine(process.stdout, 0)
   readline.cursorTo(process.stdout, 0)
   msg && process.stdout.write(msg)
+}
+
+const clearConsole = () => {
+  if (process.platform === "win32") {
+    process.stdout.write("\x1B[2J\x1B[0f")
+  } else {
+    process.stdout.write("\x1B[2J\x1B[3J\x1B[H")
+  }
 }
 
 /**
@@ -111,7 +121,7 @@ const meta = (msg: string) => {
  * @param {string} msg
  */
 const progress = (msg: string) => {
-  console.log(withCaret(c.bold(msg)))
+  console.log(withProgress(msg))
 }
 
 const info = (msg: string) => {
@@ -167,9 +177,7 @@ const variable = (val: any) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = (str: string) => {
-  process.env.DEBUG && console.log(str)
-}
+const debug = require("debug")("blitz")
 
 declare module globalThis {
   let _blitz_baseLogger: Logger
@@ -211,8 +219,10 @@ export const log = {
   withCheck,
   withX,
   withProgress,
+  withError,
   branded,
   clearLine,
+  clearConsole,
   error,
   warning,
   meta,

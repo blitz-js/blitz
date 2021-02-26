@@ -1,15 +1,26 @@
 /* eslint-disable import/first */
-
 import {join, normalize, resolve} from "path"
+import * as blitzVersion from "../src/blitz-version"
 import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "resolve-bin-async": {
       resolveBinAsync: jest.fn().mockImplementation((...a) => join(...a)), // just join the paths
     },
+    "blitz-version": {
+      getBlitzVersion: jest.fn().mockReturnValue(blitzVersion.getBlitzVersion()),
+      isVersionMatched: jest.fn().mockImplementation(blitzVersion.isVersionMatched),
+      saveBlitzVersion: jest.fn().mockImplementation(blitzVersion.saveBlitzVersion),
+    },
   },
   resolve(__dirname, "../src"),
 )
+
+jest.mock("@blitzjs/config", () => {
+  return {
+    getConfig: jest.fn().mockReturnValue({}),
+  }
+})
 
 // Import with mocks applied
 import {RouteCache} from "@blitzjs/file-pipeline"
@@ -19,8 +30,6 @@ const originalLog = console.log
 describe("Routes command", () => {
   let rootFolder: string
   let buildFolder: string
-  let devFolder: string
-  let routeFolder: string
   let consoleOutput: string[] = []
   const mockedLog = (output: string) => consoleOutput.push(output)
 
@@ -36,24 +45,26 @@ describe("Routes command", () => {
   describe("when run normally", () => {
     beforeEach(() => {
       rootFolder = resolve("dev")
-      buildFolder = resolve(rootFolder, ".blitz")
-      devFolder = resolve(rootFolder, ".blitz-dev")
-      routeFolder = resolve(rootFolder, ".blitz-routes")
+      buildFolder = resolve(rootFolder, ".blitz-build")
     })
     afterEach(() => {
       mocks.mockFs.restore()
     })
 
     it("should not blow up", async () => {
+      mocks.mockFs({
+        "dev/_blitz-version.txt": "",
+      })
       const transformFiles = () => Promise.resolve({routeCache: RouteCache.create()})
       await getRoutes({
         transformFiles,
-        rootFolder: "",
-        routeFolder: "",
+        rootFolder,
+        buildFolder: "",
         writeManifestFile: false,
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
     })
 
@@ -69,12 +80,11 @@ describe("Routes command", () => {
       const routes = await getRoutes({
         rootFolder,
         buildFolder,
-        devFolder,
-        routeFolder,
         writeManifestFile: false,
         watch: false,
         port: 3000,
         hostname: "localhost",
+        env: "dev",
       })
 
       expect(routes).toEqual([
