@@ -6,8 +6,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
-      isAuthorized: simpleRolesIsAuthorized,
       cookiePrefix: "blitz-auth-example",
+      isAuthorized: simpleRolesIsAuthorized,
       // sessionExpiryMinutes: 4,
     }),
   ],

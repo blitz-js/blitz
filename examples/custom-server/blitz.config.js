@@ -3,8 +3,8 @@ const {sessionMiddleware, simpleRolesIsAuthorized} = require("@blitzjs/server")
 module.exports = {
   middleware: [
     sessionMiddleware({
-      isAuthorized: simpleRolesIsAuthorized,
       cookiePrefix: "blitz-custom-server-example",
+      isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
   /* Uncomment this to customize the webpack config

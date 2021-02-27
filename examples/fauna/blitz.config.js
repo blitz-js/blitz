@@ -20,8 +20,8 @@ const normalizeSession = (faunaSession) => {
 module.exports = {
   middleware: [
     sessionMiddleware({
-      isAuthorized: simpleRolesIsAuthorized,
       cookiePrefix: "blitz-fauna-example",
+      isAuthorized: simpleRolesIsAuthorized,
       getSession: async (handle) => {
         const { findSessionByHandle: session } = await graphQLClient.request(
           gql`
