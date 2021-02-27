@@ -5,6 +5,9 @@
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
+    "dev": "yarn build:templates --watch",
+    "build": "yarn build:templates",
+    "build:templates": "cpx --clean \"templates/**/*\" dist/templates",
     "test": "jest --color --color",
     "test:watch": "jest --watch"
   },
