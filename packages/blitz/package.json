@@ -4,8 +4,7 @@
   "version": "0.30.5",
   "license": "MIT",
   "scripts": {
-    "predev": "wait-on ../core/dist/packages/core/src/index.d.ts",
-    "dev": "yarn clean && rollup -c rollup.config.js --watch",
+    "dev": "rollup -c rollup.config.js --watch",
     "build": "rollup -c rollup.config.js",
     "test": "jest"
   },
