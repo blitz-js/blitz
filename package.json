@@ -24,13 +24,12 @@
     "node": ">=12"
   },
   "scripts": {
-    "postinstall": "npm rebuild husky && patch-package",
-    "predev": "lerna run clean --no-private --stream --parallel",
-    "dev": "lerna run dev --no-private --stream --parallel",
+    "postinstall": "npm rebuild husky && yarn workspace blitz build",
+    "dev": "preconstruct watch",
+    "build": "preconstruct build && yarn workspace @blitzjs/cli build && yarn workspace blitz build && tsc",
+    "lint": "eslint --ignore-path .gitignore --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
-    "build": "lerna run build --no-private --stream",
-    "lint": "eslint --ignore-path .gitignore --ext \".js,.ts,.tsx\" .",
     "test": "yarn run lint && yarn run build && lerna run test --stream",
     "test:packages": "yarn run build && yarn testonly:packages",
     "test:examples": "yarn run build && yarn testonly:examples",
@@ -38,21 +37,17 @@
     "testonly:packages": "lerna run test --scope blitz && lerna run test --stream --scope @blitzjs/*",
     "testonly:examples": "lerna run test --stream --scope @examples/* --concurrency 1",
     "reset": "rimraf node_modules && git clean -xfd packages && yarn",
-    "publish-prep": "lerna run clean && yarn && yarn build",
+    "publish-prep": "yarn && yarn build",
     "prepack": "cpy README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "publish-local": "yarn workspaces run yalc publish",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
-    "danger:push-all": "git push --no-verify && git push --no-verify --tags"
+    "prerelease": "patch-package",
+    "release": "release"
   },
-  "resolutions-NOTE1": "typescript and ts-jest pinned to here overside tsdx included versions",
-  "resolutions": {
-    "typescript": "4.1.3",
-    "ts-jest": "26.5.0"
-  },
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "7.13.1",
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/preset-env": "7.13.5",
@@ -162,7 +157,6 @@
     "stdout-stderr": "0.1.13",
     "test-listen": "1.1.0",
     "ts-jest": "26.5.0",
-    "tsdx": "0.14.1",
     "tslib": "2.1.0",
     "typescript": "4.1.3",
     "wait-on": "5.2.1",

@@ -3,13 +3,8 @@
   "version": "0.30.5",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
-    "dev": "tsdx watch --verbose",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "test:watch": "tsdx test --watch --passWithNoTests",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch"
   },
   "module": "dist/blitzjs-babel-preset.esm.js",
   "main": "dist/blitzjs-babel-preset.cjs.js",
