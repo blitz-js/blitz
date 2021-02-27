@@ -4,7 +4,7 @@
   "version": "0.30.5",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --color",
     "test:watch": "jest --watch"
   },
   "author": {
@@ -18,11 +18,6 @@
   "files": [
     "dist"
   ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
-  },
   "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {
     "@types/htmlescape": "^1.1.1",

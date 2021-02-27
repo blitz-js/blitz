@@ -4,7 +4,7 @@
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
   "main": "dist/blitzjs-config.cjs.js",
@@ -13,11 +13,6 @@
   "files": [
     "dist"
   ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
-  },
   "keywords": [
     "next.config.js",
     "blitz.config.js",

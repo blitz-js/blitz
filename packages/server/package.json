@@ -7,7 +7,7 @@
     "next-patched": "./bin/next-patched"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --color",
     "test:watch": "jest --watch"
   },
   "author": {
@@ -22,11 +22,6 @@
     "dist",
     "register"
   ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
-  },
   "dependencies": {
     "@blitzjs/file-pipeline": "0.30.5",
     "b64-lite": "^1.4.0",

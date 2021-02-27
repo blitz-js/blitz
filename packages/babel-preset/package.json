@@ -3,7 +3,7 @@
   "version": "0.30.5",
   "license": "MIT",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --color",
     "test:watch": "jest --watch"
   },
   "module": "dist/blitzjs-babel-preset.esm.js",

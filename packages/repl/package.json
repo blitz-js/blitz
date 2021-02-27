@@ -5,7 +5,7 @@
   "homepage": "https://github.com/blitz-js/blitz/packages/repl/#readme",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --color",
     "test:watch": "jest --watch"
   },
   "author": {

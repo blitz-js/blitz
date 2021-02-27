@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
-    "test": "jest",
+    "test": "jest --color",
     "test:watch": "jest --watch",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
