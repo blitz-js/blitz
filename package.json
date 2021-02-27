@@ -30,7 +30,7 @@
     "dev:cli": "yarn waitfortypes && yarn workspace @blitzjs/cli dev",
     "dev:templates": "yarn waitfortypes && yarn workspace @blitzjs/generator dev",
     "dev": "concurrently --names \"BUILD,TYPES,CLI,TEMPLATES\" -c \"blue,magenta,yellow,green\" \"npm:dev:preconstruct\" \"npm:dev:tsc\" \"npm:dev:cli\" \"npm:dev:templates\"",
-    "build": "preconstruct build && lerna run test --scope @blitzjs/* build && tsc",
+    "build": "preconstruct build && lerna run build --scope @blitzjs/* && tsc",
     "lint": "eslint --ignore-path .gitignore --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
