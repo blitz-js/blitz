@@ -28,6 +28,7 @@
   "include": [
     "types/**/*",
     "packages/babel-preset/src/**/*",
+    "packages/blitz/src/**/*",
     "packages/config/src/**/*",
     "packages/core/src/**/*",
     "packages/display/src/**/*",

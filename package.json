@@ -15,7 +15,6 @@
   "preconstruct": {
     "packages": [
       "packages/*",
-      "!packages/blitz",
       "!packages/cli",
       "!packages/eslint-config"
     ]
@@ -29,9 +28,8 @@
     "dev:preconstruct": "preconstruct watch",
     "dev:tsc": "yarn waitfortypes && tsc --watch --pretty --preserveWatchOutput",
     "dev:cli": "yarn waitfortypes && yarn workspace @blitzjs/cli dev",
-    "dev:blitz": "yarn waitfortypes && yarn workspace blitz dev",
-    "dev": "concurrently --names \"BUILD,TYPES,CLI,ENTRY\" -c \"blue,magenta,yellow,green\" \"npm:dev:preconstruct\" \"npm:dev:tsc\" \"npm:dev:cli\" \"npm:dev:blitz\"",
-    "build": "preconstruct build && yarn workspace @blitzjs/cli build && yarn workspace blitz build && tsc",
+    "dev": "concurrently --names \"BUILD,TYPES,CLI\" -c \"blue,magenta,yellow,green\" \"npm:dev:preconstruct\" \"npm:dev:tsc\" \"npm:dev:cli\"",
+    "build": "preconstruct build && yarn workspace @blitzjs/cli build && tsc",
     "lint": "eslint --ignore-path .gitignore --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
