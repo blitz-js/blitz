@@ -1,4 +1,4 @@
-import {queryCache} from "react-query"
+import {QueryClient} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {
@@ -60,6 +60,15 @@ export const executeRpcCall = <TInput, TResult>(
     serialized = serialize(params)
   }
 
+  // Create a new QueryClient instance
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  })
+
   // Create a new AbortController instance for this request
   const controller = new AbortController()
 
@@ -86,12 +95,12 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
-          queryCache.clear()
+          queryClient.clear()
           publicDataStore.clear()
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
-          await queryCache.invalidateQueries("")
+          await queryClient.invalidateQueries("")
         }
         if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
@@ -134,7 +143,7 @@ export const executeRpcCall = <TInput, TResult>(
 
           if (!opts.fromQueryHook) {
             const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
-            queryCache.setQueryData(queryKey, data)
+            queryClient.setQueryData(queryKey, data)
           }
           return data as TResult
         }

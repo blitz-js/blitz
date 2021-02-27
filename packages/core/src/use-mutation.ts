@@ -17,6 +17,13 @@ export function useMutation<TResult, TError = unknown, TVariables = undefined, T
 ) {
   const enhancedResolverRpcClient = sanitize(mutationResolver)
 
+  // return useReactQueryMutation(
+  //   (variables: TVariables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
+  //   {
+  //     throwOnError: true,
+  //     ...config,
+  //   } as any,
+  // ) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
   return useReactQueryMutation(
     (variables: TVariables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
     {

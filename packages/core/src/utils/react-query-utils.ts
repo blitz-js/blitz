@@ -1,5 +1,5 @@
 import {useMemo} from "react"
-import {queryCache, QueryKey} from "react-query"
+import {QueryClient, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
 import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
@@ -84,6 +84,14 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
   return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+})
+
 export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
   params?: TInput,
@@ -95,14 +103,14 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey<any>
+  let queryKey: QueryKey
   if (params) {
     queryKey = fullQueryKey
   } else {
     // Params not provided, only use first query key item (url)
     queryKey = fullQueryKey[0]
   }
-  return queryCache.invalidateQueries(queryKey)
+  return queryClient.invalidateQueries(queryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends QueryFn>(
@@ -110,15 +118,15 @@ export function setQueryData<TInput, TResult, T extends QueryFn>(
   params: TInput,
   newData: TResult | ((oldData: TResult | undefined) => TResult),
   opts: MutateOptions = {refetch: true},
-): Promise<void | ReturnType<typeof queryCache.invalidateQueries>> {
+): Promise<void | ReturnType<typeof queryClient.invalidateQueries>> {
   if (typeof resolver === "undefined") {
     throw new Error("setQueryData is missing the first argument - it must be a resolver function")
   }
   const queryKey = getQueryKey(resolver, params)
 
   return new Promise((res) => {
-    queryCache.setQueryData(queryKey, newData)
-    let result: void | ReturnType<typeof queryCache.invalidateQueries>
+    queryClient.setQueryData(queryKey, newData)
+    let result: void | ReturnType<typeof queryClient.invalidateQueries>
     if (opts.refetch) {
       result = invalidateQuery(resolver, params)
     }

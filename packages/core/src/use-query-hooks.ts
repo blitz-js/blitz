@@ -1,11 +1,11 @@
 import {
-  InfiniteQueryOptions as RQInfiniteQueryConfig,
-  InfiniteQueryResult,
-  PaginatedQueryResult,
-  QueryOptions,
-  QueryResult,
+  UseInfiniteQueryOptions as RQInfiniteQueryConfig,
+  UseInfiniteQueryResult,
+  // PaginatedQueryResult,
+  UseQueryOptions,
+  UseQueryResult,
   useInfiniteQuery as useInfiniteReactQuery,
-  usePaginatedQuery as usePaginatedReactQuery,
+  // usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
 import {isClient} from "./utils"
@@ -31,22 +31,22 @@ type QueryNonLazyOptions =
 // -------------------------
 // useQuery
 // -------------------------
-type RestQueryResult<TResult> = Omit<QueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
+type RestQueryResult<TResult> = Omit<UseQueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
 
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+  options?: UseQueryOptions<TResult> & QueryNonLazyOptions,
 ): [TResult, RestQueryResult<TResult>]
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> & QueryLazyOptions,
+  options: UseQueryOptions<TResult> & QueryLazyOptions,
 ): [TResult | undefined, RestQueryResult<TResult>]
 export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> = {},
+  options: UseQueryOptions<TResult> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
@@ -69,10 +69,8 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
       ? (_apiUrl: string, params: any) =>
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
-    config: {
-      ...useDefaultQueryConfig(),
-      ...options,
-    },
+    ...useDefaultQueryConfig(),
+    ...options,
   })
 
   const rest = {
@@ -83,26 +81,26 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   return [data, rest as RestQueryResult<TResult>]
 }
 
-// -------------------------
-// usePaginatedQuery
-// -------------------------
-type RestPaginatedResult<TResult> = Omit<PaginatedQueryResult<TResult>, "resolvedData"> &
+// // -------------------------
+// // usePaginatedQuery
+// // -------------------------
+type RestPaginatedResult<TResult> = Omit<UseQueryResult<TResult>, "resolvedData"> &
   QueryCacheFunctions<TResult>
 
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: QueryOptions<TResult> & QueryNonLazyOptions,
+  options?: UseQueryOptions<TResult> & QueryNonLazyOptions,
 ): [TResult, RestPaginatedResult<TResult>]
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> & QueryLazyOptions,
+  options: UseQueryOptions<TResult> & QueryLazyOptions,
 ): [TResult | undefined, RestPaginatedResult<TResult>]
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   params: FirstParam<T>,
-  options: QueryOptions<TResult> = {},
+  options: UseQueryOptions<TResult> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
@@ -119,16 +117,15 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
-  const {resolvedData, ...queryRest} = usePaginatedReactQuery({
+  const {data, isPreviousData, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
       ? (_apiUrl: string, params: any) =>
           enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
-    config: {
-      ...useDefaultQueryConfig(),
-      ...options,
-    },
+    ...useDefaultQueryConfig(),
+    ...options,
+    keepPreviousData: true,
   })
 
   const rest = {
@@ -136,14 +133,14 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [resolvedData, rest as RestPaginatedResult<TResult>]
+  return [data, isPreviousData, rest as RestPaginatedResult<TResult>]
 }
 
 // -------------------------
 // useInfiniteQuery
 // -------------------------
 type RestInfiniteResult<TResult, TMoreVariable> = Omit<
-  InfiniteQueryResult<TResult, TMoreVariable>,
+  UseInfiniteQueryResult<TResult, TMoreVariable>,
   "data"
 > &
   QueryCacheFunctions<TResult>
@@ -206,10 +203,8 @@ export function useInfiniteQuery<
       ? (_apiUrl: string, _args: any, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
           enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
       : (emptyQueryFn as any),
-    config: {
-      ...useDefaultQueryConfig(),
-      ...options,
-    },
+    ...useDefaultQueryConfig(),
+    ...options,
   })
 
   const rest = {

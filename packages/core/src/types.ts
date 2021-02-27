@@ -9,7 +9,7 @@ import {
   NextPageContext,
 } from "next/types"
 import {AuthenticateOptions, Strategy} from "passport"
-import {MutateOptions, MutationResult} from "react-query"
+import {MutateOptions, UseMutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
@@ -239,7 +239,7 @@ export declare type MutateFunction<
 
 export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [
   MutateFunction<TResult, TError, TVariables, TSnapshot>,
-  MutationResult<TResult, TError>,
+  UseMutationResult<TResult, TError>,
 ]
 
 export declare type MutationFunction<TResult, TVariables = unknown> = (

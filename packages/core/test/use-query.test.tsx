@@ -1,5 +1,5 @@
 import React from "react"
-import {queryCache} from "react-query"
+import {QueryClient} from "react-query"
 import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {
@@ -12,8 +12,16 @@ import {
 } from "./test-utils"
 import {enhanceQueryFn} from "./test-utils"
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+})
+
 beforeEach(() => {
-  queryCache.clear()
+  queryClient.clear()
 })
 
 window.__BLITZ_DATA__ = getBlitzRuntimeData()
@@ -80,8 +88,8 @@ describe("useQuery", () => {
       await screen.findByText("No data")
     })
 
-    it("suspense disabled if enabled is null", async () => {
-      setupHook("test", enhanceQueryFn(upcase), {enabled: null})
+    it("suspense disabled if enabled is undefined", async () => {
+      setupHook("test", enhanceQueryFn(upcase), {enabled: undefined})
       await screen.findByText("No data")
     })
 

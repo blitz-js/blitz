@@ -1,4 +1,4 @@
-import {queryCache} from "react-query"
+import {QueryClient} from "react-query"
 import {getQueryCacheFunctions, invalidateQuery, setQueryData} from "../src/utils/react-query-utils"
 import {enhanceQueryFn} from "./test-utils"
 
@@ -10,7 +10,15 @@ const isEmpty = async (arg: string): Promise<boolean> => {
 }
 
 describe("getQueryCacheFunctions", () => {
-  const spyRefetchQueries = jest.spyOn(queryCache, "invalidateQueries")
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  })
+
+  const spyRefetchQueries = jest.spyOn(queryClient, "invalidateQueries")
 
   beforeEach(() => spyRefetchQueries.mockReset())
 
@@ -43,7 +51,15 @@ describe("getQueryCacheFunctions", () => {
 })
 
 describe("invalidateQuery", () => {
-  const spyRefetchQueries = jest.spyOn(queryCache, "invalidateQueries")
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  })
+
+  const spyRefetchQueries = jest.spyOn(queryClient, "invalidateQueries")
 
   beforeEach(() => spyRefetchQueries.mockReset())
 
@@ -57,8 +73,16 @@ describe("invalidateQuery", () => {
 })
 
 describe("setQueryData", () => {
-  const spyRefetchQueries = jest.spyOn(queryCache, "invalidateQueries")
-  const spySetQueryData = jest.spyOn(queryCache, "setQueryData")
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: true,
+      },
+    },
+  })
+
+  const spyRefetchQueries = jest.spyOn(queryClient, "invalidateQueries")
+  const spySetQueryData = jest.spyOn(queryClient, "setQueryData")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()

@@ -6,7 +6,7 @@ module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
   modulePathIgnorePatterns: ["<rootDir>/tmp", "<rootDir>/dist", "<rootDir>/templates"],
   moduleNameMapper: {
-    ...resolveAliases.node,
+    ...resolveAliases?.node,
   },
   coverageReporters: ["json", "lcov", "text", "clover"],
   // collectCoverage: !!`Boolean(process.env.CI)`,
