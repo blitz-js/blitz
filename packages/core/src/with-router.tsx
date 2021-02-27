@@ -10,7 +10,7 @@ export interface BlitzRouter extends NextRouter {
   params: ReturnType<typeof extractRouterParams>
 }
 
-interface WithRouterProps {
+export interface WithRouterProps {
   router: BlitzRouter
 }
 

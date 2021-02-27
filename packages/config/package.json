@@ -4,19 +4,14 @@
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
-    "dev": "tsdx watch --verbose",
-    "build": "tsdx build",
-    "test": "tsdx test --env=jest-environment-jsdom-sixteen --passWithNoTests",
-    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
-  "browser": "index-browser.js",
-  "main": "dist/index.js",
-  "module": "dist/config.esm.js",
-  "types": "dist/packages/config/src/index.d.ts",
+  "main": "dist/blitzjs-config.cjs.js",
+  "module": "dist/blitzjs-config.esm.js",
+  "types": "dist/blitzjs-config.cjs.d.ts",
   "files": [
-    "dist",
-    "index-browser.js"
+    "dist"
   ],
   "jest": {
     "setupFilesAfterEnv": [
@@ -35,6 +30,8 @@
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "dependencies": {
+    "fs-extra": "9.1.0",
+    "pkg-dir": "^5.0.0",
     "module-alias": "2.2.2"
   }
 }

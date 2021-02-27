@@ -4,16 +4,10 @@
   "version": "0.30.5",
   "license": "MIT",
   "scripts": {
-    "b": "./bin/run",
     "clean": "rimraf lib",
-    "predev": "yarn wait:installer && yarn wait:server && yarn wait:generator && yarn wait:repl",
-    "wait:generator": "wait-on ../generator/dist/packages/generator/src/index.d.ts",
-    "wait:server": "wait-on ../server/dist/packages/server/src/index.d.ts",
-    "wait:installer": "wait-on ../installer/dist/packages/installer/src/index.d.ts",
-    "wait:repl": "wait-on ../repl/dist/packages/repl/src/index.d.ts",
     "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
     "build": "rimraf lib && tsc",
-    "test": "tsdx test",
+    "test": "jest",
     "test:watch": "jest --watch",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"

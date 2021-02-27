@@ -14,7 +14,7 @@ import {BlitzRuntimeData} from "./blitz-data"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
-export {
+export type {
   GetServerSideProps,
   GetServerSidePropsResult,
   GetStaticPaths,

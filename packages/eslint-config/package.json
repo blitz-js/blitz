@@ -4,7 +4,6 @@
   "description": "Blitz.js eslint config",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
     "test": "echo \"No tests\""
   },
   "files": [
