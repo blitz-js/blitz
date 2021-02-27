@@ -1,13 +1,9 @@
-const {resolveAliases} = require("@blitzjs/config")
-
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   moduleFileExtensions: ["ts", "tsx", "js", "json"],
   modulePathIgnorePatterns: ["<rootDir>/tmp", "<rootDir>/dist", "<rootDir>/templates"],
-  moduleNameMapper: {
-    ...resolveAliases.node,
-  },
+  moduleNameMapper: {},
   coverageReporters: ["json", "lcov", "text", "clover"],
   // collectCoverage: !!`Boolean(process.env.CI)`,
   collectCoverageFrom: ["src/**/*.ts"],

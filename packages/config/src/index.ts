@@ -1,4 +1,4 @@
-import {readJSONSync} from "fs-extra"
+import {existsSync, readJSONSync} from "fs-extra"
 import {join} from "path"
 import path from "path"
 import pkgDir from "pkg-dir"
@@ -7,19 +7,17 @@ export function getProjectRoot() {
   return pkgDir.sync() || process.cwd()
 }
 
-const projectRoot = getProjectRoot()
+export function getConfigFilePath() {
+  const projectRoot = getProjectRoot()
+  const bConfig = path.join(projectRoot, "blitz.config.js")
+  const nConfig = path.join(projectRoot, "next.config.js")
 
-export const resolveAliases = {
-  node: {
-    "__blitz__/config-file": path.join(projectRoot, "blitz.config.js"),
-  },
-  webpack: {
-    // In webpack build, next.config.js is always present which wraps blitz.config.js
-    "__blitz__/config-file": path.join(projectRoot, "next.config.js"),
-  },
+  if (existsSync(nConfig)) {
+    return nConfig
+  } else {
+    return bConfig
+  }
 }
-
-require("module-alias").addAliases(resolveAliases.node)
 
 export interface BlitzConfig extends Record<string, unknown> {
   target?: string
@@ -65,7 +63,7 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
   let loadedConfig = {}
   try {
     // eslint-disable-next-line no-eval -- block webpack from following this module path
-    file = eval("require")("__blitz__/config-file")
+    file = eval("require")(getConfigFilePath())
     if (typeof file === "function") {
       const phase =
         process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER

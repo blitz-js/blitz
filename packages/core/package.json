@@ -25,7 +25,6 @@
   },
   "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {
-    "@blitzjs/display": "0.30.5",
     "@types/htmlescape": "^1.1.1",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
@@ -43,6 +42,7 @@
     "zod": ">=1.0.0"
   },
   "peerDependencies": {
+    "@blitzjs/display": "0.30.5",
     "@blitzjs/config": "0.30.5",
     "next": "*",
     "nanoid": "*",
