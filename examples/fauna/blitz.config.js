@@ -1,4 +1,5 @@
 const { sessionMiddleware, simpleRolesIsAuthorized } = require("@blitzjs/server")
+const withPreconstruct = require("@preconstruct/next")
 const { GraphQLClient, gql } = require("graphql-request")
 
 const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {
@@ -17,7 +18,8 @@ const normalizeSession = (faunaSession) => {
   }
 }
 
-module.exports = {
+// withPreconstruct only needed for our internal monorepo
+module.exports = withPreconstruct({
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -158,4 +160,4 @@ module.exports = {
     return config
   },
   */
-}
+})

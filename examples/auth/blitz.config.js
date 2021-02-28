@@ -1,22 +1,25 @@
 const {sessionMiddleware, simpleRolesIsAuthorized} = require("@blitzjs/server")
+const withPreconstruct = require("@preconstruct/next")
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
-module.exports = withBundleAnalyzer({
-  middleware: [
-    sessionMiddleware({
-      isAuthorized: simpleRolesIsAuthorized,
-      // sessionExpiryMinutes: 4,
-    }),
-  ],
-  log: {
-    // level: "trace",
-  },
-  experimental: {
-    isomorphicResolverImports: false,
-  },
-  /*
+// withPreconstruct only needed for our internal monorepo
+module.exports = withPreconstruct(
+  withBundleAnalyzer({
+    middleware: [
+      sessionMiddleware({
+        isAuthorized: simpleRolesIsAuthorized,
+        // sessionExpiryMinutes: 4,
+      }),
+    ],
+    log: {
+      // level: "trace",
+    },
+    experimental: {
+      isomorphicResolverImports: false,
+    },
+    /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
@@ -29,4 +32,5 @@ module.exports = withBundleAnalyzer({
     return config
   },
   */
-})
+  }),
+)

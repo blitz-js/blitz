@@ -1,4 +1,7 @@
-module.exports = {
+const withPreconstruct = require("@preconstruct/next")
+
+// withpreconstruct only needed for our internal monorepo
+module.exports = withPreconstruct({
   middleware: [
     (req, res, next) => {
       res.blitzCtx.referer = req.headers.referer
@@ -22,4 +25,4 @@ module.exports = {
   //   // Important: return the modified config
   //   return config
   // },
-}
+})
