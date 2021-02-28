@@ -1,8 +1,6 @@
 const {sessionMiddleware, simpleRolesIsAuthorized} = require("@blitzjs/server")
-const withPreconstruct = require("@preconstruct/next")
 
-// withPreconstruct only needed for our internal monorepo
-module.exports = withPreconstruct({
+module.exports = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -16,4 +14,4 @@ module.exports = withPreconstruct({
     return config
   },
   */
-})
+}

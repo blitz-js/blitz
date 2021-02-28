@@ -1,7 +1,4 @@
-const withPreconstruct = require("@preconstruct/next")
-
-// withpreconstruct only needed for our internal monorepo
-module.exports = withPreconstruct({
+module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Note: we provide webpack above so you should not `require` it
     // Perform customizations to webpack config
@@ -13,4 +10,4 @@ module.exports = withPreconstruct({
     // Important: return the modified config
     return config
   },
-})
+}
