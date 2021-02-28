@@ -1,6 +1,6 @@
 const path = require("path")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const {getProjectRoot, resolveAliases} = require("@blitzjs/config")
+const {getProjectRoot} = require("@blitzjs/config")
 const projectRoot = getProjectRoot()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
@@ -27,7 +27,6 @@ const common = {
   // Ignore the build directories
   modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
   moduleNameMapper: {
-    ...resolveAliases.node,
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),

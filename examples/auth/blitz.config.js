@@ -3,6 +3,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
 
+// withPreconstruct only needed for our internal monorepo
 module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({

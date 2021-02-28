@@ -15,6 +15,7 @@ import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
+const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
@@ -136,6 +137,7 @@ export abstract class Generator<
   constructor(protected readonly options: T) {
     super()
 
+    this.options = options
     this.store = createStore()
     this.fs = createEditor(this.store)
     this.enquirer = new Enquirer()
@@ -188,6 +190,7 @@ export abstract class Generator<
     templateValues: any,
     prettierOptions: import("prettier").Options | undefined,
   ): string | Buffer {
+    debug("Generator.process...")
     if (new RegExp(`${ignoredExtensions.join("|")}$`).test(pathEnding)) {
       return input
     }
@@ -225,6 +228,7 @@ export abstract class Generator<
   }
 
   async write(): Promise<void> {
+    debug("Generator.write...")
     const paths = readDirRecursive(this.sourcePath(), (name) => {
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
@@ -275,6 +279,7 @@ export abstract class Generator<
   }
 
   async run(): Promise<string | void> {
+    debug("Generator.run...", {options: this.options})
     if (!this.options.dryRun) {
       await fs.ensureDir(this.options.destinationRoot!)
       process.chdir(this.options.destinationRoot!)

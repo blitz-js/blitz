@@ -1,4 +1,4 @@
-import {fromPairs} from "lodash"
+import fromPairs from "lodash.frompairs"
 import {useRouter} from "next/router"
 import {useMemo} from "react"
 import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "./types"

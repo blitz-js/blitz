@@ -1,9 +1,6 @@
-import {getProjectRoot, resolveAliases} from "@blitzjs/config"
+import {getProjectRoot} from "@blitzjs/config"
 import fs from "fs"
-import moduleAlias from "module-alias"
 import path from "path"
-
-moduleAlias.addAliases(resolveAliases.node)
 
 export function withBlitz(nextConfig: any) {
   return (phase: string, nextOpts: any = {}) => {
@@ -21,11 +18,11 @@ export function withBlitz(nextConfig: any) {
         // ----------------------
         // Set up resolve aliases
         // ----------------------
-        config.resolve ??= {}
-        config.resolve.alias ??= {}
-        for (const [from, to] of Object.entries(resolveAliases.webpack)) {
-          config.resolve.alias[from] = to
-        }
+        // config.resolve ??= {}
+        // config.resolve.alias ??= {}
+        // for (const [from, to] of Object.entries(resolveAliases.webpack)) {
+        //   config.resolve.alias[from] = to
+        // }
 
         if (options.isServer) {
           const originalEntry = config.entry
@@ -44,6 +41,10 @@ export function withBlitz(nextConfig: any) {
             /node_modules[\\/]cross-spawn/,
             /node_modules[\\/]node-libs-browser/,
             /node_modules[\\/]crypto-browserify/,
+            /@blitzjs[\\/]display/,
+            /@blitzjs[\\/]config/,
+            /blitz[\\/]packages[\\/]config/,
+            /blitz[\\/]packages[\\/]display/,
           ]
           excluded.forEach((excluded) => {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})

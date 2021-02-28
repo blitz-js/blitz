@@ -2,7 +2,7 @@ import chalk from "chalk"
 import * as path from "path"
 import pkgDir from "pkg-dir"
 import resolveFrom from "resolve-from"
-import {parseSemver} from "../utils/parse-semver"
+import {parseSemver} from "./utils/parse-semver"
 
 async function main() {
   const options = require("minimist")(process.argv.slice(2))

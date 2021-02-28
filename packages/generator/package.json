@@ -4,27 +4,24 @@
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "clean": "rimraf dist",
-    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
-    "dev": "run-p watch build:templates",
-    "watch": "tsdx watch --verbose",
-    "build": "tsdx build && yarn build:templates",
-    "build:templates": "wait-on dist/index.js && rimraf dist/templates/** && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch"
+    "dev": "yarn build:templates --watch",
+    "build": "yarn build:templates",
+    "build:templates": "cpx --clean \"templates/**/{.*,*}\" dist/templates",
+    "test": "jest --color --color",
+    "test:watch": "jest --watch"
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "main": "dist/index.js",
-  "module": "dist/generator.esm.js",
-  "types": "dist/packages/generator/src/index.d.ts",
+  "main": "dist/blitzjs-generator.cjs.js",
+  "module": "dist/blitzjs-generator.esm.js",
+  "types": "dist/blitzjs-generator.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "blitz",
     "generator"
@@ -53,6 +50,9 @@
     "recast": "0.20.4",
     "username": "^5.1.0",
     "vinyl": "2.2.1"
+  },
+  "peerDependencies": {
+    "prettier": "*"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
