@@ -27,8 +27,7 @@
     "cookie-session": "^1.4.0",
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
-    "lodash": "^4.17.20",
-    "lodash-es": "^4.17.20",
+    "lodash.frompairs": "4.0.1",
     "npm-which": "^3.0.1",
     "passport": "0.4.1",
     "react-query": "2.5.12",
@@ -37,10 +36,10 @@
     "zod": ">=1.0.0"
   },
   "peerDependencies": {
-    "@blitzjs/display": "0.30.6",
     "@blitzjs/config": "0.30.6",
-    "next": "*",
+    "@blitzjs/display": "0.30.6",
     "nanoid": "*",
+    "next": "*",
     "react": "*"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
