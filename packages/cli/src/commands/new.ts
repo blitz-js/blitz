@@ -67,7 +67,7 @@ export class New extends Command {
 
     if (!flags["skip-upgrade"]) {
       const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
-      if (true) {
+      if (lt(this.config.version, latestVersion)) {
         const upgradeChoices: Array<{name: string; message?: string}> = [
           {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
           {
