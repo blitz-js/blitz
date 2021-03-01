@@ -19,6 +19,11 @@ module.exports = {
     "babel-plugin-dev-expression",
     ["@babel/plugin-proposal-class-properties", {loose: true}],
     "babel-plugin-macros",
-    // ["babel-plugin-polyfill-regenerator", {method: "usage-pure"}],
+    [
+      "transform-inline-environment-variables",
+      {
+        include: ["BLITZ_PROD_BUILD"],
+      },
+    ],
   ],
 }
