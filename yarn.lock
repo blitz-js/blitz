@@ -10659,6 +10659,11 @@ husky@4.3.8:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
+husky@5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-5.1.2.tgz#dc6a1f68640455d8d98c28875e073087f86c5081"
+  integrity sha512-lilaRYeDXcAOj8DuRnN9IxUyEMVbYg9rK7yVNkPB5V4hCvxIUxpMeiv9K2h77CE0HzjCnk1Br0oWe1IghXngDQ==
+
 hyperlinker@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/hyperlinker/-/hyperlinker-1.0.0.tgz#23dc9e38a206b208ee49bc2d6c8ef47027df0c0e"
