@@ -18,7 +18,7 @@ export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, "session"> {
   session: AuthenticatedSessionContext
 }
 
-type PipeFn<Prev, Next, PrevCtx extends Ctx, NextCtx = PrevCtx> = (
+type PipeFn<Prev, Next, PrevCtx, NextCtx = PrevCtx> = (
   i: Await<Prev>,
   c: PrevCtx,
 ) => Next extends ResultWithContext ? never : Next | ResultWithContext<Next, NextCtx>

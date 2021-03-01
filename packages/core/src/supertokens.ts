@@ -4,7 +4,7 @@ import {COOKIE_CSRF_TOKEN, COOKIE_LEGACY_CSRF_TOKEN} from "./constants"
 import {AuthenticationError} from "./errors"
 import {Ctx} from "./middleware"
 import {publicDataStore} from "./public-data-store"
-import {IsAuthorizedArgs, PublicData} from "./types"
+import {EmptyPublicData, IsAuthorizedArgs, PublicData} from "./types"
 import {isServer} from "./utils"
 import {readCookie} from "./utils/cookie"
 
@@ -48,9 +48,8 @@ export interface SessionContextBase {
 }
 
 // Could be anonymous
-export interface SessionContext extends SessionContextBase, Partial<PublicData> {
-  userId: PublicData["userId"] | null
-  $publicData: Partial<PublicData>
+export interface SessionContext extends SessionContextBase, EmptyPublicData {
+  $publicData: Partial<PublicData> | EmptyPublicData
 }
 
 export interface AuthenticatedSessionContext extends SessionContextBase, PublicData {
@@ -61,8 +60,7 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
 export const getAntiCSRFToken = () =>
   readCookie(COOKIE_CSRF_TOKEN()) || readCookie(COOKIE_LEGACY_CSRF_TOKEN())
 
-export interface ClientSession extends Partial<PublicData> {
-  userId: PublicData["userId"] | null
+export interface ClientSession extends EmptyPublicData {
   isLoading: boolean
 }
 
@@ -109,7 +107,7 @@ export const useAuthenticatedSession = (
   options: UseSessionOptions = {},
 ): AuthenticatedClientSession => {
   useAuthorize()
-  return useSession(options)
+  return useSession(options) as AuthenticatedClientSession
 }
 
 export const useAuthorize = () => {
