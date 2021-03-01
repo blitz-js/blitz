@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
-    "build": "rimraf lib && tsc",
-    "test": "jest --color",
+    "buildpkg": "rimraf lib && tsc",
+    "test": "jest",
     "test:watch": "jest --watch",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"

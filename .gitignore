@@ -27,3 +27,4 @@ dist
 **/.test*
 examples/auth2
 .idea
+.ultra.cache.json

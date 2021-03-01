@@ -1,6 +1,8 @@
 import {render} from "ink-testing-library"
 import React from "react"
+import stripAnsi from "strip-ansi"
 import {Frontmatter} from "../../src/executors/executor"
+
 describe("Executor", () => {
   const executorConfig = {
     stepId: "newFile",
@@ -11,7 +13,7 @@ describe("Executor", () => {
   it("should render Frontmatter", () => {
     const {lastFrame} = render(<Frontmatter executor={executorConfig} />)
 
-    expect(lastFrame()).toMatchSnapshot()
+    expect(stripAnsi(lastFrame())).toMatchSnapshot()
   })
 
   it("should contain a step name and explanation", () => {
