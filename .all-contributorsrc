@@ -2167,6 +2167,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "mitchazj",
+      "name": "Mitchell Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15032956?v=4",
+      "profile": "https://github.com/mitchazj",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
