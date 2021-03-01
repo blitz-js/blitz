@@ -1,6 +1,5 @@
 {
   "name": "root",
-  "private": true,
   "workspaces": {
     "packages": [
       "packages/*",
@@ -19,11 +18,8 @@
       "!packages/eslint-config"
     ]
   },
-  "engines": {
-    "node": ">=12"
-  },
   "scripts": {
-    "postinstall": "npm rebuild husky",
+    "postinstall": "husky install",
     "dev:tsc": "tsc --watch --pretty --preserveWatchOutput",
     "dev:cli": "yarn workspace @blitzjs/cli dev",
     "dev:templates": "yarn workspace @blitzjs/generator dev",
@@ -48,6 +44,14 @@
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "prerelease": "patch-package",
     "release": "release"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@babel/core": "7.13.1",
@@ -133,7 +137,7 @@
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-plugin-unicorn": "26.0.1",
     "eslint_d": "10.0.0",
-    "husky": "4.3.8",
+    "husky": "5.1.2",
     "jest": "26.6.3",
     "jest-environment-jsdom-sixteen": "1.0.3",
     "lerna": "3.22.1",
@@ -166,17 +170,6 @@
     "wait-on": "5.2.1",
     "yalc": "1.0.0-pre.49"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "yarn lint",
-      "post-rebase": "yarn install"
-    }
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix"
-    ]
-  },
+  "private": true,
   "version": "0.0.0"
 }
