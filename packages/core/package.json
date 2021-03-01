@@ -33,14 +33,21 @@
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
     "superjson": "1.7.2",
-    "zod": ">=1.0.0"
+    "zod": "1.11.11"
   },
   "peerDependencies": {
     "@blitzjs/config": "0.30.6",
     "@blitzjs/display": "0.30.6",
     "nanoid": "*",
     "next": "*",
-    "react": "*"
+    "react": ">=0.0.0 || >=0.0.0-experimental"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
+  "devDependencies": {
+    "@blitzjs/config": "*",
+    "@blitzjs/display": "*",
+    "nanoid": "^3.1.20",
+    "next": "10.0.7",
+    "react": "0.0.0-experimental-3310209d0"
+  }
 }

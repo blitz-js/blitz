@@ -40,7 +40,7 @@
     "parallel-transform": "1.2.0",
     "pump": "3.0.0",
     "pumpify": "2.0.1",
-    "rimraf": "3.0.2",
+    "rimraf": "^3.0.2",
     "through2": "4.0.2",
     "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
@@ -48,5 +48,8 @@
   },
   "peerDependencies": {
     "@blitzjs/display": "0.30.6"
+  },
+  "devDependencies": {
+    "@blitzjs/display": "*"
   }
 }

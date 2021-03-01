@@ -28,7 +28,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.12.10",
+    "@babel/core": "7.13.1",
     "@babel/plugin-transform-typescript": "7.12.1",
     "@blitzjs/config": "0.30.6",
     "@blitzjs/display": "0.30.6",
@@ -37,7 +37,7 @@
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
-    "fs-extra": "9.1.0",
+    "fs-extra": "^9.1.0",
     "globby": "11.0.2",
     "ink": "3.0.8",
     "ink-spinner": "4.0.1",

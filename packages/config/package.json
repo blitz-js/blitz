@@ -25,8 +25,8 @@
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "dependencies": {
-    "fs-extra": "9.1.0",
-    "pkg-dir": "^5.0.0",
-    "module-alias": "2.2.2"
+    "fs-extra": "^9.1.0",
+    "module-alias": "2.2.2",
+    "pkg-dir": "^5.0.0"
   }
 }

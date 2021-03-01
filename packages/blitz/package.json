@@ -67,9 +67,9 @@
     "jest-watch-typeahead": "^0.6.1",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
-    "react-test-renderer": "0.0.0-experimental-3310209d0",
+    "react-test-renderer": "17.0.1",
     "resolve-from": "^5.0.0",
-    "ts-jest": "^26.4.4"
+    "ts-jest": "26.5.0"
   },
   "keywords": [
     "blitz",

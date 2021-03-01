@@ -1,2 +1,3 @@
+yarn manypkg fix
 yarn lint-staged
 yarn pretty-quick --staged
