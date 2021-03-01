@@ -10,7 +10,7 @@ export const cspHashOf = (text: string) => {
 }
 
 export const computeCsp = (props: Readonly<DocumentProps>) => {
-  const nextHash = cspHashOf(NextScript.getInlineScriptSource(props) + "bad")
+  const nextHash = cspHashOf(NextScript.getInlineScriptSource(props))
   const blitzHash = cspHashOf(htmlescape(getBlitzRuntimeData()))
 
   return `default-src 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com; script-src 'self' ${
