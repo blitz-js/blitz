@@ -4,7 +4,7 @@
   "version": "0.30.6",
   "license": "MIT",
   "scripts": {
-    "test": "jest --color",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {

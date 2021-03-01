@@ -6,9 +6,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn build:templates --watch",
-    "build": "yarn build:templates",
+    "buildpkg": "yarn build:templates",
     "build:templates": "cpx --clean \"templates/**/{.*,*}\" dist/templates",
-    "test": "jest --color --color",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {

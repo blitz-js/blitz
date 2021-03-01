@@ -5,7 +5,7 @@
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
   "scripts": {
-    "test": "jest --color",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {

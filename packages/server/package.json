@@ -7,7 +7,7 @@
     "next-patched": "./bin/next-patched"
   },
   "scripts": {
-    "test": "jest --color",
+    "test": "jest",
     "test:watch": "jest --watch"
   },
   "author": {
