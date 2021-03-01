@@ -163,6 +163,7 @@
     "semver": "7.3.4",
     "size-limit": "4.9.2",
     "stdout-stderr": "0.1.13",
+    "strip-ansi": "6.0.0",
     "test-listen": "1.1.0",
     "ts-jest": "26.5.0",
     "tslib": "2.1.0",
