@@ -39,6 +39,10 @@ jobs:
         run: yarn install --frozen-lockfile --silent
         env:
           CI: true
+      - name: manypkg lint
+        run: yarn manypkg check
+        env:
+          CI: true
       - name: yarn lint
         run: yarn lint
         env:

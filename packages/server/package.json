@@ -25,6 +25,7 @@
   "dependencies": {
     "@blitzjs/file-pipeline": "0.30.6",
     "b64-lite": "^1.4.0",
+    "chalk": "^4.1.0",
     "cookie": "^0.4.1",
     "cross-spawn": "7.0.3",
     "date-fns": "^2.16.1",
@@ -33,12 +34,11 @@
     "fast-glob": "3.2.5",
     "flush-write-stream": "2.0.0",
     "from2": "2.3.0",
+    "fs-extra": "^9.1.0",
     "gulp-if": "3.0.0",
-    "chalk": "^4.1.0",
-    "fs-extra": "9.1.0",
-    "module-alias": "2.2.2",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.0.0",
+    "module-alias": "2.2.2",
     "nanoid": "^3.1.20",
     "next": "10.0.7",
     "null-loader": "4.0.1",
@@ -56,11 +56,14 @@
     "vinyl": "2.2.1"
   },
   "devDependencies": {
+    "@blitzjs/config": "*",
+    "@blitzjs/core": "*",
+    "@blitzjs/display": "*",
     "next-transpile-modules": "6.1.0"
   },
   "peerDependencies": {
-    "@blitzjs/core": "0.30.6",
     "@blitzjs/config": "0.30.6",
+    "@blitzjs/core": "0.30.6",
     "@blitzjs/display": "0.30.6"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
