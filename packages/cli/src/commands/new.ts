@@ -67,7 +67,7 @@ export class New extends Command {
 
     if (!flags["skip-upgrade"]) {
       const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
-      if (lt(this.config.version, latestVersion)) {
+      if (true) {
         const upgradeChoices: Array<{name: string; message?: string}> = [
           {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
           {
@@ -84,10 +84,13 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
-          const useYarn = checkYarn.stdout.toString().includes("blitz@")
-          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+          var useYarn: boolean = false
 
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          if (checkYarn && checkYarn.stdout) {
+            useYarn = checkYarn.stdout.toString().includes("blitz@")
+          }
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
           spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
 
           const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
