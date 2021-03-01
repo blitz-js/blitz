@@ -4,7 +4,7 @@
   "version": "0.30.6",
   "license": "MIT",
   "scripts": {
-    "dev": "rimraf lib && tsc --watch --preserveWatchOutput",
+    "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
     "build": "rimraf lib && tsc",
     "test": "jest --color",
     "test:watch": "jest --watch",

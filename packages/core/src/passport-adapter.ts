@@ -65,7 +65,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       log.info(`Starting authentication via ${strategyName}...`)
       if (req.query.redirectUrl) {
         middleware.push(async (req, res, next) => {
-          const session = res.blitzCtx.session as SessionContext
+          const session = (res as any).blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
           await session.$setPublicData({[INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl} as any)
           return next()

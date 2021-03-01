@@ -1,13 +1,13 @@
 import BadBehavior from "bad-behavior"
 import {COOKIE_PUBLIC_DATA_TOKEN, LOCALSTORAGE_PREFIX} from "./constants"
-import {PublicData} from "./types"
+import {EmptyPublicData, PublicData} from "./types"
 import {deleteCookie, readCookie} from "./utils/cookie"
 import {parsePublicDataToken} from "./utils/tokens"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
-  readonly emptyPublicData: PublicData = {userId: null}
-  readonly observable = BadBehavior<PublicData>()
+  readonly emptyPublicData: EmptyPublicData = {userId: null}
+  readonly observable = BadBehavior<PublicData | EmptyPublicData>()
 
   constructor() {
     if (typeof window !== "undefined") {
@@ -22,7 +22,7 @@ class PublicDataStore {
     }
   }
 
-  updateState(value?: PublicData, opts?: {suppressEvent: boolean}) {
+  updateState(value?: PublicData | EmptyPublicData, opts?: {suppressEvent: boolean}) {
     // We use localStorage as a message bus between tabs.
     // Setting the current time in ms will cause other tabs to receive the `storage` event
     if (!opts?.suppressEvent) {

@@ -31,8 +31,8 @@ export function withBlitz(nextConfig: any) {
             ...(doesDbModuleExist() ? {"../blitz/db": "./db/index"} : {}),
           })
         } else {
-          config.module ??= {}
-          config.module.rules = config.module.rules || []
+          config.module = config.module ?? {}
+          config.module.rules = config.module.rules ?? []
           const excluded = [
             /node_modules[\\/]passport/,
             /node_modules[\\/]cookie-session/,
@@ -99,14 +99,6 @@ export function withBlitz(nextConfig: any) {
       )
     }
 
-    // We add next-transpile-modules during internal blitz development so that changes in blitz
-    // framework code will trigger a hot reload of any example apps that are running
-    const isInternalBlitzDevelopment = __dirname.includes("packages/server/src")
-    if (isInternalBlitzDevelopment) {
-      const withTM = require("next-transpile-modules")(["@blitzjs/core", "@blitzjs/server"])
-      return withTM(newConfig)
-    } else {
-      return newConfig
-    }
+    return newConfig
   }
 }

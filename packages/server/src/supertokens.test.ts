@@ -45,7 +45,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
+        expect(typeof ((res as any).blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]
@@ -89,7 +89,7 @@ describe("supertokens", () => {
     }) as unknown) as EnhancedResolver<unknown, unknown>
     resolverModule.middleware = [
       (_req, res, next) => {
-        expect(typeof (res.blitzCtx.session as SessionContext).$create).toBe("function")
+        expect(typeof ((res as any).blitzCtx.session as SessionContext).$create).toBe("function")
         return next()
       },
     ]

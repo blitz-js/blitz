@@ -48,7 +48,7 @@ export async function handleRequestWithMiddleware(
   } = {},
 ) {
   if (!(res as MiddlewareResponse).blitzCtx) {
-    ;(res as MiddlewareResponse).blitzCtx = {}
+    ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
   }
   if (!(res as any)._blitz) {
     ;(res as any)._blitz = {}

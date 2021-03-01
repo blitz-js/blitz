@@ -2167,6 +2167,24 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "mitchazj",
+      "name": "Mitchell Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15032956?v=4",
+      "profile": "https://github.com/mitchazj",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Roesh",
+      "name": "Roshan Manuel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31125563?v=4",
+      "profile": "https://roshan.page/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

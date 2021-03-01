@@ -11,6 +11,7 @@ import {
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
+import {Ctx} from "./middleware"
 import {useParams} from "./use-params"
 import {useRouterQuery} from "./use-router-query"
 
@@ -54,7 +55,12 @@ export interface Session {
   // PublicData can be injected here (see supertokens.ts)
 }
 
-export type PublicData = "PublicData" extends keyof Session ? Session["PublicData"] : {userId: any}
+export type PublicData = "PublicData" extends keyof Session
+  ? Session["PublicData"]
+  : {userId: unknown}
+export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
+  userId: PublicData["userId"] | null
+}
 
 export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
   ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
@@ -65,13 +71,13 @@ export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
 }
-export interface MiddlewareResponse extends BlitzApiResponse {
+export interface MiddlewareResponse<C = Ctx> extends BlitzApiResponse {
   /**
    * This will be passed as the second argument to Blitz queries/mutations.
    *
    * You must set blitzCtx BEFORE calling next()
    */
-  blitzCtx: Record<string, unknown>
+  blitzCtx: C
   /**
    * This is the exact result returned from the Blitz query/mutation
    *
