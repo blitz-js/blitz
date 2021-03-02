@@ -7,16 +7,18 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "author": {
-    "name": "Brandon Bayer",
-    "email": "b@bayer.ws",
-    "url": "https://twitter.com/flybayer"
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "image.ts"
+    ]
   },
   "main": "dist/blitzjs-core.cjs.js",
   "module": "dist/blitzjs-core.esm.js",
   "types": "dist/blitzjs-core.cjs.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "image"
   ],
   "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {
@@ -42,12 +44,17 @@
     "next": "*",
     "react": ">=0.0.0 || >=0.0.0-experimental"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "devDependencies": {
     "@blitzjs/config": "*",
     "@blitzjs/display": "*",
     "nanoid": "^3.1.20",
     "next": "10.0.7",
     "react": "0.0.0-experimental-3310209d0"
-  }
+  },
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

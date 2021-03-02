@@ -8,9 +8,6 @@ export type {LinkProps} from "next/link"
 
 export {default as Router} from "next/router"
 
-export {default as Image} from "next/image"
-export type {ImageProps} from "next/image"
-
 export {default as Document, Html, Head as DocumentHead, Main} from "next/document"
 export type {DocumentContext, DocumentProps, DocumentInitialProps} from "next/document"
 
