@@ -1,8 +1,8 @@
 import {Ctx} from "@blitzjs/core"
 
 export interface Session {
-  // isAuthorize can be injected here (see supertokens.ts)
-  // PublicData can be injected here (see supertokens.ts)
+  // isAuthorize can be injected here
+  // PublicData can be injected here
 }
 
 export type PublicData = "PublicData" extends keyof Session

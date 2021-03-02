@@ -38,7 +38,7 @@ type CtxWithSession = {
   session: SessionContext
 }
 
-describe("supertokens", () => {
+describe("sessions", () => {
   it("anonymous", async () => {
     const resolverModule = ((() => {
       return

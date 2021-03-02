@@ -21,6 +21,4 @@ export {
 } from "./auth/auth-client"
 export * from "./auth/auth-types"
 
-export {prettyMs} from "./utils/pretty-ms"
-
 export {enhancePrisma} from "./prisma-utils"

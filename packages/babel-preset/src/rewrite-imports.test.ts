@@ -6,8 +6,8 @@ pluginTester({
   plugin: RewriteImports,
   tests: [
     {
-      code: `import { resolver } from 'blitz';`,
-      output: `import { resolver } from '@blitzjs/core';`,
+      code: `import { useQuery } from 'blitz';`,
+      output: `import { useQuery } from '@blitzjs/core';`,
     },
     {
       code: `import { Image } from 'blitz';`,
