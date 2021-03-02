@@ -30,9 +30,7 @@
     "image",
     "server"
   ],
-  "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {
-    "@types/htmlescape": "^1.1.1",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
@@ -40,7 +38,10 @@
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
     "lodash.frompairs": "4.0.1",
+    "nanoid": "^3.1.20",
+    "next": "10.0.7",
     "npm-which": "^3.0.1",
+    "null-loader": "4.0.1",
     "passport": "0.4.1",
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
@@ -50,17 +51,15 @@
   "peerDependencies": {
     "@blitzjs/config": "0.30.6",
     "@blitzjs/display": "0.30.6",
-    "nanoid": "*",
     "next": "*",
     "react": ">=0.0.0 || >=0.0.0-experimental"
   },
   "devDependencies": {
     "@blitzjs/config": "*",
     "@blitzjs/display": "*",
-    "nanoid": "^3.1.20",
-    "next": "10.0.7",
     "react": "0.0.0-experimental-3310209d0"
   },
+  "repository": "https://github.com/blitz-js/blitz",
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",

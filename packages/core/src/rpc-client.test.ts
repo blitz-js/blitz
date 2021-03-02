@@ -1,6 +1,6 @@
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../src/blitz-data"
-import {executeRpcCall, getIsomorphicEnhancedResolver} from "../src/rpc"
+import {executeRpcCall, getIsomorphicEnhancedResolver} from "./rpc-client"
 
 declare global {
   namespace NodeJS {

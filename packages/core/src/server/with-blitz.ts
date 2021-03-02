@@ -1,3 +1,4 @@
+/* eslint-disable es5/no-es6-methods  -- file only used on the server */
 import {getProjectRoot} from "@blitzjs/config"
 import fs from "fs"
 import path from "path"

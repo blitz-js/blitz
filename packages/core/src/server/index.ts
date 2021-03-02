@@ -21,3 +21,7 @@ export {sessionMiddleware, simpleRolesIsAuthorized, getSessionContext} from "./a
 export type {SimpleRolesIsAuthorized} from "./auth/sessions"
 export {passportAuth} from "./auth/passport-adapter"
 export {SecurePassword, hash256, generateToken} from "./auth/auth-utils"
+
+export {rpcApiHandler} from "./rpc-server"
+
+export {withBlitz} from "./with-blitz"

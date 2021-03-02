@@ -38,6 +38,7 @@ const specialImports: Record<string, string> = {
   SecurePassword: '@blitzjs/core/server',
   hash256: '@blitzjs/core/server',
   generateToken: '@blitzjs/core/server',
+  rpcApiHandler: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

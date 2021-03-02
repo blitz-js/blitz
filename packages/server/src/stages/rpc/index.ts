@@ -61,7 +61,7 @@ const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
 import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core/server'
-import {rpcApiHandler} from '@blitzjs/server'
+import {rpcApiHandler} from '@blitzjs/core/server'
 import path from 'path'
 
 // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)

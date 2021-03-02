@@ -46,7 +46,6 @@
     "hasbin": "1.2.3",
     "import-cwd": "3.0.0",
     "minimist": "1.2.5",
-    "module-alias": "2.2.2",
     "p-event": "4.2.0",
     "pkg-dir": "^5.0.0",
     "pluralize": "^8.0.0",

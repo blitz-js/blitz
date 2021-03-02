@@ -9,12 +9,12 @@ import {
   SessionContext,
   TOKEN_SEPARATOR,
 } from "@blitzjs/core"
-import {rpcApiHandler} from "@blitzjs/server"
 import {fromBase64} from "b64-lite"
 import http from "http"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 import fetch from "node-fetch"
 import listen from "test-listen"
+import {rpcApiHandler} from "../rpc-server"
 import {sessionMiddleware, simpleRolesIsAuthorized} from "./sessions"
 
 const isIsoDate = (str: string) => {
