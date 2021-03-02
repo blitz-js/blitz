@@ -1,5 +1,5 @@
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {Head} from "./nextjs"
+import {Head} from "./head"
 import {publicDataStore} from "./public-data-store"
 import {useAuthorizeIf} from "./supertokens"
 import {AppProps, BlitzPage} from "./types"

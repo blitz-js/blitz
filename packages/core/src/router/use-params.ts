@@ -1,8 +1,8 @@
 import fromPairs from "lodash.frompairs"
 import {useRouter} from "next/router"
 import {useMemo} from "react"
-import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "./types"
-import {useRouterQuery} from "./use-router-query"
+import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "../types"
+import {useRouterQuery} from "./index"
 
 function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQueryValue) {
   // Check if their type match

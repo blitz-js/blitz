@@ -9,8 +9,12 @@
   },
   "preconstruct": {
     "entrypoints": [
-      "index.ts",
-      "image.ts"
+      "config.ts",
+      "document.ts",
+      "dynamic.ts",
+      "head.ts",
+      "image.ts",
+      "index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -18,6 +22,10 @@
   "types": "dist/blitzjs-core.cjs.d.ts",
   "files": [
     "dist",
+    "config",
+    "document",
+    "dynamic",
+    "head",
     "image"
   ],
   "repository": "https://github.com/blitz-js/blitz",

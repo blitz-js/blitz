@@ -1,6 +1,5 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
-import {NextRouter} from "next/router"
 import {
   NextApiRequest,
   NextApiResponse,
@@ -12,8 +11,6 @@ import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
 import {Ctx} from "./middleware"
-import {useParams} from "./use-params"
-import {useRouterQuery} from "./use-router-query"
 
 export type {
   GetServerSideProps,
@@ -43,11 +40,6 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   authenticate?: boolean | {redirectTo?: string}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: string
-}
-
-export interface BlitzRouter extends NextRouter {
-  query: ReturnType<typeof useRouterQuery>
-  params: ReturnType<typeof useParams>
 }
 
 export interface Session {

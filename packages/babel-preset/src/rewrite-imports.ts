@@ -1,11 +1,24 @@
 import { PluginObj } from '@babel/core';
 import { BabelType } from 'babel-plugin-tester';
 
-const defaultImport = '@blitzjs/core';
+/*
+ * https://astexplorer.net/#/gist/dd0cdbd56a701d8c9e078d20505b3980/latest
+ */
+
+const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
   Image: '@blitzjs/core/image',
-  // 'Head': '@blitzjs/core/head'
+  Head: '@blitzjs/core/head',
+  dynamic: '@blitzjs/core/dynamic',
+  noSSR: '@blitzjs/core/dynamic',
+  getConfig: '@blitzjs/core/config',
+  setConfig: '@blitzjs/core/config',
+  Document: '@blitzjs/core/document',
+  DocumentHead: '@blitzjs/core/document',
+  Html: '@blitzjs/core/document',
+  Main: '@blitzjs/core/document',
+  BlitzScript: '@blitzjs/core/document',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {
@@ -25,9 +38,10 @@ function RewriteImports(babel: BabelType): PluginObj {
           return;
         }
 
-        path.node.source = t.stringLiteral(defaultImport);
+        path.node.source = t.stringLiteral(defaultImportSource);
 
-        path.node.specifiers.forEach((specifier, index) => {
+        const specifierIndexesToRemove: number[] = [];
+        path.node.specifiers.slice().forEach((specifier, index) => {
           if (!t.isImportSpecifier(specifier)) return;
           const importedName = t.isStringLiteral(specifier.imported)
             ? specifier.imported.value
@@ -39,13 +53,16 @@ function RewriteImports(babel: BabelType): PluginObj {
                 t.stringLiteral(specialImports[importedName])
               )
             );
-            if (path.node.specifiers.length > 1) {
-              path.node.specifiers.splice(index, 1);
-            } else {
-              path.remove();
-            }
+
+            specifierIndexesToRemove.push(index);
           }
         });
+        specifierIndexesToRemove.reverse().forEach((index) => {
+          path.node.specifiers.splice(index, 1);
+        });
+        if (!path.node.specifiers.length) {
+          path.remove();
+        }
       },
     },
   };

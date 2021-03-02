@@ -8,9 +8,9 @@ import {
   usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
+import {useRouter} from "./router"
 import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
-import {useRouter} from "./use-router"
 import {isClient} from "./utils"
 import {
   emptyQueryFn,

@@ -27,5 +27,15 @@ pluginTester({
         import { Image as BlitzImage } from '@blitzjs/core/image';
       `,
     },
+    {
+      code: `import {Document, Html, DocumentHead, Main, BlitzScript} from "blitz";`,
+      output: `
+        import { BlitzScript } from '@blitzjs/core/document';
+        import { Main } from '@blitzjs/core/document';
+        import { DocumentHead } from '@blitzjs/core/document';
+        import { Html } from '@blitzjs/core/document';
+        import { Document } from '@blitzjs/core/document';
+      `,
+    },
   ],
 });
