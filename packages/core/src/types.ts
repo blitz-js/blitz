@@ -41,26 +41,8 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   redirectAuthenticatedTo?: string
 }
 
-export interface Session {
-  // isAuthorize can be injected here (see supertokens.ts)
-  // PublicData can be injected here (see supertokens.ts)
-}
-
-export type PublicData = "PublicData" extends keyof Session
-  ? Session["PublicData"]
-  : {userId: unknown}
-export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
-  userId: PublicData["userId"] | null
-}
-
 export interface DefaultCtx {}
 export interface Ctx extends DefaultCtx {}
-
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -140,12 +122,6 @@ export type BlitzPassportConfig = {
   errorRedirectUrl?: string
   strategies: BlitzPassportStrategy[]
   secureProxy?: boolean
-}
-
-export type VerifyCallbackResult = {
-  publicData: PublicData
-  privateData?: Record<string, any>
-  redirectUrl?: string
 }
 
 // The actual resolver source definition

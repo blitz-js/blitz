@@ -28,9 +28,16 @@ const specialImports: Record<string, string> = {
   handleRequestWithMiddleware: '@blitzjs/core/server',
   connectMiddleware: '@blitzjs/core/server',
   invokeWithMiddleware: '@blitzjs/core/server',
-  passportAuth: '@blitzjs/core/server',
   paginate: '@blitzjs/core/server',
   resolver: '@blitzjs/core/server',
+  isLocalhost: '@blitzjs/core/server',
+  passportAuth: '@blitzjs/core/server',
+  sessionMiddleware: '@blitzjs/core/server',
+  simpleRolesIsAuthorized: '@blitzjs/core/server',
+  getSessionContext: '@blitzjs/core/server',
+  SecurePassword: '@blitzjs/core/server',
+  hash256: '@blitzjs/core/server',
+  generateToken: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

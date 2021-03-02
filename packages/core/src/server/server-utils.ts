@@ -1,4 +1,16 @@
+import {IncomingMessage} from "http"
 import {PaginationArgumentError} from "../errors"
+import {BlitzApiRequest} from "../types"
+
+export function isLocalhost(req: BlitzApiRequest | IncomingMessage): boolean {
+  let {host} = req.headers
+  let localhost = false
+  if (host) {
+    host = host.split(":")[0]
+    localhost = host === "localhost"
+  }
+  return localhost
+}
 
 export type PaginateArgs<QueryResult> = {
   skip?: number

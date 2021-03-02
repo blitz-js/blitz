@@ -37,7 +37,8 @@
     "packages/installer/src/**/*",
     "packages/repl/src/**/*",
     "packages/server/src/**/*",
-    "recipes/*"
+    "recipes/*",
+    "packages/auth/src/server/secure-proxy-middleware.ts"
   ],
   "exclude": ["*.test.ts", "*.test.tsx"]
 }

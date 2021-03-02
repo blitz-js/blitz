@@ -34,15 +34,10 @@ export function withBlitz(nextConfig: any) {
           config.module = config.module ?? {}
           config.module.rules = config.module.rules ?? []
           const excluded = [
-            /[\\/]secure-password[\\/]/,
             /[\\/]npm-which[\\/]/,
             /[\\/]cross-spawn[\\/]/,
-            /[\\/]node-libs-browser[\\/]/,
-            /[\\/]crypto-browserify[\\/]/,
-            /@blitzjs[\\/]display/,
             /@blitzjs[\\/]config/,
             /blitz[\\/]packages[\\/]config/,
-            /blitz[\\/]packages[\\/]display/,
           ]
           excluded.forEach((excluded) => {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})

@@ -1,6 +1,8 @@
 import {queryCache} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
+import {getAntiCSRFToken} from "./auth/auth-client"
+import {publicDataStore} from "./auth/public-data-store"
 import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
@@ -9,8 +11,6 @@ import {
   HEADER_SESSION_REVOKED,
 } from "./constants"
 import {CSRFTokenMismatchError} from "./errors"
-import {publicDataStore} from "./public-data-store"
-import {getAntiCSRFToken} from "./supertokens"
 import {
   CancellablePromise,
   EnhancedResolver,

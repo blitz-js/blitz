@@ -8,8 +8,8 @@ import {
   usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
 } from "react-query"
+import {useSession} from "./auth/auth-client"
 import {useRouter} from "./router"
-import {useSession} from "./supertokens"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {isClient} from "./utils"
 import {

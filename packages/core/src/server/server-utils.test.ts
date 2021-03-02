@@ -1,4 +1,4 @@
-import {paginate} from "../src"
+import {paginate} from "./server-utils"
 
 describe("paginate", () => {
   const dummyPaginationPromises = {

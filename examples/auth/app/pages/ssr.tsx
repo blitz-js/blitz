@@ -1,6 +1,6 @@
 import {FC} from "react"
-import {getSessionContext} from "@blitzjs/server"
 import {
+  getSessionContext,
   invokeWithMiddleware,
   useRouter,
   GetServerSideProps,

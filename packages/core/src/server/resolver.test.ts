@@ -1,5 +1,6 @@
 import * as z from "zod"
-import {Ctx, resolver} from "../src"
+import {Ctx} from "../types"
+import {resolver} from "./resolver"
 
 describe("resolver", () => {
   it("should typecheck and pass along value", async () => {

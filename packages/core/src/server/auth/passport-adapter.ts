@@ -3,21 +3,20 @@
 import {log} from "@blitzjs/display"
 import cookieSession from "cookie-session"
 import passport from "passport"
-import {SessionContext} from "../supertokens"
+import {SessionContext, VerifyCallbackResult} from "../../auth/auth-types"
 import {
   BlitzApiRequest,
   BlitzApiResponse,
   BlitzPassportConfig,
   ConnectMiddleware,
   Middleware,
-  VerifyCallbackResult,
-} from "../types"
-import {isLocalhost} from "../utils/index"
+} from "../../types"
 import {
   connectMiddleware,
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
-} from "./middleware"
+} from "../middleware"
+import {isLocalhost} from "../server-utils"
 import {secureProxyMiddleware} from "./secure-proxy-middleware"
 
 function assert(condition: any, message: string): asserts condition {

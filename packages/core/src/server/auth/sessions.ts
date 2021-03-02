@@ -1,38 +1,6 @@
+/* eslint-disable es5/no-es6-methods  -- file only used on the server */
 import {getConfig} from "@blitzjs/config"
 import {getProjectRoot} from "@blitzjs/config"
-import {
-  AuthenticationError,
-  AuthorizationError,
-  BlitzApiRequest,
-  BlitzApiResponse,
-  COOKIE_ANONYMOUS_SESSION_TOKEN,
-  COOKIE_CSRF_TOKEN,
-  COOKIE_PUBLIC_DATA_TOKEN,
-  COOKIE_REFRESH_TOKEN,
-  COOKIE_SESSION_TOKEN,
-  CSRFTokenMismatchError,
-  Ctx,
-  EmptyPublicData,
-  generateToken,
-  HANDLE_SEPARATOR,
-  hash256,
-  HEADER_CSRF,
-  HEADER_CSRF_ERROR,
-  HEADER_PUBLIC_DATA_TOKEN,
-  HEADER_SESSION_CREATED,
-  HEADER_SESSION_REVOKED,
-  IsAuthorizedArgs,
-  isLocalhost,
-  Middleware,
-  MiddlewareResponse,
-  PublicData,
-  SESSION_TOKEN_VERSION_0,
-  SESSION_TYPE_ANONYMOUS_JWT,
-  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
-  SessionConfig,
-  SessionContext,
-  TOKEN_SEPARATOR,
-} from "@blitzjs/core"
 // Must import this type from 'blitz'
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
@@ -42,6 +10,34 @@ import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
+import {
+  EmptyPublicData,
+  IsAuthorizedArgs,
+  PublicData,
+  SessionConfig,
+  SessionContext,
+} from "../../auth/auth-types"
+import {
+  COOKIE_ANONYMOUS_SESSION_TOKEN,
+  COOKIE_CSRF_TOKEN,
+  COOKIE_PUBLIC_DATA_TOKEN,
+  COOKIE_REFRESH_TOKEN,
+  COOKIE_SESSION_TOKEN,
+  HANDLE_SEPARATOR,
+  HEADER_CSRF,
+  HEADER_CSRF_ERROR,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
+  HEADER_SESSION_REVOKED,
+  SESSION_TOKEN_VERSION_0,
+  SESSION_TYPE_ANONYMOUS_JWT,
+  SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
+  TOKEN_SEPARATOR,
+} from "../../constants"
+import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "../../errors"
+import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
+import {isLocalhost} from "../server-utils"
+import {generateToken, hash256} from "./auth-utils"
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {

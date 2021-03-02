@@ -12,24 +12,15 @@ export {useMutation} from "./use-mutation"
 export {invoke} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
 
-export {SecurePassword, hash256, generateToken} from "./auth-utils"
-
 export {
   getAntiCSRFToken,
   useSession,
   useAuthenticatedSession,
   useAuthorize,
   useRedirectAuthenticated,
-} from "./supertokens"
-export type {
-  SessionConfig,
-  SessionContext,
-  AuthenticatedSessionContext,
-  ClientSession,
-  AuthenticatedClientSession,
-} from "./supertokens"
+} from "./auth/auth-client"
+export * from "./auth/auth-types"
 
-export {isLocalhost} from "./utils/index"
 export {prettyMs} from "./utils/pretty-ms"
 
 export {enhancePrisma} from "./prisma-utils"
