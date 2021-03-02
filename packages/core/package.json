@@ -34,9 +34,12 @@
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
+    "chalk": "4.1.0",
+    "cookie": "0.4.1",
     "cookie-session": "^1.4.0",
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
+    "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
     "next": "10.0.7",
@@ -45,19 +48,20 @@
     "passport": "0.4.1",
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
-    "superjson": "1.7.2",
-    "zod": "1.11.11"
+    "superjson": "1.7.2"
   },
   "peerDependencies": {
     "@blitzjs/config": "0.30.6",
     "@blitzjs/display": "0.30.6",
     "next": "*",
-    "react": ">=0.0.0 || >=0.0.0-experimental"
+    "react": ">=0.0.0 || >=0.0.0-experimental",
+    "zod": "*"
   },
   "devDependencies": {
     "@blitzjs/config": "*",
     "@blitzjs/display": "*",
-    "react": "0.0.0-experimental-3310209d0"
+    "react": "0.0.0-experimental-3310209d0",
+    "zod": "1.11.11"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {

@@ -1,3 +1,2 @@
-import {default as NextLink} from "next/link"
-export * from "next/link"
-export const Link = NextLink
+export {default as Link} from "next/link"
+export type {LinkProps} from "next/link"
