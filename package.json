@@ -51,6 +51,9 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
+    ],
+    "package.json": [
+      "manypkg fix"
     ]
   },
   "dependencies": {
