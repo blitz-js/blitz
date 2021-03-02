@@ -45,6 +45,15 @@ export function withBlitz(nextConfig: any) {
           })
 
           if (normalizedConfig.experimental?.isomorphicResolverImports) {
+            config.module.rules.push({
+              test: /@blitzjs[\\/]core[\\/]server/,
+              use: {loader: "null-loader"},
+            })
+            config.module.rules.push({
+              test: /blitz[\\/]packages[\\/]core[\\/]server/,
+              use: {loader: "null-loader"},
+            })
+
             config.plugins.push(
               new options.webpack.NormalModuleReplacementPlugin(
                 /[/\\]?(mutations|queries)[/\\]/,
