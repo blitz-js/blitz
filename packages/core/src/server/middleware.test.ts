@@ -2,9 +2,8 @@ import http from "http"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 import fetch from "node-fetch"
 import listen from "test-listen"
-import {BlitzApiRequest, BlitzApiResponse} from "."
+import {BlitzApiRequest, BlitzApiResponse, Middleware} from "../types"
 import {handleRequestWithMiddleware} from "./middleware"
-import {Middleware} from "./types"
 
 describe("handleRequestWithMiddleware", () => {
   it("works without await", async () => {

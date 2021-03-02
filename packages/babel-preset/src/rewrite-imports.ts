@@ -9,16 +9,25 @@ const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
   Image: '@blitzjs/core/image',
+
   Head: '@blitzjs/core/head',
+
   dynamic: '@blitzjs/core/dynamic',
   noSSR: '@blitzjs/core/dynamic',
+
   getConfig: '@blitzjs/core/config',
   setConfig: '@blitzjs/core/config',
+
   Document: '@blitzjs/core/document',
   DocumentHead: '@blitzjs/core/document',
   Html: '@blitzjs/core/document',
   Main: '@blitzjs/core/document',
   BlitzScript: '@blitzjs/core/document',
+
+  getAllMiddlewareForModule: '@blitzjs/core/server',
+  handleRequestWithMiddleware: '@blitzjs/core/server',
+  connectMiddleware: '@blitzjs/core/server',
+  invokeWithMiddleware: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

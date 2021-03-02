@@ -2,18 +2,17 @@
 import {getConfig} from "@blitzjs/config"
 import {baseLogger, log} from "@blitzjs/display"
 import {IncomingMessage, ServerResponse} from "http"
-import {BlitzApiRequest, BlitzApiResponse} from "."
 import {
+  BlitzApiRequest,
+  BlitzApiResponse,
   ConnectMiddleware,
+  Ctx,
   EnhancedResolver,
   Middleware,
   MiddlewareNext,
   MiddlewareRequest,
   MiddlewareResponse,
-} from "./types"
-
-export interface DefaultCtx {}
-export interface Ctx extends DefaultCtx {}
+} from "../types"
 
 export function getAllMiddlewareForModule<TInput, TResult>(
   resolverModule: EnhancedResolver<TInput, TResult>,

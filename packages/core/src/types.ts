@@ -10,7 +10,6 @@ import {
 import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
-import {Ctx} from "./middleware"
 
 export type {
   GetServerSideProps,
@@ -53,6 +52,9 @@ export type PublicData = "PublicData" extends keyof Session
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
 }
+
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
 
 export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
   ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]

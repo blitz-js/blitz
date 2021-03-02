@@ -14,7 +14,8 @@
       "dynamic.ts",
       "head.ts",
       "image.ts",
-      "index.ts"
+      "index.ts",
+      "server/index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -26,7 +27,8 @@
     "document",
     "dynamic",
     "head",
-    "image"
+    "image",
+    "server"
   ],
   "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {

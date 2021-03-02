@@ -2,10 +2,10 @@ import {
   BlitzApiRequest,
   BlitzApiResponse,
   EnhancedResolver,
-  handleRequestWithMiddleware,
   Middleware,
   prettyMs,
 } from "@blitzjs/core"
+import {handleRequestWithMiddleware} from "@blitzjs/core/server"
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
 import {deserialize, serialize} from "superjson"

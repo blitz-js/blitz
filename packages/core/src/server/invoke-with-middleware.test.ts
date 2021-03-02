@@ -2,8 +2,8 @@ import delay from "delay"
 import http, {IncomingMessage, ServerResponse} from "http"
 import fetch from "node-fetch"
 import listen from "test-listen"
-import {invokeWithMiddleware} from "./invoke"
-import {EnhancedResolver} from "./types"
+import {EnhancedResolver} from "../types"
+import {invokeWithMiddleware} from "./invoke-with-middleware"
 
 describe("invokeWithMiddleware", () => {
   it("works without middleware", async () => {

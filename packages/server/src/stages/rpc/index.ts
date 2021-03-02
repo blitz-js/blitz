@@ -60,7 +60,7 @@ export default getIsomorphicEnhancedResolver(
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
 import enhancedResolver from '${originalPath}'
-import {getAllMiddlewareForModule} from '@blitzjs/core'
+import {getAllMiddlewareForModule} from '@blitzjs/core/server'
 import {rpcApiHandler} from '@blitzjs/server'
 import path from 'path'
 

@@ -1,7 +1,6 @@
 import {infer as zInfer, ZodSchema} from "zod"
-import {Ctx} from "./middleware"
 import {AuthenticatedSessionContext, SessionContext, SessionContextBase} from "./supertokens"
-import {Await, EnsurePromise} from "./types"
+import {Await, Ctx, EnsurePromise} from "./types"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
