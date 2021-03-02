@@ -1,8 +1,8 @@
 import BadBehavior from "bad-behavior"
 import {COOKIE_PUBLIC_DATA_TOKEN, LOCALSTORAGE_PREFIX} from "../constants"
 import {deleteCookie, readCookie} from "../utils/cookie"
-import {parsePublicDataToken} from "./auth-client"
 import {EmptyPublicData, PublicData} from "./auth-types"
+import {parsePublicDataToken} from "./public-data-token"
 
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`

@@ -1,9 +1,9 @@
 import {COOKIE_PUBLIC_DATA_TOKEN} from "../constants"
 import {deleteCookie, readCookie} from "../utils/cookie"
-import {parsePublicDataToken} from "./auth-client"
 import {publicDataStore} from "./public-data-store"
+import {parsePublicDataToken} from "./public-data-token"
 
-jest.mock("./auth-client", () => ({
+jest.mock("./public-data-token", () => ({
   parsePublicDataToken: jest.fn(),
 }))
 jest.mock("../utils/cookie", () => ({
