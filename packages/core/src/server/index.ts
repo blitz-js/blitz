@@ -10,3 +10,11 @@ export {
 } from "./middleware"
 
 export {invokeWithMiddleware} from "./invoke-with-middleware"
+
+export {passportAuth} from "./passport-adapter"
+
+export {paginate} from "./server-utils"
+export type {PaginateArgs} from "./server-utils"
+
+export {resolver} from "./resolver"
+export type {AuthenticatedMiddlewareCtx} from "./resolver"

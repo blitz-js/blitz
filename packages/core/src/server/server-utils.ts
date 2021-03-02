@@ -1,6 +1,6 @@
-import {PaginationArgumentError} from "./errors"
+import {PaginationArgumentError} from "../errors"
 
-type PaginateArgs<QueryResult> = {
+export type PaginateArgs<QueryResult> = {
   skip?: number
   take?: number
   maxTake?: number

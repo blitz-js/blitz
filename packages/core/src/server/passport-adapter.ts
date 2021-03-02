@@ -3,7 +3,6 @@
 import {log} from "@blitzjs/display"
 import cookieSession from "cookie-session"
 import passport from "passport"
-import {secureProxyMiddleware} from "../secure-proxy-middleware"
 import {SessionContext} from "../supertokens"
 import {
   BlitzApiRequest,
@@ -19,6 +18,7 @@ import {
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
 } from "./middleware"
+import {secureProxyMiddleware} from "./secure-proxy-middleware"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)

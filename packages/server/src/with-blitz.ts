@@ -34,13 +34,11 @@ export function withBlitz(nextConfig: any) {
           config.module = config.module ?? {}
           config.module.rules = config.module.rules ?? []
           const excluded = [
-            /node_modules[\\/]passport/,
-            /node_modules[\\/]cookie-session/,
-            /node_modules[\\/]secure-password/,
-            /node_modules[\\/]npm-which/,
-            /node_modules[\\/]cross-spawn/,
-            /node_modules[\\/]node-libs-browser/,
-            /node_modules[\\/]crypto-browserify/,
+            /[\\/]secure-password[\\/]/,
+            /[\\/]npm-which[\\/]/,
+            /[\\/]cross-spawn[\\/]/,
+            /[\\/]node-libs-browser[\\/]/,
+            /[\\/]crypto-browserify[\\/]/,
             /@blitzjs[\\/]display/,
             /@blitzjs[\\/]config/,
             /blitz[\\/]packages[\\/]config/,
