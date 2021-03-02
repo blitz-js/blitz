@@ -2,7 +2,17 @@ import fromPairs from "lodash.frompairs"
 import {useRouter} from "next/router"
 import {useMemo} from "react"
 import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "../types"
-import {useRouterQuery} from "./index"
+
+export function useRouterQuery() {
+  const router = useRouter()
+
+  const query = useMemo(() => {
+    const query = decode(router.asPath.split("?")[1])
+    return query
+  }, [router.asPath])
+
+  return query
+}
 
 function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQueryValue) {
   // Check if their type match
@@ -103,4 +113,35 @@ export function useParam(
   const value = params[key]
 
   return value
+}
+
+/*
+ * Copied from https://github.com/lukeed/qss
+ */
+function toValue(mix: any) {
+  if (!mix) return ""
+  var str = decodeURIComponent(mix)
+  if (str === "false") return false
+  if (str === "true") return true
+  return +str * 0 === 0 ? +str : str
+}
+function decode(str: string) {
+  if (!str) return {}
+  let tmp: any
+  let k
+  const out: Record<string, any> = {}
+  const arr = str.split("&")
+
+  // eslint-disable-next-line no-cond-assign
+  while ((tmp = arr.shift())) {
+    tmp = tmp.split("=")
+    k = tmp.shift()
+    if (out[k] !== void 0) {
+      out[k] = [].concat(out[k], toValue(tmp.shift()) as any)
+    } else {
+      out[k] = toValue(tmp.shift())
+    }
+  }
+
+  return out
 }

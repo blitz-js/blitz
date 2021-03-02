@@ -1,4 +1,4 @@
-import {extractRouterParams, useParam, useParams} from "../src/router/use-params"
+import {extractRouterParams, useParam, useParams} from "../src/router/router-hooks"
 import {renderHook} from "./test-utils"
 
 describe("extractRouterParams", () => {
