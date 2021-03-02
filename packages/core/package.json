@@ -15,7 +15,8 @@
       "head.ts",
       "image.ts",
       "index.ts",
-      "server/index.ts"
+      "server/index.ts",
+      "with-blitz.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -28,7 +29,8 @@
     "dynamic",
     "head",
     "image",
-    "server"
+    "server",
+    "with-blitz"
   ],
   "dependencies": {
     "@types/secure-password": "3.1.0",
