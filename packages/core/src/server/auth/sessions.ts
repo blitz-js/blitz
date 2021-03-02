@@ -153,7 +153,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   return async (req, res, next) => {
     if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
-      await getSessionContext(req, res)
+      await getSession(req, res)
     }
     return next()
   }
@@ -200,7 +200,7 @@ function ensureMiddlewareResponse(
   }
 }
 
-export async function getSessionContext(
+export async function getSession(
   req: BlitzApiRequest | IncomingMessage,
   res: BlitzApiResponse | ServerResponse,
 ): Promise<SessionContext> {
@@ -213,7 +213,7 @@ export async function getSessionContext(
     return response.blitzCtx.session
   }
 
-  let sessionKernel = await getSession(req, res)
+  let sessionKernel = await getSessionKernel(req, res)
 
   if (sessionKernel) {
     debug("Got existing session", sessionKernel)
@@ -540,7 +540,7 @@ export const setPublicDataCookie = (
 // --------------------------------
 // Get Session
 // --------------------------------
-export async function getSession(
+export async function getSessionKernel(
   req: BlitzApiRequest,
   res: ServerResponse,
 ): Promise<SessionKernel | null> {
@@ -552,7 +552,7 @@ export async function getSession(
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
-    debug("[getSession] Request has sessionToken")
+    debug("[getSessionKernel] Request has sessionToken")
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {

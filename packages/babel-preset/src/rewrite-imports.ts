@@ -34,7 +34,7 @@ const specialImports: Record<string, string> = {
   passportAuth: '@blitzjs/core/server',
   sessionMiddleware: '@blitzjs/core/server',
   simpleRolesIsAuthorized: '@blitzjs/core/server',
-  getSessionContext: '@blitzjs/core/server',
+  getSession: '@blitzjs/core/server',
   SecurePassword: '@blitzjs/core/server',
   hash256: '@blitzjs/core/server',
   generateToken: '@blitzjs/core/server',

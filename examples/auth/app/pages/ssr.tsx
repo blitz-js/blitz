@@ -1,6 +1,6 @@
 import {FC} from "react"
 import {
-  getSessionContext,
+  getSession,
   invokeWithMiddleware,
   useRouter,
   GetServerSideProps,
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   path.resolve(".next/blitz/db.js")
   // End anti-tree-shaking
 
-  const session = await getSessionContext(req, res)
+  const session = await getSession(req, res)
   console.log("Session id:", session.userId)
   try {
     const user = await invokeWithMiddleware(
