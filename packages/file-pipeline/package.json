@@ -47,7 +47,7 @@
     "vinyl-fs": "3.0.3"
   },
   "peerDependencies": {
-    "@blitzjs/display": "0.30.6"
+    "@blitzjs/display": "*"
   },
   "devDependencies": {
     "@blitzjs/display": "0.30.7"
