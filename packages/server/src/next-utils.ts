@@ -125,33 +125,38 @@ export async function nextStartDev(
   })
 }
 
-export function nextBuild(
-  nextBin: string,
-  buildFolder: string,
-  manifest: Manifest,
-  config: ServerConfig,
-) {
-  const spawnEnv = getSpawnEnv(config)
+function makeNextSingleCommand(command: "build" | "export") {
+  return function doIt(
+    nextBin: string,
+    buildFolder: string,
+    manifest: Manifest | undefined,
+    config: ServerConfig,
+  ) {
+    const spawnEnv = getSpawnEnv(config)
 
-  return new Promise<void>((res, rej) => {
-    const nextjs = spawn(nextBin, ["build"], {
-      cwd: buildFolder,
-      env: spawnEnv,
-      stdio: [process.stdin, "pipe", "pipe"],
-    })
-      .on("exit", (code: number) => {
-        if (code === 0) {
-          res()
-        } else {
-          process.exit(code)
-        }
+    return new Promise<void>((res, rej) => {
+      const nextjs = spawn(nextBin, [command], {
+        cwd: buildFolder,
+        env: spawnEnv,
+        stdio: [process.stdin, "pipe", "pipe"],
       })
-      .on("error", rej)
+        .on("exit", (code: number) => {
+          if (code === 0) {
+            res()
+          } else {
+            process.exit(code)
+          }
+        })
+        .on("error", rej)
 
-    nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
-    nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
-  })
+      nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
+      nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
+    })
+  }
 }
+
+export const nextBuild = makeNextSingleCommand("build")
+export const nextExport = makeNextSingleCommand("export")
 
 export async function nextStart(nextBin: string, buildFolder: string, config: ServerConfig) {
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
