@@ -7,7 +7,9 @@ const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 const common = {
   globalSetup: path.resolve(__dirname, "./jest-preset/global-setup.js"),
   // Add type checking to TypeScript test files
-  preset: "ts-jest",
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+  },
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
   testPathIgnorePatterns: [
@@ -18,10 +20,6 @@ const common = {
     "<rootDir>/test/e2e",
     "<rootDir>/cypress",
   ],
-  transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "babel-jest",
-  },
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>"],
   // Ignore the build directories
