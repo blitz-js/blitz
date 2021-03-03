@@ -11,6 +11,16 @@ const common = {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.jsx?$": "babel-jest",
   },
+  globals: {
+    "ts-jest": {
+      tsconfig: {
+        jsx: "react",
+      },
+      // babelConfig: {
+      //   // plugins: ["@babel/plugin-transform-react-jsx"],
+      // },
+    },
+  },
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
   testPathIgnorePatterns: [
