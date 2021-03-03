@@ -1,6 +1,7 @@
 import {baseLogger, chalk, log as displayLog} from "@blitzjs/display"
 import {getAllMiddlewareForModule, handleRequestWithMiddleware} from "./middleware"
 import {
+  CancellablePromise,
   EnhancedResolver,
   EnhancedResolverRpcClient,
   FirstParam,
@@ -13,10 +14,10 @@ import {
 import {isClient} from "./utils"
 import {prettyMs} from "./utils/pretty-ms"
 
-export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = PromiseReturnType<T>>(
+export function invoke<T extends QueryFn, TInput = FirstParam<T>>(
   queryFn: T,
   params: TInput,
-) {
+): CancellablePromise<PromiseReturnType<T>> {
   if (typeof queryFn === "undefined") {
     throw new Error(
       "invoke is missing the first argument - it must be a query or mutation function",
@@ -24,10 +25,10 @@ export function invoke<T extends QueryFn, TInput = FirstParam<T>, TResult = Prom
   }
 
   if (isClient) {
-    const fn = (queryFn as unknown) as EnhancedResolverRpcClient<TInput, TResult>
+    const fn = (queryFn as unknown) as EnhancedResolverRpcClient<TInput, PromiseReturnType<T>>
     return fn(params, {fromInvoke: true})
   } else {
-    const fn = (queryFn as unknown) as EnhancedResolver<TInput, TResult>
+    const fn = (queryFn as unknown) as EnhancedResolver<TInput, PromiseReturnType<T>>
     return fn(params) as ReturnType<T>
   }
 }
