@@ -36,8 +36,8 @@
     "zod": "1.11.11"
   },
   "peerDependencies": {
-    "@blitzjs/config": "0.30.6",
-    "@blitzjs/display": "0.30.6",
+    "@blitzjs/config": "*",
+    "@blitzjs/display": "*",
     "nanoid": "*",
     "next": "*",
     "react": ">=0.0.0 || >=0.0.0-experimental"
