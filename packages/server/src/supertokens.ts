@@ -127,7 +127,7 @@ export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) =>
   // No roles required, so all roles allowed
   if (!roleOrRoles) return true
 
-  const rolesToAuthorize = []
+  const rolesToAuthorize: string[] = []
   if (Array.isArray(roleOrRoles)) {
     rolesToAuthorize.push(...roleOrRoles)
   } else if (roleOrRoles) {
