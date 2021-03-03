@@ -61,29 +61,21 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   filterByPath(filterFn: (givenPath: string) => boolean) {
-    const found = []
-    for (let path in this.routeCache) {
-      if (filterFn(path)) {
-        found.push(this.routeCache[path])
-      }
-    }
-    return found
+    return Object.entries(this.routeCache)
+      .filter(([path]) => filterFn(path))
+      .map(([_path, entry]) => entry)
   }
 
   filter(filterFn: (entry: RouteCacheEntry) => boolean) {
-    let found = []
-    for (let path in this.routeCache) {
-      if (filterFn(this.routeCache[path])) {
-        found.push(this.routeCache[path])
-      }
-    }
-    return found
+    return Object.values(this.routeCache).filter(filterFn)
   }
 
   get(): Record<string, RouteCacheEntry>
   get(key: string): RouteCacheEntry
-  get(key?: string) {
-    if (key) return this.routeCache[key]
+  get(file: File): RouteCacheEntry
+  get(key?: string | File) {
+    if (typeof key === "string") return this.routeCache[key]
+    if (key?.originalRelative) return this.routeCache[key.originalRelative]
     return this.routeCache
   }
 

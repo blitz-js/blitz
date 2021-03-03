@@ -31,6 +31,7 @@ export interface RouteCacheInterface extends AbstractFileCache {
 
   get(): Record<string, RouteCacheEntry>
   get(key: string): RouteCacheEntry
+  get(file: File): RouteCacheEntry
 
   set(key: string, value: RouteCacheEntry): void
 
