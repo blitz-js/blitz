@@ -1735,6 +1735,24 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@blitzjs/config@0.30.6":
+  version "0.30.6"
+  resolved "https://registry.yarnpkg.com/@blitzjs/config/-/config-0.30.6.tgz#19de5a53bb4c51a673627f5c5fdfd9c05346e20b"
+  integrity sha512-TZK9R5fvUovoFso7Y5uDcDm/PND2oCk74oC8Amob8a/feUhZ4iKbKJ8nHupk6S1eRVQIo4AGC1YZhhwtga16Ow==
+  dependencies:
+    module-alias "2.2.2"
+
+"@blitzjs/display@0.30.6":
+  version "0.30.6"
+  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.30.6.tgz#7130ef4d7959f7024972a1d51ffef81d5441784a"
+  integrity sha512-aPHHXXy6FOGvMJZ5tNpKPrHWM3uwashP2UUmSnIQKFUON/lRBLIMTgHIVPJ8yKMN1BrczXTWDGNNtGaTT2ZlcA==
+  dependencies:
+    "@blitzjs/display" "0.30.6"
+    chalk "^4.1.0"
+    console-table-printer "^2.7.5"
+    ora "^5.3.0"
+    tslog "^3.1.1"
+
 "@changesets/types@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@changesets/types/-/types-0.4.0.tgz#3413badb2c3904357a36268cb9f8c7e0afc3a804"
@@ -13448,6 +13466,11 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
+
+module-alias@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/module-alias/-/module-alias-2.2.2.tgz#151cdcecc24e25739ff0aa6e51e1c5716974c0e0"
+  integrity sha512-A/78XjoX2EmNvppVWEhM2oGk3x4lLxnkEA4jTbaK97QKSDjkIoOsKQlfylt/d3kKKi596Qy3NP5XrXJ6fZIC9Q==
 
 moment@^2.22.1, moment@^2.27.0:
   version "2.29.1"
