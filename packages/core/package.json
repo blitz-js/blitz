@@ -53,8 +53,8 @@
     "superjson": "1.7.2"
   },
   "peerDependencies": {
-    "@blitzjs/config": "0.30.7",
-    "@blitzjs/display": "0.30.7",
+    "@blitzjs/config": "*",
+    "@blitzjs/display": "*",
     "react": ">=0.0.0 || >=0.0.0-experimental",
     "zod": "*"
   },
