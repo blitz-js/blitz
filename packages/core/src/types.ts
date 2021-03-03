@@ -13,6 +13,7 @@ import {BlitzRuntimeData} from "./blitz-data"
 
 export type {
   GetServerSideProps,
+  GetServerSidePropsContext,
   GetServerSidePropsResult,
   GetStaticPaths,
   GetStaticPathsContext,

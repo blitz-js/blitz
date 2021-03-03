@@ -13,6 +13,7 @@ import {
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
 import path from "path"
+import {GetServerSidePropsContext} from "next"
 
 type PageProps = {
   user?: PromiseReturnType<typeof getUser>
@@ -22,7 +23,10 @@ type PageProps = {
   }
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, res}) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async ({
+  req,
+  res,
+}: GetServerSidePropsContext) => {
   // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
   // https://github.com/blitz-js/blitz/issues/794
   path.resolve("next.config.js")
