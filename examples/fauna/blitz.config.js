@@ -1,4 +1,4 @@
-const { sessionMiddleware, simpleRolesIsAuthorized } = require("@blitzjs/server")
+const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
 const withMonorepoBuildTooling = require("@preconstruct/next")
 const { GraphQLClient, gql } = require("graphql-request")
 
