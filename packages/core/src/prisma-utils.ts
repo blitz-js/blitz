@@ -39,7 +39,7 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
             const process = spawn(
               prismaBin,
               ["migrate", "reset", "--force", "--skip-generate", "--preview-feature"],
-              {stdio: "inherit"},
+              {stdio: "ignore"},
             )
             process.on("exit", (code) => (code === 0 ? res(0) : rej(code)))
           })
