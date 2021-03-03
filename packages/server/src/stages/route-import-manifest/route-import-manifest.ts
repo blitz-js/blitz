@@ -73,7 +73,7 @@ export function parseParametersFromRoute(
   }
 }
 
-export const createStageRouteImportManifest: Stage = ({getRouteCache, processNewFile}) => {
+export const createStageRouteImportManifest: Stage = ({getRouteCache}) => {
   const routeCache = getRouteCache()
 
   const routes: Record<string, Route> = {}
