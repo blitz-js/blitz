@@ -141,12 +141,16 @@ export type BlitzPassportStrategy = {
   strategy: Strategy
 }
 
-export type BlitzPassportConfig = {
+export type BlitzPassportConfigObject = {
   successRedirectUrl?: string
   errorRedirectUrl?: string
   strategies: BlitzPassportStrategy[]
   secureProxy?: boolean
 }
+
+export type BlitzPassportConfigCallback = (blitzCtx: Ctx) => BlitzPassportConfigObject
+
+export type BlitzPassportConfig = BlitzPassportConfigObject | BlitzPassportConfigCallback
 
 export type VerifyCallbackResult = {
   publicData: PublicData

@@ -6,17 +6,26 @@ import passport from "passport"
 import {BlitzApiRequest, BlitzApiResponse, ConnectMiddleware} from "."
 import {
   connectMiddleware,
+  Ctx,
   getAllMiddlewareForModule,
   handleRequestWithMiddleware,
 } from "./middleware"
 import {secureProxyMiddleware} from "./secure-proxy-middleware"
 import {SessionContext} from "./supertokens"
-import {BlitzPassportConfig, Middleware, VerifyCallbackResult} from "./types"
+import {
+  BlitzPassportConfig,
+  BlitzPassportConfigObject,
+  Middleware,
+  VerifyCallbackResult,
+} from "./types"
 import {isLocalhost} from "./utils/index"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
+
+const isFunction = (functionToCheck: any): functionToCheck is Function =>
+  typeof functionToCheck === "function"
 
 const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
   typeof value === "object" && value !== null && "publicData" in value
@@ -25,6 +34,13 @@ const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
 export function passportAuth(config: BlitzPassportConfig) {
   return async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
+    const globalMiddleware = getAllMiddlewareForModule({} as any)
+    await handleRequestWithMiddleware(req, res, globalMiddleware)
+
+    const configObject: BlitzPassportConfigObject = isFunction(config)
+      ? config((res as any).blitzCtx as Ctx)
+      : config
+
     const cookieSessionMiddleware = cookieSession({
       secret: process.env.SESSION_SECRET_KEY || "default-dev-secret",
       secure: process.env.NODE_ENV === "production" && !isLocalhost(req),
@@ -38,7 +54,7 @@ export function passportAuth(config: BlitzPassportConfig) {
       connectMiddleware(passport.session()),
     ]
 
-    if (config.secureProxy) {
+    if (configObject.secureProxy) {
       middleware.push(secureProxyMiddleware)
     }
 
@@ -47,11 +63,11 @@ export function passportAuth(config: BlitzPassportConfig) {
     }
 
     assert(
-      config.strategies.length,
+      configObject.strategies.length,
       "No Passport strategies found! Please add at least one strategy.",
     )
 
-    const blitzStrategy = config.strategies.find(
+    const blitzStrategy = configObject.strategies.find(
       ({strategy}) => strategy.name === req.query.auth[0],
     )
     assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
@@ -107,7 +123,7 @@ export function passportAuth(config: BlitzPassportConfig) {
               let redirectUrl: string =
                 redirectUrlFromVerifyResult ||
                 (session.$publicData as any)[INTERNAL_REDIRECT_URL_KEY] ||
-                (error ? config.errorRedirectUrl : config.successRedirectUrl) ||
+                (error ? configObject.errorRedirectUrl : configObject.successRedirectUrl) ||
                 "/"
 
               if (error) {
@@ -137,7 +153,6 @@ export function passportAuth(config: BlitzPassportConfig) {
       )
     }
 
-    const globalMiddleware = getAllMiddlewareForModule({} as any)
-    await handleRequestWithMiddleware(req, res, [...globalMiddleware, ...middleware])
+    await handleRequestWithMiddleware(req, res, middleware)
   }
 }
