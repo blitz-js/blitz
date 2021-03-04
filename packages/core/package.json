@@ -1,53 +1,74 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.30.6",
+  "version": "0.30.7",
   "license": "MIT",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "author": {
-    "name": "Brandon Bayer",
-    "email": "b@bayer.ws",
-    "url": "https://twitter.com/flybayer"
+  "preconstruct": {
+    "entrypoints": [
+      "config.ts",
+      "document.ts",
+      "dynamic.ts",
+      "head.ts",
+      "image.ts",
+      "index.ts",
+      "server/index.ts",
+      "with-blitz.ts"
+    ]
   },
   "main": "dist/blitzjs-core.cjs.js",
   "module": "dist/blitzjs-core.esm.js",
   "types": "dist/blitzjs-core.cjs.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "config",
+    "document",
+    "dynamic",
+    "head",
+    "image",
+    "server",
+    "with-blitz"
   ],
-  "repository": "https://github.com/blitz-js/blitz",
   "dependencies": {
-    "@types/htmlescape": "^1.1.1",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
+    "chalk": "^4.1.0",
+    "cookie": "0.4.1",
     "cookie-session": "^1.4.0",
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
+    "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
+    "nanoid": "^3.1.20",
+    "next": "10.0.7",
     "npm-which": "^3.0.1",
+    "null-loader": "4.0.1",
     "passport": "0.4.1",
     "react-query": "2.5.12",
     "secure-password": "4.0.0",
-    "superjson": "1.7.2",
-    "zod": "1.11.11"
+    "superjson": "1.7.2"
   },
   "peerDependencies": {
-    "@blitzjs/config": "0.30.6",
-    "@blitzjs/display": "0.30.6",
-    "nanoid": "*",
-    "next": "*",
-    "react": ">=0.0.0 || >=0.0.0-experimental"
+    "@blitzjs/config": "*",
+    "@blitzjs/display": "*",
+    "react": ">=0.0.0 || >=0.0.0-experimental",
+    "zod": "*"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "devDependencies": {
     "@blitzjs/config": "*",
     "@blitzjs/display": "*",
-    "nanoid": "^3.1.20",
-    "next": "10.0.7",
-    "react": "0.0.0-experimental-3310209d0"
-  }
+    "react": "0.0.0-experimental-3310209d0",
+    "zod": "1.11.11"
+  },
+  "repository": "https://github.com/blitz-js/blitz",
+  "author": {
+    "name": "Brandon Bayer",
+    "email": "b@bayer.ws",
+    "url": "https://twitter.com/flybayer"
+  },
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

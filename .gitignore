@@ -28,3 +28,4 @@ dist
 examples/auth2
 .idea
 .ultra.cache.json
+db.sqlite-journal

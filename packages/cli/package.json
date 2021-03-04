@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.30.6",
+  "version": "0.30.7",
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
@@ -25,8 +25,8 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.30.6",
-    "@blitzjs/repl": "0.30.6",
+    "@blitzjs/display": "0.30.7",
+    "@blitzjs/repl": "0.30.7",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
@@ -46,7 +46,6 @@
     "hasbin": "1.2.3",
     "import-cwd": "3.0.0",
     "minimist": "1.2.5",
-    "module-alias": "2.2.2",
     "p-event": "4.2.0",
     "pkg-dir": "^5.0.0",
     "pluralize": "^8.0.0",
@@ -57,9 +56,9 @@
     "v8-compile-cache": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.30.6",
-    "@blitzjs/installer": "0.30.6",
-    "@blitzjs/server": "0.30.6",
+    "@blitzjs/generator": "0.30.7",
+    "@blitzjs/installer": "0.30.7",
+    "@blitzjs/server": "0.30.7",
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "nock": "13.0.6",

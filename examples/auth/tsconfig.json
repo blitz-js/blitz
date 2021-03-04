@@ -14,6 +14,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "downlevelIteration": true,
     "jsx": "preserve"
   },
   "exclude": ["node_modules", "cypress"],
