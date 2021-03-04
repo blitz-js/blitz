@@ -73,6 +73,12 @@
     "resolve-from": "^5.0.0",
     "ts-jest": "26.5.0"
   },
+  "devDependencies": {
+    "next": "10.0.7"
+  },
+  "peerDependencies": {
+    "next": "*"
+  },
   "keywords": [
     "blitz",
     "blitzjs",
