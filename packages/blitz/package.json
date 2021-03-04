@@ -15,7 +15,8 @@
   "preconstruct": {
     "entrypoints": [
       "index.ts",
-      "cli.ts"
+      "cli.ts",
+      "custom-server.ts"
     ]
   },
   "bin": {
@@ -27,6 +28,7 @@
   "files": [
     "dist",
     "cli",
+    "custom-server",
     "jest-preset.js",
     "jest-preset",
     "babel.js"
@@ -70,6 +72,12 @@
     "react-test-renderer": "17.0.1",
     "resolve-from": "^5.0.0",
     "ts-jest": "26.5.0"
+  },
+  "devDependencies": {
+    "next": "10.0.7"
+  },
+  "peerDependencies": {
+    "next": "*"
   },
   "keywords": [
     "blitz",

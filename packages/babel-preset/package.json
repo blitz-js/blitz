@@ -2,7 +2,10 @@
   "name": "@blitzjs/babel-preset",
   "version": "0.30.7",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
   "module": "dist/blitzjs-babel-preset.esm.js",
   "main": "dist/blitzjs-babel-preset.cjs.js",
   "typings": "dist/blitzjs-babel-preset.cjs.d.ts",
