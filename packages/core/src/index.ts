@@ -1,3 +1,4 @@
+console.log("\nCORE ENTRY2\n")
 export * from "./types"
 export * from "./router"
 export * from "./link"

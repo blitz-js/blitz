@@ -1,11 +1,12 @@
 import AddBlitzAppRoot from './add-blitz-app-root';
 import RewriteImports from './rewrite-imports';
 
-const isRunningInJest = Boolean(process.env.JEST_WORKER_ID);
-
 // eslint-disable-next-line import/no-default-export
 export default function preset(_api: any, options = {}) {
-  // const isTest = api.env('test');
+  // const isTest = _api.env('test');
+  const isRunningInJest = Boolean(process.env.JEST_WORKER_ID);
+
+  console.log('\n\nIS JEST ', isRunningInJest);
 
   const config = {
     presets: [[require('next/babel'), options]],

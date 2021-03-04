@@ -1,3 +1,4 @@
+console.log("\nBLITZ ENTRY\n")
 export * from "@blitzjs/core/config"
 export * from "@blitzjs/core/document"
 export * from "@blitzjs/core/dynamic"
