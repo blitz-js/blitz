@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/file-pipeline",
-  "version": "0.30.7",
+  "version": "0.31.0",
   "description": "Display package for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -50,6 +50,6 @@
     "@blitzjs/display": "*"
   },
   "devDependencies": {
-    "@blitzjs/display": "0.30.7"
+    "@blitzjs/display": "0.31.0"
   }
 }
