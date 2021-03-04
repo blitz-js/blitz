@@ -22,7 +22,7 @@ assert(process.env.AUTH0_DOMAIN, "You must provide the AUTH0_DOMAIN env variable
 assert(process.env.AUTH0_CLIENT_ID, "You must provide the AUTH0_CLIENT_ID env variable")
 assert(process.env.AUTH0_CLIENT_SECRET, "You must provide the AUTH0_CLIENT_SECRET env variable")
 
-export default passportAuth({
+export default passportAuth((ctx) => ({
   successRedirectUrl: "/",
   strategies: [
     {
@@ -43,6 +43,8 @@ export default passportAuth({
             // This can happen if you haven't enabled email access in your twitter app permissions
             return done(new Error("Twitter OAuth response doesn't have email."))
           }
+
+          console.log(ctx.session.userId)
 
           const user = await db.user.upsert({
             where: {email},
@@ -140,4 +142,4 @@ export default passportAuth({
       ),
     },
   ],
-})
+}))
