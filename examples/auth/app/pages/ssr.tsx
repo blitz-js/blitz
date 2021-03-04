@@ -6,12 +6,13 @@ import {
   useMutation,
   AuthenticationError,
   AuthorizationError,
+  GetServerSideProps,
+  InferGetServerSidePropsType,
   BlitzPage,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
 import path from "path"
-import {GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType} from "next"
 
 export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
   // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)

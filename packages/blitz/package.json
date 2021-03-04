@@ -15,7 +15,8 @@
   "preconstruct": {
     "entrypoints": [
       "index.ts",
-      "cli.ts"
+      "cli.ts",
+      "custom-server.ts"
     ]
   },
   "bin": {
@@ -27,6 +28,7 @@
   "files": [
     "dist",
     "cli",
+    "custom-server",
     "jest-preset.js",
     "jest-preset",
     "babel.js"

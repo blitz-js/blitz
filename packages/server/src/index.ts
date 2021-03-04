@@ -6,17 +6,3 @@ export {normalize} from "./config"
 export type {ServerConfig} from "./config"
 export {resolveBinAsync} from "./resolve-bin-async"
 export {ManifestLoader} from "./stages/manifest"
-
-// -----------------
-// For custom server
-// -----------------
-import next from "next"
-
-// Support commonjs `require('blitz')`
-if (process.env.BLITZ_PROD_BUILD) {
-  module.exports = next
-  exports = module.exports
-}
-
-// eslint-disable-next-line import/no-default-export
-export default next
