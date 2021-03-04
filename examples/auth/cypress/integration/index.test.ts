@@ -53,6 +53,7 @@ describe("index page", () => {
     cy.contains("button", "Logout").click()
 
     cy.location("pathname").should("equal", "/")
+    cy.wait(1000)
     cy.contains("a", /login/i)
   })
 

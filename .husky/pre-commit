@@ -1,6 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn manypkg fix
 yarn lint-staged
 yarn pretty-quick --staged

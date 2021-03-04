@@ -51,6 +51,9 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
+    ],
+    "package.json": [
+      "manypkg fix"
     ]
   },
   "dependencies": {
@@ -80,6 +83,7 @@
     "@types/fs-extra": "9.0.6",
     "@types/fs-readdir-recursive": "1.0.0",
     "@types/gulp-if": "0.0.33",
+    "@types/htmlescape": "^1.1.1",
     "@types/ink-spinner": "3.0.0",
     "@types/jest": "^26.0.20",
     "@types/jsonwebtoken": "8.5.0",
@@ -88,7 +92,6 @@
     "@types/mem-fs-editor": "7.0.0",
     "@types/merge-stream": "1.1.2",
     "@types/mock-fs": "4.13.0",
-    "@types/module-alias": "2.0.0",
     "@types/node": "14.14.22",
     "@types/node-fetch": "2.5.8",
     "@types/parallel-transform": "1.1.0",
@@ -116,6 +119,7 @@
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-dev-expression": "0.2.2",
     "babel-plugin-macros": "3.0.1",
+    "babel-plugin-tester": "10.0.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "concurrently": "6.0.0",
     "cpx": "1.5.0",
