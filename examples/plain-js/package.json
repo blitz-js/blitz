@@ -19,8 +19,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "blitz test"
+      "pre-commit": "lint-staged && pretty-quick --staged"
     }
   },
   "lint-staged": {
