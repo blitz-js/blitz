@@ -28,8 +28,8 @@ export default passportAuth((ctx) => ({
     {
       strategy: new TwitterStrategy(
         {
-          consumerKey: process.env.TWITTER_CONSUMER_KEY,
-          consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+          consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+          consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/twitter/callback"
@@ -63,8 +63,8 @@ export default passportAuth((ctx) => ({
     {
       strategy: new GitHubStrategy(
         {
-          clientID: process.env.GITHUB_CLIENT_ID,
-          clientSecret: process.env.GITHUB_CLIENT_SECRET,
+          clientID: process.env.GITHUB_CLIENT_ID as string,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/github/callback"
@@ -106,9 +106,9 @@ export default passportAuth((ctx) => ({
       authenticateOptions: {scope: "openid email profile"},
       strategy: new Auth0Strategy(
         {
-          domain: process.env.AUTH0_DOMAIN,
-          clientID: process.env.AUTH0_CLIENT_ID,
-          clientSecret: process.env.AUTH0_CLIENT_SECRET,
+          domain: process.env.AUTH0_DOMAIN as string,
+          clientID: process.env.AUTH0_CLIENT_ID as string,
+          clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/auth0/callback"
