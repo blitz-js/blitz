@@ -2194,6 +2194,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "heavygabriel",
+      "name": "Gabriel Picard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51029779?v=4",
+      "profile": "https://projet-test-99df0.firebaseapp.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
