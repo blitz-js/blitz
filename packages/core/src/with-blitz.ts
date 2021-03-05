@@ -39,6 +39,7 @@ export function withBlitz(nextConfig: any) {
             /[\\/]cross-spawn[\\/]/,
             /@blitzjs[\\/]config/,
             /blitz[\\/]packages[\\/]config/,
+            /blitz2[\\/]packages[\\/]config/,
           ]
           excluded.forEach((excluded) => {
             config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
