@@ -22,7 +22,7 @@ jobs:
           node-version: "14"
       - name: Install yarn v2
         id: yarn-v2-install
-        run: yarn set version from sources
+        run: yarn set version berry
       - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
@@ -61,7 +61,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
       - name: Install yarn v2
         id: yarn-v2-install
-        run: yarn set version from sources
+        run: yarn set version berry
       - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
@@ -104,7 +104,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
       - name: Install yarn v2
         id: yarn-v2-install
-        run: yarn set version from sources
+        run: yarn set version berry
       - name: Cache node_modules
         id: yarn-cache
         uses: actions/cache@v2
