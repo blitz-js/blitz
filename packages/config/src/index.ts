@@ -7,18 +7,6 @@ export function getProjectRoot() {
   return pkgDir.sync() || process.cwd()
 }
 
-export function getConfigFilePath() {
-  const projectRoot = getProjectRoot()
-  const bConfig = path.join(projectRoot, "blitz.config.js")
-  const nConfig = path.join(projectRoot, "next.config.js")
-
-  if (existsSync(nConfig)) {
-    return nConfig
-  } else {
-    return bConfig
-  }
-}
-
 export interface BlitzConfig extends Record<string, unknown> {
   target?: string
   experimental?: {
@@ -59,22 +47,46 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     },
   }
 
-  let file
-  let loadedConfig = {}
+  const projectRoot = getProjectRoot()
+  const nextConfigPath = path.join(projectRoot, "next.config.js")
+  const blitzConfigPath = path.join(projectRoot, "blitz.config.js")
+
   try {
+    // --------------------------------
+    // Load next.config.js if it exists
+    // --------------------------------
+    let loadedNextConfig = {}
+    if (existsSync(nextConfigPath)) {
+      // eslint-disable-next-line no-eval -- block webpack from following this module path
+      loadedNextConfig = eval("require")(nextConfigPath)
+      if (typeof loadedNextConfig === "function") {
+        const phase =
+          process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+        loadedNextConfig = loadedNextConfig(phase, {})
+      }
+    }
+
+    // --------------------------------
+    // Load blitz.config.js
+    // --------------------------------
     // eslint-disable-next-line no-eval -- block webpack from following this module path
-    file = eval("require")(getConfigFilePath())
-    if (typeof file === "function") {
+    let loadedBlitzConfig = eval("require")(blitzConfigPath)
+    if (typeof loadedBlitzConfig === "function") {
       const phase =
         process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
-      loadedConfig = file(phase, {})
-    } else {
-      loadedConfig = file
+      loadedBlitzConfig = loadedBlitzConfig(phase, {})
     }
-  } catch {}
-  blitzConfig = {
-    ...loadedConfig,
-    ...blitzConfig,
+
+    // -------------
+    // Merge configs
+    // -------------
+    blitzConfig = {
+      ...blitzConfig,
+      ...loadedNextConfig,
+      ...loadedBlitzConfig,
+    }
+  } catch {
+    console.error("Failed to load config in getConfig()")
   }
 
   global.blitzConfig = blitzConfig
