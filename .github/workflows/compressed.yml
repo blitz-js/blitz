@@ -15,6 +15,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - name: Install yarn v2
+        id: yarn-v2-install
+        run: yarn set version from sources
       - name: Install dependencies
         run: |
           yarn && yarn build
