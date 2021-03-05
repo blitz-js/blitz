@@ -19,9 +19,7 @@
       "custom-server.ts"
     ]
   },
-  "bin": {
-    "blitz": "./bin/blitz"
-  },
+  "bin": "./bin/blitz",
   "main": "dist/blitz.cjs.js",
   "module": "dist/blitz.esm.js",
   "types": "dist/blitz.cjs.d.ts",

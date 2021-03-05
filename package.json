@@ -5,10 +5,6 @@
       "packages/*",
       "examples/*",
       "recipes/*"
-    ],
-    "nohoist": [
-      "**/@prisma",
-      "**/@prisma/**"
     ]
   },
   "preconstruct": {
