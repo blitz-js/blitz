@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.31.0",
+  "version": "0.31.1",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -59,8 +59,8 @@
     "zod": "*"
   },
   "devDependencies": {
-    "@blitzjs/config": "0.31.0",
-    "@blitzjs/display": "0.31.0",
+    "@blitzjs/config": "0.31.1",
+    "@blitzjs/display": "0.31.1",
     "react": "0.0.0-experimental-3310209d0",
     "zod": "1.11.11"
   },
