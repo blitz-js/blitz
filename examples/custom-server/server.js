@@ -1,6 +1,6 @@
 const {createServer} = require("http")
 const {parse} = require("url")
-const blitz = require("@blitzjs/server")
+const blitz = require("blitz/custom-server")
 const {log} = require("@blitzjs/display")
 
 const {PORT = "3000"} = process.env

@@ -53,6 +53,7 @@ describe("index page", () => {
     cy.contains("button", "Logout").click()
 
     cy.location("pathname").should("equal", "/")
+    cy.wait(1000)
     cy.contains("a", /login/i)
   })
 
@@ -62,6 +63,7 @@ describe("index page", () => {
     const user = createRandomUser()
 
     cy.contains("button", "Track view").click()
+    cy.wait(500)
     cy.contains("button", "Track view").click()
     cy.wait(1000)
     cy.contains('"views": 2')

@@ -1,4 +1,4 @@
-const {sessionMiddleware, simpleRolesIsAuthorized} = require("@blitzjs/server")
+const {sessionMiddleware, simpleRolesIsAuthorized} = require("blitz")
 
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,

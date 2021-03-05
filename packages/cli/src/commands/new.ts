@@ -145,8 +145,9 @@ export class New extends Command {
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
       const needsInstall = dryRun || skipInstall
       const postInstallSteps = [`cd ${args.name}`]
+      const AppGenerator = require("@blitzjs/generator").AppGenerator
 
-      const generator = new (require("@blitzjs/generator").AppGenerator)({
+      const generator = new AppGenerator({
         destinationRoot,
         appName,
         dryRun,

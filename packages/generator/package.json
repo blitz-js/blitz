@@ -1,30 +1,27 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.30.5",
+  "version": "0.31.1",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "clean": "rimraf dist",
-    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
-    "dev": "run-p watch build:templates",
-    "watch": "tsdx watch --verbose",
-    "build": "tsdx build && yarn build:templates",
-    "build:templates": "wait-on dist/index.js && rimraf dist/templates/** && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch"
+    "dev": "yarn build:templates --watch",
+    "buildpkg": "yarn build:templates",
+    "build:templates": "cpx --clean \"templates/**/{.*,*}\" dist/templates",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "main": "dist/index.js",
-  "module": "dist/generator.esm.js",
-  "types": "dist/packages/generator/src/index.d.ts",
+  "main": "dist/blitzjs-generator.cjs.js",
+  "module": "dist/blitzjs-generator.esm.js",
+  "types": "dist/blitzjs-generator.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "blitz",
     "generator"
@@ -34,9 +31,9 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.12.10",
+    "@babel/core": "7.13.1",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.30.5",
+    "@blitzjs/display": "0.31.1",
     "@types/jscodeshift": "0.7.2",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
@@ -54,5 +51,11 @@
     "username": "^5.1.0",
     "vinyl": "2.2.1"
   },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
+  "peerDependencies": {
+    "prettier": "*"
+  },
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
 }
