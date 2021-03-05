@@ -2203,6 +2203,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "chenkie",
+      "name": "Ryan Chenkie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1847678?v=4",
+      "profile": "http://ryanchenkie.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
