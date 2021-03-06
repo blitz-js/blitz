@@ -36,7 +36,7 @@ describe("paginate", () => {
     }
   })
 
-  it("throws an error if take is greater than 500", () => {
+  it("throws an error if take is greater than 500", async () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
@@ -44,10 +44,10 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow()
+    await expect(pagination()).rejects.toThrow()
   })
 
-  it("throws an error if take is greater than maxTake", () => {
+  it("throws an error if take is greater than maxTake", async () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
@@ -56,7 +56,7 @@ describe("paginate", () => {
         ...dummyPaginationPromises,
       })
 
-    expect(pagination()).rejects.toThrow()
+    await expect(pagination()).rejects.toThrow()
   })
 
   it("returns correct data", async () => {
