@@ -43,7 +43,9 @@
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "prerelease": "patch-package",
-    "release": "release"
+    "release": "release",
+    "pull-nextjs": "git subrepo nextjs pull",
+    "push-nextjs": "git subrepo nextjs push"
   },
   "engines": {
     "node": ">=12"
