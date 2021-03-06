@@ -1,0 +1,17 @@
+{
+  "name": "custom-server-hapi",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node server.js"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^18.3.1",
+    "cross-env": "^5.2.0",
+    "next": "latest",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "license": "MIT"
+}
