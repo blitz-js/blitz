@@ -1,6 +1,5 @@
-import {Console} from "../../src/commands/console"
-
 import * as repl from "@blitzjs/repl"
+import {Console} from "../../src/commands/console"
 
 jest.spyOn(global.console, "log").mockImplementation()
 
