@@ -13,7 +13,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Paste all your error logs here:
+      label: "Paste all your error logs here:"
       value: |
         ```
         PASTE_HERE (leave the ``` marks)
@@ -22,7 +22,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Paste all relevant code snippets here:
+      label: "Paste all relevant code snippets here:"
       value: |
         ```
         PASTE_HERE (leave the ``` marks)
