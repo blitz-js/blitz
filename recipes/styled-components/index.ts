@@ -2,8 +2,7 @@ import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
-import { join } from "path"
-
+import {join} from "path"
 
 function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Program>) {
   program
@@ -16,26 +15,22 @@ function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Pr
     .forEach((path: NodePath) => {
       const {node} = path
       path.replace(
-        j.jsxFragment(
-          j.jsxOpeningFragment(),
-          j.jsxClosingFragment(),
-          [
-            j.jsxText("\n"),
-            j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("GlobalStyle"), [], true)),
-            j.jsxText("\n"),
-            j.jsxElement(
-              j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-                j.jsxAttribute(
-                  j.jsxIdentifier("theme"),
-                  j.jsxExpressionContainer(j.identifier("theme")),
-                ),
-              ]),
-              j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-              [j.jsxText("\n"), node, j.jsxText("\n")],
-            ),
-            j.jsxText("\n")
-          ]
-        )
+        j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
+          j.jsxText("\n"),
+          j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("GlobalStyle"), [], true)),
+          j.jsxText("\n"),
+          j.jsxElement(
+            j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+              j.jsxAttribute(
+                j.jsxIdentifier("theme"),
+                j.jsxExpressionContainer(j.identifier("theme")),
+              ),
+            ]),
+            j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+            [j.jsxText("\n"), node, j.jsxText("\n")],
+          ),
+          j.jsxText("\n"),
+        ]),
       )
     })
   return program
@@ -71,13 +66,14 @@ export default RecipeBuilder()
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
     transform(program: Collection<j.Program>) {
-      // import ServerStyleSheets
-      const serverStyleSheetsImport = j.importDeclaration(
+      // import ServerStyleSheet
+      const serverStyleSheetImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheet"))],
         j.literal("styled-components"),
       )
 
-      program.find(j.ImportDeclaration, { source: { value: "blitz" } }).forEach((blitzImportPath) => {
+      // Ensure DocumentContext is in the blitz imports.
+      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
         if (
           !blitzImportPath.value.specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
@@ -91,7 +87,7 @@ export default RecipeBuilder()
         }
       })
       program.find(j.ClassBody).forEach((path) => {
-        const { node } = path
+        const {node} = path
 
         const ctxParam = j.identifier("ctx")
         ctxParam.typeAnnotation = j.tsTypeAnnotation(
@@ -126,7 +122,10 @@ export default RecipeBuilder()
                         j.arrowFunctionExpression(
                           [j.identifier("props")],
                           j.callExpression(
-                            j.memberExpression(j.identifier("sheets"), j.identifier("collectStyles")),
+                            j.memberExpression(
+                              j.identifier("sheet"),
+                              j.identifier("collectStyles"),
+                            ),
                             [
                               j.jsxElement(
                                 j.jsxOpeningElement(
@@ -161,24 +160,20 @@ export default RecipeBuilder()
               j.spreadElement(j.identifier("initialProps")),
               j.objectProperty(
                 j.identifier("styles"),
-                j.jsxFragment(
-                  j.jsxOpeningFragment(),
-                  j.jsxClosingFragment(),
-                  [
-                    j.jsxText("\n"),
-                    j.jsxExpressionContainer(
-                      j.memberExpression(j.identifier("initialProps"), j.identifier("styles")),
+                j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
+                  j.jsxText("\n"),
+                  j.jsxExpressionContainer(
+                    j.memberExpression(j.identifier("initialProps"), j.identifier("styles")),
+                  ),
+                  j.jsxText("\n"),
+                  j.jsxExpressionContainer(
+                    j.callExpression(
+                      j.memberExpression(j.identifier("sheet"), j.identifier("getStyleElement")),
+                      [],
                     ),
-                    j.jsxText("\n"),
-                    j.jsxExpressionContainer(
-                      j.callExpression(
-                        j.memberExpression(j.identifier("sheet"), j.identifier("getStyleElement")),
-                        [],
-                      ),
-                    ),
-                    j.jsxText("\n"),
-                  ]
-                ),
+                  ),
+                  j.jsxText("\n"),
+                ]),
               ),
             ]),
           ),
@@ -199,7 +194,7 @@ export default RecipeBuilder()
         node.body.splice(0, 0, getInitialPropsMethod)
       })
 
-      addImport(program, serverStyleSheetsImport)
+      addImport(program, serverStyleSheetImport)
 
       return program
     },
@@ -217,12 +212,9 @@ export default RecipeBuilder()
       )
 
       const themeImport = j.importDeclaration(
-        [
-          j.importSpecifier(j.identifier("theme")),
-          j.importSpecifier(j.identifier("GlobalStyle")),
-        ],
+        [j.importSpecifier(j.identifier("theme")), j.importSpecifier(j.identifier("GlobalStyle"))],
         j.literal("utils/theme"),
-      );
+      )
 
       addImport(program, styledComponentsProviderImport)
       addImport(program, themeImport)
