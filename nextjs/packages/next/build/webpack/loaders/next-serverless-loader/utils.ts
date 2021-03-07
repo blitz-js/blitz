@@ -201,7 +201,7 @@ export function getUtils({
                 return routeKeyNames.reduce((prev, keyName) => {
                   const paramName = routeKeys?.[keyName]
 
-                  if (paramName && !filterLocaleItem(obj[keyName])) {
+                  if (paramName && !filterLocaleItem(obj[keyName]!)) {
                     prev[groups[paramName].pos] = obj[keyName]
                   }
                   return prev
@@ -209,7 +209,7 @@ export function getUtils({
               }
 
               return Object.keys(obj).reduce((prev, key) => {
-                if (!filterLocaleItem(obj[key])) {
+                if (!filterLocaleItem(obj[key]!)) {
                   return Object.assign(prev, {
                     [key]: obj[key],
                   })
@@ -281,7 +281,7 @@ export function getUtils({
       // on the parsed params, this is used to signal if we need
       // to parse x-now-route-matches or not
       const isDefaultValue = Array.isArray(value)
-        ? value.every((val, idx) => val === defaultRouteMatches![key][idx])
+        ? value.every((val, idx) => val === defaultRouteMatches![key]![idx])
         : value === defaultRouteMatches![key]
 
       if (isDefaultValue || typeof value === 'undefined') {
