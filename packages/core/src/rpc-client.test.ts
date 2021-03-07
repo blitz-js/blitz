@@ -89,3 +89,24 @@ describe("RPC", () => {
     })
   })
 })
+
+describe("RPC with basePath", () => {
+  const OLD_ENV = process.env
+
+  beforeEach(() => {
+    jest.resetModules()
+    process.env = {__NEXT_ROUTER_BASEPATH: "/base", ...OLD_ENV}
+  })
+
+  afterAll(() => {
+    process.env = OLD_ENV // Restore old environment
+  })
+
+  describe("HEAD", () => {
+    it("warms the endpoint with correct basePath", async () => {
+      expect.assertions(1)
+      await executeRpcCall.warm("/base/api/endpoint")
+      expect(global.fetch).toBeCalled()
+    })
+  })
+})
