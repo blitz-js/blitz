@@ -2,6 +2,8 @@ import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
+import {join} from "path"
+
 
 function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Program>) {
   program
@@ -14,16 +16,26 @@ function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Pr
     .forEach((path: NodePath) => {
       const {node} = path
       path.replace(
-        j.jsxElement(
-          j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
-            j.jsxAttribute(
-              j.jsxIdentifier("theme"),
-              j.jsxExpressionContainer(j.identifier("theme")),
+        j.jsxFragment(
+          j.jsxOpeningFragment(),
+          j.jsxClosingFragment(),
+          [
+            j.jsxText("\n"),
+            j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("GlobalStyle"), [], true)),
+            j.jsxText("\n"),
+            j.jsxElement(
+              j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+                j.jsxAttribute(
+                  j.jsxIdentifier("theme"),
+                  j.jsxExpressionContainer(j.identifier("theme")),
+                ),
+              ]),
+              j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+              [j.jsxText("\n"), node, j.jsxText("\n")],
             ),
-          ]),
-          j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
-          [j.jsxText("\n"), node, j.jsxText("\n")],
-        ),
+            j.jsxText("\n")
+          ]
+        )
       )
     })
   return program
@@ -45,6 +57,14 @@ export default RecipeBuilder()
       {name: "babel-plugin-styled-components", version: "11", isDevDep: true},
     ],
   })
+  .addNewFilesStep({
+    stepId: "addThemeUtil",
+    stepName: "Add theme util file",
+    explanation: `Next, we need to add a util file that will store our theme and global styles.`,
+    targetDirectory: "./utils",
+    templatePath: join(__dirname, "templates", "utils"),
+    templateValues: {},
+  })
   .addTransformFilesStep({
     stepId: "addThemeProviderToApp",
     stepName: "Import required provider and wrap the root of the app with it",
@@ -56,27 +76,19 @@ export default RecipeBuilder()
         [j.importSpecifier(j.identifier("ThemeProvider"))],
         j.literal("styled-components"),
       )
-      addImport(program, styledComponentsProviderImport)
 
-      // Add basic theme variable.
-      program
-        .find(j.ExportDefaultDeclaration)
-        .at(0)
-        .insertBefore(
-          j.variableDeclaration("const", [
-            j.variableDeclarator(
-              j.identifier("theme"),
-              j.objectExpression([
-                j.objectProperty(
-                  j.identifier("colors"),
-                  j.objectExpression([
-                    j.objectProperty(j.identifier("primary"), j.stringLiteral("#0070f3")),
-                  ]),
-                ),
-              ]),
-            ),
-          ]),
-        )
+      const themeImport = j.importDeclaration(
+        [
+          j.importSpecifier(j.identifier("theme")),
+          j.importSpecifier(j.identifier("GlobalStyle")),
+        ],
+        j.literal("utils/theme"),
+      );
+
+      addImport(program, styledComponentsProviderImport)
+      addImport(program, themeImport)
+
+      // Still need to apply changes to _document.tsx
 
       return wrapComponentWithStyledComponentsThemeProvider(program)
     },
