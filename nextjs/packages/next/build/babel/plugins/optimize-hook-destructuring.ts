@@ -20,7 +20,7 @@ export default function ({
       const onlyBuiltIns = state.opts.onlyBuiltIns
 
       // if specified, options.lib is a list of libraries that provide hook functions
-      const libs =
+      const libs: any[] =
         state.opts.lib &&
         (state.opts.lib === true
           ? ['react', 'preact/hooks']

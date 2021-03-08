@@ -66,9 +66,10 @@ describe("publicDataStore", () => {
 
   describe("getData", () => {
     const setPublicDataToken = (value: string) => {
-      ;(parsePublicDataToken as jest.MockedFunction<typeof parsePublicDataToken>).mockReturnValue({
-        publicData: value as any,
-      })
+      ;(parsePublicDataToken as any) /*jest.MockedFunction<typeof parsePublicDataToken>*/
+        .mockReturnValue({
+          publicData: value as any,
+        })
     }
 
     xdescribe("when the cookie is falsy", () => {
@@ -81,7 +82,8 @@ describe("publicDataStore", () => {
 
     describe("when the cookie has a value", () => {
       beforeEach(() => {
-        ;(readCookie as jest.MockedFunction<typeof readCookie>).mockReturnValue("readCookie")
+        ;(readCookie as any) /*jest.MockedFunction<typeof readCookie>*/
+          .mockReturnValue("readCookie")
       })
       it("returns publicData", () => {
         setPublicDataToken("foo")

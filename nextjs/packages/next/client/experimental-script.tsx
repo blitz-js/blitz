@@ -38,7 +38,7 @@ const loadScript = (props: Props): void => {
 
   const el = document.createElement('script')
 
-  const loadPromise = new Promise((resolve, reject) => {
+  const loadPromise = new Promise<void>((resolve, reject) => {
     el.addEventListener('load', function () {
       resolve()
       if (onLoad) {

@@ -253,7 +253,7 @@ export default class HotReloader {
     const { finished } = await handlePageBundleRequest(res, parsedUrl)
 
     for (const fn of this.middlewares) {
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         fn(req, res, (err: Error) => {
           if (err) return reject(err)
           resolve()
