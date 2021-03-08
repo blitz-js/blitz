@@ -2224,6 +2224,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "james2406",
+      "name": "James Moran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10858584?v=4",
+      "profile": "http://stackoverflow.com/users/5207233/james-moran",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

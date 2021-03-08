@@ -76,9 +76,6 @@
   "devDependencies": {
     "next": "10.0.7"
   },
-  "peerDependencies": {
-    "next": "*"
-  },
   "keywords": [
     "blitz",
     "blitzjs",

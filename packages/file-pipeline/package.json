@@ -28,6 +28,7 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "@blitzjs/display": "0.31.1",
     "chalk": "^4.1.0",
     "chokidar": "3.5.1",
     "flush-write-stream": "2.0.0",
@@ -45,11 +46,5 @@
     "vinyl": "2.2.1",
     "vinyl-file": "3.0.0",
     "vinyl-fs": "3.0.3"
-  },
-  "peerDependencies": {
-    "@blitzjs/display": "*"
-  },
-  "devDependencies": {
-    "@blitzjs/display": "0.31.1"
   }
 }

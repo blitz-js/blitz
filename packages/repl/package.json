@@ -28,16 +28,11 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
+    "@blitzjs/config": "0.31.1",
     "chokidar": "3.5.1",
     "globby": "11.0.2",
     "pkg-dir": "^5.0.0",
     "progress": "^2.0.3"
   },
-  "peerDependencies": {
-    "@blitzjs/config": "*"
-  },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
-  "devDependencies": {
-    "@blitzjs/config": "0.31.1"
-  }
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
