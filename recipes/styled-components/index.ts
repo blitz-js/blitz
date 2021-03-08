@@ -36,6 +36,36 @@ function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Pr
   return program
 }
 
+function findModuleExportsExpressions(program: Collection<j.Program>) {
+  return program.find(j.AssignmentExpression).filter((path) => {
+    return (
+      path.value.left.type === "MemberExpression" &&
+      // TODO: figure out if there's a better way to type path.value.left
+      (path.value.left.object as any).name === "module" &&
+      (path.value.left.property as any).name === "exports" &&
+      path.value.right.type === "ObjectExpression"
+    )
+  })
+}
+
+function addBabelPlugin(program: Collection<j.Program>) {
+  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
+    j(moduleExportsExpression)
+      .find(j.ObjectProperty, {key: {name: "plugins"}})
+      .forEach((plugins) => {
+        // TODO: figure out if there's a better way to type plugins.node.value
+        ;(plugins.node.value as j.ArrayExpression).elements.push(
+          j.arrayExpression([
+            j.stringLiteral("styled-components"),
+            j.objectExpression([j.property("init", j.identifier('"ssr"'), j.booleanLiteral(true))]),
+          ]),
+        )
+      })
+  })
+
+  return program
+}
+
 export default RecipeBuilder()
   .setName("Styled Components")
   .setDescription(
@@ -236,6 +266,15 @@ export default RecipeBuilder()
       addImport(program, themeImport)
 
       return wrapComponentWithStyledComponentsThemeProvider(program)
+    },
+  })
+  .addTransformFilesStep({
+    stepId: "updateBabelConfig",
+    stepName: "Add Babel plugin and preset",
+    explanation: `Update the Babel configuration to use Styled Component's SSR plugin.`,
+    singleFileSearch: paths.babelConfig(),
+    transform(program: Collection<j.Program>) {
+      return addBabelPlugin(program)
     },
   })
   .build()
