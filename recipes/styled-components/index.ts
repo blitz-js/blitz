@@ -107,73 +107,89 @@ export default RecipeBuilder()
               j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
             ),
           ]),
-          j.expressionStatement(
-            j.assignmentExpression(
-              "=",
-              j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
-              j.arrowFunctionExpression(
-                [],
-                j.callExpression(j.identifier("originalRenderPage"), [
-                  j.objectExpression([
-                    j.objectProperty(
-                      j.identifier("enhanceApp"),
-                      j.arrowFunctionExpression(
-                        [j.identifier("App")],
-                        j.arrowFunctionExpression(
-                          [j.identifier("props")],
-                          j.callExpression(
-                            j.memberExpression(
-                              j.identifier("sheet"),
-                              j.identifier("collectStyles"),
-                            ),
-                            [
-                              j.jsxElement(
-                                j.jsxOpeningElement(
-                                  j.jsxIdentifier("App"),
-                                  [j.jsxSpreadAttribute(j.identifier("props"))],
-                                  true,
+          j.tryStatement(
+            j.blockStatement([
+              j.expressionStatement(
+                j.assignmentExpression(
+                  "=",
+                  j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
+                  j.arrowFunctionExpression(
+                    [],
+                    j.callExpression(j.identifier("originalRenderPage"), [
+                      j.objectExpression([
+                        j.objectProperty(
+                          j.identifier("enhanceApp"),
+                          j.arrowFunctionExpression(
+                            [j.identifier("App")],
+                            j.arrowFunctionExpression(
+                              [j.identifier("props")],
+                              j.callExpression(
+                                j.memberExpression(
+                                  j.identifier("sheet"),
+                                  j.identifier("collectStyles"),
                                 ),
+                                [
+                                  j.jsxElement(
+                                    j.jsxOpeningElement(
+                                      j.jsxIdentifier("App"),
+                                      [j.jsxSpreadAttribute(j.identifier("props"))],
+                                      true,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ]),
-                ]),
-              ),
-            ),
-          ),
-          j.variableDeclaration("const", [
-            j.variableDeclarator(
-              j.identifier("initialProps"),
-              j.awaitExpression(
-                j.callExpression(
-                  j.memberExpression(j.identifier("Document"), j.identifier("getInitialProps")),
-                  [j.identifier("ctx")],
+                      ]),
+                    ]),
+                  ),
                 ),
               ),
-            ),
-          ]),
-          j.returnStatement(
-            j.objectExpression([
-              j.spreadElement(j.identifier("initialProps")),
-              j.objectProperty(
-                j.identifier("styles"),
-                j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
-                  j.jsxText("\n"),
-                  j.jsxExpressionContainer(
-                    j.memberExpression(j.identifier("initialProps"), j.identifier("styles")),
-                  ),
-                  j.jsxText("\n"),
-                  j.jsxExpressionContainer(
+              j.variableDeclaration("const", [
+                j.variableDeclarator(
+                  j.identifier("initialProps"),
+                  j.awaitExpression(
                     j.callExpression(
-                      j.memberExpression(j.identifier("sheet"), j.identifier("getStyleElement")),
-                      [],
+                      j.memberExpression(j.identifier("Document"), j.identifier("getInitialProps")),
+                      [j.identifier("ctx")],
                     ),
                   ),
-                  j.jsxText("\n"),
+                ),
+              ]),
+              j.returnStatement(
+                j.objectExpression([
+                  j.spreadElement(j.identifier("initialProps")),
+                  j.objectProperty(
+                    j.identifier("styles"),
+                    j.jsxFragment(j.jsxOpeningFragment(), j.jsxClosingFragment(), [
+                      j.jsxText("\n"),
+                      j.jsxExpressionContainer(
+                        j.memberExpression(j.identifier("initialProps"), j.identifier("styles")),
+                      ),
+                      j.jsxText("\n"),
+                      j.jsxExpressionContainer(
+                        j.callExpression(
+                          j.memberExpression(
+                            j.identifier("sheet"),
+                            j.identifier("getStyleElement"),
+                          ),
+                          [],
+                        ),
+                      ),
+                      j.jsxText("\n"),
+                    ]),
+                  ),
                 ]),
+              ),
+            ]),
+            null,
+            j.blockStatement([
+              j.expressionStatement(
+                j.callExpression(
+                  j.memberExpression(j.identifier("sheet"), j.identifier("seal")),
+                  [],
+                ),
               ),
             ]),
           ),
