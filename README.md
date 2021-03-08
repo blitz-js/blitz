@@ -515,7 +515,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://projet-test-99df0.firebaseapp.com/"><img src="https://avatars.githubusercontent.com/u/51029779?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gabriel Picard</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=heavygabriel" title="Documentation">📖</a></td>
     <td align="center"><a href="http://ryanchenkie.com/"><img src="https://avatars.githubusercontent.com/u/1847678?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ryan Chenkie</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=chenkie" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/sbappan"><img src="https://avatars.githubusercontent.com/u/12586088?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Santhosh B. Appan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=sbappan" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://stackoverflow.com/users/5207233/james-moran"><img src="https://avatars.githubusercontent.com/u/10858584?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Moran</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=james2406" title="Code">💻</a></td>
+    <td align="center"><a href="http://stackoverflow.com/users/5207233/james-moran"><img src="https://avatars.githubusercontent.com/u/10858584?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Moran</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=james2406" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=james2406" title="Documentation">📖</a></td>
   </tr>
 </table>
 
