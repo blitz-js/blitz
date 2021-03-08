@@ -38,12 +38,13 @@ function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Pr
 
 function findModuleExportsExpressions(program: Collection<j.Program>) {
   return program.find(j.AssignmentExpression).filter((path) => {
+    const {left, right} = path.value
     return (
-      path.value.left.type === "MemberExpression" &&
-      // TODO: figure out if there's a better way to type path.value.left
-      (path.value.left.object as any).name === "module" &&
-      (path.value.left.property as any).name === "exports" &&
-      path.value.right.type === "ObjectExpression"
+      left.type === "MemberExpression" &&
+      left.object.type === "Identifier" &&
+      left.property.type === "Identifier" &&
+      left.property.name === "exports" &&
+      right.type === "ObjectExpression"
     )
   })
 }
@@ -53,8 +54,12 @@ function addBabelPlugin(program: Collection<j.Program>) {
     j(moduleExportsExpression)
       .find(j.ObjectProperty, {key: {name: "plugins"}})
       .forEach((plugins) => {
-        // TODO: figure out if there's a better way to type plugins.node.value
-        ;(plugins.node.value as j.ArrayExpression).elements.push(
+        const pluginsArrayExpression = plugins.node.value
+        if (pluginsArrayExpression.type !== "ArrayExpression") {
+          return
+        }
+
+        pluginsArrayExpression.elements.push(
           j.arrayExpression([
             j.stringLiteral("styled-components"),
             j.objectExpression([j.property("init", j.identifier('"ssr"'), j.booleanLiteral(true))]),
