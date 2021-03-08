@@ -7,7 +7,6 @@ import {
   NextPage,
   NextPageContext,
 } from "next/types"
-import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
 
@@ -112,18 +111,6 @@ export type ConnectMiddleware = (
   res: ServerResponse,
   next: (error?: Error) => void,
 ) => void
-
-export type BlitzPassportStrategy = {
-  authenticateOptions?: AuthenticateOptions
-  strategy: Strategy
-}
-
-export type BlitzPassportConfig = {
-  successRedirectUrl?: string
-  errorRedirectUrl?: string
-  strategies: BlitzPassportStrategy[]
-  secureProxy?: boolean
-}
 
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
