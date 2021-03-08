@@ -13,6 +13,24 @@ body:
       required: true
   - type: textarea
     attributes:
+      label: "Paste all your error logs here:"
+      value: |
+        ```
+        PASTE_HERE (leave the ``` marks)
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Paste all relevant code snippets here:"
+      value: |
+        ```
+        PASTE_HERE (leave the ``` marks)
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
       label: What are detailed steps to reproduce this?
       value: "1."
     validations:
@@ -22,7 +40,7 @@ body:
       label: "Run `blitz -v` and paste the output here:"
       value: |
         ```
-        PASTE_HERE
+        PASTE_HERE (leave the ``` marks)
         ```
     validations:
       required: true

@@ -25,7 +25,7 @@
     "dev:templates": "yarn workspace @blitzjs/generator dev",
     "dev": "preconstruct dev && concurrently --names \"typecheck,cli,templates\" -c \"blue,green,yellow,magenta\" -p \"{name}\" \"npm:dev:tsc\" \"npm:dev:cli\" \"npm:dev:templates\"",
     "build": "cross-env BLITZ_PROD_BUILD=true preconstruct build && ultra -r --filter 'packages/*' buildpkg && tsc",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern types --ext \".js,.ts,.tsx\" .",
+    "lint": "eslint --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
     "test": "yarn run lint && yarn run build && ultra -r test",
@@ -43,7 +43,9 @@
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
     "prerelease": "patch-package",
-    "release": "release"
+    "release": "release",
+    "pull-nextjs": "git subrepo nextjs pull",
+    "push-nextjs": "git subrepo nextjs push"
   },
   "engines": {
     "node": ">=12"

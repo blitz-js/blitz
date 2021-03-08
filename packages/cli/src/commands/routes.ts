@@ -1,6 +1,6 @@
-import {Command, flags} from "@oclif/command"
-import {ServerConfig} from "@blitzjs/server"
 import {log, table as Table} from "@blitzjs/display"
+import {ServerConfig} from "@blitzjs/server"
+import {Command, flags} from "@oclif/command"
 
 export class Routes extends Command {
   static description = "Display all Blitz URL Routes"
