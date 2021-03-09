@@ -328,7 +328,7 @@ export class Head extends Component<
         c.props['children'] = this.makeStylesheetInert(c.props['children'])
       }
       return c
-    })
+    })! // blitz
   }
 
   render() {
@@ -447,7 +447,7 @@ export class Head extends Component<
         }
       }
       return child
-    })
+    })! // Blitz
 
     // try to parse styles from fragment for backwards compat
     const curStyles: React.ReactElement[] = Array.isArray(styles)

@@ -104,7 +104,7 @@ function prefetchViaDom(
     if (as) link!.as = as
     link!.rel = `prefetch`
     link!.crossOrigin = process.env.__NEXT_CROSS_ORIGIN!
-    link!.onload = res as any
+    link!.onload = res as any //blitz
     link!.onerror = rej
 
     // `href` should always be last:

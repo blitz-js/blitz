@@ -27,21 +27,23 @@ function onlyReactElement(
   // Adds support for React.Fragment
   if (child.type === React.Fragment) {
     return list.concat(
-      React.Children.toArray(child.props.children).reduce(
-        (
-          fragmentList: Array<React.ReactElement<any>>,
-          fragmentChild: React.ReactChild
-        ): Array<React.ReactElement<any>> => {
-          if (
-            typeof fragmentChild === 'string' ||
-            typeof fragmentChild === 'number'
-          ) {
-            return fragmentList
-          }
-          return fragmentList.concat(fragmentChild)
-        },
-        []
-      )
+      (React.Children as any) /*blitz*/
+        .toArray(child.props.children)
+        .reduce(
+          (
+            fragmentList: Array<React.ReactElement<any>>,
+            fragmentChild: React.ReactChild
+          ): Array<React.ReactElement<any>> => {
+            if (
+              typeof fragmentChild === 'string' ||
+              typeof fragmentChild === 'number'
+            ) {
+              return fragmentList
+            }
+            return fragmentList.concat(fragmentChild)
+          },
+          []
+        )
     )
   }
   return list.concat(child)
@@ -127,7 +129,7 @@ function reduceComponents(
         const headElementChildren = React.Children.toArray(
           headElement.props.children
         )
-        return list.concat(headElementChildren)
+        return list.concat(headElementChildren as any /*blitz*/)
       },
       []
     )

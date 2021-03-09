@@ -159,7 +159,7 @@ export class DuplicatePolyfillsConformanceCheck
           if (!node.arguments || node.arguments.length < 2) {
             return EARLY_EXIT_SUCCESS_RESULT
           }
-          if (isNodeCreatingScriptElement(node)) {
+          if (isNodeCreatingScriptElement(node as any /*blitz*/)) {
             const propsNode = node
               .arguments[1] as types.namedTypes.ObjectExpression
             if (!propsNode.properties) {
