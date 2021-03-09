@@ -24,8 +24,8 @@
     "dev:cli": "yarn workspace @blitzjs/cli dev",
     "dev:templates": "yarn workspace @blitzjs/generator dev",
     "dev": "preconstruct dev && concurrently --names \"typecheck,cli,templates\" -c \"blue,green,yellow,magenta\" -p \"{name}\" \"npm:dev:tsc\" \"npm:dev:cli\" \"npm:dev:templates\"",
-    "build": "cross-env BLITZ_PROD_BUILD=true preconstruct build && ultra -r --filter 'packages/*' buildpkg && tsc",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern types --ext \".js,.ts,.tsx\" .",
+    "build": "patch-package && cross-env BLITZ_PROD_BUILD=true preconstruct build && ultra -r --filter 'packages/*' buildpkg && tsc",
+    "lint": "eslint --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
     "test": "yarn run lint && yarn run build && ultra -r test",
@@ -42,8 +42,8 @@
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
-    "prerelease": "patch-package",
-    "release": "release"
+    "pull-nextjs": "git subrepo nextjs pull",
+    "push-nextjs": "git subrepo nextjs push"
   },
   "engines": {
     "node": ">=12"
@@ -51,6 +51,9 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
+    ],
+    "package.json": [
+      "manypkg fix"
     ]
   },
   "dependencies": {
@@ -80,6 +83,7 @@
     "@types/fs-extra": "9.0.6",
     "@types/fs-readdir-recursive": "1.0.0",
     "@types/gulp-if": "0.0.33",
+    "@types/htmlescape": "^1.1.1",
     "@types/ink-spinner": "3.0.0",
     "@types/jest": "^26.0.20",
     "@types/jsonwebtoken": "8.5.0",
@@ -88,7 +92,6 @@
     "@types/mem-fs-editor": "7.0.0",
     "@types/merge-stream": "1.1.2",
     "@types/mock-fs": "4.13.0",
-    "@types/module-alias": "2.0.0",
     "@types/node": "14.14.22",
     "@types/node-fetch": "2.5.8",
     "@types/parallel-transform": "1.1.0",
@@ -116,6 +119,7 @@
     "babel-plugin-annotate-pure-calls": "0.4.0",
     "babel-plugin-dev-expression": "0.2.2",
     "babel-plugin-macros": "3.0.1",
+    "babel-plugin-tester": "10.0.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "concurrently": "6.0.0",
     "cpx": "1.5.0",

@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.30.6",
+  "version": "0.31.1",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -9,7 +9,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "analyze": "cross-env ANALYZE=true blitz build",
     "cy:open": "cypress open",
-    "cy:run": "cypress run || cypress run",
+    "cy:run": "cypress run --browser chrome",
     "test": "prisma generate && yarn test:jest && yarn test:e2e",
     "test:jest": "jest",
     "test:server": "cross-env NODE_ENV=test blitz prisma migrate deploy --preview-feature && blitz build && cross-env NODE_ENV=test blitz start -p 3099",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.17.0",
-    "blitz": "0.30.6",
+    "blitz": "0.31.1",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",

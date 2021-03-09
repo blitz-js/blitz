@@ -1,6 +1,6 @@
 import {readJSON} from "fs-extra"
-import pkgDir from "pkg-dir"
 import {resolve} from "path"
+import pkgDir from "pkg-dir"
 
 export enum IsBlitzRootError {
   NotBlitz,

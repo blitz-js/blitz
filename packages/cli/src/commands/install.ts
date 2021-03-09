@@ -1,9 +1,8 @@
-import {flags} from "@oclif/command"
-import type {RecipeExecutor} from "@blitzjs/installer"
 import {log} from "@blitzjs/display"
+import type {RecipeExecutor} from "@blitzjs/installer"
+import {flags} from "@oclif/command"
 import {Stream} from "stream"
 import {promisify} from "util"
-
 import {Command} from "../command"
 
 const pipeline = promisify(Stream.pipeline)

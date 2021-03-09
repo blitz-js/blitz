@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.30.6",
+  "version": "0.31.1",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/core": "7.13.1",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.30.6",
+    "@blitzjs/display": "0.31.1",
     "@types/jscodeshift": "0.7.2",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
@@ -51,11 +51,8 @@
     "username": "^5.1.0",
     "vinyl": "2.2.1"
   },
-  "peerDependencies": {
-    "prettier": "*"
-  },
-  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "devDependencies": {
     "prettier": "2.2.1"
-  }
+  },
+  "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

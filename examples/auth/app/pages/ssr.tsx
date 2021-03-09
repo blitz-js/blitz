@@ -1,28 +1,20 @@
-import {FC} from "react"
-import {getSessionContext} from "@blitzjs/server"
 import {
+  getSession,
   invokeWithMiddleware,
   useRouter,
-  GetServerSideProps,
-  PromiseReturnType,
   ErrorComponent as ErrorPage,
   useMutation,
   AuthenticationError,
   AuthorizationError,
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  BlitzPage,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
 import path from "path"
 
-type PageProps = {
-  user?: PromiseReturnType<typeof getUser>
-  error?: {
-    statusCode: number
-    message: string
-  }
-}
-
-export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, res}) => {
+export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
   // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
   // https://github.com/blitz-js/blitz/issues/794
   path.resolve("next.config.js")
@@ -30,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   path.resolve(".next/blitz/db.js")
   // End anti-tree-shaking
 
-  const session = await getSessionContext(req, res)
+  const session = await getSession(req, res)
   console.log("Session id:", session.userId)
   try {
     const user = await invokeWithMiddleware(
@@ -62,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async ({req, re
   }
 }
 
-const Test: FC<PageProps> = ({user, error}: PageProps) => {
+const Test: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({user, error}) => {
   const router = useRouter()
   const [logoutMutation] = useMutation(logout)
 

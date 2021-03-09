@@ -1,7 +1,7 @@
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {Head} from "./nextjs"
-import {publicDataStore} from "./public-data-store"
-import {useAuthorizeIf} from "./supertokens"
+import {useAuthorizeIf} from "./auth/auth-client"
+import {publicDataStore} from "./auth/public-data-store"
+import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
 
 const customCSS = `

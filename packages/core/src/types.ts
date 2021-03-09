@@ -1,6 +1,5 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
-import {NextRouter} from "next/router"
 import {
   NextApiRequest,
   NextApiResponse,
@@ -8,15 +7,12 @@ import {
   NextPage,
   NextPageContext,
 } from "next/types"
-import {AuthenticateOptions, Strategy} from "passport"
 import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
-import {Ctx} from "./middleware"
-import {useParams} from "./use-params"
-import {useRouterQuery} from "./use-router-query"
 
 export type {
   GetServerSideProps,
+  GetServerSidePropsContext,
   GetServerSidePropsResult,
   GetStaticPaths,
   GetStaticPathsContext,
@@ -45,28 +41,8 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   redirectAuthenticatedTo?: string
 }
 
-export interface BlitzRouter extends NextRouter {
-  query: ReturnType<typeof useRouterQuery>
-  params: ReturnType<typeof useParams>
-}
-
-export interface Session {
-  // isAuthorize can be injected here (see supertokens.ts)
-  // PublicData can be injected here (see supertokens.ts)
-}
-
-export type PublicData = "PublicData" extends keyof Session
-  ? Session["PublicData"]
-  : {userId: unknown}
-export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
-  userId: PublicData["userId"] | null
-}
-
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
@@ -135,24 +111,6 @@ export type ConnectMiddleware = (
   res: ServerResponse,
   next: (error?: Error) => void,
 ) => void
-
-export type BlitzPassportStrategy = {
-  authenticateOptions?: AuthenticateOptions
-  strategy: Strategy
-}
-
-export type BlitzPassportConfig = {
-  successRedirectUrl?: string
-  errorRedirectUrl?: string
-  strategies: BlitzPassportStrategy[]
-  secureProxy?: boolean
-}
-
-export type VerifyCallbackResult = {
-  publicData: PublicData
-  privateData?: Record<string, any>
-  redirectUrl?: string
-}
 
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
