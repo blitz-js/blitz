@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/babel-preset",
-  "version": "0.30.7",
+  "version": "0.31.1",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -33,9 +33,6 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
     "babel-plugin-superjson-next": "0.2.2"
-  },
-  "peerDependencies": {
-    "@babel/core": "*"
   },
   "devDependencies": {
     "@babel/core": "7.13.1"

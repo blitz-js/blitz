@@ -63,6 +63,7 @@ describe("index page", () => {
     const user = createRandomUser()
 
     cy.contains("button", "Track view").click()
+    cy.wait(500)
     cy.contains("button", "Track view").click()
     cy.wait(1000)
     cy.contains('"views": 2')

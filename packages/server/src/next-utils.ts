@@ -129,7 +129,7 @@ function makeNextSingleCommand(command: "build" | "export") {
   return function doIt(
     nextBin: string,
     buildFolder: string,
-    manifest: Manifest | undefined,
+    manifest: Manifest,
     config: ServerConfig,
   ) {
     const spawnEnv = getSpawnEnv(config)
@@ -140,8 +140,8 @@ function makeNextSingleCommand(command: "build" | "export") {
         env: spawnEnv,
         stdio: [process.stdin, "pipe", "pipe"],
       })
-        .on("exit", (code: number) => {
-          if (code === 0) {
+        .on("exit", (code: number | null) => {
+          if (code === 0 || code === null) {
             res()
           } else {
             process.exit(code)
@@ -167,7 +167,7 @@ export async function nextStart(nextBin: string, buildFolder: string, config: Se
       rej("")
     } else {
       const nextjs = spawn(nextBin, spawnCommand, {
-        cwd: process.cwd(),
+        cwd: buildFolder,
         env: spawnEnv,
         stdio: [process.stdin, "pipe", "pipe"],
       })
