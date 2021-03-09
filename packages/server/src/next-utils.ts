@@ -140,7 +140,6 @@ export function nextBuild(
       stdio: [process.stdin, "pipe", "pipe"],
     })
       .on("exit", (code: number | null) => {
-        console.log({code, buildFolder, nextBin, spawnEnv})
         if (code === 0 || code === null) {
           res()
         } else {
