@@ -128,7 +128,7 @@ export async function nextStartDev(
 export function nextBuild(
   nextBin: string,
   buildFolder: string,
-  manifest: Manifest | undefined,
+  manifest: Manifest,
   config: ServerConfig,
 ) {
   const spawnEnv = getSpawnEnv(config)
