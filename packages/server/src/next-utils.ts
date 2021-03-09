@@ -162,7 +162,7 @@ export async function nextStart(nextBin: string, buildFolder: string, config: Se
       rej("")
     } else {
       const nextjs = spawn(nextBin, spawnCommand, {
-        cwd: process.cwd(),
+        cwd: buildFolder,
         env: spawnEnv,
         stdio: [process.stdin, "pipe", "pipe"],
       })
