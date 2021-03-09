@@ -129,7 +129,7 @@ function makeNextSingleCommand(command: "build" | "export") {
   return function doIt(
     nextBin: string,
     buildFolder: string,
-    manifest: Manifest,
+    manifest: Manifest | undefined,
     config: ServerConfig,
   ) {
     const spawnEnv = getSpawnEnv(config)

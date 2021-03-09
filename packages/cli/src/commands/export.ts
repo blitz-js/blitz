@@ -1,5 +1,5 @@
-import {Command, flags} from "@oclif/command"
 import {ServerConfig} from "@blitzjs/server"
+import {Command, flags} from "@oclif/command"
 
 export class Export extends Command {
   static description = "Exports a static page"
