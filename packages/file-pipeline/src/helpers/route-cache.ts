@@ -41,8 +41,29 @@ export class RouteCache implements RouteCacheInterface {
     return false
   }
 
-  add(file: File, type: RouteType) {
+  private getType(file: File): RouteType | null {
+    const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
+    const rpcPathRegex = /(api[\\/].+[\\/](queries|mutations).+)$/
+    const apiPathRegex = /(api[\\/].+)$/
+
+    if (rpcPathRegex.test(file.path)) {
+      return "rpc"
+    } else if (apiPathRegex.test(file.path)) {
+      return "api"
+    } else if (pagesPathRegex.test(file.path)) {
+      return "page"
+    }
+
+    return null
+  }
+
+  add(file: File) {
     if (this.routeCache[file.orginalRelative]) return
+
+    const type = this.getType(file)
+    if (!type) {
+      return
+    }
 
     const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)

@@ -27,7 +27,7 @@ export interface FileCacheInterface extends AbstractFileCache {
 
 export interface RouteCacheInterface extends AbstractFileCache {
   delete(file: File): void
-  add(file: File, type: RouteType): void
+  add(file: File): void
 
   get(): Record<string, RouteCacheEntry>
   get(key: string): RouteCacheEntry
@@ -89,4 +89,5 @@ export type Stage = (
 ) => {
   stream: NodeJS.ReadWriteStream
   ready?: Record<string, any>
+  beforeTriage?: boolean
 } & Record<string, any>
