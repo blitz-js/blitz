@@ -140,7 +140,7 @@ export function nextBuild(
       stdio: [process.stdin, "pipe", "pipe"],
     })
       .on("exit", (code: number) => {
-        if (code === 0) {
+        if (code === 0 || code === null) {
           res()
         } else {
           process.exit(code)
