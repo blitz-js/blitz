@@ -1,5 +1,6 @@
 import {Writable} from "stream"
 import File from "vinyl"
+import {OverrideTriage} from "./helpers/work-optimizer"
 
 export type FileCacheEntry = {path: string}
 
@@ -61,6 +62,7 @@ export type StageConfig = {
   include: string[]
   ignore: string[]
   watch: boolean
+  overrideTriage?: OverrideTriage
 }
 
 /**

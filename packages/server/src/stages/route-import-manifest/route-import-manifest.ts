@@ -1,6 +1,15 @@
 import {Stage, transform} from "@blitzjs/file-pipeline"
-import {partition} from "lodash"
+import {OverrideTriage} from "@blitzjs/file-pipeline/src/helpers/work-optimizer"
+import * as fs from "fs-extra"
+import {debounce, partition} from "lodash"
+import {join} from "path"
 import File from "vinyl"
+
+function makeDebouncedWriter(path: string, ms = 100): (contents: string) => void {
+  return debounce((contents: string) => {
+    fs.outputFileSync(path, contents, {encoding: "utf-8"})
+  }, ms)
+}
 
 interface Route {
   name: string
@@ -73,12 +82,19 @@ export function parseParametersFromRoute(
   }
 }
 
-export const createStageRouteImportManifest: Stage = ({getRouteCache}) => {
+export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTriage} = ({
+  getRouteCache,
+  config,
+}) => {
   const routeCache = getRouteCache()
 
   const routes: Record<string, Route> = {}
 
-  const stream = transform.file((file, {push}) => {
+  const writeManifest = makeDebouncedWriter(
+    join(config.src, "node_modules", ".blitz", "route-manifest.ts"),
+  )
+
+  const stream = transform.file((file) => {
     if (!isPage(file.relative)) {
       return file
     }
@@ -99,12 +115,7 @@ export const createStageRouteImportManifest: Stage = ({getRouteCache}) => {
         name: defaultExportName,
       }
 
-      push(
-        new File({
-          path: "route-manifest.ts",
-          contents: Buffer.from(generateManifest(routes), "utf-8"),
-        }),
-      )
+      writeManifest(generateManifest(routes))
     }
 
     addRoute(entry.uri, defaultExportName)
@@ -113,4 +124,12 @@ export const createStageRouteImportManifest: Stage = ({getRouteCache}) => {
   })
 
   return {stream}
+}
+
+createStageRouteImportManifest.overrideTriage = (file: File) => {
+  if (isPage(file.relative)) {
+    return "proceed"
+  }
+
+  return undefined
 }
