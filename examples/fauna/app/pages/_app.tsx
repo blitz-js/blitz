@@ -1,4 +1,4 @@
-import { AppProps, ErrorComponent, useRouter } from "blitz"
+import { queryClient, AppProps, ErrorComponent, useRouter } from "blitz"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
@@ -7,14 +7,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
   const { reset } = useQueryErrorResetBoundary()
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-      },
-    },
-  })
 
   return (
     <ErrorBoundary

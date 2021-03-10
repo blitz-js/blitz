@@ -23,6 +23,15 @@ import {
 import {clientDebug, isClient, isServer} from "./utils"
 import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
 
+// Create internal QueryClient instance
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+})
+
 export const executeRpcCall = <TInput, TResult>(
   apiUrl: string,
   params: TInput,
@@ -59,15 +68,6 @@ export const executeRpcCall = <TInput, TResult>(
   } else {
     serialized = serialize(params)
   }
-
-  // Create a new QueryClient instance
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-      },
-    },
-  })
 
   // Create a new AbortController instance for this request
   const controller = new AbortController()

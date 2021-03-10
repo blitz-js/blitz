@@ -1,4 +1,5 @@
 import {
+  queryClient,
   AppProps,
   ErrorComponent,
   useRouter,
@@ -14,14 +15,6 @@ export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
   const {reset} = useQueryErrorResetBoundary()
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-      },
-    },
-  })
 
   return (
     <ErrorBoundary
