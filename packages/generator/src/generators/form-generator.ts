@@ -1,6 +1,5 @@
-import {join} from "path"
 import {Generator, GeneratorOptions} from "../generator"
-import {camelCaseToKebabCase} from "../utils/inflector"
+import {camelCaseToKebabCase, singleCamel, singlePascal} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -11,11 +10,12 @@ export interface FormGeneratorOptions extends GeneratorOptions {
   parentModels?: string
   ParentModel?: string
   ParentModels?: string
+  extraArgs?: string[]
 }
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
   static subdirectory = "queries"
-  sourceRoot = join(__dirname, "./templates/form")
+  sourceRoot = Generator.sourceRootFromTemplate("form")
 
   private getId(input: string = "") {
     if (!input) return input
@@ -42,6 +42,13 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
+      subTemplateValues: this.options.extraArgs?.map((arg: string) => {
+        const valueName = arg.split(":").shift()
+        return {
+          fieldName: singleCamel(valueName),
+          FieldName: singlePascal(valueName).replace(/(?!^)([A-Z])/g, " $1"),
+        }
+      }),
     }
   }
 

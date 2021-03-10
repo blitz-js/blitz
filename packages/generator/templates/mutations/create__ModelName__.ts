@@ -9,6 +9,7 @@ if (process.env.parentModel) {
   }).nonstrict()
 } else {
   const Create__ModelName__ = z.object({
+    /* template: __attributeName__: z.__zAttributeType__ */
     name: z.string(),
   }).nonstrict()
 }

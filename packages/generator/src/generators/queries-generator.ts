@@ -1,4 +1,3 @@
-import {join} from "path"
 import {Generator, GeneratorOptions} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
@@ -15,7 +14,7 @@ export interface QueriesGeneratorOptions extends GeneratorOptions {
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   static subdirectory = "queries"
-  sourceRoot = join(__dirname, "./templates/queries")
+  sourceRoot = Generator.sourceRootFromTemplate("queries")
 
   private getId(input: string = "") {
     if (!input) return input

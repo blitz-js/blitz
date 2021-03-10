@@ -1,4 +1,3 @@
-import {join} from "path"
 import {Generator, GeneratorOptions} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
@@ -15,7 +14,7 @@ export interface PageGeneratorOptions extends GeneratorOptions {
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = "pages"
-  sourceRoot = join(__dirname, "./templates/page")
+  sourceRoot = Generator.sourceRootFromTemplate("page")
 
   private getId(input: string = "") {
     if (!input) return input

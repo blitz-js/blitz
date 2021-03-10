@@ -128,6 +128,11 @@ export abstract class Generator<
   private useTs: boolean
   private prettier: typeof import("prettier") | undefined
 
+  // relative path to templates folder of Generators implementation folder
+  static sourceRootFromTemplate(template: string): string {
+    return path.join(__dirname, "../templates", template)
+  }
+
   prettierDisabled: boolean = false
   unsafe_disableConflictChecker = false
   returnResults: boolean = false
@@ -136,7 +141,6 @@ export abstract class Generator<
 
   constructor(protected readonly options: T) {
     super()
-
     this.options = options
     this.store = createStore()
     this.fs = createEditor(this.store)
@@ -199,6 +203,21 @@ export abstract class Generator<
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
+    // templatedFile.match
+    const subTemplateRegExp = new RegExp(/{\/\* template: (.*) \*\/}/)
+    const subTemplateString = templatedFile
+      .match(subTemplateRegExp)?.[0]
+      .replace(subTemplateRegExp, "$1")
+    if (subTemplateString) {
+      const subTemplatePosition = templatedFile.search(subTemplateRegExp)
+      templatedFile = [
+        templatedFile.slice(0, subTemplatePosition),
+        ...(templateValues.subTemplateValues?.map((values: any) =>
+          this.replaceTemplateValues(subTemplateString, values),
+        ) || []),
+        templatedFile.slice(subTemplatePosition),
+      ].join("\n")
+    }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
@@ -223,6 +242,9 @@ export abstract class Generator<
       } catch (error) {
         log.warning(`Failed trying to run prettier:` + error)
       }
+    }
+    if (subTemplateString) {
+      console.log(templatedFile)
     }
     return templatedFile
   }
