@@ -1,5 +1,18 @@
-import {extractRouterParams, useParam, useParams} from "../src/router/router-hooks"
+import {extractRouterParams, useParam, useParams, useRouterQuery} from "../src/router/router-hooks"
 import {renderHook} from "./test-utils"
+
+describe("useRouterQuery", () => {
+  const {result} = renderHook(() => useRouterQuery(), {
+    router: {asPath: "/?foo=foo&num=0&bool=true&float=1.23&empty"},
+  })
+  expect(result.current).toEqual({
+    foo: "foo",
+    num: "0",
+    bool: "true",
+    float: "1.23",
+    empty: undefined,
+  })
+})
 
 describe("extractRouterParams", () => {
   it("returns proper params", () => {
