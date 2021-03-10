@@ -1,11 +1,11 @@
-import {flags} from "@oclif/command"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
-import chalk from "chalk"
-import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
-import {lt} from "semver"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
+import {flags} from "@oclif/command"
+import chalk from "chalk"
 import spawn from "cross-spawn"
+import hasbin from "hasbin"
+import {lt} from "semver"
 const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
@@ -84,10 +84,13 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
-          const useYarn = checkYarn.stdout.toString().includes("blitz@")
-          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+          var useYarn: boolean = false
 
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          if (checkYarn && checkYarn.stdout) {
+            useYarn = checkYarn.stdout.toString().includes("blitz@")
+          }
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
           spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
 
           const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
@@ -142,8 +145,9 @@ export class New extends Command {
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
       const needsInstall = dryRun || skipInstall
       const postInstallSteps = [`cd ${args.name}`]
+      const AppGenerator = require("@blitzjs/generator").AppGenerator
 
-      const generator = new (require("@blitzjs/generator").AppGenerator)({
+      const generator = new AppGenerator({
         destinationRoot,
         appName,
         dryRun,

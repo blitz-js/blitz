@@ -1,5 +1,4 @@
-import {DefaultCtx, SessionContext} from "blitz"
-import {simpleRolesIsAuthorized} from "@blitzjs/server"
+import {DefaultCtx, SessionContext, SimpleRolesIsAuthorized} from "blitz"
 import React from "react"
 
 declare module "blitz" {
@@ -7,7 +6,7 @@ declare module "blitz" {
     session: SessionContext
   }
   export interface Session {
-    isAuthorized: typeof simpleRolesIsAuthorized
+    isAuthorized: SimpleRolesIsAuthorized
     PublicData: {
       userId: number
     }

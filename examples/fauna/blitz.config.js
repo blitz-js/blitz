@@ -1,4 +1,5 @@
-const { sessionMiddleware, simpleRolesIsAuthorized } = require("@blitzjs/server")
+const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
+const withMonorepoBuildTooling = require("@preconstruct/next")
 const { GraphQLClient, gql } = require("graphql-request")
 
 const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {
@@ -17,7 +18,7 @@ const normalizeSession = (faunaSession) => {
   }
 }
 
-module.exports = {
+module.exports = withMonorepoBuildTooling({
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -158,4 +159,4 @@ module.exports = {
     return config
   },
   */
-}
+})

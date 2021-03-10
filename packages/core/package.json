@@ -1,61 +1,68 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.30.5",
+  "version": "0.32.1",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
-    "wait:display": "wait-on ../display/dist/packages/display/src/index.d.ts",
-    "predev": "yarn wait:display",
-    "dev": "tsdx watch --verbose",
-    "build": "tsdx build",
-    "test": "tsdx test --env=jest-environment-jsdom-sixteen",
-    "test:watch": "tsdx test --watch --env=jest-environment-jsdom-sixteen"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
+  "preconstruct": {
+    "entrypoints": [
+      "config.ts",
+      "document.ts",
+      "dynamic.ts",
+      "head.ts",
+      "image.ts",
+      "index.ts",
+      "server/index.ts",
+      "with-blitz.ts"
+    ]
+  },
+  "main": "dist/blitzjs-core.cjs.js",
+  "module": "dist/blitzjs-core.esm.js",
+  "types": "dist/blitzjs-core.cjs.d.ts",
+  "files": [
+    "dist",
+    "config",
+    "document",
+    "dynamic",
+    "head",
+    "image",
+    "server",
+    "with-blitz"
+  ],
+  "dependencies": {
+    "@blitzjs/config": "0.32.1",
+    "@blitzjs/display": "0.32.1",
+    "@types/secure-password": "3.1.0",
+    "b64-lite": "^1.4.0",
+    "bad-behavior": "^1.0.1",
+    "chalk": "^4.1.0",
+    "cookie": "0.4.1",
+    "cookie-session": "^1.4.0",
+    "cross-spawn": "7.0.3",
+    "htmlescape": "^1.1.1",
+    "jsonwebtoken": "8.5.1",
+    "lodash.frompairs": "4.0.1",
+    "nanoid": "^3.1.20",
+    "next": "10.0.7",
+    "npm-which": "^3.0.1",
+    "null-loader": "4.0.1",
+    "passport": "0.4.1",
+    "react-query": "3.12.0",
+    "secure-password": "4.0.0",
+    "superjson": "1.7.2"
+  },
+  "devDependencies": {
+    "react": "0.0.0-experimental-3310209d0",
+    "zod": "1.11.11"
+  },
+  "repository": "https://github.com/blitz-js/blitz",
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
-  },
-  "contributors": [
-    {
-      "name": "Michael Edelman",
-      "email": "michael@fabulas.io",
-      "url": "https://twitter.com/edelman215"
-    }
-  ],
-  "main": "dist/index.js",
-  "module": "dist/core.esm.js",
-  "types": "dist/packages/core/src/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/blitz-js/blitz"
-  },
-  "dependencies": {
-    "@blitzjs/display": "0.30.5",
-    "@types/htmlescape": "^1.1.1",
-    "@types/secure-password": "3.1.0",
-    "b64-lite": "^1.4.0",
-    "bad-behavior": "^1.0.1",
-    "cookie-session": "^1.4.0",
-    "cross-spawn": "7.0.3",
-    "htmlescape": "^1.1.1",
-    "lodash": "^4.17.20",
-    "lodash-es": "^4.17.20",
-    "npm-which": "^3.0.1",
-    "passport": "0.4.1",
-    "react-query": "3.12.0",
-    "secure-password": "4.0.0",
-    "superjson": "1.7.2",
-    "zod": ">=1.0.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
