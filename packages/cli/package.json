@@ -17,9 +17,6 @@
     "url": "https://twitter.com/flybayer"
   },
   "main": "lib/src/index.js",
-  "bin": {
-    "blitz": "./bin/run"
-  },
   "files": [
     "/bin",
     "/lib"
