@@ -28,7 +28,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "add",
     stepName: "Import helpers and log user upon login",
-    explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
+    explanation: `We will add logic to initialize the LogRocket session and upon login, identify the user within LogRocket`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       // Ensure useRouter and useSession are in the blitz imports.
