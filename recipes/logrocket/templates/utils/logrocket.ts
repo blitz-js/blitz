@@ -10,6 +10,7 @@ export const init = () => {
   if (isActive()) {
     LogRocket.init(process.env.NEXT_PUBLIC_LOG_ROCKET_APP_ID, {
       dom: {
+        // Obfuscate all user inputs
         inputSanitizer: true,
       },
     })
