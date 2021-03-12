@@ -118,13 +118,6 @@ export function useParam(
 /*
  * Copied from https://github.com/lukeed/qss
  */
-function toValue(mix: any) {
-  if (!mix) return ""
-  var str = decodeURIComponent(mix)
-  if (str === "false") return false
-  if (str === "true") return true
-  return +str * 0 === 0 ? +str : str
-}
 function decode(str: string) {
   if (!str) return {}
   let tmp: any
@@ -137,11 +130,11 @@ function decode(str: string) {
     tmp = tmp.split("=")
     k = tmp.shift()
     if (out[k] !== void 0) {
-      out[k] = [].concat(out[k], toValue(tmp.shift()) as any)
+      out[k] = [].concat(out[k], tmp.shift())
     } else {
-      out[k] = toValue(tmp.shift())
+      out[k] = tmp.shift()
     }
   }
 
-  return out
+  return out as Record<string, string | string[]>
 }
