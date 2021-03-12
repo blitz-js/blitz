@@ -1,5 +1,4 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
@@ -78,7 +77,6 @@ export default RecipeBuilder()
         addImport(program, reactImport)
       }
 
-      const isRouterDeclared = program.findVariableDeclarators("router")
       const isSessionDeclared = program.findVariableDeclarators("session")
 
       program.find(j.FunctionDeclaration, {id: {name: "App"}}).forEach((path) => {
@@ -97,20 +95,6 @@ export default RecipeBuilder()
                       j.objectProperty(j.identifier("suspense"), j.booleanLiteral(false)),
                     ]),
                   ]),
-                ),
-              ]),
-            )
-        }
-
-        if (!isRouterDeclared.length) {
-          path
-            .get("body")
-            .get("body")
-            .value.unshift(
-              j.variableDeclaration("const", [
-                j.variableDeclarator(
-                  j.identifier("router"),
-                  j.callExpression(j.identifier("useRouter"), []),
                 ),
               ]),
             )
@@ -137,7 +121,15 @@ export default RecipeBuilder()
                       j.expressionStatement(
                         j.callExpression(
                           j.memberExpression(j.identifier("LogRocket"), j.identifier("identify")),
-                          [j.identifier("session")],
+                          [
+                            j.callExpression(
+                              j.memberExpression(
+                                j.identifier("session.userId"),
+                                j.identifier("toString"),
+                              ),
+                              [],
+                            ),
+                          ],
                         ),
                       ),
                     ]),

@@ -17,8 +17,8 @@ export const init = () => {
   }
 }
 
-export const identify = (session) => {
+export const identify = (userId: string, sessionData = {}) => {
   if (isActive()) {
-    LogRocket.identify(session.userId.toString(), {...session})
+    LogRocket.identify(userId, sessionData)
   }
 }
