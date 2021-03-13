@@ -48,7 +48,8 @@ export class New extends Command {
       allowNo: true,
     }),
     "dry-run": flags.boolean({
-      description: "show what files will be created without writing them to disk",
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
     "no-git": flags.boolean({
       description: "Skip git repository creation",
