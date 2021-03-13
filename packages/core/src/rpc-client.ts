@@ -65,7 +65,7 @@ export const executeRpcCall = <TInput, TResult>(
   const controller = new AbortController()
 
   const promise = window
-    .fetch(apiUrl, {
+    .fetch(addBasePath(apiUrl), {
       method: "POST",
       headers,
       credentials: "include",

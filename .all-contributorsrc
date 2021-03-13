@@ -2186,7 +2186,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/31125563?v=4",
       "profile": "https://roshan.page/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2233,6 +2234,15 @@
       "contributions": [
         "code",
         "doc"
+      ]
+    },
+    {
+      "login": "bugzpodder",
+      "name": "Jack Zhao",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14841421?v=4",
+      "profile": "http://fb.me/yz",
+      "contributions": [
+        "code"
       ]
     }
   ],
