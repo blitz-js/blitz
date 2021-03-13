@@ -18,11 +18,11 @@ export default RecipeBuilder()
     ],
   })
   .addNewFilesStep({
-    stepId: "addThemeUtil",
-    stepName: "Add theme util file",
-    explanation: `Next, we need to add a util file that contains integration helpers for LogRocket.`,
-    targetDirectory: "./utils",
-    templatePath: join(__dirname, "templates", "utils"),
+    stepId: "addIntegrationsFile",
+    stepName: "Add LogRocket integration file",
+    explanation: `Next, we need to add an integration file that contains helpers for LogRocket.`,
+    targetDirectory: "./integrations",
+    templatePath: join(__dirname, "templates", "integrations"),
     templateValues: {},
   })
   .addTransformFilesStep({
@@ -48,7 +48,7 @@ export default RecipeBuilder()
 
       const logrocketImport = j.importDeclaration(
         [j.importDefaultSpecifier(j.identifier("* as LogRocket"))],
-        j.literal("utils/logrocket"),
+        j.literal("integrations/logrocket"),
       )
 
       addImport(program, logrocketImport)
