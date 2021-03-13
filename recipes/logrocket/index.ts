@@ -31,17 +31,19 @@ export default RecipeBuilder()
     explanation: `We will add logic to initialize the LogRocket session and upon login, identify the user within LogRocket`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
-      // Ensure useRouter and useSession are in the blitz imports.
+      // Ensure useSession is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
-        ;["useRouter", "useSession"].forEach((fn) => {
-          if (
-            !blitzImportPath.value.specifiers
-              .filter((spec) => j.ImportSpecifier.check(spec))
-              .some((node) => (node as j.ImportSpecifier)?.imported?.name === fn)
-          ) {
-            blitzImportPath.value.specifiers.splice(0, 0, j.importSpecifier(j.identifier(fn)))
-          }
-        })
+        if (
+          !blitzImportPath.value.specifiers
+            .filter((spec) => j.ImportSpecifier.check(spec))
+            .some((node) => (node as j.ImportSpecifier)?.imported?.name === "useSession")
+        ) {
+          blitzImportPath.value.specifiers.splice(
+            0,
+            0,
+            j.importSpecifier(j.identifier("useSession")),
+          )
+        }
       })
 
       const logrocketImport = j.importDeclaration(
@@ -80,7 +82,6 @@ export default RecipeBuilder()
       const isSessionDeclared = program.findVariableDeclarators("session")
 
       program.find(j.FunctionDeclaration, {id: {name: "App"}}).forEach((path) => {
-        const {node} = path
         // Declare router and/or session if not declared.
         if (!isSessionDeclared.length) {
           path
