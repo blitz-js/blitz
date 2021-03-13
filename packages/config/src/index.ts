@@ -86,7 +86,10 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
       ...loadedBlitzConfig,
     }
   } catch {
-    console.error("Failed to load config in getConfig()")
+    // https://github.com/blitz-js/blitz/issues/2080
+    if (!process.env.JEST_WORKER_ID) {
+      console.error("Failed to load config in getConfig()")
+    }
   }
 
   global.blitzConfig = blitzConfig

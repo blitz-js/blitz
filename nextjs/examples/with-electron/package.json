@@ -1,0 +1,32 @@
+{
+  "name": "with-electron",
+  "productName": "ElectronNext",
+  "version": "1.0.0",
+  "main": "main/index.js",
+  "scripts": {
+    "clean": "rimraf dist renderer/.next renderer/out",
+    "start": "electron .",
+    "build": "next build renderer && next export renderer",
+    "pack-app": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "asar": true,
+    "files": [
+      "main",
+      "renderer/out"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
+    "next": "latest",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {
+    "electron-is-dev": "^1.1.0",
+    "electron-next": "^3.1.5"
+  },
+  "license": "MIT"
+}

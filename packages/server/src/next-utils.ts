@@ -140,7 +140,7 @@ export function nextBuild(
       stdio: [process.stdin, "pipe", "pipe"],
     })
       .on("exit", (code: number) => {
-        if (code === 0) {
+        if (code === 0 || code === null) {
           res()
         } else {
           process.exit(code)
@@ -162,7 +162,7 @@ export async function nextStart(nextBin: string, buildFolder: string, config: Se
       rej("")
     } else {
       const nextjs = spawn(nextBin, spawnCommand, {
-        cwd: process.cwd(),
+        cwd: buildFolder,
         env: spawnEnv,
         stdio: [process.stdin, "pipe", "pipe"],
       })

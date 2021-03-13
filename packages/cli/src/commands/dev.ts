@@ -18,7 +18,7 @@ export class Dev extends Command {
     inspect: flags.boolean({
       description: "Enable the Node.js inspector",
     }),
-    ["no-incremental-build"]: flags.boolean({
+    "no-incremental-build": flags.boolean({
       description: "Disable incremental build and start from a fresh cache",
     }),
   }

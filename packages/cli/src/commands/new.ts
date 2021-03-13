@@ -1,11 +1,11 @@
-import {flags} from "@oclif/command"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
-import chalk from "chalk"
-import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
-import {lt} from "semver"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
+import {flags} from "@oclif/command"
+import chalk from "chalk"
 import spawn from "cross-spawn"
+import hasbin from "hasbin"
+import {lt} from "semver"
 const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
@@ -48,7 +48,8 @@ export class New extends Command {
       allowNo: true,
     }),
     "dry-run": flags.boolean({
-      description: "show what files will be created without writing them to disk",
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
     "no-git": flags.boolean({
       description: "Skip git repository creation",

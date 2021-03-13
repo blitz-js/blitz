@@ -1,5 +1,5 @@
-import {Install, RecipeLocation} from "../../src/commands/install"
 import * as path from "path"
+import {Install, RecipeLocation} from "../../src/commands/install"
 import tempRecipe from "../__fixtures__/installer"
 
 describe("`install` command", () => {

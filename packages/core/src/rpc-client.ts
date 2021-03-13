@@ -1,3 +1,4 @@
+import {addBasePath} from "next/dist/next-server/lib/router/router"
 import {queryCache} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
@@ -64,7 +65,7 @@ export const executeRpcCall = <TInput, TResult>(
   const controller = new AbortController()
 
   const promise = window
-    .fetch(apiUrl, {
+    .fetch(addBasePath(apiUrl), {
       method: "POST",
       headers,
       credentials: "include",
@@ -153,7 +154,7 @@ executeRpcCall.warm = (apiUrl: string) => {
     return
   }
 
-  return window.fetch(apiUrl, {method: "HEAD"})
+  return window.fetch(addBasePath(apiUrl), {method: "HEAD"})
 }
 
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>

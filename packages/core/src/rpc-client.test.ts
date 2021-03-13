@@ -18,7 +18,7 @@ describe("RPC", () => {
     it("warms the endpoint", async () => {
       expect.assertions(1)
       await executeRpcCall.warm("/api/endpoint")
-      expect(global.fetch).toBeCalled()
+      expect(global.fetch).toBeCalledWith("/api/endpoint", {method: "HEAD"})
     })
   })
 
@@ -45,7 +45,13 @@ describe("RPC", () => {
       try {
         const result = await rpcFn({paramOne: 1234}, {fromQueryHook: true})
         expect(result).toBe("result")
-        expect(fetchMock).toBeCalled()
+        expect(fetchMock).toBeCalledWith(
+          "/api/queries/getProduct",
+          expect.objectContaining({
+            body: '{"params":{"paramOne":1234},"meta":{}}',
+            method: "POST",
+          }),
+        )
       } finally {
         fetchMock.mockRestore()
       }

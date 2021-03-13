@@ -1,6 +1,5 @@
 import {Hook} from "@oclif/config"
 import chalk from "chalk"
-
 import {isBlitzRoot, IsBlitzRootError} from "./utils/is-blitz-root"
 
 const commandAllowListGlobal = [
