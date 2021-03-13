@@ -25,14 +25,21 @@ test("generateManifest", () => {
         multipleParameters: ["openedCommentPath"],
       },
     }),
-  ).toEqual(
-    `
+  ).toEqual({
+    implementation: `
 export default {
   Home: "home/",
-  CommentView: ({ postId, openedCommentPath }: { postId: string, openedCommentPath: string[] }) => \`posts/$\{postId\}/$\{openedCommentPath.join("/")\}\`
+  CommentView: ({ postId, openedCommentPath }) => \`posts/$\{postId\}/$\{openedCommentPath.join("/")\}\`
 }
-  `.trim(),
-  )
+      `.trim(),
+    declaration: `
+declare const _default: {
+  Home: string;
+  CommentView({ postId, openedCommentPath }: { postId: string, openedCommentPath: string[] }): string;
+}
+export default _default;
+      `.trim(),
+  })
 })
 
 test("parseDefaultExportName", () => {

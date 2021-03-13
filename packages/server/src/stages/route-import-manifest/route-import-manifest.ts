@@ -32,7 +32,9 @@ const isPage = (path: string) =>
   !path.includes("/_app.") &&
   !path.includes("/_document.")
 
-export function generateManifest(routes: Record<string, Route>): string {
+export function generateManifest(
+  routes: Record<string, Route>,
+): {implementation: string; declaration: string} {
   const allNames = Object.values(routes).map((r) => r.name)
   const routesWithoutDuplicates = Object.entries(routes).filter(([_path, {name}], index) => {
     const first = allNames.indexOf(name)
@@ -44,28 +46,59 @@ export function generateManifest(routes: Record<string, Route>): string {
     return true
   })
 
-  const lines = routesWithoutDuplicates.map(([path, {name, parameters, multipleParameters}]) => {
-    if (parameters.length === 0 && multipleParameters.length === 0) {
-      return `${name}: "${path}"`
-    }
+  const implementationLines = routesWithoutDuplicates.map(
+    ([path, {name, parameters, multipleParameters}]) => {
+      if (parameters.length === 0 && multipleParameters.length === 0) {
+        return `${name}: "${path}"`
+      }
 
-    let resultingPath = path
+      let resultingPath = path
 
-    parameters.forEach((parameter) => {
-      resultingPath = resultingPath.replace(`[${parameter}]`, `\${${parameter}}`)
-    })
+      parameters.forEach((parameter) => {
+        resultingPath = resultingPath.replace(`[${parameter}]`, `\${${parameter}}`)
+      })
 
-    multipleParameters.forEach((parameter) => {
-      resultingPath = resultingPath.replace(`[...${parameter}]`, `\${${parameter}.join("/")}`)
-    })
+      multipleParameters.forEach((parameter) => {
+        resultingPath = resultingPath.replace(`[...${parameter}]`, `\${${parameter}.join("/")}`)
+      })
 
-    return `${name}: ({ ${[...parameters, ...multipleParameters].join(", ")} }: { ${[
-      ...parameters.map((p) => `${p}: string`),
-      ...multipleParameters.map((p) => `${p}: string[]`),
-    ].join(", ")} }) => \`${resultingPath}\``
-  })
+      const allParameters = [...parameters, ...multipleParameters]
 
-  return "export default {\n" + lines.map((line) => "  " + line).join(",\n") + "\n}"
+      return `${name}: ({ ${allParameters.join(", ")} }) => \`${resultingPath}\``
+    },
+  )
+
+  const declarationLines = routesWithoutDuplicates.map(
+    ([path, {name, parameters, multipleParameters}]) => {
+      if (parameters.length === 0 && multipleParameters.length === 0) {
+        return `${name}: string`
+      }
+
+      let resultingPath = path
+
+      parameters.forEach((parameter) => {
+        resultingPath = resultingPath.replace(`[${parameter}]`, `\${${parameter}}`)
+      })
+
+      multipleParameters.forEach((parameter) => {
+        resultingPath = resultingPath.replace(`[...${parameter}]`, `\${${parameter}.join("/")}`)
+      })
+
+      return `${name}({ ${[...parameters, ...multipleParameters].join(", ")} }: { ${[
+        ...parameters.map((p) => `${p}: string`),
+        ...multipleParameters.map((p) => `${p}: string[]`),
+      ].join(", ")} }): string`
+    },
+  )
+
+  return {
+    implementation:
+      "export default {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
+    declaration:
+      "declare const _default: {\n" +
+      declarationLines.map((line) => "  " + line).join(";\n") +
+      ";\n}\nexport default _default;",
+  }
 }
 
 export function parseParametersFromRoute(
@@ -90,9 +123,11 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
 
   const routes: Record<string, Route> = {}
 
-  const writeManifest = makeDebouncedWriter(
-    join(config.src, "node_modules", ".blitz", "route-manifest.ts"),
-  )
+  const dotBlitz = join(config.src, "node_modules", ".blitz")
+
+  const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "route-manifest.js"))
+
+  const writeManifestDeclaration = makeDebouncedWriter(join(dotBlitz, "route-manifest.d.ts"))
 
   const stream = transform.file((file) => {
     if (!isPage(file.relative)) {
@@ -115,7 +150,10 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
         name: defaultExportName,
       }
 
-      writeManifest(generateManifest(routes))
+      const {declaration, implementation} = generateManifest(routes)
+
+      writeManifestImplementation(implementation)
+      writeManifestDeclaration(declaration)
     }
 
     addRoute(entry.uri, defaultExportName)
