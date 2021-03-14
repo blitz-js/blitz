@@ -10,7 +10,7 @@ const LoginPage: BlitzPage = () => {
     <div>
       <LoginForm
         onSuccess={() => {
-          const next = (router.query.next as string) ?? "/"
+          const next = decodeURIComponent(router.query.next as string) ?? "/"
           router.push(next)
         }}
       />
