@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "node scripts/postinstall.js"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -28,6 +29,7 @@
   "files": [
     "dist",
     "cli",
+    "scripts",
     "custom-server",
     "jest-preset.js",
     "jest-preset",

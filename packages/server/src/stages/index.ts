@@ -37,3 +37,9 @@ export const configureRouteStages = (config: StagesConfig) => [
   createStageRpc(config.isTypeScript),
   createStageRoutes,
 ]
+
+export const configureGenerateStages = () => [
+  createStagePages,
+  createStageRoutes,
+  createStageRouteImportManifest,
+]
