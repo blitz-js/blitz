@@ -93,7 +93,7 @@ export function generateManifest(
 
   return {
     implementation:
-      "exports.default = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
+      "module.exports = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration:
       "declare const _default: {\n" +
       declarationLines.map((line) => "  " + line).join(";\n") +

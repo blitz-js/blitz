@@ -27,7 +27,7 @@ test("generateManifest", () => {
     }),
   ).toEqual({
     implementation: `
-exports.default = {
+module.exports = {
   Home: "home/",
   CommentView: ({ postId, openedCommentPath }) => \`posts/$\{postId\}/$\{openedCommentPath.join("/")\}\`
 }
