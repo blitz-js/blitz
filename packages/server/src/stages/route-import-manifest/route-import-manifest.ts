@@ -71,7 +71,7 @@ export function generateManifest(
   const declarationLines = routesWithoutDuplicates.map(
     ([path, {name, parameters, multipleParameters}]) => {
       if (parameters.length === 0 && multipleParameters.length === 0) {
-        return `${name}: string`
+        return `${name}: "${path}"`
       }
 
       let resultingPath = path

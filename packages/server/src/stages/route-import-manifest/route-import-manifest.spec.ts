@@ -34,7 +34,7 @@ export default {
       `.trim(),
     declaration: `
 declare const _default: {
-  Home: string;
+  Home: "home/";
   CommentView({ postId, openedCommentPath }: { postId: string, openedCommentPath: string[] }): string;
 }
 export default _default;
