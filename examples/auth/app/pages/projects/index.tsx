@@ -2,6 +2,7 @@ import {Suspense} from "react"
 import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProjects from "app/projects/queries/getProjects"
+import Routes from ".blitz/route-manifest"
 
 const ITEMS_PER_PAGE = 100
 
@@ -48,7 +49,7 @@ const ProjectsPage: BlitzPage = () => {
 
       <div>
         <p>
-          <Link href="/projects/new">
+          <Link href={Routes.NewProjectPage}>
             <a>Create Project</a>
           </Link>
         </p>

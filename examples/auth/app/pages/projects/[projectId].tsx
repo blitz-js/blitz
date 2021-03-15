@@ -3,6 +3,7 @@ import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from 
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
+import Routes from ".blitz/route-manifest"
 
 export const Project = () => {
   const router = useRouter()
@@ -47,7 +48,7 @@ const ShowProjectPage: BlitzPage = () => {
   return (
     <div>
       <p>
-        <Link href="/projects">
+        <Link href={Routes.ProjectsPage}>
           <a>Projects</a>
         </Link>
       </p>

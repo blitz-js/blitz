@@ -2,6 +2,7 @@ import {Link, useRouter, useMutation, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import createProject from "app/projects/mutations/createProject"
 import {ProjectForm, FORM_ERROR} from "app/projects/components/ProjectForm"
+import Routes from ".blitz/route-manifest"
 
 const NewProjectPage: BlitzPage = () => {
   const router = useRouter()
@@ -32,7 +33,7 @@ const NewProjectPage: BlitzPage = () => {
       />
 
       <p>
-        <Link href="/projects">
+        <Link href={Routes.ProjectsPage}>
           <a>Projects</a>
         </Link>
       </p>
