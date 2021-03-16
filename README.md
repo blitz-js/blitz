@@ -196,6 +196,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
     <td align="center"><a href="https://twitter.com/myrondavis"><img src="https://avatars2.githubusercontent.com/u/1430136?v=4" width="100px;" alt=""/><br /><sub><b>Myron Davis</b></sub></a></td>
     <td align="center"><a href="https://twitter.com/NaReto1125_"><img src="https://avatars.githubusercontent.com/reo777" width="100px;" alt=""/><br /><sub><b>Reo Ishiyama</b></sub></a></td>
     <td align="center"><a href="https://github.com/malkomalko"><img src="https://avatars.githubusercontent.com/malkomalko" width="100px;" alt=""/><br /><sub><b>Robert Malko</b></sub></a></td>
+    <td align="center"><a href="https://kevinlangleyjr.com"><img src="https://avatars.githubusercontent.com/u/877634?v=4" width="100px;" alt=""/><br /><sub><b>Kevin Langley Jr.</b></sub></a></td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
