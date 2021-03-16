@@ -4,7 +4,8 @@ import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
-const cli = require.resolve('create-next-app/dist/index.js')
+// const cli = require.resolve('create-next-app/dist/index.js')
+const cli = 'disabled'
 
 jest.setTimeout(1000 * 60 * 5)
 

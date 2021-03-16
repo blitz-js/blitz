@@ -27,6 +27,7 @@ jobs:
 
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - run: yarn install --frozen-lockfile --check-files
+      - run: yarn workspace @blitzjs/next prepublish
       - run: node run-tests.js --timings --write-timings -g 1/1
         working-directory: nextjs
       - name: Check docs only change
