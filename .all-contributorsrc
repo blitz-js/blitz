@@ -2272,6 +2272,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pavestru",
+      "name": "Pavel Struhar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10186479?v=4",
+      "profile": "https://twitter.com/pavestru",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
