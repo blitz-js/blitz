@@ -1,18 +1,21 @@
+name: Nextjs
+
+defaults:
+  run:
+    working-directory: nextjs
+
 on:
   push:
     branches: [canary]
   pull_request:
     types: [opened, synchronize]
 
-name: Build, test, and deploy
-
-defaults:
-  run:
-    working-directory: nextjs
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     env:
       NEXT_TELEMETRY_DISABLED: 1
     outputs:
@@ -24,8 +27,11 @@ jobs:
 
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - run: yarn install --frozen-lockfile --check-files
-      - run: node run-tests.js --timings --write-timings -g 1/1
+      - name: "Run tests"
+        working-directory: nextjs
+        run: node run-tests.js --timings --write-timings -g 1/1
       - name: Check docs only change
+        working-directory: nextjs
         run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
         id: docs-change
       - run: echo ${{steps.docs-change.outputs.DOCS_CHANGE}}
