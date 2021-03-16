@@ -20,7 +20,7 @@ async function usingTempDir(fn, options) {
   }
 }
 
-describe('create next app', () => {
+describe.skip('create next app', () => {
   it('non-empty directory', async () => {
     await usingTempDir(async (cwd) => {
       const projectName = 'non-empty-directory'
