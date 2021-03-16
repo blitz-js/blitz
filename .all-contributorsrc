@@ -2254,6 +2254,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Flavyoo",
+      "name": "Flavio",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14948074?v=4",
+      "profile": "http://flavioander.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
