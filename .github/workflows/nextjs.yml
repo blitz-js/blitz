@@ -40,17 +40,6 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}
-      - run: yarn lint
-
   checkPrecompiled:
     name: Check Pre-compiled
     runs-on: ubuntu-latest
@@ -100,6 +89,7 @@ jobs:
         group: [1, 2, 3, 4, 5, 6]
     steps:
       - run: echo ${{needs.build.outputs.docsChange}}
+        working-directory: ./
       - uses: actions/cache@v2
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
@@ -137,6 +127,7 @@ jobs:
 
       - run: yarn add -W --dev spectron@7.0.0 electron@5.0.0
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        working-directory: ./
 
       - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -155,8 +146,8 @@ jobs:
         id: docs-change
 
       - run: yarn install --frozen-lockfile --check-files
-        working-directory: ./
         if: ${{steps.docs-change.outputs.DOCS_CHANGE != 'docs only change'}}
+        working-directory: ./
 
       - run: bash ./test-pnp.sh
         if: ${{steps.docs-change.outputs.DOCS_CHANGE != 'docs only change'}}
@@ -171,6 +162,9 @@ jobs:
   testFutureDependencies:
     name: Webpack 5 (Basic, Production, Acceptance)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -193,10 +187,14 @@ jobs:
 
       - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        working-directory: nextjs
 
   testLegacyReact:
     name: React 16 + Webpack 4 (Basic, Production, Acceptance)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -227,6 +225,7 @@ jobs:
 
       - run: xvfb-run node run-tests.js test/integration/{link-ref,production,basic,async-modules,font-optimization,ssr-ctx,worker-loader}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        working-directory: nextjs
 
   testFirefox:
     name: Test Firefox (production)
