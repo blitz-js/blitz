@@ -27,9 +27,8 @@ jobs:
 
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - run: yarn install --frozen-lockfile --check-files
-      - name: "Run tests"
+      - run: node run-tests.js --timings --write-timings -g 1/1
         working-directory: nextjs
-        run: node run-tests.js --timings --write-timings -g 1/1
       - name: Check docs only change
         working-directory: nextjs
         run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
@@ -156,6 +155,7 @@ jobs:
         id: docs-change
 
       - run: yarn install --frozen-lockfile --check-files
+        working-directory: ./
         if: ${{steps.docs-change.outputs.DOCS_CHANGE != 'docs only change'}}
 
       - run: bash ./test-pnp.sh
