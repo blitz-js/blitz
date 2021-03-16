@@ -155,7 +155,7 @@ jobs:
   testsPass:
     name: thank you, next
     runs-on: ubuntu-latest
-    needs: [lint, checkPrecompiled, testIntegration, testUnit, testYarnPnP]
+    needs: [checkPrecompiled, testIntegration, testUnit, testYarnPnP]
     steps:
       - run: exit 0
 
