@@ -5,6 +5,7 @@
       "nextjs",
       "nextjs/packages/next",
       "nextjs/packages/eslint-plugin-next",
+      "nextjs/packages/next-mdx",
       "packages/*",
       "examples/*",
       "recipes/*"
@@ -70,7 +71,6 @@
     "@preconstruct/cli": "2.0.5",
     "@preconstruct/next": "2.0.0",
     "@rollup/pluginutils": "4.1.0",
-    "@size-limit/preset-small-lib": "4.9.2",
     "@testing-library/jest-dom": "5.11.9",
     "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "^4.0.1",
@@ -169,7 +169,6 @@
     "rollup-plugin-node-resolve": "5.2.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "semver": "7.3.4",
-    "size-limit": "4.9.2",
     "stdout-stderr": "0.1.13",
     "strip-ansi": "6.0.0",
     "test-listen": "1.1.0",

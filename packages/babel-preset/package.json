@@ -20,16 +20,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "size-limit": [
-    {
-      "path": "dist/babel-preset.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/babel-preset.esm.js",
-      "limit": "10 KB"
-    }
-  ],
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
     "babel-plugin-superjson-next": "0.2.2"
