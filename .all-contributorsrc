@@ -2245,6 +2245,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "the-red",
+      "name": "Hisaki Akaza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4494300?v=4",
+      "profile": "https://github.com/the-red",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
