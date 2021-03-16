@@ -367,7 +367,8 @@
       "contributions": [
         "code",
         "test",
-        "maintenance"
+        "maintenance",
+        "doc"
       ]
     },
     {
@@ -2186,7 +2187,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/31125563?v=4",
       "profile": "https://roshan.page/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2233,6 +2235,60 @@
       "contributions": [
         "code",
         "doc"
+      ]
+    },
+    {
+      "login": "bugzpodder",
+      "name": "Jack Zhao",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14841421?v=4",
+      "profile": "http://fb.me/yz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "the-red",
+      "name": "Hisaki Akaza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4494300?v=4",
+      "profile": "https://github.com/the-red",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Flavyoo",
+      "name": "Flavio",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14948074?v=4",
+      "profile": "http://flavioander.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pbteja1998",
+      "name": "Bhanu Teja Pachipulusu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17903466?v=4",
+      "profile": "https://bhanuteja.dev/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pavestru",
+      "name": "Pavel Struhar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10186479?v=4",
+      "profile": "https://twitter.com/pavestru",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "reo777",
+      "name": "Reo Ishiyama",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42126368?v=4",
+      "profile": "https://in-thepink.com/",
+      "contributions": [
+        "code"
       ]
     }
   ],
