@@ -58,8 +58,8 @@ describe('Production Usage', () => {
   afterAll(() => stopApp(server))
 
   it('should contain generated page count in output', async () => {
-    expect(output).toContain('Generating static pages (0/36)')
-    expect(output).toContain('Generating static pages (36/36)')
+    expect(output).toContain('Generating static pages (0/37)')
+    expect(output).toContain('Generating static pages (37/37)')
     // we should only have 4 segments and the initial message logged out
     expect(output.match(/Generating static pages/g).length).toBe(5)
   })
@@ -376,12 +376,13 @@ describe('Production Usage', () => {
     it('should set title by routeChangeComplete event', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.eval(function setup() {
-        window.next.router.events.on('routeChangeComplete', function handler(
-          url
-        ) {
-          window.routeChangeTitle = document.title
-          window.routeChangeUrl = url
-        })
+        window.next.router.events.on(
+          'routeChangeComplete',
+          function handler(url) {
+            window.routeChangeTitle = document.title
+            window.routeChangeUrl = url
+          }
+        )
         window.next.router.push('/with-title')
       })
       await browser.waitForElementByCss('#with-title')
