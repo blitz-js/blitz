@@ -139,8 +139,8 @@ jobs:
   testYarnPnP:
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: '--unhandled-rejections=strict'
-      YARN_COMPRESSION_LEVEL: '0'
+      NODE_OPTIONS: "--unhandled-rejections=strict"
+      YARN_COMPRESSION_LEVEL: "0"
     steps:
       - uses: actions/checkout@v2
         with:
@@ -228,7 +228,7 @@ jobs:
     needs: build
     env:
       HEADLESS: true
-      BROWSERNAME: 'firefox'
+      BROWSERNAME: "firefox"
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
@@ -246,7 +246,7 @@ jobs:
     needs: build
     env:
       BROWSERSTACK: true
-      BROWSERNAME: 'safari'
+      BROWSERNAME: "safari"
       NEXT_TELEMETRY_DISABLED: 1
       SKIP_LOCAL_SELENIUM_SERVER: true
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -268,7 +268,7 @@ jobs:
     env:
       BROWSERSTACK: true
       LEGACY_SAFARI: true
-      BROWSERNAME: 'safari'
+      BROWSERNAME: "safari"
       NEXT_TELEMETRY_DISABLED: 1
       SKIP_LOCAL_SELENIUM_SERVER: true
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -282,3 +282,18 @@ jobs:
           key: ${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  prStats:
+    name: Release Stats
+    runs-on: ubuntu-latest
+    needs: [publishRelease]
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - run: ./release-stats.sh
+      - uses: ./.github/actions/next-stats-action
+        env:
+          PR_STATS_COMMENT_TOKEN: ${{ secrets.PR_STATS_COMMENT_TOKEN }}
