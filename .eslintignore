@@ -25,6 +25,26 @@ eslint.config.*
 /scripts
 /types
 /recipes/*/templates
-packages/generator/templates
+/packages/generator/templates
+/packages/cli/lib
 
-/nextjs
+
+// COPIED FROM nextjs/.eslintignore
+/nextjs/**/.next/**
+/nextjs/**/_next/**
+/nextjs/**/dist/**
+/nextjs/examples/with-typescript-eslint-jest/**
+/nextjs/examples/with-kea/**
+/nextjs/packages/next/bundles/webpack/packages/*.runtime.js
+/nextjs/packages/next/compiled/**/*
+/nextjs/packages/react-refresh-utils/**/*.js
+/nextjs/packages/react-dev-overlay/lib/**
+/nextjs/**/__tmp__/**
+/nextjs/.github/actions/next-stats-action/.work
+/nextjs/packages/next-codemod/transforms/__testfixtures__/**/*
+/nextjs/packages/next-codemod/transforms/__tests__/**/*
+/nextjs/packages/next-codemod/**/*.js
+/nextjs/packages/next-codemod/**/*.d.ts
+/nextjs/packages/next-env/**/*.d.ts
+/nextjs/test/integration/async-modules/**
+/nextjs/test-timings.json
