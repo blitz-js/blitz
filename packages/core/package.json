@@ -46,7 +46,7 @@
     "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
-    "next": "10.0.7",
+    "next": "10.0.9",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",
