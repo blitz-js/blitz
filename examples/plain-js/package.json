@@ -36,8 +36,6 @@
     "react-dom": "0.0.0-experimental-6a589ad71"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "~4.14.0",
-    "@typescript-eslint/parser": "~4.14.0",
     "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",
@@ -50,7 +48,7 @@
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
-    "typescript": "4.1.5"
+    "typescript": "3.8.3"
   },
   "private": true
 }

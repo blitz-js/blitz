@@ -198,7 +198,7 @@ export class IncrementalCache {
       try {
         const seedPath = this.getSeedPath(pathname, 'html')
         await promises.mkdir(path.dirname(seedPath), { recursive: true })
-        await promises.writeFile(seedPath, data.html, 'utf8')
+        await promises.writeFile(seedPath, data.html || '', 'utf8') //blitz
         await promises.writeFile(
           this.getSeedPath(pathname, 'json'),
           JSON.stringify(data.pageData),
