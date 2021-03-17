@@ -2291,6 +2291,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tmcw",
+      "name": "Tom MacWright",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32314?v=4",
+      "profile": "https://macwright.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
