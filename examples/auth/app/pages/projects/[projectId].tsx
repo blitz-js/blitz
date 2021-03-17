@@ -1,9 +1,8 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
-import Routes from ".blitz/route-manifest"
 
 export const Project = () => {
   const router = useRouter()

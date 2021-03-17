@@ -1,10 +1,9 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
+import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import updateProject from "app/projects/mutations/updateProject"
 import {ProjectForm, FORM_ERROR} from "app/projects/components/ProjectForm"
-import Routes from ".blitz/route-manifest"
 
 export const EditProject = () => {
   const router = useRouter()

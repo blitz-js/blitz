@@ -1,12 +1,12 @@
 diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
-index 7e40755..fde60cc 100644
+index 7e40755..63c9d51 100644
 --- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 @@ -1770,6 +1770,8 @@ let getRollupConfig = (pkg, entrypoints, aliases, type, reportTransformedFile) =
      external.push(...builtInModules);
    }
  
-+  external.push('next', 'react', '@babel/core', 'prettier')
++  external.push('next', 'react', '@babel/core', 'prettier', '.blitz')
 +
    let input = {};
    entrypoints.forEach(entrypoint => {

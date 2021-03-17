@@ -12,6 +12,9 @@ export {useMutation} from "./use-mutation"
 export {invoke} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
 
+// @ts-ignore
+export {default as Routes} from ".blitz/routes-manifest"
+
 export {
   getAntiCSRFToken,
   useSession,

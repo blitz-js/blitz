@@ -1,8 +1,7 @@
 import {Suspense} from "react"
-import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+import {Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProjects from "app/projects/queries/getProjects"
-import Routes from ".blitz/route-manifest"
 
 const ITEMS_PER_PAGE = 100
 
