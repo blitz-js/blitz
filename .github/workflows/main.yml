@@ -1,4 +1,4 @@
-name: CI
+name: Blitz
 
 on:
   push:
@@ -52,14 +52,13 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node_version: [12, 15]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: "15"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
