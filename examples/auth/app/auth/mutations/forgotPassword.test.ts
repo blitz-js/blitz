@@ -1,4 +1,4 @@
-import { hash256, Ctx } from "blitz"
+import {hash256, Ctx} from "blitz"
 import forgotPassword from "./forgotPassword"
 import db from "db"
 import previewEmail from "preview-email"
@@ -8,15 +8,15 @@ beforeEach(async () => {
 })
 
 const generatedToken = "plain-token"
-jest.mock("blitz", () => ({
-  ...jest.requireActual<object>("blitz")!,
+jest.mock("@blitzjs/core/server", () => ({
+  ...jest.requireActual<object>("@blitzjs/core/server")!,
   generateToken: () => generatedToken,
 }))
 jest.mock("preview-email", () => jest.fn())
 
 describe("forgotPassword mutation", () => {
   it("does not throw error if user doesn't exist", async () => {
-    await expect(forgotPassword({ email: "no-user@email.com" }, {} as Ctx)).resolves.not.toThrow()
+    await expect(forgotPassword({email: "no-user@email.com"}, {} as Ctx)).resolves.not.toThrow()
   })
 
   it("works correctly", async () => {
@@ -34,13 +34,13 @@ describe("forgotPassword mutation", () => {
           },
         },
       },
-      include: { tokens: true },
+      include: {tokens: true},
     })
 
     // Invoke the mutation
-    await forgotPassword({ email: user.email }, {} as Ctx)
+    await forgotPassword({email: user.email}, {} as Ctx)
 
-    const tokens = await db.token.findMany({ where: { userId: user.id } })
+    const tokens = await db.token.findMany({where: {userId: user.id}})
     const token = tokens[0]
 
     // delete's existing tokens
