@@ -1,0 +1,18 @@
+{
+  "name": "@next/plugin-google-analytics",
+  "version": "10.0.9",
+  "repository": {
+    "url": "vercel/next.js",
+    "directory": "packages/next-plugin-google-analytics"
+  },
+  "nextjs": {
+    "name": "Google Analytics",
+    "required-env": [
+      "NEXT_PUBLIC_GA_TRACKING_ID"
+    ]
+  },
+  "peerDependencies": {
+    "next": "*",
+    "react": "*"
+  }
+}

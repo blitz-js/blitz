@@ -26,7 +26,7 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
       }
 
       if (!global._blitz_prismaClient) {
-        const client = new target(...args)
+        const client = new target(...(args as any))
 
         client.$reset = async function reset() {
           if (process.env.NODE_ENV === "production") {

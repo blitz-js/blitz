@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:blitz-js/next.js.git
+	branch = canary
+	commit = b4efb8b8c5add68046280a6c2059938188ce7199
+	parent = 03200b7a7d6d6b225a4e25d144359e20b124c97c
+	method = merge
+	cmdver = 0.4.3

@@ -1,5 +1,5 @@
-import {Command, flags} from "@oclif/command"
 import {ServerConfig} from "@blitzjs/server"
+import {Command, flags} from "@oclif/command"
 
 export class Build extends Command {
   static description = "Creates a production build"
