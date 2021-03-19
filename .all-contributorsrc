@@ -2302,6 +2302,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "franky47",
+      "name": "François Best",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1174092?v=4",
+      "profile": "https://francoisbest.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
