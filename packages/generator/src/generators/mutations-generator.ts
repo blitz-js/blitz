@@ -51,10 +51,7 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
       subTemplateValues: this.options.extraArgs?.map((arg: string) => {
-        const argInfos = arg.split(":")
-        const valueName = argInfos.shift()
-        const typeName = argInfos.shift()
-        console.log(argInfos)
+        const [valueName, typeName] = arg.split(":")
         return {
           attributeName: singleCamel(valueName),
           zodTypeName: this.getZodTypeName(typeName),

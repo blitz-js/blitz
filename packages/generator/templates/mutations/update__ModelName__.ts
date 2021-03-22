@@ -4,7 +4,7 @@ import * as z from "zod"
 
 const Update__ModelName__ = z.object({
   id: z.number(),
-  name: z.string(),
+  /* template: __attributeName__: z.__zodTypeName__(), */
 }).nonstrict()
 
 export default resolver.pipe(

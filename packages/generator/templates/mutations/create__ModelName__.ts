@@ -4,13 +4,12 @@ import * as z from "zod"
 
 if (process.env.parentModel) {
   const Create__ModelName__ = z.object({
-    name: z.string(),
+    /* template: __attributeName__: z.__zodTypeName__(), */
     __parentModelId__: z.number()
   }).nonstrict()
 } else {
   const Create__ModelName__ = z.object({
-    /* template: __attributeName__: z.__zAttributeType__ */
-    name: z.string(),
+    /* template: __attributeName__: z.__zodTypeName__(), */
   }).nonstrict()
 }
 

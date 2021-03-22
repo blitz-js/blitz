@@ -243,9 +243,6 @@ export abstract class Generator<
         log.warning(`Failed trying to run prettier:` + error)
       }
     }
-    if (subTemplateString) {
-      console.log(templatedFile)
-    }
     return templatedFile
   }
 
