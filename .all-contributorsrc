@@ -2320,6 +2320,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ericvicenti",
+      "name": "Eric Vicenti",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1483597?v=4",
+      "profile": "https://github.com/ericvicenti",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
