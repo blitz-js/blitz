@@ -43,7 +43,9 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
       subTemplateValues: this.options.extraArgs?.map((arg: string) => {
-        const valueName = arg.split(":").shift()
+        const argInfos = arg.split(":")
+        const valueName = argInfos.shift()
+        console.log(argInfos)
         return {
           fieldName: singleCamel(valueName),
           FieldName: singlePascal(valueName).replace(/(?!^)([A-Z])/g, " $1"),

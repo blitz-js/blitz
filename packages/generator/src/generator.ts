@@ -204,7 +204,7 @@ export abstract class Generator<
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
     // templatedFile.match
-    const subTemplateRegExp = new RegExp(/{\/\* template: (.*) \*\/}/)
+    const subTemplateRegExp = new RegExp(/{?\/\* template: (.*) \*\/}?/)
     const subTemplateString = templatedFile
       .match(subTemplateRegExp)?.[0]
       .replace(subTemplateRegExp, "$1")
