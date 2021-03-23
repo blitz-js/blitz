@@ -93,7 +93,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     if (shouldMigrate) {
       await new Promise<void>((res, rej) => {
         const prismaBin = which(process.cwd()).sync("prisma")
-        const child = spawn(prismaBin, ["migrate", "dev", "--preview-feature"], {stdio: "inherit"})
+        const child = spawn(prismaBin, ["migrate", "dev"], {stdio: "inherit"})
         child.on("exit", (code) => (code === 0 ? res() : rej()))
       })
     }
