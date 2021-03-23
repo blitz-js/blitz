@@ -2329,6 +2329,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "amdolan",
+      "name": "Alex Dolan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2552275?v=4",
+      "profile": "https://github.com/amdolan",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
