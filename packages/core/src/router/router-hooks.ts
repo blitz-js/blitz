@@ -116,25 +116,23 @@ export function useParam(
 }
 
 /*
- * Copied from https://github.com/lukeed/qss
+ * Based on the code of https://github.com/lukeed/qss
  */
 function decode(str: string) {
   if (!str) return {}
-  let tmp: any
-  let k
-  const out: Record<string, any> = {}
-  const arr = str.split("&")
 
-  // eslint-disable-next-line no-cond-assign
-  while ((tmp = arr.shift())) {
-    tmp = tmp.split("=")
-    k = tmp.shift()
-    if (out[k] !== void 0) {
-      out[k] = [].concat(out[k], tmp.shift())
+  let out: Record<string, string | string[]> = {}
+
+  for (const current of str.split("&")) {
+    let [key, value = ""] = current.split("=")
+    const decodedValue = decodeURIComponent(value)
+
+    if (key in out) {
+      out[key] = ([] as string[]).concat(out[key], decodedValue)
     } else {
-      out[k] = tmp.shift()
+      out[key] = decodedValue
     }
   }
 
-  return out as Record<string, string | string[]>
+  return out
 }
