@@ -125,12 +125,12 @@ function decode(str: string) {
 
   for (const current of str.split("&")) {
     let [key, value = ""] = current.split("=")
-    const decodedValue = decodeURIComponent(value)
+    value = decodeURIComponent(value)
 
     if (key in out) {
-      out[key] = ([] as string[]).concat(out[key], decodedValue)
+      out[key] = ([] as string[]).concat(out[key], value)
     } else {
-      out[key] = decodedValue
+      out[key] = value
     }
   }
 
