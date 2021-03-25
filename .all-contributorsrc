@@ -2341,6 +2341,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "Maastrich",
+      "name": "Mathis Pinsault",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58431775?v=4",
+      "profile": "https://github.com/Maastrich",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
