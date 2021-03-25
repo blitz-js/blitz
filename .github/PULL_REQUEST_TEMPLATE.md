@@ -5,6 +5,6 @@ Closes: ??
 ### Checklist
 
 - [ ] Changes covered by tests (tests added if needed)
-- [ ] PR requests documentation changes on [blitzjs.com](https://github.com/blitz-js/blitzjs.com)
+- [ ] Does this PR warrant documentation updates? If yes, open a second PR with doc changes to [blitzjs.com](https://github.com/blitz-js/blitzjs.com)
 
 <!-- IMPORTANT: Make sure to check the "Allow edits from maintainers" box below this window -->
