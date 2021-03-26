@@ -1,34 +1,57 @@
-import {MutationOptions, useMutation as useReactQueryMutation} from "react-query"
-import {MutationFunction, MutationResultPair} from "./types"
+import {
+  MutateOptions,
+  useMutation as useReactQueryMutation,
+  UseMutationOptions,
+  UseMutationResult,
+} from "react-query"
 import {sanitize} from "./utils/react-query-utils"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair
  * types so because we have throwOnError:true by default. And by the RQ types
- * have the mutate function result typed as TResult|undefined which isn't typed
+ * have the mutate function result typed as TData|undefined which isn't typed
  * properly with throwOnError.
  *
  * So this fixes that.
  */
+export declare type MutateFunction<
+  TData,
+  TError = unknown,
+  TVariables = unknown,
+  TContext = unknown
+> = (
+  variables?: TVariables,
+  config?: MutateOptions<TData, TError, TVariables, TContext>,
+) => Promise<TData>
 
-export function useMutation<TResult, TError = unknown, TVariables = undefined, TSnapshot = unknown>(
-  mutationResolver: MutationFunction<TResult, TVariables>,
-  config?: MutationOptions<TResult, TError, TVariables, TSnapshot>,
-) {
+export declare type MutationResultPair<TData, TError, TVariables, TContext> = [
+  MutateFunction<TData, TError, TVariables, TContext>,
+  UseMutationResult<TData, TError>,
+]
+
+export declare type MutationFunction<TData, TVariables = unknown> = (
+  variables: TVariables,
+  ctx?: any,
+) => Promise<TData>
+
+export function useMutation<
+  TData = unknown,
+  TError = unknown,
+  TVariables = void,
+  TContext = unknown
+>(
+  mutationResolver: MutationFunction<TData, TVariables>,
+  config?: UseMutationOptions<TData, TError, TVariables, TContext>,
+): MutationResultPair<TData, TError, TVariables, TContext> {
   const enhancedResolverRpcClient = sanitize(mutationResolver)
 
-  // return useReactQueryMutation(
-  //   (variables: TVariables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
-  //   {
-  //     throwOnError: true,
-  //     ...config,
-  //   } as any,
-  // ) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
-  return useReactQueryMutation(
-    (variables: TVariables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
+  const {mutate, ...rest} = useReactQueryMutation<TData, TError, TVariables, TContext>(
+    (variables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
     {
       throwOnError: true,
       ...config,
     } as any,
-  ) as MutationResultPair<TResult, TError, TVariables, TSnapshot>
+  )
+
+  return [mutate, rest] as MutationResultPair<TData, TError, TVariables, TContext>
 }
