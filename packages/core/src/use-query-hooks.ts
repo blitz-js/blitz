@@ -1,6 +1,6 @@
 import {
   useInfiniteQuery as useInfiniteReactQuery,
-  UseInfiniteQueryOptions as RQInfiniteQueryConfig,
+  UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
   // usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
@@ -139,45 +139,31 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
 // -------------------------
 // useInfiniteQuery
 // -------------------------
-type RestInfiniteResult<TResult, TMoreVariable> = Omit<
-  UseInfiniteQueryResult<TResult, TMoreVariable>,
-  "data"
-> &
-  QueryCacheFunctions<TResult>
-
-interface InfiniteQueryConfig<TResult, TFetchMoreResult>
-  extends RQInfiniteQueryConfig<TResult, TFetchMoreResult> {
-  // getNextPageParam: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
+interface RestInfiniteResult<TResult>
+  extends Omit<UseInfiniteQueryResult<TResult>, "data">,
+    QueryCacheFunctions<TResult> {
+  pageParams: any
 }
 
-// TODO - Fix TFetchMoreResult not actually taking affect in apps.
-// It shows as 'unknown' in the params() input argumunt, but should show as TFetchMoreResult
-export function useInfiniteQuery<
-  T extends QueryFn,
-  TFetchMoreResult = any,
-  TResult = PromiseReturnType<T>
->(
+interface InfiniteQueryConfig<TResult> extends UseInfiniteQueryOptions<TResult> {
+  // getPreviousPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
+  // getNextPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
+}
+
+export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
-  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
-): [TResult[], RestInfiniteResult<TResult, TFetchMoreResult> & QueryNonLazyOptions]
-export function useInfiniteQuery<
-  T extends QueryFn,
-  TFetchMoreResult = any,
-  TResult = PromiseReturnType<T>
->(
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: InfiniteQueryConfig<TResult>,
+): [TResult[], RestInfiniteResult<TResult> & QueryNonLazyOptions]
+export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
-  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TFetchMoreResult> & QueryLazyOptions,
-): [TResult[] | undefined, RestInfiniteResult<TResult, TFetchMoreResult>]
-export function useInfiniteQuery<
-  T extends QueryFn,
-  TFetchMoreResult = any,
-  TResult = PromiseReturnType<T>
->(
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: InfiniteQueryConfig<TResult> & QueryLazyOptions,
+): [TResult[] | undefined, RestInfiniteResult<TResult>]
+export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
-  params: (fetchMoreResult: TFetchMoreResult) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult, TFetchMoreResult>,
+  getQueryParams: (pageParam: any) => FirstParam<T>,
+  options: InfiniteQueryConfig<TResult>,
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
@@ -192,7 +178,7 @@ export function useInfiniteQuery<
 
   const routerIsReady = useRouter().isReady
   const enhancedResolverRpcClient = sanitize(queryFn)
-  const queryKey = getQueryKey(queryFn, params)
+  const queryKey = getQueryKey(queryFn, getQueryParams)
 
   const {data, ...queryRest} = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
@@ -200,7 +186,7 @@ export function useInfiniteQuery<
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: routerIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? ({pageParam}) => enhancedResolverRpcClient(params(pageParam), {fromQueryHook: true})
+      ? ({pageParam}) => enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true})
       : (emptyQueryFn as any),
     ...useDefaultQueryConfig(),
     ...options,
@@ -208,9 +194,9 @@ export function useInfiniteQuery<
 
   const rest = {
     ...queryRest,
-    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
+    ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, getQueryParams),
     pageParams: data?.pageParams,
   }
 
-  return [data?.pages, rest]
+  return [data?.pages as any, rest]
 }
