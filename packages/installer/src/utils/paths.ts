@@ -24,4 +24,7 @@ export const paths = {
   packageJson() {
     return "package.json"
   },
+  prismaSchema() {
+    return "db/schema.prisma"
+  },
 }

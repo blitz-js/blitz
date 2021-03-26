@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.32.1",
+  "version": "0.33.0",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/core": "7.13.1",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.32.1",
+    "@blitzjs/display": "0.33.0",
     "@types/jscodeshift": "0.7.2",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",

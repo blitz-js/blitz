@@ -48,7 +48,8 @@ export class New extends Command {
       allowNo: true,
     }),
     "dry-run": flags.boolean({
-      description: "show what files will be created without writing them to disk",
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
     "no-git": flags.boolean({
       description: "Skip git repository creation",
@@ -164,7 +165,7 @@ export class New extends Command {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
             const result = await runPrisma(
-              ["migrate", "dev", "--preview-feature", "--name", "Initial migration"],
+              ["migrate", "dev", "--name", "Initial migration"],
               true,
             )
             if (!result) throw new Error()
@@ -173,7 +174,7 @@ export class New extends Command {
           } catch (error) {
             spinner.fail()
             postInstallSteps.push(
-              "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+              "blitz prisma migrate dev (when asked, you can name the migration anything)",
             )
           }
         },
@@ -185,7 +186,7 @@ export class New extends Command {
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push(
-          "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+          "blitz prisma migrate dev (when asked, you can name the migration anything)",
         )
       }
 

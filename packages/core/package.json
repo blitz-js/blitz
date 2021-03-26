@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.32.1",
+  "version": "0.33.0",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -33,8 +33,8 @@
     "with-blitz"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.32.1",
-    "@blitzjs/display": "0.32.1",
+    "@blitzjs/config": "0.33.0",
+    "@blitzjs/display": "0.33.0",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
@@ -46,7 +46,7 @@
     "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
-    "next": "10.0.7",
+    "next": "10.0.9",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",
@@ -55,7 +55,7 @@
     "superjson": "1.7.2"
   },
   "devDependencies": {
-    "react": "0.0.0-experimental-3310209d0",
+    "react": "0.0.0-experimental-6a589ad71",
     "zod": "1.11.11"
   },
   "repository": "https://github.com/blitz-js/blitz",
