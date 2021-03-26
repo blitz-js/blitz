@@ -55,7 +55,7 @@
     "superjson": "1.7.2"
   },
   "devDependencies": {
-    "react": "0.0.0-experimental-3310209d0",
+    "react": "0.0.0-experimental-6a589ad71",
     "zod": "1.11.11"
   },
   "repository": "https://github.com/blitz-js/blitz",

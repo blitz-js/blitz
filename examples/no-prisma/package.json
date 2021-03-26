@@ -1,5 +1,5 @@
 {
-  "name": "no-prisma",
+  "name": "@examples/no-prisma",
   "version": "0.33.0",
   "scripts": {
     "dev": "blitz dev",
@@ -28,8 +28,8 @@
   "dependencies": {
     "blitz": "0.33.0",
     "knex": "0.21.16",
-    "react": "0.0.0-experimental-3310209d0",
-    "react-dom": "0.0.0-experimental-3310209d0",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
     "sqlite3": "5.0.0"
   },
   "devDependencies": {
