@@ -270,6 +270,11 @@ export abstract class Generator<
     // expose postWrite hook, no default implementation
   }
 
+  preventFileFromLogging(_file: string): boolean {
+    // no default implementation
+    return false
+  }
+
   sourcePath(...paths: string[]): string {
     return path.join(this.sourceRoot, ...paths)
   }
@@ -316,9 +321,15 @@ export abstract class Generator<
     }
 
     if (!this.returnResults) {
-      this.performedActions.sort().forEach((action) => {
-        console.log(action)
-      })
+      this.performedActions
+        .sort()
+        .filter((action) => {
+          // Each action is something like this:
+          // "\u001b[32mCREATE   \u001b[39m .env"
+          const filename = action.split(/ +/, 3)[2]
+          return !this.preventFileFromLogging(filename)
+        })
+        .forEach((action) => console.log(action))
     }
 
     if (!this.options.dryRun) {

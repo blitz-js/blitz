@@ -232,6 +232,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
+  preventFileFromLogging(file: string): boolean {
+    return file.startsWith(".vscode") || file === ".editorconfig" || file.endsWith("/.keep")
+  }
+
   commitChanges() {
     const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
