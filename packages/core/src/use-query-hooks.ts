@@ -1,12 +1,12 @@
 import {
+  useInfiniteQuery as useInfiniteReactQuery,
   UseInfiniteQueryOptions as RQInfiniteQueryConfig,
   UseInfiniteQueryResult,
+  // usePaginatedQuery as usePaginatedReactQuery,
+  useQuery as useReactQuery,
   // PaginatedQueryResult,
   UseQueryOptions,
   UseQueryResult,
-  useInfiniteQuery as useInfiniteReactQuery,
-  // usePaginatedQuery as usePaginatedReactQuery,
-  useQuery as useReactQuery,
 } from "react-query"
 import {useSession} from "./auth/auth-client"
 import {useRouter} from "./router"
@@ -66,8 +66,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? (_apiUrl: string, params: any) =>
-          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     ...useDefaultQueryConfig(),
     ...options,
@@ -78,13 +77,14 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [data, rest as RestQueryResult<TResult>]
+  // return [data, rest as RestQueryResult<TResult>]
+  return [data, rest]
 }
 
-// // -------------------------
-// // usePaginatedQuery
-// // -------------------------
-type RestPaginatedResult<TResult> = Omit<UseQueryResult<TResult>, "resolvedData"> &
+// -------------------------
+// usePaginatedQuery
+// -------------------------
+type RestPaginatedResult<TResult> = Omit<UseQueryResult<TResult>, "data"> &
   QueryCacheFunctions<TResult>
 
 export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
@@ -117,11 +117,10 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   const enhancedResolverRpcClient = sanitize(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
-  const {data, isPreviousData, ...queryRest} = useReactQuery({
+  const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? (_apiUrl: string, params: any) =>
-          enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
     ...useDefaultQueryConfig(),
     ...options,
@@ -133,7 +132,8 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
   }
 
-  return [data, isPreviousData, rest as RestPaginatedResult<TResult>]
+  // return [data, rest as RestPaginatedResult<TResult>]
+  return [data, rest]
 }
 
 // -------------------------
@@ -147,7 +147,7 @@ type RestInfiniteResult<TResult, TMoreVariable> = Omit<
 
 interface InfiniteQueryConfig<TResult, TFetchMoreResult>
   extends RQInfiniteQueryConfig<TResult, TFetchMoreResult> {
-  getFetchMore: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
+  // getNextPageParam: (lastPage: TResult, allPages: TResult[]) => TFetchMoreResult
 }
 
 // TODO - Fix TFetchMoreResult not actually taking affect in apps.
@@ -200,8 +200,7 @@ export function useInfiniteQuery<
     // Without this cache for usePaginatedQuery and this will conflict and break.
     queryKey: routerIsReady ? [...queryKey, "infinite"] : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? (_apiUrl: string, _args: any, _infinite: string, resultOfGetFetchMore: TFetchMoreResult) =>
-          enhancedResolverRpcClient(params(resultOfGetFetchMore), {fromQueryHook: true})
+      ? ({pageParam}) => enhancedResolverRpcClient(params(pageParam), {fromQueryHook: true})
       : (emptyQueryFn as any),
     ...useDefaultQueryConfig(),
     ...options,
@@ -210,7 +209,8 @@ export function useInfiniteQuery<
   const rest = {
     ...queryRest,
     ...getQueryCacheFunctions<FirstParam<T>, TResult, T>(queryFn, params),
+    pageParams: data?.pageParams,
   }
 
-  return [data, rest as RestInfiniteResult<TResult, TFetchMoreResult>]
+  return [data?.pages, rest]
 }
