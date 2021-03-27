@@ -20298,15 +20298,6 @@ react-devtools-core@^4.6.0:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-dom@0.0.0-experimental-3310209d0:
-  version "0.0.0-experimental-3310209d0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-3310209d0.tgz#da24ddc969d34406d25210c88ba6d33c101532fa"
-  integrity sha512-5Ibs6pnu5rrEgq6gTVHjnMlIFiOFHpTeLbPcqPjnFnAX7WR06+rJK32lW5U13ktmpzqUdGruwE5oweWI7uPQhA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    scheduler "0.0.0-experimental-3310209d0"
-
 react-dom@0.0.0-experimental-6a589ad71:
   version "0.0.0-experimental-6a589ad71"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-0.0.0-experimental-6a589ad71.tgz#24ace0c6b0464bdafbc42ebcec783a99aa40d175"
@@ -20386,14 +20377,6 @@ react-test-renderer@17.0.1:
     react-is "^17.0.1"
     react-shallow-renderer "^16.13.1"
     scheduler "^0.20.1"
-
-react@0.0.0-experimental-3310209d0:
-  version "0.0.0-experimental-3310209d0"
-  resolved "https://registry.yarnpkg.com/react/-/react-0.0.0-experimental-3310209d0.tgz#1421b0338fbb0c98bbe1ffcaaf88d101209d7194"
-  integrity sha512-TVDPZZ2rbxtbIlb3knyqXG1ij8veXpMTzxWmJC/+0POtKSE0HeUNVoQX8j0h0p0rHCKmAfT/mIZaoG9P0bJ+TA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 react@0.0.0-experimental-6a589ad71:
   version "0.0.0-experimental-6a589ad71"
@@ -21553,14 +21536,6 @@ saxes@^5.0.0:
   integrity sha512-5LBh1Tls8c9xgGjw3QrMwETmTMVk0oFgvrFSvWx62llR2hcEInrKNZ2GZCCuuy2lvWrdl5jhbpeqc5hRYKFOcw==
   dependencies:
     xmlchars "^2.2.0"
-
-scheduler@0.0.0-experimental-3310209d0:
-  version "0.0.0-experimental-3310209d0"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.0.0-experimental-3310209d0.tgz#228ef98604dd0dc6d5c594945277e28eae2118f1"
-  integrity sha512-TklIjh2ps3KbU8ZSDg96VUp56VZIb1tb3gy8Y16VKeg2Zf0q7FW+LhqT2gzmfN7OxZVUUHMzXilVVIHtV10gnA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@0.0.0-experimental-6a589ad71:
   version "0.0.0-experimental-6a589ad71"
