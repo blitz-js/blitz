@@ -81,7 +81,6 @@
     "@types/flush-write-stream": "1.0.0",
     "@types/from2": "2.3.0",
     "@types/fs-extra": "9.0.6",
-    "@types/fs-readdir-recursive": "1.0.0",
     "@types/gulp-if": "0.0.33",
     "@types/htmlescape": "^1.1.1",
     "@types/ink-spinner": "3.0.0",

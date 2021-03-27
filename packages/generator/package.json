@@ -40,7 +40,6 @@
     "diff": "5.0.0",
     "enquirer": "2.3.6",
     "fs-extra": "^9.1.0",
-    "fs-readdir-recursive": "1.1.0",
     "got": "^11.8.1",
     "jscodeshift": "0.11.0",
     "mem-fs": "1.2.0",

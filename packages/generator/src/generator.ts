@@ -5,7 +5,6 @@ import {log} from "@blitzjs/display"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
-import readDirRecursive from "fs-readdir-recursive"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {create as createStore, Store} from "mem-fs"
@@ -15,6 +14,7 @@ import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
+import {readdirRecursive} from "./utils/readdir-recursive"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -229,7 +229,7 @@ export abstract class Generator<
 
   async write(): Promise<void> {
     debug("Generator.write...")
-    const paths = readDirRecursive(this.sourcePath(), (name) => {
+    const paths = await readdirRecursive(this.sourcePath(), (name) => {
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })

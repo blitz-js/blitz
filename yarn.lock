@@ -3908,11 +3908,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/fs-readdir-recursive@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/fs-readdir-recursive/-/fs-readdir-recursive-1.0.0.tgz#404f77bdadc6b90cccd3f04d15f6dd85cdde38ef"
-  integrity sha512-1w3aDEWvddRoBCPm3hdGehNovSvqwe30dxplDH5bjZXoMCDVbntkbNENxfyScS4kYsovJYcwLPxJ9gjN/hh2Xg==
-
 "@types/glob-stream@*":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@types/glob-stream/-/glob-stream-6.1.0.tgz#7ede8a33e59140534f8d8adfb8ac9edfb31897bc"
@@ -9547,11 +9542,6 @@ fs-mkdirp-stream@^1.0.0:
   dependencies:
     graceful-fs "^4.1.11"
     through2 "^2.0.3"
-
-fs-readdir-recursive@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fs-readdir-recursive/-/fs-readdir-recursive-1.1.0.tgz#e32fc030a2ccee44a6b5371308da54be0b397d27"
-  integrity sha512-GNanXlVr2pf02+sPN40XN8HG+ePaNcvM0q5mZBd668Obwb0yD5GiUbZOFgwn8kGMY6I3mdyDJzieUy3PTYyTRA==
 
 fs-write-stream-atomic@^1.0.8:
   version "1.0.10"
