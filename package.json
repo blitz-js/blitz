@@ -56,6 +56,9 @@
     ],
     "package.json": []
   },
+  "resolutions": {
+    "webpack": "4.44.1"
+  },
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-proposal-class-properties": "7.12.1",

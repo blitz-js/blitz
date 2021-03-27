@@ -98,7 +98,7 @@ function formatMessage(message) {
   }
 
   // Add helpful message for users trying to use Sass for the first time
-  if (lines[1] && lines[1].match(/Cannot find module.+node-sass/)) {
+  if (lines[1] && lines[1].match(/Cannot find module.+sass/)) {
     // ./file.module.scss (<<loader info>>) => ./file.module.scss
     lines[0] = lines[0].replace(/(.+) \(.+?(?=\?\?).+?\)/, '$1')
 
