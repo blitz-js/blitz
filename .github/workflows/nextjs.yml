@@ -167,6 +167,10 @@ jobs:
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
 
+      - run: yarn prepublish
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        working-directory: nextjs
+
       - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
         working-directory: nextjs
@@ -204,6 +208,10 @@ jobs:
 
       - run: yarn list react react-dom
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: yarn prepublish
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        working-directory: nextjs
 
       - run: xvfb-run node run-tests.js test/integration/{link-ref,production,basic,async-modules,font-optimization,ssr-ctx,worker-loader}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
