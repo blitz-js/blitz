@@ -2360,6 +2360,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "markhughes",
+      "name": "Mark Hughes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1357323?v=4",
+      "profile": "http://twitter.com/_markeh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
