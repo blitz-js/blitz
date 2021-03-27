@@ -1,6 +1,6 @@
 {
   "name": "@examples/auth",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.33.0",
+    "blitz": "0.33.1",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",
     "passport-twitter": "1.0.4",
     "prisma": "2.19.0",
-    "react": "0.0.0-experimental-3310209d0",
-    "react-dom": "0.0.0-experimental-3310209d0",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.1.1",
     "react-final-form": "6.5.2",
     "zod": "1.11.11"

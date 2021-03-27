@@ -1,6 +1,6 @@
 {
   "name": "@examples/custom-server",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "scripts": {
     "dev": "nodemon --watch server.js --exec 'blitz dev'",
     "build": "blitz build",
@@ -30,11 +30,11 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.33.0",
+    "blitz": "0.33.1",
     "final-form": "4.20.1",
     "prisma": "2.19.0",
-    "react": "0.0.0-experimental-3310209d0",
-    "react-dom": "0.0.0-experimental-3310209d0",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.1.1",
     "react-final-form": "6.5.2",
     "secure-password": "4.0.0",

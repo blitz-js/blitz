@@ -14,6 +14,8 @@ services:
         fromDatabase:
           name: blitzapp-db
           property: connectionString
+      - key: SESSION_SECRET_KEY
+        generateValue: true
 
 databases:
   - name: blitzapp-db
