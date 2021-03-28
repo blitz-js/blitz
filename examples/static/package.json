@@ -1,6 +1,6 @@
 {
   "name": "@examples/static",
-  "version": "0.33.0",
+  "version": "0.33.1",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.33.0",
+    "blitz": "0.33.1",
     "final-form": "4.20.1",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",
