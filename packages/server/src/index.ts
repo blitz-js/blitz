@@ -1,4 +1,5 @@
 export {build} from "./build"
+export {blitzExport} from "./export"
 export {dev} from "./dev"
 export {prod} from "./prod"
 export {routes} from "./routes"

@@ -1,6 +1,7 @@
 import {getConfig} from "@blitzjs/config"
 import {ResolverType} from "@blitzjs/core"
 import {Stage, transform} from "@blitzjs/file-pipeline"
+import {existsSync} from "fs"
 import {relative} from "path"
 import slash from "slash"
 import File from "vinyl"
@@ -56,8 +57,7 @@ export default getIsomorphicEnhancedResolver(
 )
 `
 
-// Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
+const apiHandlerTemplate = (originalPath: string, useTypes: boolean, useDb: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
 import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core/server'
@@ -72,16 +72,20 @@ path.resolve(".next/blitz/db.js")
 
 let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}
-try {
-  db = require('db').default
-  if (require('db').connect) {
-    connect = require('db').connect
-  } else if (db?.$connect || db?.connect) {
-    connect = () => db.$connect ? db.$connect() : db.connect()
-  } else {
-    connect = () => {}
-  }
-} catch(_) {}
+
+${
+  useDb
+    ? `
+db = require('db').default
+if (require('db').connect) {
+  connect = require('db').connect
+} else if (db?.$connect || db?.connect) {
+  connect = () => db.$connect ? db.$connect() : db.connect()
+} else {
+  connect = () => {}
+}`
+    : ""
+}
 
 export default rpcApiHandler(
   enhancedResolver,
@@ -154,7 +158,13 @@ export const createStageRpc = (isTypeScript = true): Stage =>
         push(
           new File({
             path: getApiHandlerPath(file.path),
-            contents: Buffer.from(apiHandlerTemplate(originalPath, isTypeScript)),
+            contents: Buffer.from(
+              apiHandlerTemplate(
+                originalPath,
+                isTypeScript,
+                existsSync(`db/index.${isTypeScript ? "ts" : "js"}`),
+              ),
+            ),
             // Appending a new file to the output of this particular stream
             // We don't want to reprocess this file but simply add it to the output
             // of the stream here we provide a hash with some information for how

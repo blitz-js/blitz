@@ -52,11 +52,13 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
 
 function findModuleExportsExpressions(program: Collection<j.Program>) {
   return program.find(j.AssignmentExpression).filter((path) => {
+    const {left, right} = path.value
     return (
-      path.value.left.type === "MemberExpression" &&
-      (path.value.left.object as any).name === "module" &&
-      (path.value.left.property as any).name === "exports" &&
-      path.value.right.type === "ObjectExpression"
+      left.type === "MemberExpression" &&
+      left.object.type === "Identifier" &&
+      left.property.type === "Identifier" &&
+      left.property.name === "exports" &&
+      right.type === "ObjectExpression"
     )
   })
 }
@@ -65,10 +67,13 @@ function addBabelPreset(program: Collection<j.Program>, name: string) {
   findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
     j(moduleExportsExpression)
       .find(j.ObjectProperty, {key: {name: "presets"}})
-      .forEach((path) => {
-        // TODO: figure out if there's a better way to type plugins.node.value
-        const presets = path.node.value as j.ArrayExpression
-        presets.elements.push(j.literal(name))
+      .forEach((plugins) => {
+        const pluginsArrayExpression = plugins.node.value
+        if (pluginsArrayExpression.type !== "ArrayExpression") {
+          return
+        }
+
+        pluginsArrayExpression.elements.push(j.literal(name))
       })
   })
 
