@@ -1,6 +1,5 @@
-import {queryClient, AppProps, ErrorComponent} from "blitz"
+import {AppProps, ErrorComponent, useQueryErrorResetBoundary} from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
-import {QueryClient, QueryClientProvider, useQueryErrorResetBoundary} from "react-query"
 
 if (typeof window !== "undefined") {
   window["DEBUG_BLITZ"] = 1
@@ -11,9 +10,7 @@ export default function App({Component, pageProps}: AppProps) {
 
   return (
     <ErrorBoundary FallbackComponent={RootErrorFallback} onReset={reset}>
-      <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-      </QueryClientProvider>
+      <Component {...pageProps} />
     </ErrorBoundary>
   )
 }

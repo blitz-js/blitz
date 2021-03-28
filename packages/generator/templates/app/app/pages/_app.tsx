@@ -5,9 +5,9 @@ import {
   AuthenticationError,
   AuthorizationError,
   ErrorFallbackProps,
+  useQueryErrorResetBoundary
 } from "blitz"
 import { ErrorBoundary } from "react-error-boundary"
-import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from "react-query"
 import LoginForm from "app/auth/components/LoginForm"
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -15,13 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const {reset} = useQueryErrorResetBoundary()
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-      },
-    },
-  })
+
 
   return (
     <ErrorBoundary
@@ -29,9 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
       resetKeys={[router.asPath]}
       onReset={reset}
     >
-      <QueryClientProvider client={queryClient}>
         {getLayout(<Component {...pageProps} />)}
-      </QueryClientProvider>
     </ErrorBoundary>
   )
 }
