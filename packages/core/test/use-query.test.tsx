@@ -1,7 +1,7 @@
 import React from "react"
-import {QueryClient} from "react-query"
 import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
+import {queryClient} from "../src/utils/react-query-utils"
 import {
   act,
   enhanceInfiniteQueryFn,
@@ -11,14 +11,6 @@ import {
   waitForElementToBeRemoved,
 } from "./test-utils"
 import {enhanceQueryFn} from "./test-utils"
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      suspense: true,
-    },
-  },
-})
 
 beforeEach(() => {
   queryClient.clear()

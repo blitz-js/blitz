@@ -1,4 +1,3 @@
-import {QueryClient} from "react-query"
 import {addBasePath} from "next/dist/next-server/lib/router/router"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
@@ -22,16 +21,7 @@ import {
   RpcOptions,
 } from "./types"
 import {clientDebug, isClient, isServer} from "./utils"
-import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
-
-// Create internal QueryClient instance
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      suspense: true,
-    },
-  },
-})
+import {getQueryKeyFromUrlAndParams, queryClient} from "./utils/react-query-utils"
 
 export const executeRpcCall = <TInput, TResult>(
   apiUrl: string,

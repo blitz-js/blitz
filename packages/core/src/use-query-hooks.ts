@@ -18,7 +18,6 @@ import {
   getQueryKey,
   QueryCacheFunctions,
   sanitize,
-  useDefaultQueryConfig,
 } from "./utils/react-query-utils"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
@@ -68,7 +67,6 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     queryFn: routerIsReady
       ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
-    ...useDefaultQueryConfig(),
     ...options,
   })
 
@@ -122,7 +120,6 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
     queryFn: routerIsReady
       ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
       : (emptyQueryFn as any),
-    ...useDefaultQueryConfig(),
     ...options,
     keepPreviousData: true,
   })
@@ -188,7 +185,6 @@ export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<
     queryFn: routerIsReady
       ? ({pageParam}) => enhancedResolverRpcClient(getQueryParams(pageParam), {fromQueryHook: true})
       : (emptyQueryFn as any),
-    ...useDefaultQueryConfig(),
     ...options,
   })
 

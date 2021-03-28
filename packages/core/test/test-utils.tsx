@@ -3,7 +3,9 @@ import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
 import React from "react"
+import {QueryClientProvider} from "react-query"
 import {deserialize} from "superjson"
+import {queryClient} from "../src/utils/react-query-utils"
 
 export * from "@testing-library/react"
 
@@ -46,7 +48,11 @@ const mockRouter: NextRouter = {
 export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <RouterContext.Provider value={{...mockRouter, ...router}}>{children}</RouterContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <RouterContext.Provider value={{...mockRouter, ...router}}>
+          {children}
+        </RouterContext.Provider>
+      </QueryClientProvider>
     )
   }
 
@@ -72,7 +78,11 @@ export function renderHook(
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <RouterContext.Provider value={{...mockRouter, ...router}}>{children}</RouterContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <RouterContext.Provider value={{...mockRouter, ...router}}>
+          {children}
+        </RouterContext.Provider>
+      </QueryClientProvider>
     )
   }
 

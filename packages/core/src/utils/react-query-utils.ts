@@ -1,4 +1,3 @@
-import {useMemo} from "react"
 import {QueryClient, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
@@ -9,6 +8,22 @@ import {requestIdleCallback} from "./request-idle-callback"
 type MutateOptions = {
   refetch?: boolean
 }
+
+// Create internal QueryClient instance
+const initializeQueryClient = () => {
+  const {suspenseEnabled} = getBlitzRuntimeData()
+
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: !!suspenseEnabled,
+        retry: retryFunction,
+      },
+    },
+  })
+}
+
+export const queryClient = initializeQueryClient()
 
 function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
   return !!f._meta
@@ -84,14 +99,6 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
   return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      suspense: true,
-    },
-  },
-})
-
 export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   resolver: T | Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
   params?: TInput,
@@ -148,14 +155,4 @@ export const retryFunction = (failureCount: number, error: any) => {
   if (error.message === "Network request failed" && failureCount <= 3) return true
 
   return false
-}
-
-export function useDefaultQueryConfig() {
-  return useMemo(() => {
-    const {suspenseEnabled} = getBlitzRuntimeData()
-    return {
-      suspense: !!suspenseEnabled,
-      retry: retryFunction,
-    }
-  }, [])
 }
