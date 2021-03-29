@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, findModuleExportsExpressions, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
@@ -109,18 +109,6 @@ function addHttpMetaTag(name: string, value: j.JSXExpressionContainer | j.String
       ),
     ),
   ]
-}
-
-function findModuleExportsExpressions(program: Collection<j.Program>) {
-  return program
-    .find(j.AssignmentExpression)
-    .filter(
-      (path) =>
-        path.value.left.type === "MemberExpression" &&
-        (path.value.left.object as any).name === "module" &&
-        (path.value.left.property as any).name === "exports" &&
-        path.value.right.type === "ObjectExpression",
-    )
 }
 
 function addHttpHeaders(
