@@ -3,8 +3,7 @@ import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
 import React from "react"
-import {QueryClientProvider} from "react-query"
-import {queryClient} from "../src/utils/react-query-utils"
+import {BlitzProvider} from "../src/blitz-provider"
 
 export * from "@testing-library/react"
 
@@ -19,7 +18,10 @@ export * from "@testing-library/react"
 // --------------------------------------------------
 type DefaultParams = Parameters<typeof defaultRender>
 type RenderUI = DefaultParams[0]
-type RenderOptions = DefaultParams[1] & {router?: Partial<NextRouter>}
+type RenderOptions = DefaultParams[1] & {
+  router?: Partial<NextRouter>
+  dehydratedState?: unknown
+}
 
 const mockRouter: NextRouter = {
   basePath: "",
@@ -44,14 +46,17 @@ const mockRouter: NextRouter = {
   isFallback: false,
 }
 
-export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
+export function render(
+  ui: RenderUI,
+  {wrapper, router, dehydratedState, ...options}: RenderOptions = {},
+) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <QueryClientProvider client={queryClient}>
+      <BlitzProvider>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
-      </QueryClientProvider>
+      </BlitzProvider>
     )
   }
 
@@ -69,19 +74,22 @@ export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOption
 // --------------------------------------------------
 type DefaultHookParams = Parameters<typeof defaultRenderHook>
 type RenderHook = DefaultHookParams[0]
-type RenderHookOptions = DefaultHookParams[1] & {router?: Partial<NextRouter>}
+type RenderHookOptions = DefaultHookParams[1] & {
+  router?: Partial<NextRouter>
+  dehydratedState?: unknown
+}
 
 export function renderHook(
   hook: RenderHook,
-  {wrapper, router, ...options}: RenderHookOptions = {},
+  {wrapper, router, dehydratedState, ...options}: RenderHookOptions = {},
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <QueryClientProvider client={queryClient}>
+      <BlitzProvider>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
-      </QueryClientProvider>
+      </BlitzProvider>
     )
   }
 

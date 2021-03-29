@@ -1,10 +1,9 @@
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {QueryClientProvider} from "react-query"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
+import {BlitzProvider} from "./blitz-provider"
 import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
-import {queryClient} from "./utils/react-query-utils"
 
 const customCSS = `
   body::before {
@@ -86,10 +85,10 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     }, [])
 
     return (
-      <QueryClientProvider client={queryClient}>
+      <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
         <UserAppRoot {...props} Component={withBlitzInnerWrapper(props.Component)} />
-      </QueryClientProvider>
+      </BlitzProvider>
     )
   }
   if (process.env.NODE_ENV !== "production") {
