@@ -93,11 +93,9 @@ export function generateManifest(
 
   return {
     implementation:
-      "module.exports = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
+      "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration:
-      "declare const _default: {\n" +
-      declarationLines.map((line) => "  " + line).join(";\n") +
-      ";\n}\nexport default _default;",
+      "export const Routes: {\n" + declarationLines.map((line) => "  " + line).join(";\n") + ";\n}",
   }
 }
 
@@ -123,11 +121,11 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
 
   const routes: Record<string, Route> = {}
 
-  const dotBlitz = join(config.src, "node_modules", ".blitz")
+  const dotBlitz = join(config.src, "node_modules", "@blitz", "generated")
 
-  const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "route-manifest.js"))
+  const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "index.js"))
 
-  const writeManifestDeclaration = makeDebouncedWriter(join(dotBlitz, "route-manifest.d.ts"))
+  const writeManifestDeclaration = makeDebouncedWriter(join(dotBlitz, "index.d.ts"))
 
   const stream = transform.file((file) => {
     if (!isPage(file.relative)) {

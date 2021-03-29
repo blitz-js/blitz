@@ -8,11 +8,12 @@ import {
   invoke,
   useQuery,
   BlitzPage,
-  Routes,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
+
+import {Routes} from "@blitz/generated"
 
 const CurrentUserInfo = () => {
   const session = useSession()

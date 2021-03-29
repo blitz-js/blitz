@@ -27,17 +27,16 @@ test("generateManifest", () => {
     }),
   ).toEqual({
     implementation: `
-module.exports = {
+exports.Routes = {
   Home: "home/",
   CommentView: ({ postId, openedCommentPath }) => \`posts/$\{postId\}/$\{openedCommentPath.join("/")\}\`
 }
       `.trim(),
     declaration: `
-declare const _default: {
+export const Routes: {
   Home: "home/";
   CommentView({ postId, openedCommentPath }: { postId: string, openedCommentPath: string[] }): string;
 }
-export default _default;
       `.trim(),
   })
 })
