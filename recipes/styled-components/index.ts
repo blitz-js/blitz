@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addBabelPlugin, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
@@ -33,41 +33,6 @@ function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Pr
         ]),
       )
     })
-  return program
-}
-
-function findModuleExportsExpressions(program: Collection<j.Program>) {
-  return program.find(j.AssignmentExpression).filter((path) => {
-    const {left, right} = path.value
-    return (
-      left.type === "MemberExpression" &&
-      left.object.type === "Identifier" &&
-      left.property.type === "Identifier" &&
-      left.property.name === "exports" &&
-      right.type === "ObjectExpression"
-    )
-  })
-}
-
-function addBabelPlugin(program: Collection<j.Program>) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: "plugins"}})
-      .forEach((plugins) => {
-        const pluginsArrayExpression = plugins.node.value
-        if (pluginsArrayExpression.type !== "ArrayExpression") {
-          return
-        }
-
-        pluginsArrayExpression.elements.push(
-          j.arrayExpression([
-            j.stringLiteral("styled-components"),
-            j.objectExpression([j.property("init", j.identifier('"ssr"'), j.booleanLiteral(true))]),
-          ]),
-        )
-      })
-  })
-
   return program
 }
 
@@ -279,7 +244,12 @@ export default RecipeBuilder()
     explanation: `Update the Babel configuration to use Styled Component's SSR plugin.`,
     singleFileSearch: paths.babelConfig(),
     transform(program: Collection<j.Program>) {
-      return addBabelPlugin(program)
+      return addBabelPlugin(program, [
+        "styled-components",
+        {
+          ssr: true,
+        },
+      ])
     },
   })
   .build()
