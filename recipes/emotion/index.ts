@@ -100,7 +100,7 @@ export default RecipeBuilder()
     explanation: `Update the Babel configuration to use Emotion's plugin and preset to enable some advanced features.`,
     singleFileSearch: paths.babelConfig(),
     transform(program: Collection<j.Program>) {
-      addBabelPlugin(program)
+      addBabelPlugin(program, "@emotion")
       return replaceBabelPreset(program)
     },
   })
