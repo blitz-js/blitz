@@ -1,4 +1,10 @@
-import {addBabelPlugin, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {
+  addBabelPlugin,
+  addImport,
+  findModuleExportsExpressions,
+  paths,
+  RecipeBuilder,
+} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
@@ -20,19 +26,6 @@ function applyGlobalStyles(program: Collection<j.Program>) {
   })
 
   return program
-}
-
-function findModuleExportsExpressions(program: Collection<j.Program>) {
-  return program.find(j.AssignmentExpression).filter((path) => {
-    const {left, right} = path.value
-    return (
-      left.type === "MemberExpression" &&
-      left.object.type === "Identifier" &&
-      left.property.type === "Identifier" &&
-      left.property.name === "exports" &&
-      right.type === "ObjectExpression"
-    )
-  })
 }
 
 function replaceBabelPreset(program: Collection<j.Program>) {
