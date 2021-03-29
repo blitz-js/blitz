@@ -52,7 +52,7 @@ export function render(
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <BlitzProvider>
+      <BlitzProvider dehydratedState={dehydratedState}>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
@@ -85,7 +85,7 @@ export function renderHook(
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <BlitzProvider>
+      <BlitzProvider dehydratedState={dehydratedState}>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
