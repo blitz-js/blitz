@@ -137,6 +137,9 @@ jobs:
   testsPass:
     name: thank you, next
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     needs: [checkPrecompiled, testIntegration, testUnit]
     steps:
       - run: exit 0
