@@ -45,11 +45,8 @@ jobs:
           CI: true
 
   build:
-    name: Nextjs - build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    name: Build
+    runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
     outputs:
@@ -82,7 +79,7 @@ jobs:
       - name: Build Nextjs
         run: yarn prepublish
         working-directory: nextjs
-      - name: Build Blitz
+      - name: Build Blitz Packages
         run: yarn build
       - run: node run-tests.js --timings --write-timings -g 1/1
         working-directory: nextjs
@@ -95,22 +92,19 @@ jobs:
         id: cache-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
 
   build_and_test_pkgs:
     name: Packages Tests
     needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v2
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       # - uses: actions/checkout@v2
       # - name: Use Node.js
       #   uses: actions/setup-node@v2
@@ -137,10 +131,10 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
+      # - name: Build packages
+      #   run: yarn build
+      #   env:
+      #     CI: true
       - name: Test Blitz Packages
         run: yarn testonly:packages
         env:
@@ -150,18 +144,14 @@ jobs:
     timeout-minutes: 30
     name: Example Apps Tests
     needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node_version: [12, 15]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v2
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       # - uses: actions/checkout@v2
       # - name: Use Node.js
       #   uses: actions/setup-node@v2
@@ -190,10 +180,10 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
+      # - name: Build packages
+      #   run: yarn build
+      #   env:
+      #     CI: true
       - name: Test examples
         run: yarn testonly:examples
         env:
@@ -214,7 +204,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       - run: ./check-pre-compiled.sh
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -235,7 +225,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
 
       - run: node run-tests.js --timings --type unit -g 1/1
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -263,7 +253,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -290,7 +280,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -450,7 +440,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       - run: node run-tests.js test/integration/production/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -474,7 +464,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -499,6 +489,6 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
+          key: ${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
