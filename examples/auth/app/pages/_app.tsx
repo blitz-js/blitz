@@ -9,6 +9,11 @@ import {
 } from "blitz"
 import {ErrorBoundary} from "react-error-boundary"
 import LoginForm from "app/auth/components/LoginForm"
+import {ReactQueryDevtools} from "react-query/devtools"
+
+if (typeof window !== "undefined") {
+  window["DEBUG_BLITZ"] = 1
+}
 
 export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
@@ -16,13 +21,16 @@ export default function App({Component, pageProps}: AppProps) {
   const {reset} = useQueryErrorResetBoundary()
 
   return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      resetKeys={[router.asPath]}
-      onReset={reset}
-    >
-      {getLayout(<Component {...pageProps} />)}
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary
+        FallbackComponent={RootErrorFallback}
+        resetKeys={[router.asPath]}
+        onReset={reset}
+      >
+        {getLayout(<Component {...pageProps} />)}
+      </ErrorBoundary>
+      <ReactQueryDevtools />
+    </>
   )
 }
 

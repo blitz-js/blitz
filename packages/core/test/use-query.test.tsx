@@ -80,8 +80,8 @@ describe("useQuery", () => {
       await screen.findByText("No data")
     })
 
-    it("suspense disabled if enabled is undefined", async () => {
-      setupHook("test", enhanceQueryFn(upcase), {enabled: undefined})
+    it("suspense disabled if enabled is null", async () => {
+      setupHook("test", enhanceQueryFn(upcase), {enabled: null})
       await screen.findByText("No data")
     })
 

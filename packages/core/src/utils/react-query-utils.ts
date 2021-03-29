@@ -17,7 +17,14 @@ const initializeQueryClient = () => {
     defaultOptions: {
       queries: {
         suspense: !!suspenseEnabled,
-        retry: retryFunction,
+        retry: (failureCount: number, error: any) => {
+          if (process.env.NODE_ENV !== "production") return false
+
+          // Retry (max. 3 times) only if network error detected
+          if (error.message === "Network request failed" && failureCount <= 3) return true
+
+          return false
+        },
       },
     },
   })
@@ -146,13 +153,4 @@ export function setQueryData<TInput, TResult, T extends QueryFn>(
       res(result)
     }
   })
-}
-
-export const retryFunction = (failureCount: number, error: any) => {
-  if (process.env.NODE_ENV !== "production") return false
-
-  // Retry (max. 3 times) only if network error detected
-  if (error.message === "Network request failed" && failureCount <= 3) return true
-
-  return false
 }

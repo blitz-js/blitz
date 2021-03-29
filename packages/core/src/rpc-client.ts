@@ -35,7 +35,7 @@ export const executeRpcCall = <TInput, TResult>(
   }
 
   if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
-  clientDebug("Starting request for", apiUrl)
+  clientDebug("Starting request for", apiUrl, "with", params, "and", opts)
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",

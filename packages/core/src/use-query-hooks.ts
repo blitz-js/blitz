@@ -65,7 +65,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
       : (emptyQueryFn as any),
     ...options,
   })
@@ -118,7 +118,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   const {data, ...queryRest} = useReactQuery({
     queryKey: routerIsReady ? queryKey : ["_routerNotReady_"],
     queryFn: routerIsReady
-      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true, alreadySerialized: true})
+      ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
       : (emptyQueryFn as any),
     ...options,
     keepPreviousData: true,

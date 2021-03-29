@@ -13,6 +13,7 @@ import {
   MiddlewareRequest,
   MiddlewareResponse,
 } from "../types"
+const debug = require("debug")("blitz:middleware")
 
 export function getAllMiddlewareForModule<TInput, TResult>(
   resolverModule: EnhancedResolver<TInput, TResult>,
@@ -127,6 +128,7 @@ export function compose(middleware: Middleware[]) {
       }
 
       try {
+        debug(`[${handler.name}] Starting handler...`)
         return Promise.resolve(handler(req, res, dispatch.bind(null, i + 1)))
       } catch (error) {
         return Promise.reject(error)

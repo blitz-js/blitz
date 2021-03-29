@@ -2,6 +2,7 @@ import {existsSync, readJSONSync} from "fs-extra"
 import {join} from "path"
 import path from "path"
 import pkgDir from "pkg-dir"
+const debug = require("debug")("blitz:config")
 
 export function getProjectRoot() {
   return pkgDir.sync() || process.cwd()
@@ -51,11 +52,15 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
   const nextConfigPath = path.join(projectRoot, "next.config.js")
   const blitzConfigPath = path.join(projectRoot, "blitz.config.js")
 
+  debug("nextConfigPath: " + nextConfigPath)
+  debug("blitzConfigPath: " + blitzConfigPath)
+
+  let loadedNextConfig = {}
+  let loadedBlitzConfig = {}
   try {
     // --------------------------------
     // Load next.config.js if it exists
     // --------------------------------
-    let loadedNextConfig = {}
     if (existsSync(nextConfigPath)) {
       // eslint-disable-next-line no-eval -- block webpack from following this module path
       loadedNextConfig = eval("require")(nextConfigPath)
@@ -70,13 +75,12 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     // Load blitz.config.js
     // --------------------------------
     // eslint-disable-next-line no-eval -- block webpack from following this module path
-    let loadedBlitzConfig = eval("require")(blitzConfigPath)
+    loadedBlitzConfig = eval("require")(blitzConfigPath)
     if (typeof loadedBlitzConfig === "function") {
       const phase =
         process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
       loadedBlitzConfig = loadedBlitzConfig(phase, {})
     }
-
     // -------------
     // Merge configs
     // -------------
@@ -92,6 +96,10 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     }
   }
 
-  global.blitzConfig = blitzConfig
+  // Idk why, but during startup first result of loading blitz config is empty
+  // Therefore don't cache it so that next time will load the full config properly
+  if (Object.keys(loadedBlitzConfig).length) {
+    global.blitzConfig = blitzConfig
+  }
   return blitzConfig
 }
