@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, findModuleExportsExpressions, paths, RecipeBuilder} from "@blitzjs/installer"
 import {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
@@ -48,19 +48,6 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
   })
 
   return program
-}
-
-function findModuleExportsExpressions(program: Collection<j.Program>) {
-  return program.find(j.AssignmentExpression).filter((path) => {
-    const {left, right} = path.value
-    return (
-      left.type === "MemberExpression" &&
-      left.object.type === "Identifier" &&
-      left.property.type === "Identifier" &&
-      left.property.name === "exports" &&
-      right.type === "ObjectExpression"
-    )
-  })
 }
 
 function addBabelPreset(program: Collection<j.Program>, name: string) {

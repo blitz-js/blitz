@@ -1,4 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addBabelPlugin, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
@@ -33,23 +33,6 @@ function findModuleExportsExpressions(program: Collection<j.Program>) {
       right.type === "ObjectExpression"
     )
   })
-}
-
-function addBabelPlugin(program: Collection<j.Program>) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: "plugins"}})
-      .forEach((plugins) => {
-        const pluginsArrayExpression = plugins.node.value
-        if (pluginsArrayExpression.type !== "ArrayExpression") {
-          return
-        }
-
-        pluginsArrayExpression.elements.push(j.stringLiteral("@emotion"))
-      })
-  })
-
-  return program
 }
 
 function replaceBabelPreset(program: Collection<j.Program>) {
@@ -124,7 +107,7 @@ export default RecipeBuilder()
     explanation: `Update the Babel configuration to use Emotion's plugin and preset to enable some advanced features.`,
     singleFileSearch: paths.babelConfig(),
     transform(program: Collection<j.Program>) {
-      addBabelPlugin(program)
+      addBabelPlugin(program, "@emotion")
       return replaceBabelPreset(program)
     },
   })
