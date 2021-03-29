@@ -5,6 +5,7 @@
       "packages/*",
       "nextjs",
       "nextjs/packages/*",
+      "!nextjs/packages/create-next-app",
       "examples/*",
       "recipes/*"
     ],

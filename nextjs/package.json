@@ -3,7 +3,8 @@
   "name": "nextjs-project",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "!packages/create-next-app"
   ],
   "scripts": {
     "lerna": "lerna",
@@ -63,7 +64,6 @@
     "babel-jest": "26.6.3",
     "browserslist": "4.16.1",
     "browserstack-local": "1.4.0",
-    "css-loader": "1.0.0",
     "cheerio": "0.22.0",
     "clone": "2.1.2",
     "cookie": "0.4.1",

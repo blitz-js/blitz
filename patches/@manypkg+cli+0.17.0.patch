@@ -1,0 +1,14 @@
+diff --git a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
+index b09af02..ef81a04 100644
+--- a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
++++ b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
+@@ -351,6 +351,9 @@ var INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP = makeCheck({
+ 
+     if (peerDeps) {
+       for (var depName in peerDeps) {
++        if (['fibers', 'node-sass', 'react', 'react-dom', 'next', 'sass', '@mdx-js/loader', '@mdx-js/react', 'webpack'].includes(depName)) {
++          continue
++        }
+         if (!devDeps[depName]) {
+           var highestRanges = getHighestExternalRanges(allWorkspaces);
+           var idealDevVersion = highestRanges.get(depName);
