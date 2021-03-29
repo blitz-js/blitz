@@ -17,7 +17,7 @@ const initializeQueryClient = () => {
     defaultOptions: {
       queries: {
         suspense: !!suspenseEnabled,
-        retry: (failureCount: number, error: any) => {
+        retry: (failureCount, error: any) => {
           if (process.env.NODE_ENV !== "production") return false
 
           // Retry (max. 3 times) only if network error detected
