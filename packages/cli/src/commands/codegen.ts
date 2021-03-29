@@ -1,15 +1,15 @@
 import {Command, flags} from "@oclif/command"
 
-export class DxGenerate extends Command {
+export class CodeGen extends Command {
   static description = "Generates Routes Manifest"
-  static aliases = ["dxg"]
+  static aliases = ["cg"]
 
   static flags = {
     help: flags.help({char: "h"}),
   }
 
   async run() {
-    this.parse(DxGenerate)
+    this.parse(CodeGen)
 
     try {
       const {generate} = await import("@blitzjs/server")
