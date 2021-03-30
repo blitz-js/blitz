@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "yarn build:templates --watch",
     "buildpkg": "yarn build:templates",
-    "build:templates": "cpx --clean \"templates/**/{.*,*}\" dist/templates",
+    "build:templates": "cpx --clean --include-hidden \"templates/**\" dist/templates",
     "test": "jest",
     "test:watch": "jest --watch"
   },
