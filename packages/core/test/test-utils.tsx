@@ -4,6 +4,7 @@ import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
 import React from "react"
 import {BlitzProvider} from "../src/blitz-provider"
+import {queryClient} from "../src/utils/react-query-utils"
 
 export * from "@testing-library/react"
 
@@ -52,7 +53,7 @@ export function render(
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <BlitzProvider dehydratedState={dehydratedState}>
+      <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
@@ -85,7 +86,7 @@ export function renderHook(
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <BlitzProvider dehydratedState={dehydratedState}>
+      <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
         <RouterContext.Provider value={{...mockRouter, ...router}}>
           {children}
         </RouterContext.Provider>
