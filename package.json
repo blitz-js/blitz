@@ -62,7 +62,7 @@
     "@babel/preset-env": "7.13.5",
     "@babel/preset-react": "7.12.13",
     "@babel/preset-typescript": "7.13.0",
-    "@juanm04/cpx": "1.6.1",
+    "@juanm04/cpx": "2.0.0",
     "@manypkg/cli": "0.17.0",
     "@preconstruct/cli": "2.0.5",
     "@preconstruct/next": "2.0.0",

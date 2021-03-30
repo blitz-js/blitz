@@ -2214,16 +2214,16 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@juanm04/cpx@1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@juanm04/cpx/-/cpx-1.6.1.tgz#7369982ced443deb67602fa5a523553b7c1b3aed"
-  integrity sha512-wZIDl/CXAH3iPwU/UO9Tv4dv2GaDB4qADWn5J1ZTz9TCyIHjayZVgagTedaiwGdWyvYC2uWQPQxeFN9qnCfQ3g==
+"@juanm04/cpx@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@juanm04/cpx/-/cpx-2.0.0.tgz#e7f8a0748fda740cb980dfeb4f8ef3e96bfc88bc"
+  integrity sha512-MTiIUxpqAe+op8XESIrCzoTgYIiBVLw+AzXf+e4ikX9ox74D348T8SwBkz0ut3q9vOYAIR7uLqws7fCwnWqsfQ==
   dependencies:
     co "^4.6.0"
     debounce "^1.1.0"
-    debug "^3.1.0"
+    debug "^4.3.1"
     duplexer "^0.1.1"
-    fs-extra "^6.0.1"
+    fs-extra "^9.1.0"
     glob "^7.1.2"
     glob2base "0.0.12"
     minimatch "^3.0.4"
