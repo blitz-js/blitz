@@ -10,7 +10,7 @@ describe("useRouterQuery", () => {
     num: "0",
     bool: "true",
     float: "1.23",
-    empty: undefined,
+    empty: "",
   })
 })
 

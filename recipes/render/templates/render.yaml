@@ -3,7 +3,7 @@ services:
     name: blitzapp
     env: node
     plan: starter
-    buildCommand: yarn --frozen-lockfile --prod=false && blitz build && blitz prisma migrate deploy --preview-feature
+    buildCommand: yarn --frozen-lockfile --prod=false && blitz build && blitz prisma migrate deploy
     startCommand: blitz start
     envVars:
       # ⚠️  You must set SESSION_SECRET_KEY env var through the UI.
@@ -14,6 +14,8 @@ services:
         fromDatabase:
           name: blitzapp-db
           property: connectionString
+      - key: SESSION_SECRET_KEY
+        generateValue: true
 
 databases:
   - name: blitzapp-db

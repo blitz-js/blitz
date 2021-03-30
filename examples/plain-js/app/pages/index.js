@@ -3,7 +3,7 @@ const modelSnippet = `model Project {
   id      Int      @default(autoincrement()) @id
   name    String
 }`
-const migrateSnippet = `$ blitz prisma migrate dev --preview-feature
+const migrateSnippet = `$ blitz prisma migrate dev
 $ blitz generate all project`
 
 const Home = () => (
