@@ -7,7 +7,7 @@ export function useRouterQuery() {
   const router = useRouter()
 
   const query = useMemo(() => {
-    const query = decode(router.asPath.split("?")[1])
+    const query = decode(router.asPath.split("?", 2)[1])
     return query
   }, [router.asPath])
 
