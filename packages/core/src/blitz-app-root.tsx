@@ -1,8 +1,8 @@
-import React, {ComponentPropsWithoutRef, useEffect} from "react"
+import React, {useEffect} from "react"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {Head} from "./head"
-import {AppProps, BlitzPage} from "./types"
+import {AppProps} from "./types"
 
 const customCSS = `
   body::before {
@@ -38,19 +38,15 @@ const NoPageFlicker = () => {
   )
 }
 
-export function withBlitzInnerWrapper(Page: BlitzPage) {
-  const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
-    useAuthorizeIf(Page.authenticate === true)
-
-    return <Page {...props} />
-  }
-  for (let [key, value] of Object.entries(Page)) {
-    ;(BlitzInnerRoot as any)[key] = value
+function AuthGuard({Component, ...rest}: any) {
+  useAuthorizeIf(Component.authenticate === true)
+  for (let [key, value] of Object.entries(rest)) {
+    ;(Component as any)[key] = value
   }
   if (process.env.NODE_ENV !== "production") {
-    BlitzInnerRoot.displayName = `BlitzInnerRoot`
+    Component.displayName = `BlitzInnerRoot`
   }
-  return BlitzInnerRoot
+  return Component
 }
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
@@ -86,7 +82,7 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     return (
       <>
         {noPageFlicker && <NoPageFlicker />}
-        <UserAppRoot {...props} Component={withBlitzInnerWrapper(props.Component)} />
+        <UserAppRoot {...props} Component={AuthGuard(props)} />
       </>
     )
   }
