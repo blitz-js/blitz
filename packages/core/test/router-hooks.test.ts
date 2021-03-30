@@ -3,7 +3,10 @@ import {renderHook} from "./test-utils"
 
 describe("useRouterQuery", () => {
   const {result} = renderHook(() => useRouterQuery(), {
-    router: {asPath: "/?foo=foo&num=0&bool=true&float=1.23&empty"},
+    router: {
+      asPath:
+        "/?foo=foo&num=0&bool=true&float=1.23&empty&encoded=D%C3%A9j%C3%A0%20vu&spaces=Hello+World",
+    },
   })
   expect(result.current).toEqual({
     foo: "foo",
@@ -11,6 +14,8 @@ describe("useRouterQuery", () => {
     bool: "true",
     float: "1.23",
     empty: "",
+    encoded: "Déjà vu",
+    spaces: "Hello World",
   })
 })
 
