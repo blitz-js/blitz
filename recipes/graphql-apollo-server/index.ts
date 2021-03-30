@@ -15,8 +15,6 @@ export default RecipeBuilder()
     packages: [
       {name: "apollo-server-micro", version: "2"},
       {name: "graphql", version: "15"},
-      {name: "prisma", version: "2.19"},
-      {name: "@prisma/client", version: "2.19"},
       {name: "nexus", version: "1"},
       {name: "nexus-prisma", version: "0.24"},
     ],
@@ -34,8 +32,7 @@ export default RecipeBuilder()
     stepName: "Add generator to schema.prisma",
     explanation: "Adds the nexus-prisma generator to your schema.prisma file",
     singleFileSearch: paths.prismaSchema(),
-    transformPlain(program: string) {
-      return addPrismaGenerator(program, "nexusPrisma", `provider = "nexus-prisma"`)
-    },
+    transformPlain: (program: string) =>
+      addPrismaGenerator(program, {name: "nexusPrisma", provider: "nexus-prisma"}),
   })
   .build()
