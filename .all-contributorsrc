@@ -2369,6 +2369,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "andrearizzello",
+      "name": "Andrea Rizzello",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10348930?v=4",
+      "profile": "www.andrearizzello.work",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
