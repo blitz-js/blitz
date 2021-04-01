@@ -15,8 +15,6 @@ export default RecipeBuilder()
     packages: [
       {name: "apollo-server-micro", version: "2"},
       {name: "graphql", version: "15"},
-      {name: "prisma", version: "2.19"},
-      {name: "@prisma/client", version: "2.19"},
       {name: "nexus", version: "1"},
       {name: "nexus-prisma", version: "0.24"},
     ],
