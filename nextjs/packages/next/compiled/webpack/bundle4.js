@@ -28549,6 +28549,589 @@ module.exports.create = module.exports.custom.createError
 
 /***/ }),
 
+/***/ 88221:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Local dependencies
+ */
+
+var compilers = __webpack_require__(27670);
+var parsers = __webpack_require__(7358);
+
+/**
+ * Module dependencies
+ */
+
+var debug = __webpack_require__(31185)('expand-brackets');
+var extend = __webpack_require__(60606);
+var Snapdragon = __webpack_require__(98564);
+var toRegex = __webpack_require__(64961);
+
+/**
+ * Parses the given POSIX character class `pattern` and returns a
+ * string that can be used for creating regular expressions for matching.
+ *
+ * @param {String} `pattern`
+ * @param {Object} `options`
+ * @return {Object}
+ * @api public
+ */
+
+function brackets(pattern, options) {
+  debug('initializing from <%s>', __filename);
+  var res = brackets.create(pattern, options);
+  return res.output;
+}
+
+/**
+ * Takes an array of strings and a POSIX character class pattern, and returns a new
+ * array with only the strings that matched the pattern.
+ *
+ * ```js
+ * var brackets = require('expand-brackets');
+ * console.log(brackets.match(['1', 'a', 'ab'], '[[:alpha:]]'));
+ * //=> ['a']
+ *
+ * console.log(brackets.match(['1', 'a', 'ab'], '[[:alpha:]]+'));
+ * //=> ['a', 'ab']
+ * ```
+ * @param {Array} `arr` Array of strings to match
+ * @param {String} `pattern` POSIX character class pattern(s)
+ * @param {Object} `options`
+ * @return {Array}
+ * @api public
+ */
+
+brackets.match = function(arr, pattern, options) {
+  arr = [].concat(arr);
+  var opts = extend({}, options);
+  var isMatch = brackets.matcher(pattern, opts);
+  var len = arr.length;
+  var idx = -1;
+  var res = [];
+
+  while (++idx < len) {
+    var ele = arr[idx];
+    if (isMatch(ele)) {
+      res.push(ele);
+    }
+  }
+
+  if (res.length === 0) {
+    if (opts.failglob === true) {
+      throw new Error('no matches found for "' + pattern + '"');
+    }
+
+    if (opts.nonull === true || opts.nullglob === true) {
+      return [pattern.split('\\').join('')];
+    }
+  }
+  return res;
+};
+
+/**
+ * Returns true if the specified `string` matches the given
+ * brackets `pattern`.
+ *
+ * ```js
+ * var brackets = require('expand-brackets');
+ *
+ * console.log(brackets.isMatch('a.a', '[[:alpha:]].[[:alpha:]]'));
+ * //=> true
+ * console.log(brackets.isMatch('1.2', '[[:alpha:]].[[:alpha:]]'));
+ * //=> false
+ * ```
+ * @param {String} `string` String to match
+ * @param {String} `pattern` Poxis pattern
+ * @param {String} `options`
+ * @return {Boolean}
+ * @api public
+ */
+
+brackets.isMatch = function(str, pattern, options) {
+  return brackets.matcher(pattern, options)(str);
+};
+
+/**
+ * Takes a POSIX character class pattern and returns a matcher function. The returned
+ * function takes the string to match as its only argument.
+ *
+ * ```js
+ * var brackets = require('expand-brackets');
+ * var isMatch = brackets.matcher('[[:lower:]].[[:upper:]]');
+ *
+ * console.log(isMatch('a.a'));
+ * //=> false
+ * console.log(isMatch('a.A'));
+ * //=> true
+ * ```
+ * @param {String} `pattern` Poxis pattern
+ * @param {String} `options`
+ * @return {Boolean}
+ * @api public
+ */
+
+brackets.matcher = function(pattern, options) {
+  var re = brackets.makeRe(pattern, options);
+  return function(str) {
+    return re.test(str);
+  };
+};
+
+/**
+ * Create a regular expression from the given `pattern`.
+ *
+ * ```js
+ * var brackets = require('expand-brackets');
+ * var re = brackets.makeRe('[[:alpha:]]');
+ * console.log(re);
+ * //=> /^(?:[a-zA-Z])$/
+ * ```
+ * @param {String} `pattern` The pattern to convert to regex.
+ * @param {Object} `options`
+ * @return {RegExp}
+ * @api public
+ */
+
+brackets.makeRe = function(pattern, options) {
+  var res = brackets.create(pattern, options);
+  var opts = extend({strictErrors: false}, options);
+  return toRegex(res.output, opts);
+};
+
+/**
+ * Parses the given POSIX character class `pattern` and returns an object
+ * with the compiled `output` and optional source `map`.
+ *
+ * ```js
+ * var brackets = require('expand-brackets');
+ * console.log(brackets('[[:alpha:]]'));
+ * // { options: { source: 'string' },
+ * //   input: '[[:alpha:]]',
+ * //   state: {},
+ * //   compilers:
+ * //    { eos: [Function],
+ * //      noop: [Function],
+ * //      bos: [Function],
+ * //      not: [Function],
+ * //      escape: [Function],
+ * //      text: [Function],
+ * //      posix: [Function],
+ * //      bracket: [Function],
+ * //      'bracket.open': [Function],
+ * //      'bracket.inner': [Function],
+ * //      'bracket.literal': [Function],
+ * //      'bracket.close': [Function] },
+ * //   output: '[a-zA-Z]',
+ * //   ast:
+ * //    { type: 'root',
+ * //      errors: [],
+ * //      nodes: [ [Object], [Object], [Object] ] },
+ * //   parsingErrors: [] }
+ * ```
+ * @param {String} `pattern`
+ * @param {Object} `options`
+ * @return {Object}
+ * @api public
+ */
+
+brackets.create = function(pattern, options) {
+  var snapdragon = (options && options.snapdragon) || new Snapdragon(options);
+  compilers(snapdragon);
+  parsers(snapdragon);
+
+  var ast = snapdragon.parse(pattern, options);
+  ast.input = pattern;
+  var res = snapdragon.compile(ast, options);
+  res.input = pattern;
+  return res;
+};
+
+/**
+ * Expose `brackets` constructor, parsers and compilers
+ */
+
+brackets.compilers = compilers;
+brackets.parsers = parsers;
+
+/**
+ * Expose `brackets`
+ * @type {Function}
+ */
+
+module.exports = brackets;
+
+
+/***/ }),
+
+/***/ 27670:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+var posix = __webpack_require__(90157);
+
+module.exports = function(brackets) {
+  brackets.compiler
+
+    /**
+     * Escaped characters
+     */
+
+    .set('escape', function(node) {
+      return this.emit('\\' + node.val.replace(/^\\/, ''), node);
+    })
+
+    /**
+     * Text
+     */
+
+    .set('text', function(node) {
+      return this.emit(node.val.replace(/([{}])/g, '\\$1'), node);
+    })
+
+    /**
+     * POSIX character classes
+     */
+
+    .set('posix', function(node) {
+      if (node.val === '[::]') {
+        return this.emit('\\[::\\]', node);
+      }
+
+      var val = posix[node.inner];
+      if (typeof val === 'undefined') {
+        val = '[' + node.inner + ']';
+      }
+      return this.emit(val, node);
+    })
+
+    /**
+     * Non-posix brackets
+     */
+
+    .set('bracket', function(node) {
+      return this.mapVisit(node.nodes);
+    })
+    .set('bracket.open', function(node) {
+      return this.emit(node.val, node);
+    })
+    .set('bracket.inner', function(node) {
+      var inner = node.val;
+
+      if (inner === '[' || inner === ']') {
+        return this.emit('\\' + node.val, node);
+      }
+      if (inner === '^]') {
+        return this.emit('^\\]', node);
+      }
+      if (inner === '^') {
+        return this.emit('^', node);
+      }
+
+      if (/-/.test(inner) && !/(\d-\d|\w-\w)/.test(inner)) {
+        inner = inner.split('-').join('\\-');
+      }
+
+      var isNegated = inner.charAt(0) === '^';
+      // add slashes to negated brackets, per spec
+      if (isNegated && inner.indexOf('/') === -1) {
+        inner += '/';
+      }
+      if (isNegated && inner.indexOf('.') === -1) {
+        inner += '.';
+      }
+
+      // don't unescape `0` (octal literal)
+      inner = inner.replace(/\\([1-9])/g, '$1');
+      return this.emit(inner, node);
+    })
+    .set('bracket.close', function(node) {
+      var val = node.val.replace(/^\\/, '');
+      if (node.parent.escaped === true) {
+        return this.emit('\\' + val, node);
+      }
+      return this.emit(val, node);
+    });
+};
+
+
+/***/ }),
+
+/***/ 7358:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__(8539);
+var define = __webpack_require__(75275);
+
+/**
+ * Text regex
+ */
+
+var TEXT_REGEX = '(\\[(?=.*\\])|\\])+';
+var not = utils.createRegex(TEXT_REGEX);
+
+/**
+ * Brackets parsers
+ */
+
+function parsers(brackets) {
+  brackets.state = brackets.state || {};
+  brackets.parser.sets.bracket = brackets.parser.sets.bracket || [];
+  brackets.parser
+
+    .capture('escape', function() {
+      if (this.isInside('bracket')) return;
+      var pos = this.position();
+      var m = this.match(/^\\(.)/);
+      if (!m) return;
+
+      return pos({
+        type: 'escape',
+        val: m[0]
+      });
+    })
+
+    /**
+     * Text parser
+     */
+
+    .capture('text', function() {
+      if (this.isInside('bracket')) return;
+      var pos = this.position();
+      var m = this.match(not);
+      if (!m || !m[0]) return;
+
+      return pos({
+        type: 'text',
+        val: m[0]
+      });
+    })
+
+    /**
+     * POSIX character classes: "[[:alpha:][:digits:]]"
+     */
+
+    .capture('posix', function() {
+      var pos = this.position();
+      var m = this.match(/^\[:(.*?):\](?=.*\])/);
+      if (!m) return;
+
+      var inside = this.isInside('bracket');
+      if (inside) {
+        brackets.posix++;
+      }
+
+      return pos({
+        type: 'posix',
+        insideBracket: inside,
+        inner: m[1],
+        val: m[0]
+      });
+    })
+
+    /**
+     * Bracket (noop)
+     */
+
+    .capture('bracket', function() {})
+
+    /**
+     * Open: '['
+     */
+
+    .capture('bracket.open', function() {
+      var parsed = this.parsed;
+      var pos = this.position();
+      var m = this.match(/^\[(?=.*\])/);
+      if (!m) return;
+
+      var prev = this.prev();
+      var last = utils.last(prev.nodes);
+
+      if (parsed.slice(-1) === '\\' && !this.isInside('bracket')) {
+        last.val = last.val.slice(0, last.val.length - 1);
+        return pos({
+          type: 'escape',
+          val: m[0]
+        });
+      }
+
+      var open = pos({
+        type: 'bracket.open',
+        val: m[0]
+      });
+
+      if (last.type === 'bracket.open' || this.isInside('bracket')) {
+        open.val = '\\' + open.val;
+        open.type = 'bracket.inner';
+        open.escaped = true;
+        return open;
+      }
+
+      var node = pos({
+        type: 'bracket',
+        nodes: [open]
+      });
+
+      define(node, 'parent', prev);
+      define(open, 'parent', node);
+      this.push('bracket', node);
+      prev.nodes.push(node);
+    })
+
+    /**
+     * Bracket text
+     */
+
+    .capture('bracket.inner', function() {
+      if (!this.isInside('bracket')) return;
+      var pos = this.position();
+      var m = this.match(not);
+      if (!m || !m[0]) return;
+
+      var next = this.input.charAt(0);
+      var val = m[0];
+
+      var node = pos({
+        type: 'bracket.inner',
+        val: val
+      });
+
+      if (val === '\\\\') {
+        return node;
+      }
+
+      var first = val.charAt(0);
+      var last = val.slice(-1);
+
+      if (first === '!') {
+        val = '^' + val.slice(1);
+      }
+
+      if (last === '\\' || (val === '^' && next === ']')) {
+        val += this.input[0];
+        this.consume(1);
+      }
+
+      node.val = val;
+      return node;
+    })
+
+    /**
+     * Close: ']'
+     */
+
+    .capture('bracket.close', function() {
+      var parsed = this.parsed;
+      var pos = this.position();
+      var m = this.match(/^\]/);
+      if (!m) return;
+
+      var prev = this.prev();
+      var last = utils.last(prev.nodes);
+
+      if (parsed.slice(-1) === '\\' && !this.isInside('bracket')) {
+        last.val = last.val.slice(0, last.val.length - 1);
+
+        return pos({
+          type: 'escape',
+          val: m[0]
+        });
+      }
+
+      var node = pos({
+        type: 'bracket.close',
+        rest: this.input,
+        val: m[0]
+      });
+
+      if (last.type === 'bracket.open') {
+        node.type = 'bracket.inner';
+        node.escaped = true;
+        return node;
+      }
+
+      var bracket = this.pop('bracket');
+      if (!this.isType(bracket, 'bracket')) {
+        if (this.options.strict) {
+          throw new Error('missing opening "["');
+        }
+        node.type = 'bracket.inner';
+        node.escaped = true;
+        return node;
+      }
+
+      bracket.nodes.push(node);
+      define(node, 'parent', bracket);
+    });
+}
+
+/**
+ * Brackets parsers
+ */
+
+module.exports = parsers;
+
+/**
+ * Expose text regex
+ */
+
+module.exports.TEXT_REGEX = TEXT_REGEX;
+
+
+/***/ }),
+
+/***/ 8539:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toRegex = __webpack_require__(64961);
+var regexNot = __webpack_require__(84432);
+var cached;
+
+/**
+ * Get the last element from `array`
+ * @param {Array} `array`
+ * @return {*}
+ */
+
+exports.last = function(arr) {
+  return arr[arr.length - 1];
+};
+
+/**
+ * Create and cache regex to use for text nodes
+ */
+
+exports.createRegex = function(pattern, include) {
+  if (cached) return cached;
+  var opts = {contains: true, strictClose: false};
+  var not = regexNot.create(pattern, opts);
+  var re;
+
+  if (typeof include === 'string') {
+    re = toRegex('^(?:' + include + '|' + not + ')', opts);
+  } else {
+    re = toRegex(not, opts);
+  }
+
+  return (cached = re);
+};
+
+
+/***/ }),
+
 /***/ 60606:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -28935,7 +29518,7 @@ module.exports = extglob;
 "use strict";
 
 
-var brackets = __webpack_require__(86308);
+var brackets = __webpack_require__(88221);
 
 /**
  * Extglob compilers
@@ -29198,7 +29781,7 @@ module.exports = Extglob;
 "use strict";
 
 
-var brackets = __webpack_require__(86308);
+var brackets = __webpack_require__(88221);
 var define = __webpack_require__(46986);
 var utils = __webpack_require__(29399);
 
@@ -29468,1198 +30051,6 @@ module.exports = function defineProperty(obj, prop, val) {
     value: val
   });
 };
-
-
-/***/ }),
-
-/***/ 86308:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Local dependencies
- */
-
-var compilers = __webpack_require__(17418);
-var parsers = __webpack_require__(82145);
-
-/**
- * Module dependencies
- */
-
-var debug = __webpack_require__(31185)('expand-brackets');
-var extend = __webpack_require__(60606);
-var Snapdragon = __webpack_require__(98564);
-var toRegex = __webpack_require__(64961);
-
-/**
- * Parses the given POSIX character class `pattern` and returns a
- * string that can be used for creating regular expressions for matching.
- *
- * @param {String} `pattern`
- * @param {Object} `options`
- * @return {Object}
- * @api public
- */
-
-function brackets(pattern, options) {
-  debug('initializing from <%s>', __filename);
-  var res = brackets.create(pattern, options);
-  return res.output;
-}
-
-/**
- * Takes an array of strings and a POSIX character class pattern, and returns a new
- * array with only the strings that matched the pattern.
- *
- * ```js
- * var brackets = require('expand-brackets');
- * console.log(brackets.match(['1', 'a', 'ab'], '[[:alpha:]]'));
- * //=> ['a']
- *
- * console.log(brackets.match(['1', 'a', 'ab'], '[[:alpha:]]+'));
- * //=> ['a', 'ab']
- * ```
- * @param {Array} `arr` Array of strings to match
- * @param {String} `pattern` POSIX character class pattern(s)
- * @param {Object} `options`
- * @return {Array}
- * @api public
- */
-
-brackets.match = function(arr, pattern, options) {
-  arr = [].concat(arr);
-  var opts = extend({}, options);
-  var isMatch = brackets.matcher(pattern, opts);
-  var len = arr.length;
-  var idx = -1;
-  var res = [];
-
-  while (++idx < len) {
-    var ele = arr[idx];
-    if (isMatch(ele)) {
-      res.push(ele);
-    }
-  }
-
-  if (res.length === 0) {
-    if (opts.failglob === true) {
-      throw new Error('no matches found for "' + pattern + '"');
-    }
-
-    if (opts.nonull === true || opts.nullglob === true) {
-      return [pattern.split('\\').join('')];
-    }
-  }
-  return res;
-};
-
-/**
- * Returns true if the specified `string` matches the given
- * brackets `pattern`.
- *
- * ```js
- * var brackets = require('expand-brackets');
- *
- * console.log(brackets.isMatch('a.a', '[[:alpha:]].[[:alpha:]]'));
- * //=> true
- * console.log(brackets.isMatch('1.2', '[[:alpha:]].[[:alpha:]]'));
- * //=> false
- * ```
- * @param {String} `string` String to match
- * @param {String} `pattern` Poxis pattern
- * @param {String} `options`
- * @return {Boolean}
- * @api public
- */
-
-brackets.isMatch = function(str, pattern, options) {
-  return brackets.matcher(pattern, options)(str);
-};
-
-/**
- * Takes a POSIX character class pattern and returns a matcher function. The returned
- * function takes the string to match as its only argument.
- *
- * ```js
- * var brackets = require('expand-brackets');
- * var isMatch = brackets.matcher('[[:lower:]].[[:upper:]]');
- *
- * console.log(isMatch('a.a'));
- * //=> false
- * console.log(isMatch('a.A'));
- * //=> true
- * ```
- * @param {String} `pattern` Poxis pattern
- * @param {String} `options`
- * @return {Boolean}
- * @api public
- */
-
-brackets.matcher = function(pattern, options) {
-  var re = brackets.makeRe(pattern, options);
-  return function(str) {
-    return re.test(str);
-  };
-};
-
-/**
- * Create a regular expression from the given `pattern`.
- *
- * ```js
- * var brackets = require('expand-brackets');
- * var re = brackets.makeRe('[[:alpha:]]');
- * console.log(re);
- * //=> /^(?:[a-zA-Z])$/
- * ```
- * @param {String} `pattern` The pattern to convert to regex.
- * @param {Object} `options`
- * @return {RegExp}
- * @api public
- */
-
-brackets.makeRe = function(pattern, options) {
-  var res = brackets.create(pattern, options);
-  var opts = extend({strictErrors: false}, options);
-  return toRegex(res.output, opts);
-};
-
-/**
- * Parses the given POSIX character class `pattern` and returns an object
- * with the compiled `output` and optional source `map`.
- *
- * ```js
- * var brackets = require('expand-brackets');
- * console.log(brackets('[[:alpha:]]'));
- * // { options: { source: 'string' },
- * //   input: '[[:alpha:]]',
- * //   state: {},
- * //   compilers:
- * //    { eos: [Function],
- * //      noop: [Function],
- * //      bos: [Function],
- * //      not: [Function],
- * //      escape: [Function],
- * //      text: [Function],
- * //      posix: [Function],
- * //      bracket: [Function],
- * //      'bracket.open': [Function],
- * //      'bracket.inner': [Function],
- * //      'bracket.literal': [Function],
- * //      'bracket.close': [Function] },
- * //   output: '[a-zA-Z]',
- * //   ast:
- * //    { type: 'root',
- * //      errors: [],
- * //      nodes: [ [Object], [Object], [Object] ] },
- * //   parsingErrors: [] }
- * ```
- * @param {String} `pattern`
- * @param {Object} `options`
- * @return {Object}
- * @api public
- */
-
-brackets.create = function(pattern, options) {
-  var snapdragon = (options && options.snapdragon) || new Snapdragon(options);
-  compilers(snapdragon);
-  parsers(snapdragon);
-
-  var ast = snapdragon.parse(pattern, options);
-  ast.input = pattern;
-  var res = snapdragon.compile(ast, options);
-  res.input = pattern;
-  return res;
-};
-
-/**
- * Expose `brackets` constructor, parsers and compilers
- */
-
-brackets.compilers = compilers;
-brackets.parsers = parsers;
-
-/**
- * Expose `brackets`
- * @type {Function}
- */
-
-module.exports = brackets;
-
-
-/***/ }),
-
-/***/ 17418:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-var posix = __webpack_require__(90157);
-
-module.exports = function(brackets) {
-  brackets.compiler
-
-    /**
-     * Escaped characters
-     */
-
-    .set('escape', function(node) {
-      return this.emit('\\' + node.val.replace(/^\\/, ''), node);
-    })
-
-    /**
-     * Text
-     */
-
-    .set('text', function(node) {
-      return this.emit(node.val.replace(/([{}])/g, '\\$1'), node);
-    })
-
-    /**
-     * POSIX character classes
-     */
-
-    .set('posix', function(node) {
-      if (node.val === '[::]') {
-        return this.emit('\\[::\\]', node);
-      }
-
-      var val = posix[node.inner];
-      if (typeof val === 'undefined') {
-        val = '[' + node.inner + ']';
-      }
-      return this.emit(val, node);
-    })
-
-    /**
-     * Non-posix brackets
-     */
-
-    .set('bracket', function(node) {
-      return this.mapVisit(node.nodes);
-    })
-    .set('bracket.open', function(node) {
-      return this.emit(node.val, node);
-    })
-    .set('bracket.inner', function(node) {
-      var inner = node.val;
-
-      if (inner === '[' || inner === ']') {
-        return this.emit('\\' + node.val, node);
-      }
-      if (inner === '^]') {
-        return this.emit('^\\]', node);
-      }
-      if (inner === '^') {
-        return this.emit('^', node);
-      }
-
-      if (/-/.test(inner) && !/(\d-\d|\w-\w)/.test(inner)) {
-        inner = inner.split('-').join('\\-');
-      }
-
-      var isNegated = inner.charAt(0) === '^';
-      // add slashes to negated brackets, per spec
-      if (isNegated && inner.indexOf('/') === -1) {
-        inner += '/';
-      }
-      if (isNegated && inner.indexOf('.') === -1) {
-        inner += '.';
-      }
-
-      // don't unescape `0` (octal literal)
-      inner = inner.replace(/\\([1-9])/g, '$1');
-      return this.emit(inner, node);
-    })
-    .set('bracket.close', function(node) {
-      var val = node.val.replace(/^\\/, '');
-      if (node.parent.escaped === true) {
-        return this.emit('\\' + val, node);
-      }
-      return this.emit(val, node);
-    });
-};
-
-
-/***/ }),
-
-/***/ 82145:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__(99136);
-var define = __webpack_require__(23695);
-
-/**
- * Text regex
- */
-
-var TEXT_REGEX = '(\\[(?=.*\\])|\\])+';
-var not = utils.createRegex(TEXT_REGEX);
-
-/**
- * Brackets parsers
- */
-
-function parsers(brackets) {
-  brackets.state = brackets.state || {};
-  brackets.parser.sets.bracket = brackets.parser.sets.bracket || [];
-  brackets.parser
-
-    .capture('escape', function() {
-      if (this.isInside('bracket')) return;
-      var pos = this.position();
-      var m = this.match(/^\\(.)/);
-      if (!m) return;
-
-      return pos({
-        type: 'escape',
-        val: m[0]
-      });
-    })
-
-    /**
-     * Text parser
-     */
-
-    .capture('text', function() {
-      if (this.isInside('bracket')) return;
-      var pos = this.position();
-      var m = this.match(not);
-      if (!m || !m[0]) return;
-
-      return pos({
-        type: 'text',
-        val: m[0]
-      });
-    })
-
-    /**
-     * POSIX character classes: "[[:alpha:][:digits:]]"
-     */
-
-    .capture('posix', function() {
-      var pos = this.position();
-      var m = this.match(/^\[:(.*?):\](?=.*\])/);
-      if (!m) return;
-
-      var inside = this.isInside('bracket');
-      if (inside) {
-        brackets.posix++;
-      }
-
-      return pos({
-        type: 'posix',
-        insideBracket: inside,
-        inner: m[1],
-        val: m[0]
-      });
-    })
-
-    /**
-     * Bracket (noop)
-     */
-
-    .capture('bracket', function() {})
-
-    /**
-     * Open: '['
-     */
-
-    .capture('bracket.open', function() {
-      var parsed = this.parsed;
-      var pos = this.position();
-      var m = this.match(/^\[(?=.*\])/);
-      if (!m) return;
-
-      var prev = this.prev();
-      var last = utils.last(prev.nodes);
-
-      if (parsed.slice(-1) === '\\' && !this.isInside('bracket')) {
-        last.val = last.val.slice(0, last.val.length - 1);
-        return pos({
-          type: 'escape',
-          val: m[0]
-        });
-      }
-
-      var open = pos({
-        type: 'bracket.open',
-        val: m[0]
-      });
-
-      if (last.type === 'bracket.open' || this.isInside('bracket')) {
-        open.val = '\\' + open.val;
-        open.type = 'bracket.inner';
-        open.escaped = true;
-        return open;
-      }
-
-      var node = pos({
-        type: 'bracket',
-        nodes: [open]
-      });
-
-      define(node, 'parent', prev);
-      define(open, 'parent', node);
-      this.push('bracket', node);
-      prev.nodes.push(node);
-    })
-
-    /**
-     * Bracket text
-     */
-
-    .capture('bracket.inner', function() {
-      if (!this.isInside('bracket')) return;
-      var pos = this.position();
-      var m = this.match(not);
-      if (!m || !m[0]) return;
-
-      var next = this.input.charAt(0);
-      var val = m[0];
-
-      var node = pos({
-        type: 'bracket.inner',
-        val: val
-      });
-
-      if (val === '\\\\') {
-        return node;
-      }
-
-      var first = val.charAt(0);
-      var last = val.slice(-1);
-
-      if (first === '!') {
-        val = '^' + val.slice(1);
-      }
-
-      if (last === '\\' || (val === '^' && next === ']')) {
-        val += this.input[0];
-        this.consume(1);
-      }
-
-      node.val = val;
-      return node;
-    })
-
-    /**
-     * Close: ']'
-     */
-
-    .capture('bracket.close', function() {
-      var parsed = this.parsed;
-      var pos = this.position();
-      var m = this.match(/^\]/);
-      if (!m) return;
-
-      var prev = this.prev();
-      var last = utils.last(prev.nodes);
-
-      if (parsed.slice(-1) === '\\' && !this.isInside('bracket')) {
-        last.val = last.val.slice(0, last.val.length - 1);
-
-        return pos({
-          type: 'escape',
-          val: m[0]
-        });
-      }
-
-      var node = pos({
-        type: 'bracket.close',
-        rest: this.input,
-        val: m[0]
-      });
-
-      if (last.type === 'bracket.open') {
-        node.type = 'bracket.inner';
-        node.escaped = true;
-        return node;
-      }
-
-      var bracket = this.pop('bracket');
-      if (!this.isType(bracket, 'bracket')) {
-        if (this.options.strict) {
-          throw new Error('missing opening "["');
-        }
-        node.type = 'bracket.inner';
-        node.escaped = true;
-        return node;
-      }
-
-      bracket.nodes.push(node);
-      define(node, 'parent', bracket);
-    });
-}
-
-/**
- * Brackets parsers
- */
-
-module.exports = parsers;
-
-/**
- * Expose text regex
- */
-
-module.exports.TEXT_REGEX = TEXT_REGEX;
-
-
-/***/ }),
-
-/***/ 99136:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var toRegex = __webpack_require__(64961);
-var regexNot = __webpack_require__(84432);
-var cached;
-
-/**
- * Get the last element from `array`
- * @param {Array} `array`
- * @return {*}
- */
-
-exports.last = function(arr) {
-  return arr[arr.length - 1];
-};
-
-/**
- * Create and cache regex to use for text nodes
- */
-
-exports.createRegex = function(pattern, include) {
-  if (cached) return cached;
-  var opts = {contains: true, strictClose: false};
-  var not = regexNot.create(pattern, opts);
-  var re;
-
-  if (typeof include === 'string') {
-    re = toRegex('^(?:' + include + '|' + not + ')', opts);
-  } else {
-    re = toRegex(not, opts);
-  }
-
-  return (cached = re);
-};
-
-
-/***/ }),
-
-/***/ 23695:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/*!
- * define-property <https://github.com/jonschlinkert/define-property>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
-
-
-var isDescriptor = __webpack_require__(23302);
-
-module.exports = function defineProperty(obj, prop, val) {
-  if (typeof obj !== 'object' && typeof obj !== 'function') {
-    throw new TypeError('expected an object or function.');
-  }
-
-  if (typeof prop !== 'string') {
-    throw new TypeError('expected `prop` to be a string.');
-  }
-
-  if (isDescriptor(val) && ('set' in val || 'get' in val)) {
-    return Object.defineProperty(obj, prop, val);
-  }
-
-  return Object.defineProperty(obj, prop, {
-    configurable: true,
-    enumerable: false,
-    writable: true,
-    value: val
-  });
-};
-
-
-/***/ }),
-
-/***/ 23302:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/*!
- * is-descriptor <https://github.com/jonschlinkert/is-descriptor>
- *
- * Copyright (c) 2015-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
-
-
-var typeOf = __webpack_require__(9293);
-var isAccessor = __webpack_require__(7689);
-var isData = __webpack_require__(42157);
-
-module.exports = function isDescriptor(obj, key) {
-  if (typeOf(obj) !== 'object') {
-    return false;
-  }
-  if ('get' in obj) {
-    return isAccessor(obj, key);
-  }
-  return isData(obj, key);
-};
-
-
-/***/ }),
-
-/***/ 7689:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/*!
- * is-accessor-descriptor <https://github.com/jonschlinkert/is-accessor-descriptor>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
-
-
-var typeOf = __webpack_require__(79196);
-
-// accessor descriptor properties
-var accessor = {
-  get: 'function',
-  set: 'function',
-  configurable: 'boolean',
-  enumerable: 'boolean'
-};
-
-function isAccessorDescriptor(obj, prop) {
-  if (typeof prop === 'string') {
-    var val = Object.getOwnPropertyDescriptor(obj, prop);
-    return typeof val !== 'undefined';
-  }
-
-  if (typeOf(obj) !== 'object') {
-    return false;
-  }
-
-  if (has(obj, 'value') || has(obj, 'writable')) {
-    return false;
-  }
-
-  if (!has(obj, 'get') || typeof obj.get !== 'function') {
-    return false;
-  }
-
-  // tldr: it's valid to have "set" be undefined
-  // "set" might be undefined if `Object.getOwnPropertyDescriptor`
-  // was used to get the value, and only `get` was defined by the user
-  if (has(obj, 'set') && typeof obj[key] !== 'function' && typeof obj[key] !== 'undefined') {
-    return false;
-  }
-
-  for (var key in obj) {
-    if (!accessor.hasOwnProperty(key)) {
-      continue;
-    }
-
-    if (typeOf(obj[key]) === accessor[key]) {
-      continue;
-    }
-
-    if (typeof obj[key] !== 'undefined') {
-      return false;
-    }
-  }
-  return true;
-}
-
-function has(obj, key) {
-  return {}.hasOwnProperty.call(obj, key);
-}
-
-/**
- * Expose `isAccessorDescriptor`
- */
-
-module.exports = isAccessorDescriptor;
-
-
-/***/ }),
-
-/***/ 79196:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var isBuffer = __webpack_require__(84339);
-var toString = Object.prototype.toString;
-
-/**
- * Get the native `typeof` a value.
- *
- * @param  {*} `val`
- * @return {*} Native javascript type
- */
-
-module.exports = function kindOf(val) {
-  // primitivies
-  if (typeof val === 'undefined') {
-    return 'undefined';
-  }
-  if (val === null) {
-    return 'null';
-  }
-  if (val === true || val === false || val instanceof Boolean) {
-    return 'boolean';
-  }
-  if (typeof val === 'string' || val instanceof String) {
-    return 'string';
-  }
-  if (typeof val === 'number' || val instanceof Number) {
-    return 'number';
-  }
-
-  // functions
-  if (typeof val === 'function' || val instanceof Function) {
-    return 'function';
-  }
-
-  // array
-  if (typeof Array.isArray !== 'undefined' && Array.isArray(val)) {
-    return 'array';
-  }
-
-  // check for instances of RegExp and Date before calling `toString`
-  if (val instanceof RegExp) {
-    return 'regexp';
-  }
-  if (val instanceof Date) {
-    return 'date';
-  }
-
-  // other objects
-  var type = toString.call(val);
-
-  if (type === '[object RegExp]') {
-    return 'regexp';
-  }
-  if (type === '[object Date]') {
-    return 'date';
-  }
-  if (type === '[object Arguments]') {
-    return 'arguments';
-  }
-  if (type === '[object Error]') {
-    return 'error';
-  }
-
-  // buffer
-  if (isBuffer(val)) {
-    return 'buffer';
-  }
-
-  // es6: Map, WeakMap, Set, WeakSet
-  if (type === '[object Set]') {
-    return 'set';
-  }
-  if (type === '[object WeakSet]') {
-    return 'weakset';
-  }
-  if (type === '[object Map]') {
-    return 'map';
-  }
-  if (type === '[object WeakMap]') {
-    return 'weakmap';
-  }
-  if (type === '[object Symbol]') {
-    return 'symbol';
-  }
-
-  // typed arrays
-  if (type === '[object Int8Array]') {
-    return 'int8array';
-  }
-  if (type === '[object Uint8Array]') {
-    return 'uint8array';
-  }
-  if (type === '[object Uint8ClampedArray]') {
-    return 'uint8clampedarray';
-  }
-  if (type === '[object Int16Array]') {
-    return 'int16array';
-  }
-  if (type === '[object Uint16Array]') {
-    return 'uint16array';
-  }
-  if (type === '[object Int32Array]') {
-    return 'int32array';
-  }
-  if (type === '[object Uint32Array]') {
-    return 'uint32array';
-  }
-  if (type === '[object Float32Array]') {
-    return 'float32array';
-  }
-  if (type === '[object Float64Array]') {
-    return 'float64array';
-  }
-
-  // must be a plain object
-  return 'object';
-};
-
-
-/***/ }),
-
-/***/ 42157:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-/*!
- * is-data-descriptor <https://github.com/jonschlinkert/is-data-descriptor>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
-
-
-var typeOf = __webpack_require__(93171);
-
-// data descriptor properties
-var data = {
-  configurable: 'boolean',
-  enumerable: 'boolean',
-  writable: 'boolean'
-};
-
-function isDataDescriptor(obj, prop) {
-  if (typeOf(obj) !== 'object') {
-    return false;
-  }
-
-  if (typeof prop === 'string') {
-    var val = Object.getOwnPropertyDescriptor(obj, prop);
-    return typeof val !== 'undefined';
-  }
-
-  if (!('value' in obj) && !('writable' in obj)) {
-    return false;
-  }
-
-  for (var key in obj) {
-    if (key === 'value') continue;
-
-    if (!data.hasOwnProperty(key)) {
-      continue;
-    }
-
-    if (typeOf(obj[key]) === data[key]) {
-      continue;
-    }
-
-    if (typeof obj[key] !== 'undefined') {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
- * Expose `isDataDescriptor`
- */
-
-module.exports = isDataDescriptor;
-
-
-/***/ }),
-
-/***/ 93171:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-var isBuffer = __webpack_require__(84339);
-var toString = Object.prototype.toString;
-
-/**
- * Get the native `typeof` a value.
- *
- * @param  {*} `val`
- * @return {*} Native javascript type
- */
-
-module.exports = function kindOf(val) {
-  // primitivies
-  if (typeof val === 'undefined') {
-    return 'undefined';
-  }
-  if (val === null) {
-    return 'null';
-  }
-  if (val === true || val === false || val instanceof Boolean) {
-    return 'boolean';
-  }
-  if (typeof val === 'string' || val instanceof String) {
-    return 'string';
-  }
-  if (typeof val === 'number' || val instanceof Number) {
-    return 'number';
-  }
-
-  // functions
-  if (typeof val === 'function' || val instanceof Function) {
-    return 'function';
-  }
-
-  // array
-  if (typeof Array.isArray !== 'undefined' && Array.isArray(val)) {
-    return 'array';
-  }
-
-  // check for instances of RegExp and Date before calling `toString`
-  if (val instanceof RegExp) {
-    return 'regexp';
-  }
-  if (val instanceof Date) {
-    return 'date';
-  }
-
-  // other objects
-  var type = toString.call(val);
-
-  if (type === '[object RegExp]') {
-    return 'regexp';
-  }
-  if (type === '[object Date]') {
-    return 'date';
-  }
-  if (type === '[object Arguments]') {
-    return 'arguments';
-  }
-  if (type === '[object Error]') {
-    return 'error';
-  }
-
-  // buffer
-  if (isBuffer(val)) {
-    return 'buffer';
-  }
-
-  // es6: Map, WeakMap, Set, WeakSet
-  if (type === '[object Set]') {
-    return 'set';
-  }
-  if (type === '[object WeakSet]') {
-    return 'weakset';
-  }
-  if (type === '[object Map]') {
-    return 'map';
-  }
-  if (type === '[object WeakMap]') {
-    return 'weakmap';
-  }
-  if (type === '[object Symbol]') {
-    return 'symbol';
-  }
-
-  // typed arrays
-  if (type === '[object Int8Array]') {
-    return 'int8array';
-  }
-  if (type === '[object Uint8Array]') {
-    return 'uint8array';
-  }
-  if (type === '[object Uint8ClampedArray]') {
-    return 'uint8clampedarray';
-  }
-  if (type === '[object Int16Array]') {
-    return 'int16array';
-  }
-  if (type === '[object Uint16Array]') {
-    return 'uint16array';
-  }
-  if (type === '[object Int32Array]') {
-    return 'int32array';
-  }
-  if (type === '[object Uint32Array]') {
-    return 'uint32array';
-  }
-  if (type === '[object Float32Array]') {
-    return 'float32array';
-  }
-  if (type === '[object Float64Array]') {
-    return 'float64array';
-  }
-
-  // must be a plain object
-  return 'object';
-};
-
-
-/***/ }),
-
-/***/ 9293:
-/***/ (function(module) {
-
-var toString = Object.prototype.toString;
-
-/**
- * Get the native `typeof` a value.
- *
- * @param  {*} `val`
- * @return {*} Native javascript type
- */
-
-module.exports = function kindOf(val) {
-  var type = typeof val;
-
-  // primitivies
-  if (type === 'undefined') {
-    return 'undefined';
-  }
-  if (val === null) {
-    return 'null';
-  }
-  if (val === true || val === false || val instanceof Boolean) {
-    return 'boolean';
-  }
-  if (type === 'string' || val instanceof String) {
-    return 'string';
-  }
-  if (type === 'number' || val instanceof Number) {
-    return 'number';
-  }
-
-  // functions
-  if (type === 'function' || val instanceof Function) {
-    if (typeof val.constructor.name !== 'undefined' && val.constructor.name.slice(0, 9) === 'Generator') {
-      return 'generatorfunction';
-    }
-    return 'function';
-  }
-
-  // array
-  if (typeof Array.isArray !== 'undefined' && Array.isArray(val)) {
-    return 'array';
-  }
-
-  // check for instances of RegExp and Date before calling `toString`
-  if (val instanceof RegExp) {
-    return 'regexp';
-  }
-  if (val instanceof Date) {
-    return 'date';
-  }
-
-  // other objects
-  type = toString.call(val);
-
-  if (type === '[object RegExp]') {
-    return 'regexp';
-  }
-  if (type === '[object Date]') {
-    return 'date';
-  }
-  if (type === '[object Arguments]') {
-    return 'arguments';
-  }
-  if (type === '[object Error]') {
-    return 'error';
-  }
-  if (type === '[object Promise]') {
-    return 'promise';
-  }
-
-  // buffer
-  if (isBuffer(val)) {
-    return 'buffer';
-  }
-
-  // es6: Map, WeakMap, Set, WeakSet
-  if (type === '[object Set]') {
-    return 'set';
-  }
-  if (type === '[object WeakSet]') {
-    return 'weakset';
-  }
-  if (type === '[object Map]') {
-    return 'map';
-  }
-  if (type === '[object WeakMap]') {
-    return 'weakmap';
-  }
-  if (type === '[object Symbol]') {
-    return 'symbol';
-  }
-  
-  if (type === '[object Map Iterator]') {
-    return 'mapiterator';
-  }
-  if (type === '[object Set Iterator]') {
-    return 'setiterator';
-  }
-  if (type === '[object String Iterator]') {
-    return 'stringiterator';
-  }
-  if (type === '[object Array Iterator]') {
-    return 'arrayiterator';
-  }
-  
-  // typed arrays
-  if (type === '[object Int8Array]') {
-    return 'int8array';
-  }
-  if (type === '[object Uint8Array]') {
-    return 'uint8array';
-  }
-  if (type === '[object Uint8ClampedArray]') {
-    return 'uint8clampedarray';
-  }
-  if (type === '[object Int16Array]') {
-    return 'int16array';
-  }
-  if (type === '[object Uint16Array]') {
-    return 'uint16array';
-  }
-  if (type === '[object Int32Array]') {
-    return 'int32array';
-  }
-  if (type === '[object Uint32Array]') {
-    return 'uint32array';
-  }
-  if (type === '[object Float32Array]') {
-    return 'float32array';
-  }
-  if (type === '[object Float64Array]') {
-    return 'float64array';
-  }
-
-  // must be a plain object
-  return 'object';
-};
-
-/**
- * If you need to support Safari 5-7 (8-10 yr-old browser),
- * take a look at https://github.com/feross/is-buffer
- */
-
-function isBuffer(val) {
-  return val.constructor
-    && typeof val.constructor.isBuffer === 'function'
-    && val.constructor.isBuffer(val);
-}
 
 
 /***/ }),

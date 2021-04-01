@@ -42,7 +42,7 @@
   "devDependencies": {
     "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "^4.0.1",
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.0",
     "@types/secure-password": "3.1.0",
     "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",
