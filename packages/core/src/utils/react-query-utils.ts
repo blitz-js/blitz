@@ -9,8 +9,7 @@ type MutateOptions = {
   refetch?: boolean
 }
 
-// Create internal QueryClient instance
-const initializeQueryClient = () => {
+export const initializeQueryClient = () => {
   const {suspenseEnabled} = getBlitzRuntimeData()
 
   return new QueryClient({
@@ -30,6 +29,7 @@ const initializeQueryClient = () => {
   })
 }
 
+// Create internal QueryClient instance
 export const queryClient = initializeQueryClient()
 
 function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
