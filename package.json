@@ -3,11 +3,14 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "nextjs",
-      "nextjs/packages/*",
-      "!nextjs/packages/create-next-app",
       "examples/*",
-      "recipes/*"
+      "recipes/*",
+      "nextjs",
+      "nextjs/packages/next",
+      "nextjs/packages/eslint-plugin-next",
+      "nextjs/packages/next-polyfill-module",
+      "nextjs/packages/react-dev-overlay",
+      "nextjs/packages/react-refresh-utils"
     ],
     "nohoist": [
       "**/@prisma",
@@ -108,7 +111,7 @@
     "@types/progress": "^2.0.3",
     "@types/pump": "1.1.0",
     "@types/pumpify": "1.4.1",
-    "@types/react": "17.0.0",
+    "@types/react": "17.0.2",
     "@types/react-dom": "16.9.4",
     "@types/readable-stream": "2.3.9",
     "@types/rimraf": "3.0.0",
