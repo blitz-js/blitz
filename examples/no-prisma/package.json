@@ -33,7 +33,7 @@
     "sqlite3": "5.0.0"
   },
   "devDependencies": {
-    "@types/react": "17.0.0",
+    "@types/react": "17.0.2",
     "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",
