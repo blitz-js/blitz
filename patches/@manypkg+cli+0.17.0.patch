@@ -1,8 +1,18 @@
 diff --git a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
-index b09af02..ef81a04 100644
+index b09af02..89c0f0f 100644
 --- a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
-@@ -351,6 +351,9 @@ var INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP = makeCheck({
+@@ -187,6 +187,9 @@ var EXTERNAL_MISMATCH = makeCheck({
+ 
+         if (deps) {
+           for (var depName in deps) {
++            if (["css-loader"].includes(depName)) {
++              continue
++            }
+             var range = deps[depName];
+             var highestRange = highestExternalRanges.get(depName);
+ 
+@@ -351,6 +354,9 @@ var INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP = makeCheck({
  
      if (peerDeps) {
        for (var depName in peerDeps) {
