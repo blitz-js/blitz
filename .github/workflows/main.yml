@@ -26,8 +26,6 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
@@ -70,8 +68,6 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
@@ -176,7 +172,7 @@ jobs:
       #   env:
       #     CI: true
       # Needed to get cypress binary
-      - run: yarn install --frozen-lockfile --check-files
+      - run: yarn cypress install
       - name: Install sass
         run: yarn install -W sass
       - name: Setup kernel to increase watchers
