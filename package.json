@@ -108,7 +108,7 @@
     "@types/progress": "^2.0.3",
     "@types/pump": "1.1.0",
     "@types/pumpify": "1.4.1",
-    "@types/react": "17.0.0",
+    "@types/react": "17.0.2",
     "@types/react-dom": "16.9.4",
     "@types/readable-stream": "2.3.9",
     "@types/rimraf": "3.0.0",
