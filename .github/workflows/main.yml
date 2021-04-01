@@ -75,7 +75,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
-            - run: yarn install --frozen-lockfile --check-files
+      - run: yarn install --frozen-lockfile --check-files
       - name: Build Nextjs
         run: yarn prepublish
         working-directory: nextjs
@@ -175,6 +175,8 @@ jobs:
       #   run: yarn install --frozen-lockfile --silent
       #   env:
       #     CI: true
+      # Needed to get cypress binary
+      - run: yarn install --frozen-lockfile --check-files
       - name: Install sass
         run: yarn install -W sass
       - name: Setup kernel to increase watchers
