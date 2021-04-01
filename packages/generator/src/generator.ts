@@ -326,7 +326,8 @@ export abstract class Generator<
         .filter((action) => {
           // Each action is something like this:
           // "\u001b[32mCREATE   \u001b[39m .env"
-          const filename = action.split(/ +/, 3)[2]
+          const actionSplitted = action.split(/ +/g)
+          const filename = actionSplitted[actionSplitted.length - 1]
           return !this.preventFileFromLogging(filename)
         })
         .forEach((action) => console.log(action))
