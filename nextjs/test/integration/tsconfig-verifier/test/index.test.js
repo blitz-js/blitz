@@ -1,9 +1,10 @@
 /* eslint-env jest */
 
-import { writeFile } from 'fs'
+import { promises } from 'fs'
 import { createFile, exists, readFile, remove } from 'fs-extra'
 import { nextBuild } from 'next-test-utils'
 import path from 'path'
+const { writeFile } = promises
 
 jest.setTimeout(1000 * 60 * 5)
 
