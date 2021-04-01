@@ -75,7 +75,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
-      - run: yarn install --frozen-lockfile
+            - run: yarn install --frozen-lockfile --check-files
       - name: Build Nextjs
         run: yarn prepublish
         working-directory: nextjs
@@ -95,7 +95,7 @@ jobs:
           key: ${{ github.sha }}
 
   build_and_test_pkgs:
-    name: Packages Tests
+    name: Blitz Packages Tests
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -142,7 +142,7 @@ jobs:
 
   build_and_test_examples:
     timeout-minutes: 30
-    name: Example Apps Tests
+    name: Blitz Example Apps Tests
     needs: build
     runs-on: ubuntu-latest
     steps:
