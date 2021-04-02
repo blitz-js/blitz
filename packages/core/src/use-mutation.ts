@@ -26,7 +26,7 @@ export declare type MutateFunction<
 
 export declare type MutationResultPair<TData, TError, TVariables, TContext> = [
   MutateFunction<TData, TError, TVariables, TContext>,
-  UseMutationResult<TData, TError>,
+  Omit<UseMutationResult<TData, TError>, "mutate" | "mutateAsync">,
 ]
 
 export declare type MutationFunction<TData, TVariables = unknown> = (
@@ -45,7 +45,7 @@ export function useMutation<
 ): MutationResultPair<TData, TError, TVariables, TContext> {
   const enhancedResolverRpcClient = sanitize(mutationResolver)
 
-  const {mutate, ...rest} = useReactQueryMutation<TData, TError, TVariables, TContext>(
+  const {mutate, mutateAsync, ...rest} = useReactQueryMutation<TData, TError, TVariables, TContext>(
     (variables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),
     {
       throwOnError: true,
@@ -53,5 +53,5 @@ export function useMutation<
     } as any,
   )
 
-  return [mutate, rest] as MutationResultPair<TData, TError, TVariables, TContext>
+  return [mutateAsync, rest] as MutationResultPair<TData, TError, TVariables, TContext>
 }
