@@ -234,7 +234,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   preventFileFromLogging(file: string): boolean {
-    return file.startsWith(".vscode") || file === ".editorconfig" || file.endsWith("/.keep")
+    const filename = file.split("/").pop() as string
+    return filename[0] === "."
   }
 
   commitChanges() {
