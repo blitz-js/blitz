@@ -121,7 +121,7 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
 
   const routes: Record<string, Route> = {}
 
-  const dotBlitz = join(config.src, "node_modules", "@blitz", "generated")
+  const dotBlitz = join(config.src, "node_modules", ".blitz")
 
   const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "index.js"))
 

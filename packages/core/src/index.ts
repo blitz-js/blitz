@@ -11,6 +11,7 @@ export {getIsomorphicEnhancedResolver} from "./rpc-client"
 export {useMutation} from "./use-mutation"
 export {invoke} from "./invoke"
 export {getBlitzRuntimeData} from "./blitz-data"
+export {Routes} from ".blitz"
 
 export {
   getAntiCSRFToken,
