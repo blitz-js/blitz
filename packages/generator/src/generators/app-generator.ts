@@ -2,9 +2,9 @@ import {log} from "@blitzjs/display"
 import chalk from "chalk"
 import spawn from "cross-spawn"
 import {readJSONSync, writeJson} from "fs-extra"
-import {join, resolve} from "path"
+import {join} from "path"
 import username from "username"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
 
@@ -24,7 +24,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: string = resolve(__dirname, "./templates/app")
+  sourceRoot: SourceRootType = {type: "template", path: "app"}
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
   packageInstallSuccess: boolean = false

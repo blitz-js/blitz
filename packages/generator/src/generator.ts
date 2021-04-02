@@ -33,6 +33,11 @@ export interface GeneratorOptions {
   useTs?: boolean
 }
 
+export interface SourceRootType {
+  type: "template" | "absolute"
+  path: string
+}
+
 const alwaysIgnoreFiles = [".blitz", ".DS_Store", ".git", ".next", ".now", "node_modules"]
 const ignoredExtensions = [".ico", ".png", ".jpg"]
 const tsExtension = /\.(tsx?)$/
@@ -132,7 +137,14 @@ export abstract class Generator<
   unsafe_disableConflictChecker = false
   returnResults: boolean = false
 
-  abstract sourceRoot: string
+  /**
+   * When `type: 'absolute'`, it's an absolute path
+   * When `type: 'template'`, is the path type `templates/`.
+   *
+   * @example {type: 'absolue', path: './src/app'} => `./src/app`
+   * @example {type: 'template', path: 'app'} => `templates/app`
+   */
+  abstract sourceRoot: SourceRootType
 
   constructor(protected readonly options: T) {
     super()
@@ -276,7 +288,16 @@ export abstract class Generator<
   }
 
   sourcePath(...paths: string[]): string {
-    return path.join(this.sourceRoot, ...paths)
+    if (this.sourceRoot.type === "absolute") {
+      return path.join(this.sourceRoot.path, ...paths)
+    } else {
+      return path.join(
+        __dirname,
+        process.env.NODE_ENV === "test" ? "../templates" : "./templates",
+        this.sourceRoot.path,
+        ...paths,
+      )
+    }
   }
 
   destinationPath(...paths: string[]): string {
