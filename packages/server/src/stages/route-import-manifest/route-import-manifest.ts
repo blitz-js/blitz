@@ -124,7 +124,7 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
   const dotBlitz = join(config.src, "node_modules", ".blitz")
 
   const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "index.js"))
-
+  const writeManifestBrowserImplementation = makeDebouncedWriter(join(dotBlitz, "index-browser.js"))
   const writeManifestDeclaration = makeDebouncedWriter(join(dotBlitz, "index.d.ts"))
 
   const stream = transform.file((file) => {
@@ -151,6 +151,7 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
       const {declaration, implementation} = generateManifest(routes)
 
       writeManifestImplementation(implementation)
+      writeManifestBrowserImplementation(implementation)
       writeManifestDeclaration(declaration)
     }
 
