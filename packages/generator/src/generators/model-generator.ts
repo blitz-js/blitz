@@ -2,7 +2,7 @@ import {log} from "@blitzjs/display"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import path from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
 import {matchBetween} from "../utils/match-between"
@@ -15,7 +15,7 @@ export interface ModelGeneratorOptions extends GeneratorOptions {
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   // default subdirectory is /app/[name], we need to back out of there to generate the model
   static subdirectory = "../.."
-  sourceRoot: string = ""
+  sourceRoot: SourceRootType = {type: "absolute", path: ""}
   unsafe_disableConflictChecker = true
 
   async getTemplateValues() {}

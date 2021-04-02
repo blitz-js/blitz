@@ -1,5 +1,4 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
@@ -15,7 +14,7 @@ export interface FormGeneratorOptions extends GeneratorOptions {
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
   static subdirectory = "queries"
-  sourceRoot = join(__dirname, "./templates/form")
+  sourceRoot: SourceRootType = {type: "template", path: "form"}
 
   private getId(input: string = "") {
     if (!input) return input
