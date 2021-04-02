@@ -12,8 +12,8 @@ function runBlitzCommand(...args) {
   return spawn.sync("node", [cliBin(), ...args], {cwd: process.env.INIT_CWD})
 }
 
-function dxGenerate() {
-  const result = runBlitzCommand("dx-generate")
+function generate() {
+  const result = runBlitzCommand("codegen")
   return result.status === 0
 }
 
@@ -35,7 +35,7 @@ function main() {
     return
   }
 
-  dxGenerate()
+  generate()
 }
 
 main()
