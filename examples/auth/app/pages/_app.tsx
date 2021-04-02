@@ -11,10 +11,6 @@ import {ErrorBoundary} from "react-error-boundary"
 import LoginForm from "app/auth/components/LoginForm"
 import {ReactQueryDevtools} from "react-query/devtools"
 
-if (typeof window !== "undefined") {
-  window["DEBUG_BLITZ"] = 1
-}
-
 export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
