@@ -74,7 +74,7 @@
     "ts-jest": "26.5.0"
   },
   "devDependencies": {
-    "next": "10.0.9"
+    "next": "10.1.3"
   },
   "keywords": [
     "blitz",
