@@ -7,7 +7,7 @@ export function useRouterQuery() {
   const router = useRouter()
 
   const query = useMemo(() => {
-    const query = decode(router.asPath.split("?")[1])
+    const query = decode(router.asPath.split("?", 2)[1])
     return query
   }, [router.asPath])
 
@@ -118,6 +118,8 @@ export function useParam(
 /*
  * Based on the code of https://github.com/lukeed/qss
  */
+const decodeString = (str: string) => decodeURIComponent(str.replace(/\+/g, "%20"))
+
 function decode(str: string) {
   if (!str) return {}
 
@@ -125,7 +127,10 @@ function decode(str: string) {
 
   for (const current of str.split("&")) {
     let [key, value = ""] = current.split("=")
-    value = decodeURIComponent(value)
+    key = decodeString(key)
+    value = decodeString(value)
+
+    if (key.length === 0) continue
 
     if (key in out) {
       out[key] = ([] as string[]).concat(out[key], value)

@@ -5,7 +5,6 @@ import {log} from "@blitzjs/display"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
-import readDirRecursive from "fs-readdir-recursive"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {create as createStore, Store} from "mem-fs"
@@ -15,6 +14,7 @@ import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
+import {readdirRecursive} from "./utils/readdir-recursive"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -31,6 +31,11 @@ export interface GeneratorOptions {
   destinationRoot?: string
   dryRun?: boolean
   useTs?: boolean
+}
+
+export interface SourceRootType {
+  type: "template" | "absolute"
+  path: string
 }
 
 const alwaysIgnoreFiles = [".blitz", ".DS_Store", ".git", ".next", ".now", "node_modules"]
@@ -132,7 +137,14 @@ export abstract class Generator<
   unsafe_disableConflictChecker = false
   returnResults: boolean = false
 
-  abstract sourceRoot: string
+  /**
+   * When `type: 'absolute'`, it's an absolute path
+   * When `type: 'template'`, is the path type `templates/`.
+   *
+   * @example {type: 'absolue', path: './src/app'} => `./src/app`
+   * @example {type: 'template', path: 'app'} => `templates/app`
+   */
+  abstract sourceRoot: SourceRootType
 
   constructor(protected readonly options: T) {
     super()
@@ -229,7 +241,7 @@ export abstract class Generator<
 
   async write(): Promise<void> {
     debug("Generator.write...")
-    const paths = readDirRecursive(this.sourcePath(), (name) => {
+    const paths = await readdirRecursive(this.sourcePath(), (name) => {
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
@@ -270,8 +282,22 @@ export abstract class Generator<
     // expose postWrite hook, no default implementation
   }
 
+  preventFileFromLogging(_file: string): boolean {
+    // no default implementation
+    return false
+  }
+
   sourcePath(...paths: string[]): string {
-    return path.join(this.sourceRoot, ...paths)
+    if (this.sourceRoot.type === "absolute") {
+      return path.join(this.sourceRoot.path, ...paths)
+    } else {
+      return path.join(
+        __dirname,
+        process.env.NODE_ENV === "test" ? "../templates" : "./templates",
+        this.sourceRoot.path,
+        ...paths,
+      )
+    }
   }
 
   destinationPath(...paths: string[]): string {
@@ -316,9 +342,16 @@ export abstract class Generator<
     }
 
     if (!this.returnResults) {
-      this.performedActions.sort().forEach((action) => {
-        console.log(action)
-      })
+      this.performedActions
+        .sort()
+        .filter((action) => {
+          // Each action is something like this:
+          // "\u001b[32mCREATE   \u001b[39m .env"
+          const actionSplitted = action.split(/ +/g)
+          const filename = actionSplitted[actionSplitted.length - 1]
+          return !this.preventFileFromLogging(filename)
+        })
+        .forEach((action) => console.log(action))
     }
 
     if (!this.options.dryRun) {

@@ -13,3 +13,4 @@ tmp
 _app
 
 !templates/**/.env*
+!templates/**/.vscode
