@@ -1,8 +1,8 @@
 import {Suspense} from "react"
 if (process.env.parentModel) {
-  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
+  import {Head, Link, useQuery, useRouter, useParam, BlitzPage} from "blitz"
 } else {
-  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+  import {Head, Link, useQuery, useRouter, BlitzPage} from "blitz"
 }
 import Layout from "app/core/layouts/Layout"
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
@@ -14,12 +14,12 @@ export const __ModelNames__List = () => {
   const page = Number(router.query.page) || 0
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
-    const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
+    const [{__modelNames__, hasMore}] = useQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
       orderBy: {id: "asc"},
       skip: ITEMS_PER_PAGE * page,
       take: ITEMS_PER_PAGE,
-    })
+    }, {keepPreviousData: true})
 
     const goToPreviousPage = () => router.push({query: {page: page - 1}})
     const goToNextPage = () => router.push({query: {page: page + 1}})
@@ -47,11 +47,11 @@ export const __ModelNames__List = () => {
       </div>
     )
   } else {
-    const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
+    const [{__modelNames__, hasMore}] = useQuery(get__ModelNames__, {
       orderBy: {id: "asc"},
       skip: ITEMS_PER_PAGE * page,
       take: ITEMS_PER_PAGE,
-    })
+    }, {keepPreviousData: true})
 
     const goToPreviousPage = () => router.push({query: {page: page - 1}})
     const goToNextPage = () => router.push({query: {page: page + 1}})

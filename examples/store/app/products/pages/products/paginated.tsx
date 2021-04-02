@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Link, BlitzPage, usePaginatedQuery, useRouter} from "blitz"
+import {Link, BlitzPage, useQuery, useRouter} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 
 const ITEMS_PER_PAGE = 3
@@ -7,17 +7,26 @@ const ITEMS_PER_PAGE = 3
 const Products = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [{products, hasMore}] = usePaginatedQuery(getProducts, {
-    skip: ITEMS_PER_PAGE * page,
-    take: ITEMS_PER_PAGE,
-  })
+  const [data, {isPreviousData}] = useQuery(
+    getProducts,
+    {
+      skip: ITEMS_PER_PAGE * page,
+      take: ITEMS_PER_PAGE,
+    },
+    {keepPreviousData: true},
+  )
 
   const goToPreviousPage = () => router.push({query: {page: page - 1}})
-  const goToNextPage = () => router.push({query: {page: page + 1}})
+
+  const goToNextPage = () => {
+    if (!isPreviousData && data.hasMore) {
+      router.push({query: {page: page + 1}})
+    }
+  }
 
   return (
     <div>
-      {products.map((product) => (
+      {data.products.map((product) => (
         <p key={product.id}>
           <Link href="/products/[handle]" as={`/products/${product.handle}`}>
             <a>{product.name}</a>
@@ -27,7 +36,7 @@ const Products = () => {
       <button disabled={page === 0} onClick={goToPreviousPage}>
         Previous
       </button>
-      <button disabled={!hasMore} onClick={goToNextPage}>
+      <button disabled={isPreviousData || !data.hasMore} onClick={goToNextPage}>
         Next
       </button>
     </div>
@@ -47,4 +56,5 @@ const Page: BlitzPage = function () {
     </div>
   )
 }
+
 export default Page
