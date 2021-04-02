@@ -1,4 +1,4 @@
-import {Generator, GeneratorOptions} from "@blitzjs/generator"
+import {Generator, GeneratorOptions, SourceRootType} from "@blitzjs/generator"
 import {Box, Text} from "ink"
 import {useEffect, useState} from "react"
 import * as React from "react"
@@ -26,14 +26,14 @@ interface TempGeneratorOptions extends GeneratorOptions {
 }
 
 class TempGenerator extends Generator<TempGeneratorOptions> {
-  sourceRoot: string
+  sourceRoot: SourceRootType
   targetDirectory: string
   templateValues: any
   returnResults = true
 
   constructor(options: TempGeneratorOptions) {
     super(options)
-    this.sourceRoot = options.templateRoot
+    this.sourceRoot = {type: "absolute", path: options.templateRoot}
     this.templateValues = options.templateValues
     this.targetDirectory = options.targetDirectory || "."
   }
