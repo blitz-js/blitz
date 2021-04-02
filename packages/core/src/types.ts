@@ -102,7 +102,6 @@ export type ParsedUrlQueryValue = string | string[] | undefined
 
 export type Options = {
   fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
 }
 
 export type ConnectMiddleware = (
