@@ -4,7 +4,7 @@ import Layout from "app/core/layouts/Layout"
 import getProject from "app/projects/queries/getProject"
 import deleteProject from "app/projects/mutations/deleteProject"
 
-import {Routes} from "@blitz/generated"
+import {Routes} from ".blitz"
 
 export const Project = () => {
   const router = useRouter()

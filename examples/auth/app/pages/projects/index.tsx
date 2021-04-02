@@ -3,7 +3,7 @@ import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import getProjects from "app/projects/queries/getProjects"
 
-import {Routes} from "@blitz/generated"
+import {Routes} from ".blitz"
 
 const ITEMS_PER_PAGE = 100
 

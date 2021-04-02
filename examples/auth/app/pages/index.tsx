@@ -13,7 +13,7 @@ import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
 
-import {Routes} from "blitz"
+import {Routes} from ".blitz"
 
 const CurrentUserInfo = () => {
   const session = useSession()

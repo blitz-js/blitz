@@ -5,7 +5,7 @@ import {Form, FORM_ERROR} from "app/core/components/Form"
 import {ResetPassword} from "app/auth/validations"
 import resetPassword from "app/auth/mutations/resetPassword"
 
-import {Routes} from "@blitz/generated"
+import {Routes} from ".blitz"
 
 const ResetPasswordPage: BlitzPage = () => {
   const query = useRouterQuery()
