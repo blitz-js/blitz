@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "postinstall": "node scripts/postinstall.js"
   },
   "author": {
     "name": "Brandon Bayer",
@@ -28,6 +29,7 @@
   "files": [
     "dist",
     "cli",
+    "scripts",
     "custom-server",
     "jest-preset.js",
     "jest-preset",
@@ -71,10 +73,8 @@
     "pkg-dir": "^5.0.0",
     "react-test-renderer": "17.0.1",
     "resolve-from": "^5.0.0",
+    "symlink-dir": "4.1.0",
     "ts-jest": "26.5.0"
-  },
-  "devDependencies": {
-    "next": "10.0.9"
   },
   "keywords": [
     "blitz",
