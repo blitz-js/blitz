@@ -2,9 +2,7 @@ import {
   useInfiniteQuery as useInfiniteReactQuery,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
-  // usePaginatedQuery as usePaginatedReactQuery,
   useQuery as useReactQuery,
-  // PaginatedQueryResult,
   UseQueryOptions,
   UseQueryResult,
 } from "react-query"
