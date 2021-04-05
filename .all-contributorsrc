@@ -1665,7 +1665,8 @@
       "profile": "https://tundera.dev",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
