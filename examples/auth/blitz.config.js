@@ -12,6 +12,9 @@ module.exports = withMonorepoBuildTooling(
         // sessionExpiryMinutes: 4,
       }),
     ],
+    cli: {
+      clearConsoleOnBlitzDev: false,
+    },
     log: {
       // level: "trace",
     },
