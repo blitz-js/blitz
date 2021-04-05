@@ -32,7 +32,7 @@
     "prettier-fix": "prettier --write .",
     "types": "lerna run types --stream",
     "typescript": "lerna run typescript",
-    "prepublish": "lerna run prepublish",
+    "prepublish": "lerna run prepublish --ignore @next/codemod",
     "publish-canary": "lerna version prerelease --preid canary --force-publish && release --pre --skip-questions",
     "publish-stable": "lerna version --force-publish",
     "lint-staged": "lint-staged",
