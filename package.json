@@ -44,7 +44,7 @@
     "publish-local": "yarn workspaces run yalc publish",
     "publish-canary": "yarn run publish-prep && lerna publish --force-publish --preid canary --pre-dist-tag canary",
     "publish-latest": "yarn run publish-prep && lerna publish --force-publish",
-    "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish",
+    "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish --ignore-scripts",
     "pull-nextjs": "git subrepo pull nextjs",
     "push-nextjs": "git subrepo push nextjs"
   },
