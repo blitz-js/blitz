@@ -8,7 +8,8 @@
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -17,37 +18,31 @@
     "semi": false,
     "printWidth": 100
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "tsc && npm run lint && npm run test"
-    }
-  },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
   },
   "dependencies": {
-    "prisma": "~2.19",
-    "@prisma/client": "~2.19",
+    "prisma": "~2.20",
+    "@prisma/client": "~2.20",
     "blitz": "canary",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.x",
-    "typescript": "~4.1",
+    "typescript": "~4.2",
     "zod": "1.x"
   },
   "devDependencies": {
     "@types/react": "17.x",
     "@types/preview-email": "2.x",
     "eslint": "7.x",
-    "husky": "4.x",
+    "husky": "6.x",
     "lint-staged": "10.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "preview-email": "3.x",
-    "prettier-plugin-prisma": "0.x"
+    "prettier-plugin-prisma": "0.7.x"
   },
   "private": true
 }

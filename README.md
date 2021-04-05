@@ -105,17 +105,24 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🌱 Seedling Sponsors
 
-<a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
+<table>
+  <tr>
+<td><a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
  <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/reactbricks_icon.svg" width="40px"/>
- </a>
- <a aria-label="Andreas Asprou" href="https://andreas.fyi">
+  </a></td>
+ <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
-</a>
- <a aria-label="Robert Malko" href="https://github.com/malkomalko">
+</a></td>
+ <td><a aria-label="Robert Malko" href="https://github.com/malkomalko">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rob_blitz.jpg" width="40px"/>
- <a aria-label="Digas" href="https://digsas.com">
+</a></td>  
+ <td><a aria-label="Digas" href="https://digsas.com">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
-</a>
+</a></td>
+ <td><a aria-label="userTrack" href=" https://www.usertrack.net/?ref=blitzjs">
+<img alt="" src="https://i.imgur.com/UDBeazC.png" width="40px"/>
+</a></td>
+   </tr></table>
 
 
 ### 🥉 Bronze Sponsors
@@ -437,7 +444,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://ugogo.dev"><img src="https://avatars2.githubusercontent.com/u/5040476?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ugo Onali</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ugogo" title="Documentation">📖</a></td>
     <td align="center"><a href="https://saintmalik.me"><img src="https://avatars1.githubusercontent.com/u/37118134?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SaintMalik</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=saintmalik" title="Documentation">📖</a></td>
     <td align="center"><a href="https://khaledgarbaya.net"><img src="https://avatars1.githubusercontent.com/u/1156093?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khaled Garbaya</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=Khaledgarbaya" title="Code">💻</a></td>
-    <td align="center"><a href="https://tundera.dev"><img src="https://avatars0.githubusercontent.com/u/61833561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tundera</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tundera" title="Code">💻</a></td>
+    <td align="center"><a href="https://tundera.dev"><img src="https://avatars0.githubusercontent.com/u/61833561?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tundera</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=tundera" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=tundera" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=tundera" title="Documentation">📖</a></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/markylaing"><img src="https://avatars2.githubusercontent.com/u/41469221?v=4?s=100" width="100px;" alt=""/><br /><sub><b>markylaing</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=markylaing" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=markylaing" title="Documentation">📖</a></td>
