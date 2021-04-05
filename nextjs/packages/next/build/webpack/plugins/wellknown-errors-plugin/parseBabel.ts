@@ -1,7 +1,7 @@
 import Chalk from 'chalk'
 import { SimpleWebpackError } from './simpleWebpackError'
 
-const chalk = new Chalk.Instance()
+const chalk = new Chalk.constructor({ enabled: true })
 
 export function getBabelError(
   fileName: string,
