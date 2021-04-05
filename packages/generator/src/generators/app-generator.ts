@@ -65,7 +65,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         break
       case "React Hook Form":
         type = "hookform"
-        pkg.dependencies["react-hook-form"] = "6.x"
+        pkg.dependencies["react-hook-form"] = "7.x"
+        pkg.dependencies["@hookform/resolvers"] = "2.x"
         break
       case "Formik":
         type = "formik"
@@ -233,7 +234,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   preventFileFromLogging(file: string): boolean {
-    return file.startsWith(".vscode") || file === ".editorconfig" || file.endsWith("/.keep")
+    const filename = file.split("/").pop() as string
+    return filename[0] === "."
   }
 
   commitChanges() {

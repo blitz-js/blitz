@@ -3,7 +3,8 @@ import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {RouterContext} from "next/dist/next-server/lib/router-context"
 import {NextRouter} from "next/router"
 import React from "react"
-import {deserialize} from "superjson"
+import {BlitzProvider} from "../src/blitz-provider"
+import {queryClient} from "../src/utils/react-query-utils"
 
 export * from "@testing-library/react"
 
@@ -18,7 +19,10 @@ export * from "@testing-library/react"
 // --------------------------------------------------
 type DefaultParams = Parameters<typeof defaultRender>
 type RenderUI = DefaultParams[0]
-type RenderOptions = DefaultParams[1] & {router?: Partial<NextRouter>}
+type RenderOptions = DefaultParams[1] & {
+  router?: Partial<NextRouter>
+  dehydratedState?: unknown
+}
 
 const mockRouter: NextRouter = {
   basePath: "",
@@ -43,10 +47,17 @@ const mockRouter: NextRouter = {
   isFallback: false,
 }
 
-export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
+export function render(
+  ui: RenderUI,
+  {wrapper, router, dehydratedState, ...options}: RenderOptions = {},
+) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <RouterContext.Provider value={{...mockRouter, ...router}}>{children}</RouterContext.Provider>
+      <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
+        <RouterContext.Provider value={{...mockRouter, ...router}}>
+          {children}
+        </RouterContext.Provider>
+      </BlitzProvider>
     )
   }
 
@@ -64,15 +75,22 @@ export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOption
 // --------------------------------------------------
 type DefaultHookParams = Parameters<typeof defaultRenderHook>
 type RenderHook = DefaultHookParams[0]
-type RenderHookOptions = DefaultHookParams[1] & {router?: Partial<NextRouter>}
+type RenderHookOptions = DefaultHookParams[1] & {
+  router?: Partial<NextRouter>
+  dehydratedState?: unknown
+}
 
 export function renderHook(
   hook: RenderHook,
-  {wrapper, router, ...options}: RenderHookOptions = {},
+  {wrapper, router, dehydratedState, ...options}: RenderHookOptions = {},
 ) {
   if (!wrapper) {
     wrapper = ({children}) => (
-      <RouterContext.Provider value={{...mockRouter, ...router}}>{children}</RouterContext.Provider>
+      <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
+        <RouterContext.Provider value={{...mockRouter, ...router}}>
+          {children}
+        </RouterContext.Provider>
+      </BlitzProvider>
     )
   }
 
@@ -81,20 +99,6 @@ export function renderHook(
 
 // This enhance fn does what getIsomorphicEnhancedResolver does during build time
 export function enhanceQueryFn(fn: any) {
-  const newFn = (...args: any) => {
-    const [data, ...rest] = args
-    return fn(deserialize(data), ...rest)
-  }
-  newFn._meta = {
-    name: "testResolver",
-    type: "query",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
-  return newFn
-}
-// This one doesn't call deserialize
-export function enhanceInfiniteQueryFn(fn: any) {
   const newFn = (...args: any) => {
     const [data, ...rest] = args
     return fn(data, ...rest)

@@ -50,7 +50,7 @@
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",
-    "react-query": "2.5.12",
+    "react-query": "3.13.0",
     "secure-password": "4.0.0",
     "superjson": "1.7.2"
   },

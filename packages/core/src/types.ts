@@ -7,7 +7,6 @@ import {
   NextPage,
   NextPageContext,
 } from "next/types"
-import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {
@@ -103,7 +102,6 @@ export type ParsedUrlQueryValue = string | string[] | undefined
 
 export type Options = {
   fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
 }
 
 export type ConnectMiddleware = (
@@ -190,26 +188,6 @@ export type InvokeWithMiddlewareConfig = {
   middleware?: Middleware[]
   [prop: string]: any
 }
-
-export declare type MutateFunction<
-  TResult,
-  TError = unknown,
-  TVariables = unknown,
-  TSnapshot = unknown
-> = (
-  variables?: TVariables,
-  config?: MutateOptions<TResult, TError, TVariables, TSnapshot>,
-) => Promise<TResult>
-
-export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [
-  MutateFunction<TResult, TError, TVariables, TSnapshot>,
-  MutationResult<TResult, TError>,
-]
-
-export declare type MutationFunction<TResult, TVariables = unknown> = (
-  variables: TVariables,
-  ctx?: any,
-) => Promise<TResult>
 
 export interface ErrorFallbackProps {
   error: Error & Record<any, any>
