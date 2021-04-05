@@ -109,15 +109,35 @@ jobs:
   build_and_test_examples:
     timeout-minutes: 30
     name: Blitz Example Apps Tests
-    needs: build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-        id: restore-build
+      - uses: actions/checkout@v2
         with:
-          path: ./*
-          key: ${{ github.sha }}
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
