@@ -1,12 +1,12 @@
 diff --git a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
-index b09af02..cf98598 100644
+index b09af02..b28e81c 100644
 --- a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
 @@ -187,6 +187,9 @@ var EXTERNAL_MISMATCH = makeCheck({
  
          if (deps) {
            for (var depName in deps) {
-+            if (["css-loader", "source-map"].includes(depName)) {
++            if (["css-loader", "source-map", "recast"].includes(depName)) {
 +              continue
 +            }
              var range = deps[depName];

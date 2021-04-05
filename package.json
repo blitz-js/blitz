@@ -6,6 +6,7 @@
       "nextjs",
       "nextjs/packages/*",
       "!nextjs/packages/create-next-app",
+      "!nextjs/packages/next-codemod",
       "examples/*",
       "recipes/*"
     ],
