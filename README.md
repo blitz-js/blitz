@@ -110,7 +110,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <td><a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
  <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/reactbricks_icon.svg" width="40px"/>
   </a></td>
- <a aria-label="Andreas Asprou" href="https://andreas.fyi">
+ <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
 </a></td>
  <td><a aria-label="Robert Malko" href="https://github.com/malkomalko">
