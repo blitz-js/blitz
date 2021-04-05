@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "husky install && patch-package && node packages/blitz/scripts/postinstall.js",
+    "postinstall": "husky install && patch-package && symlink-dir node_modules/@blitzjs/next node_modules/next",
     "dev:tsc": "tsc --watch --pretty --preserveWatchOutput",
     "dev:cli": "yarn workspace @blitzjs/cli dev",
     "dev:templates": "yarn workspace @blitzjs/generator dev",

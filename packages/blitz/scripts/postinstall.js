@@ -1,7 +1,8 @@
 const symlinkDir = require("symlink-dir")
 const path = require("path")
 
-symlinkDir("node_modules/@blitzjs/next", "node_modules/next")
+const nodeModulesPath = path.join(__dirname, "../../")
+symlinkDir(path.join(nodeModulesPath, "@blitzjs/next"), path.join(nodeModulesPath, "next"))
   .then((result) => {
     // console.log(result)
   })
