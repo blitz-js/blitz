@@ -35,6 +35,7 @@
   "dependencies": {
     "@blitzjs/config": "0.33.1",
     "@blitzjs/display": "0.33.1",
+    "@blitzjs/next": "10.0.9",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
@@ -46,7 +47,6 @@
     "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
-    "@blitzjs/next": "10.0.9",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",
