@@ -105,20 +105,24 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🌱 Seedling Sponsors
 
-<a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
+<table>
+  <tr>
+<td><a aria-label="React Bricks" href="https://reactbricks.com/?utm_source=blitzjs&utm_medium=sponsorship&utm_campaign=blitzjs_sponsorship">
  <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/reactbricks_icon.svg" width="40px"/>
- </a>
+  </a></td>
  <a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
-</a>
- <a aria-label="Robert Malko" href="https://github.com/malkomalko">
+</a></td>
+ <td><a aria-label="Robert Malko" href="https://github.com/malkomalko">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rob_blitz.jpg" width="40px"/>
- <a aria-label="Digas" href="https://digsas.com">
+</a></td>  
+ <td><a aria-label="Digas" href="https://digsas.com">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
-</a>
- <a aria-label="userTrack" href=" https://www.usertrack.net/?ref=blitzjs">
+</a></td>
+ <td><a aria-label="userTrack" href=" https://www.usertrack.net/?ref=blitzjs">
 <img alt="" src="https://i.imgur.com/UDBeazC.png" width="40px"/>
-</a>
+</a></td>
+   </tr></table>
 
 
 ### 🥉 Bronze Sponsors
