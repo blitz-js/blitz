@@ -3,9 +3,7 @@
   "name": "nextjs-project",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "!packages/create-next-app",
-    "!packages/next-codemod"
+    "packages/*"
   ],
   "scripts": {
     "lerna": "lerna",
@@ -32,7 +30,7 @@
     "prettier-fix": "prettier --write .",
     "types": "lerna run types --stream",
     "typescript": "lerna run typescript",
-    "prepublish": "lerna run prepublish --ignore @next/codemod",
+    "prepublish": "lerna run prepublish",
     "publish-canary": "lerna version prerelease --preid canary --force-publish && release --pre --skip-questions",
     "publish-stable": "lerna version --force-publish",
     "lint-staged": "lint-staged",
