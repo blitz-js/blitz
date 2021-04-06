@@ -26,9 +26,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -68,9 +68,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -132,9 +132,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -205,7 +205,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [1, 2, 3, 4, 5, 6]
+        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     steps:
       - run: echo ${{needs.build.outputs.docsChange}}
         working-directory: ./
@@ -220,7 +220,7 @@ jobs:
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
-      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/6 -c 3
+      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/10 -c 3
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testElectron:
@@ -302,16 +302,15 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
 
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
 
-      - run: yarn prepublish
+      - run: yarn build:nextjs
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        working-directory: nextjs
 
       - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
@@ -366,9 +365,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
 
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
@@ -376,9 +375,8 @@ jobs:
       - run: yarn list react react-dom
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
 
-      - run: yarn prepublish
+      - run: yarn build:nextjs
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        working-directory: nextjs
 
       - run: xvfb-run node run-tests.js test/integration/{link-ref,production,basic,async-modules,font-optimization,ssr-ctx,worker-loader}/test/index.test.js test/acceptance/*.test.js
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
