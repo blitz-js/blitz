@@ -44,7 +44,7 @@
   "devDependencies": {
     "@cypress/skip-test": "2.6.0",
     "@next/bundle-analyzer": "^10.0.6",
-    "@testing-library/react": "^11.2.3",
+    "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "^4.0.1",
     "@types/passport-auth0": "1.0.4",
     "@types/passport-github2": "1.2.4",

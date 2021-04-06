@@ -18,7 +18,7 @@ export const ShadowPortal: React.FC<ShadowPortalProps> = function Portal({
     portalNode.current = ownerDocument.createElement('nextjs-portal')
     shadowNode.current = portalNode.current.attachShadow({ mode: 'open' })
     ownerDocument.body.appendChild(portalNode.current)
-    forceUpdate({})
+    forceUpdate({} as any /*blitz*/)
     return () => {
       if (portalNode.current && portalNode.current.ownerDocument) {
         portalNode.current.ownerDocument.body.removeChild(portalNode.current)

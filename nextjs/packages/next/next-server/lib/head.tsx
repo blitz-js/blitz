@@ -30,7 +30,7 @@ function onlyReactElement(
       React.Children.toArray(child.props.children).reduce(
         (
           fragmentList: Array<React.ReactElement<any>>,
-          fragmentChild: React.ReactChild
+          fragmentChild: any // blitz :React.ReactChild
         ): Array<React.ReactElement<any>> => {
           if (
             typeof fragmentChild === 'string' ||
@@ -41,7 +41,7 @@ function onlyReactElement(
           return fragmentList.concat(fragmentChild)
         },
         []
-      )
+      ) as any //blitz
     )
   }
   return list.concat(child)
@@ -127,7 +127,7 @@ function reduceComponents(
         const headElementChildren = React.Children.toArray(
           headElement.props.children
         )
-        return list.concat(headElementChildren)
+        return list.concat(headElementChildren as any /*blitz*/)
       },
       []
     )

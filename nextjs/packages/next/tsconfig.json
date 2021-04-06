@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "skipLibCheck": true,
     "strict": true,
     "module": "esnext",
     "target": "ES2017",
