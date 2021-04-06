@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "0.34.0-canary.0",
+  "version": "0.34.0-canary.1",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
   "license": "MIT",
