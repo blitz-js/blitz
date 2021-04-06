@@ -124,9 +124,14 @@ describe('pnpm support', () => {
         path.join(tempAppDir, 'node_modules/next')
       )
 
-      const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
-      console.log(stdout, stderr)
-      expect(stdout).toMatch(/Compiled successfully/)
+      try {
+        const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
+        console.log(stdout, stderr)
+        expect(stdout).toMatch(/Compiled successfully/)
+      } catch (error) {
+        console.log(error.stderr)
+        throw error
+      }
     })
   })
 })
