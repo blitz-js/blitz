@@ -32,70 +32,52 @@ const isPage = (path: string) =>
   !path.includes("/_app.") &&
   !path.includes("/_document.")
 
-export function generateManifest(
-  routes: Record<string, Route>,
-): {implementation: string; declaration: string} {
-  const allNames = Object.values(routes).map((r) => r.name)
-  const routesWithoutDuplicates = Object.entries(routes).filter(([_path, {name}], index) => {
-    const first = allNames.indexOf(name)
-    const last = allNames.lastIndexOf(name)
+function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
+  const allKeys = arr.map(by)
+  return arr.filter((v, index) => {
+    const key = by(v)
+    const first = allKeys.indexOf(key)
+    const last = allKeys.lastIndexOf(key)
     if (first !== last && first !== index) {
       return false
     }
 
     return true
   })
+}
+
+export function generateManifest(
+  routes: Record<string, Route>,
+): {implementation: string; declaration: string} {
+  const routesWithoutDuplicates = dedupeBy(Object.entries(routes), ([_path, {name}]) => name)
 
   const implementationLines = routesWithoutDuplicates.map(
-    ([path, {name, parameters, multipleParameters}]) => {
-      if (parameters.length === 0 && multipleParameters.length === 0) {
-        return `${name}: "${path}"`
-      }
-
-      let resultingPath = path
-
-      parameters.forEach((parameter) => {
-        resultingPath = resultingPath.replace(`[${parameter}]`, `\${${parameter}}`)
-      })
-
-      multipleParameters.forEach((parameter) => {
-        resultingPath = resultingPath.replace(`[...${parameter}]`, `\${${parameter}.join("/")}`)
-      })
-
-      const allParameters = [...parameters, ...multipleParameters]
-
-      return `${name}: ({ ${allParameters.join(", ")} }) => \`${resultingPath}\``
-    },
+    ([path, {name}]) => `${name}: (query) => ({ pathname: "${path}", query })`,
   )
 
   const declarationLines = routesWithoutDuplicates.map(
-    ([path, {name, parameters, multipleParameters}]) => {
+    ([_path, {name, parameters, multipleParameters}]) => {
       if (parameters.length === 0 && multipleParameters.length === 0) {
-        return `${name}: "${path}"`
+        return `${name}(query?: ParsedUrlQueryInput): UrlObject`
       }
 
-      let resultingPath = path
-
-      parameters.forEach((parameter) => {
-        resultingPath = resultingPath.replace(`[${parameter}]`, `\${${parameter}}`)
-      })
-
-      multipleParameters.forEach((parameter) => {
-        resultingPath = resultingPath.replace(`[...${parameter}]`, `\${${parameter}.join("/")}`)
-      })
-
-      return `${name}({ ${[...parameters, ...multipleParameters].join(", ")} }: { ${[
-        ...parameters.map((p) => `${p}: string`),
-        ...multipleParameters.map((p) => `${p}: string[]`),
-      ].join(", ")} }): string`
+      return `${name}(query: { ${[
+        ...parameters.map((param) => param + ": string"),
+        ...multipleParameters.map((param) => param + ": string[]"),
+      ].join("; ")} } & ParsedUrlQueryInput): UrlObject`
     },
   )
 
   return {
     implementation:
       "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
-    declaration:
-      "export const Routes: {\n" + declarationLines.map((line) => "  " + line).join(";\n") + ";\n}",
+    declaration: `
+import type { UrlObject } from "url"
+import type { ParsedUrlQueryInput } from "querystring"
+
+export const Routes: {
+${declarationLines.map((line) => "  " + line).join(";\n")};
+}`.trim(),
   }
 }
 

@@ -1,3 +1,3 @@
 exports.Routes = {
-  ThisFileHasNotYetBeenGeneratedPleaseRunBlitzCodeGen: "⚡️",
+  ThisFileHasNotYetBeenGeneratedPleaseRunBlitzCodeGen: (query) => ({pathname: "⚡️", query}),
 }

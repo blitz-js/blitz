@@ -28,14 +28,17 @@ test("generateManifest", () => {
   ).toEqual({
     implementation: `
 exports.Routes = {
-  Home: "home/",
-  CommentView: ({ postId, openedCommentPath }) => \`posts/$\{postId\}/$\{openedCommentPath.join("/")\}\`
+  Home: (query) => ({ pathname: "home/", query }),
+  CommentView: (query) => ({ pathname: "posts/[postId]/[...openedCommentPath]", query })
 }
       `.trim(),
     declaration: `
+import type { UrlObject } from "url"
+import type { ParsedUrlQueryInput } from "querystring"
+
 export const Routes: {
-  Home: "home/";
-  CommentView({ postId, openedCommentPath }: { postId: string, openedCommentPath: string[] }): string;
+  Home(query?: ParsedUrlQueryInput): UrlObject;
+  CommentView(query: { postId: string; openedCommentPath: string[] } & ParsedUrlQueryInput): UrlObject;
 }
       `.trim(),
   })
