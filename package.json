@@ -45,8 +45,8 @@
     "prepack": "cpx README.md packages/blitz/",
     "postpack": "rimraf packages/blitz/README.md",
     "publish-local": "yarn workspaces run yalc publish",
-    "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --preid canary --pre-dist-tag canary",
-    "publish-latest": "yarn run publish-prep && lerna publish --no-private --force-publish",
+    "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-scripts --preid canary --pre-dist-tag canary",
+    "publish-latest": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-scripts",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish --no-private --ignore-scripts",
     "pull-nextjs": "git subrepo pull nextjs",
     "push-nextjs": "git subrepo push nextjs"
