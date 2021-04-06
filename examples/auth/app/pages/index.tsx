@@ -32,10 +32,10 @@ const UserStuff = () => {
       {!session.userId && (
         <>
           <div style={{marginTop: "1rem"}}>
-            <Link href={Routes.SignupPage}>Sign Up</Link>
+            <Link href={Routes.SignupPage()}>Sign Up</Link>
           </div>
           <div>
-            <Link href={Routes.LoginPage}>Login</Link>
+            <Link href={Routes.LoginPage()}>Login</Link>
           </div>
           <a href="/api/auth/twitter" style={{display: "block"}}>
             Login with Twitter

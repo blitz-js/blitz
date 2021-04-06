@@ -34,7 +34,7 @@ const NewProjectPage: BlitzPage = () => {
       />
 
       <p>
-        <Link href={Routes.ProjectsPage}>
+        <Link href={Routes.ProjectsPage()}>
           <a>Projects</a>
         </Link>
       </p>

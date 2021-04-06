@@ -59,7 +59,7 @@ const EditProjectPage: BlitzPage = () => {
       </Suspense>
 
       <p>
-        <Link href={Routes.ProjectsPage}>
+        <Link href={Routes.ProjectsPage()}>
           <a>Projects</a>
         </Link>
       </p>

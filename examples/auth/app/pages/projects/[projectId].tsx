@@ -49,7 +49,7 @@ const ShowProjectPage: BlitzPage = () => {
   return (
     <div>
       <p>
-        <Link href={Routes.ProjectsPage}>
+        <Link href={Routes.ProjectsPage()}>
           <a>Projects</a>
         </Link>
       </p>

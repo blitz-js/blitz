@@ -19,7 +19,7 @@ const ResetPasswordPage: BlitzPage = () => {
         <div>
           <h2>Password Reset Successfully</h2>
           <p>
-            Go to the <Link href={Routes.Home}>homepage</Link>
+            Go to the <Link href={Routes.Home()}>homepage</Link>
           </p>
         </div>
       ) : (
