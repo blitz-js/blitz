@@ -29,11 +29,10 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
-      - run: yarn reset
-      # - name: Install dependencies
-      # run: yarn install --frozen-lockfile --silent
-      # env:
-      #   CI: true
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
       - name: manypkg lint
         run: yarn manypkg check
         env:
@@ -72,8 +71,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
-      - run: yarn reset
-      # - run: yarn install --frozen-lockfile --check-files
+      - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
       - run: node run-tests.js --timings --write-timings -g 1/1
@@ -137,8 +135,7 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
-      - run: yarn reset
-      # - run: yarn install --frozen-lockfile --check-files
+      - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
       # Needed to get cypress binary
@@ -309,9 +306,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
 
-      - run: yarn reset
-      # - run: yarn install --check-files
-      #   if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+      - run: yarn install --check-files
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
 
       - run: yarn prepublish
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
@@ -374,9 +370,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
 
-      - run: yarn reset
-      # - run: yarn install --check-files
-      #   if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+      - run: yarn install --check-files
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
 
       - run: yarn list react react-dom
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
