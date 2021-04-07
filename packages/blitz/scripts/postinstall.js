@@ -175,7 +175,10 @@ function codegen() {
 
   async function ensureEmptyDotBlitz() {
     try {
-      const dotBlitzDir = path.join(process.cwd(), "node_modules/.blitz")
+      const dotBlitzDir = isInBlitzMonorepo
+        ? path.join(process.cwd(), "node_modules/.blitz")
+        : path.join(__dirname, "../../.blitz")
+
       await makeDir(dotBlitzDir)
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")
       const defaultIndexBrowserJSPath = path.join(dotBlitzDir, "index-browser.js")
