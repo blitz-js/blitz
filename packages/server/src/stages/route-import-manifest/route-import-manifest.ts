@@ -27,10 +27,10 @@ export function parseDefaultExportName(contents: string): string | null {
 }
 
 const isPage = (path: string) =>
-  path.includes("pages/") &&
-  !path.includes("pages/api/") &&
-  !path.includes("/_app.") &&
-  !path.includes("/_document.")
+  path.includes(join("pages", "/")) &&
+  !path.includes(join("pages", "api", "/")) &&
+  !path.includes(join("/", "_app.")) &&
+  !path.includes(join("/", "_document."))
 
 function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
   const allKeys = arr.map(by)
