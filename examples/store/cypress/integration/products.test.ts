@@ -28,12 +28,9 @@ describe("products#show page", () => {
     cy.get("#products > p > a").first().click()
     cy.location("pathname").should("match", /\/products\/\S+$/)
 
-    cy.get("p").should("have.length", 2)
-    cy.get("p")
-      .last()
-      .contains(/Price: \$[0-9]*/)
-
     cy.get("h1").should("have.length", 1)
+    cy.get(".description").should("exist")
+    cy.get(".price").contains(/Price: \$[0-9]*/)
   })
 
   it("goes to back to products page", () => {

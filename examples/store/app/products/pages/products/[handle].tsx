@@ -27,8 +27,8 @@ const Page = function ({product}: InferGetStaticPropsType<typeof getStaticProps>
   return (
     <div>
       <h1>{product.name}</h1>
-      <p>{product.description}</p>
-      <p>Price: ${product.price}</p>
+      <p className="description">{product.description}</p>
+      <p className="price">Price: ${product.price}</p>
 
       <Link href="/products">
         <a>All Products</a>
