@@ -3,6 +3,7 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
+import symlink from 'symlink-dir'
 
 const pnpmExecutable = path.join(
   __dirname,
@@ -79,10 +80,10 @@ describe('pnpm support', () => {
     await usingTempDir(async (tempDir) => {
       const nextTarballPath = await pack(tempDir, 'next')
       const dependencyTarballPaths = {
-        '@next/env': await pack(tempDir, 'next-env'),
-        '@next/polyfill-module': await pack(tempDir, 'next-polyfill-module'),
-        '@next/react-dev-overlay': await pack(tempDir, 'react-dev-overlay'),
-        '@next/react-refresh-utils': await pack(tempDir, 'react-refresh-utils'),
+        // '@next/env': await pack(tempDir, 'next-env'),
+        // '@next/polyfill-module': await pack(tempDir, 'next-polyfill-module'),
+        // '@next/react-dev-overlay': await pack(tempDir, 'react-dev-overlay'),
+        // '@next/react-refresh-utils': await pack(tempDir, 'react-refresh-utils'),
       }
 
       const tempAppDir = path.join(tempDir, 'app')
@@ -114,14 +115,23 @@ describe('pnpm support', () => {
       ).toBeTruthy()
 
       const packageJson = await fs.readJson(packageJsonPath)
-      expect(packageJson.dependencies['next']).toMatch(/^file:/)
+      expect(packageJson.dependencies['@blitzjs/next']).toMatch(/^file:/)
       for (const dependency of Object.keys(dependencyTarballPaths)) {
         expect(packageJson.pnpm.overrides[dependency]).toMatch(/^file:/)
       }
+      await symlink(
+        path.join(tempAppDir, 'node_modules/@blitzjs/next'),
+        path.join(tempAppDir, 'node_modules/next')
+      )
 
-      const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
-      console.log(stdout, stderr)
-      expect(stdout).toMatch(/Compiled successfully/)
+      try {
+        const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
+        console.log(stdout, stderr)
+        expect(stdout).toMatch(/Compiled successfully/)
+      } catch (error) {
+        console.log(error.stderr)
+        throw error
+      }
     })
   })
 })

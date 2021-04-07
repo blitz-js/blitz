@@ -344,3 +344,16 @@ exports.UNABLE_TO_FIND_POSTINSTALL_TRIGGER__ENVAR_MISSING = UNABLE_TO_FIND_POSTI
 exports.UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_PARSE_ERROR = UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_PARSE_ERROR
 exports.UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR
 exports.getPostInstallTrigger = getPostInstallTrigger
+
+const symlinkDir = require("symlink-dir")
+
+const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../test"))
+
+if (!isInBlitzMonorepo) {
+  const nodeModulesPath = path.join(__dirname, "../../")
+  symlinkDir(path.join(nodeModulesPath, "@blitzjs/next"), path.join(nodeModulesPath, "next"))
+    .then((result) => {
+      // console.log(result)
+    })
+    .catch((err) => console.error(err))
+}

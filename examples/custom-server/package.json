@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.34.0-canary.0",
+    "blitz": "0.34.0-canary.1",
     "final-form": "4.20.1",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@cypress/skip-test": "2.6.0",
-    "@testing-library/react": "^11.2.3",
+    "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "^4.0.1",
     "@types/react": "17.0.2",
     "@types/secure-password": "3.1.0",
