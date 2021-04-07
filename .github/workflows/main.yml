@@ -145,6 +145,9 @@ jobs:
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Setup tmate session
+        if: matrix.os == 'windows-latest'
+        uses: mxschmitt/action-tmate@v3
       - name: Test examples
         run: yarn testonly:examples
         env:
