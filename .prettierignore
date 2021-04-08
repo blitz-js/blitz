@@ -4,7 +4,7 @@
 .log
 .DS_Store
 .jest-*
-lib
+packages/cli/lib
 node_modules
 reports
 *.log
