@@ -1,6 +1,4 @@
-const withMonorepoBuildTooling = require("@preconstruct/next")
-
-module.exports = withMonorepoBuildTooling({
+module.exports = {
   middleware: [],
   /* Uncomment this to customize the webpack config
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
@@ -10,4 +8,4 @@ module.exports = withMonorepoBuildTooling({
     return config
   },
   */
-})
+}

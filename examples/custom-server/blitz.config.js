@@ -1,7 +1,6 @@
 const {sessionMiddleware, simpleRolesIsAuthorized} = require("blitz")
-const withMonorepoBuildTooling = require("@preconstruct/next")
 
-module.exports = withMonorepoBuildTooling({
+module.exports = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -15,4 +14,4 @@ module.exports = withMonorepoBuildTooling({
     return config
   },
   */
-})
+}

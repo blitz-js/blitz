@@ -3131,10 +3131,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.11.tgz#aeb16f50649a91af79dbe36574b66d0f9e4d9f71"
   integrity sha512-3NsZsJIA/22P3QUyrEDNA2D133H4j224twJrdipXN38dpnIOzAbUDtOwkcJ5pXmn75w7LSQDjA4tO9dm1XlqlA==
 
-"@preconstruct/cli@2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@preconstruct/cli/-/cli-2.0.5.tgz#bd952ecae0fbe5cba37040d7f05c41cab3ac4250"
-  integrity sha512-yWB0GwqZi9tTpSmsEkcVYxnieCT89L9938XR7s9ffjKf59GFMwy8O0G8wMA8Rm6jNjf3ob5zuVWvCaoHppUS8Q==
+"@preconstruct/cli@2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@preconstruct/cli/-/cli-2.0.7.tgz#368b0313bc3e04da2442e0133d7bdc3a076a3a55"
+  integrity sha512-xXKbIZa5k39fLs3ufLo2/PgZjQK/ZBzUeK0nFt+t6xE3i++e6y/RN8GNNzGxOgwgM6+m+OL7rB54ruwB/HVWqw==
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.7.7"
@@ -3183,13 +3183,6 @@
     "@babel/plugin-transform-modules-commonjs" "^7.7.5"
     pirates "^4.0.1"
     source-map-support "^0.5.16"
-
-"@preconstruct/next@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@preconstruct/next/-/next-2.0.0.tgz#050042c13dde0c671bee0681acb49c31e80ab415"
-  integrity sha512-jpNffjgVKSilBCi3tNs2MEqqGdQBOo5n97B9OCfMDqO9SoiH7MyCmQ+tHCYQvY5gmD6Bf3Fas79N7Rzj6vJBsQ==
-  dependencies:
-    resolve "^1.17.0"
 
 "@prisma/client@2.19.0":
   version "2.19.0"
