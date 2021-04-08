@@ -13,7 +13,7 @@ describe("Queries", () => {
       env: {__NEXT_TEST_WITH_DEVTOOL: 1},
     })
 
-    const prerender = ["/use-query", "/invalidation"]
+    const prerender = ["/use-query", "/invalidate"]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
   afterAll(() => killApp(context.server))
