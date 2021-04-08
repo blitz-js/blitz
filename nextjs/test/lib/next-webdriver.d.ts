@@ -10,7 +10,7 @@ interface Chain {
   hasElementByCssSelector: () => Chain
   click: () => Chain
   elementsByCss: () => Chain
-  waitForElementByCss: () => Chain
+  waitForElementByCss: (arg: string) => Chain
   eval: () => Chain
   log: () => Chain
   url: () => Chain
