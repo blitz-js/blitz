@@ -96,7 +96,7 @@ const customBabelLoader = babelLoader((babel) => {
         }
       } else {
         // Add our default preset if the no "babelrc" found.
-        options.presets = [...options.presets, presetItem, 'blitz/babel']
+        options.presets = [...options.presets, presetItem]
       }
 
       options.caller.isServer = isServer
