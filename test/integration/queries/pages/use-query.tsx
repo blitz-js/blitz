@@ -3,7 +3,7 @@ import {useQuery} from "blitz"
 import {Suspense} from "react"
 
 function Content() {
-  const [result] = useQuery(getBasic, null)
+  const [result] = useQuery(getBasic, undefined)
   return <div id="content">{result}</div>
 }
 
