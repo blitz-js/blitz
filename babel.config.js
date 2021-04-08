@@ -34,7 +34,6 @@ module.exports = {
           "@babel/preset-env",
           {
             modules: false,
-            // loose: true,
             exclude: [
               "@babel/plugin-transform-async-to-generator",
               "@babel/plugin-transform-regenerator",
@@ -44,6 +43,22 @@ module.exports = {
         "blitz/babel",
       ],
       plugins: [],
+    },
+    {
+      test: "./nextjs/test/**/*",
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            modules: false,
+            exclude: [
+              "@babel/plugin-transform-async-to-generator",
+              "@babel/plugin-transform-regenerator",
+            ],
+          },
+        ],
+        "blitz/babel",
+      ],
     },
   ],
 }

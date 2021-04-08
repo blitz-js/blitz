@@ -4,7 +4,6 @@
     /* "module": "esnext", */
     /* "target": "esnext", */
     "allowJs": true,
-    "baseUrl": "./lib",
     "resolveJsonModule": true,
     "noEmit": true
   }

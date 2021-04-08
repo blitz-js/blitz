@@ -91,6 +91,7 @@ module.exports = {
       rules: {
         "import/no-default-export": "off",
         "require-await": "off",
+        "unicorn/filename-case": "off",
       },
     },
   ],
