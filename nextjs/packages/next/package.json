@@ -48,7 +48,7 @@
     "dev": "taskr",
     "release": "taskr release",
     "prepublish": "npm run release && yarn types",
-    "types": "tsc --declaration --emitDeclarationOnly --declarationDir dist",
+    "types": "rimraf \"dist/**/*.d.ts\" && tsc --declaration --emitDeclarationOnly --declarationDir dist",
     "typescript": "tsc --noEmit --declaration",
     "ncc-compiled": "ncc cache clean && taskr ncc"
   },

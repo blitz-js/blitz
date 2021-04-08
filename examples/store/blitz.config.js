@@ -1,6 +1,4 @@
-const withMonorepoBuildTooling = require("@preconstruct/next")
-
-module.exports = withMonorepoBuildTooling({
+module.exports = {
   middleware: [
     (req, res, next) => {
       res.blitzCtx.referer = req.headers.referer
@@ -24,4 +22,4 @@ module.exports = withMonorepoBuildTooling({
   //   // Important: return the modified config
   //   return config
   // },
-})
+}

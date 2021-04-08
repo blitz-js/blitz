@@ -64,7 +64,7 @@ async function main() {
     tests = (
       await glob('**/*.test.js', {
         nodir: true,
-        cwd: path.join(__dirname, 'test'),
+        cwd: path.join(process.cwd(), 'test'),
       })
     ).filter((test) => {
       // only include the specified type
@@ -79,7 +79,7 @@ async function main() {
     if (outputTimings && groupArg) {
       console.log('Fetching previous timings data')
       try {
-        const timingsFile = path.join(__dirname, 'test-timings.json')
+        const timingsFile = path.join(process.cwd(), 'test-timings.json')
         try {
           prevTimings = JSON.parse(await fs.readFile(timingsFile, 'utf8'))
           console.log('Loaded test timings from disk successfully')
@@ -234,7 +234,7 @@ async function main() {
         } catch (err) {
           if (i < NUM_RETRIES) {
             try {
-              const testDir = path.dirname(path.join(__dirname, test))
+              const testDir = path.dirname(path.join(process.cwd(), test))
               console.log('Cleaning test files at', testDir)
               await exec(`git clean -fdx "${testDir}"`)
               await exec(`git checkout "${testDir}"`)
