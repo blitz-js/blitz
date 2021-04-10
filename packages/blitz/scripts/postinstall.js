@@ -249,7 +249,7 @@ function codegen() {
    */
   function getPostInstallTrigger() {
     /*
-  npm_config_argv` is not officially documented so here are our (Prisma's) research notes 
+  npm_config_argv` is not officially documented so here are our (Prisma's) research notes
   `npm_config_argv` is available to the postinstall script when the containing package has been installed by npm into some project.
   An example of its value:
   ```
@@ -348,16 +348,4 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-function linkNextFork() {
-  if (!isInBlitzMonorepo) {
-    const nodeModulesPath = path.join(__dirname, "../../")
-    symlinkDir(path.join(nodeModulesPath, "@blitzjs/next"), path.join(nodeModulesPath, "next"))
-      .then((result) => {
-        // console.log(result)
-      })
-      .catch((err) => console.error(err))
-  }
-}
-
 codegen()
-linkNextFork()
