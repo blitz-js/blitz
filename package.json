@@ -52,8 +52,8 @@
     "prepack": "scripts/prepack.sh",
     "postpublish": "rimraf packages/blitz/README.md && git checkout packages/core/package.json && git checkout nextjs/packages/next/package.json",
     "publish-local": "yarn workspaces run yalc publish",
-    "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-prepublish --preid canary --pre-dist-tag canary && manypkg fix",
-    "publish-latest": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-prepublish && manypkg fix",
+    "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-prepublish --preid canary --pre-dist-tag canary && manypkg fix && git add . && git commit -m 'bump recipe/example versions' --no-verify && git push",
+    "publish-latest": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-prepublish && manypkg fix && git add . && git commit -m 'bump recipe/example versions' --no-verify && git push",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish --no-private --ignore-prepublish",
     "pull-nextjs": "git subrepo pull nextjs -v",
     "push-nextjs": "git subrepo push nextjs -v"
