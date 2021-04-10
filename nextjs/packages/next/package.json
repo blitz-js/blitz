@@ -1,5 +1,5 @@
 {
-  "name": "@blitzjs/next",
+  "name": "next",
   "version": "0.34.0-canary.2",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
