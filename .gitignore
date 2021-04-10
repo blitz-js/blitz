@@ -2,7 +2,6 @@
 .DS_Store
 .idea
 .jest-*
-lib
 node_modules
 reports
 *.log

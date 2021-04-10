@@ -3,19 +3,18 @@ import {BlitzPage, useInfiniteQuery, Link} from "blitz"
 import getProducts from "app/products/queries/getProducts"
 
 const Products = () => {
-  const [groupedProducts, {isFetching, isFetchingMore, fetchMore, canFetchMore}] = useInfiniteQuery(
-    getProducts,
-    (page = {take: 3, skip: 0}) => page,
-    {
-      getFetchMore: (lastGroup) => lastGroup.nextPage,
-    },
-  )
+  const [
+    productPages,
+    {isFetching, isFetchingNextPage, fetchNextPage, hasNextPage},
+  ] = useInfiniteQuery(getProducts, (page = {take: 3, skip: 0}) => page, {
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  })
 
   return (
     <>
-      {groupedProducts.map((group, i) => (
+      {productPages.map((page, i) => (
         <Fragment key={i}>
-          {group.products.map((product) => (
+          {page.products.map((product) => (
             <p key={product.id} data-test="productName">
               {product.name}
             </p>
@@ -24,12 +23,16 @@ const Products = () => {
       ))}
 
       <div>
-        <button onClick={() => fetchMore()} disabled={!canFetchMore || !!isFetchingMore}>
-          {isFetchingMore ? "Loading more..." : canFetchMore ? "Load More" : "Nothing more to load"}
+        <button onClick={() => fetchNextPage()} disabled={!hasNextPage || !!isFetchingNextPage}>
+          {isFetchingNextPage
+            ? "Loading more..."
+            : hasNextPage
+            ? "Load More"
+            : "Nothing more to load"}
         </button>
       </div>
 
-      <div>{isFetching && !isFetchingMore ? "Fetching..." : null}</div>
+      <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
     </>
   )
 }

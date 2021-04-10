@@ -139,7 +139,7 @@ export function nextBuild(
       env: spawnEnv,
       stdio: [process.stdin, "pipe", "pipe"],
     })
-      .on("exit", (code: number) => {
+      .on("exit", (code: number | null) => {
         if (code === 0 || code === null) {
           res()
         } else {
@@ -150,6 +150,28 @@ export function nextBuild(
 
     nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
     nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
+  })
+}
+
+export function nextExport(nextBin: string, config: ServerConfig) {
+  const spawnEnv = getSpawnEnv(config)
+
+  return new Promise<void>((res, rej) => {
+    const nextjs = spawn(nextBin, ["export"], {
+      env: spawnEnv,
+      stdio: [process.stdin, "pipe", "pipe"],
+    })
+      .on("exit", (code: number | null) => {
+        if (code === 0 || code === null) {
+          res()
+        } else {
+          process.exit(code)
+        }
+      })
+      .on("error", rej)
+
+    nextjs.stdout.pipe(process.stdout)
+    nextjs.stderr.pipe(process.stderr)
   })
 }
 

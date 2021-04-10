@@ -123,7 +123,7 @@ export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) =>
   // No roles required, so all roles allowed
   if (!roleOrRoles) return true
 
-  const rolesToAuthorize = []
+  const rolesToAuthorize: string[] = []
   if (Array.isArray(roleOrRoles)) {
     rolesToAuthorize.push(...roleOrRoles)
   } else if (roleOrRoles) {
@@ -149,6 +149,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   }
 
   return async (req, res, next) => {
+    debug("Starting sessionMiddleware...")
     if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
       await getSession(req, res)
@@ -430,7 +431,33 @@ export const parseAnonymousSessionToken = (token: string) => {
 }
 
 export const setCookie = (res: ServerResponse, cookie: string) => {
-  append(res, "Set-Cookie", cookie)
+  const getCookieName = (c: string) => c.split("=", 2)[0]
+  const appendCookie = () => append(res, "Set-Cookie", cookie)
+
+  const cookiesHeader = res.getHeader("Set-Cookie")
+  const cookieName = getCookieName(cookie)
+
+  if (typeof cookiesHeader !== "string" && !Array.isArray(cookiesHeader)) {
+    appendCookie()
+    return
+  }
+
+  if (typeof cookiesHeader === "string") {
+    if (cookieName === getCookieName(cookiesHeader)) {
+      res.setHeader("Set-Cookie", cookie)
+    } else {
+      appendCookie()
+    }
+  } else {
+    for (let i = 0; i < cookiesHeader.length; i++) {
+      if (cookieName === getCookieName(cookiesHeader[i])) {
+        cookiesHeader[i] = cookie
+        res.setHeader("Set-Cookie", cookie)
+        return
+      }
+    }
+    appendCookie()
+  }
 }
 
 export const setHeader = (res: ServerResponse, name: string, value: string) => {

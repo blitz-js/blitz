@@ -1,22 +1,16 @@
 import React from "react"
-import {queryCache} from "react-query"
 import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
-import {
-  act,
-  enhanceInfiniteQueryFn,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from "./test-utils"
+import {queryClient} from "../src/utils/react-query-utils"
+import {act, render, screen, waitFor, waitForElementToBeRemoved} from "./test-utils"
 import {enhanceQueryFn} from "./test-utils"
 
 beforeEach(() => {
-  queryCache.clear()
+  queryClient.clear()
 })
 
 window.__BLITZ_DATA__ = getBlitzRuntimeData()
+window["DEBUG_BLITZ"] = 1
 
 describe("useQuery", () => {
   const setupHook = (
@@ -106,7 +100,7 @@ describe("useInfiniteQuery", () => {
     function TestHarness() {
       // TODO - fix typing
       //@ts-ignore
-      const [groupedData] = useInfiniteQuery(queryFn, params, {getFetchMore: () => {}})
+      const [groupedData] = useInfiniteQuery(queryFn, params, {getNextPageParam: () => {}})
       Object.assign(res, {groupedData})
       return (
         <div id="harness">
@@ -140,13 +134,13 @@ describe("useInfiniteQuery", () => {
     }
   }
   it("should work", async () => {
-    setupHook(() => ({id: 1}), enhanceInfiniteQueryFn(getItems))
+    setupHook(() => ({id: 1}), enhanceQueryFn(getItems))
     await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
     await act(async () => {
       await screen.findByText("item1")
     })
 
-    setupHook(() => ({id: 2}), enhanceInfiniteQueryFn(getItems))
+    setupHook(() => ({id: 2}), enhanceQueryFn(getItems))
     await act(async () => {
       await screen.findByText("item2")
     })

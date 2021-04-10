@@ -1,5 +1,4 @@
 import {addBasePath} from "next/dist/next-server/lib/router/router"
-import {queryCache} from "react-query"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {getAntiCSRFToken} from "./auth/auth-client"
@@ -22,7 +21,7 @@ import {
   RpcOptions,
 } from "./types"
 import {clientDebug, isClient, isServer} from "./utils"
-import {getQueryKeyFromUrlAndParams} from "./utils/react-query-utils"
+import {getQueryKeyFromUrlAndParams, queryClient} from "./utils/react-query-utils"
 
 export const executeRpcCall = <TInput, TResult>(
   apiUrl: string,
@@ -36,7 +35,7 @@ export const executeRpcCall = <TInput, TResult>(
   }
 
   if (isServer) return (Promise.resolve() as unknown) as CancellablePromise<TResult>
-  clientDebug("Starting request for", apiUrl)
+  clientDebug("Starting request for", apiUrl, "with", params, "and", opts)
 
   const headers: Record<string, any> = {
     "Content-Type": "application/json",
@@ -87,12 +86,12 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
-          queryCache.clear()
+          queryClient.clear()
           publicDataStore.clear()
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
-          await queryCache.invalidateQueries("")
+          await queryClient.invalidateQueries("")
         }
         if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
@@ -135,7 +134,7 @@ export const executeRpcCall = <TInput, TResult>(
 
           if (!opts.fromQueryHook) {
             const queryKey = getQueryKeyFromUrlAndParams(apiUrl, params)
-            queryCache.setQueryData(queryKey, data)
+            queryClient.setQueryData(queryKey, data)
           }
           return data as TResult
         }

@@ -1,5 +1,4 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
@@ -9,7 +8,7 @@ export interface MutationGeneratorOptions extends GeneratorOptions {
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
   static subdirectory = "mutation"
-  sourceRoot = join(__dirname, "./templates/mutation")
+  sourceRoot: SourceRootType = {type: "template", path: "mutation"}
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {

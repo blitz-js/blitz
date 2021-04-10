@@ -2,9 +2,12 @@ import {existsSync, readJSONSync} from "fs-extra"
 import {join} from "path"
 import path from "path"
 import pkgDir from "pkg-dir"
+const debug = require("debug")("blitz:config")
 
 export function getProjectRoot() {
-  return pkgDir.sync() || process.cwd()
+  return (
+    path.dirname(path.resolve(process.cwd(), "blitz.config.js")) || pkgDir.sync() || process.cwd()
+  )
 }
 
 export interface BlitzConfig extends Record<string, unknown> {
@@ -39,11 +42,16 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
-  const pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  let pkgJson: any
+
+  const pkgJsonPath = join(getProjectRoot(), "package.json")
+  if (existsSync(pkgJsonPath)) {
+    pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  }
 
   let blitzConfig = {
     _meta: {
-      packageName: pkgJson.name,
+      packageName: pkgJson?.name,
     },
   }
 
@@ -51,11 +59,15 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
   const nextConfigPath = path.join(projectRoot, "next.config.js")
   const blitzConfigPath = path.join(projectRoot, "blitz.config.js")
 
+  debug("nextConfigPath: " + nextConfigPath)
+  debug("blitzConfigPath: " + blitzConfigPath)
+
+  let loadedNextConfig = {}
+  let loadedBlitzConfig = {}
   try {
     // --------------------------------
     // Load next.config.js if it exists
     // --------------------------------
-    let loadedNextConfig = {}
     if (existsSync(nextConfigPath)) {
       // eslint-disable-next-line no-eval -- block webpack from following this module path
       loadedNextConfig = eval("require")(nextConfigPath)
@@ -70,13 +82,12 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     // Load blitz.config.js
     // --------------------------------
     // eslint-disable-next-line no-eval -- block webpack from following this module path
-    let loadedBlitzConfig = eval("require")(blitzConfigPath)
+    loadedBlitzConfig = eval("require")(blitzConfigPath)
     if (typeof loadedBlitzConfig === "function") {
       const phase =
         process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
       loadedBlitzConfig = loadedBlitzConfig(phase, {})
     }
-
     // -------------
     // Merge configs
     // -------------
@@ -85,13 +96,17 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
       ...loadedNextConfig,
       ...loadedBlitzConfig,
     }
-  } catch {
+  } catch (error) {
     // https://github.com/blitz-js/blitz/issues/2080
     if (!process.env.JEST_WORKER_ID) {
-      console.error("Failed to load config in getConfig()")
+      console.error("Failed to load config in getConfig()", error)
     }
   }
 
-  global.blitzConfig = blitzConfig
+  // Idk why, but during startup first result of loading blitz config is empty
+  // Therefore don't cache it so that next time will load the full config properly
+  if (Object.keys(loadedBlitzConfig).length) {
+    global.blitzConfig = blitzConfig
+  }
   return blitzConfig
 }

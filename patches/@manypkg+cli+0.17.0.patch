@@ -1,0 +1,32 @@
+diff --git a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
+index b09af02..6326224 100644
+--- a/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
++++ b/node_modules/@manypkg/cli/dist/cli.cjs.dev.js
+@@ -190,6 +190,17 @@ var EXTERNAL_MISMATCH = makeCheck({
+             var range = deps[depName];
+             var highestRange = highestExternalRanges.get(depName);
+ 
++            if (["css-loader"].includes(depName)) {
++              continue
++            }
++            if (workspace.packageJson.name === 'blitz') {
++              if (depName === 'jest' && range === '^26.6.3') continue
++              if (depName === 'ts-jest' && range === '26.5.0') continue
++            }
++            if (workspace.packageJson.name === '@blitzjs/next' && ["source-map", "recast", "chalk"].includes(depName)) {
++              continue
++            }
++
+             if (highestRange !== undefined && highestRange !== range && semver.validRange(range)) {
+               errors.push({
+                 type: "EXTERNAL_MISMATCH",
+@@ -351,6 +362,9 @@ var INVALID_DEV_AND_PEER_DEPENDENCY_RELATIONSHIP = makeCheck({
+ 
+     if (peerDeps) {
+       for (var depName in peerDeps) {
++        if (['fibers', 'node-sass', 'react', 'react-dom', 'next', 'sass', '@mdx-js/loader', '@mdx-js/react', 'webpack'].includes(depName)) {
++          continue
++        }
+         if (!devDeps[depName]) {
+           var highestRanges = getHighestExternalRanges(allWorkspaces);
+           var idealDevVersion = highestRanges.get(depName);

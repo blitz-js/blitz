@@ -7,7 +7,7 @@ export function useRouterQuery() {
   const router = useRouter()
 
   const query = useMemo(() => {
-    const query = decode(router.asPath.split("?")[1])
+    const query = decode(router.asPath.split("?", 2)[1])
     return query
   }, [router.asPath])
 
@@ -116,25 +116,28 @@ export function useParam(
 }
 
 /*
- * Copied from https://github.com/lukeed/qss
+ * Based on the code of https://github.com/lukeed/qss
  */
+const decodeString = (str: string) => decodeURIComponent(str.replace(/\+/g, "%20"))
+
 function decode(str: string) {
   if (!str) return {}
-  let tmp: any
-  let k
-  const out: Record<string, any> = {}
-  const arr = str.split("&")
 
-  // eslint-disable-next-line no-cond-assign
-  while ((tmp = arr.shift())) {
-    tmp = tmp.split("=")
-    k = tmp.shift()
-    if (out[k] !== void 0) {
-      out[k] = [].concat(out[k], tmp.shift())
+  let out: Record<string, string | string[]> = {}
+
+  for (const current of str.split("&")) {
+    let [key, value = ""] = current.split("=")
+    key = decodeString(key)
+    value = decodeString(value)
+
+    if (key.length === 0) continue
+
+    if (key in out) {
+      out[key] = ([] as string[]).concat(out[key], value)
     } else {
-      out[k] = tmp.shift()
+      out[key] = value
     }
   }
 
-  return out as Record<string, string | string[]>
+  return out
 }
