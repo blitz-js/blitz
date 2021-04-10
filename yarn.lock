@@ -21538,6 +21538,11 @@ unc-path-regex@^0.1.2:
   resolved "https://registry.yarnpkg.com/unc-path-regex/-/unc-path-regex-0.1.2.tgz#e73dd3d7b0d7c5ed86fbac6b0ae7d8c6a69d50fa"
   integrity sha1-5z3T17DXxe2G+6xrCufYxqadUPo=
 
+uncommitted@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/uncommitted/-/uncommitted-1.0.0.tgz#a93e723023e256db09f04f70bccdaa115042163e"
+  integrity sha1-qT5yMCPiVtsJ8E9wvM2qEVBCFj4=
+
 undefsafe@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.3.tgz#6b166e7094ad46313b2202da7ecc2cd7cc6e7aae"

@@ -49,7 +49,8 @@
     "testonly:examples": "ultra -r --filter \"examples/*\" --concurrency 1 test",
     "reset": "rimraf node_modules && git clean -xfd packages && git clean -xfd nextjs/packages && yarn",
     "publish-prep": "yarn && yarn build",
-    "postpublish": "rimraf packages/blitz/README.md && git checkout packages/core/package.json && git checkout nextjs/packages/next/package.json",
+    "prepack": "scripts/prepack.sh",
+    "postpublish": "rimraf packages/blitz/README.md && git update-index --no-assume-unchanged packages/core/package.json && git update-index --no-assume-unchanged nextjs/packages/next/package.json && git checkout packages/core/package.json && git checkout nextjs/packages/next/package.json",
     "publish-local": "yarn workspaces run yalc publish",
     "prepublish-canary": "scripts/prepublish.sh",
     "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --ignore-scripts --preid canary --pre-dist-tag canary && manypkg fix",
@@ -193,6 +194,7 @@
     "tslib": "2.1.0",
     "typescript": "4.1.5",
     "ultra-runner": "3.10.5",
+    "uncommitted": "1.0.0",
     "wait-on": "5.2.1",
     "yalc": "1.0.0-pre.49"
   },
