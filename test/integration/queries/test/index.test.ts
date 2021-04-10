@@ -44,4 +44,18 @@ describe("Queries", () => {
       if (browser) await browser.close()
     })
   })
+
+  describe("useInfiniteQuery", () => {
+    it("should render new query result after param change", async () => {
+      const browser = await webdriver(context.appPort, "/use-infinite-query")
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      if (browser) await browser.close()
+      expect(text).toMatch(/.*(\[10,).*/)
+      await browser.elementByCss("button").click()
+      waitFor(500)
+      text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/.*(\[11,).*/)
+    })
+  })
 })
