@@ -4,7 +4,8 @@ import RewriteImports from './rewrite-imports';
 // eslint-disable-next-line import/no-default-export
 export default function preset(_api: any, options = {}) {
   // const isTest = _api.env('test');
-  const isRunningInJest = Boolean(process.env.JEST_WORKER_ID);
+  const isRunningInJest =
+    process.env.JEST_WORKER_ID && !process.env.__NEXT_TEST_MODE;
 
   const config = {
     presets: [[require('next/babel'), options]],

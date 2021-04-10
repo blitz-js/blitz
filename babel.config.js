@@ -26,4 +26,39 @@ module.exports = {
       },
     ],
   ],
+  overrides: [
+    {
+      test: "./test/**/*",
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            modules: false,
+            exclude: [
+              "@babel/plugin-transform-async-to-generator",
+              "@babel/plugin-transform-regenerator",
+            ],
+          },
+        ],
+        "blitz/babel",
+      ],
+      plugins: [],
+    },
+    {
+      test: "./nextjs/test/**/*",
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            modules: false,
+            exclude: [
+              "@babel/plugin-transform-async-to-generator",
+              "@babel/plugin-transform-regenerator",
+            ],
+          },
+        ],
+        "blitz/babel",
+      ],
+    },
+  ],
 }

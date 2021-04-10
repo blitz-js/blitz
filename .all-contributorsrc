@@ -2381,6 +2381,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jahredhope",
+      "name": "Jahred Hope",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13903378?v=4",
+      "profile": "jahred.com.au",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "simonelnahas",
+      "name": "Simon El Nahas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29279201?v=4",
+      "profile": "simonelnahas.github.io/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

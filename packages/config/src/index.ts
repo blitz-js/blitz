@@ -5,7 +5,9 @@ import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
 export function getProjectRoot() {
-  return pkgDir.sync() || process.cwd()
+  return (
+    path.dirname(path.resolve(process.cwd(), "blitz.config.js")) || pkgDir.sync() || process.cwd()
+  )
 }
 
 export interface BlitzConfig extends Record<string, unknown> {
@@ -40,11 +42,16 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
-  const pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  let pkgJson: any
+
+  const pkgJsonPath = join(getProjectRoot(), "package.json")
+  if (existsSync(pkgJsonPath)) {
+    pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  }
 
   let blitzConfig = {
     _meta: {
-      packageName: pkgJson.name,
+      packageName: pkgJson?.name,
     },
   }
 
@@ -89,10 +96,10 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
       ...loadedNextConfig,
       ...loadedBlitzConfig,
     }
-  } catch {
+  } catch (error) {
     // https://github.com/blitz-js/blitz/issues/2080
     if (!process.env.JEST_WORKER_ID) {
-      console.error("Failed to load config in getConfig()")
+      console.error("Failed to load config in getConfig()", error)
     }
   }
 

@@ -185,16 +185,16 @@ export function getClientBuildManifest(): Promise<ClientBuildManifest> {
     return Promise.resolve(self.__BUILD_MANIFEST)
   }
 
-  const onBuildManifest: Promise<ClientBuildManifest> = new Promise<ClientBuildManifest>(
-    (resolve) => {
-      // Mandatory because this is not concurrent safe:
-      const cb = self.__BUILD_MANIFEST_CB
-      self.__BUILD_MANIFEST_CB = () => {
-        resolve(self.__BUILD_MANIFEST as any /*blitz*/)
-        cb && cb()
-      }
+  const onBuildManifest: Promise<ClientBuildManifest> = new Promise<
+    ClientBuildManifest
+  >((resolve) => {
+    // Mandatory because this is not concurrent safe:
+    const cb = self.__BUILD_MANIFEST_CB
+    self.__BUILD_MANIFEST_CB = () => {
+      resolve(self.__BUILD_MANIFEST!)
+      cb && cb()
     }
-  )
+  })
 
   return resolvePromiseWithTimeout<ClientBuildManifest>(
     onBuildManifest,
