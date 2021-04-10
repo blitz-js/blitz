@@ -11,6 +11,7 @@ import {createWorkOptimizer} from "./helpers/work-optimizer"
 import {createWrite} from "./helpers/writer"
 import {pipeline, through} from "./streams"
 import {EventedFile, Stage, StageArgs, StageConfig} from "./types"
+
 export function isSourceFile(file: File) {
   return file.hash?.indexOf(":") === -1
 }
@@ -84,7 +85,7 @@ export function createPipeline(
 ) {
   // Helper streams don't account for business stages
   const input = through.obj()
-  const optimizer = createWorkOptimizer(config.src, config.dest)
+  const optimizer = createWorkOptimizer(config.src, config.dest, config.overrideTriage)
   const enrichFiles = createEnrichFiles()
   const srcCache = createFileCache(isSourceFile)
   const routeCache = createRouteCache()

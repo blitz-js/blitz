@@ -1,8 +1,8 @@
 import {Suspense} from "react"
 if (process.env.parentModel) {
-  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage} from "blitz"
+  import {Head, Link, usePaginatedQuery, useRouter, useParam, BlitzPage, Routes} from "blitz"
 } else {
-  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage} from "blitz"
+  import {Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes} from "blitz"
 }
 import Layout from "app/core/layouts/Layout"
 import get__ModelNames__ from "app/__modelNamesPath__/queries/get__ModelNames__"
@@ -30,7 +30,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
-                href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`}
+                href={Routes.Show__ModelName__Page({ __modelIdParam__: __modelName__.id })}
               >
                 <a>{__modelName__.name}</a>
               </Link>
@@ -61,7 +61,7 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link href={`/__modelNames__/${__modelName__.id}`}>
+              <Link href={Routes.Show__ModelName__Page({ __modelIdParam__: __modelName__.id })}>
                 <a>{__modelName__.name}</a>
               </Link>
             </li>
@@ -93,11 +93,11 @@ const __ModelNames__Page: BlitzPage = () => {
       <div>
         <p>
           <if condition="parentModel">
-            <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__/new`}>
+            <Link href={Routes.New__ModelName__Page({ __parentModelId__ })}>
               <a>Create __ModelName__</a>
             </Link>
             <else>
-              <Link href="/__modelNames__/new">
+              <Link href={Routes.New__ModelName__Page()}>
                 <a>Create __ModelName__</a>
               </Link>
             </else>

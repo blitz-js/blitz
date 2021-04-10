@@ -5,6 +5,8 @@ import {Form, FORM_ERROR} from "app/core/components/Form"
 import {ResetPassword} from "app/auth/validations"
 import resetPassword from "app/auth/mutations/resetPassword"
 
+import {Routes} from ".blitz"
+
 const ResetPasswordPage: BlitzPage = () => {
   const query = useRouterQuery()
   const [resetPasswordMutation, {isSuccess}] = useMutation(resetPassword)
@@ -17,7 +19,7 @@ const ResetPasswordPage: BlitzPage = () => {
         <div>
           <h2>Password Reset Successfully</h2>
           <p>
-            Go to the <Link href="/">homepage</Link>
+            Go to the <Link href={Routes.Home()}>homepage</Link>
           </p>
         </div>
       ) : (

@@ -20,12 +20,15 @@ const defaultReadCache = (filePath: string) => {
   return existsSync(filePath) ? readFileSync(filePath).toString() : ""
 }
 
+export type OverrideTriage = (file: File) => "proceed" | "ignore" | undefined
+
 /**
  * Returns streams that help handling work optimisation in the file transform stream.
  */
 export function createWorkOptimizer(
   src: string,
   dest: string,
+  overrideTriage: OverrideTriage = () => undefined,
   saveCache: (filePath: string, data: object) => Promise<void> = defaultSaveCache,
   readCache: (filePath: string) => string = defaultReadCache,
 ) {
@@ -54,13 +57,21 @@ export function createWorkOptimizer(
       delete done[pathHash]
     }
 
-    await saveCache(resolve(dest, ".blitz.incache.json"), done)
+    await saveCache(doneCacheLocation, done)
 
     return file
   })
 
   const triage = transform.file((file, {push, next}) => {
     const pathHash = getOriginalPathHash(file)
+
+    switch (overrideTriage(file)) {
+      case "proceed":
+        push(file)
+        return next()
+      case "ignore":
+        return next()
+    }
 
     if (!file.hash) {
       log.debug("File does not have hash! " + file.path)
