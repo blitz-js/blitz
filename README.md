@@ -119,7 +119,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="Digas" href="https://digsas.com">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
 </a></td>
- <td><a aria-label="userTrack" href=" https://www.usertrack.net/?ref=blitzjs">
+ <td><a aria-label="userTrack" href="https://www.usertrack.net/?ref=blitzjs">
 <img alt="" src="https://i.imgur.com/UDBeazC.png" width="40px"/>
 </a></td>
    </tr></table>
