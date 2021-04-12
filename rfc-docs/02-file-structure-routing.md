@@ -107,7 +107,7 @@ Blitz is defining a standard file structure to answer the age old question of "H
 
 Contains all your core application code.
 
-- The file structure nested inside `app` can be anything you want, but we reccomend the following:
+- The file structure nested inside `app` can be anything you want, but we recommend the following:
 - Typically you will have two types of "container" directories inside `app` that can be nested or combined any way you want:
   - **entity** directories like `projects/` and `tasks/`
   - **context** directories like `marketing/` or `admin/`.
