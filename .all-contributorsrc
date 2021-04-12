@@ -2408,6 +2408,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "peterpalau",
+      "name": "Pedro Enrique Palau Isaac",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12257885?v=4",
+      "profile": "http://palauisaac.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
