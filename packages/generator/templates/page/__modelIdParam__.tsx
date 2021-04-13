@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation} from "blitz"
+import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
@@ -25,12 +25,12 @@ export const __ModelName__ = () => {
 
         <if condition="parentModel">
           <Link
-            href={`/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}/edit`}
+            href={Routes.Edit__ModelName__Page({ __parentModelId__, __modelIdParam__: __modelName__.id })}
           >
             <a>Edit</a>
           </Link>
           <else>
-            <Link href={`/__modelNames__/${__modelName__.id}/edit`}>
+            <Link href={Routes.Edit__ModelName__Page({ __modelIdParam__: __modelName__.id })}>
               <a>Edit</a>
             </Link>
           </else>
@@ -42,9 +42,9 @@ export const __ModelName__ = () => {
             if (window.confirm("This will be deleted")) {
               await delete__ModelName__Mutation({id: __modelName__.id})
               if (process.env.parentModel) {
-                router.push(`/__parentModels__/${__parentModelId__}/__modelNames__`)
+                router.push(Routes.__ModelNames__Page({ __parentModelId__ }))
               } else {
-                router.push("/__modelNames__")
+                router.push(Routes.__ModelNames__Page())
               }
             }
           }}
@@ -66,11 +66,11 @@ const Show__ModelName__Page: BlitzPage = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href="/__modelNames__">
+            <Link href={Routes.__ModelNames__Page()}>
               <a>__ModelNames__</a>
             </Link>
           </else>

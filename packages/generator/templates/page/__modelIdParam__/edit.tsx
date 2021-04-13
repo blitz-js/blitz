@@ -1,5 +1,5 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage} from "blitz"
+import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
@@ -40,8 +40,8 @@ export const Edit__ModelName__ = () => {
               await setQueryData(updated)
               router.push(
                 process.env.parentModel
-                  ? `/__parentModels__/${__parentModelId__}/__modelNames__/${updated.id}`
-                  : `/__modelNames__/${updated.id}`,
+                  ? Routes.Show__ModelName__Page({ __parentModelId__, __modelIdParam__: updated.id })
+                  : Routes.Show__ModelName__Page({ __modelIdParam__: updated.id }),
               )
             } catch (error) {
               console.error(error)
@@ -69,11 +69,11 @@ const Edit__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={`/__parentModels__/${__parentModelId__}/__modelNames__`}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href="/__modelNames__">
+            <Link href={Routes.__ModelNames__Page()}>
               <a>__ModelNames__</a>
             </Link>
           </else>
