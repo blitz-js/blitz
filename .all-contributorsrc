@@ -2417,6 +2417,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sean-brydon",
+      "name": "sean-brydon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55134778?v=4",
+      "profile": "www.seanbrydon.me",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
