@@ -97,10 +97,7 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
       ...loadedBlitzConfig,
     }
   } catch (error) {
-    // https://github.com/blitz-js/blitz/issues/2080
-    if (!process.env.JEST_WORKER_ID) {
-      console.error("Failed to load config in getConfig()", error)
-    }
+    debug("Failed to load config in getConfig()", error)
   }
 
   // Idk why, but during startup first result of loading blitz config is empty
