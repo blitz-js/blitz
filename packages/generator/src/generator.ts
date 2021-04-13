@@ -282,7 +282,7 @@ export abstract class Generator<
     // expose postWrite hook, no default implementation
   }
 
-  preventFileFromLogging(_file: string): boolean {
+  preventFileFromLogging(_path: string): boolean {
     // no default implementation
     return false
   }
@@ -347,8 +347,8 @@ export abstract class Generator<
         .filter((action) => {
           // Each action is something like this:
           // "\u001b[32mCREATE   \u001b[39m .env"
-          const file = action.split(/ +/g).pop() as string
-          return !this.preventFileFromLogging(file)
+          const path = action.split(/ +/g).pop() as string
+          return !this.preventFileFromLogging(path)
         })
         .forEach((action) => console.log(action))
     }

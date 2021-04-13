@@ -233,9 +233,12 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
-  preventFileFromLogging(file: string): boolean {
-    const filename = file.split("/").pop() as string
-    return filename[0] === "."
+  preventFileFromLogging(path: string): boolean {
+    if (path.includes(".env")) return false
+    if (path.includes("eslint")) return false
+
+    const filename = path.split("/").pop() as string
+    return path[0] === "." || filename[0] === "."
   }
 
   commitChanges() {
