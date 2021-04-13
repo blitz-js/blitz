@@ -7,7 +7,7 @@ function Content() {
 
   const [groups, {isFetching, isFetchingNextPage, fetchNextPage, hasNextPage}] = useInfiniteQuery(
     getPaginated,
-    (page = {take: 30, skip: 0}) => ({
+    (page = {take: 5, skip: 0}) => ({
       where: {value: {gte: value}},
       ...page,
     }),
