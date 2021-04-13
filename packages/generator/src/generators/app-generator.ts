@@ -50,6 +50,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
+    this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
       | Record<string, any>
       | undefined
