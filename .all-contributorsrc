@@ -2417,6 +2417,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sean-brydon",
+      "name": "sean-brydon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55134778?v=4",
+      "profile": "www.seanbrydon.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Dieman89",
+      "name": "Alessandro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28837891?v=4",
+      "profile": "buonerba.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "laubonghaudoi",
+      "name": "laubonghaudoi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11172180?v=4",
+      "profile": "www.jyutping.org",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
