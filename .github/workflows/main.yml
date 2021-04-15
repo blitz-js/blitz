@@ -93,6 +93,8 @@ jobs:
     name: Blitz - Test Packages
     needs: build
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -115,6 +117,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
         with:
