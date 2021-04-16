@@ -17,6 +17,8 @@ export function _postPayload(data: Data) {
     }
     if (value === null || value === undefined) {
       lines += `${key}=false`
+    } else if (typeof value === 'object') {
+      lines += `${key}="object"`
     } else if (typeof value === 'string') {
       lines += `${key}="${value}"`
     } else {
