@@ -2454,6 +2454,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "antonykamp",
+      "name": "Antony",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45163503?v=4",
+      "profile": "antonykamp.de",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
