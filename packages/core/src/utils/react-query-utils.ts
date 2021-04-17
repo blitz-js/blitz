@@ -84,17 +84,19 @@ const sanitize = (type: ResolverType) => <TInput, TResult>(
 ) => {
   validateQueryFn(queryFn)
 
-  const enhancedQueryFn = queryFn as EnhancedResolverRpcClient<TInput, TResult>
+  const enhancedResolver = queryFn as EnhancedResolverRpcClient<TInput, TResult>
 
   const queryFnName = type === "mutation" ? "useMutation" : "useQuery"
 
-  if (enhancedQueryFn._meta.type !== type) {
+  if (!enhancedResolver._meta) return enhancedResolver
+
+  if (enhancedResolver._meta.type !== type) {
     throw new Error(
-      `"${queryFnName}" was expected to be called with a ${type} but was called with a "${enhancedQueryFn._meta.type}"`,
+      `"${queryFnName}" was expected to be called with a ${type} but was called with a "${enhancedResolver._meta.type}"`,
     )
   }
 
-  return enhancedQueryFn
+  return enhancedResolver
 }
 
 export const sanitizeQuery = sanitize("query")
