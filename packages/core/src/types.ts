@@ -37,7 +37,7 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string
+  redirectAuthenticatedTo?: string | null
 }
 
 export interface DefaultCtx {}
