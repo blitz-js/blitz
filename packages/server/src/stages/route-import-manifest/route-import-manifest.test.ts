@@ -36,9 +36,13 @@ exports.Routes = {
 import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
 
+interface RouteUrlObject extends UrlObject {
+  pathname: string
+}
+
 export const Routes: {
-  Home(query?: ParsedUrlQueryInput): UrlObject;
-  CommentView(query: { postId: string | number; openedCommentPath: (string | number)[] } & ParsedUrlQueryInput): UrlObject;
+  Home(query?: ParsedUrlQueryInput): RouteUrlObject;
+  CommentView(query: { postId: string | number; openedCommentPath: (string | number)[] } & ParsedUrlQueryInput): RouteUrlObject;
 }
       `.trim(),
   })
