@@ -75,7 +75,7 @@ export function generateManifest(
 import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
 
-interface RouteUrlObject extends UrlObject {
+interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
   pathname: string
 }
 
