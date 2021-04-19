@@ -62,8 +62,8 @@ export function generateManifest(
       }
 
       return `${name}(query: { ${[
-        ...parameters.map((param) => param + ": string"),
-        ...multipleParameters.map((param) => param + ": string[]"),
+        ...parameters.map((param) => param + ": string | number"),
+        ...multipleParameters.map((param) => param + ": (string | number)[]"),
       ].join("; ")} } & ParsedUrlQueryInput): UrlObject`
     },
   )

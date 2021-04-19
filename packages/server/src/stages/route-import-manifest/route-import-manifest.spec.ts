@@ -38,7 +38,7 @@ import type { ParsedUrlQueryInput } from "querystring"
 
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): UrlObject;
-  CommentView(query: { postId: string; openedCommentPath: string[] } & ParsedUrlQueryInput): UrlObject;
+  CommentView(query: { postId: string | number; openedCommentPath: (string | number)[] } & ParsedUrlQueryInput): UrlObject;
 }
       `.trim(),
   })
