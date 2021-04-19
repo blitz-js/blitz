@@ -28,3 +28,4 @@ examples/auth2
 .idea
 .ultra.cache.json
 db.sqlite-journal
+test/integration/**/db.json
