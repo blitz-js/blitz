@@ -141,6 +141,8 @@ jobs:
           key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+      - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
+        if: matrix.os == 'windows-latest'
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
