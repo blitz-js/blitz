@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "husky install && patch-package",
+    "postinstall": "husky install && patch-package && yarn workspace blitz postinstall",
     "wait:nextjs": "wait-on -d 1000 nextjs/packages/next/dist/build/index.js",
     "wait:nextjs-types": "wait-on -d 1000 nextjs/packages/next/dist/build/index.d.ts",
     "dev:nextjs": "yarn workspace next dev",
