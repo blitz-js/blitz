@@ -24,7 +24,7 @@ export const Project = () => {
         <h1>Project {project.id}</h1>
         <pre>{JSON.stringify(project, null, 2)}</pre>
 
-        <Link href={`/projects/${project.id}/edit`}>
+        <Link href={Routes.EditProjectPage({projectId: project.id})}>
           <a>Edit</a>
         </Link>
 
