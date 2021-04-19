@@ -1,6 +1,7 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
 import {
+  NextApiHandler,
   NextApiRequest,
   NextApiResponse,
   NextComponentType,
@@ -24,8 +25,9 @@ export type {
   PageConfig,
   Redirect,
 } from "next"
+export type BlitzApiHandler<T = any> = NextApiHandler<T>
 export type BlitzApiRequest = NextApiRequest
-export type BlitzApiResponse = NextApiResponse
+export type BlitzApiResponse<T = any> = NextApiResponse<T>
 export type BlitzPageContext = NextPageContext
 
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
