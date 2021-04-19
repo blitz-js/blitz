@@ -34,7 +34,7 @@
     "dev:templates": "yarn workspace @blitzjs/generator dev",
     "dev": "concurrently --names \"nextjs,blitz,typecheck,cli,templates\" -c \"magenta,cyan,green,yellow,black\" -p \"{name}\" \"npm:dev:nextjs\" \"npm:dev:blitz\" \"npm:dev:tsc\" \"npm:dev:cli\" \"npm:dev:templates\"",
     "build:nextjs": "yarn workspace next prepublish",
-    "build": "yarn build:nextjs && cross-env BLITZ_PROD_BUILD=true preconstruct build && ultra -r --filter \"packages/*\" buildpkg && tsc",
+    "build": "dir packages/core/node_modules/.blitz && yarn build:nextjs && cross-env BLITZ_PROD_BUILD=true preconstruct build && ultra -r --filter \"packages/*\" buildpkg && tsc",
     "lint": "eslint --ext \".js,.ts,.tsx\" .",
     "link-cli": "yarn workspace blitz link",
     "unlink-cli": "yarn workspace blitz unlink",
