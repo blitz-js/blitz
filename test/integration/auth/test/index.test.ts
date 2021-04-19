@@ -7,7 +7,7 @@ import rimraf from "rimraf"
 const context: any = {}
 jest.setTimeout(1000 * 60 * 5)
 
-describe("Queries", () => {
+describe("Auth", () => {
   beforeAll(async () => {
     rimraf.sync(join(__dirname, "../db.json"))
 
