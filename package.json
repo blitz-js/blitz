@@ -141,7 +141,6 @@
     "babel-plugin-tester": "10.0.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "concurrently": "6.0.0",
-    "cpy-cli": "3.1.1",
     "cross-env": "7.0.3",
     "cypress": "6.2.1",
     "debug": "4.3.1",
