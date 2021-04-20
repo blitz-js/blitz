@@ -1,7 +1,6 @@
 name: Bug Report
-about: Something is not working right. Or error messages are unclear.
+description: Something is not working right. Or error messages are unclear.
 labels: "kind/bug, status/triage"
-issue_body: true
 body:
   - type: markdown
     attributes:
