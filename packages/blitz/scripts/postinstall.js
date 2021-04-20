@@ -348,17 +348,4 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-function patchVercelDeploy() {
-  try {
-    // Vercel relies on the true nextjs package version for building
-    if (process.env.VERCEL) {
-      const nextPackagePath = require.resolve("next/package.json")
-      const pkg = require(nextPackagePath)
-      pkg.version = pkg.nextjsVersion
-      fs.writeFileSync(nextPackagePath, JSON.stringify(pkg, null, 2))
-    }
-  } catch {}
-}
-
-patchVercelDeploy()
 codegen()

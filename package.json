@@ -49,7 +49,7 @@
     "testonly:examples": "ultra -r --filter \"examples/*\" --concurrency 1 test",
     "reset": "rimraf node_modules && git clean -xfd packages && git clean -xfd nextjs/packages && yarn",
     "publish-prep": "yarn && yarn build",
-    "prepack": "scripts/prepack.sh",
+    "prepack": "node scripts/prepack.js",
     "postpublish": "rimraf packages/blitz/README.md && git checkout packages/core/package.json && git checkout nextjs/packages/next/package.json",
     "publish-local": "yarn workspaces run yalc publish",
     "publish-canary": "yarn run publish-prep && lerna publish --no-private --force-publish --preid canary --pre-dist-tag canary && manypkg fix && git add . && git commit -m 'bump recipe/example versions (ignore)' --no-verify && git push",
