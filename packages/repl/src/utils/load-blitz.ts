@@ -43,6 +43,7 @@ export const loadBlitz = async () => {
         debug("Loading", modulePath)
         const module = forceRequire(modulePath)
         const contextObj = module.default || module
+        // debug("ContextObj", contextObj)
 
         percentage.tick()
 
@@ -50,7 +51,8 @@ export const loadBlitz = async () => {
         return {
           [name]: contextObj,
         }
-      } catch (e) {
+      } catch (error) {
+        debug("Failed to load module", error)
         return {}
       }
     }),
