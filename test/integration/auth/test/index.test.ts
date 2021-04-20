@@ -33,7 +33,6 @@ describe("Auth", () => {
     it("should render result for open query", async () => {
       const browser = await webdriver(context.appPort, "/noauth-query")
       let text = await browser.elementByCss("#page").text()
-      expect(text).toMatch(/Loading/)
       await browser.waitForElementByCss("#content")
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/noauth-basic-result/)
