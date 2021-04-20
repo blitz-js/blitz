@@ -9,7 +9,7 @@ import {
   SessionContext,
   VerifyCallbackResult,
 } from "../../auth/auth-types"
-import {BlitzApiRequest, BlitzApiResponse, ConnectMiddleware, Ctx, Middleware} from "../../types"
+import {BlitzApiHandler, ConnectMiddleware, Ctx, Middleware} from "../../types"
 import {
   connectMiddleware,
   getAllMiddlewareForModule,
@@ -30,8 +30,8 @@ const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =
 
 const INTERNAL_REDIRECT_URL_KEY = "_redirectUrl"
 
-export function passportAuth(config: BlitzPassportConfig) {
-  return async function authHandler(req: BlitzApiRequest, res: BlitzApiResponse) {
+export function passportAuth(config: BlitzPassportConfig): BlitzApiHandler {
+  return async function authHandler(req, res) {
     const globalMiddleware = getAllMiddlewareForModule({} as any)
     await handleRequestWithMiddleware(req, res, globalMiddleware)
 
