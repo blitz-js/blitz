@@ -43,6 +43,6 @@ body:
         ```
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "Please include below any other applicable logs and screenshots that show your problem:"
+      label: "Please include below any other applicable logs and screenshots that show your problem:"
