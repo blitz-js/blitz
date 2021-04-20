@@ -11,9 +11,11 @@ export async function getBlitzModulePaths() {
   const paths = await globby(
     [
       "app/**/{queries,mutations}/*.{js,ts,tsx}",
-      "**/utils/*.{js,ts,tsx}",
+      "utils/*.{js,ts,tsx}",
       "jobs/**/*.{js,ts,tsx}",
       "integrations/**/*.{js,ts,tsx}",
+      "!**/*.test.*",
+      "!**/*.spec.*",
     ],
     {cwd: projectRoot, gitignore: true},
   )
