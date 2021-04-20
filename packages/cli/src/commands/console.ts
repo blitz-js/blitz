@@ -17,7 +17,7 @@ export class Console extends Command {
   }
 
   async run() {
-    process.env.CLI_COMMAND_CONSOLE = true
+    process.env.CLI_COMMAND_CONSOLE = "true"
     this.parse(Console)
     const {log} = require("@blitzjs/display")
     const chalk = require("chalk")
