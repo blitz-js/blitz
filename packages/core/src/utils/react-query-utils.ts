@@ -10,7 +10,11 @@ type MutateOptions = {
 }
 
 export const initializeQueryClient = () => {
-  const {suspenseEnabled} = getBlitzRuntimeData()
+  let suspenseEnabled = true
+  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
+    const data = getBlitzRuntimeData()
+    suspenseEnabled = data.suspenseEnabled
+  }
 
   return new QueryClient({
     defaultOptions: {
