@@ -5,9 +5,10 @@ declare module "blitz" {
     session: SessionContext
   }
   export interface Session {
-    isAuthorized: SimpleRolesIsAuthorized<any>
+    isAuthorized: SimpleRolesIsAuthorized<"user">
     PublicData: {
       userId: number
+      role: "user"
     }
   }
 }
