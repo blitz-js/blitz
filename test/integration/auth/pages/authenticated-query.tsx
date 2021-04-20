@@ -1,10 +1,24 @@
+import logout from "app/mutations/logout"
 import getAuthenticatedBasic from "app/queries/getAuthenticatedBasic"
-import {useQuery} from "blitz"
+import {useMutation, useQuery} from "blitz"
 import {Suspense} from "react"
 
 function Content() {
   const [result] = useQuery(getAuthenticatedBasic, undefined)
-  return <div id="content">{result}</div>
+  const [logoutMutation] = useMutation(logout)
+  return (
+    <div>
+      <div id="content">{result}</div>
+      <button
+        id="logout"
+        onClick={async () => {
+          await logoutMutation()
+        }}
+      >
+        logout
+      </button>
+    </div>
+  )
 }
 
 function Page() {
