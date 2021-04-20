@@ -157,7 +157,6 @@ module.exports = function (task) {
 
 function setNextVersion(code) {
   const pkg = require('./package.json')
-  const version = pkg.blitzVersion
-  if (!version) throw new Error('Missing blitzVersion in nextjs package.json')
+  const version = pkg.blitzVersion || pkg.version
   return code.replace(/process\.env\.__NEXT_VERSION/g, `"${version}"`)
 }
