@@ -15,7 +15,7 @@ import {
   getQueryCacheFunctions,
   getQueryKey,
   QueryCacheFunctions,
-  sanitize,
+  sanitizeQuery,
 } from "./utils/react-query-utils"
 
 type QueryLazyOptions = {suspense: unknown} | {enabled: unknown}
@@ -57,7 +57,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   }
 
   const routerIsReady = useRouter().isReady && isClient
-  const enhancedResolverRpcClient = sanitize(queryFn)
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
@@ -110,7 +110,7 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
   }
 
   const routerIsReady = useRouter().isReady
-  const enhancedResolverRpcClient = sanitize(queryFn)
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
   const {data, ...queryRest} = useReactQuery({
@@ -172,7 +172,7 @@ export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<
   }
 
   const routerIsReady = useRouter().isReady
-  const enhancedResolverRpcClient = sanitize(queryFn)
+  const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, getQueryParams)
 
   const {data, ...queryRest} = useInfiniteReactQuery({

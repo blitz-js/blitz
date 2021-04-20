@@ -111,3 +111,15 @@ export function enhanceQueryFn(fn: any) {
   }
   return newFn
 }
+
+// This enhance fn does what getIsomorphicEnhancedResolver does during build time
+export function enhanceMutationFn(fn: any) {
+  const newFn = (...args: any) => fn(...args)
+  newFn._meta = {
+    name: "testResolver",
+    type: "mutation",
+    path: "app/test",
+    apiUrl: "test/url",
+  }
+  return newFn
+}
