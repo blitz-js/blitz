@@ -8,6 +8,7 @@ import {
   NextPage,
   NextPageContext,
 } from "next/types"
+import type {UrlObject} from "url"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {
@@ -39,7 +40,11 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string
+  redirectAuthenticatedTo?: string | RouteUrlObject
+}
+
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+  pathname: string
 }
 
 export interface DefaultCtx {}

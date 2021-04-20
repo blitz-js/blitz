@@ -72,12 +72,8 @@ export function generateManifest(
     implementation:
       "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration: `
-import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
-
-interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
-  pathname: string
-}
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
 ${declarationLines.map((line) => "  " + line).join(";\n")};
