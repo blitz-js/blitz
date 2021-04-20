@@ -88,7 +88,7 @@ const sanitize = (type: ResolverType) => <TInput, TResult>(
 
   const queryFnName = type === "mutation" ? "useMutation" : "useQuery"
 
-  if (enhancedResolver._meta.type !== type && isNotInUserTestEnvironment()) {
+  if (enhancedResolver._meta?.type !== type && isNotInUserTestEnvironment()) {
     throw new Error(
       `"${queryFnName}" was expected to be called with a ${type} but was called with a "${enhancedResolver._meta.type}"`,
     )
