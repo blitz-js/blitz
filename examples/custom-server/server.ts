@@ -1,7 +1,7 @@
-const {createServer} = require("http")
-const {parse} = require("url")
-const blitz = require("blitz/custom-server")
-const {log} = require("@blitzjs/display")
+import blitz from "blitz/custom-server"
+import {createServer} from "http"
+import {parse} from "url"
+import {log} from "@blitzjs/display"
 
 const {PORT = "3000"} = process.env
 const dev = process.env.NODE_ENV !== "production"
@@ -10,7 +10,7 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   createServer((req, res) => {
-    const parsedUrl = parse(req.url, true)
+    const parsedUrl = parse(req.url!, true)
     const {pathname} = parsedUrl
 
     if (pathname === "/hello") {

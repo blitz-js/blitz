@@ -2,7 +2,7 @@
   "name": "@examples/custom-server",
   "version": "0.34.0-canary.0",
   "scripts": {
-    "dev": "nodemon --watch server.js --exec 'blitz dev'",
+    "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
     "studio": "blitz prisma studio",
