@@ -154,7 +154,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test examples
-        run: yarn testonly:examples
+        run: yarn testonly:examples || yarn testonly:examples
         env:
           CI: true
 
