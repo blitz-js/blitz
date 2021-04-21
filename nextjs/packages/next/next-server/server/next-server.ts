@@ -190,6 +190,7 @@ export default class Server {
       assetPrefix,
       generateEtags,
       compress,
+      experimental,
     } = this.nextConfig
 
     this.buildId = this.readBuildId()
@@ -245,6 +246,10 @@ export default class Server {
     this.customRoutes = this.getCustomRoutes()
     this.router = new Router(this.generateRoutes())
     this.setAssetPrefix(assetPrefix)
+
+    if (experimental.initServer) {
+      experimental.initServer()
+    }
 
     // call init-server middleware, this is also handled
     // individually in serverless bundles when deployed

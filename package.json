@@ -42,7 +42,7 @@
     "testheadless": "cross-env HEADLESS=true yarn test:integration",
     "test:integration": "jest --runInBand",
     "test:packages": "yarn run build && yarn testonly:packages",
-    "test:examples": "yarn run build && yarn testonly:examples || yarn testonly:examples",
+    "test:examples": "yarn run build && yarn testonly:examples",
     "test:nextjs-size": "yarn --cwd nextjs testheadless --testPathPattern \"integration/(build-output|size-limit|fallback-modules)\"",
     "testonly": "yarn test:packages && yarn test:examples",
     "testonly:packages": "ultra -r --filter \"packages/*\" --concurrency 15 test",

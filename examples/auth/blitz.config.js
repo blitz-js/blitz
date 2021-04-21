@@ -17,7 +17,9 @@ module.exports = withBundleAnalyzer({
     // level: "trace",
   },
   experimental: {
-    isomorphicResolverImports: false,
+    initServer() {
+      console.log("Hello world from initServer")
+    },
   },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
