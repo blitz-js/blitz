@@ -127,12 +127,17 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 ### 🥉 Bronze Sponsors
 
-<a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
+<table>
+  <tr>
+<td><a aria-label="Render.com" href="https://render.com?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2020">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/render-logo-color2.png" width="200px">
-</a>
-<a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
+</a></td>
+<td><a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rit_logo.png" width="200px">
-</a>
+</a></td>
+</tr>
+</table>
+
 
 ### 🥈 Silver Sponsors
 
