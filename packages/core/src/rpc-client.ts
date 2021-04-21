@@ -86,7 +86,9 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
-          queryClient.clear()
+          await queryClient.cancelQueries()
+          await queryClient.resetQueries()
+          queryClient.getMutationCache().clear()
           publicDataStore.clear()
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {

@@ -6,7 +6,7 @@ let db = global.db || low(new FileSync("db.json"))
 global.db = db
 
 db.defaults({
-  users: [{id: 1, email: "user@example.com", hashedPassword: "??"}],
+  users: [{id: 1}],
   sessions: [],
 }).write()
 

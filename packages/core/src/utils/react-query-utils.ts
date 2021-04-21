@@ -1,7 +1,7 @@
 import {QueryClient, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
-import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
+import {EnhancedResolverRpcClient, QueryFn, Resolver, ResolverType} from "../types"
 import {isClient} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
@@ -10,7 +10,11 @@ type MutateOptions = {
 }
 
 export const initializeQueryClient = () => {
-  const {suspenseEnabled} = getBlitzRuntimeData()
+  let suspenseEnabled = true
+  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
+    const data = getBlitzRuntimeData()
+    suspenseEnabled = data.suspenseEnabled
+  }
 
   return new QueryClient({
     defaultOptions: {
@@ -79,12 +83,26 @@ export const validateQueryFn = <TInput, TResult>(
   }
 }
 
-export const sanitize = <TInput, TResult>(
+const sanitize = (type: ResolverType) => <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
   validateQueryFn(queryFn)
-  return queryFn as EnhancedResolverRpcClient<TInput, TResult>
+
+  const enhancedResolver = queryFn as EnhancedResolverRpcClient<TInput, TResult>
+
+  const queryFnName = type === "mutation" ? "useMutation" : "useQuery"
+
+  if (enhancedResolver._meta?.type !== type && isNotInUserTestEnvironment()) {
+    throw new Error(
+      `"${queryFnName}" was expected to be called with a ${type} but was called with a "${enhancedResolver._meta.type}"`,
+    )
+  }
+
+  return enhancedResolver
 }
+
+export const sanitizeQuery = sanitize("query")
+export const sanitizeMutation = sanitize("mutation")
 
 export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
   const queryKey = [url]
@@ -103,7 +121,7 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
+  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._meta.apiUrl, params)
 }
 
 export function invalidateQuery<TInput, TResult, T extends QueryFn>(

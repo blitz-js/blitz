@@ -4,7 +4,7 @@ import {
   UseMutationOptions,
   UseMutationResult,
 } from "react-query"
-import {sanitize} from "./utils/react-query-utils"
+import {sanitizeMutation} from "./utils/react-query-utils"
 
 /*
  * We have to override react-query's MutationFunction and MutationResultPair
@@ -43,7 +43,7 @@ export function useMutation<
   mutationResolver: MutationFunction<TData, TVariables>,
   config?: UseMutationOptions<TData, TError, TVariables, TContext>,
 ): MutationResultPair<TData, TError, TVariables, TContext> {
-  const enhancedResolverRpcClient = sanitize(mutationResolver)
+  const enhancedResolverRpcClient = sanitizeMutation(mutationResolver)
 
   const {mutate, mutateAsync, ...rest} = useReactQueryMutation<TData, TError, TVariables, TContext>(
     (variables) => enhancedResolverRpcClient(variables, {fromQueryHook: true}),

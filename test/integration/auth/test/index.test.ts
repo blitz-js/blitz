@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import {findPort, killApp, launchApp, renderViaHTTP} from "lib/blitz-test-utils"
+import {findPort, killApp, launchApp, renderViaHTTP, waitFor} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 import rimraf from "rimraf"
@@ -16,28 +16,59 @@ describe("Auth", () => {
       env: {__NEXT_TEST_WITH_DEVTOOL: 1},
     })
 
-    const prerender = ["/noauth-query", "/authenticated-query"]
+    const prerender = [
+      "/login",
+      "/noauth-query",
+      "/authenticated-query",
+      "/api/queries/getNoauthBasic",
+      "/api/queries/getAuthenticatedBasic",
+      "/api/mutations/login",
+      "/api/mutations/logout",
+    ]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
   afterAll(() => killApp(context.server))
 
-  describe("no-auth query", () => {
-    it("should render query result", async () => {
+  describe("unauthenticated", () => {
+    it("should render result for open query", async () => {
       const browser = await webdriver(context.appPort, "/noauth-query")
       let text = await browser.elementByCss("#page").text()
-      expect(text).toMatch(/Loading/)
       await browser.waitForElementByCss("#content")
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/noauth-basic-result/)
       if (browser) await browser.close()
     })
+
+    it("should render error for protected query", async () => {
+      const browser = await webdriver(context.appPort, "/authenticated-query")
+      await browser.waitForElementByCss("#error")
+      let text = await browser.elementByCss("#error").text()
+      expect(text).toMatch(/AuthenticationError/)
+      if (browser) await browser.close()
+    })
   })
 
-  describe("authenticated query", () => {
-    it("should render error", async () => {
+  describe("authenticated", () => {
+    it("should login successfully", async () => {
+      const browser = await webdriver(context.appPort, "/login")
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/logged-out/)
+      await browser.elementByCss("#login").click()
+      await waitFor(500)
+      text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/logged-in/)
+
+      if (browser) await browser.close()
+    })
+
+    it("should logout without infinite loop #2233", async () => {
       const browser = await webdriver(context.appPort, "/authenticated-query")
-      let text = await browser.elementByCss("#page").text()
-      expect(text).toMatch(/Loading/)
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/authenticated-basic-result/)
+      await browser.elementByCss("#logout").click()
+      await waitFor(500)
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)

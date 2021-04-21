@@ -3,7 +3,7 @@ import {getBlitzRuntimeData} from "../src/blitz-data"
 import {useInfiniteQuery, useQuery} from "../src/use-query-hooks"
 import {queryClient} from "../src/utils/react-query-utils"
 import {act, render, screen, waitFor, waitForElementToBeRemoved} from "./test-utils"
-import {enhanceQueryFn} from "./test-utils"
+import {enhanceMutationFn, enhanceQueryFn} from "./test-utils"
 
 beforeEach(() => {
   queryClient.clear()
@@ -67,6 +67,11 @@ describe("useQuery", () => {
     it("shouldn't work with regular functions", () => {
       console.error = jest.fn()
       expect(() => setupHook("test", upcase)).toThrowErrorMatchingSnapshot()
+    })
+
+    it("shouldn't work with mutation function", () => {
+      console.error = jest.fn()
+      expect(() => setupHook("test", enhanceMutationFn(upcase))).toThrowErrorMatchingSnapshot()
     })
 
     it("suspense disabled if enabled is false", async () => {
