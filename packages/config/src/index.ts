@@ -1,3 +1,4 @@
+import * as esbuild from "esbuild"
 import {existsSync, readJSONSync} from "fs-extra"
 import {join} from "path"
 import path from "path"
@@ -5,9 +6,60 @@ import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
 export function getProjectRoot() {
-  return (
-    path.dirname(path.resolve(process.cwd(), "blitz.config.js")) || pkgDir.sync() || process.cwd()
-  )
+  return path.dirname(getConfigSrcPath())
+}
+
+export function getConfigSrcPath() {
+  const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
+  if (tsPath) {
+    return tsPath
+  } else {
+    const jsPath = path.resolve(path.join(process.cwd(), "blitz.config.js"))
+    return jsPath
+  }
+}
+export function getConfigBuildPath() {
+  return path.join(getProjectRoot(), ".blitz", "blitz.config.js")
+}
+
+interface BuildConfigOptions {
+  watch?: boolean
+}
+
+export async function buildConfig({watch}: BuildConfigOptions = {}) {
+  const pkg = require(path.join(pkgDir.sync()!, "package.json"))
+
+  const esbuildOptions: esbuild.BuildOptions = {
+    entryPoints: [getConfigSrcPath()],
+    outfile: getConfigBuildPath(),
+    format: "cjs",
+    bundle: true,
+    platform: "node",
+    external: [
+      "blitz",
+      "next",
+      ...Object.keys(require("blitz/package").dependencies),
+      ...Object.keys(pkg.dependencies),
+      ...Object.keys(pkg.devDependencies),
+    ],
+  }
+
+  if (watch) {
+    esbuildOptions.watch = {
+      onRebuild(error) {
+        if (error) {
+          console.error("Failed to re-build blitz config")
+        } else {
+          console.log("\n> Blitz config changed - restart for changes to take effect\n")
+        }
+      },
+    }
+  }
+
+  debug("Building config...")
+  debug("Src: ", getConfigSrcPath())
+  debug("Build: ", getConfigBuildPath())
+  await esbuild.build(esbuildOptions)
 }
 
 export interface BlitzConfig extends Record<string, unknown> {
@@ -57,7 +109,7 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const projectRoot = getProjectRoot()
   const nextConfigPath = path.join(projectRoot, "next.config.js")
-  const blitzConfigPath = path.join(projectRoot, "blitz.config.js")
+  const blitzConfigPath = path.join(projectRoot, ".blitz", "blitz.config.js")
 
   debug("nextConfigPath: " + nextConfigPath)
   debug("blitzConfigPath: " + blitzConfigPath)
@@ -81,6 +133,9 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     // --------------------------------
     // Load blitz.config.js
     // --------------------------------
+    if (!existsSync(blitzConfigPath)) {
+      console.error("Unable to find config at", blitzConfigPath)
+    }
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     loadedBlitzConfig = eval("require")(blitzConfigPath)
     if (typeof loadedBlitzConfig === "function") {
