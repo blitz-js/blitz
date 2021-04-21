@@ -25,12 +25,12 @@ export const __ModelName__ = () => {
 
         <if condition="parentModel">
           <Link
-            href={Routes.Edit__ModelName__Page({ __parentModelId__, __modelIdParam__: __modelName__.id })}
+            href={Routes.Edit__ModelName__Page({ __parentModelId__, __modelId__: __modelName__.id })}
           >
             <a>Edit</a>
           </Link>
           <else>
-            <Link href={Routes.Edit__ModelName__Page({ __modelIdParam__: __modelName__.id })}>
+            <Link href={Routes.Edit__ModelName__Page({ __modelId__: __modelName__.id })}>
               <a>Edit</a>
             </Link>
           </else>
