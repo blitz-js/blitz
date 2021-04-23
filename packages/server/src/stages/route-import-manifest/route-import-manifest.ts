@@ -58,13 +58,13 @@ export function generateManifest(
   const declarationLines = routesWithoutDuplicates.map(
     ([_path, {name, parameters, multipleParameters}]) => {
       if (parameters.length === 0 && multipleParameters.length === 0) {
-        return `${name}(query?: ParsedUrlQueryInput): UrlObject`
+        return `${name}(query?: ParsedUrlQueryInput): RouteUrlObject`
       }
 
       return `${name}(query: { ${[
-        ...parameters.map((param) => param + ": string"),
-        ...multipleParameters.map((param) => param + ": string[]"),
-      ].join("; ")} } & ParsedUrlQueryInput): UrlObject`
+        ...parameters.map((param) => param + ": string | number"),
+        ...multipleParameters.map((param) => param + ": (string | number)[]"),
+      ].join("; ")} } & ParsedUrlQueryInput): RouteUrlObject`
     },
   )
 
@@ -74,6 +74,10 @@ export function generateManifest(
     declaration: `
 import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
+
+interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
+  pathname: string
+}
 
 export const Routes: {
 ${declarationLines.map((line) => "  " + line).join(";\n")};

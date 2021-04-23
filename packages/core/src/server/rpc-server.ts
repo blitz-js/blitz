@@ -1,7 +1,7 @@
 import {baseLogger, log as displayLog} from "@blitzjs/display"
 import chalk from "chalk"
 import {deserialize, serialize} from "superjson"
-import {BlitzApiRequest, BlitzApiResponse, EnhancedResolver, Middleware} from "../types"
+import {BlitzApiHandler, EnhancedResolver, Middleware} from "../types"
 import {prettyMs} from "../utils/pretty-ms"
 import {handleRequestWithMiddleware} from "./middleware"
 
@@ -104,11 +104,11 @@ export function rpcApiHandler<TInput, TResult>(
   resolver: EnhancedResolver<TInput, TResult>,
   middleware: Middleware[] = [],
   connectDb?: () => any,
-) {
+): BlitzApiHandler {
   // RPC Middleware is always the last middleware to run
   middleware.push(rpcMiddleware(resolver, connectDb))
 
-  return (req: BlitzApiRequest, res: BlitzApiResponse) => {
+  return (req, res) => {
     return handleRequestWithMiddleware(req, res, middleware, {
       throwOnError: false,
     })

@@ -62,7 +62,7 @@ async function main() {
 
   if (tests.length === 0) {
     tests = (
-      await glob('**/*.test.js', {
+      await glob('**/*.test.+(js|ts)', {
         nodir: true,
         cwd: path.join(process.cwd(), 'test'),
       })

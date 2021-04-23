@@ -26,14 +26,14 @@ const TELEMETRY_KEY_ID = `telemetry.anonymousId`
 // See the `oneWayHash` function.
 const TELEMETRY_KEY_SALT = `telemetry.salt`
 
-type TelemetryEvent = { eventName: string; payload: object }
-type EventContext = {
+export type TelemetryEvent = { eventName: string; payload: object }
+export type EventContext = {
   anonymousId: string
   projectId: string
   sessionId: string
 }
-type EventMeta = { [key: string]: unknown }
-type EventBatchShape = {
+export type EventMeta = { [key: string]: unknown }
+export type EventBatchShape = {
   eventName: string
   fields: object
 }
@@ -233,7 +233,7 @@ export class Telemetry {
       sessionId: this.sessionId,
     }
     const meta: EventMeta = getAnonymousMeta()
-    return _postPayload(`https://telemetry.nextjs.org/api/v1/record`, {
+    return _postPayload({
       context,
       meta,
       events: events.map(({ eventName, payload }) => ({

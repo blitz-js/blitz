@@ -1610,7 +1610,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/4396533?v=4",
       "profile": "https://github.com/sakulstra",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -2414,6 +2415,69 @@
       "name": "Pedro Enrique Palau Isaac",
       "avatar_url": "https://avatars.githubusercontent.com/u/12257885?v=4",
       "profile": "http://palauisaac.me/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sean-brydon",
+      "name": "sean-brydon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55134778?v=4",
+      "profile": "www.seanbrydon.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Dieman89",
+      "name": "Alessandro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28837891?v=4",
+      "profile": "buonerba.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "laubonghaudoi",
+      "name": "laubonghaudoi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11172180?v=4",
+      "profile": "www.jyutping.org",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TommasoBruno99",
+      "name": "Tommaso Bruno",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61512591?v=4",
+      "profile": "https://github.com/TommasoBruno99",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "antonykamp",
+      "name": "Antony",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45163503?v=4",
+      "profile": "antonykamp.de",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "frontsideair",
+      "name": "Fatih Altinok",
+      "avatar_url": "https://avatars.githubusercontent.com/u/868283?v=4",
+      "profile": "https://blog.6nok.org",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Mokshit06",
+      "name": "Mokshit Jain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50412128?v=4",
+      "profile": "https://mokshitjain.co/",
       "contributions": [
         "code"
       ]

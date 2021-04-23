@@ -39,6 +39,7 @@ export type NextConfig = { [key: string]: any } & {
   experimental: {
     cpus?: number
     plugins?: boolean
+    initServer?: () => void
     profiling?: boolean
     sprFlushToDisk?: boolean
     reactMode?: 'legacy' | 'concurrent' | 'blocking'
