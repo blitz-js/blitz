@@ -1,4 +1,5 @@
-import {AppProps, ErrorFallbackProps, useQueryErrorResetBoundary} from "blitz"
+import login from "app/mutations/login"
+import {AppProps, ErrorFallbackProps, useMutation, useQueryErrorResetBoundary} from "blitz"
 import {useRouter} from "next/router"
 import {ErrorBoundary} from "react-error-boundary"
 import {ReactQueryDevtools} from "react-query/devtools"
@@ -19,5 +20,19 @@ export default function App({Component, pageProps}: AppProps) {
 }
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
-  return <div id="error">{error.name}</div>
+  const [loginMutation] = useMutation(login)
+  return (
+    <div>
+      <div id="error">{error.name}</div>
+
+      <button
+        id="login"
+        onClick={async () => {
+          await loginMutation()
+        }}
+      >
+        login
+      </button>
+    </div>
+  )
 }

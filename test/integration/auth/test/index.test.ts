@@ -29,7 +29,7 @@ describe("Auth", () => {
   })
   afterAll(() => killApp(context.server))
 
-  describe("unauthenticated", () => {
+  describe("no-auth", () => {
     it("should render result for open query", async () => {
       const browser = await webdriver(context.appPort, "/noauth-query")
       let text = await browser.elementByCss("#page").text()
