@@ -36,7 +36,7 @@ export default RecipeBuilder()
       addPrismaGenerator(program, {
         type: "generator",
         name: "nexusPrisma",
-        assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma'}],
+        assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
       }),
   })
   .build()
