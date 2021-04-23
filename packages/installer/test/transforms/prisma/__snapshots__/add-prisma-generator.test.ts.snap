@@ -1,34 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`addPrismaGenerator adds generator and keeps existing generator 1`] = `
-"datasource db {
+"
+datasource db {
   provider = \\"sqlite\\"
   url      = \\"file:./db.sqlite\\"
 }
+
 generator client {
-  provider        = \\"prisma-client-js\\"
+  provider = \\"prisma-client-js\\"
 }
+
 generator nexusPrisma {
-  provider        = \\"nexus-prisma\\"
+  provider = \\"nexus-prisma\\"
 }"
 `;
 
 exports[`addPrismaGenerator adds generator to file 1`] = `
-"datasource db {
+"
+datasource db {
   provider = \\"sqlite\\"
   url      = \\"file:./db.sqlite\\"
 }
+
 generator nexusPrisma {
-  provider        = \\"nexus-prisma\\"
+  provider = \\"nexus-prisma\\"
 }"
 `;
 
 exports[`addPrismaGenerator overwrites same generator 1`] = `
-"datasource db {
+"
+datasource db {
   provider = \\"sqlite\\"
   url      = \\"file:./db.sqlite\\"
 }
+
 generator nexusPrisma {
-  provider        = \\"nexus-prisma\\"
+  provider = \\"nexus-prisma\\"
 }"
 `;

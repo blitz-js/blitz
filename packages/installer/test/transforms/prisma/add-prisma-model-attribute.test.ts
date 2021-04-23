@@ -1,16 +1,23 @@
-import {addPrismaField} from "@blitzjs/installer"
+import {addPrismaModelAttribute} from "@blitzjs/installer"
 
-describe("addPrismaField", () => {
+describe("addPrismaModelAttribute", () => {
   const subject = (source: string) =>
-    addPrismaField(source, "Project", {
-      type: "field",
-      name: "name",
-      fieldType: "String",
-      optional: false,
-      attributes: [{type: "attribute", kind: "field", name: "unique"}],
+    addPrismaModelAttribute(source, "Project", {
+      type: "attribute",
+      kind: "model",
+      name: "index",
+      args: [
+        {
+          type: "attributeArgument",
+          value: {
+            type: "array",
+            args: ["name"],
+          },
+        },
+      ],
     })
 
-  it("creates field", async () => {
+  it("creates index", async () => {
     const source = `
 datasource db {
   provider = "sqlite"
@@ -19,6 +26,7 @@ datasource db {
 
 model Project {
   id        Int       @id @default(autoincrement())
+  name      String    @unique
 }`.trim()
 
     expect(await subject(source)).toMatchSnapshot()

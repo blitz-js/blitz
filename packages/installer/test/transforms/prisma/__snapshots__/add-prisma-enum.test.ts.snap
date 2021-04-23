@@ -1,10 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`addPrismaEnum creates enum 1`] = `
-"datasource db {
+"
+datasource db {
   provider = \\"sqlite\\"
   url      = \\"file:./db.sqlite\\"
 }
+
 enum Role {
   USER
   ADMIN

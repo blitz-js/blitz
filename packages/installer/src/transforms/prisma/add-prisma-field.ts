@@ -1,6 +1,5 @@
-import {DMMF} from "@prisma/generator-helper"
-import {merge, produceSchema} from "./produce-schema"
-import {PrismaField} from "./types"
+import {Field, Model} from "@mrleebo/prisma-ast"
+import {produceSchema} from "./produce-schema"
 
 /**
  * Adds a field to a model in your schema.prisma data model.
@@ -11,31 +10,25 @@ import {PrismaField} from "./types"
  * @returns The modified schema.prisma source
  * @example Usage
  * ```
- * addPrismaField(source, "Project", {name: "description", type: "String", isRequired: true})
+ *  addPrismaField(source, "Project", {
+      type: "field",
+      name: "name",
+      fieldType: "String",
+      optional: false,
+      attributes: [{type: "attribute", kind: "field", name: "unique"}],
+    })
  * ```
  */
 export function addPrismaField(
   source: string,
   modelName: string,
-  fieldProps: PrismaField,
+  fieldProps: Field,
 ): Promise<string> {
-  return produceSchema(source, ({doc}) => {
-    const model = doc.datamodel.models.find((x) => x.name === modelName)
+  return produceSchema(source, (schema) => {
+    const model = schema.list.find((x) => x.type === "model" && x.name === modelName) as Model
     if (!model) return
 
-    const existing = model.fields.find((x) => x.name === fieldProps.name)
-    const field: DMMF.Field = Object.assign(
-      {
-        kind: "scalar",
-        isRequired: false,
-        isUnique: false,
-        isList: false,
-        isId: false,
-        isGenerated: false,
-        hasDefaultValue: false,
-      },
-      fieldProps,
-    )
-    existing ? merge(existing, field) : model.fields.push(field)
+    const existing = model.properties.find((x) => x.type === "field" && x.name === fieldProps.name)
+    existing ? Object.assign(existing, fieldProps) : model.properties.push(fieldProps)
   })
 }

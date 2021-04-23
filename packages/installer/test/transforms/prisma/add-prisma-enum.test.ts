@@ -2,7 +2,14 @@ import {addPrismaEnum} from "@blitzjs/installer"
 
 describe("addPrismaEnum", () => {
   const subject = (source: string) =>
-    addPrismaEnum(source, {name: "Role", values: ["USER", "ADMIN"]})
+    addPrismaEnum(source, {
+      type: "enum",
+      name: "Role",
+      enumerators: [
+        {type: "enumerator", name: "USER"},
+        {type: "enumerator", name: "ADMIN"},
+      ],
+    })
 
   it("creates enum", async () => {
     const source = `

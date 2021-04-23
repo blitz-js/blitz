@@ -2,7 +2,11 @@ import {addPrismaModel} from "@blitzjs/installer"
 
 describe("addPrismaModel", () => {
   const subject = (source: string) =>
-    addPrismaModel(source, {name: "Project", fields: [{name: "id", type: "Int", isId: true}]})
+    addPrismaModel(source, {
+      type: "model",
+      name: "Project",
+      properties: [{type: "field", name: "id", fieldType: "String"}],
+    })
 
   it("creates model", async () => {
     const source = `

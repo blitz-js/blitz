@@ -2,7 +2,11 @@ import {addPrismaGenerator} from "@blitzjs/installer"
 
 describe("addPrismaGenerator", () => {
   const subject = (source: string) =>
-    addPrismaGenerator(source, {name: "nexusPrisma", provider: "nexus-prisma"})
+    addPrismaGenerator(source, {
+      type: "generator",
+      name: "nexusPrisma",
+      assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
+    })
 
   it("adds generator and keeps existing generator", async () => {
     const source = `

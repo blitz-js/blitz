@@ -1,33 +1,31 @@
-import {ConnectorType, DataSource} from "@prisma/generator-helper"
-import {merge, produceSchema} from "./produce-schema"
-import {PrismaUrl} from "./types"
+import {Datasource} from "@mrleebo/prisma-ast"
+import {produceSchema} from "./produce-schema"
 
 /**
  * Modify the prisma datasource metadata to use the provider and url specified.
  *
  * @param source - schema.prisma source file contents
- * @param provider - the provider to use
- * @param url - the url to use
+ * @param datasourceProps - datasource object to assign to the schema
  * @returns The modified schema.prisma source
  * @example Usage
  * ```
- * setPrismaDataSource(source, "postgresql", { fromEnvVar: "DATABASE_URL" })
+ *  setPrismaDataSource(source, {
+      type: "datasource",
+      name: "db",
+      assignments: [
+        {type: "assignment", key: "provider", value: '"postgresql"'},
+        {
+          type: "assignment",
+          key: "url",
+          value: {type: "function", name: "env", params: ['"DATABASE_URL"']},
+        },
+      ],
+    })
  * ```
  */
-export function setPrismaDataSource(
-  source: string,
-  provider: ConnectorType,
-  url: PrismaUrl,
-): Promise<string> {
-  return produceSchema(source, ({config}) => {
-    const [db] = config.datasources
-    const datasource: DataSource = {
-      name: "db",
-      activeProvider: provider,
-      provider: [provider],
-      url: Object.assign({fromEnvVar: null, value: null}, url),
-      config: {},
-    }
-    db ? merge(db, datasource) : config.datasources.push(datasource)
+export function setPrismaDataSource(source: string, datasourceProps: Datasource): Promise<string> {
+  return produceSchema(source, (schema) => {
+    const existing = schema.list.find((x) => x.type === "datasource")
+    existing ? Object.assign(existing, datasourceProps) : schema.list.push(datasourceProps)
   })
 }

@@ -1,6 +1,5 @@
-import {DMMF} from "@prisma/generator-helper"
-import {merge, produceSchema} from "./produce-schema"
-import {PrismaEnum} from "./types"
+import {Enum} from "@mrleebo/prisma-ast"
+import {produceSchema} from "./produce-schema"
 
 /**
  * Adds an enum to your schema.prisma data model.
@@ -10,22 +9,19 @@ import {PrismaEnum} from "./types"
  * @returns The modified schema.prisma source
  * @example Usage
  * ```
- * addPrismaEnum(source, {name: "Role", values: ["USER", "ADMIN"]})
+ *  addPrismaEnum(source, {
+      type: "enum",
+      name: "Role",
+      enumerators: [
+        {type: "enumerator", name: "USER"},
+        {type: "enumerator", name: "ADMIN"},
+      ],
+    })
  * ```
  */
-export function addPrismaEnum(source: string, enumProps: PrismaEnum): Promise<string> {
-  return produceSchema(source, ({doc}) => {
-    const existing = doc.datamodel.enums.find((x) => x.name === enumProps.name)
-    const enumerable: DMMF.DatamodelEnum = Object.assign(
-      {},
-      {
-        ...enumProps,
-        values: enumProps.values.map((name) => ({
-          name,
-          dbName: null,
-        })) as DMMF.EnumValue[],
-      },
-    )
-    existing ? merge(existing, enumerable) : doc.datamodel.enums.push(enumerable)
+export function addPrismaEnum(source: string, enumProps: Enum): Promise<string> {
+  return produceSchema(source, (schema) => {
+    const existing = schema.list.find((x) => x.type === "enum" && x.name === enumProps.name)
+    existing ? Object.assign(existing, enumProps) : schema.list.push(enumProps)
   })
 }

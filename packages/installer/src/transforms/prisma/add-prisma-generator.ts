@@ -1,27 +1,26 @@
-import {merge, produceSchema} from "./produce-schema"
-import {PrismaGenerator} from "./types"
+import {Generator} from "@mrleebo/prisma-ast"
+import {produceSchema} from "./produce-schema"
 
 /**
  * Adds a generator to your schema.prisma data model.
  *
  * @param source - schema.prisma source file contents
- * @param generator - the generator to add
+ * @param generatorProps - the generator to add
  * @returns The modified schema.prisma source
  * @example Usage
  * ```
- * addPrismaGenerator(source, {name: "nexusPrisma", provider: "nexus-prisma"})
+ *  addPrismaGenerator(source, {
+      type: "generator",
+      name: "nexusPrisma",
+      assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
+    })
  * ```
  */
-export function addPrismaGenerator(source: string, generator: PrismaGenerator): Promise<string> {
-  return produceSchema(source, ({config}) => {
-    const existing = config.generators.find((x) => x.name === generator.name)
-    existing
-      ? merge(existing, generator)
-      : config.generators.push(
-          Object.assign(
-            {output: null, config: {}, binaryTargets: [], previewFeatures: []},
-            generator,
-          ),
-        )
+export function addPrismaGenerator(source: string, generatorProps: Generator): Promise<string> {
+  return produceSchema(source, (schema) => {
+    const existing = schema.list.find(
+      (x) => x.type === "generator" && x.name === generatorProps.name,
+    ) as Generator
+    existing ? Object.assign(existing, generatorProps) : schema.list.push(generatorProps)
   })
 }

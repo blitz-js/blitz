@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`addPrismaField creates field 1`] = `
+exports[`addPrismaModelAttribute creates index 1`] = `
 "
 datasource db {
   provider = \\"sqlite\\"
@@ -10,10 +10,11 @@ datasource db {
 model Project {
   id   Int    @id @default(autoincrement())
   name String @unique
+  @@index([name])
 }"
 `;
 
-exports[`addPrismaField skips if model is missing 1`] = `
+exports[`addPrismaModelAttribute skips if model is missing 1`] = `
 "
 datasource db {
   provider = \\"sqlite\\"

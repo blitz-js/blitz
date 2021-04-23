@@ -1,6 +1,5 @@
-import {DMMF} from "@prisma/generator-helper"
-import {merge, produceSchema} from "./produce-schema"
-import {PrismaModel} from "./types"
+import {Model} from "@mrleebo/prisma-ast"
+import {produceSchema} from "./produce-schema"
 
 /**
  * Adds an enum to your schema.prisma data model.
@@ -10,16 +9,16 @@ import {PrismaModel} from "./types"
  * @returns The modified schema.prisma source
  * @example Usage
  * ```
- * addPrismaModel(source, {name: "Project", fields: [{name: "id", type: "Int", isId: true}]})
+ *  addPrismaModel(source, {
+      type: "model",
+      name: "Project",
+      properties: [{type: "field", name: "id", fieldType: "String"}],
+    })
  * ```
  */
-export function addPrismaModel(source: string, modelProps: PrismaModel): Promise<string> {
-  return produceSchema(source, ({doc}) => {
-    const existing = doc.datamodel.models.find((x) => x.name === model.name)
-    const model: DMMF.Model = Object.assign(
-      {isEmbedded: false, dbName: null, uniqueFields: [], uniqueIndexes: [], idFields: []},
-      modelProps,
-    )
-    existing ? merge(existing, model) : doc.datamodel.models.push(model)
+export function addPrismaModel(source: string, modelProps: Model): Promise<string> {
+  return produceSchema(source, (schema) => {
+    const existing = schema.list.find((x) => x.type === "model" && x.name === modelProps.name)
+    existing ? Object.assign(existing, modelProps) : schema.list.push(modelProps)
   })
 }

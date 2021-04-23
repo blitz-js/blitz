@@ -2,7 +2,18 @@ import {setPrismaDataSource} from "@blitzjs/installer"
 
 describe("setPrismaDataSource", () => {
   const subject = (source: string) =>
-    setPrismaDataSource(source, "postgresql", {fromEnvVar: "DATABASE_URL"})
+    setPrismaDataSource(source, {
+      type: "datasource",
+      name: "db",
+      assignments: [
+        {type: "assignment", key: "provider", value: '"postgresql"'},
+        {
+          type: "assignment",
+          key: "url",
+          value: {type: "function", name: "env", params: ['"DATABASE_URL"']},
+        },
+      ],
+    })
 
   it("sets datasource", async () => {
     const source = `
