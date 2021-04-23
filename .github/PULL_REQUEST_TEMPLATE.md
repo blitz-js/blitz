@@ -1,10 +1,19 @@
-Closes: ??
+<!--
+Thanks for opening a PR! Your contribution is much appreciated.
+To make sure your PR is handled as smoothly as possible please:
+ - Link issue via "Closes #[issue_number]
+ - Choose & follow the right checklist for the change that you're making:
+-->
+
+Closes: ?
 
 ### What are the changes and their implications?
 
-### Checklist
+## Bug Checklist
 
-- [ ] Changes covered by tests (tests added if needed)
-- [ ] Does this PR warrant documentation updates? If yes, open a second PR with doc changes to [blitzjs.com](https://github.com/blitz-js/blitzjs.com)
+- [ ] Integration test added (see [test docs](https://blitzjs.com/docs/contributing#running-tests) if needed)
 
-<!-- IMPORTANT: Make sure to check the "Allow edits from maintainers" box below this window -->
+## Feature Checklist
+
+- [ ] Integration test added (see [test docs](https://blitzjs.com/docs/contributing#running-tests) if needed)
+- [ ] Documentation added/updated (submit PR to [blitzjs.com repo](https://github.com/blitz-js/blitzjs.com))

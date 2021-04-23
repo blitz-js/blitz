@@ -1,5 +1,4 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
@@ -9,7 +8,7 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   static subdirectory = "query"
-  sourceRoot = join(__dirname, "./templates/query")
+  sourceRoot: SourceRootType = {type: "template", path: "query"}
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {

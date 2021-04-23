@@ -3,6 +3,7 @@ import {Transform} from "stream"
 import {createDisplay} from "../display"
 import {ERROR_THROWN, READY} from "../events"
 import {rimraf} from "../helpers/rimraf-promise"
+import {OverrideTriage} from "../helpers/work-optimizer"
 import {createPipeline} from "../pipeline"
 import {pipe, through} from "../streams"
 import {Stage} from "../types"
@@ -17,6 +18,7 @@ type SynchronizeFilesOptions = {
   source?: FSStreamer
   writer?: FSStreamer
   clean?: boolean
+  overrideTriage?: OverrideTriage
 }
 
 const defaultBus = through.obj()
@@ -41,6 +43,7 @@ export async function transformFiles(
     source,
     writer,
     clean: requestClean,
+    overrideTriage,
   } = options
 
   if (requestClean) await rimraf(dest, {glob: false})
@@ -49,15 +52,21 @@ export async function transformFiles(
 
   const display = createDisplay()
   return await new Promise((resolve, reject) => {
-    const config = {
-      cwd: src,
-      src,
-      dest,
-      include,
-      ignore,
-      watch,
-    }
-    const fileTransformPipeline = createPipeline(config, stages, bus, source, writer)
+    const fileTransformPipeline = createPipeline(
+      {
+        cwd: src,
+        src,
+        dest,
+        include,
+        ignore,
+        watch,
+        overrideTriage,
+      },
+      stages,
+      bus,
+      source,
+      writer,
+    )
 
     bus.on("data", ({type}) => {
       if (type === READY) {

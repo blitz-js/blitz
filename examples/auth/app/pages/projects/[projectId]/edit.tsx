@@ -5,6 +5,8 @@ import getProject from "app/projects/queries/getProject"
 import updateProject from "app/projects/mutations/updateProject"
 import {ProjectForm, FORM_ERROR} from "app/projects/components/ProjectForm"
 
+import {Routes} from ".blitz"
+
 export const EditProject = () => {
   const router = useRouter()
   const projectId = useParam("projectId", "number")
@@ -57,7 +59,7 @@ const EditProjectPage: BlitzPage = () => {
       </Suspense>
 
       <p>
-        <Link href="/projects">
+        <Link href={Routes.ProjectsPage()}>
           <a>Projects</a>
         </Link>
       </p>

@@ -1,4 +1,4 @@
-import {readJSON} from "fs-extra"
+import {existsSync, readJSON} from "fs-extra"
 import {resolve} from "path"
 import pkgDir from "pkg-dir"
 
@@ -53,6 +53,10 @@ export const isBlitzRoot = async (): Promise<{
     // No local package.json
     if (err.code === "ENOENT") {
       const out = await checkParent()
+
+      if (existsSync("./blitz.config.js") || existsSync("./blitz.config.ts")) {
+        return {err: false}
+      }
 
       if (out === false) {
         return {

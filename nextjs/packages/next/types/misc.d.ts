@@ -119,8 +119,48 @@ declare module 'next/dist/compiled/jsonwebtoken' {
   export = m
 }
 declare module 'next/dist/compiled/lodash.curry' {
-  import m from 'lodash.curry'
-  export = m
+  // import m from 'lodash.curry'
+  // export = m
+
+  /*
+   *  Blitz: inlining the types here because build was unable to pull types from lodash.curry
+   */
+  export interface CurriedFunction1<T1, R> {
+    (): CurriedFunction1<T1, R>
+    (t1: T1): R
+  }
+  export interface CurriedFunction2<T1, T2, R> {
+    (): CurriedFunction2<T1, T2, R>
+    (t1: T1): CurriedFunction1<T2, R>
+    (t1: __, t2: T2): CurriedFunction1<T1, R>
+    (t1: T1, t2: T2): R
+  }
+  export interface CurriedFunction3<T1, T2, T3, R> {
+    (): CurriedFunction3<T1, T2, T3, R>
+    (t1: T1): CurriedFunction2<T2, T3, R>
+    (t1: __, t2: T2): CurriedFunction2<T1, T3, R>
+    (t1: T1, t2: T2): CurriedFunction1<T3, R>
+    (t1: __, t2: __, t3: T3): CurriedFunction2<T1, T2, R>
+    (t1: T1, t2: __, t3: T3): CurriedFunction1<T2, R>
+    (t1: __, t2: T2, t3: T3): CurriedFunction1<T1, R>
+    (t1: T1, t2: T2, t3: T3): R
+  }
+  interface Curry {
+    <T1, R>(func: (t1: T1) => R, arity?: number): CurriedFunction1<T1, R>
+    <T1, T2, R>(func: (t1: T1, t2: T2) => R, arity?: number): CurriedFunction2<
+      T1,
+      T2,
+      R
+    >
+    <T1, T2, T3, R>(
+      func: (t1: T1, t2: T2, t3: T3) => R,
+      arity?: number
+    ): CurriedFunction3<T1, T2, T3, R>
+    (func: (...args: any[]) => any, arity?: number): (...args: any[]) => any
+    placeholder: __
+  }
+  const curry: Curry
+  export = curry
 }
 declare module 'next/dist/compiled/lru-cache' {
   import m from 'lru-cache'

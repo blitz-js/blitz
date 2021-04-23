@@ -7,11 +7,10 @@ describe("`install` command", () => {
     jest.resetAllMocks()
   })
 
-  it("runs local installer", async (done) => {
+  it("runs local installer", async () => {
     jest.spyOn(tempRecipe, "run")
     await Install.run([path.resolve(__dirname, "../__fixtures__/installer")])
     expect(tempRecipe.run).toHaveBeenCalledWith({})
-    done()
   })
 
   it("properly parses remote installer args", () => {

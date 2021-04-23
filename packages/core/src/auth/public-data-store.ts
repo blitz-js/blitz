@@ -27,7 +27,11 @@ class PublicDataStore {
     // Setting the current time in ms will cause other tabs to receive the `storage` event
     if (!opts?.suppressEvent) {
       // Prevent infinite loop
-      localStorage.setItem(this.eventKey, Date.now().toString())
+      try {
+        localStorage.setItem(this.eventKey, Date.now().toString())
+      } catch (err) {
+        console.error("LocalStorage is not available", err)
+      }
     }
     this.observable.next(value ?? this.getData())
   }
