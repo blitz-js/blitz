@@ -38,6 +38,7 @@
     "dotenv-flow": "^3.2.0",
     "enquirer": "2.3.6",
     "esm": "3.2.25",
+    "global-agent": "2.2.0",
     "got": "^11.8.1",
     "has-yarn": "2.1.0",
     "hasbin": "1.2.3",
