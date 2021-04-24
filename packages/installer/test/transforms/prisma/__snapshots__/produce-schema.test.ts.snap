@@ -1,15 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`produceSchema cleanly parses and serializes schema: [redwood.prisma] 1`] = `
+"
 datasource DS {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = \\"sqlite\\"
+  url      = env(\\"DATABASE_URL\\")
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = "native"
+  provider      = \\"prisma-client-js\\"
+  binaryTargets = \\"native\\"
 }
 
-/// Define your own datamodels here and run `yarn redwood db save` to create
+/// Define your own datamodels here and run \`yarn redwood db save\` to create
 /// migrations for them.
+
 model Post {
   /// this is the post id
   id       Int       @id @default(autoincrement())
@@ -34,4 +39,5 @@ model User {
   email String  @unique
 
   hasAdministrativeAccess Boolean @default(false)
-}
+}"
+`;
