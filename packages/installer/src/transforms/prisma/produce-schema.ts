@@ -9,7 +9,10 @@ import {getSchema, printSchema, Schema} from "@mrleebo/prisma-ast"
  * @param producer - a callback function that can mutate the parsed data model
  * @returns The modified schema.prisma source
  */
-export async function produceSchema(source: string, producer: (schema: Schema) => void) {
+export async function produceSchema(
+  source: string,
+  producer: (schema: Schema) => void,
+): Promise<string> {
   const schema = await getSchema(source)
   producer(schema)
   return printSchema(schema)
