@@ -1,6 +1,5 @@
 import {existsSync, readJSONSync} from "fs-extra"
-import {join} from "path"
-import path from "path"
+import path, {join} from "path"
 import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
@@ -18,6 +17,9 @@ export interface BlitzConfig extends Record<string, unknown> {
   }
   cli?: {
     clearConsoleOnBlitzDev?: boolean
+    httpProxy?: string
+    httpsProxy?: string
+    noProxy?: string
   }
   _meta: {
     packageName: string

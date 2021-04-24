@@ -1,9 +1,23 @@
+import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
+import {bootstrap} from "global-agent"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      GLOBAL_AGENT: {
+        HTTP_PROXY?: string
+        HTTPS_PROXY?: string
+        NO_PROXY?: string
+      }
+    }
+  }
+}
 
 const pipeline = promisify(Stream.pipeline)
 
@@ -147,10 +161,36 @@ export class Install extends Command {
     await recipe.run(recipeArgs)
   }
 
+  /**
+   * Setup proxy support for blitz install
+   *
+   * Loads proxy variables from enviroment and blitz.config.js
+   *
+   */
+  private async setupProxySupport() {
+    const cli = getConfig().cli
+    const httpProxy = cli?.httpProxy || process.env.http_proxy || process.env.HTTP_PROXY
+    const httpsProxy = cli?.httpsProxy || process.env.https_proxy || process.env.HTTPS_PROXY
+    const noProxy = cli?.noProxy || process.env.no_proxy || process.env.NO_PROXY
+
+    if (httpProxy || httpsProxy) {
+      global.GLOBAL_AGENT = {
+        HTTP_PROXY: httpProxy,
+        HTTPS_PROXY: httpsProxy,
+        NO_PROXY: noProxy,
+      }
+
+      bootstrap()
+    }
+  }
+
   async run() {
     this.parse(Install)
 
     require("../utils/setup-ts-node").setupTsnode()
+
+    await this.setupProxySupport()
+
     const {args} = this.parse(Install)
     const pkgManager = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
       ? "yarn"
