@@ -39,9 +39,9 @@ export async function dev(config: ServerConfig) {
 
   if (!versionMatched) await saveBlitzVersion(buildFolder)
 
-  if (customServerExists(buildFolder)) {
+  if (customServerExists()) {
     log.success("Using your custom server")
-    await startCustomServer(buildFolder, config)
+    await startCustomServer(buildFolder, config, {watch: true})
   } else {
     await nextStartDev(nextBin, buildFolder, manifest, buildFolder, config)
   }
