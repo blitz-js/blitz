@@ -1,0 +1,22 @@
+diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
+index 972d57b..e6bc64b 100644
+--- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
++++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
+@@ -166,7 +166,7 @@ function format(args, messageType, scope) {
+     info: chalk.cyan("info"),
+     none: ""
+   }[messageType];
+-  let fullPrefix = "🎁 " + prefix + (scope === undefined ? "" : " " + chalk.cyan(scope));
++  let fullPrefix = prefix + (scope === undefined ? "" : " " + chalk.cyan(scope));
+   return fullPrefix + util.format("", ...args).split("\n").reduce((str, line) => {
+     const prefixed = `${str}\n${fullPrefix}`;
+     return line ? `${prefixed} ${line}` : prefixed;
+@@ -1917,6 +1917,8 @@ let getRollupConfig = (pkg, entrypoints, aliases, type, reportTransformedFile) =
+     external.push(...builtInModules);
+   }
+ 
++  external.push('next', 'react', '@babel/core', 'prettier', '.blitz')
++
+   let input = {};
+   entrypoints.forEach(entrypoint => {
+     input[path__default.relative(pkg.directory, path__default.join(entrypoint.directory, "dist", getNameForDistForEntrypoint(entrypoint)))] = entrypoint.source;

@@ -2,6 +2,7 @@ import React from "react"
 import {useRouter, BlitzPage} from "blitz"
 import Layout from "app/core/layouts/Layout"
 import {LoginForm} from "app/auth/components/LoginForm"
+import {Routes} from ".blitz"
 
 const LoginPage: BlitzPage = () => {
   const router = useRouter()
@@ -18,7 +19,7 @@ const LoginPage: BlitzPage = () => {
   )
 }
 
-LoginPage.redirectAuthenticatedTo = "/"
+LoginPage.redirectAuthenticatedTo = Routes.Home().pathname
 LoginPage.getLayout = (page) => <Layout title="Log In">{page}</Layout>
 
 export default LoginPage

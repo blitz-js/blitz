@@ -316,7 +316,7 @@ GraphQL is a great technology, but it's not great as the backbone for apps that 
 
 Primarily because GraphQL is not scalable when deployed to serverless platforms like Zeit or Netlify. It's not scalable because all of your resolver code is stuffed into a single Lambda causing you to quickly run into cold start issues and max code size issues.
 
-Anyone deploying a sizable GraphQL API via serverless Lambda functions does so by splitting the graph into many small Lamba functions, each of which is responsible for discrete set of types. Then you have a separate gateway like Apollo Federation or GraphQL Mesh to stitch the entire schema back together again.
+Anyone deploying a sizable GraphQL API via serverless Lambda functions does so by splitting the graph into many small Lambda functions, each of which is responsible for discrete set of types. Then you have a separate gateway like Apollo Federation or GraphQL Mesh to stitch the entire schema back together again.
 
 Other reasons include:
 

@@ -1,6 +1,6 @@
 {
   "name": "@examples/plain-js",
-  "version": "0.33.1",
+  "version": "0.34.0-canary.0",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz prisma migrate deploy && blitz build",
@@ -11,6 +11,9 @@
   "browserslist": [
     "defaults"
   ],
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "prettier": {
     "semi": false,
     "printWidth": 100,
@@ -30,14 +33,12 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.33.1",
+    "blitz": "0.35.0-canary.0",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "~4.14.0",
-    "@typescript-eslint/parser": "~4.14.0",
     "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",

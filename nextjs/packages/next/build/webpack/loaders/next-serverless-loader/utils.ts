@@ -6,7 +6,9 @@ import { normalizeLocalePath } from '../../../../next-server/lib/i18n/normalize-
 import pathMatch from '../../../../next-server/lib/router/utils/path-match'
 import { getRouteRegex } from '../../../../next-server/lib/router/utils/route-regex'
 import { getRouteMatcher } from '../../../../next-server/lib/router/utils/route-matcher'
-import prepareDestination from '../../../../next-server/lib/router/utils/prepare-destination'
+import prepareDestination, {
+  matchHas,
+} from '../../../../next-server/lib/router/utils/prepare-destination'
 import { __ApiPreviewProps } from '../../../../next-server/server/api-utils'
 import { BuildManifest } from '../../../../next-server/server/get-page-files'
 import {
@@ -85,10 +87,20 @@ export function getUtils({
     defaultRouteMatches = dynamicRouteMatcher(page) as ParsedUrlQuery
   }
 
-  function handleRewrites(parsedUrl: UrlWithParsedQuery) {
+  function handleRewrites(req: IncomingMessage, parsedUrl: UrlWithParsedQuery) {
     for (const rewrite of rewrites) {
       const matcher = getCustomRouteMatcher(rewrite.source)
-      const params = matcher(parsedUrl.pathname)
+      let params = matcher(parsedUrl.pathname)
+
+      if (rewrite.has && params) {
+        const hasParams = matchHas(req, rewrite.has, parsedUrl.query)
+
+        if (hasParams) {
+          Object.assign(params, hasParams)
+        } else {
+          params = false
+        }
+      }
 
       if (params) {
         const { parsedDestination } = prepareDestination(
@@ -201,7 +213,7 @@ export function getUtils({
                 return routeKeyNames.reduce((prev, keyName) => {
                   const paramName = routeKeys?.[keyName]
 
-                  if (paramName && !filterLocaleItem(obj[keyName])) {
+                  if (paramName && !filterLocaleItem(obj[keyName]!)) {
                     prev[groups[paramName].pos] = obj[keyName]
                   }
                   return prev
@@ -209,7 +221,7 @@ export function getUtils({
               }
 
               return Object.keys(obj).reduce((prev, key) => {
-                if (!filterLocaleItem(obj[key])) {
+                if (!filterLocaleItem(obj[key]!)) {
                   return Object.assign(prev, {
                     [key]: obj[key],
                   })
@@ -281,7 +293,7 @@ export function getUtils({
       // on the parsed params, this is used to signal if we need
       // to parse x-now-route-matches or not
       const isDefaultValue = Array.isArray(value)
-        ? value.every((val, idx) => val === defaultRouteMatches![key][idx])
+        ? value.every((val, idx) => val === defaultRouteMatches![key]![idx])
         : value === defaultRouteMatches![key]
 
       if (isDefaultValue || typeof value === 'undefined') {

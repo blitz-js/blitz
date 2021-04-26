@@ -1248,7 +1248,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/8682104?v=4",
       "profile": "https://github.com/konradkalemba",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -1609,7 +1610,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/4396533?v=4",
       "profile": "https://github.com/sakulstra",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -1663,7 +1665,9 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/61833561?v=4",
       "profile": "https://tundera.dev",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "doc"
       ]
     },
     {
@@ -2375,6 +2379,141 @@
       "name": "Andrea Rizzello",
       "avatar_url": "https://avatars.githubusercontent.com/u/10348930?v=4",
       "profile": "www.andrearizzello.work",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jahredhope",
+      "name": "Jahred Hope",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13903378?v=4",
+      "profile": "jahred.com.au",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "simonelnahas",
+      "name": "Simon El Nahas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29279201?v=4",
+      "profile": "simonelnahas.github.io/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Cristy94",
+      "name": "Buleandra Cristian",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1384885?v=4",
+      "profile": "www.usertrack.net",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "peterpalau",
+      "name": "Pedro Enrique Palau Isaac",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12257885?v=4",
+      "profile": "http://palauisaac.me/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sean-brydon",
+      "name": "sean-brydon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55134778?v=4",
+      "profile": "www.seanbrydon.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Dieman89",
+      "name": "Alessandro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28837891?v=4",
+      "profile": "buonerba.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "laubonghaudoi",
+      "name": "laubonghaudoi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11172180?v=4",
+      "profile": "www.jyutping.org",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "TommasoBruno99",
+      "name": "Tommaso Bruno",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61512591?v=4",
+      "profile": "https://github.com/TommasoBruno99",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "antonykamp",
+      "name": "Antony",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45163503?v=4",
+      "profile": "antonykamp.de",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "frontsideair",
+      "name": "Fatih Altinok",
+      "avatar_url": "https://avatars.githubusercontent.com/u/868283?v=4",
+      "profile": "https://blog.6nok.org",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Mokshit06",
+      "name": "Mokshit Jain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50412128?v=4",
+      "profile": "https://mokshitjain.co/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mubaidr",
+      "name": "Muhammad Ubaid Raza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2222702?v=4",
+      "profile": "https://mubaidr.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "silicontwin",
+      "name": "Nick Warren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/121665?v=4",
+      "profile": "https://github.com/silicontwin",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mlabate",
+      "name": "mlabate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
+      "profile": "https://github.com/mlabate",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "lumaxis",
+      "name": "Lukas Spieß",
+      "avatar_url": "https://avatars.githubusercontent.com/u/406937?v=4",
+      "profile": "https://github.com/lumaxis",
       "contributions": [
         "doc"
       ]

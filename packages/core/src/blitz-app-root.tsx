@@ -1,6 +1,7 @@
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
+import {BlitzProvider} from "./blitz-provider"
 import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
 
@@ -73,6 +74,7 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
         }
       }
     }
+    const component = React.useMemo(() => withBlitzInnerWrapper(props.Component), [props.Component])
 
     const noPageFlicker =
       props.Component.suppressFirstRenderFlicker ||
@@ -84,14 +86,11 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     }, [])
 
     return (
-      <>
+      <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
-        <UserAppRoot {...props} Component={withBlitzInnerWrapper(props.Component)} />
-      </>
+        <UserAppRoot {...props} Component={component} />
+      </BlitzProvider>
     )
-  }
-  if (process.env.NODE_ENV !== "production") {
-    BlitzOuterRoot.displayName = `BlitzOuterRoot`
   }
   return BlitzOuterRoot
 }

@@ -3,7 +3,7 @@ module.exports =
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 787:
+/***/ 649:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
@@ -195,13 +195,13 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ 359:
+/***/ 143:
 /***/ (function(module, exports, __nccwpck_require__) {
 
 /* module decorator */ module = __nccwpck_require__.nmd(module);
 
 
-var _minify = _interopRequireDefault(__nccwpck_require__(787));
+var _minify = _interopRequireDefault(__nccwpck_require__(649));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -276,6 +276,6 @@ module.exports = require("next/dist/compiled/terser");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(359);
+/******/ 	return __nccwpck_require__(143);
 /******/ })()
 ;

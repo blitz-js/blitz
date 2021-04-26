@@ -2,7 +2,6 @@ import File from "vinyl"
 import {transform} from "../transform"
 import {FileCacheEntry, FileCacheInterface} from "../types"
 import {isEvent} from "../utils"
-
 export class FileCache implements FileCacheInterface {
   fileCache: Record<string, FileCacheEntry> = {}
 
@@ -15,23 +14,13 @@ export class FileCache implements FileCacheInterface {
   }
 
   filterByPath(filterFn: (a: string) => boolean) {
-    let found = []
-    for (let path in this.fileCache) {
-      if (filterFn(path)) {
-        found.push(this.fileCache[path])
-      }
-    }
-    return found
+    return Object.entries(this.fileCache)
+      .filter(([path]) => filterFn(path))
+      .map(([_path, entry]) => entry)
   }
 
   filter(filterFn: (a: FileCacheEntry) => boolean) {
-    let found = []
-    for (let path in this.fileCache) {
-      if (filterFn(this.fileCache[path])) {
-        found.push(this.fileCache[path])
-      }
-    }
-    return found
+    return Object.values(this.fileCache).filter(filterFn)
   }
 
   toString() {

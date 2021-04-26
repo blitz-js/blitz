@@ -10,7 +10,7 @@ const glob = promisify(_glob)
 const exec = promisify(execOrig)
 
 const timings = []
-const NUM_RETRIES = 2
+const NUM_RETRIES = 1
 const DEFAULT_CONCURRENCY = 2
 const RESULTS_EXT = `.results.json`
 const isTestJob = !!process.env.NEXT_TEST_JOB
@@ -23,7 +23,7 @@ const PROD_TEST_EXT = '.prod.test.js'
 // which types we have configured to run separate
 const configuredTestTypes = [UNIT_TEST_EXT]
 
-;(async () => {
+async function main() {
   let concurrencyIdx = process.argv.indexOf('-c')
   const concurrency =
     parseInt(process.argv[concurrencyIdx + 1], 10) || DEFAULT_CONCURRENCY
@@ -62,9 +62,9 @@ const configuredTestTypes = [UNIT_TEST_EXT]
 
   if (tests.length === 0) {
     tests = (
-      await glob('**/*.test.js', {
+      await glob('**/*.test.+(js|ts)', {
         nodir: true,
-        cwd: path.join(__dirname, 'test'),
+        cwd: path.join(process.cwd(), 'test'),
       })
     ).filter((test) => {
       // only include the specified type
@@ -79,7 +79,7 @@ const configuredTestTypes = [UNIT_TEST_EXT]
     if (outputTimings && groupArg) {
       console.log('Fetching previous timings data')
       try {
-        const timingsFile = path.join(__dirname, 'test-timings.json')
+        const timingsFile = path.join(process.cwd(), 'test-timings.json')
         try {
           prevTimings = JSON.parse(await fs.readFile(timingsFile, 'utf8'))
           console.log('Loaded test timings from disk successfully')
@@ -167,7 +167,7 @@ const configuredTestTypes = [UNIT_TEST_EXT]
 
   const sema = new Sema(concurrency, { capacity: testNames.length })
   const jestPath = path.join(
-    path.dirname(require.resolve('jest-cli/package')),
+    path.dirname(require.resolve('jest-cli/package.json')),
     'bin/jest.js'
   )
   const children = new Set()
@@ -234,7 +234,7 @@ const configuredTestTypes = [UNIT_TEST_EXT]
         } catch (err) {
           if (i < NUM_RETRIES) {
             try {
-              const testDir = path.dirname(path.join(__dirname, test))
+              const testDir = path.dirname(path.join(process.cwd(), test))
               console.log('Cleaning test files at', testDir)
               await exec(`git clean -fdx "${testDir}"`)
               await exec(`git checkout "${testDir}"`)
@@ -319,4 +319,9 @@ const configuredTestTypes = [UNIT_TEST_EXT]
       }
     }
   }
-})()
+}
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

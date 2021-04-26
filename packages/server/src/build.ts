@@ -20,13 +20,19 @@ export async function build(config: ServerConfig) {
     env,
   } = await normalize(config)
 
-  const stages = await configureStages({isTypeScript, writeManifestFile, buildFolder, env})
+  const {stages, overrideTriage} = await configureStages({
+    isTypeScript,
+    writeManifestFile,
+    buildFolder,
+    env,
+  })
 
   const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
     include,
     watch,
     clean: true, // always clean in build
+    overrideTriage,
   })
 
   await saveBlitzVersion(buildFolder)

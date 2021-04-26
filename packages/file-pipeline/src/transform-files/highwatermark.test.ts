@@ -52,7 +52,10 @@ describe("transformFiles", () => {
           .concat(["ready"]),
         logFile,
       ),
-      transformFiles(normalize("/foo"), [], normalize("/bar"), {source, writer}),
+      transformFiles(normalize("/foo"), [], normalize("/bar"), {
+        source,
+        writer,
+      }),
     ])
   }, 10000)
 })

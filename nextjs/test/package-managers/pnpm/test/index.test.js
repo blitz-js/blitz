@@ -79,10 +79,10 @@ describe('pnpm support', () => {
     await usingTempDir(async (tempDir) => {
       const nextTarballPath = await pack(tempDir, 'next')
       const dependencyTarballPaths = {
-        '@next/env': await pack(tempDir, 'next-env'),
-        '@next/polyfill-module': await pack(tempDir, 'next-polyfill-module'),
-        '@next/react-dev-overlay': await pack(tempDir, 'react-dev-overlay'),
-        '@next/react-refresh-utils': await pack(tempDir, 'react-refresh-utils'),
+        // '@next/env': await pack(tempDir, 'next-env'),
+        // '@next/polyfill-module': await pack(tempDir, 'next-polyfill-module'),
+        // '@next/react-dev-overlay': await pack(tempDir, 'react-dev-overlay'),
+        // '@next/react-refresh-utils': await pack(tempDir, 'react-refresh-utils'),
       }
 
       const tempAppDir = path.join(tempDir, 'app')
@@ -119,9 +119,14 @@ describe('pnpm support', () => {
         expect(packageJson.pnpm.overrides[dependency]).toMatch(/^file:/)
       }
 
-      const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
-      console.log(stdout, stderr)
-      expect(stdout).toMatch(/Compiled successfully/)
+      try {
+        const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')
+        console.log(stdout, stderr)
+        expect(stdout).toMatch(/Compiled successfully/)
+      } catch (error) {
+        console.log(error.stderr)
+        throw error
+      }
     })
   })
 })

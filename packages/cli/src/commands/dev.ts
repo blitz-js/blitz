@@ -40,7 +40,10 @@ export class Dev extends Command {
       const {getConfig} = await import("@blitzjs/config")
 
       const blitzConfig = getConfig()
-      if (blitzConfig.cli?.clearConsoleOnBlitzDev !== false) {
+      if (
+        blitzConfig.cli?.clearConsoleOnBlitzDev !== false &&
+        !process.env.BLITZ_TEST_ENVIRONMENT
+      ) {
         const {log} = await import("@blitzjs/display")
         log.clearConsole()
       }

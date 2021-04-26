@@ -151,6 +151,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   } as Required<SessionConfig>
 
   return async (req, res, next) => {
+    debug("Starting sessionMiddleware...")
     if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
       await getSession(req, res)

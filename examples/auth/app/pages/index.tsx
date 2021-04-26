@@ -13,6 +13,8 @@ import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
 
+import {Routes} from ".blitz"
+
 const CurrentUserInfo = () => {
   const session = useSession()
   const [currentUser] = useQuery(getUser, {where: {id: session.userId!}})
@@ -30,10 +32,10 @@ const UserStuff = () => {
       {!session.userId && (
         <>
           <div style={{marginTop: "1rem"}}>
-            <Link href="/signup">Sign Up</Link>
+            <Link href={Routes.SignupPage()}>Sign Up</Link>
           </div>
           <div>
-            <Link href="/login">Login</Link>
+            <Link href={Routes.LoginPage()}>Login</Link>
           </div>
           <a href="/api/auth/twitter" style={{display: "block"}}>
             Login with Twitter

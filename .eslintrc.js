@@ -87,9 +87,11 @@ module.exports = {
       },
     },
     {
-      files: ["**/__fixtures__/**"],
+      files: ["test/**", "**/__fixtures__/**"],
       rules: {
         "import/no-default-export": "off",
+        "require-await": "off",
+        "unicorn/filename-case": "off",
       },
     },
   ],

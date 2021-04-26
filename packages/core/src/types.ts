@@ -1,13 +1,13 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
 import {
+  NextApiHandler,
   NextApiRequest,
   NextApiResponse,
   NextComponentType,
   NextPage,
   NextPageContext,
 } from "next/types"
-import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {
@@ -25,8 +25,9 @@ export type {
   PageConfig,
   Redirect,
 } from "next"
+export type BlitzApiHandler<T = any> = NextApiHandler<T>
 export type BlitzApiRequest = NextApiRequest
-export type BlitzApiResponse = NextApiResponse
+export type BlitzApiResponse<T = any> = NextApiResponse<T>
 export type BlitzPageContext = NextPageContext
 
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
@@ -103,7 +104,6 @@ export type ParsedUrlQueryValue = string | string[] | undefined
 
 export type Options = {
   fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
 }
 
 export type ConnectMiddleware = (
@@ -190,26 +190,6 @@ export type InvokeWithMiddlewareConfig = {
   middleware?: Middleware[]
   [prop: string]: any
 }
-
-export declare type MutateFunction<
-  TResult,
-  TError = unknown,
-  TVariables = unknown,
-  TSnapshot = unknown
-> = (
-  variables?: TVariables,
-  config?: MutateOptions<TResult, TError, TVariables, TSnapshot>,
-) => Promise<TResult>
-
-export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [
-  MutateFunction<TResult, TError, TVariables, TSnapshot>,
-  MutationResult<TResult, TError>,
-]
-
-export declare type MutationFunction<TResult, TVariables = unknown> = (
-  variables: TVariables,
-  ctx?: any,
-) => Promise<TResult>
 
 export interface ErrorFallbackProps {
   error: Error & Record<any, any>

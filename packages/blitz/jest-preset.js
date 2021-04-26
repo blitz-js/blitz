@@ -46,7 +46,7 @@ module.exports = {
         name: "CLIENT",
         color: "cyan",
       },
-      testEnvironment: "jest-environment-jsdom-fourteen",
+      testEnvironment: "jest-environment-jsdom",
       testRegex: ["^((?!queries|mutations|api|\\.server\\.).)*\\.(test|spec)\\.(j|t)sx?$"],
       setupFilesAfterEnv: [
         path.resolve(__dirname, "./jest-preset/client/setup-after-env.js"),
