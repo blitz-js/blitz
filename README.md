@@ -122,7 +122,8 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="userTrack" href="https://www.usertrack.net/?ref=blitzjs">
 <img alt="" src="https://i.imgur.com/UDBeazC.png" width="40px"/>
 </a></td>
-   </tr></table>
+  </tr>
+</table>
 
 
 ### 🥉 Bronze Sponsors
@@ -135,7 +136,7 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <td><a aria-label="RIT" href="https://rit-inc.co.jp/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rit_logo.png" width="200px">
 </a></td>
-</tr>
+  </tr>
 </table>
 
 
