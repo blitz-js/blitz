@@ -2508,6 +2508,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "lumaxis",
+      "name": "Lukas Spieß",
+      "avatar_url": "https://avatars.githubusercontent.com/u/406937?v=4",
+      "profile": "https://github.com/lumaxis",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
