@@ -16,8 +16,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
 
   return (
-    // NOTE: This suspense tag provides a convenient global fallback
-    // Make sure to add suspense lower in the tree to optimize loading experience where possible
     <Suspense fallback="Loading...">
       <ErrorBoundary
         FallbackComponent={RootErrorFallback}
