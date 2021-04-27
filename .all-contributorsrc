@@ -181,7 +181,8 @@
       "contributions": [
         "code",
         "maintenance",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
@@ -2480,6 +2481,43 @@
       "profile": "https://mokshitjain.co/",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "mubaidr",
+      "name": "Muhammad Ubaid Raza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2222702?v=4",
+      "profile": "https://mubaidr.github.io",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "silicontwin",
+      "name": "Nick Warren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/121665?v=4",
+      "profile": "https://github.com/silicontwin",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mlabate",
+      "name": "mlabate",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17139676?v=4",
+      "profile": "https://github.com/mlabate",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "lumaxis",
+      "name": "Lukas Spieß",
+      "avatar_url": "https://avatars.githubusercontent.com/u/406937?v=4",
+      "profile": "https://github.com/lumaxis",
+      "contributions": [
+        "doc"
       ]
     }
   ],
