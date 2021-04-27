@@ -33,6 +33,8 @@
     "@blitzjs/config": "0.35.0-canary.2",
     "@blitzjs/display": "0.35.0-canary.2",
     "@blitzjs/generator": "0.35.0-canary.2",
+    "@mrleebo/prisma-ast": "^0.2.0",
+    "@prisma/sdk": "2.19.0",
     "@types/jscodeshift": "0.7.2",
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",

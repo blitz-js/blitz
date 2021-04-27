@@ -32,8 +32,11 @@ export default RecipeBuilder()
     stepName: "Add generator to schema.prisma",
     explanation: "Adds the nexus-prisma generator to your schema.prisma file",
     singleFileSearch: paths.prismaSchema(),
-    transformPlain(program: string) {
-      return addPrismaGenerator(program, "nexusPrisma", `provider = "nexus-prisma"`)
-    },
+    transformPlain: (program: string) =>
+      addPrismaGenerator(program, {
+        type: "generator",
+        name: "nexusPrisma",
+        assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
+      }),
   })
   .build()
