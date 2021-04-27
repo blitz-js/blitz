@@ -9,5 +9,6 @@ datasource db {
 
 model Project {
   id String
-}"
+}
+"
 `;

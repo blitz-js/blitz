@@ -6,7 +6,8 @@ exports[`setPrismaDataSource adds datasource if missing 1`] = `
 datasource db {
   provider = \\"postgresql\\"
   url      = env(\\"DATABASE_URL\\")
-}"
+}
+"
 `;
 
 exports[`setPrismaDataSource sets datasource 1`] = `
@@ -17,5 +18,6 @@ datasource db {
   url      = env(\\"DATABASE_URL\\")
 }
 
-// comment down here"
+// comment down here
+"
 `;

@@ -13,7 +13,8 @@ generator client {
 
 generator nexusPrisma {
   provider = \\"nexus-prisma\\"
-}"
+}
+"
 `;
 
 exports[`addPrismaGenerator adds generator to file 1`] = `
@@ -25,7 +26,8 @@ datasource db {
 
 generator nexusPrisma {
   provider = \\"nexus-prisma\\"
-}"
+}
+"
 `;
 
 exports[`addPrismaGenerator overwrites same generator 1`] = `
@@ -37,5 +39,6 @@ datasource db {
 
 generator nexusPrisma {
   provider = \\"nexus-prisma\\"
-}"
+}
+"
 `;

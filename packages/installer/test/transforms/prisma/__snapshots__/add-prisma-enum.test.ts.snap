@@ -10,5 +10,6 @@ datasource db {
 enum Role {
   USER
   ADMIN
-}"
+}
+"
 `;
