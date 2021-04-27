@@ -33,6 +33,7 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 export const type = "file-transform"
 export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
   const [diff, setDiff] = React.useState<string | null>(null)
+  const [error, setError] = React.useState<Error | null>(null)
   const filePathRef = React.useRef("")
   useEnterToContinue(() => onProposalAccepted(filePathRef.current), !!filePathRef.current)
 
@@ -45,14 +46,18 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
       })
       filePathRef.current = fileToTransform
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
-      const newFile = (step as Config).transformPlain
+      const newFile = await ((step as Config).transformPlain
         ? stringProcessFile(originalFile, (step as Config).transformPlain!)
-        : processFile(originalFile, (step as Config).transform!)
+        : processFile(originalFile, (step as Config).transform!))
       return createPatch(fileToTransform, originalFile, newFile)
     }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    generateDiff().then(setDiff)
+
+    generateDiff().then(setDiff, setError)
   }, [cliArgs, step])
+
+  // Let the renderer deal with errors from file transformers, otherwise the
+  // process would just hang.
+  if (error) throw error
 
   if (!diff) {
     return (
@@ -94,17 +99,19 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    const results = transform(
-      (original) =>
-        (step as Config).transformPlain
-          ? stringProcessFile(original, (step as Config).transformPlain!)
-          : processFile(original, (step as Config).transform!),
-      [filePath],
-    )
-    if (results.some((r) => r.status === TransformStatus.Failure)) {
-      console.error(results)
-    }
-    setLoading(false)
+    void (async function () {
+      const results = await transform(
+        async (original) =>
+          await ((step as Config).transformPlain
+            ? stringProcessFile(original, (step as Config).transformPlain!)
+            : processFile(original, (step as Config).transform!)),
+        [filePath],
+      )
+      if (results.some((r) => r.status === TransformStatus.Failure)) {
+        console.error(results)
+      }
+      setLoading(false)
+    })()
   }, [filePath, step])
 
   if (loading) {
