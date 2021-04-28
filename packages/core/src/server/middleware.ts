@@ -20,7 +20,6 @@ export function getAllMiddlewareForModule<TInput, TResult>(
 ) {
   const middleware: Middleware[] = []
   const config = getConfig()
-  console.log(config)
   if (config.middleware) {
     if (!Array.isArray(config.middleware)) {
       throw new Error("'middleware' in blitz.config.js must be an array")

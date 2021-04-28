@@ -111,7 +111,13 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const projectRoot = getProjectRoot()
   const nextConfigPath = path.join(projectRoot, "next.config.js")
-  const blitzConfigPath = path.join(projectRoot, ".blitz", "blitz.config.js")
+  let blitzConfigPath
+  if (existsSync(path.join(projectRoot, ".blitz"))) {
+    blitzConfigPath = path.join(projectRoot, ".blitz", "blitz.config.js")
+  } else {
+    // projectRoot is inside .blitz/build/
+    blitzConfigPath = path.join(projectRoot, "..", "blitz.config.js")
+  }
 
   debug("nextConfigPath: " + nextConfigPath)
   debug("blitzConfigPath: " + blitzConfigPath)
@@ -135,9 +141,6 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     // --------------------------------
     // Load blitz.config.js
     // --------------------------------
-    if (!existsSync(blitzConfigPath)) {
-      console.error("Unable to find config at", blitzConfigPath)
-    }
     // eslint-disable-next-line no-eval -- block webpack from following this module path
     loadedBlitzConfig = eval("require")(blitzConfigPath)
     if (typeof loadedBlitzConfig === "function") {

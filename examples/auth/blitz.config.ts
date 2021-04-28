@@ -9,7 +9,7 @@ module.exports = withBundleAnalyzer({
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
       // sessionExpiryMinutes: 4,
-      getSession: (handle) => console.log("SESS", handle) as any, //db.session.findFirst({where: {handle}}),
+      getSession: (handle) => db.session.findFirst({where: {handle}}),
     }),
   ],
   cli: {
