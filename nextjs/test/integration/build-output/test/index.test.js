@@ -41,6 +41,10 @@ describe('Build Output', () => {
     it.skip('should not deviate from snapshot', async () => {
       console.log(stdout)
 
+      if (process.env.NEXT_PRIVATE_SKIP_SIZE_TESTS) {
+        return
+      }
+
       const parsePageSize = (page) =>
         stdout.match(
           new RegExp(` ${page} .*?((?:\\d|\\.){1,} (?:\\w{1,})) `)
@@ -99,7 +103,7 @@ describe('Build Output', () => {
       expect(parseFloat(indexFirstLoad)).toBeCloseTo(66.8, 1)
       expect(indexFirstLoad.endsWith('kB')).toBe(true)
 
-      expect(parseFloat(err404Size) - 3.7).toBeLessThanOrEqual(0)
+      expect(parseFloat(err404Size)).toBeCloseTo(3.69, 1)
       expect(err404Size.endsWith('kB')).toBe(true)
 
       expect(parseFloat(err404FirstLoad)).toBeCloseTo(69.9, 0)
