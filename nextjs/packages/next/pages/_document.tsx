@@ -411,11 +411,13 @@ export class Head extends Component<
       process.env.__NEXT_OPTIMIZE_FONTS &&
       !inAmpMode
     ) {
-      children = this.makeStylesheetInert(children)
+      children = this.makeStylesheetInert(children) as any /* blitz */
     }
 
     if (process.env.__NEXT_SCRIPT_LOADER) {
-      children = this.handleDocumentScriptLoaderItems(children)
+      children = this.handleDocumentScriptLoaderItems(
+        children
+      ) as any /* blitz */
     }
 
     let hasAmphtmlRel = false

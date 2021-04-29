@@ -54,6 +54,7 @@ export type NextConfig = { [key: string]: any } & {
     serialWebpackBuild?: boolean
     babelMultiThread?: boolean
     conformance?: boolean
+    initServer?: () => void
     amp?: {
       optimizer?: any
       validator?: string
