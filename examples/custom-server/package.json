@@ -14,7 +14,7 @@
     "test:jest": "jest --passWithNoTests",
     "test-server": "blitz build && blitz start",
     "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
-    "test": "run-s test:*"
+    "test": "run-s test:* || run-s test:*"
   },
   "browserslist": [
     "defaults"
