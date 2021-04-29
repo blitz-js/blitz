@@ -72,7 +72,7 @@
     "webpack": "4.44.1",
     "browserslist": "4.16.1",
     "caniuse-lite": "1.0.30001179",
-    "jest": "27.0.0-next.5",
+    "jest": "27.0.0-next.8",
     "ts-jest": "27.0.0-next.10"
   },
   "dependencies": {
@@ -162,7 +162,7 @@
     "eslint_d": "10.0.0",
     "get-port": "5.1.1",
     "husky": "5.1.2",
-    "jest": "27.0.0-next.5",
+    "jest": "27.0.0-next.8",
     "lerna": "4.0.0",
     "lint-staged": "10.5.4",
     "lowdb": "1.0.0",

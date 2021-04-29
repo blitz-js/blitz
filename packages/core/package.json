@@ -9,6 +9,7 @@
   },
   "preconstruct": {
     "entrypoints": [
+      "app.ts",
       "config.ts",
       "document.ts",
       "dynamic.ts",
@@ -24,6 +25,7 @@
   "types": "dist/blitzjs-core.cjs.d.ts",
   "files": [
     "dist",
+    "app",
     "config",
     "document",
     "dynamic",
