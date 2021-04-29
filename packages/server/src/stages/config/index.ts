@@ -12,7 +12,9 @@ const isNowBuild = () => process.env.NOW_BUILDER || process.env.VERCEL_BUILDER
 export const createStageConfig: Stage = ({config, processNewFile, processNewChildFile}) => {
   // Preconditions
   const hasNextConfig = pathExistsSync(resolve(config.src, "next.config.js"))
-  const hasBlitzConfig = pathExistsSync(resolve(config.src, "blitz.config.js"))
+  const hasBlitzConfig =
+    pathExistsSync(resolve(config.src, "blitz.config.js")) ||
+    pathExistsSync(resolve(config.src, "blitz.config.ts"))
 
   if (hasNextConfig && !isNowBuild()) {
     // TODO: Pause the stream and ask the user if they wish to have their configuration file renamed
@@ -41,7 +43,7 @@ export const createStageConfig: Stage = ({config, processNewFile, processNewChil
         path: resolve(config.src, "next.config.js"),
         contents: Buffer.from(`
 const {withBlitz} = require('@blitzjs/core/with-blitz');
-const config = require('./blitz.config.js');
+const config = require('../blitz.config.js');
 module.exports = withBlitz(config);
         `),
       }),
@@ -74,7 +76,7 @@ module.exports = withBlitz(config);
       file.contents = Buffer.from(`
 const {withBlitz} = require('@blitzjs/core/with-blitz');
 const vercelConfig = require('./next-vercel.config.js');
-const config = require('./blitz.config.js');
+const config = require('../blitz.config.js');
 module.exports = withBlitz({...config, ...vercelConfig});
       `)
     }

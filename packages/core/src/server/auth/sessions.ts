@@ -626,7 +626,8 @@ export async function getSessionKernel(
     if (req.method !== "GET") {
       // The publicData in the DB could have been updated since this client last made
       // a request. If so, then we generate a new access token
-      const hasPublicDataChanged = hash256(persistedSession.publicData) !== hashedPublicData
+      const hasPublicDataChanged =
+        hash256(persistedSession.publicData ?? undefined) !== hashedPublicData
       if (hasPublicDataChanged) {
         debug("PublicData has changed since the last request")
       }

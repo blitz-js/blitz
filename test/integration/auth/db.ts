@@ -2,6 +2,14 @@ const low = require("lowdb")
 const FileSync = require("lowdb/adapters/FileSync")
 // const Memory = require("lowdb/adapters/Memory")
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      db: any
+    }
+  }
+}
+
 let db = global.db || low(new FileSync("db.json"))
 global.db = db
 
@@ -10,4 +18,4 @@ db.defaults({
   sessions: [],
 }).write()
 
-module.exports = db
+export default db

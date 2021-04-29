@@ -1,4 +1,5 @@
-const {sessionMiddleware, simpleRolesIsAuthorized} = require("blitz")
+import {sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
+import db from "db"
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
@@ -8,6 +9,7 @@ module.exports = withBundleAnalyzer({
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
       // sessionExpiryMinutes: 4,
+      getSession: (handle) => db.session.findFirst({where: {handle}}),
     }),
   ],
   cli: {

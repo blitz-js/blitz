@@ -1,5 +1,5 @@
-const {sessionMiddleware, simpleRolesIsAuthorized} = require("blitz")
-const db = require("./db")
+import {sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
+import db from "./db"
 
 module.exports = {
   middleware: [
