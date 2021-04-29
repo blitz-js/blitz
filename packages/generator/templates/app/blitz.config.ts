@@ -1,4 +1,4 @@
-const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
+import { sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 
 module.exports = {
   middleware: [

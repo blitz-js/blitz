@@ -27,7 +27,7 @@ interface BuildConfigOptions {
 
 export async function buildConfig({watch}: BuildConfigOptions = {}) {
   debug("Starting buildConfig...")
-  const pkg = require(path.join(pkgDir.sync()!, "package.json"))
+  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
   debug("src", getConfigSrcPath())
   debug("build", getConfigBuildPath())
 
@@ -126,7 +126,7 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
   debug("blitzConfigPath: " + blitzConfigPath)
 
   let loadedNextConfig = {}
-  let loadedBlitzConfig = {}
+  let loadedBlitzConfig: any = {}
   try {
     // --------------------------------
     // Load next.config.js if it exists

@@ -4,6 +4,7 @@ import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import * as esbuild from "esbuild"
+import {readJSONSync} from "fs-extra"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
@@ -269,7 +270,7 @@ export function startCustomServer(
         })
     }
 
-    const pkg = require(path.join(pkgDir.sync()!, "package.json"))
+    const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
 
     const esbuildOptions: esbuild.BuildOptions = {
       entryPoints: [serverSrcPath],
