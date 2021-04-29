@@ -1,4 +1,5 @@
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
+import SuperJSON from "superjson"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
@@ -85,8 +86,15 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
 
+    let dehydratedState = props.pageProps.dehydratedState
+    if (dehydratedState && "_superjson" in props.pageProps) {
+      const {_superjson, ...json} = props.pageProps
+      const deserialized = SuperJSON.deserialize({json, meta: _superjson}) as any
+      dehydratedState = deserialized.dehydratedState
+    }
+
     return (
-      <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>
+      <BlitzProvider dehydratedState={dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
         <UserAppRoot {...props} Component={component} />
       </BlitzProvider>
