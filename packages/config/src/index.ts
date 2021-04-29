@@ -10,7 +10,7 @@ export function getProjectRoot() {
 
 export function getConfigSrcPath() {
   const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
-  if (tsPath) {
+  if (existsSync(tsPath)) {
     return tsPath
   } else {
     const jsPath = path.resolve(path.join(process.cwd(), "blitz.config.js"))
@@ -26,7 +26,10 @@ interface BuildConfigOptions {
 }
 
 export async function buildConfig({watch}: BuildConfigOptions = {}) {
+  debug("Starting buildConfig...")
   const pkg = require(path.join(pkgDir.sync()!, "package.json"))
+  debug("src", getConfigSrcPath())
+  debug("build", getConfigBuildPath())
 
   const esbuildOptions: esbuild.BuildOptions = {
     entryPoints: [getConfigSrcPath()],
@@ -38,8 +41,8 @@ export async function buildConfig({watch}: BuildConfigOptions = {}) {
       "blitz",
       "next",
       ...Object.keys(require("blitz/package").dependencies),
-      ...Object.keys(pkg.dependencies),
-      ...Object.keys(pkg.devDependencies),
+      ...Object.keys(pkg?.dependencies ?? {}),
+      ...Object.keys(pkg?.devDependencies ?? {}),
     ],
   }
 
