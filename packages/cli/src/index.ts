@@ -9,6 +9,7 @@ import {run as oclifRun} from "@oclif/command"
 require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
 
 export function run() {
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   buildConfig().then(() => {
     oclifRun()
       .then(require("@oclif/command/flush"))
