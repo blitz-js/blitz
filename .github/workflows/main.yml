@@ -283,7 +283,6 @@ jobs:
 
       - run: cd test/integration/with-electron/app && yarn
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-        working-directory: ./
 
       - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
