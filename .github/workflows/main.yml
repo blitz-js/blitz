@@ -28,9 +28,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -70,9 +70,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -93,6 +93,8 @@ jobs:
     name: Blitz - Test Packages
     needs: build
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -115,6 +117,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
         with:
@@ -134,10 +138,12 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
       - run: yarn install --frozen-lockfile --check-files
+      # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
+      #   if: matrix.os == 'windows-latest'
       - name: Build Packages
         run: yarn build
       # Needed to get cypress binary
@@ -275,9 +281,8 @@ jobs:
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
-      - run: yarn add -W --dev spectron@7.0.0 electron@5.0.0
+      - run: cd test/integration/with-electron/app && yarn
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-        working-directory: ./
 
       - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -300,6 +305,7 @@ jobs:
   testFutureDependencies:
     name: Nextjs - Webpack 5 (Basic, Production, Acceptance)
     runs-on: ubuntu-latest
+    needs: build
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -307,49 +313,15 @@ jobs:
       NEXT_PRIVATE_TEST_WEBPACK5_MODE: 1
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
         with:
-          fetch-depth: 25
-
-      - run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
-        id: docs-change
-
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - name: Use Node.js
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-      - name: Get yarn cache directory path
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
-
-      - run: yarn install --check-files
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: yarn build:nextjs
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+          path: ./*
+          key: ${{ github.sha }}
 
       - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         working-directory: nextjs
 
   testLegacyReact:
@@ -401,9 +373,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v5-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
 
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}

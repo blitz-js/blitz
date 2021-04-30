@@ -1,18 +1,6 @@
 import React from "react"
 import {useMutation} from "../src/use-mutation"
-import {act, render, screen} from "./test-utils"
-
-// This enhance fn does what getIsomorphicEnhancedResolver does during build time
-const enhance = (fn: any) => {
-  const newFn = (...args: any) => fn(...args)
-  newFn._meta = {
-    name: "testResolver",
-    type: "mutation",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
-  return newFn
-}
+import {act, enhanceMutationFn, enhanceQueryFn, render, screen} from "./test-utils"
 
 describe("useMutation", () => {
   const setupHook = (resolver: (...args: any) => Promise<any>): [{mutate?: Function}, Function] => {
@@ -33,7 +21,7 @@ describe("useMutation", () => {
     // eslint-disable-next-line require-await
     const mutateFn = jest.fn()
     it("should work with Blitz mutations", async () => {
-      const [res] = setupHook(enhance(mutateFn))
+      const [res] = setupHook(enhanceMutationFn(mutateFn))
       await act(async () => {
         await res.mutate!("data")
         await screen.findByText("Sent")
@@ -45,6 +33,13 @@ describe("useMutation", () => {
     it("shouldn't work with regular functions", () => {
       console.error = jest.fn()
       expect(() => setupHook(mutateFn)).toThrowErrorMatchingSnapshot()
+    })
+
+    it("shouldn't work with query function", () => {
+      console.error = jest.fn()
+      const mutationFn = jest.fn()
+
+      expect(() => setupHook(enhanceQueryFn(mutationFn))).toThrowErrorMatchingSnapshot()
     })
   })
 })

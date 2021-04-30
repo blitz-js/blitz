@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`setPrismaDataSource adds datasource if missing 1`] = `
+"// wow there is no datasource here
+
+datasource db {
+  provider = \\"postgresql\\"
+  url      = env(\\"DATABASE_URL\\")
+}
+"
+`;
+
+exports[`setPrismaDataSource sets datasource 1`] = `
+"// comment up here
+
+datasource db {
+  provider = \\"postgresql\\"
+  url      = env(\\"DATABASE_URL\\")
+}
+
+// comment down here
+"
+`;

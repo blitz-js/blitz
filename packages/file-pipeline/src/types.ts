@@ -1,5 +1,6 @@
 import {Writable} from "stream"
 import File from "vinyl"
+import {OverrideTriage} from "./helpers/work-optimizer"
 
 export type FileCacheEntry = {path: string}
 
@@ -27,10 +28,11 @@ export interface FileCacheInterface extends AbstractFileCache {
 
 export interface RouteCacheInterface extends AbstractFileCache {
   delete(file: File): void
-  add(file: File, type: RouteType): void
+  add(file: File): void
 
   get(): Record<string, RouteCacheEntry>
   get(key: string): RouteCacheEntry
+  get(file: File): RouteCacheEntry
 
   set(key: string, value: RouteCacheEntry): void
 
@@ -60,6 +62,7 @@ export type StageConfig = {
   include: string[]
   ignore: string[]
   watch: boolean
+  overrideTriage?: OverrideTriage
 }
 
 /**
@@ -88,4 +91,5 @@ export type Stage = (
 ) => {
   stream: NodeJS.ReadWriteStream
   ready?: Record<string, any>
+  beforeTriage?: boolean
 } & Record<string, any>

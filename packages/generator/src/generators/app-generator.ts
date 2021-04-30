@@ -50,6 +50,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
+    this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
       | Record<string, any>
       | undefined
@@ -233,9 +234,12 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
-  preventFileFromLogging(file: string): boolean {
-    const filename = file.split("/").pop() as string
-    return filename[0] === "."
+  preventFileFromLogging(path: string): boolean {
+    if (path.includes(".env")) return false
+    if (path.includes("eslint")) return false
+
+    const filename = path.split("/").pop() as string
+    return path[0] === "." || filename[0] === "."
   }
 
   commitChanges() {

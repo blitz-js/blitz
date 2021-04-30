@@ -104,6 +104,7 @@ describe("agnosticSource", () => {
     const {triage, reportComplete} = createWorkOptimizer(
       normalize("/path"),
       normalize("/dest"),
+      undefined,
       saveCache,
       readCache,
     )
@@ -143,6 +144,7 @@ describe("agnosticSource", () => {
     const {triage, reportComplete} = createWorkOptimizer(
       normalize("/path"),
       normalize("/dest"),
+      undefined,
       saveCache,
       readCache,
     )
@@ -189,6 +191,7 @@ describe("agnosticSource", () => {
     const {triage, reportComplete} = createWorkOptimizer(
       normalize("/path"),
       normalize("/dest"),
+      undefined,
       saveCache,
       readCache,
     )

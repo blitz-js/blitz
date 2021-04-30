@@ -12,7 +12,7 @@ describe("path utils", () => {
     expect(paths.app()).toBe("app/pages/_app.tsx")
     expect(paths.entry()).toBe("app/pages/index.tsx")
     // Blitz and Babel configs are always JS, we shouldn't transform this extension
-    expect(paths.blitzConfig()).toBe("blitz.config.js")
+    expect(paths.blitzConfig()).toBe("blitz.config.ts")
     expect(paths.babelConfig()).toBe("babel.config.js")
   })
 

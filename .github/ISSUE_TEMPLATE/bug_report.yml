@@ -1,7 +1,6 @@
 name: Bug Report
-about: Something is not working right. Or error messages are unclear.
+description: Something is not working right. Or error messages are unclear.
 labels: "kind/bug, status/triage"
-issue_body: true
 body:
   - type: markdown
     attributes:
@@ -44,6 +43,6 @@ body:
         ```
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     attributes:
-      value: "Please include below any other applicable logs and screenshots that show your problem:"
+      label: "Please include below any other applicable logs and screenshots that show your problem:"
