@@ -1,9 +1,12 @@
 import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
+import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
-import fs from "fs"
+import * as esbuild from "esbuild"
+import {readJSONSync} from "fs-extra"
 import path from "path"
+import pkgDir from "pkg-dir"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
 import {Manifest} from "./stages/manifest"
 import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
@@ -139,8 +142,8 @@ export function nextBuild(
       env: spawnEnv,
       stdio: [process.stdin, "pipe", "pipe"],
     })
-      .on("exit", (code: number) => {
-        if (code === 0) {
+      .on("exit", (code: number | null) => {
+        if (code === 0 || code === null) {
           res()
         } else {
           process.exit(code)
@@ -150,6 +153,28 @@ export function nextBuild(
 
     nextjs.stdout.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stdout)
     nextjs.stderr.pipe(createOutputTransformer(buildFolder, manifest)).pipe(process.stderr)
+  })
+}
+
+export function nextExport(nextBin: string, config: ServerConfig) {
+  const spawnEnv = getSpawnEnv(config)
+
+  return new Promise<void>((res, rej) => {
+    const nextjs = spawn(nextBin, ["export"], {
+      env: spawnEnv,
+      stdio: [process.stdin, "pipe", "pipe"],
+    })
+      .on("exit", (code: number | null) => {
+        if (code === 0 || code === null) {
+          res()
+        } else {
+          process.exit(code)
+        }
+      })
+      .on("error", rej)
+
+    nextjs.stdout.pipe(process.stdout)
+    nextjs.stderr.pipe(process.stderr)
   })
 }
 
@@ -184,16 +209,35 @@ export async function nextStart(nextBin: string, buildFolder: string, config: Se
   })
 }
 
-export function getCustomServerPath(cwd: string) {
-  return path.resolve(cwd, "server.js")
+export function getCustomServerPath() {
+  const projectRoot = getProjectRoot()
+  return require.resolve(path.join(projectRoot, "server"))
+}
+export function getCustomServerBuildPath() {
+  const projectRoot = getProjectRoot()
+  return path.resolve(projectRoot, ".blitz", "custom-server.js")
 }
 
-export function customServerExists(cwd: string) {
-  return fs.existsSync(getCustomServerPath(cwd))
+export function customServerExists() {
+  try {
+    getCustomServerPath()
+    return true
+  } catch {
+    return false
+  }
 }
 
-export function startCustomServer(cwd: string, config: ServerConfig) {
-  const serverPath = getCustomServerPath(cwd)
+interface CustomServerOptions {
+  watch?: boolean
+}
+
+export function startCustomServer(
+  cwd: string,
+  config: ServerConfig,
+  {watch}: CustomServerOptions = {},
+) {
+  const serverSrcPath = getCustomServerPath()
+  const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
   if (config.env === "prod") {
@@ -201,17 +245,68 @@ export function startCustomServer(cwd: string, config: ServerConfig) {
   }
 
   return new Promise<void>((res, rej) => {
-    spawn("node", [serverPath], {
-      cwd,
-      env: spawnEnv,
-      stdio: "inherit",
+    let process: ChildProcess
+
+    const RESTART_CODE = 777777
+
+    const spawnServer = () => {
+      process = spawn("node", [serverBuildPath], {
+        cwd,
+        env: spawnEnv,
+        stdio: "inherit",
+      })
+        .on("exit", (code: number) => {
+          if (code === 0) {
+            res()
+          } else if (watch && code === RESTART_CODE) {
+            spawnServer()
+          } else {
+            rej(`server.js failed with status code: ${code}`)
+          }
+        })
+        .on("error", (err) => {
+          console.error(err)
+          rej(err)
+        })
+    }
+
+    const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+
+    const esbuildOptions: esbuild.BuildOptions = {
+      entryPoints: [serverSrcPath],
+      outfile: getCustomServerBuildPath(),
+      format: "cjs",
+      bundle: true,
+      platform: "node",
+      external: [
+        "blitz",
+        "next",
+        ...Object.keys(require("blitz/package").dependencies),
+        ...Object.keys(pkg.dependencies),
+        ...Object.keys(pkg.devDependencies),
+      ],
+    }
+
+    if (watch) {
+      esbuildOptions.watch = {
+        onRebuild(error) {
+          if (error) {
+            log.error("Failed to re-build custom server")
+          } else {
+            log.newline()
+            log.progress("Custom server changed - restarting...")
+            log.newline()
+            //@ts-ignore -- incorrect TS type from node
+            process.exitCode = RESTART_CODE
+            process.kill("SIGABRT")
+          }
+        },
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    esbuild.build(esbuildOptions).then(() => {
+      spawnServer()
     })
-      .on("exit", (code: number) => {
-        code === 0 ? res() : rej(`server.js failed with status code: ${code}`)
-      })
-      .on("error", (err) => {
-        console.error(err)
-        rej(err)
-      })
   })
 }

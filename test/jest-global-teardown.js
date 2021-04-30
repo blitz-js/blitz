@@ -1,0 +1,1 @@
+../nextjs/test/jest-global-teardown.js

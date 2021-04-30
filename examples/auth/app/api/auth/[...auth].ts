@@ -22,14 +22,14 @@ assert(process.env.AUTH0_DOMAIN, "You must provide the AUTH0_DOMAIN env variable
 assert(process.env.AUTH0_CLIENT_ID, "You must provide the AUTH0_CLIENT_ID env variable")
 assert(process.env.AUTH0_CLIENT_SECRET, "You must provide the AUTH0_CLIENT_SECRET env variable")
 
-export default passportAuth({
+export default passportAuth((ctx) => ({
   successRedirectUrl: "/",
   strategies: [
     {
       strategy: new TwitterStrategy(
         {
-          consumerKey: process.env.TWITTER_CONSUMER_KEY,
-          consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+          consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
+          consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/twitter/callback"
@@ -43,6 +43,8 @@ export default passportAuth({
             // This can happen if you haven't enabled email access in your twitter app permissions
             return done(new Error("Twitter OAuth response doesn't have email."))
           }
+
+          console.log(ctx.session.userId)
 
           const user = await db.user.upsert({
             where: {email},
@@ -61,8 +63,8 @@ export default passportAuth({
     {
       strategy: new GitHubStrategy(
         {
-          clientID: process.env.GITHUB_CLIENT_ID,
-          clientSecret: process.env.GITHUB_CLIENT_SECRET,
+          clientID: process.env.GITHUB_CLIENT_ID as string,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/github/callback"
@@ -104,9 +106,9 @@ export default passportAuth({
       authenticateOptions: {scope: "openid email profile"},
       strategy: new Auth0Strategy(
         {
-          domain: process.env.AUTH0_DOMAIN,
-          clientID: process.env.AUTH0_CLIENT_ID,
-          clientSecret: process.env.AUTH0_CLIENT_SECRET,
+          domain: process.env.AUTH0_DOMAIN as string,
+          clientID: process.env.AUTH0_CLIENT_ID as string,
+          clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
           callbackURL:
             process.env.NODE_ENV === "production"
               ? "https://auth-example-flybayer.blitzjs.vercel.app/api/auth/auth0/callback"
@@ -140,4 +142,4 @@ export default passportAuth({
       ),
     },
   ],
-})
+}))

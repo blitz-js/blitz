@@ -1,24 +1,23 @@
-import {flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
 import {
-  PageGenerator,
-  MutationsGenerator,
-  MutationGenerator,
-  QueriesGenerator,
+  capitalize,
   FormGenerator,
   ModelGenerator,
-  QueryGenerator,
-  singleCamel,
-  capitalize,
-  uncapitalize,
-  singlePascal,
+  MutationGenerator,
+  MutationsGenerator,
+  PageGenerator,
   pluralCamel,
   pluralPascal,
+  QueriesGenerator,
+  QueryGenerator,
+  singleCamel,
+  singlePascal,
+  uncapitalize,
 } from "@blitzjs/generator"
-
+import {flags} from "@oclif/command"
+import chalk from "chalk"
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
-import chalk from "chalk"
 
 const debug = require("debug")("blitz:generate")
 const getIsTypeScript = () =>

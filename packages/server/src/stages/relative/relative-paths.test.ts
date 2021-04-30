@@ -37,6 +37,15 @@ describe("relativeToAbsolute", () => {
       },
       expected: "app/one/two",
     },
+    {
+      name: "Leaves imports from .blitz package alone",
+      input: {
+        relativeImport: ".blitz/route-manifest",
+        filename: platformSensitiveAbsolutePath("/projects/blitz/blitz/app/users/pages.ts"),
+        cwd: platformSensitiveAbsolutePath("/projects/blitz/blitz"),
+      },
+      expected: ".blitz/route-manifest",
+    },
   ]
 
   tests.forEach(({name, input: {cwd, filename, relativeImport}, expected}) => {

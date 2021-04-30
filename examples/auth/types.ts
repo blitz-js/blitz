@@ -1,5 +1,4 @@
-import {DefaultCtx, SessionContext} from "blitz"
-import {SimpleRolesIsAuthorized} from "@blitzjs/server"
+import {DefaultCtx, SessionContext, SimpleRolesIsAuthorized} from "blitz"
 import {User} from "db"
 
 export type Role = "ADMIN" | "USER"
@@ -15,5 +14,13 @@ declare module "blitz" {
       role: Role
       views?: number
     }
+  }
+}
+
+// This should not be needed. Usually it isn't but for some reason in this example it is
+declare module "react" {
+  interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> {
+    jsx?: boolean
+    global?: boolean
   }
 }

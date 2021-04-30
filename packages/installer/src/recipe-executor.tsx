@@ -12,7 +12,7 @@ type ExecutorConfig =
   | FileTransformExecutor.Config
   | NewFileExecutor.Config
 
-export {ExecutorConfig as ExecutorConfigUnion}
+export type {ExecutorConfig as ExecutorConfigUnion}
 
 export class RecipeExecutor<Options extends RecipeMeta> {
   private readonly steps: ExecutorConfig[]

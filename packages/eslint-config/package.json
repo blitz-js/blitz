@@ -1,10 +1,9 @@
 {
   "name": "eslint-config-blitz",
-  "version": "0.30.2",
+  "version": "0.35.0-canary.3",
   "description": "Blitz.js eslint config",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
     "test": "echo \"No tests\""
   },
   "files": [
@@ -17,8 +16,8 @@
     "blitzjs"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "~4.14.0",
-    "@typescript-eslint/parser": "~4.14.0",
+    "@typescript-eslint/eslint-plugin": "4.17.0",
+    "@typescript-eslint/parser": "4.17.0",
     "babel-eslint": "~10.1.0",
     "eslint-config-react-app": "~6.0.0",
     "eslint-plugin-cypress": "~2.11.2",

@@ -29,11 +29,11 @@ export default RecipeBuilder()
     explanation: "Make sure that your local Quirrel server runs when you need it.",
     singleFileSearch: paths.packageJson(),
     transformPlain(program) {
-      return program.replace(/("start":\s*")(.*)(")/, (_fullMatch, start, command: string, end) => {
+      return program.replace(/("dev":\s*")(.*)(")/, (_fullMatch, start, command: string, end) => {
         if (command.includes("concurrently")) {
           command += ` 'quirrel'`
         } else {
-          command = `concurrently --raw '${command}' 'quirrel'`
+          command = `concurrently --raw \\\"${command}\\\" 'quirrel'`
         }
 
         return [start, command, end].join("")

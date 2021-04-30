@@ -22,20 +22,26 @@ export async function dev(config: ServerConfig) {
   // if blitz version is mismatched, we need to bust the cache by cleaning the buildFolder
   const versionMatched = await isVersionMatched(buildFolder)
 
-  const stages = await configureStages({writeManifestFile, isTypeScript, buildFolder, env})
+  const {stages, overrideTriage} = await configureStages({
+    writeManifestFile,
+    isTypeScript,
+    buildFolder,
+    env,
+  })
 
   const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
     ignore,
     include,
     watch,
     clean: !versionMatched || clean,
+    overrideTriage,
   })
 
   if (!versionMatched) await saveBlitzVersion(buildFolder)
 
-  if (customServerExists(buildFolder)) {
+  if (customServerExists()) {
     log.success("Using your custom server")
-    await startCustomServer(buildFolder, config)
+    await startCustomServer(buildFolder, config, {watch: true})
   } else {
     await nextStartDev(nextBin, buildFolder, manifest, buildFolder, config)
   }

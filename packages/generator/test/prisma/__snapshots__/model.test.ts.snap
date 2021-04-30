@@ -1,14 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Prisma Model generates a proper model 1`] = `
-"model User {
-  id               Int        @default(autoincrement()) @id
+"
+model User {
+  id               Int        @id @default(autoincrement())
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
   email            String     @unique
   updated          DateTime   @updatedAt
-  recentLogins     DateTime[] 
-  twoFactorEnabled Boolean    
-  twoFactorMethod  String?    
-}"
+  recentLogins     DateTime[]
+  twoFactorEnabled Boolean
+  twoFactorMethod  String?
+}
+"
 `;

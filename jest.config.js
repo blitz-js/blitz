@@ -1,23 +1,13 @@
-const {resolveAliases} = require("@blitzjs/config")
-
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  moduleFileExtensions: ["ts", "tsx", "js", "json"],
-  modulePathIgnorePatterns: ["<rootDir>/tmp", "<rootDir>/dist", "<rootDir>/templates"],
+  testMatch: ["**/*.test.js", "**/*.test.ts"],
+  verbose: true,
+  rootDir: "test",
+  modulePaths: ["<rootDir>/lib"],
   moduleNameMapper: {
-    ...resolveAliases.node,
+    "^lib/(.+)$": "<rootDir>/lib/$1",
   },
-  coverageReporters: ["json", "lcov", "text", "clover"],
-  // collectCoverage: !!`Boolean(process.env.CI)`,
-  collectCoverageFrom: ["src/**/*.ts"],
-  coveragePathIgnorePatterns: ["/templates/"],
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 100,
-  //     functions: 100,
-  //     lines: 100,
-  //     statements: 100,
-  //   },
-  // },
+  globalSetup: "<rootDir>/jest-global-setup.js",
+  globalTeardown: "<rootDir>/jest-global-teardown.js",
+  setupFilesAfterEnv: ["<rootDir>/jest-setup-after-env.js"],
+  testEnvironment: "<rootDir>/jest-environment.js",
 }

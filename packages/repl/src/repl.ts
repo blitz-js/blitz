@@ -7,6 +7,7 @@ import * as REPL from "repl"
 import {REPLCommand, REPLServer} from "repl"
 // import {loadDependencies} from '../utils/load-dependencies'
 import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
+const debug = require("debug")("blitz:repl")
 
 const projectRoot = getProjectRoot()
 
@@ -67,8 +68,10 @@ const setupHistory = (repl: any) => {
 }
 
 const initializeRepl = async (replOptions: REPL.ReplOptions) => {
+  debug("initializeRepl")
   const modules = await loadBlitz()
 
+  debug("Starting REPL...")
   const repl = REPL.start(replOptions)
 
   loadBlitzModules(repl, modules)
@@ -79,6 +82,7 @@ const initializeRepl = async (replOptions: REPL.ReplOptions) => {
 }
 
 const setupFileWatchers = async (repl: REPLServer) => {
+  debug("Setting up file watchers...")
   const watchers = [
     // watch('package.json').on('change', () => Console.loadDependencies(repl)),
     watch(await getBlitzModulePaths(), {
@@ -86,7 +90,10 @@ const setupFileWatchers = async (repl: REPLServer) => {
     }).on("all", () => loadModules(repl)),
   ]
 
-  repl.on("reset", () => loadModules(repl))
+  repl.on("reset", async () => {
+    debug("Reset, so reloading modules...")
+    await loadModules(repl)
+  })
   repl.on("exit", () => watchers.forEach((watcher) => watcher.close()))
 }
 

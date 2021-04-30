@@ -1,5 +1,5 @@
 import {FileCache, RouteCache} from "@blitzjs/file-pipeline"
-import {StageArgs, StageConfig} from "@blitzjs/file-pipeline/dist/packages/file-pipeline/src/types"
+import {StageArgs, StageConfig} from "@blitzjs/file-pipeline"
 import {pipeline, through} from "../streams"
 
 export function mockStageArgs(a: {entries?: string[]; cwd?: string}): StageArgs {
