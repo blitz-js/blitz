@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@blitzjs/display": "0.35.0-canary.3",
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.1",
     "chokidar": "3.5.1",
     "flush-write-stream": "2.0.0",
     "from2": "2.3.0",
@@ -37,7 +37,7 @@
     "gulp-if": "3.0.0",
     "lodash": "^4.0.0",
     "merge-stream": "2.0.0",
-    "micromatch": "4.0.2",
+    "micromatch": "4.0.4",
     "parallel-transform": "1.2.0",
     "pump": "3.0.0",
     "pumpify": "2.0.1",

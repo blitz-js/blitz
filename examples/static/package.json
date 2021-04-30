@@ -34,25 +34,25 @@
   "dependencies": {
     "@prisma/client": "2.19.0",
     "blitz": "0.35.0-canary.3",
-    "final-form": "4.20.1",
+    "final-form": "4.20.2",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.1.1",
-    "react-final-form": "6.5.2",
-    "typescript": "4.1.5",
-    "zod": "1.11.11"
+    "react-final-form": "6.5.3",
+    "typescript": "4.2.4",
+    "zod": "1.11.13"
   },
   "devDependencies": {
     "@types/preview-email": "2.0.0",
-    "@types/react": "17.0.2",
-    "eslint": "7.21.0",
-    "husky": "5.1.2",
+    "@types/react": "17.0.3",
+    "eslint": "7.24.0",
+    "husky": "6.0.0",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
-    "prettier-plugin-prisma": "0.4.0",
+    "prettier-plugin-prisma": "0.8.0",
     "pretty-quick": "3.1.0",
-    "preview-email": "3.0.3"
+    "preview-email": "3.0.4"
   },
   "private": true
 }

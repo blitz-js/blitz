@@ -44,7 +44,7 @@
     "pumpify": "2.0.1",
     "readable-stream": "3.6.0",
     "resolve-cwd": "3.0.0",
-    "slash": "^3.0.0",
+    "slash": "^4.0.0",
     "through2": "4.0.2",
     "vinyl": "2.2.1"
   },

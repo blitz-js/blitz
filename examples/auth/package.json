@@ -30,7 +30,7 @@
   "dependencies": {
     "@prisma/client": "2.19.0",
     "blitz": "0.35.0-canary.3",
-    "final-form": "4.20.1",
+    "final-form": "4.20.2",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",
     "passport-twitter": "1.0.4",
@@ -38,29 +38,29 @@
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.1.1",
-    "react-final-form": "6.5.2",
-    "zod": "1.11.11"
+    "react-final-form": "6.5.3",
+    "zod": "1.11.13"
   },
   "devDependencies": {
     "@cypress/skip-test": "2.6.0",
     "@next/bundle-analyzer": "^10.0.6",
-    "@testing-library/react": "11.2.5",
-    "@testing-library/react-hooks": "^4.0.1",
+    "@testing-library/react": "11.2.6",
+    "@testing-library/react-hooks": "^5.1.2",
     "@types/passport-auth0": "1.0.4",
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
     "@types/preview-email": "2.0.0",
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.3",
     "cross-env": "7.0.3",
-    "cypress": "6.2.1",
-    "eslint": "7.21.0",
-    "husky": "5.1.2",
+    "cypress": "7.1.0",
+    "eslint": "7.24.0",
+    "husky": "6.0.0",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
-    "preview-email": "3.0.3",
-    "start-server-and-test": "1.11.7",
-    "typescript": "4.1.5"
+    "preview-email": "3.0.4",
+    "start-server-and-test": "1.12.1",
+    "typescript": "4.2.4"
   },
   "private": true
 }
