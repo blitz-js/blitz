@@ -4,10 +4,24 @@ import {
   parseParametersFromRoute,
 } from "./route-import-manifest"
 
-test("parseParametersFromRoute", () => {
-  expect(parseParametersFromRoute("posts/[postId]/[...openedCommentPath]")).toEqual({
-    parameters: ["postId"],
-    multipleParameters: ["openedCommentPath"],
+describe("parseParametersFromRoute", () => {
+  it("supports being passed a route with single and multiple  parameters", () => {
+    expect(parseParametersFromRoute("posts/[postId]/[...openedCommentPath]")).toEqual({
+      parameters: ["postId"],
+      multipleParameters: ["openedCommentPath"],
+    })
+  })
+  it("supports being passed an optional catch-all parameter", () => {
+    expect(parseParametersFromRoute("posts/[[...openedCommentPath]]")).toEqual({
+      parameters: [],
+      multipleParameters: ["openedCommentPath"],
+    })
+  })
+  it("supports being passed a mix of single parameters and optional catch-all parameters", () => {
+    expect(parseParametersFromRoute("posts/[postId]/[[...openedCommentPath]]")).toEqual({
+      parameters: ["postId"],
+      multipleParameters: ["openedCommentPath"],
+    })
   })
 })
 

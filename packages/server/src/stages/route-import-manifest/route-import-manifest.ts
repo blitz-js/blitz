@@ -88,8 +88,8 @@ ${declarationLines.map((line) => "  " + line).join(";\n")};
 export function parseParametersFromRoute(
   path: string,
 ): Pick<Route, "parameters" | "multipleParameters"> {
-  const parameteredSegments = path.match(/\[.*?\]/g) ?? []
-  const withoutBrackets = parameteredSegments.map((p) => p.substring(1, p.length - 1))
+  const parameteredSegments = path.match(/\[\[.*?\]\]|\[.*?\]/g) ?? []
+  const withoutBrackets = parameteredSegments.map((p) => p.replace(/\[/g, "").replace(/\]/g, ""))
 
   const [multipleParameters, parameters] = partition(withoutBrackets, (p) => p.startsWith("..."))
 
