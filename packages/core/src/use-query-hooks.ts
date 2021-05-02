@@ -1,3 +1,4 @@
+import {getConfig} from "@blitzjs/config"
 import {
   useInfiniteQuery as useInfiniteReactQuery,
   UseInfiniteQueryOptions,
@@ -49,14 +50,15 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  let enabled = isServer ? false : options?.enabled ?? true
-  const suspense = enabled === false ? false : options?.suspense
+  const legacyMode = getConfig?.().experimental?.reactMode === "legacy"
+  let enabled = isServer ? legacyMode : options?.enabled ?? true
+  const suspense = !enabled ? false : options?.suspense ?? false
   const session = useSession({suspense})
   if (session.isLoading) {
     enabled = false
   }
 
-  const routerIsReady = useRouter().isReady || isServer
+  const routerIsReady = useRouter().isReady || (isServer && !legacyMode)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
