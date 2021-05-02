@@ -8,6 +8,7 @@ node_modules
 dist
 tmp
 .blitz
+lib
 
 # good directory to use for testing app generation
 _app

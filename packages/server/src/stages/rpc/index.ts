@@ -1,10 +1,12 @@
 import {getConfig} from "@blitzjs/config"
 import {ResolverType} from "@blitzjs/core"
 import {Stage, transform} from "@blitzjs/file-pipeline"
+import {existsSync} from "fs"
 import {relative} from "path"
 import slash from "slash"
 import File from "vinyl"
 import {absolutePathTransform} from "../utils"
+const debug = require("debug")("blitz:stage:rpc")
 
 export const resolverFullBuildPathRegex = /[\\/]app[\\/]_resolvers[\\/]/
 export const resolverBuildFolderReplaceRegex = /_resolvers[\\/]/g
@@ -55,12 +57,11 @@ export default getIsomorphicEnhancedResolver(
 )
 `
 
-// Clarification: try/catch around db is to prevent query errors when not using blitz's inbuilt database (See #572)
-const apiHandlerTemplate = (originalPath: string, useTypes: boolean) => `
+const apiHandlerTemplate = (originalPath: string, useTypes: boolean, useDb: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
 import enhancedResolver from '${originalPath}'
-import {getAllMiddlewareForModule} from '@blitzjs/core'
-import {rpcApiHandler} from '@blitzjs/server'
+import {getAllMiddlewareForModule} from '@blitzjs/core/server'
+import {rpcApiHandler} from '@blitzjs/core/server'
 import path from 'path'
 
 // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
@@ -71,16 +72,20 @@ path.resolve(".next/blitz/db.js")
 
 let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}
-try {
-  db = require('db').default
-  if (require('db').connect) {
-    connect = require('db').connect
-  } else if (db?.$connect || db?.connect) {
-    connect = () => db.$connect ? db.$connect() : db.connect()
-  } else {
-    connect = () => {}
-  }
-} catch(_) {}
+
+${
+  useDb
+    ? `
+db = require('db').default
+if (require('db').connect) {
+  connect = require('db').connect
+} else if (db?.$connect || db?.connect) {
+  connect = () => db.$connect ? db.$connect() : db.connect()
+} else {
+  connect = () => {}
+}`
+    : ""
+}
 
 export default rpcApiHandler(
   enhancedResolver,
@@ -113,11 +118,28 @@ export const createStageRpc = (isTypeScript = true): Stage =>
         return file
       }
 
+      debug("Event:", file.event)
+
       const originalPath = resolutionPath(src, file.path)
       const resolverImportPath = resolverFilePath(originalPath)
       const {resolverType, resolverName} = extractTemplateVars(resolverImportPath)
 
-      // Original function -> _resolvers path
+      // Isomorphic client - original file path
+      push(
+        new File({
+          path: file.path,
+          contents: Buffer.from(
+            isomorhicHandlerTemplateServer(
+              resolverImportPath,
+              resolverName,
+              resolverType,
+              warmApiEndpoints,
+            ),
+          ),
+          event: file.event,
+        }),
+      )
+
       push(
         new File({
           path: getResolverPath(file.path),
@@ -127,52 +149,57 @@ export const createStageRpc = (isTypeScript = true): Stage =>
           // of the stream here we provide a hash with some information for how
           // this file came to be here
           hash: [file.hash, "rpc", "resolver"].join("|"),
-          event: "add",
+          event: file.event,
         }),
       )
 
       // File API route handler
-      push(
-        new File({
-          path: getApiHandlerPath(file.path),
-          contents: Buffer.from(apiHandlerTemplate(originalPath, isTypeScript)),
-          // Appending a new file to the output of this particular stream
-          // We don't want to reprocess this file but simply add it to the output
-          // of the stream here we provide a hash with some information for how
-          // this file came to be here
-          hash: [file.hash, "rpc", "handler"].join("|"),
-          event: "add",
-          originalPath: file.path,
-          originalRelative: file.relative,
-        }),
-      )
-
-      // Isomorphic client
-      const isomorphicHandlerFile = file.clone()
-      isomorphicHandlerFile.contents = Buffer.from(
-        isomorhicHandlerTemplateServer(
-          resolverImportPath,
-          resolverName,
-          resolverType,
-          warmApiEndpoints,
-        ),
-      )
-      push(isomorphicHandlerFile)
+      if (["add", "unlink"].includes(file.event)) {
+        push(
+          new File({
+            path: getApiHandlerPath(file.path),
+            contents: Buffer.from(
+              apiHandlerTemplate(
+                originalPath,
+                isTypeScript,
+                existsSync(`db/index.${isTypeScript ? "ts" : "js"}`),
+              ),
+            ),
+            // Appending a new file to the output of this particular stream
+            // We don't want to reprocess this file but simply add it to the output
+            // of the stream here we provide a hash with some information for how
+            // this file came to be here
+            hash: [file.hash, "rpc", "handler"].join("|"),
+            event: file.event === "add" ? "add" : "unlink",
+            originalPath: file.path,
+            originalRelative: file.relative,
+          }),
+        )
+      }
 
       // Isomorphic client with export
-      const isomorphicHandlerFileWithExport = file.clone()
-      isomorphicHandlerFileWithExport.basename = clientResolverBasename(
-        isomorphicHandlerFileWithExport.basename,
-      )
-      isomorphicHandlerFileWithExport.contents = Buffer.from(
-        isomorhicHandlerTemplateClient(
-          resolverImportPath,
-          resolverName,
-          resolverType,
-          warmApiEndpoints,
-        ),
-      )
-      push(isomorphicHandlerFileWithExport)
+      if (["add", "unlink"].includes(file.event)) {
+        // For some reason, setting `clientWithExport.basename` doesn't work like it should
+        // so we have to set the basename with this temp file
+        const temp = new File({path: file.path})
+        temp.basename = clientResolverBasename(temp.basename)
+        const clientWithExport = new File({
+          path: temp.path,
+          contents: Buffer.from(
+            isomorhicHandlerTemplateClient(
+              resolverImportPath,
+              resolverName,
+              resolverType,
+              warmApiEndpoints,
+            ),
+          ),
+          hash: [file.hash, "rpc", "client"].join("|"),
+          event: file.event === "add" ? "add" : "unlink",
+          originalPath: file.path,
+          originalRelative: file.relative,
+        })
+        push(clientWithExport)
+      }
 
       return next()
     })

@@ -1,25 +1,6 @@
+import * as ast from "@mrleebo/prisma-ast"
 import {singlePascal} from "../utils/inflector"
-import {Field, FieldType} from "./field"
-
-function stringifyFieldsForPrinting(fields: Field[]) {
-  let maxNameLength = 1
-  let maxTypeLength = 1
-  for (let field of fields) {
-    const [name, type] = field.toString().split(/[\s]+/)
-    maxNameLength = Math.max(maxNameLength, name.length)
-    maxTypeLength = Math.max(maxTypeLength, type.length)
-  }
-  // add horizontal padding, otherwise there would be no space after the type
-  maxNameLength += 2
-  maxTypeLength += 2
-  return fields.map((field) => {
-    const [name, type, ...rest] = field.toString().split(/[\s]+/)
-    const attrs = rest.join(" ")
-    const namePad = maxNameLength - name.length
-    const typePad = maxTypeLength - type.length
-    return `${name}${Array(namePad).join(" ")}${type}${Array(typePad).join(" ")}${attrs}`
-  })
-}
+import {Field} from "./field"
 
 export class Model {
   name: string
@@ -30,54 +11,111 @@ export class Model {
     this.fields = fields
   }
 
-  private getIdField() {
-    return new Field("id", {
-      isRequired: true,
-      isList: false,
-      isId: true,
-      default: "autoincrement()",
-      type: FieldType.Int,
-    })
+  appendTo(schema: ast.Schema): ast.Model {
+    const model = this.createModelAst()
+    schema.list.push(model)
+    return model
   }
 
-  private getCreatedAtField() {
-    return new Field("createdAt", {
-      isRequired: true,
-      isList: false,
-      isId: false,
-      default: "now()",
-      type: FieldType.DateTime,
-    })
-  }
-
-  private getUpdatedAtField() {
-    return new Field("updatedAt", {
-      isRequired: true,
-      isList: false,
-      isId: false,
-      isUpdatedAt: true,
-      type: FieldType.DateTime,
-    })
-  }
-
-  private getFields() {
-    return stringifyFieldsForPrinting([
+  private createModelAst(): ast.Model {
+    const properties = [
       this.getIdField(),
       this.getCreatedAtField(),
       this.getUpdatedAtField(),
-      ...this.fields,
-    ])
-      .map((field) => `\n  ${field}`)
-      .join("")
+    ].filter(Boolean) as ast.Field[]
+
+    const model: ast.Model = {
+      type: "model",
+      name: this.name,
+      properties,
+    }
+
+    for (const field of this.fields) field.appendTo(model)
+
+    return model
   }
 
-  public getNewFields() {
-    return stringifyFieldsForPrinting([...this.fields])
-      .map((field) => `  ${field}\n`)
-      .join("")
+  private getIdField(): ast.Field | undefined {
+    if (this.fieldExists("id")) return
+    return {
+      type: "field",
+      name: "id",
+      fieldType: "Int",
+      attributes: [
+        {
+          type: "attribute",
+          kind: "field",
+          name: "id",
+        },
+        {
+          type: "attribute",
+          kind: "field",
+          name: "default",
+          args: [
+            {
+              type: "attributeArgument",
+              value: {
+                type: "function",
+                name: "autoincrement",
+                params: [],
+              },
+            },
+          ],
+        },
+      ],
+    }
   }
 
-  toString() {
-    return `model ${this.name} {${this.getFields()}\n}`
+  private getCreatedAtField(): ast.Field | undefined {
+    if (this.fieldExists("createdAt")) return
+    return {
+      type: "field",
+      name: "createdAt",
+      fieldType: "DateTime",
+      attributes: [
+        {
+          type: "attribute",
+          kind: "field",
+          name: "default",
+          args: [
+            {
+              type: "attributeArgument",
+              value: {
+                type: "function",
+                name: "now",
+                params: [],
+              },
+            },
+          ],
+        },
+      ],
+    }
+  }
+
+  private getUpdatedAtField(): ast.Field | undefined {
+    if (this.fieldExists("updatedAt")) return
+    return {
+      type: "field",
+      name: "updatedAt",
+      fieldType: "DateTime",
+      attributes: [
+        {
+          type: "attribute",
+          kind: "field",
+          name: "updatedAt",
+        },
+      ],
+    }
+  }
+
+  private fieldExists(name: string): boolean {
+    return this.fields.some((field) => field.name === name)
+  }
+
+  toString(): string {
+    return ast.printSchema({
+      type: "schema",
+      list: [this.createModelAst()],
+    })
   }
 }

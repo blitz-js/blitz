@@ -2,7 +2,7 @@
 
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
-# **name**
+# **__name__**
 
 ## Getting Started
 
@@ -33,8 +33,6 @@ DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name___test
 Runs your tests using Jest.
 
 ```
-blitz test
-or
 yarn test
 ```
 
@@ -50,10 +48,12 @@ Blitz comes with a powerful CLI that is designed to make development easy and fa
   dev       Start a development server
   build     Create a production build
   start     Start a production server
+  export    Export your Blitz app as a static application
   prisma    Run prisma commands
   generate  Generate new files for your Blitz project
   console   Run the Blitz console REPL
-  help      display help for blitz
+  install   Install a recipe
+  help      Display help for blitz
   test      Run project tests
 ```
 
@@ -66,6 +66,26 @@ Here is the starting structure of your app.
 ```
 __name__
 ├── app/
+│   ├── api/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   ├── LoginForm.tsx
+│   │   │   └── SignupForm.tsx
+│   │   ├── mutations/
+│   │   │   ├── changePassword.ts
+│   │   │   ├── forgotPassword.test.ts
+│   │   │   ├── forgotPassword.ts
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   ├── resetPassword.test.ts
+│   │   │   ├── resetPassword.ts
+│   │   │   └── signup.ts
+│   │   ├── pages/
+│   │   │   ├── forgot-password.tsx
+│   │   │   ├── login.tsx
+│   │   │   ├── reset-password.tsx
+│   │   │   └── signup.tsx
+│   │   └── validations.ts
 │   ├── core/
 │   │   ├── components/
 │   │   │   ├── Form.tsx
@@ -80,20 +100,6 @@ __name__
 │   │   ├── _document.tsx
 │   │   ├── index.test.tsx
 │   │   └── index.tsx
-│   ├── api/
-│   ├── auth/
-│   │   ├── components/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SignupForm.tsx
-│   │   ├── mutations/
-│   │   │   ├── changePassword.ts
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   └── signup.ts
-│   │   ├── pages/
-│   │   │   ├── login.tsx
-│   │   │   └── signup.tsx
-│   │   └── validations.ts
 │   └── users/
 │       └── queries/
 │           └── getCurrentUser.ts
@@ -102,6 +108,8 @@ __name__
 │   ├── schema.prisma
 │   └── seeds.ts
 ├── integrations/
+├── mailers/
+│   └── forgotPasswordMailer.ts
 ├── public/
 │   ├── favicon.ico*
 │   └── logo.png
@@ -114,6 +122,7 @@ __name__
 ├── jest.config.js
 ├── package.json
 ├── tsconfig.json
+├── types.d.ts
 ├── types.ts
 └── yarn.lock
 ```
@@ -141,6 +150,14 @@ These files are:
 - `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
 
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
+
+### Tools included
+
+Blitz comes with a set of tools that corrects and formats your code, facilitating its future maintenance. You can modify their options and even uninstall them.
+
+- **ESLint**: It lints your code: searches for bad practices and tell you about it. You can customize it via the `.eslintrc.js`, and you can install (or even write) plugins to have it the way you like it. It already comes with the [`blitz`](https://github.com/blitz-js/blitz/tree/canary/packages/eslint-config) config, but you can remove it safely. [Learn More](https://eslint.org).
+- **Husky**: It adds [githooks](https://git-scm.com/docs/githooks), little pieces of code that get executed when certain Git events are triggerd. For example, `pre-commit` is triggered just before a commit is created. You can see the current hooks inside `.husky/`. If are having problems commiting and pushing, check out ther [troubleshooting](https://typicode.github.io/husky/#/?id=troubleshoot) guide. [Learn More](https://typicode.github.io/husky).
+- **Prettier**: It formats your code to look the same everywhere. You can configure it via the `.prettierrc` file. The `.prettierignore` contains the files that should be ignored by Prettier; useful when you have large files or when you want to keep a custom formatting. [Learn More](https://prettier.io).
 
 ## Learn more
 

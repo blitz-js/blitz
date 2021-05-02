@@ -1,13 +1,11 @@
 const path = require("path")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const {getProjectRoot, resolveAliases} = require("@blitzjs/config")
+const {getProjectRoot} = require("@blitzjs/config")
 const projectRoot = getProjectRoot()
 const {compilerOptions} = require(path.join(projectRoot, "tsconfig"))
 
 const common = {
   globalSetup: path.resolve(__dirname, "./jest-preset/global-setup.js"),
-  // Add type checking to TypeScript test files
-  preset: "ts-jest",
   // Automatically clear mock calls and instances between every test
   clearMocks: true,
   testPathIgnorePatterns: [
@@ -18,16 +16,11 @@ const common = {
     "<rootDir>/test/e2e",
     "<rootDir>/cypress",
   ],
-  transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "babel-jest",
-  },
   // This makes absolute imports work
   moduleDirectories: ["node_modules", "<rootDir>"],
   // Ignore the build directories
   modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
   moduleNameMapper: {
-    ...resolveAliases.node,
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
@@ -53,7 +46,7 @@ module.exports = {
         name: "CLIENT",
         color: "cyan",
       },
-      testEnvironment: "jest-environment-jsdom-fourteen",
+      testEnvironment: "jest-environment-jsdom",
       testRegex: ["^((?!queries|mutations|api|\\.server\\.).)*\\.(test|spec)\\.(j|t)sx?$"],
       setupFilesAfterEnv: [
         path.resolve(__dirname, "./jest-preset/client/setup-after-env.js"),

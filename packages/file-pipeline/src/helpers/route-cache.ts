@@ -41,8 +41,29 @@ export class RouteCache implements RouteCacheInterface {
     return false
   }
 
-  add(file: File, type: RouteType) {
+  private getType(file: File): RouteType | null {
+    const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
+    const rpcPathRegex = /(api[\\/].+[\\/](queries|mutations).+)$/
+    const apiPathRegex = /(api[\\/].+)$/
+
+    if (rpcPathRegex.test(file.path)) {
+      return "rpc"
+    } else if (apiPathRegex.test(file.path)) {
+      return "api"
+    } else if (pagesPathRegex.test(file.path)) {
+      return "page"
+    }
+
+    return null
+  }
+
+  add(file: File) {
     if (this.routeCache[file.orginalRelative]) return
+
+    const type = this.getType(file)
+    if (!type) {
+      return
+    }
 
     const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)
@@ -61,29 +82,21 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   filterByPath(filterFn: (givenPath: string) => boolean) {
-    const found = []
-    for (let path in this.routeCache) {
-      if (filterFn(path)) {
-        found.push(this.routeCache[path])
-      }
-    }
-    return found
+    return Object.entries(this.routeCache)
+      .filter(([path]) => filterFn(path))
+      .map(([_path, entry]) => entry)
   }
 
   filter(filterFn: (entry: RouteCacheEntry) => boolean) {
-    let found = []
-    for (let path in this.routeCache) {
-      if (filterFn(this.routeCache[path])) {
-        found.push(this.routeCache[path])
-      }
-    }
-    return found
+    return Object.values(this.routeCache).filter(filterFn)
   }
 
   get(): Record<string, RouteCacheEntry>
   get(key: string): RouteCacheEntry
-  get(key?: string) {
-    if (key) return this.routeCache[key]
+  get(file: File): RouteCacheEntry
+  get(key?: string | File) {
+    if (typeof key === "string") return this.routeCache[key]
+    if (key?.originalRelative) return this.routeCache[key.originalRelative]
     return this.routeCache
   }
 

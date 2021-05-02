@@ -1,9 +1,3 @@
 module.exports = {
-  preset: "../../jest.config.js",
-  globals: {
-    "ts-jest": {
-      tsconfig: "test/tsconfig.json",
-      isolatedModules: true,
-    },
-  },
+  preset: "../../jest-unit.config.js",
 }

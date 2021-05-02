@@ -14,7 +14,7 @@ model Project {
 2. DB migrate
 
 ```
-blitz prisma migrate dev --preview-feature
+blitz prisma migrate dev
 ```
 
 3. Start the dev server

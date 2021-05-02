@@ -38,6 +38,7 @@ export const watch = (includePaths: string[] | string, options: chokidar.WatchOp
   fswatcher.on("add", processEvent("add"))
   fswatcher.on("change", processEvent("change"))
   fswatcher.on("unlink", processEvent("unlink"))
+  fswatcher.on("error", (error) => console.log(`Watcher error: ${error}`))
 
   return {stream, fswatcher}
 }
@@ -53,8 +54,8 @@ function getWatcher(watching: boolean, cwd: string, include: string[], ignore: s
       ignoreInitial: true,
       alwaysStat: true,
       awaitWriteFinish: {
-        stabilityThreshold: 2000,
-        pollInterval: 100,
+        stabilityThreshold: 200,
+        pollInterval: 50,
       },
     })
   }

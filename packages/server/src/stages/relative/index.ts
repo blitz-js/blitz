@@ -47,9 +47,21 @@ export function replaceRelativeImports(content: string, replacer: (s: string) =>
   })
 }
 
+function isAbsolute(path: string) {
+  if (path.indexOf("./") === 0) {
+    return false
+  }
+
+  if (path.indexOf("../") === 0) {
+    return false
+  }
+
+  return true
+}
+
 export function relativeToAbsolute(_cwd: string, _filename: string) {
   return (filePath: string) => {
-    if (filePath.indexOf(".") !== 0) return filePath
+    if (isAbsolute(filePath)) return filePath
 
     return slash(path.join(path.dirname(_filename), filePath).replace(_cwd + path.sep, ""))
   }

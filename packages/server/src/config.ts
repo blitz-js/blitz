@@ -1,5 +1,5 @@
 import {transformFiles} from "@blitzjs/file-pipeline"
-import {promises} from "fs"
+import fs, {promises} from "fs"
 import {join, resolve} from "path"
 import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
 import {resolveBinAsync} from "./resolve-bin-async"
@@ -10,6 +10,7 @@ export type ServerEnvironment = "dev" | "prod"
 export type ServerConfig = {
   rootFolder: string
   buildFolder?: string
+  routesFolder?: string
   clean?: boolean
   // -
   isTypeScript?: boolean
@@ -27,6 +28,7 @@ export type ServerConfig = {
 
 type NormalizedConfig = ServerConfig & {
   buildFolder: string
+  routesFolder: string
   clean?: boolean
   // -
   isTypeScript: boolean
@@ -45,10 +47,23 @@ type NormalizedConfig = ServerConfig & {
 export const standardBuildFolderPath = ".blitz/build"
 export const standardBuildFolderPathRegex = /\.blitz[\\/]build[\\/]/g
 
+// https://stackoverflow.com/questions/20010199/how-to-determine-if-a-process-runs-inside-lxc-docker
+function isInDocker(): boolean {
+  const cgroupFile = join("proc", "self", "cgroup")
+  if (fs.existsSync(cgroupFile)) {
+    const content = fs.readFileSync(cgroupFile, "utf-8")
+    return content.includes("docker")
+  }
+  return false
+}
+
 const defaults = {
+  hostname: isInDocker() ? "0.0.0.0" : "127.0.0.1",
+  // -
   env: "prod" as ServerEnvironment,
   // -
   buildFolder: standardBuildFolderPath,
+  routesFolder: ".blitz/routes",
   // -
   writeManifestFile: true,
   // -
@@ -92,10 +107,12 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
 
   return {
     ...config,
+    hostname: config.hostname ?? defaults.hostname,
     env,
     // -
     rootFolder,
     buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
+    routesFolder: resolve(rootFolder, config.routesFolder ?? defaults.routesFolder),
     // -
     isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",
