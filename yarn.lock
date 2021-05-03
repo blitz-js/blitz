@@ -1327,6 +1327,75 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@blitzjs/config@0.34.3":
+  version "0.34.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/config/-/config-0.34.3.tgz#83604d63e9722a80ba3fa324e99dba359e6b658b"
+  integrity sha512-3MAmHK6Kh7XJIT6mCETUvRFalqJLkk1wCYBuFXLtzqpwry/bSgPHBzAlpzccgSys5zpjBvbftns2X3i1L9X2gQ==
+  dependencies:
+    fs-extra "^9.1.0"
+    pkg-dir "^5.0.0"
+
+"@blitzjs/display@0.34.3":
+  version "0.34.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/display/-/display-0.34.3.tgz#9d17d16658c3d5576509356bccc33351e581ec4b"
+  integrity sha512-PvZphihfJKFmr5aVLQZgq/MEYDJFb2I8NmwNwNE8U+M4asctZACbiXeuRnjqN3JUultO8bk+ZyLos4vUr6nDcw==
+  dependencies:
+    "@blitzjs/config" "0.34.3"
+    "@blitzjs/display" "0.34.3"
+    chalk "^4.1.0"
+    console-table-printer "^2.7.5"
+    ora "^5.3.0"
+    readline "1.3.0"
+    tslog "^3.1.1"
+
+"@blitzjs/generator@0.34.3":
+  version "0.34.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.34.3.tgz#0b75758bc5b8e319853f548a0df161621c418107"
+  integrity sha512-KlsroS8Tx0Dq1MkcfT3qBux90CgKFp2Gs4AHWy1ZYV/9Fiu3lw/d53sY1msEEB0ggIhXjlb+AFgE5FqtBG5+FA==
+  dependencies:
+    "@babel/core" "7.12.10"
+    "@babel/plugin-transform-typescript" "7.12.1"
+    "@blitzjs/display" "0.34.3"
+    "@types/jscodeshift" "0.7.2"
+    chalk "^4.1.0"
+    cross-spawn "7.0.3"
+    diff "5.0.0"
+    enquirer "2.3.6"
+    fs-extra "^9.1.0"
+    got "^11.8.1"
+    jscodeshift "0.11.0"
+    mem-fs "1.2.0"
+    mem-fs-editor "8.0.0"
+    npm-which "^3.0.1"
+    pluralize "^8.0.0"
+    recast "0.20.4"
+    username "^5.1.0"
+    vinyl "2.2.1"
+
+"@blitzjs/installer@0.34.3":
+  version "0.34.3"
+  resolved "https://registry.yarnpkg.com/@blitzjs/installer/-/installer-0.34.3.tgz#51f33c855391c00fb1a5f417fb4818a4e3c00249"
+  integrity sha512-y7Od0YCj+ltwegNB0gmtjnLJk5e6uiqfHp8ZmpK/mnETIJXfXab/xXSJBhvyKcEvh0oO9GQC7v7ivGGouBL57g==
+  dependencies:
+    "@babel/core" "7.12.10"
+    "@babel/plugin-transform-typescript" "7.12.1"
+    "@blitzjs/config" "0.34.3"
+    "@blitzjs/display" "0.34.3"
+    "@blitzjs/generator" "0.34.3"
+    "@types/jscodeshift" "0.7.2"
+    cross-spawn "7.0.3"
+    diff "5.0.0"
+    enquirer "2.3.6"
+    fs-extra "^9.1.0"
+    globby "11.0.2"
+    ink "3.0.8"
+    ink-spinner "4.0.1"
+    ink-testing-library "2.1.0"
+    jscodeshift "0.11.0"
+    react "0.0.0-experimental-6a589ad71"
+    recast "0.20.4"
+    ts-node "^9.1.1"
+
 "@changesets/types@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@changesets/types/-/types-0.4.0.tgz#3413badb2c3904357a36268cb9f8c7e0afc3a804"
