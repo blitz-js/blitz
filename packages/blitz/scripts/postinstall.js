@@ -2,7 +2,7 @@ const childProcess = require("child_process")
 const {promisify} = require("util")
 const fs = require("fs")
 const path = require("path")
-const symlinkDir = require("symlink-dir")
+const resolveFrom = require("resolve-from")
 
 const exec = promisify(childProcess.exec)
 const copyFile = promisify(fs.copyFile)
@@ -15,6 +15,9 @@ function debug(message, ...optionalParams) {
   }
 }
 
+const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
+const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
+const isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
 const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../test"))
 
 /*
@@ -348,4 +351,6 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-codegen()
+if (!isInstalledGlobally) {
+  codegen()
+}
