@@ -28,9 +28,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -70,9 +70,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -138,9 +138,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
       - run: yarn install --frozen-lockfile --check-files
       # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
       #   if: matrix.os == 'windows-latest'
@@ -373,9 +373,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v7-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
 
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
