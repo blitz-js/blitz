@@ -70,13 +70,13 @@ function injectInitializeColorModeAndExtractCritical(program: Collection<j.Progr
 
 export default RecipeBuilder()
   .setName("Bumbag UI")
-  .setDescription(`This will install all necessary dependencies and configure Bumbag UI for use.`)
+  .setDescription(`This will install all necessary dependencies and configure BumbagProvider in your _app and _document`)
   .setOwner("me@agusti.me")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "npm dependencies",
-    explanation: `Bumbag UI requires both "bumbag" and "bumbag-server" (needed  for SSSR) npm packages`,
+    explanation: `Bumbag UI requires both "bumbag" and "bumbag-server" (SSR) npm packages`,
     packages: [
       {name: "bumbag", version: "2.0.0"},
       {name: "bumbag-server", version: "2.0.0"},
