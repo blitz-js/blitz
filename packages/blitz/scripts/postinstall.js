@@ -16,7 +16,7 @@ function debug(message, ...optionalParams) {
 }
 
 const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../test"))
-let isInstalledGlobally = isInBlitzMonorepo // default
+let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
 
 try {
   const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
