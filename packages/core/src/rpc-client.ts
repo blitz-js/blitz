@@ -3,6 +3,7 @@ import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {getAntiCSRFToken} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
+import {getBlitzRuntimeData} from "./blitz-data"
 import {
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
@@ -157,7 +158,10 @@ executeRpcCall.warm = (apiUrl: string) => {
 }
 
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
-  resolverFilePath.replace(/^app\/_resolvers/, "/api")
+  resolverFilePath.replace(
+    /^app\/_resolvers/,
+    "/api".concat(getBlitzRuntimeData().trailingSlash ? "/" : ""),
+  )
 
 type IsomorphicEnhancedResolverOptions = {
   warmApiEndpoints?: boolean
