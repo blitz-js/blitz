@@ -14,6 +14,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
   return {
     suspenseEnabled: config.experimental?.reactMode !== "legacy",
     sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
+    trailingSlash: config.trailingSlash !== undefined ? config.trailingSlash : false,
   }
 }
 

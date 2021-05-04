@@ -16,6 +16,7 @@ export interface BlitzConfig extends Record<string, unknown> {
     isomorphicResolverImports?: boolean
     reactMode?: string
   }
+  trailingSlash?: boolean
   cli?: {
     clearConsoleOnBlitzDev?: boolean
   }
