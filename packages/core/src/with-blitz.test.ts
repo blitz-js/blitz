@@ -20,7 +20,7 @@ describe("withBlitz", () => {
     expect(newNextWithoutWebpack).toStrictEqual({
       foo: "bar",
       experimental: {
-        reactMode: "concurrent",
+        reactRoot: true,
       },
       webpack: null,
       webpackDevMiddleware: null,
@@ -39,7 +39,7 @@ describe("withBlitz", () => {
       phase: "foo",
       foo: "bar",
       experimental: {
-        reactMode: "concurrent",
+        reactRoot: true,
       },
       webpack: null,
       webpackDevMiddleware: null,
