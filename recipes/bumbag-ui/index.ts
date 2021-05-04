@@ -100,7 +100,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "ImportExtractCriticalAndInitializeColorMode",
     stepName: "ImportExtractCritical & initializeColorMode",
-    explanation: `Import InitializeColorMode from bumbag, and extractCritical into _documen`,
+    explanation: `Import InitializeColorMode from bumbag, and extractCritical into _document`,
     singleFileSearch: paths.document(),
     transform(program: Collection<j.Program>) {
       const initializeColorModeImport = j.importDeclaration(
