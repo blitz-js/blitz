@@ -6,13 +6,14 @@ import {isClient} from "./utils"
 export type BlitzRuntimeData = {
   suspenseEnabled: boolean
   sessionCookiePrefix: string
+  trailingSlash: boolean
 }
 
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
   return {
-    sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
     suspenseEnabled: config.experimental?.reactMode !== "legacy",
+    sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
   }
 }
 
