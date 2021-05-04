@@ -2539,6 +2539,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "agustif",
+      "name": "Agusti Fernandez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6601142?v=4",
+      "profile": "https://github.com/agustif",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
