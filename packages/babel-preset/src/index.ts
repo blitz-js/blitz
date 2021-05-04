@@ -9,7 +9,13 @@ export default function preset(_api: any, options = {}) {
 
   const config = {
     presets: [[require('next/babel'), options]],
-    plugins: [require('babel-plugin-superjson-next'), AddBlitzAppRoot],
+    plugins: [
+      [
+        require('babel-plugin-superjson-next'),
+        { exclude: ['dehydratedState'] },
+      ],
+      AddBlitzAppRoot,
+    ],
   };
 
   if (!isRunningInJest) {
