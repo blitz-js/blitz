@@ -13,8 +13,9 @@
     "test:migrate": "prisma generate && blitz prisma migrate deploy",
     "test:jest": "jest --passWithNoTests",
     "test-server": "blitz build && blitz start",
-    "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
-    "test": "run-s test:* || run-s test:*"
+    "test-run-e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
+    "test:e2e": "yarn test-run-e2e || yarn test-run-e2e",
+    "test": "run-s test:*"
   },
   "browserslist": [
     "defaults"
