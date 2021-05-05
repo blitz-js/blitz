@@ -222,7 +222,7 @@ export class Install extends Command {
       } else {
         const repoInfo = await gotJSON(apiUrl)
 
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe}`).start()
+        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
           repoInfo.default_branch,
