@@ -2557,6 +2557,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "adblanc",
+      "name": "Blanc Adrien",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41756894?v=4",
+      "profile": "https://adrienblanc.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
