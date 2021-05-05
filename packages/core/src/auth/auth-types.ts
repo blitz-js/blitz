@@ -6,6 +6,14 @@ export interface Session {
   // PublicData can be injected here
 }
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      sessionConfig: SessionConfig
+    }
+  }
+}
+
 export type PublicData = "PublicData" extends keyof Session
   ? Session["PublicData"]
   : {userId: unknown}
