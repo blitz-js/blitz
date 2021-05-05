@@ -618,9 +618,6 @@ export async function getSessionKernel(
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
       // await revokeSession(req, res, handle)
       setHeader(res, HEADER_CSRF_ERROR, "true")
-      log.warning(
-        "Request must be performed using an anti-csrf token, you can learn more here : https://blitzjs.com/docs/session-management#manual-api-requests",
-      )
       throw new CSRFTokenMismatchError()
     }
 
