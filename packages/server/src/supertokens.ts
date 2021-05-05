@@ -160,7 +160,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     }
     return next()
   }
-  middleware.type = "blitzSessionMiddleware"
+  middleware.name = "blitzSessionMiddleware"
   middleware.config = {
     cookiePrefix: config.cookiePrefix,
   }

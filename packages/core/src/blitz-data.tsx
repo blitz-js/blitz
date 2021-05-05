@@ -11,7 +11,7 @@ export type BlitzRuntimeData = {
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
   const cookiePrefix = config.middleware?.filter(
-    (middleware) => middleware.type === "blitzSessionMiddleware",
+    (middleware) => middleware.name === "blitzSessionMiddleware",
   )[0]?.config?.cookiePrefix
   return {
     sessionCookiePrefix: (cookiePrefix || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
