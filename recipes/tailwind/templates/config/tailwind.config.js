@@ -1,6 +1,11 @@
 // tailwind.config.js
 module.exports = {
-  purge: ["{app,pages}/**/*.{js,jsx,ts,tsx}"],
+  mode: "jit",
+  purge: {
+    content: ["./app/**/*.{js,ts,jsx,tsx}"],
+    mode: "all",
+    preserveHtmlElements: false,
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
