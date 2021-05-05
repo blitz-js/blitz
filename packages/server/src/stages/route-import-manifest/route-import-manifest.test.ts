@@ -4,10 +4,49 @@ import {
   parseParametersFromRoute,
 } from "./route-import-manifest"
 
-test("parseParametersFromRoute", () => {
-  expect(parseParametersFromRoute("posts/[postId]/[...openedCommentPath]")).toEqual({
-    parameters: ["postId"],
-    multipleParameters: ["openedCommentPath"],
+describe("parseParametersFromRoute", () => {
+  it("supports being passed a route with single and multiple  parameters", () => {
+    expect(parseParametersFromRoute("posts/[postId]/[...openedCommentPath]")).toEqual({
+      parameters: [
+        {
+          name: "postId",
+          optional: false,
+        },
+      ],
+      multipleParameters: [
+        {
+          name: "openedCommentPath",
+          optional: false,
+        },
+      ],
+    })
+  })
+  it("supports being passed an optional catch-all parameter", () => {
+    expect(parseParametersFromRoute("posts/[[...openedCommentPath]]")).toEqual({
+      parameters: [],
+      multipleParameters: [
+        {
+          name: "openedCommentPath",
+          optional: true,
+        },
+      ],
+    })
+  })
+  it("supports being passed a mix of single parameters and optional catch-all parameters", () => {
+    expect(parseParametersFromRoute("posts/[postId]/[[...openedCommentPath]]")).toEqual({
+      parameters: [
+        {
+          name: "postId",
+          optional: false,
+        },
+      ],
+      multipleParameters: [
+        {
+          name: "openedCommentPath",
+          optional: true,
+        },
+      ],
+    })
   })
 })
 
@@ -21,15 +60,41 @@ test("generateManifest", () => {
       },
       "posts/[postId]/[...openedCommentPath]": {
         name: "CommentView",
-        parameters: ["postId"],
-        multipleParameters: ["openedCommentPath"],
+        parameters: [
+          {
+            name: "postId",
+            optional: false,
+          },
+        ],
+        multipleParameters: [
+          {
+            name: "openedCommentPath",
+            optional: false,
+          },
+        ],
+      },
+      "users/[userId]/[[...openedPhotoId]]": {
+        name: "UserProfileView",
+        parameters: [
+          {
+            name: "userId",
+            optional: false,
+          },
+        ],
+        multipleParameters: [
+          {
+            name: "openedPhotoId",
+            optional: true,
+          },
+        ],
       },
     }),
   ).toEqual({
     implementation: `
 exports.Routes = {
   Home: (query) => ({ pathname: "home/", query }),
-  CommentView: (query) => ({ pathname: "posts/[postId]/[...openedCommentPath]", query })
+  CommentView: (query) => ({ pathname: "posts/[postId]/[...openedCommentPath]", query }),
+  UserProfileView: (query) => ({ pathname: "users/[userId]/[[...openedPhotoId]]", query })
 }
       `.trim(),
     declaration: `
@@ -43,6 +108,7 @@ interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): RouteUrlObject;
   CommentView(query: { postId: string | number; openedCommentPath: (string | number)[] } & ParsedUrlQueryInput): RouteUrlObject;
+  UserProfileView(query: { userId: string | number; openedPhotoId?: (string | number)[] } & ParsedUrlQueryInput): RouteUrlObject;
 }
       `.trim(),
   })

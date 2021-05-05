@@ -2333,7 +2333,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1483597?v=4",
       "profile": "https://github.com/ericvicenti",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -2527,6 +2528,25 @@
       "profile": "https://dawnofmidnight.vercel.app",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "kirakik",
+      "name": "Kenza Iraki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17203119?v=4",
+      "profile": "https://www.linkedin.com/in/kenzairaki/",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "agustif",
+      "name": "Agusti Fernandez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6601142?v=4",
+      "profile": "https://github.com/agustif",
+      "contributions": [
+        "code"
       ]
     }
   ],

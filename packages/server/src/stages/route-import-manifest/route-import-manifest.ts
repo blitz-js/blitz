@@ -11,10 +11,14 @@ function makeDebouncedWriter(path: string, ms = 100): (contents: string) => void
   }, ms)
 }
 
+type Parameter = {
+  name: string
+  optional: boolean
+}
 interface Route {
   name: string
-  parameters: string[]
-  multipleParameters: string[]
+  parameters: Parameter[]
+  multipleParameters: Parameter[]
 }
 
 export function parseDefaultExportName(contents: string): string | null {
@@ -62,8 +66,12 @@ export function generateManifest(
       }
 
       return `${name}(query: { ${[
-        ...parameters.map((param) => param + ": string | number"),
-        ...multipleParameters.map((param) => param + ": (string | number)[]"),
+        ...parameters.map(
+          (param) => param.name + (param.optional ? "?" : "") + ": string | number",
+        ),
+        ...multipleParameters.map(
+          (param) => param.name + (param.optional ? "?" : "") + ": (string | number)[]",
+        ),
       ].join("; ")} } & ParsedUrlQueryInput): RouteUrlObject`
     },
   )
@@ -85,17 +93,58 @@ ${declarationLines.map((line) => "  " + line).join(";\n")};
   }
 }
 
+function removeSquareBracketsFromSegments(value: string): string
+
+function removeSquareBracketsFromSegments(value: string[]): string[]
+
+function removeSquareBracketsFromSegments(value: string | string[]): string | string[] {
+  if (typeof value === "string") {
+    return value.replace("[", "").replace("]", "")
+  }
+  return value.map((val) => val.replace("[", "").replace("]", ""))
+}
+
+const squareBracketsRegex = /\[\[.*?\]\]|\[.*?\]/g
+
 export function parseParametersFromRoute(
   path: string,
 ): Pick<Route, "parameters" | "multipleParameters"> {
-  const parameteredSegments = path.match(/\[.*?\]/g) ?? []
-  const withoutBrackets = parameteredSegments.map((p) => p.substring(1, p.length - 1))
+  const parameteredSegments = path.match(squareBracketsRegex) ?? []
+  const withoutBrackets = removeSquareBracketsFromSegments(parameteredSegments)
 
-  const [multipleParameters, parameters] = partition(withoutBrackets, (p) => p.startsWith("..."))
+  const [multipleParameters, parameters] = partition(withoutBrackets, (p) => p.includes("..."))
 
   return {
-    parameters,
-    multipleParameters: multipleParameters.map((p) => p.replace("...", "")),
+    parameters: parameters.map((value) => {
+      const containsSquareBrackets = squareBracketsRegex.test(value)
+      if (containsSquareBrackets) {
+        return {
+          name: removeSquareBracketsFromSegments(value),
+          optional: true,
+        }
+      }
+
+      return {
+        name: value,
+        optional: false,
+      }
+    }),
+    multipleParameters: multipleParameters.map((param) => {
+      const withoutEllipsis = param.replace("...", "")
+      const containsSquareBrackets = squareBracketsRegex.test(withoutEllipsis)
+
+      if (containsSquareBrackets) {
+        return {
+          name: removeSquareBracketsFromSegments(withoutEllipsis),
+          optional: true,
+        }
+      }
+
+      return {
+        name: withoutEllipsis,
+        optional: false,
+      }
+    }),
   }
 }
 
