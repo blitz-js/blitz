@@ -1,4 +1,3 @@
-import {getConfig} from "@blitzjs/config"
 import {
   useInfiniteQuery as useInfiniteReactQuery,
   UseInfiniteQueryOptions,
@@ -8,6 +7,7 @@ import {
   UseQueryResult,
 } from "react-query"
 import {useSession} from "./auth/auth-client"
+import {getBlitzRuntimeData} from "./blitz-data"
 import {useRouter} from "./router"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
 import {isServer} from "./utils"
@@ -50,15 +50,15 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const legacyMode = getConfig?.().experimental?.reactMode === "legacy"
-  let enabled = isServer ? legacyMode : options?.enabled ?? true
-  const suspense = !enabled ? false : options?.suspense ?? false
+  const suspenseConfig = getBlitzRuntimeData().suspenseEnabled
+  let enabled = isServer && suspenseConfig ? false : options?.enabled ?? options?.enabled !== null
+  const suspense = enabled === false ? false : options?.suspense
   const session = useSession({suspense})
   if (session.isLoading) {
     enabled = false
   }
 
-  const routerIsReady = useRouter().isReady || (isServer && !legacyMode)
+  const routerIsReady = useRouter().isReady || (isServer && suspenseConfig)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -74,6 +74,7 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   if (
     queryRest.isIdle &&
     isServer &&
+    suspenseConfig !== false &&
     !data &&
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
