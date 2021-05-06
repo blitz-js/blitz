@@ -2539,6 +2539,33 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "agustif",
+      "name": "Agusti Fernandez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6601142?v=4",
+      "profile": "https://github.com/agustif",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Anjianto",
+      "name": "Anjianto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61521141?v=4",
+      "profile": "https://github.com/Anjianto",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "adblanc",
+      "name": "Blanc Adrien",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41756894?v=4",
+      "profile": "https://adrienblanc.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

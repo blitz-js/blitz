@@ -27,7 +27,13 @@ interface BuildConfigOptions {
 
 export async function buildConfig({watch}: BuildConfigOptions = {}) {
   debug("Starting buildConfig...")
-  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+  const dir = pkgDir.sync()
+  if (!dir) {
+    // This will happen when running blitz no inside a blitz app
+    debug("Unable to find package directory")
+    return
+  }
+  const pkg = readJSONSync(path.join(dir, "package.json"))
   debug("src", getConfigSrcPath())
   debug("build", getConfigBuildPath())
 
