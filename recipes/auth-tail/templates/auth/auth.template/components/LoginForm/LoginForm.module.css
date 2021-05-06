@@ -1,0 +1,39 @@
+.form_wrapper {
+  @apply mt-6 lg:mt-[50px] font-sans mx-4 1.5xl:mx-[110px];
+}
+
+.title {
+  @apply font-medium text-2xl lg:text-3xl text-center text-[#19212C] font-alegreya;
+}
+
+.logo {
+  @apply mx-auto block lg:hidden fill-[#6700eb] w-[100px] h-[50px] lg:w-[200px] lg:h-[92px] mb-4;
+}
+
+.subtitle {
+  @apply text-sm text-[#868B90] text-center lg:mt-1 mb-4;
+}
+
+.form {
+  @apply w-full md:w-3/4 lg:w-full 2xl:w-1/2 container mx-auto my-[50px] bg-white border border-[#EAEAEA] py-[58px] px-[25px] lg:px-[50px] rounded-xl;
+}
+
+.form button {
+  @apply w-full py-3.5 mt-[50px] bg-[#77C5FD] text-white text-lg font-bold rounded-lg;
+}
+
+.form label {
+  @apply text-[#868B90] text-lg;
+}
+
+.form label {
+  @apply flex flex-col;
+}
+
+.forgot_password {
+  @apply text-right mt-2.5 underline font-light text-base text-[#868B90];
+}
+
+.signup {
+  @apply block text-center mt-[30px] underline font-light text-base text-[#868B90];
+}

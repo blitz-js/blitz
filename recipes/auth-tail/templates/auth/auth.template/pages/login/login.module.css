@@ -1,0 +1,35 @@
+.form_wrapper {
+  @apply grid grid-cols-1 lg:grid-cols-2 bg-[#ECF0F4] min-h-screen font-poppins;
+}
+
+.main_content {
+  @apply col-span-1 pt-10;
+}
+
+.logo {
+  @apply hidden lg:block fill-[#6700eb] pl-[70px] w-[200px] h-[92px];
+}
+
+.right_wrapper {
+  @apply hidden lg:block bg-[#4424A7] relative overflow-hidden col-span-1;
+}
+
+.ellipse_1 {
+  @apply absolute -top-4 -left-4;
+}
+
+.ellipse_2 {
+  @apply absolute -bottom-8 -right-8;
+}
+
+.illustration_wrapper {
+  @apply flex flex-col absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center;
+}
+
+.illustration_wrapper h2 {
+  @apply font-normal text-2xl text-white mt-[50px] mb-3;
+}
+
+.illustration_wrapper p {
+  @apply font-light text-xl text-[#B7A9E3];
+}

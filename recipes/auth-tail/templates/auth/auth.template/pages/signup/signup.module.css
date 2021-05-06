@@ -1,0 +1,7 @@
+.form_wrapper {
+  @apply bg-[#ECF0F4] min-h-screen font-poppins;
+}
+
+.main_content {
+  @apply py-10;
+}
