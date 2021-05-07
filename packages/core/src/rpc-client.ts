@@ -158,10 +158,9 @@ executeRpcCall.warm = (apiUrl: string) => {
 }
 
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) =>
-  resolverFilePath.replace(
-    /^app\/_resolvers/,
-    "/api".concat(getBlitzRuntimeData().trailingSlash ? "/" : ""),
-  )
+  resolverFilePath
+    .replace(/^app\/_resolvers/, "/api")
+    .concat(getBlitzRuntimeData().trailingSlash ? "/" : "")
 
 type IsomorphicEnhancedResolverOptions = {
   warmApiEndpoints?: boolean
