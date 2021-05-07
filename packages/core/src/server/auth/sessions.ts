@@ -38,7 +38,6 @@ import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} 
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
 import {isLocalhost} from "../server-utils"
 import {generateToken, hash256} from "./auth-utils"
-import {getSessionContext} from "@blitzjs/server/packages/server/src";
 const debug = require("debug")("blitz:session")
 
 function assert(condition: any, message: string): asserts condition {
