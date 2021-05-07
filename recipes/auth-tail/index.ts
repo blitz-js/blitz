@@ -1,5 +1,4 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import chalk from "chalk"
 import * as fs from "fs"
 import j, {Collection} from "jscodeshift"
 import {join} from "path"
