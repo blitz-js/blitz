@@ -39,6 +39,7 @@ export interface SessionModel extends Record<any, any> {
 }
 
 export type SessionConfig = {
+  cookiePrefix?: string
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
