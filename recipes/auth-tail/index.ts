@@ -19,7 +19,7 @@ const useForm = isReactFinalForm
   : false
 
 if (!useForm)
-  throw chalk.red(
+  throw new Error(
     "Please install one of this package to install this recipe \n1. react-final-form\n2. react-hook-form\n3. formik",
   )
 
