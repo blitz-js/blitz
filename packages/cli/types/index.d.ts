@@ -9,3 +9,5 @@ declare namespace webpack {
 declare module "next/dist/compiled/webpack/webpack" {
   export const webpack: any
 }
+
+declare module "global-agent"

@@ -2,7 +2,6 @@
 .DS_Store
 .idea
 .jest-*
-lib
 node_modules
 reports
 *.log
@@ -27,3 +26,6 @@ dist
 **/.test*
 examples/auth2
 .idea
+.ultra.cache.json
+db.sqlite-journal
+test/integration/**/db.json

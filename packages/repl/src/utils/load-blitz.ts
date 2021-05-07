@@ -1,22 +1,26 @@
+import {getProjectRoot} from "@blitzjs/config"
 import globby from "globby"
 import path from "path"
-import pkgDir from "pkg-dir"
 import ProgressBar from "progress"
 import {forceRequire} from "./module"
+const debug = require("debug")("blitz:repl")
 
-const projectRoot = pkgDir.sync() || process.cwd()
+const projectRoot = getProjectRoot()
 
 export async function getBlitzModulePaths() {
   const paths = await globby(
     [
       "app/**/{queries,mutations}/*.{js,ts,tsx}",
-      "**/utils/*.{js,ts,tsx}",
+      "utils/*.{js,ts,tsx}",
       "jobs/**/*.{js,ts,tsx}",
       "integrations/**/*.{js,ts,tsx}",
+      "!**/*.test.*",
+      "!**/*.spec.*",
     ],
     {cwd: projectRoot, gitignore: true},
   )
   paths.push("db")
+  debug("Paths", paths)
 
   return [...paths.map((p) => path.join(projectRoot, p))]
 }
@@ -38,8 +42,10 @@ export const loadBlitz = async () => {
       }
 
       try {
+        debug("Loading", modulePath)
         const module = forceRequire(modulePath)
         const contextObj = module.default || module
+        // debug("ContextObj", contextObj)
 
         percentage.tick()
 
@@ -47,7 +53,8 @@ export const loadBlitz = async () => {
         return {
           [name]: contextObj,
         }
-      } catch (e) {
+      } catch (error) {
+        debug("Failed to load module", error)
         return {}
       }
     }),

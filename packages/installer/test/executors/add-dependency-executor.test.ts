@@ -28,8 +28,8 @@ describe("add dependency executor", () => {
 
   it("should choose proper package manager according to lock file", () => {
     mocked(existsSync).mockReturnValueOnce(true)
-    expect(AddDependencyExecutor.getPackageManager()).toEqual("npm")
     expect(AddDependencyExecutor.getPackageManager()).toEqual("yarn")
+    expect(AddDependencyExecutor.getPackageManager()).toEqual("npm")
   })
 
   it("should issue proper commands according to the specified packages", async () => {
@@ -37,18 +37,18 @@ describe("add dependency executor", () => {
     mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
 
     // NPM
-    mocked(existsSync).mockReturnValue(true)
-    await AddDependencyExecutor.installPackages(testConfiguration.packages, true)
-    await AddDependencyExecutor.installPackages(testConfiguration.packages, false)
-
-    // Yarn
     mocked(existsSync).mockReturnValue(false)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, true)
     await AddDependencyExecutor.installPackages(testConfiguration.packages, false)
 
+    // Yarn
+    mocked(existsSync).mockReturnValue(true)
+    await AddDependencyExecutor.installPackages(testConfiguration.packages, true)
+    await AddDependencyExecutor.installPackages(testConfiguration.packages, false)
+
     expect(mockedSpawn.calls.length).toEqual(4)
-    expect(mockedSpawn.calls[0]).toEqual("npm add --save-dev typescript@4 ts-node")
-    expect(mockedSpawn.calls[1]).toEqual("npm add typescript@4 ts-node")
+    expect(mockedSpawn.calls[0]).toEqual("npm install --save-dev typescript@4 ts-node")
+    expect(mockedSpawn.calls[1]).toEqual("npm install typescript@4 ts-node")
     expect(mockedSpawn.calls[2]).toEqual("yarn add -D typescript@4 ts-node")
     expect(mockedSpawn.calls[3]).toEqual("yarn add typescript@4 ts-node")
   })

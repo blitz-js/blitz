@@ -1,5 +1,5 @@
-import {Generate} from "../../src/commands/generate"
 import * as path from "path"
+import {Generate} from "../../src/commands/generate"
 
 describe("`generate` command", () => {
   describe("#getModelNameAndContext", () => {

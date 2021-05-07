@@ -1,5 +1,5 @@
-import {Command, flags} from "@oclif/command"
 import {log} from "@blitzjs/display"
+import {Command, flags} from "@oclif/command"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
@@ -66,6 +66,7 @@ ${require("chalk").bold(
   static strict = false
 
   async run() {
+    process.env.CLI_COMMAND_DB = "true"
     const {args} = this.parse(Db)
     const command = args["command"]
 

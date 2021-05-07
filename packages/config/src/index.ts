@@ -1,25 +1,74 @@
-import {readJSONSync} from "fs-extra"
-import {join} from "path"
-import path from "path"
+import * as esbuild from "esbuild"
+import {existsSync, readJSONSync} from "fs-extra"
+import path, {join} from "path"
 import pkgDir from "pkg-dir"
+const debug = require("debug")("blitz:config")
 
 export function getProjectRoot() {
-  return pkgDir.sync() || process.cwd()
+  return path.dirname(getConfigSrcPath())
 }
 
-const projectRoot = getProjectRoot()
-
-export const resolveAliases = {
-  node: {
-    "__blitz__/config-file": path.join(projectRoot, "blitz.config.js"),
-  },
-  webpack: {
-    // In webpack build, next.config.js is always present which wraps blitz.config.js
-    "__blitz__/config-file": path.join(projectRoot, "next.config.js"),
-  },
+export function getConfigSrcPath() {
+  const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
+  if (existsSync(tsPath)) {
+    return tsPath
+  } else {
+    const jsPath = path.resolve(path.join(process.cwd(), "blitz.config.js"))
+    return jsPath
+  }
+}
+export function getConfigBuildPath() {
+  return path.join(getProjectRoot(), ".blitz", "blitz.config.js")
 }
 
-require("module-alias").addAliases(resolveAliases.node)
+interface BuildConfigOptions {
+  watch?: boolean
+}
+
+export async function buildConfig({watch}: BuildConfigOptions = {}) {
+  debug("Starting buildConfig...")
+  const dir = pkgDir.sync()
+  if (!dir) {
+    // This will happen when running blitz no inside a blitz app
+    debug("Unable to find package directory")
+    return
+  }
+  const pkg = readJSONSync(path.join(dir, "package.json"))
+  debug("src", getConfigSrcPath())
+  debug("build", getConfigBuildPath())
+
+  const esbuildOptions: esbuild.BuildOptions = {
+    entryPoints: [getConfigSrcPath()],
+    outfile: getConfigBuildPath(),
+    format: "cjs",
+    bundle: true,
+    platform: "node",
+    external: [
+      "blitz",
+      "next",
+      ...Object.keys(require("blitz/package").dependencies),
+      ...Object.keys(pkg?.dependencies ?? {}),
+      ...Object.keys(pkg?.devDependencies ?? {}),
+    ],
+  }
+
+  if (watch) {
+    esbuildOptions.watch = {
+      onRebuild(error) {
+        if (error) {
+          console.error("Failed to re-build blitz config")
+        } else {
+          console.log("\n> Blitz config changed - restart for changes to take effect\n")
+        }
+      },
+    }
+  }
+
+  debug("Building config...")
+  debug("Src: ", getConfigSrcPath())
+  debug("Build: ", getConfigBuildPath())
+  await esbuild.build(esbuildOptions)
+}
 
 export interface BlitzConfig extends Record<string, unknown> {
   target?: string
@@ -29,6 +78,9 @@ export interface BlitzConfig extends Record<string, unknown> {
   }
   cli?: {
     clearConsoleOnBlitzDev?: boolean
+    httpProxy?: string
+    httpsProxy?: string
+    noProxy?: string
   }
   _meta: {
     packageName: string
@@ -60,32 +112,74 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
-  const pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  let pkgJson: any
+
+  const pkgJsonPath = join(getProjectRoot(), "package.json")
+  if (existsSync(pkgJsonPath)) {
+    pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+  }
 
   let blitzConfig = {
     _meta: {
-      packageName: pkgJson.name,
+      packageName: pkgJson?.name,
     },
   }
 
-  let file
-  let loadedConfig = {}
-  try {
-    // eslint-disable-next-line no-eval -- block webpack from following this module path
-    file = eval("require")("__blitz__/config-file")
-    if (typeof file === "function") {
-      const phase =
-        process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
-      loadedConfig = file(phase, {})
-    } else {
-      loadedConfig = file
-    }
-  } catch {}
-  blitzConfig = {
-    ...loadedConfig,
-    ...blitzConfig,
+  const projectRoot = getProjectRoot()
+  const nextConfigPath = path.join(projectRoot, "next.config.js")
+  let blitzConfigPath
+  if (existsSync(path.join(projectRoot, ".blitz"))) {
+    blitzConfigPath = path.join(projectRoot, ".blitz", "blitz.config.js")
+  } else {
+    // projectRoot is inside .blitz/build/
+    blitzConfigPath = path.join(projectRoot, "..", "blitz.config.js")
   }
 
-  global.blitzConfig = blitzConfig
+  debug("nextConfigPath: " + nextConfigPath)
+  debug("blitzConfigPath: " + blitzConfigPath)
+
+  let loadedNextConfig = {}
+  let loadedBlitzConfig: any = {}
+  try {
+    // --------------------------------
+    // Load next.config.js if it exists
+    // --------------------------------
+    if (existsSync(nextConfigPath)) {
+      // eslint-disable-next-line no-eval -- block webpack from following this module path
+      loadedNextConfig = eval("require")(nextConfigPath)
+      if (typeof loadedNextConfig === "function") {
+        const phase =
+          process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+        loadedNextConfig = loadedNextConfig(phase, {})
+      }
+    }
+
+    // --------------------------------
+    // Load blitz.config.js
+    // --------------------------------
+    // eslint-disable-next-line no-eval -- block webpack from following this module path
+    loadedBlitzConfig = eval("require")(blitzConfigPath)
+    if (typeof loadedBlitzConfig === "function") {
+      const phase =
+        process.env.NODE_ENV === "production" ? PHASE_PRODUCTION_SERVER : PHASE_DEVELOPMENT_SERVER
+      loadedBlitzConfig = loadedBlitzConfig(phase, {})
+    }
+    // -------------
+    // Merge configs
+    // -------------
+    blitzConfig = {
+      ...blitzConfig,
+      ...loadedNextConfig,
+      ...loadedBlitzConfig,
+    }
+  } catch (error) {
+    debug("Failed to load config in getConfig()", error)
+  }
+
+  // Idk why, but during startup first result of loading blitz config is empty
+  // Therefore don't cache it so that next time will load the full config properly
+  if (Object.keys(loadedBlitzConfig).length) {
+    global.blitzConfig = blitzConfig
+  }
   return blitzConfig
 }

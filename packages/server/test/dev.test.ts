@@ -65,7 +65,7 @@ describe("Dev command", () => {
       mocks["blitz-version"].saveBlitzVersion.mockImplementation(blitzVersion.saveBlitzVersion)
     })
 
-    it("should blow up", async (done) => {
+    it("should blow up", async () => {
       const transformFiles = () => Promise.resolve({manifest: Manifest.create()})
       try {
         await dev({
@@ -79,7 +79,6 @@ describe("Dev command", () => {
         })
       } catch (err) {
         expect(err).toBe("pow")
-        done()
       }
     })
   })

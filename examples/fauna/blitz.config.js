@@ -1,4 +1,4 @@
-const { sessionMiddleware, simpleRolesIsAuthorized } = require("@blitzjs/server")
+const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
 const { GraphQLClient, gql } = require("graphql-request")
 
 const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {

@@ -10,7 +10,7 @@ export async function prod(config: ServerConfig) {
     process.exit(1)
   }
 
-  if (customServerExists(buildFolder)) {
+  if (customServerExists()) {
     log.success("Using your custom server")
     await startCustomServer(buildFolder, config)
   } else {

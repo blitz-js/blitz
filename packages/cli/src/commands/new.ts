@@ -1,11 +1,11 @@
-import {flags} from "@oclif/command"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
-import chalk from "chalk"
-import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
-import {lt} from "semver"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
+import {flags} from "@oclif/command"
+import chalk from "chalk"
 import spawn from "cross-spawn"
+import hasbin from "hasbin"
+import {lt} from "semver"
 const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
@@ -48,7 +48,8 @@ export class New extends Command {
       allowNo: true,
     }),
     "dry-run": flags.boolean({
-      description: "show what files will be created without writing them to disk",
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
     "no-git": flags.boolean({
       description: "Skip git repository creation",
@@ -84,10 +85,13 @@ export class New extends Command {
         })
 
         if (promptUpgrade.upgrade === "yes") {
-          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
-          const useYarn = checkYarn.stdout.toString().includes("blitz@")
-          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+          var useYarn: boolean = false
 
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          if (checkYarn && checkYarn.stdout) {
+            useYarn = checkYarn.stdout.toString().includes("blitz@")
+          }
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
           spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
 
           const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
@@ -142,8 +146,9 @@ export class New extends Command {
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
       const needsInstall = dryRun || skipInstall
       const postInstallSteps = [`cd ${args.name}`]
+      const AppGenerator = require("@blitzjs/generator").AppGenerator
 
-      const generator = new (require("@blitzjs/generator").AppGenerator)({
+      const generator = new AppGenerator({
         destinationRoot,
         appName,
         dryRun,
@@ -159,17 +164,14 @@ export class New extends Command {
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-            const result = await runPrisma(
-              ["migrate", "dev", "--preview-feature", "--name", "Initial migration"],
-              true,
-            )
+            const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
             if (!result) throw new Error()
 
             spinner.succeed()
           } catch (error) {
             spinner.fail()
             postInstallSteps.push(
-              "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+              "blitz prisma migrate dev (when asked, you can name the migration anything)",
             )
           }
         },
@@ -181,7 +183,7 @@ export class New extends Command {
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
         postInstallSteps.push(
-          "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+          "blitz prisma migrate dev (when asked, you can name the migration anything)",
         )
       }
 

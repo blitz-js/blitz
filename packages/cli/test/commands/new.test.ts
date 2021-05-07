@@ -1,13 +1,13 @@
-import {New} from "../../src/commands/new"
 import {getLatestVersion} from "@blitzjs/generator/src/utils/get-latest-version"
 import * as fs from "fs"
-import * as path from "path"
-import * as os from "os"
-import fetch from "node-fetch"
 import nock from "nock"
+import fetch from "node-fetch"
+import * as os from "os"
+import * as path from "path"
+import pkgDir from "pkg-dir"
 import rimraf from "rimraf"
 import {stdout} from "stdout-stderr"
-import pkgDir from "pkg-dir"
+import {New} from "../../src/commands/new"
 
 jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require("../../package.json")
@@ -70,7 +70,7 @@ describe("`new` command", () => {
 
     function getStepsFromOutput() {
       const output = stdout.output
-      const exp = /^   \d. (.*)$/gm
+      const exp = /^ {3}\d. (.*)$/gm
       const matches = []
       let match
 
@@ -115,7 +115,7 @@ describe("`new` command", () => {
           expect(getStepsFromOutput()).toStrictEqual([
             `cd ${dirName}`,
             "yarn",
-            "blitz prisma migrate dev --preview-feature (when asked, you can name the migration anything)",
+            "blitz prisma migrate dev (when asked, you can name the migration anything)",
             "blitz dev",
           ])
         }),
@@ -171,7 +171,7 @@ describe("`new` command", () => {
       testIfNotWindows("uses template versions", async () => {
         nock("https://registry.npmjs.org").get(/.*/).reply(500).persist()
 
-        await withNewApp(async (_, packageJson) => {
+        await withNewApp((_, packageJson) => {
           const {dependencies} = packageJson
           expect(dependencies.blitz).toBe("latest")
         })

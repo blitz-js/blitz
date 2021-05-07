@@ -1,14 +1,12 @@
+# https://github.com/vercel/next.js/commits/canary/.github/workflows/build_test_deploy.yml
+
 name: CI
 
 on:
   push:
-    branches:
-      - master
-      - canary
+    branches: [canary]
   pull_request:
-    branches:
-      - master
-      - canary
+    types: [opened, synchronize]
 
 jobs:
   lint:
@@ -30,32 +28,38 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
+      - name: manypkg lint
+        run: yarn manypkg check
         env:
           CI: true
       - name: yarn lint
         run: yarn lint
         env:
           CI: true
-  build_and_test_pkgs:
-    name: Packages Tests
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node_version: [12, 15]
-    runs-on: ${{ matrix.os }}
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    outputs:
+      docsChange: ${{ steps.docs-change.outputs.DOCS_CHANGE }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -65,40 +69,65 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
+      - run: node run-tests.js --timings --write-timings -g 1/1
+        working-directory: nextjs
+      - name: Check docs only change
+        working-directory: nextjs
+        run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
+        id: docs-change
+      - run: echo ${{steps.docs-change.outputs.DOCS_CHANGE}}
+      - uses: actions/cache@v2
+        id: cache-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+  testBlitzPackages:
+    name: Blitz - Test Packages
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
       - name: Test Blitz Packages
         run: yarn testonly:packages
         env:
           CI: true
-  build_and_test_examples:
+
+  testBlitzExamples:
     timeout-minutes: 30
-    name: Example Apps Tests
+    name: Blitz - Test Example Apps
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node_version: [12, 15]
     runs-on: ${{ matrix.os }}
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -108,23 +137,325 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-${{ hashFiles('yarn.lock') }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v4-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+      - run: yarn install --frozen-lockfile --check-files
+      # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
+      #   if: matrix.os == 'windows-latest'
+      - name: Build Packages
+        run: yarn build
+      # Needed to get cypress binary
+      - run: yarn cypress install
+      - name: Install sass
+        run: yarn install -W sass
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
       - name: Test examples
         run: yarn testonly:examples
         env:
           CI: true
+
+  checkPrecompiled:
+    name: Check Pre-compiled
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - run: ./check-pre-compiled.sh
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testUnit:
+    name: Nextjs - Test Unit
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+      - run: node run-tests.js --timings --type unit -g 1/1
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testIntegrationBlitz:
+    name: Blitz - Test Integration
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    strategy:
+      fail-fast: false
+    steps:
+      - run: echo ${{needs.build.outputs.docsChange}}
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+      - run: xvfb-run node nextjs/run-tests.js -c 3
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testIntegration:
+    name: Nextjs - Test Integration
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    steps:
+      - run: echo ${{needs.build.outputs.docsChange}}
+        working-directory: ./
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/10 -c 3
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testElectron:
+    name: Nextjs - Test Electron
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+      TEST_ELECTRON: 1
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+      - run: cd test/integration/with-electron/app && yarn
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+      - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testsPass:
+    name: thank you, next
+    runs-on: ubuntu-latest
+    needs:
+      [
+        checkPrecompiled,
+        testIntegration,
+        testIntegrationBlitz,
+        testUnit,
+        testBlitzPackages,
+        testBlitzExamples,
+      ]
+    steps:
+      - run: exit 0
+
+  testFutureDependencies:
+    name: Nextjs - Webpack 5 (Basic, Production, Acceptance)
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+      NEXT_PRIVATE_TEST_WEBPACK5_MODE: 1
+
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+      - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        working-directory: nextjs
+
+  testLegacyReact:
+    name: Nextjs - React 16 + Webpack 4 (Basic, Production, Acceptance)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
+
+      - run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
+        id: docs-change
+
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: cat package.json | jq '.resolutions.react = "^16.14.0"' > package.json.tmp && mv package.json.tmp package.json
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: cat package.json | jq '.resolutions."react-dom" = "^16.14.0"' > package.json.tmp && mv package.json.tmp package.json
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - name: Use Node.js
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+      - name: Get yarn cache directory path
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache node_modules
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+            /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+
+      - run: yarn install --check-files
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: yarn list react react-dom
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: yarn build:nextjs
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+
+      - run: xvfb-run node run-tests.js test/integration/{link-ref,production,basic,async-modules,font-optimization,ssr-ctx,worker-loader}/test/index.test.js test/acceptance/*.test.js
+        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
+        working-directory: nextjs
+
+  testFirefox:
+    name: Nextjs - Test Firefox (production)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      HEADLESS: true
+      BROWSERNAME: "firefox"
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - run: node run-tests.js test/integration/production/test/index.test.js
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testSafari:
+    name: Nextjs - Test Safari (production)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      BROWSERSTACK: true
+      BROWSERNAME: "safari"
+      NEXT_TELEMETRY_DISABLED: 1
+      SKIP_LOCAL_SELENIUM_SERVER: true
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production/test/index.test.js'
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+
+  testSafariOld:
+    name: Nextjs - Test Safari 10.1 (nav)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: [build, testSafari]
+    env:
+      BROWSERSTACK: true
+      LEGACY_SAFARI: true
+      BROWSERNAME: "safari"
+      NEXT_TELEMETRY_DISABLED: 1
+      SKIP_LOCAL_SELENIUM_SERVER: true
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}

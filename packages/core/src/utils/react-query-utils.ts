@@ -1,14 +1,40 @@
-import {useMemo} from "react"
-import {queryCache, QueryKey} from "react-query"
+import {QueryClient, QueryKey} from "react-query"
 import {serialize} from "superjson"
 import {getBlitzRuntimeData} from "../blitz-data"
-import {EnhancedResolverRpcClient, QueryFn, Resolver} from "../types"
+import {EnhancedResolverRpcClient, QueryFn, Resolver, ResolverType} from "../types"
 import {isClient} from "."
 import {requestIdleCallback} from "./request-idle-callback"
 
 type MutateOptions = {
   refetch?: boolean
 }
+
+export const initializeQueryClient = () => {
+  let suspenseEnabled = true
+  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
+    const data = getBlitzRuntimeData()
+    suspenseEnabled = data.suspenseEnabled
+  }
+
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        suspense: !!suspenseEnabled,
+        retry: (failureCount, error: any) => {
+          if (process.env.NODE_ENV !== "production") return false
+
+          // Retry (max. 3 times) only if network error detected
+          if (error.message === "Network request failed" && failureCount <= 3) return true
+
+          return false
+        },
+      },
+    },
+  })
+}
+
+// Create internal QueryClient instance
+export const queryClient = initializeQueryClient()
 
 function isEnhancedResolverRpcClient(f: any): f is EnhancedResolverRpcClient<any, any> {
   return !!f._meta
@@ -57,12 +83,26 @@ export const validateQueryFn = <TInput, TResult>(
   }
 }
 
-export const sanitize = <TInput, TResult>(
+const sanitize = (type: ResolverType) => <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | EnhancedResolverRpcClient<TInput, TResult>,
 ) => {
   validateQueryFn(queryFn)
-  return queryFn as EnhancedResolverRpcClient<TInput, TResult>
+
+  const enhancedResolver = queryFn as EnhancedResolverRpcClient<TInput, TResult>
+
+  const queryFnName = type === "mutation" ? "useMutation" : "useQuery"
+
+  if (enhancedResolver._meta?.type !== type && isNotInUserTestEnvironment()) {
+    throw new Error(
+      `"${queryFnName}" was expected to be called with a ${type} but was called with a "${enhancedResolver._meta.type}"`,
+    )
+  }
+
+  return enhancedResolver
 }
+
+export const sanitizeQuery = sanitize("query")
+export const sanitizeMutation = sanitize("mutation")
 
 export const getQueryKeyFromUrlAndParams = (url: string, params: unknown) => {
   const queryKey = [url]
@@ -81,7 +121,7 @@ export function getQueryKey<TInput, TResult, T extends QueryFn>(
     throw new Error("getQueryKey is missing the first argument - it must be a resolver function")
   }
 
-  return getQueryKeyFromUrlAndParams(sanitize(resolver)._meta.apiUrl, params)
+  return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._meta.apiUrl, params)
 }
 
 export function invalidateQuery<TInput, TResult, T extends QueryFn>(
@@ -95,14 +135,14 @@ export function invalidateQuery<TInput, TResult, T extends QueryFn>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey<any>
+  let queryKey: QueryKey
   if (params) {
     queryKey = fullQueryKey
   } else {
     // Params not provided, only use first query key item (url)
     queryKey = fullQueryKey[0]
   }
-  return queryCache.invalidateQueries(queryKey)
+  return queryClient.invalidateQueries(queryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends QueryFn>(
@@ -110,15 +150,15 @@ export function setQueryData<TInput, TResult, T extends QueryFn>(
   params: TInput,
   newData: TResult | ((oldData: TResult | undefined) => TResult),
   opts: MutateOptions = {refetch: true},
-): Promise<void | ReturnType<typeof queryCache.invalidateQueries>> {
+): Promise<void | ReturnType<typeof queryClient.invalidateQueries>> {
   if (typeof resolver === "undefined") {
     throw new Error("setQueryData is missing the first argument - it must be a resolver function")
   }
   const queryKey = getQueryKey(resolver, params)
 
   return new Promise((res) => {
-    queryCache.setQueryData(queryKey, newData)
-    let result: void | ReturnType<typeof queryCache.invalidateQueries>
+    queryClient.setQueryData(queryKey, newData)
+    let result: void | ReturnType<typeof queryClient.invalidateQueries>
     if (opts.refetch) {
       result = invalidateQuery(resolver, params)
     }
@@ -131,23 +171,4 @@ export function setQueryData<TInput, TResult, T extends QueryFn>(
       res(result)
     }
   })
-}
-
-export const retryFunction = (failureCount: number, error: any) => {
-  if (process.env.NODE_ENV !== "production") return false
-
-  // Retry (max. 3 times) only if network error detected
-  if (error.message === "Network request failed" && failureCount <= 3) return true
-
-  return false
-}
-
-export function useDefaultQueryConfig() {
-  return useMemo(() => {
-    const {suspenseEnabled} = getBlitzRuntimeData()
-    return {
-      suspense: !!suspenseEnabled,
-      retry: retryFunction,
-    }
-  }, [])
 }

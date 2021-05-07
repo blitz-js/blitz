@@ -1,21 +1,18 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
-import {NextRouter} from "next/router"
 import {
+  NextApiHandler,
   NextApiRequest,
   NextApiResponse,
   NextComponentType,
   NextPage,
   NextPageContext,
 } from "next/types"
-import {AuthenticateOptions, Strategy} from "passport"
-import {MutateOptions, MutationResult} from "react-query"
 import {BlitzRuntimeData} from "./blitz-data"
-import {useParams} from "./use-params"
-import {useRouterQuery} from "./use-router-query"
 
-export {
+export type {
   GetServerSideProps,
+  GetServerSidePropsContext,
   GetServerSidePropsResult,
   GetStaticPaths,
   GetStaticPathsContext,
@@ -28,8 +25,9 @@ export {
   PageConfig,
   Redirect,
 } from "next"
+export type BlitzApiHandler<T = any> = NextApiHandler<T>
 export type BlitzApiRequest = NextApiRequest
-export type BlitzApiResponse = NextApiResponse
+export type BlitzApiResponse<T = any> = NextApiResponse<T>
 export type BlitzPageContext = NextPageContext
 
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
@@ -44,34 +42,19 @@ export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   redirectAuthenticatedTo?: string
 }
 
-export interface BlitzRouter extends NextRouter {
-  query: ReturnType<typeof useRouterQuery>
-  params: ReturnType<typeof useParams>
-}
-
-export interface Session {
-  // isAuthorize can be injected here (see supertokens.ts)
-  // PublicData can be injected here (see supertokens.ts)
-}
-
-export type PublicData = "PublicData" extends keyof Session ? Session["PublicData"] : {userId: any}
-
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
-  ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-    ? Parameters<Session["isAuthorized"]>[0]["args"]
-    : unknown[]
-  : unknown[]
+export interface DefaultCtx {}
+export interface Ctx extends DefaultCtx {}
 
 export interface MiddlewareRequest extends BlitzApiRequest {
   protocol?: string
 }
-export interface MiddlewareResponse extends BlitzApiResponse {
+export interface MiddlewareResponse<C = Ctx> extends BlitzApiResponse {
   /**
    * This will be passed as the second argument to Blitz queries/mutations.
    *
    * You must set blitzCtx BEFORE calling next()
    */
-  blitzCtx: Record<string, unknown>
+  blitzCtx: C
   /**
    * This is the exact result returned from the Blitz query/mutation
    *
@@ -121,7 +104,6 @@ export type ParsedUrlQueryValue = string | string[] | undefined
 
 export type Options = {
   fromQueryHook?: boolean
-  resultOfGetFetchMore?: any
 }
 
 export type ConnectMiddleware = (
@@ -129,24 +111,6 @@ export type ConnectMiddleware = (
   res: ServerResponse,
   next: (error?: Error) => void,
 ) => void
-
-export type BlitzPassportStrategy = {
-  authenticateOptions?: AuthenticateOptions
-  strategy: Strategy
-}
-
-export type BlitzPassportConfig = {
-  successRedirectUrl?: string
-  errorRedirectUrl?: string
-  strategies: BlitzPassportStrategy[]
-  secureProxy?: boolean
-}
-
-export type VerifyCallbackResult = {
-  publicData: PublicData
-  privateData?: Record<string, any>
-  redirectUrl?: string
-}
 
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
@@ -226,26 +190,6 @@ export type InvokeWithMiddlewareConfig = {
   middleware?: Middleware[]
   [prop: string]: any
 }
-
-export declare type MutateFunction<
-  TResult,
-  TError = unknown,
-  TVariables = unknown,
-  TSnapshot = unknown
-> = (
-  variables?: TVariables,
-  config?: MutateOptions<TResult, TError, TVariables, TSnapshot>,
-) => Promise<TResult>
-
-export declare type MutationResultPair<TResult, TError, TVariables, TSnapshot> = [
-  MutateFunction<TResult, TError, TVariables, TSnapshot>,
-  MutationResult<TResult, TError>,
-]
-
-export declare type MutationFunction<TResult, TVariables = unknown> = (
-  variables: TVariables,
-  ctx?: any,
-) => Promise<TResult>
 
 export interface ErrorFallbackProps {
   error: Error & Record<any, any>
