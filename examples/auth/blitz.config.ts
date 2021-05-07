@@ -7,6 +7,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 module.exports = withBundleAnalyzer({
   middleware: [
     sessionMiddleware({
+      cookiePrefix: "blitz-auth-example",
       isAuthorized: simpleRolesIsAuthorized,
       // sessionExpiryMinutes: 4,
       getSession: (handle) => db.session.findFirst({where: {handle}}),

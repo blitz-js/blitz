@@ -10,8 +10,11 @@ export type BlitzRuntimeData = {
 
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
+  const cookiePrefix = config.middleware?.filter(
+    (middleware) => middleware.name === "blitzSessionMiddleware",
+  )[0]?.config?.cookiePrefix
   return {
-    sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
+    sessionCookiePrefix: (cookiePrefix || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
     suspenseEnabled: config.experimental?.reactMode !== "legacy",
   }
 }

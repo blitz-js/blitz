@@ -85,6 +85,14 @@ export interface BlitzConfig extends Record<string, unknown> {
   _meta: {
     packageName: string
   }
+  middleware?: Record<string, any> &
+    {
+      (req: any, res: any, next: any): Promise<void> | void
+      type?: string
+      config?: {
+        cookiePrefix?: string
+      }
+    }[]
 }
 
 declare global {
