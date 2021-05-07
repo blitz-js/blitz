@@ -6,11 +6,8 @@ import {join} from "path"
 
 const packageDev = JSON.parse(`${fs.readFileSync("./package.json")}`)
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isReactFinalForm = packageDev?.dependencies?.["react-final-form"] !== undefined
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isReactHookForm = packageDev?.dependencies?.["react-hook-form"] !== undefined
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isFormik = packageDev?.dependencies?.["formik"] !== undefined
 
 const useForm = isReactFinalForm
@@ -22,10 +19,8 @@ const useForm = isReactFinalForm
   : false
 
 if (!useForm)
-  throw new Error(
-    chalk.red(
-      "Please install one of this package to install this recipe \n1. react-final-form\n2. react-hook-form\n3. formik",
-    ),
+  throw chalk.red(
+    "Please install one of this package to install this recipe \n1. react-final-form\n2. react-hook-form\n3. formik",
   )
 
 export default RecipeBuilder()
@@ -57,8 +52,8 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addStyles",
     stepName: "Stylesheet",
-    explanation: `Adds a root CSS stylesheet where Tailwind is imported and where you can add global styles and remove .template from folder name`,
-    targetDirectory: "./app/core",
+    explanation: `Adds a root CSS stylesheet where Tailwind is imported and where you can add global styles`,
+    targetDirectory: "./app/core/styles",
     templatePath: join(__dirname, "templates", "styles"),
     templateValues: {},
   })
@@ -75,8 +70,7 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addCoreFile",
     stepName: "Core Files",
-    explanation:
-      "Adds core files to give you a good development and remove .template from filename",
+    explanation: "Adds core files to give you a good development",
     targetDirectory: "./app/core/components",
     templatePath: join(__dirname, "templates", "core", useForm),
     templateValues: {},
@@ -84,12 +78,9 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addAuthFile",
     stepName: "Auth Files",
-    explanation:
-      "Adds auth files to give you a secure app and remove .template from filename and from folder name",
-    targetDirectory: "./app",
+    explanation: "Adds auth files to give you a secure app",
+    targetDirectory: "./app/auth",
     templatePath: join(__dirname, "templates", "auth"),
     templateValues: {},
   })
   .build()
-
-//   Collection<Program> | Promise<Collection<Program>>
