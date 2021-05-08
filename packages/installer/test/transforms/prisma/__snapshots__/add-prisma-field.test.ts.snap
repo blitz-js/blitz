@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addPrismaField creates field 1`] = `
+"
+datasource db {
+  provider = \\"sqlite\\"
+  url      = \\"file:./db.sqlite\\"
+}
+
+model Project {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
+"
+`;
+
+exports[`addPrismaField skips if model is missing 1`] = `
+"
+datasource db {
+  provider = \\"sqlite\\"
+  url      = \\"file:./db.sqlite\\"
+}
+"
+`;

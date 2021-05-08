@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addPrismaModelAttribute creates index 1`] = `
+"
+datasource db {
+  provider = \\"sqlite\\"
+  url      = \\"file:./db.sqlite\\"
+}
+
+model Project {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  @@index([name])
+}
+"
+`;
+
+exports[`addPrismaModelAttribute skips if model is missing 1`] = `
+"
+datasource db {
+  provider = \\"sqlite\\"
+  url      = \\"file:./db.sqlite\\"
+}
+"
+`;

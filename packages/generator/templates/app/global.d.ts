@@ -1,8 +1,3 @@
-declare module "*.module.scss" {
-  const content: { [className: string]: string }
-  export default content
-}
-declare module "*.module.css" {
-  const content: { [className: string]: string }
-  export default content
-}
+// These reference imports provide type definitions for things like styled-jsx and css modules
+/// <reference types="next" />
+/// <reference types="next/types/global" />

@@ -19,7 +19,7 @@ export const paths = {
     return "babel.config.js"
   },
   blitzConfig() {
-    return "blitz.config.js"
+    return `blitz.config${ext()}`
   },
   packageJson() {
     return "package.json"

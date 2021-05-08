@@ -10,11 +10,16 @@ export function withBlitz(nextConfig: any) {
     const normalizedConfig =
       typeof nextConfig === "function" ? nextConfig(phase, nextOpts) : nextConfig
 
+    const experimental = {
+      ...normalizedConfig.experimental,
+    }
+    if (experimental.reactMode === undefined && experimental.reactRoot === undefined) {
+      // Default to true
+      experimental.reactRoot = true
+    }
+
     const newConfig = Object.assign({}, normalizedConfig, {
-      experimental: {
-        reactMode: "concurrent",
-        ...(normalizedConfig.experimental || {}),
-      },
+      experimental,
       webpack(config: any, options: {isServer: boolean; webpack: any}) {
         // ----------------------
         // Set up resolve aliases
