@@ -1,4 +1,4 @@
-import {formatWithValidation} from "next/next-server/lib/utils"
+import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
