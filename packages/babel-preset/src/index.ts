@@ -1,3 +1,4 @@
+import type { TransformOptions } from '@babel/core';
 import AddBlitzAppRoot from './add-blitz-app-root';
 import RewriteImports from './rewrite-imports';
 
@@ -7,7 +8,7 @@ export default function preset(_api: any, options = {}) {
   const isRunningInJest =
     process.env.JEST_WORKER_ID && !process.env.__NEXT_TEST_MODE;
 
-  const config = {
+  const config: TransformOptions = {
     presets: [[require('next/babel'), options]],
     plugins: [
       [
@@ -19,7 +20,7 @@ export default function preset(_api: any, options = {}) {
   };
 
   if (!isRunningInJest) {
-    config.plugins.push(RewriteImports);
+    config.plugins!.push(RewriteImports);
   }
 
   return config;
