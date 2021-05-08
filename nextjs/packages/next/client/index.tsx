@@ -713,9 +713,9 @@ function doRender(input: RenderRouteInfo): Promise<any> {
       !canceled
     ) {
       const desiredHrefs: Set<string> = new Set(styleSheets.map((s) => s.href))
-      const currentStyleTags: HTMLStyleElement[] = looseToArray<HTMLStyleElement>(
-        document.querySelectorAll('style[data-n-href]')
-      )
+      const currentStyleTags: HTMLStyleElement[] = looseToArray<
+        HTMLStyleElement
+      >(document.querySelectorAll('style[data-n-href]'))
       const currentHrefs: string[] = currentStyleTags.map(
         (tag) => tag.getAttribute('data-n-href')!
       )

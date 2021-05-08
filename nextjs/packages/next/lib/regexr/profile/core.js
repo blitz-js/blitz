@@ -48,7 +48,7 @@ let core = {
   badEscChars: n,
 
   escCharCodes: {
-    0: 0, // null
+    '0': 0, // null
     a: 7, // bell
     t: 9, // tab
     n: 10, // lf

@@ -1220,7 +1220,7 @@ export default class Router implements BaseRouter {
           as,
           options,
           __N: true,
-          idx: (this._idx = method !== 'pushState' ? this._idx : this._idx + 1),
+          idx: this._idx = method !== 'pushState' ? this._idx : this._idx + 1,
         } as HistoryState,
         // Most browsers currently ignores this parameter, although they may use it in the future.
         // Passing the empty string here should be safe against future changes to the method.
