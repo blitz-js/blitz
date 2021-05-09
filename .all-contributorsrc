@@ -2567,6 +2567,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "meepdeew",
+      "name": "meepdeew",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43303008?v=4",
+      "profile": "https://github.com/meepdeew",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
