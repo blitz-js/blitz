@@ -148,8 +148,8 @@ interface InfiniteQueryConfig<TResult> extends UseInfiniteQueryOptions<TResult> 
 export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult>,
-): [TResult[], RestInfiniteResult<TResult> & QueryNonLazyOptions]
+  options: InfiniteQueryConfig<TResult> & QueryNonLazyOptions,
+): [TResult[], RestInfiniteResult<TResult>]
 export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,

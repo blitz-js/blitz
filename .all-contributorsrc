@@ -531,7 +531,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/19371989?v=4",
       "profile": "https://builtforfifty.com",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2545,6 +2546,51 @@
       "name": "Agusti Fernandez",
       "avatar_url": "https://avatars.githubusercontent.com/u/6601142?v=4",
       "profile": "https://github.com/agustif",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Anjianto",
+      "name": "Anjianto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61521141?v=4",
+      "profile": "https://github.com/Anjianto",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "adblanc",
+      "name": "Blanc Adrien",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41756894?v=4",
+      "profile": "https://adrienblanc.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "meepdeew",
+      "name": "meepdeew",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43303008?v=4",
+      "profile": "https://github.com/meepdeew",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Hardik3296",
+      "name": "Hardik Gaur",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20360325?v=4",
+      "profile": "https://github.com/Hardik3296",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "acornellier",
+      "name": "acornellier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8725423?v=4",
+      "profile": "https://github.com/acornellier",
       "contributions": [
         "code"
       ]
