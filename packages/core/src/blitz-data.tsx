@@ -12,7 +12,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
   return {
     sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
-    suspenseEnabled: config.experimental?.reactMode !== "legacy",
+    suspenseEnabled: config.experimental?.reactRoot !== false,
   }
 }
 
