@@ -10,9 +10,10 @@ export type BlitzRuntimeData = {
 
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
-  const cookiePrefix = config.middleware?.filter(
+  const middleware = config.middleware?.filter(
     (middleware) => middleware.name === "blitzSessionMiddleware",
-  )[0]?.config?.cookiePrefix
+  )[0]
+  const cookiePrefix = middleware?.config?.cookiePrefix
   return {
     sessionCookiePrefix: (cookiePrefix || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
     suspenseEnabled: config.experimental?.reactRoot !== false,
@@ -23,10 +24,7 @@ export function getBlitzRuntimeData() {
   if (isClient && !process.env.JEST_WORKER_ID) {
     return window.__BLITZ_DATA__
   } else {
-    if (!global.__BLITZ_DATA__) {
-      global.__BLITZ_DATA__ = _getBlitzRuntimeData()
-    }
-    return global.__BLITZ_DATA__
+    return _getBlitzRuntimeData()
   }
 }
 
