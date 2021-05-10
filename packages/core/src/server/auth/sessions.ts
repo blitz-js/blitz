@@ -576,14 +576,6 @@ export async function getSessionKernel(
     req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
-  // Check if the request is missing anti-CSRF token, and logs an error
-  // the error includes link to the documentation
-  if (enableCsrfProtection && !antiCSRFToken) {
-    log.warning(
-      `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
-    )
-  }
-
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
     const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
@@ -616,7 +608,12 @@ export async function getSessionKernel(
       return null
     }
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
-      // await revokeSession(req, res, handle)
+      if (!antiCSRFToken) {
+        log.warning(
+          `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
+        )
+      }
+
       setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
@@ -687,7 +684,12 @@ export async function getSessionKernel(
     }
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
-      // await revokeSession(req, res, payload.handle, true)
+      if (!antiCSRFToken) {
+        log.warning(
+          `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
+        )
+      }
+
       setHeader(res, HEADER_CSRF_ERROR, "true")
       throw new CSRFTokenMismatchError()
     }
