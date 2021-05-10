@@ -2585,6 +2585,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "acornellier",
+      "name": "acornellier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8725423?v=4",
+      "profile": "https://github.com/acornellier",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
