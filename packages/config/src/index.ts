@@ -1,4 +1,5 @@
 import * as esbuild from "esbuild"
+import fs from "fs"
 import {existsSync, readJSONSync} from "fs-extra"
 import path, {join} from "path"
 import pkgDir from "pkg-dir"
@@ -34,11 +35,16 @@ export async function buildConfig({watch}: BuildConfigOptions = {}) {
     return
   }
   const pkg = readJSONSync(path.join(dir, "package.json"))
-  debug("src", getConfigSrcPath())
-  debug("build", getConfigBuildPath())
+  const srcPath = getConfigSrcPath()
+
+  if (fs.readFileSync(srcPath, "utf8").includes("tsconfig-paths/register")) {
+    // User is manually handling their own typescript stuff
+    debug("Config contains 'tsconfig-paths/register', so skipping build")
+    return
+  }
 
   const esbuildOptions: esbuild.BuildOptions = {
-    entryPoints: [getConfigSrcPath()],
+    entryPoints: [srcPath],
     outfile: getConfigBuildPath(),
     format: "cjs",
     bundle: true,
