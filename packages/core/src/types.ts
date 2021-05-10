@@ -119,6 +119,7 @@ export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TR
 export type ResolverModule<TInput, TResult> = {
   default: Resolver<TInput, TResult>
   middleware?: Middleware[]
+  config?: Record<string, any>
 }
 
 export type RpcOptions = {
@@ -141,6 +142,7 @@ export interface ResolverRpcExecutor<TInput, TResult> {
 export type ResolverType = "query" | "mutation"
 
 export interface ResolverEnhancement {
+  config?: Record<string, any>
   _meta: {
     name: string
     type: ResolverType
