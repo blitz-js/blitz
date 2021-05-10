@@ -68,7 +68,7 @@ export default RecipeBuilder()
     packages: [
       {name: "@emotion/react", version: "11"},
       {name: "@emotion/styled", version: "11"},
-      {name: "@emotion/babel-plugin", version: "11", isDevDep: true},
+      {name: "@emotion/babel-plugin", version: "11"},
     ],
   })
   .addNewFilesStep({
