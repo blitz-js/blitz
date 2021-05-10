@@ -34,15 +34,7 @@ import {
   TOKEN_SEPARATOR,
 } from "../../constants"
 import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "../../errors"
-import {
-  BlitzApiRequest,
-  BlitzApiResponse,
-  Ctx,
-  Middleware,
-  MiddlewareNext,
-  MiddlewareRequest,
-  MiddlewareResponse,
-} from "../../types"
+import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
 import {isLocalhost} from "../server-utils"
 import {generateToken, hash256} from "./auth-utils"
@@ -156,11 +148,9 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     ...sessionConfig,
   }
 
-  const blitzSessionMiddleware = async (
-    req: MiddlewareRequest,
-    res: MiddlewareResponse,
-    next: MiddlewareNext,
-  ) => {
+  const blitzSessionMiddleware: Middleware<{
+    cookiePrefix?: string
+  }> = async (req, res, next) => {
     debug("Starting sessionMiddleware...")
     if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
@@ -168,7 +158,6 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     }
     return next()
   }
-  blitzSessionMiddleware.name = "blitzSessionMiddleware"
   blitzSessionMiddleware.config = {
     cookiePrefix: global.sessionConfig.cookiePrefix,
   }
