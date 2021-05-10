@@ -230,6 +230,7 @@ export function getIsomorphicEnhancedResolver<TInput, TResult>(
     if (!resolver) throw new Error("resolver is missing on the server")
     const enhancedResolver = (resolver.default as unknown) as EnhancedResolver<TInput, TResult>
     enhancedResolver.middleware = resolver.middleware
+    enhancedResolver.config = resolver.config
     enhancedResolver._meta = {
       name: resolverName,
       type: resolverType,

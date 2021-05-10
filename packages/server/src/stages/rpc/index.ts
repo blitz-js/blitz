@@ -94,7 +94,9 @@ export default rpcApiHandler(
 )
 
 export const config = {
+  ...enhancedResolver.config,
   api: {
+    ...enhancedResolver.config?.api,
     externalResolver: true,
   },
 }
