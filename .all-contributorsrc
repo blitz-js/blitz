@@ -2594,6 +2594,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "craigglennie",
+      "name": "craigglennie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/149281?v=4",
+      "profile": "https://github.com/craigglennie",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
