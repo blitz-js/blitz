@@ -40,5 +40,6 @@ model User {
   email String  @unique
 
   hasAdministrativeAccess Boolean @default(false)
-}"
+}
+"
 `;

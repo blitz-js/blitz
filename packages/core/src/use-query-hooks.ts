@@ -7,9 +7,10 @@ import {
   UseQueryResult,
 } from "react-query"
 import {useSession} from "./auth/auth-client"
+import {getBlitzRuntimeData} from "./blitz-data"
 import {useRouter} from "./router"
 import {FirstParam, PromiseReturnType, QueryFn} from "./types"
-import {isClient} from "./utils"
+import {isServer} from "./utils"
 import {
   emptyQueryFn,
   getQueryCacheFunctions,
@@ -49,14 +50,15 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const suspense =
-    options?.enabled === false || options?.enabled === null ? false : options?.suspense
+  const suspenseConfig = getBlitzRuntimeData().suspenseEnabled
+  let enabled = isServer && suspenseConfig ? false : options?.enabled ?? options?.enabled !== null
+  const suspense = enabled === false ? false : options?.suspense
   const session = useSession({suspense})
   if (session.isLoading) {
-    options.enabled = false
+    enabled = false
   }
 
-  const routerIsReady = useRouter().isReady && isClient
+  const routerIsReady = useRouter().isReady || (isServer && suspenseConfig)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -66,7 +68,19 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
       ? () => enhancedResolverRpcClient(params, {fromQueryHook: true})
       : (emptyQueryFn as any),
     ...options,
+    enabled,
   })
+
+  if (
+    queryRest.isIdle &&
+    isServer &&
+    suspenseConfig !== false &&
+    !data &&
+    (!options || !("suspense" in options) || options.suspense) &&
+    (!options || !("enabled" in options) || options.enabled)
+  ) {
+    throw new Promise(() => {})
+  }
 
   const rest = {
     ...queryRest,
@@ -148,8 +162,8 @@ interface InfiniteQueryConfig<TResult> extends UseInfiniteQueryOptions<TResult> 
 export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult>,
-): [TResult[], RestInfiniteResult<TResult> & QueryNonLazyOptions]
+  options: InfiniteQueryConfig<TResult> & QueryNonLazyOptions,
+): [TResult[], RestInfiniteResult<TResult>]
 export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,

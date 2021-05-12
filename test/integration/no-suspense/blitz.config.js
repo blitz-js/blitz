@@ -1,5 +1,5 @@
 module.exports = {
   experimental: {
-    reactMode: "legacy",
+    reactRoot: false,
   },
 }

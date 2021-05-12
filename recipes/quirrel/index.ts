@@ -19,7 +19,6 @@ export default RecipeBuilder()
       {
         name: "concurrently",
         version: "latest",
-        isDevDep: true,
       },
     ],
   })

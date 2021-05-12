@@ -6,6 +6,14 @@ export interface Session {
   // PublicData can be injected here
 }
 
+declare global {
+  namespace NodeJS {
+    interface Global {
+      sessionConfig: SessionConfig
+    }
+  }
+}
+
 export type PublicData = "PublicData" extends keyof Session
   ? Session["PublicData"]
   : {userId: unknown}
@@ -22,12 +30,12 @@ export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
 
 export interface SessionModel extends Record<any, any> {
   handle: string
-  userId?: PublicData["userId"]
-  expiresAt?: Date
-  hashedSessionToken?: string
-  antiCSRFToken?: string
-  publicData?: string
-  privateData?: string
+  userId?: PublicData["userId"] | null
+  expiresAt?: Date | null
+  hashedSessionToken?: string | null
+  antiCSRFToken?: string | null
+  publicData?: string | null
+  privateData?: string | null
 }
 
 export type SessionConfig = {
@@ -41,7 +49,7 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  isAuthorized: (data: {ctx: Ctx; args: any[]}) => boolean
+  isAuthorized: (data: {ctx: Ctx; args: any}) => boolean
 }
 
 export interface SessionContextBase {

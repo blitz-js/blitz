@@ -13,9 +13,9 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Tailwind CSS requires a couple of dependencies including PostCSS for removing unused styles from the production bundle`,
     packages: [
-      {name: "tailwindcss", version: "2"},
-      {name: "autoprefixer", version: "10", isDevDep: true},
-      {name: "postcss", version: "8", isDevDep: true},
+      {name: "tailwindcss", version: "2.1.2"},
+      {name: "autoprefixer", version: "10"},
+      {name: "postcss", version: "8"},
     ],
   })
   .addNewFilesStep({

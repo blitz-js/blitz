@@ -13,7 +13,8 @@
     "test:migrate": "prisma generate && blitz prisma migrate deploy",
     "test:jest": "jest --passWithNoTests",
     "test-server": "blitz build && blitz start",
-    "test:e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
+    "test-run-e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
+    "test:e2e": "yarn test-run-e2e || yarn test-run-e2e",
     "test": "run-s test:*"
   },
   "browserslist": [
@@ -30,7 +31,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.35.0-canary.2",
+    "blitz": "0.35.0-canary.6",
     "final-form": "4.20.1",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",

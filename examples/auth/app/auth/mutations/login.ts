@@ -27,3 +27,11 @@ export default resolver.pipe(resolver.zod(Login), async ({email, password}, ctx)
 
   return user
 })
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "2mb",
+    },
+  },
+}

@@ -1,11 +1,11 @@
 import {log} from "@blitzjs/display"
+import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import path from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
-import {matchBetween} from "../utils/match-between"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -36,55 +36,60 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
+    const schemaPath = path.resolve("db/schema.prisma")
+    if (!this.fs.exists(schemaPath)) {
+      throw new Error("Prisma schema file was not found")
+    }
+
+    let schema: ast.Schema
     try {
-      if (!this.fs.exists(path.resolve("db/schema.prisma"))) {
-        throw new Error("Prisma schema file was not found")
-      }
-      let updatedOrCreated = "created"
+      schema = ast.getSchema(this.fs.read(schemaPath))
+    } catch (err) {
+      log.error("Failed to parse db/schema.prisma file")
+      throw err
+    }
+    const {modelName, extraArgs, dryRun} = this.options
+    let updatedOrCreated = "created"
 
-      const extraArgs =
-        this.options.extraArgs.length === 1 && this.options.extraArgs[0].includes(" ")
-          ? this.options.extraArgs[0].split(" ")
-          : this.options.extraArgs
-      const modelDefinition = new Model(
-        this.options.modelName,
-        extraArgs.flatMap((def) => Field.parse(def)),
-      )
-      if (!this.options.dryRun) {
-        // wrap in newlines to put a space below the previously generated model and
-        // to preserve the EOF newline
-        const schema = this.fs.read(path.resolve("db/schema.prisma"))
+    let fields = (extraArgs.length === 1 && extraArgs[0].includes(" ")
+      ? extraArgs[0].split(" ")
+      : extraArgs
+    ).flatMap((input) => Field.parse(input, schema))
 
-        if (schema.indexOf(`model ${modelDefinition.name}`) === -1) {
-          //model does not exist in schema - just add it
-          this.fs.append(path.resolve("db/schema.prisma"), `\n${modelDefinition.toString()}\n`)
+    const modelDefinition = new Model(modelName, fields)
+
+    let model: ast.Model | undefined
+    if (!dryRun) {
+      model = schema.list.find(function (component): component is ast.Model {
+        return component.type === "model" && component.name === modelDefinition.name
+      })
+      try {
+        if (model) {
+          for (const field of fields) field.appendTo(model)
+          this.fs.write(schemaPath, ast.printSchema(schema))
+          updatedOrCreated = "updated"
         } else {
-          const model = matchBetween(schema, `model ${modelDefinition.name}`, "}")
-          if (model) {
-            //filter out all fields that are already defined
-            modelDefinition.fields = modelDefinition.fields.filter((field) => {
-              return model.indexOf(field.name) === -1
-            })
-
-            //add new fields to the selected model
-            const newModel = model.replace("}", `${modelDefinition.getNewFields()}}`)
-
-            //replace all content with the newly added fields for the already existing model
-            this.fs.write(path.resolve("db/schema.prisma"), schema.replace(model, newModel))
-            updatedOrCreated = "updated"
-          }
+          model = modelDefinition.appendTo(schema)
+          this.fs.write(schemaPath, ast.printSchema(schema))
         }
+      } catch (err) {
+        console.error(`Failed to apply changes to model '${modelDefinition.name}'`)
+        throw err
       }
+    }
+
+    if (model) {
       log.newline()
       log.success(
-        `Model for '${this.options.modelName}'${
-          this.options.dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
+        `Model '${modelDefinition.name}'${
+          dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
         }:\n`,
       )
-      modelDefinition.toString().split("\n").map(log.progress)
+      ast
+        .printSchema({type: "schema", list: [model]})
+        .split("\n")
+        .map(log.progress)
       log.newline()
-    } catch (error) {
-      throw error
     }
   }
 

@@ -4,7 +4,9 @@ import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import * as esbuild from "esbuild"
+import {existsSync, readJSONSync} from "fs-extra"
 import path from "path"
+import pkgDir from "pkg-dir"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
 import {Manifest} from "./stages/manifest"
 import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
@@ -209,7 +211,20 @@ export async function nextStart(nextBin: string, buildFolder: string, config: Se
 
 export function getCustomServerPath() {
   const projectRoot = getProjectRoot()
-  return require.resolve(path.join(projectRoot, "server"))
+
+  let serverPath = path.resolve(path.join(projectRoot, "server.ts"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server.js"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server/index.ts"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server/index.js"))
+  if (existsSync(serverPath)) return serverPath
+
+  throw new Error("Unable to find custom server")
 }
 export function getCustomServerBuildPath() {
   const projectRoot = getProjectRoot()
@@ -268,13 +283,21 @@ export function startCustomServer(
         })
     }
 
+    const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+
     const esbuildOptions: esbuild.BuildOptions = {
       entryPoints: [serverSrcPath],
       outfile: getCustomServerBuildPath(),
       format: "cjs",
       bundle: true,
       platform: "node",
-      external: ["blitz", "next", ...Object.keys(require("blitz/package").dependencies)],
+      external: [
+        "blitz",
+        "next",
+        ...Object.keys(require("blitz/package").dependencies),
+        ...Object.keys(pkg.dependencies),
+        ...Object.keys(pkg.devDependencies),
+      ],
     }
 
     if (watch) {

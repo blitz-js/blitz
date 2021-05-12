@@ -30,11 +30,13 @@ describe("index page", () => {
     cy.signup(user)
 
     cy.contains("button", "Logout").click()
+    cy.wait(500)
     cy.contains("a", /login/i).click()
 
     cy.contains("Email").find("input").type(user.email)
     cy.contains("Password").find("input").type(user.password)
     cy.contains("button", /login/i).click()
+    cy.wait(500)
 
     cy.location("pathname").should("equal", "/")
     cy.contains("button", "Logout")

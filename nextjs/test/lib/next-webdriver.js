@@ -2,12 +2,12 @@
 import fetch from 'node-fetch'
 import os from 'os'
 import path from 'path'
+import Chain from './wd-chain'
 import { Builder, By } from 'selenium-webdriver'
 import { Options as ChromeOptions } from 'selenium-webdriver/chrome'
-import { Options as FireFoxOptions } from 'selenium-webdriver/firefox'
 import { Options as SafariOptions } from 'selenium-webdriver/safari'
+import { Options as FireFoxOptions } from 'selenium-webdriver/firefox'
 import { waitFor } from './next-test-utils'
-import Chain from './wd-chain'
 
 const {
   BROWSER_NAME: browserName = 'chrome',
