@@ -2603,6 +2603,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "fernvilla",
+      "name": "Fernando Villasenor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5857808?v=4",
+      "profile": "http://www.fernvillasenor.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
