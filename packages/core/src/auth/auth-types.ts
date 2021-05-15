@@ -1,3 +1,4 @@
+import {NextApiRequest, NextApiResponse} from "next"
 import type {AuthenticateOptions, Strategy} from "passport"
 import {Ctx} from "../../types"
 
@@ -85,7 +86,11 @@ export interface AuthenticatedClientSession extends PublicData {
   isLoading: boolean
 }
 
-export type BlitzPassportConfigCallback = (blitzCtx: Ctx) => BlitzPassportConfigObject
+export type BlitzPassportConfigCallback = (
+  blitzCtx: Ctx,
+  req: NextApiRequest,
+  res: NextApiResponse<any>,
+) => BlitzPassportConfigObject
 
 export type BlitzPassportConfig = BlitzPassportConfigObject | BlitzPassportConfigCallback
 
