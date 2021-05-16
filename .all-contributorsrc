@@ -2612,6 +2612,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "swiftgaruda",
+      "name": "swiftgaruda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16741392?v=4",
+      "profile": "https://github.com/swiftgaruda",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
