@@ -158,7 +158,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     }
     return next()
   }
-  const cookiePrefix = global.sessionConfig.cookiePrefix
+  const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
   if (cookiePrefix.match(/[^a-z0-9+]+/gi)) {
     log.warning(
       `The cookie prefix used has invalid characters. Only alphanumeric characters and "_" character are supported`,
