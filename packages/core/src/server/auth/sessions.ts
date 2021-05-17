@@ -159,7 +159,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     return next()
   }
   const cookiePrefix = global.sessionConfig.cookiePrefix
-  if (cookiePrefix.match("?![^a-zA-Z0-9-_]")) {
+  if (cookiePrefix.match(/[^a-z0-9+]+/gi)) {
     log.warning(
       `The cookie prefix used has invalid characters. Only alphanumeric characters and "_" character are supported`,
     )
