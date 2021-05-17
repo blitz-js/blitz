@@ -148,6 +148,12 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     ...sessionConfig,
   }
 
+  const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
+  assert(
+    cookiePrefix.match(/[^a-z0-9+]+/gi),
+    `The cookie prefix used has invalid characters. Only alphanumeric characters and "_" character are supported`,
+  )
+
   const blitzSessionMiddleware: Middleware<{
     cookiePrefix?: string
   }> = async (req, res, next) => {
@@ -158,12 +164,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     }
     return next()
   }
-  const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
-  if (cookiePrefix.match(/[^a-z0-9+]+/gi)) {
-    log.warning(
-      `The cookie prefix used has invalid characters. Only alphanumeric characters and "_" character are supported`,
-    )
-  }
+
   blitzSessionMiddleware.config = {
     cookiePrefix,
   }
