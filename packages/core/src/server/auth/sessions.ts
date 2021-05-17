@@ -152,8 +152,8 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
   // non-alphanumeric characters and throws error
   const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
   assert(
-    cookiePrefix.match(/^[a-zA-Z0-9_]+$/),
-    `The cookie prefix used has invalid characters. Only alphanumeric characters and "_" character are supported`,
+    cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
+    `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,
   )
 
   const blitzSessionMiddleware: Middleware<{
