@@ -15,7 +15,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
   )[0]
   const cookiePrefix = middleware?.config?.cookiePrefix
   return {
-    sessionCookiePrefix: (cookiePrefix || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
+    sessionCookiePrefix: cookiePrefix || "blitz",
     suspenseEnabled: config.experimental?.reactRoot !== false,
   }
 }
