@@ -148,7 +148,17 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     ...sessionConfig,
   }
 
-  return async (req, res, next) => {
+  // Checks if cookie prefix from configuration has
+  // non-alphanumeric characters and throws error
+  const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
+  assert(
+    cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
+    `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,
+  )
+
+  const blitzSessionMiddleware: Middleware<{
+    cookiePrefix?: string
+  }> = async (req, res, next) => {
     debug("Starting sessionMiddleware...")
     if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
@@ -156,6 +166,11 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     }
     return next()
   }
+
+  blitzSessionMiddleware.config = {
+    cookiePrefix,
+  }
+  return blitzSessionMiddleware
 }
 
 type JwtPayload = AnonymousSessionPayload | null

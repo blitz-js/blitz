@@ -3,6 +3,7 @@ const {sessionMiddleware, simpleRolesIsAuthorized} = require("blitz")
 module.exports = {
   middleware: [
     sessionMiddleware({
+      cookiePrefix: "blitz-custom-server-example",
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
