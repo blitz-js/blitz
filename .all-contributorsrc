@@ -2630,6 +2630,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mabadir",
+      "name": "Mina Abadir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3389914?v=4",
+      "profile": "minaabadir.ca",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
