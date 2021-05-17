@@ -148,6 +148,8 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     ...sessionConfig,
   }
 
+  // Checks if cookie prefix from configuration has
+  // non-alphanumeric characters and throws error
   const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
   assert(
     cookiePrefix.match(/[^a-z0-9+]+/gi),
