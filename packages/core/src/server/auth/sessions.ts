@@ -501,9 +501,11 @@ export const setSessionCookie = (
       path: "/",
       httpOnly: true,
       secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
+        global.sessionConfig.secure || (
+          !process.env.DISABLE_SECURE_COOKIES &&
+          process.env.NODE_ENV === "production" &&
+          !isLocalhost(req)
+        ),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -523,9 +525,11 @@ export const setAnonymousSessionCookie = (
       path: "/",
       httpOnly: true,
       secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
+        global.sessionConfig.secure || (
+          !process.env.DISABLE_SECURE_COOKIES &&
+          process.env.NODE_ENV === "production" &&
+          !isLocalhost(req)
+        ),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -545,9 +549,11 @@ export const setCSRFCookie = (
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
       secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
+        global.sessionConfig.secure || (
+          !process.env.DISABLE_SECURE_COOKIES &&
+          process.env.NODE_ENV === "production" &&
+          !isLocalhost(req)
+        ),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -567,9 +573,11 @@ export const setPublicDataCookie = (
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
       secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === "production" &&
-        !isLocalhost(req),
+        global.sessionConfig.secure || (
+          !process.env.DISABLE_SECURE_COOKIES &&
+          process.env.NODE_ENV === "production" &&
+          !isLocalhost(req)
+        ),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
