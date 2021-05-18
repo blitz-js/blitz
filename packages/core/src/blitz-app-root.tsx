@@ -68,12 +68,13 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
         }
       } else {
         const authenticate = props.Component.authenticate
-        if (
-          authenticate &&
-          typeof authenticate === "object" &&
-          typeof authenticate.redirectTo === "string"
-        ) {
-          const url = new URL(authenticate.redirectTo, window.location.href)
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
           window.location.replace(url.toString())
         }
