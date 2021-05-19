@@ -2639,6 +2639,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "frankiesardo",
+      "name": "Francesco Sardo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1476561?v=4",
+      "profile": "https://github.com/frankiesardo",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
