@@ -501,7 +501,7 @@ export const setSessionCookie = (
       path: "/",
       httpOnly: true,
       secure:
-        global.sessionConfig.secure || (
+        global.sessionConfig.secureCookies || (
           !process.env.DISABLE_SECURE_COOKIES &&
           process.env.NODE_ENV === "production" &&
           !isLocalhost(req)
@@ -525,7 +525,7 @@ export const setAnonymousSessionCookie = (
       path: "/",
       httpOnly: true,
       secure:
-        global.sessionConfig.secure || (
+        global.sessionConfig.secureCookies || (
           !process.env.DISABLE_SECURE_COOKIES &&
           process.env.NODE_ENV === "production" &&
           !isLocalhost(req)
@@ -549,7 +549,7 @@ export const setCSRFCookie = (
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
       secure:
-        global.sessionConfig.secure || (
+        global.sessionConfig.secureCookies || (
           !process.env.DISABLE_SECURE_COOKIES &&
           process.env.NODE_ENV === "production" &&
           !isLocalhost(req)
@@ -573,7 +573,7 @@ export const setPublicDataCookie = (
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
       secure:
-        global.sessionConfig.secure || (
+        global.sessionConfig.secureCookies || (
           !process.env.DISABLE_SECURE_COOKIES &&
           process.env.NODE_ENV === "production" &&
           !isLocalhost(req)
