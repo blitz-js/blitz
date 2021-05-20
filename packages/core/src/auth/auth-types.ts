@@ -43,6 +43,7 @@ export type SessionConfig = {
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
   sameSite?: "none" | "lax" | "strict"
+  secureCookies?: boolean
   domain?: string
   publicDataKeysToSyncAcrossSessions?: string[]
   getSession: (handle: string) => Promise<SessionModel | null>
