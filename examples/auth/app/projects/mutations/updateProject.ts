@@ -1,6 +1,6 @@
 import {resolver} from "blitz"
 import db from "db"
-import * as z from "zod"
+import {z} from "zod"
 
 const UpdateProject = z
   .object({

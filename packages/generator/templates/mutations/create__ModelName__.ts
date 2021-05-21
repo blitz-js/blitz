@@ -1,6 +1,6 @@
 import {resolver} from "blitz"
 import db from "db"
-import * as z from "zod"
+import {z} from "zod"
 
 if (process.env.parentModel) {
   const Create__ModelName__ = z.object({
