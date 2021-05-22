@@ -229,6 +229,10 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
 
 <br>
 
+## Contributor over time
+
+[![Contributor over time](https://contributor-graph-api.apiseven.com/contributors-svg?chart=contributorOverTime&repo=blitz-js/blitz)](https://www.apiseven.com/en/contributor-graph?chart=contributorOverTime&repo=blitz-js/blitz)
+
 ## Contributors ✨
 
 Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
