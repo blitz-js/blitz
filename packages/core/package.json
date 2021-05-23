@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "react": "0.0.0-experimental-6a589ad71",
-    "zod": "1.11.11"
+    "zod": "3.0.2"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {
