@@ -2648,6 +2648,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "enemycnt",
+      "name": "Nikolay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/320313?v=4",
+      "profile": "https://github.com/enemycnt",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
