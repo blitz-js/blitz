@@ -6,7 +6,7 @@ if (process.env.parentModel) {
   const Create__ModelName__ = z.object({
     name: z.string(),
     __parentModelId__: z.number()
-  }).nonstrict()
+  })
 } else {
   const Create__ModelName__ = z.object({
     name: z.string(),
