@@ -80,12 +80,8 @@ export function generateManifest(
     implementation:
       "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration: `
-import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
-
-interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
-  pathname: string
-}
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
 ${declarationLines.map((line) => "  " + line).join(";\n")};
@@ -148,6 +144,16 @@ export function parseParametersFromRoute(
   }
 }
 
+/**
+ * Will resolve the real node_modules root.
+ * We're not fooled by you, `yarn workspace`!
+ */
+function findNodeModulesRoot(src: string) {
+  const nodeModules = join(src, "node_modules")
+  const includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  return includesBlitzPackage ? nodeModules : join(nodeModules, "../../../node_modules")
+}
+
 export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTriage} = ({
   getRouteCache,
   config,
@@ -156,7 +162,7 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
 
   const routes: Record<string, Route> = {}
 
-  const dotBlitz = join(config.src, "node_modules", ".blitz")
+  const dotBlitz = join(findNodeModulesRoot(config.src), ".blitz")
 
   const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "index.js"))
   const writeManifestBrowserImplementation = makeDebouncedWriter(join(dotBlitz, "index-browser.js"))

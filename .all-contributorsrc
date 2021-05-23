@@ -2612,6 +2612,51 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "swiftgaruda",
+      "name": "swiftgaruda",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16741392?v=4",
+      "profile": "https://github.com/swiftgaruda",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Patil2099",
+      "name": "Pankaj Patil",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35653876?v=4",
+      "profile": "https://pplife.home.blog",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mabadir",
+      "name": "Mina Abadir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3389914?v=4",
+      "profile": "minaabadir.ca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "frankiesardo",
+      "name": "Francesco Sardo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1476561?v=4",
+      "profile": "https://github.com/frankiesardo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "enemycnt",
+      "name": "Nikolay",
+      "avatar_url": "https://avatars.githubusercontent.com/u/320313?v=4",
+      "profile": "https://github.com/enemycnt",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
