@@ -4,7 +4,7 @@ import {z} from "zod"
 
 const __Name__ = z.object({
   id: z.number(),
-}).nonstrict()
+})
 
 export default resolver.pipe(
   resolver.zod(__Name__),
