@@ -61,7 +61,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "~10.1.0",
     "babel-jest": "27.0.0-next.5",
-    "browserslist": "4.16.1",
+    "browserslist": "4.16.6",
     "browserstack-local": "1.4.0",
     "cheerio": "0.22.0",
     "clone": "2.1.2",
@@ -134,7 +134,7 @@
     "worker-loader": "3.0.7"
   },
   "resolutions": {
-    "browserslist": "4.16.1",
+    "browserslist": "4.16.6",
     "caniuse-lite": "1.0.30001179"
   },
   "engines": {
