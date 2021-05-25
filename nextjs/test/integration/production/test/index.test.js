@@ -251,10 +251,14 @@ describe('Production Usage', () => {
 
       const resources = new Set()
 
+      const manifestKey = Object.keys(reactLoadableManifest).find((item) => {
+        return item
+          .replace(/\\/g, '/')
+          .endsWith('bundle.js -> ../../components/hello1')
+      })
+
       // test dynamic chunk
-      resources.add(
-        url + reactLoadableManifest['../../components/hello1'][0].file
-      )
+      resources.add(url + reactLoadableManifest[manifestKey].files[0])
 
       // test main.js runtime etc
       for (const item of buildManifest.pages['/']) {
@@ -376,12 +380,13 @@ describe('Production Usage', () => {
     it('should set title by routeChangeComplete event', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.eval(function setup() {
-        window.next.router.events.on('routeChangeComplete', function handler(
-          url
-        ) {
-          window.routeChangeTitle = document.title
-          window.routeChangeUrl = url
-        })
+        window.next.router.events.on(
+          'routeChangeComplete',
+          function handler(url) {
+            window.routeChangeTitle = document.title
+            window.routeChangeUrl = url
+          }
+        )
         window.next.router.push('/with-title')
       })
       await browser.waitForElementByCss('#with-title')
@@ -803,7 +808,8 @@ describe('Production Usage', () => {
   it('should clear all core performance marks', async () => {
     let browser
     try {
-      browser = await webdriver(appPort, '/about')
+      browser = await webdriver(appPort, '/fully-dynamic')
+
       const currentPerfMarks = await browser.eval(
         `window.performance.getEntriesByType('mark')`
       )

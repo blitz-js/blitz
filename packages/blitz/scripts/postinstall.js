@@ -2,7 +2,7 @@ const childProcess = require("child_process")
 const {promisify} = require("util")
 const fs = require("fs")
 const path = require("path")
-const symlinkDir = require("symlink-dir")
+const resolveFrom = require("resolve-from")
 
 const exec = promisify(childProcess.exec)
 const copyFile = promisify(fs.copyFile)
@@ -16,6 +16,15 @@ function debug(message, ...optionalParams) {
 }
 
 const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../test"))
+let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
+
+try {
+  const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
+  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
+  isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
+} catch (error) {
+  // noop
+}
 
 /*
   Adapted from https://github.com/prisma/prisma/blob/974cbeff4a7f616137ce540d0ec88a2a86365892/src/packages/client/scripts/postinstall.js
@@ -348,4 +357,6 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-codegen()
+if (!isInstalledGlobally) {
+  codegen()
+}

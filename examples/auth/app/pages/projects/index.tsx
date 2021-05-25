@@ -24,7 +24,7 @@ export const ProjectsList = () => {
       <ul>
         {projects.map((project) => (
           <li key={project.id}>
-            <Link href={`/projects/${project.id}`}>
+            <Link href={Routes.ShowProjectPage({projectId: project.id})}>
               <a>{project.name}</a>
             </Link>
           </li>

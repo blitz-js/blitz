@@ -1,8 +1,3 @@
-on:
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron: '0 0,12 * * *'
-
 name: Test react@next
 
 jobs:
@@ -30,6 +25,7 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       HEADLESS: true
+      NEXT_PRIVATE_SKIP_SIZE_TESTS: true
     strategy:
       fail-fast: false
       matrix:

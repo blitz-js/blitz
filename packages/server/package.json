@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.34.0-canary.3",
+  "version": "0.35.0",
   "license": "MIT",
   "bin": {
     "next-patched": "./bin/next-patched"
@@ -23,12 +23,13 @@
     "register"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.34.0-canary.3",
-    "@blitzjs/core": "0.34.0-canary.3",
-    "@blitzjs/display": "0.34.0-canary.3",
-    "@blitzjs/file-pipeline": "0.34.0-canary.3",
+    "@blitzjs/config": "0.35.0",
+    "@blitzjs/core": "0.35.0",
+    "@blitzjs/display": "0.35.0",
+    "@blitzjs/file-pipeline": "0.35.0",
     "cross-spawn": "7.0.3",
     "detect-port": "1.3.0",
+    "esbuild": "^0.11.12",
     "expand-tilde": "2.0.2",
     "fast-glob": "3.2.5",
     "flush-write-stream": "2.0.0",

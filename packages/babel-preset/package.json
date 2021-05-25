@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/babel-preset",
-  "version": "0.34.0-canary.3",
+  "version": "0.35.0",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -32,7 +32,7 @@
   ],
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
-    "babel-plugin-superjson-next": "0.2.2"
+    "babel-plugin-superjson-next": "0.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.12.10"

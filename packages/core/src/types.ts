@@ -1,12 +1,14 @@
 import {IncomingMessage, ServerResponse} from "http"
 import {AppProps as NextAppProps} from "next/app"
 import {
+  NextApiHandler,
   NextApiRequest,
   NextApiResponse,
   NextComponentType,
   NextPage,
   NextPageContext,
 } from "next/types"
+import type {UrlObject} from "url"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {
@@ -24,8 +26,9 @@ export type {
   PageConfig,
   Redirect,
 } from "next"
+export type BlitzApiHandler<T = any> = NextApiHandler<T>
 export type BlitzApiRequest = NextApiRequest
-export type BlitzApiResponse = NextApiResponse
+export type BlitzApiResponse<T = any> = NextApiResponse<T>
 export type BlitzPageContext = NextPageContext
 
 export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextComponentType<C, IP, P>
@@ -35,9 +38,13 @@ export interface AppProps<P = {}> extends NextAppProps<P> {
 }
 export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string
+  redirectAuthenticatedTo?: string | RouteUrlObject
+}
+
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+  pathname: string
 }
 
 export interface DefaultCtx {}
@@ -62,11 +69,11 @@ export interface MiddlewareResponse<C = Ctx> extends BlitzApiResponse {
 }
 export type MiddlewareNext = (error?: Error) => Promise<void> | void
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-) => Promise<void> | void
+export type Middleware<MiddlewareConfig = {}> = {
+  (req: MiddlewareRequest, res: MiddlewareResponse, next: MiddlewareNext): Promise<void> | void
+  type?: string
+  config?: MiddlewareConfig
+}
 
 /**
  * Infer the type of the parameter from function that takes a single argument
@@ -117,6 +124,7 @@ export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TR
 export type ResolverModule<TInput, TResult> = {
   default: Resolver<TInput, TResult>
   middleware?: Middleware[]
+  config?: Record<string, any>
 }
 
 export type RpcOptions = {
@@ -139,6 +147,7 @@ export interface ResolverRpcExecutor<TInput, TResult> {
 export type ResolverType = "query" | "mutation"
 
 export interface ResolverEnhancement {
+  config?: Record<string, any>
   _meta: {
     name: string
     type: ResolverType

@@ -3,7 +3,6 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
-import symlink from 'symlink-dir'
 
 const pnpmExecutable = path.join(
   __dirname,
@@ -115,14 +114,10 @@ describe('pnpm support', () => {
       ).toBeTruthy()
 
       const packageJson = await fs.readJson(packageJsonPath)
-      expect(packageJson.dependencies['@blitzjs/next']).toMatch(/^file:/)
+      expect(packageJson.dependencies['next']).toMatch(/^file:/)
       for (const dependency of Object.keys(dependencyTarballPaths)) {
         expect(packageJson.pnpm.overrides[dependency]).toMatch(/^file:/)
       }
-      await symlink(
-        path.join(tempAppDir, 'node_modules/@blitzjs/next'),
-        path.join(tempAppDir, 'node_modules/next')
-      )
 
       try {
         const { stdout, stderr } = await runPnpm(tempAppDir, 'run', 'build')

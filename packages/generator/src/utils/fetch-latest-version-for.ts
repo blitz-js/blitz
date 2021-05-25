@@ -10,7 +10,7 @@ function fromEntries<K extends number | string, V extends any>(entries: [K, V][]
 export const fetchLatestVersionsFor = async <T extends Record<string, string>>(
   dependencies: T,
 ): Promise<Fallbackable<T>> => {
-  const entries = Object.entries(dependencies)
+  const entries = Object.entries(dependencies || {})
 
   let fallbackUsed = false
 

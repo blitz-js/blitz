@@ -11,10 +11,14 @@ function makeDebouncedWriter(path: string, ms = 100): (contents: string) => void
   }, ms)
 }
 
+type Parameter = {
+  name: string
+  optional: boolean
+}
 interface Route {
   name: string
-  parameters: string[]
-  multipleParameters: string[]
+  parameters: Parameter[]
+  multipleParameters: Parameter[]
 }
 
 export function parseDefaultExportName(contents: string): string | null {
@@ -58,13 +62,17 @@ export function generateManifest(
   const declarationLines = routesWithoutDuplicates.map(
     ([_path, {name, parameters, multipleParameters}]) => {
       if (parameters.length === 0 && multipleParameters.length === 0) {
-        return `${name}(query?: ParsedUrlQueryInput): UrlObject`
+        return `${name}(query?: ParsedUrlQueryInput): RouteUrlObject`
       }
 
       return `${name}(query: { ${[
-        ...parameters.map((param) => param + ": string"),
-        ...multipleParameters.map((param) => param + ": string[]"),
-      ].join("; ")} } & ParsedUrlQueryInput): UrlObject`
+        ...parameters.map(
+          (param) => param.name + (param.optional ? "?" : "") + ": string | number",
+        ),
+        ...multipleParameters.map(
+          (param) => param.name + (param.optional ? "?" : "") + ": (string | number)[]",
+        ),
+      ].join("; ")} } & ParsedUrlQueryInput): RouteUrlObject`
     },
   )
 
@@ -72,8 +80,8 @@ export function generateManifest(
     implementation:
       "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration: `
-import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
 ${declarationLines.map((line) => "  " + line).join(";\n")};
@@ -81,18 +89,69 @@ ${declarationLines.map((line) => "  " + line).join(";\n")};
   }
 }
 
+function removeSquareBracketsFromSegments(value: string): string
+
+function removeSquareBracketsFromSegments(value: string[]): string[]
+
+function removeSquareBracketsFromSegments(value: string | string[]): string | string[] {
+  if (typeof value === "string") {
+    return value.replace("[", "").replace("]", "")
+  }
+  return value.map((val) => val.replace("[", "").replace("]", ""))
+}
+
+const squareBracketsRegex = /\[\[.*?\]\]|\[.*?\]/g
+
 export function parseParametersFromRoute(
   path: string,
 ): Pick<Route, "parameters" | "multipleParameters"> {
-  const parameteredSegments = path.match(/\[.*?\]/g) ?? []
-  const withoutBrackets = parameteredSegments.map((p) => p.substring(1, p.length - 1))
+  const parameteredSegments = path.match(squareBracketsRegex) ?? []
+  const withoutBrackets = removeSquareBracketsFromSegments(parameteredSegments)
 
-  const [multipleParameters, parameters] = partition(withoutBrackets, (p) => p.startsWith("..."))
+  const [multipleParameters, parameters] = partition(withoutBrackets, (p) => p.includes("..."))
 
   return {
-    parameters,
-    multipleParameters: multipleParameters.map((p) => p.replace("...", "")),
+    parameters: parameters.map((value) => {
+      const containsSquareBrackets = squareBracketsRegex.test(value)
+      if (containsSquareBrackets) {
+        return {
+          name: removeSquareBracketsFromSegments(value),
+          optional: true,
+        }
+      }
+
+      return {
+        name: value,
+        optional: false,
+      }
+    }),
+    multipleParameters: multipleParameters.map((param) => {
+      const withoutEllipsis = param.replace("...", "")
+      const containsSquareBrackets = squareBracketsRegex.test(withoutEllipsis)
+
+      if (containsSquareBrackets) {
+        return {
+          name: removeSquareBracketsFromSegments(withoutEllipsis),
+          optional: true,
+        }
+      }
+
+      return {
+        name: withoutEllipsis,
+        optional: false,
+      }
+    }),
   }
+}
+
+/**
+ * Will resolve the real node_modules root.
+ * We're not fooled by you, `yarn workspace`!
+ */
+function findNodeModulesRoot(src: string) {
+  const nodeModules = join(src, "node_modules")
+  const includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  return includesBlitzPackage ? nodeModules : join(nodeModules, "../../../node_modules")
 }
 
 export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTriage} = ({
@@ -103,7 +162,7 @@ export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTr
 
   const routes: Record<string, Route> = {}
 
-  const dotBlitz = join(config.src, "node_modules", ".blitz")
+  const dotBlitz = join(findNodeModulesRoot(config.src), ".blitz")
 
   const writeManifestImplementation = makeDebouncedWriter(join(dotBlitz, "index.js"))
   const writeManifestBrowserImplementation = makeDebouncedWriter(join(dotBlitz, "index-browser.js"))

@@ -2,7 +2,7 @@ import http from "http"
 import {apiResolver} from "next/dist/next-server/server/api-utils"
 import fetch from "node-fetch"
 import listen from "test-listen"
-import {BlitzApiRequest, BlitzApiResponse, Middleware} from "../types"
+import {BlitzApiHandler, Middleware} from "../types"
 import {handleRequestWithMiddleware} from "./middleware"
 
 describe("handleRequestWithMiddleware", () => {
@@ -102,7 +102,7 @@ describe("handleRequestWithMiddleware", () => {
 })
 
 async function mockServer(middleware: Middleware[], callback: (url: string) => Promise<void>) {
-  const apiEndpoint = async (req: BlitzApiRequest, res: BlitzApiResponse) => {
+  const apiEndpoint: BlitzApiHandler = async (req, res) => {
     try {
       await handleRequestWithMiddleware(req, res, middleware, {stackPrintOnError: false})
     } catch (err) {

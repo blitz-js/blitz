@@ -11,9 +11,13 @@ export type BlitzRuntimeData = {
 
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
   const config = getConfig()
+  const middleware = config.middleware?.filter(
+    (middleware) => middleware.name === "blitzSessionMiddleware",
+  )[0]
+  const cookiePrefix = middleware?.config?.cookiePrefix
   return {
-    suspenseEnabled: config.experimental?.reactMode !== "legacy",
-    sessionCookiePrefix: (config._meta.packageName || "blitz").replace(/[^a-zA-Z0-9-_]/g, "_"),
+    suspenseEnabled: config.experimental?.reactRoot !== false,
+    sessionCookiePrefix: cookiePrefix || "blitz",
     trailingSlash: config.trailingSlash !== undefined ? config.trailingSlash : false,
   }
 }
@@ -22,10 +26,7 @@ export function getBlitzRuntimeData() {
   if (isClient && !process.env.JEST_WORKER_ID) {
     return window.__BLITZ_DATA__
   } else {
-    if (!global.__BLITZ_DATA__) {
-      global.__BLITZ_DATA__ = _getBlitzRuntimeData()
-    }
-    return global.__BLITZ_DATA__
+    return _getBlitzRuntimeData()
   }
 }
 
