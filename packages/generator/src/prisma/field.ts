@@ -1,4 +1,5 @@
 import {log} from "@blitzjs/display"
+import * as ast from "@mrleebo/prisma-ast"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 
 export enum FieldType {
@@ -53,10 +54,11 @@ export class Field {
   relationToFields?: string[]
 
   // 'name:type?[]:attribute' => Field
-  static parse(input: string): Field[] {
+  static parse(input: string, schema?: ast.Schema): Field[] {
     const [_fieldName, _fieldType = "String", attribute] = input.split(":")
     let fieldName = uncapitalize(_fieldName)
     let fieldType = capitalize(_fieldType)
+    let isId = fieldName === "id"
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
@@ -91,7 +93,21 @@ export class Field {
           const idFieldName = `${fieldName}Id`
           relationFromFields = [idFieldName]
           relationToFields = ["id"]
-          maybeIdField = new Field(idFieldName, {type: FieldType.Int, isRequired})
+
+          const relationModel = schema?.list.find(function (component): component is ast.Model {
+            return component.type === "model" && component.name === fieldType
+          })
+          const relationField =
+            relationModel &&
+            relationModel.properties.find(function (prop): prop is ast.Field {
+              return prop.type === "field" && prop.name === "id"
+            })
+
+          maybeIdField = new Field(idFieldName, {
+            // find the matching field based on the relation and, if found, match its field type
+            type: relationField ? (relationField.fieldType as FieldType) : FieldType.Int,
+            isRequired,
+          })
           isList = false
           break
       }
@@ -109,14 +125,14 @@ export class Field {
       if (defaultValueTest.test(attribute)) {
         const [, _defaultValue] = attribute.match(defaultValueTest)!
         defaultValue = builtInGenerators.includes(_defaultValue)
-          ? {name: _defaultValue}
+          ? {type: "function", name: _defaultValue, params: []}
           : _defaultValue
       }
     }
     try {
       const parseResult = new Field(fieldName, {
         default: defaultValue,
-        isId: false,
+        isId,
         isList,
         isRequired,
         isUnique,
@@ -168,72 +184,88 @@ export class Field {
     }
   }
 
-  private getDefault() {
-    if (this.default === undefined) return ""
-    let defaultValue: string
-    if (typeof this.default === "object") {
-      // { name: 'fnname' } is based off of the Prisma model definition
-      defaultValue = `${this.default.name}()`
-    } else {
-      defaultValue = String(this.default)
-    }
-    return `@default(${defaultValue})`
-  }
+  appendTo(model: ast.Model) {
+    if (model.properties.some((prop) => prop.type === "field" && prop.name === this.name)) return
 
-  private getId() {
-    return this.isId ? "@id" : ""
-  }
-
-  private getIsUnique() {
-    return this.isUnique ? "@unique" : ""
-  }
-
-  private getIsUpdatedAt() {
-    return this.isUpdatedAt ? "@updatedAt" : ""
-  }
-
-  private getRelation() {
-    if (this.relationFromFields === undefined || this.relationToFields === undefined) return ""
-    const separator =
-      this.relationToFields &&
-      this.relationToFields.length > 0 &&
-      this.relationFromFields &&
-      this.relationFromFields.length
-        ? ", "
-        : ""
-    const fromFields =
-      this.relationFromFields && this.relationFromFields.length > 0
-        ? `fields: [${this.relationFromFields.toString()}]`
-        : ""
-
-    const toFields =
-      this.relationToFields && this.relationToFields.length > 0
-        ? `references: [${this.relationToFields.toString()}]`
-        : ""
-    return `@relation(${fromFields}${separator}${toFields})`
-  }
-
-  private getTypeModifiers() {
-    return `${this.isRequired ? "" : "?"}${this.isList ? "[]" : ""}`
-  }
-
-  private getAttributes() {
-    const possibleAttributes = [
-      this.getDefault(),
+    const attributes = [
       this.getId(),
       this.getIsUnique(),
+      this.getDefault(),
       this.getIsUpdatedAt(),
       this.getRelation(),
-    ]
-    // filter out any attributes that return ''
-    const attrs = possibleAttributes.filter((attr) => attr)
-    if (attrs.length > 0) {
-      return `  ${attrs.join(" ")}`
-    }
-    return ""
+    ].filter(Boolean) as ast.Attribute[]
+
+    model.properties.push({
+      type: "field",
+      name: this.name,
+      fieldType: this.type,
+      optional: !this.isRequired,
+      array: this.isList,
+      attributes,
+    })
   }
 
-  toString() {
-    return `${this.name}  ${this.type}${this.getTypeModifiers()}${this.getAttributes()}`
+  private getDefault(): ast.Attribute | undefined {
+    if (this.default == null) return
+
+    return {
+      type: "attribute",
+      kind: "field",
+      name: "default",
+      args: [
+        {
+          type: "attributeArgument",
+          value: typeof this.default === "object" ? `${this.default.name}()` : String(this.default),
+        },
+      ],
+    }
+  }
+
+  private getId(): ast.Attribute | undefined {
+    if (!this.isId) return
+
+    return {
+      type: "attribute",
+      kind: "field",
+      name: "id",
+    }
+  }
+
+  private getIsUnique(): ast.Attribute | undefined {
+    if (!this.isUnique) return
+    return {type: "attribute", kind: "field", name: "unique"}
+  }
+
+  private getIsUpdatedAt(): ast.Attribute | undefined {
+    if (!this.isUpdatedAt) return
+    return {type: "attribute", kind: "field", name: "updatedAt"}
+  }
+
+  private getRelation(): ast.Attribute | undefined {
+    if (this.relationFromFields == null || this.relationToFields == null) return
+
+    return {
+      type: "attribute",
+      kind: "field",
+      name: "relation",
+      args: [
+        {
+          type: "attributeArgument",
+          value: {
+            type: "keyValue",
+            key: "fields",
+            value: {type: "array", args: this.relationFromFields},
+          },
+        },
+        {
+          type: "attributeArgument",
+          value: {
+            type: "keyValue",
+            key: "references",
+            value: {type: "array", args: this.relationToFields},
+          },
+        },
+      ],
+    }
   }
 }

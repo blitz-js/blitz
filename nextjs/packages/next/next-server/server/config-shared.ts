@@ -54,11 +54,14 @@ export type NextConfig = { [key: string]: any } & {
     serialWebpackBuild?: boolean
     babelMultiThread?: boolean
     conformance?: boolean
+    initServer?: () => void
     amp?: {
       optimizer?: any
       validator?: string
       skipValidation?: boolean
     }
+    turboMode: boolean
+    reactRoot: boolean
   }
 }
 
@@ -93,6 +96,7 @@ export const defaultConfig: NextConfig = {
   trailingSlash: false,
   i18n: null,
   productionBrowserSourceMaps: false,
+  optimizeFonts: true,
   experimental: {
     cpus: Math.max(
       1,
@@ -102,10 +106,8 @@ export const defaultConfig: NextConfig = {
     plugins: false,
     profiling: false,
     sprFlushToDisk: true,
-    reactMode: 'legacy',
     workerThreads: false,
     pageEnv: false,
-    optimizeFonts: false,
     optimizeImages: false,
     optimizeCss: false,
     scrollRestoration: false,
@@ -113,6 +115,8 @@ export const defaultConfig: NextConfig = {
     stats: false,
     externalDir: false,
     serialWebpackBuild: false,
+    turboMode: false,
+    reactRoot: Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0,
   },
   future: {
     strictPostcssConfiguration: false,

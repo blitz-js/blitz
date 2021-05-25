@@ -12,6 +12,8 @@ const specialImports: Record<string, string> = {
 
   Head: '@blitzjs/core/head',
 
+  App: '@blitzjs/core/app',
+
   dynamic: '@blitzjs/core/dynamic',
   noSSR: '@blitzjs/core/dynamic',
 

@@ -89,7 +89,7 @@
     "image-size": "0.9.3",
     "is-animated": "2.0.0",
     "isomorphic-unfetch": "3.0.0",
-    "jest-cli": "27.0.0-next.5",
+    "jest": "27.0.0-next.8",
     "ky": "0.19.1",
     "ky-universal": "0.6.0",
     "lerna": "4.0.0",

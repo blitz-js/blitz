@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/config",
-  "version": "0.34.0-canary.3",
+  "version": "0.35.0",
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922",
   "dependencies": {
+    "esbuild": "^0.11.12",
     "fs-extra": "^9.1.0",
     "pkg-dir": "^5.0.0"
   }

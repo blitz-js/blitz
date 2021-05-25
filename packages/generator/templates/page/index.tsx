@@ -30,7 +30,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <Link
-                href={Routes.Show__ModelName__Page({ __modelIdParam__: __modelName__.id })}
+                href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}
               >
                 <a>{__modelName__.name}</a>
               </Link>
@@ -61,7 +61,7 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link href={Routes.Show__ModelName__Page({ __modelIdParam__: __modelName__.id })}>
+              <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
                 <a>{__modelName__.name}</a>
               </Link>
             </li>

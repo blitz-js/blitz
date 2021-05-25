@@ -1,3 +1,4 @@
+import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import {useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
@@ -58,17 +59,22 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
     if (typeof window !== "undefined") {
       if (publicDataStore.getData().userId) {
-        if (props.Component.redirectAuthenticatedTo) {
-          window.location.replace(props.Component.redirectAuthenticatedTo)
+        let {redirectAuthenticatedTo} = props.Component
+        if (redirectAuthenticatedTo) {
+          if (typeof redirectAuthenticatedTo !== "string") {
+            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
+          }
+          window.location.replace(redirectAuthenticatedTo)
         }
       } else {
         const authenticate = props.Component.authenticate
-        if (
-          authenticate &&
-          typeof authenticate === "object" &&
-          typeof authenticate.redirectTo === "string"
-        ) {
-          const url = new URL(authenticate.redirectTo, window.location.href)
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
           window.location.replace(url.toString())
         }

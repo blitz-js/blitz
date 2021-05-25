@@ -1,13 +1,11 @@
-import { codeFrameColumns } from 'next/dist/compiled/babel/code-frame'
 import ReactRefreshWebpackPlugin from '@next/react-refresh-utils/ReactRefreshWebpackPlugin'
+import chalk from 'chalk'
 import crypto from 'crypto'
 import { readFileSync, realpathSync } from 'fs'
-import chalk from 'chalk'
+import { codeFrameColumns } from 'next/dist/compiled/babel/code-frame'
 import semver from 'next/dist/compiled/semver'
-// @ts-ignore No typings yet
-import TerserPlugin from './webpack/plugins/terser-webpack-plugin/src/index.js'
-import path from 'path'
-import { webpack, isWebpack5 } from 'next/dist/compiled/webpack/webpack'
+import { isWebpack5, webpack } from 'next/dist/compiled/webpack/webpack'
+import path, { join as pathJoin, relative as relativePath } from 'path'
 import {
   DOT_NEXT_ALIAS,
   NEXT_PROJECT_ROOT,
@@ -16,33 +14,28 @@ import {
 } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
 import { getPackageVersion } from '../lib/get-package-version'
+import { CustomRoutes } from '../lib/load-custom-routes.js'
 import { getTypeScriptConfiguration } from '../lib/typescript/getTypeScriptConfiguration'
 import {
+  CLIENT_STATIC_FILES_RUNTIME_AMP,
   CLIENT_STATIC_FILES_RUNTIME_MAIN,
   CLIENT_STATIC_FILES_RUNTIME_POLYFILLS,
+  CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH,
   CLIENT_STATIC_FILES_RUNTIME_WEBPACK,
   REACT_LOADABLE_MANIFEST,
   SERVERLESS_DIRECTORY,
   SERVER_DIRECTORY,
-  CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH,
-  CLIENT_STATIC_FILES_RUNTIME_AMP,
 } from '../next-server/lib/constants'
 import { execOnce } from '../next-server/lib/utils'
+import { NextConfig } from '../next-server/server/config'
 import { findPageFile } from '../server/lib/find-page-file'
 import { WebpackEntrypoints } from './entries'
 import * as Log from './output/log'
-import {
-  collectPlugins,
-  PluginMetaData,
-  VALID_MIDDLEWARE,
-} from './plugins/collect-plugins'
 import { build as buildConfiguration } from './webpack/config'
 import { __overrideCssConfiguration } from './webpack/config/blocks/css/overrideCssConfiguration'
-import { pluginLoaderOptions } from './webpack/loaders/next-plugin-loader'
 import BuildManifestPlugin from './webpack/plugins/build-manifest-plugin'
 import BuildStatsPlugin from './webpack/plugins/build-stats-plugin'
 import ChunkNamesPlugin from './webpack/plugins/chunk-names-plugin'
-import { CssMinimizerPlugin } from './webpack/plugins/css-minimizer-plugin'
 import { JsConfigPathsPlugin } from './webpack/plugins/jsconfig-paths-plugin'
 import { DropClientPage } from './webpack/plugins/next-drop-client-page-plugin'
 import NextJsSsrImportPlugin from './webpack/plugins/nextjs-ssr-import'
@@ -58,9 +51,6 @@ import WebpackConformancePlugin, {
   ReactSyncScriptsConformanceCheck,
 } from './webpack/plugins/webpack-conformance-plugin'
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
-import { NextConfig } from '../next-server/server/config'
-import { relative as relativePath, join as pathJoin } from 'path'
-import { CustomRoutes } from '../lib/load-custom-routes.js'
 
 type ExcludesFalse = <T>(x: T | false) => x is T
 
@@ -192,6 +182,7 @@ export default async function getBaseWebpackConfig(
     reactProductionProfiling = false,
     entrypoints,
     rewrites,
+    isDevFallback = false,
   }: {
     buildId: string
     config: NextConfig
@@ -202,29 +193,13 @@ export default async function getBaseWebpackConfig(
     reactProductionProfiling?: boolean
     entrypoints: WebpackEntrypoints
     rewrites: CustomRoutes['rewrites']
+    isDevFallback?: boolean
   }
 ): Promise<webpack.Configuration> {
-  let plugins: PluginMetaData[] = []
-  let babelPresetPlugins: { dir: string; config: any }[] = []
-
   const hasRewrites =
     rewrites.beforeFiles.length > 0 ||
     rewrites.afterFiles.length > 0 ||
     rewrites.fallback.length > 0
-
-  if (config.experimental.plugins) {
-    plugins = await collectPlugins(dir, config.env, config.plugins)
-    pluginLoaderOptions.plugins = plugins
-
-    for (const plugin of plugins) {
-      if (plugin.middleware.includes('babel-preset-build')) {
-        babelPresetPlugins.push({
-          dir: plugin.directory,
-          config: plugin.config,
-        })
-      }
-    }
-  }
 
   const reactVersion = await getPackageVersion({ cwd: dir, name: 'react' })
   const hasReactRefresh: boolean = dev && !isServer
@@ -234,18 +209,40 @@ export default async function getBaseWebpackConfig(
     // fixed in rc.1.
     semver.gte(reactVersion!, '17.0.0-rc.1')
 
+  const babelConfigFile = await [
+    '.babelrc',
+    '.babelrc.json',
+    '.babelrc.js',
+    '.babelrc.mjs',
+    '.babelrc.cjs',
+    'babel.config.js',
+    'babel.config.json',
+    'babel.config.mjs',
+    'babel.config.cjs',
+  ].reduce(async (memo: Promise<string | undefined>, filename) => {
+    const configFilePath = path.join(dir, filename)
+    return (
+      (await memo) ||
+      ((await fileExists(configFilePath)) ? configFilePath : undefined)
+    )
+  }, Promise.resolve(undefined))
+
   const distDir = path.join(dir, config.distDir)
+
+  const babelLoader = config.experimental.turboMode
+    ? require.resolve('./babel/loader/index')
+    : 'next-babel-loader'
   const defaultLoaders = {
     babel: {
-      loader: 'next-babel-loader',
+      loader: babelLoader,
       options: {
+        configFile: babelConfigFile,
         isServer,
         distDir,
         pagesDir,
         cwd: dir,
         // Webpack 5 has a built-in loader cache
         cache: !isWebpack5,
-        babelPresetPlugins,
         development: dev,
         hasReactRefresh,
         hasJsxRuntime,
@@ -262,9 +259,6 @@ export default async function getBaseWebpackConfig(
     /next[\\/]dist[\\/]client/,
     /next[\\/]dist[\\/]pages/,
     /[\\/](strip-ansi|ansi-regex)[\\/]/,
-    ...(config.experimental.plugins
-      ? VALID_MIDDLEWARE.map((name) => new RegExp(`src(\\\\|/)${name}`))
-      : []),
   ]
 
   // Support for NODE_PATH
@@ -328,7 +322,7 @@ export default async function getBaseWebpackConfig(
   // jsconfig is a subset of tsconfig
   if (useTypeScript) {
     const ts = (await import(typeScriptPath!)) as typeof import('typescript')
-    const tsConfig = await getTypeScriptConfiguration(ts, tsConfigPath)
+    const tsConfig = await getTypeScriptConfiguration(ts, tsConfigPath, true)
     jsConfig = { compilerOptions: tsConfig.options }
   }
 
@@ -606,7 +600,10 @@ export default async function getBaseWebpackConfig(
   async function handleExternals(
     context: string,
     request: string,
-    getResolve: () => (context: string, request: string) => Promise<string>
+    getResolve: () => (
+      resolveContext: string,
+      resolveRequest: string
+    ) => Promise<string>
   ) {
     if (request === 'next') {
       return `commonjs ${request}`
@@ -773,8 +770,8 @@ export default async function getBaseWebpackConfig(
                 context: string
                 request: string
                 getResolve: () => (
-                  context: string,
-                  request: string
+                  resolveContext: string,
+                  resolveRequest: string
                 ) => Promise<string>
               }) => handleExternals(context, request, getResolve)
             : (
@@ -818,24 +815,35 @@ export default async function getBaseWebpackConfig(
       minimize: !(dev || isServer),
       minimizer: [
         // Minify JavaScript
-        new TerserPlugin({
-          cacheDir: path.join(distDir, 'cache', 'next-minifier'),
-          parallel: config.experimental.cpus,
-          terserOptions,
-        }),
+        (compiler: webpack.Compiler) => {
+          // @ts-ignore No typings yet
+          const {
+            TerserPlugin,
+          } = require('./webpack/plugins/terser-webpack-plugin/src/index.js')
+          new TerserPlugin({
+            cacheDir: path.join(distDir, 'cache', 'next-minifier'),
+            parallel: config.experimental.cpus,
+            terserOptions,
+          }).apply(compiler)
+        },
         // Minify CSS
-        new CssMinimizerPlugin({
-          postcssOptions: {
-            map: {
-              // `inline: false` generates the source map in a separate file.
-              // Otherwise, the CSS file is needlessly large.
-              inline: false,
-              // `annotation: false` skips appending the `sourceMappingURL`
-              // to the end of the CSS file. Webpack already handles this.
-              annotation: false,
+        (compiler: webpack.Compiler) => {
+          const {
+            CssMinimizerPlugin,
+          } = require('./webpack/plugins/css-minimizer-plugin')
+          new CssMinimizerPlugin({
+            postcssOptions: {
+              map: {
+                // `inline: false` generates the source map in a separate file.
+                // Otherwise, the CSS file is needlessly large.
+                inline: false,
+                // `annotation: false` skips appending the `sourceMappingURL`
+                // to the end of the CSS file. Webpack already handles this.
+                annotation: false,
+              },
             },
-          },
-        }),
+          }).apply(compiler)
+        },
       ],
     },
     context: dir,
@@ -847,13 +855,6 @@ export default async function getBaseWebpackConfig(
       return {
         ...(clientEntries ? clientEntries : {}),
         ...entrypoints,
-        ...(isServer
-          ? {
-              'init-server.js': 'next-plugin-loader?middleware=on-init-server!',
-              'on-error-server.js':
-                'next-plugin-loader?middleware=on-error-server!',
-            }
-          : {}),
       }
     },
     watchOptions: {
@@ -889,7 +890,9 @@ export default async function getBaseWebpackConfig(
         ? isWebpack5 && !dev
           ? '../[name].js'
           : '[name].js'
-        : `static/chunks/[name]${dev ? '' : '-[chunkhash]'}.js`,
+        : `static/chunks/${isDevFallback ? 'fallback/' : ''}[name]${
+            dev ? '' : '-[chunkhash]'
+          }.js`,
       library: isServer ? undefined : '_N_E',
       libraryTarget: isServer ? 'commonjs2' : 'assign',
       hotUpdateChunkFilename: isWebpack5
@@ -901,7 +904,9 @@ export default async function getBaseWebpackConfig(
       // This saves chunks with the name given via `import()`
       chunkFilename: isServer
         ? `${dev ? '[name]' : '[name].[contenthash]'}.js`
-        : `static/chunks/${dev ? '[name]' : '[name].[contenthash]'}.js`,
+        : `static/chunks/${isDevFallback ? 'fallback/' : ''}${
+            dev ? '[name]' : '[name].[contenthash]'
+          }.js`,
       strictModuleExceptionHandling: true,
       crossOriginLoading: crossOrigin,
       futureEmitAssets: !dev,
@@ -918,7 +923,6 @@ export default async function getBaseWebpackConfig(
         'next-client-pages-loader',
         'next-serverless-loader',
         'noop-loader',
-        'next-plugin-loader',
         'next-style-loader',
       ].reduce((alias, loader) => {
         // using multiple aliases to replace `resolveLoader.modules`
@@ -966,7 +970,7 @@ export default async function getBaseWebpackConfig(
                   loader: 'next/dist/compiled/cache-loader',
                   options: {
                     cacheContext: dir,
-                    cacheDirectory: path.join(dir, '.next', 'cache', 'webpack'),
+                    cacheDirectory: path.join(distDir, 'cache', 'webpack'),
                     cacheIdentifier: `webpack${isServer ? '-server' : ''}`,
                   },
                 },
@@ -1051,11 +1055,11 @@ export default async function getBaseWebpackConfig(
         'process.env.__NEXT_STRICT_MODE': JSON.stringify(
           config.reactStrictMode
         ),
-        'process.env.__NEXT_REACT_MODE': JSON.stringify(
-          config.experimental.reactMode
+        'process.env.__NEXT_REACT_ROOT': JSON.stringify(
+          config.experimental.reactRoot
         ),
         'process.env.__NEXT_OPTIMIZE_FONTS': JSON.stringify(
-          config.experimental.optimizeFonts && !dev
+          config.optimizeFonts && !dev
         ),
         'process.env.__NEXT_OPTIMIZE_IMAGES': JSON.stringify(
           config.experimental.optimizeImages
@@ -1114,6 +1118,7 @@ export default async function getBaseWebpackConfig(
       !isServer &&
         new ReactLoadablePlugin({
           filename: REACT_LOADABLE_MANIFEST,
+          pagesDir,
         }),
       !isServer && new DropClientPage(),
       // Moment.js is an extremely popular library that bundles large locale files
@@ -1160,6 +1165,7 @@ export default async function getBaseWebpackConfig(
         new BuildManifestPlugin({
           buildId,
           rewrites,
+          isDevFallback,
         }),
       !dev &&
         !isServer &&
@@ -1168,7 +1174,7 @@ export default async function getBaseWebpackConfig(
           distDir,
         }),
       new ProfilingPlugin(),
-      config.experimental.optimizeFonts &&
+      config.optimizeFonts &&
         !dev &&
         isServer &&
         (function () {
@@ -1252,7 +1258,7 @@ export default async function getBaseWebpackConfig(
       plugins: config.experimental.plugins,
       reactStrictMode: config.reactStrictMode,
       reactMode: config.experimental.reactMode,
-      optimizeFonts: config.experimental.optimizeFonts,
+      optimizeFonts: config.optimizeFonts,
       optimizeImages: config.experimental.optimizeImages,
       optimizeCss: config.experimental.optimizeCss,
       scrollRestoration: config.experimental.scrollRestoration,
@@ -1271,7 +1277,7 @@ export default async function getBaseWebpackConfig(
       //  - Next.js version
       //  - next.config.js keys that affect compilation
       version: `${process.env.__NEXT_VERSION}|${configVars}`,
-      cacheDirectory: path.join(dir, '.next', 'cache', 'webpack'),
+      cacheDirectory: path.join(distDir, 'cache', 'webpack'),
     }
 
     // Adds `next.config.js` as a buildDependency when custom webpack config is provided
@@ -1505,93 +1511,94 @@ export default async function getBaseWebpackConfig(
 
   // Patch `@zeit/next-sass`, `@zeit/next-less`, `@zeit/next-stylus` for compatibility
   if (webpackConfig.module && Array.isArray(webpackConfig.module.rules)) {
-    ;[].forEach.call(webpackConfig.module.rules, function (
-      rule: webpack.RuleSetRule
-    ) {
-      if (!(rule.test instanceof RegExp && Array.isArray(rule.use))) {
-        return
-      }
-
-      const isSass =
-        rule.test.source === '\\.scss$' || rule.test.source === '\\.sass$'
-      const isLess = rule.test.source === '\\.less$'
-      const isCss = rule.test.source === '\\.css$'
-      const isStylus = rule.test.source === '\\.styl$'
-
-      // Check if the rule we're iterating over applies to Sass, Less, or CSS
-      if (!(isSass || isLess || isCss || isStylus)) {
-        return
-      }
-
-      ;[].forEach.call(rule.use, function (use: webpack.RuleSetUseItem) {
-        if (
-          !(
-            use &&
-            typeof use === 'object' &&
-            // Identify use statements only pertaining to `css-loader`
-            (use.loader === 'css-loader' ||
-              use.loader === 'css-loader/locals') &&
-            use.options &&
-            typeof use.options === 'object' &&
-            // The `minimize` property is a good heuristic that we need to
-            // perform this hack. The `minimize` property was only valid on
-            // old `css-loader` versions. Custom setups (that aren't next-sass,
-            // next-less or next-stylus) likely have the newer version.
-            // We still handle this gracefully below.
-            (Object.prototype.hasOwnProperty.call(use.options, 'minimize') ||
-              Object.prototype.hasOwnProperty.call(
-                use.options,
-                'exportOnlyLocals'
-              ))
-          )
-        ) {
+    ;[].forEach.call(
+      webpackConfig.module.rules,
+      function (rule: webpack.RuleSetRule) {
+        if (!(rule.test instanceof RegExp && Array.isArray(rule.use))) {
           return
         }
 
-        // Try to monkey patch within a try-catch. We shouldn't fail the build
-        // if we cannot pull this off.
-        // The user may not even be using the `next-sass` or `next-less` or
-        // `next-stylus` plugins.
-        // If it does work, great!
-        try {
-          // Resolve the version of `@zeit/next-css` as depended on by the Sass,
-          // Less or Stylus plugin.
-          const correctNextCss = require.resolve('@zeit/next-css', {
-            paths: [
-              isCss
-                ? // Resolve `@zeit/next-css` from the base directory
-                  dir
-                : // Else, resolve it from the specific plugins
-                  require.resolve(
-                    isSass
-                      ? '@zeit/next-sass'
-                      : isLess
-                      ? '@zeit/next-less'
-                      : isStylus
-                      ? '@zeit/next-stylus'
-                      : 'next'
-                  ),
-            ],
-          })
+        const isSass =
+          rule.test.source === '\\.scss$' || rule.test.source === '\\.sass$'
+        const isLess = rule.test.source === '\\.less$'
+        const isCss = rule.test.source === '\\.css$'
+        const isStylus = rule.test.source === '\\.styl$'
 
-          // If we found `@zeit/next-css` ...
-          if (correctNextCss) {
-            // ... resolve the version of `css-loader` shipped with that
-            // package instead of whichever was hoisted highest in your
-            // `node_modules` tree.
-            const correctCssLoader = require.resolve(use.loader, {
-              paths: [correctNextCss],
-            })
-            if (correctCssLoader) {
-              // We saved the user from a failed build!
-              use.loader = correctCssLoader
-            }
-          }
-        } catch (_) {
-          // The error is not required to be handled.
+        // Check if the rule we're iterating over applies to Sass, Less, or CSS
+        if (!(isSass || isLess || isCss || isStylus)) {
+          return
         }
-      })
-    })
+
+        ;[].forEach.call(rule.use, function (use: webpack.RuleSetUseItem) {
+          if (
+            !(
+              use &&
+              typeof use === 'object' &&
+              // Identify use statements only pertaining to `css-loader`
+              (use.loader === 'css-loader' ||
+                use.loader === 'css-loader/locals') &&
+              use.options &&
+              typeof use.options === 'object' &&
+              // The `minimize` property is a good heuristic that we need to
+              // perform this hack. The `minimize` property was only valid on
+              // old `css-loader` versions. Custom setups (that aren't next-sass,
+              // next-less or next-stylus) likely have the newer version.
+              // We still handle this gracefully below.
+              (Object.prototype.hasOwnProperty.call(use.options, 'minimize') ||
+                Object.prototype.hasOwnProperty.call(
+                  use.options,
+                  'exportOnlyLocals'
+                ))
+            )
+          ) {
+            return
+          }
+
+          // Try to monkey patch within a try-catch. We shouldn't fail the build
+          // if we cannot pull this off.
+          // The user may not even be using the `next-sass` or `next-less` or
+          // `next-stylus` plugins.
+          // If it does work, great!
+          try {
+            // Resolve the version of `@zeit/next-css` as depended on by the Sass,
+            // Less or Stylus plugin.
+            const correctNextCss = require.resolve('@zeit/next-css', {
+              paths: [
+                isCss
+                  ? // Resolve `@zeit/next-css` from the base directory
+                    dir
+                  : // Else, resolve it from the specific plugins
+                    require.resolve(
+                      isSass
+                        ? '@zeit/next-sass'
+                        : isLess
+                        ? '@zeit/next-less'
+                        : isStylus
+                        ? '@zeit/next-stylus'
+                        : 'next'
+                    ),
+              ],
+            })
+
+            // If we found `@zeit/next-css` ...
+            if (correctNextCss) {
+              // ... resolve the version of `css-loader` shipped with that
+              // package instead of whichever was hoisted highest in your
+              // `node_modules` tree.
+              const correctCssLoader = require.resolve(use.loader, {
+                paths: [correctNextCss],
+              })
+              if (correctCssLoader) {
+                // We saved the user from a failed build!
+                use.loader = correctCssLoader
+              }
+            }
+          } catch (_) {
+            // The error is not required to be handled.
+          }
+        })
+      }
+    )
   }
 
   // Backwards compat for `main.js` entry key
