@@ -2666,6 +2666,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benbender",
+      "name": "Benjamin Bender",
+      "avatar_url": "https://avatars.githubusercontent.com/u/462455?v=4",
+      "profile": "https://codepoet.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
