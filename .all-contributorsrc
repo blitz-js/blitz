@@ -2657,6 +2657,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Dipeshwagle",
+      "name": "Dipesh Wagle",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4191022?v=4",
+      "profile": "https://dipeshwagle.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
