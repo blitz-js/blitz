@@ -2675,6 +2675,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "nimashoghi",
+      "name": "Nima Shoghi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3728170?v=4",
+      "profile": "https://nima.sh",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
