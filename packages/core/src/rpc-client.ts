@@ -169,7 +169,7 @@ const ensureTrailingSlash = (url: string) => {
 
 const getApiUrlFromResolverFilePath = (resolverFilePath: string) => {
   const url = resolverFilePath.replace(/^app\/_resolvers/, "/api")
-  return getBlitzRuntimeData() ? ensureTrailingSlash(url) : url
+  return getBlitzRuntimeData().trailingSlash ? ensureTrailingSlash(url) : url
 }
 
 type IsomorphicEnhancedResolverOptions = {
