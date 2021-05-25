@@ -221,6 +221,18 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
         </sub>
       </a>
     </td>
+     <td align="center">
+   <a href="https://mina.ca">
+     <img
+       src="https://avatars.githubusercontent.com/mabadir"
+       width="100px;"
+       alt=""
+     /><br />
+     <sub>
+       <b>Mina Abadir</b>
+     </sub>
+   </a>
+ </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
