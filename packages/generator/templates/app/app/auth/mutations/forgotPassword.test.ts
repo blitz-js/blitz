@@ -41,7 +41,7 @@ describe("forgotPassword mutation", () => {
     await forgotPassword({ email: user.email }, {} as Ctx)
 
     const tokens = await db.token.findMany({ where: { userId: user.id } })
-    const token = tokens[0]
+    const token = tokens[0]!
 
     // delete's existing tokens
     expect(tokens.length).toBe(1)
