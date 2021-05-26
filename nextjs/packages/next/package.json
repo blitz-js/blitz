@@ -73,7 +73,7 @@
     "assert": "2.0.0",
     "ast-types": "0.13.2",
     "browserify-zlib": "0.2.0",
-    "browserslist": "4.16.1",
+    "browserslist": "4.16.5",
     "buffer": "5.6.0",
     "caniuse-lite": "^1.0.30001179",
     "chalk": "2.4.2",
