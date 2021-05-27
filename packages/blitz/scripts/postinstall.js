@@ -83,12 +83,9 @@ function codegen() {
       // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
       debug("Missing next package, manually installing...")
       const corePkg = require("@blitzjs/core/package.json")
-      await run(
-        "npm",
-        ["install", "--no-save", `next@${corePkg.dependencies.next}`],
-        process.cwd(),
-        ["ignore", "ignore", "inherit"],
-      )
+      await run("npm", ["install", "--no-save", `next@${corePkg.dependencies.next}`], root, [
+        "ignore",
+      ])
     }
 
     debug({
