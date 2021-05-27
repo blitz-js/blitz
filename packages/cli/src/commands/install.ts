@@ -23,13 +23,18 @@ declare global {
 const pipeline = promisify(Stream.pipeline)
 
 async function got(url: string) {
-  return require("got")(url).catch((e: any) => e)
+  return require("got")(url).catch((e: any) => {
+    if (e.response.statusCode === 403) {
+      log.error(e.response.body)
+    } else {
+      return e
+    }
+  })
 }
 
 async function gotJSON(url: string) {
   debug("[gotJSON] Downloading json from ", url)
   const res = await got(url)
-  // debug("[gotJSON] res ", res)
   return JSON.parse(res.body)
 }
 
@@ -131,10 +136,7 @@ export class Install extends Command {
     subdirectory?: string,
   ): Promise<string> {
     debug("[cloneRepo] starting...")
-    const recipeDir = require("path").join(
-      require("os").tmpdir(),
-      `blitz-recipe-${repoFullName.replace("/", "-")}`,
-    )
+    const recipeDir = require("path").join(process.cwd(), ".blitz", "recipe-install")
     // clean up from previous run in case of error
     require("rimraf").sync(recipeDir)
     require("fs-extra").mkdirSync(recipeDir)
