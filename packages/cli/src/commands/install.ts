@@ -6,6 +6,7 @@ import {bootstrap} from "global-agent"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
+const debug = require("debug")("blitz:cli")
 
 declare global {
   namespace NodeJS {
@@ -26,7 +27,10 @@ async function got(url: string) {
 }
 
 async function gotJSON(url: string) {
-  return JSON.parse((await got(url)).body)
+  debug("[gotJSON] Downloading json from ", url)
+  const res = await got(url)
+  // debug("[gotJSON] res ", res)
+  return JSON.parse(res.body)
 }
 
 async function isUrlValid(url: string) {
@@ -39,6 +43,7 @@ function requireJSON(file: string) {
 
 const GH_ROOT = "https://github.com/"
 const API_ROOT = "https://api.github.com/repos/"
+const RAW_ROOT = "https://raw.githubusercontent.com/"
 const CODE_ROOT = "https://codeload.github.com/"
 
 export enum RecipeLocation {
@@ -125,6 +130,7 @@ export class Install extends Command {
     defaultBranch: string,
     subdirectory?: string,
   ): Promise<string> {
+    debug("[cloneRepo] starting...")
     const recipeDir = require("path").join(
       require("os").tmpdir(),
       `blitz-recipe-${repoFullName.replace("/", "-")}`,
@@ -133,6 +139,7 @@ export class Install extends Command {
     require("rimraf").sync(recipeDir)
     require("fs-extra").mkdirSync(recipeDir)
     process.chdir(recipeDir)
+    debug("Extracting recipe to ", recipeDir)
 
     const repoName = repoFullName.split("/")[1]
     // `tar` top-level filter is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
@@ -192,22 +199,23 @@ export class Install extends Command {
     await this.setupProxySupport()
 
     const {args} = this.parse(Install)
-    const pkgManager = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
-      ? "yarn"
-      : "npm"
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
+    debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
 
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
+      const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
       const packageJsonPath = require("path").join(
-        `${apiUrl}/contents`,
+        `${rawUrl}`,
+        "canary",
         recipeInfo.subdirectory ?? "",
         "package.json",
       )
 
       if (!(await isUrlValid(packageJsonPath))) {
+        debug("Url is invalid for ", packageJsonPath)
         log.error(`Could not find recipe "${args.recipe}"\n`)
         console.log(`${chalk.bold("Please provide one of the following:")}
 
@@ -220,9 +228,9 @@ export class Install extends Command {
 4. A file path to a locally-written recipe.\n`)
         process.exit(1)
       } else {
+        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
         const repoInfo = await gotJSON(apiUrl)
 
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
           repoInfo.default_branch,
@@ -231,8 +239,12 @@ export class Install extends Command {
         spinner.stop()
 
         spinner = log.spinner("Installing package.json dependencies").start()
+
+        const isYarn = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
+        const pkgManager = isYarn ? "yarn" : "npm"
+        const installArgs = isYarn ? ["install"] : ["install", "--legacy-peer-deps"]
         await new Promise((resolve) => {
-          const installProcess = require("cross-spawn")(pkgManager, ["install"])
+          const installProcess = require("cross-spawn")(pkgManager, installArgs)
           installProcess.on("exit", resolve)
         })
         spinner.stop()

@@ -6,6 +6,7 @@ import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import {RecipeRenderer} from "./recipe-renderer"
 import {RecipeMeta} from "./types"
+// const debug = require('debug')("blitz:installer")
 
 type ExecutorConfig =
   | AddDependencyExecutor.Config
