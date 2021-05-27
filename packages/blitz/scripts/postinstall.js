@@ -145,7 +145,7 @@ function codegen() {
 
   async function isInstalledGlobally() {
     try {
-      await run("blitz", ["-v"])
+      await run("blitz", ["-v"], process.cwd(), ["ignore"])
       return true
     } catch (e) {
       return false
