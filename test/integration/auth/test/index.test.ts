@@ -49,26 +49,34 @@ describe("Auth", () => {
   })
 
   describe("authenticated", () => {
-    it("should login successfully", async () => {
+    it("should login and out successfully", async () => {
       const browser = await webdriver(context.appPort, "/login")
       await browser.waitForElementByCss("#content")
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-out/)
       await browser.elementByCss("#login").click()
-      await waitFor(500)
+      await waitFor(100)
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-in/)
+      await browser.elementByCss("#logout").click()
+      await waitFor(100)
+      text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/logged-out/)
 
       if (browser) await browser.close()
     })
 
     it("should logout without infinite loop #2233", async () => {
-      const browser = await webdriver(context.appPort, "/authenticated-query")
+      // Login
+      let browser = await webdriver(context.appPort, "/login")
+      await browser.elementByCss("#login").click()
+
+      browser = await webdriver(context.appPort, "/authenticated-query")
       await browser.waitForElementByCss("#content")
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
       await browser.elementByCss("#logout").click()
-      await waitFor(500)
+      await waitFor(100)
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
@@ -83,7 +91,7 @@ describe("Auth", () => {
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-out/)
       await browser.elementByCss("#login").click()
-      await waitFor(500)
+      await waitFor(100)
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-in/)
 
