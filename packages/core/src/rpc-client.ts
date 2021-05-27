@@ -86,10 +86,13 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
           clientDebug("Session revoked")
-          await queryClient.cancelQueries()
-          await queryClient.resetQueries()
-          queryClient.getMutationCache().clear()
-          publicDataStore.clear()
+          setTimeout(async () => {
+            // Do these in the next tick to prevent various bugs like #2207
+            await queryClient.cancelQueries()
+            await queryClient.resetQueries()
+            queryClient.getMutationCache().clear()
+            publicDataStore.clear()
+          }, 0)
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
