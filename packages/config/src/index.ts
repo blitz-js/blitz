@@ -82,6 +82,7 @@ export interface BlitzConfig extends Record<string, unknown> {
     isomorphicResolverImports?: boolean
     reactRoot?: boolean
   }
+  trailingSlash?: boolean
   cli?: {
     clearConsoleOnBlitzDev?: boolean
     httpProxy?: string
