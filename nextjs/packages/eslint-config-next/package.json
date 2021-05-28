@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-next",
-  "version": "10.2.3",
+  "version": "0.36.0",
   "description": "ESLint configuration used by NextJS.",
   "main": "index.js",
   "license": "MIT",
