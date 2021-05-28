@@ -1,19 +1,14 @@
-const childProcess = require("child_process")
+const childProcess = require("cross-spawn")
 const {promisify} = require("util")
 const fs = require("fs")
 const path = require("path")
 const resolveFrom = require("resolve-from")
 
-const exec = promisify(childProcess.exec)
 const copyFile = promisify(fs.copyFile)
 const mkdir = promisify(fs.mkdir)
 const stat = promisify(fs.stat)
 
-function debug(message, ...optionalParams) {
-  if (process.env.DEBUG && process.env.DEBUG === "blitz:postinstall") {
-    console.log(message, ...optionalParams)
-  }
-}
+const debug = require("debug")("blitz:postinstall")
 
 const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../test"))
 let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
@@ -76,13 +71,22 @@ function codegen() {
     const installedGlobally = localPath ? undefined : await isInstalledGlobally()
 
     // this is needed, so that the Generate command does not fail in postinstall
-
     process.env.BLITZ_GENERATE_IN_POSTINSTALL = "true"
 
     // this is needed, so we can find the correct schemas in yarn workspace projects
     const root = findPackageRoot(localPath)
 
     process.env.BLITZ_GENERATE_IN_POSTINSTALL = root ? root : "true"
+
+    if (!fs.existsSync(path.join(root, "node_modules", "next"))) {
+      // Sometimes with npm the next package is missing because of how
+      // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
+      debug("Missing next package, manually installing...")
+      const corePkg = require("@blitzjs/core/package.json")
+      await run("npm", ["install", "--no-save", `next@${corePkg.dependencies.next}`], root, [
+        "ignore",
+      ])
+    }
 
     debug({
       localPath,
@@ -141,7 +145,7 @@ function codegen() {
 
   async function isInstalledGlobally() {
     try {
-      await exec("blitz -v")
+      await run("blitz", ["-v"], process.cwd(), ["ignore"])
       return true
     } catch (e) {
       return false
@@ -159,9 +163,9 @@ function codegen() {
       })
   }
 
-  function run(cmd, params, cwd = process.cwd()) {
+  function run(cmd, params, cwd = process.cwd(), stdio = ["pipe", "inherit", "inherit"]) {
     const child = childProcess.spawn(cmd, params, {
-      stdio: ["pipe", "inherit", "inherit"],
+      stdio,
       cwd,
     })
 
@@ -340,7 +344,7 @@ function codegen() {
     // - https://pnpm.js.org/en/3.6/only-allow-pnpm
     // - https://github.com/cameronhunter/npm-config-user-agent-parser
     if (userAgent) {
-      const matchResult = userAgent.match(/^([^\/]+)\/.+/)
+      const matchResult = userAgent.match(/^([^/]+)\/.+/)
       if (matchResult) {
         packageManager = matchResult[1].trim()
       }

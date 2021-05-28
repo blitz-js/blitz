@@ -9,7 +9,6 @@ import {run as oclifRun} from "@oclif/command"
 require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
 
 function buildConfigIfNeeded() {
-  console.log(process.argv)
   if (["help", "-h", "autocomplete", "new", "s", "start"].includes(process.argv[2])) {
     return Promise.resolve()
   }

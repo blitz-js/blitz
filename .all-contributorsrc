@@ -2637,7 +2637,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/3389914?v=4",
       "profile": "minaabadir.ca",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2683,6 +2684,24 @@
       "profile": "https://nima.sh",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "chronark",
+      "name": "Andreas Thomas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18246773?v=4",
+      "profile": "https://github.com/chronark",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "guoqqqi",
+      "name": "guoqqqi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72343596?v=4",
+      "profile": "https://github.com/guoqqqi",
+      "contributions": [
+        "doc"
       ]
     }
   ],
