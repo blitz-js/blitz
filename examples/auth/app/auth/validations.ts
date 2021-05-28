@@ -1,4 +1,4 @@
-import * as z from "zod"
+import {z} from "zod"
 
 const password = z.string().min(10).max(100)
 

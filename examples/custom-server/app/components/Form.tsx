@@ -1,6 +1,6 @@
 import React, {ReactNode, PropsWithoutRef} from "react"
 import {Form as FinalForm, FormProps as FinalFormProps} from "react-final-form"
-import * as z from "zod"
+import {z} from "zod"
 export {FORM_ERROR} from "final-form"
 
 type FormProps<S extends z.ZodType<any, any>> = {
