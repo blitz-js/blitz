@@ -1,12 +1,14 @@
 import {NextScript} from "next/document"
-import React from "react"
+import React, {ComponentPropsWithoutRef} from "react"
 import {BlitzData} from "./blitz-data"
 
-export function BlitzScript() {
+export type BlitzScriptProps = ComponentPropsWithoutRef<typeof NextScript>
+
+export function BlitzScript(props: BlitzScriptProps) {
   return (
     <>
       <BlitzData />
-      <NextScript />
+      <NextScript {...props} />
     </>
   )
 }
