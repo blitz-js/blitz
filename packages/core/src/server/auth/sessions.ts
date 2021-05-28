@@ -161,7 +161,7 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     cookiePrefix?: string
   }> = async (req, res, next) => {
     debug("Starting sessionMiddleware...")
-    if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
+    if (!(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
       await getSession(req, res)
     }

@@ -38,7 +38,7 @@ export interface AppProps<P = {}> extends NextAppProps<P> {
 }
 export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: string | RouteUrlObject
 }
