@@ -9,7 +9,7 @@ export type DomainLocales = Array<{
   defaultLocale: string
 }>
 
-export type NextConfig = { [key: string]: any } & {
+export type PublicNextConfig = {
   i18n?: {
     locales: string[]
     defaultLocale: string
@@ -66,6 +66,7 @@ export type NextConfig = { [key: string]: any } & {
     gzipSize?: boolean
   }
 }
+export type NextConfig = PublicNextConfig & Record<string, any>
 
 export const defaultConfig: NextConfig = {
   env: [],
