@@ -18,10 +18,10 @@
    - If it fails, run `git subrepo clean nextjs` and try again
 5. Run `yarn`
 6. Run `yarn manypkg check` and optionally `yarn manypkg fix` to fix any issues
-7. Run `yarn build:nextjs`
-8. Run `yarn lint` - fix any issues
-9. Run `yarn build` - fix any issues
-10. Under `nextjs/`, run `./check-pre-compiled.sh` and commit the changes
+7. Under `nextjs/`, run `./check-pre-compiled.sh` and commit the changes
+8. Run `yarn build:nextjs`
+9. Run `yarn lint` - fix any issues
+10. Run `yarn build` - fix any issues
 11. Run `yarn test:nextjs-size` and update tests if there are any failures
 12. Open PR and fix any failing tests
 13. Any doc updates?
