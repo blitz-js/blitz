@@ -40,7 +40,7 @@
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-error-boundary": "3.x",
     "typescript": "~4.2",
-    "zod": "1.x"
+    "zod": "3.x"
   },
   "private": true
 }

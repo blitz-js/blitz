@@ -1,6 +1,6 @@
 import { useState, ReactNode, PropsWithoutRef } from "react"
 import { Formik, FormikProps } from "formik"
-import * as z from "zod"
+import { z } from "zod"
 
 export interface FormProps<S extends z.ZodType<any, any>>
   extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
