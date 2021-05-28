@@ -11,6 +11,7 @@ import {
 import type {UrlObject} from "url"
 import {BlitzRuntimeData} from "./blitz-data"
 
+export type {BlitzConfig} from "@blitzjs/config"
 export type {
   GetServerSideProps,
   GetServerSidePropsContext,
