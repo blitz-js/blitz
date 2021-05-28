@@ -204,18 +204,18 @@ export abstract class Generator<
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
     // templatedFile.match
-    const subTemplateRegExp = new RegExp(/{?\/\* template: (.*) \*\/}?/)
-    const subTemplateString = templatedFile
-      .match(subTemplateRegExp)?.[0]
-      .replace(subTemplateRegExp, "$1")
-    if (subTemplateString) {
-      const subTemplatePosition = templatedFile.search(subTemplateRegExp)
+    const fieldTemplateRegExp = new RegExp(/{?\/\* template: (.*) \*\/}?/)
+    const fieldTemplateString = templatedFile
+      .match(fieldTemplateRegExp)?.[0]
+      .replace(fieldTemplateRegExp, "$1")
+    if (fieldTemplateString) {
+      const fieldTemplatePosition = templatedFile.search(fieldTemplateRegExp)
       templatedFile = [
-        templatedFile.slice(0, subTemplatePosition),
-        ...(templateValues.subTemplateValues?.map((values: any) =>
-          this.replaceTemplateValues(subTemplateString, values),
+        templatedFile.slice(0, fieldTemplatePosition),
+        ...(templateValues.fieldTemplateValues?.map((values: any) =>
+          this.replaceTemplateValues(fieldTemplateString, values),
         ) || []),
-        templatedFile.slice(subTemplatePosition),
+        templatedFile.slice(fieldTemplatePosition),
       ].join("\n")
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)

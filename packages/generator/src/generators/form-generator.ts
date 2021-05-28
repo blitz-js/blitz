@@ -42,7 +42,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
-      subTemplateValues: this.options.extraArgs?.map((arg: string) => {
+      fieldTemplateValues: this.options.extraArgs?.map((arg: string) => {
         const [valueName] = arg.split(":")
         return {
           fieldName: singleCamel(valueName),
