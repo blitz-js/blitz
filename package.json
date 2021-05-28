@@ -6,6 +6,7 @@
       "nextjs",
       "nextjs/packages/next",
       "nextjs/packages/next-mdx",
+      "nextjs/packages/eslint-config-next",
       "nextjs/packages/eslint-plugin-next",
       "examples/*",
       "recipes/*"
