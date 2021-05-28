@@ -5,7 +5,7 @@ import {Suspense, useState} from "react"
 function Content() {
   const [value, setValue] = useState(10)
 
-  const [groups, {isFetching, isFetchingNextPage, fetchNextPage, hasNextPage}] = useInfiniteQuery(
+  const [groups] = useInfiniteQuery(
     getPaginated,
     (page = {take: 5, skip: 0}) => ({
       where: {value: {gte: value}},

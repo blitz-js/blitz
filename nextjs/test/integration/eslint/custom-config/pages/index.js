@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 const Home = () => (
   <div>
     <p>Home</p>
