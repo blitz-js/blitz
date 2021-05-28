@@ -6,6 +6,7 @@ import {isClient} from "./utils"
 export type BlitzRuntimeData = {
   suspenseEnabled: boolean
   sessionCookiePrefix: string
+  trailingSlash: boolean
 }
 
 export function _getBlitzRuntimeData(): BlitzRuntimeData {
@@ -17,6 +18,7 @@ export function _getBlitzRuntimeData(): BlitzRuntimeData {
   return {
     sessionCookiePrefix: cookiePrefix || "blitz",
     suspenseEnabled: config.experimental?.reactRoot !== false,
+    trailingSlash: config.trailingSlash !== undefined ? config.trailingSlash : false,
   }
 }
 
