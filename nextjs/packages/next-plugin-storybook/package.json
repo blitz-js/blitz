@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@next/plugin-storybook",
-  "version": "10.2.0",
+  "version": "10.2.3",
   "repository": {
     "url": "vercel/next.js",
     "directory": "packages/next-plugin-storybook"
