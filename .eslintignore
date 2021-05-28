@@ -33,6 +33,7 @@ eslint.config.*
 /nextjs/**/.next/**
 /nextjs/**/_next/**
 /nextjs/**/dist/**
+/nextjs/examples/with-eslint/**
 /nextjs/examples/with-typescript-eslint-jest/**
 /nextjs/examples/with-kea/**
 /nextjs/packages/next/bundles/webpack/packages/*.runtime.js
@@ -47,4 +48,5 @@ eslint.config.*
 /nextjs/packages/next-codemod/**/*.d.ts
 /nextjs/packages/next-env/**/*.d.ts
 /nextjs/test/integration/async-modules/**
+/nextjs/test/integration/eslint/**
 /nextjs/test-timings.json

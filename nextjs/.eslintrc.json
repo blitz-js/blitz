@@ -120,7 +120,7 @@
       "rules": {
         "no-shadow": ["warn", { "builtinGlobals": false }],
         "import/no-extraneous-dependencies": [
-          "error",
+          "off",
           { "devDependencies": false }
         ]
       }

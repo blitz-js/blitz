@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import {findPort, killApp, launchApp, renderViaHTTP, waitFor} from "lib/blitz-test-utils"
+import {findPort, killApp, launchApp, renderViaHTTP} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 
