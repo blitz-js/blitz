@@ -39,6 +39,10 @@ jobs:
         run: yarn manypkg check
         env:
           CI: true
+      - name: Build next.js
+        run: yarn build:nextjs
+        env:
+          CI: true
       - name: yarn lint
         run: yarn lint
         env:
