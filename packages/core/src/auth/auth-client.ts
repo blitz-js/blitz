@@ -60,7 +60,7 @@ export const useAuthorizeIf = (condition?: boolean) => {
   useEffect(() => {
     if (condition && !publicDataStore.getData().userId) {
       const error = new AuthenticationError()
-      delete error.stack
+      error.stack = null!
       throw error
     }
   })

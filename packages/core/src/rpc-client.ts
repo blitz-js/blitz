@@ -101,7 +101,7 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
-          delete err.stack
+          err.stack = null!
           throw err
         }
       }
@@ -110,7 +110,7 @@ export const executeRpcCall = <TInput, TResult>(
         const error = new Error(response.statusText)
         ;(error as any).statusCode = response.status
         ;(error as any).path = apiUrl
-        delete error.stack
+        error.stack = null!
         throw error
       } else {
         let payload
@@ -118,7 +118,8 @@ export const executeRpcCall = <TInput, TResult>(
           payload = await response.json()
         } catch (error) {
           const err = new Error(`Failed to parse json from ${apiUrl}`)
-          delete err.stack
+          err.stack = null!
+          throw err
         }
 
         if (payload.error) {
@@ -134,6 +135,7 @@ export const executeRpcCall = <TInput, TResult>(
             error.statusCode = 500
           }
 
+          error.stack = null
           throw error
         } else {
           const data = deserialize({json: payload.result, meta: payload.meta?.result})
