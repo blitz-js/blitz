@@ -209,9 +209,10 @@ export class Install extends Command {
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
+      const repoInfo = await gotJSON(apiUrl)
       const packageJsonPath = require("path").join(
         `${rawUrl}`,
-        "canary",
+        repoInfo.default_branch,
         recipeInfo.subdirectory ?? "",
         "package.json",
       )
@@ -231,7 +232,6 @@ export class Install extends Command {
         process.exit(1)
       } else {
         let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
-        const repoInfo = await gotJSON(apiUrl)
 
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
