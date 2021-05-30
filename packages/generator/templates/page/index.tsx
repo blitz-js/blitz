@@ -61,9 +61,16 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
-                <a>{__modelName__.name}</a>
-              </Link>
+              <if condition="parentModel">
+                <Link href={Routes.Show__ModelName__Page({ __parentModelId__, __modelId__: __modelName__.id })}>
+                  <a>{__modelName__.name}</a>
+                </Link>               
+                <else>
+                  <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
+                    <a>{__modelName__.name}</a>
+                  </Link>
+                </else>
+              </if>
             </li>
           ))}
         </ul>

@@ -67,10 +67,10 @@ export function generateManifest(
 
       return `${name}(query: { ${[
         ...parameters.map(
-          (param) => param.name + (param.optional ? "?" : "") + ": string | number",
+          (param) => param.name + (param.optional ? "?" : "") + ": string | number | undefined",
         ),
         ...multipleParameters.map(
-          (param) => param.name + (param.optional ? "?" : "") + ": (string | number)[]",
+          (param) => param.name + (param.optional ? "?" : "") + ": (string | number | undefined)[]",
         ),
       ].join("; ")} } & ParsedUrlQueryInput): RouteUrlObject`
     },
