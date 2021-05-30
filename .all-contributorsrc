@@ -2713,6 +2713,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "ormarek",
+      "name": "Marek Orłowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16357457?v=4",
+      "profile": "http://orlowski.me/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
