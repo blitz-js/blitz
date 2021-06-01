@@ -7,6 +7,7 @@
 ### Syncing Next.js Fork
 
 1. Run `yarn push-nextjs`
+   - If it fails with an error of `git-subrepo: Can't commit: 'subrepo/nextjs' doesn't contain upstream HEAD:`, then run `yarn push-nextjs --force` (see https://github.com/ingydotnet/git-subrepo/issues/530)
 2. Create new git branch for the upgrade
 3. In the forked repo (https://github.com/blitz-js/next.js), run:
    1. `git pull`
