@@ -37,16 +37,16 @@ export default function Page() {
 
 Page.authenticate = true
 
-// export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-//   const queryClient = new QueryClient()
-//
-//   await queryClient.prefetchQuery(getQueryKey(getAuthenticatedBasic, null), () =>
-//     invokeWithMiddleware(getAuthenticatedBasic, null, ctx),
-//   )
-//
-//   return {
-//     props: {
-//       dehydratedState: dehydrate(queryClient),
-//     },
-//   }
-// }
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const queryClient = new QueryClient()
+
+  await queryClient.prefetchQuery(getQueryKey(getAuthenticatedBasic, null), () =>
+    invokeWithMiddleware(getAuthenticatedBasic, null, ctx),
+  )
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
+}
