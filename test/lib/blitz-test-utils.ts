@@ -126,7 +126,7 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
     __NEXT_TEST_MODE: "true",
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise<any>((resolve, reject) => {
     console.log(`Running command "blitz ${argv.join(" ")}"`)
     const instance = spawn("node", ["--no-deprecation", blitzBin, ...argv], {
       ...options.spawnOptions,
@@ -141,14 +141,14 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
 
     let stderrOutput = ""
     if (options.stderr) {
-      instance.stderr.on("data", function (chunk) {
+      instance.stderr?.on("data", function (chunk) {
         stderrOutput += chunk
       })
     }
 
     let stdoutOutput = ""
     if (options.stdout) {
-      instance.stdout.on("data", function (chunk) {
+      instance.stdout?.on("data", function (chunk) {
         stdoutOutput += chunk
       })
     }
