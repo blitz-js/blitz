@@ -855,7 +855,8 @@ export async function isPageStatic(
       }
 
       const isNextImageImported = (global as any).__NEXT_IMAGE_IMPORTED
-      const isBlitzSessionMiddlewareUsed = (global as any).__NEXT_IMAGE_IMPORTED
+      const isBlitzSessionMiddlewareUsed = (global as any)
+        .__BLITZ_SESSION_MIDDLEWARE_USED
       const config = mod.config || {}
       return {
         isStatic: !hasStaticProps && !hasGetInitialProps && !hasServerProps,
