@@ -2731,6 +2731,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "swinner2",
+      "name": "Sean Winner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6707308?v=4",
+      "profile": "https://github.com/swinner2",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
