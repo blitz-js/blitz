@@ -31,6 +31,7 @@ describe('Application Export Intent Output', () => {
           "exportTrailingSlash": false,
           "hasExportPathMap": false,
           "isNextImageImported": false,
+          "isBlitzSessionMiddlewareUsed": false,
           "version": 1,
         }
       `)
@@ -72,6 +73,7 @@ describe('Application Export Intent Output', () => {
           "exportTrailingSlash": false,
           "hasExportPathMap": true,
           "isNextImageImported": false,
+          "isBlitzSessionMiddlewareUsed": false,
           "version": 1,
         }
       `)
@@ -113,6 +115,7 @@ describe('Application Export Intent Output', () => {
           "exportTrailingSlash": true,
           "hasExportPathMap": false,
           "isNextImageImported": false,
+          "isBlitzSessionMiddlewareUsed": false,
           "version": 1,
         }
       `)
@@ -154,6 +157,7 @@ describe('Application Export Intent Output', () => {
           "exportTrailingSlash": false,
           "hasExportPathMap": false,
           "isNextImageImported": false,
+          "isBlitzSessionMiddlewareUsed": false,
           "version": 1,
         }
       `)
@@ -194,6 +198,7 @@ describe('Application Export Intent Output', () => {
           "exportTrailingSlash": false,
           "hasExportPathMap": false,
           "isNextImageImported": false,
+          "isBlitzSessionMiddlewareUsed": false,
           "version": 1,
         }
       `)
