@@ -69,6 +69,7 @@
     "eslint-config-blitz": "0.36.3",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",
+    "minimist": "1.2.5",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
     "react-test-renderer": "17.0.1",
