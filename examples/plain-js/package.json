@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.36.3",
+    "blitz": "0.36.4",
     "prisma": "2.19.0",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71"

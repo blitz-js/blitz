@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.19.0",
-    "blitz": "0.36.3",
+    "blitz": "0.36.4",
     "final-form": "4.20.1",
     "passport-auth0": "1.4.0",
     "passport-github2": "0.1.12",
