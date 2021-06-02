@@ -143,6 +143,8 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     sessionConfig.isAuthorized,
     "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
+  ;(global as any).__BLITZ_SESSION_MIDDLEWARE_USED = true
+
   global.sessionConfig = {
     ...defaultConfig,
     ...sessionConfig,
