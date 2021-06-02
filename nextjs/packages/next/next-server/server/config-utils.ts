@@ -13,11 +13,11 @@ function reasonMessage(reason: CheckReasons) {
     case 'no-future-flag':
       return 'future.webpack5 option disabled'
     case 'no-config':
-      return 'no next.config.js'
+      return 'no blitz.config.js'
     case 'webpack-config':
-      return 'custom webpack configuration in next.config.js'
+      return 'custom webpack configuration in blitz.config.js'
     case 'no-webpack-config':
-      return 'no custom webpack configuration in next.config.js'
+      return 'no custom webpack configuration in blitz.config.js'
     case 'test-mode':
       return 'internal test mode'
     default:

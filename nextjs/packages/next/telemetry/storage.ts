@@ -94,10 +94,10 @@ export class Telemetry {
     console.log(
       `${chalk.magenta.bold(
         'Attention'
-      )}: Next.js now collects completely anonymous telemetry regarding usage.`
+      )}: Blitz.js now collects completely anonymous telemetry regarding usage.`
     )
     console.log(
-      `This information is used to shape Next.js' roadmap and prioritize features.`
+      `This information is used to shape Blitz.js' roadmap and prioritize features.`
     )
     console.log(
       `You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:`

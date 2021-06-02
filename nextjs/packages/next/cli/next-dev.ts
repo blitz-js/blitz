@@ -38,7 +38,7 @@ const nextDev: cliCommand = (argv) => {
       Usage
         $ next dev <dir> -p <port number>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the Blitz.js application.
       If no directory is provided, the current directory will be used.
 
       Options
@@ -72,7 +72,7 @@ const nextDev: cliCommand = (argv) => {
       semver.coerce(reactVersion)?.version !== '0.0.0'
     ) {
       Log.warn(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.' +
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.' +
           ' Read more: https://nextjs.org/docs/messages/react-version'
       )
     } else {
@@ -86,7 +86,7 @@ const nextDev: cliCommand = (argv) => {
         semver.coerce(reactDomVersion)?.version !== '0.0.0'
       ) {
         Log.warn(
-          'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.' +
+          'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.' +
             ' Read more: https://nextjs.org/docs/messages/react-version'
         )
       }

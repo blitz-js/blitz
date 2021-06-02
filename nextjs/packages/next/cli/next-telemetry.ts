@@ -28,12 +28,12 @@ const nextTelemetry: cliCommand = (argv) => {
     console.log(
       `
       Description
-        Allows you to control Next.js' telemetry collection
+        Allows you to control Blitz.js' telemetry collection
 
       Usage
         $ next telemetry [enable/disable]
 
-      You may pass the 'enable' or 'disable' argument to turn Next.js' telemetry collection on or off.
+      You may pass the 'enable' or 'disable' argument to turn Blitz.js' telemetry collection on or off.
 
       Learn more: ${chalk.cyan('https://nextjs.org/telemetry')}
     `
@@ -57,14 +57,14 @@ const nextTelemetry: cliCommand = (argv) => {
       console.log(chalk.cyan('Your preference has been saved.'))
     } else {
       console.log(
-        chalk.yellow(`Next.js' telemetry collection is already disabled.`)
+        chalk.yellow(`Blitz.js' telemetry collection is already disabled.`)
       )
     }
     console.log()
 
     isEnabled = false
   } else {
-    console.log(chalk.bold('Next.js Telemetry'))
+    console.log(chalk.bold('Blitz.js Telemetry'))
     console.log()
   }
 
@@ -77,10 +77,10 @@ const nextTelemetry: cliCommand = (argv) => {
 
   if (isEnabled) {
     console.log(
-      `Next.js telemetry is completely anonymous. Thank you for participating!`
+      `Blitz.js telemetry is completely anonymous. Thank you for participating!`
     )
   } else {
-    console.log(`You have opted-out of Next.js' anonymous telemetry program.`)
+    console.log(`You have opted-out of Blitz.js' anonymous telemetry program.`)
     console.log(`No data will be collected from your machine.`)
   }
 

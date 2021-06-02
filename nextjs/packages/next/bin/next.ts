@@ -8,7 +8,7 @@ import { NON_STANDARD_NODE_ENV } from '../lib/constants'
     require.resolve(dependency)
   } catch (err) {
     console.warn(
-      `The module '${dependency}' was not found. Next.js requires that you include it in 'dependencies' of your 'package.json'. To add it, run 'npm install ${dependency}'`
+      `The module '${dependency}' was not found. Blitz.js requires that you include it in 'dependencies' of your 'package.json'. To add it, run 'npm install ${dependency}'`
     )
   }
 })
@@ -41,7 +41,7 @@ const args = arg(
 
 // Version is inlined into the file using taskr build pipeline
 if (args['--version']) {
-  console.log(`Next.js v${process.env.__NEXT_VERSION}`)
+  console.log(`Blitz.js v${process.env.__NEXT_VERSION}`)
   process.exit(0)
 }
 
@@ -98,7 +98,7 @@ const React = require('react')
 
 if (typeof React.Suspense === 'undefined') {
   throw new Error(
-    `The version of React you are using is lower than the minimum required version needed for Next.js. Please upgrade "react" and "react-dom": "npm install react react-dom" https://nextjs.org/docs/messages/invalid-react-version`
+    `The version of React you are using is lower than the minimum required version needed for Blitz.js. Please upgrade "react" and "react-dom": "npm install react react-dom" https://nextjs.org/docs/messages/invalid-react-version`
   )
 }
 

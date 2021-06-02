@@ -941,7 +941,7 @@ export async function renderToHTML(
     Object.keys(props?.pageProps || {}).includes('url')
   ) {
     console.warn(
-      `The prop \`url\` is a reserved prop in Next.js for legacy reasons and will be overridden on page ${pathname}\n` +
+      `The prop \`url\` is a reserved prop in Blitz.js for legacy reasons and will be overridden on page ${pathname}\n` +
         `See more info here: https://nextjs.org/docs/messages/reserved-page-prop`
     )
   }
