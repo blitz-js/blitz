@@ -30,9 +30,9 @@ describe("formatZodErrors", () => {
   const MyDoubleNestedSchema = z.object({
     test: z.string(),
     nested: z.object({
-      foo: z.string(),
+      test: z.string(),
       doubleNested: z.object({
-        yo: z.string(),
+        test: z.string(),
       }),
     }),
   })
@@ -44,7 +44,7 @@ describe("formatZodErrors", () => {
 
     expect(formatZodErrors(result.error.format())).toEqual({
       test: "Required",
-      nested: {foo: "Required", doubleNested: {yo: "Required"}},
+      nested: {test: "Required", doubleNested: {test: "Required"}},
     })
   })
 })
