@@ -33,6 +33,9 @@ export interface BlitzConfig extends Omit<PublicNextConfig, "experimental" | "fu
         cookiePrefix?: string
       }
     }[]
+  customServer?: {
+    hotReload?: boolean
+  }
 }
 
 export interface BlitzConfigNormalized extends BlitzConfig {
