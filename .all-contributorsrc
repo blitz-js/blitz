@@ -2749,6 +2749,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sebastianhoitz",
+      "name": "Sebastian Hoitz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/353768?v=4",
+      "profile": "https://makemake.sh",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
