@@ -90,7 +90,7 @@ describe('config', () => {
           join(__dirname, '_resolvedata', 'typescript-config')
         )
     ).rejects.toThrow(
-      /Configuring Next.js via .+ is not supported. Please replace the file with 'next.config.js'/
+      /Configuring Blitz.js via .+ is not supported. Please replace the file with 'blitz.config.js'/
     )
   })
 
