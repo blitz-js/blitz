@@ -42,9 +42,8 @@ export const createStageConfig: Stage = ({config, processNewFile, processNewChil
         cwd: config.src,
         path: resolve(config.src, "next.config.js"),
         contents: Buffer.from(`
-const {withBlitz} = require('@blitzjs/core/with-blitz');
 const config = require('../blitz.config.js');
-module.exports = withBlitz(config);
+module.exports = config;
         `),
       }),
     )
@@ -74,10 +73,9 @@ module.exports = withBlitz(config);
       })
 
       file.contents = Buffer.from(`
-const {withBlitz} = require('@blitzjs/core/with-blitz');
 const vercelConfig = require('./next-vercel.config.js');
 const config = require('../blitz.config.js');
-module.exports = withBlitz({...config, ...vercelConfig});
+module.exports = {...config, ...vercelConfig};
       `)
     }
 

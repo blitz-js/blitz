@@ -16,8 +16,7 @@
       "head.ts",
       "image.ts",
       "index.ts",
-      "server/index.ts",
-      "with-blitz.ts"
+      "server/index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -31,8 +30,7 @@
     "dynamic",
     "head",
     "image",
-    "server",
-    "with-blitz"
+    "server"
   ],
   "dependencies": {
     "@blitzjs/config": "0.36.4",

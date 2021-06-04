@@ -120,7 +120,7 @@ export const defaultConfig: NextConfig = {
     serialWebpackBuild: false,
     turboMode: false,
     eslint: false,
-    reactRoot: Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0,
+    reactRoot: true,
     enableBlurryPlaceholder: false,
     disableOptimizedLoading: true,
     gzipSize: true,

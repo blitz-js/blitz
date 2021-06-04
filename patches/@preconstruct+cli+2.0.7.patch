@@ -1,5 +1,5 @@
 diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
-index 972d57b..e6bc64b 100644
+index 972d57b..3baa4e6 100644
 --- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 @@ -166,7 +166,7 @@ function format(args, messageType, scope) {
@@ -11,7 +11,17 @@ index 972d57b..e6bc64b 100644
    return fullPrefix + util.format("", ...args).split("\n").reduce((str, line) => {
      const prefixed = `${str}\n${fullPrefix}`;
      return line ? `${prefixed} ${line}` : prefixed;
-@@ -1917,6 +1917,8 @@ let getRollupConfig = (pkg, entrypoints, aliases, type, reportTransformedFile) =
+@@ -847,6 +847,9 @@ const isFieldValid = {
+   },
+ 
+   browser(entrypoint) {
++    if (entrypoint.directory.includes("packages/config")) {
++      return true
++    }
+     return equal(entrypoint.json.browser, validFields.browser(entrypoint));
+   }
+ 
+@@ -1917,6 +1920,8 @@ let getRollupConfig = (pkg, entrypoints, aliases, type, reportTransformedFile) =
      external.push(...builtInModules);
    }
  
@@ -20,3 +30,14 @@ index 972d57b..e6bc64b 100644
    let input = {};
    entrypoints.forEach(entrypoint => {
      input[path__default.relative(pkg.directory, path__default.join(entrypoint.directory, "dist", getNameForDistForEntrypoint(entrypoint)))] = entrypoint.source;
+@@ -2129,6 +2134,10 @@ function getRollupConfigs(pkg, aliases) {
+   });
+   let hasBrowserField = pkg.entrypoints[0].json.browser !== undefined;
+ 
++  if (["@blitzjs/config"].includes(pkg.entrypoints[0].json.name)) {
++    hasBrowserField = false
++  }
++
+   if (hasBrowserField) {
+     configs.push({
+       config: getRollupConfig(pkg, pkg.entrypoints, aliases, "browser", () => {}),
