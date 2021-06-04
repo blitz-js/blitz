@@ -53,7 +53,7 @@ import WebpackConformancePlugin, {
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
 
 import fs from 'fs'
-import { getProjectRoot } from '@blitzjs/config'
+import {getProjectRoot} from '../server/lib/utils'
 
 /* ------ Blitz.js ------- */
 function doesDbModuleExist() {
