@@ -33,7 +33,7 @@
     "@blitzjs/config": "0.36.4",
     "@blitzjs/display": "0.36.4",
     "@blitzjs/generator": "0.36.4",
-    "@mrleebo/prisma-ast": "^0.2.3",
+    "@mrleebo/prisma-ast": "^0.2.4",
     "@prisma/sdk": "2.19.0",
     "@types/jscodeshift": "0.7.2",
     "cross-spawn": "7.0.3",
