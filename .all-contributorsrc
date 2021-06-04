@@ -2740,6 +2740,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "max-programming",
+      "name": "Max Programming",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51731966?v=4",
+      "profile": "https://usman-s.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
