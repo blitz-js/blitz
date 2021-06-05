@@ -24,3 +24,11 @@ export function formatZodErrors(errors: any) {
 
   return formattedErrors
 }
+
+export function validateZodSchema(schema: any, values: any) {
+  try {
+    schema.parse(values)
+  } catch (error) {
+    return formatZodErrors(error.format())
+  }
+}
