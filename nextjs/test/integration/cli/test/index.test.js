@@ -42,7 +42,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(output.stdout).toMatch(
-        new RegExp(`Next\\.js v${pkg.version.replace(/\./g, '\\.')}`)
+        new RegExp(`Blitz\\.js v${pkg.version.replace(/\./g, '\\.')}`)
       )
     })
 
@@ -51,7 +51,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(output.stdout).toMatch(
-        new RegExp(`Next\\.js v${pkg.version.replace(/\./g, '\\.')}`)
+        new RegExp(`Blitz\\.js v${pkg.version.replace(/\./g, '\\.')}`)
       )
     })
   })
