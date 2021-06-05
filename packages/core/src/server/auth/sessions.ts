@@ -1045,6 +1045,28 @@ export async function setPublicData(
 }
 
 /**
+ * Updates publicData in all sessions
+ *
+ * @param {PublicData["userId"]} userId
+ * @param {Record<any, any>} data
+ */
+export async function setPublicDataForUser(userId: PublicData["userId"], data: Record<any, any>) {
+  // Don't allow updating userId
+  delete data.userId
+
+  const sessions = await global.sessionConfig.getSessions(userId)
+  for (const session of sessions) {
+    // Merge data
+    const publicData = JSON.stringify({
+      ...JSON.parse(session.publicData || ""),
+      ...data,
+    })
+
+    await global.sessionConfig.updateSession(session.handle, {publicData})
+  }
+}
+
+/**
  * Append additional header `field` with value `val`.
  *
  * Example:
