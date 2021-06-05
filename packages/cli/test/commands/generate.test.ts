@@ -48,4 +48,13 @@ describe("`generate` command", () => {
       })
     })
   })
+
+  describe("when passing model name", () => {
+    it("should stop generating model with reserved keyword", function () {
+      const checkReservedKeyword = Generate.prototype.checkReservedKeyword
+      expect(() => {
+        checkReservedKeyword("page")
+      }).toThrow("Reserved keyword")
+    })
+  })
 })

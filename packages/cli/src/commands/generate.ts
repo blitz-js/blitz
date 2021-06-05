@@ -184,6 +184,15 @@ export class Generate extends Command {
     }
   }
 
+  checkReservedKeyword(modelName: string) {
+    const reservedKeywords = ["page"]
+
+    if (reservedKeywords.includes(modelName)) {
+      console.error(`The model name ${modelName} is a reserved keyword and cannot be used.`)
+      throw new Error("Reserved keyword")
+    }
+  }
+
   getModelNameAndContext(modelName: string, context?: string): {model: string; context?: string} {
     const modelSegments = modelName.split(/[\\/]/)
 
@@ -216,6 +225,8 @@ export class Generate extends Command {
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
+
+      this.checkReservedKeyword(singularRootContext)
 
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
