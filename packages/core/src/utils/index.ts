@@ -28,6 +28,7 @@ export function formatZodErrors(errors: any) {
 export function validateZodSchema(schema: any, values: any) {
   try {
     schema.parse(values)
+    return {}
   } catch (error) {
     return formatZodErrors(error.format())
   }
