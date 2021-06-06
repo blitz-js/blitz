@@ -13,7 +13,7 @@ export const __ModelNames__List = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")
+    const __parentModelId__ = useParam("__parentModelId__", "number")!
     const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
       where: {__parentModel__: {id: __parentModelId__}},
       orderBy: {id: "asc"},
@@ -88,7 +88,7 @@ export const __ModelNames__List = () => {
 
 const __ModelNames__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")
+    const __parentModelId__ = useParam("__parentModelId__", "number")!
   }
 
   return (

@@ -8,7 +8,7 @@ export const __ModelName__ = () => {
   const router = useRouter()
   const __modelId__ = useParam("__modelId__", "number")
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")
+    const __parentModelId__ = useParam("__parentModelId__", "number")!
   }
   const [delete__ModelName__Mutation] = useMutation(delete__ModelName__)
   const [__modelName__] = useQuery(get__ModelName__, {id: __modelId__} )
@@ -59,7 +59,7 @@ export const __ModelName__ = () => {
 
 const Show__ModelName__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")
+    const __parentModelId__ = useParam("__parentModelId__", "number")!
   }
 
   return (

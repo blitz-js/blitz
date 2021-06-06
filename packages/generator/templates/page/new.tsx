@@ -10,7 +10,7 @@ import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/_
 const New__ModelName__Page: BlitzPage = () => {
   const router = useRouter()
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")
+    const __parentModelId__ = useParam("__parentModelId__", "number")!
   }
   const [create__ModelName__Mutation] = useMutation(create__ModelName__)
 
