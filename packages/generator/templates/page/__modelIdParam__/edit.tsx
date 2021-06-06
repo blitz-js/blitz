@@ -9,7 +9,7 @@ export const Edit__ModelName__ = () => {
   const router = useRouter()
   const __modelId__ = useParam("__modelId__", "number")
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")!
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
   const [__modelName__, {setQueryData}] = useQuery(get__ModelName__, {id: __modelId__})
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
@@ -40,7 +40,7 @@ export const Edit__ModelName__ = () => {
               await setQueryData(updated)
               router.push(
                 process.env.parentModel
-                  ? Routes.Show__ModelName__Page({ __parentModelId__, __modelId__: updated.id })
+                  ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: updated.id })
                   : Routes.Show__ModelName__Page({ __modelId__: updated.id }),
               )
             } catch (error) {
@@ -58,7 +58,7 @@ export const Edit__ModelName__ = () => {
 
 const Edit__ModelName__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")!
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
 
   return (
@@ -69,7 +69,7 @@ const Edit__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
             <a>__ModelNames__</a>
           </Link>
           <else>
