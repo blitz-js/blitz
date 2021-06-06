@@ -13,9 +13,9 @@ export const __ModelNames__List = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")!
+    const __parentModelId__ = useParam("__parentModelId__", "number")
     const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
-      where: {__parentModel__: {id: __parentModelId__}},
+      where: {__parentModel__: {id: __parentModelId__!}},
       orderBy: {id: "asc"},
       skip: ITEMS_PER_PAGE * page,
       take: ITEMS_PER_PAGE,
@@ -62,7 +62,7 @@ export const __ModelNames__List = () => {
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
               <if condition="parentModel">
-                <Link href={Routes.Show__ModelName__Page({ __parentModelId__, __modelId__: __modelName__.id })}>
+                <Link href={Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
                   <a>{__modelName__.name}</a>
                 </Link>               
                 <else>
@@ -88,7 +88,7 @@ export const __ModelNames__List = () => {
 
 const __ModelNames__Page: BlitzPage = () => {
   if (process.env.parentModel) {
-    const __parentModelId__ = useParam("__parentModelId__", "number")!
+    const __parentModelId__ = useParam("__parentModelId__", "number")
   }
 
   return (
@@ -100,7 +100,7 @@ const __ModelNames__Page: BlitzPage = () => {
       <div>
         <p>
           <if condition="parentModel">
-            <Link href={Routes.New__ModelName__Page({ __parentModelId__ })}>
+            <Link href={Routes.New__ModelName__Page({ __parentModelId__: __parentModelId__! })}>
               <a>Create __ModelName__</a>
             </Link>
             <else>
