@@ -244,12 +244,45 @@ interface CustomServerOptions {
   watch?: boolean
 }
 
+const getEsbuildOptions = (): esbuild.BuildOptions => {
+  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+  return {
+    entryPoints: [getCustomServerPath()],
+    outfile: getCustomServerBuildPath(),
+    format: "cjs",
+    bundle: true,
+    platform: "node",
+    external: [
+      "blitz",
+      "next",
+      ...Object.keys(require("blitz/package").dependencies),
+      ...Object.keys(pkg.dependencies),
+      ...Object.keys(pkg.devDependencies),
+    ],
+  }
+}
+
+export function buildCustomServer({watch}: CustomServerOptions = {}) {
+  const esbuildOptions = getEsbuildOptions()
+  if (watch) {
+    esbuildOptions.watch = {
+      onRebuild(error) {
+        if (error) {
+          log.error("Failed to re-build custom server")
+        } else {
+          log.newline()
+          log.progress("Custom server changed - rebuilding...")
+        }
+      },
+    }
+  }
+  return esbuild.build(esbuildOptions)
+}
 export function startCustomServer(
   cwd: string,
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
-  const serverSrcPath = getCustomServerPath()
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
@@ -272,7 +305,12 @@ export function startCustomServer(
           if (code === 0) {
             res()
           } else if (watch && code === RESTART_CODE) {
-            spawnServer()
+            buildCustomServer()
+              .then(() => spawnServer())
+              .catch((err) => {
+                console.error(err)
+                rej(err)
+              })
           } else {
             rej(`server.js failed with status code: ${code}`)
           }
@@ -282,24 +320,7 @@ export function startCustomServer(
           rej(err)
         })
     }
-
-    const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
-
-    const esbuildOptions: esbuild.BuildOptions = {
-      entryPoints: [serverSrcPath],
-      outfile: getCustomServerBuildPath(),
-      format: "cjs",
-      bundle: true,
-      platform: "node",
-      external: [
-        "blitz",
-        "next",
-        ...Object.keys(require("blitz/package").dependencies),
-        ...Object.keys(pkg.dependencies),
-        ...Object.keys(pkg.devDependencies),
-      ],
-    }
-
+    const esbuildOptions = getEsbuildOptions()
     if (watch) {
       esbuildOptions.watch = {
         onRebuild(error) {
@@ -317,9 +338,6 @@ export function startCustomServer(
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    esbuild.build(esbuildOptions).then(() => {
-      spawnServer()
-    })
+    spawnServer()
   })
 }
