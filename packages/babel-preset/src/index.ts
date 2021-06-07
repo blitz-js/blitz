@@ -12,12 +12,12 @@ export default function preset(_api: any, options = {}) {
   const config: TransformOptions = {
     presets: [[require('next/babel'), options]],
     plugins: [
+      FixNodeFileTrace,
       [
         require('babel-plugin-superjson-next'),
         { exclude: ['dehydratedState'] },
       ],
       AddBlitzAppRoot,
-      FixNodeFileTrace,
     ],
   };
 
