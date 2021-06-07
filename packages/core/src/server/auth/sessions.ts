@@ -8,7 +8,7 @@ import cookie from "cookie"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
-import {join} from "path"
+import path, {join} from "path"
 import {
   EmptyPublicData,
   IsAuthorizedArgs,
@@ -222,6 +222,10 @@ export async function getSession(
 ): Promise<SessionContext> {
   ensureBlitzApiRequest(req)
   ensureMiddlewareResponse(res)
+
+  path.resolve("next.config.js")
+  path.resolve(".blitz/blitz.config.js")
+  path.resolve(".next/blitz/db.js")
 
   let response = res as MiddlewareResponse<{session?: SessionContext}>
 

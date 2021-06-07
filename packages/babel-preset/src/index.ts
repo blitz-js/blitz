@@ -1,5 +1,6 @@
 import type { TransformOptions } from '@babel/core';
 import AddBlitzAppRoot from './add-blitz-app-root';
+// import FixNodeFileTrace from './fix-node-file-trace';
 import RewriteImports from './rewrite-imports';
 
 // eslint-disable-next-line import/no-default-export
@@ -16,6 +17,7 @@ export default function preset(_api: any, options = {}) {
         { exclude: ['dehydratedState'] },
       ],
       AddBlitzAppRoot,
+      // FixNodeFileTrace
     ],
   };
 
