@@ -241,7 +241,7 @@ function removePlaceholder(
   }
 }
 
-export default function Image({
+export function Image({
   src,
   sizes,
   unoptimized = false,
