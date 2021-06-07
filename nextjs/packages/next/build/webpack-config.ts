@@ -1020,11 +1020,11 @@ export default async function getBaseWebpackConfig(
               {
                 issuer: /(mutations|queries)(?!.*\.client)/,
                 resource: /_resolvers/,
-                use: { loader: 'null-loader' },
+                use: { loader: require.resolve('null-loader') },
               },
               // Because of packages/core/src/prisma-utils.ts
-              { test: /[\\/]npm-which[\\/]/, use: { loader: 'null-loader' } },
-              { test: /[\\/]cross-spawn[\\/]/, use: { loader: 'null-loader' } },
+              { test: /[\\/]npm-which[\\/]/, use: { loader: require.resolve('null-loader') } },
+              { test: /[\\/]cross-spawn[\\/]/, use: { loader: require.resolve('null-loader') } },
             ]),
       ].filter(Boolean),
     },
