@@ -1,28 +1,21 @@
-import { PluginObj } from '@babel/core';
-import { getFileName, wrapExportDefaultDeclaration } from './utils';
-import type { NodePath, PluginObj, PluginPass } from '@babel/core';
+import type { NodePath, PluginObj } from '@babel/core';
 import { addNamed as addNamedImport } from '@babel/helper-module-imports';
 import {
   callExpression,
-  ClassDeclaration,
-  classExpression,
   ExportNamedDeclaration,
   Expression,
   FunctionDeclaration,
   functionExpression,
-  isClassDeclaration,
   isExportDefaultDeclaration,
   isExportNamedDeclaration,
   isFunctionDeclaration,
-  isFunctionExpression,
   isIdentifier,
   isVariableDeclaration,
   variableDeclaration,
   variableDeclarator,
-  arrayExpression,
-  stringLiteral,
 } from '@babel/types';
 import * as nodePath from 'path';
+import { getFileName, wrapExportDefaultDeclaration } from '../utils';
 
 function functionDeclarationToExpression(declaration: FunctionDeclaration) {
   return functionExpression(
@@ -32,29 +25,6 @@ function functionDeclarationToExpression(declaration: FunctionDeclaration) {
     declaration.generator,
     declaration.async
   );
-}
-
-function classDeclarationToExpression(declaration: ClassDeclaration) {
-  return classExpression(
-    declaration.id,
-    declaration.superClass,
-    declaration.body,
-    declaration.decorators
-  );
-}
-
-function getFileName(state: PluginPass) {
-  const { filename, cwd } = state;
-
-  if (!filename) {
-    return undefined;
-  }
-
-  if (cwd && filename.startsWith(cwd)) {
-    return filename.slice(cwd.length);
-  }
-
-  return filename;
 }
 
 const functionsToReplace = ['getServerSideProps', 'getStaticProps'];
@@ -98,15 +68,14 @@ function transformPropGetters(
   }
 }
 
-function addWithSuperJSONPropsImport(path: NodePath<any>) {
-  return addNamedImport(
-    path,
-    'withSuperJSONProps',
-    'babel-plugin-superjson-next/tools'
-  );
+const HOFName = 'withFixNodeFileTrace';
+const importFrom = '@blitzjs/core/server';
+
+function addWithFixNodeFileTraceImport(path: NodePath<any>) {
+  return addNamedImport(path, HOFName, importFrom);
 }
 
-const filesToSkip = ([] as string[]).concat(
+const pagesToSkip = ([] as string[]).concat(
   ...['_app', '_document', '_error'].map((name) => [
     name + '.js',
     name + '.jsx',
@@ -115,14 +84,21 @@ const filesToSkip = ([] as string[]).concat(
   ])
 );
 
-function shouldBeSkipped(filePath: string) {
+function isPage(filePath: string) {
   if (!filePath.includes('pages' + nodePath.sep)) {
-    return true;
+    return false;
   }
+  if (filePath.includes('pages' + nodePath.sep + 'api')) {
+    return false;
+  }
+  return !pagesToSkip.some((fileToSkip) => filePath.includes(fileToSkip));
+}
+
+function isApiRoute(filePath: string) {
   if (filePath.includes('pages' + nodePath.sep + 'api')) {
     return true;
   }
-  return filesToSkip.some((fileToSkip) => filePath.includes(fileToSkip));
+  return false;
 }
 
 function FixNodeFileTrace(): PluginObj {
@@ -130,34 +106,38 @@ function FixNodeFileTrace(): PluginObj {
     name: 'FixNodeFileTrace',
     visitor: {
       Program(path, state) {
-        const propsToBeExcluded = (state.opts as any).exclude as
-          | string[]
-          | undefined;
-
         const filePath =
           getFileName(state) ?? nodePath.join('pages', 'Default.js');
 
-        if (shouldBeSkipped(filePath)) {
+        if (isPage(filePath)) {
+          const body = path.get('body');
+          body
+            .filter((path) => isExportNamedDeclaration(path))
+            .forEach((path) => {
+              transformPropGetters(
+                path as NodePath<ExportNamedDeclaration>,
+                (decl) => {
+                  return callExpression(addWithFixNodeFileTraceImport(path), [
+                    decl,
+                  ]);
+                }
+              );
+            });
           return;
-        }
-
-        const body = path.get('body');
-
-        body
-          .filter((path) => isExportNamedDeclaration(path))
-          .forEach((path) => {
-            transformPropGetters(
-              path as NodePath<ExportNamedDeclaration>,
-              (decl) => {
-                return callExpression(addWithSuperJSONPropsImport(path), [
-                  decl,
-                  arrayExpression(
-                    propsToBeExcluded?.map((prop) => stringLiteral(prop))
-                  ),
-                ]);
-              }
+        } else if (isApiRoute(filePath)) {
+          const body = path.get('body');
+          const exportDefaultDeclaration = body.find((path) =>
+            isExportDefaultDeclaration(path)
+          );
+          if (exportDefaultDeclaration) {
+            wrapExportDefaultDeclaration(
+              exportDefaultDeclaration,
+              HOFName,
+              importFrom
             );
-          });
+            return;
+          }
+        }
       },
     },
   };

@@ -30,7 +30,7 @@ export const fixNodeFileTrace = () => {
   path.resolve(".blitz/blitz.config.js")
   path.resolve(".next/blitz/db.js")
 }
-export const withNodeFileTrace = (fn: Function) => {
+export const withFixNodeFileTrace = (fn: Function) => {
   fixNodeFileTrace()
   return fn
 }

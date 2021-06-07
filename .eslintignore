@@ -27,6 +27,7 @@ eslint.config.*
 /recipes/*/templates
 /packages/generator/templates
 /packages/cli/lib
+/packages/babel-preset/src/fix-node-file-trace/tests/**
 
 
 // COPIED FROM nextjs/.eslintignore

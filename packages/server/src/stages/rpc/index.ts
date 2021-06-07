@@ -60,11 +60,9 @@ export default getIsomorphicEnhancedResolver(
 const apiHandlerTemplate = (originalPath: string, useTypes: boolean, useDb: boolean) => `
 // This imports the output of getIsomorphicEnhancedResolver()
 import enhancedResolver from '${originalPath}'
-import {getAllMiddlewareForModule, fixNodeFileTrace} from '@blitzjs/core/server'
+import {getAllMiddlewareForModule} from '@blitzjs/core/server'
 import {rpcApiHandler} from '@blitzjs/core/server'
 import path from 'path'
-
-fixNodeFileTrace()
 
 let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}
