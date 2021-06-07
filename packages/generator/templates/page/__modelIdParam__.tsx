@@ -25,7 +25,7 @@ export const __ModelName__ = () => {
 
         <if condition="parentModel">
           <Link
-            href={Routes.Edit__ModelName__Page({ __parentModelId__, __modelId__: __modelName__.id })}
+            href={Routes.Edit__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}
           >
             <a>Edit</a>
           </Link>
@@ -42,7 +42,7 @@ export const __ModelName__ = () => {
             if (window.confirm("This will be deleted")) {
               await delete__ModelName__Mutation({id: __modelName__.id})
               if (process.env.parentModel) {
-                router.push(Routes.__ModelNames__Page({ __parentModelId__ }))
+                router.push(Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! }))
               } else {
                 router.push(Routes.__ModelNames__Page())
               }
@@ -66,7 +66,7 @@ const Show__ModelName__Page: BlitzPage = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
             <a>__ModelNames__</a>
           </Link>
           <else>

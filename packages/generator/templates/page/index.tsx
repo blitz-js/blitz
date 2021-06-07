@@ -15,7 +15,7 @@ export const __ModelNames__List = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
     const [{__modelNames__, hasMore}] = usePaginatedQuery(get__ModelNames__, {
-      where: {__parentModel__: {id: __parentModelId__}},
+      where: {__parentModel__: {id: __parentModelId__!}},
       orderBy: {id: "asc"},
       skip: ITEMS_PER_PAGE * page,
       take: ITEMS_PER_PAGE,
@@ -61,9 +61,16 @@ export const __ModelNames__List = () => {
         <ul>
           {__modelNames__.map((__modelName__) => (
             <li key={__modelName__.id}>
-              <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
-                <a>{__modelName__.name}</a>
-              </Link>
+              <if condition="parentModel">
+                <Link href={Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}>
+                  <a>{__modelName__.name}</a>
+                </Link>               
+                <else>
+                  <Link href={Routes.Show__ModelName__Page({ __modelId__: __modelName__.id })}>
+                    <a>{__modelName__.name}</a>
+                  </Link>
+                </else>
+              </if>
             </li>
           ))}
         </ul>
@@ -93,7 +100,7 @@ const __ModelNames__Page: BlitzPage = () => {
       <div>
         <p>
           <if condition="parentModel">
-            <Link href={Routes.New__ModelName__Page({ __parentModelId__ })}>
+            <Link href={Routes.New__ModelName__Page({ __parentModelId__: __parentModelId__! })}>
               <a>Create __ModelName__</a>
             </Link>
             <else>
