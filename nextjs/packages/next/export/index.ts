@@ -328,7 +328,10 @@ export default async function exportApp(
     }
 
     if (!options.buildExport) {
-      const { isNextImageImported } = await nextExportSpan
+      const {
+        isNextImageImported,
+        isBlitzSessionMiddlewareUsed,
+      } = await nextExportSpan
         .traceChild('is-next-image-imported')
         .traceAsyncFn(() =>
           promises
@@ -336,6 +339,15 @@ export default async function exportApp(
             .then((text) => JSON.parse(text))
             .catch(() => ({}))
         )
+
+      if (isBlitzSessionMiddlewareUsed) {
+        throw new Error(
+          `Blitz sessionMiddleware is not compatible with \`blitz export\`.
+  Possible solutions:
+    - Use \`blitz start\` to run a server, which supports middleware.
+    - Remove \`sessionMiddleware\` import from \`blitz.config.js\`.\n`
+        )
+      }
 
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(

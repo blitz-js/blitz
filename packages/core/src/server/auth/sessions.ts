@@ -143,6 +143,8 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     sessionConfig.isAuthorized,
     "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
+  ;(global as any).__BLITZ_SESSION_MIDDLEWARE_USED = true
+
   global.sessionConfig = {
     ...defaultConfig,
     ...sessionConfig,
@@ -588,7 +590,10 @@ export async function getSessionKernel(
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
-    req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
+    req.method !== "GET" &&
+    req.method !== "OPTIONS" &&
+    req.method !== "HEAD" &&
+    !process.env.DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {

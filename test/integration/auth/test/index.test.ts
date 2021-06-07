@@ -1,5 +1,14 @@
 /* eslint-env jest */
-import {findPort, killApp, launchApp, renderViaHTTP, waitFor} from "lib/blitz-test-utils"
+import fs from "fs-extra"
+import {
+  blitzBuild,
+  blitzExport,
+  findPort,
+  killApp,
+  launchApp,
+  renderViaHTTP,
+  waitFor,
+} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 import rimraf from "rimraf"
@@ -105,5 +114,21 @@ describe("Auth", () => {
       expect(text).toMatch(/authenticated-basic-result/)
       if (browser) await browser.close()
     })
+  })
+})
+
+const appDir = join(__dirname, "../")
+const outdir = join(appDir, "out")
+
+describe("auth - blitz export should not work", () => {
+  it("should build successfully", async () => {
+    await fs.remove(join(appDir, ".next"))
+    const {code} = await blitzBuild(appDir)
+    if (code !== 0) throw new Error(`build failed with status ${code}`)
+  })
+
+  it("should have error during blitz export", async () => {
+    const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
+    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
   })
 })

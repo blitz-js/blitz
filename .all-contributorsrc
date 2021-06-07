@@ -2374,7 +2374,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1357323?v=4",
       "profile": "http://twitter.com/_markeh",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2721,6 +2722,43 @@
       "profile": "http://orlowski.me/",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "AntoineGuestin",
+      "name": "Antoine G",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70888750?v=4",
+      "profile": "https://github.com/AntoineGuestin",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "swinner2",
+      "name": "Sean Winner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6707308?v=4",
+      "profile": "https://github.com/swinner2",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "max-programming",
+      "name": "Max Programming",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51731966?v=4",
+      "profile": "https://usman-s.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sebastianhoitz",
+      "name": "Sebastian Hoitz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/353768?v=4",
+      "profile": "https://makemake.sh",
+      "contributions": [
+        "test",
+        "code"
       ]
     }
   ],

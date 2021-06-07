@@ -7,6 +7,10 @@ export class Export extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    outdir: flags.string({
+      char: "o",
+      description: "set the output dir (defaults to 'out')",
+    }),
   }
 
   async run() {
