@@ -21,8 +21,7 @@ try {
   // noop
 }
 
-const isUsingNpm =
-  Boolean(process.env.npm_execpath) && /node_modules[\\/]npm/.test(process.env.npm_execpath)
+const isUsingNpm = process.env.npm_config_user_agent?.startsWith("npm")
 
 /*
   Adapted from https://github.com/prisma/prisma/blob/974cbeff4a7f616137ce540d0ec88a2a86365892/src/packages/client/scripts/postinstall.js
