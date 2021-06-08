@@ -45,10 +45,14 @@ export interface BlitzConfigNormalized extends BlitzConfig {
 }
 
 export function getProjectRoot() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   return path.dirname(getConfigSrcPath())
 }
 
 export function getConfigSrcPath() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
   if (existsSync(tsPath)) {
     return tsPath
