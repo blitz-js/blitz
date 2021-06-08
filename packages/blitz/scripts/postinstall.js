@@ -21,6 +21,8 @@ try {
   // noop
 }
 
+const isUsingNpm = process.env.npm_config_user_agent?.startsWith("npm")
+
 /*
   Adapted from https://github.com/prisma/prisma/blob/974cbeff4a7f616137ce540d0ec88a2a86365892/src/packages/client/scripts/postinstall.js
 */
@@ -78,7 +80,7 @@ function codegen() {
 
     process.env.BLITZ_GENERATE_IN_POSTINSTALL = root ? root : "true"
 
-    if (!fs.existsSync(path.join(root, "node_modules", "next"))) {
+    if (isUsingNpm && !fs.existsSync(path.join(root, "node_modules", "next"))) {
       // Sometimes with npm the next package is missing because of how
       // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
       debug("Missing next package, manually installing...")
