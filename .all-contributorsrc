@@ -2761,6 +2761,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "garnerp",
+      "name": "garnerp",
+      "avatar_url": "https://avatars.githubusercontent.com/u/737307?v=4",
+      "profile": "https://github.com/garnerp",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
