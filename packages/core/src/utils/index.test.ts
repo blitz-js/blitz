@@ -1,7 +1,7 @@
 import {z} from "zod"
 import {formatZodErrors, validateZodSchema} from "./index"
 
-const validateSchema = (schema, input) => {
+const validateSchema = (schema: any, input: any) => {
   const result = schema.safeParse(input)
   if (result.success) throw new Error("Schema should not return success")
   return result.error.format()
