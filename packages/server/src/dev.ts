@@ -2,7 +2,7 @@ import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {isVersionMatched, saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
-import {buildCustomServer, customServerExists, nextStartDev, startCustomServer} from "./next-utils"
+import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
 import {configureStages} from "./stages"
 
 export async function dev(config: ServerConfig) {
@@ -46,7 +46,6 @@ export async function dev(config: ServerConfig) {
     const blitzConfig = getConfig()
     const watch = blitzConfig.customServer?.hotReload ?? true
 
-    await buildCustomServer()
     await startCustomServer(buildFolder, config, {watch})
   } else {
     await nextStartDev(nextBin, buildFolder, manifest, buildFolder, config)

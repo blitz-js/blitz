@@ -278,6 +278,7 @@ export function buildCustomServer({watch}: CustomServerOptions = {}) {
   }
   return esbuild.build(esbuildOptions)
 }
+
 export function startCustomServer(
   cwd: string,
   config: ServerConfig,
@@ -305,12 +306,7 @@ export function startCustomServer(
           if (code === 0) {
             res()
           } else if (watch && code === RESTART_CODE) {
-            buildCustomServer()
-              .then(() => spawnServer())
-              .catch((err) => {
-                console.error(err)
-                rej(err)
-              })
+            spawnServer()
           } else {
             rej(`server.js failed with status code: ${code}`)
           }
@@ -320,8 +316,10 @@ export function startCustomServer(
           rej(err)
         })
     }
-    const esbuildOptions = getEsbuildOptions()
+
     if (watch) {
+      // Handle build & Starting server
+      const esbuildOptions = getEsbuildOptions()
       esbuildOptions.watch = {
         onRebuild(error) {
           if (error) {
@@ -336,8 +334,13 @@ export function startCustomServer(
           }
         },
       }
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      esbuild.build(esbuildOptions).then(() => {
+        spawnServer()
+      })
+    } else {
+      // No build required, Start server
+      spawnServer()
     }
-
-    spawnServer()
   })
 }
