@@ -1,5 +1,5 @@
 diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
-index 972d57b..f8432cd 100644
+index 972d57b..a8d19eb 100644
 --- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
 @@ -166,7 +166,7 @@ function format(args, messageType, scope) {
@@ -15,7 +15,7 @@ index 972d57b..f8432cd 100644
    },
  
    browser(entrypoint) {
-+    if (entrypoint.directory.includes("packages/config")) {
++    if (/packages[\\/]config/.test(entrypoint.directory)) {
 +      return true
 +    }
      return equal(entrypoint.json.browser, validFields.browser(entrypoint));
@@ -41,25 +41,3 @@ index 972d57b..f8432cd 100644
    if (hasBrowserField) {
      configs.push({
        config: getRollupConfig(pkg, pkg.entrypoints, aliases, "browser", () => {}),
-diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.prod.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.prod.js
-index a8d6c8f..035d741 100644
---- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.prod.js
-+++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.prod.js
-@@ -580,7 +580,7 @@ const isFieldValid = {
-   main: entrypoint => entrypoint.json.main === validFields.main(entrypoint),
-   module: entrypoint => entrypoint.json.module === validFields.module(entrypoint),
-   "umd:main": entrypoint => entrypoint.json["umd:main"] === validFields["umd:main"](entrypoint),
--  browser: entrypoint => equal(entrypoint.json.browser, validFields.browser(entrypoint))
-+  browser: entrypoint => !entrypoint.directory.includes("packages/config") && equal(entrypoint.json.browser, validFields.browser(entrypoint))
- };
- 
- function isUmdNameSpecified(entrypoint) {
-@@ -1331,7 +1331,7 @@ function getRollupConfigs(pkg, aliases) {
-         globals: name => name === entrypoint.json.preconstruct.umdName ? name : getGlobal(pkg.project, name)
-       } ]
-     });
--  }), void 0 !== pkg.entrypoints[0].json.browser && configs.push({
-+  }), void 0 !== pkg.entrypoints[0].json.browser && !["@blitzjs/config"].includes(pkg.entrypoints[0].json.name) && configs.push({
-     config: getRollupConfig(pkg, pkg.entrypoints, aliases, "browser", () => {}),
-     outputs: [ {
-       format: "cjs",

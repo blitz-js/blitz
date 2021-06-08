@@ -335,6 +335,7 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
+      NEXT_TEST_LEGACY_REACT: 1
       HEADLESS: true
 
     steps:
