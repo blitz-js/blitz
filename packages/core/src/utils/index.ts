@@ -25,11 +25,11 @@ export function formatZodErrors(errors: any) {
   return formattedErrors
 }
 
-export function validateZodSchema(schema: any, values: any) {
+export const validateZodSchema = (schema: any) => (values: any): any => {
   try {
     schema.parse(values)
     return {}
   } catch (error) {
-    return formatZodErrors(error.format())
+    return error.format ? formatZodErrors(error.format()) : error.toString()
   }
 }

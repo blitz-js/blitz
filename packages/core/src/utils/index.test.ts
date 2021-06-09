@@ -60,10 +60,10 @@ describe("formatZodErrors", () => {
 
 describe("validateZodSchema", () => {
   it("passes validation", () => {
-    expect(validateZodSchema(Schema, {test: "test"})).toEqual({})
+    expect(validateZodSchema(Schema)({test: "test"})).toEqual({})
   })
 
   it("fails validation", () => {
-    expect(validateZodSchema(Schema, {})).toEqual({test: "Required"})
+    expect(validateZodSchema(Schema)({})).toEqual({test: "Required"})
   })
 })
