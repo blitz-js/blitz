@@ -244,12 +244,46 @@ interface CustomServerOptions {
   watch?: boolean
 }
 
+const getEsbuildOptions = (): esbuild.BuildOptions => {
+  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+  return {
+    entryPoints: [getCustomServerPath()],
+    outfile: getCustomServerBuildPath(),
+    format: "cjs",
+    bundle: true,
+    platform: "node",
+    external: [
+      "blitz",
+      "next",
+      ...Object.keys(require("blitz/package").dependencies),
+      ...Object.keys(pkg.dependencies),
+      ...Object.keys(pkg.devDependencies),
+    ],
+  }
+}
+
+export function buildCustomServer({watch}: CustomServerOptions = {}) {
+  const esbuildOptions = getEsbuildOptions()
+  if (watch) {
+    esbuildOptions.watch = {
+      onRebuild(error) {
+        if (error) {
+          log.error("Failed to re-build custom server")
+        } else {
+          log.newline()
+          log.progress("Custom server changed - rebuilding...")
+        }
+      },
+    }
+  }
+  return esbuild.build(esbuildOptions)
+}
+
 export function startCustomServer(
   cwd: string,
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
-  const serverSrcPath = getCustomServerPath()
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
@@ -283,24 +317,9 @@ export function startCustomServer(
         })
     }
 
-    const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
-
-    const esbuildOptions: esbuild.BuildOptions = {
-      entryPoints: [serverSrcPath],
-      outfile: getCustomServerBuildPath(),
-      format: "cjs",
-      bundle: true,
-      platform: "node",
-      external: [
-        "blitz",
-        "next",
-        ...Object.keys(require("blitz/package").dependencies),
-        ...Object.keys(pkg.dependencies),
-        ...Object.keys(pkg.devDependencies),
-      ],
-    }
-
     if (watch) {
+      // Handle build & Starting server
+      const esbuildOptions = getEsbuildOptions()
       esbuildOptions.watch = {
         onRebuild(error) {
           if (error) {
@@ -315,11 +334,13 @@ export function startCustomServer(
           }
         },
       }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    esbuild.build(esbuildOptions).then(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      esbuild.build(esbuildOptions).then(() => {
+        spawnServer()
+      })
+    } else {
+      // No build required, Start server
       spawnServer()
-    })
+    }
   })
 }

@@ -2639,7 +2639,8 @@
       "profile": "minaabadir.ca",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -2648,7 +2649,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1476561?v=4",
       "profile": "https://github.com/frankiesardo",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -2759,6 +2761,15 @@
       "contributions": [
         "test",
         "code"
+      ]
+    },
+    {
+      "login": "garnerp",
+      "name": "garnerp",
+      "avatar_url": "https://avatars.githubusercontent.com/u/737307?v=4",
+      "profile": "https://github.com/garnerp",
+      "contributions": [
+        "doc"
       ]
     }
   ],

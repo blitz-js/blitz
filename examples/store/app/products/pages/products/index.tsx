@@ -1,9 +1,16 @@
 import {Link, BlitzPage, InferGetStaticPropsType} from "blitz"
-import getProducts, {averagePrice} from "../../queries/getProducts"
+import getProducts from "../../queries/getProducts"
+import {sum} from "lodash"
+import {Product} from "@prisma/client"
 
 // regression test for #1646
 import {getMeSomeQualityHumor} from "../../api"
 console.log("Attention! Must read: " + getMeSomeQualityHumor())
+
+export function averagePrice(products: Product[]) {
+  const prices = products.map((p) => p.price ?? 0)
+  return sum(prices) / prices.length
+}
 
 export const getStaticProps = async () => {
   const {products} = await getProducts({orderBy: {id: "desc"}})
