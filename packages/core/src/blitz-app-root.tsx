@@ -1,10 +1,13 @@
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
+// import Router from "next/router"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {useAuthorizeIf} from "./auth/auth-client"
+import {useSession, useAuthorizeIf} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
+import {RedirectError} from "./errors"
 import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
+import {clientDebug} from "./utils"
 
 const customCSS = `
   body::before {
@@ -44,6 +47,47 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     useAuthorizeIf(Page.authenticate === true)
 
+    // We call useSession so this will rerender anytime session changes
+    useSession({suspense: false})
+    if (typeof window !== "undefined") {
+      // We read directly from publicDataStore.getData().userId instead of useSession
+      // so we can access userId on first render. useSession is always empty on first render
+      if (publicDataStore.getData().userId) {
+        clientDebug("[BlitzInnerRoot] logged in")
+        let {redirectAuthenticatedTo} = Page
+        if (redirectAuthenticatedTo) {
+          if (typeof redirectAuthenticatedTo !== "string") {
+            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
+          }
+          // Router.push(redirectAuthenticatedTo)
+
+          clientDebug("[BlitzInnerRoot] Calling window.location")
+          //@ts-ignore
+          window.location = redirectAuthenticatedTo
+        }
+      } else {
+        clientDebug("[BlitzInnerRoot] logged out")
+        const authenticate = Page.authenticate
+        clientDebug("[BlitzInnerRoot] authenticate", authenticate)
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          // Router.push(url.toString())
+          // clientDebug("[BlitzInnerRoot] Calling window.location")
+          //@ts-ignore
+          // window.location = url.toString()
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
+        }
+      }
+    }
+
     return <Page {...props} />
   }
   for (let [key, value] of Object.entries(Page)) {
@@ -57,29 +101,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    if (typeof window !== "undefined") {
-      if (publicDataStore.getData().userId) {
-        let {redirectAuthenticatedTo} = props.Component
-        if (redirectAuthenticatedTo) {
-          if (typeof redirectAuthenticatedTo !== "string") {
-            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
-          }
-          window.location.replace(redirectAuthenticatedTo)
-        }
-      } else {
-        const authenticate = props.Component.authenticate
-        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
-          let {redirectTo} = authenticate
-          if (typeof redirectTo !== "string") {
-            redirectTo = formatWithValidation(redirectTo)
-          }
-
-          const url = new URL(redirectTo, window.location.href)
-          url.searchParams.append("next", window.location.pathname)
-          window.location.replace(url.toString())
-        }
-      }
-    }
+    clientDebug("[BlitzOuterRoot] render")
     const component = React.useMemo(() => withBlitzInnerWrapper(props.Component), [props.Component])
 
     const noPageFlicker =
@@ -90,6 +112,8 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     useEffect(() => {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
+
+    // if (authError) return null
 
     return (
       <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>

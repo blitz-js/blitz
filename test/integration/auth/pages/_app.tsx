@@ -15,6 +15,12 @@ export default function App({Component, pageProps}: AppProps) {
       FallbackComponent={RootErrorFallback}
       resetKeys={[router.asPath]}
       onReset={useQueryErrorResetBoundary().reset}
+      // onError={(error: any) => {
+      //   if (error.name === "RedirectError") {
+      //     console.log("[RedirectError] - router .push")
+      //     router.push(error.href)
+      //   }
+      // }}
     >
       <Component {...pageProps} />
       <ReactQueryDevtools />
@@ -23,5 +29,11 @@ export default function App({Component, pageProps}: AppProps) {
 }
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
+  const router = useRouter()
+  if (error.name === "RedirectError") {
+    console.log("[RedirectError] - router .push")
+    router.push(error.href)
+    return null
+  }
   return <div id="error">{error.name}</div>
 }

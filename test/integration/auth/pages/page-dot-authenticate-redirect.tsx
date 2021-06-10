@@ -24,7 +24,7 @@ function Content() {
 const Page: BlitzPage = () => {
   return (
     <div id="page">
-      <Suspense fallback={"Loading..."}>
+      <Suspense fallback={"Loading redirect page..."}>
         <Content />
       </Suspense>
     </div>

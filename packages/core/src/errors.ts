@@ -80,3 +80,19 @@ if (process.env.JEST_WORKER_ID === undefined) {
     allowProps: errorProps,
   })
 }
+
+export class RedirectError extends Error {
+  name = "RedirectError"
+  statusCode = 302
+  href: string
+  constructor(href: string) {
+    super(href)
+    this.href = href
+  }
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(NotFoundError, {identifier: "BlitzRedirectError", allowProps: errorProps})
+}
