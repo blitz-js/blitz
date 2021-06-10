@@ -115,6 +115,24 @@ describe("Auth", () => {
       if (browser) await browser.close()
     })
   })
+
+  describe("setting public data for a user", () => {
+    fit("should update all sessions of the user", async () => {
+      const browser = await webdriver(context.appPort, "/set-public-data")
+      await browser.waitForElementByCss("#change-role")
+      await browser.elementByCss("#change-role").click()
+      await browser.waitForElementByCss(".role")
+      // @ts-ignore
+      const roleElementsAfter = await browser.elementsByCss(".role")
+      expect(roleElementsAfter.length).toBe(2)
+      for (const role of roleElementsAfter) {
+        // @ts-ignore
+        const text = await role.getText()
+        expect(text).toMatch(/role: new role/)
+      }
+      if (browser) await browser.close()
+    })
+  })
 })
 
 const appDir = join(__dirname, "../")
