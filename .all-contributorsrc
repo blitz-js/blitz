@@ -2771,6 +2771,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "kivi",
+      "name": "kivi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/366163?v=4",
+      "profile": "https://github.com/kivi",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
