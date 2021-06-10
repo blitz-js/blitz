@@ -1,21 +1,21 @@
 import * as esbuild from "esbuild"
 import fs from "fs"
 import {existsSync, readJSONSync} from "fs-extra"
-import {PublicNextConfig} from "next/dist/next-server/server/config"
+import {NextConfig} from "next/dist/next-server/server/config"
 import path, {join} from "path"
 import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
-type NextExperimental = PublicNextConfig["experimental"]
+type NextExperimental = NextConfig["experimental"]
 
 interface Experimental extends NextExperimental {
   isomorphicResolverImports?: boolean
 }
 
-export interface BlitzConfig extends Omit<PublicNextConfig, "experimental" | "future"> {
+export interface BlitzConfig extends Omit<NextConfig, "experimental" | "future"> {
   target?: string
   experimental?: Experimental
-  future?: PublicNextConfig["future"]
+  future?: NextConfig["future"]
   cli?: {
     clearConsoleOnBlitzDev?: boolean
     httpProxy?: string
