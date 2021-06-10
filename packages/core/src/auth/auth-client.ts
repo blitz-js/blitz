@@ -57,13 +57,11 @@ export const useAuthorize = () => {
 }
 
 export const useAuthorizeIf = (condition?: boolean) => {
-  useEffect(() => {
-    if (condition && !publicDataStore.getData().userId) {
-      const error = new AuthenticationError()
-      error.stack = null!
-      throw error
-    }
-  })
+  if (typeof window !== "undefined" && condition && !publicDataStore.getData().userId) {
+    const error = new AuthenticationError()
+    error.stack = null!
+    throw error
+  }
 }
 
 export const useRedirectAuthenticated = (to: string) => {
