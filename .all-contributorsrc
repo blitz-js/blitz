@@ -2780,6 +2780,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dangreaves",
+      "name": "Dan Greaves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1036142?v=4",
+      "profile": "http://dangreaves.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
