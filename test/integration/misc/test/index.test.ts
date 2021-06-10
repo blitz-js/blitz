@@ -21,7 +21,7 @@ describe("Misc", () => {
       env: {__NEXT_TEST_WITH_DEVTOOL: 1},
     })
 
-    const prerender = ["/body-parser"]
+    const prerender = ["/body-parser", "image-ssr"]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
   afterAll(() => killApp(context.server))
@@ -34,6 +34,16 @@ describe("Misc", () => {
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/query failed/)
+      if (browser) await browser.close()
+    })
+  })
+
+  describe("Image with SSR for configured domains", () => {
+    it("should build and render correctly", async () => {
+      const browser = await webdriver(context.appPort, "/image-ssr")
+      await browser.waitForElementByCss("#avatar")
+      const src = await browser.elementById("avatar").getAttribute("src")
+      expect(src).toContain("github-cover-photo.png")
       if (browser) await browser.close()
     })
   })
