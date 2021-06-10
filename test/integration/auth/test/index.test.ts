@@ -29,6 +29,7 @@ describe("Auth", () => {
       "/login",
       "/noauth-query",
       "/authenticated-query",
+      "/page-dot-authenticate",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
@@ -50,6 +51,14 @@ describe("Auth", () => {
 
     it("should render error for protected query", async () => {
       const browser = await webdriver(context.appPort, "/authenticated-query")
+      await browser.waitForElementByCss("#error")
+      let text = await browser.elementByCss("#error").text()
+      expect(text).toMatch(/AuthenticationError/)
+      if (browser) await browser.close()
+    })
+
+    it("should render error for protected page", async () => {
+      const browser = await webdriver(context.appPort, "/page-dot-authenticate")
       await browser.waitForElementByCss("#error")
       let text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
