@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [master, canary]
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Compressed Size
