@@ -2791,6 +2791,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lksnmnn",
+      "name": "Lukas Neumann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4983285?v=4",
+      "profile": "lksnmnn.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
