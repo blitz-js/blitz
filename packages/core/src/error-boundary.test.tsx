@@ -87,11 +87,11 @@ test("standard use-case", () => {
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in the <Bomb> component:
 
-    at Bomb
-    at ErrorBoundary
+    at Bomb 
+    at ErrorBoundary 
     at div
     at div
-    at App
+    at App 
 
 React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
 `)
@@ -190,8 +190,8 @@ test("withErrorBoundary HOC", () => {
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in one of your React components:
 
-    at error_boundary_1.withErrorBoundary.FallbackComponent
-    at ErrorBoundary
+    at error_boundary_1.withErrorBoundary.FallbackComponent 
+    at ErrorBoundary 
     at withErrorBoundary
 
 React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
@@ -204,8 +204,8 @@ React will try to recreate this component tree from scratch using the error boun
   expect(cleanStack(onErrorComponentStack)).toMatchInlineSnapshot(`
 Object {
   "componentStack": "
-    at error_boundary_1.withErrorBoundary.FallbackComponent
-    at ErrorBoundary
+    at error_boundary_1.withErrorBoundary.FallbackComponent 
+    at ErrorBoundary 
     at withErrorBoundary",
 }
 `)
