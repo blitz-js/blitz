@@ -593,7 +593,7 @@ export async function getSessionKernel(
     req.method !== "GET" &&
     req.method !== "OPTIONS" &&
     req.method !== "HEAD" &&
-    !process.env.DISABLE_CSRF_PROTECTION
+    !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
