@@ -5,6 +5,7 @@ import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
+import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
@@ -52,7 +53,10 @@ process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = getProjectRoot()
-  const path = join(projectRoot, ".next/server/blitz-db.js")
+  let path = join(projectRoot, ".next/server/blitz-db.js")
+  if (!fs.existsSync(path)) {
+    path = join(projectRoot, ".next/serverless/blitz-db.js")
+  }
   // eslint-disable-next-line no-eval -- block webpack from following this module path
   return eval("require")(path).default
 }
