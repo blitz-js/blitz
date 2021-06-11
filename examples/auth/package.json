@@ -35,8 +35,8 @@
     "passport-github2": "0.1.12",
     "passport-twitter": "1.0.4",
     "prisma": "2.24.1",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react": "18.0.0-alpha-01be61c12",
+    "react-dom": "18.0.0-alpha-01be61c12",
     "react-error-boundary": "3.1.1",
     "react-final-form": "6.5.2",
     "zod": "3.0.2"

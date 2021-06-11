@@ -35,8 +35,8 @@
     "@prisma/client": "2.24.1",
     "blitz": "0.37.0",
     "prisma": "2.24.1",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71"
+    "react": "18.0.0-alpha-01be61c12",
+    "react-dom": "18.0.0-alpha-01be61c12"
   },
   "devDependencies": {
     "babel-eslint": "~10.1.0",
