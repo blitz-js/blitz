@@ -1,4 +1,3 @@
-import {WithRouterProps as WithNextRouterProps} from "next/dist/client/with-router"
 import {
   default as NextRouter,
   NextRouter as NextRouterType,
@@ -23,11 +22,11 @@ export interface WithRouterProps {
   router: BlitzRouter
 }
 
-export function withRouter(WrappedComponent: React.ComponentType<WithRouterProps>) {
-  const Wrapper: React.FC<WithNextRouterProps> = ({router}) => {
+export const withRouter: typeof withNextRouter = (WrappedComponent) => {
+  function Wrapper({router, ...props}: any) {
     const query = useRouterQuery()
     const params = useParams()
-    return <WrappedComponent router={{...router, query, params}} />
+    return <WrappedComponent router={{...router, query, params}} {...props} />
   }
   return withNextRouter(Wrapper)
 }

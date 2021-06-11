@@ -27,7 +27,6 @@
     "@prisma/client": "2.x",
     "blitz": "canary",
     "react-dom": "0.0.0-experimental-0eea57724",
-    "react-error-boundary": "3.x",
     "react": "0.0.0-experimental-0eea57724",
     "zod": "3.x"
   },

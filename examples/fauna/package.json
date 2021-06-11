@@ -34,7 +34,6 @@
     "graphql-request": "3.4.0",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-error-boundary": "3.1.1",
     "react-final-form": "6.5.2",
     "secure-password": "4.0.0",
     "zod": "3.0.2"
