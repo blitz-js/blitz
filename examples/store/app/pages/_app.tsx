@@ -1,5 +1,4 @@
-import {AppProps, ErrorComponent, useQueryErrorResetBoundary} from "blitz"
-import {ErrorBoundary} from "react-error-boundary"
+import {AppProps, ErrorBoundary, ErrorComponent, useQueryErrorResetBoundary} from "blitz"
 
 if (typeof window !== "undefined") {
   window["DEBUG_BLITZ"] = 1
