@@ -1,7 +1,6 @@
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
-// import Router from "next/router"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {useSession, useAuthorizeIf} from "./auth/auth-client"
+import {useAuthorizeIf, useSession} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
 import {RedirectError} from "./errors"
@@ -45,10 +44,11 @@ const NoPageFlicker = () => {
 
 export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
-    useAuthorizeIf(Page.authenticate === true)
-
     // We call useSession so this will rerender anytime session changes
     useSession({suspense: false})
+
+    useAuthorizeIf(Page.authenticate === true)
+
     if (typeof window !== "undefined") {
       // We read directly from publicDataStore.getData().userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
@@ -59,16 +59,14 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
           if (typeof redirectAuthenticatedTo !== "string") {
             redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
           }
-          // Router.push(redirectAuthenticatedTo)
 
-          clientDebug("[BlitzInnerRoot] Calling window.location")
-          //@ts-ignore
-          window.location = redirectAuthenticatedTo
+          const error = new RedirectError(redirectAuthenticatedTo)
+          error.stack = null!
+          throw error
         }
       } else {
         clientDebug("[BlitzInnerRoot] logged out")
         const authenticate = Page.authenticate
-        clientDebug("[BlitzInnerRoot] authenticate", authenticate)
         if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {
@@ -77,10 +75,6 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
-          // Router.push(url.toString())
-          // clientDebug("[BlitzInnerRoot] Calling window.location")
-          //@ts-ignore
-          // window.location = url.toString()
           const error = new RedirectError(url.toString())
           error.stack = null!
           throw error
@@ -101,7 +95,6 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    clientDebug("[BlitzOuterRoot] render")
     const component = React.useMemo(() => withBlitzInnerWrapper(props.Component), [props.Component])
 
     const noPageFlicker =
@@ -112,8 +105,6 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     useEffect(() => {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
-
-    // if (authError) return null
 
     return (
       <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>
