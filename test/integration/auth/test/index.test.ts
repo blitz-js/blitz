@@ -30,6 +30,7 @@ describe("Auth", () => {
       "/noauth-query",
       "/authenticated-query",
       "/page-dot-authenticate",
+      "/page-dot-authenticate-redirect",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
@@ -98,6 +99,24 @@ describe("Auth", () => {
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
+      if (browser) await browser.close()
+    })
+
+    it("Page.authenticate = {redirect} should work ", async () => {
+      // Login
+      let browser = await webdriver(context.appPort, "/login")
+      await waitFor(100)
+      await browser.elementByCss("#login").click()
+      await waitFor(100)
+
+      browser = await webdriver(context.appPort, "/page-dot-authenticate-redirect")
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/authenticated-basic-result/)
+      await browser.elementByCss("#logout").click()
+      await waitFor(200)
+
+      expect(await browser.url()).toMatch(/\/login/)
       if (browser) await browser.close()
     })
   })

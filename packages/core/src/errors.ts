@@ -1,4 +1,5 @@
 import SuperJson from "superjson"
+import type {UrlObject} from "url"
 
 const errorProps = ["name", "message", "code", "statusCode", "meta"]
 if (process.env.JEST_WORKER_ID === undefined) {
@@ -79,4 +80,20 @@ if (process.env.JEST_WORKER_ID === undefined) {
     identifier: "BlitzPaginationArgumentError",
     allowProps: errorProps,
   })
+}
+
+export class RedirectError extends Error {
+  name = "RedirectError"
+  statusCode = 302
+  url: UrlObject | string
+  constructor(url: UrlObject | string) {
+    super(typeof url === "object" ? url.href! : url)
+    this.url = url
+  }
+  get _clearStack() {
+    return true
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(NotFoundError, {identifier: "BlitzRedirectError", allowProps: errorProps})
 }

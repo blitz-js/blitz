@@ -1,6 +1,8 @@
 import {Router} from "next/router"
 import * as React from "react"
+import {RedirectError} from "./errors"
 import {RouterContext} from "./router"
+import {clientDebug} from "./utils"
 
 const changedArray = (a: Array<unknown> = [], b: Array<unknown> = []) =>
   //eslint-disable-next-line es5/no-es6-static-methods
@@ -88,7 +90,11 @@ class ErrorBoundary extends React.Component<
     this.setState(initialState)
   }
 
-  componentDidCatch(error: Error, info: React.ErrorInfo) {
+  async componentDidCatch(error: Error, info: React.ErrorInfo) {
+    if (error instanceof RedirectError) {
+      clientDebug("Redirecting from ErrorBoundary to", error.url)
+      await (this.context as Router)?.push(error.url)
+    }
     this.props.onError?.(error, info)
   }
 
@@ -104,7 +110,7 @@ class ErrorBoundary extends React.Component<
   }
 
   handleRouteChange = () => {
-    console.log("Resetting on route change")
+    clientDebug("Resetting error boundary on route change")
     this.reset()
   }
 
@@ -143,7 +149,10 @@ class ErrorBoundary extends React.Component<
         error,
         resetErrorBoundary: this.resetErrorBoundary,
       }
-      if (React.isValidElement(fallback)) {
+      if (error instanceof RedirectError) {
+        // Don't render children because redirect is imminent
+        return null
+      } else if (React.isValidElement(fallback)) {
         return fallback
       } else if (typeof fallbackRender === "function") {
         return fallbackRender(props)
