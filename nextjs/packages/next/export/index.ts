@@ -323,7 +323,7 @@ export default async function exportApp(
 
     if (i18n && !options.buildExport) {
       throw new Error(
-        `i18n support is not compatible with next export. See here for more info on deploying: https://nextjs.org/docs/deployment`
+        `i18n support is not compatible with blitz export. See here for more info on deploying: https://nextjs.org/docs/deployment`
       )
     }
 
@@ -351,7 +351,7 @@ export default async function exportApp(
 
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(
-          `Image Optimization using Blitz.js' default loader is not compatible with \`next export\`.
+          `Image Optimization using Blitz.js' default loader is not compatible with \`blitz export\`.
   Possible solutions:
     - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
