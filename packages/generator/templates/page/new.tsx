@@ -29,7 +29,7 @@ const New__ModelName__Page: BlitzPage = () => {
           try {
             const __modelName__ = await create__ModelName__Mutation(
               process.env.parentModel
-                ? {...values, __parentModelId__}
+                ? {...values, __parentModelId__: __parentModelId__!}
                 : values,
             )
             router.push(
@@ -48,7 +48,7 @@ const New__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
             <a>__ModelNames__</a>
           </Link>
           <else>

@@ -2374,7 +2374,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1357323?v=4",
       "profile": "http://twitter.com/_markeh",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2638,7 +2639,8 @@
       "profile": "minaabadir.ca",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -2647,7 +2649,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1476561?v=4",
       "profile": "https://github.com/frankiesardo",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -2738,7 +2741,66 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/6707308?v=4",
       "profile": "https://github.com/swinner2",
       "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "max-programming",
+      "name": "Max Programming",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51731966?v=4",
+      "profile": "https://usman-s.me",
+      "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "sebastianhoitz",
+      "name": "Sebastian Hoitz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/353768?v=4",
+      "profile": "https://makemake.sh",
+      "contributions": [
+        "test",
+        "code"
+      ]
+    },
+    {
+      "login": "garnerp",
+      "name": "garnerp",
+      "avatar_url": "https://avatars.githubusercontent.com/u/737307?v=4",
+      "profile": "https://github.com/garnerp",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kivi",
+      "name": "kivi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/366163?v=4",
+      "profile": "https://github.com/kivi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dangreaves",
+      "name": "Dan Greaves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1036142?v=4",
+      "profile": "http://dangreaves.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lksnmnn",
+      "name": "Lukas Neumann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4983285?v=4",
+      "profile": "lksnmnn.com",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
       ]
     }
   ],

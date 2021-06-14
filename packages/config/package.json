@@ -1,17 +1,19 @@
 {
   "name": "@blitzjs/config",
-  "version": "0.36.3",
+  "version": "0.37.0",
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
+  "browser": "index-browser.js",
   "main": "dist/blitzjs-config.cjs.js",
   "module": "dist/blitzjs-config.esm.js",
   "types": "dist/blitzjs-config.cjs.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index-browser.js"
   ],
   "keywords": [
     "next.config.js",

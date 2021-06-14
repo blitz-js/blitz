@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.36.3",
+  "version": "0.37.0",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -16,8 +16,7 @@
       "head.ts",
       "image.ts",
       "index.ts",
-      "server/index.ts",
-      "with-blitz.ts"
+      "server/index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -31,12 +30,11 @@
     "dynamic",
     "head",
     "image",
-    "server",
-    "with-blitz"
+    "server"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.36.3",
-    "@blitzjs/display": "0.36.3",
+    "@blitzjs/config": "0.37.0",
+    "@blitzjs/display": "0.37.0",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
@@ -48,7 +46,7 @@
     "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
-    "next": "0.36.3",
+    "next": "0.37.0",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",

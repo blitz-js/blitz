@@ -1,5 +1,13 @@
 /* eslint-env jest */
-import {findPort, killApp, launchApp, renderViaHTTP} from "lib/blitz-test-utils"
+import fs from "fs-extra"
+import {
+  blitzBuild,
+  blitzExport,
+  findPort,
+  killApp,
+  launchApp,
+  renderViaHTTP,
+} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 
@@ -27,6 +35,22 @@ describe("Misc", () => {
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/query failed/)
       if (browser) await browser.close()
+    })
+  })
+
+  const appDir = join(__dirname, "../")
+  const outdir = join(appDir, "out")
+
+  describe("blitz export", () => {
+    it("should build successfully", async () => {
+      await fs.remove(join(appDir, ".next"))
+      const {code} = await blitzBuild(appDir)
+      if (code !== 0) throw new Error(`build failed with status ${code}`)
+    })
+
+    it("should export successfully", async () => {
+      const {code} = await blitzExport(appDir, {outdir})
+      if (code !== 0) throw new Error(`export failed with status ${code}`)
     })
   })
 })

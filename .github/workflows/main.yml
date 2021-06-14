@@ -6,6 +6,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     name: Lint
@@ -26,9 +30,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -72,9 +76,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -140,9 +144,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
       - run: yarn install --frozen-lockfile --check-files
       # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
       #   if: matrix.os == 'windows-latest'
@@ -335,6 +339,7 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
+      NEXT_TEST_LEGACY_REACT: 1
       HEADLESS: true
 
     steps:
@@ -375,9 +380,9 @@ jobs:
             **/node_modules
             /home/runner/.cache/Cypress
             C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v8-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
 
       - run: yarn install --check-files
         if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}

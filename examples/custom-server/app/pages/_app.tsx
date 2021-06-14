@@ -1,31 +1,26 @@
 import {
   AppProps,
+  ErrorBoundary,
+  ErrorFallbackProps,
   ErrorComponent,
-  useRouter,
   AuthenticationError,
   AuthorizationError,
   useQueryErrorResetBoundary,
 } from "blitz"
-import {ErrorBoundary, FallbackProps} from "react-error-boundary"
 import LoginForm from "app/auth/components/LoginForm"
 
 export default function App({Component, pageProps}: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
-  const router = useRouter()
   const {reset} = useQueryErrorResetBoundary()
 
   return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      resetKeys={[router.asPath]}
-      onReset={reset}
-    >
+    <ErrorBoundary FallbackComponent={RootErrorFallback} onReset={reset}>
       {getLayout(<Component {...pageProps} />)}
     </ErrorBoundary>
   )
 }
 
-function RootErrorFallback({error, resetErrorBoundary}: FallbackProps) {
+function RootErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
     return <LoginForm onSuccess={resetErrorBoundary} />
   } else if (error instanceof AuthorizationError) {

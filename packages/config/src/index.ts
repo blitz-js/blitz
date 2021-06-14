@@ -1,21 +1,21 @@
 import * as esbuild from "esbuild"
 import fs from "fs"
 import {existsSync, readJSONSync} from "fs-extra"
-import {PublicNextConfig} from "next/dist/next-server/server/config"
+import {NextConfig} from "next/dist/next-server/server/config"
 import path, {join} from "path"
 import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
-type NextExperimental = PublicNextConfig["experimental"]
+type NextExperimental = NextConfig["experimental"]
 
 interface Experimental extends NextExperimental {
   isomorphicResolverImports?: boolean
 }
 
-export interface BlitzConfig extends Omit<PublicNextConfig, "experimental" | "future"> {
+export interface BlitzConfig extends Omit<NextConfig, "experimental" | "future"> {
   target?: string
   experimental?: Experimental
-  future?: PublicNextConfig["future"]
+  future?: NextConfig["future"]
   cli?: {
     clearConsoleOnBlitzDev?: boolean
     httpProxy?: string
@@ -33,6 +33,9 @@ export interface BlitzConfig extends Omit<PublicNextConfig, "experimental" | "fu
         cookiePrefix?: string
       }
     }[]
+  customServer?: {
+    hotReload?: boolean
+  }
 }
 
 export interface BlitzConfigNormalized extends BlitzConfig {
@@ -42,10 +45,14 @@ export interface BlitzConfigNormalized extends BlitzConfig {
 }
 
 export function getProjectRoot() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   return path.dirname(getConfigSrcPath())
 }
 
 export function getConfigSrcPath() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
   if (existsSync(tsPath)) {
     return tsPath

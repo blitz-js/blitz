@@ -40,7 +40,7 @@ export const Edit__ModelName__ = () => {
               await setQueryData(updated)
               router.push(
                 process.env.parentModel
-                  ? Routes.Show__ModelName__Page({ __parentModelId__, __modelId__: updated.id })
+                  ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: updated.id })
                   : Routes.Show__ModelName__Page({ __modelId__: updated.id }),
               )
             } catch (error) {
@@ -69,7 +69,7 @@ const Edit__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__ })}>
+          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
             <a>__ModelNames__</a>
           </Link>
           <else>

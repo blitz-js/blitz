@@ -1,7 +1,6 @@
 import getError from "app/queries/getError"
-import {useQuery} from "blitz"
+import {ErrorBoundary, useQuery} from "blitz"
 import {Suspense} from "react"
-import {ErrorBoundary} from "react-error-boundary"
 
 function Content() {
   const [result] = useQuery(getError, undefined)

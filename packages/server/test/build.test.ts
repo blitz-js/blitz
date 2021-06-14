@@ -6,6 +6,8 @@ import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "next-utils": {
+      customServerExists: jest.fn().mockReturnValue(Boolean),
+      buildCustomServer: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
     },
     "resolve-bin-async": {
