@@ -74,11 +74,11 @@ describe("Auth", () => {
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-out/)
       await browser.elementByCss("#login").click()
-      await waitFor(200)
+      await waitFor(100)
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-in/)
       await browser.elementByCss("#logout").click()
-      await waitFor(200)
+      await waitFor(100)
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-out/)
 
@@ -95,7 +95,7 @@ describe("Auth", () => {
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
       await browser.elementByCss("#logout").click()
-      await waitFor(200)
+      await waitFor(100)
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
@@ -105,9 +105,9 @@ describe("Auth", () => {
     it("Page.authenticate = {redirect} should work ", async () => {
       // Login
       let browser = await webdriver(context.appPort, "/login")
-      await waitFor(200)
+      await waitFor(100)
       await browser.elementByCss("#login").click()
-      await waitFor(200)
+      await waitFor(100)
 
       browser = await webdriver(context.appPort, "/page-dot-authenticate-redirect")
       await browser.waitForElementByCss("#content")
@@ -128,7 +128,7 @@ describe("Auth", () => {
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-out/)
       await browser.elementByCss("#login").click()
-      await waitFor(200)
+      await waitFor(100)
       text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/logged-in/)
 

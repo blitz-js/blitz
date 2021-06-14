@@ -34,7 +34,7 @@ function Content() {
           onClick={async () => {
             await loginMutation()
 
-            const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"
+            const next = router.query.next ? decodeURIComponent(router.query.next as string) : null
             if (next) {
               await router.push(next)
             }
