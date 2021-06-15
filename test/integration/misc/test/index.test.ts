@@ -21,7 +21,7 @@ describe("Misc", () => {
       env: {__NEXT_TEST_WITH_DEVTOOL: 1},
     })
 
-    const prerender = ["/body-parser", "image-ssr"]
+    const prerender = ["/body-parser", "/image-ssr"]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
   afterAll(() => killApp(context.server))

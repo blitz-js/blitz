@@ -25,22 +25,23 @@
   },
   "dependencies": {
     "@prisma/client": "2.x",
-    "@types/react": "17.x",
-    "@types/preview-email": "2.x",
     "blitz": "canary",
+    "react-dom": "0.0.0-experimental-0eea57724",
+    "react": "0.0.0-experimental-0eea57724",
+    "zod": "3.x"
+  },
+  "devDependencies": {
+    "@types/preview-email": "2.x",
+    "@types/react": "17.x",
     "eslint": "7.x",
     "husky": "6.x",
     "lint-staged": "10.x",
+    "prettier-plugin-prisma": "0.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "preview-email": "3.x",
-    "prettier-plugin-prisma": "0.x",
     "prisma": "2.x",
-    "react": "0.0.0-experimental-0eea57724",
-    "react-dom": "0.0.0-experimental-0eea57724",
-    "react-error-boundary": "3.x",
-    "typescript": "~4.2",
-    "zod": "3.x"
+    "typescript": "~4.2"
   },
   "private": true
 }

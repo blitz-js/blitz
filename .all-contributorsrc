@@ -2741,7 +2741,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/6707308?v=4",
       "profile": "https://github.com/swinner2",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "doc"
       ]
     },
     {
@@ -2770,6 +2772,35 @@
       "profile": "https://github.com/garnerp",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "kivi",
+      "name": "kivi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/366163?v=4",
+      "profile": "https://github.com/kivi",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "dangreaves",
+      "name": "Dan Greaves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1036142?v=4",
+      "profile": "http://dangreaves.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lksnmnn",
+      "name": "Lukas Neumann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4983285?v=4",
+      "profile": "lksnmnn.com",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
       ]
     }
   ],

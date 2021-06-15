@@ -755,6 +755,7 @@ function runTests(dev) {
     expect(html).toMatch(/onmpost:.*pending/)
 
     const browser = await webdriver(appPort, '/on-mount/post-1')
+    await waitFor(100)
     const text = await browser.eval(`document.body.innerHTML`)
     expect(text).toMatch(/onmpost:.*post-1/)
   })

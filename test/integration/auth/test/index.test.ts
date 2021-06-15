@@ -29,6 +29,8 @@ describe("Auth", () => {
       "/login",
       "/noauth-query",
       "/authenticated-query",
+      "/page-dot-authenticate",
+      "/page-dot-authenticate-redirect",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
@@ -50,6 +52,14 @@ describe("Auth", () => {
 
     it("should render error for protected query", async () => {
       const browser = await webdriver(context.appPort, "/authenticated-query")
+      await browser.waitForElementByCss("#error")
+      let text = await browser.elementByCss("#error").text()
+      expect(text).toMatch(/AuthenticationError/)
+      if (browser) await browser.close()
+    })
+
+    it("should render error for protected page", async () => {
+      const browser = await webdriver(context.appPort, "/page-dot-authenticate")
       await browser.waitForElementByCss("#error")
       let text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
@@ -91,6 +101,24 @@ describe("Auth", () => {
       expect(text).toMatch(/AuthenticationError/)
       if (browser) await browser.close()
     })
+
+    it("Page.authenticate = {redirect} should work ", async () => {
+      // Login
+      let browser = await webdriver(context.appPort, "/login")
+      await waitFor(100)
+      await browser.elementByCss("#login").click()
+      await waitFor(100)
+
+      browser = await webdriver(context.appPort, "/page-dot-authenticate-redirect")
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/authenticated-basic-result/)
+      await browser.elementByCss("#logout").click()
+      await waitFor(200)
+
+      expect(await browser.url()).toMatch(/\/login/)
+      if (browser) await browser.close()
+    })
   })
 
   describe("prefetching", () => {
@@ -112,6 +140,24 @@ describe("Auth", () => {
       await browser.waitForElementByCss("#content")
       const text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
+      if (browser) await browser.close()
+    })
+  })
+
+  describe("setting public data for a user", () => {
+    fit("should update all sessions of the user", async () => {
+      const browser = await webdriver(context.appPort, "/set-public-data")
+      await browser.waitForElementByCss("#change-role")
+      await browser.elementByCss("#change-role").click()
+      await browser.waitForElementByCss(".role")
+      // @ts-ignore
+      const roleElementsAfter = await browser.elementsByCss(".role")
+      expect(roleElementsAfter.length).toBe(2)
+      for (const role of roleElementsAfter) {
+        // @ts-ignore
+        const text = await role.getText()
+        expect(text).toMatch(/role: new role/)
+      }
       if (browser) await browser.close()
     })
   })
