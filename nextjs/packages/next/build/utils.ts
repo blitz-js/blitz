@@ -49,14 +49,15 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
-export function collectPages(
+export async function collectPages(
   directory: string,
   pageExtensions: string[]
 ): Promise<string[]> {
-  return recursiveReadDir(
+  const paths = await recursiveReadDir(
     directory,
     new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
   )
+  return paths.map((p) => p.replace(/^\/pages/, ''))
 }
 
 export interface PageInfo {

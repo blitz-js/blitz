@@ -161,7 +161,8 @@ export default async function build(
     setGlobal('telemetry', telemetry)
 
     const publicDir = path.join(dir, 'public')
-    const pagesDir = findPagesDir(dir)
+    // const pagesDir = findPagesDir(dir)
+    const pagesDir = dir //findPagesDir(dir)
     const hasPublicDir = await fileExists(publicDir)
 
     telemetry.record(
@@ -234,6 +235,8 @@ export default async function build(
     const pagePaths: string[] = await nextBuildSpan
       .traceChild('collect-pages')
       .traceAsyncFn(() => collectPages(pagesDir, config.pageExtensions))
+
+    console.log('[collectPages]', pagesDir, config.pageExtensions, pagePaths)
 
     // needed for static exporting since we want to replace with HTML
     // files
