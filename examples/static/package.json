@@ -38,9 +38,7 @@
     "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-final-form": "6.5.2",
-    "typescript": "4.3.2",
-    "zod": "3.0.2"
+    "react-final-form": "6.5.2"
   },
   "devDependencies": {
     "@types/preview-email": "2.0.0",
