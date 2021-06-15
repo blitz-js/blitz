@@ -241,7 +241,7 @@ function removePlaceholder(
   }
 }
 
-export default function Image({
+export function Image({
   src,
   sizes,
   unoptimized = false,
@@ -546,6 +546,8 @@ export default function Image({
     </div>
   )
 }
+
+export default Image
 
 //BUILT IN LOADERS
 
