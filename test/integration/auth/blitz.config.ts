@@ -16,5 +16,8 @@ const config: BlitzConfig = {
       deleteSession: (handle) => db.get("sessions").remove({handle}).write(),
     }),
   ],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 module.exports = config
