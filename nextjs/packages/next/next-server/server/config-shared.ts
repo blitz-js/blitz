@@ -9,7 +9,7 @@ export type DomainLocales = Array<{
   defaultLocale: string
 }>
 
-export type NextConfig = { [key: string]: any } & {
+export type PublicNextConfig = {
   i18n?: {
     locales: string[]
     defaultLocale: string
@@ -44,7 +44,6 @@ export type NextConfig = { [key: string]: any } & {
     reactMode?: 'legacy' | 'concurrent' | 'blocking'
     workerThreads?: boolean
     pageEnv?: boolean
-    optimizeFonts?: boolean
     optimizeImages?: boolean
     optimizeCss?: boolean
     scrollRestoration?: boolean
@@ -52,7 +51,6 @@ export type NextConfig = { [key: string]: any } & {
     stats?: boolean
     externalDir?: boolean
     serialWebpackBuild?: boolean
-    babelMultiThread?: boolean
     conformance?: boolean
     initServer?: () => void
     amp?: {
@@ -60,10 +58,15 @@ export type NextConfig = { [key: string]: any } & {
       validator?: string
       skipValidation?: boolean
     }
-    turboMode: boolean
-    reactRoot: boolean
+    turboMode?: boolean
+    eslint?: boolean
+    reactRoot?: boolean
+    enableBlurryPlaceholder?: boolean
+    disableOptimizedLoading?: boolean
+    gzipSize?: boolean
   }
 }
+export type NextConfig = PublicNextConfig & Record<string, any>
 
 export const defaultConfig: NextConfig = {
   env: [],
@@ -116,7 +119,11 @@ export const defaultConfig: NextConfig = {
     externalDir: false,
     serialWebpackBuild: false,
     turboMode: false,
-    reactRoot: Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0,
+    eslint: false,
+    reactRoot: process.env.NEXT_TEST_LEGACY_REACT ? false : true,
+    enableBlurryPlaceholder: false,
+    disableOptimizedLoading: true,
+    gzipSize: true,
   },
   future: {
     strictPostcssConfiguration: false,

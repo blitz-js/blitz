@@ -1,7 +1,7 @@
-import j from "jscodeshift"
-import {NodePath} from "ast-types/lib/node-path"
-import {Collection} from "jscodeshift/src/Collection"
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {NodePath} from "ast-types/lib/node-path"
+import j from "jscodeshift"
+import {Collection} from "jscodeshift/src/Collection"
 
 function wrapComponentWithBumbagProvider(program: Collection<j.Program>) {
   program
@@ -30,7 +30,7 @@ function wrapComponentWithBumbagProvider(program: Collection<j.Program>) {
 
 function injectInitializeColorModeAndExtractCritical(program: Collection<j.Program>) {
   // Finds body element and injects InitializeColorMode before it.
-  program.find(j.JSXElement, { openingElement: { name: { name: "body" } } }).forEach((path) => {
+  program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
     path.replace(
       j.jsxElement(
@@ -70,7 +70,9 @@ function injectInitializeColorModeAndExtractCritical(program: Collection<j.Progr
 
 export default RecipeBuilder()
   .setName("Bumbag UI")
-  .setDescription(`This will install all necessary dependencies and configure BumbagProvider in your _app and _document`)
+  .setDescription(
+    `This will install all necessary dependencies and configure BumbagProvider in your _app and _document`,
+  )
   .setOwner("me@agusti.me")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({

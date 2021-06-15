@@ -1,7 +1,7 @@
-import {sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
+import {BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
 import db from "./db"
 
-module.exports = {
+const config: BlitzConfig = {
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -17,3 +17,4 @@ module.exports = {
     }),
   ],
 }
+module.exports = config

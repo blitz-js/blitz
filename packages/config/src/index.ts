@@ -1,15 +1,58 @@
 import * as esbuild from "esbuild"
 import fs from "fs"
 import {existsSync, readJSONSync} from "fs-extra"
+import {NextConfig} from "next/dist/next-server/server/config"
 import path, {join} from "path"
 import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
 
+type NextExperimental = NextConfig["experimental"]
+
+interface Experimental extends NextExperimental {
+  isomorphicResolverImports?: boolean
+}
+
+export interface BlitzConfig extends Omit<NextConfig, "experimental" | "future"> {
+  target?: string
+  experimental?: Experimental
+  future?: NextConfig["future"]
+  cli?: {
+    clearConsoleOnBlitzDev?: boolean
+    httpProxy?: string
+    httpsProxy?: string
+    noProxy?: string
+  }
+  log?: {
+    level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+  }
+  middleware?: Record<string, any> &
+    {
+      (req: any, res: any, next: any): Promise<void> | void
+      type?: string
+      config?: {
+        cookiePrefix?: string
+      }
+    }[]
+  customServer?: {
+    hotReload?: boolean
+  }
+}
+
+export interface BlitzConfigNormalized extends BlitzConfig {
+  _meta: {
+    packageName: string
+  }
+}
+
 export function getProjectRoot() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   return path.dirname(getConfigSrcPath())
 }
 
 export function getConfigSrcPath() {
+  // TODO consolidate with nextjs/packages/next/server/lib/utils.ts
+  // IF THIS IS UPDATED, so does the one inside nextjs
   const tsPath = path.resolve(path.join(process.cwd(), "blitz.config.ts"))
   if (existsSync(tsPath)) {
     return tsPath
@@ -76,36 +119,10 @@ export async function buildConfig({watch}: BuildConfigOptions = {}) {
   await esbuild.build(esbuildOptions)
 }
 
-export interface BlitzConfig extends Record<string, unknown> {
-  target?: string
-  experimental?: {
-    isomorphicResolverImports?: boolean
-    reactRoot?: boolean
-  }
-  trailingSlash?: boolean
-  cli?: {
-    clearConsoleOnBlitzDev?: boolean
-    httpProxy?: string
-    httpsProxy?: string
-    noProxy?: string
-  }
-  _meta: {
-    packageName: string
-  }
-  middleware?: Record<string, any> &
-    {
-      (req: any, res: any, next: any): Promise<void> | void
-      type?: string
-      config?: {
-        cookiePrefix?: string
-      }
-    }[]
-}
-
 declare global {
   namespace NodeJS {
     interface Global {
-      blitzConfig: BlitzConfig
+      blitzConfig: BlitzConfigNormalized
     }
   }
 }
@@ -113,7 +130,7 @@ declare global {
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
-export const getConfig = (reload?: boolean): BlitzConfig => {
+export const getConfig = (reload?: boolean): BlitzConfigNormalized => {
   if (global.blitzConfig && Object.keys(global.blitzConfig).length > 0 && !reload) {
     return global.blitzConfig
   }

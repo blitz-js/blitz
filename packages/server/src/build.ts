@@ -3,7 +3,7 @@ import {copy} from "fs-extra"
 import {resolve} from "path"
 import {saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
-import {nextBuild} from "./next-utils"
+import {buildCustomServer, customServerExists, nextBuild} from "./next-utils"
 import {configureStages} from "./stages"
 
 export async function build(config: ServerConfig) {
@@ -36,7 +36,7 @@ export async function build(config: ServerConfig) {
   })
 
   await saveBlitzVersion(buildFolder)
-
+  if (customServerExists()) await buildCustomServer({watch})
   await nextBuild(nextBin, buildFolder, manifest, config)
 
   const rootNextFolder = resolve(rootFolder, ".next")

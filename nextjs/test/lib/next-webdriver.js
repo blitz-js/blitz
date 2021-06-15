@@ -153,12 +153,12 @@ const freshWindow = async () => {
   await browser.switchTo().window(newWindow)
 }
 
-export default async (
+export default async function webdriver(
   appPort,
   path,
   waitHydration = true,
   allowHydrationRetry = false
-) => {
+) {
   if (!initialWindow) {
     initialWindow = await browser.getWindowHandle()
   }

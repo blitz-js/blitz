@@ -86,14 +86,21 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Public data updated")
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
-          clientDebug("Session revoked")
+          clientDebug("Session revoked, clearing publicData")
+          publicDataStore.clear()
           setTimeout(async () => {
-            // Do these in the next tick to prevent various bugs like #2207
+            // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+            clientDebug("Clearing and invalidating react-query cache...")
             await queryClient.cancelQueries()
             await queryClient.resetQueries()
             queryClient.getMutationCache().clear()
-            publicDataStore.clear()
-          }, 0)
+            // We have a 100ms delay here to prevent unnecessary stale queries from running
+            // This prevents the case where you logout on a page with
+            // Page.authenticate = {redirectTo: '/login'}
+            // Without this delay, queries that require authentication on the original page
+            // will still run (but fail because you are now logged out)
+            // Ref: https://github.com/blitz-js/blitz/issues/1935
+          }, 100)
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")
@@ -101,7 +108,7 @@ export const executeRpcCall = <TInput, TResult>(
         }
         if (response.headers.get(HEADER_CSRF_ERROR)) {
           const err = new CSRFTokenMismatchError()
-          delete err.stack
+          err.stack = null!
           throw err
         }
       }
@@ -110,7 +117,7 @@ export const executeRpcCall = <TInput, TResult>(
         const error = new Error(response.statusText)
         ;(error as any).statusCode = response.status
         ;(error as any).path = apiUrl
-        delete error.stack
+        error.stack = null!
         throw error
       } else {
         let payload
@@ -118,7 +125,8 @@ export const executeRpcCall = <TInput, TResult>(
           payload = await response.json()
         } catch (error) {
           const err = new Error(`Failed to parse json from ${apiUrl}`)
-          delete err.stack
+          err.stack = null!
+          throw err
         }
 
         if (payload.error) {
@@ -134,6 +142,7 @@ export const executeRpcCall = <TInput, TResult>(
             error.statusCode = 500
           }
 
+          error.stack = null
           throw error
         } else {
           const data = deserialize({json: payload.result, meta: payload.meta?.result})

@@ -1,5 +1,14 @@
 /* eslint-env jest */
-import {findPort, killApp, launchApp, renderViaHTTP, waitFor} from "lib/blitz-test-utils"
+import fs from "fs-extra"
+import {
+  blitzBuild,
+  blitzExport,
+  findPort,
+  killApp,
+  launchApp,
+  renderViaHTTP,
+  waitFor,
+} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 import rimraf from "rimraf"
@@ -20,6 +29,8 @@ describe("Auth", () => {
       "/login",
       "/noauth-query",
       "/authenticated-query",
+      "/page-dot-authenticate",
+      "/page-dot-authenticate-redirect",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
@@ -41,6 +52,14 @@ describe("Auth", () => {
 
     it("should render error for protected query", async () => {
       const browser = await webdriver(context.appPort, "/authenticated-query")
+      await browser.waitForElementByCss("#error")
+      let text = await browser.elementByCss("#error").text()
+      expect(text).toMatch(/AuthenticationError/)
+      if (browser) await browser.close()
+    })
+
+    it("should render error for protected page", async () => {
+      const browser = await webdriver(context.appPort, "/page-dot-authenticate")
       await browser.waitForElementByCss("#error")
       let text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/AuthenticationError/)
@@ -82,6 +101,24 @@ describe("Auth", () => {
       expect(text).toMatch(/AuthenticationError/)
       if (browser) await browser.close()
     })
+
+    it("Page.authenticate = {redirect} should work ", async () => {
+      // Login
+      let browser = await webdriver(context.appPort, "/login")
+      await waitFor(100)
+      await browser.elementByCss("#login").click()
+      await waitFor(100)
+
+      browser = await webdriver(context.appPort, "/page-dot-authenticate-redirect")
+      await browser.waitForElementByCss("#content")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/authenticated-basic-result/)
+      await browser.elementByCss("#logout").click()
+      await waitFor(200)
+
+      expect(await browser.url()).toMatch(/\/login/)
+      if (browser) await browser.close()
+    })
   })
 
   describe("prefetching", () => {
@@ -105,5 +142,39 @@ describe("Auth", () => {
       expect(text).toMatch(/authenticated-basic-result/)
       if (browser) await browser.close()
     })
+  })
+
+  describe("setting public data for a user", () => {
+    fit("should update all sessions of the user", async () => {
+      const browser = await webdriver(context.appPort, "/set-public-data")
+      await browser.waitForElementByCss("#change-role")
+      await browser.elementByCss("#change-role").click()
+      await browser.waitForElementByCss(".role")
+      // @ts-ignore
+      const roleElementsAfter = await browser.elementsByCss(".role")
+      expect(roleElementsAfter.length).toBe(2)
+      for (const role of roleElementsAfter) {
+        // @ts-ignore
+        const text = await role.getText()
+        expect(text).toMatch(/role: new role/)
+      }
+      if (browser) await browser.close()
+    })
+  })
+})
+
+const appDir = join(__dirname, "../")
+const outdir = join(appDir, "out")
+
+describe("auth - blitz export should not work", () => {
+  it("should build successfully", async () => {
+    await fs.remove(join(appDir, ".next"))
+    const {code} = await blitzBuild(appDir)
+    if (code !== 0) throw new Error(`build failed with status ${code}`)
+  })
+
+  it("should have error during blitz export", async () => {
+    const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
+    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
   })
 })

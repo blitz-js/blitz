@@ -5,6 +5,7 @@ import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
+import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
@@ -52,7 +53,10 @@ process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = getProjectRoot()
-  const path = join(projectRoot, ".next/blitz/db.js")
+  let path = join(projectRoot, ".next/server/blitz-db.js")
+  if (!fs.existsSync(path)) {
+    path = join(projectRoot, ".next/serverless/blitz-db.js")
+  }
   // eslint-disable-next-line no-eval -- block webpack from following this module path
   return eval("require")(path).default
 }
@@ -144,6 +148,8 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     sessionConfig.isAuthorized,
     "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
+  ;(global as any).__BLITZ_SESSION_MIDDLEWARE_USED = true
+
   global.sessionConfig = {
     ...defaultConfig,
     ...sessionConfig,
@@ -577,7 +583,10 @@ export async function getSessionKernel(
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
-    req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
+    req.method !== "GET" &&
+    req.method !== "OPTIONS" &&
+    req.method !== "HEAD" &&
+    !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
   const antiCSRFToken = req.headers[HEADER_CSRF] as string
 
   if (sessionToken) {
@@ -1026,6 +1035,28 @@ export async function setPublicData(
 
   await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
+}
+
+/**
+ * Updates publicData in all sessions
+ *
+ * @param {PublicData["userId"]} userId
+ * @param {Record<any, any>} data
+ */
+export async function setPublicDataForUser(userId: PublicData["userId"], data: Record<any, any>) {
+  // Don't allow updating userId
+  delete data.userId
+
+  const sessions = await global.sessionConfig.getSessions(userId)
+  for (const session of sessions) {
+    // Merge data
+    const publicData = JSON.stringify({
+      ...JSON.parse(session.publicData || ""),
+      ...data,
+    })
+
+    await global.sessionConfig.updateSession(session.handle, {publicData})
+  }
 }
 
 /**

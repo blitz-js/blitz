@@ -328,7 +328,10 @@ export default async function exportApp(
     }
 
     if (!options.buildExport) {
-      const { isNextImageImported } = await nextExportSpan
+      const {
+        isNextImageImported,
+        isBlitzSessionMiddlewareUsed,
+      } = await nextExportSpan
         .traceChild('is-next-image-imported')
         .traceAsyncFn(() =>
           promises
@@ -336,6 +339,15 @@ export default async function exportApp(
             .then((text) => JSON.parse(text))
             .catch(() => ({}))
         )
+
+      if (isBlitzSessionMiddlewareUsed) {
+        throw new Error(
+          `Blitz sessionMiddleware is not compatible with \`blitz export\`.
+  Possible solutions:
+    - Use \`blitz start\` to run a server, which supports middleware.
+    - Remove \`sessionMiddleware\` import from \`blitz.config.js\`.\n`
+        )
+      }
 
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(
@@ -369,6 +381,7 @@ export default async function exportApp(
       defaultLocale: i18n?.defaultLocale,
       domainLocales: i18n?.domains,
       trailingSlash: nextConfig.trailingSlash,
+      disableOptimizedLoading: nextConfig.experimental.disableOptimizedLoading,
     }
 
     const { serverRuntimeConfig, publicRuntimeConfig } = nextConfig
@@ -511,7 +524,7 @@ export default async function exportApp(
     const worker = new Worker(require.resolve('./worker'), {
       maxRetries: 0,
       numWorkers: threads,
-      enableWorkerThreads: true,
+      enableWorkerThreads: nextConfig.experimental.workerThreads,
       exposedMethods: ['default'],
     }) as Worker & { default: typeof exportPage }
 
@@ -541,6 +554,8 @@ export default async function exportApp(
             optimizeFonts: nextConfig.optimizeFonts,
             optimizeImages: nextConfig.experimental.optimizeImages,
             optimizeCss: nextConfig.experimental.optimizeCss,
+            disableOptimizedLoading:
+              nextConfig.experimental.disableOptimizedLoading,
             parentSpanId: pageExportSpan.id,
           })
 

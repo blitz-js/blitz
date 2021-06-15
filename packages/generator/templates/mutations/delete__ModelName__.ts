@@ -1,10 +1,10 @@
 import {resolver} from "blitz"
 import db from "db"
-import * as z from "zod"
+import {z} from "zod"
 
 const Delete__ModelName__ = z.object({
   id: z.number(),
-}).nonstrict()
+})
 
 export default resolver.pipe(
   resolver.zod(Delete__ModelName__),
