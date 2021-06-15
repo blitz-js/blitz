@@ -57,7 +57,7 @@
     "publish-latest": "yarn run publish-prep && lerna publish --no-private --force-publish && manypkg fix && git add . && git commit -m 'bump recipe/example versions (ignore)' --no-verify && git push",
     "publish-danger": "lerna publish --canary --pre-dist-tag danger --preid danger.$(git rev-parse --short HEAD) --allow-branch * --force-publish --no-private --ignore-prepublish",
     "pull-nextjs": "git subrepo pull nextjs -v",
-    "push-nextjs": "git subrepo push nextjs -v"
+    "push-nextjs": "git subrepo clean nextjs && git subrepo push nextjs -v"
   },
   "engines": {
     "node": ">=12"
