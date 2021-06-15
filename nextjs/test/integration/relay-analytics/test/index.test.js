@@ -85,7 +85,7 @@ describe('Analytics relayer', () => {
       value: expect.stringContaining('.'),
     })
 
-    expect(stdout).toMatch('Next.js Analytics')
+    expect(stdout).toMatch('Blitz.js Analytics')
 
     await browser.close()
   })

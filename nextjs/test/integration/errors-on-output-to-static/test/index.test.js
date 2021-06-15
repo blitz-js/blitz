@@ -22,7 +22,7 @@ describe('Errors on output to static', () => {
       }
     )
     expect(results.stdout + results.stderr).toMatch(
-      /The 'static' directory is reserved in Next\.js and can not be used as/
+      /The 'static' directory is reserved in Blitz\.js and can not be used as/
     )
   })
 })

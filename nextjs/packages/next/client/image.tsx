@@ -215,7 +215,7 @@ function defaultImageLoader(loaderProps: ImageLoaderProps) {
     return load({ root: configPath, ...loaderProps })
   }
   throw new Error(
-    `Unknown "loader" found in "next.config.js". Expected: ${VALID_LOADERS.join(
+    `Unknown "loader" found in "blitz.config.js". Expected: ${VALID_LOADERS.join(
       ', '
     )}. Received: ${configLoader}`
   )
@@ -632,7 +632,7 @@ function defaultLoader({
 
       if (!configDomains.includes(parsedSrc.hostname)) {
         throw new Error(
-          `Invalid src prop (${src}) on \`next/image\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`next.config.js\`\n` +
+          `Invalid src prop (${src}) on \`next/image\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`blitz.config.js\`\n` +
             `See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host`
         )
       }

@@ -468,7 +468,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Invalid src prop (https://google.com/test.png) on `next/image`, hostname "google.com" is not configured under images in your `next.config.js`'
+        'Invalid src prop (https://google.com/test.png) on `next/image`, hostname "google.com" is not configured under images in your `blitz.config.js`'
       )
     })
 

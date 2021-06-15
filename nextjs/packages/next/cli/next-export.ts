@@ -36,7 +36,7 @@ const nextExport: cliCommand = (argv) => {
       Usage
         $ next export [options] <dir>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the Blitz.js application.
       If no directory is provided, the current directory will be used.
 
       Options

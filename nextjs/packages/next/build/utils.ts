@@ -718,7 +718,7 @@ export async function buildStaticPaths(
 
       if (entry.locale && !locales?.includes(entry.locale)) {
         throw new Error(
-          `Invalid locale returned from getStaticPaths for ${page}, the locale ${entry.locale} is not specified in next.config.js`
+          `Invalid locale returned from getStaticPaths for ${page}, the locale ${entry.locale} is not specified in blitz.config.js`
         )
       }
       const curLocale = entry.locale || defaultLocale || ''

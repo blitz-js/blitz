@@ -42,7 +42,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(output.stdout).toMatch(
-        new RegExp(`Next\\.js v${pkg.version.replace(/\./g, '\\.')}`)
+        new RegExp(`Blitz\\.js v${pkg.version.replace(/\./g, '\\.')}`)
       )
     })
 
@@ -51,7 +51,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(output.stdout).toMatch(
-        new RegExp(`Next\\.js v${pkg.version.replace(/\./g, '\\.')}`)
+        new RegExp(`Blitz\\.js v${pkg.version.replace(/\./g, '\\.')}`)
       )
     })
   })
@@ -122,7 +122,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
 
@@ -132,7 +132,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
 
@@ -142,7 +142,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
 
@@ -155,7 +155,7 @@ describe('CLI Usage', () => {
       )
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
 
@@ -165,7 +165,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
 
@@ -175,7 +175,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
     })
   })
@@ -364,7 +364,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -382,7 +382,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -400,7 +400,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -418,7 +418,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -436,7 +436,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -454,7 +454,7 @@ describe('CLI Usage', () => {
       })
 
       expect(stderr).not.toMatch(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.'
+        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Blitz.js 11.'
       )
 
       await killApp(instance)
@@ -551,7 +551,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(help.stdout).toMatch(
-        /Allows you to control Next\.js' telemetry collection/
+        /Allows you to control Blitz\.js' telemetry collection/
       )
     })
 
@@ -560,7 +560,7 @@ describe('CLI Usage', () => {
         stdout: true,
       })
       expect(help.stdout).toMatch(
-        /Allows you to control Next\.js' telemetry collection/
+        /Allows you to control Blitz\.js' telemetry collection/
       )
     })
 

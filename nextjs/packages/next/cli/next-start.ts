@@ -35,9 +35,9 @@ const nextStart: cliCommand = (argv) => {
         The application should be compiled with \`next build\` first.
 
       Usage
-        $ next start <dir> -p <port>
+        $ blitz start <dir> -p <port>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the Blitz.js application.
       If no directory is provided, the current directory will be used.
 
       Options

@@ -316,7 +316,7 @@ export default async function build(
 
     if (nestedReservedPages.length) {
       Log.warn(
-        `The following reserved Next.js pages were detected not directly under the pages directory:\n` +
+        `The following reserved Blitz.js pages were detected not directly under the pages directory:\n` +
           nestedReservedPages.join('\n') +
           `\nSee more info here: https://nextjs.org/docs/messages/nested-reserved-page\n`
       )
@@ -1560,7 +1560,7 @@ export default async function build(
 
     if (config.analyticsId) {
       console.log(
-        chalk.bold.green('Next.js Analytics') +
+        chalk.bold.green('Blitz.js Analytics') +
           ' is enabled for this production build. ' +
           "You'll receive a Real Experience Score computed by all of your visitors."
       )

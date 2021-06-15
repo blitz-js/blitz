@@ -1058,7 +1058,7 @@ export default async function getBaseWebpackConfig(
         ...Object.keys(config.env).reduce((acc, key) => {
           if (/^(?:NODE_.+)|^(?:__.+)$/i.test(key)) {
             throw new Error(
-              `The key "${key}" under "env" in next.config.js is not allowed. https://nextjs.org/docs/messages/env-key-not-allowed`
+              `The key "${key}" under "env" in blitz.config.js is not allowed. https://nextjs.org/docs/messages/env-key-not-allowed`
             )
           }
 
@@ -1448,7 +1448,7 @@ export default async function getBaseWebpackConfig(
 
     if (!webpackConfig) {
       throw new Error(
-        'Webpack config is undefined. You may have forgot to return properly from within the "webpack" method of your next.config.js.\n' +
+        'Webpack config is undefined. You may have forgot to return properly from within the "webpack" method of your blitz.config.js.\n' +
           'See more info here https://nextjs.org/docs/messages/undefined-webpack-config'
       )
     }
@@ -1584,7 +1584,7 @@ export default async function getBaseWebpackConfig(
 
     if (foundTsRule) {
       console.warn(
-        '\n@zeit/next-typescript is no longer needed since Next.js has built-in support for TypeScript now. Please remove it from your next.config.js and your .babelrc\n'
+        '\n@zeit/next-typescript is no longer needed since Blitz.js has built-in support for TypeScript now. Please remove it from your blitz.config.js and your .babelrc\n'
       )
     }
   }
