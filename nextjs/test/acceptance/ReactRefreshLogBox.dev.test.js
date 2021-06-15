@@ -1281,7 +1281,7 @@ test('_app top level error shows logbox', async () => {
   expect(await session.getRedboxSource()).toMatchInlineSnapshot(`
       "pages/_app.js (2:16) @ eval
 
-        1 |
+        1 | 
       > 2 |           throw new Error(\\"test\\");
           |                ^
         3 |           function MyApp({ Component, pageProps }) {
@@ -1342,10 +1342,10 @@ test('_document top level error shows logbox', async () => {
       "pages/_document.js (4:16) @ eval
 
         2 |           import Document, { Html, Head, Main, NextScript } from 'next/document'
-        3 |
+        3 | 
       > 4 |           throw new Error(\\"test\\");
           |                ^
-        5 |
+        5 | 
         6 |           class MyDocument extends Document {
         7 |             static async getInitialProps(ctx) {"
 `)
@@ -1420,7 +1420,7 @@ test('empty _app shows logbox', async () => {
       [
         'pages/_app.js',
         `
-
+          
         `,
       ],
     ])
@@ -1450,7 +1450,7 @@ test('empty _document shows logbox', async () => {
       [
         'pages/_document.js',
         `
-
+          
         `,
       ],
     ])
@@ -1512,8 +1512,8 @@ test('_app syntax error shows logbox', async () => {
   expect(await session.getRedboxSource()).toMatchInlineSnapshot(`
       "./pages/_app.js:3:20
       Syntax error: Unexpected token
-
-        1 |
+      
+        1 | 
         2 |           function MyApp({ Component, pageProps }) {
       > 3 |             return <<Component {...pageProps} />;
           |                     ^
@@ -1576,7 +1576,7 @@ test('_document syntax error shows logbox', async () => {
       Syntax error: Unexpected token
 
         2 |           import Document, { Html, Head, Main, NextScript } from 'next/document'
-        3 |
+        3 | 
       > 4 |           class MyDocument extends Document {{
           |                                              ^
         5 |             static async getInitialProps(ctx) {
