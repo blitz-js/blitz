@@ -18,7 +18,7 @@ import {
   SERVER_PROPS_SSG_CONFLICT,
 } from '../lib/constants'
 import prettyBytes from '../lib/pretty-bytes'
-import { recursiveReadDir } from '../lib/recursive-readdir'
+import { recursiveFindPages, recursiveReadDir } from '../lib/recursive-readdir'
 import { getRouteMatcher, getRouteRegex } from '../next-server/lib/router/utils'
 import { isDynamicRoute } from '../next-server/lib/router/utils/is-dynamic'
 import escapePathDelimiters from '../next-server/lib/router/utils/escape-path-delimiters'
@@ -49,15 +49,44 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
+const topLevelFolders = ['pages', 'src', 'app', 'integrations']
+
 export async function collectPages(
   directory: string,
   pageExtensions: string[]
 ): Promise<string[]> {
-  const paths = await recursiveReadDir(
-    directory,
-    new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
+  // const paths = await recursiveFindPages(
+  //   directory,
+  // new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
+  // )
+
+  // TODO
+  //   - add integration test for this
+  //   - only keep files inside pages/ folders
+  //   - only keep path relative to pages/ folder
+
+  let paths: string[] = []
+
+  await Promise.all(
+    topLevelFolders.map(async (topDir) => {
+      const absolutePath = path.join(directory, topDir)
+      try {
+        await fs.access(absolutePath)
+        const thesePaths = await recursiveReadDir(
+          absolutePath,
+          new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
+        )
+        paths.push(...thesePaths)
+      } catch {
+        // top level folder doesn't exist
+      }
+    })
   )
-  return paths.map((p) => p.replace(/^\/pages/, ''))
+
+  paths = paths.flat().sort()
+
+  return paths
+  // return paths.map((p) => p.replace(/^\/pages/, ''))
 }
 
 export interface PageInfo {

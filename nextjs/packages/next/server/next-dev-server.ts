@@ -12,7 +12,6 @@ import { ampValidation } from '../build/output/index'
 import * as Log from '../build/output/log'
 import { PUBLIC_DIR_MIDDLEWARE_CONFLICT } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
-import { findPagesDir } from '../lib/find-pages-dir'
 import loadCustomRoutes, { CustomRoutes } from '../lib/load-custom-routes'
 import { verifyTypeScriptSetup } from '../lib/verifyTypeScriptSetup'
 import {
@@ -107,7 +106,7 @@ export default class DevServer extends Server {
       )
     }
     this.isCustomServer = !options.isNextDevCommand
-    this.pagesDir = findPagesDir(this.dir)
+    this.pagesDir = this.dir
     this.staticPathsWorker = new Worker(
       require.resolve('./static-paths-worker'),
       {
