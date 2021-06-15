@@ -48,7 +48,7 @@
     "testonly": "yarn test:packages && yarn test:examples",
     "testonly:packages": "ultra -r --filter \"packages/*\" --concurrency 15 test",
     "testonly:examples": "ultra -r --filter \"examples/*\" --concurrency 1 test",
-    "reset": "rimraf node_modules && git clean -xfd packages && git clean -xfd nextjs && yarn",
+    "reset": "rimraf node_modules && git clean -xfd packages && git clean -xfd test && git clean -xfd nextjs && yarn",
     "publish-prep": "yarn && yarn build",
     "prepack": "node scripts/prepack.js",
     "postpublish": "rimraf packages/blitz/README.md && git checkout packages/core/package.json && git checkout nextjs/packages/next/package.json",

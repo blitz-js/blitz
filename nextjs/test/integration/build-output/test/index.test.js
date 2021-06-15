@@ -124,51 +124,51 @@ describe('Build Output', () => {
           expect(indexSize.endsWith('B')).toBe(true)
 
           const blitzExtra = 13
-          const blitzExtraGz = 3.15
+          const blitzExtraGz = 3.2
           expect(parseFloat(indexFirstLoad)).toBeCloseTo(
             gz ? 64 + blitzExtraGz : 196 + blitzExtra,
-            1
+            0
           )
           expect(indexFirstLoad.endsWith('kB')).toBe(true)
 
-          expect(parseFloat(err404Size)).toBeCloseTo(gz ? 3.17 : 8.51, 1)
+          expect(parseFloat(err404Size)).toBeCloseTo(gz ? 3.17 : 8.51, 0)
           expect(err404Size.endsWith('kB')).toBe(true)
 
           expect(parseFloat(err404FirstLoad)).toBeCloseTo(
             gz ? 66.9 + blitzExtraGz : 205 + 12,
-            1
+            0
           )
           expect(err404FirstLoad.endsWith('kB')).toBe(true)
 
           expect(parseFloat(sharedByAll)).toBeCloseTo(
             gz ? 63.7 + blitzExtraGz : 196 + blitzExtra,
-            1
+            0
           )
           expect(sharedByAll.endsWith('kB')).toBe(true)
 
           const appSizeValue = _appSize.endsWith('kB')
             ? parseFloat(_appSize)
             : parseFloat(_appSize) / 1000
-          expect(appSizeValue).toBeCloseTo(gz ? 0.799 : 1.63, 1)
+          expect(appSizeValue).toBeCloseTo(gz ? 0.799 : 1.63, 0)
           expect(_appSize.endsWith('kB') || _appSize.endsWith(' B')).toBe(true)
 
           const webpackSizeValue = webpackSize.endsWith('kB')
             ? parseFloat(webpackSize)
             : parseFloat(webpackSize) / 1000
-          expect(webpackSizeValue).toBeCloseTo(gz ? 0.76 : 1.45, 2)
+          expect(webpackSizeValue).toBeCloseTo(gz ? 0.76 : 1.45, 1)
           expect(webpackSize.endsWith('kB') || webpackSize.endsWith(' B')).toBe(
             true
           )
 
           expect(parseFloat(mainSize)).toBeCloseTo(
-            gz ? 20.1 + 0.2 : 62.8 + 0.1,
-            1
+            gz ? 20.1 + 0.2 : 62.8 + 0.2,
+            0
           )
           expect(mainSize.endsWith('kB')).toBe(true)
 
           expect(parseFloat(frameworkSize)).toBeCloseTo(
             gz ? 42.0 + blitzExtraGz : 130 + blitzExtra,
-            1
+            0
           )
           expect(frameworkSize.endsWith('kB')).toBe(true)
         })

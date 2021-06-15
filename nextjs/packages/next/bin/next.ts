@@ -123,7 +123,7 @@ if (command === 'dev') {
   watchFile(`${process.cwd()}/${CONFIG_FILE}`, (cur: any, prev: any) => {
     if (cur.size > 0 || prev.size > 0) {
       console.log(
-        `\n> Found a change in ${CONFIG_FILE}. Restart the server to see the changes in effect.`
+        `\n> Found a change in blitz.config.js. Restart the server to see the changes in effect.`
       )
     }
   })
