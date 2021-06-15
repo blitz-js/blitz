@@ -1,5 +1,1 @@
-module.exports = {
-  images: {
-    domains: ["raw.githubusercontent.com"],
-  },
-}
+module.exports = {}
