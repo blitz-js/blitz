@@ -128,7 +128,6 @@ const {
   loader: configLoader,
   path: configPath,
   domains: configDomains,
-  enableBlurryPlaceholder: configEnableBlurryPlaceholder,
 } =
   ((process.env.__NEXT_IMAGE_OPTS as any) as ImageConfig) || imageConfigDefault
 // sort smallest to largest

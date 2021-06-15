@@ -534,7 +534,7 @@ export class Head extends Component<
       children = this.makeStylesheetInert(children) as any /* blitz */
     }
 
-    children = this.handleDocumentScriptLoaderItems(children)
+    children = this.handleDocumentScriptLoaderItems(children) as any /* blitz */
 
     let hasAmphtmlRel = false
     let hasCanonicalRel = false
