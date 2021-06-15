@@ -53,7 +53,7 @@ export const ESLINT_DEFAULT_DIRS = [
   'pages',
   'components',
   'lib',
-  'src/pages',
-  'src/components',
-  'src/lib',
+  'src',
+  'app',
+  'integrations',
 ]

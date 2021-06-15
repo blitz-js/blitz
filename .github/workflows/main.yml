@@ -326,7 +326,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-          - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
+      - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testSafari:
