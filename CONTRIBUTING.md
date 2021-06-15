@@ -26,3 +26,4 @@
 11. Run `yarn test:nextjs-size` and update tests if there are any failures
 12. Open PR and fix any failing tests
 13. Any doc updates?
+14. `yarn push-nextjs`

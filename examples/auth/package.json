@@ -59,7 +59,7 @@
     "pretty-quick": "3.1.0",
     "preview-email": "3.0.3",
     "start-server-and-test": "1.11.7",
-    "typescript": "4.3.0-beta"
+    "typescript": "4.3.2"
   },
   "private": true
 }
