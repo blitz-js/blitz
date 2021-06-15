@@ -767,12 +767,14 @@ function runTests(dev) {
 
   it('should update with a hash in the URL', async () => {
     const browser = await webdriver(appPort, '/on-mount/post-1#abc')
+    await waitFor(100)
     const text = await browser.eval(`document.body.innerHTML`)
     expect(text).toMatch(/onmpost:.*post-1/)
   })
 
   it('should scroll to a hash on mount', async () => {
     const browser = await webdriver(appPort, '/on-mount/post-1#item-400')
+    await waitFor(100)
 
     const text = await browser.eval(`document.body.innerHTML`)
     expect(text).toMatch(/onmpost:.*post-1/)
@@ -935,6 +937,7 @@ function runTests(dev) {
 
     it('should work with HMR correctly', async () => {
       const browser = await webdriver(appPort, '/post-1/comments')
+      await waitFor(100)
       let text = await browser.eval(`document.documentElement.innerHTML`)
       expect(text).toMatch(/comments for.*post-1/)
 
