@@ -2802,6 +2802,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "dbachrach",
+      "name": "Dustin Bachrach",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45016?v=4",
+      "profile": "dbachrach.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

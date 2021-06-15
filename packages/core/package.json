@@ -14,7 +14,6 @@
       "document.ts",
       "dynamic.ts",
       "head.ts",
-      "image.ts",
       "index.ts",
       "server/index.ts"
     ]
@@ -29,7 +28,6 @@
     "document",
     "dynamic",
     "head",
-    "image",
     "server"
   ],
   "dependencies": {

@@ -11,7 +11,14 @@ export const Edit__ModelName__ = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
-  const [__modelName__, {setQueryData}] = useQuery(get__ModelName__, {id: __modelId__})
+  const [__modelName__, {setQueryData}] = useQuery(
+    get__ModelName__,
+    {id: __modelId__},
+    { 
+      // This ensures the query never refreshes and overwrites the form data while the user is editing.
+      staleTime: Infinity 
+    }
+  )
   const [update__ModelName__Mutation] = useMutation(update__ModelName__)
 
   return (
