@@ -2812,6 +2812,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "ashikka",
+      "name": "Ashikka Gupta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58368421?v=4",
+      "profile": "https://github.com/ashikka",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
