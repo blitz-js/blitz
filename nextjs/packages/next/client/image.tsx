@@ -547,6 +547,8 @@ export function Image({
   )
 }
 
+export default Image
+
 //BUILT IN LOADERS
 
 function normalizeSrc(src: string): string {
