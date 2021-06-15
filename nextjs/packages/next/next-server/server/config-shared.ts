@@ -115,7 +115,7 @@ export const defaultConfig: NextConfig = {
     scrollRestoration: false,
     stats: false,
     externalDir: false,
-    reactRoot: process.env.NEXT_TEST_LEGACY_REACT ? false : true,
+    reactRoot: true,
     disableOptimizedLoading: false,
     gzipSize: true,
     craCompat: false,

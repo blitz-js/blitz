@@ -508,7 +508,11 @@ function renderReactElement(
   const reactEl = fn(shouldHydrate ? markHydrateComplete : markRenderComplete)
   if (process.env.__NEXT_REACT_ROOT) {
     if (!reactRoot) {
-      reactRoot = (ReactDOM as any).createRoot(domEl, {
+      const createRootName =
+        typeof (ReactDOM as any).unstable_createRoot === 'function'
+          ? 'unstable_createRoot'
+          : 'createRoot'
+      reactRoot = (ReactDOM as any)[createRootName](domEl, {
         hydrate: shouldHydrate,
       })
     }
@@ -709,9 +713,9 @@ function doRender(input: RenderRouteInfo): Promise<any> {
       !canceled
     ) {
       const desiredHrefs: Set<string> = new Set(styleSheets.map((s) => s.href))
-      const currentStyleTags: HTMLStyleElement[] = looseToArray<
-        HTMLStyleElement
-      >(document.querySelectorAll('style[data-n-href]'))
+      const currentStyleTags: HTMLStyleElement[] = looseToArray<HTMLStyleElement>(
+        document.querySelectorAll('style[data-n-href]')
+      )
       const currentHrefs: string[] = currentStyleTags.map(
         (tag) => tag.getAttribute('data-n-href')!
       )
