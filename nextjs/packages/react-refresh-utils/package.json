@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@next/react-refresh-utils",
-  "version": "10.2.3",
+  "version": "11.0.0",
   "description": "An experimental package providing utilities for React Refresh.",
   "repository": {
     "url": "vercel/next.js",
@@ -13,7 +13,7 @@
     "*.d.ts",
     "*.js"
   ],
-  "author": "Joe Haddad <timer@zeit.co>",
+  "author": "Joe Haddad <timer@vercel.com>",
   "license": "MIT",
   "scripts": {
     "prepublish": "tsc -d -p tsconfig.json",
