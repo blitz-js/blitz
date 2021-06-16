@@ -1,19 +1,19 @@
 import {z} from "zod"
-import {formatZodErrors, validateZodSchema} from "./index"
+import {formatZodError, validateZodSchema} from "./index"
 
 const validateSchema = (schema: any, input: any) => {
   const result = schema.safeParse(input)
   if (result.success) throw new Error("Schema should not return success")
-  return result.error.format()
+  return result
 }
 
 const Schema = z.object({
   test: z.string(),
 })
 
-describe("formatZodErrors", () => {
+describe("formatZodError", () => {
   it("formats the zod error", () => {
-    expect(formatZodErrors(validateSchema(Schema, {}))).toEqual({
+    expect(formatZodError(validateSchema(Schema, {}).error)).toEqual({
       test: "Required",
     })
   })
@@ -27,9 +27,8 @@ describe("formatZodErrors", () => {
   })
 
   it("formats the nested zod error", () => {
-    expect(
-      formatZodErrors(validateSchema(NestedSchema, {test: "yo", nested: {foo: "yo"}})),
-    ).toEqual({
+    const result = validateSchema(NestedSchema, {test: "yo", nested: {foo: "yo"}})
+    expect(formatZodError(result.error)).toEqual({
       nested: {test: "Required"},
     })
   })
@@ -46,10 +45,10 @@ describe("formatZodErrors", () => {
 
   it("formats 2 levels nested zod error", () => {
     expect(
-      formatZodErrors(
+      formatZodError(
         validateSchema(DoubleNestedSchema, {
           nested: {doubleNested: {}},
-        }),
+        }).error,
       ),
     ).toEqual({
       test: "Required",
