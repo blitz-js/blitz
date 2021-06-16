@@ -129,7 +129,7 @@ describe('no-html-link-for-pages', function () {
     assert.notEqual(report, undefined, 'No lint errors found.')
     assert.equal(
       report.message,
-      "Do not use the HTML <a> tag to navigate to /. Use Link from 'next/link' instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages."
+      "Do not use the HTML <a> tag to navigate to /. Use Link from 'blitz' instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages."
     )
   })
 
@@ -140,7 +140,7 @@ describe('no-html-link-for-pages', function () {
     assert.notEqual(report, undefined, 'No lint errors found.')
     assert.equal(
       report.message,
-      "Do not use the HTML <a> tag to navigate to /list/blah/. Use Link from 'next/link' instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages."
+      "Do not use the HTML <a> tag to navigate to /list/blah/. Use Link from 'blitz' instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages."
     )
   })
 })
