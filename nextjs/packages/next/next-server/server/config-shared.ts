@@ -137,7 +137,7 @@ export function normalizeConfig(phase: string, config: any) {
 
     if (typeof config.then === 'function') {
       throw new Error(
-        '> Promise returned in next config. https://nextjs.org/docs/messages/promise-in-next-config'
+        '> Promise returned in blitz config. https://nextjs.org/docs/messages/promise-in-next-config'
       )
     }
   }

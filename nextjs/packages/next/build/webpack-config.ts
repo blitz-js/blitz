@@ -1474,7 +1474,7 @@ export default async function getBaseWebpackConfig(
 
     if (typeof (webpackConfig as any).then === 'function') {
       console.warn(
-        '> Promise returned in next config. https://nextjs.org/docs/messages/promise-in-next-config'
+        '> Promise returned in blitz config. https://nextjs.org/docs/messages/promise-in-next-config'
       )
     }
   }
