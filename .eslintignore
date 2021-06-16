@@ -29,6 +29,7 @@ eslint.config.*
 /packages/cli/lib
 /packages/babel-preset/src/fix-node-file-trace/tests/**
 /test/integration/**/out/**
+/nextjs/packages/create-next-app
 
 
 // COPIED FROM nextjs/.eslintignore

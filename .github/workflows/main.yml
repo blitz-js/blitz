@@ -245,7 +245,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
       - run: echo ${{needs.build.outputs.docsChange}}
         working-directory: ./
@@ -260,7 +260,7 @@ jobs:
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
-      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/15 -c 3
+      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/20 -c 3
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testElectron:

@@ -151,6 +151,7 @@
     "directory-tree": "2.2.5",
     "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",
+    "eslint-plugin-cypress": "2.11.3",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-es5": "1.5.0",
     "eslint-plugin-flowtype": "~5.2.0",
