@@ -145,11 +145,12 @@ describe("Auth", () => {
   })
 
   describe("setting public data for a user", () => {
-    fit("should update all sessions of the user", async () => {
+    it("should update all sessions of the user", async () => {
       const browser = await webdriver(context.appPort, "/set-public-data")
       await browser.waitForElementByCss("#change-role")
       await browser.elementByCss("#change-role").click()
       await browser.waitForElementByCss(".role")
+      await waitFor(100)
       // @ts-ignore
       const roleElementsAfter = await browser.elementsByCss(".role")
       expect(roleElementsAfter.length).toBe(2)
