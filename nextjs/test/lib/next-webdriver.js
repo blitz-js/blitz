@@ -181,7 +181,7 @@ export default async function webdriver(
 
   // Wait for application to hydrate
   if (waitHydration) {
-    console.log(`\n> Waiting hydration for ${url}\n`)
+    // console.log(`\n> Waiting hydration for ${url}\n`)
 
     const checkHydrated = async () => {
       await browser.executeAsyncScript(function () {
@@ -219,7 +219,7 @@ export default async function webdriver(
       }
     }
 
-    console.log(`\n> Hydration complete for ${url}\n`)
+    // console.log(`\n> Hydration complete for ${url}\n`)
   }
 
   const promiseProp = new Set(['then', 'catch', 'finally'])

@@ -141,8 +141,8 @@ if (process.env.__NEXT_I18N_SUPPORT) {
   }
 }
 
-if (process.env.__NEXT_SCRIPT_LOADER && data.scriptLoader) {
-  const { initScriptLoader } = require('./experimental-script')
+if (data.scriptLoader) {
+  const { initScriptLoader } = require('./script')
   initScriptLoader(data.scriptLoader)
 }
 
@@ -713,9 +713,9 @@ function doRender(input: RenderRouteInfo): Promise<any> {
       !canceled
     ) {
       const desiredHrefs: Set<string> = new Set(styleSheets.map((s) => s.href))
-      const currentStyleTags: HTMLStyleElement[] = looseToArray<
-        HTMLStyleElement
-      >(document.querySelectorAll('style[data-n-href]'))
+      const currentStyleTags: HTMLStyleElement[] = looseToArray<HTMLStyleElement>(
+        document.querySelectorAll('style[data-n-href]')
+      )
       const currentHrefs: string[] = currentStyleTags.map(
         (tag) => tag.getAttribute('data-n-href')!
       )

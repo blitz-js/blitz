@@ -20,6 +20,7 @@ const commands: { [command: string]: () => Promise<cliCommand> } = {
   start: () => import('../cli/next-start').then((i) => i.nextStart),
   export: () => import('../cli/next-export').then((i) => i.nextExport),
   dev: () => import('../cli/next-dev').then((i) => i.nextDev),
+  lint: () => import('../cli/next-lint').then((i) => i.nextLint),
   telemetry: () => import('../cli/next-telemetry').then((i) => i.nextTelemetry),
 }
 
@@ -122,7 +123,7 @@ if (command === 'dev') {
   watchFile(`${process.cwd()}/${CONFIG_FILE}`, (cur: any, prev: any) => {
     if (cur.size > 0 || prev.size > 0) {
       console.log(
-        `\n> Found a change in ${CONFIG_FILE}. Restart the server to see the changes in effect.`
+        `\n> Found a change in blitz.config.js. Restart the server to see the changes in effect.`
       )
     }
   })
