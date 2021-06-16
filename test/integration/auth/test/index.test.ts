@@ -90,7 +90,7 @@ describe("Auth", () => {
       let browser = await webdriver(context.appPort, "/login")
       await browser.elementByCss("#login").click()
 
-      browser = await webdriver(context.appPort, "/authenticated-query")
+      await browser.eval(`window.location = "/authenticated-query"`)
       await browser.waitForElementByCss("#content")
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
@@ -109,7 +109,7 @@ describe("Auth", () => {
       await browser.elementByCss("#login").click()
       await waitFor(100)
 
-      browser = await webdriver(context.appPort, "/page-dot-authenticate-redirect")
+      await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
       await browser.waitForElementByCss("#content")
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
@@ -146,11 +146,18 @@ describe("Auth", () => {
 
   describe("setting public data for a user", () => {
     it("should update all sessions of the user", async () => {
-      const browser = await webdriver(context.appPort, "/set-public-data")
+      const browser = await webdriver(context.appPort, "/login")
+
+      let text = await browser.elementByCss("#content").text()
+      if (text.match(/logged-in/)) {
+        await browser.elementByCss("#logout").click()
+      }
+
+      await browser.eval(`window.location = "/set-public-data"`)
       await browser.waitForElementByCss("#change-role")
       await browser.elementByCss("#change-role").click()
-      await browser.waitForElementByCss(".role")
       await waitFor(500)
+      await browser.waitForElementByCss(".role")
       // @ts-ignore
       const roleElementsAfter = await browser.elementsByCss(".role")
       expect(roleElementsAfter.length).toBe(2)
