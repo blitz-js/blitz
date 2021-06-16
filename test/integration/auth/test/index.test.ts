@@ -114,7 +114,7 @@ describe("Auth", () => {
       let text = await browser.elementByCss("#content").text()
       expect(text).toMatch(/authenticated-basic-result/)
       await browser.elementByCss("#logout").click()
-      await waitFor(200)
+      await waitFor(500)
 
       expect(await browser.url()).toMatch(/\/login/)
       if (browser) await browser.close()
@@ -150,7 +150,7 @@ describe("Auth", () => {
       await browser.waitForElementByCss("#change-role")
       await browser.elementByCss("#change-role").click()
       await browser.waitForElementByCss(".role")
-      await waitFor(300)
+      await waitFor(500)
       // @ts-ignore
       const roleElementsAfter = await browser.elementsByCss(".role")
       expect(roleElementsAfter.length).toBe(2)
