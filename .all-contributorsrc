@@ -2822,6 +2822,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "deini",
+      "name": "Daniel Almaguer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2752665?v=4",
+      "profile": "https://github.com/deini",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
