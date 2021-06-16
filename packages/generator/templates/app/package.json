@@ -26,8 +26,8 @@
   "dependencies": {
     "@prisma/client": "2.x",
     "blitz": "canary",
-    "react-dom": "0.0.0-experimental-0eea57724",
-    "react": "0.0.0-experimental-0eea57724",
+    "react-dom": "alpha",
+    "react": "alpha",
     "zod": "3.x"
   },
   "devDependencies": {
