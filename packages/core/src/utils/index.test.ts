@@ -18,32 +18,32 @@ describe("formatZodError", () => {
     })
   })
 
-  const NestedSchema = z.object({
-    test: z.string(),
-    nested: z.object({
-      foo: z.string(),
-      test: z.string(),
-    }),
-  })
-
   it("formats the nested zod error", () => {
+    const NestedSchema = z.object({
+      test: z.string(),
+      nested: z.object({
+        foo: z.string(),
+        test: z.string(),
+      }),
+    })
+
     const result = validateSchema(NestedSchema, {test: "yo", nested: {foo: "yo"}})
     expect(formatZodError(result.error)).toEqual({
       nested: {test: "Required"},
     })
   })
 
-  const DoubleNestedSchema = z.object({
-    test: z.string(),
-    nested: z.object({
-      test: z.string(),
-      doubleNested: z.object({
-        test: z.string(),
-      }),
-    }),
-  })
-
   it("formats 2 levels nested zod error", () => {
+    const DoubleNestedSchema = z.object({
+      test: z.string(),
+      nested: z.object({
+        test: z.string(),
+        doubleNested: z.object({
+          test: z.string(),
+        }),
+      }),
+    })
+
     expect(
       formatZodError(
         validateSchema(DoubleNestedSchema, {
@@ -53,6 +53,28 @@ describe("formatZodError", () => {
     ).toEqual({
       test: "Required",
       nested: {test: "Required", doubleNested: {test: "Required"}},
+    })
+  })
+
+  it("formats arrays", () => {
+    const NestedSchema = z.object({
+      students: z.array(
+        z.object({
+          name: z.string(),
+        }),
+      ),
+      data: z.object({
+        1: z.literal(true),
+      }),
+    })
+
+    const result = validateSchema(NestedSchema, {
+      students: [{name: "hi"}, {wat: true}, {name: true}],
+      data: {},
+    })
+    expect(formatZodError(result.error)).toEqual({
+      students: [undefined, {name: "Required"}, {name: "Expected string, received boolean"}],
+      data: [undefined, "Expected true, received undefined"],
     })
   })
 })

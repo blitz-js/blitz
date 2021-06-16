@@ -11,7 +11,6 @@ export function clientDebug(...args: any) {
 
 export function formatZodError(error: ZodError) {
   if (!error || typeof error.format !== "function") {
-    console.log("input", error.name, error)
     throw new Error("The argument to formatZodError must be a zod error with error.format()")
   }
 
@@ -28,8 +27,14 @@ export function recursiveFormatZodErrors(errors: any) {
     }
 
     if (errors[key]._errors[0]) {
+      if (!isNaN(key) && !Array.isArray(formattedErrors)) {
+        formattedErrors = []
+      }
       formattedErrors[key] = errors[key]._errors[0]
     } else {
+      if (!isNaN(key) && !Array.isArray(formattedErrors)) {
+        formattedErrors = []
+      }
       formattedErrors[key] = recursiveFormatZodErrors(errors[key])
     }
   }
