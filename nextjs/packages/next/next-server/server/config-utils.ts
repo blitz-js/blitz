@@ -12,7 +12,7 @@ function reasonMessage(reason: CheckReasons) {
     case 'default':
       return 'Enabled by default'
     case 'flag-disabled':
-      return 'webpack5 flag is set to false in next.config.js'
+      return 'webpack5 flag is set to false in blitz.config.js'
     case 'test-mode':
       return 'internal test mode'
     default:
@@ -62,7 +62,7 @@ export async function loadWebpackHook(phase: string, dir: string) {
 
   if (usesRemovedFlag) {
     throw new Error(
-      '`future.webpack5` in `next.config.js` has moved to the top level `webpack5` flag https://nextjs.org/docs/messages/future-webpack5-moved-to-webpack5'
+      '`future.webpack5` in `blitz.config.js` has moved to the top level `webpack5` flag https://nextjs.org/docs/messages/future-webpack5-moved-to-webpack5'
     )
   }
 
