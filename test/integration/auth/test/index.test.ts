@@ -150,7 +150,7 @@ describe("Auth", () => {
       await browser.waitForElementByCss("#change-role")
       await browser.elementByCss("#change-role").click()
       await browser.waitForElementByCss(".role")
-      await waitFor(100)
+      await waitFor(300)
       // @ts-ignore
       const roleElementsAfter = await browser.elementsByCss(".role")
       expect(roleElementsAfter.length).toBe(2)
