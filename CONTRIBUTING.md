@@ -14,6 +14,7 @@
    2. `git fetch --all`
    3. `git merge v10.2.0` (change the version to be the version you are updating to)
    4. Resolve all merge conflicts and complete merge
+      - Run `rm -rf examples && git add examples`
    5. `git push`
 4. Run `yarn pull next-nextjs`
    - If it fails, run `git subrepo clean nextjs` and try again
