@@ -9,6 +9,7 @@ const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
   Image: 'next/image',
+  Script: 'next/script',
 
   Head: '@blitzjs/core/head',
 
