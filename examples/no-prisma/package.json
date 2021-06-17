@@ -26,7 +26,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.37.0",
+    "blitz": "0.38.0",
     "knex": "0.21.16",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
@@ -39,14 +39,13 @@
     "eslint-config-react-app": "~6.0.0",
     "eslint-plugin-flowtype": "~5.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "~6.4.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "5.1.2",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",
-    "pretty-quick": "3.1.0",
-    "typescript": "4.1.5"
+    "pretty-quick": "3.1.0"
   },
   "private": true
 }

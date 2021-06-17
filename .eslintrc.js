@@ -81,6 +81,19 @@ module.exports = {
       },
     },
     {
+      files: ["examples/**"],
+      plugins: ["cypress"],
+      parserOptions: {
+        project: null,
+      },
+      env: {
+        "cypress/globals": true,
+      },
+      rules: {
+        "simple-import-sort/imports": "off",
+      },
+    },
+    {
       files: ["packages/cli/src/commands/**/*"],
       rules: {
         "require-await": "off",

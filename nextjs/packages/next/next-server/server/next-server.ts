@@ -1444,6 +1444,7 @@ export default class Server {
     opts: RenderOptsPartial
   ): Promise<string | null> {
     const is404Page = pathname === '/404'
+    const is500Page = pathname === '/500'
 
     const isLikeServerless =
       typeof components.Component === 'object' &&
@@ -1565,7 +1566,7 @@ export default class Server {
               : resolvedUrlPathname
           }${query.amp ? '.amp' : ''}`
 
-    if (is404Page && isSSG) {
+    if ((is404Page || is500Page) && isSSG) {
       ssgCacheKey = `${locale ? `/${locale}` : ''}${pathname}${
         query.amp ? '.amp' : ''
       }`

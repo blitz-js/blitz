@@ -1,14 +1,5 @@
 /* eslint-env jest */
-import fs from "fs-extra"
-import {
-  blitzBuild,
-  blitzExport,
-  findPort,
-  killApp,
-  launchApp,
-  renderViaHTTP,
-  waitFor,
-} from "lib/blitz-test-utils"
+import {findPort, killApp, launchApp, renderViaHTTP, waitFor} from "lib/blitz-test-utils"
 import webdriver from "lib/next-webdriver"
 import {join} from "path"
 import rimraf from "rimraf"

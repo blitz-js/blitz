@@ -36,7 +36,7 @@ function isIgnoredPlugin(pluginPath: string): boolean {
     `${chalk.yellow.bold('Warning')}: Please remove the ${chalk.underline(
       plugin
     )} plugin from your PostCSS configuration. ` +
-      `This plugin is automatically configured by Next.js.\n` +
+      `This plugin is automatically configured by Blitz.js.\n` +
       'Read more: https://nextjs.org/docs/messages/postcss-ignored-plugin'
   )
   return true

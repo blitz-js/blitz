@@ -18,7 +18,7 @@ describe('Export with default loader next/image component', () => {
   it('should have error during next export', async () => {
     const { stderr } = await nextExport(appDir, { outdir }, { stderr: true })
     expect(stderr).toContain(
-      "Image Optimization using Next.js' default loader is not compatible with `next export`."
+      "Image Optimization using Blitz.js' default loader is not compatible with `blitz export`."
     )
   })
 })

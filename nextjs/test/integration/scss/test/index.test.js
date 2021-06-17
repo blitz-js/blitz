@@ -39,7 +39,7 @@ describe('SCSS Support', () => {
       expect(code).toBe(1)
       expect(stderr).toContain('Failed to compile.')
       expect(stderr).toContain(
-        "To use Next.js' built-in Sass support, you first need to install `sass`."
+        "To use Blitz.js' built-in Sass support, you first need to install `sass`."
       )
       expect(stderr).toContain(
         'Run `npm i sass` or `yarn add sass` inside your workspace.'

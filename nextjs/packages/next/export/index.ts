@@ -251,13 +251,13 @@ export default async function exportApp(
 
     if (outDir === join(dir, 'public')) {
       throw new Error(
-        `The 'public' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
+        `The 'public' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
       )
     }
 
     if (outDir === join(dir, 'static')) {
       throw new Error(
-        `The 'static' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
+        `The 'static' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
       )
     }
 
@@ -323,7 +323,7 @@ export default async function exportApp(
 
     if (i18n && !options.buildExport) {
       throw new Error(
-        `i18n support is not compatible with next export. See here for more info on deploying: https://nextjs.org/docs/deployment`
+        `i18n support is not compatible with blitz export. See here for more info on deploying: https://nextjs.org/docs/deployment`
       )
     }
 
@@ -351,11 +351,11 @@ export default async function exportApp(
 
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(
-          `Image Optimization using Next.js' default loader is not compatible with \`next export\`.
+          `Image Optimization using Blitz.js' default loader is not compatible with \`blitz export\`.
   Possible solutions:
-    - Use \`next start\` to run a server, which includes the Image Optimization API.
+    - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
-    - Configure a third-party loader in \`next.config.js\`.
+    - Configure a third-party loader in \`blitz.config.js\`.
     - Use the \`loader\` prop for \`next/image\`.
   Read more: https://nextjs.org/docs/messages/export-image-api`
         )
@@ -470,7 +470,7 @@ export default async function exportApp(
       if (!options.silent) {
         Log.warn(
           chalk.yellow(
-            `Statically exporting a Next.js application via \`next export\` disables API routes.`
+            `Statically exporting a Blitz.js application via \`next export\` disables API routes.`
           ) +
             `\n` +
             chalk.yellow(

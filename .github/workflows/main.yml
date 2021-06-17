@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize]
 
 concurrency:
-  group: ${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -30,9 +30,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -76,9 +76,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -144,9 +144,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v12-
       - run: yarn install --frozen-lockfile --check-files
       # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
       #   if: matrix.os == 'windows-latest'
@@ -245,7 +245,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
       - run: echo ${{needs.build.outputs.docsChange}}
         working-directory: ./
@@ -260,7 +260,7 @@ jobs:
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
-      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/10 -c 3
+      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/20 -c 3
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testElectron:
@@ -308,95 +308,6 @@ jobs:
     steps:
       - run: exit 0
 
-  testFutureDependencies:
-    name: Nextjs - Webpack 5 (Basic, Production, Acceptance)
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      NEXT_TELEMETRY_DISABLED: 1
-      NEXT_TEST_JOB: 1
-      HEADLESS: true
-      NEXT_PRIVATE_TEST_WEBPACK5_MODE: 1
-
-    steps:
-      - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ github.sha }}
-
-      - run: xvfb-run node run-tests.js test/integration/{fallback-modules,link-ref,production,basic,async-modules,font-optimization,ssr-ctx}/test/index.test.js test/acceptance/*.test.js
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-        working-directory: nextjs
-
-  testLegacyReact:
-    name: Nextjs - React 16 + Webpack 4 (Basic, Production, Acceptance)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
-    env:
-      NEXT_TELEMETRY_DISABLED: 1
-      NEXT_TEST_JOB: 1
-      NEXT_TEST_LEGACY_REACT: 1
-      HEADLESS: true
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 25
-
-      - run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
-        id: docs-change
-
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: cat package.json | jq '.resolutions.react = "^16.14.0"' > package.json.tmp && mv package.json.tmp package.json
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: cat package.json | jq '.resolutions."react-dom" = "^16.14.0"' > package.json.tmp && mv package.json.tmp package.json
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - name: Use Node.js
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-      - name: Get yarn cache directory path
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v10-
-
-      - run: yarn install --check-files
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: yarn list react react-dom
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: yarn build:nextjs
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-
-      - run: xvfb-run node run-tests.js test/integration/{link-ref,production,basic,async-modules,font-optimization,ssr-ctx,worker-loader}/test/index.test.js test/acceptance/*.test.js
-        if: ${{ steps.docs-change.outputs.DOCS_CHANGE != 'docs only change' }}
-        working-directory: nextjs
-
   testFirefox:
     name: Nextjs - Test Firefox (production)
     defaults:
@@ -406,7 +317,7 @@ jobs:
     needs: build
     env:
       HEADLESS: true
-      BROWSERNAME: "firefox"
+      BROWSER_NAME: "firefox"
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
@@ -415,7 +326,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: node run-tests.js test/integration/production/test/index.test.js
+      - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testSafari:
@@ -427,7 +338,7 @@ jobs:
     needs: build
     env:
       BROWSERSTACK: true
-      BROWSERNAME: "safari"
+      BROWSER_NAME: "safari"
       NEXT_TELEMETRY_DISABLED: 1
       SKIP_LOCAL_SELENIUM_SERVER: true
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -439,7 +350,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production/test/index.test.js'
+      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testSafariOld:

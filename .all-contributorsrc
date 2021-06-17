@@ -2802,6 +2802,35 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "dbachrach",
+      "name": "Dustin Bachrach",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45016?v=4",
+      "profile": "dbachrach.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "ashikka",
+      "name": "Ashikka Gupta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58368421?v=4",
+      "profile": "https://github.com/ashikka",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "deini",
+      "name": "Daniel Almaguer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2752665?v=4",
+      "profile": "https://github.com/deini",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
