@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
 import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
-import { fileExists } from '../../lib/file-exists'
+import { recursiveFindPages } from '../../lib/recursive-readdir'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)
@@ -22,26 +22,41 @@ export async function findPageFile(
   normalizedPagePath: string,
   pageExtensions: string[]
 ): Promise<string | null> {
-  const foundPagePaths: string[] = []
-
   const page = denormalizePagePath(normalizedPagePath)
 
-  for (const extension of pageExtensions) {
-    if (!normalizedPagePath.endsWith('/index')) {
-      const relativePagePath = `${page}.${extension}`
-      const pagePath = join(rootDir, relativePagePath)
+  // TODO - debounce this call to improve perf
+  const allPages = await recursiveFindPages(
+    rootDir,
+    new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
+  )
 
-      if (await fileExists(pagePath)) {
-        foundPagePaths.push(relativePagePath)
-      }
-    }
+  const nameMatch =
+    page === '/'
+      ? normalizedPagePath
+      : `(${normalizedPagePath}|${normalizedPagePath}/index/)`
 
-    const relativePagePathWithIndex = join(page, `index.${extension}`)
-    const pagePathWithIndex = join(rootDir, relativePagePathWithIndex)
-    if (await fileExists(pagePathWithIndex)) {
-      foundPagePaths.push(relativePagePathWithIndex)
-    }
-  }
+  const foundPagePaths = allPages.filter((path) =>
+    path.match(
+      new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+    )
+  )
+
+  // for (const extension of pageExtensions) {
+  //   if (!normalizedPagePath.endsWith('/index')) {
+  //     const relativePagePath = `${page}.${extension}`
+  //     const pagePath = join(rootDir, relativePagePath)
+  //
+  //     if (await fileExists(pagePath)) {
+  //       foundPagePaths.push(relativePagePath)
+  //     }
+  //   }
+  //
+  //   const relativePagePathWithIndex = join(page, `index.${extension}`)
+  //   const pagePathWithIndex = join(rootDir, relativePagePathWithIndex)
+  //   if (await fileExists(pagePathWithIndex)) {
+  //     foundPagePaths.push(relativePagePathWithIndex)
+  //   }
+  // }
 
   if (foundPagePaths.length < 1) {
     return null

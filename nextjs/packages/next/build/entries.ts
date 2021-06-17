@@ -23,18 +23,20 @@ export function createPagesMapping(
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
       let page = `${pagePath
+        .replace(/^.*?\/pages\//, '/')
+        .replace(/^.*?\/api\//, '/api/')
         .replace(new RegExp(`\\.+(${extensions.join('|')})$`), '')
         .replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
-      const pageKey = page === '' ? '/' : page
+      let pageKey = page === '' ? '/' : page
 
       if (pageKey in result) {
         warn(
           `Duplicate page detected. ${chalk.cyan(
-            join('pages', previousPages[pageKey])
-          )} and ${chalk.cyan(
-            join('pages', pagePath)
-          )} both resolve to ${chalk.cyan(pageKey)}.`
+            previousPages[pageKey]
+          )} and ${chalk.cyan(pagePath)} both resolve to ${chalk.cyan(
+            pageKey
+          )}.`
         )
       } else {
         previousPages[pageKey] = pagePath

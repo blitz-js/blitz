@@ -40,3 +40,48 @@ export async function recursiveReadDir(
 
   return arr.sort()
 }
+
+export async function recursiveFindPages(
+  dir: string,
+  filter: RegExp,
+  ignore?: RegExp,
+  arr: string[] = [],
+  rootDir: string = dir
+): Promise<string[]> {
+  let folders = await promises.readdir(dir)
+
+  if (dir === rootDir) {
+    folders = folders.filter((folder) =>
+      ['pages', 'src', 'app', 'integrations'].includes(folder)
+    )
+  }
+
+  await Promise.all(
+    folders.map(async (part: string) => {
+      const absolutePath = join(dir, part)
+      if (ignore && ignore.test(part)) return
+
+      const pathStat = await promises.stat(absolutePath)
+
+      if (pathStat.isDirectory()) {
+        await recursiveFindPages(absolutePath, filter, ignore, arr, rootDir)
+        return
+      }
+
+      if (!filter.test(part)) {
+        return
+      }
+
+      const relativeFromRoot = absolutePath.replace(rootDir, '')
+      if (
+        /[\\/]pages[\\/]/.test(relativeFromRoot) ||
+        /[\\/]api[\\/]/.test(relativeFromRoot)
+      ) {
+        arr.push(relativeFromRoot)
+        return
+      }
+    })
+  )
+
+  return arr.sort()
+}

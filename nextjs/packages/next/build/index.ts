@@ -238,8 +238,6 @@ export default async function build(
       .traceChild('collect-pages')
       .traceAsyncFn(() => collectPages(pagesDir, config.pageExtensions))
 
-    console.log('[collectPages]', pagesDir, config.pageExtensions, pagePaths)
-
     // needed for static exporting since we want to replace with HTML
     // files
     const allStaticPages = new Set<string>()
