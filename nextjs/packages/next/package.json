@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.37.0",
+  "version": "0.38.0",
   "nextjsVersion": "11.0.0",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
