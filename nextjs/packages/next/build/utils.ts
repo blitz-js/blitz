@@ -49,16 +49,14 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
-export async function collectPages(
+export function collectPages(
   directory: string,
   pageExtensions: string[]
 ): Promise<string[]> {
-  const paths = await recursiveFindPages(
+  return recursiveFindPages(
     directory,
     new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
   )
-
-  return paths
 }
 
 export interface PageInfo {

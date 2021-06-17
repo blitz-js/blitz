@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
 import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
+// import { fileExists } from '../../lib/file-exists'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
@@ -22,24 +23,29 @@ export async function findPageFile(
   normalizedPagePath: string,
   pageExtensions: string[]
 ): Promise<string | null> {
+  // console.log('[findPageFile]', { rootDir, normalizedPagePath })
+
   const page = denormalizePagePath(normalizedPagePath)
 
-  // TODO - debounce this call to improve perf
   const allPages = await recursiveFindPages(
     rootDir,
     new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
   )
+  // console.log('allPages', allPages)
 
   const nameMatch =
     page === '/'
       ? normalizedPagePath
-      : `(${normalizedPagePath}|${normalizedPagePath}/index/)`
-
+      : `(${normalizedPagePath}|${normalizedPagePath}/index)`
   const foundPagePaths = allPages.filter((path) =>
     path.match(
       new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
     )
   )
+  // console.log(
+  //   new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+  // )
+  // console.log('FOUND', foundPagePaths)
 
   // for (const extension of pageExtensions) {
   //   if (!normalizedPagePath.endsWith('/index')) {

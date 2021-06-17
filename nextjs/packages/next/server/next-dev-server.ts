@@ -327,6 +327,7 @@ export default class DevServer extends Server {
   }
 
   protected async hasPage(pathname: string): Promise<boolean> {
+    console.log('[next-dev-server] hasPage', pathname)
     let normalizedPath: string
 
     try {
@@ -344,6 +345,7 @@ export default class DevServer extends Server {
       normalizedPath,
       this.nextConfig.pageExtensions
     )
+    console.log('FOUND', pageFile)
     return !!pageFile
   }
 
