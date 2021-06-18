@@ -38,6 +38,11 @@ import { findPageFile } from './lib/find-page-file'
 import { getNodeOptionsWithoutInspect } from './lib/utils'
 import { withCoalescedInvoke } from '../lib/coalesced-function'
 import { NextConfig } from '../next-server/server/config'
+import {
+  convertPageFilePathToRoutePath,
+  isPageFile,
+  topLevelFoldersThatMayContainPages,
+} from '../build/utils'
 
 if (typeof React.Suspense === 'undefined') {
   throw new Error(
@@ -207,18 +212,31 @@ export default class DevServer extends Server {
       })
 
       let wp = (this.webpackWatcher = new Watchpack())
-      wp.watch([], [pagesDir!], 0)
+      wp.watch(
+        [],
+        topLevelFoldersThatMayContainPages.map((dir) =>
+          pathJoin(pagesDir!, dir)
+        ),
+        0
+      )
 
       wp.on('aggregated', () => {
         const routedPages = []
         const knownFiles = wp.getTimeInfoEntries()
-        for (const [fileName, { accuracy }] of knownFiles) {
-          if (accuracy === undefined || !regexPageExtension.test(fileName)) {
+        for (const [filePath, { accuracy }] of knownFiles) {
+          const relativePath = '/' + relative(pagesDir!, filePath)
+
+          if (
+            accuracy === undefined ||
+            !isPageFile(relativePath) ||
+            !regexPageExtension.test(filePath)
+          ) {
             continue
           }
 
-          let pageName =
-            '/' + relative(pagesDir!, fileName).replace(/\\+/g, '/')
+          let pageName = relativePath.replace(/\\+/g, '/')
+
+          pageName = convertPageFilePathToRoutePath(pageName)
           pageName = pageName.replace(regexPageExtension, '')
           pageName = pageName.replace(/\/index$/, '') || '/'
 
@@ -327,7 +345,6 @@ export default class DevServer extends Server {
   }
 
   protected async hasPage(pathname: string): Promise<boolean> {
-    console.log('[next-dev-server] hasPage', pathname)
     let normalizedPath: string
 
     try {
@@ -345,7 +362,6 @@ export default class DevServer extends Server {
       normalizedPath,
       this.nextConfig.pageExtensions
     )
-    console.log('FOUND', pageFile)
     return !!pageFile
   }
 

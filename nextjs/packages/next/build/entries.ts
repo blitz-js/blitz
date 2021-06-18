@@ -10,6 +10,7 @@ import { ClientPagesLoaderOptions } from './webpack/loaders/next-client-pages-lo
 import { ServerlessLoaderQuery } from './webpack/loaders/next-serverless-loader'
 import { LoadedEnvFiles } from '@next/env'
 import { NextConfig } from '../next-server/server/config'
+import { convertPageFilePathToRoutePath } from './utils'
 
 type PagesMapping = {
   [page: string]: string
@@ -22,9 +23,7 @@ export function createPagesMapping(
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
-      let page = `${pagePath
-        .replace(/^.*?\/pages\//, '/')
-        .replace(/^.*?\/api\//, '/api/')
+      let page = `${convertPageFilePathToRoutePath(pagePath)
         .replace(new RegExp(`\\.+(${extensions.join('|')})$`), '')
         .replace(/\\/g, '/')}`.replace(/\/index$/, '')
 

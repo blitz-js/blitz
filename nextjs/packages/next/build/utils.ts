@@ -49,6 +49,24 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
+export const topLevelFoldersThatMayContainPages = [
+  'pages',
+  'src',
+  'app',
+  'integrations',
+]
+
+export function convertPageFilePathToRoutePath(filePath: string) {
+  return filePath.replace(/^.*?\/pages\//, '/').replace(/^.*?\/api\//, '/api/')
+}
+
+export function isPageFile(filePathFromAppRoot: string) {
+  return (
+    /[\\/]pages[\\/]/.test(filePathFromAppRoot) ||
+    /[\\/]api[\\/]/.test(filePathFromAppRoot)
+  )
+}
+
 export function collectPages(
   directory: string,
   pageExtensions: string[]

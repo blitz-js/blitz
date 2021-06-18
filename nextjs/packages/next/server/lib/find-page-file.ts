@@ -33,10 +33,11 @@ export async function findPageFile(
   )
   // console.log('allPages', allPages)
 
-  const nameMatch =
+  let nameMatch =
     page === '/'
       ? normalizedPagePath
       : `(${normalizedPagePath}|${normalizedPagePath}/index)`
+  nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
   const foundPagePaths = allPages.filter((path) =>
     path.match(
       new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
