@@ -208,14 +208,6 @@ export class Generate extends Command {
     }
   }
 
-  async codegen() {
-    const {generate} = await import("@blitzjs/server")
-    await generate({
-      rootFolder: process.cwd(),
-      env: "dev",
-    })
-  }
-
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug("args: ", args)
@@ -246,8 +238,6 @@ export class Generate extends Command {
         })
         await generator.run()
       }
-
-      await this.codegen()
 
       console.log(" ") // new line
     } catch (err) {
