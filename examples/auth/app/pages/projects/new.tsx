@@ -23,7 +23,7 @@ const NewProjectPage: BlitzPage = () => {
         onSubmit={async (values) => {
           try {
             const project = await createProjectMutation(values)
-            router.push(`/projects/${project.id}`)
+            router.push(Routes.ShowProjectPage({projectId: project.id}))
           } catch (error) {
             console.error(error)
             return {
