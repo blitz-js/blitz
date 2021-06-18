@@ -638,6 +638,7 @@ export default class HotReloader {
   }
 
   public async ensurePage(page: string) {
+    console.log('[hot-reloader ensurePage]')
     // Make sure we don't re-build or dispose prebuilt pages
     if (page !== '/_error' && BLOCKED_PAGES.indexOf(page) !== -1) {
       return
