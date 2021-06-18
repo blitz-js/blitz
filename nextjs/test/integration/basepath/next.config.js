@@ -3,7 +3,7 @@ module.exports = {
     // Make sure entries are not getting disposed.
     maxInactiveAge: 1000 * 60 * 60,
   },
-  basePath: '/hello/world',
+  basePath: '/docs',
   // replace me
   async rewrites() {
     return [
@@ -13,7 +13,7 @@ module.exports = {
       },
       {
         source: '/rewrite-no-basepath',
-        destination: 'http://localhost:61074/page.html',
+        destination: 'http://localhost:__EXTERNAL_APP_PORT__/page.html',
         basePath: false,
       },
       {
