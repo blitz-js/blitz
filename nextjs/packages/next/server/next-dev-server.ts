@@ -226,8 +226,6 @@ export default class DevServer extends Server {
         for (const [filePath, { accuracy }] of knownFiles) {
           const relativePath = '/' + relative(pagesDir!, filePath)
 
-          console.log('relativePath', relativePath)
-
           if (
             accuracy === undefined ||
             !isPageFile(relativePath) ||
@@ -244,7 +242,6 @@ export default class DevServer extends Server {
 
           routedPages.push(pageName)
         }
-        console.log('routedPages', routedPages)
 
         try {
           // we serve a separate manifest with all pages for the client in

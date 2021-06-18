@@ -23,7 +23,7 @@ export async function findPageFile(
   normalizedPagePath: string,
   pageExtensions: string[]
 ): Promise<string | null> {
-  console.log('[findPageFile]', { rootDir, normalizedPagePath })
+  // console.log('[findPageFile]', { rootDir, normalizedPagePath })
 
   const page = denormalizePagePath(normalizedPagePath)
 
@@ -36,10 +36,10 @@ export async function findPageFile(
   let nameMatch: string
   if (page === '/') {
     nameMatch = normalizedPagePath
-  } else if (normalizedPagePath.endsWith('/index')) {
-    nameMatch = `${normalizedPagePath}/index`
+  } else if (page.endsWith('/index')) {
+    nameMatch = `${page}/index`
   } else {
-    nameMatch = `(${normalizedPagePath}|${normalizedPagePath}/index)`
+    nameMatch = `(${page}|${page}/index)`
   }
 
   nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')

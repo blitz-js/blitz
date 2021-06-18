@@ -72,7 +72,8 @@ describe('Telemetry CLI', () => {
     expect(stdout).toMatch(/Status: Disabled/)
   })
 
-  it('detects isSrcDir dir correctly for `next build`', async () => {
+  it.skip('detects isSrcDir dir correctly for `next build`', async () => {
+    // blitz
     const { stderr } = await runNextCommand(['build', appDir], {
       stderr: true,
       env: {
@@ -337,7 +338,8 @@ describe('Telemetry CLI', () => {
     expect(event1).toMatch(/"totalPageCount": 6/)
   })
 
-  it('detects isSrcDir dir correctly for `next dev`', async () => {
+  it.skip('detects isSrcDir dir correctly for `next dev`', async () => {
+    // blitz
     let port = await findPort()
     let stderr = ''
 
