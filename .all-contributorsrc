@@ -2841,6 +2841,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "prisis",
+      "name": "Daniel Bannert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2716058?v=4",
+      "profile": "http://anolilab.de",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
