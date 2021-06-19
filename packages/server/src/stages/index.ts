@@ -1,7 +1,6 @@
 import {ServerEnvironment} from "../config"
 import {createStageConfig} from "./config"
 import {createStageManifest} from "./manifest"
-import {createStagePages} from "./pages"
 import {createStageRelative} from "./relative"
 import {createStageRewriteImports} from "./rewrite-imports"
 import {createStageRouteImportManifest} from "./route-import-manifest/route-import-manifest"
@@ -23,7 +22,6 @@ export const configureStages = async (config: StagesConfig) => ({
     // Order is important
     createStageRelative,
     createStageRewriteImports,
-    createStagePages,
     createStageRpc(config.isTypeScript),
     createStageRoutes,
     createStageRouteImportManifest,
@@ -33,13 +31,8 @@ export const configureStages = async (config: StagesConfig) => ({
 })
 
 export const configureRouteStages = (config: StagesConfig) => [
-  createStagePages,
   createStageRpc(config.isTypeScript),
   createStageRoutes,
 ]
 
-export const configureGenerateStages = () => [
-  createStagePages,
-  createStageRoutes,
-  createStageRouteImportManifest,
-]
+export const configureGenerateStages = () => [createStageRoutes, createStageRouteImportManifest]
