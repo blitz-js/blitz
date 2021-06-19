@@ -45,7 +45,8 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
         Object.assign({}, parsedUrl.query, params),
         await pageModule,
         encodedPreviewProps,
-        true
+        true,
+        { route: page }
       )
     } catch (err) {
       console.error(err)

@@ -1176,7 +1176,8 @@ export default class Server {
       query,
       pageModule,
       this.renderOpts.previewProps,
-      false
+      false,
+      { route: page }
     )
     return true
   }

@@ -40,7 +40,7 @@ import { withCoalescedInvoke } from '../lib/coalesced-function'
 import { NextConfig } from '../next-server/server/config'
 import {
   convertPageFilePathToRoutePath,
-  isPageFile,
+  getIsPageFile,
   topLevelFoldersThatMayContainPages,
 } from '../build/utils'
 
@@ -228,7 +228,7 @@ export default class DevServer extends Server {
 
           if (
             accuracy === undefined ||
-            !isPageFile(relativePath) ||
+            !getIsPageFile(relativePath) ||
             !regexPageExtension.test(filePath)
           ) {
             continue

@@ -5,6 +5,7 @@ import { promises } from 'fs'
 import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
 // import { fileExists } from '../../lib/file-exists'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
+import { getIsRpcRoute } from '../../build/utils'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)
@@ -25,32 +26,32 @@ export async function findPageFile(
 ): Promise<string | null> {
   // console.log('[findPageFile]', { rootDir, normalizedPagePath })
 
-  const page = denormalizePagePath(normalizedPagePath)
-
   const allPages = await recursiveFindPages(
     rootDir,
     new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
   )
   // console.log('allPages', allPages)
 
+  let page = denormalizePagePath(normalizedPagePath)
+
   let nameMatch: string
   if (page === '/') {
-    nameMatch = normalizedPagePath
+    nameMatch = '/pages' + normalizedPagePath
   } else if (page.endsWith('/index')) {
-    nameMatch = `${page}/index`
+    nameMatch = `/pages${page}/index`
+  } else if (getIsRpcRoute(page)) {
+    const rpcPath = page.replace('/api/rpc', '')
+    nameMatch = `(/queries${rpcPath}|/queries${rpcPath}/index|/mutations${rpcPath}|/mutations${rpcPath}/index)`
   } else {
-    nameMatch = `(${page}|${page}/index)`
+    nameMatch = `/pages(${page}|${page}/index)`
   }
 
   nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
+
   const foundPagePaths = allPages.filter((path) =>
-    path.match(
-      new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
-    )
+    path.match(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
   )
-  // console.log(
-  //   new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
-  // )
+  // console.log(new RegExp(`/${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
   // console.log('FOUND', foundPagePaths)
 
   // for (const extension of pageExtensions) {

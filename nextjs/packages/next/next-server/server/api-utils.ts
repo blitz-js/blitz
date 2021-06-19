@@ -9,6 +9,11 @@ import { decryptWithSecret, encryptWithSecret } from './crypto-utils'
 import { interopDefault } from './load-components'
 import { sendEtagResponse } from './send-payload'
 import generateETag from 'etag'
+import { getIsRpcRoute } from '../../build/utils'
+// import { baseLogger, log as displayLog } from '@blitzjs/display'
+import chalk from 'chalk'
+import { deserialize, serialize } from 'superjson'
+import { prettyMs } from '../../server/lib/utils'
 
 export type NextApiRequestCookies = { [key: string]: string }
 export type NextApiRequestQuery = { [key: string]: string | string[] }
@@ -19,13 +24,18 @@ export type __ApiPreviewProps = {
   previewModeSigningKey: string
 }
 
+export type ApiResolverCtx = {
+  route: string
+}
+
 export async function apiResolver(
   req: IncomingMessage,
   res: ServerResponse,
   query: any,
   resolverModule: any,
-  apiContext: __ApiPreviewProps,
-  propagateError: boolean
+  previewProps: __ApiPreviewProps,
+  propagateError: boolean,
+  { route }: ApiResolverCtx
 ): Promise<void> {
   const apiReq = req as NextApiRequest
   const apiRes = res as NextApiResponse
@@ -46,7 +56,7 @@ export async function apiResolver(
     apiReq.query = query
     // Parsing preview data
     setLazyProp({ req: apiReq }, 'previewData', () =>
-      tryGetPreviewData(req, res, apiContext)
+      tryGetPreviewData(req, res, previewProps)
     )
     // Checking if preview mode is enabled
     setLazyProp({ req: apiReq }, 'preview', () =>
@@ -69,7 +79,7 @@ export async function apiResolver(
     apiRes.redirect = (statusOrUrl: number | string, url?: string) =>
       redirect(apiRes, statusOrUrl, url)
     apiRes.setPreviewData = (data, options = {}) =>
-      setPreviewData(apiRes, data, Object.assign({}, apiContext, options))
+      setPreviewData(apiRes, data, Object.assign({}, previewProps, options))
     apiRes.clearPreviewData = () => clearPreviewData(apiRes)
 
     const resolver = interopDefault(resolverModule)
@@ -80,8 +90,13 @@ export async function apiResolver(
       res.once('pipe', () => (wasPiped = true))
     }
 
+    console.log('ROUTE', route)
     // Call API route method
-    await resolver(req, res)
+    if (getIsRpcRoute(route)) {
+      await rpcHandler(resolver, { req: apiReq, res: apiRes, route })
+    } else {
+      await resolver(req, res)
+    }
 
     if (
       process.env.NODE_ENV !== 'production' &&
@@ -103,6 +118,125 @@ export async function apiResolver(
       }
       sendError(apiRes, 500, 'Internal Server Error')
     }
+  }
+}
+
+export type RpcHandlerCtx = {
+  req: NextApiRequest
+  res: NextApiResponse
+  route: string
+}
+
+export async function rpcHandler(
+  resolver: any,
+  { req, res, route }: RpcHandlerCtx
+) {
+  // const log = baseLogger().getChildLogger({
+  //   prefix: [route.replace('/api/rpc', '') + '()'],
+  // })
+  const log = console
+
+  const next = () => {}
+
+  if (req.method === 'HEAD') {
+    // TODO enable
+    // Warm the lamda and connect to DB
+    // if (typeof connectDb === 'function') {
+    //   connectDb()
+    // }
+    res.status(200).end()
+    return next()
+  } else if (req.method === 'POST') {
+    // Handle RPC call
+
+    if (typeof req.body.params === 'undefined') {
+      const error = { message: 'Request body is missing the `params` key' }
+      log.error(error.message)
+      res.status(400).json({
+        result: null,
+        error,
+      })
+      return next()
+    }
+
+    try {
+      const data = deserialize({
+        json: req.body.params,
+        meta: req.body.meta?.params,
+      })
+
+      log.info(
+        chalk.dim('Starting with input:'),
+        data ? data : JSON.stringify(data)
+      )
+      const startTime = Date.now()
+      // TODO FIX TYPE
+      const result = await resolver(data, (res as any).blitzCtx)
+      const resolverDuration = Date.now() - startTime
+      log.debug(chalk.dim('Result:'), result ? result : JSON.stringify(result))
+
+      const serializerStartTime = Date.now()
+      const serializedResult = serialize(result)
+
+      const nextSerializerStartTime = Date.now()
+      // TODO FIX TYPE
+      ;(res as any).blitzResult = result
+      res.json({
+        result: serializedResult.json,
+        error: null,
+        meta: {
+          result: serializedResult.meta,
+        },
+      })
+      log.debug(
+        chalk.dim(
+          `Next.js serialization:${prettyMs(
+            Date.now() - nextSerializerStartTime
+          )}`
+        )
+      )
+      const serializerDuration = Date.now() - serializerStartTime
+      const duration = Date.now() - startTime
+
+      log.info(
+        chalk.dim(
+          `Finished: resolver:${prettyMs(
+            resolverDuration
+          )} serializer:${prettyMs(serializerDuration)} total:${prettyMs(
+            duration
+          )}`
+        )
+      )
+      displayLog.newline()
+
+      return next()
+    } catch (error) {
+      if (error._clearStack) {
+        delete error.stack
+      }
+      log.error(error)
+      displayLog.newline()
+
+      if (!error.statusCode) {
+        error.statusCode = 500
+      }
+
+      const serializedError = serialize(error)
+
+      res.json({
+        result: null,
+        error: serializedError.json,
+        meta: {
+          error: serializedError.meta,
+        },
+      })
+      return next()
+    }
+  } else {
+    // Everything else is error
+    log.warn(`${req.method} method not supported`)
+    res.status(404).end()
+    return next()
   }
 }
 

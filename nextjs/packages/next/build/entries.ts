@@ -110,6 +110,7 @@ export function createEntrypoints(
   }
 
   Object.keys(pages).forEach((page) => {
+    console.log('[webpack]', page)
     const absolutePagePath = pages[page]
     const bundleFile = normalizePagePath(page)
     const isApiRoute = page.match(API_ROUTE)
