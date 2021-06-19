@@ -244,7 +244,7 @@ export class Install extends Command {
 
         const isYarn = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
         const pkgManager = isYarn ? "yarn" : "npm"
-        const installArgs = isYarn ? ["install"] : ["install", "--legacy-peer-deps"]
+        const installArgs = isYarn ? ["install", "--ignore-scripts"] : ["install", "--legacy-peer-deps", "--ignore-scripts"]
         await new Promise((resolve) => {
           const installProcess = require("cross-spawn")(pkgManager, installArgs)
           installProcess.on("exit", resolve)
