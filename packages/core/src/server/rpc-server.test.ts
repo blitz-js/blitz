@@ -198,6 +198,7 @@ describe("rpcMiddleware", () => {
           previewModeSigningKey: "previewModeSigningKey",
         },
         false,
+        {} as any,
       ),
     )
 

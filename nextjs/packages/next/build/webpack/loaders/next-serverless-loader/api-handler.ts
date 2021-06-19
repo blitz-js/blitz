@@ -4,7 +4,7 @@ import { apiResolver } from '../../../../next-server/server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
-  const { pageModule, encodedPreviewProps, pageIsDynamic } = ctx
+  const { page, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
   const {
     handleRewrites,
     handleBasePath,

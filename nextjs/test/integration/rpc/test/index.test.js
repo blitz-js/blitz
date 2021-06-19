@@ -25,280 +25,90 @@ let mode
 let app
 
 function runTests(dev = false) {
-  // it('should work', async () => {
-  //   const text = await fetchViaHTTP(
-  //     appPort,
-  //     '/api/rpc/getBasic',
-  //     null,
-  //     {}
-  //   ).then((res) => res.ok && res.text())
-  //   expect(text).toEqual('hello world')
-  // })
+  it('returns 200 for HEAD', async () => {
+    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+      method: 'HEAD',
+    })
+    expect(res.status).toEqual(200)
+  })
 
-  it('should parse JSON body', async () => {
+  it('returns 404 for GET', async () => {
+    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+      method: 'GET',
+    })
+    expect(res.status).toEqual(404)
+  })
+
+  it('requires params', async () => {
+    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    })
+    const json = await res.json()
+    expect(res.status).toEqual(400)
+    expect(json.error.message).toBe('Request body is missing the `params` key')
+  })
+
+  it('query works', async () => {
     const data = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify({ params: {} }),
     }).then((res) => res.ok && res.json())
 
-    expect(data).toEqual({ result: 'hello world', error: null, meta: {} })
+    expect(data).toEqual({ result: 'basic-result', error: null, meta: {} })
   })
 
-  // it('should set cors headers when adding cors middleware', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/api/cors', null, {
-  //     method: 'OPTIONS',
-  //     headers: {
-  //       origin: 'example.com',
-  //     },
-  //   })
-  //
-  //   expect(res.status).toEqual(204)
-  //   expect(res.headers.get('access-control-allow-methods')).toEqual(
-  //     'GET,POST,OPTIONS'
-  //   )
-  // })
-  //
-  // it('should work with index api', async () => {
-  //   const text = await fetchViaHTTP(appPort, '/api', null, {}).then(
-  //     (res) => res.ok && res.text()
-  //   )
-  //   expect(text).toEqual('Index should work')
-  // })
-  //
-  // it('should return custom error', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/error', null, {})
-  //   const json = await data.json()
-  //
-  //   expect(data.status).toEqual(500)
-  //   expect(json).toEqual({ error: 'Server error!' })
-  // })
-  //
-  // it('should throw Internal Server Error', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/api/user-error', null, {})
-  //   const text = await res.text()
-  //   expect(res.status).toBe(500)
-  //   expect(text).toBe('Internal Server Error')
-  // })
-  //
-  // it('should throw Internal Server Error (async)', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/api/user-error-async', null, {})
-  //   const text = await res.text()
-  //   expect(res.status).toBe(500)
-  //   expect(text).toBe('Internal Server Error')
-  // })
-  //
-  // it('should special-case empty JSON body', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/parse', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //   }).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual({})
-  // })
-  //
-  // it('should support boolean for JSON in api page', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/api/bool', null, {})
-  //   const body = res.ok ? await res.json() : null
-  //   expect(res.status).toBe(200)
-  //   expect(res.headers.get('content-type')).toBe(
-  //     'application/json; charset=utf-8'
-  //   )
-  //   expect(body).toBe(true)
-  // })
-  //
-  // it('should support undefined response body', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/api/undefined', null, {})
-  //   const body = res.ok ? await res.text() : null
-  //   expect(body).toBe('')
-  // })
-  //
-  // it('should return error with invalid JSON', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/parse', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //     body: `{"message":Invalid"}`,
-  //   })
-  //   expect(data.status).toEqual(400)
-  //   expect(data.statusText).toEqual('Invalid JSON')
-  // })
-  //
-  // it('should return error exceeded body limit', async () => {
-  //   let res
-  //   let error
-  //
-  //   try {
-  //     res = await fetchViaHTTP(appPort, '/api/parse', null, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json; charset=utf-8',
-  //       },
-  //       body: JSON.stringify(json),
-  //     })
-  //   } catch (err) {
-  //     error = err
-  //   }
-  //
-  //   if (error) {
-  //     // This is a temporary workaround for testing since node doesn't handle
-  //     // closed connections when POSTing data to an endpoint correctly
-  //     // https://github.com/nodejs/node/issues/12339
-  //     // TODO: investigate re-enabling this after above issue has been
-  //     // addressed in node or `node-fetch`
-  //     expect(error.code).toBe('EPIPE')
-  //   } else {
-  //     expect(res.status).toEqual(413)
-  //     expect(res.statusText).toEqual('Body exceeded 1mb limit')
-  //   }
-  // })
-  //
-  // it('should parse bigger body then 1mb', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/big-parse', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //     body: JSON.stringify(json),
-  //   })
-  //
-  //   expect(data.status).toEqual(200)
-  // })
-  //
-  // it('should support etag spec', async () => {
-  //   const response = await fetchViaHTTP(appPort, '/api/blog')
-  //   const etag = response.headers.get('etag')
-  //
-  //   const unmodifiedResponse = await fetchViaHTTP(appPort, '/api/blog', null, {
-  //     headers: { 'If-None-Match': etag },
-  //   })
-  //
-  //   expect(unmodifiedResponse.status).toBe(304)
-  // })
-  //
-  // it('should parse urlencoded body', async () => {
-  //   const body = {
-  //     title: 'Nextjs',
-  //     description: 'The React Framework for Production',
-  //   }
-  //
-  //   const formBody = Object.keys(body)
-  //     .map((key) => {
-  //       return `${encodeURIComponent(key)}=${encodeURIComponent(body[key])}`
-  //     })
-  //     .join('&')
-  //
-  //   const data = await fetchViaHTTP(appPort, '/api/parse', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/x-www-Form-urlencoded',
-  //     },
-  //     body: formBody,
-  //   }).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual({
-  //     title: 'Nextjs',
-  //     description: 'The React Framework for Production',
-  //   })
-  // })
-  //
-  // it('should parse body in handler', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/no-parsing', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //     body: JSON.stringify([{ title: 'Nextjs' }]),
-  //   }).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual([{ title: 'Nextjs' }])
-  // })
-  //
-  // it('should parse body with config', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/parsing', null, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //     body: JSON.stringify([{ title: 'Nextjs' }]),
-  //   }).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual({ message: 'Parsed body' })
-  // })
-  //
-  // it('should return empty query object', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/query', null, {}).then(
-  //     (res) => res.ok && res.json()
-  //   )
-  //   expect(data).toEqual({})
-  // })
-  //
-  // it('should parse query correctly', async () => {
-  //   const data = await fetchViaHTTP(
-  //     appPort,
-  //     '/api/query?a=1&b=2&a=3',
-  //     null,
-  //     {}
-  //   ).then((res) => res.ok && res.json())
-  //   expect(data).toEqual({ a: ['1', '3'], b: '2' })
-  // })
-  //
-  // it('should return empty cookies object', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/cookies', null, {}).then(
-  //     (res) => res.ok && res.json()
-  //   )
-  //   expect(data).toEqual({})
-  // })
-  //
-  // it('should return cookies object', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/cookies', null, {
-  //     headers: {
-  //       Cookie: 'nextjs=cool;',
-  //     },
-  //   }).then((res) => res.ok && res.json())
-  //   expect(data).toEqual({ nextjs: 'cool' })
-  // })
-  //
-  // it('should return 200 on POST on pages', async () => {
-  //   const res = await fetchViaHTTP(appPort, '/user', null, {
-  //     method: 'POST',
-  //   })
-  //
-  //   expect(res.status).toEqual(200)
-  // })
-  //
-  // it('should return JSON on post on API', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/blog?title=Nextjs', null, {
-  //     method: 'POST',
-  //   }).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual([{ title: 'Nextjs' }])
-  // })
-  //
-  // it('should return data on dynamic route', async () => {
-  //   const data = await fetchViaHTTP(appPort, '/api/post-1', null, {}).then(
-  //     (res) => res.ok && res.json()
-  //   )
-  //
-  //   expect(data).toEqual({ post: 'post-1' })
-  // })
-  //
-  // it('should work with dynamic params and search string', async () => {
-  //   const data = await fetchViaHTTP(
-  //     appPort,
-  //     '/api/post-1?val=1',
-  //     null,
-  //     {}
-  //   ).then((res) => res.ok && res.json())
-  //
-  //   expect(data).toEqual({ val: '1', post: 'post-1' })
-  // })
-  //
+  it('mutation works', async () => {
+    const data = await fetchViaHTTP(appPort, '/api/rpc/setBasic', null, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ params: 'new-basic' }),
+    }).then((res) => res.ok && res.json())
+
+    expect(data).toEqual({ result: 'new-basic', error: null, meta: {} })
+
+    const data2 = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ params: {} }),
+    }).then((res) => res.ok && res.json())
+
+    expect(data2).toEqual({ result: 'new-basic', error: null, meta: {} })
+  })
+
+  it('handles resolver errors', async () => {
+    const res = await fetchViaHTTP(appPort, '/api/rpc/getFailure', null, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ params: {} }),
+    })
+    const json = await res.json()
+    expect(res.status).toEqual(200)
+    expect(json).toEqual({
+      result: null,
+      error: { name: 'Error', message: 'user error' },
+      meta: { error: { values: ['Error'] } },
+    })
+  })
+
+  it('nested query works', async () => {
+    const data = await fetchViaHTTP(
+      appPort,
+      '/api/rpc/v2/getNestedBasic',
+      null,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ params: {} }),
+      }
+    ).then((res) => res.ok && res.json())
+
+    expect(data).toEqual({ result: 'nested-basic', error: null, meta: {} })
+  })
+
+  // TODO - test exported config like bodyParser
+
   if (dev) {
     it('should compile only server code in development', async () => {
       await fetchViaHTTP(appPort, '/api/rpc/getBasic')
@@ -330,26 +140,14 @@ function runTests(dev = false) {
           'utf8'
         )
       )
-      expect(
-        Object.keys(pagesManifest).includes('/api/rpc/getBasic')
-      ).toBeTruthy()
-
-      // const res = await fetchViaHTTP(appPort, '/api/nextjs')
-      // const json = await res.json()
-      //
-      // expect(json).toEqual({ post: 'nextjs' })
-      //
-      // const buildManifest = JSON.parse(
-      //   await fs.readFile(join(appDir, '.next/build-manifest.json'), 'utf8')
-      // )
-      // expect(
-      //   Object.keys(buildManifest.pages).includes('/api-conflict')
-      // ).toBeTruthy()
+      expect(pagesManifest['/api/rpc/getBasic']).toBe(
+        'pages/api/rpc/getBasic.js'
+      )
     })
   }
 }
 
-describe('API routes', () => {
+describe('RPC', () => {
   describe('dev support', () => {
     beforeAll(async () => {
       stderr = ''

@@ -4,12 +4,16 @@ import { CookieSerializeOptions } from 'next/dist/compiled/cookie'
 import getRawBody from 'raw-body'
 import { PageConfig, PreviewData } from 'next/types'
 import { Stream } from 'stream'
-import { isResSent, NextApiRequest, NextApiResponse } from '../lib/utils'
+import {
+  isResSent,
+  NextApiRequest,
+  NextApiResponse,
+  getIsRpcRoute,
+} from '../lib/utils'
 import { decryptWithSecret, encryptWithSecret } from './crypto-utils'
 import { interopDefault } from './load-components'
 import { sendEtagResponse } from './send-payload'
 import generateETag from 'etag'
-import { getIsRpcRoute } from '../../build/utils'
 // import { baseLogger, log as displayLog } from '@blitzjs/display'
 import chalk from 'chalk'
 import { deserialize, serialize } from 'superjson'
@@ -207,7 +211,7 @@ export async function rpcHandler(
           )}`
         )
       )
-      displayLog.newline()
+      // displayLog.newline()
 
       return next()
     } catch (error) {
@@ -215,7 +219,7 @@ export async function rpcHandler(
         delete error.stack
       }
       log.error(error)
-      displayLog.newline()
+      // displayLog.newline()
 
       if (!error.statusCode) {
         error.statusCode = 500

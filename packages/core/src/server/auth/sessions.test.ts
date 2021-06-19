@@ -222,6 +222,7 @@ async function mockServer<TInput, TResult>(
         previewModeSigningKey: "previewModeSigningKey",
       },
       false,
+      {} as any,
     )
   })
 

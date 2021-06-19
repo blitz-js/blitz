@@ -410,3 +410,7 @@ export const ST =
   SP &&
   typeof performance.mark === 'function' &&
   typeof performance.measure === 'function'
+
+export function getIsRpcRoute(routePath: string) {
+  return /\/api\/rpc\//.test(routePath)
+}

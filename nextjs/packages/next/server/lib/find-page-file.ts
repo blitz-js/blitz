@@ -5,7 +5,7 @@ import { promises } from 'fs'
 import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
 // import { fileExists } from '../../lib/file-exists'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
-import { getIsRpcRoute } from '../../build/utils'
+import { getIsRpcRoute } from '../../next-server/lib/utils'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)

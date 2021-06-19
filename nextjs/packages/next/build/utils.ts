@@ -73,10 +73,6 @@ export function getIsPageFile(filePathFromAppRoot: string) {
   )
 }
 
-export function getIsRpcRoute(routePath: string) {
-  return /\/api\/rpc\//.test(routePath)
-}
-
 export function collectPages(
   directory: string,
   pageExtensions: string[]
