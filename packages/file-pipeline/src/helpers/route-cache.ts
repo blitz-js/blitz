@@ -14,13 +14,17 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   getUrifromPath(path: string) {
+    let uri = path
     let findStr = "/pages"
     let findStrIdx = path.indexOf(findStr)
-    if (findStrIdx < 0) {
+    if (findStrIdx >= 0) {
+      uri = path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    } else {
       findStr = "/api"
       findStrIdx = path.indexOf(findStr)
+      uri = "/api" + path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
     }
-    const uri = path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+
     const uriWithoutIndex = uri.replace("/index", "")
     return uriWithoutIndex.length > 0 ? uriWithoutIndex : "/"
   }

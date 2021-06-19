@@ -38,7 +38,6 @@ describe("Build command Vercel", () => {
   beforeEach(async () => {
     process.env.NOW_BUILDER = "1"
     mocks.mockFs({
-      "app/posts/pages/foo.tsx": "",
       "pages/bar.tsx": "",
       ".next": "",
       "next.config.js": 'module.exports = {target: "experimental-serverless-trace"}',
@@ -70,7 +69,7 @@ describe("Build command Vercel", () => {
         {name: "next.config.js"},
         {
           name: "pages",
-          children: [{name: "bar.tsx"}, {name: "foo.tsx"}],
+          children: [{name: "bar.tsx"}],
         },
       ],
     })
