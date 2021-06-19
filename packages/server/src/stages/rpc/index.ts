@@ -62,7 +62,6 @@ const apiHandlerTemplate = (originalPath: string, useTypes: boolean, useDb: bool
 import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core/server'
 import {rpcApiHandler} from '@blitzjs/core/server'
-import path from 'path'
 
 let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}

@@ -43,6 +43,7 @@ export function recursiveFormatZodErrors(errors: any) {
 }
 
 export const validateZodSchema = (schema: any) => (values: any): any => {
+  if (!schema) return {}
   try {
     schema.parse(values)
     return {}
