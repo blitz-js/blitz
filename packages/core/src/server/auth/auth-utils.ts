@@ -1,6 +1,6 @@
 import * as crypto from "crypto"
 import {nanoid} from "nanoid"
-import {AuthenticationError} from "next/client"
+import {AuthenticationError} from "next/stdlib"
 import SecurePasswordLib from "secure-password"
 
 export const hash256 = (input: string = "") => {

@@ -8,8 +8,8 @@ import cookie from "cookie"
 import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/client"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/stdlib"
 import {join} from "path"
 import {
   EmptyPublicData,

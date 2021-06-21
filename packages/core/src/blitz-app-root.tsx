@@ -1,5 +1,5 @@
-import {RedirectError} from "next/client"
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
+import {RedirectError} from "next/stdlib"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
 import {useAuthorizeIf, useSession} from "./auth/auth-client"

@@ -22,4 +22,4 @@ export {
   NotFoundError,
   PaginationArgumentError,
   RedirectError,
-} from "next/client"
+} from "next/stdlib"

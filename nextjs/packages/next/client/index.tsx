@@ -32,7 +32,7 @@ import {
   AuthorizationError,
   NotFoundError,
   RedirectError,
-} from './errors'
+} from '../stdlib/errors'
 
 /// <reference types="react-dom/experimental" />
 
@@ -862,5 +862,3 @@ function Head({ callback }: { callback: () => void }): null {
   React.useLayoutEffect(() => callback(), [callback])
   return null
 }
-
-export * from './errors'

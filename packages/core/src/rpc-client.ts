@@ -1,5 +1,5 @@
-import {CSRFTokenMismatchError} from "next/client"
 import {addBasePath} from "next/dist/next-server/lib/router/router"
+import {CSRFTokenMismatchError} from "next/stdlib"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {getAntiCSRFToken} from "./auth/auth-client"

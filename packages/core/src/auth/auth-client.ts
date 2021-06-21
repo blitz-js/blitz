@@ -1,4 +1,4 @@
-import {AuthenticationError, RedirectError} from "next/client"
+import {AuthenticationError, RedirectError} from "next/stdlib"
 import {useEffect, useState} from "react"
 import {UrlObject} from "url"
 import {getBlitzRuntimeData} from "../blitz-data"
