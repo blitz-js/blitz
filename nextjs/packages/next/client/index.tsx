@@ -96,6 +96,15 @@ if (hasBasePath(asPath)) {
   asPath = delBasePath(asPath)
 }
 
+if (process.env.NODE_ENV === 'development') {
+  function onUnhandledError(ev: ErrorEvent) {
+    if (ev.error.name === 'RedirectError') {
+      ev.preventDefault()
+    }
+  }
+  window.addEventListener('error', onUnhandledError)
+}
+
 if (process.env.__NEXT_I18N_SUPPORT) {
   const {
     normalizeLocalePath,

@@ -398,6 +398,11 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
+    if (!process.env.SESSION_SECRET_KEY && process.env.SECRET_SESSION_KEY) {
+      throw new Error(
+        "You need to rename the SECRET_SESSION_KEY environment variable to SESSION_SECRET_KEY (but don't feel bad, we've all done it :)",
+      )
+    }
     assert(
       process.env.SESSION_SECRET_KEY,
       "You must provide the SESSION_SECRET_KEY environment variable in production. This is used to sign and verify tokens. It should be 32 chars long.",
