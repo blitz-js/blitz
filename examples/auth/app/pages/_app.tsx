@@ -19,6 +19,7 @@ export default function App({Component, pageProps}: AppProps) {
       <ErrorBoundary FallbackComponent={RootErrorFallback} onReset={reset}>
         {getLayout(<Component {...pageProps} />)}
       </ErrorBoundary>
+      <ReactQueryDevtools />
     </>
   )
 }

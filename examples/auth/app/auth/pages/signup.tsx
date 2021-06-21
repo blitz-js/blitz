@@ -7,12 +7,11 @@ const SignupPage: BlitzPage = () => {
 
   return (
     <div>
-      <SignupForm />
+      <SignupForm onSuccess={() => router.push("/")} />
     </div>
   )
 }
 
 SignupPage.getLayout = (page) => <Layout title="Sign Up">{page}</Layout>
-SignupPage.authenticate = {redirectTo: "/"}
 
 export default SignupPage
