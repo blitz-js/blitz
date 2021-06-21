@@ -54,7 +54,7 @@ describe('Configuration', () => {
 
   it('should log webpack version correctly', async () => {
     expect(context.output).toContain(
-      `Using webpack 4. Reason: webpack5 flag is set to false in next.config.js`
+      `Using webpack 4. Reason: webpack5 flag is set to false in blitz.config.js`
     )
   })
 
