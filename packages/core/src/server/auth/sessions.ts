@@ -8,6 +8,7 @@ import cookie from "cookie"
 import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/client"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {join} from "path"
 import {
@@ -34,7 +35,6 @@ import {
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
 } from "../../constants"
-import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "../../errors"
 import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
 import {isLocalhost} from "../server-utils"

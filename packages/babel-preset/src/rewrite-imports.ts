@@ -10,6 +10,12 @@ const defaultImportSource = '@blitzjs/core';
 const specialImports: Record<string, string> = {
   Image: 'next/image',
   Script: 'next/script',
+  AuthenticationError: 'next/client',
+  AuthorizationError: 'next/client',
+  CSRFTokenMismatchError: 'next/client',
+  NotFoundError: 'next/client',
+  PaginationArgumentError: 'next/client',
+  RedirectError: 'next/client',
 
   Head: '@blitzjs/core/head',
 

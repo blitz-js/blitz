@@ -1,5 +1,5 @@
 import {IncomingMessage} from "http"
-import {PaginationArgumentError} from "../errors"
+import {PaginationArgumentError} from "next/client"
 import {BlitzApiRequest} from "../types"
 
 export function isLocalhost(req: BlitzApiRequest | IncomingMessage): boolean {

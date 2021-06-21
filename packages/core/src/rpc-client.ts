@@ -1,3 +1,4 @@
+import {CSRFTokenMismatchError} from "next/client"
 import {addBasePath} from "next/dist/next-server/lib/router/router"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
@@ -11,7 +12,6 @@ import {
   HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from "./constants"
-import {CSRFTokenMismatchError} from "./errors"
 import {
   CancellablePromise,
   EnhancedResolver,

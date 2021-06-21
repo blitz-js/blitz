@@ -27,6 +27,12 @@ import PageLoader, { StyleSheetTuple } from './page-loader'
 import measureWebVitals from './performance-relayer'
 import { RouteAnnouncer } from './route-announcer'
 import { createRouter, makePublicRouterInstance } from './router'
+import {
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  RedirectError,
+} from './errors'
 
 /// <reference types="react-dom/experimental" />
 
@@ -98,7 +104,14 @@ if (hasBasePath(asPath)) {
 
 if (process.env.NODE_ENV === 'development') {
   function onUnhandledError(ev: ErrorEvent) {
-    if (ev.error.name === 'RedirectError') {
+    if (
+      ev.error instanceof RedirectError ||
+      ev.error instanceof AuthenticationError ||
+      ev.error instanceof AuthorizationError ||
+      ev.error instanceof NotFoundError
+    ) {
+      // This prevents 'Uncaught error' logs in the console.
+      // This doesn't change how React or error boundaries handle errors
       ev.preventDefault()
     }
   }
@@ -849,3 +862,5 @@ function Head({ callback }: { callback: () => void }): null {
   React.useLayoutEffect(() => callback(), [callback])
   return null
 }
+
+export * from './errors'
