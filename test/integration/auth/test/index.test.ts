@@ -29,6 +29,7 @@ describe("Auth", () => {
       "/login",
       "/noauth-query",
       "/authenticated-query",
+      "/prefetching",
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
       "/api/queries/getNoauthBasic",
@@ -122,24 +123,11 @@ describe("Auth", () => {
   })
 
   describe("prefetching", () => {
-    it("should login successfully", async () => {
-      const browser = await webdriver(context.appPort, "/login")
-      await browser.waitForElementByCss("#content")
-      let text = await browser.elementByCss("#content").text()
-      expect(text).toMatch(/logged-out/)
-      await browser.elementByCss("#login").click()
-      await waitFor(100)
-      text = await browser.elementByCss("#content").text()
-      expect(text).toMatch(/logged-in/)
-
-      if (browser) await browser.close()
-    })
-
     it("should prefetch from the query cache #2281", async () => {
-      const browser = await webdriver(context.appPort, "/prefetching", true)
+      const browser = await webdriver(context.appPort, "/prefetching")
       await browser.waitForElementByCss("#content")
       const text = await browser.elementByCss("#content").text()
-      expect(text).toMatch(/authenticated-basic-result/)
+      expect(text).toMatch(/noauth-basic-result/)
       if (browser) await browser.close()
     })
   })

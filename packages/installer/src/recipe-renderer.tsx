@@ -5,6 +5,7 @@ import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import {Executor, ExecutorConfig, Frontmatter} from "./executors/executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
+import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {RecipeMeta} from "./types"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
 
@@ -27,6 +28,7 @@ enum Status {
 const ExecutorMap: {[key: string]: Executor} = {
   [AddDependencyExecutor.type]: AddDependencyExecutor,
   [NewFileExecutor.type]: NewFileExecutor,
+  [PrintMessageExecutor.type]: PrintMessageExecutor,
   [FileTransformExecutor.type]: FileTransformExecutor,
 } as const
 
@@ -177,13 +179,14 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
     }
   })
 
-  const messages = state.steps.map((step) => step.successMsg).filter((s) => s)
-
+  const messages = state.steps
+    .map((step) => ({msg: step.successMsg, icon: step.executor.successIcon ?? "✅"}))
+    .filter((s) => s.msg)
   return (
     <DispatchContext.Provider value={dispatch}>
-      {messages.map((msg, index) => (
+      {messages.map(({msg, icon}, index) => (
         <Text key={msg + index} color="green">
-          {msg === "\n" ? "" : "✅"} {msg}
+          {msg === "\n" ? "" : icon} {msg}
         </Text>
       ))}
       {state.current === -1 ? <WelcomeMessage recipeMeta={recipeMeta} /> : null}

@@ -20,9 +20,9 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
   return new Proxy(client as EnhancedPrismaClientConstructor<TPrismaClientCtor>, {
     construct(target, args) {
       if (typeof window !== "undefined" && process.env.JEST_WORKER_ID === undefined) {
-        // Return empty object if in the browser
+        // Return object with $use method if in the browser
         // Skip in Jest tests because window is defined in Jest tests
-        return {}
+        return {$use: () => {}}
       }
 
       if (!global._blitz_prismaClient) {

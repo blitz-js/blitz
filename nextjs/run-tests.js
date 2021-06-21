@@ -65,7 +65,9 @@ async function main() {
   }
 
   console.log('Running tests with concurrency:', concurrency)
-  let tests = process.argv.filter((arg) => arg.endsWith('.test.js'))
+  let tests = process.argv.filter(
+    (arg) => arg.endsWith('.test.js') || arg.endsWith('.test.ts')
+  )
   let prevTimings
 
   if (tests.length === 0) {
