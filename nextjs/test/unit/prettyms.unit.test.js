@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { prettyMs } from 'next/dist/server/lib'
+import { prettyMs } from 'next/dist/server/lib/utils'
 
 describe('prettyMs', () => {
   it('returns pretty strings', () => {
