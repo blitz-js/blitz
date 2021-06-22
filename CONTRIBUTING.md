@@ -19,7 +19,6 @@
    7. Run `yarn lint` and fix any issues
    8. `git push`
 4. Run `yarn pull next-nextjs`
-   - If it fails, run `git subrepo clean nextjs` and try again
 5. Run `yarn`
 6. Run `yarn manypkg check` and optionally `yarn manypkg fix` to fix any issues
 7. Under `nextjs/`, run `./check-pre-compiled.sh` and commit the changes
