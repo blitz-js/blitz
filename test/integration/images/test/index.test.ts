@@ -23,7 +23,9 @@ describe("Misc", () => {
       const browser = await webdriver(context.appPort, "/image-ssr")
       await browser.waitForElementByCss("#avatar")
       const src = await browser.elementById("avatar").getAttribute("src")
-      expect(src).toContain("github-cover-photo.png")
+      expect(src).toContain(
+        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+      )
       if (browser) await browser.close()
     })
   })
