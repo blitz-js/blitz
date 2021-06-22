@@ -250,11 +250,13 @@ export default async function getBaseWebpackConfig(
     cwd: dir,
     name: 'react-dom',
   })
+  const hasReactExperimental: boolean =
+    Boolean(reactDomVersion) && reactDomVersion!.includes('experimental') // blitz
   const hasReact18: boolean =
     (Boolean(reactDomVersion) &&
       (semver.gte(reactDomVersion!, '18.0.0') ||
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
-    reactDomVersion?.includes('experimental') // blitz
+    hasReactExperimental // blitz
   const hasReactRoot: boolean = config.experimental.reactRoot || hasReact18
 
   const babelConfigFile = await [
