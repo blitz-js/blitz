@@ -3,6 +3,7 @@ import * as React from "react"
 import {Newline} from "../components/newline"
 
 export interface ExecutorConfig {
+  successIcon?: string
   stepId: string | number
   stepName: string
   stepType: string

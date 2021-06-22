@@ -60,4 +60,13 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       : ""
     return `app/pages/${parent}${kebabCaseModelName}`
   }
+
+  async postWrite() {
+    // After pages have been generated, run `codegen` so the Routes definition is updated
+    const {generate} = await import("@blitzjs/server")
+    await generate({
+      rootFolder: process.cwd(),
+      env: "dev",
+    })
+  }
 }

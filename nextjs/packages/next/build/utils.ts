@@ -73,14 +73,15 @@ export function getIsPageFile(filePathFromAppRoot: string) {
   )
 }
 
+export function buildPageExtensionRegex(pageExtensions: string[]) {
+  return new RegExp(`(?<!\\.test|\\.spec)\\.(?:${pageExtensions.join('|')})$`)
+}
+
 export function collectPages(
   directory: string,
   pageExtensions: string[]
 ): Promise<string[]> {
-  return recursiveFindPages(
-    directory,
-    new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
-  )
+  return recursiveFindPages(directory, buildPageExtensionRegex(pageExtensions))
 }
 
 export interface PageInfo {
