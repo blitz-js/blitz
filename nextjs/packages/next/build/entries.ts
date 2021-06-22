@@ -18,13 +18,13 @@ type PagesMapping = {
 
 export function createPagesMapping(
   pagePaths: string[],
-  extensions: string[]
+  pageExtensions: string[]
 ): PagesMapping {
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
       let page = `${convertPageFilePathToRoutePath(pagePath)
-        .replace(new RegExp(`\\.+(${extensions.join('|')})$`), '')
+        .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
         .replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
       let pageKey = page === '' ? '/' : page

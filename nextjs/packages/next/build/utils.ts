@@ -68,6 +68,12 @@ export function getIsPageFile(filePathFromAppRoot: string) {
   return (
     /[\\/]pages[\\/]/.test(filePathFromAppRoot) ||
     /[\\/]api[\\/]/.test(filePathFromAppRoot) ||
+    getIsRpcFile(filePathFromAppRoot)
+  )
+}
+
+export function getIsRpcFile(filePathFromAppRoot: string) {
+  return (
     /[\\/]queries[\\/]/.test(filePathFromAppRoot) ||
     /[\\/]mutations[\\/]/.test(filePathFromAppRoot)
   )
