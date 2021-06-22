@@ -1,2 +1,2 @@
-const Page = () => <div id="page-container">Some page</div>
+const Page = () => <div id="page-container">Home page</div>
 export default Page

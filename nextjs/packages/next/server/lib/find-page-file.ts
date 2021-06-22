@@ -5,6 +5,7 @@ import { promises } from 'fs'
 import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
 // import { fileExists } from '../../lib/file-exists'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
+import { buildPageExtensionRegex } from '../../build/utils'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)
@@ -29,7 +30,7 @@ export async function findPageFile(
 
   const allPages = await recursiveFindPages(
     rootDir,
-    new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
+    buildPageExtensionRegex(pageExtensions)
   )
   // console.log('allPages', allPages)
 

@@ -39,6 +39,7 @@ import { getNodeOptionsWithoutInspect } from './lib/utils'
 import { withCoalescedInvoke } from '../lib/coalesced-function'
 import { NextConfig } from '../next-server/server/config'
 import {
+  buildPageExtensionRegex,
   convertPageFilePathToRoutePath,
   isPageFile,
   topLevelFoldersThatMayContainPages,
@@ -191,8 +192,8 @@ export default class DevServer extends Server {
       return
     }
 
-    const regexPageExtension = new RegExp(
-      `\\.+(?:${this.nextConfig.pageExtensions.join('|')})$`
+    const regexPageExtension = buildPageExtensionRegex(
+      this.nextConfig.pageExtensions
     )
 
     let resolved = false
