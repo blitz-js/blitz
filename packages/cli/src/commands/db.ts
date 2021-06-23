@@ -33,7 +33,7 @@ async function runSeed() {
     console.log("\n" + log.withCaret("Seeding..."))
     seeds && (await seeds())
   } catch (err) {
-    baseLogger.error(err)
+    baseLogger().prettyError(err)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
     throw err
   }
@@ -79,7 +79,7 @@ ${require("chalk").bold(
         return await runSeed()
       } catch (err) {
         log.error("Could not seed database:")
-        baseLogger.error(err)
+        baseLogger().prettyError(err)
         process.exit(1)
       }
     }
