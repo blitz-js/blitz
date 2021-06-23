@@ -43,7 +43,10 @@ export async function verifyTypeScriptSetup(
       deps.resolved.get('typescript')!
     )) as typeof import('typescript')
 
-    if (semver.lt(ts.version, '4.3.2')) {
+    if (
+      semver.lt(ts.version, '4.3.2') &&
+      !Boolean(process.env.BLITZ_TEST_ENVIRONMENT)
+    ) {
       log.warn(
         `Minimum recommended TypeScript version is v4.3.2, older versions can potentially be incompatible with Blitz.js. Detected: ${ts.version}`
       )

@@ -8,7 +8,8 @@ jest.setTimeout(1000 * 60 * 2)
 const appDir = join(__dirname, '../app')
 const tsFile = join(appDir, 'node_modules/typescript/index.js')
 
-describe('Minimum TypeScript Warning', () => {
+// Blitz skipping because as written this requires more than 1 TS version in the repo
+describe.skip('Minimum TypeScript Warning', () => {
   it('should show warning during next build with old version', async () => {
     const res = await nextBuild(appDir, [], {
       stderr: true,

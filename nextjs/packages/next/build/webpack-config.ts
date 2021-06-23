@@ -1053,16 +1053,6 @@ export default async function getBaseWebpackConfig(
                 use: { loader: require.resolve('null-loader') },
               },
             ]),
-        ...(!config.images.disableStaticImages && isWebpack5
-          ? [
-              {
-                test: /\.(png|svg|jpg|jpeg|gif|webp|ico|bmp)$/i,
-                loader: 'next-image-loader',
-                issuer: { not: regexLikeCss },
-                dependency: { not: ['url'] },
-              },
-            ]
-          : []),
       ].filter(Boolean),
     },
     plugins: [

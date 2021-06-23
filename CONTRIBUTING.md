@@ -14,10 +14,12 @@
    2. `git fetch --all`
    3. `git merge v10.2.0` (change the version to be the version you are updating to)
    4. Run `rm -rf examples && git add examples`
-   5. Resolve all merge conflicts and complete merge
-   6. Run `yarn` and make sure all builds complete
-   7. Run `yarn lint` and fix any issues
-   8. `git push`
+   5. To resolve conflict with their version for a path, like docs, run this:
+      - `git checkout --theirs docs && git add docs`
+   6. Resolve all merge conflicts and complete merge
+   7. Run `yarn` and make sure all builds complete
+   8. Run `yarn lint` and fix any issues
+   9. `git push`
 4. Run `yarn pull next-nextjs`
 5. Run `yarn`
 6. Run `yarn manypkg check` and optionally `yarn manypkg fix` to fix any issues
