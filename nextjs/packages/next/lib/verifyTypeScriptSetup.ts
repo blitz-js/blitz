@@ -45,12 +45,6 @@ export async function verifyTypeScriptSetup(
 
     if (semver.lt(ts.version, '4.3.2')) {
       log.warn(
-        `Minimum recommended TypeScript version is v4.3.2, older versions can potentially be incompatible with Next.js. Detected: ${ts.version}`
-      )
-    }
-
-    if (semver.lt(ts.version, '4.3.2')) {
-      log.warn(
         `Minimum recommended TypeScript version is v4.3.2, older versions can potentially be incompatible with Blitz.js. Detected: ${ts.version}`
       )
     }
