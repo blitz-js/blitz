@@ -1,4 +1,4 @@
-import {log} from "@blitzjs/display"
+import {baseLogger, log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
 
 export function getDbName(connectionString: string): string {
@@ -33,7 +33,7 @@ async function runSeed() {
     console.log("\n" + log.withCaret("Seeding..."))
     seeds && (await seeds())
   } catch (err) {
-    log.error(err)
+    baseLogger.error(err)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
     throw err
   }
@@ -79,7 +79,7 @@ ${require("chalk").bold(
         return await runSeed()
       } catch (err) {
         log.error("Could not seed database:")
-        log.error(err)
+        baseLogger.error(err)
         process.exit(1)
       }
     }
