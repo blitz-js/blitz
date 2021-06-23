@@ -348,7 +348,7 @@ export function Image({
   if (process.env.NODE_ENV !== 'production') {
     if (!src) {
       throw new Error(
-        `Image is missing required "src" property. Make sure you pass "src" in props to the \`blitz\` component. Received: ${JSON.stringify(
+        `Image is missing required "src" property. Make sure you pass "src" in props to the \`<Image>\` component. Received: ${JSON.stringify(
           { width, height, quality }
         )}`
       )
@@ -682,7 +682,7 @@ function defaultLoader({
       throw new Error(
         `Next Image Optimization requires ${missingValues.join(
           ', '
-        )} to be provided. Make sure you pass them as props to the \`blitz\` component. Received: ${JSON.stringify(
+        )} to be provided. Make sure you pass them as props to the \`<Image>\` component. Received: ${JSON.stringify(
           { src, width, quality }
         )}`
       )
@@ -690,7 +690,7 @@ function defaultLoader({
 
     if (src.startsWith('//')) {
       throw new Error(
-        `Failed to parse src "${src}" on \`blitz\`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)`
+        `Failed to parse src "${src}" on \`<Image>\`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)`
       )
     }
 
@@ -701,13 +701,13 @@ function defaultLoader({
       } catch (err) {
         console.error(err)
         throw new Error(
-          `Failed to parse src "${src}" on \`blitz\`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)`
+          `Failed to parse src "${src}" on \`<Image>\`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)`
         )
       }
 
       if (!configDomains.includes(parsedSrc.hostname)) {
         throw new Error(
-          `Invalid src prop (${src}) on \`blitz\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`blitz.config.js\`\n` +
+          `Invalid src prop (${src}) on \`<Image>\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`blitz.config.js\`\n` +
             `See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host`
         )
       }
