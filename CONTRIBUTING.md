@@ -29,6 +29,7 @@
 10. Run `yarn build` - fix any issues
 11. Run `yarn test:nextjs-size` and update tests if there are any failures
 12. Open PR and fix any failing tests
-13. Any doc updates needed?
-14. Merge PR
-15. `yarn push-nextjs`
+13. Update any references to nextjs in new code including imports like `next/image`, etc.
+14. Any doc updates needed?
+15. Merge PR
+16. `yarn push-nextjs`
