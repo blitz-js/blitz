@@ -118,15 +118,13 @@ export function runNextCommand(argv, options = {}) {
     }
 
     let stderrOutput = ''
-    if (options.stderr) {
-      instance.stderr.on('data', function (chunk) {
-        stderrOutput += chunk
+    instance.stderr.on('data', function (chunk) {
+      stderrOutput += chunk
 
-        if (options.stderr === 'log') {
-          console.log(chunk.toString())
-        }
-      })
-    }
+      if (options.stderr === 'log') {
+        console.log(chunk.toString())
+      }
+    })
 
     let stdoutOutput = ''
     if (options.stdout) {
@@ -146,6 +144,7 @@ export function runNextCommand(argv, options = {}) {
         !options.ignoreFail &&
         code !== 0
       ) {
+        console.log(stderrOutput)
         return reject(new Error(`command failed with code ${code}`))
       }
 

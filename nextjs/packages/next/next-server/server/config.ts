@@ -462,20 +462,23 @@ export default async function loadConfig(
       ...userConfig,
     })
   } else {
-    const configBaseName = basename(CONFIG_FILE, extname(CONFIG_FILE))
-    const nonJsPath = findUp.sync(
+    const unsupportedPath = findUp.sync(
       [
-        `${configBaseName}.jsx`,
-        `${configBaseName}.tsx`,
-        `${configBaseName}.json`,
+        `blitz.config.jsx`,
+        `blitz.config.tsx`,
+        `blitz.config.json`,
+        `next.config.jsx`,
+        `next.config.ts`,
+        `next.config.tsx`,
+        `next.config.json`,
       ],
       { cwd: dir }
     )
-    if (nonJsPath?.length) {
+    if (unsupportedPath?.length) {
       throw new Error(
         `Configuring Blitz.js via '${basename(
-          nonJsPath
-        )}' is not supported. Please replace the file with 'blitz.config.(js|ts)'.`
+          unsupportedPath
+        )}' is not supported. Please replace the file with 'blitz.config.(js|ts)'`
       )
     }
   }

@@ -4,10 +4,9 @@ import findUp from 'next/dist/compiled/find-up'
 import os from 'os'
 import { join } from 'path'
 import { Header, Redirect, Rewrite } from '../../lib/load-custom-routes'
-import { getProjectRoot } from '../../server/lib/utils'
 import { imageConfigDefault } from './image-config'
 import { CONFIG_FILE } from '../lib/constants'
-import { copy } from 'fs-extra'
+import { copy, remove } from 'fs-extra'
 const debug = require('debug')('blitz:config')
 
 export type DomainLocales = Array<{
@@ -152,21 +151,30 @@ export function normalizeConfig(phase: string, config: any) {
   return config
 }
 
-export async function getConfigSrcPath(dir: string) {
+export async function getConfigSrcPath(dir: string | null) {
+  if (!dir) return null
+
   const tsPath = join(dir, 'blitz.config.ts')
   const jsPath = join(dir, 'blitz.config.js')
   const legacyPath = join(dir, 'next.config.js')
-  const isInternalDevelopment = __dirname.includes(
-    'packages/next/dist/next-server'
-  )
 
   if (existsSync(tsPath)) {
     return tsPath
   } else if (existsSync(jsPath)) {
     return jsPath
-  } else if (isInternalDevelopment && existsSync(legacyPath)) {
-    debug('Allowing next.config.js because isInternalDevelopment...')
-    return legacyPath
+  } else if (existsSync(legacyPath)) {
+    const isInternalDevelopment = __dirname.includes(
+      'packages/next/dist/next-server'
+    )
+    if (isInternalDevelopment) {
+      debug('Allowing next.config.js because isInternalDevelopment...')
+      return legacyPath
+    } else {
+      console.log('') // newline
+      throw new Error(
+        'We found next.config.js - please rename it to blitz.config.js'
+      )
+    }
   }
   return null
 }
@@ -175,18 +183,27 @@ export function getCompiledConfigPath(dir: string) {
   return join(dir, CONFIG_FILE)
 }
 
-export async function compileConfig(dir: string) {
+export async function compileConfig(dir: string | null) {
   debug('Starting compileConfig...')
+
+  if (!dir) {
+    debug('compileConfig given empty dir argument')
+    return
+  }
+
   const srcPath = await getConfigSrcPath(dir)
   debug('srcPath:', srcPath)
+  const compiledPath = getCompiledConfigPath(dir)
+  debug('compiledPath:', compiledPath)
+
+  // Remove compiled file. This is important for example when user
+  // had a config file but then removed it
+  remove(compiledPath)
 
   if (!srcPath) {
     debug('Did not find a config file')
     return
   }
-
-  const compiledPath = getCompiledConfigPath(dir)
-  debug('compiledPath:', compiledPath)
 
   if (readFileSync(srcPath, 'utf8').includes('tsconfig-paths/register')) {
     // User is manually handling their own typescript stuff
@@ -217,6 +234,7 @@ export async function compileConfig(dir: string) {
     external: [
       'blitz',
       'next',
+      'webpack',
       ...Object.keys(require('blitz/package').dependencies),
       ...Object.keys(pkg?.dependencies ?? {}),
       ...Object.keys(pkg?.devDependencies ?? {}),
