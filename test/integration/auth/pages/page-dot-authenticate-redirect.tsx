@@ -31,6 +31,6 @@ const Page: BlitzPage = () => {
   )
 }
 
-Page.authenticate = {redirectTo: "/login"}
+Page.authenticate = {redirectTo: "/authenticated-query"}
 
 export default Page

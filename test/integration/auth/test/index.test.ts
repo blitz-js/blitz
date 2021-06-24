@@ -32,6 +32,7 @@ describe("Auth", () => {
       "/prefetching",
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
+      "/redirect-authenticated",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
@@ -122,6 +123,24 @@ describe("Auth", () => {
     })
   })
 
+  describe("Page.redirectAuthenticatedTo", () => {
+    it("should work when redirecting to page with useQuery", async () => {
+      const browser = await webdriver(context.appPort, "/login")
+
+      // Ensure logged in
+      let text = await browser.elementByCss("#content").text()
+      if (text.match(/logged-out/)) {
+        await browser.elementByCss("#login").click()
+      }
+
+      await browser.eval(`window.location = "/redirect-authenticated"`)
+      await browser.waitForElementByCss("#content")
+      text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/authenticated-basic-result/)
+      if (browser) await browser.close()
+    })
+  })
+
   describe("prefetching", () => {
     it("should prefetch from the query cache #2281", async () => {
       const browser = await webdriver(context.appPort, "/prefetching")
@@ -136,6 +155,7 @@ describe("Auth", () => {
     it("should update all sessions of the user", async () => {
       const browser = await webdriver(context.appPort, "/login")
 
+      // Ensure logged out
       let text = await browser.elementByCss("#content").text()
       if (text.match(/logged-in/)) {
         await browser.elementByCss("#logout").click()
