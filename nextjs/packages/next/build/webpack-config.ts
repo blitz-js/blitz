@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
 import { codeFrameColumns } from 'next/dist/compiled/babel/code-frame'
+import semver from 'next/dist/compiled/semver'
 import { isWebpack5, webpack } from 'next/dist/compiled/webpack/webpack'
 import path, { join as pathJoin, relative as relativePath } from 'path'
 import {
@@ -12,6 +13,7 @@ import {
   PAGES_DIR_ALIAS,
 } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
+import { getPackageVersion } from '../lib/get-package-version'
 import { CustomRoutes } from '../lib/load-custom-routes.js'
 import { getTypeScriptConfiguration } from '../lib/typescript/getTypeScriptConfiguration'
 import {
@@ -244,6 +246,18 @@ export default async function getBaseWebpackConfig(
     rewrites.afterFiles.length > 0 ||
     rewrites.fallback.length > 0
   const hasReactRefresh: boolean = dev && !isServer
+  const reactDomVersion = await getPackageVersion({
+    cwd: dir,
+    name: 'react-dom',
+  })
+  const hasReactExperimental: boolean =
+    Boolean(reactDomVersion) && reactDomVersion!.includes('experimental') // blitz
+  const hasReact18: boolean =
+    (Boolean(reactDomVersion) &&
+      (semver.gte(reactDomVersion!, '18.0.0') ||
+        semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
+    hasReactExperimental // blitz
+  const hasReactRoot: boolean = config.experimental.reactRoot || hasReact18
 
   const babelConfigFile = await [
     '.babelrc',
@@ -498,7 +512,7 @@ export default async function getBaseWebpackConfig(
 
   // Contains various versions of the Webpack SplitChunksPlugin used in different build types
   const splitChunksConfigs: {
-    [propName: string]: webpack.Options.SplitChunksOptions
+    [propName: string]: webpack.Options.SplitChunksOptions | false
   } = {
     dev: {
       cacheGroups: {
@@ -599,9 +613,9 @@ export default async function getBaseWebpackConfig(
   }
 
   // Select appropriate SplitChunksPlugin config for this build
-  let splitChunksConfig: webpack.Options.SplitChunksOptions
+  let splitChunksConfig: webpack.Options.SplitChunksOptions | false
   if (dev) {
-    splitChunksConfig = splitChunksConfigs.dev
+    splitChunksConfig = isWebpack5 ? false : splitChunksConfigs.dev
   } else {
     splitChunksConfig = splitChunksConfigs.prodGranular
   }
@@ -931,7 +945,7 @@ export default async function getBaseWebpackConfig(
         : {}),
       // we must set publicPath to an empty value to override the default of
       // auto which doesn't work in IE11
-      publicPath: '',
+      publicPath: `${config.assetPrefix || ''}/_next/`,
       path:
         isServer && isWebpack5 && !dev
           ? path.join(outputPath, 'chunks')
@@ -950,7 +964,7 @@ export default async function getBaseWebpackConfig(
         ? 'static/webpack/[id].[fullhash].hot-update.js'
         : 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: isWebpack5
-        ? 'static/webpack/[fullhash].hot-update.json'
+        ? 'static/webpack/[fullhash].[runtime].hot-update.json'
         : 'static/webpack/[hash].hot-update.json',
       // This saves chunks with the name given via `import()`
       chunkFilename: isServer
@@ -1039,16 +1053,6 @@ export default async function getBaseWebpackConfig(
                 use: { loader: require.resolve('null-loader') },
               },
             ]),
-        ...(!config.images.disableStaticImages && isWebpack5
-          ? [
-              {
-                test: /\.(png|svg|jpg|jpeg|gif|webp|ico|bmp)$/i,
-                loader: 'next-image-loader',
-                issuer: { not: regexLikeCss },
-                dependency: { not: ['url'] },
-              },
-            ]
-          : []),
       ].filter(Boolean),
     },
     plugins: [
@@ -1111,9 +1115,7 @@ export default async function getBaseWebpackConfig(
         'process.env.__NEXT_STRICT_MODE': JSON.stringify(
           config.reactStrictMode
         ),
-        'process.env.__NEXT_REACT_ROOT': JSON.stringify(
-          config.experimental.reactRoot
-        ),
+        'process.env.__NEXT_REACT_ROOT': JSON.stringify(hasReactRoot),
         'process.env.__NEXT_OPTIMIZE_FONTS': JSON.stringify(
           config.optimizeFonts && !dev
         ),
@@ -1477,6 +1479,30 @@ export default async function getBaseWebpackConfig(
         '> Promise returned in blitz config. https://nextjs.org/docs/messages/promise-in-next-config'
       )
     }
+  }
+
+  if (!config.images.disableStaticImages && isWebpack5) {
+    if (!webpackConfig.module) {
+      webpackConfig.module = { rules: [] }
+    }
+
+    const hasSvg = webpackConfig.module.rules.some(
+      (rule) =>
+        'test' in rule && rule.test instanceof RegExp && rule.test.test('.svg')
+    )
+
+    // Exclude svg if the user already defined it in custom
+    // webpack config such as `@svgr/webpack` plugin or
+    // the `babel-plugin-inline-react-svg` plugin.
+    webpackConfig.module.rules.push({
+      test: hasSvg
+        ? /\.(png|jpg|jpeg|gif|webp|ico|bmp)$/i
+        : /\.(png|svg|jpg|jpeg|gif|webp|ico|bmp)$/i,
+      loader: 'next-image-loader',
+      dependency: { not: ['url'] },
+      // @ts-ignore
+      issuer: { not: regexLikeCss },
+    })
   }
 
   if (

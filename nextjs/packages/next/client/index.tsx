@@ -259,7 +259,7 @@ class Container extends React.Component<{
   }
 }
 
-export const emitter: MittEmitter = mitt()
+export const emitter: MittEmitter<string> = mitt()
 let CachedComponent: React.ComponentType
 
 export default async (opts: { webpackHMR?: any } = {}) => {
@@ -508,7 +508,7 @@ function renderReactElement(
   const reactEl = fn(shouldHydrate ? markHydrateComplete : markRenderComplete)
   if (process.env.__NEXT_REACT_ROOT) {
     if (!reactRoot) {
-      const createRootName =
+      const createRootName = // blitz
         typeof (ReactDOM as any).unstable_createRoot === 'function'
           ? 'unstable_createRoot'
           : 'createRoot'

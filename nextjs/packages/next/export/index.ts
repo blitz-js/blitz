@@ -356,7 +356,7 @@ export default async function exportApp(
     - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
     - Configure a third-party loader in \`blitz.config.js\`.
-    - Use the \`loader\` prop for \`next/image\`.
+    - Use the \`loader\` prop for \`blitz\`.
   Read more: https://nextjs.org/docs/messages/export-image-api`
         )
       }

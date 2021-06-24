@@ -115,7 +115,7 @@ export const defaultConfig: NextConfig = {
     scrollRestoration: false,
     stats: false,
     externalDir: false,
-    reactRoot: true,
+    reactRoot: Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0,
     disableOptimizedLoading: false,
     gzipSize: true,
     craCompat: false,

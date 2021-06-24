@@ -155,13 +155,13 @@ describe('Build Output', () => {
           const webpackSizeValue = webpackSize.endsWith('kB')
             ? parseFloat(webpackSize)
             : parseFloat(webpackSize) / 1000
-          expect(webpackSizeValue).toBeCloseTo(gz ? 0.76 : 1.45, 1)
+          expect(webpackSizeValue).toBeCloseTo(gz ? 0.766 : 1.46, 1)
           expect(webpackSize.endsWith('kB') || webpackSize.endsWith(' B')).toBe(
             true
           )
 
           expect(parseFloat(mainSize)).toBeCloseTo(
-            gz ? 20.1 + 0.2 : 62.8 + 0.2,
+            gz ? 20.1 + 0.2 : 62.7 + 0.3,
             0
           )
           expect(mainSize.endsWith('kB')).toBe(true)
