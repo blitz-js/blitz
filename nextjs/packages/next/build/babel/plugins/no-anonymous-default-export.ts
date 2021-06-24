@@ -35,7 +35,10 @@ export default function NoAnonymousDefaultExport({
 
         switch (def.type) {
           case 'ArrowFunctionExpression': {
-            if (!process.env.__NEXT_TEST_MODE) {
+            if (
+              !process.env.__NEXT_TEST_MODE ||
+              !!process.env.__NEXT_TEST_ANON_EXPORT
+            ) {
               warn(
                 [
                   chalk.yellow.bold(
@@ -60,7 +63,11 @@ export default function NoAnonymousDefaultExport({
           }
           case 'FunctionDeclaration': {
             const isAnonymous = !Boolean(def.id)
-            if (isAnonymous && !process.env.__NEXT_TEST_MODE) {
+            if (
+              isAnonymous &&
+              (!process.env.__NEXT_TEST_MODE ||
+                !!process.env.__NEXT_TEST_ANON_EXPORT)
+            ) {
               warn(
                 [
                   chalk.yellow.bold(
