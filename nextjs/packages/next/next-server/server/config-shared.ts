@@ -154,9 +154,9 @@ export function normalizeConfig(phase: string, config: any) {
 export async function getConfigSrcPath(dir: string | null) {
   if (!dir) return null
 
-  const tsPath = join(dir, 'blitz.config.ts')
-  const jsPath = join(dir, 'blitz.config.js')
-  const legacyPath = join(dir, 'next.config.js')
+  let tsPath = join(dir, 'blitz.config.ts')
+  let jsPath = join(dir, 'blitz.config.js')
+  let legacyPath = join(dir, 'next.config.js')
 
   if (existsSync(tsPath)) {
     return tsPath
@@ -176,6 +176,20 @@ export async function getConfigSrcPath(dir: string | null) {
       )
     }
   }
+
+  if (process.env.__NEXT_TEST_MODE) {
+    let tsPath2 = join(dir, '..', 'blitz.config.ts')
+    let jsPath2 = join(dir, '..', 'blitz.config.js')
+    let legacyPath2 = join(dir, '..', 'next.config.js')
+    if (existsSync(tsPath2)) {
+      return tsPath2
+    } else if (existsSync(jsPath2)) {
+      return jsPath2
+    } else if (existsSync(legacyPath2)) {
+      return legacyPath2
+    }
+  }
+
   return null
 }
 
@@ -232,6 +246,10 @@ export async function compileConfig(dir: string | null) {
     bundle: true,
     platform: 'node',
     external: [
+      '*.json',
+      '@blitzjs',
+      '@next',
+      '@zeit',
       'blitz',
       'next',
       'webpack',
