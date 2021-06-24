@@ -463,7 +463,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Image is missing required "src" property. Make sure you pass "src" in props to the `next/image` component. Received: {"width":200}'
+        'Image is missing required "src" property. Make sure you pass "src" in props to the `<Image>` component. Received: {"width":200}'
       )
     })
 
@@ -472,7 +472,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Invalid src prop (https://google.com/test.png) on `next/image`, hostname "google.com" is not configured under images in your `blitz.config.js`'
+        'Invalid src prop (https://google.com/test.png) on `<Image>`, hostname "google.com" is not configured under images in your `blitz.config.js`'
       )
     })
 
@@ -481,7 +481,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Failed to parse src "//assets.example.com/img.jpg" on `next/image`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)'
+        'Failed to parse src "//assets.example.com/img.jpg" on `<Image>`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)'
       )
     })
 
@@ -491,6 +491,15 @@ function runTests(mode) {
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
         `Image with src "/test.png" has "placeholder='blur'" property but is missing the "blurDataURL" property.`
+      )
+    })
+
+    it('should show error when not numeric string width or height', async () => {
+      const browser = await webdriver(appPort, '/invalid-width-or-height')
+
+      expect(await hasRedbox(browser)).toBe(true)
+      expect(await getRedboxHeader(browser)).toContain(
+        `Image with src "/test.jpg" has invalid "width" or "height" property. These should be numeric values.`
       )
     })
 

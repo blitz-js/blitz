@@ -807,6 +807,7 @@ export async function compile(task, opts) {
       'pages',
       'lib',
       'client',
+      'stdlib',
       'telemetry',
       'nextserver',
       'nextserver_wasm',
@@ -866,6 +867,14 @@ export async function client(task, opts) {
   notify('Compiled client files')
 }
 
+export async function stdlib(task, opts) {
+  await task
+    .source(opts.src || 'stdlib/**/*.+(js|ts|tsx)')
+    .babel('stdlib', { dev: opts.dev })
+    .target('dist/stdlib')
+  notify('Compiled stdlib files')
+}
+
 // export is a reserved keyword for functions
 export async function nextbuildstatic(task, opts) {
   await task
@@ -922,6 +931,7 @@ export default async function (task) {
   await task.watch('build/**/*.+(js|ts|tsx)', 'nextbuild', opts)
   await task.watch('export/**/*.+(js|ts|tsx)', 'nextbuildstatic', opts)
   await task.watch('client/**/*.+(js|ts|tsx)', 'client', opts)
+  await task.watch('stdlib/**/*.+(js|ts|tsx)', 'stdlib', opts)
   await task.watch('lib/**/*.+(js|ts|tsx)', 'lib', opts)
   await task.watch('cli/**/*.+(js|ts|tsx)', 'cli', opts)
   await task.watch('telemetry/**/*.+(js|ts|tsx)', 'telemetry', opts)

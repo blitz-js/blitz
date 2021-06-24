@@ -123,8 +123,8 @@ describe('Build Output', () => {
           )
           expect(indexSize.endsWith('B')).toBe(true)
 
-          const blitzExtra = 13
-          const blitzExtraGz = 3.2
+          const blitzExtra = 38
+          const blitzExtraGz = 10.2
           expect(parseFloat(indexFirstLoad)).toBeCloseTo(
             gz ? 64 + blitzExtraGz : 196 + blitzExtra,
             0
@@ -135,13 +135,13 @@ describe('Build Output', () => {
           expect(err404Size.endsWith('kB')).toBe(true)
 
           expect(parseFloat(err404FirstLoad)).toBeCloseTo(
-            gz ? 66.9 + blitzExtraGz : 205 + 12,
+            gz ? 66.9 + blitzExtraGz : 204 + blitzExtra,
             0
           )
           expect(err404FirstLoad.endsWith('kB')).toBe(true)
 
           expect(parseFloat(sharedByAll)).toBeCloseTo(
-            gz ? 63.7 + blitzExtraGz : 196 + blitzExtra,
+            gz ? 63.7 + blitzExtraGz : 195 + blitzExtra,
             0
           )
           expect(sharedByAll.endsWith('kB')).toBe(true)
@@ -155,19 +155,23 @@ describe('Build Output', () => {
           const webpackSizeValue = webpackSize.endsWith('kB')
             ? parseFloat(webpackSize)
             : parseFloat(webpackSize) / 1000
-          expect(webpackSizeValue).toBeCloseTo(gz ? 0.76 : 1.45, 1)
+          expect(webpackSizeValue).toBeCloseTo(gz ? 0.766 : 1.46, 1)
           expect(webpackSize.endsWith('kB') || webpackSize.endsWith(' B')).toBe(
             true
           )
 
+          const blitzMainExtra = 25
+          const blitzMainExtraGz = 7.2
           expect(parseFloat(mainSize)).toBeCloseTo(
-            gz ? 20.1 + 0.2 : 62.8 + 0.2,
+            gz ? 20.1 + blitzMainExtraGz : 62.8 + blitzMainExtra,
             0
           )
           expect(mainSize.endsWith('kB')).toBe(true)
 
+          const blitzFrameworkExtra = 13
+          const blitzFrameworkExtraGz = 3.2
           expect(parseFloat(frameworkSize)).toBeCloseTo(
-            gz ? 42.0 + blitzExtraGz : 130 + blitzExtra,
+            gz ? 42.0 + blitzFrameworkExtraGz : 130 + blitzFrameworkExtra,
             0
           )
           expect(frameworkSize.endsWith('kB')).toBe(true)
