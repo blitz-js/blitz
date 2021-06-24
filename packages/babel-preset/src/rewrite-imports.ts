@@ -11,6 +11,13 @@ const specialImports: Record<string, string> = {
   Image: 'next/image',
   Script: 'next/script',
 
+  AuthenticationError: 'next/stdlib',
+  AuthorizationError: 'next/stdlib',
+  CSRFTokenMismatchError: 'next/stdlib',
+  NotFoundError: 'next/stdlib',
+  PaginationArgumentError: 'next/stdlib',
+  RedirectError: 'next/stdlib',
+
   Head: '@blitzjs/core/head',
 
   App: '@blitzjs/core/app',

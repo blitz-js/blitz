@@ -9,6 +9,7 @@ import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/stdlib"
 import {join} from "path"
 import {
   EmptyPublicData,
@@ -34,7 +35,6 @@ import {
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
 } from "../../constants"
-import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "../../errors"
 import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
 import {isLocalhost} from "../server-utils"
@@ -398,6 +398,11 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
+    if (!process.env.SESSION_SECRET_KEY && process.env.SECRET_SESSION_KEY) {
+      throw new Error(
+        "You need to rename the SECRET_SESSION_KEY environment variable to SESSION_SECRET_KEY (but don't feel bad, we've all done it :)",
+      )
+    }
     assert(
       process.env.SESSION_SECRET_KEY,
       "You must provide the SESSION_SECRET_KEY environment variable in production. This is used to sign and verify tokens. It should be 32 chars long.",
