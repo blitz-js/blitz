@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import findUp from 'next/dist/compiled/find-up'
-import { basename, extname } from 'path'
+import { basename, extname, join } from 'path'
 import * as Log from '../../build/output/log'
 import { hasNextSupport } from '../../telemetry/ci-info'
 import { CONFIG_FILE, PHASE_DEVELOPMENT_SERVER } from '../lib/constants'
@@ -9,6 +9,7 @@ import { compileConfig, defaultConfig, normalizeConfig } from './config-shared'
 import { loadWebpackHook } from './config-utils'
 import { ImageConfig, imageConfigDefault, VALID_LOADERS } from './image-config'
 import { loadEnvConfig } from '@next/env'
+const debug = require('debug')('blitz:config')
 
 export { DomainLocales, NextConfig, normalizeConfig } from './config-shared'
 
@@ -424,10 +425,19 @@ export default async function loadConfig(
   // If config file was found
   if (path?.length) {
     const userConfigModule = require(path)
-    const userConfig = normalizeConfig(
+    let userConfig = normalizeConfig(
       phase,
       userConfigModule.default || userConfigModule
     )
+
+    if (process.env.VERCEL_BUILDER) {
+      debug("Loading Vercel's next.config.js...")
+      const nextConfig = require(join('dir', 'next.config.js'))
+      debug("Vercel's next.config.js contents:", nextConfig)
+      for (const [key, value] of Object.entries(nextConfig)) {
+        userConfig[key] = value
+      }
+    }
 
     if (Object.keys(userConfig).length === 0) {
       Log.warn(

@@ -166,13 +166,16 @@ export async function getConfigSrcPath(dir: string | null) {
     const isInternalDevelopment = __dirname.includes(
       'packages/next/dist/next-server'
     )
-    if (isInternalDevelopment) {
-      debug('Allowing next.config.js because isInternalDevelopment...')
+    if (isInternalDevelopment || process.env.VERCEL_BUILDER) {
+      // We read from next.config.js that Vercel automatically adds
+      debug(
+        'Using next.config.js because isInternalDevelopment or VERCEL_BUILDER...'
+      )
       return legacyPath
     } else {
       console.log('') // newline
       throw new Error(
-        'We found next.config.js - please rename it to blitz.config.js'
+        'Blitz does not support next.config.js. Please rename it to blitz.config.js'
       )
     }
   }
