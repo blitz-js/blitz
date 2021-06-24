@@ -1,6 +1,14 @@
+import { existsSync, readFileSync } from 'fs'
+import { build as esbuild } from 'esbuild'
+import findUp from 'next/dist/compiled/find-up'
 import os from 'os'
+import { join } from 'path'
 import { Header, Redirect, Rewrite } from '../../lib/load-custom-routes'
+import { getProjectRoot } from '../../server/lib/utils'
 import { imageConfigDefault } from './image-config'
+import { CONFIG_FILE } from '../lib/constants'
+import { copy } from 'fs-extra'
+const debug = require('debug')('blitz:config')
 
 export type DomainLocales = Array<{
   http?: true
@@ -142,4 +150,72 @@ export function normalizeConfig(phase: string, config: any) {
     }
   }
   return config
+}
+
+export async function getConfigSrcPath(dir: string) {
+  const tsPath = join(dir, 'blitz.config.ts')
+  if (existsSync(tsPath)) {
+    return tsPath
+  } else {
+    const jsPath = join(dir, 'blitz.config.js')
+
+    if (existsSync(jsPath)) {
+      return jsPath
+    }
+  }
+  return null
+}
+
+export function getCompiledConfigPath(dir: string) {
+  return join(dir, CONFIG_FILE)
+}
+
+export async function compileConfig(dir: string) {
+  debug('Starting compileConfig...')
+  const srcPath = await getConfigSrcPath(dir)
+  debug('srcPath:', srcPath)
+
+  if (!srcPath) {
+    debug('Did not find a config file')
+    return
+  }
+
+  const compiledPath = getCompiledConfigPath(dir)
+  debug('compiledPath:', compiledPath)
+
+  if (readFileSync(srcPath, 'utf8').includes('tsconfig-paths/register')) {
+    // User is manually handling their own typescript stuff
+    debug(
+      "Config contains 'tsconfig-paths/register', so skipping build and just copying the file"
+    )
+    await copy(srcPath, compiledPath)
+    return
+  }
+
+  const pkgJsonPath = await findUp('package.json', { cwd: dir })
+
+  if (!pkgJsonPath) {
+    // This will happen when running blitz no inside a blitz app
+    debug('Unable to find package directory')
+    return
+  }
+
+  debug('Building config...')
+  const pkg = require(pkgJsonPath)
+
+  await esbuild({
+    entryPoints: [srcPath],
+    outfile: compiledPath,
+    format: 'cjs',
+    bundle: true,
+    platform: 'node',
+    external: [
+      'blitz',
+      'next',
+      ...Object.keys(require('blitz/package').dependencies),
+      ...Object.keys(pkg?.dependencies ?? {}),
+      ...Object.keys(pkg?.devDependencies ?? {}),
+    ],
+  })
+  debug('Config built.')
 }

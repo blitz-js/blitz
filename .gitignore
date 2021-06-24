@@ -30,3 +30,4 @@ examples/auth2
 db.sqlite-journal
 test/integration/**/db.json
 test/**/*/out
+.blitz**
