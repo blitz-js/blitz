@@ -1,11 +1,7 @@
 import { join } from 'path'
 import * as Log from '../../output/log'
 import babelLoader from './babel-loader/src/index'
-import {
-  convertPageFilePathToRoutePath,
-  getIsPageFile,
-  getIsRpcFile,
-} from '../../utils'
+import { getIsPageFile, getIsRpcFile } from '../../utils'
 
 // increment 'p' to invalidate cache
 // eslint-disable-next-line no-useless-concat
@@ -184,15 +180,7 @@ const customBabelLoader = babelLoader((babel) => {
           [require('../../babel/plugins/blitz-rpc-client')],
           { type: 'plugin' }
         )
-        options.plugins.push([
-          rpcClientPlugin,
-          {
-            resolverName: filepath
-              .replace(/^.*[\\/]/, '')
-              .replace(/\.[^.]*$/, ''),
-            routePath: convertPageFilePathToRoutePath(relativePathFromRoot),
-          },
-        ])
+        options.plugins.push([rpcClientPlugin])
       }
 
       // As next-server/lib has stateful modules we have to transpile commonjs

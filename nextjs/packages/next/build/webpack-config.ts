@@ -1024,11 +1024,6 @@ export default async function getBaseWebpackConfig(
         ...(isServer
           ? []
           : [
-              {
-                issuer: /(mutations|queries)(?!.*\.client)/,
-                resource: /_resolvers/,
-                use: { loader: require.resolve('null-loader') },
-              },
               // Because of packages/core/src/prisma-utils.ts
               {
                 test: /[\\/]npm-which[\\/]/,
