@@ -41,6 +41,8 @@
     "router.d.ts",
     "amp.js",
     "amp.d.ts",
+    "stdlib.js",
+    "stdlib.d.ts",
     "types/index.d.ts",
     "types/global.d.ts",
     "image-types/global.d.ts"

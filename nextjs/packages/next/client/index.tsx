@@ -27,6 +27,12 @@ import PageLoader, { StyleSheetTuple } from './page-loader'
 import measureWebVitals from './performance-relayer'
 import { RouteAnnouncer } from './route-announcer'
 import { createRouter, makePublicRouterInstance } from './router'
+import {
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  RedirectError,
+} from '../stdlib/errors'
 
 /// <reference types="react-dom/experimental" />
 
@@ -94,6 +100,22 @@ let asPath: string = getURL()
 // make sure not to attempt stripping basePath for 404s
 if (hasBasePath(asPath)) {
   asPath = delBasePath(asPath)
+}
+
+if (process.env.NODE_ENV === 'development') {
+  function onUnhandledError(ev: ErrorEvent) {
+    if (
+      ev.error instanceof RedirectError ||
+      ev.error instanceof AuthenticationError ||
+      ev.error instanceof AuthorizationError ||
+      ev.error instanceof NotFoundError
+    ) {
+      // This prevents 'Uncaught error' logs in the console.
+      // This doesn't change how React or error boundaries handle errors
+      ev.preventDefault()
+    }
+  }
+  window.addEventListener('error', onUnhandledError)
 }
 
 if (process.env.__NEXT_I18N_SUPPORT) {

@@ -1,6 +1,6 @@
 import {Router} from "next/router"
+import {RedirectError} from "next/stdlib"
 import * as React from "react"
-import {RedirectError} from "./errors"
 import {RouterContext} from "./router"
 import {clientDebug} from "./utils"
 
