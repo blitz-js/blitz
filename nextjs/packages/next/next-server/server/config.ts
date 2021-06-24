@@ -413,7 +413,10 @@ export default async function loadConfig(
   customConfig?: object | null
 ) {
   await loadEnvConfig(dir, phase === PHASE_DEVELOPMENT_SERVER, Log)
-  await compileConfig(dir)
+  if (!['start', 's'].includes(process.argv[2])) {
+    // Do not compile config for blitz start because it was already compiled during blitz build
+    await compileConfig(dir)
+  }
   await loadWebpackHook(phase, dir)
 
   if (customConfig) {
