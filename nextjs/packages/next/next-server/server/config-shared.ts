@@ -154,14 +154,19 @@ export function normalizeConfig(phase: string, config: any) {
 
 export async function getConfigSrcPath(dir: string) {
   const tsPath = join(dir, 'blitz.config.ts')
+  const jsPath = join(dir, 'blitz.config.js')
+  const legacyPath = join(dir, 'next.config.js')
+  const isInternalDevelopment = __dirname.includes(
+    'packages/next/dist/next-server'
+  )
+
   if (existsSync(tsPath)) {
     return tsPath
-  } else {
-    const jsPath = join(dir, 'blitz.config.js')
-
-    if (existsSync(jsPath)) {
-      return jsPath
-    }
+  } else if (existsSync(jsPath)) {
+    return jsPath
+  } else if (isInternalDevelopment && existsSync(legacyPath)) {
+    debug('Allowing next.config.js because isInternalDevelopment...')
+    return legacyPath
   }
   return null
 }
