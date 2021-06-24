@@ -12,7 +12,6 @@ import { ampValidation } from '../build/output/index'
 import * as Log from '../build/output/log'
 import { PUBLIC_DIR_MIDDLEWARE_CONFLICT } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
-import { findPagesDir } from '../lib/find-pages-dir'
 import loadCustomRoutes, { CustomRoutes } from '../lib/load-custom-routes'
 import { verifyTypeScriptSetup } from '../lib/verifyTypeScriptSetup'
 import {
@@ -39,6 +38,12 @@ import { findPageFile } from './lib/find-page-file'
 import { getNodeOptionsWithoutInspect } from './lib/utils'
 import { withCoalescedInvoke } from '../lib/coalesced-function'
 import { NextConfig } from '../next-server/server/config'
+import {
+  buildPageExtensionRegex,
+  convertPageFilePathToRoutePath,
+  isPageFile,
+  topLevelFoldersThatMayContainPages,
+} from '../build/utils'
 
 if (typeof React.Suspense === 'undefined') {
   throw new Error(
@@ -107,7 +112,7 @@ export default class DevServer extends Server {
       )
     }
     this.isCustomServer = !options.isNextDevCommand
-    this.pagesDir = findPagesDir(this.dir)
+    this.pagesDir = this.dir
     this.staticPathsWorker = new Worker(
       require.resolve('./static-paths-worker'),
       {
@@ -187,8 +192,8 @@ export default class DevServer extends Server {
       return
     }
 
-    const regexPageExtension = new RegExp(
-      `\\.+(?:${this.nextConfig.pageExtensions.join('|')})$`
+    const regexPageExtension = buildPageExtensionRegex(
+      this.nextConfig.pageExtensions
     )
 
     let resolved = false
@@ -208,18 +213,31 @@ export default class DevServer extends Server {
       })
 
       let wp = (this.webpackWatcher = new Watchpack())
-      wp.watch([], [pagesDir!], 0)
+      wp.watch(
+        [],
+        topLevelFoldersThatMayContainPages.map((dir) =>
+          pathJoin(pagesDir!, dir)
+        ),
+        0
+      )
 
       wp.on('aggregated', () => {
         const routedPages = []
         const knownFiles = wp.getTimeInfoEntries()
-        for (const [fileName, { accuracy }] of knownFiles) {
-          if (accuracy === undefined || !regexPageExtension.test(fileName)) {
+        for (const [filePath, { accuracy }] of knownFiles) {
+          const relativePath = '/' + relative(pagesDir!, filePath)
+
+          if (
+            accuracy === undefined ||
+            !isPageFile(relativePath) ||
+            !regexPageExtension.test(filePath)
+          ) {
             continue
           }
 
-          let pageName =
-            '/' + relative(pagesDir!, fileName).replace(/\\+/g, '/')
+          let pageName = relativePath.replace(/\\+/g, '/')
+
+          pageName = convertPageFilePathToRoutePath(pageName)
           pageName = pageName.replace(regexPageExtension, '')
           pageName = pageName.replace(/\/index$/, '') || '/'
 

@@ -15,7 +15,6 @@ import {
   PUBLIC_DIR_MIDDLEWARE_CONFLICT,
 } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
-import { findPagesDir } from '../lib/find-pages-dir'
 import loadCustomRoutes, {
   CustomRoutes,
   getRedirectStatus,
@@ -162,7 +161,7 @@ export default async function build(
     setGlobal('telemetry', telemetry)
 
     const publicDir = path.join(dir, 'public')
-    const pagesDir = findPagesDir(dir)
+    const pagesDir = dir
     const hasPublicDir = await fileExists(publicDir)
 
     telemetry.record(

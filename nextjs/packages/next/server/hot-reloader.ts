@@ -166,7 +166,7 @@ export default class HotReloader {
     this.buildId = buildId
     this.dir = dir
     this.middlewares = []
-    this.pagesDir = pagesDir
+    this.pagesDir = dir
     this.webpackHotMiddleware = null
     this.stats = null
     this.serverStats = null
