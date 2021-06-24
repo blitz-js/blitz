@@ -18,7 +18,7 @@ import {
   SERVER_PROPS_SSG_CONFLICT,
 } from '../lib/constants'
 import prettyBytes from '../lib/pretty-bytes'
-import { recursiveReadDir } from '../lib/recursive-readdir'
+import { recursiveFindPages } from '../lib/recursive-readdir'
 import { getRouteMatcher, getRouteRegex } from '../next-server/lib/router/utils'
 import { isDynamicRoute } from '../next-server/lib/router/utils/is-dynamic'
 import escapePathDelimiters from '../next-server/lib/router/utils/escape-path-delimiters'
@@ -49,14 +49,35 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
+export const topLevelFoldersThatMayContainPages = [
+  'pages',
+  'src',
+  'app',
+  'integrations',
+]
+
+export function convertPageFilePathToRoutePath(filePath: string) {
+  return filePath
+    .replace(/^.*?[\\/]pages[\\/]/, '/')
+    .replace(/^.*?[\\/]api[\\/]/, '/api/')
+}
+
+export function isPageFile(filePathFromAppRoot: string) {
+  return (
+    /[\\/]pages[\\/]/.test(filePathFromAppRoot) ||
+    /[\\/]api[\\/]/.test(filePathFromAppRoot)
+  )
+}
+
+export function buildPageExtensionRegex(pageExtensions: string[]) {
+  return new RegExp(`(?<!\\.test|\\.spec)\\.(?:${pageExtensions.join('|')})$`)
+}
+
 export function collectPages(
   directory: string,
   pageExtensions: string[]
 ): Promise<string[]> {
-  return recursiveReadDir(
-    directory,
-    new RegExp(`\\.(?:${pageExtensions.join('|')})$`)
-  )
+  return recursiveFindPages(directory, buildPageExtensionRegex(pageExtensions))
 }
 
 export interface PageInfo {

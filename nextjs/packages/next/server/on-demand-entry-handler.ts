@@ -11,6 +11,7 @@ import {
 import { pageNotFoundError } from '../next-server/server/require'
 import { findPageFile } from './lib/find-page-file'
 import getRouteFromEntrypoint from '../next-server/server/get-route-from-entrypoint'
+import { convertPageFilePathToRoutePath } from '../build/utils'
 
 export const ADDED = Symbol('added')
 export const BUILDING = Symbol('building')
@@ -158,7 +159,7 @@ export default function onDemandEntryHandler(
         throw pageNotFoundError(normalizedPagePath)
       }
 
-      let pageUrl = pagePath.replace(/\\/g, '/')
+      let pageUrl = convertPageFilePathToRoutePath(pagePath.replace(/\\/g, '/'))
 
       pageUrl = `${pageUrl[0] !== '/' ? '/' : ''}${pageUrl
         .replace(new RegExp(`\\.+(?:${pageExtensions.join('|')})$`), '')

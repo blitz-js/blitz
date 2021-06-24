@@ -1,5 +1,6 @@
 import { promises } from 'fs'
 import { join } from 'path'
+import { isPageFile, topLevelFoldersThatMayContainPages } from '../build/utils'
 
 /**
  * Recursively read directory
@@ -35,6 +36,48 @@ export async function recursiveReadDir(
       }
 
       arr.push(absolutePath.replace(rootDir, ''))
+    })
+  )
+
+  return arr.sort()
+}
+
+export async function recursiveFindPages(
+  dir: string,
+  filter: RegExp,
+  ignore?: RegExp,
+  arr: string[] = [],
+  rootDir: string = dir
+): Promise<string[]> {
+  let folders = await promises.readdir(dir)
+
+  if (dir === rootDir) {
+    folders = folders.filter((folder) =>
+      topLevelFoldersThatMayContainPages.includes(folder)
+    )
+  }
+
+  await Promise.all(
+    folders.map(async (part: string) => {
+      const absolutePath = join(dir, part)
+      if (ignore && ignore.test(part)) return
+
+      const pathStat = await promises.stat(absolutePath)
+
+      if (pathStat.isDirectory()) {
+        await recursiveFindPages(absolutePath, filter, ignore, arr, rootDir)
+        return
+      }
+
+      if (!filter.test(part)) {
+        return
+      }
+
+      const relativeFromRoot = absolutePath.replace(rootDir, '')
+      if (isPageFile(relativeFromRoot)) {
+        arr.push(relativeFromRoot)
+        return
+      }
     })
   )
 

@@ -6,6 +6,7 @@ import loadConfig from 'next/dist/compiled/babel/core-lib-config'
 
 import { NextBabelLoaderOptions, NextJsLoaderContext } from './types'
 import { consumeIterator } from './util'
+import { isPageFile as isPageFileFn } from '../../utils'
 
 const nextDistPath = /(next[\\/]dist[\\/]next-server[\\/]lib)|(next[\\/]dist[\\/]client)|(next[\\/]dist[\\/]pages)/
 
@@ -43,8 +44,8 @@ function getCacheCharacteristics(
   filename: string
 ): CharacteristicsGermaneToCaching {
   const { isServer, pagesDir } = loaderOptions
-  const isPageFile = filename.startsWith(pagesDir)
   const isNextDist = nextDistPath.test(filename)
+  const isPageFile = !isNextDist && isPageFileFn(filename.replace(pagesDir, ''))
   const hasModuleExports = source.indexOf('module.exports') !== -1
   const fileExt = fileExtensionRegex.exec(filename)?.[1] || 'unknown'
 

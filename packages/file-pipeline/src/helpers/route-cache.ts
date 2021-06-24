@@ -14,9 +14,17 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   getUrifromPath(path: string) {
-    const findStr = "/pages"
-    const findStrIdx = path.indexOf(findStr)
-    const uri = path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    let uri = path
+    let findStr = "/pages"
+    let findStrIdx = path.indexOf(findStr)
+    if (findStrIdx >= 0) {
+      uri = path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    } else {
+      findStr = "/api"
+      findStrIdx = path.indexOf(findStr)
+      uri = "/api" + path.substring(findStrIdx + findStr.length, path.lastIndexOf("."))
+    }
+
     const uriWithoutIndex = uri.replace("/index", "")
     return uriWithoutIndex.length > 0 ? uriWithoutIndex : "/"
   }
@@ -44,7 +52,7 @@ export class RouteCache implements RouteCacheInterface {
   private getType(file: File): RouteType | null {
     const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
     const rpcPathRegex = /(api[\\/].+[\\/](queries|mutations).+)$/
-    const apiPathRegex = /(api[\\/].+)$/
+    const apiPathRegex = /(api[\\/].+\.[tj]s)$/
 
     if (rpcPathRegex.test(file.path)) {
       return "rpc"
@@ -58,7 +66,8 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   add(file: File) {
-    if (this.routeCache[file.orginalRelative]) return
+    const srcPath = file.originalRelative ?? file.relative
+    if (this.routeCache[srcPath]) return
 
     const type = this.getType(file)
     if (!type) {
@@ -68,8 +77,8 @@ export class RouteCache implements RouteCacheInterface {
     const uri = this.getUrifromPath(this.normalizePath(file.path))
     const isErrorCode = this.isErrorCode(uri)
     if (!isErrorCode) {
-      this.routeCache[file.originalRelative] = {
-        path: file.originalRelative,
+      this.routeCache[srcPath] = {
+        path: srcPath,
         uri,
         verb: this.getVerb(type),
         type,
@@ -78,7 +87,8 @@ export class RouteCache implements RouteCacheInterface {
   }
 
   delete(file: File) {
-    delete this.routeCache[file.originalRelative]
+    const srcPath = file.originalRelative ?? file.relative
+    delete this.routeCache[srcPath]
   }
 
   filterByPath(filterFn: (givenPath: string) => boolean) {
@@ -96,7 +106,8 @@ export class RouteCache implements RouteCacheInterface {
   get(file: File): RouteCacheEntry
   get(key?: string | File) {
     if (typeof key === "string") return this.routeCache[key]
-    if (key?.originalRelative) return this.routeCache[key.originalRelative]
+    const srcPath = key?.originalRelative ?? key?.relative
+    if (srcPath) return this.routeCache[srcPath]
     return this.routeCache
   }
 
