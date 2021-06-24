@@ -348,7 +348,7 @@ export function Image({
   if (process.env.NODE_ENV !== 'production') {
     if (!src) {
       throw new Error(
-        `Image is missing required "src" property. Make sure you pass "src" in props to the \`next/image\` component. Received: ${JSON.stringify(
+        `Image is missing required "src" property. Make sure you pass "src" in props to the \`<Image>\` component. Received: ${JSON.stringify(
           { width, height, quality }
         )}`
       )
@@ -358,6 +358,14 @@ export function Image({
         `Image with src "${src}" has invalid "layout" property. Provided "${layout}" should be one of ${VALID_LAYOUT_VALUES.map(
           String
         ).join(',')}.`
+      )
+    }
+    if (
+      (typeof widthInt !== 'undefined' && isNaN(widthInt)) ||
+      (typeof heightInt !== 'undefined' && isNaN(heightInt))
+    ) {
+      throw new Error(
+        `Image with src "${src}" has invalid "width" or "height" property. These should be numeric values.`
       )
     }
     if (!VALID_LOADING_VALUES.includes(loading)) {
@@ -373,7 +381,7 @@ export function Image({
       )
     }
     if (placeholder === 'blur') {
-      if ((widthInt || 0) * (heightInt || 0) < 1600) {
+      if (layout !== 'fill' && (widthInt || 0) * (heightInt || 0) < 1600) {
         console.warn(
           `Image with src "${src}" is smaller than 40x40. Consider removing the "placeholder='blur'" property to improve performance.`
         )
@@ -569,9 +577,7 @@ export function Image({
               sizes,
               loader,
             })}
-            src={src}
             decoding="async"
-            sizes={sizes}
             style={imgStyle}
             className={className}
           />
@@ -676,7 +682,7 @@ function defaultLoader({
       throw new Error(
         `Next Image Optimization requires ${missingValues.join(
           ', '
-        )} to be provided. Make sure you pass them as props to the \`next/image\` component. Received: ${JSON.stringify(
+        )} to be provided. Make sure you pass them as props to the \`<Image>\` component. Received: ${JSON.stringify(
           { src, width, quality }
         )}`
       )
@@ -684,7 +690,7 @@ function defaultLoader({
 
     if (src.startsWith('//')) {
       throw new Error(
-        `Failed to parse src "${src}" on \`next/image\`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)`
+        `Failed to parse src "${src}" on \`<Image>\`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)`
       )
     }
 
@@ -695,13 +701,13 @@ function defaultLoader({
       } catch (err) {
         console.error(err)
         throw new Error(
-          `Failed to parse src "${src}" on \`next/image\`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)`
+          `Failed to parse src "${src}" on \`<Image>\`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)`
         )
       }
 
       if (!configDomains.includes(parsedSrc.hostname)) {
         throw new Error(
-          `Invalid src prop (${src}) on \`next/image\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`blitz.config.js\`\n` +
+          `Invalid src prop (${src}) on \`<Image>\`, hostname "${parsedSrc.hostname}" is not configured under images in your \`blitz.config.js\`\n` +
             `See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host`
         )
       }

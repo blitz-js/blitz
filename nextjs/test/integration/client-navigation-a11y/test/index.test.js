@@ -5,6 +5,7 @@ import {
   killApp,
   launchApp,
   renderViaHTTP,
+  waitFor,
 } from '../../../lib/next-test-utils'
 import webdriver from 'next-webdriver'
 import { join } from 'path'
@@ -53,10 +54,12 @@ describe('Client Navigation accessibility', () => {
           .elementByCss('h1')
           .text()
 
+        await waitFor(500)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()
 
+        await waitFor(500)
         expect(h1Value).toBe(routeAnnouncerValue)
         await browser.close()
       })
