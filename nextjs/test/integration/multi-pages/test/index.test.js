@@ -14,7 +14,6 @@ let app
 let appPort
 const appDir = join(__dirname, '..')
 const nextConfig = join(appDir, 'next.config.js')
-let mode
 
 const specPage = join(appDir, 'app/pages/home.spec.js')
 const testPage = join(appDir, 'app/pages/home.test.js')
@@ -32,7 +31,7 @@ afterAll(async () => {
   await fs.remove(testApi)
 })
 
-const runTests = (dev = false) => {
+const runTests = (mode) => {
   it('should load the pages', async () => {
     const browser = await webdriver(appPort, '/')
     let text = await browser.elementByCss('#page-container').text()
@@ -55,7 +54,7 @@ const runTests = (dev = false) => {
     expect(html).toContain('This page could not be found')
   })
 
-  if (!dev) {
+  if (mode !== 'dev') {
     it('should build routes', async () => {
       const pagesManifest = JSON.parse(
         await fs.readFile(
@@ -87,25 +86,23 @@ describe('dev mode', () => {
     app = await launchApp(appDir, appPort)
   })
   afterAll(() => killApp(app))
-  runTests(true)
+  runTests('dev')
 })
 
 describe('production mode', () => {
   beforeAll(async () => {
     await nextBuild(appDir)
-    mode = 'server'
     appPort = await findPort()
     app = await nextStart(appDir, appPort)
   })
   afterAll(() => killApp(app))
-  runTests()
+  runTests('server')
 })
 
-describe('Serverless support', () => {
+describe('serverless mode', () => {
   beforeAll(async () => {
     await fs.writeFile(nextConfig, `module.exports = { target: 'serverless' }`)
     await nextBuild(appDir)
-    mode = 'serverless'
     appPort = await findPort()
     app = await nextStart(appDir, appPort)
   })
@@ -114,5 +111,5 @@ describe('Serverless support', () => {
     await fs.remove(nextConfig)
   })
 
-  runTests()
+  runTests('serverless')
 })

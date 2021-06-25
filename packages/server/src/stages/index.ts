@@ -1,5 +1,4 @@
 import {ServerEnvironment} from "../config"
-import {createStageConfig} from "./config"
 import {createStageManifest} from "./manifest"
 import {createStageRelative} from "./relative"
 import {createStageRewriteImports} from "./rewrite-imports"
@@ -25,7 +24,6 @@ export const configureStages = async (config: StagesConfig) => ({
     createStageRpc(config.isTypeScript),
     createStageRoutes,
     createStageRouteImportManifest,
-    createStageConfig,
     await createStageManifest(config.writeManifestFile, config.buildFolder, config.env),
   ],
 })

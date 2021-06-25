@@ -122,7 +122,7 @@ export type ServerConstructor = {
    */
   quiet?: boolean
   /**
-   * Object what you would use in next.config.js - @default {}
+   * Object what you would use in blitz.config.js - @default {}
    */
   conf?: NextConfig | null
   dev?: boolean
@@ -606,7 +606,7 @@ export default class Server {
     let rewrites: CustomRoutes['rewrites']
 
     // rewrites can be stored as an array when an array is
-    // returned in next.config.js so massage them into
+    // returned in blitz.config.js so massage them into
     // the expected object format
     if (Array.isArray(customRoutes.rewrites)) {
       rewrites = {

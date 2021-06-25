@@ -124,7 +124,7 @@ export default async function build(
   const nextBuildSpan = trace('next-build')
 
   return nextBuildSpan.traceAsyncFn(async () => {
-    // attempt to load global env values so they are available in next.config.js
+    // attempt to load global env values so they are available in blitz.config.js
     const { loadedEnvFiles } = nextBuildSpan
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
