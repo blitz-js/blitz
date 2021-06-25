@@ -83,40 +83,6 @@ describe("Dev command", () => {
     })
   })
 
-  describe.skip("when with next.config", () => {
-    beforeEach(() => {
-      rootFolder = resolve("bad")
-      buildFolder = resolve(rootFolder, ".blitz")
-      mocks.mockFs({
-        "bad/next.config.js": "yo",
-      })
-    })
-    afterEach(() => {
-      mocks.mockFs.restore()
-    })
-
-    it("should fail when passed a next.config.js", async () => {
-      expect.assertions(2)
-      await expect(
-        dev({
-          rootFolder,
-          buildFolder,
-          writeManifestFile: false,
-          watch: false,
-          port: 3000,
-          hostname: "localhost",
-          env: "dev",
-        }),
-      ).rejects.toThrowError("Blitz does not support")
-
-      expect(
-        consoleOutput.includes(
-          "Blitz does not support next.config.js. Please rename your next.config.js to blitz.config.js",
-        ),
-      ).toBeTruthy()
-    })
-  })
-
   describe("when run normally", () => {
     beforeEach(() => {
       rootFolder = resolve("dev")
@@ -146,13 +112,7 @@ describe("Dev command", () => {
       expect(directoryTree(rootFolder)).toEqual({
         children: [
           {
-            children: [
-              {name: "_blitz-version.txt"},
-              {name: "blitz.config.js"},
-              {name: "next.config.js"},
-              {name: "one"},
-              {name: "two"},
-            ],
+            children: [{name: "_blitz-version.txt"}, {name: "one"}, {name: "two"}],
             name: ".blitz-build",
           },
           {

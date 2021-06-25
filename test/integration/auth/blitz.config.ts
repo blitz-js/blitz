@@ -2,6 +2,7 @@ import {BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
 import db from "./db"
 
 const config: BlitzConfig = {
+  // replace me
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,

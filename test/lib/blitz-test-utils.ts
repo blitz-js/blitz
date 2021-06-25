@@ -142,11 +142,9 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
     }
 
     let stderrOutput = ""
-    if (options.stderr) {
-      instance.stderr?.on("data", function (chunk) {
-        stderrOutput += chunk
-      })
-    }
+    instance.stderr?.on("data", function (chunk) {
+      stderrOutput += chunk
+    })
 
     let stdoutOutput = ""
     if (options.stdout) {
