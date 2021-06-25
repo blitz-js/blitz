@@ -2,13 +2,11 @@
 
 import fs from 'fs-extra'
 import { join } from 'path'
-import AbortController from 'abort-controller'
 import {
   killApp,
   findPort,
   launchApp,
   fetchViaHTTP,
-  renderViaHTTP,
   nextBuild,
   nextStart,
   nextExport,
@@ -25,89 +23,93 @@ let mode
 let app
 
 function runTests(dev = false) {
-  it('returns 200 for HEAD', async () => {
-    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
-      method: 'HEAD',
+  describe('api requests', () => {
+    it('returns 200 for HEAD', async () => {
+      const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+        method: 'HEAD',
+      })
+      expect(res.status).toEqual(200)
     })
-    expect(res.status).toEqual(200)
-  })
 
-  it('returns 404 for GET', async () => {
-    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
-      method: 'GET',
+    it('returns 404 for GET', async () => {
+      const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+        method: 'GET',
+      })
+      expect(res.status).toEqual(404)
     })
-    expect(res.status).toEqual(404)
-  })
 
-  it('requires params', async () => {
-    const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    it('requires params', async () => {
+      const res = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      })
+      const json = await res.json()
+      expect(res.status).toEqual(400)
+      expect(json.error.message).toBe(
+        'Request body is missing the `params` key'
+      )
     })
-    const json = await res.json()
-    expect(res.status).toEqual(400)
-    expect(json.error.message).toBe('Request body is missing the `params` key')
-  })
 
-  it('query works', async () => {
-    const data = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ params: {} }),
-    }).then((res) => res.ok && res.json())
-
-    expect(data).toEqual({ result: 'basic-result', error: null, meta: {} })
-  })
-
-  it('mutation works', async () => {
-    const data = await fetchViaHTTP(appPort, '/api/rpc/setBasic', null, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ params: 'new-basic' }),
-    }).then((res) => res.ok && res.json())
-
-    expect(data).toEqual({ result: 'new-basic', error: null, meta: {} })
-
-    const data2 = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ params: {} }),
-    }).then((res) => res.ok && res.json())
-
-    expect(data2).toEqual({ result: 'new-basic', error: null, meta: {} })
-  })
-
-  it('handles resolver errors', async () => {
-    const res = await fetchViaHTTP(appPort, '/api/rpc/getFailure', null, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ params: {} }),
-    })
-    const json = await res.json()
-    expect(res.status).toEqual(200)
-    expect(json).toEqual({
-      result: null,
-      error: { name: 'Error', message: 'user error' },
-      meta: { error: { values: ['Error'] } },
-    })
-  })
-
-  it('nested query works', async () => {
-    const data = await fetchViaHTTP(
-      appPort,
-      '/api/rpc/v2/getNestedBasic',
-      null,
-      {
+    it('query works', async () => {
+      const data = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify({ params: {} }),
-      }
-    ).then((res) => res.ok && res.json())
+      }).then((res) => res.ok && res.json())
 
-    expect(data).toEqual({ result: 'nested-basic', error: null, meta: {} })
+      expect(data).toEqual({ result: 'basic-result', error: null, meta: {} })
+    })
+
+    it('mutation works', async () => {
+      const data = await fetchViaHTTP(appPort, '/api/rpc/setBasic', null, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ params: 'new-basic' }),
+      }).then((res) => res.ok && res.json())
+
+      expect(data).toEqual({ result: 'new-basic', error: null, meta: {} })
+
+      const data2 = await fetchViaHTTP(appPort, '/api/rpc/getBasic', null, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ params: {} }),
+      }).then((res) => res.ok && res.json())
+
+      expect(data2).toEqual({ result: 'new-basic', error: null, meta: {} })
+    })
+
+    it('handles resolver errors', async () => {
+      const res = await fetchViaHTTP(appPort, '/api/rpc/getFailure', null, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify({ params: {} }),
+      })
+      const json = await res.json()
+      expect(res.status).toEqual(200)
+      expect(json).toEqual({
+        result: null,
+        error: { name: 'Error', message: 'error on purpose for test' },
+        meta: { error: { values: ['Error'] } },
+      })
+    })
+
+    it('nested query works', async () => {
+      const data = await fetchViaHTTP(
+        appPort,
+        '/api/rpc/v2/getNestedBasic',
+        null,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify({ params: {} }),
+        }
+      ).then((res) => res.ok && res.json())
+
+      expect(data).toEqual({ result: 'nested-basic', error: null, meta: {} })
+    })
+
+    // TODO - test exported config like bodyParser
   })
-
-  // TODO - test exported config like bodyParser
 
   if (dev) {
     it('should compile only server code in development', async () => {

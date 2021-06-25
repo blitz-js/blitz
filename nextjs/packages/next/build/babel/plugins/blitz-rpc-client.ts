@@ -4,9 +4,9 @@ import { convertPageFilePathToRoutePath } from '../../utils'
 
 /* This plugin changes the file contents to this:
  *
-import { buildRpcClient } from "next/rpc";
+import { buildRpcClient } from "next/data-client";
 export default buildRpcClient({
-  "name": "getUsers",
+  "resolverName": "getUsers",
   "routePath": "/api/rpc/getUsers"
 });
  *
@@ -36,7 +36,7 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
                 t.identifier('buildRpcClient')
               ),
             ],
-            t.stringLiteral('next/rpc')
+            t.stringLiteral('next/data-client')
           )
           const exportDeclaration = t.exportDefaultDeclaration(
             t.callExpression(t.identifier('buildRpcClient'), [

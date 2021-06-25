@@ -62,6 +62,7 @@ export function convertPageFilePathToRoutePath(filePath: string) {
     .replace(/^.*?[\\/]api[\\/]/, '/api/')
     .replace(/^.*?[\\/]queries[\\/]/, '/api/rpc/')
     .replace(/^.*?[\\/]mutations[\\/]/, '/api/rpc/')
+    .replace(/\.[^.]*$/, '')
 }
 
 export function getIsPageFile(filePathFromAppRoot: string) {

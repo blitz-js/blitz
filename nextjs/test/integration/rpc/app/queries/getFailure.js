@@ -1,3 +1,3 @@
 export default async function getFailure() {
-  throw new Error('user error')
+  throw new Error('error on purpose for test')
 }

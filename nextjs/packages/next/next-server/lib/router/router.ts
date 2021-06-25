@@ -169,6 +169,10 @@ export function delBasePath(path: string): string {
   return path
 }
 
+export function normalizeApiRoute(path: string): string {
+  return normalizePathTrailingSlash(addBasePath(path))
+}
+
 /**
  * Detects whether a given url is routable by the Next.js router (browser only).
  */

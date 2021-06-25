@@ -1,4 +1,4 @@
-import { addBasePath } from 'next/dist/next-server/lib/router/router'
+import { normalizeApiRoute } from '../next-server/lib/router/router'
 import { deserialize, serialize } from 'superjson'
 import { SuperJSONResult } from 'superjson/dist/types'
 // import {getAntiCSRFToken} from "./auth/auth-client"
@@ -21,12 +21,21 @@ import { SuperJSONResult } from 'superjson/dist/types'
 //   ResolverType,
 //   RpcOptions,
 // } from "./types"
-// import {clientDebug, isClient, isServer} from "./utils"
 // import {getQueryKeyFromUrlAndParams, queryClient} from "./utils/react-query-utils"
+const debug = require('debug')('blitz:rpc')
+
+const isServer = typeof window === 'undefined'
+const isClient = !isServer
 
 interface BuildRpcClientParams {
   resolverName: string
   routePath: string
+}
+
+export interface RpcOptions {
+  fromQueryHook?: boolean
+  fromInvoke?: boolean
+  alreadySerialized?: boolean
 }
 
 export function buildRpcClient({
@@ -40,21 +49,23 @@ export function buildRpcClient({
       )
     }
 
-    if (isServer)
-      return (Promise.resolve() as unknown) as CancellablePromise<TResult>
-    clientDebug('Starting request for', routePath, 'with', params, 'and', opts)
+    if (isServer) {
+      return Promise.resolve() as unknown // as CancellablePromise<TResult>
+    }
+    const fullRoutePath = normalizeApiRoute(routePath)
+    debug('Starting request for', fullRoutePath, 'with', params, 'and', opts)
 
     const headers: Record<string, any> = {
       'Content-Type': 'application/json',
     }
 
-    const antiCSRFToken = getAntiCSRFToken()
-    if (antiCSRFToken) {
-      clientDebug('Adding antiCSRFToken cookie header', antiCSRFToken)
-      headers[HEADER_CSRF] = antiCSRFToken
-    } else {
-      clientDebug('No antiCSRFToken cookie found')
-    }
+    // const antiCSRFToken = getAntiCSRFToken()
+    // if (antiCSRFToken) {
+    //   debug('Adding antiCSRFToken cookie header', antiCSRFToken)
+    //   headers[HEADER_CSRF] = antiCSRFToken
+    // } else {
+    //   debug('No antiCSRFToken cookie found')
+    // }
 
     let serialized: SuperJSONResult
     if (opts.alreadySerialized) {
@@ -71,7 +82,7 @@ export function buildRpcClient({
     const controller = new AbortController()
 
     const promise = window
-      .fetch(addBasePath(routePath), {
+      .fetch(fullRoutePath, {
         method: 'POST',
         headers,
         credentials: 'include',
@@ -85,39 +96,39 @@ export function buildRpcClient({
         signal: controller.signal,
       })
       .then(async (response) => {
-        clientDebug('Received request for', routePath)
-        if (response.headers) {
-          if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-            publicDataStore.updateState()
-            clientDebug('Public data updated')
-          }
-          if (response.headers.get(HEADER_SESSION_REVOKED)) {
-            clientDebug('Session revoked, clearing publicData')
-            publicDataStore.clear()
-            setTimeout(async () => {
-              // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-              clientDebug('Clearing and invalidating react-query cache...')
-              await queryClient.cancelQueries()
-              await queryClient.resetQueries()
-              queryClient.getMutationCache().clear()
-              // We have a 100ms delay here to prevent unnecessary stale queries from running
-              // This prevents the case where you logout on a page with
-              // Page.authenticate = {redirectTo: '/login'}
-              // Without this delay, queries that require authentication on the original page
-              // will still run (but fail because you are now logged out)
-              // Ref: https://github.com/blitz-js/blitz/issues/1935
-            }, 100)
-          }
-          if (response.headers.get(HEADER_SESSION_CREATED)) {
-            clientDebug('Session created')
-            await queryClient.invalidateQueries('')
-          }
-          if (response.headers.get(HEADER_CSRF_ERROR)) {
-            const err = new CSRFTokenMismatchError()
-            err.stack = null!
-            throw err
-          }
-        }
+        debug('Received request for', routePath)
+        // if (response.headers) {
+        //   if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+        //     publicDataStore.updateState()
+        //     debug('Public data updated')
+        //   }
+        //   if (response.headers.get(HEADER_SESSION_REVOKED)) {
+        //     debug('Session revoked, clearing publicData')
+        //     publicDataStore.clear()
+        //     setTimeout(async () => {
+        //       // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+        //       debug('Clearing and invalidating react-query cache...')
+        //       await queryClient.cancelQueries()
+        //       await queryClient.resetQueries()
+        //       queryClient.getMutationCache().clear()
+        //       // We have a 100ms delay here to prevent unnecessary stale queries from running
+        //       // This prevents the case where you logout on a page with
+        //       // Page.authenticate = {redirectTo: '/login'}
+        //       // Without this delay, queries that require authentication on the original page
+        //       // will still run (but fail because you are now logged out)
+        //       // Ref: https://github.com/blitz-js/blitz/issues/1935
+        //     }, 100)
+        //   }
+        //   if (response.headers.get(HEADER_SESSION_CREATED)) {
+        //     debug('Session created')
+        //     await queryClient.invalidateQueries('')
+        //   }
+        //   if (response.headers.get(HEADER_CSRF_ERROR)) {
+        //     const err = new CSRFTokenMismatchError()
+        //     err.stack = null!
+        //     throw err
+        //   }
+        // }
 
         if (!response.ok) {
           const error = new Error(response.statusText)
@@ -141,12 +152,12 @@ export function buildRpcClient({
               meta: payload.meta?.error,
             }) as any
             // We don't clear the publicDataStore for anonymous users
-            if (
-              error.name === 'AuthenticationError' &&
-              publicDataStore.getData().userId
-            ) {
-              publicDataStore.clear()
-            }
+            // if (
+            //   error.name === 'AuthenticationError' &&
+            //   publicDataStore.getData().userId
+            // ) {
+            //   publicDataStore.clear()
+            // }
 
             const prismaError = error.message.match(
               /invalid.*prisma.*invocation/i
@@ -164,14 +175,14 @@ export function buildRpcClient({
               meta: payload.meta?.result,
             })
 
-            if (!opts.fromQueryHook) {
-              const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-              queryClient.setQueryData(queryKey, data)
-            }
-            return data as TResult
+            // if (!opts.fromQueryHook) {
+            //   const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
+            //   queryClient.setQueryData(queryKey, data)
+            // }
+            return data
           }
         }
-      }) as CancellablePromise<TResult>
+      }) // as CancellablePromise<TResult>
 
     // Disable react-query request cancellation for now
     // Having too many weird bugs with it enabled
@@ -189,15 +200,15 @@ export function buildRpcClient({
 //   return window.fetch(addBasePath(apiUrl), { method: 'HEAD' })
 // }
 
-const ensureTrailingSlash = (url: string) => {
-  const lastChar = url.substr(-1)
-  if (lastChar !== '/') {
-    url = url + '/'
-  }
-  return url
-}
+// const ensureTrailingSlash = (url: string) => {
+//   const lastChar = url.substr(-1)
+//   if (lastChar !== '/') {
+//     url = url + '/'
+//   }
+//   return url
+// }
 
-const getApiUrlFromResolverFilePath = (resolverFilePath: string) => {
-  const url = resolverFilePath.replace(/^app\/_resolvers/, '/api')
-  return getBlitzRuntimeData().trailingSlash ? ensureTrailingSlash(url) : url
-}
+// const getApiUrlFromResolverFilePath = (resolverFilePath: string) => {
+//   const url = resolverFilePath.replace(/^app\/_resolvers/, '/api')
+//   return getBlitzRuntimeData().trailingSlash ? ensureTrailingSlash(url) : url
+// }

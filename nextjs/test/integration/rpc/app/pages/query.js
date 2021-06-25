@@ -1,7 +1,7 @@
 import getBasic from '../queries/getBasic'
 
 const Page = () => {
-  console.log('DEBUG', typeof getBasic, typeof getBasic())
+  getBasic().then(console.log)
   return <div id="page-container">Hello World</div>
 }
 export default Page
