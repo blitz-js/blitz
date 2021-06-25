@@ -20,7 +20,7 @@ let appPort: number
 const appDir = join(__dirname, "..")
 const outdir = join(appDir, "out")
 const blitzConfig = new File(join(appDir, "blitz.config.ts"))
-jest.setTimeout(1000 * 30)
+jest.setTimeout(1000 * 60 * 2)
 
 beforeAll(async () => {
   rimraf.sync(join(__dirname, "../db.json"))
