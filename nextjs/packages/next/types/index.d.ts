@@ -20,6 +20,16 @@ import {
   // @ts-ignore This path is generated at build time and conflicts otherwise
 } from '../dist/next-server/server/api-utils'
 
+export {
+  DefaultCtx,
+  Ctx,
+  MiddlewareRequest,
+  MiddlewareResponse,
+  MiddlewareNext,
+  Middleware,
+  ConnectMiddleware, // @ts-ignore This path is generated at build time and conflicts otherwise
+} from '../dist/next-server/server/middleware'
+
 // @ts-ignore This path is generated at build time and conflicts otherwise
 import next from '../dist/server/next'
 

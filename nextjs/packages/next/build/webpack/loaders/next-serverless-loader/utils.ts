@@ -30,6 +30,7 @@ export const vercelHeader = 'x-vercel-id'
 
 export type ServerlessHandlerCtx = {
   page: string
+  pagesDir: string
 
   pageModule: any
   pageComponent?: any

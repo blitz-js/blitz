@@ -267,7 +267,8 @@ export default async function build(
           buildId,
           previewProps,
           config,
-          loadedEnvFiles
+          loadedEnvFiles,
+          { pagesDir }
         )
       )
     const pageKeys = Object.keys(mappedPages)

@@ -14,10 +14,15 @@ import { decryptWithSecret, encryptWithSecret } from './crypto-utils'
 import { interopDefault } from './load-components'
 import { sendEtagResponse } from './send-payload'
 import generateETag from 'etag'
-// import { baseLogger, log as displayLog } from '@blitzjs/display'
 import chalk from 'chalk'
 import { deserialize, serialize } from 'superjson'
 import { prettyMs } from '../../server/lib/utils'
+import { NextConfig } from './config-shared'
+import {
+  getAndValidateMiddleware,
+  handleRequestWithMiddleware,
+  Middleware,
+} from './middleware'
 
 export type NextApiRequestCookies = { [key: string]: string }
 export type NextApiRequestQuery = { [key: string]: string | string[] }
@@ -30,6 +35,7 @@ export type __ApiPreviewProps = {
 
 export type ApiResolverCtx = {
   route: string
+  config: NextConfig
 }
 
 export async function apiResolver(
@@ -39,7 +45,7 @@ export async function apiResolver(
   resolverModule: any,
   previewProps: __ApiPreviewProps,
   propagateError: boolean,
-  { route }: ApiResolverCtx
+  { route, config: blitzConfig }: ApiResolverCtx
 ): Promise<void> {
   const apiReq = req as NextApiRequest
   const apiRes = res as NextApiResponse
@@ -94,10 +100,15 @@ export async function apiResolver(
       res.once('pipe', () => (wasPiped = true))
     }
 
-    console.log('ROUTE', route)
     // Call API route method
     if (getIsRpcRoute(route)) {
-      await rpcHandler(resolver, { req: apiReq, res: apiRes, route })
+      const middleware = getAndValidateMiddleware(
+        blitzConfig,
+        resolverModule,
+        route
+      )
+      middleware.push(getRpcMiddleware(resolver, { route }))
+      await handleRequestWithMiddleware(req, res, middleware)
     } else {
       await resolver(req, res)
     }
@@ -126,121 +137,127 @@ export async function apiResolver(
 }
 
 export type RpcHandlerCtx = {
-  req: NextApiRequest
-  res: NextApiResponse
   route: string
 }
 
-export async function rpcHandler(
-  resolver: any,
-  { req, res, route }: RpcHandlerCtx
-) {
-  // const log = baseLogger().getChildLogger({
-  //   prefix: [route.replace('/api/rpc', '') + '()'],
-  // })
-  const log = console
+export type Resolver<TInput, TResult> = (
+  input: TInput,
+  ctx?: any
+) => Promise<TResult>
 
-  const next = () => {}
+export function getRpcMiddleware(
+  resolver: Resolver<any, any>,
+  { route }: RpcHandlerCtx
+): Middleware {
+  return async (req, res, next) => {
+    // const log = baseLogger().getChildLogger({
+    //   prefix: [route.replace('/api/rpc', '') + '()'],
+    // })
+    const log = console
 
-  if (req.method === 'HEAD') {
-    // TODO enable
-    // Warm the lamda and connect to DB
-    // if (typeof connectDb === 'function') {
-    //   connectDb()
-    // }
-    res.status(200).end()
-    return next()
-  } else if (req.method === 'POST') {
-    // Handle RPC call
-
-    if (typeof req.body.params === 'undefined') {
-      const error = { message: 'Request body is missing the `params` key' }
-      log.error(error.message)
-      res.status(400).json({
-        result: null,
-        error,
-      })
+    if (req.method === 'HEAD') {
+      // TODO enable
+      // Warm the lamda and connect to DB
+      // if (typeof connectDb === 'function') {
+      //   connectDb()
+      // }
+      res.status(200).end()
       return next()
-    }
+    } else if (req.method === 'POST') {
+      // Handle RPC call
 
-    try {
-      const data = deserialize({
-        json: req.body.params,
-        meta: req.body.meta?.params,
-      })
-
-      log.info(
-        chalk.dim('Starting with input:'),
-        data ? data : JSON.stringify(data)
-      )
-      const startTime = Date.now()
-      // TODO FIX TYPE
-      const result = await resolver(data, (res as any).blitzCtx)
-      const resolverDuration = Date.now() - startTime
-      log.debug(chalk.dim('Result:'), result ? result : JSON.stringify(result))
-
-      const serializerStartTime = Date.now()
-      const serializedResult = serialize(result)
-
-      const nextSerializerStartTime = Date.now()
-      // TODO FIX TYPE
-      ;(res as any).blitzResult = result
-      res.json({
-        result: serializedResult.json,
-        error: null,
-        meta: {
-          result: serializedResult.meta,
-        },
-      })
-      log.debug(
-        chalk.dim(
-          `Next.js serialization:${prettyMs(
-            Date.now() - nextSerializerStartTime
-          )}`
-        )
-      )
-      const serializerDuration = Date.now() - serializerStartTime
-      const duration = Date.now() - startTime
-
-      log.info(
-        chalk.dim(
-          `Finished: resolver:${prettyMs(
-            resolverDuration
-          )} serializer:${prettyMs(serializerDuration)} total:${prettyMs(
-            duration
-          )}`
-        )
-      )
-      // displayLog.newline()
-
-      return next()
-    } catch (error) {
-      if (error._clearStack) {
-        delete error.stack
-      }
-      log.error(error)
-      // displayLog.newline()
-
-      if (!error.statusCode) {
-        error.statusCode = 500
+      if (typeof req.body.params === 'undefined') {
+        const error = { message: 'Request body is missing the `params` key' }
+        log.error(error.message)
+        res.status(400).json({
+          result: null,
+          error,
+        })
+        return next()
       }
 
-      const serializedError = serialize(error)
+      try {
+        const data = deserialize({
+          json: req.body.params,
+          meta: req.body.meta?.params,
+        })
 
-      res.json({
-        result: null,
-        error: serializedError.json,
-        meta: {
-          error: serializedError.meta,
-        },
-      })
+        log.info(
+          chalk.dim('Starting with input:'),
+          data ? data : JSON.stringify(data)
+        )
+        const startTime = Date.now()
+        // TODO FIX TYPE
+        const result = await resolver(data, (res as any).blitzCtx)
+        const resolverDuration = Date.now() - startTime
+        log.debug(
+          chalk.dim('Result:'),
+          result ? result : JSON.stringify(result)
+        )
+
+        const serializerStartTime = Date.now()
+        const serializedResult = serialize(result)
+
+        const nextSerializerStartTime = Date.now()
+        // TODO FIX TYPE
+        ;(res as any).blitzResult = result
+        res.json({
+          result: serializedResult.json,
+          error: null,
+          meta: {
+            result: serializedResult.meta,
+          },
+        })
+        log.debug(
+          chalk.dim(
+            `Next.js serialization:${prettyMs(
+              Date.now() - nextSerializerStartTime
+            )}`
+          )
+        )
+        const serializerDuration = Date.now() - serializerStartTime
+        const duration = Date.now() - startTime
+
+        log.info(
+          chalk.dim(
+            `Finished: resolver:${prettyMs(
+              resolverDuration
+            )} serializer:${prettyMs(serializerDuration)} total:${prettyMs(
+              duration
+            )}`
+          )
+        )
+        // displayLog.newline()
+
+        return next()
+      } catch (error) {
+        if (error._clearStack) {
+          delete error.stack
+        }
+        log.error(error)
+        // displayLog.newline()
+
+        if (!error.statusCode) {
+          error.statusCode = 500
+        }
+
+        const serializedError = serialize(error)
+
+        res.json({
+          result: null,
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
+        })
+        return next()
+      }
+    } else {
+      // Everything else is error
+      log.warn(`${req.method} method not supported`)
+      res.status(404).end()
       return next()
     }
-  } else {
-    // Everything else is error
-    log.warn(`${req.method} method not supported`)
-    res.status(404).end()
-    return next()
   }
 }
 

@@ -15,6 +15,7 @@ import { trace } from '../../../../telemetry/trace'
 
 export type ServerlessLoaderQuery = {
   page: string
+  pagesDir: string
   distDir: string
   absolutePagePath: string
   absoluteAppPath: string
@@ -40,6 +41,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       distDir,
       absolutePagePath,
       page,
+      pagesDir,
       buildId,
       canonicalBase,
       assetPrefix,
@@ -121,7 +123,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
           page: "${page}",
           basePath: "${basePath}",
           pageIsDynamic: ${pageIsDynamicRoute},
-          encodedPreviewProps: ${encodedPreviewProps}
+          encodedPreviewProps: ${encodedPreviewProps},
+          pagesDir: "${pagesDir}",
         })
         export default apiHandler
       `

@@ -68,13 +68,18 @@ type Entrypoints = {
   server: WebpackEntrypoints
 }
 
+interface EntrypointsCtx {
+  pagesDir: string
+}
+
 export function createEntrypoints(
   pages: PagesMapping,
   target: 'server' | 'serverless' | 'experimental-serverless-trace',
   buildId: string,
   previewMode: __ApiPreviewProps,
   config: NextConfig,
-  loadedEnvFiles: LoadedEnvFiles
+  loadedEnvFiles: LoadedEnvFiles,
+  { pagesDir }: EntrypointsCtx
 ): Entrypoints {
   const client: WebpackEntrypoints = {}
   const server: WebpackEntrypoints = {}
@@ -89,6 +94,7 @@ export function createEntrypoints(
     absoluteErrorPath: pages['/_error'],
     absolute404Path: pages['/404'] || '',
     distDir: DOT_NEXT_ALIAS,
+    pagesDir,
     buildId,
     assetPrefix: config.assetPrefix,
     generateEtags: config.generateEtags,

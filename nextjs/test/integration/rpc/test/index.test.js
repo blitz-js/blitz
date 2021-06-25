@@ -150,7 +150,7 @@ function runTests(dev = false) {
 }
 
 describe('RPC', () => {
-  describe('dev support', () => {
+  describe('dev mode', () => {
     beforeAll(async () => {
       stderr = ''
       appPort = await findPort()
@@ -165,7 +165,7 @@ describe('RPC', () => {
     runTests(true)
   })
 
-  describe('Server support', () => {
+  describe('server mode', () => {
     beforeAll(async () => {
       await nextBuild(appDir)
       mode = 'server'
@@ -177,7 +177,7 @@ describe('RPC', () => {
     runTests()
   })
 
-  describe('Serverless support', () => {
+  describe('serverless mode', () => {
     beforeAll(async () => {
       await fs.writeFile(
         nextConfig,

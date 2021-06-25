@@ -1181,7 +1181,7 @@ export default class Server {
       pageModule,
       this.renderOpts.previewProps,
       false,
-      { route: page }
+      { route: page, config: this.nextConfig }
     )
     return true
   }
