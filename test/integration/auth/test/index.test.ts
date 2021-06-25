@@ -150,19 +150,6 @@ const runTests = (mode: string) => {
   })
 }
 
-describe("auth - blitz export should not work", () => {
-  it("should build successfully", async () => {
-    await fs.remove(join(appDir, ".next"))
-    const {code} = await blitzBuild(appDir)
-    if (code !== 0) throw new Error(`build failed with status ${code}`)
-  })
-
-  it("should have error during blitz export", async () => {
-    const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
-    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
-  })
-})
-
 describe("dev mode", () => {
   beforeAll(async () => {
     await blitzBuild(appDir)
@@ -209,5 +196,18 @@ describe("serverless mode", () => {
     blitzConfig.restore()
   })
 
-  runTests("severless")
+  runTests("serverless")
+})
+
+describe("auth - blitz export should not work", () => {
+  it("should build successfully", async () => {
+    await fs.remove(join(appDir, ".next"))
+    const {code} = await blitzBuild(appDir)
+    if (code !== 0) throw new Error(`build failed with status ${code}`)
+  })
+
+  it("should have error during blitz export", async () => {
+    const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
+    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
+  })
 })

@@ -99,7 +99,7 @@ describe('production mode', () => {
   runTests('server')
 })
 
-describe('Serverless support', () => {
+describe('serverless mode', () => {
   beforeAll(async () => {
     await fs.writeFile(nextConfig, `module.exports = { target: 'serverless' }`)
     await nextBuild(appDir)
@@ -111,5 +111,5 @@ describe('Serverless support', () => {
     await fs.remove(nextConfig)
   })
 
-  runTests('severless')
+  runTests('serverless')
 })
