@@ -20,7 +20,6 @@ import {
   BUILD_ID_FILE,
   CLIENT_PUBLIC_FILES_PATH,
   CLIENT_STATIC_FILES_PATH,
-  CONFIG_FILE,
   EXPORT_DETAIL,
   EXPORT_MARKER,
   PAGES_MANIFEST,
@@ -143,7 +142,7 @@ export default async function exportApp(
   return nextExportSpan.traceAsyncFn(async () => {
     dir = resolve(dir)
 
-    // attempt to load global env values so they are available in next.config.js
+    // attempt to load global env values so they are available in blitz.config.js
     nextExportSpan
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
@@ -308,7 +307,7 @@ export default async function exportApp(
     if (typeof nextConfig.exportPathMap !== 'function') {
       if (!options.silent) {
         Log.info(
-          `No "exportPathMap" found in "${CONFIG_FILE}". Generating map from "./pages"`
+          `No "exportPathMap" found in "blitz.config.js". Generating map from "./pages"`
         )
       }
       nextConfig.exportPathMap = async (defaultMap: ExportPathMap) => {
@@ -356,7 +355,7 @@ export default async function exportApp(
     - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
     - Configure a third-party loader in \`blitz.config.js\`.
-    - Use the \`loader\` prop for \`next/image\`.
+    - Use the \`loader\` prop for \`blitz\`.
   Read more: https://nextjs.org/docs/messages/export-image-api`
         )
       }

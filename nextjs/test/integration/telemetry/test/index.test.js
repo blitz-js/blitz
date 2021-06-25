@@ -133,11 +133,9 @@ describe('Telemetry CLI', () => {
 
     const event1 = /NEXT_BUILD_COMPLETED[\s\S]+?{([\s\S]+?)}/.exec(stderr).pop()
     expect(event1).toMatch(/hasDunderPages.*?true/)
-    expect(event1).toMatch(/hasTestPages.*?true/)
 
     const event2 = /NEXT_BUILD_OPTIMIZED[\s\S]+?{([\s\S]+?)}/.exec(stderr).pop()
     expect(event2).toMatch(/hasDunderPages.*?true/)
-    expect(event2).toMatch(/hasTestPages.*?true/)
   })
 
   it('detects correct cli session defaults', async () => {

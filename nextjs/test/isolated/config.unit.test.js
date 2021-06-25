@@ -89,12 +89,10 @@ describe('config', () => {
           PHASE_DEVELOPMENT_SERVER,
           join(__dirname, '_resolvedata', 'typescript-config')
         )
-    ).rejects.toThrow(
-      /Configuring Blitz.js via .+ is not supported. Please replace the file with 'blitz.config.js'/
-    )
+    ).rejects.toThrow(/Configuring Blitz.js via .* is not supported/)
   })
 
-  it('Should not throw an error when two versions of next.config.js are present', async () => {
+  it('Should not throw an error when two versions of blitz.config.js are present', async () => {
     const config = await loadConfig(
       PHASE_DEVELOPMENT_SERVER,
       join(__dirname, '_resolvedata', 'js-ts-config')

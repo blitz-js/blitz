@@ -96,7 +96,9 @@ export function fetchViaHTTP(
   query?: Record<any, any>,
   opts?: Record<any, any>,
 ) {
-  const url = `http://localhost:${appPort}${pathname}${query ? `?${qs.stringify(query)}` : ""}`
+  const url = `http://localhost:${appPort}${pathname}${
+    typeof query === "string" ? query : query ? `?${qs.stringify(query)}` : ""
+  }`
   return fetch(url, opts)
 }
 
@@ -140,11 +142,9 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
     }
 
     let stderrOutput = ""
-    if (options.stderr) {
-      instance.stderr?.on("data", function (chunk) {
-        stderrOutput += chunk
-      })
-    }
+    instance.stderr?.on("data", function (chunk) {
+      stderrOutput += chunk
+    })
 
     let stdoutOutput = ""
     if (options.stdout) {

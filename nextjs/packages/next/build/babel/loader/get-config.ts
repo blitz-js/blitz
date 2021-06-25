@@ -1,15 +1,12 @@
 import { readFileSync } from 'fs'
+import JSON5 from 'next/dist/compiled/json5'
 
 import { createConfigItem, loadOptions } from 'next/dist/compiled/babel/core'
 import loadConfig from 'next/dist/compiled/babel/core-lib-config'
 
 import { NextBabelLoaderOptions, NextJsLoaderContext } from './types'
 import { consumeIterator } from './util'
-import {
-  getIsPageFile,
-  getIsRpcFile,
-  convertPageFilePathToRoutePath,
-} from '../../utils'
+import { getIsPageFile, getIsRpcFile } from '../../utils'
 
 const nextDistPath = /(next[\\/]dist[\\/]next-server[\\/]lib)|(next[\\/]dist[\\/]client)|(next[\\/]dist[\\/]pages)/
 
@@ -168,7 +165,7 @@ const isJsFile = /\.js$/
 function getCustomBabelConfig(configFilePath: string) {
   if (isJsonFile.exec(configFilePath)) {
     const babelConfigRaw = readFileSync(configFilePath, 'utf8')
-    return JSON.parse(babelConfigRaw)
+    return JSON5.parse(babelConfigRaw)
   } else if (isJsFile.exec(configFilePath)) {
     return require(configFilePath)
   }

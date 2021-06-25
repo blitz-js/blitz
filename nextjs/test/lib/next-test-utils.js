@@ -83,7 +83,7 @@ export function renderViaHTTP(appPort, pathname, query, opts) {
 
 export function fetchViaHTTP(appPort, pathname, query, opts) {
   const url = `http://localhost:${appPort}${pathname}${
-    query ? `?${qs.stringify(query)}` : ''
+    typeof query === 'string' ? query : query ? `?${qs.stringify(query)}` : ''
   }`
   return fetch(url, opts)
 }
@@ -118,15 +118,13 @@ export function runNextCommand(argv, options = {}) {
     }
 
     let stderrOutput = ''
-    if (options.stderr) {
-      instance.stderr.on('data', function (chunk) {
-        stderrOutput += chunk
+    instance.stderr.on('data', function (chunk) {
+      stderrOutput += chunk
 
-        if (options.stderr === 'log') {
-          console.log(chunk.toString())
-        }
-      })
-    }
+      if (options.stderr === 'log') {
+        console.log(chunk.toString())
+      }
+    })
 
     let stdoutOutput = ''
     if (options.stdout) {
@@ -146,6 +144,7 @@ export function runNextCommand(argv, options = {}) {
         !options.ignoreFail &&
         code !== 0
       ) {
+        console.log(stderrOutput)
         return reject(new Error(`command failed with code ${code}`))
       }
 
