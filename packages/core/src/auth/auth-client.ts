@@ -1,7 +1,8 @@
+import {AuthenticationError, RedirectError} from "next/stdlib"
 import {useEffect, useState} from "react"
+import {UrlObject} from "url"
 import {getBlitzRuntimeData} from "../blitz-data"
 import {COOKIE_CSRF_TOKEN, COOKIE_LEGACY_CSRF_TOKEN} from "../constants"
-import {AuthenticationError} from "../errors"
 import {isServer} from "../utils"
 import {readCookie} from "../utils/cookie"
 import {AuthenticatedClientSession, ClientSession, PublicData} from "./auth-types"
@@ -64,8 +65,10 @@ export const useAuthorizeIf = (condition?: boolean) => {
   }
 }
 
-export const useRedirectAuthenticated = (to: string) => {
+export const useRedirectAuthenticated = (to: UrlObject | string) => {
   if (typeof window !== "undefined" && publicDataStore.getData().userId) {
-    window.location.replace(to)
+    const error = new RedirectError(to)
+    error.stack = null!
+    throw error
   }
 }

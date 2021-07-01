@@ -357,7 +357,8 @@
       "contributions": [
         "test",
         "code",
-        "review"
+        "review",
+        "doc"
       ]
     },
     {
@@ -2411,7 +2412,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1384885?v=4",
       "profile": "www.usertrack.net",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -2798,7 +2800,65 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/4983285?v=4",
       "profile": "lksnmnn.com",
       "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "dbachrach",
+      "name": "Dustin Bachrach",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45016?v=4",
+      "profile": "dbachrach.com",
+      "contributions": [
+        "code",
         "doc"
+      ]
+    },
+    {
+      "login": "ashikka",
+      "name": "Ashikka Gupta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58368421?v=4",
+      "profile": "https://github.com/ashikka",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "deini",
+      "name": "Daniel Almaguer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2752665?v=4",
+      "profile": "https://github.com/deini",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "igeligel",
+      "name": "Kevin Peters",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12736734?v=4",
+      "profile": "https://www.kevinpeters.net/about/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "prisis",
+      "name": "Daniel Bannert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2716058?v=4",
+      "profile": "http://anolilab.de",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "benjakugler96",
+      "name": "Benja Kugler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53273645?v=4",
+      "profile": "https://benjakugler96.github.io/",
+      "contributions": [
+        "code"
       ]
     }
   ],

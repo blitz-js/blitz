@@ -63,14 +63,7 @@ describe("Build command", () => {
     expect(directoryTree(rootFolder)).toEqual({
       children: [
         {
-          children: [
-            {name: ".next"},
-            {name: "_blitz-version.txt"},
-            {name: "blitz.config.js"},
-            {name: "next.config.js"},
-            {name: "one"},
-            {name: "two"},
-          ],
+          children: [{name: ".next"}, {name: "_blitz-version.txt"}, {name: "one"}, {name: "two"}],
           name: ".blitz-build",
         },
         {

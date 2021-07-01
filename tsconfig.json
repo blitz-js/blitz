@@ -23,7 +23,8 @@
     "esModuleInterop": true,
     "noEmit": true,
     "isolatedModules": true,
-    "incremental": true
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": [
     "types/**/*",

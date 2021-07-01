@@ -11,20 +11,20 @@ pluginTester({
     },
     {
       code: `import { Image } from 'blitz';`,
-      output: `import { Image } from '@blitzjs/core/image';`,
+      output: `import { Image } from 'next/image';`,
     },
     {
       code: `import {Image, Link} from 'blitz';`,
       output: `
         import { Link } from '@blitzjs/core';
-        import { Image } from '@blitzjs/core/image';
+        import { Image } from 'next/image';
       `,
     },
     {
       code: `import {Image as BlitzImage, Link} from 'blitz';`,
       output: `
         import { Link } from '@blitzjs/core';
-        import { Image as BlitzImage } from '@blitzjs/core/image';
+        import { Image as BlitzImage } from 'next/image';
       `,
     },
     {

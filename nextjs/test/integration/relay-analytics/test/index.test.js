@@ -2,7 +2,13 @@
 
 import { join } from 'path'
 import webdriver from 'next-webdriver'
-import { killApp, findPort, nextBuild, nextStart } from 'next-test-utils'
+import {
+  killApp,
+  findPort,
+  nextBuild,
+  nextStart,
+  waitFor,
+} from 'next-test-utils'
 
 const appDir = join(__dirname, '../')
 let appPort
@@ -59,6 +65,7 @@ describe('Analytics relayer', () => {
     expect(largestContentfulPaint).not.toBeNaN()
     expect(largestContentfulPaint).toBeGreaterThan(0)
 
+    await waitFor(100)
     const beacons = (await browser.eval('window.__BEACONS')).map(([, value]) =>
       Object.fromEntries(new URLSearchParams(value))
     )
@@ -85,7 +92,7 @@ describe('Analytics relayer', () => {
       value: expect.stringContaining('.'),
     })
 
-    expect(stdout).toMatch('Next.js Analytics')
+    expect(stdout).toMatch('Blitz.js Analytics')
 
     await browser.close()
   })

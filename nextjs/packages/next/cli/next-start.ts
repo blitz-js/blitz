@@ -35,9 +35,9 @@ const nextStart: cliCommand = (argv) => {
         The application should be compiled with \`next build\` first.
 
       Usage
-        $ next start <dir> -p <port>
+        $ blitz start <dir> -p <port>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the Blitz.js application.
       If no directory is provided, the current directory will be used.
 
       Options
@@ -49,7 +49,8 @@ const nextStart: cliCommand = (argv) => {
   }
 
   const dir = resolve(args._[0] || '.')
-  const port = args['--port'] || 3000
+  const port =
+    args['--port'] || (process.env.PORT && parseInt(process.env.PORT)) || 3000
   const host = args['--hostname'] || '0.0.0.0'
   const appUrl = `http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`
   startServer({ dir }, port, host)

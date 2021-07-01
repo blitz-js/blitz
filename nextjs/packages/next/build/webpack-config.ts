@@ -51,20 +51,8 @@ import WebpackConformancePlugin, {
   ReactSyncScriptsConformanceCheck,
 } from './webpack/plugins/webpack-conformance-plugin'
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
-
-import fs from 'fs'
-import { getProjectRoot } from '../server/lib/utils'
-
-/* ------ Blitz.js ------- */
-function doesDbModuleExist() {
-  const projectRoot = getProjectRoot()
-  return (
-    fs.existsSync(path.join(projectRoot, 'db/index.js')) ||
-    fs.existsSync(path.join(projectRoot, 'db/index.ts')) ||
-    fs.existsSync(path.join(projectRoot, 'db/index.tsx'))
-  )
-}
-/* ------ Blitz.js ------- */
+import { regexLikeCss } from './webpack/config/blocks/css'
+import { existsSync } from 'fs'
 
 type ExcludesFalse = <T>(x: T | false) => x is T
 
@@ -190,6 +178,7 @@ const WEBPACK_RESOLVE_OPTIONS = {
   // Otherwise combined ESM+CJS packages will never be external
   // as resolving mismatch would lead to opt-out from being external.
   dependencyType: 'commonjs',
+  symlinks: true,
 }
 
 const NODE_RESOLVE_OPTIONS = {
@@ -243,14 +232,19 @@ export default async function getBaseWebpackConfig(
     rewrites.beforeFiles.length > 0 ||
     rewrites.afterFiles.length > 0 ||
     rewrites.fallback.length > 0
-
-  const reactVersion = await getPackageVersion({ cwd: dir, name: 'react' })
   const hasReactRefresh: boolean = dev && !isServer
-  const hasJsxRuntime: boolean =
-    Boolean(reactVersion) &&
-    // 17.0.0-rc.0 had a breaking change not compatible with Next.js, but was
-    // fixed in rc.1.
-    semver.gte(reactVersion!, '17.0.0-rc.1')
+  const reactDomVersion = await getPackageVersion({
+    cwd: dir,
+    name: 'react-dom',
+  })
+  const hasReactExperimental: boolean =
+    Boolean(reactDomVersion) && reactDomVersion!.includes('experimental') // blitz
+  const hasReact18: boolean =
+    (Boolean(reactDomVersion) &&
+      (semver.gte(reactDomVersion!, '18.0.0') ||
+        semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
+    hasReactExperimental // blitz
+  const hasReactRoot: boolean = config.experimental.reactRoot || hasReact18
 
   const babelConfigFile = await [
     '.babelrc',
@@ -272,7 +266,15 @@ export default async function getBaseWebpackConfig(
 
   const distDir = path.join(dir, config.distDir)
 
-  const babelLoader = config.experimental.turboMode
+  /* ------ Blitz.js ------- */
+  const hasDbModule =
+    existsSync(path.join(dir, 'db/index.js')) ||
+    existsSync(path.join(dir, 'db/index.ts'))
+  /* ------ Blitz.js ------- */
+
+  // Webpack 5 can use the faster babel loader, webpack 5 has built-in caching for loaders
+  // For webpack 4 the old loader is used as it has external caching
+  const babelLoader = isWebpack5
     ? require.resolve('./babel/loader/index')
     : 'next-babel-loader'
   const defaultLoaders = {
@@ -288,7 +290,7 @@ export default async function getBaseWebpackConfig(
         cache: !isWebpack5,
         development: dev,
         hasReactRefresh,
-        hasJsxRuntime,
+        hasJsxRuntime: true,
       },
     },
     // Backwards compat
@@ -503,7 +505,7 @@ export default async function getBaseWebpackConfig(
 
   // Contains various versions of the Webpack SplitChunksPlugin used in different build types
   const splitChunksConfigs: {
-    [propName: string]: webpack.Options.SplitChunksOptions
+    [propName: string]: webpack.Options.SplitChunksOptions | false
   } = {
     dev: {
       cacheGroups: {
@@ -604,9 +606,9 @@ export default async function getBaseWebpackConfig(
   }
 
   // Select appropriate SplitChunksPlugin config for this build
-  let splitChunksConfig: webpack.Options.SplitChunksOptions
+  let splitChunksConfig: webpack.Options.SplitChunksOptions | false
   if (dev) {
-    splitChunksConfig = splitChunksConfigs.dev
+    splitChunksConfig = isWebpack5 ? false : splitChunksConfigs.dev
   } else {
     splitChunksConfig = splitChunksConfigs.prodGranular
   }
@@ -753,6 +755,14 @@ export default async function getBaseWebpackConfig(
       return
     }
 
+    if (
+      res.match(
+        /next[/\\]dist[/\\]next-server[/\\](?!lib[/\\]router[/\\]router)/
+      )
+    ) {
+      return `commonjs ${request}`
+    }
+
     // Default pages have to be transpiled
     if (
       res.match(/[/\\]next[/\\]dist[/\\]/) ||
@@ -837,7 +847,7 @@ export default async function getBaseWebpackConfig(
       checkWasmTypes: false,
       nodeEnv: false,
       splitChunks: isServer
-        ? isWebpack5
+        ? isWebpack5 && !dev
           ? ({
               filename: '[name].js',
               // allow to split entrypoints
@@ -896,9 +906,7 @@ export default async function getBaseWebpackConfig(
     entry: async () => {
       return {
         ...(clientEntries ? clientEntries : {}),
-        ...(isServer && doesDbModuleExist()
-          ? { 'blitz-db': './db/index' }
-          : {}),
+        ...(isServer && hasDbModule ? { 'blitz-db': './db/index' } : {}),
         ...entrypoints,
       }
     },
@@ -926,6 +934,9 @@ export default async function getBaseWebpackConfig(
             },
           }
         : {}),
+      // we must set publicPath to an empty value to override the default of
+      // auto which doesn't work in IE11
+      publicPath: `${config.assetPrefix || ''}/_next/`,
       path:
         isServer && isWebpack5 && !dev
           ? path.join(outputPath, 'chunks')
@@ -944,7 +955,7 @@ export default async function getBaseWebpackConfig(
         ? 'static/webpack/[id].[fullhash].hot-update.js'
         : 'static/webpack/[id].[hash].hot-update.js',
       hotUpdateMainFilename: isWebpack5
-        ? 'static/webpack/[fullhash].hot-update.json'
+        ? 'static/webpack/[fullhash].[runtime].hot-update.json'
         : 'static/webpack/[hash].hot-update.json',
       // This saves chunks with the name given via `import()`
       chunkFilename: isServer
@@ -966,6 +977,7 @@ export default async function getBaseWebpackConfig(
         'error-loader',
         'next-babel-loader',
         'next-client-pages-loader',
+        'next-image-loader',
         'next-serverless-loader',
         'noop-loader',
         'next-style-loader',
@@ -1058,7 +1070,7 @@ export default async function getBaseWebpackConfig(
         ...Object.keys(config.env).reduce((acc, key) => {
           if (/^(?:NODE_.+)|^(?:__.+)$/i.test(key)) {
             throw new Error(
-              `The key "${key}" under "env" in next.config.js is not allowed. https://nextjs.org/docs/messages/env-key-not-allowed`
+              `The key "${key}" under "env" in blitz.config.js is not allowed. https://nextjs.org/docs/messages/env-key-not-allowed`
             )
           }
 
@@ -1094,9 +1106,7 @@ export default async function getBaseWebpackConfig(
         'process.env.__NEXT_STRICT_MODE': JSON.stringify(
           config.reactStrictMode
         ),
-        'process.env.__NEXT_REACT_ROOT': JSON.stringify(
-          config.experimental.reactRoot
-        ),
+        'process.env.__NEXT_REACT_ROOT': JSON.stringify(hasReactRoot),
         'process.env.__NEXT_OPTIMIZE_FONTS': JSON.stringify(
           config.optimizeFonts && !dev
         ),
@@ -1105,9 +1115,6 @@ export default async function getBaseWebpackConfig(
         ),
         'process.env.__NEXT_OPTIMIZE_CSS': JSON.stringify(
           config.experimental.optimizeCss && !dev
-        ),
-        'process.env.__NEXT_SCRIPT_LOADER': JSON.stringify(
-          !!config.experimental.scriptLoader
         ),
         'process.env.__NEXT_SCROLL_RESTORATION': JSON.stringify(
           config.experimental.scrollRestoration
@@ -1123,7 +1130,6 @@ export default async function getBaseWebpackConfig(
                 domains: config.images.domains,
               }
             : {}),
-          enableBlurryPlaceholder: config.experimental.enableBlurryPlaceholder,
         }),
         'process.env.__NEXT_ROUTER_BASEPATH': JSON.stringify(config.basePath),
         'process.env.__NEXT_HAS_REWRITES': JSON.stringify(hasRewrites),
@@ -1165,7 +1171,7 @@ export default async function getBaseWebpackConfig(
       // by default due to how Webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-      config.future.excludeDefaultMomentLocales &&
+      config.excludeDefaultMomentLocales &&
         new webpack.IgnorePlugin({
           resourceRegExp: /^\.\/locale$/,
           contextRegExp: /moment$/,
@@ -1345,7 +1351,7 @@ export default async function getBaseWebpackConfig(
       scrollRestoration: config.experimental.scrollRestoration,
       basePath: config.basePath,
       pageEnv: config.experimental.pageEnv,
-      excludeDefaultMomentLocales: config.future.excludeDefaultMomentLocales,
+      excludeDefaultMomentLocales: config.excludeDefaultMomentLocales,
       assetPrefix: config.assetPrefix,
       disableOptimizedLoading: config.experimental.disableOptimizedLoading,
       target,
@@ -1358,12 +1364,13 @@ export default async function getBaseWebpackConfig(
       type: 'filesystem',
       // Includes:
       //  - Next.js version
-      //  - next.config.js keys that affect compilation
+      //  - blitz.config.js keys that affect compilation
       version: `${process.env.__NEXT_VERSION}|${configVars}`,
       cacheDirectory: path.join(distDir, 'cache', 'webpack'),
     }
 
-    // Adds `next.config.js` as a buildDependency when custom webpack config is provided
+    // TODO - can we remove this?
+    // Adds `blitz.config.js` as a buildDependency when custom webpack config is provided
     if (config.webpack && config.configFile) {
       cache.buildDependencies = {
         config: [config.configFile],
@@ -1431,6 +1438,7 @@ export default async function getBaseWebpackConfig(
     sassOptions: config.sassOptions,
     productionBrowserSourceMaps: config.productionBrowserSourceMaps,
     future: config.future,
+    isCraCompat: config.experimental.craCompat,
   })
 
   let originalDevtool = webpackConfig.devtool
@@ -1448,7 +1456,7 @@ export default async function getBaseWebpackConfig(
 
     if (!webpackConfig) {
       throw new Error(
-        'Webpack config is undefined. You may have forgot to return properly from within the "webpack" method of your next.config.js.\n' +
+        'Webpack config is undefined. You may have forgot to return properly from within the "webpack" method of your blitz.config.js.\n' +
           'See more info here https://nextjs.org/docs/messages/undefined-webpack-config'
       )
     }
@@ -1460,9 +1468,99 @@ export default async function getBaseWebpackConfig(
 
     if (typeof (webpackConfig as any).then === 'function') {
       console.warn(
-        '> Promise returned in next config. https://nextjs.org/docs/messages/promise-in-next-config'
+        '> Promise returned in blitz config. https://nextjs.org/docs/messages/promise-in-next-config'
       )
     }
+  }
+
+  if (!config.images.disableStaticImages && isWebpack5) {
+    if (!webpackConfig.module) {
+      webpackConfig.module = { rules: [] }
+    }
+
+    const hasSvg = webpackConfig.module.rules.some(
+      (rule) =>
+        'test' in rule && rule.test instanceof RegExp && rule.test.test('.svg')
+    )
+
+    // Exclude svg if the user already defined it in custom
+    // webpack config such as `@svgr/webpack` plugin or
+    // the `babel-plugin-inline-react-svg` plugin.
+    webpackConfig.module.rules.push({
+      test: hasSvg
+        ? /\.(png|jpg|jpeg|gif|webp|ico|bmp)$/i
+        : /\.(png|svg|jpg|jpeg|gif|webp|ico|bmp)$/i,
+      loader: 'next-image-loader',
+      dependency: { not: ['url'] },
+      // @ts-ignore
+      issuer: { not: regexLikeCss },
+    })
+  }
+
+  if (
+    config.experimental.craCompat &&
+    webpackConfig.module?.rules &&
+    webpackConfig.plugins
+  ) {
+    // CRA prevents loading all locales by default
+    // https://github.com/facebook/create-react-app/blob/fddce8a9e21bf68f37054586deb0c8636a45f50b/packages/react-scripts/config/webpack.config.js#L721
+    webpackConfig.plugins.push(
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    )
+
+    // CRA allows importing non-webpack handled files with file-loader
+    // these need to be the last rule to prevent catching other items
+    // https://github.com/facebook/create-react-app/blob/fddce8a9e21bf68f37054586deb0c8636a45f50b/packages/react-scripts/config/webpack.config.js#L594
+    const fileLoaderExclude = [/\.(js|mjs|jsx|ts|tsx|json)$/]
+    const fileLoader = isWebpack5
+      ? {
+          exclude: fileLoaderExclude,
+          issuer: fileLoaderExclude,
+          type: 'asset/resource',
+          generator: {
+            publicPath: '/_next/',
+            filename: 'static/media/[name].[hash:8].[ext]',
+          },
+        }
+      : {
+          loader: require.resolve('next/dist/compiled/file-loader'),
+          // Exclude `js` files to keep "css" loader working as it injects
+          // its runtime that would otherwise be processed through "file" loader.
+          // Also exclude `html` and `json` extensions so they get processed
+          // by webpacks internal loaders.
+          exclude: fileLoaderExclude,
+          issuer: fileLoaderExclude,
+          options: {
+            publicPath: '/_next/static/media',
+            outputPath: 'static/media',
+            name: '[name].[hash:8].[ext]',
+          },
+        }
+
+    const topRules = []
+    const innerRules = []
+
+    for (const rule of webpackConfig.module.rules) {
+      if (rule.resolve) {
+        topRules.push(rule)
+      } else {
+        if (
+          rule.oneOf &&
+          !(rule.test || rule.exclude || rule.resource || rule.issuer)
+        ) {
+          rule.oneOf.forEach((r) => innerRules.push(r))
+        } else {
+          innerRules.push(rule)
+        }
+      }
+    }
+
+    webpackConfig.module.rules = [
+      ...(topRules as any),
+      {
+        oneOf: [...innerRules, fileLoader],
+      },
+    ]
   }
 
   // Backwards compat with webpack-dev-middleware options object
@@ -1584,7 +1682,7 @@ export default async function getBaseWebpackConfig(
 
     if (foundTsRule) {
       console.warn(
-        '\n@zeit/next-typescript is no longer needed since Next.js has built-in support for TypeScript now. Please remove it from your next.config.js and your .babelrc\n'
+        '\n@zeit/next-typescript is no longer needed since Blitz.js has built-in support for TypeScript now. Please remove it from your blitz.config.js and your .babelrc\n'
       )
     }
   }

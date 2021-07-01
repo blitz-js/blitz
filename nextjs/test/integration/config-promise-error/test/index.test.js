@@ -24,7 +24,7 @@ describe('Promise in next config', () => {
     )
 
     expect(stderr).toMatch(
-      /Error: > Promise returned in next config\. https:\/\//
+      /Error: > Promise returned in blitz config\. https:\/\//
     )
   })
 
@@ -45,6 +45,6 @@ describe('Promise in next config', () => {
       { stderr: true }
     )
 
-    expect(stderr).toMatch(/> Promise returned in next config\. https:\/\//)
+    expect(stderr).toMatch(/> Promise returned in blitz config\. https:\/\//)
   })
 })

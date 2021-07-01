@@ -1,4 +1,5 @@
 import {addBasePath} from "next/dist/next-server/lib/router/router"
+import {CSRFTokenMismatchError} from "next/stdlib"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {getAntiCSRFToken} from "./auth/auth-client"
@@ -11,7 +12,6 @@ import {
   HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from "./constants"
-import {CSRFTokenMismatchError} from "./errors"
 import {
   CancellablePromise,
   EnhancedResolver,
@@ -86,14 +86,21 @@ export const executeRpcCall = <TInput, TResult>(
           clientDebug("Public data updated")
         }
         if (response.headers.get(HEADER_SESSION_REVOKED)) {
-          clientDebug("Session revoked")
+          clientDebug("Session revoked, clearing publicData")
+          publicDataStore.clear()
           setTimeout(async () => {
-            // Do these in the next tick to prevent various bugs like #2207
+            // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+            clientDebug("Clearing and invalidating react-query cache...")
             await queryClient.cancelQueries()
             await queryClient.resetQueries()
             queryClient.getMutationCache().clear()
-            publicDataStore.clear()
-          }, 0)
+            // We have a 100ms delay here to prevent unnecessary stale queries from running
+            // This prevents the case where you logout on a page with
+            // Page.authenticate = {redirectTo: '/login'}
+            // Without this delay, queries that require authentication on the original page
+            // will still run (but fail because you are now logged out)
+            // Ref: https://github.com/blitz-js/blitz/issues/1935
+          }, 100)
         }
         if (response.headers.get(HEADER_SESSION_CREATED)) {
           clientDebug("Session created")

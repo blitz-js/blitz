@@ -21,7 +21,7 @@ describe("Misc", () => {
       env: {__NEXT_TEST_WITH_DEVTOOL: 1},
     })
 
-    const prerender = ["/body-parser"]
+    const prerender = ["/body-parser", "/script"]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
   afterAll(() => killApp(context.server))
@@ -34,6 +34,17 @@ describe("Misc", () => {
       await browser.waitForElementByCss("#error")
       text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/query failed/)
+      if (browser) await browser.close()
+    })
+  })
+
+  describe("Script", () => {
+    it("should work", async () => {
+      const browser = await webdriver(context.appPort, "/script")
+
+      let scriptLoaded = await browser.eval(`window.scriptLoaded`)
+      expect(scriptLoaded).toBe(true)
+
       if (browser) await browser.close()
     })
   })

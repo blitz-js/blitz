@@ -26,7 +26,7 @@ const runTests = () => {
       'You have opted-out of Automatic Static Optimization due to'
     )
     expect(combinedOutput).toContain(
-      'The following reserved Next.js pages were detected not directly under the pages directory'
+      'The following reserved Blitz.js pages were detected not directly under the pages directory'
     )
     expect(combinedOutput).toContain('/app/_error')
   })

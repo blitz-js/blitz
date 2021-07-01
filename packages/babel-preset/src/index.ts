@@ -13,10 +13,7 @@ export default function preset(_api: any, options = {}) {
     presets: [[require('next/babel'), options]],
     plugins: [
       FixNodeFileTrace,
-      [
-        require('babel-plugin-superjson-next'),
-        { exclude: ['dehydratedState'] },
-      ],
+      require('babel-plugin-superjson-next'),
       AddBlitzAppRoot,
     ],
   };

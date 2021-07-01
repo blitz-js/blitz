@@ -13,7 +13,7 @@ web_modules/
 *.sqlite
 *.sqlite-journal
 .now
-.blitz-console-history
+.blitz**
 blitz-log.log
 
 # misc

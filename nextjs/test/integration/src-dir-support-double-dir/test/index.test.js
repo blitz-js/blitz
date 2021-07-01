@@ -23,9 +23,11 @@ function runTests(dev) {
     expect(html).toMatch(/PAGES/)
   })
 
-  it('should render not render from src/pages', async () => {
+  it('should render from src/pages', async () => {
     const html = await renderViaHTTP(appPort, '/hello')
-    expect(html).toMatch(/404/)
+    expect(html).toMatch(/SRC/)
+    const html2 = await renderViaHTTP(appPort, '/world')
+    expect(html2).toMatch(/SRC/)
   })
 }
 

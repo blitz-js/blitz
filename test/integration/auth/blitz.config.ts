@@ -2,6 +2,7 @@ import {BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized} from "blitz"
 import db from "./db"
 
 const config: BlitzConfig = {
+  // replace me
   middleware: [
     sessionMiddleware({
       isAuthorized: simpleRolesIsAuthorized,
@@ -16,5 +17,8 @@ const config: BlitzConfig = {
       deleteSession: (handle) => db.get("sessions").remove({handle}).write(),
     }),
   ],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 module.exports = config

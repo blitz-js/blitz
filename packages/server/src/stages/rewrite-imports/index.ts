@@ -69,17 +69,5 @@ export function rewriteImportOrigin(origin: string, cwd: string): string {
     }
   }
 
-  // If it's an import from a page, say from app/pages/mypage,
-  // we'll rewrite that import to pages/mypage.
-  if (parts.includes("pages")) {
-    parts.splice(0, parts.indexOf("pages"))
-  }
-
-  // If it's an import from an API Route, say from app/users/api/myRoute,
-  // we'll rewrite it to pages/api/myRoute.
-  if (parts.includes("api")) {
-    parts.splice(0, parts.indexOf("api"), "pages")
-  }
-
   return parts.join("/")
 }

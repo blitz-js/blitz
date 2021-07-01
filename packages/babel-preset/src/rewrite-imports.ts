@@ -8,7 +8,15 @@ import { BabelType } from 'babel-plugin-tester';
 const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
-  Image: '@blitzjs/core/image',
+  Image: 'next/image',
+  Script: 'next/script',
+
+  AuthenticationError: 'next/stdlib',
+  AuthorizationError: 'next/stdlib',
+  CSRFTokenMismatchError: 'next/stdlib',
+  NotFoundError: 'next/stdlib',
+  PaginationArgumentError: 'next/stdlib',
+  RedirectError: 'next/stdlib',
 
   Head: '@blitzjs/core/head',
 
@@ -41,6 +49,7 @@ const specialImports: Record<string, string> = {
   hash256: '@blitzjs/core/server',
   generateToken: '@blitzjs/core/server',
   rpcApiHandler: '@blitzjs/core/server',
+  setPublicDataForUser: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {
