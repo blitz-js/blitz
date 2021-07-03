@@ -35,30 +35,39 @@ export default function NoAnonymousDefaultExport({
 
         switch (def.type) {
           case 'ArrowFunctionExpression': {
-            warn(
-              [
-                chalk.yellow.bold(
-                  'Anonymous arrow functions cause Fast Refresh to not preserve local component state.'
-                ),
-                'Please add a name to your function, for example:',
-                '',
-                chalk.bold('Before'),
-                chalk.cyan('export default () => <div />;'),
-                '',
-                chalk.bold('After'),
-                chalk.cyan('const Named = () => <div />;'),
-                chalk.cyan('export default Named;'),
-                '',
-                `A codemod is available to fix the most common cases: ${chalk.cyan(
-                  'https://nextjs.link/codemod-ndc'
-                )}`,
-              ].join('\n')
-            )
+            if (
+              !process.env.__NEXT_TEST_MODE ||
+              !!process.env.__NEXT_TEST_ANON_EXPORT
+            ) {
+              warn(
+                [
+                  chalk.yellow.bold(
+                    'Anonymous arrow functions cause Fast Refresh to not preserve local component state.'
+                  ),
+                  'Please add a name to your function, for example:',
+                  '',
+                  chalk.bold('Before'),
+                  chalk.cyan('export default () => <div />;'),
+                  '',
+                  chalk.bold('After'),
+                  chalk.cyan('const Named = () => <div />;'),
+                  chalk.cyan('export default Named;'),
+                  '',
+                  `A codemod is available to fix the most common cases: ${chalk.cyan(
+                    'https://nextjs.link/codemod-ndc'
+                  )}`,
+                ].join('\n')
+              )
+            }
             break
           }
           case 'FunctionDeclaration': {
             const isAnonymous = !Boolean(def.id)
-            if (isAnonymous) {
+            if (
+              isAnonymous &&
+              (!process.env.__NEXT_TEST_MODE ||
+                !!process.env.__NEXT_TEST_ANON_EXPORT)
+            ) {
               warn(
                 [
                   chalk.yellow.bold(

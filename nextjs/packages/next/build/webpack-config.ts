@@ -52,20 +52,7 @@ import WebpackConformancePlugin, {
 } from './webpack/plugins/webpack-conformance-plugin'
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
 import { regexLikeCss } from './webpack/config/blocks/css'
-
-import fs from 'fs'
-import { getProjectRoot } from '../server/lib/utils'
-
-/* ------ Blitz.js ------- */
-function doesDbModuleExist() {
-  const projectRoot = getProjectRoot()
-  return (
-    fs.existsSync(path.join(projectRoot, 'db/index.js')) ||
-    fs.existsSync(path.join(projectRoot, 'db/index.ts')) ||
-    fs.existsSync(path.join(projectRoot, 'db/index.tsx'))
-  )
-}
-/* ------ Blitz.js ------- */
+import { existsSync } from 'fs'
 
 type ExcludesFalse = <T>(x: T | false) => x is T
 
@@ -278,6 +265,12 @@ export default async function getBaseWebpackConfig(
   }, Promise.resolve(undefined))
 
   const distDir = path.join(dir, config.distDir)
+
+  /* ------ Blitz.js ------- */
+  const hasDbModule =
+    existsSync(path.join(dir, 'db/index.js')) ||
+    existsSync(path.join(dir, 'db/index.ts'))
+  /* ------ Blitz.js ------- */
 
   // Webpack 5 can use the faster babel loader, webpack 5 has built-in caching for loaders
   // For webpack 4 the old loader is used as it has external caching
@@ -913,9 +906,7 @@ export default async function getBaseWebpackConfig(
     entry: async () => {
       return {
         ...(clientEntries ? clientEntries : {}),
-        ...(isServer && doesDbModuleExist()
-          ? { 'blitz-db': './db/index' }
-          : {}),
+        ...(isServer && hasDbModule ? { 'blitz-db': './db/index' } : {}),
         ...entrypoints,
       }
     },
@@ -1373,12 +1364,13 @@ export default async function getBaseWebpackConfig(
       type: 'filesystem',
       // Includes:
       //  - Next.js version
-      //  - next.config.js keys that affect compilation
+      //  - blitz.config.js keys that affect compilation
       version: `${process.env.__NEXT_VERSION}|${configVars}`,
       cacheDirectory: path.join(distDir, 'cache', 'webpack'),
     }
 
-    // Adds `next.config.js` as a buildDependency when custom webpack config is provided
+    // TODO - can we remove this?
+    // Adds `blitz.config.js` as a buildDependency when custom webpack config is provided
     if (config.webpack && config.configFile) {
       cache.buildDependencies = {
         config: [config.configFile],

@@ -10,6 +10,7 @@ import { ClientPagesLoaderOptions } from './webpack/loaders/next-client-pages-lo
 import { ServerlessLoaderQuery } from './webpack/loaders/next-serverless-loader'
 import { LoadedEnvFiles } from '@next/env'
 import { NextConfig } from '../next-server/server/config'
+import { convertPageFilePathToRoutePath } from './utils'
 
 type PagesMapping = {
   [page: string]: string
@@ -22,19 +23,19 @@ export function createPagesMapping(
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
-      let page = `${pagePath
+      let page = `${convertPageFilePathToRoutePath(pagePath)
         .replace(new RegExp(`\\.+(${extensions.join('|')})$`), '')
         .replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
-      const pageKey = page === '' ? '/' : page
+      let pageKey = page === '' ? '/' : page
 
       if (pageKey in result) {
         warn(
           `Duplicate page detected. ${chalk.cyan(
-            join('pages', previousPages[pageKey])
-          )} and ${chalk.cyan(
-            join('pages', pagePath)
-          )} both resolve to ${chalk.cyan(pageKey)}.`
+            previousPages[pageKey]
+          )} and ${chalk.cyan(pagePath)} both resolve to ${chalk.cyan(
+            pageKey
+          )}.`
         )
       } else {
         previousPages[pageKey] = pagePath

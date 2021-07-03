@@ -74,6 +74,7 @@ describe('Client Navigation accessibility', () => {
 
         const title = await browser.eval('document.title')
 
+        await waitFor(500)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()
@@ -92,6 +93,7 @@ describe('Client Navigation accessibility', () => {
 
         const pathname = '/page-without-h1-or-title'
 
+        await waitFor(500)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()

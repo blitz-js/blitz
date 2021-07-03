@@ -1,14 +1,15 @@
 import chalk from 'chalk'
 import findUp from 'next/dist/compiled/find-up'
-import { basename, extname } from 'path'
+import { basename, extname, join } from 'path'
 import * as Log from '../../build/output/log'
 import { hasNextSupport } from '../../telemetry/ci-info'
 import { CONFIG_FILE, PHASE_DEVELOPMENT_SERVER } from '../lib/constants'
 import { execOnce } from '../lib/utils'
-import { defaultConfig, normalizeConfig } from './config-shared'
+import { compileConfig, defaultConfig, normalizeConfig } from './config-shared'
 import { loadWebpackHook } from './config-utils'
 import { ImageConfig, imageConfigDefault, VALID_LOADERS } from './image-config'
 import { loadEnvConfig } from '@next/env'
+const debug = require('debug')('blitz:config')
 
 export { DomainLocales, NextConfig, normalizeConfig } from './config-shared'
 
@@ -412,6 +413,10 @@ export default async function loadConfig(
   customConfig?: object | null
 ) {
   await loadEnvConfig(dir, phase === PHASE_DEVELOPMENT_SERVER, Log)
+  if (!['start', 's'].includes(process.argv[2])) {
+    // Do not compile config for blitz start because it was already compiled during blitz build
+    await compileConfig(dir)
+  }
   await loadWebpackHook(phase, dir)
 
   if (customConfig) {
@@ -423,10 +428,19 @@ export default async function loadConfig(
   // If config file was found
   if (path?.length) {
     const userConfigModule = require(path)
-    const userConfig = normalizeConfig(
+    let userConfig = normalizeConfig(
       phase,
       userConfigModule.default || userConfigModule
     )
+
+    if (process.env.VERCEL_BUILDER) {
+      debug("Loading Vercel's next.config.js...")
+      const nextConfig = require(join('dir', 'next.config.js'))
+      debug("Vercel's next.config.js contents:", nextConfig)
+      for (const [key, value] of Object.entries(nextConfig)) {
+        userConfig[key] = value
+      }
+    }
 
     if (Object.keys(userConfig).length === 0) {
       Log.warn(
@@ -461,21 +475,23 @@ export default async function loadConfig(
       ...userConfig,
     })
   } else {
-    const configBaseName = basename(CONFIG_FILE, extname(CONFIG_FILE))
-    const nonJsPath = findUp.sync(
+    const unsupportedPath = findUp.sync(
       [
-        `${configBaseName}.jsx`,
-        `${configBaseName}.ts`,
-        `${configBaseName}.tsx`,
-        `${configBaseName}.json`,
+        `blitz.config.jsx`,
+        `blitz.config.tsx`,
+        `blitz.config.json`,
+        `next.config.jsx`,
+        `next.config.ts`,
+        `next.config.tsx`,
+        `next.config.json`,
       ],
       { cwd: dir }
     )
-    if (nonJsPath?.length) {
+    if (unsupportedPath?.length) {
       throw new Error(
         `Configuring Blitz.js via '${basename(
-          nonJsPath
-        )}' is not supported. Please replace the file with 'blitz.config.js'.`
+          unsupportedPath
+        )}' is not supported. Please replace the file with 'blitz.config.(js|ts)'`
       )
     }
   }

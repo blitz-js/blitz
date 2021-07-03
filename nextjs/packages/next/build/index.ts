@@ -15,7 +15,6 @@ import {
   PUBLIC_DIR_MIDDLEWARE_CONFLICT,
 } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
-import { findPagesDir } from '../lib/find-pages-dir'
 import loadCustomRoutes, {
   CustomRoutes,
   getRedirectStatus,
@@ -125,7 +124,7 @@ export default async function build(
   const nextBuildSpan = trace('next-build')
 
   return nextBuildSpan.traceAsyncFn(async () => {
-    // attempt to load global env values so they are available in next.config.js
+    // attempt to load global env values so they are available in blitz.config.js
     const { loadedEnvFiles } = nextBuildSpan
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
@@ -162,7 +161,7 @@ export default async function build(
     setGlobal('telemetry', telemetry)
 
     const publicDir = path.join(dir, 'public')
-    const pagesDir = findPagesDir(dir)
+    const pagesDir = dir
     const hasPublicDir = await fileExists(publicDir)
 
     telemetry.record(

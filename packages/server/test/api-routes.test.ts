@@ -71,11 +71,12 @@ describe("Dev command", () => {
       name: ".blitz-build",
       children: [
         {name: "_blitz-version.txt"},
-        {name: "blitz.config.js"},
-        {name: "next.config.js"},
         {
-          name: "pages",
-          children: [{name: "api", children: [{name: "bar.ts"}, {name: "foo.ts"}]}],
+          name: "app",
+          children: [
+            {name: "api", children: [{name: "bar.ts"}]},
+            {name: "foo", children: [{name: "api", children: [{name: "foo.ts"}]}]},
+          ],
         },
       ],
     })
