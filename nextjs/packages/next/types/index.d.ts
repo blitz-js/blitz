@@ -186,3 +186,5 @@ export type InferGetServerSidePropsType<T> = T extends GetServerSideProps<
   : never
 
 export default next
+
+export { PaginateArgs } from '../stdlib-server'

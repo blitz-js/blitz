@@ -18,6 +18,9 @@ const specialImports: Record<string, string> = {
   PaginationArgumentError: 'next/stdlib',
   RedirectError: 'next/stdlib',
 
+  paginate: 'next/stdlib-server',
+  isLocalhost: 'next/stdlib-server',
+
   Head: '@blitzjs/core/head',
 
   App: '@blitzjs/core/app',
@@ -34,22 +37,18 @@ const specialImports: Record<string, string> = {
   Main: '@blitzjs/core/document',
   BlitzScript: '@blitzjs/core/document',
 
-  getAllMiddlewareForModule: '@blitzjs/core/server',
-  handleRequestWithMiddleware: '@blitzjs/core/server',
-  connectMiddleware: '@blitzjs/core/server',
   invokeWithMiddleware: '@blitzjs/core/server',
-  paginate: '@blitzjs/core/server',
+
   resolver: '@blitzjs/core/server',
-  isLocalhost: '@blitzjs/core/server',
   passportAuth: '@blitzjs/core/server',
   sessionMiddleware: '@blitzjs/core/server',
   simpleRolesIsAuthorized: '@blitzjs/core/server',
   getSession: '@blitzjs/core/server',
+  setPublicDataForUser: '@blitzjs/core/server',
+
   SecurePassword: '@blitzjs/core/server',
   hash256: '@blitzjs/core/server',
   generateToken: '@blitzjs/core/server',
-  rpcApiHandler: '@blitzjs/core/server',
-  setPublicDataForUser: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

@@ -43,6 +43,8 @@
     "amp.d.ts",
     "stdlib.js",
     "stdlib.d.ts",
+    "stdlib-server.js",
+    "stdlib-server.d.ts",
     "types/index.d.ts",
     "types/global.d.ts",
     "image-types/global.d.ts"

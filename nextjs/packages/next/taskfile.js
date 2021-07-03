@@ -808,6 +808,7 @@ export async function compile(task, opts) {
       'lib',
       'client',
       'stdlib',
+      'stdlib_server',
       'dataclient',
       'telemetry',
       'nextserver',
@@ -876,6 +877,14 @@ export async function stdlib(task, opts) {
   notify('Compiled stdlib files')
 }
 
+export async function stdlib_server(task, opts) {
+  await task
+    .source(opts.src || 'stdlib-server/**/*.+(js|ts|tsx)')
+    .babel('client', { dev: opts.dev })
+    .target('dist/stdlib-server')
+  notify('Compiled stdlib-server files')
+}
+
 export async function dataclient(task, opts) {
   await task
     .source(opts.src || 'data-client/**/*.+(js|ts|tsx)')
@@ -941,6 +950,7 @@ export default async function (task) {
   await task.watch('export/**/*.+(js|ts|tsx)', 'nextbuildstatic', opts)
   await task.watch('client/**/*.+(js|ts|tsx)', 'client', opts)
   await task.watch('stdlib/**/*.+(js|ts|tsx)', 'stdlib', opts)
+  await task.watch('stdlib-server/**/*.+(js|ts|tsx)', 'stdlib_server', opts)
   await task.watch('data-client/**/*.+(js|ts|tsx)', 'dataclient', opts)
   await task.watch('lib/**/*.+(js|ts|tsx)', 'lib', opts)
   await task.watch('cli/**/*.+(js|ts|tsx)', 'cli', opts)

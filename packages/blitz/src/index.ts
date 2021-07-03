@@ -23,3 +23,7 @@ export {
   PaginationArgumentError,
   RedirectError,
 } from "next/stdlib"
+export {connectMiddleware} from "next/dist/next-server/server/middleware"
+
+// TODO rename types
+export * from "next/types"

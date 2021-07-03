@@ -1,13 +1,13 @@
-import {paginate} from "./server-utils"
+import { paginate } from 'next/stdlib-server'
 
-describe("paginate", () => {
+describe('paginate', () => {
   const dummyPaginationPromises = {
     count: () => new Promise<number>((resolve) => resolve(1)),
     query: () => new Promise<object[]>((resolve) => resolve([])),
   }
 
-  it("throws an error if skip is not a positive integer", async () => {
-    const invalidSkipValues = [null, -1, 0.1, "1"]
+  it('throws an error if skip is not a positive integer', async () => {
+    const invalidSkipValues = [null, -1, 0.1, '1']
 
     const pagination = async (skip: any) =>
       await paginate({
@@ -21,8 +21,8 @@ describe("paginate", () => {
     }
   })
 
-  it("throws an error if take is not an integer greater than or equal to 0", async () => {
-    const invalidTakeValues = [null, -1, 0.1, "1"]
+  it('throws an error if take is not an integer greater than or equal to 0', async () => {
+    const invalidTakeValues = [null, -1, 0.1, '1']
 
     const pagination = async (take: any) =>
       await paginate({
@@ -36,7 +36,7 @@ describe("paginate", () => {
     }
   })
 
-  it("throws an error if take is greater than 500", async () => {
+  it('throws an error if take is greater than 500', async () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
@@ -47,7 +47,7 @@ describe("paginate", () => {
     await expect(pagination()).rejects.toThrow()
   })
 
-  it("throws an error if take is greater than maxTake", async () => {
+  it('throws an error if take is greater than maxTake', async () => {
     const pagination = async () =>
       await paginate({
         skip: 1,
@@ -59,7 +59,7 @@ describe("paginate", () => {
     await expect(pagination()).rejects.toThrow()
   })
 
-  it("returns correct data", async () => {
+  it('returns correct data', async () => {
     const tests = [
       {
         payload: {
@@ -84,7 +84,7 @@ describe("paginate", () => {
         },
         resolves: {
           items: [],
-          nextPage: {skip: 3, take: 2},
+          nextPage: { skip: 3, take: 2 },
           hasMore: true,
           count: 4,
         },
