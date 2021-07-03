@@ -551,6 +551,7 @@ export const setCSRFCookie = (
   expiresAt: Date,
 ) => {
   debug("setCSRFCookie", antiCSRFToken)
+  assert(Boolean(antiCSRFToken), "Internal error: antiCSRFToken is being set to undefined")
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
@@ -726,8 +727,8 @@ export async function getSessionKernel(
     return {
       handle: payload.handle,
       publicData: payload.publicData,
+      antiCSRFToken: payload.antiCSRFToken,
       jwtPayload: payload,
-      antiCSRFToken,
       anonymousSessionToken,
     }
   }
