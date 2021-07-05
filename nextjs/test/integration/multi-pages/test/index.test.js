@@ -93,7 +93,6 @@ const runTests = (mode) => {
 
 describe('dev mode', () => {
   beforeAll(async () => {
-    await nextBuild(appDir)
     appPort = await findPort()
     app = await launchApp(appDir, appPort)
   })
