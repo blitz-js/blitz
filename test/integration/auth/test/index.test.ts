@@ -46,16 +46,13 @@ const runTests = (mode: string) => {
         if (browser) await browser.close()
       })
 
-      if (mode === "dev") {
-        // TODO - investigate why failing in production mode
-        it("should render error for protected page", async () => {
-          const browser = await webdriver(appPort, "/page-dot-authenticate")
-          await browser.waitForElementByCss("#error")
-          let text = await browser.elementByCss("#error").text()
-          expect(text).toMatch(/AuthenticationError/)
-          if (browser) await browser.close()
-        })
-      }
+      it("should render error for protected page", async () => {
+        const browser = await webdriver(appPort, "/page-dot-authenticate")
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
     })
 
     describe("authenticated", () => {
@@ -65,11 +62,11 @@ const runTests = (mode: string) => {
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/logged-out/)
         await browser.elementByCss("#login").click()
-        await waitFor(100)
+        await waitFor(200)
         text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/logged-in/)
         await browser.elementByCss("#logout").click()
-        await waitFor(100)
+        await waitFor(250)
         text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/logged-out/)
 
@@ -79,14 +76,16 @@ const runTests = (mode: string) => {
       it("should logout without infinite loop #2233", async () => {
         // Login
         let browser = await webdriver(appPort, "/login")
+        await waitFor(200)
         await browser.elementByCss("#login").click()
+        await waitFor(200)
 
         await browser.eval(`window.location = "/authenticated-query"`)
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
         await browser.elementByCss("#logout").click()
-        await waitFor(100)
+        await waitFor(200)
         await browser.waitForElementByCss("#error")
         text = await browser.elementByCss("#error").text()
         expect(text).toMatch(/AuthenticationError/)
@@ -96,9 +95,9 @@ const runTests = (mode: string) => {
       it("Page.authenticate = {redirect} should work ", async () => {
         // Login
         let browser = await webdriver(appPort, "/login")
-        await waitFor(100)
+        await waitFor(200)
         await browser.elementByCss("#login").click()
-        await waitFor(100)
+        await waitFor(200)
 
         await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
         await browser.waitForElementByCss("#content")
@@ -124,11 +123,13 @@ const runTests = (mode: string) => {
 
     describe("setting public data for a user", () => {
       it("should update all sessions of the user", async () => {
+        // Ensure logged out
         const browser = await webdriver(appPort, "/login")
-
+        await waitFor(200)
         let text = await browser.elementByCss("#content").text()
         if (text.match(/logged-in/)) {
           await browser.elementByCss("#logout").click()
+          await waitFor(200)
         }
 
         await browser.eval(`window.location = "/set-public-data"`)
@@ -147,12 +148,53 @@ const runTests = (mode: string) => {
         if (browser) await browser.close()
       })
     })
+
+    describe("Page.redirectAuthenticatedTo", () => {
+      it("should work when redirecting to page with useQuery", async () => {
+        // https://github.com/blitz-js/blitz/issues/2527
+
+        // Ensure logged in
+        const browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-out/)) {
+          await browser.elementByCss("#login").click()
+          await waitFor(200)
+        }
+
+        await browser.eval(`window.location = "/redirect-authenticated"`)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        if (browser) await browser.close()
+      })
+    })
+
+    describe("setPublicData", () => {
+      it("it should not throw CSRF error", async () => {
+        // https://github.com/blitz-js/blitz/issues/2448
+
+        // ensure logged out
+        const browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-in/)) {
+          await browser.elementByCss("#logout").click()
+          await waitFor(200)
+        }
+
+        await browser.eval(`window.location = "/gssp-setpublicdata"`)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/it works/)
+        if (browser) await browser.close()
+      })
+    })
   })
 }
 
 describe("dev mode", () => {
   beforeAll(async () => {
-    await blitzBuild(appDir)
     appPort = await findPort()
     app = await launchApp(appDir, appPort)
 
@@ -163,10 +205,12 @@ describe("dev mode", () => {
       "/prefetching",
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
+      "/redirect-authenticated",
       "/api/queries/getNoauthBasic",
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
       "/api/mutations/logout",
+      "/gssp-setpublicdata",
     ]
     await Promise.all(prerender.map((route) => renderViaHTTP(appPort, route)))
   })
@@ -186,7 +230,7 @@ describe("production mode", () => {
 
 describe("serverless mode", () => {
   beforeAll(async () => {
-    await blitzConfig.replace("// replace me", `target: 'experimental-serverless-trace', `)
+    blitzConfig.replace("// replace me", `target: 'experimental-serverless-trace', `)
     await blitzBuild(appDir)
     appPort = await findPort()
     app = await blitzStart(appDir, appPort)
@@ -195,7 +239,6 @@ describe("serverless mode", () => {
     await killApp(app)
     blitzConfig.restore()
   })
-
   runTests("serverless")
 })
 
