@@ -32,14 +32,14 @@
     "final-form": "4.20.1",
     "graphql": "15.5.0",
     "graphql-request": "3.4.0",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react": "18.0.0-alpha-ed6c091fe-20210701",
+    "react-dom": "18.0.0-alpha-ed6c091fe-20210701",
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
     "@testing-library/react": "11.2.5",
     "@testing-library/react-hooks": "^4.0.1",
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.13",
     "@types/secure-password": "3.1.0",
     "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",

@@ -123,8 +123,8 @@ describe('Build Output', () => {
           )
           expect(indexSize.endsWith('B')).toBe(true)
 
-          const blitzExtra = 38
-          const blitzExtraGz = 10.2
+          const blitzExtra = 32
+          const blitzExtraGz = 8.7
           expect(parseFloat(indexFirstLoad)).toBeCloseTo(
             gz ? 64 + blitzExtraGz : 196 + blitzExtra,
             0
@@ -168,8 +168,8 @@ describe('Build Output', () => {
           )
           expect(mainSize.endsWith('kB')).toBe(true)
 
-          const blitzFrameworkExtra = 13
-          const blitzFrameworkExtraGz = 3.2
+          const blitzFrameworkExtra = 7
+          const blitzFrameworkExtraGz = 1.6
           expect(parseFloat(frameworkSize)).toBeCloseTo(
             gz ? 42.0 + blitzFrameworkExtraGz : 130 + blitzFrameworkExtra,
             0

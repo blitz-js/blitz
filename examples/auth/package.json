@@ -35,8 +35,8 @@
     "passport-github2": "0.1.12",
     "passport-twitter": "1.0.4",
     "prisma": "2.24.1",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react": "18.0.0-alpha-ed6c091fe-20210701",
+    "react-dom": "18.0.0-alpha-ed6c091fe-20210701",
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
@@ -48,7 +48,7 @@
     "@types/passport-github2": "1.2.4",
     "@types/passport-twitter": "1.0.36",
     "@types/preview-email": "2.0.0",
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.13",
     "cross-env": "7.0.3",
     "cypress": "6.2.1",
     "eslint": "7.21.0",

@@ -85,7 +85,7 @@ describe('Production response size', () => {
     const delta = responseSizesBytes / 1024
 
     // Expected difference: < 0.5
-    const blitzExtra = 36.08
+    const blitzExtra = 30.24
     expect(delta).toBeCloseTo(286.8 + blitzExtra, 0)
   })
 })

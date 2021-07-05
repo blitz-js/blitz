@@ -24,12 +24,12 @@
     "blitz": "0.38.3-canary.1",
     "final-form": "4.20.1",
     "prisma": "2.24.1",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react": "18.0.0-alpha-ed6c091fe-20210701",
+    "react-dom": "18.0.0-alpha-ed6c091fe-20210701",
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.13",
     "cypress": "6.2.1",
     "start-server-and-test": "1.11.7"
   }
