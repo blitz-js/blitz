@@ -99,7 +99,7 @@ exports.Routes = {
       `.trim(),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "blitz"
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): RouteUrlObject;
