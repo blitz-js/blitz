@@ -22,7 +22,7 @@ function Content() {
             try {
               await logoutMutation()
             } catch (error) {
-              setError(error)
+              setError(error.toString())
             }
           }}
         >

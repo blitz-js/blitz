@@ -166,6 +166,25 @@ const runTests = (mode: string) => {
         if (browser) await browser.close()
       })
     })
+
+    describe("setPublicData", () => {
+      it("it should not throw CSRF error", async () => {
+        // https://github.com/blitz-js/blitz/issues/2448
+        const browser = await webdriver(appPort, "/login")
+
+        // ensure logged out
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-in/)) {
+          await browser.elementByCss("#logout").click()
+        }
+
+        await browser.eval(`window.location = "/gssp-setpublicdata"`)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/it works/)
+        if (browser) await browser.close()
+      })
+    })
   })
 }
 
@@ -187,6 +206,7 @@ describe("dev mode", () => {
       "/api/queries/getAuthenticatedBasic",
       "/api/mutations/login",
       "/api/mutations/logout",
+      "/gssp-setpublicdata",
     ]
     await Promise.all(prerender.map((route) => renderViaHTTP(appPort, route)))
   })

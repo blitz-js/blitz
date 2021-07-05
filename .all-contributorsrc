@@ -2860,6 +2860,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "esemeniuc",
+      "name": "Eric Semeniuc",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3838856?v=4",
+      "profile": "https://semeniuc.ml/",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
