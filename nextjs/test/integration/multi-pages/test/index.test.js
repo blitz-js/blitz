@@ -45,6 +45,10 @@ const runTests = (mode) => {
     text = await browser.elementByCss('#page-container').text()
     expect(text).toMatch('Some page')
 
+    await browser.eval('window.location = "/api/hello-api"')
+    text = await browser.elementByCss('pre').text()
+    expect(text).toMatch('ok')
+
     await browser.eval('window.location = "/api/api-health"')
     text = await browser.elementByCss('pre').text()
     expect(text).toMatch('ok')
