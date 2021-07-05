@@ -8,20 +8,17 @@ import {
   useQueryErrorResetBoundary,
 } from "blitz"
 import LoginForm from "app/auth/components/LoginForm"
-import { Suspense } from "react"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
 
   return (
-    <Suspense fallback="Loading...">
-      <ErrorBoundary
-        FallbackComponent={RootErrorFallback}
-        onReset={useQueryErrorResetBoundary().reset}
-      >
-        {getLayout(<Component {...pageProps} />)}
-      </ErrorBoundary>
-    </Suspense>
+    <ErrorBoundary
+      FallbackComponent={RootErrorFallback}
+      onReset={useQueryErrorResetBoundary().reset}
+    >
+      {getLayout(<Component {...pageProps} />)}
+    </ErrorBoundary>
   )
 }
 
