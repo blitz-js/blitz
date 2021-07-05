@@ -120,8 +120,14 @@ export function buildRpcClient({
         //     }, 100)
         //   }
         //   if (response.headers.get(HEADER_SESSION_CREATED)) {
-        //     debug('Session created')
-        //     await queryClient.invalidateQueries('')
+        // clientDebug("Session created")
+        // // await queryClient.invalidateQueries("")
+        // setTimeout(async () => {
+        //   // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+        //   clientDebug("Invalidating react-query cache...")
+        //   await queryClient.cancelQueries()
+        //   await queryClient.resetQueries()
+        // })
         //   }
         //   if (response.headers.get(HEADER_CSRF_ERROR)) {
         //     const err = new CSRFTokenMismatchError()

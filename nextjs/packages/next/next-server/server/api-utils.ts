@@ -43,7 +43,7 @@ export async function apiResolver(
   res: ServerResponse,
   query: any,
   resolverModule: any,
-  previewProps: __ApiPreviewProps,
+  apiContext: __ApiPreviewProps,
   propagateError: boolean,
   { route, config: blitzConfig }: ApiResolverCtx
 ): Promise<void> {
@@ -66,7 +66,7 @@ export async function apiResolver(
     apiReq.query = query
     // Parsing preview data
     setLazyProp({ req: apiReq }, 'previewData', () =>
-      tryGetPreviewData(req, res, previewProps)
+      tryGetPreviewData(req, res, apiContext)
     )
     // Checking if preview mode is enabled
     setLazyProp({ req: apiReq }, 'preview', () =>
@@ -89,7 +89,7 @@ export async function apiResolver(
     apiRes.redirect = (statusOrUrl: number | string, url?: string) =>
       redirect(apiRes, statusOrUrl, url)
     apiRes.setPreviewData = (data, options = {}) =>
-      setPreviewData(apiRes, data, Object.assign({}, previewProps, options))
+      setPreviewData(apiRes, data, Object.assign({}, apiContext, options))
     apiRes.clearPreviewData = () => clearPreviewData(apiRes)
 
     const resolver = interopDefault(resolverModule)

@@ -35,21 +35,16 @@ export async function findPageFile(
   )
   // console.log('allPages', allPages)
 
-  let prefix: string
-  if (normalizedPagePath.startsWith('/api/')) {
-    prefix = ''
-  } else {
-    prefix = '/pages'
-  }
-
   let nameMatch: string
-  if (page === '/') {
+  if (getIsRpcRoute(page)) {
+    const rpcPath = page.replace('/api/rpc', '')
+    nameMatch = `(/queries${rpcPath}|/queries${rpcPath}/index|/mutations${rpcPath}|/mutations${rpcPath}/index)`
+  } else if (page.startsWith('/api/')) {
+    nameMatch = `(${page}|${page}/index)`
+  } else if (page === '/') {
     nameMatch = '/pages' + normalizedPagePath
   } else if (page.endsWith('/index')) {
     nameMatch = `/pages${page}/index`
-  } else if (getIsRpcRoute(page)) {
-    const rpcPath = page.replace('/api/rpc', '')
-    nameMatch = `(/queries${rpcPath}|/queries${rpcPath}/index|/mutations${rpcPath}|/mutations${rpcPath}/index)`
   } else {
     nameMatch = `/pages(${page}|${page}/index)`
   }
@@ -57,12 +52,10 @@ export async function findPageFile(
   nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
 
   const foundPagePaths = allPages.filter((path) =>
-    path.match(
-      new RegExp(`${prefix}${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
-    )
+    path.match(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
   )
   // console.log(
-  //   new RegExp(`${prefix}${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+  //   new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
   // )
   // console.log('FOUND', foundPagePaths)
 
