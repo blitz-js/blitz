@@ -34,6 +34,13 @@ export async function findPageFile(
   )
   // console.log('allPages', allPages)
 
+  let prefix: string
+  if (normalizedPagePath.startsWith('/api/')) {
+    prefix = ''
+  } else {
+    prefix = '/pages'
+  }
+
   let nameMatch: string
   if (page === '/') {
     nameMatch = normalizedPagePath
@@ -46,11 +53,11 @@ export async function findPageFile(
   nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
   const foundPagePaths = allPages.filter((path) =>
     path.match(
-      new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+      new RegExp(`${prefix}${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
     )
   )
   // console.log(
-  //   new RegExp(`/pages${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+  //   new RegExp(`${prefix}${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
   // )
   // console.log('FOUND', foundPagePaths)
 
