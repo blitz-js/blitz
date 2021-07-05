@@ -61,6 +61,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
             redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
           }
 
+          clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
           const error = new RedirectError(redirectAuthenticatedTo)
           error.stack = null!
           throw error
@@ -76,6 +77,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
+          clientDebug("[BlitzInnerRoot] redirecting to", url.toString())
           const error = new RedirectError(url.toString())
           error.stack = null!
           throw error

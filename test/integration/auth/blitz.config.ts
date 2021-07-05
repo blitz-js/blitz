@@ -5,6 +5,7 @@ const config: BlitzConfig = {
   // replace me
   middleware: [
     sessionMiddleware({
+      sessionExpiryMinutes: 15,
       isAuthorized: simpleRolesIsAuthorized,
       getSession: (handle) => db.get("sessions").find({handle}).value(),
       getSessions: (userId) => db.get("sessions").filter({userId}).value(),

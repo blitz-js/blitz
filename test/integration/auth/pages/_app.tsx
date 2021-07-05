@@ -18,5 +18,10 @@ export default function App({Component, pageProps}: AppProps) {
 }
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
-  return <div id="error">{error.name}</div>
+  return (
+    <div>
+      <div id="error">{error.name}</div>
+      {error.statusCode} {error.message}
+    </div>
+  )
 }

@@ -94,6 +94,7 @@ class ErrorBoundary extends React.Component<
     if (error instanceof RedirectError) {
       clientDebug("Redirecting from ErrorBoundary to", error.url)
       await (this.context as Router)?.push(error.url)
+      return
     }
     this.props.onError?.(error, info)
   }
@@ -111,6 +112,7 @@ class ErrorBoundary extends React.Component<
 
   handleRouteChange = () => {
     clientDebug("Resetting error boundary on route change")
+    this.props.onReset?.()
     this.reset()
   }
 
