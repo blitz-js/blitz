@@ -229,6 +229,14 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
           </sub>
       </a>
     </td>
+     <td align="center">
+       <a href="https://builtforfifty.com">
+        <img src="https://avatars.githubusercontent.com/abuuzayr" width="100px;" alt="Abu Uzayr avatar" /><br />
+          <sub>
+            <b>Abu Uzayr</b>
+          </sub>
+      </a>
+    </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
