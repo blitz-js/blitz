@@ -178,7 +178,7 @@
     "prettier": "2.2.1",
     "prettier-plugin-prisma": "0.4.0",
     "prompt": "1.1.0",
-    "react": "0.0.0-experimental-6a589ad71",
+    "react": "0.14.0",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-test-renderer": "17.0.1",
     "release": "6.3.0",

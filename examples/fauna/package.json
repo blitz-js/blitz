@@ -32,7 +32,7 @@
     "final-form": "4.20.1",
     "graphql": "15.5.0",
     "graphql-request": "3.4.0",
-    "react": "0.0.0-experimental-6a589ad71",
+    "react": "0.14.0",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-final-form": "6.5.2"
   },
