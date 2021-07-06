@@ -96,7 +96,7 @@ jobs:
         id: cache-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
 
   testBlitzPackages:
     name: Blitz - Test Packages
@@ -110,7 +110,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -135,7 +135,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -163,7 +163,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       - run: ./check-pre-compiled.sh
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -184,7 +184,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
 
       - run: node run-tests.js --timings --type unit -g 1/1
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
@@ -206,7 +206,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -238,7 +238,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -265,7 +265,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -309,7 +309,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -333,7 +333,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -358,6 +358,6 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: $${{ runner.os }}-{{ github.sha }}
+          key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
