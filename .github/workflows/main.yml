@@ -140,6 +140,9 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
@@ -237,6 +240,9 @@ jobs:
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
@@ -299,6 +305,9 @@ jobs:
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
