@@ -148,19 +148,19 @@ jobs:
         with:
           node-version: "14"
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -248,19 +248,19 @@ jobs:
         with:
           node-version: "14"
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -296,9 +296,6 @@ jobs:
 
   testIntegrationWin:
     name: Nextjs - Test Integration (Windows)
-    defaults:
-      run:
-        working-directory: nextjs
     runs-on: windows-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
@@ -313,23 +310,24 @@ jobs:
         with:
           node-version: "14"
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
       - run: node run-tests.js test/integration/{basic,production,multi-pages}/test/index.test.js test/acceptance/*.test.js
+        working-directory: nextjs
 
   testElectron:
     name: Nextjs - Test Electron
