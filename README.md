@@ -182,7 +182,6 @@ _Code ownership, pull request approvals and merging, etc_ (see [Maintainers L2](
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://robdrosenberg.com"><img src="https://avatars0.githubusercontent.com/u/20813991?v=4" width="100px;" alt=""/><br /><sub><b>Robert Rosenberg</b></sub></a><br />Website/Docs</td>
     <td align="center"><a href="http://simonknott.de"><img src="https://avatars1.githubusercontent.com/u/14912729?v=4" width="100px;" alt=""/><br /><sub><b>Simon Knott</b></sub></a><br />SuperJSON</td>
     <td align="center"><a href="https://juanm04.com"><img src="https://avatars0.githubusercontent.com/u/16712703?v=4" width="100px;" alt=""/><br /><sub><b>Juan Martín Seery</b></sub></a><br />Website/Docs</td>
   </tr>
