@@ -88,7 +88,7 @@ jobs:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
 
-  build-win:
+  build-windows:
     name: Build (Windows)
     runs-on: windows-latest
     env:
@@ -235,7 +235,7 @@ jobs:
 
   testIntegrationBlitzWin:
     name: Blitz - Test Integration (Windows)
-    needs: build-win
+    needs: build-windows
     runs-on: windows-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
@@ -247,13 +247,7 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-
-      # TODO: remove after we fix watchpack watching too much
-      - name: Setup kernel to increase watchers
-        if: runner.os == 'Linux'
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-      - run: xvfb-run node nextjs/run-tests.js -c 3
+      - run: node nextjs/run-tests.js -c 3
 
   testIntegration:
     name: Nextjs - Test Integration
@@ -282,6 +276,26 @@ jobs:
         if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/20 -c 3
+
+  testIntegrationWin:
+    name: Nextjs - Test Integration (Windows)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: windows-latest
+    needs: build-windows
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+
+          - run: node run-tests.js test/integration/{basic,production,multi-pages}/test/index.test.js test/acceptance/*.test.js
 
   testElectron:
     name: Nextjs - Test Electron
@@ -316,6 +330,7 @@ jobs:
         checkPrecompiled,
         testIntegration,
         testIntegrationBlitz,
+        testIntegrationBlitzWin,
         testUnit,
         testBlitzPackages,
         testBlitzExamples,
