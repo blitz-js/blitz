@@ -50,12 +50,47 @@ jobs:
         env:
           CI: true
 
-  build:
-    name: Build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  build-linux:
+    name: Build (Linux)
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache node_modules
+        id: yarn-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
+      - run: node run-tests.js --timings --write-timings -g 1/1
+        working-directory: nextjs
+      - uses: actions/cache@v2
+        id: cache-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+  build-win:
+    name: Build (Windows)
+    runs-on: windows-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
@@ -93,7 +128,7 @@ jobs:
 
   testBlitzPackages:
     name: Blitz - Test Packages
-    needs: build
+    needs: build-linux
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
@@ -114,7 +149,7 @@ jobs:
   testBlitzExamples:
     timeout-minutes: 30
     name: Blitz - Test Example Apps
-    needs: build
+    needs: build-linux
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -145,7 +180,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
@@ -162,7 +197,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -177,12 +212,31 @@ jobs:
       - run: node run-tests.js --timings --type unit -g 1/1
 
   testIntegrationBlitz:
-    name: Blitz - Test Integration
-    needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    name: Blitz - Test Integration (Linux)
+    needs: build-linux
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+      - run: xvfb-run node nextjs/run-tests.js -c 3
+
+  testIntegrationBlitzWin:
+    name: Blitz - Test Integration (Windows)
+    needs: build-win
+    runs-on: windows-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -207,7 +261,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -235,7 +289,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
@@ -275,7 +329,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       HEADLESS: true
       BROWSER_NAME: "firefox"
@@ -294,7 +348,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-linux
     env:
       BROWSERSTACK: true
       BROWSER_NAME: "safari"
@@ -316,7 +370,7 @@ jobs:
       run:
         working-directory: nextjs
     runs-on: ubuntu-latest
-    needs: [build, testSafari]
+    needs: [build-linux, testSafari]
     env:
       BROWSERSTACK: true
       LEGACY_SAFARI: true
