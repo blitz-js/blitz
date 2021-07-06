@@ -52,7 +52,10 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     env:
       NEXT_TELEMETRY_DISABLED: 1
     outputs:
@@ -93,7 +96,7 @@ jobs:
         id: cache-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
 
   testBlitzPackages:
     name: Blitz - Test Packages
@@ -107,7 +110,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
       - name: Setup kernel to increase watchers
         if: matrix.os == 'ubuntu-latest'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -119,6 +122,7 @@ jobs:
   testBlitzExamples:
     timeout-minutes: 30
     name: Blitz - Test Example Apps
+    needs: build
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -126,32 +130,12 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+        id: restore-build
         with:
-          fetch-depth: 25
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
-      - run: yarn install --frozen-lockfile --check-files
-      # - run: yarn cpy node_modules/.blitz packages/core/node_modules/.blitz
-      #   if: matrix.os == 'windows-latest'
-      - name: Build Packages
-        run: yarn build
+          path: ./*
+          key: $${{ runner.os }}-{{ github.sha }}
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -179,7 +163,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
       - run: ./check-pre-compiled.sh
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -200,21 +184,21 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
 
       - run: node run-tests.js --timings --type unit -g 1/1
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testIntegrationBlitz:
     name: Blitz - Test Integration
-    runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     env:
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
-    strategy:
-      fail-fast: false
     steps:
       - run: echo ${{needs.build.outputs.docsChange}}
       - uses: actions/cache@v2
@@ -222,7 +206,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -254,7 +238,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -281,7 +265,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
       - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -325,7 +309,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
       - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -349,7 +333,7 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
@@ -374,6 +358,6 @@ jobs:
         id: restore-build
         with:
           path: ./*
-          key: ${{ github.sha }}
+          key: $${{ runner.os }}-{{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
