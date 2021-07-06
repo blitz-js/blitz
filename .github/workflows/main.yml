@@ -58,8 +58,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       NEXT_TELEMETRY_DISABLED: 1
-    outputs:
-      docsChange: ${{ steps.docs-change.outputs.DOCS_CHANGE }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -87,11 +85,6 @@ jobs:
         run: yarn build
       - run: node run-tests.js --timings --write-timings -g 1/1
         working-directory: nextjs
-      - name: Check docs only change
-        working-directory: nextjs
-        run: echo ::set-output name=DOCS_CHANGE::$(node skip-docs-change.js echo 'not-docs-only-change')
-        id: docs-change
-      - run: echo ${{steps.docs-change.outputs.DOCS_CHANGE}}
       - uses: actions/cache@v2
         id: cache-build
         with:
@@ -106,13 +99,12 @@ jobs:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
       - name: Setup kernel to increase watchers
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
         run: yarn testonly:packages
@@ -131,7 +123,6 @@ jobs:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
@@ -141,7 +132,7 @@ jobs:
       - name: Install sass
         run: yarn install -W sass
       - name: Setup kernel to increase watchers
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test examples
         run: yarn testonly:examples
@@ -159,13 +150,11 @@ jobs:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
       - run: ./check-pre-compiled.sh
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testUnit:
     name: Nextjs - Test Unit
@@ -180,14 +169,12 @@ jobs:
       HEADLESS: true
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
 
       - run: node run-tests.js --timings --type unit -g 1/1
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testIntegrationBlitz:
     name: Blitz - Test Integration
@@ -201,20 +188,18 @@ jobs:
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
-      - run: echo ${{needs.build.outputs.docsChange}}
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
-      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
       - run: xvfb-run node nextjs/run-tests.js -c 3
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testIntegration:
     name: Nextjs - Test Integration
@@ -232,21 +217,17 @@ jobs:
       matrix:
         group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
-      - run: echo ${{needs.build.outputs.docsChange}}
-        working-directory: ./
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
-      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/20 -c 3
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testElectron:
     name: Nextjs - Test Electron
@@ -262,21 +243,16 @@ jobs:
       TEST_ELECTRON: 1
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
 
       # TODO: remove after we fix watchpack watching too much
-      - run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-
+      - name: Setup kernel to increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - run: cd test/integration/with-electron/app && yarn
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
-
       - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testsPass:
     name: thank you, next
@@ -306,13 +282,11 @@ jobs:
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
       - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testSafari:
     name: Nextjs - Test Safari (production)
@@ -330,13 +304,11 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testSafariOld:
     name: Nextjs - Test Safari 10.1 (nav)
@@ -355,10 +327,8 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
       - uses: actions/cache@v2
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
-        if: ${{needs.build.outputs.docsChange != 'docs only change'}}
