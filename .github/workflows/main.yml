@@ -80,7 +80,7 @@ jobs:
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
-      - run: node run-tests.js --timings --write-timings -g 1/1
+      - run: node run-tests.js -g 1/1
         working-directory: nextjs
       - uses: actions/cache@v2
         id: cache-build
@@ -207,8 +207,7 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-
-      - run: node run-tests.js --timings --type unit -g 1/1
+      - run: node run-tests.js --type unit -g 1/1
 
   testIntegrationBlitz:
     name: Blitz - Test Integration
@@ -292,7 +291,7 @@ jobs:
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - run: xvfb-run node run-tests.js --timings -g ${{ matrix.group }}/20 -c 3
+      - run: xvfb-run node run-tests.js -g ${{ matrix.group }}/20 -c 3
 
   testIntegrationWin:
     name: Nextjs - Test Integration (Windows)
@@ -326,7 +325,7 @@ jobs:
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
-      - run: node run-tests.js test/integration/basic/test/index.test.js test/integration/production/test/index.test.js test/integration/multi-pages/test/index.test.js test/acceptance/*.test.js
+      - run: node run-tests.js test/integration/basic/test/index.test.js test/integration/production/test/index.test.js test/integration/multi-pages/test/index.test.js
         working-directory: nextjs
 
   testElectron:
