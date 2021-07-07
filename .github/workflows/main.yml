@@ -326,7 +326,7 @@ jobs:
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
-      - run: node run-tests.js test/integration/{basic,production,multi-pages}/test/index.test.js test/acceptance/*.test.js
+      - run: node run-tests.js test/integration/basic/test/index.test.js test/integration/production/test/index.test.js test/integration/multi-pages/test/index.test.js test/acceptance/*.test.js
         working-directory: nextjs
 
   testElectron:
