@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import fs from "fs-extra"
 import {
   blitzBuild,
   blitzExport,
@@ -48,16 +47,16 @@ describe("Misc", () => {
       if (browser) await browser.close()
     })
   })
+})
 
-  const appDir = join(__dirname, "../")
-  const outdir = join(appDir, "out")
+const appDir = join(__dirname, "../")
+const outdir = join(appDir, "out")
 
-  describe("blitz export", () => {
-    it("should export successfully", async () => {
-      const {code} = await blitzBuild(appDir)
-      if (code !== 0) throw new Error(`export failed with status ${code}`)
-      const {code: exportCode} = await blitzExport(appDir, {outdir})
-      if (exportCode !== 0) throw new Error(`export failed with status ${exportCode}`)
-    })
+describe("blitz export", () => {
+  it("should export successfully", async () => {
+    const {code} = await blitzBuild(appDir)
+    if (code !== 0) throw new Error(`export failed with status ${code}`)
+    const {code: exportCode} = await blitzExport(appDir, {outdir})
+    if (exportCode !== 0) throw new Error(`export failed with status ${exportCode}`)
   })
 })
