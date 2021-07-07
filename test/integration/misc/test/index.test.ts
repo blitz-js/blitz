@@ -53,15 +53,11 @@ describe("Misc", () => {
   const outdir = join(appDir, "out")
 
   describe("blitz export", () => {
-    it("should build successfully", async () => {
-      await fs.remove(join(appDir, ".next"))
-      const {code} = await blitzBuild(appDir)
-      if (code !== 0) throw new Error(`build failed with status ${code}`)
-    })
-
     it("should export successfully", async () => {
-      const {code} = await blitzExport(appDir, {outdir})
+      const {code} = await blitzBuild(appDir)
       if (code !== 0) throw new Error(`export failed with status ${code}`)
+      const {code: exportCode} = await blitzExport(appDir, {outdir})
+      if (exportCode !== 0) throw new Error(`export failed with status ${exportCode}`)
     })
   })
 })
