@@ -261,7 +261,7 @@ jobs:
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
-      - run: node nextjs/run-tests.js -c 3
+      - run: node nextjs/run-tests.js
 
   testIntegration:
     name: Nextjs - Test Integration

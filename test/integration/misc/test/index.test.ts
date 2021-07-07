@@ -1,5 +1,4 @@
 /* eslint-env jest */
-import delay from "delay"
 import fs from "fs-extra"
 import {
   blitzBuild,
@@ -25,10 +24,7 @@ describe("Misc", () => {
     const prerender = ["/body-parser", "/script"]
     await Promise.all(prerender.map((route) => renderViaHTTP(context.appPort, route)))
   })
-  afterAll(async () => {
-    await killApp(context.server)
-    await delay(1000)
-  })
+  afterAll(() => killApp(context.server))
 
   describe("body parser config", () => {
     it("should render query result", async () => {
