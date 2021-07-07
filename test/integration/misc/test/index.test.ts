@@ -26,12 +26,10 @@ describe("Misc", () => {
   afterAll(() => killApp(context.server))
 
   describe("body parser config", () => {
-    it("should render query result", async () => {
+    it("should not render query result", async () => {
       const browser = await webdriver(context.appPort, "/body-parser")
-      let text = await browser.elementByCss("#page").text()
-      expect(text).toMatch(/Loading/)
       await browser.waitForElementByCss("#error")
-      text = await browser.elementByCss("#error").text()
+      let text = await browser.elementByCss("#error").text()
       expect(text).toMatch(/query failed/)
       if (browser) await browser.close()
     })
