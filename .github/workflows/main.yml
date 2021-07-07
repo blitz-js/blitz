@@ -110,7 +110,7 @@ jobs:
 
   testBlitzExamples:
     timeout-minutes: 30
-    name: Blitz - Test Example Apps (Linux)
+    name: Blitz - Test Example Apps (ubuntu-latest)
     needs: build-linux
     runs-on: ubuntu-latest
     env:
@@ -135,7 +135,7 @@ jobs:
 
   testBlitzExamplesWin:
     timeout-minutes: 30
-    name: Blitz - Test Example Apps (Windows)
+    name: Blitz - Test Example Apps (windows-latest)
     runs-on: windows-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
@@ -211,7 +211,7 @@ jobs:
       - run: node run-tests.js --timings --type unit -g 1/1
 
   testIntegrationBlitz:
-    name: Blitz - Test Integration (Linux)
+    name: Blitz - Test Integration
     needs: build-linux
     runs-on: ubuntu-latest
     env:
