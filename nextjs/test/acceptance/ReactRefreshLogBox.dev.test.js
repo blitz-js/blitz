@@ -1434,7 +1434,15 @@ test('server-side only compilation errors', async () => {
   try {
     await patch()
   } catch (error) {
-    await patch()
+    try {
+      await patch()
+    } catch (error) {
+      try {
+        await patch()
+      } catch (error) {
+        await patch()
+      }
+    }
   }
 
   expect(await session.hasRedbox(true)).toBe(true)

@@ -2,7 +2,10 @@ import { join, sep as pathSeparator, normalize } from 'path'
 import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
-import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
+import {
+  denormalizePagePath,
+  normalizePathSep,
+} from '../../next-server/server/normalize-page-path'
 // import { fileExists } from '../../lib/file-exists'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
 import { buildPageExtensionRegex } from '../../build/utils'
@@ -24,9 +27,8 @@ export async function findPageFile(
   normalizedPagePath: string,
   pageExtensions: string[]
 ): Promise<string | null> {
-  // console.log('[findPageFile]', { rootDir, normalizedPagePath })
-
   const page = denormalizePagePath(normalizedPagePath)
+  // console.log('[findPageFile]', { rootDir, normalizedPagePath, page })
 
   const allPages = await recursiveFindPages(
     rootDir,
@@ -50,9 +52,11 @@ export async function findPageFile(
     nameMatch = `(${page}|${page}/index)`
   }
 
+  // Make the regex work for dynamic routes like [...auth].ts
   nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
+
   const foundPagePaths = allPages.filter((path) =>
-    path.match(
+    normalizePathSep(path).match(
       new RegExp(`${prefix}${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
     )
   )
