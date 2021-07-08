@@ -604,7 +604,7 @@ export async function getSessionKernel(
     req.method !== "OPTIONS" &&
     req.method !== "HEAD" &&
     !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
-  const antiCSRFToken = req.headers[HEADER_CSRF] as string
+  const antiCSRFToken = req.headers[HEADER_CSRF] as string | undefined
 
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
@@ -626,6 +626,9 @@ export async function getSessionKernel(
     if (!persistedSession) {
       debug("Session not found in DB")
       return null
+    }
+    if (!persistedSession.antiCSRFToken) {
+      throw new Error("Internal error: persistedSession.antiCSRFToken is empty")
     }
     if (persistedSession.hashedSessionToken !== hash256(sessionToken)) {
       debug("sessionToken hash did not match")
@@ -685,7 +688,7 @@ export async function getSessionKernel(
             handle,
             publicData: JSON.parse(persistedSession.publicData || ""),
             jwtPayload: null,
-            antiCSRFToken,
+            antiCSRFToken: persistedSession.antiCSRFToken,
             sessionToken,
           },
           {publicDataChanged: hasPublicDataChanged},
@@ -697,7 +700,7 @@ export async function getSessionKernel(
       handle,
       publicData: JSON.parse(persistedSession.publicData || ""),
       jwtPayload: null,
-      antiCSRFToken,
+      antiCSRFToken: persistedSession.antiCSRFToken,
       sessionToken,
     }
   } else if (idRefreshToken) {
