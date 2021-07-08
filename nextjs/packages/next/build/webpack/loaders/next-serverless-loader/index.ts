@@ -106,6 +106,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
 
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
+        process.env.BLITZ_APP_DIR = "${pagesDir}""
+
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
           : []
@@ -142,6 +144,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
         runtimeConfigSetter
       }
       import { getPageHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/page-handler'
+
+      process.env.BLITZ_APP_DIR = "${pagesDir}""
 
       const documentModule = require("${absoluteDocumentPath}")
 

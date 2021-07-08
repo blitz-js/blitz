@@ -1,5 +1,6 @@
 import findUp from 'next/dist/compiled/find-up'
 import { dirname } from 'path'
+import { CONFIG_FILE } from '../../next-server/lib/constants'
 
 export function printAndExit(message: string, code = 1) {
   if (code === 0) {
@@ -17,11 +18,16 @@ export function getNodeOptionsWithoutInspect() {
 }
 
 export async function getProjectRoot(dir: string) {
+  const builtConfigPath = await findUp(CONFIG_FILE, { cwd: dir })
+
+  if (builtConfigPath) return builtConfigPath
+
   const pkgJsonPath = await findUp('package.json', { cwd: dir })
 
   if (!pkgJsonPath) {
     throw new Error(
-      'Unable to find project root by looking for your package.json'
+      'Unable to find project root by looking for your package.json or for ' +
+        CONFIG_FILE
     )
   }
 

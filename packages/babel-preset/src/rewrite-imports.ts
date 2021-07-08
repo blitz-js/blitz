@@ -20,6 +20,7 @@ const specialImports: Record<string, string> = {
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
+  invokeWithMiddleware: 'next/stdlib-server',
 
   Head: '@blitzjs/core/head',
 
@@ -36,8 +37,6 @@ const specialImports: Record<string, string> = {
   Html: '@blitzjs/core/document',
   Main: '@blitzjs/core/document',
   BlitzScript: '@blitzjs/core/document',
-
-  invokeWithMiddleware: '@blitzjs/core/server',
 
   resolver: '@blitzjs/core/server',
   passportAuth: '@blitzjs/core/server',

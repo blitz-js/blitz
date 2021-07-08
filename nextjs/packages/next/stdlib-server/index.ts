@@ -2,6 +2,8 @@ import { IncomingMessage } from 'http'
 import { PaginationArgumentError } from '../stdlib/errors'
 import { NextApiRequest } from '../types'
 
+export * from './middleware'
+
 export function isLocalhost(req: NextApiRequest | IncomingMessage): boolean {
   let { host } = req.headers
   let localhost = false

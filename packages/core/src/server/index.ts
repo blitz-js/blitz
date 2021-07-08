@@ -3,8 +3,6 @@
  *    You also need to update the rewrite map in
  *    packages/babel-preset/src/rewrite-imports.ts
  */
-export {invokeWithMiddleware} from "./invoke-with-middleware"
-
 export {resolver} from "./resolver"
 export type {AuthenticatedMiddlewareCtx} from "./resolver"
 

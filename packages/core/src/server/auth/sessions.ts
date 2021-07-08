@@ -10,6 +10,7 @@ import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
 import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/stdlib"
+import {isLocalhost} from "next/stdlib-server"
 import {join} from "path"
 import {
   EmptyPublicData,
@@ -37,7 +38,6 @@ import {
 } from "../../constants"
 import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
-import {isLocalhost} from "../server-utils"
 import {generateToken, hash256} from "./auth-utils"
 const debug = require("debug")("blitz:session")
 

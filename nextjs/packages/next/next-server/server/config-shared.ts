@@ -7,7 +7,22 @@ import { Header, Redirect, Rewrite } from '../../lib/load-custom-routes'
 import { imageConfigDefault } from './image-config'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../lib/constants'
 import { copy, remove } from 'fs-extra'
+import { Middleware } from './middleware'
 const debug = require('debug')('blitz:config')
+
+export async function loadConfigAtRuntime() {
+  if (!process.env.BLITZ_APP_DIR) {
+    throw new Error(
+      'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set'
+    )
+  }
+  const userConfigModule = require(join(process.env.BLITZ_APP_DIR, CONFIG_FILE))
+  let userConfig = normalizeConfig(
+    PHASE_PRODUCTION_SERVER,
+    userConfigModule.default || userConfigModule
+  )
+  return userConfig
+}
 
 export function loadConfigProduction(pagesDir: string) {
   // eslint-disable-next-line no-eval -- block webpack from following this module path
@@ -59,14 +74,7 @@ export type NextConfig = { [key: string]: any } & {
   log?: {
     level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
   }
-  middleware?: Record<string, any> &
-    {
-      (req: any, res: any, next: any): Promise<void> | void
-      type?: string
-      config?: {
-        cookiePrefix?: string
-      }
-    }[]
+  middleware?: Middleware[]
   customServer?: {
     hotReload?: boolean
   }
