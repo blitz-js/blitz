@@ -21,6 +21,20 @@ const specialImports: Record<string, string> = {
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
   invokeWithMiddleware: 'next/stdlib-server',
+  passportAuth: 'next/stdlib-server',
+  sessionMiddleware: 'next/stdlib-server',
+  simpleRolesIsAuthorized: 'next/stdlib-server',
+  getSession: 'next/stdlib-server',
+  setPublicDataForUser: 'next/stdlib-server',
+  SecurePassword: 'next/stdlib-server',
+  hash256: 'next/stdlib-server',
+  generateToken: 'next/stdlib-server',
+
+  getAntiCSRFToken: 'next/data-client',
+  useSession: 'next/data-client',
+  useAuthenticatedSession: 'next/data-client',
+  useAuthorize: 'next/data-client',
+  useRedirectAuthenticated: 'next/data-client',
 
   Head: '@blitzjs/core/head',
 
@@ -39,15 +53,6 @@ const specialImports: Record<string, string> = {
   BlitzScript: '@blitzjs/core/document',
 
   resolver: '@blitzjs/core/server',
-  passportAuth: '@blitzjs/core/server',
-  sessionMiddleware: '@blitzjs/core/server',
-  simpleRolesIsAuthorized: '@blitzjs/core/server',
-  getSession: '@blitzjs/core/server',
-  setPublicDataForUser: '@blitzjs/core/server',
-
-  SecurePassword: '@blitzjs/core/server',
-  hash256: '@blitzjs/core/server',
-  generateToken: '@blitzjs/core/server',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

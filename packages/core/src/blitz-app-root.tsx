@@ -1,9 +1,8 @@
+import {getPublicDataStore, useAuthorizeIf, useSession} from "next/data-client"
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import {RedirectError} from "next/stdlib"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
-import {useAuthorizeIf, useSession} from "./auth/auth-client"
-import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
 import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
@@ -51,9 +50,9 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
     useAuthorizeIf(Page.authenticate === true)
 
     if (typeof window !== "undefined") {
-      // We read directly from publicDataStore.getData().userId instead of useSession
+      // We read directly from publicDataStor.getData().userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
-      if (publicDataStore.getData().userId) {
+      if (getPublicDataStore().getData().userId) {
         clientDebug("[BlitzInnerRoot] logged in")
         let {redirectAuthenticatedTo} = Page
         if (redirectAuthenticatedTo) {

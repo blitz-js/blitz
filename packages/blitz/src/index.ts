@@ -15,15 +15,9 @@ export {default as Image} from "next/image"
 export type {ImageProps, ImageLoader, ImageLoaderProps} from "next/image"
 export {Script} from "next/script"
 export type {Props as ScriptProps} from "next/script"
-export {
-  AuthenticationError,
-  AuthorizationError,
-  CSRFTokenMismatchError,
-  NotFoundError,
-  PaginationArgumentError,
-  RedirectError,
-} from "next/stdlib"
-export {connectMiddleware} from "next/dist/next-server/server/middleware"
+export * from "next/stdlib"
+export * from "next/stdlib-server"
+export * from "next/data-client"
 
 // TODO rename types
 export * from "next/types"

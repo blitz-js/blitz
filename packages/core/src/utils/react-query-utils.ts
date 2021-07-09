@@ -1,6 +1,5 @@
 import {QueryClient, QueryKey} from "react-query"
 import {serialize} from "superjson"
-import {getBlitzRuntimeData} from "../blitz-data"
 import {EnhancedResolverRpcClient, QueryFn, Resolver, ResolverType} from "../types"
 import {isClient} from "."
 import {requestIdleCallback} from "./request-idle-callback"
@@ -12,8 +11,7 @@ type MutateOptions = {
 export const initializeQueryClient = () => {
   let suspenseEnabled = true
   if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
-    const data = getBlitzRuntimeData()
-    suspenseEnabled = data.suspenseEnabled
+    suspenseEnabled = process.env.__BLITZ_SUSPENSE_ENABLED
   }
 
   return new QueryClient({

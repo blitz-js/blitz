@@ -270,6 +270,11 @@ export default async function getBaseWebpackConfig(
   const hasDbModule =
     existsSync(path.join(dir, 'db/index.js')) ||
     existsSync(path.join(dir, 'db/index.ts'))
+
+  const middleware = config.middleware?.filter(
+    (m) => m.name === 'blitzSessionMiddleware'
+  )[0]
+  const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
   /* ------ Blitz.js ------- */
 
   // Webpack 5 can use the faster babel loader, webpack 5 has built-in caching for loaders
@@ -1089,6 +1094,10 @@ export default async function getBaseWebpackConfig(
               'process.env.__NEXT_DIST_DIR': JSON.stringify(distDir),
             }
           : {}),
+        'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
+        'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
+          sessionCookiePrefix
+        ),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),

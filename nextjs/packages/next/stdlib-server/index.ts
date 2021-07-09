@@ -1,8 +1,11 @@
 import { IncomingMessage } from 'http'
+import { NextApiRequest } from '../next-server/lib/utils'
 import { PaginationArgumentError } from '../stdlib/errors'
-import { NextApiRequest } from '../types'
 
 export * from './middleware'
+export * from './auth-sessions'
+export * from './auth-utils'
+export * from './passport-adapter'
 
 export function isLocalhost(req: NextApiRequest | IncomingMessage): boolean {
   let { host } = req.headers

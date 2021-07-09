@@ -33,23 +33,13 @@
   "dependencies": {
     "@blitzjs/config": "0.38.5",
     "@blitzjs/display": "0.38.5",
-    "@types/secure-password": "3.1.0",
-    "b64-lite": "^1.4.0",
-    "bad-behavior": "^1.0.1",
     "chalk": "^4.1.0",
-    "cookie": "0.4.1",
-    "cookie-session": "^1.4.0",
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
-    "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
-    "nanoid": "^3.1.20",
     "next": "0.38.5",
     "npm-which": "^3.0.1",
-    "null-loader": "4.0.1",
-    "passport": "0.4.1",
     "react-query": "3.16.0",
-    "secure-password": "4.0.0",
     "superjson": "1.7.2"
   },
   "devDependencies": {

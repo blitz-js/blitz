@@ -6,16 +6,6 @@
 export {resolver} from "./resolver"
 export type {AuthenticatedMiddlewareCtx} from "./resolver"
 
-export {
-  sessionMiddleware,
-  simpleRolesIsAuthorized,
-  getSession,
-  setPublicDataForUser,
-} from "./auth/sessions"
-export type {SimpleRolesIsAuthorized} from "./auth/sessions"
-export {passportAuth} from "./auth/passport-adapter"
-export {SecurePassword, hash256, generateToken} from "./auth/auth-utils"
-
 export const fixNodeFileTrace = () => {
   const path = require("path")
   path.resolve(".blitz.config.compiled.js")

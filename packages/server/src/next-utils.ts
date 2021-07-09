@@ -12,7 +12,7 @@ import {Manifest} from "./stages/manifest"
 import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
 import {through} from "./streams"
 
-function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
+function createOutputTransformer(_buildFolder: string, _manifest?: Manifest) {
   const stream = through(function (data: Buffer, _, next) {
     let outputStr = data.toString()
 

@@ -2,45 +2,13 @@ import { NextApiRequest, NextApiResponse } from '../lib/utils'
 // import {baseLogger, log} from "@blitzjs/display"
 import { IncomingMessage, ServerResponse } from 'http'
 import { NextConfig } from './config-shared'
+import {
+  Ctx,
+  Middleware,
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '../lib/utils'
 const debug = require('debug')('blitz:middleware')
-
-export interface DefaultCtx {}
-export interface Ctx extends DefaultCtx {}
-
-export interface MiddlewareRequest extends NextApiRequest {
-  protocol?: string
-}
-export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
-  /**
-   * This will be passed as the second argument to Blitz queries/mutations.
-   *
-   * You must set blitzCtx BEFORE calling next()
-   */
-  blitzCtx: C
-  /**
-   * This is the exact result returned from the Blitz query/mutation
-   *
-   * You must first `await next()` before reading this
-   */
-  blitzResult: unknown
-}
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
-
-export type Middleware<MiddlewareConfig = {}> = {
-  (
-    req: MiddlewareRequest,
-    res: MiddlewareResponse,
-    next: MiddlewareNext
-  ): Promise<void> | void
-  type?: string
-  config?: MiddlewareConfig
-}
-
-export type ConnectMiddleware = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: (error?: Error) => void
-) => void
 
 export function getAndValidateMiddleware(
   config: NextConfig,
@@ -164,54 +132,5 @@ export function compose(middleware: Middleware[]) {
 
     // return next(result as any)
     return dispatch(0).then(next as any)
-  } as Middleware
-}
-
-/**
- * If the middleware function doesn't declare receiving the `next` callback
- * assume that it's synchronous and invoke `next` ourselves
- */
-function noCallbackHandler(
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-  middleware: ConnectMiddleware
-) {
-  // Cast to any to call with two arguments for connect compatibility
-  ;(middleware as any)(req, res)
-  return next()
-}
-
-/**
- * The middleware function does include the `next` callback so only resolve
- * the Promise when it's called. If it's never called, the middleware stack
- * completion will stall
- */
-function withCallbackHandler(
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: MiddlewareNext,
-  middleware: ConnectMiddleware
-) {
-  return new Promise((resolve, reject) => {
-    // Rule doesn't matter since we are inside new Promise()
-    //eslint-disable-next-line @typescript-eslint/no-floating-promises
-    middleware(req, res, (err) => {
-      if (err) reject(err)
-      else resolve(next())
-    })
-  })
-}
-
-/**
- * Returns a Blitz middleware function that varies its async logic based on if the
- * given middleware function declares at least 3 parameters, i.e. includes
- * the `next` callback function
- */
-export function connectMiddleware(middleware: ConnectMiddleware): Middleware {
-  const handler =
-    middleware.length < 3 ? noCallbackHandler : withCallbackHandler
-  return function connectHandler(req, res, next) {
-    return handler(req, res, next, middleware)
   } as Middleware
 }

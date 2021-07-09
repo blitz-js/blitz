@@ -286,6 +286,12 @@ export default class Server {
     if (this.renderOpts.optimizeCss) {
       process.env.__NEXT_OPTIMIZE_CSS = JSON.stringify(true)
     }
+
+    const middleware = this.nextConfig.middleware?.filter(
+      (m) => m.name === 'blitzSessionMiddleware'
+    )[0]
+    const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
+    process.env.__BLITZ_SESSION_COOKIE_PREFIX = sessionCookiePrefix
   }
 
   public logError(err: Error): void {

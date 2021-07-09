@@ -2,7 +2,7 @@ import { normalizeApiRoute } from '../next-server/lib/router/router'
 import { deserialize, serialize } from 'superjson'
 import { SuperJSONResult } from 'superjson/dist/types'
 // import {getAntiCSRFToken} from "./auth/auth-client"
-// import {publicDataStore} from "./auth/public-data-store"
+// import {getPublicDataStore} from "./auth/public-data-store"
 // import {getBlitzRuntimeData} from "./blitz-data"
 // import {
 //   HEADER_CSRF,
@@ -99,12 +99,12 @@ export function buildRpcClient({
         debug('Received request for', routePath)
         // if (response.headers) {
         //   if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-        //     publicDataStore.updateState()
+        //     getPublicDataStore().updateState()
         //     debug('Public data updated')
         //   }
         //   if (response.headers.get(HEADER_SESSION_REVOKED)) {
         //     debug('Session revoked, clearing publicData')
-        //     publicDataStore.clear()
+        //     getPublicDataStore().clear()
         //     setTimeout(async () => {
         //       // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
         //       debug('Clearing and invalidating react-query cache...')
@@ -160,9 +160,9 @@ export function buildRpcClient({
             // We don't clear the publicDataStore for anonymous users
             // if (
             //   error.name === 'AuthenticationError' &&
-            //   publicDataStore.getData().userId
+            //   getPublicDataStore().getData().userId
             // ) {
-            //   publicDataStore.clear()
+            //   getPublicDataStore().clear()
             // }
 
             const prismaError = error.message.match(

@@ -2,13 +2,14 @@ import { IncomingMessage, ServerResponse } from 'http'
 import { parse } from 'next/dist/compiled/content-type'
 import { CookieSerializeOptions } from 'next/dist/compiled/cookie'
 import getRawBody from 'raw-body'
-import { PageConfig, PreviewData } from 'next/types'
+import { PageConfig, PreviewData } from '../../types'
 import { Stream } from 'stream'
 import {
   isResSent,
   NextApiRequest,
   NextApiResponse,
   getIsRpcRoute,
+  Middleware,
 } from '../lib/utils'
 import { decryptWithSecret, encryptWithSecret } from './crypto-utils'
 import { interopDefault } from './load-components'
@@ -21,7 +22,6 @@ import { NextConfig } from './config-shared'
 import {
   getAndValidateMiddleware,
   handleRequestWithMiddleware,
-  Middleware,
 } from './middleware'
 
 export type NextApiRequestCookies = { [key: string]: string }

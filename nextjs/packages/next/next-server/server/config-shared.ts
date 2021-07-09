@@ -7,7 +7,7 @@ import { Header, Redirect, Rewrite } from '../../lib/load-custom-routes'
 import { imageConfigDefault } from './image-config'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../lib/constants'
 import { copy, remove } from 'fs-extra'
-import { Middleware } from './middleware'
+import { Middleware } from '../../types'
 const debug = require('debug')('blitz:config')
 
 export async function loadConfigAtRuntime() {

@@ -1,9 +1,60 @@
 import http from 'http'
 import { apiResolver } from 'next/dist/next-server/server/api-utils'
-import { handleRequestWithMiddleware } from 'next/dist/next-server/server/middleware'
+import {
+  handleRequestWithMiddleware,
+  secureProxyMiddleware,
+} from 'next/dist/next-server/server/middleware'
 import fetch from 'node-fetch'
 import listen from 'test-listen'
 import { NextApiHandler, Middleware } from 'next/types'
+import { Request } from 'express'
+import { Socket } from 'net'
+
+describe('secure proxy middleware', () => {
+  // @ts-ignore
+  let reqSecure: Request = {
+    connection: new Socket(),
+    method: 'GET',
+    url: '/stuff?q=thing',
+    headers: {
+      'x-forwarded-proto': 'https',
+    },
+  }
+  // @ts-ignore
+  let reqHttp: Request = {
+    connection: new Socket(),
+    method: 'GET',
+    url: '/stuff?q=thing',
+    headers: {
+      'x-forwarded-proto': 'http',
+    },
+  }
+  // @ts-ignore
+  let reqNoHeader: Request = {
+    connection: new Socket(),
+    method: 'GET',
+    url: '/stuff?q=thing',
+  }
+
+  const res = {}
+  it('should set https protocol if X-Forwarded-Proto is https', () => {
+    // @ts-ignore
+    void secureProxyMiddleware(reqSecure, res, () => null)
+    expect(reqSecure.protocol).toEqual('https')
+  })
+
+  it('should set http protocol if X-Forwarded-Proto is absent', () => {
+    // @ts-ignore
+    void secureProxyMiddleware(reqNoHeader, res, () => null)
+    expect(reqNoHeader.protocol).toEqual('http')
+  })
+
+  it('should set http protocol if X-Forwarded-Proto is http', () => {
+    // @ts-ignore
+    void secureProxyMiddleware(reqHttp, res, () => null)
+    expect(reqHttp.protocol).toEqual('http')
+  })
+})
 
 describe('handleRequestWithMiddleware', () => {
   it('works without await', async () => {

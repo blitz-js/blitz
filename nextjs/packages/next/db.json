@@ -1,0 +1,324 @@
+{
+  "users": [
+    {
+      "id": 1
+    }
+  ],
+  "sessions": [
+    {
+      "expiresAt": "2021-07-09T20:25:27.633Z",
+      "handle": "qp9DJYE8e3psuCY9u44r8pm1HiTHdr1V:ots",
+      "userId": 1,
+      "hashedSessionToken": "dc4229ccc51064206ed634e96d7e4864c202b74a52fb3de4ca701072c5831618",
+      "antiCSRFToken": "rNYixXAn_F8BCYdKC4ArDHG9o2KR2JSt",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:28:00.641Z",
+      "handle": "AJsohSO1AH6xVXrvbwN7M6phTZ2UHGAR:ots",
+      "userId": 1,
+      "hashedSessionToken": "a6a6af805b550ee1f7fb79ab04b382d116895ac2c9c4cde6d6b145911e227e4b",
+      "antiCSRFToken": "VP1dskSjJUHrncsigF8P_L4gf5W6lh12",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:31:40.860Z",
+      "handle": "j-MklGtMyV-e57cGicE18MNXCXdtuzH9:ots",
+      "userId": 1,
+      "hashedSessionToken": "9709aac9f25298ac10f934d91bcdc5ec165a0cc93eb8c37c5934e1c69126cd15",
+      "antiCSRFToken": "qWw780jy3eDm6LgLRQGOQTQKTBoovtkW",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:31:47.195Z",
+      "handle": "IkiK5q4j22ZDjRtbWK_SnLLxp3Ni92uD:ots",
+      "userId": 1,
+      "hashedSessionToken": "f4f631639e3500832a61912b7f3b5803ea57e4bb42db977ceca227c74b683015",
+      "antiCSRFToken": "S3JjXWhQRPQm_3Zezyz7a6J1W7Khd3SF",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:31:52.724Z",
+      "handle": "gNa3XxRkRF2s6xHWDQSm1gMV8p-a5rjS:ots",
+      "userId": 1,
+      "hashedSessionToken": "21a4ca37a21e4fa55c5dbe91c8adc9154b459499a47d14d636590c38e261613f",
+      "antiCSRFToken": "yVwkE2jjoTDK513Tlen-hUlXugC_CH9U",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:32:45.745Z",
+      "handle": "8q0n4KMiYbM1wfhTTMqY6UIU_V1EHVol:ots",
+      "userId": 1,
+      "hashedSessionToken": "8dadbaf5258081208572a7d50b4382d696650ba331cc9085707e24605c427dfd",
+      "antiCSRFToken": "yIivKn6aaCgQ0GrJq3uOCU-Hmq_IEyQm",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:32:51.498Z",
+      "handle": "80yqH-dLyugxu_fVmDif6TExshHNTU19:ots",
+      "userId": 1,
+      "hashedSessionToken": "f8b29fa95df2225116c6c0794bf0e6ee07ff1974cb9399c990493bfaaf93ef75",
+      "antiCSRFToken": "V3kIlS2nbMgLTAjBt8f7L5jt6g1CX1dt",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:32:57.031Z",
+      "handle": "0XiNF9djFUvd328MPDJJO5mK5VLO8jJb:ots",
+      "userId": 1,
+      "hashedSessionToken": "a9014144d954f9eaa9a96b6b5fb7a07ffff7b190df63ae280b1689d9ea357e05",
+      "antiCSRFToken": "w7dSANlHUvPWlyBhV6hVwBR1tZahXQnx",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:33:40.525Z",
+      "handle": "-CgasmvvKNOLo6jO52Pj5LsSjCAgmLrw:ots",
+      "userId": 1,
+      "hashedSessionToken": "bb934f516b1b41988e4206b2e3f025d9f1f8fc51b2f319f0bd685bcc40d1de0c",
+      "antiCSRFToken": "o_5_9T9fPY9JUfOIAUOFA2A8_Zz9nmak",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:33:46.199Z",
+      "handle": "B4Yga2MohrDRvXwoWbDLPd5aDfaoul2S:ots",
+      "userId": 1,
+      "hashedSessionToken": "eafd0591058d8661e9b66aa0e1c2610c0d44e6ffdb6fc46bd4f69d3a90eeb3e6",
+      "antiCSRFToken": "1NQ3scWgj7HBbqz6PqxIoJvTVPiDh5nH",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:33:51.742Z",
+      "handle": "o2mvlGAKXOQxJmeYjsxVXPZg6ZjxLDDc:ots",
+      "userId": 1,
+      "hashedSessionToken": "77cc25f4a29dd7666539be48066a90dbbb75c67fd045b9e71e9accba45f5dcb8",
+      "antiCSRFToken": "_YH-0UH14LVog-fEppguJA9KbBOZME6H",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:34:16.115Z",
+      "handle": "AXZhPbw6aVwYDrcGUtwREw2RZ9ninAYY:ots",
+      "userId": 1,
+      "hashedSessionToken": "804a657dd009a547012263a7bc7d3c6964df71767f5420d5b822b8e97ce40204",
+      "antiCSRFToken": "O_YcN7S3zQBbCcFgS8vftBNkJ8blEcM2",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:34:21.862Z",
+      "handle": "uj1Sdf0PvnCLy9TuHXthdgdO2FPBjm7T:ots",
+      "userId": 1,
+      "hashedSessionToken": "aa392a3f1963d9df80c34024b860d728cc67e4bdf167f0d7110bb52b1715a23a",
+      "antiCSRFToken": "w3EHSAoWru13ozcQQsKtfMdP2IOBrF7g",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:34:27.552Z",
+      "handle": "1xhA5poGXQ-wRlm0iXkvvRw7buu5SXm3:ots",
+      "userId": 1,
+      "hashedSessionToken": "f496aac72debfdab7afb56fdec861ad900c9c9ada0a5c4dfa8799b507b4eb52f",
+      "antiCSRFToken": "GazXAMKrQPsE1tdXbfem3XFP0EiooNBo",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:34:52.877Z",
+      "handle": "Co8ZwMHZwnXd5rWGq4yuwIBxtenIy0wZ:ots",
+      "userId": 1,
+      "hashedSessionToken": "963ad4c5f896f36293de313d7b9fc39b7d97263775bff0114aecd12e62f7032c",
+      "antiCSRFToken": "hgZ3jU2rOaAaekuJYQ99y65-U3Th-RDM",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:34:58.493Z",
+      "handle": "Y0LAkUKHBl7R49Frbbl_XeMZtzELyWqJ:ots",
+      "userId": 1,
+      "hashedSessionToken": "4c9fd7deba499cd522e2a0d830bc712b3aca93b626c439e442214d6173b49b75",
+      "antiCSRFToken": "QZESEyq2KCyQOodPTtkg4m5s8m-d9Nhp",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:35:04.039Z",
+      "handle": "WYK6rrFRZY20s2VewBu0PvO0_JIKHBUi:ots",
+      "userId": 1,
+      "hashedSessionToken": "c941552036aebeb39324e0ceff807d46b7c78e5b2b4cb96682de2f04e6db5061",
+      "antiCSRFToken": "SSf-IifiusJ_JfVCbT4btduFBOws94Ju",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:39:04.603Z",
+      "handle": "UXrOxS0tzKYhpSZgsutgL7YWv5eemyCC:ots",
+      "userId": 1,
+      "hashedSessionToken": "d176fde9a0c0fa38b076ee89766592625376360a2117fc255ca71f65dca762f1",
+      "antiCSRFToken": "pnt-q9axkKtRglaP95iG8ihX748MftSZ",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:39:10.038Z",
+      "handle": "1Apq-YvmELOkOxkn1beI-cGXSjjkj568:ots",
+      "userId": 1,
+      "hashedSessionToken": "6c8ddad7451675726b03c407ce6625df23bb0a7a007e7422406afd1c98ed5443",
+      "antiCSRFToken": "dL1b1ZBAPOXkLKDKeq5iFG3QYKr-Oop-",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:40:02.470Z",
+      "handle": "xmx-YMecnsZ-c8szebAALHLTTfbI9lqY:ots",
+      "userId": 1,
+      "hashedSessionToken": "1c574cc5d08105e654b32b317fecc892a80e72307a6dea841a8213ed0e669ad8",
+      "antiCSRFToken": "JnasC_id3XSQ0iosEdHiTk2jA8lptgvm",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T20:40:07.909Z",
+      "handle": "VWKvc58748_9T1N3hc_FNg52fdgBZgl_:ots",
+      "userId": 1,
+      "hashedSessionToken": "05469b243404cb46d49666481f16b21192027ccbfa6a6601c2997072fa764b51",
+      "antiCSRFToken": "yjpwM0kG_TPOO5FpBjTXmAYO_bBXChvL",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:04:31.748Z",
+      "handle": "wTfxhbZDFh_kN8D5aytOWbW5owlabHsh:ots",
+      "userId": 1,
+      "hashedSessionToken": "7e361f2c6ee4ec4c418c1099332ab45babc5a9335829763146997c70112a52f4",
+      "antiCSRFToken": "b7jkd3WI2hHh22YXxtyKeEr4z2lWZ2r3",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:04:37.351Z",
+      "handle": "xx26S6Tb_suHO2QHCdvBxOXOOekbx3yF:ots",
+      "userId": 1,
+      "hashedSessionToken": "0d49c9164dc89ea73daafdad98ba6eb3fcfd28ddf9cc3b31fa7b3def80409777",
+      "antiCSRFToken": "imih296Nt9cTIYwU6JIyw5wSh1pSBv_J",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:04:42.987Z",
+      "handle": "8BrJc0MzpCD-pLPtTQ6PNbhB7RXRnmeR:ots",
+      "userId": 1,
+      "hashedSessionToken": "4dc743c73d5827dc9566d7ef300077414deb7dc736c57d4cd096c4a490d6b920",
+      "antiCSRFToken": "zHLTIcy_4i59MagCXyyr2gRRx0nqP0ee",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:06:10.208Z",
+      "handle": "HO60lMiqSKIfX3CDi0GfyUu03Onesd29:ots",
+      "userId": 1,
+      "hashedSessionToken": "9d52a75d4c034f2810e2fca941e2c4adbd0537f41a0f6e660ac47ee9f5c03328",
+      "antiCSRFToken": "7YHYK92k5qCANVWMJ8jU4rvUrrFLFrpo",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:06:53.977Z",
+      "handle": "BZwPS0f1nWcbywv28TZrl8b7P_pZl2rr:ots",
+      "userId": 1,
+      "hashedSessionToken": "ff49e161f10079612ed2300f150720fca9f08ffc38ae5ece062745002befbbd4",
+      "antiCSRFToken": "Zg8P-AaPriTkuEjDwhseT1-7z7Nm2Kg8",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:08:46.026Z",
+      "handle": "7J856XJzRWSTiVsjgliFopLSk5hfNqkP:ots",
+      "userId": 1,
+      "hashedSessionToken": "80c1ff8be8af2616a205b28e2cf3c5e42a070e4542d9cd2382abca14b65b3806",
+      "antiCSRFToken": "b2Y2v5yCPc7x_kdMkptbXU99s3XqrtW5",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:08:51.717Z",
+      "handle": "51tnTLEecz-uKlkLi0roREsFo5YFiu3g:ots",
+      "userId": 1,
+      "hashedSessionToken": "5d0fbab3d7652a455dcfaa9c96bc4fff3e98e97d3b5a739e781e26abda9e6dc2",
+      "antiCSRFToken": "G1CsnvXyrZO8e4jRLJyJ4L3eg7cVMj8b",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:08:57.075Z",
+      "handle": "fcYY-GqSOzJDQlPOcsdQHzLXY0sisPCe:ots",
+      "userId": 1,
+      "hashedSessionToken": "2fd17e7dd69dae308f2607035fd1df3e6136d438a59c25153be5f6c1de3e9f18",
+      "antiCSRFToken": "b4g_Isp7kjOYVcinoX5L4zWr_5bHX4z7",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:09.704Z",
+      "handle": "XoRP7XuK-ghDDLCyuyP8vPiD3G0iyNZ0:ots",
+      "userId": 1,
+      "hashedSessionToken": "48d4c9cd3a81b692cdcbd95c9b7524662752702e4084bc488c7820e930cd0b49",
+      "antiCSRFToken": "HNSdo83hRyoaIQgsmp08yH4t-TxO7twc",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:15.364Z",
+      "handle": "GtuaB6ppBSes73rXlyhFM2OsrfyLpqo8:ots",
+      "userId": 1,
+      "hashedSessionToken": "b15230bb1bc105d66aaad28974e3ab25fe739fbc6365e59b46e8fa3a83e91f75",
+      "antiCSRFToken": "ZkPlStAT3a5EyRXPBQFFZWu-qCASNxDd",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:20.777Z",
+      "handle": "7dN4nhcC-R4_DOGrnCF5Q3KR7zMg-I4v:ots",
+      "userId": 1,
+      "hashedSessionToken": "3b8067886c19d195c37436134a65453d331c2e21baaf04c227174d3fe92e0040",
+      "antiCSRFToken": "oYqqbWcf8YWYThX2jAhfwAbawnrZE7mo",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:29.928Z",
+      "handle": "E2Y8X2mp2HACmbIZZgoXsPqpX0-7JgQi:ots",
+      "userId": 1,
+      "hashedSessionToken": "7368b1ad502953f5e1397bd77278bb256f8be5cf488159ef7e03bc05308a6205",
+      "antiCSRFToken": "JLTGftigl8UAJt2v4jUOimgEwwOIqYHR",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:36.104Z",
+      "handle": "bcFsbMyrwar_n0iEuabeM15VnZxu09WV:ots",
+      "userId": 1,
+      "hashedSessionToken": "66078eb1dd421a88a8490454e2f963d58e28a645c6998b1d339eec563f7406d7",
+      "antiCSRFToken": "SReH8mP8rGXszQ8viYJq7u1KszNquJkU",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    },
+    {
+      "expiresAt": "2021-07-09T21:41:41.730Z",
+      "handle": "Iss73L5mJVvjC6IRDaiIUBCwl66w1DMp:ots",
+      "userId": 1,
+      "hashedSessionToken": "6c7e7b92d3bbb5f5d1eb4d4d4bb763dbc6cf7a19ddaee69af291c36e89f7bb2d",
+      "antiCSRFToken": "XuzKilOH5z2dPm7wciiKOj1x0m0z-h_C",
+      "publicData": "{\"userId\":1,\"role\":\"user\"}",
+      "privateData": "{}"
+    }
+  ]
+}
