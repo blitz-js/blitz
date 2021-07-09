@@ -2870,6 +2870,15 @@
         "test",
         "code"
       ]
+    },
+    {
+      "login": "ricardo-rp",
+      "name": "Ricardo Romero",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30808767?v=4",
+      "profile": "https://github.com/ricardo-rp",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

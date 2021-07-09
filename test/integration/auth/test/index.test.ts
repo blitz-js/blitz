@@ -114,6 +114,7 @@ const runTests = (mode: string) => {
     describe("prefetching", () => {
       it("should prefetch from the query cache #2281", async () => {
         const browser = await webdriver(appPort, "/prefetching")
+        await waitFor(100)
         await browser.waitForElementByCss("#content")
         const text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/noauth-basic-result/)

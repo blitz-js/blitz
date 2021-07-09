@@ -98,4 +98,22 @@ describe('middleware', () => {
 
     runTests('serverless')
   })
+
+  describe('serverless trace mode', () => {
+    beforeAll(async () => {
+      await fs.writeFile(
+        nextConfig,
+        `module.exports = { target: 'experimental-serverless-trace' }`
+      )
+      await nextBuild(appDir)
+      appPort = await findPort()
+      app = await nextStart(appDir, appPort)
+    })
+    afterAll(async () => {
+      await killApp(app)
+      await fs.remove(nextConfig)
+    })
+
+    runTests('serverless-trace')
+  })
 })

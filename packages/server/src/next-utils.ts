@@ -12,13 +12,7 @@ import {Manifest} from "./stages/manifest"
 import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
 import {through} from "./streams"
 
-const pathToGlobalRegex = (path: string) => {
-  return new RegExp(path.replace(/\//g, "\\/"), "g")
-}
-
 function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
-  const projectRoot = getProjectRoot()
-
   const stream = through(function (data: Buffer, _, next) {
     let outputStr = data.toString()
 
@@ -35,26 +29,6 @@ function createOutputTransformer(buildFolder: string, manifest?: Manifest) {
       outputStr = log.withError(
         "Could not find a production build, you must run `blitz build` before starting\n\n",
       )
-    } else if (manifest) {
-      /*
-       * Here we look any page files that got moved during the compilation step.
-       * And then replace the compiled path with the original path
-       */
-      const pageMatches = /[\\/](pages[\\/].*.(j|t)sx?)/g.exec(outputStr)
-      if (pageMatches) {
-        const [fullMatch, simplePath] = pageMatches
-
-        if (fullMatch) {
-          const builtPath = path.join(buildFolder, simplePath)
-          const originalPath = manifest.getByValue(builtPath)
-          if (originalPath) {
-            outputStr = outputStr.replace(
-              pathToGlobalRegex(fullMatch),
-              originalPath.replace(projectRoot, ""),
-            )
-          }
-        }
-      }
     }
 
     next(null, Buffer.from(outputStr))

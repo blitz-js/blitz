@@ -202,12 +202,11 @@ export function runBlitzLaunchCommand(
     ...opts.env,
   }
 
+  const command = opts.blitzStart ? "start" : "dev"
+  console.log(`Running command "blitz ${command}" `)
+
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn(
-      "node",
-      ["--no-deprecation", blitzBin, opts.blitzStart ? "start" : "dev", ...argv],
-      {cwd, env},
-    )
+    const instance = spawn("node", ["--no-deprecation", blitzBin, command, ...argv], {cwd, env})
     let didResolve = false
 
     function handleStdout(data: Buffer) {

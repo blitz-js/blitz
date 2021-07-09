@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/config",
-  "version": "0.38.3",
+  "version": "0.38.5",
   "description": "Loads the blitz app config",
   "license": "MIT",
   "scripts": {
