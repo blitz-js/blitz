@@ -2879,6 +2879,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "anothernode",
+      "name": "Moritz Reiter",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3286144?v=4",
+      "profile": "exocortex.anothernode.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
