@@ -2888,6 +2888,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "msichterman",
+      "name": "Matt Sichterman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38794918?v=4",
+      "profile": "https://msich.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
