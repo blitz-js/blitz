@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export type PublicData = "PublicData" extends keyof Session
+export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
   : {userId: unknown}
 
@@ -22,7 +22,7 @@ export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
 }
 
-export type IsAuthorizedArgs = "isAuthorized" extends keyof Session
+export type IsAuthorizedArgs = Session extends {isAuthorized: (...args: any) => any}
   ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
     ? Parameters<Session["isAuthorized"]>[0]["args"]
     : unknown[]
