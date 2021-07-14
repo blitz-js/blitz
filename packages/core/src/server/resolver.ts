@@ -1,4 +1,4 @@
-import {infer as zInfer, ZodSchema} from "zod"
+import {input as zInput, output as zOutput, ZodSchema} from "zod"
 import {AuthenticatedSessionContext, SessionContext, SessionContextBase} from "../auth/auth-types"
 import {Await, Ctx, EnsurePromise} from "../types"
 
@@ -292,8 +292,10 @@ const authorize: ResolverAuthorize = (...args) => {
 
 export const resolver = {
   pipe,
-  zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
-    return (input: Type): Type => schema.parse(input)
+  zod<Schema extends ZodSchema<any, any>, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+    schema: Schema,
+  ) {
+    return (input: InputType): OutputType => schema.parse(input)
   },
   authorize,
 }
