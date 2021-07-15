@@ -2897,6 +2897,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "medihack",
+      "name": "Kai Schlamp",
+      "avatar_url": "https://avatars.githubusercontent.com/u/120626?v=4",
+      "profile": "https://github.com/medihack",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
