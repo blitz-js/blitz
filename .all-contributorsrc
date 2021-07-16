@@ -2906,6 +2906,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "muyiwaolu",
+      "name": "Muyiwa Olu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6832244?v=4",
+      "profile": "https://muyiwa.me",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
