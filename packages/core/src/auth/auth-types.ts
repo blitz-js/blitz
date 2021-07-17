@@ -1,5 +1,5 @@
 import type {AuthenticateOptions, Strategy} from "passport"
-import {Ctx} from "../../types"
+import {BlitzApiRequest, BlitzApiResponse, Ctx} from "../../types"
 
 export interface Session {
   // isAuthorize can be injected here
@@ -86,7 +86,17 @@ export interface AuthenticatedClientSession extends PublicData {
   isLoading: boolean
 }
 
-export type BlitzPassportConfigCallback = (blitzCtx: Ctx) => BlitzPassportConfigObject
+export interface BlitzPassportConfigCallbackParams {
+  ctx: Ctx
+  req: BlitzApiRequest
+  res: BlitzApiResponse
+}
+
+export type BlitzPassportConfigCallback = ({
+  ctx,
+  req,
+  res,
+}: BlitzPassportConfigCallbackParams) => BlitzPassportConfigObject
 
 export type BlitzPassportConfig = BlitzPassportConfigObject | BlitzPassportConfigCallback
 
