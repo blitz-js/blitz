@@ -22,7 +22,7 @@ assert(process.env.AUTH0_DOMAIN, "You must provide the AUTH0_DOMAIN env variable
 assert(process.env.AUTH0_CLIENT_ID, "You must provide the AUTH0_CLIENT_ID env variable")
 assert(process.env.AUTH0_CLIENT_SECRET, "You must provide the AUTH0_CLIENT_SECRET env variable")
 
-export default passportAuth(({blitzCtx, req, res}) => ({
+export default passportAuth(({ctx, req, res}) => ({
   successRedirectUrl: "/",
   strategies: [
     {
@@ -44,7 +44,7 @@ export default passportAuth(({blitzCtx, req, res}) => ({
             return done(new Error("Twitter OAuth response doesn't have email."))
           }
 
-          console.log(blitzCtx.session.userId)
+          console.log(ctx.session.userId)
 
           const user = await db.user.upsert({
             where: {email},
