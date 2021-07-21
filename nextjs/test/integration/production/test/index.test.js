@@ -179,7 +179,7 @@ describe('Production Usage', () => {
       const url = `http://localhost:${appPort}/`
       const header = (await fetch(url)).headers.get('X-Powered-By')
 
-      expect(header).toBe('Next.js')
+      expect(header).toBe('Blitz.js')
     })
 
     it('should render 404 for routes that do not exist', async () => {
