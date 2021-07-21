@@ -61,7 +61,7 @@ describe('Configuration', () => {
   it('should disable X-Powered-By header support', async () => {
     const url = `http://localhost:${context.appPort}/`
     const header = (await fetch(url)).headers.get('X-Powered-By')
-    expect(header).not.toBe('Next.js')
+    expect(header).not.toBe('Blitz.js')
   })
 
   test('renders css imports', async () => {
