@@ -51,7 +51,7 @@ export function sendPayload(
   }
 
   if (poweredByHeader && type === 'html') {
-    res.setHeader('X-Powered-By', 'Next.js')
+    res.setHeader('X-Powered-By', 'Blitz.js')
   }
 
   const etag = generateEtags ? generateETag(payload) : undefined
