@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Executor should render PrintMessageExecutor 1`] = `
+"My message
+
+Press ENTER to continue"
+`;

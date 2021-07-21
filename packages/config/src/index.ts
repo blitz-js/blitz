@@ -1,9 +1,45 @@
-import * as esbuild from "esbuild"
-import fs from "fs"
 import {existsSync, readJSONSync} from "fs-extra"
+import {NextConfig} from "next/dist/next-server/server/config"
 import path, {join} from "path"
-import pkgDir from "pkg-dir"
 const debug = require("debug")("blitz:config")
+
+type NextExperimental = NextConfig["experimental"]
+
+interface Experimental extends NextExperimental {
+  isomorphicResolverImports?: boolean
+}
+
+export interface BlitzConfig extends Omit<NextConfig, "experimental" | "future"> {
+  target?: string
+  experimental?: Experimental
+  future?: NextConfig["future"]
+  cli?: {
+    clearConsoleOnBlitzDev?: boolean
+    httpProxy?: string
+    httpsProxy?: string
+    noProxy?: string
+  }
+  log?: {
+    level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+  }
+  middleware?: Record<string, any> &
+    {
+      (req: any, res: any, next: any): Promise<void> | void
+      type?: string
+      config?: {
+        cookiePrefix?: string
+      }
+    }[]
+  customServer?: {
+    hotReload?: boolean
+  }
+}
+
+export interface BlitzConfigNormalized extends BlitzConfig {
+  _meta: {
+    packageName: string
+  }
+}
 
 export function getProjectRoot() {
   return path.dirname(getConfigSrcPath())
@@ -18,85 +54,10 @@ export function getConfigSrcPath() {
     return jsPath
   }
 }
-export function getConfigBuildPath() {
-  return path.join(getProjectRoot(), ".blitz", "blitz.config.js")
-}
-
-interface BuildConfigOptions {
-  watch?: boolean
-}
-
-export async function buildConfig({watch}: BuildConfigOptions = {}) {
-  debug("Starting buildConfig...")
-  const dir = pkgDir.sync()
-  if (!dir) {
-    // This will happen when running blitz no inside a blitz app
-    debug("Unable to find package directory")
-    return
-  }
-  const pkg = readJSONSync(path.join(dir, "package.json"))
-  const srcPath = getConfigSrcPath()
-
-  if (fs.readFileSync(srcPath, "utf8").includes("tsconfig-paths/register")) {
-    // User is manually handling their own typescript stuff
-    debug("Config contains 'tsconfig-paths/register', so skipping build")
-    return
-  }
-
-  const esbuildOptions: esbuild.BuildOptions = {
-    entryPoints: [srcPath],
-    outfile: getConfigBuildPath(),
-    format: "cjs",
-    bundle: true,
-    platform: "node",
-    external: [
-      "blitz",
-      "next",
-      ...Object.keys(require("blitz/package").dependencies),
-      ...Object.keys(pkg?.dependencies ?? {}),
-      ...Object.keys(pkg?.devDependencies ?? {}),
-    ],
-  }
-
-  if (watch) {
-    esbuildOptions.watch = {
-      onRebuild(error) {
-        if (error) {
-          console.error("Failed to re-build blitz config")
-        } else {
-          console.log("\n> Blitz config changed - restart for changes to take effect\n")
-        }
-      },
-    }
-  }
-
-  debug("Building config...")
-  debug("Src: ", getConfigSrcPath())
-  debug("Build: ", getConfigBuildPath())
-  await esbuild.build(esbuildOptions)
-}
-
-export interface BlitzConfig extends Record<string, unknown> {
-  target?: string
-  experimental?: {
-    isomorphicResolverImports?: boolean
-    reactRoot?: boolean
-  }
-  cli?: {
-    clearConsoleOnBlitzDev?: boolean
-    httpProxy?: string
-    httpsProxy?: string
-    noProxy?: string
-  }
-  _meta: {
-    packageName: string
-  }
-}
-
 declare global {
   namespace NodeJS {
     interface Global {
-      blitzConfig: BlitzConfig
+      blitzConfig: BlitzConfigNormalized
     }
   }
 }
@@ -104,18 +65,20 @@ declare global {
 /**
  * @param {boolean | undefined} reload - reimport config files to reset global cache
  */
-export const getConfig = (reload?: boolean): BlitzConfig => {
+export const getConfig = (reload?: boolean): BlitzConfigNormalized => {
   if (global.blitzConfig && Object.keys(global.blitzConfig).length > 0 && !reload) {
     return global.blitzConfig
   }
 
   const {PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_SERVER} = require("next/constants")
 
+  const projectRoot = getProjectRoot()
+
   let pkgJson: any
 
   const pkgJsonPath = join(getProjectRoot(), "package.json")
   if (existsSync(pkgJsonPath)) {
-    pkgJson = readJSONSync(join(getProjectRoot(), "package.json"))
+    pkgJson = readJSONSync(pkgJsonPath)
   }
 
   let blitzConfig = {
@@ -124,15 +87,8 @@ export const getConfig = (reload?: boolean): BlitzConfig => {
     },
   }
 
-  const projectRoot = getProjectRoot()
   const nextConfigPath = path.join(projectRoot, "next.config.js")
-  let blitzConfigPath
-  if (existsSync(path.join(projectRoot, ".blitz"))) {
-    blitzConfigPath = path.join(projectRoot, ".blitz", "blitz.config.js")
-  } else {
-    // projectRoot is inside .blitz/build/
-    blitzConfigPath = path.join(projectRoot, "..", "blitz.config.js")
-  }
+  const blitzConfigPath = path.join(projectRoot, ".blitz.config.compiled.js")
 
   debug("nextConfigPath: " + nextConfigPath)
   debug("blitzConfigPath: " + blitzConfigPath)

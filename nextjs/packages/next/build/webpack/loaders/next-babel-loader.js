@@ -1,6 +1,7 @@
 import { join } from 'path'
 import * as Log from '../../output/log'
 import babelLoader from './babel-loader/src/index'
+import { isPageFile as isPageFileFn } from '../../utils'
 
 // increment 'p' to invalidate cache
 // eslint-disable-next-line no-useless-concat
@@ -81,7 +82,7 @@ const customBabelLoader = babelLoader((babel) => {
     ) {
       const filename = this.resourcePath
       const options = Object.assign({}, cfg.options)
-      const isPageFile = filename.startsWith(pagesDir)
+      const isPageFile = isPageFileFn(filename.replace(pagesDir, ''))
 
       if (cfg.hasFilesystemConfig()) {
         for (const file of [cfg.babelrc, cfg.config]) {

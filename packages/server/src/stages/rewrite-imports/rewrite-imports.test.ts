@@ -81,7 +81,7 @@ describe("rewrite-imports", () => {
 
   describe("an import from app/pages/index", () => {
     it(
-      "is rewritten to pages/index",
+      "is not rewritten to pages/index",
       makeTest({
         input: [
           {
@@ -106,7 +106,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/pages/index.tsx"),
             contents: `
-              import styles from "pages/index.module.css"
+              import styles from "app/pages/index.module.css"
               export function someFunction() { return "foo"; }
               export default function Index() { return <p>Hello World</p> }
             `,
@@ -114,7 +114,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-              import { someFunction } from "pages/index";
+              import { someFunction } from "app/pages/index";
               export function someOtherFunction() {
                 return someFunction();
               }
@@ -127,7 +127,7 @@ describe("rewrite-imports", () => {
 
   describe("an import from app/admin/pages/admin/index", () => {
     it(
-      "is rewritten to pages/admin/index",
+      "is rewritten to app/admin/pages/admin/index",
       makeTest({
         input: [
           {
@@ -141,7 +141,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/admin/pages/admin/index.tsx"),
             contents: `
-              import styles from "pages/admin/index.module.scss"
+              import styles from "app/admin/pages/admin/index.module.scss"
             `,
           },
         ],
@@ -151,7 +151,7 @@ describe("rewrite-imports", () => {
 
   describe("an import from app/users/api/getUser", () => {
     it(
-      "is rewritten to pages/api/getUser",
+      "is not rewritten to pages/api/getUser",
       makeTest({
         input: [
           {
@@ -182,7 +182,7 @@ describe("rewrite-imports", () => {
           {
             path: normalize("/projects/blitz/blitz/app/anyFile.ts"),
             contents: `
-              import { someFunction } from "pages/api/getUser";
+              import { someFunction } from "app/users/api/getUser";
               export function someOtherFunction() {
                 return someFunction();
               }

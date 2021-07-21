@@ -5,9 +5,11 @@ import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
+import fs from "fs"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {getCookieParser} from "next/dist/next-server/server/api-utils"
+import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "next/stdlib"
 import {join} from "path"
 import {
   EmptyPublicData,
@@ -33,7 +35,6 @@ import {
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
 } from "../../constants"
-import {AuthenticationError, AuthorizationError, CSRFTokenMismatchError} from "../../errors"
 import {BlitzApiRequest, BlitzApiResponse, Ctx, Middleware, MiddlewareResponse} from "../../types"
 import {addMinutes, addYears, differenceInMinutes, isPast} from "../../utils/date-utils"
 import {isLocalhost} from "../server-utils"
@@ -52,7 +53,10 @@ process.nextTick(getConfig)
 
 const getDb = () => {
   const projectRoot = getProjectRoot()
-  const path = join(projectRoot, ".next/blitz/db.js")
+  let path = join(projectRoot, ".next/server/blitz-db.js")
+  if (!fs.existsSync(path)) {
+    path = join(projectRoot, ".next/serverless/blitz-db.js")
+  }
   // eslint-disable-next-line no-eval -- block webpack from following this module path
   return eval("require")(path).default
 }
@@ -143,19 +147,36 @@ export const sessionMiddleware = (sessionConfig: Partial<SessionConfig> = {}): M
     sessionConfig.isAuthorized,
     "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
   )
+  ;(global as any).__BLITZ_SESSION_MIDDLEWARE_USED = true
+
   global.sessionConfig = {
     ...defaultConfig,
     ...sessionConfig,
   }
 
-  return async (req, res, next) => {
+  // Checks if cookie prefix from configuration has
+  // non-alphanumeric characters and throws error
+  const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
+  assert(
+    cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
+    `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,
+  )
+
+  const blitzSessionMiddleware: Middleware<{
+    cookiePrefix?: string
+  }> = async (req, res, next) => {
     debug("Starting sessionMiddleware...")
-    if (req.method !== "HEAD" && !(res.blitzCtx as any).session) {
+    if (!(res.blitzCtx as any).session) {
       // This function also saves session to res.blitzCtx
       await getSession(req, res)
     }
     return next()
   }
+
+  blitzSessionMiddleware.config = {
+    cookiePrefix,
+  }
+  return blitzSessionMiddleware
 }
 
 type JwtPayload = AnonymousSessionPayload | null
@@ -377,6 +398,11 @@ export type AnonymousSessionPayload = {
 
 export const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === "production") {
+    if (!process.env.SESSION_SECRET_KEY && process.env.SECRET_SESSION_KEY) {
+      throw new Error(
+        "You need to rename the SECRET_SESSION_KEY environment variable to SESSION_SECRET_KEY (but don't feel bad, we've all done it :)",
+      )
+    }
     assert(
       process.env.SESSION_SECRET_KEY,
       "You must provide the SESSION_SECRET_KEY environment variable in production. This is used to sign and verify tokens. It should be 32 chars long.",
@@ -525,6 +551,7 @@ export const setCSRFCookie = (
   expiresAt: Date,
 ) => {
   debug("setCSRFCookie", antiCSRFToken)
+  assert(antiCSRFToken !== undefined, "Internal error: antiCSRFToken is being set to undefined")
   setCookie(
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
@@ -573,8 +600,11 @@ export async function getSessionKernel(
   const sessionToken = req.cookies[COOKIE_SESSION_TOKEN()] // for essential method
   const idRefreshToken = req.cookies[COOKIE_REFRESH_TOKEN()] // for advanced method
   const enableCsrfProtection =
-    req.method !== "GET" && req.method !== "OPTIONS" && !process.env.DISABLE_CSRF_PROTECTION
-  const antiCSRFToken = req.headers[HEADER_CSRF] as string
+    req.method !== "GET" &&
+    req.method !== "OPTIONS" &&
+    req.method !== "HEAD" &&
+    !process.env.DANGEROUSLY_DISABLE_CSRF_PROTECTION
+  const antiCSRFToken = req.headers[HEADER_CSRF] as string | undefined
 
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
@@ -596,6 +626,9 @@ export async function getSessionKernel(
     if (!persistedSession) {
       debug("Session not found in DB")
       return null
+    }
+    if (!persistedSession.antiCSRFToken) {
+      throw new Error("Internal error: persistedSession.antiCSRFToken is empty")
     }
     if (persistedSession.hashedSessionToken !== hash256(sessionToken)) {
       debug("sessionToken hash did not match")
@@ -655,7 +688,7 @@ export async function getSessionKernel(
             handle,
             publicData: JSON.parse(persistedSession.publicData || ""),
             jwtPayload: null,
-            antiCSRFToken,
+            antiCSRFToken: persistedSession.antiCSRFToken,
             sessionToken,
           },
           {publicDataChanged: hasPublicDataChanged},
@@ -667,7 +700,7 @@ export async function getSessionKernel(
       handle,
       publicData: JSON.parse(persistedSession.publicData || ""),
       jwtPayload: null,
-      antiCSRFToken,
+      antiCSRFToken: persistedSession.antiCSRFToken,
       sessionToken,
     }
   } else if (idRefreshToken) {
@@ -697,8 +730,8 @@ export async function getSessionKernel(
     return {
       handle: payload.handle,
       publicData: payload.publicData,
+      antiCSRFToken: payload.antiCSRFToken,
       jwtPayload: payload,
-      antiCSRFToken,
       anonymousSessionToken,
     }
   }
@@ -1022,6 +1055,28 @@ export async function setPublicData(
 
   await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
+}
+
+/**
+ * Updates publicData in all sessions
+ *
+ * @param {PublicData["userId"]} userId
+ * @param {Record<any, any>} data
+ */
+export async function setPublicDataForUser(userId: PublicData["userId"], data: Record<any, any>) {
+  // Don't allow updating userId
+  delete data.userId
+
+  const sessions = await global.sessionConfig.getSessions(userId)
+  for (const session of sessions) {
+    // Merge data
+    const publicData = JSON.stringify({
+      ...JSON.parse(session.publicData || ""),
+      ...data,
+    })
+
+    await global.sessionConfig.updateSession(session.handle, {publicData})
+  }
 }
 
 /**

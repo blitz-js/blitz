@@ -4,13 +4,16 @@ import React from "react"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
+import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {RecipeRenderer} from "./recipe-renderer"
 import {RecipeMeta} from "./types"
+// const debug = require('debug')("blitz:installer")
 
 type ExecutorConfig =
   | AddDependencyExecutor.Config
   | FileTransformExecutor.Config
   | NewFileExecutor.Config
+  | PrintMessageExecutor.Config
 
 export type {ExecutorConfig as ExecutorConfigUnion}
 

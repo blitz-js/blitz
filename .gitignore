@@ -29,3 +29,5 @@ examples/auth2
 .ultra.cache.json
 db.sqlite-journal
 test/integration/**/db.json
+test/**/*/out
+.blitz**

@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.35.0-canary.6",
+  "version": "0.38.5",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -14,10 +14,8 @@
       "document.ts",
       "dynamic.ts",
       "head.ts",
-      "image.ts",
       "index.ts",
-      "server/index.ts",
-      "with-blitz.ts"
+      "server/index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
@@ -30,13 +28,11 @@
     "document",
     "dynamic",
     "head",
-    "image",
-    "server",
-    "with-blitz"
+    "server"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.35.0-canary.6",
-    "@blitzjs/display": "0.35.0-canary.6",
+    "@blitzjs/config": "0.38.5",
+    "@blitzjs/display": "0.38.5",
     "@types/secure-password": "3.1.0",
     "b64-lite": "^1.4.0",
     "bad-behavior": "^1.0.1",
@@ -48,17 +44,17 @@
     "jsonwebtoken": "8.5.1",
     "lodash.frompairs": "4.0.1",
     "nanoid": "^3.1.20",
-    "next": "0.35.0-canary.6",
+    "next": "0.38.5",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
     "passport": "0.4.1",
-    "react-query": "3.13.9",
+    "react-query": "3.16.0",
     "secure-password": "4.0.0",
     "superjson": "1.7.2"
   },
   "devDependencies": {
     "react": "0.0.0-experimental-6a589ad71",
-    "zod": "1.11.11"
+    "zod": "3.2.0"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {

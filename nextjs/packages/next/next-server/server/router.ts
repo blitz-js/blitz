@@ -124,6 +124,7 @@ export default class Router {
     const memoizedPageChecker = async (p: string): Promise<boolean> => {
       p = normalizeLocalePath(p, this.locales).pathname
 
+      // @ts-ignore -- blitzjs
       if (pageChecks[p]) {
         return pageChecks[p]
       }

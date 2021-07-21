@@ -122,7 +122,7 @@ export type ServerConstructor = {
    */
   quiet?: boolean
   /**
-   * Object what you would use in next.config.js - @default {}
+   * Object what you would use in blitz.config.js - @default {}
    */
   conf?: NextConfig | null
   dev?: boolean
@@ -157,6 +157,7 @@ export default class Server {
     images: string
     fontManifest: FontManifest
     optimizeImages: boolean
+    disableOptimizedLoading?: boolean
     optimizeCss: any
     locale?: string
     locales?: string[]
@@ -218,6 +219,8 @@ export default class Server {
           : null,
       optimizeImages: !!this.nextConfig.experimental.optimizeImages,
       optimizeCss: this.nextConfig.experimental.optimizeCss,
+      disableOptimizedLoading: this.nextConfig.experimental
+        .disableOptimizedLoading,
       domainLocales: this.nextConfig.i18n?.domains,
       distDir: this.distDir,
     }
@@ -429,11 +432,15 @@ export default class Server {
 
       let defaultLocale = i18n.defaultLocale
       let detectedLocale = detectLocaleCookie(req, i18n.locales)
-      let acceptPreferredLocale =
-        i18n.localeDetection !== false
-          ? accept.language(req.headers['accept-language'], i18n.locales)
-          : detectedLocale
-
+      let acceptPreferredLocale
+      try {
+        acceptPreferredLocale =
+          i18n.localeDetection !== false
+            ? accept.language(req.headers['accept-language'], i18n.locales)
+            : detectedLocale
+      } catch (_) {
+        acceptPreferredLocale = detectedLocale
+      }
       const { host } = req?.headers || {}
       // remove port from host if present
       const hostname = host?.split(':')[0].toLowerCase()
@@ -599,7 +606,7 @@ export default class Server {
     let rewrites: CustomRoutes['rewrites']
 
     // rewrites can be stored as an array when an array is
-    // returned in next.config.js so massage them into
+    // returned in blitz.config.js so massage them into
     // the expected object format
     if (Array.isArray(customRoutes.rewrites)) {
       rewrites = {
@@ -820,28 +827,30 @@ export default class Server {
     }
 
     // Headers come very first
-    const headers = this.customRoutes.headers.map((r) => {
-      const headerRoute = getCustomRoute(r, 'header')
-      return {
-        match: headerRoute.match,
-        has: headerRoute.has,
-        type: headerRoute.type,
-        name: `${headerRoute.type} ${headerRoute.source} header route`,
-        fn: async (_req, res, params, _parsedUrl) => {
-          const hasParams = Object.keys(params).length > 0
+    const headers = this.minimalMode
+      ? []
+      : this.customRoutes.headers.map((r) => {
+          const headerRoute = getCustomRoute(r, 'header')
+          return {
+            match: headerRoute.match,
+            has: headerRoute.has,
+            type: headerRoute.type,
+            name: `${headerRoute.type} ${headerRoute.source} header route`,
+            fn: async (_req, res, params, _parsedUrl) => {
+              const hasParams = Object.keys(params).length > 0
 
-          for (const header of (headerRoute as Header).headers) {
-            let { key, value } = header
-            if (hasParams) {
-              key = compileNonPath(key, params)
-              value = compileNonPath(value, params)
-            }
-            res.setHeader(key, value)
-          }
-          return { finished: false }
-        },
-      } as Route
-    })
+              for (const header of (headerRoute as Header).headers) {
+                let { key, value } = header
+                if (hasParams) {
+                  key = compileNonPath(key, params)
+                  value = compileNonPath(value, params)
+                }
+                res.setHeader(key, value)
+              }
+              return { finished: false }
+            },
+          } as Route
+        })
 
     // since initial query values are decoded by querystring.parse
     // we need to re-encode them here but still allow passing through
@@ -902,11 +911,11 @@ export default class Server {
           } as Route
         })
 
-    const buildRewrite = (rewrite: Rewrite) => {
+    const buildRewrite = (rewrite: Rewrite, check = true) => {
       const rewriteRoute = getCustomRoute(rewrite, 'rewrite')
       return {
         ...rewriteRoute,
-        check: true,
+        check,
         type: rewriteRoute.type,
         name: `Rewrite route ${rewriteRoute.source}`,
         match: rewriteRoute.match,
@@ -973,12 +982,20 @@ export default class Server {
     let afterFiles: Route[] = []
     let fallback: Route[] = []
 
-    if (Array.isArray(this.customRoutes.rewrites)) {
-      afterFiles = this.customRoutes.rewrites.map(buildRewrite)
-    } else {
-      beforeFiles = this.customRoutes.rewrites.beforeFiles.map(buildRewrite)
-      afterFiles = this.customRoutes.rewrites.afterFiles.map(buildRewrite)
-      fallback = this.customRoutes.rewrites.fallback.map(buildRewrite)
+    if (!this.minimalMode) {
+      if (Array.isArray(this.customRoutes.rewrites)) {
+        afterFiles = this.customRoutes.rewrites.map((r) => buildRewrite(r))
+      } else {
+        beforeFiles = this.customRoutes.rewrites.beforeFiles.map((r) =>
+          buildRewrite(r, false)
+        )
+        afterFiles = this.customRoutes.rewrites.afterFiles.map((r) =>
+          buildRewrite(r)
+        )
+        fallback = this.customRoutes.rewrites.fallback.map((r) =>
+          buildRewrite(r)
+        )
+      }
     }
 
     const catchAllRoute: Route = {
@@ -1260,7 +1277,7 @@ export default class Server {
         return
       }
     } catch (err) {
-      if (err.code === 'DECODE_FAILED') {
+      if (err.code === 'DECODE_FAILED' || err.code === 'ENAMETOOLONG') {
         res.statusCode = 400
         return this.renderError(null, req, res, '/_error', {})
       }
@@ -1318,6 +1335,11 @@ export default class Server {
         (this.hasStaticDir && url.match(/^\/static\//)))
     ) {
       return this.handleRequest(req, res, parsedUrl)
+    }
+
+    // Custom server users can run `app.render()` which needs compression.
+    if (this.renderOpts.customServer) {
+      this.handleCompression(req, res)
     }
 
     if (isBlockedPage(pathname)) {
@@ -1426,6 +1448,7 @@ export default class Server {
     opts: RenderOptsPartial
   ): Promise<string | null> {
     const is404Page = pathname === '/404'
+    const is500Page = pathname === '/500'
 
     const isLikeServerless =
       typeof components.Component === 'object' &&
@@ -1547,7 +1570,7 @@ export default class Server {
               : resolvedUrlPathname
           }${query.amp ? '.amp' : ''}`
 
-    if (is404Page && isSSG) {
+    if ((is404Page || is500Page) && isSSG) {
       ssgCacheKey = `${locale ? `/${locale}` : ''}${pathname}${
         query.amp ? '.amp' : ''
       }`

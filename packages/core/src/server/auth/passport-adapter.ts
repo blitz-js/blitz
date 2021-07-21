@@ -99,21 +99,11 @@ export function passportAuth(config: BlitzPassportConfig): BlitzApiHandler {
             try {
               let error = err
 
-              if (!error) {
-                if (result === false) {
-                  log.warning(
-                    `Login via ${strategyName} failed - usually this means the user did not authenticate properly with the provider`,
-                  )
-                  error = `Login failed`
-                }
-                assert(
-                  typeof result === "object" && result !== null,
-                  `Your '${strategyName}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
+              if (!error && result === false) {
+                log.warning(
+                  `Login via ${strategyName} failed - usually this means the user did not authenticate properly with the provider`,
                 )
-                assert(
-                  (result as any).publicData,
-                  `'publicData' is missing from your '${strategyName}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
-                )
+                error = `Login failed`
               }
 
               const redirectUrlFromVerifyResult =
@@ -132,6 +122,14 @@ export function passportAuth(config: BlitzPassportConfig): BlitzApiHandler {
                 return
               }
 
+              assert(
+                typeof result === "object" && result !== null,
+                `Your '${strategyName}' passport verify callback returned empty data. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
+              )
+              assert(
+                (result as any).publicData,
+                `'publicData' is missing from your '${strategyName}' passport verify callback. Ensure you call 'done(null, {publicData: {userId: 1}})' along with any other publicData fields you need)`,
+              )
               assert(isVerifyCallbackResult(result), "Passport verify callback is invalid")
 
               delete (result.publicData as any)[INTERNAL_REDIRECT_URL_KEY]

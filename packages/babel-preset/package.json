@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/babel-preset",
-  "version": "0.35.0-canary.6",
+  "version": "0.38.5",
   "license": "MIT",
   "scripts": {
     "test": "jest",

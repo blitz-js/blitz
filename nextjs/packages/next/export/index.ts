@@ -20,7 +20,6 @@ import {
   BUILD_ID_FILE,
   CLIENT_PUBLIC_FILES_PATH,
   CLIENT_STATIC_FILES_PATH,
-  CONFIG_FILE,
   EXPORT_DETAIL,
   EXPORT_MARKER,
   PAGES_MANIFEST,
@@ -143,7 +142,7 @@ export default async function exportApp(
   return nextExportSpan.traceAsyncFn(async () => {
     dir = resolve(dir)
 
-    // attempt to load global env values so they are available in next.config.js
+    // attempt to load global env values so they are available in blitz.config.js
     nextExportSpan
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
@@ -251,13 +250,13 @@ export default async function exportApp(
 
     if (outDir === join(dir, 'public')) {
       throw new Error(
-        `The 'public' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
+        `The 'public' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
       )
     }
 
     if (outDir === join(dir, 'static')) {
       throw new Error(
-        `The 'static' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
+        `The 'static' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
       )
     }
 
@@ -308,7 +307,7 @@ export default async function exportApp(
     if (typeof nextConfig.exportPathMap !== 'function') {
       if (!options.silent) {
         Log.info(
-          `No "exportPathMap" found in "${CONFIG_FILE}". Generating map from "./pages"`
+          `No "exportPathMap" found in "blitz.config.js". Generating map from "./pages"`
         )
       }
       nextConfig.exportPathMap = async (defaultMap: ExportPathMap) => {
@@ -323,12 +322,15 @@ export default async function exportApp(
 
     if (i18n && !options.buildExport) {
       throw new Error(
-        `i18n support is not compatible with next export. See here for more info on deploying: https://nextjs.org/docs/deployment`
+        `i18n support is not compatible with blitz export. See here for more info on deploying: https://nextjs.org/docs/deployment`
       )
     }
 
     if (!options.buildExport) {
-      const { isNextImageImported } = await nextExportSpan
+      const {
+        isNextImageImported,
+        isBlitzSessionMiddlewareUsed,
+      } = await nextExportSpan
         .traceChild('is-next-image-imported')
         .traceAsyncFn(() =>
           promises
@@ -337,14 +339,23 @@ export default async function exportApp(
             .catch(() => ({}))
         )
 
+      if (isBlitzSessionMiddlewareUsed) {
+        throw new Error(
+          `Blitz sessionMiddleware is not compatible with \`blitz export\`.
+  Possible solutions:
+    - Use \`blitz start\` to run a server, which supports middleware.
+    - Remove \`sessionMiddleware\` import from \`blitz.config.js\`.\n`
+        )
+      }
+
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(
-          `Image Optimization using Next.js' default loader is not compatible with \`next export\`.
+          `Image Optimization using Blitz.js' default loader is not compatible with \`blitz export\`.
   Possible solutions:
-    - Use \`next start\` to run a server, which includes the Image Optimization API.
+    - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
-    - Configure a third-party loader in \`next.config.js\`.
-    - Use the \`loader\` prop for \`next/image\`.
+    - Configure a third-party loader in \`blitz.config.js\`.
+    - Use the \`loader\` prop for \`blitz\`.
   Read more: https://nextjs.org/docs/messages/export-image-api`
         )
       }
@@ -369,6 +380,7 @@ export default async function exportApp(
       defaultLocale: i18n?.defaultLocale,
       domainLocales: i18n?.domains,
       trailingSlash: nextConfig.trailingSlash,
+      disableOptimizedLoading: nextConfig.experimental.disableOptimizedLoading,
     }
 
     const { serverRuntimeConfig, publicRuntimeConfig } = nextConfig
@@ -457,7 +469,7 @@ export default async function exportApp(
       if (!options.silent) {
         Log.warn(
           chalk.yellow(
-            `Statically exporting a Next.js application via \`next export\` disables API routes.`
+            `Statically exporting a Blitz.js application via \`next export\` disables API routes.`
           ) +
             `\n` +
             chalk.yellow(
@@ -511,7 +523,7 @@ export default async function exportApp(
     const worker = new Worker(require.resolve('./worker'), {
       maxRetries: 0,
       numWorkers: threads,
-      enableWorkerThreads: true,
+      enableWorkerThreads: nextConfig.experimental.workerThreads,
       exposedMethods: ['default'],
     }) as Worker & { default: typeof exportPage }
 
@@ -541,6 +553,8 @@ export default async function exportApp(
             optimizeFonts: nextConfig.optimizeFonts,
             optimizeImages: nextConfig.experimental.optimizeImages,
             optimizeCss: nextConfig.experimental.optimizeCss,
+            disableOptimizedLoading:
+              nextConfig.experimental.disableOptimizedLoading,
             parentSpanId: pageExportSpan.id,
           })
 

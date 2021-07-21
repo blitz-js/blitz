@@ -41,7 +41,7 @@ export default ActiveLink
 
 The following is the definition of the `router` object returned by both [`useRouter`](#useRouter) and [`withRouter`](#withRouter):
 
-- `pathname`: `String` - Current route. That is the path of the page in `/pages`
+- `pathname`: `String` - Current route. That is the path of the page in `/pages`, the configured `basePath` or `locale` is not included.
 - `query`: `Object` - The query string parsed to an object. It will be an empty object during prerendering if the page doesn't have [data fetching requirements](/docs/basic-features/data-fetching.md). Defaults to `{}`
 - `asPath`: `String` - The path (including the query) shown in the browser without the configured `basePath` or `locale`.
 - `isFallback`: `boolean` - Whether the current page is in [fallback mode](/docs/basic-features/data-fetching.md#fallback-pages).
@@ -49,6 +49,7 @@ The following is the definition of the `router` object returned by both [`useRou
 - `locale`: `String` - The active locale (if enabled).
 - `locales`: `String[]` - All supported locales (if enabled).
 - `defaultLocale`: `String` - The current default locale (if enabled).
+- `domainLocales`: `Array<{domain, defaultLocale, locales}>` - Any configured domain locales.
 - `isReady`: `boolean` - Whether the router fields are updated client-side and ready for use. Should only be used inside of `useEffect` methods and not for conditionally rendering on the server.
 - `isPreview`: `boolean` - Whether the application is currently in [preview mode](/docs/advanced-features/preview-mode.md).
 
@@ -74,6 +75,7 @@ router.push(url, as, options)
 - `options` - Optional object with the following configuration options:
   - `scroll` - Optional boolean, controls scrolling to the top of the page after navigation. Defaults to `true`
   - [`shallow`](/docs/routing/shallow-routing.md): Update the path of the current page without rerunning [`getStaticProps`](/docs/basic-features/data-fetching.md#getstaticprops-static-generation), [`getServerSideProps`](/docs/basic-features/data-fetching.md#getserversideprops-server-side-rendering) or [`getInitialProps`](/docs/api-reference/data-fetching/getInitialProps.md). Defaults to `false`
+  - `locale` - Optional string, indicates locale of the new page
 
 > You don't need to use `router.push` for external URLs. [window.location](https://developer.mozilla.org/en-US/docs/Web/API/Window/location) is better suited for those cases.
 
@@ -110,6 +112,8 @@ export default function Page() {
   )
 }
 ```
+
+> **Note:** When navigating to the same page in Next.js, the page's state **will not** be reset by default, as the top-level React component is the same. You can manually ensure the state is updated using `useEffect`.
 
 Redirecting the user to `pages/login.js`, useful for pages behind [authentication](/docs/authentication):
 

@@ -1,8 +1,12 @@
-name: CI
+name: Size Check
 
 on:
   pull_request:
     branches: [master, canary]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:

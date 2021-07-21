@@ -390,7 +390,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Image is missing required "src" property. Make sure you pass "src" in props to the `next/image` component. Received: {"width":200}'
+        'Image is missing required "src" property. Make sure you pass "src" in props to the `<Image>` component. Received: {"width":200}'
       )
     })
 
@@ -399,7 +399,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Invalid src prop (https://google.com/test.png) on `next/image`, hostname "google.com" is not configured under images in your `next.config.js`'
+        'Invalid src prop (https://google.com/test.png) on `<Image>`, hostname "google.com" is not configured under images in your `blitz.config.js`'
       )
     })
 
@@ -411,16 +411,7 @@ function runTests(mode) {
 
       expect(await hasRedbox(browser)).toBe(true)
       expect(await getRedboxHeader(browser)).toContain(
-        'Failed to parse src "//assets.example.com/img.jpg" on `next/image`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)'
-      )
-    })
-
-    it('should show invalid unsized error', async () => {
-      const browser = await webdriver(appPort, '/docs/invalid-unsized')
-
-      expect(await hasRedbox(browser)).toBe(true)
-      expect(await getRedboxHeader(browser)).toContain(
-        'Image with src "/docs/test.png" has deprecated "unsized" property, which was removed in favor of the "layout=\'fill\'" property'
+        'Failed to parse src "//assets.example.com/img.jpg" on `<Image>`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)'
       )
     })
   }
@@ -483,7 +474,7 @@ function runTests(mode) {
 
         const computedWidth = await getComputed(browser, id, 'width')
         const computedHeight = await getComputed(browser, id, 'height')
-        expect(getRatio(computedWidth, computedHeight)).toBeCloseTo(1.333, 1)
+        expect(getRatio(computedWidth, computedHeight)).toBeCloseTo(0.5625, 1)
       } finally {
         if (browser) {
           await browser.close()

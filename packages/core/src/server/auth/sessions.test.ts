@@ -146,6 +146,40 @@ describe("sessions", () => {
       expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN())).not.toBe(undefined)
     })
   })
+
+  it("does not require CSRF header on HEAD requests", async () => {
+    const resolverModule = ((() => {
+      return
+    }) as unknown) as EnhancedResolver<unknown, unknown>
+    resolverModule.middleware = [
+      (_req, _res, next) => {
+        return next()
+      },
+    ]
+
+    await mockServer(resolverModule, async (url) => {
+      // console.log = jest.fn()
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({params: {}}),
+      })
+
+      const cookieHeader = res.headers.get("Set-Cookie") as string
+
+      const headRes = await fetch(url, {
+        method: "HEAD",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookieHeader,
+        },
+      })
+
+      expect(headRes.status).toBe(200)
+    })
+  })
 })
 
 async function mockServer<TInput, TResult>(

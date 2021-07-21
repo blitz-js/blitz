@@ -1,9 +1,13 @@
+import {formatWithValidation} from "next/dist/next-server/lib/utils"
+import {RedirectError} from "next/stdlib"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import {useAuthorizeIf} from "./auth/auth-client"
+import SuperJSON from "superjson"
+import {useAuthorizeIf, useSession} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
 import {Head} from "./head"
 import {AppProps, BlitzPage} from "./types"
+import {clientDebug} from "./utils"
 
 const customCSS = `
   body::before {
@@ -41,7 +45,45 @@ const NoPageFlicker = () => {
 
 export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
+    // We call useSession so this will rerender anytime session changes
+    useSession({suspense: false})
+
     useAuthorizeIf(Page.authenticate === true)
+
+    if (typeof window !== "undefined") {
+      // We read directly from publicDataStore.getData().userId instead of useSession
+      // so we can access userId on first render. useSession is always empty on first render
+      if (publicDataStore.getData().userId) {
+        clientDebug("[BlitzInnerRoot] logged in")
+        let {redirectAuthenticatedTo} = Page
+        if (redirectAuthenticatedTo) {
+          if (typeof redirectAuthenticatedTo !== "string") {
+            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
+          }
+
+          clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
+          const error = new RedirectError(redirectAuthenticatedTo)
+          error.stack = null!
+          throw error
+        }
+      } else {
+        clientDebug("[BlitzInnerRoot] logged out")
+        const authenticate = Page.authenticate
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          clientDebug("[BlitzInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
+        }
+      }
+    }
 
     return <Page {...props} />
   }
@@ -56,24 +98,6 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    if (typeof window !== "undefined") {
-      if (publicDataStore.getData().userId) {
-        if (props.Component.redirectAuthenticatedTo) {
-          window.location.replace(props.Component.redirectAuthenticatedTo)
-        }
-      } else {
-        const authenticate = props.Component.authenticate
-        if (
-          authenticate &&
-          typeof authenticate === "object" &&
-          typeof authenticate.redirectTo === "string"
-        ) {
-          const url = new URL(authenticate.redirectTo, window.location.href)
-          url.searchParams.append("next", window.location.pathname)
-          window.location.replace(url.toString())
-        }
-      }
-    }
     const component = React.useMemo(() => withBlitzInnerWrapper(props.Component), [props.Component])
 
     const noPageFlicker =
@@ -85,8 +109,12 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
 
+    const dehydratedState = props.pageProps.dehydratedState
+      ? SuperJSON.deserialize(props.pageProps.dehydratedState)
+      : undefined
+
     return (
-      <BlitzProvider dehydratedState={props.pageProps.dehydratedState}>
+      <BlitzProvider dehydratedState={dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
         <UserAppRoot {...props} Component={component} />
       </BlitzProvider>

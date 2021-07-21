@@ -62,13 +62,6 @@ const apiHandlerTemplate = (originalPath: string, useTypes: boolean, useDb: bool
 import enhancedResolver from '${originalPath}'
 import {getAllMiddlewareForModule} from '@blitzjs/core/server'
 import {rpcApiHandler} from '@blitzjs/core/server'
-import path from 'path'
-
-// Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
-path.resolve("next.config.js")
-path.resolve("blitz.config.js")
-path.resolve(".next/blitz/db.js")
-// End anti-tree-shaking
 
 let db${useTypes ? ": any" : ""}
 let connect${useTypes ? ": any" : ""}
@@ -96,7 +89,7 @@ export default rpcApiHandler(
 export const config = {
   ...enhancedResolver.config,
   api: {
-    ...enhancedResolver.config?.api,
+    ...enhancedResolver.config?.["api"],
     externalResolver: true,
   },
 }

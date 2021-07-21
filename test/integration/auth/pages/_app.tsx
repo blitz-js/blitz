@@ -1,15 +1,14 @@
-import {AppProps, ErrorFallbackProps, useQueryErrorResetBoundary} from "blitz"
-import {useRouter} from "next/router"
-import {ErrorBoundary} from "react-error-boundary"
+import {AppProps, ErrorBoundary, ErrorFallbackProps, useQueryErrorResetBoundary} from "blitz"
 import {ReactQueryDevtools} from "react-query/devtools"
 
-export default function App({Component, pageProps}: AppProps) {
-  const router = useRouter()
+if (typeof window !== "undefined") {
+  ;(window as any).DEBUG_BLITZ = 1
+}
 
+export default function App({Component, pageProps}: AppProps) {
   return (
     <ErrorBoundary
       FallbackComponent={RootErrorFallback}
-      resetKeys={[router.asPath]}
       onReset={useQueryErrorResetBoundary().reset}
     >
       <Component {...pageProps} />
@@ -19,5 +18,10 @@ export default function App({Component, pageProps}: AppProps) {
 }
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
-  return <div id="error">{error.name}</div>
+  return (
+    <div>
+      <div id="error">{error.name}</div>
+      {error.statusCode} {error.message}
+    </div>
+  )
 }

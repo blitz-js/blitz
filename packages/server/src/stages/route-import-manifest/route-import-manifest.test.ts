@@ -98,12 +98,8 @@ exports.Routes = {
 }
       `.trim(),
     declaration: `
-import type { UrlObject } from "url"
 import type { ParsedUrlQueryInput } from "querystring"
-
-interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
-  pathname: string
-}
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): RouteUrlObject;

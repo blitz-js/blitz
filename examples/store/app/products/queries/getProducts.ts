@@ -1,11 +1,5 @@
 import {Middleware, paginate} from "blitz"
-import db, {Prisma, Product} from "db"
-import {sum} from "lodash"
-
-export function averagePrice(products: Product[]) {
-  const prices = products.map((p) => p.price ?? 0)
-  return sum(prices) / prices.length
-}
+import db, {Prisma} from "db"
 
 type GetProductsInput = {
   where?: Prisma.ProductFindManyArgs["where"]

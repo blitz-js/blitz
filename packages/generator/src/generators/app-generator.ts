@@ -39,6 +39,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async getTemplateValues() {
     return {
       name: this.options.appName,
+      safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
       username: await username(),
     }
   }

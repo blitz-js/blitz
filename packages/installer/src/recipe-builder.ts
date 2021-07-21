@@ -1,12 +1,16 @@
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as TransformFileExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
+import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {ExecutorConfigUnion, RecipeExecutor} from "./recipe-executor"
 import {RecipeMeta} from "./types"
 
 export interface IRecipeBuilder {
   setName(name: string): IRecipeBuilder
   setDescription(description: string): IRecipeBuilder
+  printMessage(
+    step: Omit<Omit<PrintMessageExecutor.Config, "stepType">, "explanation">,
+  ): IRecipeBuilder
   setOwner(owner: string): IRecipeBuilder
   setRepoLink(repoLink: string): IRecipeBuilder
   addAddDependenciesStep(step: Omit<AddDependencyExecutor.Config, "stepType">): IRecipeBuilder
@@ -26,6 +30,13 @@ export function RecipeBuilder(): IRecipeBuilder {
     },
     setDescription(description: string) {
       meta.description = description
+      return this
+    },
+    printMessage(step: Omit<PrintMessageExecutor.Config, "stepType">) {
+      steps.push({
+        stepType: PrintMessageExecutor.type,
+        ...step,
+      })
       return this
     },
     setOwner(owner: string) {

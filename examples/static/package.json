@@ -32,16 +32,13 @@
     ]
   },
   "dependencies": {
-    "@prisma/client": "2.19.0",
-    "blitz": "0.35.0-canary.6",
+    "@prisma/client": "2.24.1",
+    "blitz": "0.38.5",
     "final-form": "4.20.1",
-    "prisma": "2.19.0",
+    "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-error-boundary": "3.1.1",
-    "react-final-form": "6.5.2",
-    "typescript": "4.1.5",
-    "zod": "1.11.11"
+    "react-final-form": "6.5.2"
   },
   "devDependencies": {
     "@types/preview-email": "2.0.0",

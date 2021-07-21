@@ -1,14 +1,15 @@
 import chalk from 'chalk'
 import findUp from 'next/dist/compiled/find-up'
-import { basename, extname } from 'path'
+import { basename, extname, join } from 'path'
 import * as Log from '../../build/output/log'
 import { hasNextSupport } from '../../telemetry/ci-info'
 import { CONFIG_FILE, PHASE_DEVELOPMENT_SERVER } from '../lib/constants'
 import { execOnce } from '../lib/utils'
-import { defaultConfig, normalizeConfig } from './config-shared'
+import { compileConfig, defaultConfig, normalizeConfig } from './config-shared'
 import { loadWebpackHook } from './config-utils'
 import { ImageConfig, imageConfigDefault, VALID_LOADERS } from './image-config'
 import { loadEnvConfig } from '@next/env'
+const debug = require('debug')('blitz:config')
 
 export { DomainLocales, NextConfig, normalizeConfig } from './config-shared'
 
@@ -27,7 +28,7 @@ function assignDefaults(userConfig: { [key: string]: any }) {
   if (typeof userConfig.exportTrailingSlash !== 'undefined') {
     console.warn(
       chalk.yellow.bold('Warning: ') +
-        'The "exportTrailingSlash" option has been renamed to "trailingSlash". Please update your next.config.js.'
+        'The "exportTrailingSlash" option has been renamed to "trailingSlash". Please update your blitz.config.js.'
     )
     if (typeof userConfig.trailingSlash === 'undefined') {
       userConfig.trailingSlash = userConfig.exportTrailingSlash
@@ -38,7 +39,7 @@ function assignDefaults(userConfig: { [key: string]: any }) {
   if (typeof userConfig.experimental?.reactMode !== 'undefined') {
     console.warn(
       chalk.yellow.bold('Warning: ') +
-        'The experimental "reactMode" option has been replaced with "reactRoot". Please update your next.config.js.'
+        'The experimental "reactMode" option has been replaced with "reactRoot". Please update your blitz.config.js.'
     )
     if (typeof userConfig.experimental?.reactRoot === 'undefined') {
       userConfig.experimental.reactRoot = ['concurrent', 'blocking'].includes(
@@ -56,7 +57,11 @@ function assignDefaults(userConfig: { [key: string]: any }) {
         return currentConfig
       }
 
-      if (key === 'experimental' && value && value !== defaultConfig[key]) {
+      if (
+        key === 'experimental' &&
+        value !== undefined &&
+        value !== defaultConfig[key]
+      ) {
         experimentalWarning()
       }
 
@@ -72,7 +77,7 @@ function assignDefaults(userConfig: { [key: string]: any }) {
         // public files
         if (userDistDir === 'public') {
           throw new Error(
-            `The 'public' directory is reserved in Next.js and can not be set as the 'distDir'. https://nextjs.org/docs/messages/can-not-output-to-public`
+            `The 'public' directory is reserved in Blitz.js and can not be set as the 'distDir'. https://nextjs.org/docs/messages/can-not-output-to-public`
           )
         }
         // make sure distDir isn't an empty string as it can result in the provided
@@ -408,6 +413,10 @@ export default async function loadConfig(
   customConfig?: object | null
 ) {
   await loadEnvConfig(dir, phase === PHASE_DEVELOPMENT_SERVER, Log)
+  if (!['start', 's'].includes(process.argv[2])) {
+    // Do not compile config for blitz start because it was already compiled during blitz build
+    await compileConfig(dir)
+  }
   await loadWebpackHook(phase, dir)
 
   if (customConfig) {
@@ -419,14 +428,23 @@ export default async function loadConfig(
   // If config file was found
   if (path?.length) {
     const userConfigModule = require(path)
-    const userConfig = normalizeConfig(
+    let userConfig = normalizeConfig(
       phase,
       userConfigModule.default || userConfigModule
     )
 
+    if (process.env.VERCEL_BUILDER) {
+      debug("Loading Vercel's next.config.js...")
+      const nextConfig = require(join('dir', 'next.config.js'))
+      debug("Vercel's next.config.js contents:", nextConfig)
+      for (const [key, value] of Object.entries(nextConfig)) {
+        userConfig[key] = value
+      }
+    }
+
     if (Object.keys(userConfig).length === 0) {
       Log.warn(
-        'Detected next.config.js, no exported configuration found. https://nextjs.org/docs/messages/empty-configuration'
+        'Detected blitz.config.js, no exported configuration found. https://nextjs.org/docs/messages/empty-configuration'
       )
     }
 
@@ -457,21 +475,23 @@ export default async function loadConfig(
       ...userConfig,
     })
   } else {
-    const configBaseName = basename(CONFIG_FILE, extname(CONFIG_FILE))
-    const nonJsPath = findUp.sync(
+    const unsupportedPath = findUp.sync(
       [
-        `${configBaseName}.jsx`,
-        `${configBaseName}.ts`,
-        `${configBaseName}.tsx`,
-        `${configBaseName}.json`,
+        `blitz.config.jsx`,
+        `blitz.config.tsx`,
+        `blitz.config.json`,
+        `next.config.jsx`,
+        `next.config.ts`,
+        `next.config.tsx`,
+        `next.config.json`,
       ],
       { cwd: dir }
     )
-    if (nonJsPath?.length) {
+    if (unsupportedPath?.length) {
       throw new Error(
-        `Configuring Next.js via '${basename(
-          nonJsPath
-        )}' is not supported. Please replace the file with 'next.config.js'.`
+        `Configuring Blitz.js via '${basename(
+          unsupportedPath
+        )}' is not supported. Please replace the file with 'blitz.config.(js|ts)'`
       )
     }
   }

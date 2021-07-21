@@ -6,6 +6,8 @@ import {multiMock} from "./utils/multi-mock"
 const mocks = multiMock(
   {
     "next-utils": {
+      customServerExists: jest.fn().mockReturnValue(Boolean),
+      buildCustomServer: jest.fn().mockReturnValue(Promise.resolve()),
       nextBuild: jest.fn().mockReturnValue(Promise.resolve()),
     },
     "resolve-bin-async": {
@@ -61,14 +63,7 @@ describe("Build command", () => {
     expect(directoryTree(rootFolder)).toEqual({
       children: [
         {
-          children: [
-            {name: ".next"},
-            {name: "_blitz-version.txt"},
-            {name: "blitz.config.js"},
-            {name: "next.config.js"},
-            {name: "one"},
-            {name: "two"},
-          ],
+          children: [{name: ".next"}, {name: "_blitz-version.txt"}, {name: "one"}, {name: "two"}],
           name: ".blitz-build",
         },
         {

@@ -1099,6 +1099,34 @@ test('logbox: anchors links in error messages', async () => {
   await cleanup()
 })
 
+test('<Link> with multiple children', async () => {
+  const [session, cleanup] = await sandbox()
+
+  console.log({ SANDBOX: session.sandboxDirectory })
+  await session.patch(
+    'index.js',
+    `
+      import Link from 'next/link'
+
+      export default function Index() {
+        return (
+          <Link href="/">
+            <p>One</p>
+            <p>Two</p>
+          </Link>
+        )
+      }
+    `
+  )
+
+  expect(await session.hasRedbox(true)).toBe(true)
+  expect(await session.getRedboxDescription()).toMatchInlineSnapshot(
+    `"Error: Multiple children were passed to <Link> with \`href\` of \`/\` but only one child is supported https://nextjs.org/docs/messages/link-multiple-children"`
+  )
+
+  await cleanup()
+})
+
 test('<Link> component props errors', async () => {
   const [session, cleanup] = await sandbox()
 
@@ -1384,9 +1412,10 @@ test('_document top level error shows logbox', async () => {
 test('server-side only compilation errors', async () => {
   const [session, cleanup] = await sandbox()
 
-  await session.patch(
-    'pages/index.js',
-    `
+  const patch = () =>
+    session.patch(
+      'pages/index.js',
+      `
       import myLibrary from 'my-non-existent-library'
       export async function getStaticProps() {
         return {
@@ -1399,7 +1428,22 @@ test('server-side only compilation errors', async () => {
         return <h1>{props.result}</h1>
       }
     `
-  )
+    )
+
+  // This is very flaky, so add a retry
+  try {
+    await patch()
+  } catch (error) {
+    try {
+      await patch()
+    } catch (error) {
+      try {
+        await patch()
+      } catch (error) {
+        await patch()
+      }
+    }
+  }
 
   expect(await session.hasRedbox(true)).toBe(true)
   await cleanup()

@@ -10,7 +10,14 @@ import {Routes} from ".blitz"
 export const EditProject = () => {
   const router = useRouter()
   const projectId = useParam("projectId", "number")
-  const [project, {setQueryData}] = useQuery(getProject, {id: projectId})
+  const [project, {setQueryData}] = useQuery(
+    getProject,
+    {id: projectId},
+    {
+      // This ensures the query never refreshes and overwrites the form data while the user is editing.
+      staleTime: Infinity,
+    },
+  )
   const [updateProjectMutation] = useMutation(updateProject)
 
   return (

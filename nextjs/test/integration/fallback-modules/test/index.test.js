@@ -48,7 +48,10 @@ describe('Build Output', () => {
       expect(parseFloat(indexSize)).toBeGreaterThanOrEqual(2)
       expect(indexSize.endsWith('kB')).toBe(true)
 
-      expect(parseFloat(indexFirstLoad)).toBeLessThanOrEqual(70.8)
+      const blitzExtra = 8.8
+      expect(parseFloat(indexFirstLoad)).toBeLessThanOrEqual(
+        process.env.NEXT_PRIVATE_TEST_WEBPACK4_MODE ? 68 : 67.9 + blitzExtra
+      )
       expect(parseFloat(indexFirstLoad)).toBeGreaterThanOrEqual(60)
       expect(indexFirstLoad.endsWith('kB')).toBe(true)
     })

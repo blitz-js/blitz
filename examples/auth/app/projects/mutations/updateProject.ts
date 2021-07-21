@@ -1,13 +1,11 @@
 import {resolver} from "blitz"
 import db from "db"
-import * as z from "zod"
+import {z} from "zod"
 
-const UpdateProject = z
-  .object({
-    id: z.number(),
-    name: z.string(),
-  })
-  .nonstrict()
+const UpdateProject = z.object({
+  id: z.number(),
+  name: z.string(),
+})
 
 export default resolver.pipe(
   resolver.zod(UpdateProject),
