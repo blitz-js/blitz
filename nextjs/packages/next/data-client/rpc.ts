@@ -1,31 +1,17 @@
 import { normalizeApiRoute } from '../next-server/lib/router/router'
 import { deserialize, serialize } from 'superjson'
 import { SuperJSONResult } from 'superjson/dist/types'
-// import {getAntiCSRFToken} from "./auth/auth-client"
-// import {getPublicDataStore} from "./auth/public-data-store"
-// import {getBlitzRuntimeData} from "./blitz-data"
-// import {
-//   HEADER_CSRF,
-//   HEADER_CSRF_ERROR,
-//   HEADER_PUBLIC_DATA_TOKEN,
-//   HEADER_SESSION_CREATED,
-//   HEADER_SESSION_REVOKED,
-// } from "./constants"
-// import {CSRFTokenMismatchError} from "./errors"
-// import {
-//   CancellablePromise,
-//   EnhancedResolver,
-//   EnhancedResolverRpcClient,
-//   ResolverModule,
-//   ResolverRpc,
-//   ResolverType,
-//   RpcOptions,
-// } from "./types"
-// import {getQueryKeyFromUrlAndParams, queryClient} from "./utils/react-query-utils"
+import { getAntiCSRFToken, getPublicDataStore } from './auth'
+import {
+  HEADER_CSRF,
+  HEADER_CSRF_ERROR,
+  HEADER_PUBLIC_DATA_TOKEN,
+  HEADER_SESSION_CREATED,
+  HEADER_SESSION_REVOKED,
+} from './constants'
+import { isServer } from '../stdlib'
+import { CSRFTokenMismatchError } from '../stdlib'
 const debug = require('debug')('blitz:rpc')
-
-const isServer = typeof window === 'undefined'
-const isClient = !isServer
 
 interface BuildRpcClientParams {
   resolverName: string
@@ -59,13 +45,13 @@ export function buildRpcClient({
       'Content-Type': 'application/json',
     }
 
-    // const antiCSRFToken = getAntiCSRFToken()
-    // if (antiCSRFToken) {
-    //   debug('Adding antiCSRFToken cookie header', antiCSRFToken)
-    //   headers[HEADER_CSRF] = antiCSRFToken
-    // } else {
-    //   debug('No antiCSRFToken cookie found')
-    // }
+    const antiCSRFToken = getAntiCSRFToken()
+    if (antiCSRFToken) {
+      debug('Adding antiCSRFToken cookie header', antiCSRFToken)
+      headers[HEADER_CSRF] = antiCSRFToken
+    } else {
+      debug('No antiCSRFToken cookie found')
+    }
 
     let serialized: SuperJSONResult
     if (opts.alreadySerialized) {
@@ -97,44 +83,46 @@ export function buildRpcClient({
       })
       .then(async (response) => {
         debug('Received request for', routePath)
-        // if (response.headers) {
-        //   if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
-        //     getPublicDataStore().updateState()
-        //     debug('Public data updated')
-        //   }
-        //   if (response.headers.get(HEADER_SESSION_REVOKED)) {
-        //     debug('Session revoked, clearing publicData')
-        //     getPublicDataStore().clear()
-        //     setTimeout(async () => {
-        //       // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-        //       debug('Clearing and invalidating react-query cache...')
-        //       await queryClient.cancelQueries()
-        //       await queryClient.resetQueries()
-        //       queryClient.getMutationCache().clear()
-        //       // We have a 100ms delay here to prevent unnecessary stale queries from running
-        //       // This prevents the case where you logout on a page with
-        //       // Page.authenticate = {redirectTo: '/login'}
-        //       // Without this delay, queries that require authentication on the original page
-        //       // will still run (but fail because you are now logged out)
-        //       // Ref: https://github.com/blitz-js/blitz/issues/1935
-        //     }, 100)
-        //   }
-        //   if (response.headers.get(HEADER_SESSION_CREATED)) {
-        // clientDebug("Session created")
-        // // await queryClient.invalidateQueries("")
-        // setTimeout(async () => {
-        //   // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-        //   clientDebug("Invalidating react-query cache...")
-        //   await queryClient.cancelQueries()
-        //   await queryClient.resetQueries()
-        // })
-        //   }
-        //   if (response.headers.get(HEADER_CSRF_ERROR)) {
-        //     const err = new CSRFTokenMismatchError()
-        //     err.stack = null!
-        //     throw err
-        //   }
-        // }
+        if (response.headers) {
+          if (response.headers.get(HEADER_PUBLIC_DATA_TOKEN)) {
+            getPublicDataStore().updateState()
+            debug('Public data updated')
+          }
+          if (response.headers.get(HEADER_SESSION_REVOKED)) {
+            debug('Session revoked, clearing publicData')
+            getPublicDataStore().clear()
+            setTimeout(async () => {
+              // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+              debug('Clearing and invalidating react-query cache...')
+              // TODO uncomment
+              // await queryClient.cancelQueries()
+              // await queryClient.resetQueries()
+              // queryClient.getMutationCache().clear()
+              // We have a 100ms delay here to prevent unnecessary stale queries from running
+              // This prevents the case where you logout on a page with
+              // Page.authenticate = {redirectTo: '/login'}
+              // Without this delay, queries that require authentication on the original page
+              // will still run (but fail because you are now logged out)
+              // Ref: https://github.com/blitz-js/blitz/issues/1935
+            }, 100)
+          }
+          if (response.headers.get(HEADER_SESSION_CREATED)) {
+            debug('Session created')
+            // await queryClient.invalidateQueries("")
+            setTimeout(async () => {
+              // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
+              debug('Invalidating react-query cache...')
+              // TODO uncomment
+              // await queryClient.cancelQueries()
+              // await queryClient.resetQueries()
+            })
+          }
+          if (response.headers.get(HEADER_CSRF_ERROR)) {
+            const err = new CSRFTokenMismatchError()
+            err.stack = null!
+            throw err
+          }
+        }
 
         if (!response.ok) {
           const error = new Error(response.statusText)
@@ -204,17 +192,4 @@ export function buildRpcClient({
 //   }
 //
 //   return window.fetch(addBasePath(apiUrl), { method: 'HEAD' })
-// }
-
-// const ensureTrailingSlash = (url: string) => {
-//   const lastChar = url.substr(-1)
-//   if (lastChar !== '/') {
-//     url = url + '/'
-//   }
-//   return url
-// }
-
-// const getApiUrlFromResolverFilePath = (resolverFilePath: string) => {
-//   const url = resolverFilePath.replace(/^app\/_resolvers/, '/api')
-//   return getBlitzRuntimeData().trailingSlash ? ensureTrailingSlash(url) : url
 // }
