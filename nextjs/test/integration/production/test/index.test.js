@@ -179,7 +179,7 @@ describe('Production Usage', () => {
       const url = `http://localhost:${appPort}/`
       const header = (await fetch(url)).headers.get('X-Powered-By')
 
-      expect(header).toBe('Next.js')
+      expect(header).toBe('Blitz.js')
     })
 
     it('should render 404 for routes that do not exist', async () => {
@@ -424,12 +424,13 @@ describe('Production Usage', () => {
     it('should set title by routeChangeComplete event', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.eval(function setup() {
-        window.next.router.events.on('routeChangeComplete', function handler(
-          url
-        ) {
-          window.routeChangeTitle = document.title
-          window.routeChangeUrl = url
-        })
+        window.next.router.events.on(
+          'routeChangeComplete',
+          function handler(url) {
+            window.routeChangeTitle = document.title
+            window.routeChangeUrl = url
+          }
+        )
         window.next.router.push('/with-title')
       })
       await browser.waitForElementByCss('#with-title')

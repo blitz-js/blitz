@@ -26,7 +26,7 @@ export function recursiveFormatZodErrors(errors: any) {
       continue
     }
 
-    if (errors[key]._errors[0]) {
+    if (errors[key]?._errors?.[0]) {
       if (!isNaN(key as any) && !Array.isArray(formattedErrors)) {
         formattedErrors = []
       }

@@ -2879,6 +2879,51 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "anothernode",
+      "name": "Moritz Reiter",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3286144?v=4",
+      "profile": "exocortex.anothernode.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "msichterman",
+      "name": "Matt Sichterman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38794918?v=4",
+      "profile": "https://msich.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "medihack",
+      "name": "Kai Schlamp",
+      "avatar_url": "https://avatars.githubusercontent.com/u/120626?v=4",
+      "profile": "https://github.com/medihack",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "muyiwaolu",
+      "name": "Muyiwa Olu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6832244?v=4",
+      "profile": "https://muyiwa.me",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rabbihossain",
+      "name": "Rabbi Hossain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4346154?v=4",
+      "profile": "http://2hr.me/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

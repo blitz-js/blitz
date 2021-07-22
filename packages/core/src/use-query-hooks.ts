@@ -29,22 +29,38 @@ type QueryNonLazyOptions =
 // -------------------------
 // useQuery
 // -------------------------
-type RestQueryResult<TResult> = Omit<UseQueryResult<TResult>, "data"> & QueryCacheFunctions<TResult>
+type RestQueryResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
+  QueryCacheFunctions<TResult>
 
-export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+export function useQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: UseQueryOptions<TResult> & QueryNonLazyOptions,
-): [TResult, RestQueryResult<TResult>]
-export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+): [TSelectedData, RestQueryResult<TSelectedData, TError>]
+export function useQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult> & QueryLazyOptions,
-): [TResult | undefined, RestQueryResult<TResult>]
-export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
+): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
+export function useQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult> = {},
+  options: UseQueryOptions<TResult, TError, TSelectedData> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useQuery is missing the first argument - it must be a query function")
@@ -94,23 +110,38 @@ export function useQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
 // -------------------------
 // usePaginatedQuery
 // -------------------------
-type RestPaginatedResult<TResult> = Omit<UseQueryResult<TResult>, "data"> &
+type RestPaginatedResult<TResult, TError> = Omit<UseQueryResult<TResult, TError>, "data"> &
   QueryCacheFunctions<TResult>
 
-export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+export function usePaginatedQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options?: UseQueryOptions<TResult> & QueryNonLazyOptions,
-): [TResult, RestPaginatedResult<TResult>]
-export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+): [TSelectedData, RestPaginatedResult<TSelectedData, TError>]
+export function usePaginatedQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult> & QueryLazyOptions,
-): [TResult | undefined, RestPaginatedResult<TResult>]
-export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options: UseQueryOptions<TResult, TError, TSelectedData> & QueryLazyOptions,
+): [TSelectedData | undefined, RestPaginatedResult<TSelectedData, TError>]
+export function usePaginatedQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   params: FirstParam<T>,
-  options: UseQueryOptions<TResult> = {},
+  options: UseQueryOptions<TResult, TError, TSelectedData> = {},
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
@@ -148,31 +179,47 @@ export function usePaginatedQuery<T extends QueryFn, TResult = PromiseReturnType
 // -------------------------
 // useInfiniteQuery
 // -------------------------
-interface RestInfiniteResult<TResult>
-  extends Omit<UseInfiniteQueryResult<TResult>, "data">,
+interface RestInfiniteResult<TResult, TError>
+  extends Omit<UseInfiniteQueryResult<TResult, TError>, "data">,
     QueryCacheFunctions<TResult> {
   pageParams: any
 }
 
-interface InfiniteQueryConfig<TResult> extends UseInfiniteQueryOptions<TResult> {
+interface InfiniteQueryConfig<TResult, TError, TSelectedData>
+  extends UseInfiniteQueryOptions<TResult, TError, TSelectedData, TResult> {
   // getPreviousPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
   // getNextPageParam?: (lastPage: TResult, allPages: TResult[]) => TGetPageParamResult
 }
 
-export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult> & QueryNonLazyOptions,
-): [TResult[], RestInfiniteResult<TResult>]
-export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryNonLazyOptions,
+): [TSelectedData[], RestInfiniteResult<TSelectedData, TError>]
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult> & QueryLazyOptions,
-): [TResult[] | undefined, RestInfiniteResult<TResult>]
-export function useInfiniteQuery<T extends QueryFn, TResult = PromiseReturnType<T>>(
+  options: InfiniteQueryConfig<TResult, TError, TSelectedData> & QueryLazyOptions,
+): [TSelectedData[] | undefined, RestInfiniteResult<TSelectedData, TError>]
+export function useInfiniteQuery<
+  T extends QueryFn,
+  TResult = PromiseReturnType<T>,
+  TError = unknown,
+  TSelectedData = TResult
+>(
   queryFn: T,
   getQueryParams: (pageParam: any) => FirstParam<T>,
-  options: InfiniteQueryConfig<TResult>,
+  options: InfiniteQueryConfig<TResult, TError, TSelectedData>,
 ) {
   if (typeof queryFn === "undefined") {
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
