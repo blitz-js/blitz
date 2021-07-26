@@ -2915,6 +2915,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rabbihossain",
+      "name": "Rabbi Hossain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4346154?v=4",
+      "profile": "http://2hr.me/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
