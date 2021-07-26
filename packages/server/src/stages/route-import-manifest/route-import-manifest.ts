@@ -149,9 +149,13 @@ export function parseParametersFromRoute(
  * We're not fooled by you, `yarn workspace`!
  */
 function findNodeModulesRoot(src: string) {
-  const nodeModules = join(src, "node_modules")
-  const includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
-  return includesBlitzPackage ? nodeModules : join(nodeModules, "../../../node_modules")
+  let nodeModules = join(src, "node_modules")
+  let includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  while (!includesBlitzPackage) {
+    nodeModules = join(nodeModules, "../../node_modules")
+    includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  }
+  return nodeModules
 }
 
 export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTriage} = ({
