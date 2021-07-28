@@ -136,11 +136,11 @@ describe('process.env stubbing', () => {
 
     describe('server side', () => {
       it('should not show missing env value when its not missing public', async () => {
-        await checkMissing('/not-missing-blitz', 'NEXT_PUBLIC_HI')
+        await checkMissing('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
       it('should not show missing env value when its not missing public', async () => {
-        await checkMissing('/not-missing', 'BLITZ_PUBLIC_HI')
+        await checkMissing('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
       it('should not show missing env value when its not missing runtime', async () => {
