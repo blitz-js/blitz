@@ -62,6 +62,7 @@ describe('process.env stubbing', () => {
       app = await launchApp(appDir, appPort, {
         env: {
           NEXT_PUBLIC_HI: 'hi',
+          BLITZ_PUBLIC_HI: 'hi from blitz',
           I_SHOULD_BE_HERE: 'hello',
         },
         onStderr(msg) {
@@ -74,6 +75,10 @@ describe('process.env stubbing', () => {
     describe('server side', () => {
       it('should not show missing env value when its not missing public', async () => {
         await checkMissing('/not-missing', 'NEXT_PUBLIC_HI')
+      })
+
+      it('should not show missing env value when its not missing public', async () => {
+        await checkMissing('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
       it('should not show missing env value when its not missing runtime', async () => {
@@ -102,6 +107,10 @@ describe('process.env stubbing', () => {
         await checkMissingClient('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
+      it('should not show missing env value when its not missing public', async () => {
+        await checkMissingClient('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
+      })
+
       it('should show missing env value when its missing runtime', async () => {
         await checkMissingClient('/also-not-missing', 'I_SHOULD_BE_HERE', true)
       })
@@ -127,7 +136,11 @@ describe('process.env stubbing', () => {
 
     describe('server side', () => {
       it('should not show missing env value when its not missing public', async () => {
-        await checkMissing('/not-missing', 'NEXT_PUBLIC_HI')
+        await checkMissing('/not-missing-blitz', 'NEXT_PUBLIC_HI')
+      })
+
+      it('should not show missing env value when its not missing public', async () => {
+        await checkMissing('/not-missing', 'BLITZ_PUBLIC_HI')
       })
 
       it('should not show missing env value when its not missing runtime', async () => {
@@ -154,6 +167,10 @@ describe('process.env stubbing', () => {
     describe('client side', () => {
       it('should not show missing env value when its not missing public', async () => {
         await checkMissingClient('/not-missing', 'NEXT_PUBLIC_HI')
+      })
+
+      it('should not show missing env value when its not missing public', async () => {
+        await checkMissingClient('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
       it('should not show missing env value when its missing runtime', async () => {
