@@ -43,6 +43,7 @@ function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
     const first = allKeys.indexOf(key)
     const last = allKeys.lastIndexOf(key)
     if (first !== last && first !== index) {
+      console.error(`Duplicate path found: ${key}`)
       return false
     }
 
