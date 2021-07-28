@@ -77,7 +77,7 @@ describe('process.env stubbing', () => {
         await checkMissing('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
-      it('should not show missing env value when its not missing public', async () => {
+      it('should not show missing env value when its not missing blitz public', async () => {
         await checkMissing('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
@@ -107,7 +107,7 @@ describe('process.env stubbing', () => {
         await checkMissingClient('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
-      it('should not show missing env value when its not missing public', async () => {
+      it('should not show missing env value when its not missing blitz public', async () => {
         await checkMissingClient('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
@@ -139,7 +139,7 @@ describe('process.env stubbing', () => {
         await checkMissing('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
-      it('should not show missing env value when its not missing public', async () => {
+      it('should not show missing env value when its not missing blitz public', async () => {
         await checkMissing('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
@@ -169,7 +169,7 @@ describe('process.env stubbing', () => {
         await checkMissingClient('/not-missing', 'NEXT_PUBLIC_HI')
       })
 
-      it('should not show missing env value when its not missing public', async () => {
+      it('should not show missing env value when its not missing blitz public', async () => {
         await checkMissingClient('/not-missing-blitz', 'BLITZ_PUBLIC_HI')
       })
 
