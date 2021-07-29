@@ -2952,6 +2952,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "zenhob",
+      "name": "Zack Hobson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12092?v=4",
+      "profile": "http://zackhobson.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
