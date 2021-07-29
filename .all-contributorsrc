@@ -2942,6 +2942,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "doncicuto",
+      "name": "Miguel Cabrerizo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30386061?v=4",
+      "profile": "https://doncicuto.medium.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
