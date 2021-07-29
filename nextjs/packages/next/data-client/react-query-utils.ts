@@ -81,8 +81,8 @@ export const validateQueryFn = <TInput, TResult>(
 
 const sanitize = (type: ResolverType) => <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | RpcClient<TInput, TResult>
-) => {
-  if (isServer) return queryFn
+): RpcClient<TInput, TResult> => {
+  if (isServer) return queryFn as any
 
   validateQueryFn(queryFn)
 
