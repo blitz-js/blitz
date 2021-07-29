@@ -1,5 +1,4 @@
 import { IncomingMessage, ServerResponse } from 'http'
-import { Resolver } from '../next-server/server/api-utils'
 import {
   getAndValidateMiddleware,
   handleRequestWithMiddleware,
@@ -15,6 +14,7 @@ import {
 import { loadConfigAtRuntime } from '../next-server/server/config-shared'
 import chalk from 'chalk'
 import { interopDefault } from '../next-server/server/load-components'
+import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
 
 export type InvokeWithMiddlewareConfig = {
   req: IncomingMessage
@@ -23,13 +23,12 @@ export type InvokeWithMiddlewareConfig = {
   [prop: string]: any
 }
 
-interface ResolverModule<TInput, TResult> extends Record<any, any> {
-  default: Resolver<TInput, TResult>
-  middleware?: Middleware[]
-}
-
-export async function invokeWithMiddleware<TInput, TResult>(
-  resolver: ResolverModule<TInput, TResult>,
+export async function invokeWithMiddleware<
+  T extends AsyncFunc,
+  TInput = FirstParam<T>,
+  TResult = PromiseReturnType<T>
+>(
+  resolver: T,
   params: TInput,
   ctx: InvokeWithMiddlewareConfig
 ): Promise<TResult> {

@@ -46,6 +46,7 @@
     "stdlib-server.js",
     "stdlib-server.d.ts",
     "types/index.d.ts",
+    "types/utils.ts",
     "types/global.d.ts",
     "image-types/global.d.ts"
   ],
@@ -87,7 +88,6 @@
     "chokidar": "3.5.1",
     "constants-browserify": "1.0.0",
     "cookie-session": "^1.4.0",
-    "jsonwebtoken": "8.5.1",
     "crypto-browserify": "3.12.0",
     "cssnano-simple": "2.0.0",
     "debug": "4.3.1",

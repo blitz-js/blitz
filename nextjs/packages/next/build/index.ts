@@ -666,7 +666,6 @@ export default async function build(
       customAppGetInitialProps,
       namedExports,
       isNextImageImported,
-      isBlitzSessionMiddlewareUsed,
       hasSsrAmpPages,
       hasNonStaticErrorPage,
     } = await staticCheckSpan.traceAsyncFn(async () => {
@@ -735,8 +734,6 @@ export default async function build(
       // eslint-disable-next-line no-shadow
       let isNextImageImported: boolean | undefined
       // eslint-disable-next-line no-shadow
-      let isBlitzSessionMiddlewareUsed: boolean | undefined
-      // eslint-disable-next-line no-shadow
       let hasSsrAmpPages = false
 
       const computedManifestData = await computeFromManifest(
@@ -799,10 +796,6 @@ export default async function build(
 
                 if (workerResult.isNextImageImported) {
                   isNextImageImported = true
-                }
-
-                if (workerResult.isBlitzSessionMiddlewareUsed) {
-                  isBlitzSessionMiddlewareUsed = true
                 }
 
                 if (workerResult.hasStaticProps) {
@@ -889,7 +882,6 @@ export default async function build(
         customAppGetInitialProps: await customAppGetInitialPropsPromise,
         namedExports: await namedExportsPromise,
         isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
         hasSsrAmpPages,
         hasNonStaticErrorPage: nonStaticErrorPage,
       }
@@ -1552,7 +1544,6 @@ export default async function build(
         hasExportPathMap: typeof config.exportPathMap === 'function',
         exportTrailingSlash: config.trailingSlash === true,
         isNextImageImported: isNextImageImported === true,
-        isBlitzSessionMiddlewareUsed: isBlitzSessionMiddlewareUsed === true,
       }),
       'utf8'
     )

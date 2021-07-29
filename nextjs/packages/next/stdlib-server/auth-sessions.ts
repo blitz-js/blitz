@@ -5,7 +5,10 @@ import cookie from 'next/dist/compiled/cookie'
 import fs from 'fs'
 import { IncomingMessage, ServerResponse } from 'http'
 import { join } from 'path'
-import { sign as jwtSign, verify as jwtVerify } from 'jsonwebtoken'
+import {
+  sign as jwtSign,
+  verify as jwtVerify,
+} from 'next/dist/compiled/jsonwebtoken'
 import { getCookieParser } from '../next-server/server/api-utils'
 import {
   AuthenticationError,
@@ -172,7 +175,6 @@ export const sessionMiddleware = (
     sessionConfig.isAuthorized,
     'You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)'
   )
-  ;(global as any).__BLITZ_SESSION_MIDDLEWARE_USED = true
 
   global.sessionConfig = {
     ...defaultConfig,

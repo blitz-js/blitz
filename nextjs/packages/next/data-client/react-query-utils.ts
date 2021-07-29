@@ -1,9 +1,9 @@
 import { QueryClient, QueryKey } from 'react-query'
 import { serialize } from 'superjson'
-import { isClient } from '../stdlib/index'
+import { isClient, isServer } from '../stdlib/index'
 import { requestIdleCallback } from '../client/request-idle-callback'
 import { ResolverType, RpcClient } from './rpc'
-import { AsyncFunc } from '../types/index'
+import { AsyncFunc } from '../types/utils'
 import { Resolver } from '../next-server/server/api-utils'
 
 type MutateOptions = {
@@ -72,7 +72,7 @@ const isNotInUserTestEnvironment = () => {
 export const validateQueryFn = <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | RpcClient<TInput, TResult>
 ) => {
-  if (!isRpcClient(queryFn) && isNotInUserTestEnvironment()) {
+  if (isClient && !isRpcClient(queryFn) && isNotInUserTestEnvironment()) {
     throw new Error(
       `Either the file path to your resolver is incorrect (must be in a "queries" or "mutations" folder that isn't nested inside "pages" or "api") or you are trying to use Blitz's useQuery to fetch from third-party APIs (to do that, import useQuery directly from "react-query")`
     )
@@ -82,6 +82,8 @@ export const validateQueryFn = <TInput, TResult>(
 const sanitize = (type: ResolverType) => <TInput, TResult>(
   queryFn: Resolver<TInput, TResult> | RpcClient<TInput, TResult>
 ) => {
+  if (isServer) return queryFn
+
   validateQueryFn(queryFn)
 
   const rpcClient = queryFn as RpcClient<TInput, TResult>

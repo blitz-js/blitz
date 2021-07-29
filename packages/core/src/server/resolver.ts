@@ -1,11 +1,5 @@
-import {
-  AuthenticatedSessionContext,
-  Await,
-  Ctx,
-  EnsurePromise,
-  SessionContext,
-  SessionContextBase,
-} from "next/types"
+import {AuthenticatedSessionContext, Ctx, SessionContext, SessionContextBase} from "next/types"
+import {Await, EnsurePromise} from "next/types/utils"
 import {infer as zInfer, ZodSchema} from "zod"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {

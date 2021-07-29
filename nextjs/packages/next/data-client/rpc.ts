@@ -39,6 +39,7 @@ export function buildRpcClient({
   resolverType,
   routePath,
 }: BuildRpcClientParams): RpcClient {
+  console.log('Building...', resolverName, resolverType, routePath)
   const fullRoutePath = normalizeApiRoute(routePath)
 
   const rpcClient: RpcClient = async (params, opts = {}) => {

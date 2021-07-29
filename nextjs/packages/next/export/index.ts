@@ -318,6 +318,7 @@ export default async function exportApp(
     const {
       i18n,
       images: { loader = 'default' },
+      middleware,
     } = nextConfig
 
     if (i18n && !options.buildExport) {
@@ -327,10 +328,7 @@ export default async function exportApp(
     }
 
     if (!options.buildExport) {
-      const {
-        isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
-      } = await nextExportSpan
+      const { isNextImageImported } = await nextExportSpan
         .traceChild('is-next-image-imported')
         .traceAsyncFn(() =>
           promises
@@ -339,7 +337,7 @@ export default async function exportApp(
             .catch(() => ({}))
         )
 
-      if (isBlitzSessionMiddlewareUsed) {
+      if (middleware?.find((m) => m.name === 'blitzSessionMiddleware')) {
         throw new Error(
           `Blitz sessionMiddleware is not compatible with \`blitz export\`.
   Possible solutions:

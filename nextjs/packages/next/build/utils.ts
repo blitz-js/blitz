@@ -793,7 +793,6 @@ export async function isPageStatic(
   encodedPrerenderRoutes?: string[]
   prerenderFallback?: boolean | 'blocking'
   isNextImageImported?: boolean
-  isBlitzSessionMiddlewareUsed?: boolean
 }> {
   const isPageStaticSpan = trace('is-page-static-utils', parentId)
   return isPageStaticSpan.traceAsyncFn(async () => {
@@ -887,8 +886,6 @@ export async function isPageStatic(
       }
 
       const isNextImageImported = (global as any).__NEXT_IMAGE_IMPORTED
-      const isBlitzSessionMiddlewareUsed = (global as any)
-        .__BLITZ_SESSION_MIDDLEWARE_USED
       const config = mod.config || {}
       return {
         isStatic: !hasStaticProps && !hasGetInitialProps && !hasServerProps,
@@ -900,7 +897,6 @@ export async function isPageStatic(
         hasStaticProps,
         hasServerProps,
         isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
       }
     } catch (err) {
       if (err.code === 'MODULE_NOT_FOUND') return {}

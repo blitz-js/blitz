@@ -42,9 +42,10 @@ export const parsePublicDataToken = (token: string) => {
   }
 }
 
+const emptyPublicData: EmptyPublicData = { userId: null }
+
 class PublicDataStore {
   private eventKey = `${LOCALSTORAGE_PREFIX}publicDataUpdated`
-  readonly emptyPublicData: EmptyPublicData = { userId: null }
   readonly observable = BadBehavior<PublicData | EmptyPublicData>()
 
   constructor() {
@@ -79,13 +80,13 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
-    this.updateState(this.emptyPublicData)
+    this.updateState(emptyPublicData)
   }
 
   getData() {
     const publicDataToken = this.getToken()
     if (!publicDataToken) {
-      return this.emptyPublicData
+      return emptyPublicData
     }
 
     const { publicData } = parsePublicDataToken(publicDataToken)
@@ -124,7 +125,7 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
       initialState = { ...getPublicDataStore().getData(), isLoading: false }
     }
   } else {
-    initialState = { ...getPublicDataStore().emptyPublicData, isLoading: true }
+    initialState = { ...emptyPublicData, isLoading: true }
   }
 
   const [session, setSession] = useState(initialState)

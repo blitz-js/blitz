@@ -1,4 +1,4 @@
-import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/index'
+import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
 import { isClient } from '../stdlib/index'
 import { RpcClient } from './rpc'
 

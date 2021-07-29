@@ -13,7 +13,7 @@ import {
   QueryClientProvider,
 } from 'react-query'
 import { useSession } from './auth'
-import { FirstParam, PromiseReturnType, AsyncFunc } from '../types/index'
+import { FirstParam, PromiseReturnType, AsyncFunc } from '../types/utils'
 import { isServer } from '../stdlib/index'
 import {
   emptyQueryFn,
