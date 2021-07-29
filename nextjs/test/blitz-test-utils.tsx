@@ -1,11 +1,11 @@
-import {render as defaultRender} from "@testing-library/react"
-import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
-import {BlitzProvider, queryClient} from "next/data-client"
-import {RouterContext} from "next/dist/next-server/lib/router-context"
-import {NextRouter} from "next/router"
-import React from "react"
+import { render as defaultRender } from '@testing-library/react'
+import { renderHook as defaultRenderHook } from '@testing-library/react-hooks'
+import { RouterContext } from 'next/dist/next-server/lib/router-context'
+import { NextRouter } from 'next/router'
+import React from 'react'
+import { BlitzProvider, queryClient } from 'next/data-client'
 
-export * from "@testing-library/react"
+export * from '@testing-library/react'
 
 // --------------------------------------------------
 // Override the default test render with our own
@@ -24,10 +24,10 @@ type RenderOptions = DefaultParams[1] & {
 }
 
 const mockRouter: NextRouter = {
-  basePath: "",
-  pathname: "/",
-  route: "/",
-  asPath: "/",
+  basePath: '',
+  pathname: '/',
+  route: '/',
+  asPath: '/',
   query: {},
   isReady: true,
   isLocaleDomain: false,
@@ -48,19 +48,19 @@ const mockRouter: NextRouter = {
 
 export function render(
   ui: RenderUI,
-  {wrapper, router, dehydratedState, ...options}: RenderOptions = {},
+  { wrapper, router, dehydratedState, ...options }: RenderOptions = {}
 ) {
   if (!wrapper) {
-    wrapper = ({children}) => (
+    wrapper = ({ children }) => (
       <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
-        <RouterContext.Provider value={{...mockRouter, ...router}}>
+        <RouterContext.Provider value={{ ...mockRouter, ...router }}>
           {children}
         </RouterContext.Provider>
       </BlitzProvider>
     )
   }
 
-  return defaultRender(ui, {wrapper, ...options})
+  return defaultRender(ui, { wrapper, ...options })
 }
 
 // --------------------------------------------------
@@ -81,44 +81,38 @@ type RenderHookOptions = DefaultHookParams[1] & {
 
 export function renderHook(
   hook: RenderHook,
-  {wrapper, router, dehydratedState, ...options}: RenderHookOptions = {},
+  { wrapper, router, dehydratedState, ...options }: RenderHookOptions = {}
 ) {
   if (!wrapper) {
-    wrapper = ({children}) => (
+    wrapper = ({ children }) => (
       <BlitzProvider client={queryClient} dehydratedState={dehydratedState}>
-        <RouterContext.Provider value={{...mockRouter, ...router}}>
+        <RouterContext.Provider value={{ ...mockRouter, ...router }}>
           {children}
         </RouterContext.Provider>
       </BlitzProvider>
     )
   }
 
-  return defaultRenderHook(hook, {wrapper, ...options})
+  return defaultRenderHook(hook, { wrapper, ...options })
 }
 
-// This enhance fn does what getIsomorphicEnhancedResolver does during build time
-export function enhanceQueryFn(fn: any) {
+// This enhance fn does what buildRpcClient does during build time
+export function buildQueryRpc(fn: any) {
   const newFn = (...args: any) => {
     const [data, ...rest] = args
     return fn(data, ...rest)
   }
-  newFn._meta = {
-    name: "testResolver",
-    type: "query",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
+  newFn._isRpcClient = true
+  newFn._resolverType = 'query'
+  newFn._routePath = '/api/test/url/' + Math.random()
   return newFn
 }
 
-// This enhance fn does what getIsomorphicEnhancedResolver does during build time
-export function enhanceMutationFn(fn: any) {
+// This enhance fn does what buildRpcClient does during build time
+export function buildMutationRpc(fn: any) {
   const newFn = (...args: any) => fn(...args)
-  newFn._meta = {
-    name: "testResolver",
-    type: "mutation",
-    path: "app/test",
-    apiUrl: "test/url",
-  }
+  newFn._isRpcClient = true
+  newFn._resolverType = 'mutation'
+  newFn._routePath = '/api/test/url'
   return newFn
 }

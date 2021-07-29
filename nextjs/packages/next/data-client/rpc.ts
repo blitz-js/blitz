@@ -9,12 +9,14 @@ import {
   HEADER_SESSION_CREATED,
   HEADER_SESSION_REVOKED,
 } from './constants'
-import { isServer } from '../stdlib'
-import { CSRFTokenMismatchError } from '../stdlib'
+import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
 const debug = require('debug')('blitz:rpc')
 
-interface BuildRpcClientParams {
+export type ResolverType = 'query' | 'mutation'
+
+export interface BuildRpcClientParams {
   resolverName: string
+  resolverType: ResolverType
   routePath: string
 }
 
@@ -24,11 +26,21 @@ export interface RpcOptions {
   alreadySerialized?: boolean
 }
 
+export interface RpcClient<Input = unknown, Result = unknown> {
+  (params: Input, opts?: RpcOptions): Promise<Result>
+  _isRpcClient: true
+  _resolverType: ResolverType
+  _routePath: string
+}
+
 export function buildRpcClient({
   resolverName,
+  resolverType,
   routePath,
-}: BuildRpcClientParams) {
-  return function rpcClient(params: any, opts: RpcOptions = {}) {
+}: BuildRpcClientParams): RpcClient {
+  const fullRoutePath = normalizeApiRoute(routePath)
+
+  const rpcClient: RpcClient = async (params, opts = {}) => {
     if (!opts.fromQueryHook && !opts.fromInvoke) {
       console.warn(
         '[Deprecation] Directly calling queries/mutations is deprecated in favor of invoke(queryFn, params)'
@@ -38,7 +50,6 @@ export function buildRpcClient({
     if (isServer) {
       return Promise.resolve() as unknown // as CancellablePromise<TResult>
     }
-    const fullRoutePath = normalizeApiRoute(routePath)
     debug('Starting request for', fullRoutePath, 'with', params, 'and', opts)
 
     const headers: Record<string, any> = {
@@ -184,6 +195,10 @@ export function buildRpcClient({
 
     return promise
   }
+  rpcClient._isRpcClient = true
+  rpcClient._resolverType = resolverType
+  rpcClient._routePath = fullRoutePath
+  return rpcClient
 }
 
 // executeRpcCall.warm = (routePath: string) => {

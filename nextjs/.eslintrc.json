@@ -193,7 +193,7 @@
     "no-obj-calls": "warn",
     "no-octal": "warn",
     "no-octal-escape": "warn",
-    "no-redeclare": ["warn", { "builtinGlobals": false }],
+    "no-redeclare": ["off"], //blitz
     "no-regex-spaces": "warn",
     "no-restricted-syntax": ["warn", "WithStatement"],
     "no-script-url": "warn",

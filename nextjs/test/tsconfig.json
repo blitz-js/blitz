@@ -5,6 +5,7 @@
     "esModuleInterop": true,
     "target": "es6",
     "allowJs": true,
+    "jsx": "react",
     "baseUrl": "./lib",
     "noEmit": true
   },

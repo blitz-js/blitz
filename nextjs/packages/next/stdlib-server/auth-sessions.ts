@@ -385,7 +385,7 @@ export class SessionContextClass implements SessionContext {
 // --------------------------------
 const TOKEN_LENGTH = 32
 
-export const generateEssentialSessionHandle = () => {
+const generateEssentialSessionHandle = () => {
   return (
     generateToken(TOKEN_LENGTH) +
     HANDLE_SEPARATOR +
@@ -393,13 +393,13 @@ export const generateEssentialSessionHandle = () => {
   )
 }
 
-export const generateAnonymousSessionHandle = () => {
+const generateAnonymousSessionHandle = () => {
   return (
     generateToken(TOKEN_LENGTH) + HANDLE_SEPARATOR + SESSION_TYPE_ANONYMOUS_JWT
   )
 }
 
-export const createSessionToken = (
+const createSessionToken = (
   handle: string,
   publicData: PublicData | string
 ) => {
@@ -421,7 +421,7 @@ export const createSessionToken = (
     ].join(TOKEN_SEPARATOR)
   )
 }
-export const parseSessionToken = (token: string) => {
+const parseSessionToken = (token: string) => {
   const [handle, id, hashedPublicData, version] = fromBase64(token).split(
     TOKEN_SEPARATOR
   )
@@ -438,7 +438,7 @@ export const parseSessionToken = (token: string) => {
   }
 }
 
-export const createPublicDataToken = (
+const createPublicDataToken = (
   publicData: string | PublicData | EmptyPublicData
 ) => {
   const payload =
@@ -446,7 +446,7 @@ export const createPublicDataToken = (
   return toBase64(payload)
 }
 
-export const createAntiCSRFToken = () => generateToken(TOKEN_LENGTH)
+const createAntiCSRFToken = () => generateToken(TOKEN_LENGTH)
 
 export type AnonymousSessionPayload = {
   isAnonymous: true
@@ -455,7 +455,7 @@ export type AnonymousSessionPayload = {
   antiCSRFToken: string
 }
 
-export const getSessionSecretKey = () => {
+const getSessionSecretKey = () => {
   if (process.env.NODE_ENV === 'production') {
     if (!process.env.SESSION_SECRET_KEY && process.env.SECRET_SESSION_KEY) {
       throw new Error(
@@ -483,9 +483,7 @@ const JWT_AUDIENCE = 'blitzjs'
 const JWT_ANONYMOUS_SUBJECT = 'anonymous'
 const JWT_ALGORITHM = 'HS256'
 
-export const createAnonymousSessionToken = (
-  payload: AnonymousSessionPayload
-) => {
+const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
   return jwtSign({ [JWT_NAMESPACE]: payload }, getSessionSecretKey(), {
     algorithm: JWT_ALGORITHM,
     issuer: JWT_ISSUER,
@@ -494,7 +492,7 @@ export const createAnonymousSessionToken = (
   })
 }
 
-export const parseAnonymousSessionToken = (token: string) => {
+const parseAnonymousSessionToken = (token: string) => {
   // This must happen outside the try/catch because it could throw an error
   // about a missing environment variable
   const secret = getSessionSecretKey()
@@ -517,7 +515,7 @@ export const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-export const setCookie = (res: ServerResponse, cookie: string) => {
+const setCookie = (res: ServerResponse, cookie: string) => {
   const getCookieName = (c: string) => c.split('=', 2)[0]
   const appendCookie = () => append(res, 'Set-Cookie', cookie)
 
@@ -547,21 +545,21 @@ export const setCookie = (res: ServerResponse, cookie: string) => {
   }
 }
 
-export const setHeader = (res: ServerResponse, name: string, value: string) => {
+const setHeader = (res: ServerResponse, name: string, value: string) => {
   res.setHeader(name, value)
   if ('_blitz' in res) {
     ;(res as any)._blitz[name] = value
   }
 }
 
-export const removeHeader = (res: ServerResponse, name: string) => {
+const removeHeader = (res: ServerResponse, name: string) => {
   res.removeHeader(name)
   if ('_blitz' in res) {
     delete (res as any)._blitz[name]
   }
 }
 
-export const setSessionCookie = (
+const setSessionCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   sessionToken: string,
@@ -583,7 +581,7 @@ export const setSessionCookie = (
   )
 }
 
-export const setAnonymousSessionCookie = (
+const setAnonymousSessionCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   token: string,
@@ -605,7 +603,7 @@ export const setAnonymousSessionCookie = (
   )
 }
 
-export const setCSRFCookie = (
+const setCSRFCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   antiCSRFToken: string,
@@ -631,7 +629,7 @@ export const setCSRFCookie = (
   )
 }
 
-export const setPublicDataCookie = (
+const setPublicDataCookie = (
   req: IncomingMessage,
   res: ServerResponse,
   publicDataToken: string,
@@ -656,7 +654,7 @@ export const setPublicDataCookie = (
 // --------------------------------
 // Get Session
 // --------------------------------
-export async function getSessionKernel(
+async function getSessionKernel(
   req: NextApiRequest,
   res: ServerResponse
 ): Promise<SessionKernel | null> {
@@ -833,7 +831,7 @@ interface CreateNewAuthedSession {
   jwtPayload?: JwtPayload
 }
 
-export async function createNewSession(
+async function createNewSession(
   args: CreateNewAnonSession | CreateNewAuthedSession
 ): Promise<SessionKernel> {
   const { req, res } = args
@@ -946,7 +944,7 @@ export async function createNewSession(
   }
 }
 
-export async function createAnonymousSession(
+async function createAnonymousSession(
   req: IncomingMessage,
   res: ServerResponse
 ) {
@@ -962,7 +960,7 @@ export async function createAnonymousSession(
 // Session/DB utils
 // --------------------------------
 
-export async function refreshSession(
+async function refreshSession(
   req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
@@ -1033,7 +1031,7 @@ export async function getAllSessionHandlesForUser(
   )
 }
 
-export async function syncPubicDataFieldsForUserIfNeeded(
+async function syncPubicDataFieldsForUserIfNeeded(
   userId: PublicData['userId'],
   data: Record<string, unknown>
 ) {
@@ -1056,7 +1054,7 @@ export async function syncPubicDataFieldsForUserIfNeeded(
   }
 }
 
-export async function revokeSession(
+async function revokeSession(
   req: IncomingMessage,
   res: ServerResponse,
   handle: string,
@@ -1079,7 +1077,7 @@ export async function revokeSession(
   setCSRFCookie(req, res, '', new Date(0))
 }
 
-export async function revokeMultipleSessions(
+async function revokeMultipleSessions(
   req: IncomingMessage,
   res: ServerResponse,
   sessionHandles: string[]
@@ -1092,7 +1090,7 @@ export async function revokeMultipleSessions(
   return revoked
 }
 
-export async function revokeAllSessionsForUser(
+async function revokeAllSessionsForUser(
   req: IncomingMessage,
   res: ServerResponse,
   userId: PublicData['userId']
@@ -1103,7 +1101,7 @@ export async function revokeAllSessionsForUser(
   return revokeMultipleSessions(req, res, sessionHandles)
 }
 
-export async function getPublicData(
+async function getPublicData(
   sessionKernel: SessionKernel
 ): Promise<PublicData | EmptyPublicData> {
   if (sessionKernel.jwtPayload?.publicData) {
@@ -1124,7 +1122,7 @@ export async function getPublicData(
   }
 }
 
-export async function getPrivateData(
+async function getPrivateData(
   handle: string
 ): Promise<Record<any, any> | null> {
   const session = await global.sessionConfig.getSession(handle)
@@ -1135,7 +1133,7 @@ export async function getPrivateData(
   }
 }
 
-export async function setPrivateData(
+async function setPrivateData(
   sessionKernel: SessionKernel,
   data: Record<any, any>
 ) {
@@ -1156,7 +1154,7 @@ export async function setPrivateData(
   })
 }
 
-export async function setPublicData(
+async function setPublicData(
   req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
@@ -1215,11 +1213,7 @@ export async function setPublicDataForUser(
  * @param {string} field
  * @param {string| string[]} val
  */
-export function append(
-  res: ServerResponse,
-  field: string,
-  val: string | string[]
-) {
+function append(res: ServerResponse, field: string, val: string | string[]) {
   let prev: string | string[] | undefined = res.getHeader(field) as
     | string
     | string[]

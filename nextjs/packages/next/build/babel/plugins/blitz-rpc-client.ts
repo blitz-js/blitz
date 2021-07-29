@@ -7,6 +7,7 @@ import { convertPageFilePathToRoutePath } from '../../utils'
 import { buildRpcClient } from "next/data-client";
 export default buildRpcClient({
   "resolverName": "getUsers",
+  "resolverType": "query",
   "routePath": "/api/rpc/getUsers"
 });
  *
@@ -27,6 +28,9 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
           const resolverName = filename
             .replace(/^.*[\\/]/, '')
             .replace(/\.[^.]*$/, '')
+          const resolverType = filename.match(/[\\/]queries[\\/]/)
+            ? 'query'
+            : 'mutation'
           const routePath = convertPageFilePathToRoutePath(relativePathFromRoot)
 
           const importDeclaration = t.importDeclaration(
@@ -44,6 +48,10 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
                 t.objectProperty(
                   t.stringLiteral('resolverName'),
                   t.stringLiteral(resolverName)
+                ),
+                t.objectProperty(
+                  t.stringLiteral('resolverType'),
+                  t.stringLiteral(resolverType)
                 ),
                 t.objectProperty(
                   t.stringLiteral('routePath'),

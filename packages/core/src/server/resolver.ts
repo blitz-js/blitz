@@ -1,6 +1,12 @@
+import {
+  AuthenticatedSessionContext,
+  Await,
+  Ctx,
+  EnsurePromise,
+  SessionContext,
+  SessionContextBase,
+} from "next/types"
 import {infer as zInfer, ZodSchema} from "zod"
-import {AuthenticatedSessionContext, SessionContext, SessionContextBase} from "../auth/auth-types"
-import {Await, Ctx, EnsurePromise} from "../types"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
