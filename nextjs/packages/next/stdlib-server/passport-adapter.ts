@@ -32,9 +32,17 @@ const isVerifyCallbackResult = (
 
 const INTERNAL_REDIRECT_URL_KEY = '_redirectUrl'
 
-export type BlitzPassportConfigCallback = (
-  blitzCtx: Ctx
-) => BlitzPassportConfigObject
+export interface BlitzPassportConfigCallbackParams {
+  ctx: Ctx
+  req: BlitzApiRequest
+  res: BlitzApiResponse
+}
+
+export type BlitzPassportConfigCallback = ({
+  ctx,
+  req,
+  res,
+}: BlitzPassportConfigCallbackParams) => BlitzPassportConfigObject
 
 export type BlitzPassportConfig =
   | BlitzPassportConfigObject
@@ -69,7 +77,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
     await handleRequestWithMiddleware(req, res, globalMiddleware)
 
     const configObject: BlitzPassportConfigObject = isFunction(config)
-      ? config((res as any).blitzCtx as Ctx)
+      ? config({ ctx: (res as any).blitzCtx as Ctx, req, res })
       : config
 
     const cookieSessionMiddleware = cookieSession({

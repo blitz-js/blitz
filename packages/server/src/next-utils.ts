@@ -230,8 +230,8 @@ const getEsbuildOptions = (): esbuild.BuildOptions => {
       "blitz",
       "next",
       ...Object.keys(require("blitz/package").dependencies),
-      ...Object.keys(pkg.dependencies),
-      ...Object.keys(pkg.devDependencies),
+      ...Object.keys(pkg?.dependencies ?? {}),
+      ...Object.keys(pkg?.devDependencies ?? {}),
     ],
   }
 }

@@ -22,7 +22,7 @@ assert(process.env.AUTH0_DOMAIN, "You must provide the AUTH0_DOMAIN env variable
 assert(process.env.AUTH0_CLIENT_ID, "You must provide the AUTH0_CLIENT_ID env variable")
 assert(process.env.AUTH0_CLIENT_SECRET, "You must provide the AUTH0_CLIENT_SECRET env variable")
 
-export default passportAuth((ctx) => ({
+export default passportAuth(({ctx, req, res}) => ({
   successRedirectUrl: "/",
   strategies: [
     {
