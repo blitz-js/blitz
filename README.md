@@ -660,7 +660,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="http://2hr.me/"><img src="https://avatars.githubusercontent.com/u/4346154?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rabbi Hossain</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=rabbihossain" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/bravo-kernel"><img src="https://avatars.githubusercontent.com/u/230500?v=4?s=100" width="100px;" alt=""/><br /><sub><b>bravo-kernel</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=bravo-kernel" title="Code">💻</a></td>
     <td align="center"><a href="https://samholmes.net"><img src="https://avatars.githubusercontent.com/u/8385528?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sam Holmes</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=sam3d" title="Code">💻</a></td>
-    <td align="center"><a href="https://doncicuto.medium.com"><img src="https://avatars.githubusercontent.com/u/30386061?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miguel Cabrerizo</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=doncicuto" title="Code">💻</a></td>
+    <td align="center"><a href="https://doncicuto.medium.com"><img src="https://avatars.githubusercontent.com/u/30386061?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Miguel Cabrerizo</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=doncicuto" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=doncicuto" title="Documentation">📖</a></td>
   </tr>
 </table>
 
