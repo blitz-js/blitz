@@ -9,8 +9,10 @@ import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
 import {Manifest} from "./stages/manifest"
-import {resolverBuildFolderReplaceRegex, resolverFullBuildPathRegex} from "./stages/rpc"
 import {through} from "./streams"
+
+export const resolverFullBuildPathRegex = /[\\/]app[\\/]_resolvers[\\/]/
+export const resolverBuildFolderReplaceRegex = /_resolvers[\\/]/g
 
 function createOutputTransformer(_buildFolder: string, _manifest?: Manifest) {
   const stream = through(function (data: Buffer, _, next) {

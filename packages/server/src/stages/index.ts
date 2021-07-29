@@ -4,7 +4,6 @@ import {createStageRelative} from "./relative"
 import {createStageRewriteImports} from "./rewrite-imports"
 import {createStageRouteImportManifest} from "./route-import-manifest/route-import-manifest"
 import {createStageRoutes} from "./routes"
-import {createStageRpc} from "./rpc"
 
 type StagesConfig = {
   writeManifestFile: boolean
@@ -21,16 +20,12 @@ export const configureStages = async (config: StagesConfig) => ({
     // Order is important
     createStageRelative,
     createStageRewriteImports,
-    createStageRpc(config.isTypeScript),
     createStageRoutes,
     createStageRouteImportManifest,
     await createStageManifest(config.writeManifestFile, config.buildFolder, config.env),
   ],
 })
 
-export const configureRouteStages = (config: StagesConfig) => [
-  createStageRpc(config.isTypeScript),
-  createStageRoutes,
-]
+export const configureRouteStages = (_config: StagesConfig) => [createStageRoutes]
 
 export const configureGenerateStages = () => [createStageRoutes, createStageRouteImportManifest]

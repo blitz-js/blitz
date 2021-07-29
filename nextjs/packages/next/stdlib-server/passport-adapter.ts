@@ -16,7 +16,11 @@ import {
 } from '../next-server/server/middleware'
 import { isLocalhost } from './index'
 import { loadConfigAtRuntime } from '../next-server/server/config-shared'
-import { NextApiHandler } from '../next-server/lib/utils'
+import {
+  NextApiHandler,
+  NextApiRequest,
+  NextApiResponse,
+} from '../next-server/lib/utils'
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -34,8 +38,8 @@ const INTERNAL_REDIRECT_URL_KEY = '_redirectUrl'
 
 export interface BlitzPassportConfigCallbackParams {
   ctx: Ctx
-  req: BlitzApiRequest
-  res: BlitzApiResponse
+  req: NextApiRequest
+  res: NextApiResponse
 }
 
 export type BlitzPassportConfigCallback = ({

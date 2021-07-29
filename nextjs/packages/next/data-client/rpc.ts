@@ -10,6 +10,7 @@ import {
   HEADER_SESSION_REVOKED,
 } from './constants'
 import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
+import { getQueryKeyFromUrlAndParams, queryClient } from './react-query-utils'
 const debug = require('debug')('blitz:rpc')
 
 export type ResolverType = 'query' | 'mutation'
@@ -105,10 +106,9 @@ export function buildRpcClient({
             setTimeout(async () => {
               // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
               debug('Clearing and invalidating react-query cache...')
-              // TODO uncomment
-              // await queryClient.cancelQueries()
-              // await queryClient.resetQueries()
-              // queryClient.getMutationCache().clear()
+              await queryClient.cancelQueries()
+              await queryClient.resetQueries()
+              queryClient.getMutationCache().clear()
               // We have a 100ms delay here to prevent unnecessary stale queries from running
               // This prevents the case where you logout on a page with
               // Page.authenticate = {redirectTo: '/login'}
@@ -123,9 +123,8 @@ export function buildRpcClient({
             setTimeout(async () => {
               // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
               debug('Invalidating react-query cache...')
-              // TODO uncomment
-              // await queryClient.cancelQueries()
-              // await queryClient.resetQueries()
+              await queryClient.cancelQueries()
+              await queryClient.resetQueries()
             })
           }
           if (response.headers.get(HEADER_CSRF_ERROR)) {
@@ -157,12 +156,12 @@ export function buildRpcClient({
               meta: payload.meta?.error,
             }) as any
             // We don't clear the publicDataStore for anonymous users
-            // if (
-            //   error.name === 'AuthenticationError' &&
-            //   getPublicDataStore().getData().userId
-            // ) {
-            //   getPublicDataStore().clear()
-            // }
+            if (
+              error.name === 'AuthenticationError' &&
+              getPublicDataStore().getData().userId
+            ) {
+              getPublicDataStore().clear()
+            }
 
             const prismaError = error.message.match(
               /invalid.*prisma.*invocation/i
@@ -180,10 +179,10 @@ export function buildRpcClient({
               meta: payload.meta?.result,
             })
 
-            // if (!opts.fromQueryHook) {
-            //   const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-            //   queryClient.setQueryData(queryKey, data)
-            // }
+            if (!opts.fromQueryHook) {
+              const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
+              queryClient.setQueryData(queryKey, data)
+            }
             return data
           }
         }

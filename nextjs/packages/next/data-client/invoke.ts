@@ -1,5 +1,5 @@
 import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/index'
-import { isClient } from '../stdlib'
+import { isClient } from '../stdlib/index'
 import { RpcClient } from './rpc'
 
 export function invoke<T extends AsyncFunc, TInput = FirstParam<T>>(
