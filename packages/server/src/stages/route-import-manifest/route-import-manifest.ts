@@ -151,9 +151,14 @@ export function parseParametersFromRoute(
 function findNodeModulesRoot(src: string) {
   let nodeModules = join(src, "node_modules")
   let includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  let count = 0
   while (!includesBlitzPackage) {
     nodeModules = join(nodeModules, "../../node_modules")
     includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+    count++
+    if (count > 5) {
+      throw new Error("Can't find node_modules of blitz! Check report an issue. Thanks!")
+    }
   }
   return nodeModules
 }
