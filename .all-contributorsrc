@@ -2003,7 +2003,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/9019397?v=4",
       "profile": "http://aleksandra.codes",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2923,6 +2924,43 @@
       "profile": "http://2hr.me/",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "bravo-kernel",
+      "name": "bravo-kernel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/230500?v=4",
+      "profile": "https://github.com/bravo-kernel",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sam3d",
+      "name": "Sam Holmes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8385528?v=4",
+      "profile": "https://samholmes.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "doncicuto",
+      "name": "Miguel Cabrerizo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30386061?v=4",
+      "profile": "https://doncicuto.medium.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "zenhob",
+      "name": "Zack Hobson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12092?v=4",
+      "profile": "http://zackhobson.com/",
+      "contributions": [
+        "code"
       ]
     }
   ],

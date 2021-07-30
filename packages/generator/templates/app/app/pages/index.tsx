@@ -1,8 +1,9 @@
 import { Suspense } from "react"
-import { Link, BlitzPage, useMutation, Routes } from "blitz"
+import { Image, Link, BlitzPage, useMutation, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
+import logo from "public/logo.png"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -54,7 +55,7 @@ const Home: BlitzPage = () => {
     <div className="container">
       <main>
         <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
+          <Image src={logo} alt="blitzjs" />
         </div>
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
