@@ -80,11 +80,15 @@ describe("formatZodError", () => {
 })
 
 describe("validateZodSchema", () => {
-  it("passes validation", () => {
-    expect(validateZodSchema(Schema)({test: "test"})).toEqual({})
+  it("passes validation", async () => {
+    expect(await validateZodSchema(Schema)({test: "test"})).toEqual({})
   })
 
-  it("fails validation", () => {
-    expect(validateZodSchema(Schema)({})).toEqual({test: "Required"})
+  it("fails validation", async () => {
+    expect(await validateZodSchema(Schema)({})).toEqual({test: "Required"})
+  })
+
+  it("passes validation if synchronous", async () => {
+    expect(await validateZodSchema(Schema, "sync")({test: "test"})).toEqual({})
   })
 })

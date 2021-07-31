@@ -1,4 +1,5 @@
 import {ZodError} from "zod"
+import { ParserType } from "../server/resolver"
 
 export const isServer = typeof window === "undefined"
 export const isClient = typeof window !== "undefined"
@@ -42,10 +43,11 @@ export function recursiveFormatZodErrors(errors: any) {
   return formattedErrors
 }
 
-export const validateZodSchema = (schema: any) => (values: any): any => {
+export const validateZodSchema = (schema: any, parserType: ParserType = "async") => async (values: any): Promise<any> => {
   if (!schema) return {}
   try {
-    schema.parse(values)
+    parserType === "sync" && schema.parse(values)
+    await schema.parseAsync(values)
     return {}
   } catch (error) {
     return error.format ? formatZodError(error) : error.toString()
