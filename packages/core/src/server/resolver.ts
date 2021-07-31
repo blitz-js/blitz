@@ -290,10 +290,20 @@ const authorize: ResolverAuthorize = (...args) => {
   }
 }
 
+export type ParserType = "sync" | "async"
+
 export const resolver = {
   pipe,
-  zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
-    return (input: Type): Type => schema.parse(input)
+  zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(
+    schema: Schema,
+    parserType: ParserType = "async",
+  ) {
+    return (input: Type): Promise<Type> => {
+      if(parserType === "sync"){
+        return schema.parse(input)
+      }
+      return schema.parseAsync(input)
+    }
   },
   authorize,
 }
