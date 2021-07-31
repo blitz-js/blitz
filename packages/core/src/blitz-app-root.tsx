@@ -1,7 +1,6 @@
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import {RedirectError} from "next/stdlib"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import SuperJSON from "superjson"
 import {useAuthorizeIf, useSession} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
@@ -110,7 +109,7 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     }, [])
 
     const dehydratedState = props.pageProps.dehydratedState
-      ? SuperJSON.deserialize(props.pageProps.dehydratedState)
+      ? props.pageProps.dehydratedState
       : undefined
 
     return (
