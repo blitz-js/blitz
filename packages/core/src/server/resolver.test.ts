@@ -4,13 +4,13 @@ import {ParserType, resolver} from "./resolver"
 
 describe("resolver", () => {
   it("should typecheck and pass along value", async () => {
-    resolverTest({})
+    await resolverTest({})
   })
   it("should typecheck and pass along value if sync resolver is specified", async () => {
-    resolverTest({type: "sync"})
+    await resolverTest({type: "sync"})
   })
   it("should typecheck and pass along value if async resolver is specified", async () => {
-    resolverTest({type: "async"})
+    await resolverTest({type: "async"})
   })
 })
 
