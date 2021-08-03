@@ -1,6 +1,7 @@
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import {RedirectError} from "next/stdlib"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
+import SuperJSON from "superjson"
 import {useAuthorizeIf, useSession} from "./auth/auth-client"
 import {publicDataStore} from "./auth/public-data-store"
 import {BlitzProvider} from "./blitz-provider"
@@ -108,9 +109,14 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
 
-    const dehydratedState = props.pageProps.dehydratedState
-      ? props.pageProps.dehydratedState
-      : undefined
+    let {dehydratedState, _superjson} = props.pageProps
+    if (dehydratedState && _superjson) {
+      const deserializedProps = SuperJSON.deserialize({
+        json: {dehydratedState},
+        meta: _superjson,
+      }) as {dehydratedState: any}
+      dehydratedState = deserializedProps?.dehydratedState
+    }
 
     return (
       <BlitzProvider dehydratedState={dehydratedState}>
