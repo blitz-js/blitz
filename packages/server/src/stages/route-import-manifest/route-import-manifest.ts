@@ -42,9 +42,13 @@ function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
     const key = by(v)
     const first = allKeys.indexOf(key)
     const last = allKeys.lastIndexOf(key)
+
     if (first !== last && first !== index) {
-      console.error(`Duplicate path found: ${key}`)
-      return false
+      const {0: firstPath} = arr[first] as any
+      const {0: lastPath} = arr[last] as any
+      throw Error(
+        `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`,
+      )
     }
 
     return true
