@@ -153,6 +153,7 @@ function findNodeModulesRoot(src: string) {
   let includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
   let count = 0
   while (!includesBlitzPackage) {
+    // Check for node_modules at the next level up
     nodeModules = join(nodeModules, "../../node_modules")
     includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
     count++
