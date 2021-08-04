@@ -2963,6 +2963,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "m5r",
+      "name": "Mokhtar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13026820?v=4",
+      "profile": "https://www.mokhtar.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
