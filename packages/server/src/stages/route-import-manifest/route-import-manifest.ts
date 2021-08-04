@@ -157,7 +157,7 @@ function findNodeModulesRoot(src: string) {
     includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
     count++
     if (count > 5) {
-      throw new Error("Can't find node_modules of blitz! Check report an issue. Thanks!")
+      throw new Error("Oops. We can't find the blitz node_modules package. Are you sure it's installed?")
     }
   }
   return nodeModules
