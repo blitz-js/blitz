@@ -160,7 +160,7 @@ function findNodeModulesRoot(src: string) {
     count++
     if (count > 5) {
       log.warning(
-        "Oops. We can't find the blitz node_modules package. Are you sure it's installed?",
+        "We couldn't determine your actual node_modules location, so defaulting to normal location",
       )
       nodeModules = join(src, "node_modules")
       break
