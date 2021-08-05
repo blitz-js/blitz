@@ -1,3 +1,4 @@
+import {log} from "@blitzjs/display"
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import {OverrideTriage} from "@blitzjs/file-pipeline/src/helpers/work-optimizer"
 import * as fs from "fs-extra"
@@ -158,7 +159,11 @@ function findNodeModulesRoot(src: string) {
     includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
     count++
     if (count > 5) {
-      throw new Error("Oops. We can't find the blitz node_modules package. Are you sure it's installed?")
+      log.warning(
+        "Oops. We can't find the blitz node_modules package. Are you sure it's installed?",
+      )
+      nodeModules = join(src, "node_modules")
+      break
     }
   }
   return nodeModules
