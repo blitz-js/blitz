@@ -46,17 +46,21 @@ const NoPageFlicker = () => {
 export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     // We call useSession so this will rerender anytime session changes
-    useSession({suspense: false})
+    const session = useSession({suspense: false})
 
     useAuthorizeIf(Page.authenticate === true)
 
     if (typeof window !== "undefined") {
+      const publicData = publicDataStore.getData()
       // We read directly from publicDataStore.getData().userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
-      if (publicDataStore.getData().userId) {
+      if (publicData.userId) {
         clientDebug("[BlitzInnerRoot] logged in")
         let {redirectAuthenticatedTo} = Page
         if (redirectAuthenticatedTo) {
+          if (typeof redirectAuthenticatedTo === "function") {
+            redirectAuthenticatedTo = redirectAuthenticatedTo({publicData, session})
+          }
           if (typeof redirectAuthenticatedTo !== "string") {
             redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
           }
