@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
   }
 }
 
-const Page: BlitzPage<InferGetStaticPropsType<typeof getStaticProps>> = function ({products}) {
+const Products: BlitzPage<InferGetStaticPropsType<typeof getStaticProps>> = function ({products}) {
   return (
     <div>
       <h1>First 100 Products</h1>
@@ -37,4 +37,4 @@ const Page: BlitzPage<InferGetStaticPropsType<typeof getStaticProps>> = function
     </div>
   )
 }
-export default Page
+export default Products

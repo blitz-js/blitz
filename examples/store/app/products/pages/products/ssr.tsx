@@ -11,7 +11,7 @@ export const getServerSideProps = async ({req, res}) => {
 }
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Page: BlitzPage<PageProps> = function (props) {
+const ProductsSSR: BlitzPage<PageProps> = function (props) {
   return (
     <div>
       <h1>Products</h1>
@@ -28,4 +28,4 @@ const Page: BlitzPage<PageProps> = function (props) {
     </div>
   )
 }
-export default Page
+export default ProductsSSR
