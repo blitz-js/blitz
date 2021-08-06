@@ -18,7 +18,7 @@ function Content() {
   )
 }
 
-function Page() {
+function SetPublicData() {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -28,4 +28,4 @@ function Page() {
   )
 }
 
-export default Page
+export default SetPublicData
