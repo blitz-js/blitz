@@ -18,7 +18,7 @@ function Content() {
   )
 }
 
-function SetPublicData() {
+function GSSPSetPublicData() {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -28,4 +28,4 @@ function SetPublicData() {
   )
 }
 
-export default SetPublicData
+export default GSSPSetPublicData
