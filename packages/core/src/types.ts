@@ -9,7 +9,7 @@ import {
   NextPageContext,
 } from "next/types"
 import type {UrlObject} from "url"
-import {ClientSession, EmptyPublicData} from "./auth/auth-types"
+import {ClientSession} from "./auth/auth-types"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {BlitzConfig} from "@blitzjs/config"
@@ -40,7 +40,6 @@ export interface AppProps<P = {}> extends NextAppProps<P> {
 }
 
 export type RedirectAuthenticatedToFnCtx = {
-  publicData: EmptyPublicData
   session: ClientSession
 }
 export type RedirectAuthenticatedToFn = (
