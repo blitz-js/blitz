@@ -1,4 +1,4 @@
-import getDate from "app/queries/getDate"
+import getMap from "app/queries/getMap"
 import {
   dehydrate,
   getQueryKey,
@@ -11,8 +11,8 @@ import {Suspense} from "react"
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient()
-  const queryKey = getQueryKey(getDate, undefined)
-  await queryClient.prefetchQuery(queryKey, () => invokeWithMiddleware(getDate, undefined, ctx))
+  const queryKey = getQueryKey(getMap, undefined)
+  await queryClient.prefetchQuery(queryKey, () => invokeWithMiddleware(getMap, undefined, ctx))
 
   return {
     props: {
@@ -22,8 +22,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 }
 
 function Content() {
-  const [date] = useQuery(getDate, undefined)
-  return <p id="content">date is Date: {"" + (date instanceof Date)}</p>
+  const [map] = useQuery(getMap, undefined)
+  return <p id="content">map is Map: {"" + (map instanceof Map)}</p>
 }
 
 function Page() {
