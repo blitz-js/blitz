@@ -1,7 +1,7 @@
-function Page() {
+function RedirectAuthenticated() {
   return <div id="page-container">Hello World</div>
 }
 
-Page.redirectAuthenticatedTo = "/authenticated-query"
+RedirectAuthenticated.redirectAuthenticatedTo = "/authenticated-query"
 
-export default Page
+export default RedirectAuthenticated

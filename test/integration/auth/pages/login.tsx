@@ -48,7 +48,7 @@ function Content() {
   )
 }
 
-function Page() {
+function Login() {
   return (
     <div id="page">
       <Suspense fallback="Loading...">
@@ -58,4 +58,4 @@ function Page() {
   )
 }
 
-export default Page
+export default Login

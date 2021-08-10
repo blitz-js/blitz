@@ -21,7 +21,7 @@ function Content() {
   )
 }
 
-const Page: BlitzPage = () => {
+const Authenticate: BlitzPage = () => {
   if (typeof window !== "undefined") {
     throw new Error("This code should never run")
   }
@@ -34,6 +34,6 @@ const Page: BlitzPage = () => {
   )
 }
 
-Page.authenticate = true
+Authenticate.authenticate = true
 
-export default Page
+export default Authenticate

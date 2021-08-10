@@ -26,7 +26,7 @@ function Content() {
   return <p id="content">date is Date: {"" + (date instanceof Date)}</p>
 }
 
-function Page() {
+function DehydratedState() {
   return (
     <Suspense fallback="Loading ...">
       <Content />
@@ -34,4 +34,4 @@ function Page() {
   )
 }
 
-export default Page
+export default DehydratedState
