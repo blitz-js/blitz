@@ -9,7 +9,7 @@ import {
   NextPageContext,
 } from "next/types"
 import type {UrlObject} from "url"
-import {ClientSession} from "./auth/auth-types"
+import {PublicData} from "./auth/auth-types"
 import {BlitzRuntimeData} from "./blitz-data"
 
 export type {BlitzConfig} from "@blitzjs/config"
@@ -39,18 +39,19 @@ export interface AppProps<P = {}> extends NextAppProps<P> {
   Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
 }
 
+export type RedirectAuthenticatedTo = string | RouteUrlObject | false
 export type RedirectAuthenticatedToFnCtx = {
-  session: ClientSession
+  session: PublicData
 }
 export type RedirectAuthenticatedToFn = (
   args: RedirectAuthenticatedToFnCtx,
-) => string | RouteUrlObject
+) => RedirectAuthenticatedTo
 
 export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string | RouteUrlObject | RedirectAuthenticatedToFn
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
