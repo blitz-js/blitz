@@ -56,14 +56,17 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
       if (publicDataStore.getData().userId) {
         clientDebug("[BlitzInnerRoot] logged in")
         let {redirectAuthenticatedTo} = Page
-        if (redirectAuthenticatedTo) {
-          if (typeof redirectAuthenticatedTo === "function") {
+        if (typeof redirectAuthenticatedTo === "function") {
+          if (session.isLoading) {
+            redirectAuthenticatedTo = undefined
+          } else {
             redirectAuthenticatedTo = redirectAuthenticatedTo({session})
           }
-          if (typeof redirectAuthenticatedTo !== "string") {
-            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
-          }
-
+        }
+        if (redirectAuthenticatedTo && typeof redirectAuthenticatedTo !== "string") {
+          redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
+        }
+        if (redirectAuthenticatedTo) {
           clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
           const error = new RedirectError(redirectAuthenticatedTo)
           error.stack = null!
