@@ -108,9 +108,14 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
 
-    const dehydratedState = props.pageProps.dehydratedState
-      ? SuperJSON.deserialize(props.pageProps.dehydratedState)
-      : undefined
+    let {dehydratedState, _superjson} = props.pageProps
+    if (dehydratedState && _superjson) {
+      const deserializedProps = SuperJSON.deserialize({
+        json: {dehydratedState},
+        meta: _superjson,
+      }) as {dehydratedState: any}
+      dehydratedState = deserializedProps?.dehydratedState
+    }
 
     return (
       <BlitzProvider dehydratedState={dehydratedState}>

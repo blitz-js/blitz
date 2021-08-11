@@ -46,7 +46,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
   }
 }
 
-const Test: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({user, error}) => {
+const PageSSR: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  user,
+  error,
+}) => {
   const router = useRouter()
   const [logoutMutation] = useMutation(logout)
 
@@ -69,4 +72,4 @@ const Test: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   )
 }
 
-export default Test
+export default PageSSR

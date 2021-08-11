@@ -21,7 +21,7 @@ function Content() {
   )
 }
 
-const Page: BlitzPage = () => {
+const AuthRedirect: BlitzPage = () => {
   return (
     <div id="page">
       <Suspense fallback={"Loading redirect page..."}>
@@ -31,6 +31,6 @@ const Page: BlitzPage = () => {
   )
 }
 
-Page.authenticate = {redirectTo: "/login"}
+AuthRedirect.authenticate = {redirectTo: "/login"}
 
-export default Page
+export default AuthRedirect

@@ -17,7 +17,7 @@ function Content() {
   )
 }
 
-function Page() {
+function SetPublicData() {
   const [changeRoleMutation] = useMutation(changeRole)
 
   return (
@@ -38,4 +38,4 @@ function Page() {
   )
 }
 
-export default Page
+export default SetPublicData

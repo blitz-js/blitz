@@ -139,7 +139,7 @@ export class Install extends Command {
     const recipeDir = require("path").join(process.cwd(), ".blitz", "recipe-install")
     // clean up from previous run in case of error
     require("rimraf").sync(recipeDir)
-    require("fs-extra").mkdirSync(recipeDir)
+    require("fs-extra").mkdirsSync(recipeDir)
     process.chdir(recipeDir)
     debug("Extracting recipe to ", recipeDir)
 

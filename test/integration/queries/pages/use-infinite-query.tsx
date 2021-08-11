@@ -23,7 +23,7 @@ function Content() {
   )
 }
 
-function Page() {
+function InfiniteQuery() {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -33,4 +33,4 @@ function Page() {
   )
 }
 
-export default Page
+export default InfiniteQuery

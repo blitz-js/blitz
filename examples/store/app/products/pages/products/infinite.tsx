@@ -37,7 +37,7 @@ const Products = () => {
   )
 }
 
-const Page: BlitzPage = function () {
+const ProductsInfinite: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Infinite</h1>
@@ -50,4 +50,4 @@ const Page: BlitzPage = function () {
     </div>
   )
 }
-export default Page
+export default ProductsInfinite

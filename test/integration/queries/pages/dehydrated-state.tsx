@@ -11,7 +11,7 @@ import {Suspense} from "react"
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient()
-  const queryKey = getQueryKey(getDate, null)
+  const queryKey = getQueryKey(getDate, undefined)
   await queryClient.prefetchQuery(queryKey, () => invokeWithMiddleware(getDate, undefined, ctx))
 
   return {
@@ -26,7 +26,7 @@ function Content() {
   return <p id="content">date is Date: {"" + (date instanceof Date)}</p>
 }
 
-function Page() {
+function DehydratedState() {
   return (
     <Suspense fallback="Loading ...">
       <Content />
@@ -34,4 +34,4 @@ function Page() {
   )
 }
 
-export default Page
+export default DehydratedState
