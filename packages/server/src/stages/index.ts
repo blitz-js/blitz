@@ -26,6 +26,6 @@ export const configureStages = async (config: StagesConfig) => ({
   ],
 })
 
-export const configureRouteStages = (_config: StagesConfig) => [createStageRoutes]
+export const configureRouteStages = (config: StagesConfig) => [createStageRoutes]
 
 export const configureGenerateStages = () => [createStageRoutes, createStageRouteImportManifest]

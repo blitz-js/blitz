@@ -244,7 +244,7 @@ export default async function getBaseWebpackConfig(
       (semver.gte(reactDomVersion!, '18.0.0') ||
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
     hasReactExperimental // blitz
-  const hasReactRoot: boolean = config.experimental.reactRoot || hasReact18
+  const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
 
   const babelConfigFile = await [
     '.babelrc',
@@ -1060,7 +1060,10 @@ export default async function getBaseWebpackConfig(
       new webpack.DefinePlugin({
         ...Object.keys(process.env).reduce(
           (prev: { [key: string]: string }, key: string) => {
-            if (key.startsWith('NEXT_PUBLIC_')|| key.startsWith('BLITZ_PUBLIC_')) {
+            if (
+              key.startsWith('NEXT_PUBLIC_') ||
+              key.startsWith('BLITZ_PUBLIC_')
+            ) {
               prev[`process.env.${key}`] = JSON.stringify(process.env[key]!)
             }
             return prev
