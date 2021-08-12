@@ -42,7 +42,11 @@ export async function findPageFile(
     const rpcPath = page.replace('/api/rpc', '')
     nameMatch = `(/queries${rpcPath}|/queries${rpcPath}/index|/mutations${rpcPath}|/mutations${rpcPath}/index)`
   } else if (page.startsWith('/api/')) {
-    nameMatch = `(${page}|${page}/index)`
+    if (page.endsWith('/index')) {
+      nameMatch = `{page}`
+    } else {
+      nameMatch = `(${page}|${page}/index)`
+    }
   } else if (page === '/') {
     nameMatch = '/pages' + normalizedPagePath
   } else if (page.endsWith('/index')) {
@@ -59,9 +63,7 @@ export async function findPageFile(
       new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
     )
   )
-  // console.log(
-  //   new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
-  // )
+  // console.log(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
   // console.log('FOUND', foundPagePaths)
 
   // for (const extension of pageExtensions) {

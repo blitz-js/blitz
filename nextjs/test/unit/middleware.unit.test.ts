@@ -1,9 +1,7 @@
 import http from 'http'
 import { apiResolver } from 'next/dist/next-server/server/api-utils'
-import {
-  handleRequestWithMiddleware,
-  secureProxyMiddleware,
-} from 'next/dist/next-server/server/middleware'
+import { handleRequestWithMiddleware } from 'next/dist/next-server/server/middleware'
+import { secureProxyMiddleware } from 'next/stdlib-server'
 import fetch from 'node-fetch'
 import listen from 'test-listen'
 import { NextApiHandler, Middleware } from 'next/types'

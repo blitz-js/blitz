@@ -1,4 +1,4 @@
-import { SecurePassword } from 'next/stdlib-server/auth-utils'
+import { SecurePassword } from 'next/stdlib-server'
 
 describe('SecurePassword', () => {
   describe('hash', () => {

@@ -102,7 +102,7 @@ describe('publicDataStore', () => {
         ret = data
       })
       getPublicDataStore().clear()
-      expect(ret).toEqual(getPublicDataStore().emptyPublicData)
+      expect(ret).toEqual({ userId: null })
     })
   })
 
@@ -111,7 +111,7 @@ describe('publicDataStore', () => {
       it('returns empty data if cookie is falsy', () => {
         const ret = getPublicDataStore().getData()
 
-        expect(ret).toEqual(getPublicDataStore().emptyPublicData)
+        expect(ret).toEqual({ userId: null })
       })
     })
   })
@@ -123,7 +123,7 @@ describe('useSession', () => {
 
     expect(result.current).toEqual({
       isLoading: false,
-      ...getPublicDataStore().emptyPublicData,
+      userId: null,
     })
   })
 
