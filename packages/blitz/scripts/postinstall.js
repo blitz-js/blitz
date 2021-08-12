@@ -81,7 +81,7 @@ function codegen() {
 
     process.env.BLITZ_GENERATE_IN_POSTINSTALL = root ? root : "true"
 
-    if (isUsingNpm && !fs.existsSync(path.join(root, "node_modules", "next"))) {
+    if (isUsingNpm && root && !fs.existsSync(path.join(root, "node_modules", "next"))) {
       // Sometimes with npm the next package is missing because of how
       // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
       debug("Missing next package, manually installing...")

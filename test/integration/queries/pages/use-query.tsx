@@ -7,7 +7,7 @@ function Content() {
   return <div id="content">{result}</div>
 }
 
-function Page() {
+function Query() {
   return (
     <div id="page">
       <Suspense fallback={"Loading..."}>
@@ -17,4 +17,4 @@ function Page() {
   )
 }
 
-export default Page
+export default Query

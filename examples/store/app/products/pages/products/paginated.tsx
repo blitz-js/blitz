@@ -34,7 +34,7 @@ const Products = () => {
   )
 }
 
-const Page: BlitzPage = function () {
+const ProductsPaginated: BlitzPage = function () {
   return (
     <div>
       <h1>Products - Paginated</h1>
@@ -47,4 +47,4 @@ const Page: BlitzPage = function () {
     </div>
   )
 }
-export default Page
+export default ProductsPaginated
