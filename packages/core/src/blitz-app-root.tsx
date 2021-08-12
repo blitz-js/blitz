@@ -56,17 +56,17 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
       // so we can access userId on first render. useSession is always empty on first render
       if (publicData.userId) {
         clientDebug("[BlitzInnerRoot] logged in")
-        let {redirectAuthenticatedTo} = Page
-        if (typeof redirectAuthenticatedTo === "function") {
-          redirectAuthenticatedTo = redirectAuthenticatedTo({session: publicData})
-          // redirectAuthenticatedTo is string/RouteUrlObject/false now
-        }
-        if (redirectAuthenticatedTo && typeof redirectAuthenticatedTo !== "string") {
-          redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
-        }
+        const redirectAuthenticatedTo =
+          typeof Page.redirectAuthenticatedTo === "function"
+            ? Page.redirectAuthenticatedTo({session: publicData})
+            : Page.redirectAuthenticatedTo
         if (redirectAuthenticatedTo) {
-          clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
-          const error = new RedirectError(redirectAuthenticatedTo)
+          const redirectUrl =
+            typeof redirectAuthenticatedTo === "string"
+              ? redirectAuthenticatedTo
+              : formatWithValidation(redirectAuthenticatedTo)
+          clientDebug("[BlitzInnerRoot] redirecting to", redirectUrl)
+          const error = new RedirectError(redirectUrl)
           error.stack = null!
           throw error
         }
