@@ -59,6 +59,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
         let {redirectAuthenticatedTo} = Page
         if (typeof redirectAuthenticatedTo === "function") {
           redirectAuthenticatedTo = redirectAuthenticatedTo({session: publicData})
+          // redirectAuthenticatedTo is string/RouteUrlObject/false now
         }
         if (redirectAuthenticatedTo && typeof redirectAuthenticatedTo !== "string") {
           redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
