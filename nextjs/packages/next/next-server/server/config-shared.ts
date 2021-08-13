@@ -25,6 +25,7 @@ export async function loadConfigAtRuntime() {
 }
 
 export function loadConfigProduction(pagesDir: string) {
+  console.log('LOAD_CONFIG_PRODUCTION', pagesDir, join(pagesDir, CONFIG_FILE))
   // eslint-disable-next-line no-eval -- block webpack from following this module path
   const userConfigModule = eval('require')(join(pagesDir, CONFIG_FILE))
   let userConfig = normalizeConfig(

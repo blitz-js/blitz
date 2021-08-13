@@ -207,11 +207,11 @@ describe("dev mode", () => {
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
       "/redirect-authenticated",
-      "/api/queries/getNoauthBasic",
-      "/api/queries/getAuthenticatedBasic",
-      "/api/mutations/login",
-      "/api/mutations/logout",
       "/gssp-setpublicdata",
+      "/api/rpc/getNoauthBasic",
+      "/api/rpc/getAuthenticatedBasic",
+      "/api/rpc/login",
+      "/api/rpc/logout",
     ]
     await Promise.all(prerender.map((route) => renderViaHTTP(appPort, route)))
   })
