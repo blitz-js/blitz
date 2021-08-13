@@ -50,18 +50,22 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
     useAuthorizeIf(Page.authenticate === true)
 
     if (typeof window !== "undefined") {
-      // We read directly from publicDataStor.getData().userId instead of useSession
+      const publicData = getPublicDataStore().getData()
+      // We read directly from publicData.userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
-      if (getPublicDataStore().getData().userId) {
+      if (publicData.userId) {
         clientDebug("[BlitzInnerRoot] logged in")
-        let {redirectAuthenticatedTo} = Page
+        const redirectAuthenticatedTo =
+          typeof Page.redirectAuthenticatedTo === "function"
+            ? Page.redirectAuthenticatedTo({session: publicData})
+            : Page.redirectAuthenticatedTo
         if (redirectAuthenticatedTo) {
-          if (typeof redirectAuthenticatedTo !== "string") {
-            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
-          }
-
-          clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
-          const error = new RedirectError(redirectAuthenticatedTo)
+          const redirectUrl =
+            typeof redirectAuthenticatedTo === "string"
+              ? redirectAuthenticatedTo
+              : formatWithValidation(redirectAuthenticatedTo)
+          clientDebug("[BlitzInnerRoot] redirecting to", redirectUrl)
+          const error = new RedirectError(redirectUrl)
           error.stack = null!
           throw error
         }

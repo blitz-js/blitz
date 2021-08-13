@@ -6,6 +6,7 @@ import {
   NextComponentType,
   NextPage,
   NextPageContext,
+  PublicData,
 } from "next/types"
 import type {UrlObject} from "url"
 
@@ -35,11 +36,20 @@ export type BlitzComponentType<C = NextPageContext, IP = {}, P = {}> = NextCompo
 export interface AppProps<P = {}> extends NextAppProps<P> {
   Component: BlitzComponentType<NextPageContext, any, P> & BlitzPage
 }
+
+export type RedirectAuthenticatedTo = string | RouteUrlObject | false
+export type RedirectAuthenticatedToFnCtx = {
+  session: PublicData
+}
+export type RedirectAuthenticatedToFn = (
+  args: RedirectAuthenticatedToFnCtx,
+) => RedirectAuthenticatedTo
+
 export type BlitzPage<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: string | RouteUrlObject
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {

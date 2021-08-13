@@ -29,7 +29,7 @@ export const Edit__ModelName__ = () => {
 
       <div>
         <h1>Edit __ModelName__ {__modelName__.id}</h1>
-        <pre>{JSON.stringify(__modelName__)}</pre>
+        <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
         <__ModelName__Form
           submitText="Update __ModelName__"

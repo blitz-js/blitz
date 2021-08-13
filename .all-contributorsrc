@@ -2851,7 +2851,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2716058?v=4",
       "profile": "http://anolilab.de",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2998,6 +2999,16 @@
       "profile": "rahulravindran.in",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "s-r-x",
+      "name": "Ilya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41614937?v=4",
+      "profile": "https://github.com/s-r-x",
+      "contributions": [
+        "code",
+        "doc"
       ]
     }
   ],
