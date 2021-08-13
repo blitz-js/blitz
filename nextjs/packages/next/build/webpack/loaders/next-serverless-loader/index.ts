@@ -12,6 +12,7 @@ import {
   REACT_LOADABLE_MANIFEST,
 } from '../../../../next-server/lib/constants'
 import { trace } from '../../../../telemetry/trace'
+import { normalizePathSep } from '../../../../next-server/server/normalize-page-path'
 
 export type ServerlessLoaderQuery = {
   page: string
@@ -41,7 +42,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       distDir,
       absolutePagePath,
       page,
-      pagesDir,
+      pagesDir: rawPagesDir,
       buildId,
       canonicalBase,
       assetPrefix,
@@ -59,7 +60,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
     }: ServerlessLoaderQuery =
       typeof this.query === 'string' ? parse(this.query.substr(1)) : this.query
 
-    console.log('\n\n\nZZZDEBUG\n', pagesDir, '\n\n')
+    const pagesDir = normalizePathSep(rawPagesDir)
 
     const buildManifest = join(distDir, BUILD_MANIFEST).replace(/\\/g, '/')
     const reactLoadableManifest = join(
@@ -109,8 +110,6 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
         process.env.BLITZ_APP_DIR = "${pagesDir}"
-
-        console.log("ZZZDEBUG API", "${pagesDir}")
 
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
