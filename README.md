@@ -668,7 +668,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/kenkuan"><img src="https://avatars.githubusercontent.com/u/1924968?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ken Kuan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kenkuan" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/meehawk"><img src="https://avatars.githubusercontent.com/u/80167324?v=4?s=100" width="100px;" alt=""/><br /><sub><b>meehawk</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=meehawk" title="Code">💻</a></td>
     <td align="center"><a href="rahulravindran.in"><img src="https://avatars.githubusercontent.com/u/10168946?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rahul Ravindran</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ravindranrahul" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/s-r-x"><img src="https://avatars.githubusercontent.com/u/41614937?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ilya</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=s-r-x" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/s-r-x"><img src="https://avatars.githubusercontent.com/u/41614937?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ilya</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=s-r-x" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=s-r-x" title="Documentation">📖</a></td>
   </tr>
 </table>
 
