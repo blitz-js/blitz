@@ -56,13 +56,16 @@ export const topLevelFoldersThatMayContainPages = [
   'integrations',
 ]
 
-export function convertPageFilePathToRoutePath(filePath: string) {
+export function convertPageFilePathToRoutePath(
+  filePath: string,
+  pageExtensions: string[]
+) {
   return filePath
     .replace(/^.*?[\\/]pages[\\/]/, '/')
     .replace(/^.*?[\\/]api[\\/]/, '/api/')
     .replace(/^.*?[\\/]queries[\\/]/, '/api/rpc/')
     .replace(/^.*?[\\/]mutations[\\/]/, '/api/rpc/')
-    .replace(/\.[^.]*$/, '')
+    .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
 }
 
 export function getIsPageFile(filePathFromAppRoot: string) {

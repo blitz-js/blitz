@@ -76,7 +76,8 @@ export class RouteCache implements RouteCacheInterface {
 
     let uri
     if (type === "rpc") {
-      uri = convertPageFilePathToRoutePath(file.path)
+      // TODO - load page extensions from user config
+      uri = convertPageFilePathToRoutePath(file.path, ["tsx", "ts", "jsx", "js"])
     } else {
       uri = this.getUrifromPath(this.normalizePath(file.path))
     }

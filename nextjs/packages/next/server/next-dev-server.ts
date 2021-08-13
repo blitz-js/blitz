@@ -237,8 +237,10 @@ export default class DevServer extends Server {
 
           let pageName = relativePath.replace(/\\+/g, '/')
 
-          pageName = convertPageFilePathToRoutePath(pageName)
-          pageName = pageName.replace(regexPageExtension, '')
+          pageName = convertPageFilePathToRoutePath(
+            pageName,
+            this.nextConfig.pageExtensions
+          )
           pageName = pageName.replace(/\/index$/, '') || '/'
 
           routedPages.push(pageName)

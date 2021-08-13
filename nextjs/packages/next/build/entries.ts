@@ -23,9 +23,10 @@ export function createPagesMapping(
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
-      let page = `${convertPageFilePathToRoutePath(pagePath)
-        .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
-        .replace(/\\/g, '/')}`.replace(/\/index$/, '')
+      let page = `${convertPageFilePathToRoutePath(
+        pagePath,
+        pageExtensions
+      ).replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
       let pageKey = page === '' ? '/' : page
 
@@ -118,6 +119,7 @@ export function createEntrypoints(
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
     const bundleFile = normalizePagePath(page)
+    console.log({ page, absolutePagePath, bundleFile })
     const isApiRoute = page.match(API_ROUTE)
 
     const clientBundlePath = posix.join('pages', bundleFile)

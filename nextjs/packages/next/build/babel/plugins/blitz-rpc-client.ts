@@ -15,6 +15,7 @@ export default buildRpcClient({
 
 // https://astexplorer.net/#/gist/02bab3c8f0488923346b607ed578e2f7/latest (may be out of date)
 
+const fileExtensionRegex = /\.([a-z]+)$/
 export default function blitzRpcClient(babel: BabelType): PluginObj {
   const { types: t } = babel
 
@@ -23,6 +24,7 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
       Program: {
         enter(path, state) {
           const { filename, cwd } = state
+          const fileExt = fileExtensionRegex.exec(filename)?.[1] || 'unknown'
 
           const relativePathFromRoot = filename.replace(cwd, '')
           const resolverName = filename
@@ -31,7 +33,10 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
           const resolverType = filename.match(/[\\/]queries[\\/]/)
             ? 'query'
             : 'mutation'
-          const routePath = convertPageFilePathToRoutePath(relativePathFromRoot)
+          const routePath = convertPageFilePathToRoutePath(
+            relativePathFromRoot,
+            [fileExt as string]
+          )
 
           const importDeclaration = t.importDeclaration(
             [
