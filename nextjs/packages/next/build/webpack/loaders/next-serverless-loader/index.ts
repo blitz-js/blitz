@@ -110,7 +110,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
 
         process.env.BLITZ_APP_DIR = "${pagesDir}"
 
-        console.log('\n\n\nZZZDEBUG API\n', "${pagesDir}", '\n\n')
+        console.log("ZZZDEBUG API", "${pagesDir}")
 
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
