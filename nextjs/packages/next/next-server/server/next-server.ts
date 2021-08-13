@@ -1916,7 +1916,6 @@ export default class Server {
 
     try {
       const result = await this.findPageComponents(pathname, query)
-      console.log('RESULT', result)
       if (result) {
         try {
           return await this.renderToHTMLWithComponents(

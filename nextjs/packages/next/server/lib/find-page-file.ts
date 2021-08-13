@@ -29,7 +29,7 @@ export async function findPageFile(
   pageExtensions: string[]
 ): Promise<string | null> {
   const page = denormalizePagePath(normalizedPagePath)
-  console.log('[findPageFile]', { rootDir, normalizedPagePath, page })
+  // console.log('[findPageFile]', { rootDir, normalizedPagePath, page })
 
   const allPages = await recursiveFindPages(
     rootDir,
@@ -64,7 +64,7 @@ export async function findPageFile(
     )
   )
   // console.log(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
-  console.log('FOUND', foundPagePaths)
+  // console.log('FOUND', foundPagePaths)
 
   // for (const extension of pageExtensions) {
   //   if (!normalizedPagePath.endsWith('/index')) {

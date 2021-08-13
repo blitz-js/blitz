@@ -39,7 +39,6 @@ export function getPagePath(
     throw pageNotFoundError(page)
   }
   let pagePath = pagesManifest[page]
-  console.log('manifest', pagesManifest)
 
   if (!pagesManifest[page] && locales) {
     const manifestNoLocales: typeof pagesManifest = {}
@@ -63,7 +62,6 @@ export function requirePage(
   serverless: boolean
 ): any {
   const pagePath = getPagePath(page, distDir, serverless)
-  console.log('[requirePage]', page, distDir, pagePath)
   if (pagePath.endsWith('.html')) {
     return promises.readFile(pagePath, 'utf8')
   }

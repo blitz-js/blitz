@@ -119,7 +119,6 @@ export function createEntrypoints(
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
     const bundleFile = normalizePagePath(page)
-    console.log({ page, absolutePagePath, bundleFile })
     const isApiRoute = page.match(API_ROUTE)
 
     const clientBundlePath = posix.join('pages', bundleFile)

@@ -25,7 +25,6 @@ export default class PagesManifestPlugin implements webpack.Plugin {
     const pages: PagesManifest = {}
 
     for (const entrypoint of entrypoints.values()) {
-      console.log('entrypoint', entrypoint.name)
       const pagePath = getRouteFromEntrypoint(entrypoint.name)
 
       if (!pagePath) {
@@ -56,7 +55,6 @@ export default class PagesManifestPlugin implements webpack.Plugin {
       pages[pagePath] = pages[pagePath].replace(/\\/g, '/')
     }
 
-    console.log('PAGES', pages)
     assets[
       `${isWebpack5 && !this.dev ? '../' : ''}` + PAGES_MANIFEST
     ] = new sources.RawSource(JSON.stringify(pages, null, 2))
