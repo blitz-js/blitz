@@ -12,7 +12,7 @@ declare module globalThis {
 
 export const newline = () => {
   globalThis._blitz_logLevel =
-    globalThis._blitz_logLevel ?? loadConfigAtRuntime().log.level
+    globalThis._blitz_logLevel ?? loadConfigAtRuntime().log?.level
 
   const logLevel = globalThis._blitz_logLevel
 
@@ -37,7 +37,7 @@ export const baseLogger = (): Logger => {
   const config = loadConfigAtRuntime()
 
   globalThis._blitz_baseLogger = new Logger({
-    minLevel: config.log.level,
+    minLevel: config.log?.level,
     dateTimePattern:
       process.env.NODE_ENV === 'production'
         ? 'year-month-day hour:minute:second.millisecond'
