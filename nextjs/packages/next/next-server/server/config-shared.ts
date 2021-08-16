@@ -8,6 +8,7 @@ import { imageConfigDefault } from './image-config'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../../types'
+import { assignDefaults } from './config'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
@@ -18,23 +19,23 @@ export function loadConfigAtRuntime() {
       'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set'
     )
   }
-  const userConfigModule = require(join(process.env.BLITZ_APP_DIR, CONFIG_FILE))
-  let userConfig = normalizeConfig(
-    PHASE_PRODUCTION_SERVER,
-    userConfigModule.default || userConfigModule
-  )
-  return userConfig
+  return loadConfigProduction(process.env.BLITZ_APP_DIR)
 }
 
 export function loadConfigProduction(pagesDir: string) {
-  console.log('LOAD_CONFIG_PRODUCTION', pagesDir, join(pagesDir, CONFIG_FILE))
-  // eslint-disable-next-line no-eval -- block webpack from following this module path
-  const userConfigModule = eval('require')(join(pagesDir, CONFIG_FILE))
+  let userConfigModule
+  try {
+    // eslint-disable-next-line no-eval -- block webpack from following this module path
+    userConfigModule = eval('require')(join(pagesDir, CONFIG_FILE))
+  } catch {
+    // In case user does not have custom config
+    userConfigModule = {}
+  }
   let userConfig = normalizeConfig(
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule
   )
-  return userConfig
+  return assignDefaults(userConfig)
 }
 
 export type DomainLocales = Array<{
