@@ -11,7 +11,7 @@ import {
 } from './constants'
 import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
 import { getQueryKeyFromUrlAndParams, queryClient } from './react-query-utils'
-import { Ctx } from '../types'
+import { Ctx } from '../types/index'
 const debug = require('debug')('blitz:rpc')
 
 export type ResolverType = 'query' | 'mutation'
