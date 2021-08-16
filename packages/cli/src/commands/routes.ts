@@ -29,6 +29,8 @@ export class Routes extends Command {
     }
     this.parse(Routes)
 
+    process.env.BLITZ_APP_DIR = config.rootFolder
+
     try {
       const {routes} = await import("@blitzjs/server")
       const routesResult = await routes(config)
