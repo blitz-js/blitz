@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.24.1",
-    "blitz": "0.39.0",
+    "blitz": "0.40.0-canary.0",
     "final-form": "4.20.1",
     "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
