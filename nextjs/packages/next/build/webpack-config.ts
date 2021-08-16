@@ -244,7 +244,7 @@ export default async function getBaseWebpackConfig(
       (semver.gte(reactDomVersion!, '18.0.0') ||
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
     hasReactExperimental // blitz
-  const hasReactRoot: boolean = config.experimental.reactRoot || hasReact18
+  const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
 
   const babelConfigFile = await [
     '.babelrc',
@@ -270,6 +270,11 @@ export default async function getBaseWebpackConfig(
   const hasDbModule =
     existsSync(path.join(dir, 'db/index.js')) ||
     existsSync(path.join(dir, 'db/index.ts'))
+
+  const middleware = config.middleware?.filter(
+    (m) => m.name === 'blitzSessionMiddleware'
+  )[0]
+  const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
   /* ------ Blitz.js ------- */
 
   // Webpack 5 can use the faster babel loader, webpack 5 has built-in caching for loaders
@@ -1029,11 +1034,6 @@ export default async function getBaseWebpackConfig(
         ...(isServer
           ? []
           : [
-              {
-                issuer: /(mutations|queries)(?!.*\.client)/,
-                resource: /_resolvers/,
-                use: { loader: require.resolve('null-loader') },
-              },
               // Because of packages/core/src/prisma-utils.ts
               {
                 test: /[\\/]npm-which[\\/]/,
@@ -1060,7 +1060,10 @@ export default async function getBaseWebpackConfig(
       new webpack.DefinePlugin({
         ...Object.keys(process.env).reduce(
           (prev: { [key: string]: string }, key: string) => {
-            if (key.startsWith('NEXT_PUBLIC_')|| key.startsWith('BLITZ_PUBLIC_')) {
+            if (
+              key.startsWith('NEXT_PUBLIC_') ||
+              key.startsWith('BLITZ_PUBLIC_')
+            ) {
               prev[`process.env.${key}`] = JSON.stringify(process.env[key]!)
             }
             return prev
@@ -1094,6 +1097,10 @@ export default async function getBaseWebpackConfig(
               'process.env.__NEXT_DIST_DIR': JSON.stringify(distDir),
             }
           : {}),
+        'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
+        'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
+          sessionCookiePrefix
+        ),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),

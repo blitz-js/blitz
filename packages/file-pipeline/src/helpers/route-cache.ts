@@ -1,3 +1,4 @@
+import {convertPageFilePathToRoutePath, getIsRpcFile} from "next/dist/build/utils"
 import path from "path"
 import File from "vinyl"
 import {RouteCacheEntry, RouteCacheInterface, RouteType, RouteVerb} from "../types"
@@ -51,10 +52,9 @@ export class RouteCache implements RouteCacheInterface {
 
   private getType(file: File): RouteType | null {
     const pagesPathRegex = /(pages[\\/][^_.].+(?<!\.test)\.(m?[tj]sx?|mdx))$/
-    const rpcPathRegex = /(api[\\/].+[\\/](queries|mutations).+)$/
     const apiPathRegex = /(api[\\/].+\.[tj]s)$/
 
-    if (rpcPathRegex.test(file.path)) {
+    if (getIsRpcFile(file.path)) {
       return "rpc"
     } else if (apiPathRegex.test(file.path)) {
       return "api"
@@ -74,7 +74,13 @@ export class RouteCache implements RouteCacheInterface {
       return
     }
 
-    const uri = this.getUrifromPath(this.normalizePath(file.path))
+    let uri
+    if (type === "rpc") {
+      // TODO - load page extensions from user config
+      uri = convertPageFilePathToRoutePath(file.path, ["tsx", "ts", "jsx", "js"])
+    } else {
+      uri = this.getUrifromPath(this.normalizePath(file.path))
+    }
     const isErrorCode = this.isErrorCode(uri)
     if (!isErrorCode) {
       this.routeCache[srcPath] = {

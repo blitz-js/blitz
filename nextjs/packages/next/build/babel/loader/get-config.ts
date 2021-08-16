@@ -6,7 +6,7 @@ import loadConfig from 'next/dist/compiled/babel/core-lib-config'
 
 import { NextBabelLoaderOptions, NextJsLoaderContext } from './types'
 import { consumeIterator } from './util'
-import { isPageFile as isPageFileFn } from '../../utils'
+import { getIsPageFile, getIsRpcFile } from '../../utils'
 
 const nextDistPath = /(next[\\/]dist[\\/]next-server[\\/]lib)|(next[\\/]dist[\\/]client)|(next[\\/]dist[\\/]pages)/
 
@@ -32,6 +32,7 @@ const nextDistPath = /(next[\\/]dist[\\/]next-server[\\/]lib)|(next[\\/]dist[\\/
 interface CharacteristicsGermaneToCaching {
   isServer: boolean
   isPageFile: boolean
+  isRpcFile: boolean
   isNextDist: boolean
   hasModuleExports: boolean
   fileExt: string
@@ -45,13 +46,16 @@ function getCacheCharacteristics(
 ): CharacteristicsGermaneToCaching {
   const { isServer, pagesDir } = loaderOptions
   const isNextDist = nextDistPath.test(filename)
-  const isPageFile = !isNextDist && isPageFileFn(filename.replace(pagesDir, ''))
+  const relativePathFromRoot = filename.replace(pagesDir, '')
+  const isPageFile = !isNextDist && getIsPageFile(relativePathFromRoot)
+  const isRpcFile = !isNextDist && getIsRpcFile(relativePathFromRoot)
   const hasModuleExports = source.indexOf('module.exports') !== -1
   const fileExt = fileExtensionRegex.exec(filename)?.[1] || 'unknown'
 
   return {
     isServer,
     isPageFile,
+    isRpcFile,
     isNextDist,
     hasModuleExports,
     fileExt,
@@ -69,6 +73,7 @@ function getPlugins(
   const {
     isServer,
     isPageFile,
+    isRpcFile,
     isNextDist,
     hasModuleExports,
   } = cacheCharacteristics
@@ -94,6 +99,18 @@ function getPlugins(
   const pageConfigItem =
     !isServer && isPageFile
       ? createConfigItem([require('../plugins/next-page-config')], {
+          type: 'plugin',
+        })
+      : null
+  const rpcClientConfigItem =
+    !isServer && isRpcFile
+      ? createConfigItem([require('../plugins/blitz-rpc-client')], {
+          type: 'plugin',
+        })
+      : null
+  const rpcServerTransformConfigItem =
+    isServer && isRpcFile
+      ? createConfigItem([require('../plugins/blitz-rpc-server-transform')], {
           type: 'plugin',
         })
       : null
@@ -133,6 +150,8 @@ function getPlugins(
     noAnonymousDefaultExportItem,
     reactRefreshItem,
     pageConfigItem,
+    rpcClientConfigItem,
+    rpcServerTransformConfigItem,
     disallowExportAllItem,
     applyCommonJsItem,
     transformDefineItem,
@@ -158,7 +177,7 @@ function getCustomBabelConfig(configFilePath: string) {
     return require(configFilePath)
   }
   throw new Error(
-    'The Next.js Babel loader does not support .mjs or .cjs config files.'
+    'The Blitz.js Babel loader does not support .mjs or .cjs config files.'
   )
 }
 
@@ -290,6 +309,7 @@ function getCacheKey(cacheCharacteristics: CharacteristicsGermaneToCaching) {
   const {
     isServer,
     isPageFile,
+    isRpcFile,
     isNextDist,
     hasModuleExports,
     fileExt,
@@ -300,7 +320,8 @@ function getCacheKey(cacheCharacteristics: CharacteristicsGermaneToCaching) {
     (isServer ? 0b0001 : 0) |
     (isPageFile ? 0b0010 : 0) |
     (isNextDist ? 0b0100 : 0) |
-    (hasModuleExports ? 0b1000 : 0)
+    (hasModuleExports ? 0b1000 : 0) |
+    (isRpcFile ? 0b10000 : 0)
 
   return fileExt + flags
 }

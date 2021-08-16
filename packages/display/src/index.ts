@@ -1,28 +1,7 @@
-import {getConfig} from "@blitzjs/config"
 import c from "chalk"
 import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
-import {Logger} from "tslog"
-
-type LogConfig = {
-  level: "trace" | "debug" | "info" | "warn" | "error" | "fatal"
-}
-
-const defaultConfig: LogConfig = {
-  level: "info",
-}
-
-const getLogConfig = (): LogConfig => {
-  const config = getConfig()
-
-  // TODO - validate log config and print helpfull error if invalid
-  if (config.log && typeof config.log === "object") {
-    return {...defaultConfig, ...config.log} as any
-  }
-
-  return defaultConfig
-}
 
 export const table = Table
 export const chalk = c
@@ -148,22 +127,6 @@ const success = (msg: string) => {
   console.log(withCheck(c.green(msg)))
 }
 
-const newline = () => {
-  const logLevel = getLogConfig().level
-  switch (logLevel) {
-    case "trace":
-    case "debug":
-    case "info":
-      console.log(" ")
-      break
-    case "warn":
-    case "error":
-    case "fatal":
-      //nothing
-      break
-  }
-}
-
 /**
  * Colorizes a variable for display.
  *
@@ -178,39 +141,6 @@ const variable = (val: any) => {
  * @param str msg
  */
 const debug = require("debug")("blitz")
-
-declare module globalThis {
-  let _blitz_baseLogger: Logger
-}
-
-export const baseLogger = () => {
-  globalThis._blitz_baseLogger =
-    globalThis._blitz_baseLogger ??
-    new Logger({
-      minLevel: getLogConfig().level,
-      dateTimePattern:
-        process.env.NODE_ENV === "production"
-          ? "year-month-day hour:minute:second.millisecond"
-          : "hour:minute:second.millisecond",
-      displayFunctionName: false,
-      displayFilePath: "hidden",
-      displayRequestId: false,
-      dateTimeTimezone:
-        process.env.NODE_ENV === "production"
-          ? "utc"
-          : Intl.DateTimeFormat().resolvedOptions().timeZone,
-      prettyInspectHighlightStyles: {
-        name: "yellow",
-        number: "blue",
-        bigint: "blue",
-        boolean: "blue",
-      },
-      maskValuesOfKeys: ["password", "passwordConfirmation"],
-      exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
-    })
-
-  return globalThis._blitz_baseLogger
-}
 
 export const log = {
   withBrand,
@@ -229,7 +159,6 @@ export const log = {
   progress,
   spinner,
   success,
-  newline,
   variable,
   info,
   debug,

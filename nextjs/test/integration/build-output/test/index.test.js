@@ -141,7 +141,7 @@ describe('Build Output', () => {
           expect(err404FirstLoad.endsWith('kB')).toBe(true)
 
           expect(parseFloat(sharedByAll)).toBeCloseTo(
-            gz ? 63.7 + blitzExtraGz : 195 + blitzExtra,
+            gz ? 63.7 + blitzExtraGz : 195 + blitzExtra + 1,
             0
           )
           expect(sharedByAll.endsWith('kB')).toBe(true)

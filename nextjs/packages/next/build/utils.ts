@@ -56,16 +56,42 @@ export const topLevelFoldersThatMayContainPages = [
   'integrations',
 ]
 
-export function convertPageFilePathToRoutePath(filePath: string) {
+export function convertPageFilePathToRoutePath(
+  filePath: string,
+  pageExtensions: string[]
+) {
   return filePath
     .replace(/^.*?[\\/]pages[\\/]/, '/')
     .replace(/^.*?[\\/]api[\\/]/, '/api/')
+    .replace(/^.*?[\\/]queries[\\/]/, '/api/rpc/')
+    .replace(/^.*?[\\/]mutations[\\/]/, '/api/rpc/')
+    .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
 }
 
-export function isPageFile(filePathFromAppRoot: string) {
+const fileExtensionRegex = /\.([a-z]+)$/
+
+export function convertPageFilePathToResolverName(filePathFromAppRoot: string) {
+  return filePathFromAppRoot
+    .replace(/^.*[\\/](queries|mutations)[\\/]/, '')
+    .replace(fileExtensionRegex, '')
+}
+
+export function convertPageFilePathToResolverType(filePathFromAppRoot: string) {
+  return filePathFromAppRoot.match(/[\\/]queries[\\/]/) ? 'query' : 'mutation'
+}
+
+export function getIsPageFile(filePathFromAppRoot: string) {
   return (
     /[\\/]pages[\\/]/.test(filePathFromAppRoot) ||
-    /[\\/]api[\\/]/.test(filePathFromAppRoot)
+    /[\\/]api[\\/]/.test(filePathFromAppRoot) ||
+    getIsRpcFile(filePathFromAppRoot)
+  )
+}
+
+export function getIsRpcFile(filePathFromAppRoot: string) {
+  return (
+    /[\\/]queries[\\/]/.test(filePathFromAppRoot) ||
+    /[\\/]mutations[\\/]/.test(filePathFromAppRoot)
   )
 }
 
@@ -782,7 +808,6 @@ export async function isPageStatic(
   encodedPrerenderRoutes?: string[]
   prerenderFallback?: boolean | 'blocking'
   isNextImageImported?: boolean
-  isBlitzSessionMiddlewareUsed?: boolean
 }> {
   const isPageStaticSpan = trace('is-page-static-utils', parentId)
   return isPageStaticSpan.traceAsyncFn(async () => {
@@ -876,8 +901,6 @@ export async function isPageStatic(
       }
 
       const isNextImageImported = (global as any).__NEXT_IMAGE_IMPORTED
-      const isBlitzSessionMiddlewareUsed = (global as any)
-        .__BLITZ_SESSION_MIDDLEWARE_USED
       const config = mod.config || {}
       return {
         isStatic: !hasStaticProps && !hasGetInitialProps && !hasServerProps,
@@ -889,7 +912,6 @@ export async function isPageStatic(
         hasStaticProps,
         hasServerProps,
         isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
       }
     } catch (err) {
       if (err.code === 'MODULE_NOT_FOUND') return {}

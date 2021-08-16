@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import findUp from 'next/dist/compiled/find-up'
-import { basename, extname, join } from 'path'
+import { basename, join } from 'path'
 import * as Log from '../../build/output/log'
 import { hasNextSupport } from '../../telemetry/ci-info'
 import { CONFIG_FILE, PHASE_DEVELOPMENT_SERVER } from '../lib/constants'

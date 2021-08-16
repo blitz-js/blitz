@@ -12,9 +12,11 @@ import {
   REACT_LOADABLE_MANIFEST,
 } from '../../../../next-server/lib/constants'
 import { trace } from '../../../../telemetry/trace'
+import { normalizePathSep } from '../../../../next-server/server/normalize-page-path'
 
 export type ServerlessLoaderQuery = {
   page: string
+  pagesDir: string
   distDir: string
   absolutePagePath: string
   absoluteAppPath: string
@@ -40,6 +42,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       distDir,
       absolutePagePath,
       page,
+      pagesDir: rawPagesDir,
       buildId,
       canonicalBase,
       assetPrefix,
@@ -56,6 +59,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       i18n,
     }: ServerlessLoaderQuery =
       typeof this.query === 'string' ? parse(this.query.substr(1)) : this.query
+
+    const pagesDir = normalizePathSep(rawPagesDir)
 
     const buildManifest = join(distDir, BUILD_MANIFEST).replace(/\\/g, '/')
     const reactLoadableManifest = join(
@@ -104,6 +109,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
 
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
+        process.env.BLITZ_APP_DIR = "${pagesDir}"
+
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
           : []
@@ -121,7 +128,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
           page: "${page}",
           basePath: "${basePath}",
           pageIsDynamic: ${pageIsDynamicRoute},
-          encodedPreviewProps: ${encodedPreviewProps}
+          encodedPreviewProps: ${encodedPreviewProps},
+          pagesDir: "${pagesDir}",
         })
         export default apiHandler
       `
@@ -139,6 +147,8 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
         runtimeConfigSetter
       }
       import { getPageHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/page-handler'
+
+      process.env.BLITZ_APP_DIR = "${pagesDir}"
 
       const documentModule = require("${absoluteDocumentPath}")
 

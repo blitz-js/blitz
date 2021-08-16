@@ -5,9 +5,37 @@ import os from 'os'
 import { join } from 'path'
 import { Header, Redirect, Rewrite } from '../../lib/load-custom-routes'
 import { imageConfigDefault } from './image-config'
-import { CONFIG_FILE } from '../lib/constants'
+import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../lib/constants'
 import { copy, remove } from 'fs-extra'
+import { Middleware } from '../../types'
 const debug = require('debug')('blitz:config')
+
+export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+
+export function loadConfigAtRuntime() {
+  if (!process.env.BLITZ_APP_DIR) {
+    throw new Error(
+      'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set'
+    )
+  }
+  return loadConfigProduction(process.env.BLITZ_APP_DIR)
+}
+
+export function loadConfigProduction(pagesDir: string) {
+  let userConfigModule
+  try {
+    // eslint-disable-next-line no-eval -- block webpack from following this module path
+    userConfigModule = eval('require')(join(pagesDir, CONFIG_FILE))
+  } catch {
+    // In case user does not have custom config
+    userConfigModule = {}
+  }
+  let userConfig = normalizeConfig(
+    PHASE_PRODUCTION_SERVER,
+    userConfigModule.default || userConfigModule
+  )
+  return assignDefaultsBase(userConfig)
+}
 
 export type DomainLocales = Array<{
   http?: true
@@ -38,6 +66,22 @@ export type NextConfig = { [key: string]: any } & {
   trailingSlash?: boolean
   webpack5?: false
   excludeDefaultMomentLocales?: boolean
+
+  // -- Blitz start
+  cli?: {
+    clearConsoleOnBlitzDev?: boolean
+    httpProxy?: string
+    httpsProxy?: string
+    noProxy?: string
+  }
+  log?: {
+    level: LogLevel
+  }
+  middleware?: Middleware[]
+  customServer?: {
+    hotReload?: boolean
+  }
+  // -- Blitz end
 
   future: {
     /**
@@ -106,6 +150,9 @@ export const defaultConfig: NextConfig = {
   i18n: null,
   productionBrowserSourceMaps: false,
   optimizeFonts: true,
+  log: {
+    level: 'info',
+  },
   experimental: {
     cpus: Math.max(
       1,
@@ -122,7 +169,8 @@ export const defaultConfig: NextConfig = {
     scrollRestoration: false,
     stats: false,
     externalDir: false,
-    reactRoot: Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0,
+    reactRoot:
+      Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0 ? true : undefined,
     disableOptimizedLoading: false,
     gzipSize: true,
     craCompat: false,
@@ -136,6 +184,39 @@ export const defaultConfig: NextConfig = {
   serverRuntimeConfig: {},
   publicRuntimeConfig: {},
   reactStrictMode: false,
+}
+
+export function assignDefaultsBase(userConfig: { [key: string]: any }) {
+  const config = Object.keys(userConfig).reduce<{ [key: string]: any }>(
+    (currentConfig, key) => {
+      const value = userConfig[key]
+
+      if (value === undefined || value === null) {
+        return currentConfig
+      }
+
+      // Copied from assignDefaults in server/config.ts
+      if (!!value && value.constructor === Object) {
+        currentConfig[key] = {
+          ...defaultConfig[key],
+          ...Object.keys(value).reduce<any>((c, k) => {
+            const v = value[k]
+            if (v !== undefined && v !== null) {
+              c[k] = v
+            }
+            return c
+          }, {}),
+        }
+      } else {
+        currentConfig[key] = value
+      }
+
+      return currentConfig
+    },
+    {}
+  )
+  const result = { ...defaultConfig, ...config }
+  return result
 }
 
 export function normalizeConfig(phase: string, config: any) {

@@ -2,15 +2,18 @@ import { parse as parseUrl } from 'url'
 import { IncomingMessage, ServerResponse } from 'http'
 import { apiResolver } from '../../../../next-server/server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
+import { loadConfigProduction } from '../../../../next-server/server/config-shared'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
-  const { pageModule, encodedPreviewProps, pageIsDynamic } = ctx
+  const { page, pagesDir, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
   const {
     handleRewrites,
     handleBasePath,
     dynamicRouteMatcher,
     normalizeDynamicRouteParams,
   } = getUtils(ctx)
+
+  const config = loadConfigProduction(pagesDir)
 
   return async (req: IncomingMessage, res: ServerResponse) => {
     try {
@@ -45,7 +48,8 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
         Object.assign({}, parsedUrl.query, params),
         await pageModule,
         encodedPreviewProps,
-        true
+        true,
+        { route: page, config }
       )
     } catch (err) {
       console.error(err)

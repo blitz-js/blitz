@@ -1,5 +1,5 @@
+import {Ctx} from "next/types"
 import {z} from "zod"
-import {Ctx} from "../types"
 import {resolver} from "./resolver"
 
 describe("resolver", () => {

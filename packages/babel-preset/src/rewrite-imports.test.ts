@@ -7,7 +7,7 @@ pluginTester({
   tests: [
     {
       code: `import { useQuery } from 'blitz';`,
-      output: `import { useQuery } from '@blitzjs/core';`,
+      output: `import { useQuery } from 'next/data-client';`,
     },
     {
       code: `import { Image } from 'blitz';`,

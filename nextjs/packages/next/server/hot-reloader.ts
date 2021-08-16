@@ -276,7 +276,8 @@ export default class HotReloader {
       this.buildId,
       this.previewProps,
       this.config,
-      []
+      [],
+      { pagesDir: this.pagesDir }
     )
 
     return Promise.all([
@@ -325,7 +326,8 @@ export default class HotReloader {
         this.buildId,
         this.previewProps,
         this.config,
-        []
+        [],
+        { pagesDir: this.pagesDir }
       ).client,
     })
     const fallbackCompiler = webpack(fallbackConfig)

@@ -56,6 +56,8 @@ const nextDev: cliCommand = (argv) => {
     printAndExit(`> No such directory exists as the project root: ${dir}`)
   }
 
+  process.env.BLITZ_APP_DIR = dir
+
   async function preflight() {
     const { getPackageVersion } = await import('../lib/get-package-version')
     const [sassVersion, nodeSassVersion] = await Promise.all([

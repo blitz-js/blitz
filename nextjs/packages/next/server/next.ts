@@ -123,6 +123,7 @@ export class NextServer {
       ? PHASE_DEVELOPMENT_SERVER
       : PHASE_PRODUCTION_SERVER
     const dir = resolve(this.options.dir || '.')
+    process.env.BLITZ_APP_DIR = dir
     const conf = await loadConfig(phase, dir, this.options.conf)
     return conf
   }
