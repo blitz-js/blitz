@@ -10,7 +10,9 @@ import { copy, remove } from 'fs-extra'
 import { Middleware } from '../../types'
 const debug = require('debug')('blitz:config')
 
-export async function loadConfigAtRuntime() {
+export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+
+export function loadConfigAtRuntime() {
   if (!process.env.BLITZ_APP_DIR) {
     throw new Error(
       'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set'
@@ -73,7 +75,7 @@ export type NextConfig = { [key: string]: any } & {
     noProxy?: string
   }
   log?: {
-    level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+    level: LogLevel
   }
   middleware?: Middleware[]
   customServer?: {
@@ -148,6 +150,9 @@ export const defaultConfig: NextConfig = {
   i18n: null,
   productionBrowserSourceMaps: false,
   optimizeFonts: true,
+  log: {
+    level: 'info',
+  },
   experimental: {
     cpus: Math.max(
       1,

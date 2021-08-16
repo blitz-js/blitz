@@ -23,6 +23,7 @@ import {
   getAndValidateMiddleware,
   handleRequestWithMiddleware,
 } from './middleware'
+import { baseLogger, newline } from '../../server/lib/logging'
 
 export type NextApiRequestCookies = { [key: string]: string }
 export type NextApiRequestQuery = { [key: string]: string | string[] }
@@ -150,10 +151,9 @@ export function getRpcMiddleware(
   { route }: RpcHandlerCtx
 ): Middleware {
   return async (req, res, next) => {
-    // const log = baseLogger().getChildLogger({
-    //   prefix: [route.replace('/api/rpc', '') + '()'],
-    // })
-    const log = console
+    const log = baseLogger().getChildLogger({
+      prefix: [route.replace('/api/rpc', '') + '()'],
+    })
 
     if (req.method === 'HEAD') {
       // TODO enable
@@ -227,7 +227,7 @@ export function getRpcMiddleware(
             )}`
           )
         )
-        // displayLog.newline()
+        newline()
 
         return next()
       } catch (error) {
@@ -235,7 +235,7 @@ export function getRpcMiddleware(
           delete error.stack
         }
         log.error(error)
-        // displayLog.newline()
+        newline()
 
         if (!error.statusCode) {
           error.statusCode = 500

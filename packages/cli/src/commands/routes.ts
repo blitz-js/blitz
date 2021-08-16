@@ -1,6 +1,7 @@
-import {log, table as Table} from "@blitzjs/display"
+import {table as Table} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
+import {newline} from "next/dist/server/lib/logging"
 
 export class Routes extends Command {
   static description = "Display all Blitz URL Routes"
@@ -31,7 +32,7 @@ export class Routes extends Command {
     try {
       const {routes} = await import("@blitzjs/server")
       const routesResult = await routes(config)
-      log.newline()
+      newline()
       const table = new Table({
         columns: [
           {name: "HTTP", alignment: "center"},

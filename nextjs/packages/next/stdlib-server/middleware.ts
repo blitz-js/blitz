@@ -15,6 +15,7 @@ import { loadConfigAtRuntime } from '../next-server/server/config-shared'
 import chalk from 'chalk'
 import { interopDefault } from '../next-server/server/load-components'
 import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
+import { baseLogger, newline } from '../server/lib/logging'
 
 export type InvokeWithMiddlewareConfig = {
   req: IncomingMessage
@@ -57,22 +58,20 @@ export async function invokeWithMiddleware<
   }
 
   middleware.push(async (_req, res, next) => {
-    // TODO fix
-    // const log = baseLogger().getChildLogger({
-    //   prefix: [resolver._meta.name + '()'],
-    // })
-    // displayLog.newline()
+    const log = baseLogger().getChildLogger({
+      // TODO fix
+      prefix: ['unknown' /*resolver._meta.name*/ + '()'],
+    })
+    newline()
     try {
-      // log.info(chalk.dim('Starting with input:'), params)
-      console.log(chalk.dim('Starting with input:'), params)
+      log.info(chalk.dim('Starting with input:'), params)
       const startTime = Date.now()
 
       const result = await interopDefault(resolver)(params, res.blitzCtx)
 
       const duration = Date.now() - startTime
-      // log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
-      console.log(chalk.dim(`Finished in ${prettyMs(duration)}\n`))
-      // displayLog.newline()
+      log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
+      newline()
 
       res.blitzResult = result
       return next()

@@ -5,6 +5,7 @@ import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import * as esbuild from "esbuild"
 import {existsSync, readJSONSync} from "fs-extra"
+import {newline} from "next/dist/server/lib/logging"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig, standardBuildFolderPathRegex} from "./config"
@@ -246,7 +247,7 @@ export function buildCustomServer({watch}: CustomServerOptions = {}) {
         if (error) {
           log.error("Failed to re-build custom server")
         } else {
-          log.newline()
+          newline()
           log.progress("Custom server changed - rebuilding...")
         }
       },
@@ -301,9 +302,9 @@ export function startCustomServer(
           if (error) {
             log.error("Failed to re-build custom server")
           } else {
-            log.newline()
+            newline()
             log.progress("Custom server changed - restarting...")
-            log.newline()
+            newline()
             //@ts-ignore -- incorrect TS type from node
             process.exitCode = RESTART_CODE
             process.kill("SIGABRT")

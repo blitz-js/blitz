@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from '../lib/utils'
-// import {baseLogger, log} from "@blitzjs/display"
 import { IncomingMessage, ServerResponse } from 'http'
 import { NextConfig } from './config-shared'
 import {
@@ -8,6 +7,7 @@ import {
   MiddlewareRequest,
   MiddlewareResponse,
 } from '../lib/utils'
+import { baseLogger, newline } from '../../server/lib/logging'
 const debug = require('debug')('blitz:middleware')
 
 export function getAndValidateMiddleware(
@@ -31,6 +31,7 @@ export function getAndValidateMiddleware(
   return middleware
 }
 
+// TODO - can we simplify this function?
 export async function handleRequestWithMiddleware(
   req: NextApiRequest | IncomingMessage,
   res: NextApiResponse | ServerResponse,
@@ -43,6 +44,8 @@ export async function handleRequestWithMiddleware(
     stackPrintOnError?: boolean
   } = {}
 ) {
+  const log = baseLogger().getChildLogger()
+
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
   }
@@ -63,28 +66,28 @@ export async function handleRequestWithMiddleware(
       }
     )
   } catch (error) {
-    // log.newline()
+    newline()
     if (req.method === 'GET') {
       // This GET method check is so we don't .end() the request for SSR requests
-      // baseLogger().error('Error while processing the request')
+      log.error('Error while processing the request')
     } else if (res.writableFinished) {
-      // baseLogger().error(
-      //   'Error occured in middleware after the response was already sent to the browser'
-      // )
+      log.error(
+        'Error occured in middleware after the response was already sent to the browser'
+      )
     } else {
       res.statusCode = (error as any).statusCode || (error as any).status || 500
       res.end(error.message || res.statusCode.toString())
-      // baseLogger().error('Error while processing the request')
+      log.error('Error while processing the request')
     }
     if (error._clearStack) {
       delete error.stack
     }
     if (stackPrintOnError) {
-      // baseLogger().prettyError(error)
+      log.prettyError(error)
     } else {
-      // baseLogger().prettyError(error, true, false, false)
+      log.prettyError(error, true, false, false)
     }
-    // log.newline()
+    newline()
     if (throwOnError) throw error
   }
 }
