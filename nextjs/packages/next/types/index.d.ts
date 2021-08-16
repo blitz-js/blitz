@@ -36,6 +36,7 @@ import {
   AuthenticatedSessionContext,
   ClientSession,
   AuthenticatedClientSession,
+  AppPropsType,
   // @ts-ignore This path is generated at build time and conflicts otherwise
 } from '../dist/next-server/lib/utils'
 
@@ -139,7 +140,11 @@ export type NextPage<P = {}, IP = P> = NextComponentType<
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzPage = NextPage
+export type BlitzPage<P = {}, IP = P> = NextPage<P, IP>
+
+export type AppProps<P = {}> = AppPropsType<Router, P> & {
+  Component: BlitzPage
+}
 
 /**
  * `Config` type, use it for export const config

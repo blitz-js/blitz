@@ -25,7 +25,11 @@ export type NextComponentType<
    */
   getInitialProps?(context: C): IP | Promise<IP>
 }
-export type BlitzComponentType = NextComponentType
+export type BlitzComponentType<
+  C extends BaseContext = NextPageContext,
+  IP = {},
+  P = {}
+> = NextComponentType<C, IP, P>
 
 export type DocumentType = NextComponentType<
   DocumentContext,
@@ -277,7 +281,7 @@ export type NextApiResponse<T = any> = ServerResponse & {
   ) => NextApiResponse<T>
   clearPreviewData: () => NextApiResponse<T>
 }
-export type BlitzApiResponse = NextApiResponse
+export type BlitzApiResponse<T = any> = NextApiResponse<T>
 
 /**
  * Next `API` route handler
@@ -286,7 +290,7 @@ export type NextApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>
 ) => void | Promise<void>
-export type BlitzApiHandler = NextApiHandler
+export type BlitzApiHandler<T = any> = NextApiHandler<T>
 
 // -----------------------------
 // Blitz.js

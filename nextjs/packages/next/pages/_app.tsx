@@ -7,7 +7,6 @@ import {
   NextWebVitalsMetric,
 } from '../next-server/lib/utils'
 import { Router } from '../client/router'
-import { BlitzPage } from '../types/index'
 
 export { AppInitialProps }
 
@@ -15,9 +14,7 @@ export { NextWebVitalsMetric }
 
 export type AppContext = AppContextType<Router>
 
-export type AppProps<P = {}> = AppPropsType<Router, P> & {
-  Component: BlitzPage
-}
+export type AppProps<P = {}> = AppPropsType<Router, P>
 
 /**
  * `App` component is used for initialize of pages. It allows for overwriting and full control of the `page` initialization.

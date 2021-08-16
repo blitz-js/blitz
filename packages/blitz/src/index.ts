@@ -51,6 +51,7 @@ export type {
   Redirect,
   NextPage,
   BlitzPage,
+  AppProps,
   PageConfig,
   PreviewData,
   GetStaticPropsContext,
@@ -68,4 +69,3 @@ export type {
   RedirectAuthenticatedToFnCtx,
   RedirectAuthenticatedToFn,
 } from "next/types"
-export type {AppProps} from "next/app"
