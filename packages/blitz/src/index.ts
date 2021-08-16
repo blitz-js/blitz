@@ -19,13 +19,17 @@ export * from "next/stdlib"
 export * from "next/stdlib-server"
 export * from "next/data-client"
 
-// TODO rename types
 export type {
   NextPageContext,
+  BlitzPageContext,
   NextComponentType,
+  BlitzComponentType,
   NextApiResponse,
+  BlitzApiResponse,
   NextApiRequest,
+  BlitzApiRequest,
   NextApiHandler,
+  BlitzApiHandler,
   DefaultCtx,
   Ctx,
   MiddlewareRequest,
@@ -46,6 +50,7 @@ export type {
   AuthenticatedClientSession,
   Redirect,
   NextPage,
+  BlitzPage,
   PageConfig,
   PreviewData,
   GetStaticPropsContext,
@@ -59,4 +64,8 @@ export type {
   GetServerSidePropsResult,
   GetServerSideProps,
   InferGetServerSidePropsType,
+  RedirectAuthenticatedTo,
+  RedirectAuthenticatedToFnCtx,
+  RedirectAuthenticatedToFn,
 } from "next/types"
+export type {AppProps} from "next/app"

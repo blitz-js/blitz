@@ -1,11 +1,12 @@
+import {AppProps} from "next/app"
 import {getPublicDataStore, useAuthorizeIf, useSession} from "next/data-client"
 import {BlitzProvider} from "next/data-client"
 import {formatWithValidation} from "next/dist/next-server/lib/utils"
 import {RedirectError} from "next/stdlib"
+import {BlitzPage} from "next/types"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
 import {Head} from "./head"
-import {AppProps, BlitzPage} from "./types"
 import {clientDebug} from "./utils"
 
 const customCSS = `

@@ -241,11 +241,3 @@ export function buildRpcClient({
 
   return rpcClient
 }
-
-// executeRpcCall.warm = (routePath: string) => {
-//   if (!isClient) {
-//     return
-//   }
-//
-//   return window.fetch(addBasePath(apiUrl), { method: 'HEAD' })
-// }

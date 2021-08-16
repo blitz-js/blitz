@@ -156,11 +156,7 @@ export function getRpcMiddleware(
     })
 
     if (req.method === 'HEAD') {
-      // TODO enable
-      // Warm the lamda and connect to DB
-      // if (typeof connectDb === 'function') {
-      //   connectDb()
-      // }
+      // We used to initiate database connection here
       res.status(200).end()
       return next()
     } else if (req.method === 'POST') {

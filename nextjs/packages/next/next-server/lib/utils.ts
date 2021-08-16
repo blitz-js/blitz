@@ -25,6 +25,7 @@ export type NextComponentType<
    */
   getInitialProps?(context: C): IP | Promise<IP>
 }
+export type BlitzComponentType = NextComponentType
 
 export type DocumentType = NextComponentType<
   DocumentContext,
@@ -152,6 +153,7 @@ export interface NextPageContext {
    */
   AppTree: AppTreeType
 }
+export type BlitzPageContext = NextPageContext
 
 export type AppContextType<R extends NextRouter = NextRouter> = {
   Component: NextComponentType<NextPageContext>
@@ -235,6 +237,7 @@ export interface NextApiRequest extends IncomingMessage {
    * */
   previewData?: PreviewData
 }
+export interface BlitzApiRequest extends NextApiRequest {}
 
 /**
  * Send body of response
@@ -274,6 +277,7 @@ export type NextApiResponse<T = any> = ServerResponse & {
   ) => NextApiResponse<T>
   clearPreviewData: () => NextApiResponse<T>
 }
+export type BlitzApiResponse = NextApiResponse
 
 /**
  * Next `API` route handler
@@ -282,6 +286,7 @@ export type NextApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>
 ) => void | Promise<void>
+export type BlitzApiHandler = NextApiHandler
 
 // -----------------------------
 // Blitz.js

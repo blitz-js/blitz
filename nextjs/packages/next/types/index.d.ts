@@ -5,13 +5,19 @@
 import React from 'react'
 import { ParsedUrlQuery } from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
+import { UrlObject } from 'url'
 
 import {
   NextPageContext,
+  BlitzPageContext,
   NextComponentType,
+  BlitzComponentType,
   NextApiResponse,
+  BlitzApiResponse,
   NextApiRequest,
+  BlitzApiRequest,
   NextApiHandler,
+  BlitzApiHandler,
   DefaultCtx,
   Ctx,
   MiddlewareRequest,
@@ -48,10 +54,15 @@ export default next
 
 export {
   NextPageContext,
+  BlitzPageContext,
   NextComponentType,
+  BlitzComponentType,
   NextApiResponse,
+  BlitzApiResponse,
   NextApiRequest,
+  BlitzApiRequest,
   NextApiHandler,
+  BlitzApiHandler,
   DefaultCtx,
   Ctx,
   MiddlewareRequest,
@@ -103,10 +114,32 @@ export type Redirect =
       basePath?: false
     }
 
+export interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
+  pathname: string
+}
+
+export type RedirectAuthenticatedTo = string | RouteUrlObject | false
+export type RedirectAuthenticatedToFnCtx = {
+  session: PublicData
+}
+export type RedirectAuthenticatedToFn = (
+  args: RedirectAuthenticatedToFnCtx
+) => RedirectAuthenticatedTo
+
 /**
  * `Page` type, use it as a guide to create `pages`.
  */
-export type NextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P>
+export type NextPage<P = {}, IP = P> = NextComponentType<
+  NextPageContext,
+  IP,
+  P
+> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | { redirectTo?: string | RouteUrlObject }
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
+export type BlitzPage = NextPage
 
 /**
  * `Config` type, use it for export const config
