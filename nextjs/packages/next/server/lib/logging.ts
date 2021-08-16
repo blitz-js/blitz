@@ -34,10 +34,15 @@ export const newline = () => {
 export const baseLogger = (): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
-  const config = loadConfigAtRuntime()
+  let config
+  try {
+    config = loadConfigAtRuntime()
+  } catch {
+    config = {}
+  }
 
   globalThis._blitz_baseLogger = new Logger({
-    minLevel: config.log?.level,
+    minLevel: config.log?.level || 'info',
     dateTimePattern:
       process.env.NODE_ENV === 'production'
         ? 'year-month-day hour:minute:second.millisecond'

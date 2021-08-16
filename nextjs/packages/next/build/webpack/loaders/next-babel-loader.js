@@ -175,12 +175,20 @@ const customBabelLoader = babelLoader((babel) => {
         }
       }
 
-      if (!isServer && isRpcFile) {
-        const rpcClientPlugin = babel.createConfigItem(
-          [require('../../babel/plugins/blitz-rpc-client')],
-          { type: 'plugin' }
-        )
-        options.plugins.push([rpcClientPlugin])
+      if (isRpcFile) {
+        if (isServer) {
+          const rpcServerTransformPlugin = babel.createConfigItem(
+            [require('../../babel/plugins/blitz-rpc-server-transform')],
+            { type: 'plugin' }
+          )
+          options.plugins.push([rpcServerTransformPlugin])
+        } else {
+          const rpcClientPlugin = babel.createConfigItem(
+            [require('../../babel/plugins/blitz-rpc-client')],
+            { type: 'plugin' }
+          )
+          options.plugins.push([rpcClientPlugin])
+        }
       }
 
       // As next-server/lib has stateful modules we have to transpile commonjs

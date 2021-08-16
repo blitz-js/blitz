@@ -16,6 +16,7 @@ import chalk from 'chalk'
 import { interopDefault } from '../next-server/server/load-components'
 import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
 import { baseLogger, newline } from '../server/lib/logging'
+import { RpcResolver } from '../data-client/rpc'
 
 export type InvokeWithMiddlewareConfig = {
   req: IncomingMessage
@@ -44,14 +45,14 @@ export async function invokeWithMiddleware<
     )
   }
 
+  const rpcResolver = (resolver as unknown) as RpcResolver
+
+  // can be .default._resolverName when user imports with `* as resolver`
+  const resolverName =
+    rpcResolver._resolverName ?? (rpcResolver as any).default?._resolverName
+
   const config = await loadConfigAtRuntime()
-  const middleware = getAndValidateMiddleware(
-    config,
-    resolver,
-    'unknown'
-    // TODO fix
-    // resolver._meta.name
-  )
+  const middleware = getAndValidateMiddleware(config, rpcResolver, resolverName)
 
   if (ctx.middleware) {
     middleware.push(...ctx.middleware)
@@ -59,15 +60,14 @@ export async function invokeWithMiddleware<
 
   middleware.push(async (_req, res, next) => {
     const log = baseLogger().getChildLogger({
-      // TODO fix
-      prefix: ['unknown' /*resolver._meta.name*/ + '()'],
+      prefix: [resolverName + '()'],
     })
     newline()
     try {
       log.info(chalk.dim('Starting with input:'), params)
       const startTime = Date.now()
 
-      const result = await interopDefault(resolver)(params, res.blitzCtx)
+      const result = await interopDefault(rpcResolver)(params, res.blitzCtx)
 
       const duration = Date.now() - startTime
       log.info(chalk.dim(`Finished in ${prettyMs(duration)}`))

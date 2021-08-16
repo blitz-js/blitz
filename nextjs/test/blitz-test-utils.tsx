@@ -96,7 +96,7 @@ export function renderHook(
   return defaultRenderHook(hook, { wrapper, ...options })
 }
 
-// This enhance fn does what buildRpcClient does during build time
+// This enhance fn does what buildRpcFunction does during build time
 export function buildQueryRpc(fn: any) {
   const newFn = (...args: any) => {
     const [data, ...rest] = args
@@ -108,7 +108,7 @@ export function buildQueryRpc(fn: any) {
   return newFn
 }
 
-// This enhance fn does what buildRpcClient does during build time
+// This enhance fn does what buildRpcFunction does during build time
 export function buildMutationRpc(fn: any) {
   const newFn = (...args: any) => fn(...args)
   newFn._isRpcClient = true

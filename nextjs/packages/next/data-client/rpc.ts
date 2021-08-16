@@ -11,6 +11,7 @@ import {
 } from './constants'
 import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
 import { getQueryKeyFromUrlAndParams, queryClient } from './react-query-utils'
+import { Ctx } from '../types'
 const debug = require('debug')('blitz:rpc')
 
 export type ResolverType = 'query' | 'mutation'
@@ -27,11 +28,47 @@ export interface RpcOptions {
   alreadySerialized?: boolean
 }
 
-export interface RpcClient<Input = unknown, Result = unknown> {
-  (params: Input, opts?: RpcOptions): Promise<Result>
+export interface EnhancedRpc {
   _isRpcClient: true
   _resolverType: ResolverType
+  _resolverName: string
   _routePath: string
+}
+
+export interface RpcClientBase<Input = unknown, Result = unknown> {
+  (params: Input, opts?: RpcOptions): Promise<Result>
+}
+
+export interface RpcClient<Input = unknown, Result = unknown>
+  extends EnhancedRpc,
+    RpcClientBase<Input, Result> {}
+
+export interface RpcResolver<Input = unknown, Result = unknown>
+  extends EnhancedRpc {
+  (params: Input, ctx?: Ctx): Promise<Result>
+  middleware?: any
+}
+
+export function buildRpcResolver(
+  resolver: (params: unknown, ctx?: unknown) => unknown,
+  {
+    resolverName,
+    resolverType,
+    routePath,
+    middleware,
+  }: BuildRpcClientParams & { middleware?: any }
+): RpcResolver {
+  const rpcResolver = (resolver as unknown) as RpcResolver
+
+  const fullRoutePath = normalizeApiRoute(routePath)
+
+  rpcResolver.middleware = middleware
+  rpcResolver._isRpcClient = true
+  rpcResolver._resolverName = resolverName
+  rpcResolver._resolverType = resolverType
+  rpcResolver._routePath = fullRoutePath
+
+  return rpcResolver
 }
 
 export function buildRpcClient({
@@ -39,10 +76,9 @@ export function buildRpcClient({
   resolverType,
   routePath,
 }: BuildRpcClientParams): RpcClient {
-  console.log('Building...', resolverName, resolverType, routePath)
   const fullRoutePath = normalizeApiRoute(routePath)
 
-  const rpcClient: RpcClient = async (params, opts = {}) => {
+  const httpClient: RpcClientBase = async (params, opts = {}) => {
     if (!opts.fromQueryHook && !opts.fromInvoke) {
       console.warn(
         '[Deprecation] Directly calling queries/mutations is deprecated in favor of invoke(queryFn, params)'
@@ -195,9 +231,14 @@ export function buildRpcClient({
 
     return promise
   }
+
+  const rpcClient = httpClient as RpcClient
+
   rpcClient._isRpcClient = true
+  rpcClient._resolverName = resolverName
   rpcClient._resolverType = resolverType
   rpcClient._routePath = fullRoutePath
+
   return rpcClient
 }
 

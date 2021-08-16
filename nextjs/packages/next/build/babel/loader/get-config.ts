@@ -108,6 +108,12 @@ function getPlugins(
           type: 'plugin',
         })
       : null
+  const rpcServerTransformConfigItem =
+    isServer && isRpcFile
+      ? createConfigItem([require('../plugins/blitz-rpc-server-transform')], {
+          type: 'plugin',
+        })
+      : null
   const disallowExportAllItem =
     !isServer && isPageFile
       ? createConfigItem(
@@ -145,6 +151,7 @@ function getPlugins(
     reactRefreshItem,
     pageConfigItem,
     rpcClientConfigItem,
+    rpcServerTransformConfigItem,
     disallowExportAllItem,
     applyCommonJsItem,
     transformDefineItem,

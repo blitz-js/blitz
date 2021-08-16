@@ -1,6 +1,10 @@
 import { PluginObj } from 'next/dist/compiled/babel/core'
 import { BabelType } from 'babel-plugin-tester'
-import { convertPageFilePathToRoutePath } from '../../utils'
+import {
+  convertPageFilePathToRoutePath,
+  convertPageFilePathToResolverName,
+  convertPageFilePathToResolverType,
+} from '../../utils'
 
 /* This plugin changes the file contents to this:
  *
@@ -16,6 +20,7 @@ export default buildRpcClient({
 // https://astexplorer.net/#/gist/02bab3c8f0488923346b607ed578e2f7/latest (may be out of date)
 
 const fileExtensionRegex = /\.([a-z]+)$/
+
 export default function blitzRpcClient(babel: BabelType): PluginObj {
   const { types: t } = babel
 
@@ -27,12 +32,12 @@ export default function blitzRpcClient(babel: BabelType): PluginObj {
           const fileExt = fileExtensionRegex.exec(filename)?.[1] || 'unknown'
 
           const relativePathFromRoot = filename.replace(cwd, '')
-          const resolverName = filename
-            .replace(/^.*[\\/]/, '')
-            .replace(/\.[^.]*$/, '')
-          const resolverType = filename.match(/[\\/]queries[\\/]/)
-            ? 'query'
-            : 'mutation'
+          const resolverName = convertPageFilePathToResolverName(
+            relativePathFromRoot
+          )
+          const resolverType = convertPageFilePathToResolverType(
+            relativePathFromRoot
+          )
           const routePath = convertPageFilePathToRoutePath(
             relativePathFromRoot,
             [fileExt as string]

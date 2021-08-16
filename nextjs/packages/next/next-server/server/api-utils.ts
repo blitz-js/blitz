@@ -152,7 +152,7 @@ export function getRpcMiddleware(
 ): Middleware {
   return async (req, res, next) => {
     const log = baseLogger().getChildLogger({
-      prefix: [route.replace('/api/rpc', '') + '()'],
+      prefix: [route.replace('/api/rpc/', '') + '()'],
     })
 
     if (req.method === 'HEAD') {

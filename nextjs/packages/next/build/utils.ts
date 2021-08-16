@@ -68,6 +68,18 @@ export function convertPageFilePathToRoutePath(
     .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
 }
 
+const fileExtensionRegex = /\.([a-z]+)$/
+
+export function convertPageFilePathToResolverName(filePathFromAppRoot: string) {
+  return filePathFromAppRoot
+    .replace(/^.*[\\/](queries|mutations)[\\/]/, '')
+    .replace(fileExtensionRegex, '')
+}
+
+export function convertPageFilePathToResolverType(filePathFromAppRoot: string) {
+  return filePathFromAppRoot.match(/[\\/]queries[\\/]/) ? 'query' : 'mutation'
+}
+
 export function getIsPageFile(filePathFromAppRoot: string) {
   return (
     /[\\/]pages[\\/]/.test(filePathFromAppRoot) ||
