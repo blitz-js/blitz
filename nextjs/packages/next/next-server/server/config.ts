@@ -24,7 +24,7 @@ const experimentalWarning = execOnce(() => {
   console.warn()
 })
 
-export function assignDefaults(userConfig: { [key: string]: any }) {
+function assignDefaults(userConfig: { [key: string]: any }) {
   if (typeof userConfig.exportTrailingSlash !== 'undefined') {
     console.warn(
       chalk.yellow.bold('Warning: ') +

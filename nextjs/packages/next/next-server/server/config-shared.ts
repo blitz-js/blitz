@@ -8,7 +8,6 @@ import { imageConfigDefault } from './image-config'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../../types'
-import { assignDefaults } from './config'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
@@ -35,7 +34,7 @@ export function loadConfigProduction(pagesDir: string) {
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule
   )
-  return assignDefaults(userConfig)
+  return assignDefaultsBase(userConfig)
 }
 
 export type DomainLocales = Array<{
@@ -185,6 +184,39 @@ export const defaultConfig: NextConfig = {
   serverRuntimeConfig: {},
   publicRuntimeConfig: {},
   reactStrictMode: false,
+}
+
+export function assignDefaultsBase(userConfig: { [key: string]: any }) {
+  const config = Object.keys(userConfig).reduce<{ [key: string]: any }>(
+    (currentConfig, key) => {
+      const value = userConfig[key]
+
+      if (value === undefined || value === null) {
+        return currentConfig
+      }
+
+      // Copied from assignDefaults in server/config.ts
+      if (!!value && value.constructor === Object) {
+        currentConfig[key] = {
+          ...defaultConfig[key],
+          ...Object.keys(value).reduce<any>((c, k) => {
+            const v = value[k]
+            if (v !== undefined && v !== null) {
+              c[k] = v
+            }
+            return c
+          }, {}),
+        }
+      } else {
+        currentConfig[key] = value
+      }
+
+      return currentConfig
+    },
+    {}
+  )
+  const result = { ...defaultConfig, ...config }
+  return result
 }
 
 export function normalizeConfig(phase: string, config: any) {
