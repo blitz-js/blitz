@@ -23,6 +23,8 @@
     "constants.d.ts",
     "data.js",
     "data.d.ts",
+    "data-client.js",
+    "data-client.d.ts",
     "document.js",
     "document.d.ts",
     "dynamic.js",
