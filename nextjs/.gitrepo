@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:blitz-js/next.js.git
 	branch = canary
-	commit = 4be32b7a54fa68dfcf66d4a5cc7744409c409c7f
-	parent = 194a3720ce56aa3fabace4b07c5faeac1121b8d6
+	commit = 08cae3bd023ba14074fde394231890cf65db0427
+	parent = aa85d1d47ea23dbeeb718fd98089a8700786055b
 	method = merge
 	cmdver = 0.4.3
