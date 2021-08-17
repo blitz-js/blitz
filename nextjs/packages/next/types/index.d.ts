@@ -1,6 +1,7 @@
 /// <reference types="node" />
 /// <reference types="react" />
 /// <reference types="react-dom" />
+/// <reference types="styled-jsx" />
 
 import React from 'react'
 import { ParsedUrlQuery } from 'querystring'
@@ -38,18 +39,27 @@ import {
   AuthenticatedClientSession,
   AppPropsType,
   // @ts-ignore This path is generated at build time and conflicts otherwise
-} from '../dist/next-server/lib/utils'
+} from '../dist/shared/lib/utils'
 
 import {
   NextApiRequestCookies,
   // @ts-ignore This path is generated at build time and conflicts otherwise
-} from '../dist/next-server/server/api-utils'
+} from '../dist/server/api-utils'
 
 // @ts-ignore This path is generated at build time and conflicts otherwise
 // export { PaginateArgs, ConnectMiddleware } from './dist/stdlib-server'
 
 // @ts-ignore This path is generated at build time and conflicts otherwise
 import next from '../dist/server/next'
+
+// @ts-ignore This path is generated at build time and conflicts otherwise
+import {
+  NextConfig as NextConfigType,
+  BlitzConfig as BlitzConfigType,
+} from '../dist/server/config'
+
+export type NextConfig = NextConfigType
+export type BlitzConfig = BlitzConfigType
 
 export default next
 
@@ -94,12 +104,6 @@ declare module 'react' {
   // <link nonce=""> support
   interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
     nonce?: string
-  }
-
-  // <style jsx> and <style jsx global> support for styled-jsx
-  interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
-    jsx?: boolean
-    global?: boolean
   }
 }
 

@@ -80,7 +80,7 @@ const nextDev: cliCommand = (argv) => {
 
   startServer({ dir, dev: true, isNextDevCommand: true }, port, host)
     .then(async (app) => {
-      startedDevelopmentServer(appUrl, `${host}:${port}`)
+      startedDevelopmentServer(appUrl, `${host || '0.0.0.0'}:${port}`)
       // Start preflight after server is listening and ignore errors:
       preflight().catch(() => {})
       // Finalize server bootup:

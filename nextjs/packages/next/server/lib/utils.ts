@@ -1,6 +1,6 @@
 import findUp from 'next/dist/compiled/find-up'
 import { dirname } from 'path'
-import { CONFIG_FILE } from '../../next-server/lib/constants'
+import { CONFIG_FILE } from '../../shared/lib/constants'
 
 export function printAndExit(message: string, code = 1) {
   if (code === 0) {

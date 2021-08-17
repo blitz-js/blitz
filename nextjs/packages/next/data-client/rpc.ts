@@ -1,4 +1,4 @@
-import { normalizeApiRoute } from '../next-server/lib/router/router'
+import { normalizeApiRoute } from '../shared/lib/router/router'
 import { deserialize, serialize } from 'superjson'
 import { SuperJSONResult } from 'superjson/dist/types'
 import { getAntiCSRFToken, getPublicDataStore } from './auth'

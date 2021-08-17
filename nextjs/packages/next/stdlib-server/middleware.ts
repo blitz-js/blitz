@@ -2,7 +2,7 @@ import { IncomingMessage, ServerResponse } from 'http'
 import {
   getAndValidateMiddleware,
   handleRequestWithMiddleware,
-} from '../next-server/server/middleware'
+} from '../server/middleware'
 import { prettyMs } from '../server/lib/utils'
 import {
   Middleware,
@@ -10,10 +10,10 @@ import {
   MiddlewareRequest,
   MiddlewareResponse,
   ConnectMiddleware,
-} from '../next-server/lib/utils'
-import { loadConfigAtRuntime } from '../next-server/server/config-shared'
+} from '../shared/lib/utils'
+import { loadConfigAtRuntime } from '../server/config-shared'
 import chalk from 'chalk'
-import { interopDefault } from '../next-server/server/load-components'
+import { interopDefault } from '../server/load-components'
 import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
 import { baseLogger, newline } from '../server/lib/logging'
 import { RpcResolver } from '../data-client/rpc'
@@ -51,7 +51,7 @@ export async function invokeWithMiddleware<
   const resolverName =
     rpcResolver._resolverName ?? (rpcResolver as any).default?._resolverName
 
-  const config = await loadConfigAtRuntime()
+  const config = loadConfigAtRuntime()
   const middleware = getAndValidateMiddleware(config, rpcResolver, resolverName)
 
   if (ctx.middleware) {
@@ -129,7 +129,7 @@ function withCallbackHandler(
 export function connectMiddleware(middleware: ConnectMiddleware): Middleware {
   const handler =
     middleware.length < 3 ? noCallbackHandler : withCallbackHandler
-  return function connectHandler(req, res, next) {
+  return function connectHandler(req: MiddlewareRequest, res, next) {
     return handler(req, res, next, middleware)
   } as Middleware
 }

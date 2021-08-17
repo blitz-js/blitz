@@ -4,7 +4,7 @@ import { isClient, isServer } from '../stdlib/index'
 import { requestIdleCallback } from '../client/request-idle-callback'
 import { ResolverType, RpcClient } from './rpc'
 import { AsyncFunc } from '../types/utils'
-import { Resolver } from '../next-server/server/api-utils'
+import { Resolver } from '../server/api-utils'
 
 type MutateOptions = {
   refetch?: boolean

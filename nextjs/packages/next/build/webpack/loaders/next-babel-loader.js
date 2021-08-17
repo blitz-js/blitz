@@ -196,7 +196,7 @@ const customBabelLoader = babelLoader((babel) => {
         ...(options.overrides || []),
         {
           test: [
-            /next[\\/]dist[\\/]next-server[\\/]lib/,
+            /next[\\/]dist[\\/]shared[\\/]lib/,
             /next[\\/]dist[\\/]client/,
             /next[\\/]dist[\\/]pages/,
           ],
