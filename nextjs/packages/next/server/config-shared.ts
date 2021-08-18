@@ -308,7 +308,7 @@ export async function getConfigSrcPath(dir: string | null) {
     return jsPath
   } else if (existsSync(legacyPath)) {
     const isInternalDevelopment = __dirname.match(
-      /[\\/]packages[\\/]next[\\/]dist[\\/]next-server/
+      /[\\/]packages[\\/]next[\\/]dist[\\/]server/
     )
     if (isInternalDevelopment || process.env.VERCEL_BUILDER) {
       // We read from next.config.js that Vercel automatically adds
