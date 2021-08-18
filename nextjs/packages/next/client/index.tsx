@@ -535,8 +535,9 @@ function renderReactElement(
 
   const reactEl = fn(shouldHydrate ? markHydrateComplete : markRenderComplete)
   if (process.env.__NEXT_REACT_ROOT) {
+    // start blitz
     if (!reactRoot) {
-      const createRootName = // blitz
+      const createRootName =
         typeof (ReactDOM as any).unstable_createRoot === 'function'
           ? 'unstable_createRoot'
           : 'createRoot'
@@ -544,6 +545,9 @@ function renderReactElement(
         hydrate: shouldHydrate,
       })
     }
+    reactRoot.render(reactEl)
+    shouldHydrate = false
+    // end blitz
   } else {
     // The check for `.hydrate` is there to support React alternatives like preact
     if (shouldHydrate) {
