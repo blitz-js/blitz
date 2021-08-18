@@ -248,7 +248,7 @@ describe('ESLint', () => {
 
       const output = stdout + stderr
       expect(output).toContain(
-        "Warning: Do not use <img>. Use Image from 'next/image' instead."
+        "Warning: Do not use <img>. Use Image from 'blitz' instead."
       )
       expect(output).toContain(
         'Error: External synchronous scripts are forbidden'
@@ -286,7 +286,7 @@ describe('ESLint', () => {
 
       const output = stdout + stderr
       expect(output).toContain(
-        "Warning: Do not use <img>. Use Image from 'next/image' instead."
+        "Warning: Do not use <img>. Use Image from 'blitz' instead."
       )
       expect(output).toContain(
         'Error: External synchronous scripts are forbidden'

@@ -324,6 +324,7 @@ function getCacheKey(cacheCharacteristics: CharacteristicsGermaneToCaching) {
 
 type BabelConfig = any
 const configCache: Map<any, BabelConfig> = new Map()
+const configFiles: Set<string> = new Set()
 
 export default function getConfig(
   this: NextJsLoaderContext,
@@ -368,7 +369,8 @@ export default function getConfig(
     }
   }
 
-  if (loaderOptions.configFile) {
+  if (loaderOptions.configFile && !configFiles.has(loaderOptions.configFile)) {
+    configFiles.add(loaderOptions.configFile)
     Log.info(
       `Using external babel configuration from ${loaderOptions.configFile}`
     )
