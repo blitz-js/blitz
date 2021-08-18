@@ -84,7 +84,7 @@ describe('Analytics relayer', () => {
       expect(isNaN(parseFloat(beacon.value))).toBe(false)
     }
 
-    expect(stdout).toMatch('Next.js Analytics')
+    expect(stdout).toMatch('Blitz.js Analytics')
     await browser.close()
   })
 })

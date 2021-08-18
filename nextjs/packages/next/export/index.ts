@@ -343,12 +343,12 @@ export default async function exportApp(
             .catch(() => ({}))
         )
 
-      if (middleware?.find((m) => m.name === 'blitzSessionMiddleware')) {
+      if (middleware.length) {
         throw new Error(
-          `Blitz sessionMiddleware is not compatible with \`blitz export\`.
+          `Blitz http middleware is not compatible with \`blitz export\`.
   Possible solutions:
     - Use \`blitz start\` to run a server, which supports middleware.
-    - Remove \`sessionMiddleware\` import from \`blitz.config.js\`.\n`
+    - Remove \`middleware\` from \`blitz.config.js\`.\n`
         )
       }
 
@@ -475,7 +475,7 @@ export default async function exportApp(
       if (!options.silent) {
         Log.warn(
           chalk.yellow(
-            `Statically exporting a Blitz.js application via \`next export\` disables API routes.`
+            `Statically exporting a Blitz.js application via \`blitz export\` disables API routes.`
           ) +
             `\n` +
             chalk.yellow(
@@ -485,7 +485,7 @@ export default async function exportApp(
             ) +
             `\n` +
             chalk.yellow(
-              `Pages in your application without server-side data dependencies will be automatically statically exported by \`next build\`, including pages powered by \`getStaticProps\`.`
+              `Pages in your application without server-side data dependencies will be automatically statically exported by \`blitz build\`, including pages powered by \`getStaticProps\`.`
             ) +
             `\n` +
             chalk.yellow(

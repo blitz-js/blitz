@@ -102,6 +102,7 @@ import ResponseCache, {
 } from './response-cache'
 import { NextConfigComplete } from './config-shared'
 import { parseNextUrl } from '../shared/lib/router/utils/parse-next-url'
+import { getSessionCookiePrefix } from './lib/utils'
 
 const getCustomRouteMatcher = pathMatch(true)
 
@@ -310,10 +311,7 @@ export default class Server {
       process.env.__NEXT_OPTIMIZE_CSS = JSON.stringify(true)
     }
 
-    const middleware = this.nextConfig.middleware?.filter(
-      (m) => m.config?.name === 'blitzSessionMiddleware'
-    )[0]
-    const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
+    const sessionCookiePrefix = getSessionCookiePrefix(this.nextConfig)
     process.env.__BLITZ_SESSION_COOKIE_PREFIX = sessionCookiePrefix
   }
 

@@ -467,14 +467,6 @@ export function Image({
 
     objectFit,
     objectPosition,
-
-    ...(placeholder === 'blur'
-      ? {
-          filter: 'blur(20px)',
-          backgroundSize: 'cover',
-          backgroundImage: `url("${blurDataURL}")`,
-        }
-      : undefined),
   }
   const blurStyle =
     placeholder === 'blur'

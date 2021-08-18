@@ -53,6 +53,7 @@ import WebpackConformancePlugin, {
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
 import { regexLikeCss } from './webpack/config/blocks/css'
 import { existsSync } from 'fs'
+import { getSessionCookiePrefix } from '../server/lib/utils'
 
 type ExcludesFalse = <T>(x: T | false) => x is T
 
@@ -283,10 +284,7 @@ export default async function getBaseWebpackConfig(
     existsSync(path.join(dir, 'db/index.js')) ||
     existsSync(path.join(dir, 'db/index.ts'))
 
-  const middleware = config.middleware?.filter(
-    (m) => m.name === 'blitzSessionMiddleware'
-  )[0]
-  const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
+  const sessionCookiePrefix = getSessionCookiePrefix(config)
   /* ------ Blitz.js ------- */
 
   // Webpack 5 can use the faster babel loader, webpack 5 has built-in caching for loaders
