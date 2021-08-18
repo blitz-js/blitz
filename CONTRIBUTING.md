@@ -37,6 +37,16 @@
 
 #### Troubleshooting
 
+##### yarn lint - Failed to load parser
+
+Caused by invalid version of `@babel/eslint-parser`. `7.13.14` is a working version. I think it may be an incompatibility between this version and the version of eslint?
+
+- change version of eslint-parser
+- run `yarn --check-files`
+- run `./scripts/check-pre-compiled.sh` from `./nextjs/`
+- run `yarn build:nextjs` from root
+- Try linting again
+
 ```
 ~/c/blitz> yarn lint
 yarn run v1.22.10

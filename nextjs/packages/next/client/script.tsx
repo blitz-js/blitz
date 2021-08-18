@@ -126,7 +126,7 @@ export function initScriptLoader(scriptLoaderItems: ScriptProps[]) {
   scriptLoaderItems.forEach(handleClientScriptLoad)
 }
 
-function Script(props: ScriptProps): JSX.Element | null {
+export function Script(props: ScriptProps): JSX.Element | null {
   const {
     src = '',
     onLoad = () => {},

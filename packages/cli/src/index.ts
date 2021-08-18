@@ -4,7 +4,7 @@ const lazyLoad = require("@salesforce/lazy-require").default.create(cacheFile)
 lazyLoad.start()
 import {getProjectRoot} from "@blitzjs/config"
 import {run as oclifRun} from "@oclif/command"
-import {compileConfig} from "next/dist/next-server/server/config-shared"
+import {compileConfig} from "next/dist/server/config-shared"
 
 // Load the .env environment variable so it's available for all commands
 require("dotenv-expand")(require("dotenv-flow").config({silent: true}))

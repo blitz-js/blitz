@@ -1,9 +1,9 @@
 import {existsSync, readJSONSync} from "fs-extra"
-import {NextConfig} from "next/dist/next-server/server/config"
+import {NextConfig, NextConfigComplete} from "next/dist/server/config-shared"
 import path, {join} from "path"
 const debug = require("debug")("blitz:config")
 
-type NextExperimental = NextConfig["experimental"]
+type NextExperimental = NextConfigComplete["experimental"]
 
 interface Experimental extends NextExperimental {
   isomorphicResolverImports?: boolean
