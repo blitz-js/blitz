@@ -199,6 +199,7 @@ export const sessionMiddleware = (
   }
 
   blitzSessionMiddleware.config = {
+    name: 'blitzSessionMiddleware',
     cookiePrefix,
   }
   return blitzSessionMiddleware
@@ -251,6 +252,8 @@ export async function getSession(
 ): Promise<SessionContext> {
   ensureNextApiRequest(req)
   ensureMiddlewareResponse(res)
+
+  debug('cookiePrefix', process.env.__BLITZ_SESSION_COOKIE_PREFIX)
 
   let response = res as MiddlewareResponse<{ session?: SessionContext }>
 

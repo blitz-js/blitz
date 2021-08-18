@@ -1,4 +1,4 @@
-import { NextConfig } from 'next/dist/next-server/server/config'
+import { NextConfig } from 'next/dist/server/config'
 import { sessionMiddleware, simpleRolesIsAuthorized } from 'next/stdlib-server'
 import db from './db'
 

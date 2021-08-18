@@ -38,3 +38,7 @@ test-timings.json
 # Vercel
 .vercel
 .now
+
+#blitz
+/packages/next/db.json
+/db.json

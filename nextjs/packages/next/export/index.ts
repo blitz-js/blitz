@@ -186,7 +186,7 @@ export default async function exportApp(
 
     if (!existsSync(buildIdFile)) {
       throw new Error(
-        `Could not find a production build in the '${distDir}' directory. Try building your app with 'next build' before starting the static export. https://nextjs.org/docs/messages/next-export-no-build-id`
+        `Could not find a production build in the '${distDir}' directory. Try building your app with 'blitz build' before starting the static export. https://nextjs.org/docs/messages/next-export-no-build-id`
       )
     }
 

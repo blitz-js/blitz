@@ -1,7 +1,7 @@
 import {render as defaultRender} from "@testing-library/react"
 import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {BlitzProvider, queryClient} from "next/data-client"
-import {RouterContext} from "next/dist/next-server/lib/router-context"
+import {RouterContext} from "next/dist/shared/lib/router-context"
 import {NextRouter} from "next/router"
 import React from "react"
 

@@ -311,7 +311,7 @@ export default class Server {
     }
 
     const middleware = this.nextConfig.middleware?.filter(
-      (m) => m.name === 'blitzSessionMiddleware'
+      (m) => m.config?.name === 'blitzSessionMiddleware'
     )[0]
     const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
     process.env.__BLITZ_SESSION_COOKIE_PREFIX = sessionCookiePrefix

@@ -519,7 +519,7 @@ describe('Telemetry CLI', () => {
     expect(event2).toMatch(/"reactStrictMode": false/)
   })
 
-  it('emits telemetry for lint during build', async () => {
+  it.skip('emits telemetry for lint during build', async () => {
     await fs.writeFile(path.join(appDir, '.eslintrc'), `{ "extends": "next" }`)
     const { stderr } = await nextBuild(appDir, [], {
       stderr: true,

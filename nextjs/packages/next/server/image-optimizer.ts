@@ -38,7 +38,9 @@ let sharp:
   | undefined
 
 try {
-  sharp = require(process.env.NEXT_SHARP_PATH || 'sharp')
+  sharp = require(process.env.BLITZ_SHARP_PATH ||
+    process.env.NEXT_SHARP_PATH ||
+    'sharp')
 } catch (e) {
   // Sharp not present on the server, Squoosh fallback will be used
 }

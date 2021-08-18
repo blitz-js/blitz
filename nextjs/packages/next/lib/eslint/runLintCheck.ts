@@ -11,7 +11,7 @@ import { writeDefaultConfig } from './writeDefaultConfig'
 import { hasEslintConfiguration } from './hasEslintConfiguration'
 
 import { ESLINT_PROMPT_VALUES } from '../constants'
-import { existsSync, findPagesDir } from '../find-pages-dir'
+import { existsSync } from '../find-pages-dir'
 import { installDependencies } from '../install-dependencies'
 import { hasNecessaryDependencies } from '../has-necessary-dependencies'
 import { isYarn } from '../is-yarn'
@@ -137,7 +137,7 @@ async function lint(
       }
     }
 
-    const pagesDir = findPagesDir(baseDir)
+    const pagesDir = baseDir
 
     if (nextEslintPluginIsEnabled) {
       let updatedPagesDir = false

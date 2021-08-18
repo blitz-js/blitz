@@ -12,7 +12,7 @@ function reasonMessage(reason: CheckReasons) {
     case 'default':
       return 'Enabled by default'
     case 'flag-disabled':
-      return 'webpack5 flag is set to false in next.config.js'
+      return 'webpack5 flag is set to false in blitz.config.js'
     case 'test-mode':
       return 'internal test mode'
     default:
