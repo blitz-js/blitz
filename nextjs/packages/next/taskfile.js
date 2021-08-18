@@ -892,7 +892,7 @@ export async function client(task, opts) {
 export async function stdlib(task, opts) {
   await task
     .source(opts.src || 'stdlib/**/*.+(js|ts|tsx)')
-    .babel('client', { dev: opts.dev })
+    .swc('client', { dev: opts.dev })
     .target('dist/stdlib')
   notify('Compiled stdlib files')
 }
@@ -900,7 +900,7 @@ export async function stdlib(task, opts) {
 export async function stdlib_server(task, opts) {
   await task
     .source(opts.src || 'stdlib-server/**/*.+(js|ts|tsx)')
-    .babel('client', { dev: opts.dev })
+    .swc('client', { dev: opts.dev })
     .target('dist/stdlib-server')
   notify('Compiled stdlib-server files')
 }
@@ -908,7 +908,7 @@ export async function stdlib_server(task, opts) {
 export async function dataclient(task, opts) {
   await task
     .source(opts.src || 'data-client/**/*.+(js|ts|tsx)')
-    .babel('client', { dev: opts.dev })
+    .swc('client', { dev: opts.dev })
     .target('dist/data-client')
   notify('Compiled data-client files')
 }

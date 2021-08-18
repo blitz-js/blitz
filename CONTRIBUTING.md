@@ -34,3 +34,28 @@
 14. Any doc updates needed?
 15. Merge PR
 16. `yarn push-nextjs`
+
+#### Troubleshooting
+
+```
+~/c/blitz> yarn lint
+yarn run v1.22.10
+$ eslint --ext ".js,.ts,.tsx" .
+
+Oops! Something went wrong! :(
+
+ESLint: 7.21.0
+
+Error: Failed to load parser './parser.js' declared in 'examples/auth/.eslintrc.js » eslint-config-blitz » eslint-config-next': Cannot find module '@babel/parser'
+    at webpackEmptyContext (/Users/b/c/blitz/nextjs/packages/next/dist/compiled/babel/bundle.js:1:33258)
+    at Object.73139 (/Users/b/c/blitz/nextjs/packages/next/dist/compiled/babel/bundle.js:2194:783181)
+    at __nccwpck_require__ (/Users/b/c/blitz/nextjs/packages/next/dist/compiled/babel/bundle.js:2194:1065271)
+    at Object.eslintParser (/Users/b/c/blitz/nextjs/packages/next/dist/compiled/babel/bundle.js:1:43676)
+    at Object.<anonymous> (/Users/b/c/blitz/nextjs/packages/next/dist/compiled/babel/eslint-parser.js:1:100)
+    at Module._compile (/Users/b/c/blitz/node_modules/v8-compile-cache/v8-compile-cache.js:192:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1027:10)
+    at Module.load (internal/modules/cjs/loader.js:863:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:708:14)
+    at Module.require (internal/modules/cjs/loader.js:887:19)
+error Command failed with exit code 2.
+```

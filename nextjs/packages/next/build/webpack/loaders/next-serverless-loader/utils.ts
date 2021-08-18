@@ -255,7 +255,8 @@ export function getUtils({
             .join('/')
         } else {
           paramValue =
-            params[param] && encodeURIComponent(params[param] as string)
+            params[param]! /*blitz*/ &&
+            encodeURIComponent(params[param] as string)
         }
 
         pathname =

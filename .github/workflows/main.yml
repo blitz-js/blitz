@@ -186,7 +186,7 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-      - run: ./check-pre-compiled.sh
+      - run: ./scripts/check-pre-compiled.sh
 
   testUnit:
     name: Nextjs - Test Unit

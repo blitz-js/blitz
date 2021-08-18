@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@next/codemod",
   "version": "11.1.0",
   "license": "MIT",
