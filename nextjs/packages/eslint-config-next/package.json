@@ -28,5 +28,9 @@
     "typescript": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "eslint": "7.21.0",
+    "typescript": "4.1.5"
   }
 }

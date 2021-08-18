@@ -19,11 +19,12 @@
    6. Resolve all merge conflicts and complete merge
    7. Run `yarn` and make sure all builds complete
    8. Run `yarn lint` and fix any issues
-   9. `git push`
-4. Run `yarn pull next-nextjs`
+   9. Commit all changes to finish merge
+   10. `git push`
+4. Run `yarn pull-nextjs`
 5. Run `yarn`
 6. Run `yarn manypkg check` and optionally `yarn manypkg fix` to fix any issues
-7. Under `nextjs/`, run `./check-pre-compiled.sh` and commit the changes
+7. Under `nextjs/`, run `./scripts/check-pre-compiled.sh` and commit the changes
 8. Run `yarn build:nextjs`
 9. Run `yarn lint` - fix any issues
 10. Run `yarn build` - fix any issues
