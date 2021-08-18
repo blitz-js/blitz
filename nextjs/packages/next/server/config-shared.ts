@@ -234,9 +234,7 @@ export const defaultConfig: NextConfig = {
     stats: false,
     externalDir: false,
     reactRoot:
-      process.env.NEXT_PRIVATE_REACT_ROOT !== undefined
-        ? Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0
-        : undefined,
+      Number(process.env.NEXT_PRIVATE_REACT_ROOT) > 0 ? true : undefined,
     disableOptimizedLoading: false,
     gzipSize: true,
     craCompat: false,
