@@ -14,19 +14,36 @@ describe("resolver", () => {
   })
 })
 
+const syncResolver = resolver.pipe(
+  resolver.zod(
+    z.object({
+      email: z.string().email(),
+    }),
+    "sync",
+  ),
+  resolver.authorize({}),
+  (input) => {
+    return input.email
+  },
+)
+
+const asyncResolver = resolver.pipe(
+  resolver.zod(
+    z.object({
+      email: z.string().email(),
+    }),
+    "async",
+  ),
+  resolver.authorize({}),
+  (input) => {
+    return input.email
+  },
+)
+
 const resolverTest = async ({type}: {type?: ParserType}) => {
-  const resolver1 = resolver.pipe(
-    resolver.zod(
-      z.object({
-        email: z.string().email(),
-      }),
-      type
-    ),
-    resolver.authorize(),
-    (input) => {
-      return input.email
-    },
-  )
+  
+  const resolver1 = type === "sync" ? syncResolver : asyncResolver
+  
   const result1 = await resolver1(
     {email: "test@example.com"},
     {session: {$authorize: () => undefined} as Ctx},

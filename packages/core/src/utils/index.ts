@@ -1,5 +1,5 @@
 import {ZodError} from "zod"
-import { ParserType } from "../server/resolver"
+import {ParserType} from "../server/resolver"
 
 export const isServer = typeof window === "undefined"
 export const isClient = typeof window !== "undefined"
@@ -43,13 +43,35 @@ export function recursiveFormatZodErrors(errors: any) {
   return formattedErrors
 }
 
-export const validateZodSchema = (schema: any, parserType: ParserType = "async") => async (values: any): Promise<any> => {
+const validateZodSchemaSync = (schema: any): any => (values: any) => {
   if (!schema) return {}
   try {
-    parserType === "sync" && schema.parse(values)
+    schema.parse(values)
+    return {}
+  } catch (error) {
+    return error.format ? formatZodError(error) : error.toString()
+  }
+}
+
+const validateZodSchemaAsync = (schema: any) => async (values: any) => {
+  if (!schema) return {}
+  try {
     await schema.parseAsync(values)
     return {}
   } catch (error) {
     return error.format ? formatZodError(error) : error.toString()
+  }
+}
+
+// type zodSchemaReturn = typeof validateZodSchemaAsync | typeof validateZodSchemaSync
+// : (((values:any) => any) | ((values:any) => Promise<any>)) =>
+export function validateZodSchema(schema: any, parserType: "sync"): (values: any) => any
+export function validateZodSchema(schema: any, parserType: "async"): (values: any) => Promise<any>
+export function validateZodSchema(schema: any): (values: any) => Promise<any>
+export function validateZodSchema(schema: any, parserType: ParserType = "async") {
+  if (parserType === "sync") {
+    return validateZodSchemaSync(schema)
+  } else {
+    return validateZodSchemaAsync(schema)
   }
 }

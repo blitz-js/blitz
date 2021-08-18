@@ -89,6 +89,10 @@ describe("validateZodSchema", () => {
   })
 
   it("passes validation if synchronous", async () => {
-    expect(await validateZodSchema(Schema, "sync")({test: "test"})).toEqual({})
+    expect(validateZodSchema(Schema, "sync")({test: "test"})).toEqual({})
+  })
+
+  it("fails validation if synchronous", async () => {
+    expect(validateZodSchema(Schema, "sync")({})).toEqual({test: "Required"})
   })
 })
