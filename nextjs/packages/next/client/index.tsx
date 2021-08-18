@@ -116,6 +116,27 @@ if (process.env.NODE_ENV === 'development') {
     }
   }
   window.addEventListener('error', onUnhandledError)
+
+  if ('Cypress' in window) {
+    // Hide some errors from Cypress, so they don't fail Cypress tests
+    // https://github.com/cypress-io/cypress/issues/7196
+
+    const cypressOnErrorFun = window.onerror
+
+    window.onerror = (message, source, lineno, colno, err) => {
+      if (
+        cypressOnErrorFun &&
+        !(
+          err instanceof RedirectError ||
+          err instanceof AuthenticationError ||
+          err instanceof AuthorizationError ||
+          err instanceof NotFoundError
+        )
+      ) {
+        cypressOnErrorFun(message, source, lineno, colno, err)
+      }
+    }
+  }
 }
 
 if (process.env.__NEXT_I18N_SUPPORT) {
