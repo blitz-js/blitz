@@ -343,7 +343,7 @@ export default async function exportApp(
             .catch(() => ({}))
         )
 
-      if (middleware.length) {
+      if (middleware?.length) {
         throw new Error(
           `Blitz http middleware is not compatible with \`blitz export\`.
   Possible solutions:
