@@ -2,6 +2,7 @@
 import { Console } from 'console'
 
 process.env.BLITZ_TEST_ENVIRONMENT = true
+process.env.NEXT_TEST_ENVIRONMENT = true
 
 if (process.env.JEST_RETRY_TIMES) {
   const retries = Number(process.env.JEST_RETRY_TIMES)

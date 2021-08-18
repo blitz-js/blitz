@@ -256,14 +256,10 @@ export default async function getBaseWebpackConfig(
       (semver.gte(reactDomVersion!, '18.0.0') ||
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
     hasReactExperimental // blitz
-  const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
-
-  // Only inform during one of the builds
-  if (!isServer) {
-    if (hasReactRoot) {
-      Log.info('Using the createRoot API for React')
-    }
-  }
+  const hasReactRoot: boolean =
+    config.experimental.reactRoot ?? process.env.NEXT_TEST_ENVIRONMENT
+      ? false
+      : hasReact18
 
   const babelConfigFile = await [
     '.babelrc',
