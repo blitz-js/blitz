@@ -3010,6 +3010,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "hashimwarren",
+      "name": "Hashim Warren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6027587?v=4",
+      "profile": "https://github.com/hashimwarren",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
