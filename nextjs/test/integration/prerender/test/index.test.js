@@ -700,6 +700,7 @@ const runTests = (dev = false, isEmulatedServerless = false) => {
         })
       ).toBe(true)
 
+      await waitFor(250)
       const text = await browser.elementByCss('#params').text()
       expect(text).toMatch(/post.*?post-999/)
     })
