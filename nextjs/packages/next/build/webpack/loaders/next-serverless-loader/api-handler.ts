@@ -1,8 +1,9 @@
 import { parse as parseUrl } from 'url'
 import { IncomingMessage, ServerResponse } from 'http'
-import { apiResolver } from '../../../../next-server/server/api-utils'
+import { apiResolver } from '../../../../server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
-import { loadConfigProduction } from '../../../../next-server/server/config-shared'
+import { loadConfigProduction } from '../../../../server/config-shared'
+import { DecodeError } from '../../../../shared/lib/utils'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
   const { page, pagesDir, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
@@ -54,8 +55,7 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
     } catch (err) {
       console.error(err)
 
-      // TODO: better error for DECODE_FAILED?
-      if (err.code === 'DECODE_FAILED') {
+      if (err instanceof DecodeError) {
         res.statusCode = 400
         res.end('Bad Request')
       } else {

@@ -1,6 +1,6 @@
 import {getPublicDataStore, useAuthorizeIf, useSession} from "next/data-client"
 import {BlitzProvider} from "next/data-client"
-import {formatWithValidation} from "next/dist/next-server/lib/utils"
+import {formatWithValidation} from "next/dist/shared/lib/utils"
 import {RedirectError} from "next/stdlib"
 import {AppProps, BlitzPage} from "next/types"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"

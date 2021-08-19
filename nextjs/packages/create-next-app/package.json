@@ -1,7 +1,6 @@
 {
-  "private": true,
   "name": "create-next-app",
-  "version": "11.0.1",
+  "version": "11.1.0",
   "keywords": [
     "react",
     "next",

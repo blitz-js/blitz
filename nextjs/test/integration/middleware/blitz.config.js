@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @type {import('next/dist/next-server/server/config').NextConfig}
+ * @type {import('next/dist/server/config').NextConfig}
  **/
 const config = {
   middleware: [

@@ -1,6 +1,7 @@
 import findUp from 'next/dist/compiled/find-up'
 import { dirname } from 'path'
-import { CONFIG_FILE } from '../../next-server/lib/constants'
+import { CONFIG_FILE } from '../../shared/lib/constants'
+import { NextConfigComplete } from '../config-shared'
 
 export function printAndExit(message: string, code = 1) {
   if (code === 0) {
@@ -53,4 +54,12 @@ export function prettyMs(ms: number): string {
     return `${round(ms / 1000, 1)}s`
   }
   return `${ms}ms`
+}
+
+export function getSessionCookiePrefix(config: NextConfigComplete) {
+  const middleware = config.middleware?.filter(
+    (m) => m.config?.name === 'blitzSessionMiddleware'
+  )[0]
+  const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
+  return sessionCookiePrefix
 }

@@ -1,6 +1,7 @@
 # build output
 dist
 .next
+target
 
 # dependencies
 node_modules
@@ -37,3 +38,7 @@ test-timings.json
 # Vercel
 .vercel
 .now
+
+#blitz
+/packages/next/db.json
+/db.json

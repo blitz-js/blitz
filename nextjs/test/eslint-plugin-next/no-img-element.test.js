@@ -16,7 +16,7 @@ RuleTester.setDefaultConfig({
 var ruleTester = new RuleTester()
 ruleTester.run('no-img-element', rule, {
   valid: [
-    `import { Image } from 'next/image';
+    `import { Image } from 'blitz';
 
       export class MyComponent {
         render() {
@@ -53,7 +53,7 @@ ruleTester.run('no-img-element', rule, {
       errors: [
         {
           message:
-            "Do not use <img>. Use <Image> from 'blitz' instead. See https://nextjs.org/docs/messages/no-img-element.",
+            "Do not use <img>. Use Image from 'blitz' instead. See https://nextjs.org/docs/messages/no-img-element.",
           type: 'JSXOpeningElement',
         },
       ],

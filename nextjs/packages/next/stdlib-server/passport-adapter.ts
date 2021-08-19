@@ -1,26 +1,25 @@
-// import { log } from '@blitzjs/display'
+/* @eslint-disable no-redeclare */
+import { baseLogger } from '../server/lib/logging'
 import cookieSession from 'cookie-session'
 import passport from 'passport'
 import type { AuthenticateOptions, Strategy } from 'passport'
+import { connectMiddleware, secureProxyMiddleware } from './middleware'
 import {
+  getAndValidateMiddleware,
+  handleRequestWithMiddleware,
+} from '../server/middleware'
+import { isLocalhost } from './index'
+import { loadConfigAtRuntime } from '../server/config-shared'
+import {
+  NextApiHandler,
+  NextApiRequest,
+  NextApiResponse,
   ConnectMiddleware,
   Ctx,
   Middleware,
   SessionContext,
   PublicData,
-} from '../next-server/lib/utils'
-import { connectMiddleware, secureProxyMiddleware } from './middleware'
-import {
-  getAndValidateMiddleware,
-  handleRequestWithMiddleware,
-} from '../next-server/server/middleware'
-import { isLocalhost } from './index'
-import { loadConfigAtRuntime } from '../next-server/server/config-shared'
-import {
-  NextApiHandler,
-  NextApiRequest,
-  NextApiResponse,
-} from '../next-server/lib/utils'
+} from '../shared/lib/utils'
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -72,7 +71,8 @@ export type VerifyCallbackResult = {
 
 export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
   return async function authHandler(req, res) {
-    const appConfig = await loadConfigAtRuntime()
+    const log = baseLogger().getChildLogger()
+    const appConfig = loadConfigAtRuntime()
     const globalMiddleware = getAndValidateMiddleware(
       appConfig,
       {},
@@ -124,7 +124,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
     const strategyName = strategy.name as string
 
     if (req.query.auth.length === 1) {
-      // log.info(`Starting authentication via ${strategyName}...`)
+      log.info(`Starting authentication via ${strategyName}...`)
       console.info(`Starting authentication via ${strategyName}...`)
       if (req.query.redirectUrl) {
         middleware.push(async (req, res, next) => {
@@ -142,7 +142,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
         )
       )
     } else if (req.query.auth[1] === 'callback') {
-      // log.info(`Processing callback for ${strategyName}...`)
+      log.info(`Processing callback for ${strategyName}...`)
       console.info(`Processing callback for ${strategyName}...`)
       middleware.push(
         connectMiddleware((req, res, next) => {
@@ -156,8 +156,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
                 let error = err
 
                 if (!error && result === false) {
-                  // log.warning(
-                  console.log(
+                  log.warn(
                     `Login via ${strategyName} failed - usually this means the user did not authenticate properly with the provider`
                   )
                   error = `Login failed`

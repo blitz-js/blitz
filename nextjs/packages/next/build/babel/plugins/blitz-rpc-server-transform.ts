@@ -1,3 +1,4 @@
+/* @eslint-disable no-redeclare */
 import { NodePath, PluginObj, types as t } from 'next/dist/compiled/babel/core'
 import { BabelType } from 'babel-plugin-tester'
 // @ts-ignore

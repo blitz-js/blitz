@@ -2,13 +2,9 @@ import { join, sep as pathSeparator, normalize } from 'path'
 import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
-import {
-  denormalizePagePath,
-  normalizePathSep,
-} from '../../next-server/server/normalize-page-path'
-// import { fileExists } from '../../lib/file-exists'
+import { denormalizePagePath, normalizePathSep } from '../normalize-page-path'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
-import { getIsRpcRoute } from '../../next-server/lib/utils'
+import { getIsRpcRoute } from '../../shared/lib/utils'
 import { buildPageExtensionRegex } from '../../build/utils'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
@@ -65,23 +61,6 @@ export async function findPageFile(
   )
   // console.log(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
   // console.log('FOUND', foundPagePaths)
-
-  // for (const extension of pageExtensions) {
-  //   if (!normalizedPagePath.endsWith('/index')) {
-  //     const relativePagePath = `${page}.${extension}`
-  //     const pagePath = join(rootDir, relativePagePath)
-  //
-  //     if (await fileExists(pagePath)) {
-  //       foundPagePaths.push(relativePagePath)
-  //     }
-  //   }
-  //
-  //   const relativePagePathWithIndex = join(page, `index.${extension}`)
-  //   const pagePathWithIndex = join(rootDir, relativePagePathWithIndex)
-  //   if (await fileExists(pagePathWithIndex)) {
-  //     foundPagePaths.push(relativePagePathWithIndex)
-  //   }
-  // }
 
   if (foundPagePaths.length < 1) {
     return null

@@ -48,6 +48,8 @@ eslint.config.*
 /nextjs/packages/next-codemod/**/*.js
 /nextjs/packages/next-codemod/**/*.d.ts
 /nextjs/packages/next-env/**/*.d.ts
+/nextjs/packages/next/build/swc/tests/fixture/**
 /nextjs/test/integration/async-modules/**
 /nextjs/test/integration/eslint/**
+/nextjs/test/integration/babel/**
 /nextjs/test-timings.json

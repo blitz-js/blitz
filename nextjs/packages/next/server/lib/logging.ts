@@ -1,8 +1,5 @@
 import { Logger } from 'tslog'
-import {
-  loadConfigAtRuntime,
-  LogLevel,
-} from '../../next-server/server/config-shared'
+import { loadConfigAtRuntime, LogLevel } from '../config-shared'
 
 // eslint-disable-next-line
 declare module globalThis {

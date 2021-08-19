@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http'
-import { NextApiRequest } from '../next-server/lib/utils'
+import { NextApiRequest } from '../shared/lib/utils'
 import { PaginationArgumentError } from '../stdlib/errors'
 
 export * from './middleware'

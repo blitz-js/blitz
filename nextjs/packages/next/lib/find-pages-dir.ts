@@ -11,7 +11,9 @@ export const existsSync = (f: string): boolean => {
 }
 
 export function findPagesDir(dir: string): string {
-  throw new Error('findPagesDir is deprecated in Blitz.js')
+  throw new Error(
+    'findPagesDir is deprecated in Blitz.js. Use baseDir as pagesDir'
+  )
   // prioritize ./pages over ./src/pages
   // eslint-disable-next-line no-unreachable -- disabled in Blitz.js
   let curDir = path.join(dir, 'pages')

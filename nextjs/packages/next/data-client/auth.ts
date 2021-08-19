@@ -18,7 +18,7 @@ import {
   EmptyPublicData,
   AuthenticatedClientSession,
   ClientSession,
-} from '../next-server/lib/utils'
+} from '../shared/lib/utils'
 import { useEffect, useState } from 'react'
 import { UrlObject } from 'url'
 

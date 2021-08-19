@@ -252,6 +252,6 @@ describe("auth - blitz export should not work", () => {
 
   it("should have error during blitz export", async () => {
     const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
-    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
+    expect(stderr).toContain("Blitz http middleware is not compatible with `blitz export`.")
   })
 })

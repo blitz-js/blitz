@@ -9,7 +9,7 @@ import {extractRouterParams, useParams, useRouterQuery} from "./router-hooks"
 
 export const Router = NextRouter
 export {createRouter, makePublicRouterInstance} from "next/router"
-export {RouterContext} from "next/dist/next-server/lib/router-context"
+export {RouterContext} from "next/dist/shared/lib/router-context"
 
 export {useParam, useParams, useRouterQuery} from "./router-hooks"
 

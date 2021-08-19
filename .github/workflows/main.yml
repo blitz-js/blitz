@@ -41,8 +41,8 @@ jobs:
         run: yarn manypkg check
         env:
           CI: true
-      - name: Build next.js
-        run: yarn build:nextjs
+      - name: Build packages
+        run: yarn build
         env:
           CI: true
       - name: yarn lint
@@ -186,7 +186,7 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-      - run: ./check-pre-compiled.sh
+      - run: ./scripts/check-pre-compiled.sh
 
   testUnit:
     name: Nextjs - Test Unit

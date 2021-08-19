@@ -1,7 +1,7 @@
 {
   "name": "next",
   "version": "0.40.0-canary.1",
-  "nextjsVersion": "11.0.1",
+  "nextjsVersion": "11.1.0",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
   "license": "MIT",
@@ -61,23 +61,24 @@
     "prepublish": "npm run release && yarn types",
     "types": "rimraf \"dist/**/*.d.ts\" && tsc --declaration --emitDeclarationOnly --declarationDir dist",
     "typescript": "tsc --noEmit --declaration",
-    "ncc-compiled": "ncc cache clean && taskr ncc"
+    "ncc-compiled": "ncc cache clean && taskr ncc",
+    "build-native": "napi build --platform --release --cargo-cwd build/swc native"
   },
   "taskr": {
     "requires": [
       "./taskfile-ncc.js",
-      "./taskfile-babel.js",
-      "./taskfile-typescript.js"
+      "./taskfile-swc.js"
     ]
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
     "@babel/runtime": "7.12.5",
     "@hapi/accept": "5.0.2",
-    "@next/env": "11.0.1",
-    "@next/polyfill-module": "11.0.1",
-    "@next/react-dev-overlay": "11.0.1",
-    "@next/react-refresh-utils": "11.0.1",
+    "@next/env": "11.1.0",
+    "@next/polyfill-module": "11.1.0",
+    "@next/react-dev-overlay": "11.1.0",
+    "@next/react-refresh-utils": "11.1.0",
+    "@node-rs/helper": "1.2.1",
     "@types/secure-password": "3.1.0",
     "assert": "2.0.0",
     "ast-types": "0.13.2",
@@ -92,7 +93,7 @@
     "constants-browserify": "1.0.0",
     "cookie-session": "^1.4.0",
     "crypto-browserify": "3.12.0",
-    "cssnano-simple": "2.0.0",
+    "cssnano-simple": "3.0.0",
     "debug": "4.3.1",
     "domain-browser": "4.19.0",
     "encoding": "0.1.13",
@@ -113,18 +114,18 @@
     "passport": "0.4.1",
     "path-browserify": "1.0.1",
     "pnp-webpack-plugin": "1.6.4",
-    "postcss": "8.2.13",
+    "postcss": "8.2.15",
     "process": "0.11.10",
-    "prop-types": "15.7.2",
     "querystring-es3": "0.2.1",
     "raw-body": "2.4.1",
     "react-is": "17.0.2",
+    "react-query": "3.16.0",
     "react-refresh": "0.8.3",
     "secure-password": "4.0.0",
     "stream-browserify": "3.0.0",
     "stream-http": "3.1.1",
     "string_decoder": "1.3.0",
-    "styled-jsx": "3.3.2",
+    "styled-jsx": "4.0.0",
     "superjson": "1.7.2",
     "timers-browserify": "2.0.12",
     "tslog": "^3.1.1",
@@ -154,7 +155,6 @@
     "@ampproject/toolbox-optimizer": "2.7.1-alpha.0",
     "@babel/code-frame": "7.12.11",
     "@babel/core": "7.12.10",
-    "@babel/eslint-parser": "7.13.14",
     "@babel/generator": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "7.12.1",
     "@babel/plugin-proposal-export-namespace-from": "7.12.1",
@@ -170,7 +170,8 @@
     "@babel/preset-typescript": "7.12.7",
     "@babel/traverse": "^7.12.10",
     "@babel/types": "7.12.12",
-    "@next/polyfill-nomodule": "11.0.1",
+    "@napi-rs/cli": "1.1.0",
+    "@next/polyfill-nomodule": "11.1.0",
     "@taskr/clear": "1.1.0",
     "@taskr/esnext": "1.1.0",
     "@taskr/watch": "1.1.0",
@@ -213,11 +214,13 @@
     "bfj": "7.0.2",
     "cacache": "15.0.5",
     "ci-info": "watson/ci-info#f43f6a1cefff47fb361c88cf4b943fdbcaafe540",
+    "cli-select": "1.1.2",
     "comment-json": "3.0.3",
     "compression": "1.7.4",
     "conf": "5.0.0",
     "content-type": "1.0.4",
     "cookie": "0.4.1",
+    "cross-spawn": "7.0.3",
     "css-loader": "4.3.0",
     "devalue": "2.0.1",
     "escape-string-regexp": "2.0.0",
@@ -254,15 +257,21 @@
     "string-hash": "1.1.3",
     "strip-ansi": "6.0.0",
     "taskr": "1.1.0",
-    "terser": "5.5.1",
+    "terser": "5.7.1",
     "text-table": "0.2.0",
     "typescript": "4.1.5",
     "unistore": "3.4.1",
-    "web-vitals": "0.2.4",
+    "web-vitals": "2.1.0",
     "webpack": "4.44.1",
     "webpack-sources": "1.4.3"
   },
   "engines": {
     "node": ">=12.0.0"
+  },
+  "napi": {
+    "name": "next-swc",
+    "triples": {
+      "defaults": true
+    }
   }
 }

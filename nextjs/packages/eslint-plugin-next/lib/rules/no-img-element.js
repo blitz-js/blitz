@@ -21,7 +21,7 @@ module.exports = {
 
         context.report({
           node,
-          message: `Do not use <img>. Use <Image> from 'blitz' instead. See https://nextjs.org/docs/messages/no-img-element.`,
+          message: `Do not use <img>. Use Image from 'blitz' instead. See https://nextjs.org/docs/messages/no-img-element.`,
         })
       },
     }

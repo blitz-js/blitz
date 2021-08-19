@@ -9,7 +9,7 @@ import {
   sign as jwtSign,
   verify as jwtVerify,
 } from 'next/dist/compiled/jsonwebtoken'
-import { getCookieParser } from '../next-server/server/api-utils'
+import { getCookieParser } from '../server/api-utils'
 import {
   AuthenticationError,
   AuthorizationError,
@@ -31,7 +31,7 @@ import {
   Ctx,
   Middleware,
   MiddlewareResponse,
-} from '../next-server/lib/utils'
+} from '../shared/lib/utils'
 import {
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_CSRF_TOKEN,
@@ -199,6 +199,7 @@ export const sessionMiddleware = (
   }
 
   blitzSessionMiddleware.config = {
+    name: 'blitzSessionMiddleware',
     cookiePrefix,
   }
   return blitzSessionMiddleware
@@ -229,7 +230,7 @@ function ensureNextApiRequest(
 ): asserts req is NextApiRequest {
   if (!('cookies' in req)) {
     // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    ;(req as NextApiRequest).cookies = getCookieParser(req)()
+    ;(req as NextApiRequest).cookies = getCookieParser(req.headers)()
   }
 }
 // const isMiddlewareApResponse = (
@@ -251,6 +252,8 @@ export async function getSession(
 ): Promise<SessionContext> {
   ensureNextApiRequest(req)
   ensureMiddlewareResponse(res)
+
+  debug('cookiePrefix', process.env.__BLITZ_SESSION_COOKIE_PREFIX)
 
   let response = res as MiddlewareResponse<{ session?: SessionContext }>
 
@@ -321,9 +324,9 @@ export class SessionContextClass implements SessionContext {
     if (!this.userId) throw e
 
     if (!this.$isAuthorized(...args)) {
-      const e = new AuthorizationError()
-      Error.captureStackTrace(e, this.$authorize)
-      throw e
+      const err = new AuthorizationError()
+      Error.captureStackTrace(err, this.$authorize)
+      throw err
     }
   }
 
@@ -517,12 +520,12 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-const setCookie = (res: ServerResponse, cookie: string) => {
+const setCookie = (res: ServerResponse, cookieStr: string) => {
   const getCookieName = (c: string) => c.split('=', 2)[0]
-  const appendCookie = () => append(res, 'Set-Cookie', cookie)
+  const appendCookie = () => append(res, 'Set-Cookie', cookieStr)
 
   const cookiesHeader = res.getHeader('Set-Cookie')
-  const cookieName = getCookieName(cookie)
+  const cookieName = getCookieName(cookieStr)
 
   if (typeof cookiesHeader !== 'string' && !Array.isArray(cookiesHeader)) {
     appendCookie()
@@ -531,15 +534,15 @@ const setCookie = (res: ServerResponse, cookie: string) => {
 
   if (typeof cookiesHeader === 'string') {
     if (cookieName === getCookieName(cookiesHeader)) {
-      res.setHeader('Set-Cookie', cookie)
+      res.setHeader('Set-Cookie', cookieStr)
     } else {
       appendCookie()
     }
   } else {
     for (let i = 0; i < cookiesHeader.length; i++) {
       if (cookieName === getCookieName(cookiesHeader[i])) {
-        cookiesHeader[i] = cookie
-        res.setHeader('Set-Cookie', cookie)
+        cookiesHeader[i] = cookieStr
+        res.setHeader('Set-Cookie', cookieStr)
         return
       }
     }
