@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "4.17.0",
-    "eslint-config-next": "0.40.0-canary.2"
+    "eslint-config-next": "^11.0.0"
   },
   "author": "Brandon Bayer <b@bayer.ws>",
   "repository": {
