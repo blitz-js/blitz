@@ -1,47 +1,47 @@
-import {rimraf} from "@blitzjs/file-pipeline"
-import {copy} from "fs-extra"
-import {resolve} from "path"
-import {saveBlitzVersion} from "./blitz-version"
+// import {rimraf} from "@blitzjs/file-pipeline"
+// import {copy} from "fs-extra"
+// import {resolve} from "path"
+// import {saveBlitzVersion} from "./blitz-version"
 import {normalize, ServerConfig} from "./config"
 import {buildCustomServer, customServerExists, nextBuild} from "./next-utils"
-import {configureStages} from "./stages"
+// import {configureStages} from "./stages"
 
 export async function build(config: ServerConfig) {
   const {
     rootFolder,
-    transformFiles,
-    buildFolder,
+    // transformFiles,
+    // buildFolder,
     nextBin,
-    ignore,
-    include,
+    // ignore,
+    // include,
     watch,
-    isTypeScript,
-    writeManifestFile,
-    env,
+    // isTypeScript,
+    // writeManifestFile,
+    // env,
   } = await normalize(config)
 
-  const {stages, overrideTriage} = await configureStages({
-    isTypeScript,
-    writeManifestFile,
-    buildFolder,
-    env,
-  })
-
-  const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
-    ignore,
-    include,
-    watch,
-    clean: true, // always clean in build
-    overrideTriage,
-  })
-
-  await saveBlitzVersion(buildFolder)
+  // const {stages, overrideTriage} = await configureStages({
+  //   isTypeScript,
+  //   writeManifestFile,
+  //   buildFolder,
+  //   env,
+  // })
+  //
+  // const {manifest} = await transformFiles(rootFolder, stages, buildFolder, {
+  //   ignore,
+  //   include,
+  //   watch,
+  //   clean: true, // always clean in build
+  //   overrideTriage,
+  // })
+  //
+  // await saveBlitzVersion(buildFolder)
   if (customServerExists()) await buildCustomServer({watch})
-  await nextBuild(nextBin, buildFolder, manifest, config)
+  await nextBuild(nextBin, rootFolder, {} as any, config)
 
-  const rootNextFolder = resolve(rootFolder, ".next")
-  const buildNextFolder = resolve(buildFolder, ".next")
+  // const rootNextFolder = resolve(rootFolder, ".next")
+  // const buildNextFolder = resolve(buildFolder, ".next")
 
-  await rimraf(rootNextFolder)
-  await copy(buildNextFolder, rootNextFolder)
+  // await rimraf(rootNextFolder)
+  // await copy(buildNextFolder, rootNextFolder)
 }
