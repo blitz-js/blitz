@@ -47,7 +47,7 @@ describe('tsconfig.json verifier', () => {
           \\"jsx\\": \\"preserve\\"
         },
         \\"include\\": [
-          \\"next-env.d.ts\\",
+          \\"blitz-env.d.ts\\",
           \\"**/*.ts\\",
           \\"**/*.tsx\\"
         ],
@@ -91,7 +91,7 @@ describe('tsconfig.json verifier', () => {
           \\"jsx\\": \\"preserve\\"
         },
         \\"include\\": [
-          \\"next-env.d.ts\\",
+          \\"blitz-env.d.ts\\",
           \\"**/*.ts\\",
           \\"**/*.tsx\\"
         ],
@@ -158,7 +158,7 @@ describe('tsconfig.json verifier', () => {
         // in-object comment 2
         ,
         \\"include\\": [
-          \\"next-env.d.ts\\",
+          \\"blitz-env.d.ts\\",
           \\"**/*.ts\\",
           \\"**/*.tsx\\"
         ],
@@ -204,7 +204,7 @@ describe('tsconfig.json verifier', () => {
           \\"jsx\\": \\"preserve\\"
         },
         \\"include\\": [
-          \\"next-env.d.ts\\",
+          \\"blitz-env.d.ts\\",
           \\"**/*.ts\\",
           \\"**/*.tsx\\"
         ],
@@ -249,7 +249,7 @@ describe('tsconfig.json verifier', () => {
           \\"jsx\\": \\"preserve\\"
         },
         \\"include\\": [
-          \\"next-env.d.ts\\",
+          \\"blitz-env.d.ts\\",
           \\"**/*.ts\\",
           \\"**/*.tsx\\"
         ],
@@ -289,7 +289,7 @@ describe('tsconfig.json verifier', () => {
           "jsx": "preserve"
         },
         "include": [
-          "next-env.d.ts",
+          "blitz-env.d.ts",
           "**/*.ts",
           "**/*.tsx"
         ],

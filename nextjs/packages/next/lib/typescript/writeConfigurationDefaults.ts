@@ -144,11 +144,11 @@ export async function writeConfigurationDefaults(
   }
 
   if (!('include' in rawConfig)) {
-    userTsConfig.include = ['next-env.d.ts', '**/*.ts', '**/*.tsx']
+    userTsConfig.include = ['blitz-env.d.ts', '**/*.ts', '**/*.tsx']
     suggestedActions.push(
       chalk.cyan('include') +
         ' was set to ' +
-        chalk.bold(`['next-env.d.ts', '**/*.ts', '**/*.tsx']`)
+        chalk.bold(`['blitz-env.d.ts', '**/*.ts', '**/*.tsx']`)
     )
   }
 
