@@ -3028,6 +3028,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mwcampbell",
+      "name": "Matt Campbell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/214820?v=4",
+      "profile": "https://github.com/mwcampbell",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
