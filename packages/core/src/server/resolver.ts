@@ -310,7 +310,7 @@ function zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(
   if(parserType === "sync"){
     return (input: Type) : Type => schema.parse(input)
   }else{
-    return async (input: Type) : Promise<Type> => schema.parseAsync(input)
+    return (input: Type) : Promise<Type> => schema.parseAsync(input)
   }
 }
 
