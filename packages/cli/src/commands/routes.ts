@@ -1,7 +1,7 @@
 import {table as Table} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
-import {collectAllRoutes} from "next/dist/build/utils"
+import {collectAllRoutes} from "next/dist/build/routes"
 import {loadConfigProduction} from "next/dist/server/config-shared"
 import {newline} from "next/dist/server/lib/logging"
 

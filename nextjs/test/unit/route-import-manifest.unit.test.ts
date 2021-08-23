@@ -2,47 +2,51 @@ import {
   generateManifest,
   parseDefaultExportName,
   parseParametersFromRoute,
-} from "./route-import-manifest"
+} from 'next/dist/build/routes'
 
-describe("parseParametersFromRoute", () => {
-  it("supports being passed a route with single and multiple  parameters", () => {
-    expect(parseParametersFromRoute("posts/[postId]/[...openedCommentPath]")).toEqual({
+describe('parseParametersFromRoute', () => {
+  it('supports being passed a route with single and multiple  parameters', () => {
+    expect(
+      parseParametersFromRoute('posts/[postId]/[...openedCommentPath]')
+    ).toEqual({
       parameters: [
         {
-          name: "postId",
+          name: 'postId',
           optional: false,
         },
       ],
       multipleParameters: [
         {
-          name: "openedCommentPath",
+          name: 'openedCommentPath',
           optional: false,
         },
       ],
     })
   })
-  it("supports being passed an optional catch-all parameter", () => {
-    expect(parseParametersFromRoute("posts/[[...openedCommentPath]]")).toEqual({
+  it('supports being passed an optional catch-all parameter', () => {
+    expect(parseParametersFromRoute('posts/[[...openedCommentPath]]')).toEqual({
       parameters: [],
       multipleParameters: [
         {
-          name: "openedCommentPath",
+          name: 'openedCommentPath',
           optional: true,
         },
       ],
     })
   })
-  it("supports being passed a mix of single parameters and optional catch-all parameters", () => {
-    expect(parseParametersFromRoute("posts/[postId]/[[...openedCommentPath]]")).toEqual({
+  it('supports being passed a mix of single parameters and optional catch-all parameters', () => {
+    expect(
+      parseParametersFromRoute('posts/[postId]/[[...openedCommentPath]]')
+    ).toEqual({
       parameters: [
         {
-          name: "postId",
+          name: 'postId',
           optional: false,
         },
       ],
       multipleParameters: [
         {
-          name: "openedCommentPath",
+          name: 'openedCommentPath',
           optional: true,
         },
       ],
@@ -50,45 +54,45 @@ describe("parseParametersFromRoute", () => {
   })
 })
 
-test("generateManifest", () => {
+test('generateManifest', () => {
   expect(
     generateManifest({
-      "home/": {
-        name: "Home",
+      'home/': {
+        name: 'Home',
         parameters: [],
         multipleParameters: [],
       },
-      "posts/[postId]/[...openedCommentPath]": {
-        name: "CommentView",
+      'posts/[postId]/[...openedCommentPath]': {
+        name: 'CommentView',
         parameters: [
           {
-            name: "postId",
+            name: 'postId',
             optional: false,
           },
         ],
         multipleParameters: [
           {
-            name: "openedCommentPath",
+            name: 'openedCommentPath',
             optional: false,
           },
         ],
       },
-      "users/[userId]/[[...openedPhotoId]]": {
-        name: "UserProfileView",
+      'users/[userId]/[[...openedPhotoId]]': {
+        name: 'UserProfileView',
         parameters: [
           {
-            name: "userId",
+            name: 'userId',
             optional: false,
           },
         ],
         multipleParameters: [
           {
-            name: "openedPhotoId",
+            name: 'openedPhotoId',
             optional: true,
           },
         ],
       },
-    }),
+    })
   ).toEqual({
     implementation: `
 exports.Routes = {
@@ -99,7 +103,7 @@ exports.Routes = {
       `.trim(),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "blitz"
+import type { RouteUrlObject } from "next/types"
 
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): RouteUrlObject;
@@ -110,11 +114,15 @@ export const Routes: {
   })
 })
 
-test("parseDefaultExportName", () => {
-  expect(parseDefaultExportName("export default MyRoute")).toBe("MyRoute")
-  expect(parseDefaultExportName("export default const MyRoute")).toBe("MyRoute")
-  expect(parseDefaultExportName("export default let MyRoute")).toBe("MyRoute")
-  expect(parseDefaultExportName("export default class MyRoute {}")).toBe("MyRoute")
-  expect(parseDefaultExportName("export default function MyRoute() {}")).toBe("MyRoute")
-  expect(parseDefaultExportName("export const hello = ")).toBe(null)
+test('parseDefaultExportName', () => {
+  expect(parseDefaultExportName('export default MyRoute')).toBe('MyRoute')
+  expect(parseDefaultExportName('export default const MyRoute')).toBe('MyRoute')
+  expect(parseDefaultExportName('export default let MyRoute')).toBe('MyRoute')
+  expect(parseDefaultExportName('export default class MyRoute {}')).toBe(
+    'MyRoute'
+  )
+  expect(parseDefaultExportName('export default function MyRoute() {}')).toBe(
+    'MyRoute'
+  )
+  expect(parseDefaultExportName('export const hello = ')).toBe(null)
 })

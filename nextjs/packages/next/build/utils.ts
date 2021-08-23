@@ -102,57 +102,6 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
   return new RegExp(`(?<!\\.test|\\.spec)\\.(?:${pageExtensions.join('|')})$`)
 }
 
-export type RouteType = 'page' | 'rpc' | 'api'
-export type RouteVerb = 'get' | 'post' | 'patch' | 'head' | 'delete' | '*'
-export type RouteCacheEntry = {
-  filePath: string
-  route: string
-  verb: string
-  type: RouteType
-}
-
-function getVerb(type: RouteType): RouteVerb {
-  switch (type) {
-    case 'api':
-      return '*'
-    case 'rpc':
-      return 'post'
-    default:
-      return 'get'
-  }
-}
-
-export async function collectAllRoutes(
-  directory: string,
-  config: NextConfigComplete
-) {
-  const routeFiles = await collectPages(directory, config.pageExtensions!)
-  const rawRouteMappings = createPagesMapping(
-    routeFiles,
-    config.pageExtensions!
-  )
-  const routes: RouteCacheEntry[] = []
-  for (const [route, filePath] of Object.entries(rawRouteMappings)) {
-    if (['/_app', '/_document', '/_error'].includes(route)) continue
-    let type: RouteType
-    const apiPathRegex = /([\\/]api[\\/])/
-    if (getIsRpcFile(filePath)) {
-      type = 'rpc'
-    } else if (apiPathRegex.test(filePath)) {
-      type = 'api'
-    } else {
-      type = 'page'
-    }
-    routes.push({
-      filePath: filePath.replace('private-next-pages/', ''),
-      route,
-      type,
-      verb: getVerb(type),
-    })
-  }
-  return routes
-}
-
 export function collectPages(
   directory: string,
   pageExtensions: string[]
