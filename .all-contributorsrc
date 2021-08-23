@@ -3010,6 +3010,33 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "hashimwarren",
+      "name": "Hashim Warren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6027587?v=4",
+      "profile": "https://github.com/hashimwarren",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "damilolarandolph",
+      "name": "Damilola Randolph",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43427949?v=4",
+      "profile": "https://damilolarandolph.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mwcampbell",
+      "name": "Matt Campbell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/214820?v=4",
+      "profile": "https://github.com/mwcampbell",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

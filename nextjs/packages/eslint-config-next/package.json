@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "eslint-config-next",
-  "version": "0.40.0-canary.2",
+  "version": "11.1.0",
   "description": "ESLint configuration used by NextJS.",
   "main": "index.js",
   "license": "MIT",
