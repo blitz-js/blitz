@@ -1,8 +1,6 @@
 import {table as Table} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
-import {collectAllRoutes} from "next/dist/build/routes"
-import {loadConfigProduction} from "next/dist/server/config-shared"
 import {newline} from "next/dist/server/lib/logging"
 
 export class Routes extends Command {
@@ -34,6 +32,8 @@ export class Routes extends Command {
     process.env.BLITZ_APP_DIR = config.rootFolder
 
     try {
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
+      const {collectAllRoutes} = await import("next/dist/build/routes")
       const config = loadConfigProduction(process.cwd())
       const routes = await collectAllRoutes(process.cwd(), config)
       newline()

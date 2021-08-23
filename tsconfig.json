@@ -33,7 +33,6 @@
     "packages/config/src/**/*",
     "packages/core/src/**/*",
     "packages/display/src/**/*",
-    "packages/file-pipeline/src/**/*",
     "packages/generator/src/**/*",
     "packages/installer/src/**/*",
     "packages/repl/src/**/*",

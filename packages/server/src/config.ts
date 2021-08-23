@@ -1,9 +1,7 @@
-import {transformFiles} from "@blitzjs/file-pipeline"
 import fs, {promises} from "fs"
 import {join, resolve} from "path"
 import {resolveBinAsync} from "./resolve-bin-async"
 
-type Synchronizer = typeof transformFiles
 export type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
@@ -15,7 +13,6 @@ export type ServerConfig = {
   isTypeScript?: boolean
   watch?: boolean
   // -
-  transformFiles?: Synchronizer
   writeManifestFile?: boolean
   // -
   port?: number
@@ -33,7 +30,6 @@ type NormalizedConfig = ServerConfig & {
   isTypeScript: boolean
   watch: boolean
   // -
-  transformFiles: Synchronizer
   writeManifestFile: boolean
   // -
   ignore: string[]
@@ -116,7 +112,6 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     watch: config.watch ?? env === "dev",
     clean: config.clean,
     // -
-    transformFiles: config.transformFiles ?? transformFiles,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
     // -
     ignore: defaults.ignoredPaths.concat(),
@@ -126,11 +121,9 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
   }
 }
 
-async function getNextBin(rootFolder: string, usePatched: boolean = false): Promise<string> {
-  // do not await for both bin-pkg because just one is used at a time
-  const nextBinPkg = usePatched ? "@blitzjs/server" : "next"
-  const nextBinExec = usePatched ? "next-patched" : undefined
-  const nextBin = await resolveBinAsync(nextBinPkg, nextBinExec)
+async function getNextBin(rootFolder: string, _usePatched: boolean = false): Promise<string> {
+  const nextBinPkg = "next"
+  const nextBin = await resolveBinAsync(nextBinPkg)
   return resolve(rootFolder, nextBin)
 }
 

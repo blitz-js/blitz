@@ -9,7 +9,6 @@ import {newline} from "next/dist/server/lib/logging"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig} from "./config"
-import {Manifest} from "./stages/manifest"
 
 function getSpawnEnv(config: ServerConfig) {
   let spawnEnv: NodeJS.ProcessEnv = process.env
@@ -42,7 +41,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
 export async function nextStartDev(
   nextBin: string,
   cwd: string,
-  _manifest: Manifest,
+  _manifest: any,
   _buildFolder: string,
   config: ServerConfig,
 ) {
@@ -76,7 +75,7 @@ export async function nextStartDev(
 export function nextBuild(
   nextBin: string,
   _buildFolder: string,
-  _manifest: Manifest,
+  _manifest: any,
   config: ServerConfig,
 ) {
   const spawnEnv = getSpawnEnv(config)
