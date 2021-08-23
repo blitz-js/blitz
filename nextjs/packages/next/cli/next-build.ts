@@ -60,6 +60,8 @@ const nextBuild: cliCommand = (argv) => {
     printAndExit(`> No such directory exists as the project root: ${dir}`)
   }
 
+  process.env.BLITZ_APP_DIR = dir
+
   return build(
     dir,
     null,

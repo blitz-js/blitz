@@ -49,6 +49,7 @@ const nextStart: cliCommand = (argv) => {
   }
 
   const dir = resolve(args._[0] || '.')
+  process.env.BLITZ_APP_DIR = dir
   const port =
     args['--port'] || (process.env.PORT && parseInt(process.env.PORT)) || 3000
   const host = args['--hostname'] || '0.0.0.0'

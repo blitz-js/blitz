@@ -1,23 +1,19 @@
-import PropTypes from 'prop-types'
 import React, { Component, ReactElement, ReactNode, useContext } from 'react'
 import flush from 'styled-jsx/server'
 import {
   AMP_RENDER_TARGET,
   OPTIMIZED_FONT_PROVIDERS,
-} from '../next-server/lib/constants'
-import { DocumentContext as DocumentComponentContext } from '../next-server/lib/document-context'
+} from '../shared/lib/constants'
+import { DocumentContext as DocumentComponentContext } from '../shared/lib/document-context'
 import {
   DocumentContext,
   DocumentInitialProps,
   DocumentProps,
-} from '../next-server/lib/utils'
-import {
-  BuildManifest,
-  getPageFiles,
-} from '../next-server/server/get-page-files'
-import { cleanAmpPath } from '../next-server/server/utils'
+} from '../shared/lib/utils'
+import { BuildManifest, getPageFiles } from '../server/get-page-files'
+import { cleanAmpPath } from '../server/utils'
 import { htmlEscapeJsonString } from '../server/htmlescape'
-import Script, { Props as ScriptLoaderProps } from '../client/script'
+import Script, { ScriptProps } from '../client/script'
 
 export { DocumentContext, DocumentInitialProps, DocumentProps }
 
@@ -79,11 +75,12 @@ function getPreNextScripts(context: DocumentProps, props: OriginProps) {
   const { scriptLoader, disableOptimizedLoading } = context
 
   return (scriptLoader.beforeInteractive || []).map(
-    (file: ScriptLoaderProps) => {
+    (file: ScriptProps, index: number) => {
       const { strategy, ...scriptProps } = file
       return (
         <script
           {...scriptProps}
+          key={scriptProps.src || index}
           defer={!disableOptimizedLoading}
           nonce={props.nonce}
           crossOrigin={props.crossOrigin || process.env.__NEXT_CROSS_ORIGIN}
@@ -235,11 +232,6 @@ export class Head extends Component<
     >
 > {
   static contextType = DocumentComponentContext
-
-  static propTypes = {
-    nonce: PropTypes.string,
-    crossOrigin: PropTypes.string,
-  }
 
   context!: React.ContextType<typeof DocumentComponentContext>
 
@@ -410,7 +402,7 @@ export class Head extends Component<
 
   handleDocumentScriptLoaderItems(children: React.ReactNode): ReactNode[] {
     const { scriptLoader } = this.context
-    const scriptLoaderItems: ScriptLoaderProps[] = []
+    const scriptLoaderItems: ScriptProps[] = []
     const filteredChildren: ReactNode[] = []
 
     React.Children.forEach(children, (child: any) => {
@@ -758,11 +750,6 @@ export function Main() {
 
 export class NextScript extends Component<OriginProps> {
   static contextType = DocumentComponentContext
-
-  static propTypes = {
-    nonce: PropTypes.string,
-    crossOrigin: PropTypes.string,
-  }
 
   context!: React.ContextType<typeof DocumentComponentContext>
 

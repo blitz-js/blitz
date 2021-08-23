@@ -26,9 +26,9 @@ function runTests() {
     await waitFor(5000)
 
     await browser.elementByCss('#link-1').click()
-    await waitFor(1000)
+    await waitFor(1500)
     await browser.elementByCss('#link-2').click()
-    await waitFor(1000)
+    await waitFor(1500)
 
     const text = await browser.elementByCss('#page-text').text()
     expect(text).toMatch(/2/)

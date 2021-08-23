@@ -56,9 +56,17 @@ export class Telemetry {
 
   constructor({ distDir }: { distDir: string }) {
     // Read in the constructor so that .env can be loaded before reading
-    const { NEXT_TELEMETRY_DISABLED, NEXT_TELEMETRY_DEBUG } = process.env
-    this.NEXT_TELEMETRY_DISABLED = NEXT_TELEMETRY_DISABLED
-    this.NEXT_TELEMETRY_DEBUG = NEXT_TELEMETRY_DEBUG
+    const {
+      NEXT_TELEMETRY_DISABLED,
+      NEXT_TELEMETRY_DEBUG,
+      BLITZ_TELEMETRY_DISABLED,
+      BLITZ_TELEMETRY_DEBUG,
+    } = process.env
+
+    this.NEXT_TELEMETRY_DISABLED =
+      BLITZ_TELEMETRY_DISABLED || NEXT_TELEMETRY_DISABLED
+    this.NEXT_TELEMETRY_DEBUG = BLITZ_TELEMETRY_DEBUG || NEXT_TELEMETRY_DEBUG
+
     const storageDirectory = getStorageDirectory(distDir)
 
     try {

@@ -92,13 +92,13 @@ describe("Routes command", () => {
         {path: normalize("app/auth/pages/login.ts"), uri: "/login", type: "page", verb: "get"},
         {
           path: normalize("app/products/mutations/updateProduct.ts"),
-          uri: "/api/products/mutations/updateProduct",
+          uri: "/api/rpc/updateProduct",
           type: "rpc",
           verb: "post",
         },
         {
           path: normalize("app/products/queries/getProducts.ts"),
-          uri: "/api/products/queries/getProducts",
+          uri: "/api/rpc/getProducts",
           type: "rpc",
           verb: "post",
         },

@@ -1,12 +1,11 @@
-import {formatWithValidation} from "next/dist/next-server/lib/utils"
+import {getPublicDataStore, useAuthorizeIf, useSession} from "next/data-client"
+import {BlitzProvider} from "next/data-client"
+import {formatWithValidation} from "next/dist/shared/lib/utils"
 import {RedirectError} from "next/stdlib"
+import {AppProps, BlitzPage} from "next/types"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
-import {useAuthorizeIf, useSession} from "./auth/auth-client"
-import {publicDataStore} from "./auth/public-data-store"
-import {BlitzProvider} from "./blitz-provider"
 import {Head} from "./head"
-import {AppProps, BlitzPage} from "./types"
 import {clientDebug} from "./utils"
 
 const customCSS = `
@@ -51,18 +50,22 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
     useAuthorizeIf(Page.authenticate === true)
 
     if (typeof window !== "undefined") {
-      // We read directly from publicDataStore.getData().userId instead of useSession
+      const publicData = getPublicDataStore().getData()
+      // We read directly from publicData.userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
-      if (publicDataStore.getData().userId) {
+      if (publicData.userId) {
         clientDebug("[BlitzInnerRoot] logged in")
-        let {redirectAuthenticatedTo} = Page
+        const redirectAuthenticatedTo =
+          typeof Page.redirectAuthenticatedTo === "function"
+            ? Page.redirectAuthenticatedTo({session: publicData})
+            : Page.redirectAuthenticatedTo
         if (redirectAuthenticatedTo) {
-          if (typeof redirectAuthenticatedTo !== "string") {
-            redirectAuthenticatedTo = formatWithValidation(redirectAuthenticatedTo)
-          }
-
-          clientDebug("[BlitzInnerRoot] redirecting to", redirectAuthenticatedTo)
-          const error = new RedirectError(redirectAuthenticatedTo)
+          const redirectUrl =
+            typeof redirectAuthenticatedTo === "string"
+              ? redirectAuthenticatedTo
+              : formatWithValidation(redirectAuthenticatedTo)
+          clientDebug("[BlitzInnerRoot] redirecting to", redirectUrl)
+          const error = new RedirectError(redirectUrl)
           error.stack = null!
           throw error
         }
@@ -109,9 +112,14 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       document.documentElement.classList.add("blitz-first-render-complete")
     }, [])
 
-    const dehydratedState = props.pageProps.dehydratedState
-      ? SuperJSON.deserialize(props.pageProps.dehydratedState)
-      : undefined
+    let {dehydratedState, _superjson} = props.pageProps
+    if (dehydratedState && _superjson) {
+      const deserializedProps = SuperJSON.deserialize({
+        json: {dehydratedState},
+        meta: _superjson,
+      }) as {dehydratedState: any}
+      dehydratedState = deserializedProps?.dehydratedState
+    }
 
     return (
       <BlitzProvider dehydratedState={dehydratedState}>

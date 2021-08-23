@@ -963,6 +963,7 @@ const runTests = (dev = false) => {
     const browser = await webdriver(appPort, `${basePath}/hello`)
     try {
       await browser.eval('window._clearEventLog()')
+      await waitFor(100)
       await browser.elementByCss('#hash-change').click()
 
       const eventLog = await browser.eval('window._getEventLog()')

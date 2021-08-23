@@ -1,3 +1,4 @@
+import {log} from "@blitzjs/display"
 import {Stage, transform} from "@blitzjs/file-pipeline"
 import {OverrideTriage} from "@blitzjs/file-pipeline/src/helpers/work-optimizer"
 import * as fs from "fs-extra"
@@ -42,8 +43,13 @@ function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
     const key = by(v)
     const first = allKeys.indexOf(key)
     const last = allKeys.lastIndexOf(key)
+
     if (first !== last && first !== index) {
-      return false
+      const {0: firstPath} = arr[first] as any
+      const {0: lastPath} = arr[last] as any
+      throw Error(
+        `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`,
+      )
     }
 
     return true
@@ -149,9 +155,23 @@ export function parseParametersFromRoute(
  * We're not fooled by you, `yarn workspace`!
  */
 function findNodeModulesRoot(src: string) {
-  const nodeModules = join(src, "node_modules")
-  const includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
-  return includesBlitzPackage ? nodeModules : join(nodeModules, "../../../node_modules")
+  let nodeModules = join(src, "node_modules")
+  let includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+  let count = 0
+  while (!includesBlitzPackage) {
+    // Check for node_modules at the next level up
+    nodeModules = join(nodeModules, "../../node_modules")
+    includesBlitzPackage = fs.existsSync(join(nodeModules, "blitz"))
+    count++
+    if (count > 5) {
+      log.warning(
+        "We couldn't determine your actual node_modules location, so defaulting to normal location",
+      )
+      nodeModules = join(src, "node_modules")
+      break
+    }
+  }
+  return nodeModules
 }
 
 export const createStageRouteImportManifest: Stage & {overrideTriage: OverrideTriage} = ({

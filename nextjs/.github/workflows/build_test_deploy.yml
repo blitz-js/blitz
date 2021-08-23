@@ -40,6 +40,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: ./scripts/check-manifests.js
       - run: yarn lint
 
   checkPrecompiled:
@@ -55,7 +56,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: ./check-pre-compiled.sh
+      - run: ./scripts/check-pre-compiled.sh
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testUnit:
@@ -146,7 +147,7 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
 
-      - run: bash ./test-pnp.sh
+      - run: bash ./scripts/test-pnp.sh
         if: ${{needs.build.outputs.docsChange != 'docs only change'}}
 
   testsPass:
@@ -251,9 +252,9 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
 
-      - run: ./publish-release.sh
+      - run: ./scripts/publish-release.sh
 
-  prStats:
+  releaseStats:
     name: Release Stats
     runs-on: ubuntu-latest
     needs: [publishRelease]
@@ -263,7 +264,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - run: ./release-stats.sh
+      - run: ./scripts/release-stats.sh
       - uses: ./.github/actions/next-stats-action
         env:
           PR_STATS_COMMENT_TOKEN: ${{ secrets.PR_STATS_COMMENT_TOKEN }}

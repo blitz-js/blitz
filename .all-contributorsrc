@@ -1519,7 +1519,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/11509865?v=4",
       "profile": "http://taloranderson.com",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2850,7 +2851,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2716058?v=4",
       "profile": "http://anolilab.de",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2961,6 +2963,79 @@
       "profile": "http://zackhobson.com/",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "m5r",
+      "name": "Mokhtar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13026820?v=4",
+      "profile": "https://www.mokhtar.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kenkuan",
+      "name": "Ken Kuan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1924968?v=4",
+      "profile": "https://github.com/kenkuan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "meehawk",
+      "name": "meehawk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/80167324?v=4",
+      "profile": "https://github.com/meehawk",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ravindranrahul",
+      "name": "Rahul Ravindran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10168946?v=4",
+      "profile": "rahulravindran.in",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "s-r-x",
+      "name": "Ilya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41614937?v=4",
+      "profile": "https://github.com/s-r-x",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "hashimwarren",
+      "name": "Hashim Warren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6027587?v=4",
+      "profile": "https://github.com/hashimwarren",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "damilolarandolph",
+      "name": "Damilola Randolph",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43427949?v=4",
+      "profile": "https://damilolarandolph.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mwcampbell",
+      "name": "Matt Campbell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/214820?v=4",
+      "profile": "https://github.com/mwcampbell",
+      "contributions": [
+        "doc"
       ]
     }
   ],

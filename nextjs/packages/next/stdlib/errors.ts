@@ -98,7 +98,7 @@ export class RedirectError extends Error {
   }
 }
 if (process.env.JEST_WORKER_ID === undefined) {
-  SuperJson.registerClass(NotFoundError, {
+  SuperJson.registerClass(RedirectError, {
     identifier: 'BlitzRedirectError',
     allowProps: errorProps,
   })
