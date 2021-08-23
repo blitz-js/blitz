@@ -19,6 +19,7 @@ export const initializeQueryClient = () => {
   return new QueryClient({
     defaultOptions: {
       queries: {
+        ...(isServer && { cacheTime: 0 }),
         suspense: suspenseEnabled,
         retry: (failureCount, error: any) => {
           if (process.env.NODE_ENV !== 'production') return false
