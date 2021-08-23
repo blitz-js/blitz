@@ -122,7 +122,7 @@ describe.skip('create next app', () => {
         fs.existsSync(path.join(cwd, projectName, 'tsconfig.json'))
       ).toBeTruthy()
       expect(
-        fs.existsSync(path.join(cwd, projectName, 'next-env.d.ts'))
+        fs.existsSync(path.join(cwd, projectName, 'blitz-env.d.ts'))
       ).toBeTruthy()
       expect(
         fs.existsSync(path.join(cwd, projectName, '.eslintrc.json'))

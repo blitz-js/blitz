@@ -20,6 +20,6 @@
       "lib/*": ["../../lib/*"]
     }
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "test"],
   "include": ["blitz-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

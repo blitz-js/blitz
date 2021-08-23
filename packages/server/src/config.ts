@@ -1,7 +1,6 @@
 import {transformFiles} from "@blitzjs/file-pipeline"
 import fs, {promises} from "fs"
 import {join, resolve} from "path"
-import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
 import {resolveBinAsync} from "./resolve-bin-async"
 
 type Synchronizer = typeof transformFiles
@@ -101,7 +100,6 @@ const defaults = {
 
 export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
   const rootFolder = resolve(process.cwd(), config.rootFolder)
-  const git = parseChokidarRulesFromGitignore(rootFolder)
 
   const env = config.env || defaults.env
 
@@ -121,8 +119,8 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     transformFiles: config.transformFiles ?? transformFiles,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
     // -
-    ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
-    include: defaults.includePaths.concat(git.includePaths),
+    ignore: defaults.ignoredPaths.concat(),
+    include: defaults.includePaths.concat(),
     // -
     nextBin: await getNextBin(rootFolder, env === "dev"),
   }

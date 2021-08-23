@@ -36,8 +36,8 @@ export async function build(config: ServerConfig) {
   // })
   //
   // await saveBlitzVersion(buildFolder)
-  if (customServerExists()) await buildCustomServer({watch})
   await nextBuild(nextBin, rootFolder, {} as any, config)
+  if (customServerExists()) await buildCustomServer({watch})
 
   // const rootNextFolder = resolve(rootFolder, ".next")
   // const buildNextFolder = resolve(buildFolder, ".next")
