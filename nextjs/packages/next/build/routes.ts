@@ -1,7 +1,7 @@
 import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
-import { collectPages, getIsRpcFile } from './utils'
+import { collectPages, getIsRpcFile, isInternalDevelopment } from './utils'
 import { partition } from 'lodash'
 import { join } from 'path'
 import { existsSync, outputFile } from 'fs-extra'
@@ -79,7 +79,9 @@ export async function saveRouteManifest(
 
   for (let { filePath, route, type } of allRoutes) {
     if (type === 'api' || type === 'rpc') continue
-    const fileContents = await readFile(filePath, { encoding: 'utf-8' })
+    const fileContents = await readFile(join(directory, filePath), {
+      encoding: 'utf-8',
+    })
 
     const defaultExportName = parseDefaultExportName(fileContents)
     if (!defaultExportName) continue
@@ -147,9 +149,13 @@ function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
     if (first !== last && first !== index) {
       const { 0: firstPath } = arr[first] as any
       const { 0: lastPath } = arr[last] as any
-      throw Error(
-        `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`
-      )
+      const message = `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`
+
+      if (isInternalDevelopment) {
+        console.log(message)
+      } else {
+        throw Error(message)
+      }
     }
 
     return true

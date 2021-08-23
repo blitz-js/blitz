@@ -8,6 +8,7 @@ import { join } from 'path'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../shared/lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../shared/lib/utils'
+import { isInternalDevelopment } from '../build/utils'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
@@ -306,9 +307,6 @@ export async function getConfigSrcPath(dir: string | null) {
   } else if (existsSync(jsPath)) {
     return jsPath
   } else if (existsSync(legacyPath)) {
-    const isInternalDevelopment = __dirname.match(
-      /[\\/]packages[\\/]next[\\/]dist[\\/]server/
-    )
     if (isInternalDevelopment || process.env.VERCEL_BUILDER) {
       // We read from next.config.js that Vercel automatically adds
       debug(

@@ -22,9 +22,7 @@ const outdir = join(appDir, "out")
 const blitzConfig = new File(join(appDir, "blitz.config.ts"))
 jest.setTimeout(1000 * 60 * 2)
 
-beforeAll(async () => {
-  rimraf.sync(join(__dirname, "../db.json"))
-})
+const resetDb = () => rimraf.sync(join(__dirname, "../db.json"))
 
 const runTests = (mode: string) => {
   describe("Auth", () => {
@@ -196,6 +194,7 @@ const runTests = (mode: string) => {
 
 describe("dev mode", () => {
   beforeAll(async () => {
+    resetDb()
     appPort = await findPort()
     app = await launchApp(appDir, appPort)
 
@@ -221,6 +220,7 @@ describe("dev mode", () => {
 
 describe("production mode", () => {
   beforeAll(async () => {
+    resetDb()
     await blitzBuild(appDir)
     appPort = await findPort()
     app = await blitzStart(appDir, appPort)
@@ -231,6 +231,7 @@ describe("production mode", () => {
 
 describe("serverless mode", () => {
   beforeAll(async () => {
+    resetDb()
     blitzConfig.replace("// replace me", `target: 'experimental-serverless-trace', `)
     await blitzBuild(appDir)
     appPort = await findPort()

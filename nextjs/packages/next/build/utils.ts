@@ -34,7 +34,6 @@ import { loadComponents } from '../server/load-components'
 import { trace } from '../telemetry/trace'
 import { setHttpAgentOptions } from '../server/config'
 import { NextConfigComplete } from '../server/config-shared'
-import { createPagesMapping } from './entries'
 
 const fileGzipStats: { [k: string]: Promise<number> | undefined } = {}
 const fsStatGzip = (file: string) => {
@@ -51,6 +50,10 @@ const fsStat = (file: string) => {
   if (cached) return cached
   return (fileStats[file] = fileSize(file))
 }
+
+export const isInternalDevelopment = __dirname.match(
+  /[\\/]packages[\\/]next[\\/]dist[\\/]build/
+)
 
 export const topLevelFoldersThatMayContainPages = [
   'pages',
