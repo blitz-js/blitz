@@ -21,7 +21,7 @@ export function loadConfigAtRuntime() {
   return loadConfigProduction(process.env.BLITZ_APP_DIR)
 }
 
-export function loadConfigProduction(pagesDir: string) {
+export function loadConfigProduction(pagesDir: string): NextConfigComplete {
   let userConfigModule
   try {
     // eslint-disable-next-line no-eval -- block webpack from following this module path
@@ -34,7 +34,7 @@ export function loadConfigProduction(pagesDir: string) {
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule
   )
-  return assignDefaultsBase(userConfig)
+  return assignDefaultsBase(userConfig) as any
 }
 
 type NoOptionals<T> = {
