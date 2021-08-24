@@ -31,7 +31,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json"]
+      return ["tsconfig.json", "blitz-env.d.ts"]
     }
     return ["jsconfig.json"]
   }

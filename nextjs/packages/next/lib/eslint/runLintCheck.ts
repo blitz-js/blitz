@@ -162,7 +162,7 @@ async function lint(
       }
     } else {
       Log.warn(
-        'The Next.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/basic-features/eslint#migrating-existing-config'
+        'The Blitz.js plugin was not detected in your ESLint configuration. See https://blitzjs.com/docs/eslint-config'
       )
     }
 

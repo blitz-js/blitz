@@ -1417,12 +1417,13 @@ test('_document top level error shows logbox', async () => {
 })
 
 test('server-side only compilation errors', async () => {
-  const [session, cleanup] = await sandbox()
+  async function run() {
+    const [session, cleanup] = await sandbox()
 
-  const patch = () =>
-    session.patch(
-      'pages/index.js',
-      `
+    const patch = () =>
+      session.patch(
+        'pages/index.js',
+        `
       import myLibrary from 'my-non-existent-library'
       export async function getStaticProps() {
         return {
@@ -1435,33 +1436,23 @@ test('server-side only compilation errors', async () => {
         return <h1>{props.result}</h1>
       }
     `
-    )
+      )
 
-  // This is very flaky, so add a retry
-  try {
     await patch()
-  } catch (error) {
-    try {
-      await patch()
-    } catch (error) {
-      try {
-        await patch()
-      } catch (error) {
-        try {
-          await patch()
-        } catch (error) {
-          try {
-            await patch()
-          } catch (error) {
-            await patch()
-          }
-        }
-      }
-    }
+    expect(await session.hasRedbox(true)).toBe(true)
+    await cleanup()
   }
 
-  expect(await session.hasRedbox(true)).toBe(true)
-  await cleanup()
+  // This is flaky, so add a retry
+  try {
+    await run()
+  } catch {
+    try {
+      await run()
+    } catch {
+      await run()
+    }
+  }
 })
 
 test('empty _app shows logbox', async () => {

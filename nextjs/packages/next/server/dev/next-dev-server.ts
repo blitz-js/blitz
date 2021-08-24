@@ -52,6 +52,7 @@ import {
   getIsPageFile,
   topLevelFoldersThatMayContainPages,
 } from '../../build/utils'
+import { saveRouteManifest } from '../../build/routes'
 
 // Load ReactDevOverlay only when needed
 let ReactDevOverlayImpl: React.FunctionComponent
@@ -225,6 +226,9 @@ export default class DevServer extends Server {
       )
 
       wp.on('aggregated', () => {
+        // Intentially don't await so it finishes in the background
+        saveRouteManifest(this.pagesDir!, this.nextConfig)
+
         const routedPages = []
         const knownFiles = wp.getTimeInfoEntries()
         for (const [filePath, { accuracy }] of knownFiles) {
@@ -298,6 +302,8 @@ export default class DevServer extends Server {
   }
 
   async prepare(): Promise<void> {
+    await saveRouteManifest(this.pagesDir!, this.nextConfig)
+
     await verifyTypeScriptSetup(
       this.dir,
       this.pagesDir!,

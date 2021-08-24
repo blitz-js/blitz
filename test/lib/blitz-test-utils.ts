@@ -35,7 +35,7 @@ export function initBlitzServerScript(
   },
 ) {
   return new Promise((resolve, reject) => {
-    const instance = spawn("node", ["--no-deprecation", scriptPath], {env})
+    const instance = spawn("node", ["--no-deprecation", scriptPath], {env: env as any})
 
     function handleStdout(data: Buffer) {
       const message = data.toString()

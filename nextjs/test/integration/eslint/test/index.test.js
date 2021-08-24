@@ -141,7 +141,7 @@ describe('ESLint', () => {
 
       const output = stdout + stderr
       expect(output).toContain(
-        'The Next.js plugin was not detected in your ESLint configuration'
+        'The Blitz.js plugin was not detected in your ESLint configuration'
       )
     })
   })

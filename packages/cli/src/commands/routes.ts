@@ -32,14 +32,16 @@ export class Routes extends Command {
     process.env.BLITZ_APP_DIR = config.rootFolder
 
     try {
-      const {routes} = await import("@blitzjs/server")
-      const routesResult = await routes(config)
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
+      const {collectAllRoutes} = await import("next/dist/build/routes")
+      const config = loadConfigProduction(process.cwd())
+      const routes = await collectAllRoutes(process.cwd(), config)
       newline()
       const table = new Table({
         columns: [
           {name: "HTTP", alignment: "center"},
           {name: "Source File", alignment: "left"},
-          {name: "URI", alignment: "left"},
+          {name: "Route Path", alignment: "left"},
           {name: "Type", alignment: "center"},
         ],
         sort: (q, r) => {
@@ -60,12 +62,12 @@ export class Routes extends Command {
           return 0
         },
       })
-      routesResult.forEach(({path, uri, verb, type}: any) => {
+      routes.forEach(({filePath, route, verb, type}: any) => {
         table.addRow(
           {
             [table.table.columns[0].name]: verb.toUpperCase(),
-            [table.table.columns[1].name]: path,
-            [table.table.columns[2].name]: uri,
+            [table.table.columns[1].name]: filePath,
+            [table.table.columns[2].name]: route,
             [table.table.columns[3].name]: type.toUpperCase(),
           },
           {color: this.getColor(type)},

@@ -1,10 +1,7 @@
-import {transformFiles} from "@blitzjs/file-pipeline"
 import fs, {promises} from "fs"
 import {join, resolve} from "path"
-import {parseChokidarRulesFromGitignore} from "./parse-chokidar-rules-from-gitignore"
 import {resolveBinAsync} from "./resolve-bin-async"
 
-type Synchronizer = typeof transformFiles
 export type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
@@ -16,7 +13,6 @@ export type ServerConfig = {
   isTypeScript?: boolean
   watch?: boolean
   // -
-  transformFiles?: Synchronizer
   writeManifestFile?: boolean
   // -
   port?: number
@@ -34,7 +30,6 @@ type NormalizedConfig = ServerConfig & {
   isTypeScript: boolean
   watch: boolean
   // -
-  transformFiles: Synchronizer
   writeManifestFile: boolean
   // -
   ignore: string[]
@@ -101,7 +96,6 @@ const defaults = {
 
 export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
   const rootFolder = resolve(process.cwd(), config.rootFolder)
-  const git = parseChokidarRulesFromGitignore(rootFolder)
 
   const env = config.env || defaults.env
 
@@ -118,21 +112,18 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     watch: config.watch ?? env === "dev",
     clean: config.clean,
     // -
-    transformFiles: config.transformFiles ?? transformFiles,
     writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
     // -
-    ignore: defaults.ignoredPaths.concat(git.ignoredPaths),
-    include: defaults.includePaths.concat(git.includePaths),
+    ignore: defaults.ignoredPaths.concat(),
+    include: defaults.includePaths.concat(),
     // -
     nextBin: await getNextBin(rootFolder, env === "dev"),
   }
 }
 
-async function getNextBin(rootFolder: string, usePatched: boolean = false): Promise<string> {
-  // do not await for both bin-pkg because just one is used at a time
-  const nextBinPkg = usePatched ? "@blitzjs/server" : "next"
-  const nextBinExec = usePatched ? "next-patched" : undefined
-  const nextBin = await resolveBinAsync(nextBinPkg, nextBinExec)
+async function getNextBin(rootFolder: string, _usePatched: boolean = false): Promise<string> {
+  const nextBinPkg = "next"
+  const nextBin = await resolveBinAsync(nextBinPkg)
   return resolve(rootFolder, nextBin)
 }
 
