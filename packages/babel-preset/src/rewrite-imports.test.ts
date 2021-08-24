@@ -16,14 +16,14 @@ pluginTester({
     {
       code: `import {Image, Link} from 'blitz';`,
       output: `
-        import { Link } from '@blitzjs/core';
+        import { Link } from 'next/link';
         import { Image } from 'next/image';
       `,
     },
     {
       code: `import {Image as BlitzImage, Link} from 'blitz';`,
       output: `
-        import { Link } from '@blitzjs/core';
+        import { Link } from 'next/link';
         import { Image as BlitzImage } from 'next/image';
       `,
     },
