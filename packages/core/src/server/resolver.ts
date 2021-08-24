@@ -1,6 +1,6 @@
 import {AuthenticatedSessionContext, Ctx, SessionContext, SessionContextBase} from "next/types"
 import {Await, EnsurePromise} from "next/types/utils"
-import {infer as zInfer, ZodSchema} from "zod"
+import type {input as zInput, output as zOutput, ZodSchema} from "zod"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
@@ -292,8 +292,10 @@ const authorize: ResolverAuthorize = (...args) => {
 
 export const resolver = {
   pipe,
-  zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
-    return (input: Type): Type => schema.parse(input)
+  zod<Schema extends ZodSchema<any, any>, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+    schema: Schema,
+  ) {
+    return (input: InputType): OutputType => schema.parse(input)
   },
   authorize,
 }
