@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@blitzjs/config": "0.40.0-canary.4",
-    "chokidar": "3.5.1",
-    "globby": "11.0.2",
+    "chokidar": "3.5.2",
+    "globby": "12.0.1",
     "pkg-dir": "^5.0.0",
     "progress": "^2.0.3"
   },

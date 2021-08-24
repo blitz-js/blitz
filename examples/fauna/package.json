@@ -29,27 +29,27 @@
   },
   "dependencies": {
     "blitz": "0.40.0-canary.4",
-    "final-form": "4.20.1",
-    "graphql": "15.5.0",
-    "graphql-request": "3.4.0",
+    "final-form": "4.20.2",
+    "graphql": "15.5.1",
+    "graphql-request": "3.5.0",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-final-form": "6.5.2"
+    "react-final-form": "6.5.3"
   },
   "devDependencies": {
-    "@testing-library/react": "11.2.5",
-    "@testing-library/react-hooks": "^4.0.1",
-    "@types/react": "17.0.2",
-    "@types/secure-password": "3.1.0",
-    "eslint": "7.21.0",
+    "@testing-library/react": "12.0.0",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@types/react": "17.0.15",
+    "@types/secure-password": "3.1.1",
+    "eslint": "7.32.0",
     "eslint-config-react-app": "~6.0.0",
-    "eslint-plugin-flowtype": "~5.2.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-flowtype": "~5.9.0",
+    "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "5.1.2",
-    "start-server-and-test": "1.11.7"
+    "husky": "7.0.1",
+    "start-server-and-test": "1.13.1"
   },
   "private": true
 }

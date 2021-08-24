@@ -16,7 +16,7 @@
     "blitzjs"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "4.17.0",
+    "@typescript-eslint/eslint-plugin": "4.29.3",
     "eslint-config-next": "^11.0.0"
   },
   "author": "Brandon Bayer <b@bayer.ws>",

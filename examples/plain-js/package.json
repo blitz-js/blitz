@@ -39,17 +39,17 @@
     "react-dom": "0.0.0-experimental-6a589ad71"
   },
   "devDependencies": {
-    "eslint": "7.21.0",
+    "eslint": "7.32.0",
     "eslint-config-react-app": "~6.0.0",
-    "eslint-plugin-flowtype": "~5.2.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-flowtype": "~5.9.0",
+    "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "5.1.2",
-    "lint-staged": "10.5.4",
-    "prettier": "2.2.1",
-    "pretty-quick": "3.1.0"
+    "husky": "7.0.1",
+    "lint-staged": "11.1.2",
+    "prettier": "2.3.2",
+    "pretty-quick": "3.1.1"
   },
   "private": true
 }
