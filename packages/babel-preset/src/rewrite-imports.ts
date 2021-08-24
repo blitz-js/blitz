@@ -8,6 +8,7 @@ import { BabelType } from 'babel-plugin-tester';
 const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
+  Link: 'next/link',
   Image: 'next/image',
   Script: 'next/script',
 

@@ -13,8 +13,12 @@ export * from "@blitzjs/core/server"
  */
 export {default as Image} from "next/image"
 export type {ImageProps, ImageLoader, ImageLoaderProps} from "next/image"
+
+export * from "next/link"
+
 export {Script} from "next/script"
 export type {Props as ScriptProps} from "next/script"
+
 export * from "next/stdlib"
 export * from "next/stdlib-server"
 export * from "next/data-client"
