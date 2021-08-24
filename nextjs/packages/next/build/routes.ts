@@ -3,7 +3,6 @@ import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
-import { partition } from 'lodash'
 import { join } from 'path'
 import { existsSync, outputFile } from 'fs-extra'
 import { baseLogger } from '../server/lib/logging'
@@ -27,6 +26,28 @@ function getVerb(type: RouteType): RouteVerb {
     default:
       return 'get'
   }
+}
+
+// from https://github.com/angus-c/just/blob/master/packages/array-partition/index.js
+function partition(arr: any[], predicate: (value: any) => boolean) {
+  if (!Array.isArray(arr)) {
+    throw new Error('expected first argument to be an array')
+  }
+  if (typeof predicate != 'function') {
+    throw new Error('expected second argument to be a function')
+  }
+  var first = []
+  var second = []
+  var length = arr.length
+  for (var i = 0; i < length; i++) {
+    var nextValue = arr[i]
+    if (predicate(nextValue)) {
+      first.push(nextValue)
+    } else {
+      second.push(nextValue)
+    }
+  }
+  return [first, second]
 }
 
 const apiPathRegex = /([\\/]api[\\/])/
