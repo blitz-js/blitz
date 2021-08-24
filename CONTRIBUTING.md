@@ -69,3 +69,17 @@ Error: Failed to load parser './parser.js' declared in 'examples/auth/.eslintrc.
     at Module.require (internal/modules/cjs/loader.js:887:19)
 error Command failed with exit code 2.
 ```
+
+##### Failed to compile - LICENSE
+
+This error occurs sometimes when you import code from packages/next/build/utils.ts into some other code like config-shared.ts. Solution is to move the code into another file.
+
+```
+Failed to compile.
+../../../packages/next/dist/compiled/webpack/LICENSE
+Module parse failed: Unexpected token (1:10)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See webpack.js.org/concepts#loaders
+> Copyright JS Foundation and other contributors
+|
+| Permission is hereby granted, free of charge, to any person obtaining
+```

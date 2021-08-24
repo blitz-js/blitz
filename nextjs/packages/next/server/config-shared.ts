@@ -8,7 +8,7 @@ import { join } from 'path'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../shared/lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../shared/lib/utils'
-import { isInternalDevelopment } from '../build/utils'
+import { isInternalDevelopment } from './utils'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'

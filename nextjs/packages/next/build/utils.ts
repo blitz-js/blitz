@@ -51,10 +51,6 @@ const fsStat = (file: string) => {
   return (fileStats[file] = fileSize(file))
 }
 
-export const isInternalDevelopment = __dirname.match(
-  /[\\/]packages[\\/]next[\\/]dist[\\/]build/
-)
-
 export const topLevelFoldersThatMayContainPages = [
   'pages',
   'src',

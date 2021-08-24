@@ -1,7 +1,8 @@
 import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
-import { collectPages, getIsRpcFile, isInternalDevelopment } from './utils'
+import { collectPages, getIsRpcFile } from './utils'
+import { isInternalDevelopment } from '../server/utils'
 import { partition } from 'lodash'
 import { join } from 'path'
 import { existsSync, outputFile } from 'fs-extra'
@@ -193,6 +194,8 @@ export function generateManifest(
     }
   )
 
+  const declarationEnding = declarationLines.length > 0 ? ';' : ''
+
   return {
     implementation:
       'exports.Routes = {\n' +
@@ -203,7 +206,7 @@ import type { ParsedUrlQueryInput } from "querystring"
 import type { RouteUrlObject } from "next/types"
 
 export const Routes: {
-${declarationLines.map((line) => '  ' + line).join(';\n')};
+${declarationLines.map((line) => '  ' + line).join(';\n') + declarationEnding}
 }`.trim(),
   }
 }

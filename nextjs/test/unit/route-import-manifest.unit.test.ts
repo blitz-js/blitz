@@ -54,6 +54,24 @@ describe('parseParametersFromRoute', () => {
   })
 })
 
+test('generateManifest empty', () => {
+  expect(generateManifest({})).toEqual({
+    implementation: `
+exports.Routes = {
+
+}
+      `.trim(),
+    declaration: `
+import type { ParsedUrlQueryInput } from "querystring"
+import type { RouteUrlObject } from "next/types"
+
+export const Routes: {
+
+}
+      `.trim(),
+  })
+})
+
 test('generateManifest', () => {
   expect(
     generateManifest({
