@@ -4,9 +4,12 @@ import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
 import { join } from 'path'
-import { existsSync, outputFile } from 'fs-extra'
-import { baseLogger } from '../server/lib/logging'
+// import { existsSync, outputFile } from 'fs-extra'
+import { outputFile } from 'fs-extra'
+// import { baseLogger } from '../server/lib/logging'
+import resolveFrom from 'resolve-from'
 const readFile = promises.readFile
+const manifestDebug = require('debug')('blitz:manifest')
 
 export type RouteType = 'page' | 'rpc' | 'api'
 export type RouteVerb = 'get' | 'post' | 'patch' | 'head' | 'delete' | '*'
@@ -130,24 +133,33 @@ export async function saveRouteManifest(
 }
 
 function findNodeModulesRoot(src: string) {
-  const log = baseLogger()
-  let nodeModules = join(src, 'node_modules')
-  let includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-  let count = 0
-  while (!includesBlitzPackage) {
-    // Check for node_modules at the next level up
-    nodeModules = join(nodeModules, '../../node_modules')
-    includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-    count++
-    if (count > 5) {
-      log.warn(
-        "We couldn't determine your actual node_modules location, so defaulting to normal location"
-      )
-      nodeModules = join(src, 'node_modules')
-      break
-    }
-  }
-  return nodeModules
+  manifestDebug('src ' + src)
+  const blitzPkgLocation = resolveFrom(src, 'blitz')
+  manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
+  const blitzCorePkgLocation = resolveFrom(blitzPkgLocation, '@blitzjs/core')
+  manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
+  const root = join(blitzCorePkgLocation, '../../')
+  manifestDebug('root ' + root)
+  return root
+
+  // const log = baseLogger()
+  // let nodeModules = join(src, 'node_modules')
+  // let includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
+  // let count = 0
+  // while (!includesBlitzPackage) {
+  //   // Check for node_modules at the next level up
+  //   nodeModules = join(nodeModules, '../../node_modules')
+  //   includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
+  //   count++
+  //   if (count > 5) {
+  //     log.warn(
+  //       "We couldn't determine your actual node_modules location, so defaulting to normal location"
+  //     )
+  //     nodeModules = join(src, 'node_modules')
+  //     break
+  //   }
+  // }
+  // return nodeModules
 }
 
 export function parseDefaultExportName(contents: string): string | null {

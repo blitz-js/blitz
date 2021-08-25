@@ -1,2 +1,5 @@
 save-exact=true
 legacy-peer-deps=true
+
+public-hoist-pattern[]=next
+public-hoist-pattern[]=secure-password
