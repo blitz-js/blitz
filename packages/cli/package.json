@@ -24,6 +24,8 @@
   "dependencies": {
     "@blitzjs/display": "0.40.0-canary.5",
     "@blitzjs/repl": "0.40.0-canary.5",
+    "@blitzjs/generator": "0.40.0-canary.5",
+    "@blitzjs/server": "0.40.0-canary.5",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
