@@ -7,6 +7,7 @@ import { join } from 'path'
 // import { existsSync, outputFile } from 'fs-extra'
 import { outputFile } from 'fs-extra'
 // import { baseLogger } from '../server/lib/logging'
+import findUp from 'next/dist/compiled/find-up'
 import resolveFrom from 'resolve-from'
 const readFile = promises.readFile
 const manifestDebug = require('debug')('blitz:manifest')
@@ -119,7 +120,7 @@ export async function saveRouteManifest(
 
   const { declaration, implementation } = generateManifest(routes)
 
-  const dotBlitz = join(findNodeModulesRoot(directory), '.blitz')
+  const dotBlitz = join(await findNodeModulesRoot(directory), '.blitz')
 
   await outputFile(join(dotBlitz, 'index.js'), implementation, {
     encoding: 'utf-8',
@@ -132,12 +133,26 @@ export async function saveRouteManifest(
   })
 }
 
-function findNodeModulesRoot(src: string) {
+async function findNodeModulesRoot(src: string) {
   manifestDebug('src ' + src)
-  const blitzPkgLocation = resolveFrom(src, 'blitz')
+  const blitzPkgLocation = await findUp('package.json', {
+    cwd: resolveFrom(src, 'blitz'),
+  })
   manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
-  const blitzCorePkgLocation = resolveFrom(blitzPkgLocation, '@blitzjs/core')
+  if (!blitzPkgLocation) {
+    throw new Error(
+      "Internal Blitz Error: unable to find 'blitz' package location"
+    )
+  }
+  const blitzCorePkgLocation = await findUp('package.json', {
+    cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
+  })
   manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
+  if (!blitzCorePkgLocation) {
+    throw new Error(
+      "Internal Blitz Error: unable to find '@blitzjs/core' package location"
+    )
+  }
   const root = join(blitzCorePkgLocation, '../../')
   manifestDebug('root ' + root)
   return root
