@@ -23,8 +23,9 @@
   ],
   "dependencies": {
     "@blitzjs/display": "0.40.0-canary.5",
-    "@blitzjs/repl": "0.40.0-canary.5",
     "@blitzjs/generator": "0.40.0-canary.5",
+    "@blitzjs/installer": "0.40.0-canary.5",
+    "@blitzjs/repl": "0.40.0-canary.5",
     "@blitzjs/server": "0.40.0-canary.5",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
@@ -58,9 +59,6 @@
     "v8-compile-cache": "2.2.0"
   },
   "devDependencies": {
-    "@blitzjs/generator": "0.40.0-canary.5",
-    "@blitzjs/installer": "0.40.0-canary.5",
-    "@blitzjs/server": "0.40.0-canary.5",
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
     "nock": "13.0.6",

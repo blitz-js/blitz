@@ -72,4 +72,5 @@ export type {
   RedirectAuthenticatedTo,
   RedirectAuthenticatedToFnCtx,
   RedirectAuthenticatedToFn,
+  RouteUrlObject,
 } from "next/types"

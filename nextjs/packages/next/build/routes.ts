@@ -224,7 +224,7 @@ export function generateManifest(
       '\n}',
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "next/types"
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
 ${declarationLines.map((line) => '  ' + line).join(';\n') + declarationEnding}
