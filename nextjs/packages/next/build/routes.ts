@@ -4,9 +4,7 @@ import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
 import { join, dirname } from 'path'
-// import { existsSync, outputFile } from 'fs-extra'
 import { outputFile } from 'fs-extra'
-// import { baseLogger } from '../server/lib/logging'
 import findUp from 'next/dist/compiled/find-up'
 import resolveFrom from 'resolve-from'
 const readFile = promises.readFile
@@ -134,6 +132,14 @@ export async function saveRouteManifest(
 }
 
 async function findNodeModulesRoot(src: string) {
+  /*
+   *  Because of our package structure, and because of how things like pnpm link modules,
+   *  we must first find blitz package, and then find @blitzjs/core and then
+   *  the root of @blitzjs/core
+   *
+   *  This is because we import from `.blitz` inside @blitzjs/core.
+   *  If that changes, then this logic here will need to change
+   */
   manifestDebug('src ' + src)
   const blitzPkgLocation = dirname(
     (await findUp('package.json', {
@@ -160,25 +166,6 @@ async function findNodeModulesRoot(src: string) {
   const root = join(blitzCorePkgLocation, '../../')
   manifestDebug('root ' + root)
   return root
-
-  // const log = baseLogger()
-  // let nodeModules = join(src, 'node_modules')
-  // let includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-  // let count = 0
-  // while (!includesBlitzPackage) {
-  //   // Check for node_modules at the next level up
-  //   nodeModules = join(nodeModules, '../../node_modules')
-  //   includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-  //   count++
-  //   if (count > 5) {
-  //     log.warn(
-  //       "We couldn't determine your actual node_modules location, so defaulting to normal location"
-  //     )
-  //     nodeModules = join(src, 'node_modules')
-  //     break
-  //   }
-  // }
-  // return nodeModules
 }
 
 export function parseDefaultExportName(contents: string): string | null {
