@@ -9,6 +9,7 @@ import {newline} from "next/dist/server/lib/logging"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig} from "./config"
+const debug = require("debug")("blitz:utils")
 
 function getSpawnEnv(config: ServerConfig) {
   let spawnEnv: NodeJS.ProcessEnv = process.env
@@ -48,6 +49,9 @@ export async function nextStartDev(
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
   process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
+
+  debug("cwd ", cwd)
+  debug("spawn ", nextBin, spawnCommand)
 
   return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
