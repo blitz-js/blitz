@@ -3,7 +3,7 @@ import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
-import { join } from 'path'
+import { join, dirname } from 'path'
 // import { existsSync, outputFile } from 'fs-extra'
 import { outputFile } from 'fs-extra'
 // import { baseLogger } from '../server/lib/logging'
@@ -135,18 +135,22 @@ export async function saveRouteManifest(
 
 async function findNodeModulesRoot(src: string) {
   manifestDebug('src ' + src)
-  const blitzPkgLocation = await findUp('package.json', {
-    cwd: resolveFrom(src, 'blitz'),
-  })
+  const blitzPkgLocation = dirname(
+    (await findUp('package.json', {
+      cwd: resolveFrom(src, 'blitz'),
+    })) ?? ''
+  )
   manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
   if (!blitzPkgLocation) {
     throw new Error(
       "Internal Blitz Error: unable to find 'blitz' package location"
     )
   }
-  const blitzCorePkgLocation = await findUp('package.json', {
-    cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
-  })
+  const blitzCorePkgLocation = dirname(
+    (await findUp('package.json', {
+      cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
+    })) ?? ''
+  )
   manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
   if (!blitzCorePkgLocation) {
     throw new Error(
