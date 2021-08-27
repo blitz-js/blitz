@@ -28,7 +28,7 @@ const ResetPasswordPage: BlitzPage = () => {
           onSubmit={async (values) => {
             try {
               await resetPasswordMutation(values)
-            } catch (error) {
+            } catch (error: any) {
               if (error.name === "ResetPasswordError") {
                 return {
                   [FORM_ERROR]: error.message,

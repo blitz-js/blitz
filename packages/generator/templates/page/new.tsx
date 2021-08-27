@@ -37,7 +37,7 @@ const New__ModelName__Page: BlitzPage = () => {
                 ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })
                 : Routes.Show__ModelName__Page({ __modelId__: __modelName__.id }),
             )
-          } catch (error) {
+          } catch (error: any) {
             console.error(error)
             return {
               [FORM_ERROR]: error.toString(),
