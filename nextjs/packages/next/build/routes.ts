@@ -3,10 +3,12 @@ import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
-import { join } from 'path'
-import { existsSync, outputFile } from 'fs-extra'
-import { baseLogger } from '../server/lib/logging'
+import { join, dirname } from 'path'
+import { outputFile } from 'fs-extra'
+import findUp from 'next/dist/compiled/find-up'
+import resolveFrom from 'resolve-from'
 const readFile = promises.readFile
+const manifestDebug = require('debug')('blitz:manifest')
 
 export type RouteType = 'page' | 'rpc' | 'api'
 export type RouteVerb = 'get' | 'post' | 'patch' | 'head' | 'delete' | '*'
@@ -116,7 +118,7 @@ export async function saveRouteManifest(
 
   const { declaration, implementation } = generateManifest(routes)
 
-  const dotBlitz = join(findNodeModulesRoot(directory), '.blitz')
+  const dotBlitz = join(await findNodeModulesRoot(directory), '.blitz')
 
   await outputFile(join(dotBlitz, 'index.js'), implementation, {
     encoding: 'utf-8',
@@ -129,25 +131,59 @@ export async function saveRouteManifest(
   })
 }
 
-function findNodeModulesRoot(src: string) {
-  const log = baseLogger()
-  let nodeModules = join(src, 'node_modules')
-  let includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-  let count = 0
-  while (!includesBlitzPackage) {
-    // Check for node_modules at the next level up
-    nodeModules = join(nodeModules, '../../node_modules')
-    includesBlitzPackage = existsSync(join(nodeModules, 'blitz'))
-    count++
-    if (count > 5) {
-      log.warn(
-        "We couldn't determine your actual node_modules location, so defaulting to normal location"
+async function findNodeModulesRoot(src: string) {
+  /*
+   *  Because of our package structure, and because of how things like pnpm link modules,
+   *  we must first find blitz package, and then find @blitzjs/core and then
+   *  the root of @blitzjs/core
+   *
+   *  This is because we import from `.blitz` inside @blitzjs/core.
+   *  If that changes, then this logic here will need to change
+   */
+  manifestDebug('src ' + src)
+  let root: string
+  if (process.env.NEXT_PNPM_TEST) {
+    const nextPkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(src, 'next'),
+      })) ?? ''
+    )
+    manifestDebug('nextPkgLocation ' + nextPkgLocation)
+    if (!nextPkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find 'next' package location"
       )
-      nodeModules = join(src, 'node_modules')
-      break
     }
+    root = join(nextPkgLocation, '../')
+  } else if (isInternalDevelopment) {
+    root = join(src, 'node_modules')
+  } else {
+    const blitzPkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(src, 'blitz'),
+      })) ?? ''
+    )
+    manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
+    if (!blitzPkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find 'blitz' package location"
+      )
+    }
+    const blitzCorePkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
+      })) ?? ''
+    )
+    manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
+    if (!blitzCorePkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find '@blitzjs/core' package location"
+      )
+    }
+    root = join(blitzCorePkgLocation, '../../')
   }
-  return nodeModules
+  manifestDebug('root ' + root)
+  return root
 }
 
 export function parseDefaultExportName(contents: string): string | null {
@@ -217,6 +253,8 @@ export function generateManifest(
 
   const declarationEnding = declarationLines.length > 0 ? ';' : ''
 
+  const moduleName = process.env.NEXT_PNPM_TEST ? 'next/types' : 'blitz'
+
   return {
     implementation:
       'exports.Routes = {\n' +
@@ -224,7 +262,7 @@ export function generateManifest(
       '\n}',
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "next/types"
+import type { RouteUrlObject } from "${moduleName}"
 
 export const Routes: {
 ${declarationLines.map((line) => '  ' + line).join(';\n') + declarationEnding}
