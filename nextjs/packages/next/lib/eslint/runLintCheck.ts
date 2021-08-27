@@ -90,7 +90,7 @@ async function lint(
         `ESLint must be installed${
           lintDuringBuild ? ' in order to run during builds:' : ':'
         } ${chalk.bold.cyan(
-          isYarn(baseDir)
+          (await isYarn(baseDir))
             ? 'yarn add --dev eslint'
             : 'npm install --save-dev eslint'
         )}`

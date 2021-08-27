@@ -22,7 +22,7 @@ function Content() {
           onClick={async () => {
             try {
               await logoutMutation()
-            } catch (error) {
+            } catch (error: any) {
               setError(error.toString())
             }
           }}

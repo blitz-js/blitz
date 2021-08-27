@@ -48,7 +48,7 @@ export function useIntersection<T extends Element>({
     if (!hasIntersectionObserver) {
       if (!visible) {
         const idleCallback = requestIdleCallback(() => setVisible(true))
-        return () => cancelIdleCallback(idleCallback)
+        return () => cancelIdleCallback(idleCallback as any)
       }
     }
   }, [visible])
