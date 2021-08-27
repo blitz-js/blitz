@@ -290,12 +290,32 @@ const authorize: ResolverAuthorize = (...args) => {
   }
 }
 
+export type ParserType = "sync" | "async"
+
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: "sync",
+): (input: InputType) => OutputType
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: "async",
+): (input: InputType) => Promise<OutputType>
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+): (input: InputType) => Promise<OutputType>
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: ParserType = "async",
+) {
+  if (parserType === "sync") {
+    return (input: InputType): OutputType => schema.parse(input)
+  } else {
+    return (input: InputType): Promise<OutputType> => schema.parseAsync(input)
+  }
+}
+
 export const resolver = {
   pipe,
-  zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
-    schema: Schema,
-  ) {
-    return (input: InputType): OutputType => schema.parse(input)
-  },
+  zod,
   authorize,
 }

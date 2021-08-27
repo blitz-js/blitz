@@ -1,6 +1,5 @@
 export * from "./types"
 export * from "./router"
-export * from "./link"
 export * from "./error"
 export * from "./error-boundary"
 export {withBlitzAppRoot} from "./blitz-app-root"
