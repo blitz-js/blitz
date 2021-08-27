@@ -155,6 +155,8 @@ async function findNodeModulesRoot(src: string) {
       )
     }
     root = join(nextPkgLocation, '../')
+  } else if (isInternalDevelopment) {
+    root = join(src, 'node_modules')
   } else {
     const blitzPkgLocation = dirname(
       (await findUp('package.json', {
