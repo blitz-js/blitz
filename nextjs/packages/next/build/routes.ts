@@ -141,29 +141,45 @@ async function findNodeModulesRoot(src: string) {
    *  If that changes, then this logic here will need to change
    */
   manifestDebug('src ' + src)
-  const blitzPkgLocation = dirname(
-    (await findUp('package.json', {
-      cwd: resolveFrom(src, 'blitz'),
-    })) ?? ''
-  )
-  manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
-  if (!blitzPkgLocation) {
-    throw new Error(
-      "Internal Blitz Error: unable to find 'blitz' package location"
+  let root: string
+  if (process.env.NEXT_PNPM_TEST) {
+    const nextPkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(src, 'next'),
+      })) ?? ''
     )
-  }
-  const blitzCorePkgLocation = dirname(
-    (await findUp('package.json', {
-      cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
-    })) ?? ''
-  )
-  manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
-  if (!blitzCorePkgLocation) {
-    throw new Error(
-      "Internal Blitz Error: unable to find '@blitzjs/core' package location"
+    manifestDebug('nextPkgLocation ' + nextPkgLocation)
+    if (!nextPkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find 'next' package location"
+      )
+    }
+    root = join(nextPkgLocation, '../')
+  } else {
+    const blitzPkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(src, 'blitz'),
+      })) ?? ''
     )
+    manifestDebug('blitzPkgLocation ' + blitzPkgLocation)
+    if (!blitzPkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find 'blitz' package location"
+      )
+    }
+    const blitzCorePkgLocation = dirname(
+      (await findUp('package.json', {
+        cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
+      })) ?? ''
+    )
+    manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
+    if (!blitzCorePkgLocation) {
+      throw new Error(
+        "Internal Blitz Error: unable to find '@blitzjs/core' package location"
+      )
+    }
+    root = join(blitzCorePkgLocation, '../../')
   }
-  const root = join(blitzCorePkgLocation, '../../')
   manifestDebug('root ' + root)
   return root
 }
@@ -235,6 +251,8 @@ export function generateManifest(
 
   const declarationEnding = declarationLines.length > 0 ? ';' : ''
 
+  const moduleName = process.env.NEXT_PNPM_TEST ? 'next/types' : 'blitz'
+
   return {
     implementation:
       'exports.Routes = {\n' +
@@ -242,7 +260,7 @@ export function generateManifest(
       '\n}',
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "blitz"
+import type { RouteUrlObject } from "${moduleName}"
 
 export const Routes: {
 ${declarationLines.map((line) => '  ' + line).join(';\n') + declarationEnding}
