@@ -15,27 +15,11 @@ export type Options = {
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
 
-type RequestIdleCallbackHandle = any
-type RequestIdleCallbackOptions = {
-  timeout: number
-}
-type RequestIdleCallbackDeadline = {
-  readonly didTimeout: boolean
-  timeRemaining: () => number
-}
-
 declare global {
   namespace NodeJS {
     interface Global {
       _blitz_prismaClient: any
     }
-  }
-  interface Window {
-    requestIdleCallback: (
-      callback: (deadline: RequestIdleCallbackDeadline) => void,
-      opts?: RequestIdleCallbackOptions,
-    ) => RequestIdleCallbackHandle
-    cancelIdleCallback: (handle: RequestIdleCallbackHandle) => void
   }
 }
 

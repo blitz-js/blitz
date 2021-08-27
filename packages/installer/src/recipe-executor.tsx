@@ -35,7 +35,7 @@ export class RecipeExecutor<Options extends RecipeMeta> {
       await waitUntilExit()
       log.info(`\n🎉 The ${this.options.name} recipe has been installed!\n`)
     } catch (e) {
-      log.error(e)
+      log.error(e as any)
       return
     }
   }

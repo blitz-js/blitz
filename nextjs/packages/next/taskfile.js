@@ -999,7 +999,7 @@ export async function release(task) {
 // notification helper
 function notify(msg) {
   return notifier.notify({
-    title: '▲ Next',
+    title: '▲ Blitz',
     message: msg,
     icon: false,
   })
