@@ -30,11 +30,11 @@ pluginTester({
     {
       code: `import {Document, Html, DocumentHead, Main, BlitzScript} from "blitz";`,
       output: `
-        import { BlitzScript } from '@blitzjs/core/document';
-        import { Main } from '@blitzjs/core/document';
-        import { DocumentHead } from '@blitzjs/core/document';
-        import { Html } from '@blitzjs/core/document';
-        import { Document } from '@blitzjs/core/document';
+        import { BlitzScript } from 'next/document';
+        import { Main } from 'next/document';
+        import { DocumentHead } from 'next/document';
+        import { Html } from 'next/document';
+        import { Document } from 'next/document';
       `,
     },
   ],
