@@ -211,6 +211,22 @@ export abstract class Generator<
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
+    // templatedFile.match
+    const fieldTemplateRegExp = new RegExp(/{?\/\* template: (.*) \*\/}?/)
+    const fieldTemplateString = templatedFile
+      .match(fieldTemplateRegExp)?.[0]
+      .replace(fieldTemplateRegExp, "$1")
+
+    if (fieldTemplateString) {
+      const fieldTemplatePosition = templatedFile.search(fieldTemplateRegExp)
+      templatedFile = [
+        templatedFile.slice(0, fieldTemplatePosition),
+        ...(templateValues.fieldTemplateValues?.map((values: any) =>
+          this.replaceTemplateValues(fieldTemplateString, values),
+        ) || []),
+        templatedFile.slice(fieldTemplatePosition),
+      ].join("\n")
+    }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
