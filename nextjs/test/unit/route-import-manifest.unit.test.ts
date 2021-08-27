@@ -63,7 +63,7 @@ exports.Routes = {
       `.trim(),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "next/types"
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
 
@@ -121,7 +121,7 @@ exports.Routes = {
       `.trim(),
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "next/types"
+import type { RouteUrlObject } from "blitz"
 
 export const Routes: {
   Home(query?: ParsedUrlQueryInput): RouteUrlObject;

@@ -12,6 +12,12 @@ const specialImports: Record<string, string> = {
   Image: 'next/image',
   Script: 'next/script',
 
+  Document: 'next/document',
+  DocumentHead: 'next/document',
+  Html: 'next/document',
+  Main: 'next/document',
+  BlitzScript: 'next/document',
+
   AuthenticationError: 'next/stdlib',
   AuthorizationError: 'next/stdlib',
   CSRFTokenMismatchError: 'next/stdlib',
@@ -58,12 +64,6 @@ const specialImports: Record<string, string> = {
 
   getConfig: '@blitzjs/core/config',
   setConfig: '@blitzjs/core/config',
-
-  Document: '@blitzjs/core/document',
-  DocumentHead: '@blitzjs/core/document',
-  Html: '@blitzjs/core/document',
-  Main: '@blitzjs/core/document',
-  BlitzScript: '@blitzjs/core/document',
 
   resolver: '@blitzjs/core/server',
 };
