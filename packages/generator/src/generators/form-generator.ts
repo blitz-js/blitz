@@ -1,5 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
-import {camelCaseToKebabCase} from "../utils/inflector"
+import {camelCaseToKebabCase, singleCamel, singlePascal} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -10,6 +10,7 @@ export interface FormGeneratorOptions extends GeneratorOptions {
   parentModels?: string
   ParentModel?: string
   ParentModels?: string
+  extraArgs?: string[]
 }
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
@@ -41,6 +42,18 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
       modelNames: this.options.modelNames,
       ModelName: this.options.ModelName,
       ModelNames: this.options.ModelNames,
+      fieldTemplateValues: this.options.extraArgs?.map((arg: string) => {
+        const [valueName, type] = arg.split(":")
+        // Get component from blitz config using type map
+        return {
+          inputComponent: "Component TODO", // get component based on type. TODO: Override argument 3?
+          fieldName: singleCamel(valueName),
+          FieldName: singlePascal(valueName).replace(/(?!^)([A-Z])/g, " $1"),
+          field_name: "f_n TODO", // 
+          Field_name: "F_n TODO", // 
+          Field_Name: "F_N TODO", // 
+        }
+      }),
     }
   }
 
