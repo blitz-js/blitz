@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/core",
   "description": "Blitz.js core functionality",
-  "version": "0.40.0-canary.5",
+  "version": "0.40.0-canary.6",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -29,13 +29,13 @@
     "server"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.40.0-canary.5",
-    "@blitzjs/display": "0.40.0-canary.5",
+    "@blitzjs/config": "0.40.0-canary.6",
+    "@blitzjs/display": "0.40.0-canary.6",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "htmlescape": "^1.1.1",
     "lodash.frompairs": "4.0.1",
-    "next": "0.40.0-canary.5",
+    "next": "0.40.0-canary.6",
     "npm-which": "^3.0.1",
     "react-query": "3.16.0",
     "superjson": "1.7.2"
