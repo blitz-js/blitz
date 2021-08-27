@@ -25,5 +25,14 @@ describe('Configuration', () => {
         /Look, a button!/
       )
     })
+
+    it('should generate correct route manifest', async () => {
+      const { Routes } = require('.blitz')
+      expect(Object.keys(Routes)).toStrictEqual([
+        'Button',
+        'DocsTwoWords',
+        'Index',
+      ])
+    })
   })
 })

@@ -3,7 +3,7 @@ import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
 import { isInternalDevelopment } from '../server/utils'
-import { join, dirname } from 'path'
+import { join, dirname, basename } from 'path'
 import { outputFile } from 'fs-extra'
 import findUp from 'next/dist/compiled/find-up'
 import resolveFrom from 'resolve-from'
@@ -92,6 +92,14 @@ interface RouteManifestEntry {
   name: string
   parameters: Parameter[]
   multipleParameters: Parameter[]
+  mdx?: boolean
+}
+
+const pascalCase = (value: string): string => {
+  const val = value.replace(/[-_\s/.]+(.)?/g, (_match, chr) =>
+    chr ? chr.toUpperCase() : ''
+  )
+  return val.substr(0, 1).toUpperCase() + val.substr(1)
 }
 
 export async function saveRouteManifest(
@@ -103,16 +111,25 @@ export async function saveRouteManifest(
 
   for (let { filePath, route, type } of allRoutes) {
     if (type === 'api' || type === 'rpc') continue
-    const fileContents = await readFile(join(directory, filePath), {
-      encoding: 'utf-8',
-    })
 
-    const defaultExportName = parseDefaultExportName(fileContents)
-    if (!defaultExportName) continue
+    if (/\.mdx$/.test(filePath)) {
+      routes[route] = {
+        ...parseParametersFromRoute(route),
+        name: route === '/' ? 'Index' : pascalCase(route),
+        mdx: true,
+      }
+    } else {
+      const fileContents = await readFile(join(directory, filePath), {
+        encoding: 'utf-8',
+      })
 
-    routes[route] = {
-      ...parseParametersFromRoute(route),
-      name: defaultExportName,
+      const defaultExportName = parseDefaultExportName(fileContents)
+      if (!defaultExportName) continue
+
+      routes[route] = {
+        ...parseParametersFromRoute(route),
+        name: defaultExportName,
+      }
     }
   }
 
