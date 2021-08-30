@@ -119,7 +119,7 @@ __name__
 ├── README.md
 ├── babel.config.js
 ├── blitz.config.js
-├── jest.config.ts
+├── jest.config.js
 ├── package.json
 ├── tsconfig.json
 ├── types.d.ts
