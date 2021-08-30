@@ -37,7 +37,6 @@
     "lodash.frompairs": "4.0.1",
     "next": "0.40.0-canary.7",
     "npm-which": "^3.0.1",
-    "react-query": "3.16.0",
     "superjson": "1.7.2"
   },
   "devDependencies": {
