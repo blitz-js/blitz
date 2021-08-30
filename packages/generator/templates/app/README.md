@@ -147,7 +147,7 @@ These files are:
 
 - `blitz.config.js` is for advanced custom configuration of Blitz. It extends [`next.config.js`](https://nextjs.org/docs/api-reference/next.config.js/introduction).
 
-- `jest.config.ts` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
+- `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
 
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
 
