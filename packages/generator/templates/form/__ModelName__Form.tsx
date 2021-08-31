@@ -6,7 +6,7 @@ export {FORM_ERROR} from "app/core/components/Form"
 export function __ModelName__Form<S extends z.ZodType<any, any>>(props: FormProps<S>) {
   return (
     <Form<S> {...props}>
-      {/* template: <__FieldComponent__ name="__fieldName__" label="__FieldName__" placeholder="__FieldName__" /> */}
+      {/* template: <__FieldComponent__ name="__fieldName__" label="__Field_Name__" placeholder="__Field_Name__" /> */}
     </Form>
   )
 }
