@@ -29,6 +29,10 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {
+    const addSpaceBeforeCapitals = (input: string):string => {
+      return singleCamel(input).replace(/(?!^)([A-Z])/g, " $1")
+    }
+
     return {
       parentModelId: this.getId(this.options.parentModel),
       parentModelParam: this.getParam(this.getId(this.options.parentModel)),
@@ -44,14 +48,14 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
       ModelNames: this.options.ModelNames,
       fieldTemplateValues: this.options.extraArgs?.map((arg: string) => {
         const [valueName, type] = arg.split(":")
-        // Get component from blitz config using type map
+        // Get component from blitz config using type map        
         return {
-          inputComponent: "Component TODO", // get component based on type. TODO: Override argument 3?
-          fieldName: singleCamel(valueName),
-          FieldName: singlePascal(valueName).replace(/(?!^)([A-Z])/g, " $1"),
-          field_name: "f_n TODO", // 
-          Field_name: "F_n TODO", // 
-          Field_Name: "F_N TODO", // 
+          FieldComponent: "Component TODO", // get component based on type. TODO: Override argument 3?
+          fieldName: singleCamel(valueName), // fieldName
+          FieldName: singlePascal(valueName), // FieldName
+          field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
+          Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
+          Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
         }
       }),
     }
