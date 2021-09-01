@@ -48,7 +48,7 @@ export async function shouldLoadWithWebpack5(
     }
   }
 
-  // Use webpack 5 by default in apps that do not have blitz.config.js
+  // Use webpack 5 by default in apps that do not have next.config.js
   if (!path?.length) {
     return {
       enabled: true,

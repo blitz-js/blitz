@@ -1,3 +1,4 @@
+import Observable from 'next/dist/compiled/zen-observable'
 import { BLOCKED_PAGES } from '../shared/lib/constants'
 
 export function isBlockedPage(pathname: string): boolean {
@@ -15,35 +16,23 @@ export function cleanAmpPath(pathname: string): string {
   return pathname
 }
 
-export type Disposable = () => void
-// TODO: Consider just using an actual Observable here
-export type RenderResult = (observer: {
-  next(chunk: string): void
-  error(error: Error): void
-  complete(): void
-}) => Disposable
-
-export function resultFromChunks(chunks: string[]): RenderResult {
-  return ({ next, complete }) => {
-    chunks.forEach(next)
-    complete()
-    return () => {}
-  }
-}
-
-export function resultToChunks(result: RenderResult): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    const chunks: string[] = []
-    result({
-      next: (chunk) => {
-        chunks.push(chunk)
-      },
-      error: (error) => reject(error),
-      complete: () => resolve(chunks),
-    })
-  })
-}
-
 export const isInternalDevelopment = __dirname.match(
   /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
 )
+
+export type RenderResult = Observable<string>
+
+export function mergeResults(results: Array<RenderResult>): RenderResult {
+  // @ts-ignore
+  return Observable.prototype.concat.call(...results)
+}
+
+export async function resultsToString(
+  results: Array<RenderResult>
+): Promise<string> {
+  const chunks: string[] = []
+  await mergeResults(results).forEach((chunk: string) => {
+    chunks.push(chunk)
+  })
+  return chunks.join('')
+}

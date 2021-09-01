@@ -61,7 +61,9 @@ export async function collectAllRoutes(
   const routeFiles = await collectPages(directory, config.pageExtensions!)
   const rawRouteMappings = createPagesMapping(
     routeFiles,
-    config.pageExtensions!
+    config.pageExtensions!,
+    config.webpack5,
+    false
   )
   const routes: RouteCacheEntry[] = []
   for (const [route, filePath] of Object.entries(rawRouteMappings)) {
@@ -237,9 +239,10 @@ function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
   })
 }
 
-export function generateManifest(
-  routes: Record<string, RouteManifestEntry>
-): { implementation: string; declaration: string } {
+export function generateManifest(routes: Record<string, RouteManifestEntry>): {
+  implementation: string
+  declaration: string
+} {
   const routesWithoutDuplicates = dedupeBy(
     Object.entries(routes),
     ([_path, { name }]) => name

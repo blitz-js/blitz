@@ -10,6 +10,7 @@
     "outDir": "lib",
     "jsx": "react",
     "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
     "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],

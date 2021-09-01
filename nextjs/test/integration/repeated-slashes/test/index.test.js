@@ -304,7 +304,7 @@ function runTests({ isDev = false, isExport = false, isPages404 = false }) {
           browser.eval(
             'window.caughtErrors.map(err => typeof err !== "string" ? err.message : err).join(", ")'
           ),
-        new RegExp(escapeRegex(`Invalid href passed to router: ${href}`))
+        new RegExp(escapeRegex(`Invalid href passed to next/router: ${href}`))
       )
     }
   })

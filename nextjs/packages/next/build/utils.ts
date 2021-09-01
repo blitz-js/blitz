@@ -23,7 +23,7 @@ import { getRouteMatcher, getRouteRegex } from '../shared/lib/router/utils'
 import { isDynamicRoute } from '../shared/lib/router/utils/is-dynamic'
 import escapePathDelimiters from '../shared/lib/router/utils/escape-path-delimiters'
 import { findPageFile } from '../server/lib/find-page-file'
-import { GetStaticPaths } from 'next/types'
+import { GetStaticPaths, PageConfig } from 'next/types'
 import { denormalizePagePath } from '../server/normalize-page-path'
 import { BuildManifest } from '../server/get-page-files'
 import { removePathTrailingSlash } from '../client/normalize-trailing-slash'
@@ -878,6 +878,8 @@ export async function isPageStatic(
   encodedPrerenderRoutes?: string[]
   prerenderFallback?: boolean | 'blocking'
   isNextImageImported?: boolean
+  traceIncludes?: string[]
+  traceExcludes?: string[]
 }> {
   const isPageStaticSpan = trace('is-page-static-utils', parentId)
   return isPageStaticSpan.traceAsyncFn(async () => {
@@ -972,7 +974,7 @@ export async function isPageStatic(
       }
 
       const isNextImageImported = (global as any).__NEXT_IMAGE_IMPORTED
-      const config = mod.config || {}
+      const config: PageConfig = mod.config || {}
       return {
         isStatic: !hasStaticProps && !hasGetInitialProps && !hasServerProps,
         isHybridAmp: config.amp === 'hybrid',
@@ -983,6 +985,8 @@ export async function isPageStatic(
         hasStaticProps,
         hasServerProps,
         isNextImageImported,
+        traceIncludes: config.unstable_includeFiles || [],
+        traceExcludes: config.unstable_excludeFiles || [],
       }
     } catch (err) {
       if (err.code === 'MODULE_NOT_FOUND') return {}

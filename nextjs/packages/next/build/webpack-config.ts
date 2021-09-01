@@ -19,7 +19,7 @@ import { getTypeScriptConfiguration } from '../lib/typescript/getTypeScriptConfi
 import {
   CLIENT_STATIC_FILES_RUNTIME_AMP,
   CLIENT_STATIC_FILES_RUNTIME_MAIN,
-  CLIENT_STATIC_FILES_RUNTIME_POLYFILLS,
+  CLIENT_STATIC_FILES_RUNTIME_POLYFILLS_SYMBOL,
   CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH,
   CLIENT_STATIC_FILES_RUNTIME_WEBPACK,
   REACT_LOADABLE_MANIFEST,
@@ -38,6 +38,7 @@ import BuildStatsPlugin from './webpack/plugins/build-stats-plugin'
 import ChunkNamesPlugin from './webpack/plugins/chunk-names-plugin'
 import { JsConfigPathsPlugin } from './webpack/plugins/jsconfig-paths-plugin'
 import { DropClientPage } from './webpack/plugins/next-drop-client-page-plugin'
+import { TraceEntryPointsPlugin } from './webpack/plugins/next-trace-entrypoints-plugin'
 import NextJsSsrImportPlugin from './webpack/plugins/nextjs-ssr-import'
 import NextJsSSRModuleCachePlugin from './webpack/plugins/nextjs-ssr-module-cache'
 import PagesManifestPlugin from './webpack/plugins/pages-manifest-plugin'
@@ -52,6 +53,8 @@ import WebpackConformancePlugin, {
 } from './webpack/plugins/webpack-conformance-plugin'
 import { WellKnownErrorsPlugin } from './webpack/plugins/wellknown-errors-plugin'
 import { regexLikeCss } from './webpack/config/blocks/css'
+import { CopyFilePlugin } from './webpack/plugins/copy-file-plugin'
+import type { Span } from '../telemetry/trace'
 import { existsSync } from 'fs'
 import { getSessionCookiePrefix } from '../server/lib/utils'
 
@@ -228,6 +231,7 @@ export default async function getBaseWebpackConfig(
     entrypoints,
     rewrites,
     isDevFallback = false,
+    runWebpackSpan,
   }: {
     buildId: string
     config: NextConfigComplete
@@ -239,6 +243,7 @@ export default async function getBaseWebpackConfig(
     entrypoints: WebpackEntrypoints
     rewrites: CustomRoutes['rewrites']
     isDevFallback?: boolean
+    runWebpackSpan: Span
   }
 ): Promise<webpack.Configuration> {
   const hasRewrites =
@@ -376,10 +381,6 @@ export default async function getBaseWebpackConfig(
               )
             )
             .replace(/\\/g, '/'),
-        [CLIENT_STATIC_FILES_RUNTIME_POLYFILLS]: path.join(
-          NEXT_PROJECT_ROOT_DIST_CLIENT,
-          'polyfills.js'
-        ),
       } as ClientEntries)
     : undefined
 
@@ -419,12 +420,43 @@ export default async function getBaseWebpackConfig(
     }
   }
 
+  // tell webpack where to look for _app and _document
+  // using aliases to allow falling back to the default
+  // version when removed or not present
   const clientResolveRewrites = require.resolve(
     '../shared/lib/router/utils/resolve-rewrites'
   )
   const clientResolveRewritesNoop = require.resolve(
     '../shared/lib/router/utils/resolve-rewrites-noop'
   )
+
+  const customAppAliases: { [key: string]: string[] } = {}
+  const customErrorAlias: { [key: string]: string[] } = {}
+  const customDocumentAliases: { [key: string]: string[] } = {}
+
+  if (dev && isWebpack5) {
+    customAppAliases[`${PAGES_DIR_ALIAS}/_app`] = [
+      ...config.pageExtensions.reduce((prev, ext) => {
+        prev.push(path.join(pagesDir, `_app.${ext}`))
+        return prev
+      }, [] as string[]),
+      'next/dist/pages/_app.js',
+    ]
+    customAppAliases[`${PAGES_DIR_ALIAS}/_error`] = [
+      ...config.pageExtensions.reduce((prev, ext) => {
+        prev.push(path.join(pagesDir, `_error.${ext}`))
+        return prev
+      }, [] as string[]),
+      'next/dist/pages/_error.js',
+    ]
+    customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`] = [
+      ...config.pageExtensions.reduce((prev, ext) => {
+        prev.push(path.join(pagesDir, `_document.${ext}`))
+        return prev
+      }, [] as string[]),
+      'next/dist/pages/_document.js',
+    ]
+  }
 
   const resolveConfig = {
     // Disable .mjs for node_modules bundling
@@ -451,6 +483,11 @@ export default async function getBaseWebpackConfig(
     ],
     alias: {
       next: NEXT_PROJECT_ROOT,
+
+      ...customAppAliases,
+      ...customErrorAlias,
+      ...customDocumentAliases,
+
       [PAGES_DIR_ALIAS]: pagesDir,
       [DOT_NEXT_ALIAS]: distDir,
       ...getOptimizedAliases(isServer),
@@ -644,15 +681,6 @@ export default async function getBaseWebpackConfig(
 
   const crossOrigin = config.crossOrigin
 
-  let customAppFile: string | null = await findPageFile(
-    pagesDir,
-    '/_app',
-    config.pageExtensions
-  )
-  if (customAppFile) {
-    customAppFile = path.resolve(path.join(pagesDir, customAppFile))
-  }
-
   const conformanceConfig = Object.assign(
     {
       ReactSyncScriptsConformanceCheck: {
@@ -712,7 +740,8 @@ export default async function getBaseWebpackConfig(
         return `commonjs ${request}`
       }
 
-      const notExternalModules = /^(?:private-next-pages\/|next\/(?:dist\/pages\/|(?:app|document|link|image|constants)$)|string-hash$)/
+      const notExternalModules =
+        /^(?:private-next-pages\/|next\/(?:dist\/pages\/|(?:app|document|link|image|constants|dynamic)$)|string-hash$)/
       if (notExternalModules.test(request)) {
         return
       }
@@ -767,11 +796,12 @@ export default async function getBaseWebpackConfig(
 
     if (isLocal) {
       // Makes sure dist/shared and dist/server are not bundled
-      // we need to process shared/lib/router/router so that
-      // the DefinePlugin can inject process.env values
-      const isNextExternal = /next[/\\]dist[/\\](shared|server)[/\\](?!lib[/\\]router[/\\]router)/.test(
-        res
-      )
+      // we need to process shared `router/router` and `dynamic`,
+      // so that the DefinePlugin can inject process.env values
+      const isNextExternal =
+        /next[/\\]dist[/\\](shared|server)[/\\](?!lib[/\\](router[/\\]router|dynamic))/.test(
+          res
+        )
 
       if (isNextExternal) {
         // Generate Next.js external import
@@ -855,6 +885,7 @@ export default async function getBaseWebpackConfig(
   const emacsLockfilePattern = '**/.#*'
 
   let webpackConfig: webpack.Configuration = {
+    parallelism: Number(process.env.NEXT_WEBPACK_PARALLELISM) || undefined,
     externals: !isServer
       ? // make sure importing "next" is handled gracefully for client
         // bundles in case a user imported types and it wasn't removed
@@ -1188,9 +1219,8 @@ export default async function getBaseWebpackConfig(
             }
           : {}),
         'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
-        'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
-          sessionCookiePrefix
-        ),
+        'process.env.__BLITZ_SESSION_COOKIE_PREFIX':
+          JSON.stringify(sessionCookiePrefix),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),
@@ -1204,6 +1234,9 @@ export default async function getBaseWebpackConfig(
           config.reactStrictMode
         ),
         'process.env.__NEXT_REACT_ROOT': JSON.stringify(hasReactRoot),
+        'process.env.__NEXT_CONCURRENT_FEATURES': JSON.stringify(
+          config.experimental.concurrentFeatures && hasReactRoot
+        ),
         'process.env.__NEXT_OPTIMIZE_FONTS': JSON.stringify(
           config.optimizeFonts && !dev
         ),
@@ -1264,6 +1297,12 @@ export default async function getBaseWebpackConfig(
           pagesDir,
         }),
       !isServer && new DropClientPage(),
+      config.experimental.nftTracing &&
+        !isLikeServerless &&
+        isServer &&
+        !dev &&
+        isWebpack5 &&
+        new TraceEntryPointsPlugin({ appDir: dir }),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how Webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
@@ -1316,16 +1355,15 @@ export default async function getBaseWebpackConfig(
         new BuildStatsPlugin({
           distDir,
         }),
-      new ProfilingPlugin(),
+      new ProfilingPlugin({ runWebpackSpan }),
       config.optimizeFonts &&
         !dev &&
         isServer &&
         (function () {
-          const {
-            FontStylesheetGatheringPlugin,
-          } = require('./webpack/plugins/font-stylesheet-gathering-plugin') as {
-            FontStylesheetGatheringPlugin: typeof import('./webpack/plugins/font-stylesheet-gathering-plugin').FontStylesheetGatheringPlugin
-          }
+          const { FontStylesheetGatheringPlugin } =
+            require('./webpack/plugins/font-stylesheet-gathering-plugin') as {
+              FontStylesheetGatheringPlugin: typeof import('./webpack/plugins/font-stylesheet-gathering-plugin').FontStylesheetGatheringPlugin
+            }
           return new FontStylesheetGatheringPlugin({
             isLikeServerless,
           })
@@ -1359,7 +1397,19 @@ export default async function getBaseWebpackConfig(
           ].filter(Boolean),
         }),
       new WellKnownErrorsPlugin(),
-    ].filter((Boolean as any) as ExcludesFalse),
+      !isServer &&
+        new CopyFilePlugin({
+          filePath: require.resolve('./polyfills/polyfill-nomodule'),
+          cacheKey: process.env.__NEXT_VERSION as string,
+          name: `static/chunks/polyfills${dev ? '' : '-[hash]'}.js`,
+          minimize: false,
+          info: {
+            [CLIENT_STATIC_FILES_RUNTIME_POLYFILLS_SYMBOL]: 1,
+            // This file is already minified
+            minimized: true,
+          },
+        }),
+    ].filter(Boolean as any as ExcludesFalse),
   }
 
   // Support tsconfig and jsconfig baseUrl
@@ -1390,9 +1440,10 @@ export default async function getBaseWebpackConfig(
     // @ts-ignore webpack 5
     webpackConfig.snapshot = {}
     if (process.versions.pnp === '3') {
-      const match = /^(.+?)[\\/]cache[\\/]jest-worker-npm-[^\\/]+\.zip[\\/]node_modules[\\/]/.exec(
-        require.resolve('jest-worker')
-      )
+      const match =
+        /^(.+?)[\\/]cache[\\/]jest-worker-npm-[^\\/]+\.zip[\\/]node_modules[\\/]/.exec(
+          require.resolve('jest-worker')
+        )
       if (match) {
         // @ts-ignore webpack 5
         webpackConfig.snapshot.managedPaths = [
@@ -1409,17 +1460,19 @@ export default async function getBaseWebpackConfig(
       }
     }
     if (process.versions.pnp === '1') {
-      const match = /^(.+?[\\/]v4)[\\/]npm-jest-worker-[^\\/]+-[\da-f]{40}[\\/]node_modules[\\/]/.exec(
-        require.resolve('jest-worker')
-      )
+      const match =
+        /^(.+?[\\/]v4)[\\/]npm-jest-worker-[^\\/]+-[\da-f]{40}[\\/]node_modules[\\/]/.exec(
+          require.resolve('jest-worker')
+        )
       if (match) {
         // @ts-ignore webpack 5
         webpackConfig.snapshot.immutablePaths = [match[1]]
       }
     } else if (process.versions.pnp === '3') {
-      const match = /^(.+?)[\\/]jest-worker-npm-[^\\/]+\.zip[\\/]node_modules[\\/]/.exec(
-        require.resolve('jest-worker')
-      )
+      const match =
+        /^(.+?)[\\/]jest-worker-npm-[^\\/]+\.zip[\\/]node_modules[\\/]/.exec(
+          require.resolve('jest-worker')
+        )
       if (match) {
         // @ts-ignore webpack 5
         webpackConfig.snapshot.immutablePaths = [match[1]]
@@ -1456,6 +1509,8 @@ export default async function getBaseWebpackConfig(
       reactProductionProfiling,
       webpack: !!config.webpack,
       hasRewrites,
+      reactRoot: config.experimental.reactRoot,
+      concurrentFeatures: config.experimental.concurrentFeatures,
     })
 
     const cache: any = {
@@ -1478,15 +1533,12 @@ export default async function getBaseWebpackConfig(
     webpackConfig.cache = cache
 
     if (process.env.NEXT_WEBPACK_LOGGING) {
-      const logInfra = process.env.NEXT_WEBPACK_LOGGING.includes(
-        'infrastructure'
-      )
-      const logProfileClient = process.env.NEXT_WEBPACK_LOGGING.includes(
-        'profile-client'
-      )
-      const logProfileServer = process.env.NEXT_WEBPACK_LOGGING.includes(
-        'profile-server'
-      )
+      const logInfra =
+        process.env.NEXT_WEBPACK_LOGGING.includes('infrastructure')
+      const logProfileClient =
+        process.env.NEXT_WEBPACK_LOGGING.includes('profile-client')
+      const logProfileServer =
+        process.env.NEXT_WEBPACK_LOGGING.includes('profile-server')
       const logDefault = !logInfra && !logProfileClient && !logProfileServer
 
       if (logDefault || logInfra) {
@@ -1529,7 +1581,9 @@ export default async function getBaseWebpackConfig(
 
   webpackConfig = await buildConfiguration(webpackConfig, {
     rootDirectory: dir,
-    customAppFile,
+    customAppFile: new RegExp(
+      path.join(pagesDir, `_app`).replace(/\\/g, '(/|\\\\)')
+    ),
     isDevelopment: dev,
     isServer,
     assetPrefix: config.assetPrefix || '',
@@ -1741,9 +1795,10 @@ export default async function getBaseWebpackConfig(
     }
     if (webpackConfig.optimization?.minimizer?.length) {
       // Disable CSS Minifier
-      webpackConfig.optimization.minimizer = webpackConfig.optimization.minimizer.filter(
-        (e) => (e as any).__next_css_remove !== true
-      )
+      webpackConfig.optimization.minimizer =
+        webpackConfig.optimization.minimizer.filter(
+          (e) => (e as any).__next_css_remove !== true
+        )
     }
   } else if (!config.future.strictPostcssConfiguration) {
     await __overrideCssConfiguration(dir, !dev, webpackConfig)

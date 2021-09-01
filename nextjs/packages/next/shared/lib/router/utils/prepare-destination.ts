@@ -166,7 +166,7 @@ export default function prepareDestination(
     if (Array.isArray(strOrArray)) {
       destQuery[key] = strOrArray.map((value) => compileNonPath(value, params))
     } else {
-      destQuery[key] = compileNonPath(strOrArray! /*blitz*/, params)
+      destQuery[key] = compileNonPath(strOrArray, params)
     }
   }
 

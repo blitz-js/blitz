@@ -13,7 +13,10 @@ type EventTypeCheckCompleted = {
 
 export function eventTypeCheckCompleted(
   event: EventTypeCheckCompleted
-): { eventName: string; payload: EventTypeCheckCompleted } {
+): {
+  eventName: string
+  payload: EventTypeCheckCompleted
+} {
   return {
     eventName: EVENT_TYPE_CHECK_COMPLETED,
     payload: event,
@@ -34,7 +37,10 @@ export type EventLintCheckCompleted = {
 
 export function eventLintCheckCompleted(
   event: EventLintCheckCompleted
-): { eventName: string; payload: EventLintCheckCompleted } {
+): {
+  eventName: string
+  payload: EventLintCheckCompleted
+} {
   return {
     eventName: EVENT_LINT_CHECK_COMPLETED,
     payload: event,

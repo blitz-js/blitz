@@ -21,7 +21,7 @@ describe('getQueryCacheFunctions', () => {
   it('returns a setQueryData function with working options', async () => {
     window.requestIdleCallback = jest.fn((fn) => {
       fn({} as any)
-    })
+    }) as any
 
     const { setQueryData } = getQueryCacheFunctions(buildQueryRpc(isEmpty), 'a')
     expect(setQueryData).toBeTruthy()

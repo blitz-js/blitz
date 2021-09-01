@@ -58,27 +58,33 @@ export async function recursiveFindPages(
   arr: string[] = [],
   rootDir: string = dir
 ): Promise<string[]> {
-  let folders = await promises.readdir(dir)
+  let folders = await promises.readdir(dir, { withFileTypes: true })
 
   if (dir === rootDir) {
     folders = folders.filter((folder) =>
-      topLevelFoldersThatMayContainPages.includes(folder)
+      topLevelFoldersThatMayContainPages.includes(folder.name)
     )
   }
 
   await Promise.all(
-    folders.map(async (part: string) => {
-      const absolutePath = join(dir, part)
-      if (ignore && ignore.test(part)) return
+    folders.map(async (part: Dirent) => {
+      const absolutePath = join(dir, part.name)
+      if (ignore && ignore.test(part.name)) return
 
-      const pathStat = await promises.stat(absolutePath)
+      // readdir does not follow symbolic links
+      // if part is a symbolic link, follow it using stat
+      let isDirectory = part.isDirectory()
+      if (part.isSymbolicLink()) {
+        const stats = await promises.stat(absolutePath)
+        isDirectory = stats.isDirectory()
+      }
 
-      if (pathStat.isDirectory()) {
+      if (isDirectory) {
         await recursiveFindPages(absolutePath, filter, ignore, arr, rootDir)
         return
       }
 
-      if (!filter.test(part)) {
+      if (!filter.test(part.name)) {
         return
       }
 

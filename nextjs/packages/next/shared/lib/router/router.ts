@@ -66,8 +66,8 @@ type HistoryState =
 let detectDomainLocale: typeof import('../i18n/detect-domain-locale').detectDomainLocale
 
 if (process.env.__NEXT_I18N_SUPPORT) {
-  detectDomainLocale = require('../i18n/detect-domain-locale')
-    .detectDomainLocale
+  detectDomainLocale =
+    require('../i18n/detect-domain-locale').detectDomainLocale
 }
 
 const basePath = (process.env.__NEXT_ROUTER_BASEPATH as string) || ''
@@ -345,9 +345,9 @@ export function resolveHref(
         ? finalUrl.href.slice(finalUrl.origin.length)
         : finalUrl.href
 
-    return (resolveAs
-      ? [resolvedHref, interpolatedAs || resolvedHref]
-      : resolvedHref) as string
+    return (
+      resolveAs ? [resolvedHref, interpolatedAs || resolvedHref] : resolvedHref
+    ) as string
   } catch (_) {
     return (resolveAs ? [urlAsString] : urlAsString) as string
   }
@@ -1360,9 +1360,8 @@ export default class Router implements BaseRouter {
     routeProps: RouteProperties
   ): Promise<PrivateRouteInfo> {
     try {
-      const existingRouteInfo: PrivateRouteInfo | undefined = this.components[
-        route
-      ]
+      const existingRouteInfo: PrivateRouteInfo | undefined =
+        this.components[route]
       if (routeProps.shallow && existingRouteInfo && this.route === route) {
         return existingRouteInfo
       }

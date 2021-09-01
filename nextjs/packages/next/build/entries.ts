@@ -18,14 +18,16 @@ type PagesMapping = {
 
 export function createPagesMapping(
   pagePaths: string[],
-  pageExtensions: string[]
+  extensions: string[],
+  isWebpack5: boolean,
+  isDev: boolean
 ): PagesMapping {
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
       let page = `${convertPageFilePathToRoutePath(
         pagePath,
-        pageExtensions
+        extensions
       ).replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
       let pageKey = page === '' ? '/' : page
@@ -47,10 +49,18 @@ export function createPagesMapping(
     {}
   )
 
-  pages['/_app'] = pages['/_app'] || 'next/dist/pages/_app'
-  pages['/_error'] = pages['/_error'] || 'next/dist/pages/_error'
-  pages['/_document'] = pages['/_document'] || 'next/dist/pages/_document'
-
+  // we alias these in development and allow webpack to
+  // allow falling back to the correct source file so
+  // that HMR can work properly when a file is added/removed
+  if (isWebpack5 && isDev) {
+    pages['/_app'] = `${PAGES_DIR_ALIAS}/_app`
+    pages['/_error'] = `${PAGES_DIR_ALIAS}/_error`
+    pages['/_document'] = `${PAGES_DIR_ALIAS}/_document`
+  } else {
+    pages['/_app'] = pages['/_app'] || 'next/dist/pages/_app'
+    pages['/_error'] = pages['/_error'] || 'next/dist/pages/_error'
+    pages['/_document'] = pages['/_document'] || 'next/dist/pages/_document'
+  }
   return pages
 }
 
@@ -99,7 +109,7 @@ export function createEntrypoints(
     buildId,
     assetPrefix: config.assetPrefix,
     generateEtags: config.generateEtags ? 'true' : '',
-    poweredByHeader: config.poweredByHeader,
+    poweredByHeader: config.poweredByHeader ? 'true' : '',
     canonicalBase: config.amp.canonicalBase || '',
     basePath: config.basePath,
     runtimeConfig: hasRuntimeConfig

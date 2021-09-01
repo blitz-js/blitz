@@ -47,9 +47,6 @@ import {
 } from '../dist/server/api-utils'
 
 // @ts-ignore This path is generated at build time and conflicts otherwise
-// export { PaginateArgs, ConnectMiddleware } from './dist/stdlib-server'
-
-// @ts-ignore This path is generated at build time and conflicts otherwise
 import next from '../dist/server/next'
 
 // @ts-ignore This path is generated at build time and conflicts otherwise
@@ -104,6 +101,11 @@ declare module 'react' {
   // <link nonce=""> support
   interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
     nonce?: string
+  }
+
+  // <img loading="lazy"> support
+  interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
+    loading?: 'auto' | 'eager' | 'lazy'
   }
 }
 
@@ -171,6 +173,8 @@ export type PageConfig = {
   env?: Array<string>
   unstable_runtimeJS?: false
   unstable_JsPreload?: false
+  unstable_includeFiles?: string[]
+  unstable_excludeFiles?: string[]
 }
 
 export type PreviewData = string | false | object | undefined

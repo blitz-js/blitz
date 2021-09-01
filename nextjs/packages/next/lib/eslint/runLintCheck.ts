@@ -11,7 +11,7 @@ import { writeDefaultConfig } from './writeDefaultConfig'
 import { hasEslintConfiguration } from './hasEslintConfiguration'
 
 import { ESLINT_PROMPT_VALUES } from '../constants'
-import { existsSync } from '../find-pages-dir'
+import { existsSync, findPagesDir } from '../find-pages-dir'
 import { installDependencies } from '../install-dependencies'
 import { hasNecessaryDependencies } from '../has-necessary-dependencies'
 import { isYarn } from '../is-yarn'
@@ -116,6 +116,7 @@ async function lint(
       baseConfig: {},
       errorOnUnmatchedPattern: false,
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      cache: true,
       ...eslintOptions,
     }
 
@@ -162,7 +163,7 @@ async function lint(
       }
     } else {
       Log.warn(
-        'The Blitz.js plugin was not detected in your ESLint configuration. See https://blitzjs.com/docs/eslint-config'
+        'The Blitz.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/basic-features/eslint#migrating-existing-config'
       )
     }
 

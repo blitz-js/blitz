@@ -383,8 +383,10 @@ export function getUtils({
     let localeDomainRedirect
     const localePathResult = normalizeLocalePath(pathname, i18n.locales)
 
-    routeNoAssetPath = normalizeLocalePath(routeNoAssetPath, i18n.locales)
-      .pathname
+    routeNoAssetPath = normalizeLocalePath(
+      routeNoAssetPath,
+      i18n.locales
+    ).pathname
 
     if (localePathResult.detectedLocale) {
       detectedLocale = localePathResult.detectedLocale

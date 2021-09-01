@@ -9,7 +9,8 @@ import { consumeIterator } from './util'
 import { getIsPageFile, getIsRpcFile } from '../../utils'
 import * as Log from '../../output/log'
 
-const nextDistPath = /(next[\\/]dist[\\/]shared[\\/]lib)|(next[\\/]dist[\\/]client)|(next[\\/]dist[\\/]pages)/
+const nextDistPath =
+  /(next[\\/]dist[\\/]shared[\\/]lib)|(next[\\/]dist[\\/]client)|(next[\\/]dist[\\/]pages)/
 
 /**
  * The properties defined here are the conditions with which subsets of inputs

@@ -18,7 +18,7 @@ export default function NoAnonymousDefaultExport({
     return { visitor: {} }
   }
 
-  const warn = onWarning! as any /* blitz */
+  const warn: any = onWarning
   return {
     visitor: {
       ExportDefaultDeclaration(path) {

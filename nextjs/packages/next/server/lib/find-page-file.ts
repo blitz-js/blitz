@@ -2,10 +2,11 @@ import { join, sep as pathSeparator, normalize } from 'path'
 import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
-import { denormalizePagePath, normalizePathSep } from '../normalize-page-path'
+import { normalizePathSep } from '../normalize-page-path'
 import { recursiveFindPages } from '../../lib/recursive-readdir'
 import { getIsRpcRoute } from '../../shared/lib/utils'
 import { buildPageExtensionRegex } from '../../build/utils'
+import { denormalizePagePath } from '../normalize-page-path'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)

@@ -38,9 +38,7 @@ let sharp:
   | undefined
 
 try {
-  sharp = require(process.env.BLITZ_SHARP_PATH ||
-    process.env.NEXT_SHARP_PATH ||
-    'sharp')
+  sharp = require(process.env.NEXT_SHARP_PATH || 'sharp')
 } catch (e) {
   // Sharp not present on the server, Squoosh fallback will be used
 }
@@ -71,21 +69,19 @@ export async function imageOptimizer(
   }
 
   const { headers } = req
-  const { url: decodedUrl, w, q } = parsedUrl.query
+  const { url, w, q } = parsedUrl.query
   const mimeType = getSupportedMimeType(MODERN_TYPES, headers.accept)
   let href: string
 
-  if (!decodedUrl) {
+  if (!url) {
     res.statusCode = 400
     res.end('"url" parameter is required')
     return { finished: true }
-  } else if (Array.isArray(decodedUrl)) {
+  } else if (Array.isArray(url)) {
     res.statusCode = 400
     res.end('"url" parameter cannot be an array')
     return { finished: true }
   }
-
-  const url = encodeURI(decodedUrl)
 
   let isAbsolute: boolean
 
@@ -376,7 +372,7 @@ export async function imageOptimizer(
         if (shouldShowSharpWarning) {
           console.warn(
             chalk.yellow.bold('Warning: ') +
-              `For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization.\n` +
+              `For production Image Optimization with Blitz.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Blitz.js will use it automatically for Image Optimization.\n` +
               'Read more: https://nextjs.org/docs/messages/sharp-missing-in-production'
           )
           shouldShowSharpWarning = false
@@ -528,6 +524,8 @@ function setResponseHeaders(
   if (fileName) {
     res.setHeader('Content-Disposition', `inline; filename="${fileName}"`)
   }
+
+  res.setHeader('Content-Security-Policy', `script-src 'none'; sandbox;`)
 
   return { finished: false }
 }

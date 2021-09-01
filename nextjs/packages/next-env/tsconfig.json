@@ -5,6 +5,7 @@
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "useUnknownInCatchVariables": false,
     "skipLibCheck": false
   }
 }
