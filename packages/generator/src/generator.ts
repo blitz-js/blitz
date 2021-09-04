@@ -212,10 +212,10 @@ export abstract class Generator<
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
     // templatedFile.match
-    const fieldTemplateRegExp = new RegExp(/{?\/\* template: (.*) \*\/}?/)
+    const fieldTemplateRegExp = new RegExp(/({?\/\* template: (.*) \*\/}?|\/\/ template: (.*))/)
     const fieldTemplateString = templatedFile
       .match(fieldTemplateRegExp)?.[0]
-      .replace(fieldTemplateRegExp, "$1")
+      .replace(fieldTemplateRegExp, "$2$3")
 
     if (fieldTemplateString) {
       const fieldTemplatePosition = templatedFile.search(fieldTemplateRegExp)
