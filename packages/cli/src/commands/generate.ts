@@ -243,7 +243,7 @@ export class Generate extends Command {
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
-      log.error(err)
+      log.error(err as any)
       this.exit(1)
     }
   }

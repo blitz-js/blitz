@@ -89,6 +89,7 @@ import { writeBuildId } from './write-build-id'
 import { normalizeLocalePath } from '../shared/lib/i18n/normalize-locale-path'
 import { isWebpack5 } from 'next/dist/compiled/webpack/webpack'
 import { NextConfigComplete } from '../server/config-shared'
+import { saveRouteManifest } from './routes'
 
 const staticCheckWorker = require.resolve('./utils')
 
@@ -176,6 +177,12 @@ export default async function build(
     eventNextPlugins(path.resolve(dir)).then((events) =>
       telemetry.record(events)
     )
+
+    const routeManifestSpinner = createSpinner({
+      prefixText: `${Log.prefixes.info} Generating route manifest`,
+    })
+    await saveRouteManifest(pagesDir, config)
+    routeManifestSpinner?.stopAndPersist()
 
     const ignoreTypeScriptErrors = Boolean(config.typescript?.ignoreBuildErrors)
     const typeCheckStart = process.hrtime()

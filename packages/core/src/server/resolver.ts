@@ -1,6 +1,6 @@
 import {AuthenticatedSessionContext, Ctx, SessionContext, SessionContextBase} from "next/types"
 import {Await, EnsurePromise} from "next/types/utils"
-import {infer as zInfer, ZodSchema} from "zod"
+import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
@@ -290,10 +290,32 @@ const authorize: ResolverAuthorize = (...args) => {
   }
 }
 
+export type ParserType = "sync" | "async"
+
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: "sync",
+): (input: InputType) => OutputType
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: "async",
+): (input: InputType) => Promise<OutputType>
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+): (input: InputType) => Promise<OutputType>
+function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+  schema: Schema,
+  parserType: ParserType = "async",
+) {
+  if (parserType === "sync") {
+    return (input: InputType): OutputType => schema.parse(input)
+  } else {
+    return (input: InputType): Promise<OutputType> => schema.parseAsync(input)
+  }
+}
+
 export const resolver = {
   pipe,
-  zod<Schema extends ZodSchema<any, any>, Type = zInfer<Schema>>(schema: Schema) {
-    return (input: Type): Type => schema.parse(input)
-  },
+  zod,
   authorize,
 }

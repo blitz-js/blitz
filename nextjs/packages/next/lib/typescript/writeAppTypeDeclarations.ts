@@ -7,7 +7,7 @@ export async function writeAppTypeDeclarations(
   imageImportsEnabled: boolean
 ): Promise<void> {
   // Reference `next` types
-  const appTypeDeclarations = path.join(baseDir, 'next-env.d.ts')
+  const appTypeDeclarations = path.join(baseDir, 'blitz-env.d.ts')
 
   await fs.writeFile(
     appTypeDeclarations,

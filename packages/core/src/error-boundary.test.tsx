@@ -190,7 +190,7 @@ test("withErrorBoundary HOC", () => {
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in one of your React components:
 
-    at error_boundary_1.withErrorBoundary.FallbackComponent 
+    at Boundary.FallbackComponent 
     at ErrorBoundary 
     at withErrorBoundary
 
@@ -204,7 +204,7 @@ React will try to recreate this component tree from scratch using the error boun
   expect(cleanStack(onErrorComponentStack)).toMatchInlineSnapshot(`
 Object {
   "componentStack": "
-    at error_boundary_1.withErrorBoundary.FallbackComponent 
+    at Boundary.FallbackComponent 
     at ErrorBoundary 
     at withErrorBoundary",
 }

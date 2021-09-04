@@ -8,6 +8,7 @@ import { join } from 'path'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../shared/lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../shared/lib/utils'
+import { isInternalDevelopment } from './utils'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
@@ -21,7 +22,7 @@ export function loadConfigAtRuntime() {
   return loadConfigProduction(process.env.BLITZ_APP_DIR)
 }
 
-export function loadConfigProduction(pagesDir: string) {
+export function loadConfigProduction(pagesDir: string): NextConfigComplete {
   let userConfigModule
   try {
     // eslint-disable-next-line no-eval -- block webpack from following this module path
@@ -34,7 +35,7 @@ export function loadConfigProduction(pagesDir: string) {
     PHASE_PRODUCTION_SERVER,
     userConfigModule.default || userConfigModule
   )
-  return assignDefaultsBase(userConfig)
+  return assignDefaultsBase(userConfig) as any
 }
 
 type NoOptionals<T> = {
@@ -306,9 +307,6 @@ export async function getConfigSrcPath(dir: string | null) {
   } else if (existsSync(jsPath)) {
     return jsPath
   } else if (existsSync(legacyPath)) {
-    const isInternalDevelopment = __dirname.match(
-      /[\\/]packages[\\/]next[\\/]dist[\\/]server/
-    )
     if (isInternalDevelopment || process.env.VERCEL_BUILDER) {
       // We read from next.config.js that Vercel automatically adds
       debug(

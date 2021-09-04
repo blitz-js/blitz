@@ -66,7 +66,7 @@ export async function transform(
       results.push({
         status: TransformStatus.Failure,
         filename: filePath,
-        error: err,
+        error: err as any,
       })
     }
   }

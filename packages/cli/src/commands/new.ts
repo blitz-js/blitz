@@ -145,7 +145,7 @@ export class New extends Command {
 
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
       const needsInstall = dryRun || skipInstall
-      const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`];
+      const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
       const generator = new AppGenerator({
@@ -164,10 +164,7 @@ export class New extends Command {
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-            const result = await runPrisma(
-              ["migrate", "dev", "--name", "Initial migration"],
-              true,
-            )
+            const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
             if (!result) throw new Error()
 
             spinner.succeed()
@@ -200,7 +197,7 @@ export class New extends Command {
       this.log("") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
-      this.error(err)
+      this.error(err as any)
     }
   }
 }

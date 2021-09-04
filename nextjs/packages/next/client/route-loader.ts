@@ -78,7 +78,8 @@ function hasPrefetch(link?: HTMLLinkElement): boolean {
     return (
       // detect IE11 since it supports prefetch but isn't detected
       // with relList.support
-      (!!window.MSInputMethodContext && !!(document as any).documentMode) ||
+      (!!(window as any).MSInputMethodContext &&
+        !!(document as any).documentMode) || //blitz
       link.relList.supports('prefetch')
     )
   } catch {

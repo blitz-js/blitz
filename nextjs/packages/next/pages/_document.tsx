@@ -159,7 +159,7 @@ function getScripts(
  * `Document` component handles the initial `document` markup and renders only on the server side.
  * Commonly used for implementing server side rendering for `css-in-js` libraries.
  */
-export default class Document<P = {}> extends Component<DocumentProps & P> {
+export class Document<P = {}> extends Component<DocumentProps & P> {
   /**
    * `getInitialProps` hook returns the context object with the addition of `renderPage`.
    * `renderPage` callback executes `React` rendering logic synchronously to support server-rendering wrappers
@@ -199,6 +199,7 @@ export default class Document<P = {}> extends Component<DocumentProps & P> {
     )
   }
 }
+export default Document
 
 export function Html(
   props: React.DetailedHTMLProps<
@@ -499,14 +500,14 @@ export class Head extends Component<
         if (!isReactHelmet) {
           if (child?.type === 'title') {
             console.warn(
-              "Warning: <title> should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-title"
+              "Warning: <title> should not be used in _document.js's <DocumentHead>. https://nextjs.org/docs/messages/no-document-title"
             )
           } else if (
             child?.type === 'meta' &&
             child?.props?.name === 'viewport'
           ) {
             console.warn(
-              "Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta"
+              "Warning: viewport meta tags should not be used in _document.js's <DocumentHead>. https://nextjs.org/docs/messages/no-document-viewport-meta"
             )
           }
         }
@@ -514,7 +515,7 @@ export class Head extends Component<
       })
       if (this.props.crossOrigin)
         console.warn(
-          'Warning: `Head` attribute `crossOrigin` is deprecated. https://nextjs.org/docs/messages/doc-crossorigin-deprecated'
+          'Warning: `DocumentHead` attribute `crossOrigin` is deprecated. https://nextjs.org/docs/messages/doc-crossorigin-deprecated'
         )
     }
 
@@ -736,6 +737,7 @@ export class Head extends Component<
     )
   }
 }
+export class DocumentHead extends Head {}
 
 export function Main() {
   const { inAmpMode, html, docComponentsRendered } = useContext(
@@ -900,6 +902,7 @@ export class NextScript extends Component<OriginProps> {
     )
   }
 }
+export class BlitzScript extends NextScript {}
 
 function getAmpPath(ampPath: string, asPath: string): string {
   return ampPath || `${asPath}${asPath.includes('?') ? '&' : '?'}amp=1`

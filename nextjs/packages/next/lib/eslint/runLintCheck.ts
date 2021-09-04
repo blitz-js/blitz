@@ -90,7 +90,7 @@ async function lint(
         `ESLint must be installed${
           lintDuringBuild ? ' in order to run during builds:' : ':'
         } ${chalk.bold.cyan(
-          isYarn(baseDir)
+          (await isYarn(baseDir))
             ? 'yarn add --dev eslint'
             : 'npm install --save-dev eslint'
         )}`
@@ -162,7 +162,7 @@ async function lint(
       }
     } else {
       Log.warn(
-        'The Next.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/basic-features/eslint#migrating-existing-config'
+        'The Blitz.js plugin was not detected in your ESLint configuration. See https://blitzjs.com/docs/eslint-config'
       )
     }
 
