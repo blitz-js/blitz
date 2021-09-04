@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/recipe-ghost",
   "private": true,
-  "version": "0.40.0-canary.4",
+  "version": "0.40.0-canary.7",
   "description": "Use Ghost in blitz",
   "main": "index.ts",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "dependencies": {
-    "@blitzjs/installer": "0.40.0-canary.4",
+    "@blitzjs/installer": "0.40.0-canary.7",
     "jscodeshift": "0.11.0"
   },
   "devDependencies": {
