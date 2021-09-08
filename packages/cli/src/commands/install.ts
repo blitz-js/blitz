@@ -46,6 +46,10 @@ function requireJSON(file: string) {
   return JSON.parse(require("fs-extra").readFileSync(file).toString("utf-8"))
 }
 
+function checkLockFileExists(filename: string) {
+  return require("fs-extra").existsSync(require("path").resolve(filename))
+}
+
 const GH_ROOT = "https://github.com/"
 const API_ROOT = "https://api.github.com/repos/"
 const RAW_ROOT = "https://raw.githubusercontent.com/"
@@ -242,11 +246,17 @@ export class Install extends Command {
 
         spinner = log.spinner("Installing package.json dependencies").start()
 
-        const isYarn = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
-        const pkgManager = isYarn ? "yarn" : "npm"
-        const installArgs = isYarn
-          ? ["install", "--ignore-scripts"]
-          : ["install", "--legacy-peer-deps", "--ignore-scripts"]
+        let pkgManager = "npm"
+        let installArgs = ["install", "--legacy-peer-deps", "--ignore-scripts"]
+
+        if (checkLockFileExists("yarn.lock")) {
+          pkgManager = "yarn"
+          installArgs = ["install", "--ignore-scripts"]
+        } else if (checkLockFileExists("pnpm-lock.yaml")) {
+          pkgManager = "pnpm"
+          installArgs = ["install", "--ignore-scripts"]
+        }
+
         await new Promise((resolve) => {
           const installProcess = require("cross-spawn")(pkgManager, installArgs)
           installProcess.on("exit", resolve)
