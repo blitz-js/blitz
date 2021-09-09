@@ -253,6 +253,13 @@ export function startCustomServer(
         })
     }
 
+    const skipDevCustomServerBuild = config.env === 'prod';
+
+    if (skipDevCustomServerBuild) {
+      spawnServer();
+      return;
+    }
+
     // Handle build & Starting server
     const esbuildOptions = getEsbuildOptions()
     esbuildOptions.watch = watch ? {
