@@ -150,7 +150,9 @@ function getProtocol(req: MiddlewareRequest) {
     return 'https'
   }
   const forwardedProto =
-    req.headers && (req.headers['x-forwarded-proto'] as string)
+    req.headers &&
+    ((req.headers['forwarded'] as string)?.match(/(?<=proto=).+/g)?.[0] ||
+      (req.headers['x-forwarded-proto'] as string))
   if (forwardedProto) {
     return forwardedProto.split(/\s*,\s*/)[0]
   }
