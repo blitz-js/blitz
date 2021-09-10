@@ -221,6 +221,8 @@ export function startCustomServer(
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
+  process.env.BLITZ_APP_DIR = config.rootFolder;
+  
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
