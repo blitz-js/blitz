@@ -3064,6 +3064,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kotx",
+      "name": "Kot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33439542?v=4",
+      "profile": "https://github.com/kotx",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
