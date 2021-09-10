@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.40.0-canary.7",
+  "version": "0.40.0-canary.8",
   "license": "MIT",
   "scripts": {
     "test": "jest --passWithNoTests",
@@ -19,9 +19,9 @@
     "dist"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.40.0-canary.7",
-    "@blitzjs/core": "0.40.0-canary.7",
-    "@blitzjs/display": "0.40.0-canary.7",
+    "@blitzjs/config": "0.40.0-canary.8",
+    "@blitzjs/core": "0.40.0-canary.8",
+    "@blitzjs/display": "0.40.0-canary.8",
     "cross-spawn": "7.0.3",
     "detect-port": "1.3.0",
     "esbuild": "^0.11.12",
