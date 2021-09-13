@@ -6,7 +6,7 @@ import {join} from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
-import AppValuesBuilder from "./template-builders/app-values-builder"
+import {AppValuesBuilder} from "./template-builders/app-values-builder"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
