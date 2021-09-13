@@ -3,10 +3,10 @@ import chalk from "chalk"
 import spawn from "cross-spawn"
 import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
-import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+import AppValuesBuilder from "./template-builders/app-values-builder"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -36,13 +36,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ["jsconfig.json"]
   }
 
-  async getTemplateValues() {
-    return {
-      name: this.options.appName,
-      safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
-      username: await username(),
-    }
-  }
+  templateValuesBuilder = new AppValuesBuilder()
 
   getTargetDirectory() {
     return ""
