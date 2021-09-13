@@ -25,3 +25,7 @@ export const pluralCamel = pipe(plural, uncapitalize)
 export function camelCaseToKebabCase(transformString: string) {
   return transformString.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase()
 }
+
+export function addSpaceBeforeCapitals(input: string): string {
+  return singleCamel(input).replace(/(?!^)([A-Z])/g, " $1")
+}
