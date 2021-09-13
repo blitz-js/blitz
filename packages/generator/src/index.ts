@@ -10,8 +10,8 @@ export * from "./generator"
 export * from "./conflict-checker"
 export * from "./generators/template-builders/builder"
 export * from "./generators/template-builders/null-builder"
-export * from "./generators/template-builders/app-generator-builder"
-export * from "./generators/template-builders/field-templates-builder"
+export * from "./generators/template-builders/app-values-builder"
+export * from "./generators/template-builders/field-values-builder"
 export {getLatestVersion} from "./utils/get-latest-version"
 export {
   singleCamel,

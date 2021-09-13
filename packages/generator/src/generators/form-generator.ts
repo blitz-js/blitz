@@ -1,6 +1,6 @@
+import { FieldValuesBuilder } from ".."
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
-import FieldTemplatesBuilder from "./template-builders/field-templates-builder"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -18,7 +18,7 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
   static subdirectory = "queries"
   sourceRoot: SourceRootType = {type: "template", path: "form"}
 
-  templateValuesBuilder = new FieldTemplatesBuilder()
+  templateValuesBuilder = new FieldValuesBuilder()
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""

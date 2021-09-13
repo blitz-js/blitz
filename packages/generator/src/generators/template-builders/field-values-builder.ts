@@ -2,7 +2,7 @@ import {singleCamel, singlePascal} from "../.."
 import {addSpaceBeforeCapitals} from "../../utils/inflector"
 import {BaseGeneratorOptions, Builder} from "./builder"
 
-export class FieldTemplatesBuilder extends Builder<BaseGeneratorOptions> {
+export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
   public async getTemplateValues(options: BaseGeneratorOptions) {
     const values = {
       parentModelId: this.getId(options.parentModel),
@@ -33,5 +33,3 @@ export class FieldTemplatesBuilder extends Builder<BaseGeneratorOptions> {
     return values
   }
 }
-
-export default FieldTemplatesBuilder
