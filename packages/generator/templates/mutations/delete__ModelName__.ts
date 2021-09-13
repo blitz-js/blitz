@@ -3,7 +3,8 @@ import db from "db"
 import {z} from "zod"
 
 const Delete__ModelName__ = z.object({
-  id: z.number(),
+  id: z.number(), //TODO: Infer Id type from schema
+  // template: __fieldName__: z.__zodType__(),
 })
 
 export default resolver.pipe(
