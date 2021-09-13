@@ -3,6 +3,7 @@ import {addSpaceBeforeCapitals} from "../../utils/inflector"
 import {BaseGeneratorOptions, Builder} from "./builder"
 
 export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
+  // eslint-disable-next-line require-await
   public async getTemplateValues(options: BaseGeneratorOptions) {
     const values = {
       parentModelId: this.getId(options.parentModel),
@@ -17,10 +18,13 @@ export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
       modelNames: options.modelNames,
       ModelName: options.ModelName,
       ModelNames: options.ModelNames,
+      modelNamesPath: this.getModelNamesPath(options.context, options.modelNames),
       fieldTemplateValues: options.extraArgs?.map((arg: string) => {
-        const [valueName] = arg.split(":")
+        const [valueName, typeName] = arg.split(":")
         // Get component from blitz config using type map
         return {
+          attributeName: singleCamel(valueName),
+          zodTypeName: this.getZodTypeName(typeName),
           FieldComponent: "Component TODO", // get component based on type. TODO: Override argument 3?
           fieldName: singleCamel(valueName), // fieldName
           FieldName: singlePascal(valueName), // FieldName
