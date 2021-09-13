@@ -15,6 +15,8 @@ import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
+import {IBuilder} from "./generators/template-builders/builder"
+import NullBuilder from "./generators/template-builders/null-builder"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -160,7 +162,12 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  abstract getTemplateValues(): Promise<any>
+  public templateValuesBuilder: IBuilder<T> = NullBuilder
+  
+  async getTemplateValues(): Promise<any>{
+    const values = await this.templateValuesBuilder.getTemplateValues(this.options)    
+    return values
+  }
 
   abstract getTargetDirectory(): string
 
