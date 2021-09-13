@@ -16,7 +16,7 @@ import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import {IBuilder} from "./generators/template-builders/builder"
-import NullBuilder from "./generators/template-builders/null-builder"
+import {NullBuilder} from "./generators/template-builders/null-builder"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -163,9 +163,9 @@ export abstract class Generator<
   }
 
   public templateValuesBuilder: IBuilder<T> = NullBuilder
-  
-  async getTemplateValues(): Promise<any>{
-    const values = await this.templateValuesBuilder.getTemplateValues(this.options)    
+
+  async getTemplateValues(): Promise<any> {
+    const values = await this.templateValuesBuilder.getTemplateValues(this.options)
     return values
   }
 

@@ -2,7 +2,7 @@ import {AppGeneratorOptions} from "../.."
 import {Builder} from "./builder"
 import username from "username"
 
-class AppValuesBuilder extends Builder<AppGeneratorOptions> {
+export class AppValuesBuilder extends Builder<AppGeneratorOptions> {
   public async getTemplateValues(options: AppGeneratorOptions) {
     const values = {
       name: options.appName,
@@ -12,5 +12,3 @@ class AppValuesBuilder extends Builder<AppGeneratorOptions> {
     return values
   }
 }
-
-export default AppValuesBuilder
