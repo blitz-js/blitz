@@ -19,8 +19,6 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   sourceRoot: SourceRootType = {type: "absolute", path: ""}
   unsafe_disableConflictChecker = true
 
-  async getTemplateValues() {}
-
   getTargetDirectory() {
     return ""
   }
