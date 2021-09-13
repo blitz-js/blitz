@@ -8,6 +8,10 @@ export * from "./generators/query-generator"
 export * from "./generators/form-generator"
 export * from "./generator"
 export * from "./conflict-checker"
+export * from "./generators/template-builders/builder"
+export * from "./generators/template-builders/null-builder"
+export * from "./generators/template-builders/app-generator-builder"
+export * from "./generators/template-builders/field-templates-builder"
 export {getLatestVersion} from "./utils/get-latest-version"
 export {
   singleCamel,
@@ -16,4 +20,5 @@ export {
   pluralPascal,
   capitalize,
   uncapitalize,
+  addSpaceBeforeCapitals
 } from "./utils/inflector"
