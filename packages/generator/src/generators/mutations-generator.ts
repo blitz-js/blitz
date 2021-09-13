@@ -1,5 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
-import {camelCaseToKebabCase, singleCamel} from "../utils/inflector"
+import {camelCaseToKebabCase, singleCamel, singlePascal} from "../utils/inflector"
 
 export interface MutationsGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -37,6 +37,11 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {
+    
+    const addSpaceBeforeCapitals = (input: string):string => {
+      return singleCamel(input).replace(/(?!^)([A-Z])/g, " $1")
+    }
+
     return {
       parentModelId: this.getId(this.options.parentModel),
       parentModelParam: this.getParam(this.getId(this.options.parentModel)),
@@ -55,6 +60,11 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
         return {
           attributeName: singleCamel(valueName),
           zodTypeName: this.getZodTypeName(typeName),
+          fieldName: singleCamel(valueName), // fieldName
+          FieldName: singlePascal(valueName), // FieldName
+          field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
+          Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
+          Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
         }
       }),
     }
