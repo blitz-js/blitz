@@ -1,6 +1,6 @@
 import { FieldValuesBuilder } from ".."
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
-import {camelCaseToKebabCase, singleCamel, singlePascal} from "../utils/inflector"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationsGeneratorOptions extends GeneratorOptions {
   ModelName: string
