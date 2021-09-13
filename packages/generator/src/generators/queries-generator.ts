@@ -1,3 +1,4 @@
+import { FieldValuesBuilder } from ".."
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
@@ -16,34 +17,8 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   static subdirectory = "queries"
   sourceRoot: SourceRootType = {type: "template", path: "queries"}
 
-  private getId(input: string = "") {
-    if (!input) return input
-    return `${input}Id`
-  }
-
-  private getParam(input: string = "") {
-    if (!input) return input
-    return `[${input}]`
-  }
-
-  // eslint-disable-next-line require-await
-  async getTemplateValues() {
-    return {
-      parentModelId: this.getId(this.options.parentModel),
-      parentModelParam: this.getParam(this.getId(this.options.parentModel)),
-      parentModel: this.options.parentModel,
-      parentModels: this.options.parentModels,
-      ParentModel: this.options.ParentModel,
-      ParentModels: this.options.ParentModels,
-      modelId: this.getId(this.options.modelName),
-      modelIdParam: this.getParam(this.getId(this.options.modelName)),
-      modelName: this.options.modelName,
-      modelNames: this.options.modelNames,
-      ModelName: this.options.ModelName,
-      ModelNames: this.options.ModelNames,
-    }
-  }
-
+  templateValuesBuilder = new FieldValuesBuilder()
+  
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
