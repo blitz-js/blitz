@@ -5,6 +5,7 @@ import {BaseGeneratorOptions, Builder} from "./builder"
 export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
   // eslint-disable-next-line require-await
   public async getTemplateValues(options: BaseGeneratorOptions) {
+    await this.getComponentForType()
     const values = {
       parentModelId: this.getId(options.parentModel),
       parentModelParam: this.getParam(this.getId(options.parentModel)),

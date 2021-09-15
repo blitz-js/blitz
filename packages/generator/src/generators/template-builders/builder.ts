@@ -1,5 +1,6 @@
 import {GeneratorOptions} from "../../generator"
 import {camelCaseToKebabCase} from "../../utils/inflector"
+const debug = require("debug")("blitz:generator")
 
 export interface IBuilder<T> {
   getTemplateValues(Options: T): Promise<any>
@@ -36,8 +37,27 @@ export abstract class Builder<T> implements IBuilder<T> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
+  private possibleTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
+
   public getZodTypeName(type: string = "") {
-    if (["string", "null", "undefined", "unknown", "void", "boolean"].includes(type)) {
+    if (this.possibleTypes.includes(type)) {
+      return type
+    } else {
+      return type === "int" ? "number" : "any"
+    }
+  }
+  
+  public async getComponentForType(type: string = ""){
+    process.env.BLITZ_APP_DIR = "."
+    debug("app dir is")
+    debug(process.env.BLITZ_APP_DIR)
+    const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
+    const config = await loadConfigAtRuntime();
+    debug("displaying config")
+    debug(config)
+
+    // const typeToComponentMap = 
+    if (this.possibleTypes.includes(type)) {
       return type
     } else {
       return type === "int" ? "number" : "any"
