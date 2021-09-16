@@ -168,6 +168,9 @@ export type NextConfig = { [key: string]: any } & {
     pageDataCollectionTimeout?: number
     isrMemoryCacheSize?: number
     concurrentFeatures?: boolean
+  }  
+  template?:{
+    typeToComponentMap: any
   }
 }
 
