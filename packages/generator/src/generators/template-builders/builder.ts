@@ -1,6 +1,5 @@
 import {GeneratorOptions} from "../../generator"
 import {addSpaceBeforeCapitals, camelCaseToKebabCase, singleCamel, singlePascal} from "../../utils/inflector"
-const debug = require("debug")("blitz:generator")
 
 export interface IBuilder<T> {
   getTemplateValues(Options: T): Promise<any>
@@ -68,7 +67,7 @@ export abstract class Builder<T> implements IBuilder<T> {
   }
 
   public async getFieldTemplateValues(args: string[]){
-    let argsPromises = args.map(async (arg: string) => {
+    const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")
       
       return {
