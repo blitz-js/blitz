@@ -1,4 +1,4 @@
-import { FieldValuesBuilder } from ".."
+import {FieldValuesBuilder} from ".."
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
@@ -28,6 +28,9 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   async postWrite() {
+    if (!process.env.BLITZ_APP_DIR) {
+      process.env.BLITZ_APP_DIR = "."
+    }
     const {loadConfigProduction} = await import("next/dist/server/config-shared")
     const {saveRouteManifest} = await import("next/dist/build/routes")
     const config = loadConfigProduction(process.cwd())
