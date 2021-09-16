@@ -1,5 +1,5 @@
 import {GeneratorOptions} from "../../generator"
-import {camelCaseToKebabCase} from "../../utils/inflector"
+import {addSpaceBeforeCapitals, camelCaseToKebabCase, singleCamel, singlePascal} from "../../utils/inflector"
 const debug = require("debug")("blitz:generator")
 
 export interface IBuilder<T> {
@@ -37,30 +37,51 @@ export abstract class Builder<T> implements IBuilder<T> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
-  private possibleTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
+  private possibleZodTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
+  private possibleComponentTypes = ["string", "any", "int", "number", "boolean"]
 
   public getZodTypeName(type: string = "") {
-    if (this.possibleTypes.includes(type)) {
+    if (this.possibleZodTypes.includes(type)) {
       return type
     } else {
       return type === "int" ? "number" : "any"
     }
   }
-  
-  public async getComponentForType(type: string = ""){
-    process.env.BLITZ_APP_DIR = "."
-    debug("app dir is")
-    debug(process.env.BLITZ_APP_DIR)
-    const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
-    const config = await loadConfigAtRuntime();
-    debug("displaying config")
-    debug(config)
 
-    // const typeToComponentMap = 
-    if (this.possibleTypes.includes(type)) {
-      return type
-    } else {
-      return type === "int" ? "number" : "any"
+  public async getComponentForType(type: string = ""):Promise<string> {
+    if (!process.env.BLITZ_APP_DIR) {
+      process.env.BLITZ_APP_DIR = "."
     }
+
+    // TODO: Need to research if this is an expensive call. If we have a ton of fields, 
+    // we should probably throw this behind a proxy that's reused
+    // over the lifetime of a generator command:
+    const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
+    const config = await loadConfigAtRuntime()
+    const typeToComponentMap = config.template.typeToComponentMap
+
+    if (this.possibleComponentTypes.includes(type)) {
+      return typeToComponentMap[type]
+    } else {
+      return typeToComponentMap["string"]
+    }
+  }
+
+  public async getFieldTemplateValues(args: string[]){
+    let argsPromises = args.map(async (arg: string) => {
+      const [valueName, typeName] = arg.split(":")
+      
+      return {
+        attributeName: singleCamel(valueName),
+        zodTypeName: this.getZodTypeName(typeName),
+        FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
+        fieldName: singleCamel(valueName), // fieldName
+        FieldName: singlePascal(valueName), // FieldName
+        field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
+        Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
+        Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
+      }
+    })
+    return Promise.all(argsPromises)
   }
 }
