@@ -23,7 +23,7 @@ export const LoginForm = (props: LoginFormProps) => {
           try {
             await loginMutation(values)
             props.onSuccess?.()
-          } catch (error) {
+          } catch (error: any) {
             if (error instanceof AuthenticationError) {
               return { [FORM_ERROR]: "Sorry, those credentials are invalid" }
             } else {

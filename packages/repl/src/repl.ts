@@ -42,7 +42,7 @@ const setupSelfRolledHistory = (repl: any, path: string) => {
       const history = fs.readFileSync(path, {encoding: "utf8"})
       const nonEmptyLines = history.split(os.EOL).filter((line) => line.trim())
       repl.history.push(...nonEmptyLines.reverse())
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== "ENOENT") {
         throw err
       }

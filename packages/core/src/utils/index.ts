@@ -48,7 +48,7 @@ const validateZodSchemaSync = (schema: any): any => (values: any) => {
   try {
     schema.parse(values)
     return {}
-  } catch (error) {
+  } catch (error: any) {
     return error.format ? formatZodError(error) : error.toString()
   }
 }
@@ -58,7 +58,7 @@ const validateZodSchemaAsync = (schema: any) => async (values: any) => {
   try {
     await schema.parseAsync(values)
     return {}
-  } catch (error) {
+  } catch (error: any) {
     return error.format ? formatZodError(error) : error.toString()
   }
 }

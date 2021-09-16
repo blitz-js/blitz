@@ -1,5 +1,4 @@
 import {BlitzScript, DocumentProps} from "blitz"
-import htmlescape from "htmlescape"
 import crypto from "crypto"
 
 export const cspHashOf = (text: string) => {

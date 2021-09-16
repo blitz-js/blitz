@@ -9,6 +9,7 @@ import {newline} from "next/dist/server/lib/logging"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig} from "./config"
+const debug = require("debug")("blitz:utils")
 
 function getSpawnEnv(config: ServerConfig) {
   let spawnEnv: NodeJS.ProcessEnv = process.env
@@ -48,6 +49,9 @@ export async function nextStartDev(
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
   process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
+
+  debug("cwd ", cwd)
+  debug("spawn ", nextBin, spawnCommand)
 
   return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
@@ -217,6 +221,8 @@ export function startCustomServer(
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
+  process.env.BLITZ_APP_DIR = config.rootFolder;
+  
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
@@ -249,30 +255,32 @@ export function startCustomServer(
         })
     }
 
-    if (watch) {
-      // Handle build & Starting server
-      const esbuildOptions = getEsbuildOptions()
-      esbuildOptions.watch = {
-        onRebuild(error) {
-          if (error) {
-            log.error("Failed to re-build custom server")
-          } else {
-            newline()
-            log.progress("Custom server changed - restarting...")
-            newline()
-            //@ts-ignore -- incorrect TS type from node
-            process.exitCode = RESTART_CODE
-            process.kill("SIGABRT")
-          }
-        },
-      }
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      esbuild.build(esbuildOptions).then(() => {
-        spawnServer()
-      })
-    } else {
-      // No build required, Start server
-      spawnServer()
+    const skipDevCustomServerBuild = config.env === 'prod';
+
+    if (skipDevCustomServerBuild) {
+      spawnServer();
+      return;
     }
+
+    // Handle build & Starting server
+    const esbuildOptions = getEsbuildOptions()
+    esbuildOptions.watch = watch ? {
+      onRebuild(error) {
+        if (error) {
+          log.error("Failed to re-build custom server")
+        } else {
+          newline()
+          log.progress("Custom server changed - restarting...")
+          newline()
+          //@ts-ignore -- incorrect TS type from node
+          process.exitCode = RESTART_CODE
+          process.kill("SIGABRT")
+        }
+      },
+    } : undefined
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    esbuild.build(esbuildOptions).then(() => {
+      spawnServer()
+    })
   })
 }

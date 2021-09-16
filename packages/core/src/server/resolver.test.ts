@@ -41,9 +41,8 @@ const asyncResolver = resolver.pipe(
 )
 
 const resolverTest = async ({type}: {type?: ParserType}) => {
-  
   const resolver1 = type === "sync" ? syncResolver : asyncResolver
-  
+
   const result1 = await resolver1(
     {email: "test@example.com"},
     {session: {$authorize: () => undefined} as Ctx},
