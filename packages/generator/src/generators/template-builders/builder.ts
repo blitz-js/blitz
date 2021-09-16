@@ -66,6 +66,7 @@ export abstract class Builder<T> implements IBuilder<T> {
     }
   }
 
+  // eslint-disable-next-line require-await
   public async getFieldTemplateValues(args: string[]){
     const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")

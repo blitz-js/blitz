@@ -1,4 +1,3 @@
-const debug = require("debug")("blitz:generator")
 import {BaseGeneratorOptions, Builder} from "./builder"
 
 export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
@@ -21,8 +20,6 @@ export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
     }
     if (options.extraArgs) {
       const ftv = await this.getFieldTemplateValues(options.extraArgs)
-      debug("ftvz")
-      debug(ftv)
       return {...values, fieldTemplateValues: ftv}
     }
 
