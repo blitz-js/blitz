@@ -9,8 +9,10 @@ describe("PageGenerator", () => {
   })
 
   describe("#getModelNamesPath", () => {
-    it("returns path only with default modelNames", () => {
-      expect(generator.getModelNamesPath()).toEqual("projects")
+    it("returns path only with default modelNames", async () => {
+      expect((await generator.getTemplateValues()).modelNamesPath).toBe(
+        "projects",
+      )
     })
 
     describe("when generator has context option", () => {
@@ -22,8 +24,10 @@ describe("PageGenerator", () => {
         context: "marketing",
       })
 
-      it("returns path with context as prefix", () => {
-        expect(generator.getModelNamesPath()).toEqual("marketing/projects")
+      it("returns path with context as prefix", async () => {
+        expect((await generator.getTemplateValues()).modelNamesPath).toBe(
+          "marketing/projects",
+        )
       })
     })
   })

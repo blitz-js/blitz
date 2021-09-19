@@ -203,6 +203,8 @@ export abstract class Generator<
     return result
   }
 
+  public fieldTemplateRegExp:RegExp = new RegExp(/({?\/\*\s+template: (.*) \*\/}?|\/\/\s+template: (.*))/)
+
   process(
     input: Buffer,
     pathEnding: string,
@@ -219,13 +221,13 @@ export abstract class Generator<
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
     // templatedFile.match
-    const fieldTemplateRegExp = new RegExp(/({?\/\* template: (.*) \*\/}?|\/\/ template: (.*))/)
+    
     const fieldTemplateString = templatedFile
-      .match(fieldTemplateRegExp)?.[0]
-      .replace(fieldTemplateRegExp, "$2$3")
+      .match(this.fieldTemplateRegExp)?.[0]
+      .replace(this.fieldTemplateRegExp, "$2$3")
 
     if (fieldTemplateString) {
-      const fieldTemplatePosition = templatedFile.search(fieldTemplateRegExp)
+      const fieldTemplatePosition = templatedFile.search(this.fieldTemplateRegExp)
       templatedFile = [
         templatedFile.slice(0, fieldTemplatePosition),
         ...(templateValues.fieldTemplateValues?.map((values: any) =>
