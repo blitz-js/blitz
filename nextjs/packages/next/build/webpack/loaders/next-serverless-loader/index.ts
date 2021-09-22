@@ -62,13 +62,18 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
     }: ServerlessLoaderQuery =
       typeof this.query === 'string' ? parse(this.query.substr(1)) : this.query
 
-    const pagesDir = process.env.VERCEL
-      ? '/var/task/'
-      : normalizePathSep(rawPagesDir)
+    const pagesDir = normalizePathSep(rawPagesDir)
 
     const sessionCookiePrefix = getSessionCookiePrefix(
       loadConfigProduction(pagesDir)
     )
+
+    const setEnvCode = `
+      process.env.BLITZ_APP_DIR = process.env.VERCEL && !process.env.CI
+        ? '/var/task/'
+        : "${pagesDir}"
+      process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
+    `
 
     const buildManifest = join(distDir, BUILD_MANIFEST).replace(/\\/g, '/')
     const reactLoadableManifest = join(
@@ -117,8 +122,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
 
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
-        process.env.BLITZ_APP_DIR = "${pagesDir}"
-        process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
+        ${setEnvCode}
 
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
@@ -138,7 +142,6 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
           basePath: "${basePath}",
           pageIsDynamic: ${pageIsDynamicRoute},
           encodedPreviewProps: ${encodedPreviewProps},
-          pagesDir: "${pagesDir}",
         })
         export default apiHandler
       `
@@ -157,8 +160,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       }
       import { getPageHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/page-handler'
 
-      process.env.BLITZ_APP_DIR = "${pagesDir}"
-        process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
+      ${setEnvCode}
 
       const documentModule = require("${absoluteDocumentPath}")
 
