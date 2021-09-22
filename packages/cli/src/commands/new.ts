@@ -20,6 +20,7 @@ export interface Flags {
   "no-git": boolean
   npm: boolean
   pnpm: boolean
+  yarn: boolean
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -50,11 +51,17 @@ export class New extends Command {
       hidden: true,
     }),
     npm: flags.boolean({
-      description: "Use npm as the package manager. Yarn is the default if installed",
+      description: "Use npm as the package manager",
+      allowNo: true,
+    }),
+    yarn: flags.boolean({
+      description: "Use yarn as the package manager",
+      default: false,
+      hidden: !IS_YARN_INSTALLED,
       allowNo: true,
     }),
     pnpm: flags.boolean({
-      description: "Use pnpm as the package manager. Yarn is the default if installed",
+      description: "Use pnpm as the package manager",
       default: false,
       hidden: !IS_PNPM_INSTALLED,
       allowNo: true,
@@ -193,13 +200,14 @@ export class New extends Command {
     }
   }
 
-  // TODO:: dry run
+  // TODO:: there should be some problems with dry run
   private async determinePkgManagerToInstallDeps(flags: Flags): Promise<void> {
     if (flags["skip-install"]) {
       this.shouldInstallDeps = false
       return
     }
-    if (flags.npm || flags.pnpm) {
+    const isPkgManagerSpecifiedAsFlag = flags.npm || flags.pnpm || flags.yarn
+    if (isPkgManagerSpecifiedAsFlag) {
       if (flags.npm) {
         this.pkgManager = "npm"
       } else if (flags.pnpm) {
@@ -207,6 +215,12 @@ export class New extends Command {
           this.pkgManager = "pnpm"
         } else {
           this.warn(`Pnpm is not installed. Fallback to ${this.pkgManager}`)
+        }
+      } else if (flags.yarn) {
+        if (IS_YARN_INSTALLED) {
+          this.pkgManager = "yarn"
+        } else {
+          this.warn(`Yarn is not installed. Fallback to ${this.pkgManager}`)
         }
       }
     } else {
