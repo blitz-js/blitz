@@ -4,6 +4,7 @@ import { apiResolver } from '../../../../server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
 import { loadConfigProduction } from '../../../../server/config-shared'
 import { DecodeError } from '../../../../shared/lib/utils'
+import { fixNodeFileTrace } from '../../../../server/utils'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
   const { page, pagesDir, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
@@ -14,12 +15,11 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
     normalizeDynamicRouteParams,
   } = getUtils(ctx)
 
-  console.log('Loading prod config...')
+  fixNodeFileTrace()
+
   const config = loadConfigProduction(pagesDir)
-  console.log('Loaded prod config', config)
 
   return async (req: IncomingMessage, res: ServerResponse) => {
-    console.log('saved prod config', config)
     try {
       // We need to trust the dynamic route params from the proxy
       // to ensure we are using the correct values
