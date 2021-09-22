@@ -21,6 +21,7 @@ export interface Flags {
   npm: boolean
   pnpm: boolean
   yarn: boolean
+  form?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -65,6 +66,10 @@ export class New extends Command {
       default: false,
       hidden: !IS_PNPM_INSTALLED,
       allowNo: true,
+    }),
+    form: flags.string({
+      description: "A form library",
+      options: ["react-final-form", "react-hook-form", "formik"],
     }),
     "skip-install": flags.boolean({
       description: "Skip package installation",
@@ -139,7 +144,7 @@ export class New extends Command {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      const form = await this.promptFormLib()
+      const form = await this.determineFormLib(flags)
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
       const needsInstall = dryRun || !shouldInstallDeps
@@ -263,7 +268,31 @@ export class New extends Command {
       }
     }
   }
+  private async determineFormLib(flags: Flags): Promise<AppGeneratorOptions["form"]> {
+    if (flags.form) {
+      switch (flags.form) {
+        case "react-final-form":
+          return "React Final Form"
+        case "react-hook-form":
+          return "React Hook Form"
+        case "formik":
+          return "Formik"
+      }
+    }
+    const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
+      {name: "React Final Form", message: "React Final Form (recommended)"},
+      {name: "React Hook Form"},
+      {name: "Formik"},
+    ]
 
+    const promptResult: any = await this.enquirer.prompt({
+      type: "select",
+      name: "form",
+      message: "Pick a form library (you can switch to something else later if you want)",
+      choices: formChoices,
+    })
+    return promptResult.form
+  }
   private upgradeGloballyInstalledBlitz() {
     let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
     const upgradeOpts =
@@ -285,21 +314,6 @@ export class New extends Command {
     return "npm"
   }
 
-  private async promptFormLib(): Promise<AppGeneratorOptions["form"]> {
-    const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
-      {name: "React Final Form", message: "React Final Form (recommended)"},
-      {name: "React Hook Form"},
-      {name: "Formik"},
-    ]
-
-    const promptResult: any = await this.enquirer.prompt({
-      type: "select",
-      name: "form",
-      message: "Pick a form library (you can switch to something else later if you want)",
-      choices: formChoices,
-    })
-    return promptResult.form
-  }
   private async promptBlitzUpgrade(latestVersion: string): Promise<boolean> {
     const upgradeChoices: Array<{name: string; message?: string}> = [
       {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
