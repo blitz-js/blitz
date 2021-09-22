@@ -79,7 +79,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
       this.destinationPath(`app/core/components/Form.${ext}`),
