@@ -2,12 +2,11 @@ import { parse as parseUrl } from 'url'
 import { IncomingMessage, ServerResponse } from 'http'
 import { apiResolver } from '../../../../server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
-import { loadConfigProduction } from '../../../../server/config-shared'
+import { loadConfigAtRuntime } from '../../../../server/config-shared'
 import { DecodeError } from '../../../../shared/lib/utils'
-import { fixNodeFileTrace } from '../../../../server/utils'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
-  const { page, pagesDir, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
+  const { page, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
   const {
     handleRewrites,
     handleBasePath,
@@ -15,9 +14,7 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
     normalizeDynamicRouteParams,
   } = getUtils(ctx)
 
-  fixNodeFileTrace()
-
-  const config = loadConfigProduction(pagesDir)
+  const config = loadConfigAtRuntime()
 
   return async (req: IncomingMessage, res: ServerResponse) => {
     try {

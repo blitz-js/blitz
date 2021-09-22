@@ -60,7 +60,9 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
     }: ServerlessLoaderQuery =
       typeof this.query === 'string' ? parse(this.query.substr(1)) : this.query
 
-    const pagesDir = normalizePathSep(rawPagesDir)
+    const pagesDir = process.env.VERCEL
+      ? '/var/task/'
+      : normalizePathSep(rawPagesDir)
 
     const buildManifest = join(distDir, BUILD_MANIFEST).replace(/\\/g, '/')
     const reactLoadableManifest = join(
