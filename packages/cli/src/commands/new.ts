@@ -25,10 +25,10 @@ type PkgManager = "npm" | "yarn" | "pnpm"
 
 const IS_YARN_INSTALLED = hasbin.sync("yarn")
 const IS_PNPM_INSTALLED = hasbin.sync("pnpm")
-const PREFERABLE_PKG_MANAGER: PkgManager = IS_YARN_INSTALLED
-  ? "yarn"
-  : IS_PNPM_INSTALLED
+const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   ? "pnpm"
+  : IS_YARN_INSTALLED
+  ? "yarn"
   : "npm"
 
 export class New extends Command {
