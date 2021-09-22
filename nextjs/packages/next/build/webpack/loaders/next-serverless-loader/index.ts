@@ -13,6 +13,8 @@ import {
 } from '../../../../shared/lib/constants'
 import { trace } from '../../../../telemetry/trace'
 import { normalizePathSep } from '../../../../server/normalize-page-path'
+import { getSessionCookiePrefix } from '../../../../server/lib/utils'
+import { loadConfigProduction } from '../../../../server/config-shared'
 
 export type ServerlessLoaderQuery = {
   page: string
@@ -64,6 +66,10 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       ? '/var/task/'
       : normalizePathSep(rawPagesDir)
 
+    const sessionCookiePrefix = getSessionCookiePrefix(
+      loadConfigProduction(pagesDir)
+    )
+
     const buildManifest = join(distDir, BUILD_MANIFEST).replace(/\\/g, '/')
     const reactLoadableManifest = join(
       distDir,
@@ -112,6 +118,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
         process.env.BLITZ_APP_DIR = "${pagesDir}"
+        process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
 
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
@@ -151,6 +158,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       import { getPageHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/page-handler'
 
       process.env.BLITZ_APP_DIR = "${pagesDir}"
+        process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
 
       const documentModule = require("${absoluteDocumentPath}")
 
