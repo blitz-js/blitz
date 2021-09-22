@@ -305,15 +305,16 @@ export class New extends Command {
     return false
   }
   private getGlobalBlitzPkgManagerOwner(): PkgManager {
+    if (IS_PNPM_INSTALLED) {
+      const output = spawn.sync("pnpm", ["list", "-g", "--depth", "0"], {stdio: "pipe"})
+      if (output && output.stdout.toString().includes("blitz ")) {
+        return "pnpm"
+      }
+    }
     if (IS_YARN_INSTALLED) {
       const output = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
       if (output && output.stdout.toString().includes("blitz@")) {
         return "yarn"
-      }
-    } else if (IS_PNPM_INSTALLED) {
-      const output = spawn.sync("pnpm", ["list", "-g", "--depth", "0"], {stdio: "pipe"})
-      if (output && output.stdout.toString().includes("blitz ")) {
-        return "pnpm"
       }
     }
     return "npm"
