@@ -102,41 +102,12 @@ export class New extends Command {
     await this.determinePkgManagerToInstallDeps(flags)
     const {pkgManager, shouldInstallDeps} = this
 
-    if (!flags["skip-upgrade"]) {
-      const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
-      if (lt(this.config.version, latestVersion)) {
-        if (await this.promptBlitzUpgrade(latestVersion)) {
-          this.upgradeGloballyInstalledBlitz()
-
-          const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
-
-          if (versionResult.stdout) {
-            const newVersion =
-              versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
-
-            if (newVersion[0] && newVersion[0] === latestVersion) {
-              this.log(
-                chalk.green(
-                  `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
-                ),
-              )
-
-              const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(
-                (arr, key) => (flags[key] ? [...arr, `--${key}`] : arr),
-                [] as string[],
-              )
-
-              spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
-                stdio: "inherit",
-              })
-
-              return
-            }
-          }
-          this.error(
-            "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
-          )
-        }
+    const shouldUpgrade = !flags["skip-upgrade"]
+    if (shouldUpgrade) {
+      const wasUpgraded = await this.maybeUpgradeGloballyInstalledBlitz()
+      if (wasUpgraded) {
+        this.rerunButSkipUpgrade(flags, args)
+        return
       }
     }
 
@@ -293,11 +264,45 @@ export class New extends Command {
     })
     return promptResult.form
   }
-  private upgradeGloballyInstalledBlitz() {
-    let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
-    const upgradeOpts =
-      globalBlitzOwner === "yarn" ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
-    spawn.sync(globalBlitzOwner, upgradeOpts, {stdio: "inherit"})
+  private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
+    const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(
+      (arr, key) => (flags[key] ? [...arr, `--${key}`] : arr),
+      [] as string[],
+    )
+    spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
+      stdio: "inherit",
+    })
+  }
+  private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
+    const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
+    if (lt(this.config.version, latestVersion)) {
+      if (await this.promptBlitzUpgrade(latestVersion)) {
+        let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
+        const upgradeOpts =
+          globalBlitzOwner === "yarn" ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+        spawn.sync(globalBlitzOwner, upgradeOpts, {stdio: "inherit"})
+
+        const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
+
+        if (versionResult.stdout) {
+          const newVersion =
+            versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+
+          if (newVersion[0] && newVersion[0] === latestVersion) {
+            this.log(
+              chalk.green(
+                `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
+              ),
+            )
+            return true
+          }
+        }
+        this.error(
+          "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
+        )
+      }
+    }
+    return false
   }
   private getGlobalBlitzPkgManagerOwner(): PkgManager {
     if (IS_YARN_INSTALLED) {
@@ -313,7 +318,6 @@ export class New extends Command {
     }
     return "npm"
   }
-
   private async promptBlitzUpgrade(latestVersion: string): Promise<boolean> {
     const upgradeChoices: Array<{name: string; message?: string}> = [
       {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
