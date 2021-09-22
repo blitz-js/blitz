@@ -23,6 +23,7 @@ export function loadConfigAtRuntime() {
 }
 
 export function loadConfigProduction(pagesDir: string): NextConfigComplete {
+  debug('[loadConfigProduction] starting... ', { pagesDir, CONFIG_FILE })
   let userConfigModule
   try {
     const path = join(pagesDir, CONFIG_FILE)

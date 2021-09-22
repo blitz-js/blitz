@@ -14,9 +14,12 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
     normalizeDynamicRouteParams,
   } = getUtils(ctx)
 
+  console.log('Loading prod config...')
   const config = loadConfigProduction(pagesDir)
+  console.log('Loaded prod config', config)
 
   return async (req: IncomingMessage, res: ServerResponse) => {
+    console.log('saved prod config', config)
     try {
       // We need to trust the dynamic route params from the proxy
       // to ensure we are using the correct values
