@@ -1,6 +1,5 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
-import {camelCaseToKebabCase} from "../utils/kebab-case"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -15,7 +14,7 @@ export interface PageGeneratorOptions extends GeneratorOptions {
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = "pages"
-  sourceRoot = join(__dirname, "./templates/page")
+  sourceRoot: SourceRootType = {type: "template", path: "page"}
 
   private getId(input: string = "") {
     if (!input) return input
@@ -59,6 +58,13 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     const parent = this.options.parentModels
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
-    return `app/${this.getModelNamesPath()}/pages/${parent}${kebabCaseModelName}`
+    return `app/pages/${parent}${kebabCaseModelName}`
+  }
+
+  async postWrite() {
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const {saveRouteManifest} = await import("next/dist/build/routes")
+    const config = loadConfigProduction(process.cwd())
+    await saveRouteManifest(process.cwd(), config)
   }
 }

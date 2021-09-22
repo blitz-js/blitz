@@ -1,0 +1,98 @@
+name: CI
+
+on: [push]
+
+jobs:
+  ###############
+  # Lint & Test
+  ###############
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost/test
+    services:
+      postgres:
+        image: postgres:12
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Make sure the database is ready before we use it
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Node
+      - name: Read .node-version
+        id: node_version
+        run: echo ::set-output name=NODE_VERSION::$(cat .node-version || echo "14")
+      - name: Setup Node
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ steps.node_version.outputs.NODE_VERSION }}
+
+      # Yarn cache/install
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: JS package cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ steps.yarn-cache.outputs.dir }}
+            **/node_modules
+            /home/runner/.cache/Cypress
+            C:\Users\runneradmin\AppData\Local\Cypress\Cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: yarn install --frozen-lockfile
+
+      # Lint Code
+      - name: Lint
+        run: yarn lint
+
+      # Migrate DB & generate prisma client
+      - name: Migrate DB & generate prisma client
+        run: yarn blitz prisma migrate dev
+
+      # Jest Tests (API/Frontend)
+      - name: Run Jest Tests
+        run: yarn test
+
+      # E2E Tests via Cypress
+      # - name: Run Cypress E2E Tests
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     # we have already installed all dependencies above
+      #     install: false
+      #     start: yarn test:server --production
+      #     wait-on: "http://localhost:3099"
+      #     wait-on-timeout: 300
+      #   env:
+      #     NODE_ENV: test
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Upload Cypress Screenshots
+      #   uses: actions/upload-artifact@v1
+      #   # Only capture images on failure
+      #   if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
+      #     retention-days: 3
+      # - name: Upload Cypress Videos
+      #   uses: actions/upload-artifact@v1
+      #   # Test run video was always captured, so this action uses "always()" condition
+      #   if: always()
+      #   with:
+      #     name: cypress-videos
+      #     path: cypress/videos
+      #     retention-days: 3

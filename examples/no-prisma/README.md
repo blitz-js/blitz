@@ -11,16 +11,10 @@ model Project {
 }
 ```
 
-2. DB migrate
-
-```
-blitz db migrate
-```
-
 3. Start the dev server
 
 ```
-blitz start
+blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

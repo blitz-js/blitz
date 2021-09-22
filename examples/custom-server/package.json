@@ -1,0 +1,59 @@
+{
+  "name": "@examples/custom-server",
+  "version": "0.34.0-canary.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test-watch": "jest --watch",
+    "cy-open": "cypress open",
+    "cy-run": "cypress run",
+    "test:migrate": "prisma generate && blitz prisma migrate deploy",
+    "test:jest": "jest --passWithNoTests",
+    "test-server": "blitz build && blitz start",
+    "test-run-e2e": "cross-env NODE_ENV=test PORT=3099 start-server-and-test test-server http://localhost:3099 cy-run",
+    "test:e2e": "yarn test-run-e2e || yarn test-run-e2e",
+    "test": "run-s test:*"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "@prisma/client": "2.24.1",
+    "blitz": "0.40.0-canary.8",
+    "final-form": "4.20.1",
+    "prisma": "2.24.1",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react-final-form": "6.5.2",
+    "secure-password": "4.0.0"
+  },
+  "devDependencies": {
+    "@cypress/skip-test": "2.6.0",
+    "@testing-library/react": "11.2.5",
+    "@testing-library/react-hooks": "^4.0.1",
+    "@types/react": "17.0.2",
+    "@types/secure-password": "3.1.0",
+    "cypress": "6.2.1",
+    "eslint": "7.21.0",
+    "husky": "5.1.2",
+    "lint-staged": "10.5.4",
+    "nodemon": "2.0.7",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.2.1",
+    "pretty-quick": "3.1.0",
+    "start-server-and-test": "1.11.7"
+  },
+  "private": true
+}

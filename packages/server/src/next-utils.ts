@@ -1,38 +1,30 @@
+import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
-import {ServerConfig} from "config"
+import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
-import {Manifest} from "./stages/manifest"
-import {through} from "./streams"
+import * as esbuild from "esbuild"
+import {existsSync, readJSONSync} from "fs-extra"
+import {newline} from "next/dist/server/lib/logging"
+import path from "path"
+import pkgDir from "pkg-dir"
+import {ServerConfig} from "./config"
+const debug = require("debug")("blitz:utils")
 
-function createOutputTransformer(manifest: Manifest, devFolder: string) {
-  const stream = through((data, _, next) => {
-    const dataStr = data.toString()
+function getSpawnEnv(config: ServerConfig) {
+  let spawnEnv: NodeJS.ProcessEnv = process.env
 
-    const buildError = `ERROR\\sin\\s(${devFolder.replace(/\//g, "\\/")}\\/[^:]+)\\(\\d+,\\d+\\)`
+  spawnEnv.FORCE_COLOR = "3"
 
-    const matches = new RegExp(buildError, "g").exec(dataStr)
+  if (config.inspect) {
+    spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
+  }
 
-    if (matches) {
-      const [, filepath] = matches
-
-      if (filepath) {
-        const matchedPath = manifest.getByValue(filepath)
-        if (matchedPath) {
-          next(null, data.replace(filepath, matchedPath))
-          return
-        }
-      }
-    }
-    next(null, data)
-  })
-
-  return {stream}
+  return spawnEnv
 }
 
 async function createCommandAndPort(config: ServerConfig, command: string) {
   let spawnCommand: string[] = [command]
-  let spawnEnv: NodeJS.ProcessEnv = process.env
   let availablePort: number
 
   availablePort = await detect({port: config.port ? config.port : 3000})
@@ -42,9 +34,7 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
     spawnCommand = spawnCommand.concat(["-H", `${config.hostname}`])
   }
 
-  if (config.inspect) {
-    spawnEnv = {...spawnEnv, NODE_OPTIONS: "--inspect"}
-  }
+  const spawnEnv = getSpawnEnv(config)
 
   return {spawnCommand, spawnEnv, availablePort}
 }
@@ -52,49 +42,18 @@ async function createCommandAndPort(config: ServerConfig, command: string) {
 export async function nextStartDev(
   nextBin: string,
   cwd: string,
-  manifest: Manifest,
-  devFolder: string,
+  _manifest: any,
+  _buildFolder: string,
   config: ServerConfig,
 ) {
-  const transform = createOutputTransformer(manifest, devFolder).stream
   const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "dev")
 
-  return new Promise((res, rej) => {
-    if (config.port && availablePort !== config.port) {
-      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
-      rej("")
-    } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
-        env: spawnEnv,
-        stdio: [process.stdin, transform.pipe(process.stdout), transform.pipe(process.stderr)],
-      })
-        .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next dev' failed with status code: ${code}`)
-        })
+  process.env.BLITZ_DEV_SERVER_ORIGIN = `http://localhost:${availablePort}`
 
-        .on("error", rej)
-    }
-  })
-}
+  debug("cwd ", cwd)
+  debug("spawn ", nextBin, spawnCommand)
 
-export function nextBuild(nextBin: string, cwd: string) {
-  return new Promise((res, rej) => {
-    spawn(nextBin, ["build"], {
-      cwd,
-      stdio: "inherit",
-    })
-      .on("exit", (code: number) => {
-        code === 0 ? res() : rej(`'next build' failed with status code: ${code}`)
-      })
-      .on("error", rej)
-  })
-}
-
-export async function nextStart(nextBin: string, cwd: string, config: ServerConfig) {
-  const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
-
-  return new Promise((res, rej) => {
+  return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
       log.error(`Couldn't start server on port ${config.port} because it's already in use`)
       rej("")
@@ -105,12 +64,223 @@ export async function nextStart(nextBin: string, cwd: string, config: ServerConf
         stdio: "inherit",
       })
         .on("exit", (code: number) => {
-          code === 0 ? res() : rej(`'next start' failed with status code: ${code}`)
+          if (code === 0) {
+            res()
+          } else {
+            process.exit(code)
+          }
+        })
+
+        .on("error", rej)
+    }
+  })
+}
+
+export function nextBuild(
+  nextBin: string,
+  _buildFolder: string,
+  _manifest: any,
+  config: ServerConfig,
+) {
+  const spawnEnv = getSpawnEnv(config)
+
+  return new Promise<void>((res, rej) => {
+    spawn(nextBin, ["build"], {
+      env: spawnEnv,
+      stdio: "inherit",
+    })
+      .on("exit", (code: number | null) => {
+        if (code === 0 || code === null) {
+          res()
+        } else {
+          process.exit(code)
+        }
+      })
+      .on("error", rej)
+  })
+}
+
+export function nextExport(nextBin: string, config: ServerConfig) {
+  const spawnEnv = getSpawnEnv(config)
+
+  return new Promise<void>((res, rej) => {
+    spawn(nextBin, ["export"], {
+      env: spawnEnv,
+      stdio: "inherit",
+    })
+      .on("exit", (code: number | null) => {
+        if (code === 0 || code === null) {
+          res()
+        } else {
+          process.exit(code)
+        }
+      })
+      .on("error", rej)
+  })
+}
+
+export async function nextStart(nextBin: string, _buildFolder: string, config: ServerConfig) {
+  const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
+
+  return new Promise<void>((res, rej) => {
+    if (config.port && availablePort !== config.port) {
+      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      rej("")
+    } else {
+      spawn(nextBin, spawnCommand, {
+        env: spawnEnv,
+        stdio: "inherit",
+      })
+        .on("exit", (code: number) => {
+          if (code === 0) {
+            res()
+          } else {
+            process.exit(code)
+          }
         })
         .on("error", (err) => {
           console.error(err)
           rej(err)
         })
     }
+  })
+}
+
+export function getCustomServerPath() {
+  const projectRoot = getProjectRoot()
+
+  let serverPath = path.resolve(path.join(projectRoot, "server.ts"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server.js"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server/index.ts"))
+  if (existsSync(serverPath)) return serverPath
+
+  serverPath = path.resolve(path.join(projectRoot, "server/index.js"))
+  if (existsSync(serverPath)) return serverPath
+
+  throw new Error("Unable to find custom server")
+}
+export function getCustomServerBuildPath() {
+  const projectRoot = getProjectRoot()
+  return path.resolve(projectRoot, ".next", "custom-server.js")
+}
+
+export function customServerExists() {
+  try {
+    getCustomServerPath()
+    return true
+  } catch {
+    return false
+  }
+}
+
+interface CustomServerOptions {
+  watch?: boolean
+}
+
+const getEsbuildOptions = (): esbuild.BuildOptions => {
+  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
+  return {
+    entryPoints: [getCustomServerPath()],
+    outfile: getCustomServerBuildPath(),
+    format: "cjs",
+    bundle: true,
+    platform: "node",
+    external: [
+      "blitz",
+      "next",
+      ...Object.keys(require("blitz/package").dependencies),
+      ...Object.keys(pkg?.dependencies ?? {}),
+      ...Object.keys(pkg?.devDependencies ?? {}),
+    ],
+  }
+}
+
+export function buildCustomServer({watch}: CustomServerOptions = {}) {
+  const esbuildOptions = getEsbuildOptions()
+  if (watch) {
+    esbuildOptions.watch = {
+      onRebuild(error) {
+        if (error) {
+          log.error("Failed to re-build custom server")
+        } else {
+          newline()
+          log.progress("Custom server changed - rebuilding...")
+        }
+      },
+    }
+  }
+  return esbuild.build(esbuildOptions)
+}
+
+export function startCustomServer(
+  _cwd: string,
+  config: ServerConfig,
+  {watch}: CustomServerOptions = {},
+) {
+  process.env.BLITZ_APP_DIR = config.rootFolder;
+  
+  const serverBuildPath = getCustomServerBuildPath()
+
+  let spawnEnv = getSpawnEnv(config)
+  if (config.env === "prod") {
+    spawnEnv = {...spawnEnv, NODE_ENV: "production"}
+  }
+
+  return new Promise<void>((res, rej) => {
+    let process: ChildProcess
+
+    const RESTART_CODE = 777777
+
+    const spawnServer = () => {
+      process = spawn("node", [serverBuildPath], {
+        env: spawnEnv,
+        stdio: "inherit",
+      })
+        .on("exit", (code: number) => {
+          if (code === 0) {
+            res()
+          } else if (watch && code === RESTART_CODE) {
+            spawnServer()
+          } else {
+            rej(`server.js failed with status code: ${code}`)
+          }
+        })
+        .on("error", (err) => {
+          console.error(err)
+          rej(err)
+        })
+    }
+
+    const skipDevCustomServerBuild = config.env === 'prod';
+
+    if (skipDevCustomServerBuild) {
+      spawnServer();
+      return;
+    }
+
+    // Handle build & Starting server
+    const esbuildOptions = getEsbuildOptions()
+    esbuildOptions.watch = watch ? {
+      onRebuild(error) {
+        if (error) {
+          log.error("Failed to re-build custom server")
+        } else {
+          newline()
+          log.progress("Custom server changed - restarting...")
+          newline()
+          //@ts-ignore -- incorrect TS type from node
+          process.exitCode = RESTART_CODE
+          process.kill("SIGABRT")
+        }
+      },
+    } : undefined
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    esbuild.build(esbuildOptions).then(() => {
+      spawnServer()
+    })
   })
 }

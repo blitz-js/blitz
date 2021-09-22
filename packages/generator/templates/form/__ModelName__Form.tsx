@@ -1,23 +1,13 @@
-import React from "react"
+import {Form, FormProps} from "app/core/components/Form"
+import {LabeledTextField} from "app/core/components/LabeledTextField"
+import {z} from "zod"
+export {FORM_ERROR} from "app/core/components/Form"
 
-type __ModelName__FormProps = {
-  initialValues: any
-  onSubmit: React.FormEventHandler<HTMLFormElement>
-}
-
-const __ModelName__Form = ({initialValues, onSubmit}: __ModelName__FormProps) => {
+export function __ModelName__Form<S extends z.ZodType<any, any>>(props: FormProps<S>) {
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault()
-        onSubmit(event)
-      }}
-    >
-      <div>Put your form fields here. But for now, just click submit</div>
-      <div>{JSON.stringify(initialValues)}</div>
-      <button>Submit</button>
-    </form>
+    <Form<S> {...props}>
+      <LabeledTextField name="name" label="Name" placeholder="Name" />
+    </Form>
   )
 }
 
-export default __ModelName__Form

@@ -3,7 +3,7 @@ const modelSnippet = `model Project {
   id      Int      @default(autoincrement()) @id
   name    String
 }`
-const migrateSnippet = `$ blitz db migrate
+const migrateSnippet = `$ blitz prisma migrate dev
 $ blitz generate all project`
 
 const Home = () => (
@@ -53,11 +53,11 @@ const Home = () => (
         </a>
         <a
           className="button-outline"
-          href="https://slack.blitzjs.com"
+          href="https://discord.blitzjs.com"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Slack Community
+          Discord Community
         </a>
       </div>
     </main>

@@ -1,41 +1,11 @@
-import {Middleware} from "blitz"
-import db, {FindManyProductArgs} from "db"
+import {Middleware, paginate} from "blitz"
+import db, {Prisma} from "db"
 
 type GetProductsInput = {
-  where?: FindManyProductArgs["where"]
-  orderBy?: FindManyProductArgs["orderBy"]
-  skip?: FindManyProductArgs["skip"]
-  cursor?: FindManyProductArgs["cursor"]
-  take?: FindManyProductArgs["take"]
-  // Only available if a model relationship exists
-  // include?: FindManyProductArgs['include']
-}
-
-export default async function getProducts(
-  {where, orderBy, skip = 0, cursor, take}: GetProductsInput,
-  ctx: Record<any, unknown> = {},
-) {
-  if (ctx.referer) {
-    console.log("HTTP referer:", ctx.referer)
-  }
-
-  const products = await db.product.findMany({
-    where,
-    orderBy,
-    skip,
-    cursor,
-    take,
-  })
-
-  const count = await db.product.count()
-  const hasMore = typeof take === "number" ? skip + take < count : false
-  const nextPage = hasMore ? {take, skip: skip + take!} : null
-
-  return {
-    products,
-    nextPage,
-    hasMore,
-  }
+  where?: Prisma.ProductFindManyArgs["where"]
+  orderBy?: Prisma.ProductFindManyArgs["orderBy"]
+  skip?: number
+  take?: number
 }
 
 export const middleware: Middleware[] = [
@@ -46,3 +16,28 @@ export const middleware: Middleware[] = [
     }
   },
 ]
+
+export default async function getProducts(
+  {where, orderBy, skip = 0, take = 100}: GetProductsInput,
+  ctx: Record<any, unknown> = {},
+) {
+  if (ctx.referer) {
+    console.log("HTTP referer:", ctx.referer)
+  }
+
+  console.log("this line should not be included in the frontend bundle")
+
+  const {items: products, hasMore, nextPage, count} = await paginate({
+    skip,
+    take,
+    count: () => db.product.count({where}),
+    query: (paginateArgs) => db.product.findMany({...paginateArgs, where, orderBy}),
+  })
+
+  return {
+    products,
+    hasMore,
+    nextPage,
+    count,
+  }
+}

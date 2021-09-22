@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "strict": true,
+    "module": "esnext",
+    "target": "ES2017",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "useUnknownInCatchVariables": false,
+    "jsx": "react"
+  },
+  "exclude": ["dist", "./*.d.ts"]
+}

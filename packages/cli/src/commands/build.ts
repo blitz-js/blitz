@@ -1,5 +1,5 @@
+import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
-import {build as ServerBuild} from "@blitzjs/server"
 
 export class Build extends Command {
   static description = "Creates a production build"
@@ -10,13 +10,14 @@ export class Build extends Command {
   }
 
   async run() {
-    const config = {
+    const config: ServerConfig = {
       rootFolder: process.cwd(),
+      env: "prod",
     }
     this.parse(Build)
 
     try {
-      const build: typeof ServerBuild = require("@blitzjs/server").build
+      const {build} = await import("@blitzjs/server")
       await build(config)
     } catch (err) {
       console.error(err)

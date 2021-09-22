@@ -1,0 +1,43 @@
+diff --git a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
+index 972d57b..a8d19eb 100644
+--- a/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
++++ b/node_modules/@preconstruct/cli/cli/dist/cli.cjs.dev.js
+@@ -166,7 +166,7 @@ function format(args, messageType, scope) {
+     info: chalk.cyan("info"),
+     none: ""
+   }[messageType];
+-  let fullPrefix = "🎁 " + prefix + (scope === undefined ? "" : " " + chalk.cyan(scope));
++  let fullPrefix = prefix + (scope === undefined ? "" : " " + chalk.cyan(scope));
+   return fullPrefix + util.format("", ...args).split("\n").reduce((str, line) => {
+     const prefixed = `${str}\n${fullPrefix}`;
+     return line ? `${prefixed} ${line}` : prefixed;
+@@ -847,6 +847,9 @@ const isFieldValid = {
+   },
+ 
+   browser(entrypoint) {
++    if (/packages[\\/]config/.test(entrypoint.directory)) {
++      return true
++    }
+     return equal(entrypoint.json.browser, validFields.browser(entrypoint));
+   }
+ 
+@@ -1917,6 +1920,8 @@ let getRollupConfig = (pkg, entrypoints, aliases, type, reportTransformedFile) =
+     external.push(...builtInModules);
+   }
+ 
++  external.push('next', 'react', '@babel/core', 'prettier', '.blitz', "@babel/types")
++
+   let input = {};
+   entrypoints.forEach(entrypoint => {
+     input[path__default.relative(pkg.directory, path__default.join(entrypoint.directory, "dist", getNameForDistForEntrypoint(entrypoint)))] = entrypoint.source;
+@@ -2129,6 +2134,10 @@ function getRollupConfigs(pkg, aliases) {
+   });
+   let hasBrowserField = pkg.entrypoints[0].json.browser !== undefined;
+ 
++  if (["@blitzjs/config"].includes(pkg.entrypoints[0].json.name)) {
++    hasBrowserField = false
++  }
++
+   if (hasBrowserField) {
+     configs.push({
+       config: getRollupConfig(pkg, pkg.entrypoints, aliases, "browser", () => {}),

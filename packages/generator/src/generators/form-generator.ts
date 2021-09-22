@@ -1,5 +1,5 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -14,7 +14,7 @@ export interface FormGeneratorOptions extends GeneratorOptions {
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
   static subdirectory = "queries"
-  sourceRoot = join(__dirname, "./templates/form")
+  sourceRoot: SourceRootType = {type: "template", path: "form"}
 
   private getId(input: string = "") {
     if (!input) return input
@@ -45,7 +45,8 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ""
-    return `app/${context}${this.options.modelNames}/components`
+    const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
+    const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    return `app/${context}${kebabCaseModelName}/components`
   }
 }

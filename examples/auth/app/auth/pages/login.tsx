@@ -1,21 +1,25 @@
-import {Head, useRouter, BlitzPage} from "blitz"
+import React from "react"
+import {useRouter, BlitzPage} from "blitz"
+import Layout from "app/core/layouts/Layout"
 import {LoginForm} from "app/auth/components/LoginForm"
+import {Routes} from ".blitz"
 
-const SignupPage: BlitzPage = () => {
+const LoginPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <>
-      <Head>
-        <title>Log In</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <div>
-        <LoginForm onSuccess={() => router.push("/")} />
-      </div>
-    </>
+    <div>
+      <LoginForm
+        onSuccess={() => {
+          const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"
+          router.push(next)
+        }}
+      />
+    </div>
   )
 }
 
-export default SignupPage
+LoginPage.redirectAuthenticatedTo = Routes.Home().pathname
+LoginPage.getLayout = (page) => <Layout title="Log In">{page}</Layout>
+
+export default LoginPage

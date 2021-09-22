@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2017",
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
     "rootDir": "./",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
+    "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -21,6 +21,23 @@
     "moduleResolution": "node",
     "jsx": "react",
     "esModuleInterop": true,
-    "noEmit": true
-  }
+    "noEmit": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
+  },
+  "include": [
+    "types/**/*",
+    "packages/babel-preset/src/**/*",
+    "packages/blitz/src/**/*",
+    "packages/config/src/**/*",
+    "packages/core/src/**/*",
+    "packages/display/src/**/*",
+    "packages/generator/src/**/*",
+    "packages/installer/src/**/*",
+    "packages/repl/src/**/*",
+    "packages/server/src/**/*",
+    "recipes/*"
+  ],
+  "exclude": ["*.test.ts", "*.test.tsx"]
 }

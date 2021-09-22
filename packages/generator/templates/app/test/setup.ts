@@ -1,6 +1,4 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom/extend-expect"
-require("dotenv-flow").config({ silent: true })
+// This is the jest 'setupFilesAfterEnv' setup file
+// It's a good place to set globals, add global before/after hooks, etc
+
+export {} // so TS doesn't complain

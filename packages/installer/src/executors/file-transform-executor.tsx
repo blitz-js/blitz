@@ -4,7 +4,14 @@ import {Box, Text} from "ink"
 import Spinner from "ink-spinner"
 import * as React from "react"
 import {Newline} from "../components/newline"
-import {processFile, transform, Transformer, TransformStatus} from "../utils/transform"
+import {
+  processFile,
+  stringProcessFile,
+  StringTransformer,
+  transform,
+  Transformer,
+  TransformStatus,
+} from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
@@ -12,16 +19,21 @@ import {filePrompt} from "./file-prompt"
 export interface Config extends ExecutorConfig {
   selectTargetFiles?(cliArgs: any): any[]
   singleFileSearch?: executorArgument<string>
-  transform: Transformer
+  transform?: Transformer
+  transformPlain?: StringTransformer
 }
 
 export function isFileTransformExecutor(executor: ExecutorConfig): executor is Config {
-  return (executor as Config).transform !== undefined
+  return (
+    (executor as Config).transform !== undefined ||
+    (executor as Config).transformPlain !== undefined
+  )
 }
 
 export const type = "file-transform"
 export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
   const [diff, setDiff] = React.useState<string | null>(null)
+  const [error, setError] = React.useState<Error | null>(null)
   const filePathRef = React.useRef("")
   useEnterToContinue(() => onProposalAccepted(filePathRef.current), !!filePathRef.current)
 
@@ -34,12 +46,18 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
       })
       filePathRef.current = fileToTransform
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
-      const newFile = processFile(originalFile, (step as Config).transform)
+      const newFile = await ((step as Config).transformPlain
+        ? stringProcessFile(originalFile, (step as Config).transformPlain!)
+        : processFile(originalFile, (step as Config).transform!))
       return createPatch(fileToTransform, originalFile, newFile)
     }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    generateDiff().then(setDiff)
+
+    generateDiff().then(setDiff, setError)
   }, [cliArgs, step])
+
+  // Let the renderer deal with errors from file transformers, otherwise the
+  // process would just hang.
+  if (error) throw error
 
   if (!diff) {
     return (
@@ -73,30 +91,28 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
           )
         })}
       <Newline />
-      <Text>
-        The above diff will be applied. If it looks okay to you, hit ENTER to apply the changes!
-      </Text>
+      <Text bold>The above changes will be made. Press ENTER to continue</Text>
     </Box>
   )
 }
 export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
-  const transformFn = (step as Config).transform
-
   const [loading, setLoading] = React.useState(true)
 
-  const handleChangeCommitted = React.useCallback(() => {
-    onChangeCommitted(`Modified 1 file: ${filePath}`)
-  }, [filePath, onChangeCommitted])
-
-  useEnterToContinue(handleChangeCommitted, !loading)
-
   React.useEffect(() => {
-    const results = transform(transformFn, [filePath])
-    if (results.some((r) => r.status === TransformStatus.Failure)) {
-      console.error(results)
-    }
-    setLoading(false)
-  }, [filePath, transformFn])
+    void (async function () {
+      const results = await transform(
+        async (original) =>
+          await ((step as Config).transformPlain
+            ? stringProcessFile(original, (step as Config).transformPlain!)
+            : processFile(original, (step as Config).transform!)),
+        [filePath],
+      )
+      if (results.some((r) => r.status === TransformStatus.Failure)) {
+        console.error(results)
+      }
+      setLoading(false)
+    })()
+  }, [filePath, step])
 
   if (loading) {
     return (
@@ -106,11 +122,7 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
       </Box>
     )
   }
-  return (
-    <Box paddingBottom={1} flexDirection="column">
-      {/* Stop ESlint from complaining about the emoji */}
-      {/* eslint-disable-next-line */}
-      <Text>📝 File changes applied! Press ENTER to continue</Text>
-    </Box>
-  )
+
+  onChangeCommitted(`Modified file: ${filePath}`)
+  return null
 }

@@ -1,8 +1,9 @@
-import { Link, BlitzPage, useMutation } from "blitz"
-import Layout from "app/layouts/Layout"
-import logout from "app/auth/mutations/logout"
-import { useCurrentUser } from "app/hooks/useCurrentUser"
 import { Suspense } from "react"
+import { Image, Link, BlitzPage, useMutation, Routes } from "blitz"
+import Layout from "app/core/layouts/Layout"
+import { useCurrentUser } from "app/core/hooks/useCurrentUser"
+import logout from "app/auth/mutations/logout"
+import logo from "public/logo.png"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -34,12 +35,12 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href="/signup">
+        <Link href={Routes.SignupPage()}>
           <a className="button small">
             <strong>Sign Up</strong>
           </a>
         </Link>
-        <Link href="/login">
+        <Link href={Routes.LoginPage()}>
           <a className="button small">
             <strong>Login</strong>
           </a>
@@ -54,7 +55,7 @@ const Home: BlitzPage = () => {
     <div className="container">
       <main>
         <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
+          <Image src={logo} alt="blitzjs" />
         </div>
         <p>
           <strong>Congrats!</strong> Your app is ready, including user sign-up and log-in.
@@ -73,9 +74,7 @@ const Home: BlitzPage = () => {
         <pre>
           <code>blitz generate all project name:string</code>
         </pre>
-        <pre>
-          <code>blitz db migrate</code>
-        </pre>
+        <div style={{ marginBottom: "1rem" }}>(And select Yes to run prisma migrate)</div>
         <div>
           <p>
             Then <strong>restart the server</strong>
@@ -84,7 +83,7 @@ const Home: BlitzPage = () => {
             <code>Ctrl + c</code>
           </pre>
           <pre>
-            <code>blitz start</code>
+            <code>blitz dev</code>
           </pre>
           <p>
             and go to{" "}
@@ -112,11 +111,11 @@ const Home: BlitzPage = () => {
           </a>
           <a
             className="button-outline"
-            href="https://slack.blitzjs.com"
+            href="https://discord.blitzjs.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Slack Community
+            Discord Community
           </a>
         </div>
       </main>
@@ -267,6 +266,7 @@ const Home: BlitzPage = () => {
   )
 }
 
+Home.suppressFirstRenderFlicker = true
 Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
 
 export default Home

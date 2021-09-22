@@ -1,17 +1,14 @@
-import {AppProps, ErrorComponent} from "blitz"
-import {ErrorBoundary} from "react-error-boundary"
-import {queryCache} from "react-query"
+import {AppProps, ErrorBoundary, ErrorComponent, useQueryErrorResetBoundary} from "blitz"
+
+if (typeof window !== "undefined") {
+  window["DEBUG_BLITZ"] = 1
+}
 
 export default function App({Component, pageProps}: AppProps) {
+  const {reset} = useQueryErrorResetBoundary()
+
   return (
-    <ErrorBoundary
-      FallbackComponent={RootErrorFallback}
-      onReset={() => {
-        // This ensures the Blitz useQuery hooks will automatically refetch
-        // data any time you reset the error boundary
-        queryCache.resetErrorBoundaries()
-      }}
-    >
+    <ErrorBoundary FallbackComponent={RootErrorFallback} onReset={reset}>
       <Component {...pageProps} />
     </ErrorBoundary>
   )

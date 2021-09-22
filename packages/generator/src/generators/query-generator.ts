@@ -1,23 +1,25 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
-  rawInput: string
+  name: string
+  Name: string
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
   static subdirectory = "query"
-  sourceRoot = join(__dirname, "./templates/query")
+  sourceRoot: SourceRootType = {type: "template", path: "query"}
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {
     return {
-      rawInput: this.options.rawInput,
+      name: this.options.name,
+      Name: this.options.Name,
     }
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}` : ""
+    const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}` : ""
     return `app/${context}/queries`
   }
 }

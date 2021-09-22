@@ -2,14 +2,14 @@
 
 This is a [Blitz.js](https://github.com/blitz-js/blitz) app.
 
-# **name**
+# **__name__**
 
 ## Getting Started
 
 Run your app in the development mode.
 
 ```
-blitz start
+blitz dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -33,8 +33,6 @@ DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name___test
 Runs your tests using Jest.
 
 ```
-blitz test
-or
 yarn test
 ```
 
@@ -47,12 +45,15 @@ Blitz comes with a powerful CLI that is designed to make development easy and fa
 ```
   blitz [COMMAND]
 
+  dev       Start a development server
   build     Create a production build
-  console   Run the Blitz console REPL
-  db        Run database commands
+  start     Start a production server
+  export    Export your Blitz app as a static application
+  prisma    Run prisma commands
   generate  Generate new files for your Blitz project
-  help      display help for blitz
-  start     Start a development server
+  console   Run the Blitz console REPL
+  install   Install a recipe
+  help      Display help for blitz
   test      Run project tests
 ```
 
@@ -60,81 +61,87 @@ You can read more about it on the [CLI Overview](https://blitzjs.com/docs/cli-ov
 
 ## What's included?
 
-Here is the structure of your app.
+Here is the starting structure of your app.
 
 ```
 __name__
-├── app
-│   |── auth
-│   │   ├── components
-│   │   │   └── LoginForm.tsx
-│   │   ├── mutations
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   └── signup.ts
-│   │   └── pages
-│   │       ├── login.tsx
-│   │       └── signup.tsx
-│   ├── auth-utils.ts
-│   ├── validations.ts
-│   ├── components
-│   │   ├── Form.tsx
-│   │   └── LabeledTextField.tsx
-│   ├── hooks
-│   │   └── useCurrentUser.ts
-│   ├── layouts
-│   │   └── Layout.tsx
-│   │── pages
-│   │   ├── _app.tsx
-│   │   ├── _document.tsx
-│   │   ├── 404.tsx
-│   │   ├── index.tsx
-│   │   └── index.test.tsx
-│   └── users
-│   │   └── queries
-│   │       └── getCurrentUser.ts
-├── db
-│   ├── migrations
+├── app/
+│   ├── api/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   ├── LoginForm.tsx
+│   │   │   └── SignupForm.tsx
+│   │   ├── mutations/
+│   │   │   ├── changePassword.ts
+│   │   │   ├── forgotPassword.test.ts
+│   │   │   ├── forgotPassword.ts
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   ├── resetPassword.test.ts
+│   │   │   ├── resetPassword.ts
+│   │   │   └── signup.ts
+│   │   ├── pages/
+│   │   │   ├── forgot-password.tsx
+│   │   │   ├── login.tsx
+│   │   │   ├── reset-password.tsx
+│   │   │   └── signup.tsx
+│   │   └── validations.ts
+│   ├── core/
+│   │   ├── components/
+│   │   │   ├── Form.tsx
+│   │   │   └── LabeledTextField.tsx
+│   │   ├── hooks/
+│   │   │   └── useCurrentUser.ts
+│   │   └── layouts/
+│   │       └── Layout.tsx
+│   ├── pages/
+│   │   ├── 404.tsx
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── index.test.tsx
+│   │   └── index.tsx
+│   └── users/
+│       └── queries/
+│           └── getCurrentUser.ts
+├── db/
 │   ├── index.ts
-│   └── schema.prisma
-├── integrations
-├── node_modules
-├── public
-│   ├── favicon.ico
+│   ├── schema.prisma
+│   └── seeds.ts
+├── integrations/
+├── mailers/
+│   └── forgotPasswordMailer.ts
+├── public/
+│   ├── favicon.ico*
 │   └── logo.png
-├── test
-│   ├── __mocks__
-│   │       └── fileMock.js
+├── test/
 │   ├── setup.ts
 │   └── utils.tsx
-├── utils
-├── .env
-├── .eslintrc.js
-├── .gitignore
-├── .npmrc
-├── .prettierignore
+├── README.md
 ├── babel.config.js
 ├── blitz.config.js
 ├── jest.config.js
 ├── package.json
-├── README.md
 ├── tsconfig.json
+├── types.d.ts
+├── types.ts
 └── yarn.lock
 ```
 
 These files are:
 
-- The `app/` directory is a container for most of your project. This is where you’ll put any pages or API routes.
+- The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
-- `db`/ is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
+- `db/` is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
 
-- `node_modules/` is where your “dependencies” are stored. This directory is updated by your package manager, so you don’t have to worry too much about it.
+- `public/` is a folder where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
 
-- `public/` is a directory where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
+- `integrations/` is a folder to put all third-party integrations like with Stripe, Sentry, etc.
 
-- `test/` is a directory where you can put your unit and integration tests.
+- `test/` is a folder where you can put test utilities and integration tests.
 
-- `utils/` is a good place to put any shared utility files which you might use across different sections of your app.
+- `package.json` contains information about your dependencies and devDependencies. If you’re using a tool like `npm` or `yarn`, you won’t have to worry about this much.
+
+- `tsconfig.json` is our recommended setup for TypeScript.
 
 - `.babelrc.js`, `.env`, etc. ("dotfiles") are configuration files for various bits of JavaScript tooling.
 
@@ -142,29 +149,25 @@ These files are:
 
 - `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
 
-- `package.json` contains information about your dependencies and devDependencies. If you’re using a tool like `npm` or `yarn`, you won’t have to worry about this much.
-
-- `tsconfig.json` is our recommended setup for TypeScript.
-
 You can read more about it in the [File Structure](https://blitzjs.com/docs/file-structure) section of the documentation.
+
+### Tools included
+
+Blitz comes with a set of tools that corrects and formats your code, facilitating its future maintenance. You can modify their options and even uninstall them.
+
+- **ESLint**: It lints your code: searches for bad practices and tell you about it. You can customize it via the `.eslintrc.js`, and you can install (or even write) plugins to have it the way you like it. It already comes with the [`blitz`](https://github.com/blitz-js/blitz/tree/canary/packages/eslint-config) config, but you can remove it safely. [Learn More](https://eslint.org).
+- **Husky**: It adds [githooks](https://git-scm.com/docs/githooks), little pieces of code that get executed when certain Git events are triggerd. For example, `pre-commit` is triggered just before a commit is created. You can see the current hooks inside `.husky/`. If are having problems commiting and pushing, check out ther [troubleshooting](https://typicode.github.io/husky/#/?id=troubleshoot) guide. [Learn More](https://typicode.github.io/husky).
+- **Prettier**: It formats your code to look the same everywhere. You can configure it via the `.prettierrc` file. The `.prettierignore` contains the files that should be ignored by Prettier; useful when you have large files or when you want to keep a custom formatting. [Learn More](https://prettier.io).
 
 ## Learn more
 
 Read the [Blitz.js Documentation](https://blitzjs.com/docs/getting-started) to learn more.
 
-### The Blitz.js Manifesto
-
-Read the [Blitz Manifesto](https://blitzjs.com/docs/manifesto) to learn the Blitz foundational principles.
-
-Blitz is built on Next.js. For more info on this see [Why use Blitz instead of Next.js](https://blitzjs.com/docs/why-blitz)
-
-## Get in touch
-
 The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to reach out to us in any of our communication channels.
 
 - [Website](https://blitzjs.com/)
-- [Slack](https://slack.blitzjs.com/)
+- [Discord](https://discord.blitzjs.com/)
 - [Report an issue](https://github.com/blitz-js/blitz/issues/new/choose)
 - [Forum discussions](https://github.com/blitz-js/blitz/discussions)
-- [Sponsors and donations](https://github.com/blitz-js/blitz#sponsors-and-donations)
-- [Contributing Guide](https://blitzjs.com/docs/contributing)
+- [How to Contribute](https://blitzjs.com/docs/contributing)
+- [Sponsor or donate](https://github.com/blitz-js/blitz#sponsors-and-donations)

@@ -1,12 +1,13 @@
-import {New} from "../../src/commands/new"
 import {getLatestVersion} from "@blitzjs/generator/src/utils/get-latest-version"
 import * as fs from "fs"
-import * as path from "path"
-import * as os from "os"
-import fetch from "node-fetch"
 import nock from "nock"
+import fetch from "node-fetch"
+import * as os from "os"
+import * as path from "path"
+import pkgDir from "pkg-dir"
 import rimraf from "rimraf"
 import {stdout} from "stdout-stderr"
+import {New} from "../../src/commands/new"
 
 jest.setTimeout(120 * 1000)
 const blitzCliPackageJson = require("../../package.json")
@@ -34,6 +35,15 @@ jest.mock("enquirer", () => {
   })
 })
 
+const tempDir = path.join(__dirname, ".test")
+
+beforeEach(() => {
+  fs.mkdirSync(tempDir)
+})
+afterEach(() => {
+  rimraf.sync(tempDir)
+})
+
 describe("`new` command", () => {
   describe("when scaffolding new project", () => {
     beforeEach(() => {
@@ -45,7 +55,7 @@ describe("`new` command", () => {
       stdout.stop()
     })
 
-    jest.setTimeout(120 * 1000)
+    jest.setTimeout(200 * 1000)
 
     function makeTempDir() {
       const tmpDirPath = path.join(os.tmpdir(), "blitzjs-test-")
@@ -60,7 +70,7 @@ describe("`new` command", () => {
 
     function getStepsFromOutput() {
       const output = stdout.output
-      const exp = /^   \d. (.*)$/gm
+      const exp = /^ {3}\d. (.*)$/gm
       const matches = []
       let match
 
@@ -105,18 +115,31 @@ describe("`new` command", () => {
           expect(getStepsFromOutput()).toStrictEqual([
             `cd ${dirName}`,
             "yarn",
-            "blitz db migrate (when asked, you can name the migration anything)",
-            "blitz start",
+            "blitz prisma migrate dev (when asked, you can name the migration anything)",
+            "blitz dev",
           ])
         }),
     )
 
     testIfNotWindows("performs all steps on a full install", async () => {
-      const tempDir = makeTempDir()
-      await whileStayingInCWD(() => New.run([tempDir]))
-      rimraf.sync(tempDir)
+      const currentBlitzWorkspaceVersion = require(path.join(
+        await pkgDir(__dirname),
+        "package.json",
+      )).version
 
-      expect(getStepsFromOutput()).toStrictEqual([`cd ${tempDir}`, "blitz start"])
+      jest.mock("@blitzjs/generator/src/utils/get-blitz-dependency-version", () => {
+        return jest.fn().mockImplementation(() => {
+          return {
+            value: currentBlitzWorkspaceVersion,
+            fallback: false,
+          }
+        })
+      })
+
+      const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
+
+      expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz dev"])
     })
 
     it("fetches latest version from template", async () => {
@@ -148,7 +171,7 @@ describe("`new` command", () => {
       testIfNotWindows("uses template versions", async () => {
         nock("https://registry.npmjs.org").get(/.*/).reply(500).persist()
 
-        await withNewApp(async (_, packageJson) => {
+        await withNewApp((_, packageJson) => {
           const {dependencies} = packageJson
           expect(dependencies.blitz).toBe("latest")
         })

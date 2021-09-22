@@ -1,14 +1,27 @@
 module.exports = {
-  parser: "@typescript-eslint/parser",
+  parser: "@babel/eslint-parser",
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    node: true,
+  },
   parserOptions: {
     ecmaVersion: 6,
+    requireConfigFile: false,
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
-    project: `./tsconfig.json`,
+    babelOptions: {
+      presets: ["@babel/preset-env", "@babel/preset-react"],
+      caller: {
+        // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
+        supportsTopLevelAwait: true,
+      },
+    },
   },
-  plugins: ["@typescript-eslint", "import", "unicorn", "simple-import-sort"],
+  plugins: ["import", "unicorn", "simple-import-sort"],
   extends: ["react-app"],
   rules: {
     "react/react-in-jsx-scope": "off", // React is always in scope with Blitz
@@ -23,14 +36,7 @@ module.exports = {
         case: "kebabCase",
       },
     ],
-    "@typescript-eslint/no-floating-promises": "error",
-    // note you must disable the base rule as it can report incorrect errors
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    // note you must disable the base rule as it can report incorrect errors
-    "no-redeclare": "off",
-    "@typescript-eslint/no-redeclare": ["error"],
-    "simple-import-sort/sort": [
+    "simple-import-sort/imports": [
       "warn",
       {
         groups: [
@@ -51,14 +57,62 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ["packages/cli/", "packages/generator/templates", ".eslintrc.js"],
   overrides: [
     {
-      files: ["examples/**", "packages/gui/**", "recipes/**"],
+      files: ["**/*.ts", "**/*.tsx"],
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        ecmaVersion: 6,
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: `./tsconfig.eslint.json`,
+      },
+      plugins: ["@typescript-eslint"],
+      rules: {
+        "@typescript-eslint/no-floating-promises": "error",
+        // note you must disable the base rule as it can report incorrect errors
+        "no-use-before-define": "off",
+        // "@typescript-eslint/no-use-before-define": ["error"],
+        // note you must disable the base rule as it can report incorrect errors
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": ["error"],
+      },
+    },
+    {
+      files: ["examples/**", "recipes/**"],
       rules: {
         "import/no-default-export": "off",
         "unicorn/filename-case": "off",
         "@typescript-eslint/no-floating-promises": "off",
+      },
+    },
+    {
+      files: ["examples/**"],
+      plugins: ["cypress"],
+      parserOptions: {
+        project: null,
+      },
+      env: {
+        "cypress/globals": true,
+      },
+      rules: {
+        "simple-import-sort/imports": "off",
+      },
+    },
+    {
+      files: ["packages/cli/src/commands/**/*"],
+      rules: {
+        "require-await": "off",
+      },
+    },
+    {
+      files: ["test/**", "**/__fixtures__/**"],
+      rules: {
+        "import/no-default-export": "off",
+        "require-await": "off",
+        "unicorn/filename-case": "off",
       },
     },
   ],

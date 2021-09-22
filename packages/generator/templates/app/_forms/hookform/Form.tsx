@@ -1,18 +1,20 @@
-import React, { useState, ReactNode, PropsWithoutRef } from "react"
-import { FormProvider, useForm, UseFormOptions } from "react-hook-form"
-import * as z from "zod"
+import { useState, ReactNode, PropsWithoutRef } from "react"
+import { FormProvider, useForm, UseFormProps } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
-type FormProps<S extends z.ZodType<any, any>> = {
+export interface FormProps<S extends z.ZodType<any, any>>
+  extends Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit"> {
   /** All your form fields */
-  children: ReactNode
+  children?: ReactNode
   /** Text to display in the submit button */
-  submitText: string
+  submitText?: string
   schema?: S
   onSubmit: (values: z.infer<S>) => Promise<void | OnSubmitResult>
-  initialValues?: UseFormOptions<z.infer<S>>["defaultValues"]
-} & Omit<PropsWithoutRef<JSX.IntrinsicElements["form"]>, "onSubmit">
+  initialValues?: UseFormProps<z.infer<S>>["defaultValues"]
+}
 
-type OnSubmitResult = {
+interface OnSubmitResult {
   FORM_ERROR?: string
   [prop: string]: any
 }
@@ -29,16 +31,7 @@ export function Form<S extends z.ZodType<any, any>>({
 }: FormProps<S>) {
   const ctx = useForm<z.infer<S>>({
     mode: "onBlur",
-    resolver: async (values) => {
-      try {
-        if (schema) {
-          schema.parse(values)
-        }
-        return { values, errors: {} }
-      } catch (error) {
-        return { values: {}, errors: error.formErrors?.fieldErrors }
-      }
-    },
+    resolver: schema ? zodResolver(schema) : undefined,
     defaultValues: initialValues,
   })
   const [formError, setFormError] = useState<string | null>(null)
@@ -71,9 +64,11 @@ export function Form<S extends z.ZodType<any, any>>({
           </div>
         )}
 
-        <button type="submit" disabled={ctx.formState.isSubmitting}>
-          {submitText}
-        </button>
+        {submitText && (
+          <button type="submit" disabled={ctx.formState.isSubmitting}>
+            {submitText}
+          </button>
+        )}
 
         <style global jsx>{`
           .form > * + * {

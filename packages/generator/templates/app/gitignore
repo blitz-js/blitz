@@ -11,8 +11,9 @@ web_modules/
 /.blitz/
 /.next/
 *.sqlite
+*.sqlite-journal
 .now
-.blitz-console-history
+.blitz**
 blitz-log.log
 
 # misc

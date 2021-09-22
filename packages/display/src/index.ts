@@ -1,8 +1,9 @@
 import c from "chalk"
+import {Table} from "console-table-printer"
 import ora from "ora"
 import readline from "readline"
-import {Logger} from "tslog"
 
+export const table = Table
 export const chalk = c
 
 // const blitzTrueBrandColor = '6700AB'
@@ -32,7 +33,10 @@ const withX = (str: string) => {
 }
 
 const withProgress = (str: string) => {
-  return withCaret(c.bold(str))
+  return withCaret(str)
+}
+const withError = (str: string) => {
+  return withX(c.red.bold(str))
 }
 
 /**
@@ -53,6 +57,14 @@ const clearLine = (msg?: string) => {
   readline.clearLine(process.stdout, 0)
   readline.cursorTo(process.stdout, 0)
   msg && process.stdout.write(msg)
+}
+
+const clearConsole = () => {
+  if (process.platform === "win32") {
+    process.stdout.write("\x1B[2J\x1B[0f")
+  } else {
+    process.stdout.write("\x1B[2J\x1B[3J\x1B[H")
+  }
 }
 
 /**
@@ -88,7 +100,7 @@ const meta = (msg: string) => {
  * @param {string} msg
  */
 const progress = (msg: string) => {
-  console.log(withCaret(c.bold(msg)))
+  console.log(withProgress(msg))
 }
 
 const info = (msg: string) => {
@@ -115,10 +127,6 @@ const success = (msg: string) => {
   console.log(withCheck(c.green(msg)))
 }
 
-const newline = () => {
-  console.log(" ")
-}
-
 /**
  * Colorizes a variable for display.
  *
@@ -132,9 +140,7 @@ const variable = (val: any) => {
  * If the DEBUG env var is set this will write to the console
  * @param str msg
  */
-const debug = (str: string) => {
-  process.env.DEBUG && console.log(str)
-}
+const debug = require("debug")("blitz")
 
 export const log = {
   withBrand,
@@ -143,33 +149,18 @@ export const log = {
   withCheck,
   withX,
   withProgress,
+  withError,
   branded,
   clearLine,
+  clearConsole,
   error,
   warning,
   meta,
   progress,
   spinner,
   success,
-  newline,
   variable,
   info,
   debug,
+  Table,
 }
-
-export const baseLogger = new Logger({
-  dateTimePattern:
-    process.env.NODE_ENV === "production"
-      ? "year-month-day hour:minute:second.millisecond"
-      : "hour:minute:second.millisecond",
-  displayFunctionName: false,
-  displayFilePath: "hidden",
-  displayRequestId: false,
-  dateTimeTimezone:
-    process.env.NODE_ENV === "production"
-      ? "utc"
-      : Intl.DateTimeFormat().resolvedOptions().timeZone,
-  prettyInspectHighlightStyles: {name: "yellow", number: "blue", bigint: "blue", boolean: "blue"},
-  maskValuesOfKeys: ["password", "passwordConfirmation"],
-  exposeErrorCodeFrame: process.env.NODE_ENV !== "production",
-})

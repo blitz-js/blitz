@@ -1,0 +1,4 @@
+{
+  "main": "dist/blitz-cli.cjs.js",
+  "module": "dist/blitz-cli.esm.js"
+}

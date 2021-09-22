@@ -4,15 +4,18 @@ import React from "react"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
+import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {RecipeRenderer} from "./recipe-renderer"
 import {RecipeMeta} from "./types"
+// const debug = require('debug')("blitz:installer")
 
 type ExecutorConfig =
   | AddDependencyExecutor.Config
   | FileTransformExecutor.Config
   | NewFileExecutor.Config
+  | PrintMessageExecutor.Config
 
-export {ExecutorConfig as ExecutorConfigUnion}
+export type {ExecutorConfig as ExecutorConfigUnion}
 
 export class RecipeExecutor<Options extends RecipeMeta> {
   private readonly steps: ExecutorConfig[]
@@ -27,15 +30,13 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     try {
       const {waitUntilExit} = render(
         <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
+        {exitOnCtrlC: false},
       )
       await waitUntilExit()
+      log.info(`\n🎉 The ${this.options.name} recipe has been installed!\n`)
     } catch (e) {
-      log.error(e)
+      log.error(e as any)
       return
     }
-
-    log.info(
-      `\n🎉 The recipe for ${this.options.name} completed successfully! Its functionality is now fully configured in your Blitz app.\n`,
-    )
   }
 }

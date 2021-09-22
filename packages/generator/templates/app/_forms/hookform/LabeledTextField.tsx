@@ -1,4 +1,4 @@
-import React, { PropsWithoutRef } from "react"
+import { forwardRef, PropsWithoutRef, ComponentPropsWithoutRef } from "react"
 import { useFormContext } from "react-hook-form"
 
 export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElements["input"]> {
@@ -9,24 +9,24 @@ export interface LabeledTextFieldProps extends PropsWithoutRef<JSX.IntrinsicElem
   /** Field type. Doesn't include radio buttons and checkboxes */
   type?: "text" | "password" | "email" | "number"
   outerProps?: PropsWithoutRef<JSX.IntrinsicElements["div"]>
+  labelProps?: ComponentPropsWithoutRef<"label">
 }
 
-export const LabeledTextField = React.forwardRef<HTMLInputElement, LabeledTextFieldProps>(
-  ({ label, outerProps, ...props }, ref) => {
+export const LabeledTextField = forwardRef<HTMLInputElement, LabeledTextFieldProps>(
+  ({ label, outerProps, labelProps, name, ...props }, ref) => {
     const {
       register,
-      formState: { isSubmitting },
-      errors,
+      formState: { isSubmitting, errors },
     } = useFormContext()
-    const error = Array.isArray(errors[props.name])
-      ? errors[props.name].join(", ")
-      : errors[props.name]?.message || errors[props.name]
+    const error = Array.isArray(errors[name])
+      ? errors[name].join(", ")
+      : errors[name]?.message || errors[name]
 
     return (
       <div {...outerProps}>
-        <label>
+        <label {...labelProps}>
           {label}
-          <input disabled={isSubmitting} {...props} ref={register} />
+          <input disabled={isSubmitting} {...register(name)} {...props} />
         </label>
 
         {error && (

@@ -1,12 +1,16 @@
-import {flags} from "@oclif/command"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
-import chalk from "chalk"
-import hasbin from "hasbin"
 import {log} from "@blitzjs/display"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
+import {getLatestVersion} from "@blitzjs/generator"
+import {flags} from "@oclif/command"
+import chalk from "chalk"
+import spawn from "cross-spawn"
+import hasbin from "hasbin"
+import {lt} from "semver"
 const debug = require("debug")("blitz:new")
 
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
+import {runPrisma} from "./prisma"
 
 export interface Flags {
   ts: boolean
@@ -25,7 +29,7 @@ export class New extends Command {
     },
   ]
 
-  static flags = {
+  static flags: {[flag: string]: any} = {
     help: flags.help({char: "h"}),
     js: flags.boolean({
       description: "Generates a JS project. TypeScript is the default unless you add this flag.",
@@ -44,10 +48,15 @@ export class New extends Command {
       allowNo: true,
     }),
     "dry-run": flags.boolean({
-      description: "show what files will be created without writing them to disk",
+      char: "d",
+      description: "Show what files will be created without writing them to disk",
     }),
     "no-git": flags.boolean({
       description: "Skip git repository creation",
+      default: false,
+    }),
+    "skip-upgrade": flags.boolean({
+      description: "Skip blitz upgrade if outdated",
       default: false,
     }),
   }
@@ -56,6 +65,66 @@ export class New extends Command {
     const {args, flags} = this.parse(New)
     debug("args: ", args)
     debug("flags: ", flags)
+
+    if (!flags["skip-upgrade"]) {
+      const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
+      if (lt(this.config.version, latestVersion)) {
+        const upgradeChoices: Array<{name: string; message?: string}> = [
+          {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
+          {
+            name: "no",
+            message: `No - Continue with old version (${this.config.version}) - NOT recommended`,
+          },
+        ]
+
+        const promptUpgrade: any = await this.enquirer.prompt({
+          type: "select",
+          name: "upgrade",
+          message: "Your global blitz version is outdated. Upgrade?",
+          choices: upgradeChoices,
+        })
+
+        if (promptUpgrade.upgrade === "yes") {
+          var useYarn: boolean = false
+
+          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+          if (checkYarn && checkYarn.stdout) {
+            useYarn = checkYarn.stdout.toString().includes("blitz@")
+          }
+          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+          spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
+
+          const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
+
+          if (versionResult.stdout) {
+            const newVersion =
+              versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+
+            if (newVersion[0] && newVersion[0] === latestVersion) {
+              this.log(
+                chalk.green(
+                  `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
+                ),
+              )
+
+              const flagsArr = Object.keys(flags).reduce(
+                (arr: Array<string>, key: string) => (flags[key] ? [...arr, `--${key}`] : arr),
+                [],
+              )
+
+              spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
+                stdio: "inherit",
+              })
+
+              return
+            }
+          }
+          this.error(
+            "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
+          )
+        }
+      }
+    }
 
     try {
       const destinationRoot = require("path").resolve(args.name)
@@ -75,8 +144,11 @@ export class New extends Command {
       })
 
       const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
+      const needsInstall = dryRun || skipInstall
+      const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
+      const AppGenerator = require("@blitzjs/generator").AppGenerator
 
-      const generator = new (require("@blitzjs/generator").AppGenerator)({
+      const generator = new AppGenerator({
         destinationRoot,
         appName,
         dryRun,
@@ -86,34 +158,36 @@ export class New extends Command {
         version: this.config.version,
         skipInstall,
         skipGit: flags["no-git"],
+        onPostInstall: async () => {
+          const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
+
+          try {
+            // Required in order for DATABASE_URL to be available
+            require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+            const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
+            if (!result) throw new Error()
+
+            spinner.succeed()
+          } catch (error) {
+            spinner.fail()
+            postInstallSteps.push(
+              "blitz prisma migrate dev (when asked, you can name the migration anything)",
+            )
+          }
+        },
       })
 
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
 
-      const postInstallSteps = [`cd ${args.name}`]
-      const needsInstall = dryRun || skipInstall
-
       if (needsInstall) {
         postInstallSteps.push(npm ? "npm install" : "yarn")
-        postInstallSteps.push("blitz db migrate (when asked, you can name the migration anything)")
-      } else {
-        const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
-
-        try {
-          // Required in order for DATABASE_URL to be available
-          require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
-          await require("./db").Db.run(["migrate", "--name", "Initial Migration"])
-          spinner.succeed()
-        } catch {
-          spinner.fail()
-          postInstallSteps.push(
-            "blitz db migrate (when asked, you can name the migration anything)",
-          )
-        }
+        postInstallSteps.push(
+          "blitz prisma migrate dev (when asked, you can name the migration anything)",
+        )
       }
 
-      postInstallSteps.push("blitz start")
+      postInstallSteps.push("blitz dev")
 
       this.log("\n" + log.withBrand("Your new Blitz app is ready! Next steps:") + "\n")
 
@@ -123,7 +197,7 @@ export class New extends Command {
       this.log("") // new line
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
-      this.error(err)
+      this.error(err as any)
     }
   }
 }

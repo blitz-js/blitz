@@ -2,11 +2,15 @@ import {log} from "@blitzjs/display"
 import chalk from "chalk"
 import spawn from "cross-spawn"
 import {readJSONSync, writeJson} from "fs-extra"
-import {join, resolve} from "path"
+import {join} from "path"
 import username from "username"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+
+function assert(condition: any, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
@@ -16,25 +20,26 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   skipInstall: boolean
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
+  onPostInstall?: () => Promise<void>
 }
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: string = resolve(__dirname, "./templates/app")
+  sourceRoot: SourceRootType = {type: "template", path: "app"}
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
   packageInstallSuccess: boolean = false
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json", "package.ts.json"]
-
+      return ["tsconfig.json", "blitz-env.d.ts", "jest.config.ts", "package.ts.json"]
     }
-    return ["jsconfig.json", "package.js.json"]
+    return ["jsconfig.json", "jest.config.js", "package.js.json"]
   }
 
   async getTemplateValues() {
     return {
       name: this.options.appName,
+      safeNameSlug: this.options.appName.replace(/[^a-zA-Z0-9-_]/g, "-"),
       username: await username(),
     }
   }
@@ -46,8 +51,15 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   // eslint-disable-next-line require-await
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
-    this.fs.move(this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"), this.destinationPath("package.json"))
-    const pkg = this.fs.readJSON(this.destinationPath("package.json"))
+    this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
+    this.fs.move(
+      this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
+      this.destinationPath("package.json"),
+    )
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
     const ext = this.options.useTs ? "tsx" : "js"
     let type: string
 
@@ -59,7 +71,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         break
       case "React Hook Form":
         type = "hookform"
-        pkg.dependencies["react-hook-form"] = "6.x"
+        pkg.dependencies["react-hook-form"] = "7.x"
+        pkg.dependencies["@hookform/resolvers"] = "2.x"
         break
       case "Formik":
         type = "formik"
@@ -69,11 +82,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
     this.fs.move(
       this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/components/Form.${ext}`),
+      this.destinationPath(`app/core/components/Form.${ext}`),
     )
     this.fs.move(
       this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/components/LabeledTextField.${ext}`),
+      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
     )
 
     this.fs.delete(this.destinationPath("_forms"))
@@ -122,7 +135,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     if (!fallbackUsed && !this.options.skipInstall) {
       spinner.succeed()
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         const logFlag = this.options.yarn ? "--json" : "--loglevel=error"
         const cp = spawn(this.options.yarn ? "yarn" : "npm", ["install", logFlag], {
           stdio: ["inherit", "pipe", "pipe"],
@@ -187,6 +200,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         })
       })
 
+      await this.options.onPostInstall?.()
+
       const runLocalNodeCLI = (command: string) => {
         if (this.options.yarn) {
           return spawn.sync("yarn", ["run", ...command.split(" ")])
@@ -225,13 +240,31 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
   }
 
+  preventFileFromLogging(path: string): boolean {
+    if (path.includes(".env")) return false
+    if (path.includes("eslint")) return false
+
+    const filename = path.split("/").pop() as string
+    return path[0] === "." || filename[0] === "."
+  }
+
   commitChanges() {
     const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
       [
         "git",
-        ["commit", "--no-gpg-sign", "--no-verify", "-m", "New baby Blitz app!"],
+        [
+          "-c",
+          "user.name='Blitz.js CLI'",
+          "-c",
+          "user.email='noop@blitzjs.com'",
+          "commit",
+          "--no-gpg-sign",
+          "--no-verify",
+          "-m",
+          "Brand new Blitz app!",
+        ],
         {stdio: "ignore", timeout: 10000},
       ],
     ]

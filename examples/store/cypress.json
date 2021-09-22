@@ -1,5 +1,9 @@
 {
   "baseUrl": "http://localhost:3099",
   "defaultCommandTimeout": 10000,
-  "video": false
+  "retries": {
+    "runMode": 1
+  },
+  "video": false,
+  "chromeWebSecurity": false
 }

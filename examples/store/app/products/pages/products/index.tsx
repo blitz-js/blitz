@@ -1,27 +1,29 @@
-import {useMemo} from "react"
-import {Link, BlitzPage, GetStaticProps} from "blitz"
+import {Link, BlitzPage, InferGetStaticPropsType} from "blitz"
 import getProducts from "../../queries/getProducts"
-import {Product} from "db"
-import superjson from "superjson"
+import {sum} from "lodash"
+import {Product} from "@prisma/client"
 
-type StaticProps = {
-  dataString: string
+// regression test for #1646
+import {getMeSomeQualityHumor} from "../../api"
+console.log("Attention! Must read: " + getMeSomeQualityHumor())
+
+export function averagePrice(products: Product[]) {
+  const prices = products.map((p) => p.price ?? 0)
+  return sum(prices) / prices.length
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getStaticProps = async () => {
   const {products} = await getProducts({orderBy: {id: "desc"}})
-  const dataString = superjson.stringify(products)
   return {
-    props: {dataString},
+    props: {products},
     revalidate: 1,
   }
 }
 
-const Page: BlitzPage<StaticProps> = function ({dataString}) {
-  const products = useMemo(() => superjson.parse<Product[]>(dataString), [dataString])
+const Products: BlitzPage<InferGetStaticPropsType<typeof getStaticProps>> = function ({products}) {
   return (
     <div>
-      <h1>Products</h1>
+      <h1>First 100 Products</h1>
       <div id="products">
         {products.map((product) => (
           <p key={product.id}>
@@ -31,7 +33,8 @@ const Page: BlitzPage<StaticProps> = function ({dataString}) {
           </p>
         ))}
       </div>
+      <p>Average price: {averagePrice(products).toFixed(1)}</p>
     </div>
   )
 }
-export default Page
+export default Products

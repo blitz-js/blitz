@@ -1,9 +1,10 @@
 {
-  "name": "no-prisma",
-  "version": "0.25.0-canary.1",
+  "name": "@examples/no-prisma",
+  "version": "0.34.0-canary.0",
   "scripts": {
-    "start": "blitz start",
+    "dev": "blitz dev",
     "build": "blitz build",
+    "start": "blitz start",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "echo \"No tests yet\""
   },
@@ -16,8 +17,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && pretty-quick --staged",
-      "pre-push": "blitz test"
+      "pre-commit": "lint-staged && pretty-quick --staged"
     }
   },
   "lint-staged": {
@@ -26,29 +26,25 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.25.0-canary.1",
-    "knex": "0.21.2",
-    "react": "0.0.0-experimental-7f28234f8",
-    "react-dom": "0.0.0-experimental-7f28234f8",
-    "sqlite3": "5.0.0"
+    "blitz": "0.40.0-canary.8",
+    "knex": "0.21.16",
+    "react": "0.0.0-experimental-6a589ad71",
+    "react-dom": "0.0.0-experimental-6a589ad71",
+    "sqlite3": "5.0.2"
   },
   "devDependencies": {
-    "@types/react": "16.9.43",
-    "@typescript-eslint/eslint-plugin": "2.34.1-alpha.2",
-    "@typescript-eslint/parser": "2.34.1-alpha.2",
-    "babel-eslint": "10.1.0",
-    "eslint": "7.6.0",
-    "eslint-config-react-app": "5.2.1",
-    "eslint-plugin-flowtype": "5.2.0",
-    "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-react": "7.20.5",
-    "eslint-plugin-react-hooks": "4.0.8",
-    "husky": "4.2.5",
-    "lint-staged": "10.2.13",
-    "prettier": "2.0.5",
-    "pretty-quick": "2.0.1",
-    "typescript": "3.9.6"
+    "@types/react": "17.0.2",
+    "eslint": "7.21.0",
+    "eslint-config-react-app": "~6.0.0",
+    "eslint-plugin-flowtype": "~5.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "5.1.2",
+    "lint-staged": "10.5.4",
+    "prettier": "2.2.1",
+    "pretty-quick": "3.1.0"
   },
   "private": true
 }

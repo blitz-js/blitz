@@ -1,20 +1,41 @@
-import {flags} from "@oclif/command"
-import type {RecipeExecutor} from "@blitzjs/installer"
+import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
+import type {RecipeExecutor} from "@blitzjs/installer"
+import {flags} from "@oclif/command"
+import {bootstrap} from "global-agent"
 import {Stream} from "stream"
 import {promisify} from "util"
-
 import {Command} from "../command"
-import {dedent} from "../utils/dedent"
+const debug = require("debug")("blitz:cli")
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      GLOBAL_AGENT: {
+        HTTP_PROXY?: string
+        HTTPS_PROXY?: string
+        NO_PROXY?: string
+      }
+    }
+  }
+}
 
 const pipeline = promisify(Stream.pipeline)
 
 async function got(url: string) {
-  return require("got")(url).catch((e: any) => Boolean(console.error(e)) || e)
+  return require("got")(url).catch((e: any) => {
+    if (e.response.statusCode === 403) {
+      log.error(e.response.body)
+    } else {
+      return e
+    }
+  })
 }
 
 async function gotJSON(url: string) {
-  return JSON.parse((await got(url)).body)
+  debug("[gotJSON] Downloading json from ", url)
+  const res = await got(url)
+  return JSON.parse(res.body)
 }
 
 async function isUrlValid(url: string) {
@@ -25,8 +46,13 @@ function requireJSON(file: string) {
   return JSON.parse(require("fs-extra").readFileSync(file).toString("utf-8"))
 }
 
+function checkLockFileExists(filename: string) {
+  return require("fs-extra").existsSync(require("path").resolve(filename))
+}
+
 const GH_ROOT = "https://github.com/"
 const API_ROOT = "https://api.github.com/repos/"
+const RAW_ROOT = "https://raw.githubusercontent.com/"
 const CODE_ROOT = "https://codeload.github.com/"
 
 export enum RecipeLocation {
@@ -113,14 +139,13 @@ export class Install extends Command {
     defaultBranch: string,
     subdirectory?: string,
   ): Promise<string> {
-    const recipeDir = require("path").join(
-      require("os").tmpdir(),
-      `blitz-recipe-${repoFullName.replace("/", "-")}`,
-    )
+    debug("[cloneRepo] starting...")
+    const recipeDir = require("path").join(process.cwd(), ".blitz", "recipe-install")
     // clean up from previous run in case of error
     require("rimraf").sync(recipeDir)
-    require("fs-extra").mkdirSync(recipeDir)
+    require("fs-extra").mkdirsSync(recipeDir)
     process.chdir(recipeDir)
+    debug("Extracting recipe to ", recipeDir)
 
     const repoName = repoFullName.split("/")[1]
     // `tar` top-level filter is `${repoName}-${defaultBranch}`, and then we want to get our recipe path
@@ -149,31 +174,69 @@ export class Install extends Command {
     await recipe.run(recipeArgs)
   }
 
+  /**
+   * Setup proxy support for blitz install
+   *
+   * Loads proxy variables from enviroment and blitz.config.js
+   *
+   */
+  private async setupProxySupport() {
+    const cli = getConfig().cli
+    const httpProxy = cli?.httpProxy || process.env.http_proxy || process.env.HTTP_PROXY
+    const httpsProxy = cli?.httpsProxy || process.env.https_proxy || process.env.HTTPS_PROXY
+    const noProxy = cli?.noProxy || process.env.no_proxy || process.env.NO_PROXY
+
+    if (httpProxy || httpsProxy) {
+      global.GLOBAL_AGENT = {
+        HTTP_PROXY: httpProxy,
+        HTTPS_PROXY: httpsProxy,
+        NO_PROXY: noProxy,
+      }
+
+      bootstrap()
+    }
+  }
+
   async run() {
     this.parse(Install)
 
     require("../utils/setup-ts-node").setupTsnode()
+
+    await this.setupProxySupport()
+
     const {args} = this.parse(Install)
-    const pkgManager = require("fs-extra").existsSync(require("path").resolve("yarn.lock"))
-      ? "yarn"
-      : "npm"
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
+    debug("recipeInfo", recipeInfo)
+    const chalk = (await import("chalk")).default
 
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
-      const packageJsonPath = `${apiUrl}/contents/package.json`
+      const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
+      const repoInfo = await gotJSON(apiUrl)
+      const packageJsonPath = require("path").join(
+        `${rawUrl}`,
+        repoInfo.default_branch,
+        recipeInfo.subdirectory ?? "",
+        "package.json",
+      )
 
       if (!(await isUrlValid(packageJsonPath))) {
-        log.error(dedent`[blitz install] Recipe path "${args.recipe}" isn't valid. Please provide:
-          1. The name of a dependency to install (e.g. "tailwind"),
-          2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
-          3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
-          4. A file path to a locally-written recipe.`)
-      } else {
-        const repoInfo = await gotJSON(apiUrl)
+        debug("Url is invalid for ", packageJsonPath)
+        log.error(`Could not find recipe "${args.recipe}"\n`)
+        console.log(`${chalk.bold("Please provide one of the following:")}
 
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe}`).start()
+1. The name of a recipe to install (e.g. "tailwind")
+   ${chalk.dim(
+     "- Available recipes listed at https://github.com/blitz-js/blitz/tree/canary/recipes",
+   )}
+2. The full name of a GitHub repository (e.g. "blitz-js/example-recipe"),
+3. A full URL to a Github repository (e.g. "https://github.com/blitz-js/example-recipe"), or
+4. A file path to a locally-written recipe.\n`)
+        process.exit(1)
+      } else {
+        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
+
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
           repoInfo.default_branch,
@@ -182,8 +245,20 @@ export class Install extends Command {
         spinner.stop()
 
         spinner = log.spinner("Installing package.json dependencies").start()
+
+        let pkgManager = "npm"
+        let installArgs = ["install", "--legacy-peer-deps", "--ignore-scripts"]
+
+        if (checkLockFileExists("yarn.lock")) {
+          pkgManager = "yarn"
+          installArgs = ["install", "--ignore-scripts"]
+        } else if (checkLockFileExists("pnpm-lock.yaml")) {
+          pkgManager = "pnpm"
+          installArgs = ["install", "--ignore-scripts"]
+        }
+
         await new Promise((resolve) => {
-          const installProcess = require("cross-spawn")(pkgManager, ["install"])
+          const installProcess = require("cross-spawn")(pkgManager, installArgs)
           installProcess.on("exit", resolve)
         })
         spinner.stop()

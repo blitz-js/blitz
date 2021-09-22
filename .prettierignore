@@ -4,7 +4,7 @@
 .log
 .DS_Store
 .jest-*
-lib
+packages/cli/lib
 node_modules
 reports
 *.log
@@ -19,3 +19,7 @@ bin
 !packages/blitz/src/bin
 packages/generator/templates/**
 .github/ISSUE_TEMPLATE/bug_report.md
+nextjs/packages/next/compiled/**
+
+// Because file from nextjs upstream isn't formatted properly
+nextjs/packages/next/build/webpack-config.ts

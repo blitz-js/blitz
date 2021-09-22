@@ -1,5 +1,5 @@
-import {join} from "path"
-import {Generator, GeneratorOptions} from "../generator"
+import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueriesGeneratorOptions extends GeneratorOptions {
   ModelName: string
@@ -14,7 +14,7 @@ export interface QueriesGeneratorOptions extends GeneratorOptions {
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   static subdirectory = "queries"
-  sourceRoot = join(__dirname, "./templates/queries")
+  sourceRoot: SourceRootType = {type: "template", path: "queries"}
 
   private getId(input: string = "") {
     if (!input) return input
@@ -45,7 +45,8 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   }
 
   getTargetDirectory() {
-    const context = this.options.context ? `${this.options.context}/` : ""
-    return `app/${context}${this.options.modelNames}/queries`
+    const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
+    const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
+    return `app/${context}${kebabCaseModelName}/queries`
   }
 }

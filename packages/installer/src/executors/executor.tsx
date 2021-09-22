@@ -3,6 +3,7 @@ import * as React from "react"
 import {Newline} from "../components/newline"
 
 export interface ExecutorConfig {
+  successIcon?: string
   stepId: string | number
   stepName: string
   stepType: string
@@ -12,7 +13,7 @@ export interface ExecutorConfig {
 
 export interface Executor {
   type: string
-  Propose: React.FC<{step: ExecutorConfig; onProposalAccepted: (data?: any) => void; cliArgs: any}>
+  Propose?: React.FC<{step: ExecutorConfig; onProposalAccepted: (data?: any) => void; cliArgs: any}>
   Commit: React.FC<{
     step: ExecutorConfig
     proposalData?: any
@@ -48,7 +49,9 @@ export function Frontmatter({executor}: {executor: ExecutorConfig}) {
           {verticalBorder}
         </Text>
       </Box>
-      <Text bold>{executor.explanation}</Text>
+      <Text color="gray" italic>
+        {executor.explanation}
+      </Text>
     </Box>
   )
 }

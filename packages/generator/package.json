@@ -1,30 +1,27 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.25.0-canary.1",
+  "version": "0.40.0-canary.8",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "clean": "rimraf dist",
-    "predev": "wait-on ../server/dist/packages/server/src/index.d.ts",
-    "dev": "run-p watch build:templates",
-    "watch": "tsdx watch --verbose",
-    "build": "tsdx build && yarn build:templates",
-    "build:templates": "wait-on dist/index.js && rimraf templates/**/node_modules && cpy --dot --parents '!/node_modules/' templates dist",
-    "test": "tsdx test",
-    "test:watch": "tsdx test --watch"
+    "dev": "yarn build:templates --watch",
+    "buildpkg": "yarn build:templates",
+    "build:templates": "cpx --clean --include-hidden \"templates/**\" dist/templates",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": {
     "name": "Brandon Bayer",
     "email": "b@bayer.ws",
     "url": "https://twitter.com/flybayer"
   },
-  "main": "dist/index.js",
-  "module": "dist/generator.esm.js",
-  "types": "dist/packages/generator/src/index.d.ts",
+  "main": "dist/blitzjs-generator.cjs.js",
+  "module": "dist/blitzjs-generator.esm.js",
+  "types": "dist/blitzjs-generator.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "blitz",
     "generator"
@@ -34,25 +31,29 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/plugin-transform-typescript": "7.9.4",
-    "@blitzjs/display": "0.25.0-canary.1",
-    "@types/jscodeshift": "0.7.1",
-    "chalk": "4.0.0",
+    "@babel/core": "7.12.10",
+    "@babel/plugin-transform-typescript": "7.12.1",
+    "@blitzjs/display": "0.40.0-canary.8",
+    "@blitzjs/server": "0.40.0-canary.8",
+    "@mrleebo/prisma-ast": "^0.2.4",
+    "@types/jscodeshift": "0.7.2",
+    "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
-    "diff": "4.0.2",
-    "enquirer": "2.3.5",
-    "fs-extra": "9.0.0",
-    "fs-readdir-recursive": "1.1.0",
-    "got": "11.1.3",
-    "jscodeshift": "0.10.0",
-    "mem-fs": "1.1.3",
-    "mem-fs-editor": "6.0.0",
-    "node-fetch": "2.6.1",
-    "pluralize": "8.0.0",
-    "recast": "0.19.1",
-    "username": "5.1.0",
-    "vinyl": "2.2.0"
+    "diff": "5.0.0",
+    "enquirer": "2.3.6",
+    "fs-extra": "^9.1.0",
+    "got": "^11.8.1",
+    "jscodeshift": "0.11.0",
+    "mem-fs": "1.2.0",
+    "mem-fs-editor": "8.0.0",
+    "npm-which": "^3.0.1",
+    "pluralize": "^8.0.0",
+    "recast": "0.20.4",
+    "username": "^5.1.0",
+    "vinyl": "2.2.1"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

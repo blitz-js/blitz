@@ -3,6 +3,15 @@ describe("products#index page", () => {
     cy.visit("/products")
     cy.contains("h1", "Products")
   })
+
+  it("Logs the XKCD (Regression #1646)", () => {
+    cy.visit("/products", {
+      onBeforeLoad(win) {
+        cy.stub(win.console, "log").as("consoleLog")
+      },
+    })
+    cy.get("@consoleLog").should("be.calledWithMatch", /Attention! Must read: .*/)
+  })
 })
 
 describe("products#show page", () => {
@@ -19,12 +28,9 @@ describe("products#show page", () => {
     cy.get("#products > p > a").first().click()
     cy.location("pathname").should("match", /\/products\/\S+$/)
 
-    cy.get("p").should("have.length", 2)
-    cy.get("p")
-      .last()
-      .contains(/Price: \$[0-9]*/)
-
     cy.get("h1").should("have.length", 1)
+    cy.get(".description").should("exist")
+    cy.get(".price").contains(/Price: \$[0-9]*/)
   })
 
   it("goes to back to products page", () => {
@@ -33,6 +39,10 @@ describe("products#show page", () => {
 
     cy.get("a").first().click()
     cy.location("pathname").should("equal", "/products")
+  })
+
+  it("shows the average price", () => {
+    cy.contains(/Average price: \d+.\d/)
   })
 })
 
@@ -51,6 +61,16 @@ describe("products#ssr page", () => {
 
     cy.get("a").first().click()
     cy.location("pathname").should("equal", "/products")
+  })
+})
+
+describe("products#infinite page", () => {
+  beforeEach(() => {
+    cy.visit("/products/infinite")
+  })
+
+  it("shows 3 products", () => {
+    cy.get('[data-test="productName"]').should("have.length", 3)
   })
 })
 

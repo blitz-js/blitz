@@ -224,7 +224,7 @@ Blitz does some fancy stuff at compile time to convert the imported queries and 
 We love this approach for all the following reasons:
 
 1. Extremely simple. Just import the function and call it like any other function.
-2. Everything has complete Typescript types without a compiler (unlike GraphQL).
+2. Everything has complete TypeScript types without a compiler (unlike GraphQL).
 3. The entire network layer is abstracted away so you can focus on what makes your app unique.
 4. Queries and mutations are highly composable and easily testable.
 
@@ -316,12 +316,12 @@ GraphQL is a great technology, but it's not great as the backbone for apps that 
 
 Primarily because GraphQL is not scalable when deployed to serverless platforms like Zeit or Netlify. It's not scalable because all of your resolver code is stuffed into a single Lambda causing you to quickly run into cold start issues and max code size issues.
 
-Anyone deploying a sizable GraphQL API via serverless Lambda functions does so by splitting the graph into many small Lamba functions, each of which is responsible for discrete set of types. Then you have a separate gateway like Apollo Federation or GraphQL Mesh to stitch the entire schema back together again.
+Anyone deploying a sizable GraphQL API via serverless Lambda functions does so by splitting the graph into many small Lambda functions, each of which is responsible for discrete set of types. Then you have a separate gateway like Apollo Federation or GraphQL Mesh to stitch the entire schema back together again.
 
 Other reasons include:
 
-1. A lot of boilerplate, especially for use with Typescript
-2. Typescript types require a code watcher and compiler
+1. A lot of boilerplate, especially for use with TypeScript
+2. TypeScript types require a code watcher and compiler
 3. Extra code dependencies
 
 ## 9. Blitz is GraphQL Ready
@@ -375,7 +375,7 @@ Once we have sufficient feedback on this proposal and made any necessary changes
 ### How You Can Help
 
 1. **Contributions of any kind, including code, design, documentation, and translation.**
-   1. [Join the Blitz Slack group](https://slack.blitzjs.com)
-   2. Find an unclaimed issue that is marked as ready to work on. Then comment that you are working on it. **NOTE:** There's currently very few issues, but we'll soon be creating a lot of new issues for building everything defined in this RFC. You can watch Slack for new issues and/or watch this repo.
+   1. [Join the Blitz Discord group](https://discord.blitzjs.com)
+   2. Find an unclaimed issue that is marked as ready to work on. Then comment that you are working on it. **NOTE:** There's currently very few issues, but we'll soon be creating a lot of new issues for building everything defined in this RFC. You can watch Discord for new issues and/or watch this repo.
 2. **Donation or Sponsorship**
    1. Click the sponsor button at the top of this repo to see the options.

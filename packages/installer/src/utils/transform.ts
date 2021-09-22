@@ -22,17 +22,28 @@ export interface TransformResult {
   filename: string
   error?: Error
 }
-export type Transformer = (program: Collection<j.Program>) => Collection<j.Program>
 
-export function processFile(original: string, transformerFn: Transformer): string {
-  const program = j(original, {parser: customTsParser})
-  return transformerFn(program).toSource()
+export type StringTransformer = (program: string) => string | Promise<string>
+export type Transformer = (
+  program: Collection<j.Program>,
+) => Collection<j.Program> | Promise<Collection<j.Program>>
+
+export function stringProcessFile(
+  original: string,
+  transformerFn: StringTransformer,
+): string | Promise<string> {
+  return transformerFn(original)
 }
 
-export function transform(
-  transformerFn: Transformer,
+export async function processFile(original: string, transformerFn: Transformer): Promise<string> {
+  const program = j(original, {parser: customTsParser})
+  return (await transformerFn(program)).toSource()
+}
+
+export async function transform(
+  processFile: (original: string) => Promise<string>,
   targetFilePaths: string[],
-): TransformResult[] {
+): Promise<TransformResult[]> {
   const results: TransformResult[] = []
   for (const filePath of targetFilePaths) {
     if (!fs.existsSync(filePath)) {
@@ -45,7 +56,7 @@ export function transform(
     try {
       const fileBuffer = fs.readFileSync(filePath)
       const fileSource = fileBuffer.toString("utf-8")
-      const transformedCode = processFile(fileSource, transformerFn)
+      const transformedCode = await processFile(fileSource)
       fs.writeFileSync(filePath, transformedCode)
       results.push({
         status: TransformStatus.Success,
@@ -55,7 +66,7 @@ export function transform(
       results.push({
         status: TransformStatus.Failure,
         filename: filePath,
-        error: err,
+        error: err as any,
       })
     }
   }

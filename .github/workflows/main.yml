@@ -1,14 +1,14 @@
-name: Continuous Integration
+# https://github.com/vercel/next.js/commits/canary/.github/workflows/build_test_deploy.yml
+
+name: CI
 
 on:
-  push:
-    branches:
-      - master
-      - canary
   pull_request:
-    branches:
-      - master
-      - canary
+    types: [opened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -17,9 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: "12.16.1"
+          node-version: "14"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -30,31 +30,40 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-v3-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v3-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
+        env:
+          CI: true
+      - name: manypkg lint
+        run: yarn manypkg check
+        env:
+          CI: true
+      - name: Build packages
+        run: yarn build
         env:
           CI: true
       - name: yarn lint
         run: yarn lint
         env:
           CI: true
-  build_and_test_pkgs:
-    name: Build & Test Packages
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+
+  build-linux:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
         with:
-          node-version: "12.16.1"
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -64,64 +73,361 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-v2-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
-      - name: Setup kernel to increase watchers
-        if: matrix.os == 'ubuntu-latest'
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
         run: yarn build
-        env:
-          CI: true
+      - uses: actions/cache@v2
+        id: cache-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+  testBlitzPackages:
+    name: Blitz - Test Packages
+    needs: build-linux
+    runs-on: ubuntu-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
         run: yarn testonly:packages
         env:
           CI: true
-  build_and_test_examples:
-    name: Build & Test Examples
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+
+  testBlitzExamples:
+    timeout-minutes: 30
+    name: Blitz - Test Example Apps (ubuntu-latest)
+    needs: build-linux
+    runs-on: ubuntu-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/cache@v2
+        id: restore-build
         with:
-          node-version: "12.16.1"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            /home/runner/.cache/Cypress
-            C:\Users\runneradmin\AppData\Local\Cypress\Cache
-          key: ${{ runner.os }}-yarn-v2-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-v2-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --silent
-        env:
-          CI: true
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      # Needed to get cypress binary
+      - run: yarn cypress install
+      - name: Install sass
+        run: yarn install -W sass
       - name: Setup kernel to increase watchers
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-      - name: Build packages
-        run: yarn build
-        env:
-          CI: true
       - name: Test examples
         run: yarn testonly:examples
         env:
           CI: true
+
+  testBlitzExamplesWin:
+    timeout-minutes: 30
+    name: Blitz - Test Example Apps (windows-latest)
+    runs-on: windows-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
+      # Needed to get cypress binary
+      - run: yarn cypress install
+      - name: Install sass
+        run: yarn install -W sass
+      - name: Test examples
+        run: yarn testonly:examples
+        env:
+          CI: true
+
+  checkPrecompiled:
+    name: Check Pre-compiled
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - run: ./scripts/check-pre-compiled.sh
+
+  testUnit:
+    name: Nextjs - Test Unit
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - run: node run-tests.js --type unit -g 1/1
+
+  testIntegrationBlitz:
+    name: Blitz - Test Integration
+    needs: build-linux
+    runs-on: ubuntu-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+      - run: xvfb-run node nextjs/run-tests.js -c 3
+
+  testIntegrationBlitzWin:
+    name: Blitz - Test Integration (Windows)
+    runs-on: windows-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
+      - run: node nextjs/run-tests.js
+
+  testIntegration:
+    name: Nextjs - Test Integration
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - run: xvfb-run node run-tests.js -g ${{ matrix.group }}/20 -c 3
+
+  testIntegrationWin:
+    name: Nextjs - Test Integration (Windows)
+    runs-on: windows-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 25
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+      # - name: Cache node_modules
+      #   id: yarn-cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       **/node_modules
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      - run: yarn install --frozen-lockfile --check-files
+      - name: Build Packages
+        run: yarn build
+      - run: node run-tests.js test/integration/basic/test/index.test.js test/integration/production/test/index.test.js test/integration/multi-pages/test/index.test.js
+        working-directory: nextjs
+
+  testElectron:
+    name: Nextjs - Test Electron
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+      NEXT_TEST_JOB: 1
+      HEADLESS: true
+      TEST_ELECTRON: 1
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+
+      # TODO: remove after we fix watchpack watching too much
+      - name: Setup kernel to increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - run: cd test/integration/with-electron/app && yarn
+      - run: xvfb-run node run-tests.js test/integration/with-electron/test/index.test.js
+
+  testsPass:
+    name: thank you, next
+    runs-on: ubuntu-latest
+    needs:
+      [
+        checkPrecompiled,
+        testIntegration,
+        testIntegrationBlitz,
+        testIntegrationBlitzWin,
+        testUnit,
+        testBlitzPackages,
+        testBlitzExamples,
+        testBlitzExamplesWin,
+      ]
+    steps:
+      - run: exit 0
+
+  testFirefox:
+    name: Nextjs - Test Firefox (production)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      HEADLESS: true
+      BROWSER_NAME: "firefox"
+      BLITZ_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
+
+  testSafari:
+    name: Nextjs - Test Safari (production)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: build-linux
+    env:
+      BROWSERSTACK: true
+      BROWSER_NAME: "safari"
+      BLITZ_TELEMETRY_DISABLED: 1
+      SKIP_LOCAL_SELENIUM_SERVER: true
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
+
+  testSafariOld:
+    name: Nextjs - Test Safari 10.1 (nav)
+    defaults:
+      run:
+        working-directory: nextjs
+    runs-on: ubuntu-latest
+    needs: [build-linux, testSafari]
+    env:
+      BROWSERSTACK: true
+      LEGACY_SAFARI: true
+      BROWSERNAME: "safari"
+      BLITZ_TELEMETRY_DISABLED: 1
+      SKIP_LOCAL_SELENIUM_SERVER: true
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'

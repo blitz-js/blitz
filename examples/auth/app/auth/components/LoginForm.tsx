@@ -1,8 +1,10 @@
-import {Link, useMutation} from "blitz"
-import {LabeledTextField} from "app/components/LabeledTextField"
-import {Form, FORM_ERROR} from "app/components/Form"
+import {AuthenticationError, Link, useMutation} from "blitz"
+import {LabeledTextField} from "app/core/components/LabeledTextField"
+import {Form, FORM_ERROR} from "app/core/components/Form"
 import login from "app/auth/mutations/login"
-import {LoginInput} from "app/auth/validations"
+import {Login} from "app/auth/validations"
+
+import {Routes} from ".blitz"
 
 type LoginFormProps = {
   onSuccess?: () => void
@@ -10,19 +12,21 @@ type LoginFormProps = {
 
 export const LoginForm = (props: LoginFormProps) => {
   const [loginMutation] = useMutation(login)
+
   return (
     <div>
       <h1>Login</h1>
+
       <Form
-        submitText="Log In"
-        schema={LoginInput}
-        initialValues={{email: undefined, password: undefined}}
+        submitText="Login"
+        schema={Login}
+        initialValues={{email: "", password: ""}}
         onSubmit={async (values) => {
           try {
             await loginMutation(values)
-            props.onSuccess && props.onSuccess()
-          } catch (error) {
-            if (error.name === "AuthenticationError") {
+            props.onSuccess?.()
+          } catch (error: any) {
+            if (error instanceof AuthenticationError) {
               return {[FORM_ERROR]: "Sorry, those credentials are invalid"}
             } else {
               return {
@@ -35,9 +39,15 @@ export const LoginForm = (props: LoginFormProps) => {
       >
         <LabeledTextField name="email" label="Email" placeholder="Email" />
         <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <div>
+          <Link href={Routes.ForgotPasswordPage()}>
+            <a>Forgot your password?</a>
+          </Link>
+        </div>
       </Form>
+
       <div style={{marginTop: "1rem"}}>
-        Or <Link href="/signup">Sign Up</Link>
+        Or <Link href={Routes.SignupPage()}>Sign Up</Link>
       </div>
     </div>
   )

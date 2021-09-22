@@ -5,15 +5,13 @@ import {join} from "path"
 
 export default RecipeBuilder()
   .setName("Base Web")
-  .setDescription(
-    `Configure your Blitz app's styling with Base Web. This recipe will install all necessary dependencies and configure Base Web for immediate use.`,
-  )
+  .setDescription(`This will install all necessary dependencies and configure Base Web for use.`)
   .setOwner("Konrad Kalemba <konrad@kale.mba>")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add dependencies",
-    explanation: `We need to install 'baseui' which is Base Web's main package containing all components. We need to add Styletron as a dependency too -- it's a toolkit for CSS in JS styling which Base Web relies on.`,
+    explanation: `Add 'baseui' and Styletron as a dependency too -- it's a toolkit for CSS in JS styling which Base Web relies on.`,
     packages: [
       {name: "baseui", version: "latest"},
       {name: "styletron-engine-atomic", version: "latest"},
@@ -31,7 +29,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "addStyletronAndBaseProvidersToApp",
     stepName: "Import required providers and wrap the root of the app with them",
-    explanation: `Now we need to import StyletronProvider and BaseProvider components and then wrap the application with them. Additionally we supply StyletronProvider with 'value' and 'debug' props. BaseProvider requires a 'theme' prop we set with default Base Web's light theme.`,
+    explanation: `Additionally we supply StyletronProvider with 'value' and 'debug' props. BaseProvider requires a 'theme' prop we set with default Base Web's light theme.`,
     singleFileSearch: paths.app(),
     transform(program: Collection<j.Program>) {
       const styletronProviderImport = j.importDeclaration(

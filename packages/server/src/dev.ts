@@ -1,33 +1,19 @@
+import {getConfig} from "@blitzjs/config"
+import {log} from "@blitzjs/display"
 import {normalize, ServerConfig} from "./config"
-import {nextStartDev} from "./next-utils"
-import {configureStages} from "./stages"
+import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
 
-export async function dev(config: ServerConfig, readyForNextDev: Promise<any> = Promise.resolve()) {
-  const {
-    rootFolder,
-    transformFiles,
-    nextBin,
-    devFolder,
-    ignore,
-    include,
-    isTypescript,
-    writeManifestFile,
-    watch,
-    clean,
-  } = await normalize({...config, env: "dev"})
+export async function dev(config: ServerConfig) {
+  const {rootFolder, nextBin} = await normalize({...config, env: "dev"})
 
-  const stages = configureStages({writeManifestFile, isTypescript})
+  if (customServerExists()) {
+    log.success("Using your custom server")
 
-  const [{manifest}] = await Promise.all([
-    transformFiles(rootFolder, stages, devFolder, {
-      ignore,
-      include,
-      watch,
-      clean,
-    }),
-    // Ensure next does not start until parallel processing completes
-    readyForNextDev,
-  ])
+    const blitzConfig = getConfig()
+    const watch = blitzConfig.customServer?.hotReload ?? true
 
-  await nextStartDev(nextBin, devFolder, manifest, devFolder, config)
+    await startCustomServer(rootFolder, config, {watch})
+  } else {
+    await nextStartDev(nextBin, rootFolder, {} as any, rootFolder, config)
+  }
 }
