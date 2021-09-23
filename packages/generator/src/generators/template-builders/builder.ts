@@ -1,3 +1,4 @@
+import { NextConfigComplete } from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
 import {addSpaceBeforeCapitals, camelCaseToKebabCase, singleCamel, singlePascal} from "../../utils/inflector"
 
@@ -37,7 +38,7 @@ export abstract class Builder<T> implements IBuilder<T> {
   }
 
   private possibleZodTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
-  private possibleComponentTypes = ["string", "any", "int", "number", "boolean"]
+  private possibleComponentTypes = ["string", "any", "int", "number", "boolean", "uuid"]
 
   public getZodTypeName(type: string = "") {
     if (this.possibleZodTypes.includes(type)) {
@@ -52,11 +53,7 @@ export abstract class Builder<T> implements IBuilder<T> {
       process.env.BLITZ_APP_DIR = "."
     }
 
-    // TODO: Need to research if this is an expensive call. If we have a ton of fields, 
-    // we should probably throw this behind a proxy that's reused
-    // over the lifetime of a generator command:
-    const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
-    const config = await loadConfigAtRuntime()
+    const config = await this.getConfig()
     const typeToComponentMap = config.template.typeToComponentMap
 
     if (this.possibleComponentTypes.includes(type)) {
@@ -65,6 +62,17 @@ export abstract class Builder<T> implements IBuilder<T> {
       return typeToComponentMap["string"]
     }
   }
+
+  private config: NextConfigComplete | undefined = undefined
+  
+  private async getConfig(){
+    if(!this.config){
+      const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
+      this.config = await loadConfigAtRuntime()
+    }
+
+    return this.config
+  }  
 
   // eslint-disable-next-line require-await
   public async getFieldTemplateValues(args: string[]){
