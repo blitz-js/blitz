@@ -158,7 +158,7 @@ export abstract class Generator<
         ? fs.existsSync(path.resolve("tsconfig.json"))
         : this.options.useTs
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
-    process.env.BLITZ_APP_DIR = this.options.destinationRoot
+    process.env.BLITZ_APP_DIR = process.cwd()
   }
 
   abstract getTemplateValues(): Promise<any>
