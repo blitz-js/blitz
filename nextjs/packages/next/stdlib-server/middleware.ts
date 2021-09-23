@@ -45,7 +45,7 @@ export async function invokeWithMiddleware<
     )
   }
 
-  const rpcResolver = (resolver as unknown) as RpcResolver
+  const rpcResolver = resolver as unknown as RpcResolver
 
   // can be .default._resolverName when user imports with `* as resolver`
   const resolverName =
@@ -150,7 +150,9 @@ function getProtocol(req: MiddlewareRequest) {
     return 'https'
   }
   const forwardedProto =
-    req.headers && (req.headers['x-forwarded-proto'] as string)
+    req.headers &&
+    ((req.headers['forwarded'] as string)?.match(/(?<=proto=).+/g)?.[0] ||
+      (req.headers['x-forwarded-proto'] as string))
   if (forwardedProto) {
     return forwardedProto.split(/\s*,\s*/)[0]
   }

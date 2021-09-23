@@ -221,6 +221,8 @@ export function startCustomServer(
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
+  process.env.BLITZ_APP_DIR = config.rootFolder
+
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
@@ -253,30 +255,34 @@ export function startCustomServer(
         })
     }
 
-    if (watch) {
-      // Handle build & Starting server
-      const esbuildOptions = getEsbuildOptions()
-      esbuildOptions.watch = {
-        onRebuild(error) {
-          if (error) {
-            log.error("Failed to re-build custom server")
-          } else {
-            newline()
-            log.progress("Custom server changed - restarting...")
-            newline()
-            //@ts-ignore -- incorrect TS type from node
-            process.exitCode = RESTART_CODE
-            process.kill("SIGABRT")
-          }
-        },
-      }
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      esbuild.build(esbuildOptions).then(() => {
-        spawnServer()
-      })
-    } else {
-      // No build required, Start server
+    const skipDevCustomServerBuild = config.env === "prod"
+
+    if (skipDevCustomServerBuild) {
       spawnServer()
+      return
     }
+
+    // Handle build & Starting server
+    const esbuildOptions = getEsbuildOptions()
+    esbuildOptions.watch = watch
+      ? {
+          onRebuild(error) {
+            if (error) {
+              log.error("Failed to re-build custom server")
+            } else {
+              newline()
+              log.progress("Custom server changed - restarting...")
+              newline()
+              //@ts-ignore -- incorrect TS type from node
+              process.exitCode = RESTART_CODE
+              process.kill("SIGABRT")
+            }
+          },
+        }
+      : undefined
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    esbuild.build(esbuildOptions).then(() => {
+      spawnServer()
+    })
   })
 }

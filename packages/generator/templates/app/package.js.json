@@ -1,0 +1,44 @@
+{
+  "name": "__name__",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@prisma/client": "2.x",
+    "blitz": "canary",
+    "react-dom": "alpha",
+    "react": "alpha",
+    "zod": "3.x"
+  },
+  "devDependencies": {
+    "eslint": "7.x",
+    "husky": "6.x",
+    "lint-staged": "10.x",
+    "prettier-plugin-prisma": "0.x",
+    "prettier": "2.x",
+    "pretty-quick": "3.x",
+    "preview-email": "3.x",
+    "prisma": "2.x"
+  },
+  "private": true
+}

@@ -16,10 +16,6 @@ export function cleanAmpPath(pathname: string): string {
   return pathname
 }
 
-export const isInternalDevelopment = __dirname.match(
-  /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
-)
-
 export type RenderResult = Observable<string>
 
 export function mergeResults(results: Array<RenderResult>): RenderResult {
@@ -35,4 +31,19 @@ export async function resultsToString(
     chunks.push(chunk)
   })
   return chunks.join('')
+}
+
+export const isInternalDevelopment = __dirname.match(
+  /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
+)
+
+export const fixNodeFileTrace = () => {
+  const path = require('path')
+  path.resolve('.blitz.config.compiled.js')
+  path.resolve('.next/server/blitz-db.js')
+  path.resolve('.next/serverless/blitz-db.js')
+}
+export const withFixNodeFileTrace = (fn: Function) => {
+  fixNodeFileTrace()
+  return fn
 }

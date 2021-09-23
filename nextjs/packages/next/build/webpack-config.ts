@@ -1219,8 +1219,6 @@ export default async function getBaseWebpackConfig(
             }
           : {}),
         'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
-        'process.env.__BLITZ_SESSION_COOKIE_PREFIX':
-          JSON.stringify(sessionCookiePrefix),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),
@@ -1273,7 +1271,11 @@ export default async function getBaseWebpackConfig(
               // pre-webpack era (common in server-side code)
               'global.GENTLY': JSON.stringify(false),
             }
-          : undefined),
+          : {
+              'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
+                sessionCookiePrefix
+              ),
+            }),
         // stub process.env with proxy to warn a missing value is
         // being accessed in development mode
         ...(config.experimental.pageEnv && dev
