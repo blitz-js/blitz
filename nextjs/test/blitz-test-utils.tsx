@@ -5,7 +5,12 @@ import { NextRouter } from 'next/router'
 import React from 'react'
 import { BlitzProvider, queryClient } from 'next/data-client'
 
-export * from '@testing-library/react'
+export {
+  act,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
 
 // --------------------------------------------------
 // Override the default test render with our own
