@@ -16,12 +16,17 @@ export function getAndValidateMiddleware(
   route: string
 ) {
   const middleware: Middleware[] = []
+  debug('[getAndValidateMiddleware] config.middleware', config.middleware)
   if (config.middleware) {
     if (!Array.isArray(config.middleware)) {
       throw new Error("'middleware' in blitz.config.js must be an array")
     }
     middleware.push(...config.middleware)
   }
+  debug(
+    '[getAndValidateMiddleware] resolverModule.middleware',
+    resolverModule.middleware
+  )
   if (resolverModule.middleware) {
     if (!Array.isArray(resolverModule.middleware)) {
       throw new Error(`'middleware' exported from ${route} must be an array`)
