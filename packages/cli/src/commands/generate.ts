@@ -213,6 +213,8 @@ export class Generate extends Command {
     debug("args: ", args)
     debug("flags: ", flags)
 
+    process.env.BLITZ_APP_DIR = process.cwd()
+
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
