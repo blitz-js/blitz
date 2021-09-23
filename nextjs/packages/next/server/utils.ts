@@ -47,3 +47,14 @@ export function resultToChunks(result: RenderResult): Promise<string[]> {
 export const isInternalDevelopment = __dirname.match(
   /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
 )
+
+export const fixNodeFileTrace = () => {
+  const path = require('path')
+  path.resolve('.blitz.config.compiled.js')
+  path.resolve('.next/server/blitz-db.js')
+  path.resolve('.next/serverless/blitz-db.js')
+}
+export const withFixNodeFileTrace = (fn: Function) => {
+  fixNodeFileTrace()
+  return fn
+}

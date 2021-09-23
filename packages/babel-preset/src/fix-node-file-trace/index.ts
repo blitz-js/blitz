@@ -69,7 +69,7 @@ function transformPropGetters(
 }
 
 const HOFName = 'withFixNodeFileTrace';
-const importFrom = '@blitzjs/core/server';
+const importFrom = 'next/dist/server/utils';
 
 function addWithFixNodeFileTraceImport(path: NodePath<any>) {
   return addNamedImport(path, HOFName, importFrom);
