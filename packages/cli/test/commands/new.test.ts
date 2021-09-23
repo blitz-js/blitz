@@ -114,7 +114,7 @@ describe("`new` command", () => {
 
           expect(getStepsFromOutput()).toStrictEqual([
             `cd ${dirName}`,
-            "yarn",
+            "pnpm install",
             "blitz prisma migrate dev (when asked, you can name the migration anything)",
             "blitz dev",
           ])
