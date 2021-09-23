@@ -31,8 +31,6 @@
     "zod": "3.x"
   },
   "devDependencies": {
-    "@types/preview-email": "2.x",
-    "@types/react": "17.x",
     "eslint": "7.x",
     "husky": "6.x",
     "lint-staged": "10.x",
