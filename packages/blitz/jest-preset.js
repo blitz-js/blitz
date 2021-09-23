@@ -24,12 +24,9 @@ const common = {
     // This ensures any path aliases in tsconfig also work in jest
     ...pathsToModuleNameMapper(compilerOptions.paths || {}),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": path.resolve(
-      __dirname,
-      "./jest-preset/file-mock.js",
-    ),
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+      path.resolve(__dirname, "./jest-preset/file-mock.js"),
   },
-  watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
   // Coverage output
   coverageDirectory: ".coverage",
   collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],

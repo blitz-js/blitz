@@ -1,4 +1,4 @@
-const {jsWithBabel: tsjPreset} = require("ts-jest/preset")
+const {jsWithBabel: tsjPreset} = require("ts-jest/presets")
 
 module.exports = {
   testEnvironment: "node",
