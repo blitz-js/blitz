@@ -75,7 +75,7 @@
     "react-test-renderer": "17.0.1",
     "resolve-from": "^5.0.0",
     "symlink-dir": "4.1.0",
-    "ts-jest": "26.5.0"
+    "ts-jest": "27.0.5"
   },
   "keywords": [
     "blitz",
