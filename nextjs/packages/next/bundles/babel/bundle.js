@@ -28,10 +28,6 @@ function coreLibPluginPass() {
   return require('@babel/core/lib/transformation/plugin-pass')
 }
 
-function eslintParser() {
-  return require('@babel/eslint-parser')
-}
-
 function traverse() {
   return require('@babel/traverse')
 }

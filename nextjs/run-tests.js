@@ -30,14 +30,6 @@ const testFilters = {
   unit: 'unit/',
 }
 
-const NON_CONCURRENT_TESTS = [
-  'test/integration/basic/test/index.test.js',
-  'test/acceptance/ReactRefresh.dev.test.js',
-  'test/acceptance/ReactRefreshLogBox.dev.test.js',
-  'test/acceptance/ReactRefreshRegression.dev.test.js',
-  'test/acceptance/ReactRefreshRequire.dev.test.js',
-]
-
 // which types we have configured to run separate
 const configuredTestTypes = Object.values(testFilters)
 
