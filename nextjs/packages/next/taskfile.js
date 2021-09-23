@@ -1020,7 +1020,7 @@ export async function release(task) {
 // notification helper
 function notify(msg) {
   return notifier.notify({
-    title: '▲ Blitz',
+    title: '⚡️ Blitz',
     message: msg,
     icon: false,
   })
