@@ -3084,6 +3084,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "fuzzthink",
+      "name": "John Leung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20699?v=4",
+      "profile": "johnleung.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
