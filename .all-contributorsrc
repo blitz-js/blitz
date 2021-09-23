@@ -3093,6 +3093,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "bcye",
+      "name": "Bruce",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29666239?v=4",
+      "profile": "roettgers.co",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
