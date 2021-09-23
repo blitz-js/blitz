@@ -31,9 +31,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json", "blitz-env.d.ts", "jest.config.ts"]
+      return ["tsconfig.json", "blitz-env.d.ts", "jest.config.ts", "package.ts.json"]
     }
-    return ["jsconfig.json", "jest.config.js"]
+    return ["jsconfig.json", "jest.config.js", "package.js.json"]
   }
 
   async getTemplateValues() {
@@ -52,6 +52,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
+    this.fs.move(
+      this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
+      this.destinationPath("package.json"),
+    )
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
       | Record<string, any>
       | undefined
