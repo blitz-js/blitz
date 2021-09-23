@@ -58,7 +58,7 @@
   "scripts": {
     "dev": "taskr",
     "release": "taskr release",
-    "prepublish": "npm run release && yarn types && yarn trace-server",
+    "prepublish": "npm run release && yarn types",
     "trace-server": "node ../../scripts/trace-next-server.js",
     "types": "rimraf \"dist/**/*.d.ts\" && tsc --declaration --emitDeclarationOnly --declarationDir dist",
     "typescript": "tsc --noEmit --declaration",
