@@ -6,6 +6,7 @@ import {AppProps, BlitzPage} from "next/types"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
 import {Head} from "./head"
+import {useRouter} from "./router"
 import {clientDebug} from "./utils"
 
 const customCSS = `
@@ -44,12 +45,13 @@ const NoPageFlicker = () => {
 
 export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
+    const isRouterReady = useRouter().isReady
     // We call useSession so this will rerender anytime session changes
     useSession({suspense: false})
 
     useAuthorizeIf(Page.authenticate === true)
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && isRouterReady) {
       const publicData = getPublicDataStore().getData()
       // We read directly from publicData.userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render

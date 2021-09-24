@@ -214,19 +214,32 @@ let CachedApp: AppComponent, onPerfEntry: (metric: any) => void
 class Container extends React.Component<{
   fn: (err: Error, info?: any) => void
 }> {
+  wasSsrBeforeMount: boolean | undefined = undefined
+  constructor(props: any) {
+    super(props)
+    if (router) {
+      this.wasSsrBeforeMount = router.isSsr
+    }
+  }
   componentDidCatch(componentErr: Error, info: any) {
     this.props.fn(componentErr, info)
   }
 
   componentDidMount() {
+    // on routes with dynamic params the router's initial isReady status is false
+    // and it will be settled to true in the code below
+    // but if there were any redirects before componentDidMount hook(this one)
+    // isSsr becomes false and isReady status will be false forever
+    const isSsrStateWasChangedBeforeMount =
+      typeof this.wasSsrBeforeMount !== 'undefined' &&
+      this.wasSsrBeforeMount !== router.isSsr
     this.scrollToHash()
-
     // We need to replace the router state if:
     // - the page was (auto) exported and has a query string or search (hash)
     // - it was auto exported and is a dynamic route (to provide params)
     // - if it is a client-side skeleton (fallback render)
     if (
-      router.isSsr &&
+      (router.isSsr || isSsrStateWasChangedBeforeMount) &&
       // We don't update for 404 requests as this can modify
       // the asPath unexpectedly e.g. adding basePath when
       // it wasn't originally present
