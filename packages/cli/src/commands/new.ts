@@ -13,10 +13,25 @@ import {PromptAbortedError} from "../errors/prompt-aborted"
 import {runPrisma} from "./prisma"
 
 export interface Flags {
-  ts: boolean
-  yarn: boolean
+  js: boolean
   "skip-install": boolean
+  "skip-upgrade": boolean
+  "dry-run": boolean
+  "no-git": boolean
+  npm: boolean
+  pnpm: boolean
+  yarn: boolean
+  form?: string
 }
+type PkgManager = "npm" | "yarn" | "pnpm"
+
+const IS_YARN_INSTALLED = hasbin.sync("yarn")
+const IS_PNPM_INSTALLED = hasbin.sync("pnpm")
+const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
+  ? "pnpm"
+  : IS_YARN_INSTALLED
+  ? "yarn"
+  : "npm"
 
 export class New extends Command {
   static description = "Create a new Blitz project"
@@ -29,7 +44,7 @@ export class New extends Command {
     },
   ]
 
-  static flags: {[flag: string]: any} = {
+  static flags = {
     help: flags.help({char: "h"}),
     js: flags.boolean({
       description: "Generates a JS project. TypeScript is the default unless you add this flag.",
@@ -37,9 +52,24 @@ export class New extends Command {
       hidden: true,
     }),
     npm: flags.boolean({
-      description: "Use npm as the package manager. Yarn is the default if installed",
-      default: !hasbin.sync("yarn"),
+      description: "Use npm as the package manager",
       allowNo: true,
+    }),
+    yarn: flags.boolean({
+      description: "Use yarn as the package manager",
+      default: false,
+      hidden: !IS_YARN_INSTALLED,
+      allowNo: true,
+    }),
+    pnpm: flags.boolean({
+      description: "Use pnpm as the package manager",
+      default: false,
+      hidden: !IS_PNPM_INSTALLED,
+      allowNo: true,
+    }),
+    form: flags.string({
+      description: "A form library",
+      options: ["react-final-form", "react-hook-form", "formik"],
     }),
     "skip-install": flags.boolean({
       description: "Skip package installation",
@@ -61,68 +91,23 @@ export class New extends Command {
     }),
   }
 
+  private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
+  private shouldInstallDeps = true
+
   async run() {
     const {args, flags} = this.parse(New)
     debug("args: ", args)
     debug("flags: ", flags)
 
-    if (!flags["skip-upgrade"]) {
-      const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
-      if (lt(this.config.version, latestVersion)) {
-        const upgradeChoices: Array<{name: string; message?: string}> = [
-          {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
-          {
-            name: "no",
-            message: `No - Continue with old version (${this.config.version}) - NOT recommended`,
-          },
-        ]
+    await this.determinePkgManagerToInstallDeps(flags)
+    const {pkgManager, shouldInstallDeps} = this
 
-        const promptUpgrade: any = await this.enquirer.prompt({
-          type: "select",
-          name: "upgrade",
-          message: "Your global blitz version is outdated. Upgrade?",
-          choices: upgradeChoices,
-        })
-
-        if (promptUpgrade.upgrade === "yes") {
-          var useYarn: boolean = false
-
-          const checkYarn = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
-          if (checkYarn && checkYarn.stdout) {
-            useYarn = checkYarn.stdout.toString().includes("blitz@")
-          }
-          const upgradeOpts = useYarn ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
-          spawn.sync(useYarn ? "yarn" : "npm", upgradeOpts, {stdio: "inherit"})
-
-          const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
-
-          if (versionResult.stdout) {
-            const newVersion =
-              versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
-
-            if (newVersion[0] && newVersion[0] === latestVersion) {
-              this.log(
-                chalk.green(
-                  `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
-                ),
-              )
-
-              const flagsArr = Object.keys(flags).reduce(
-                (arr: Array<string>, key: string) => (flags[key] ? [...arr, `--${key}`] : arr),
-                [],
-              )
-
-              spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
-                stdio: "inherit",
-              })
-
-              return
-            }
-          }
-          this.error(
-            "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
-          )
-        }
+    const shouldUpgrade = !flags["skip-upgrade"]
+    if (shouldUpgrade) {
+      const wasUpgraded = await this.maybeUpgradeGloballyInstalledBlitz()
+      if (wasUpgraded) {
+        this.rerunButSkipUpgrade(flags, args)
+        return
       }
     }
 
@@ -130,37 +115,26 @@ export class New extends Command {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
-        {name: "React Final Form", message: "React Final Form (recommended)"},
-        {name: "React Hook Form"},
-        {name: "Formik"},
-      ]
+      const form = await this.determineFormLib(flags)
 
-      const promptResult: any = await this.enquirer.prompt({
-        type: "select",
-        name: "form",
-        message: "Pick a form library (you can switch to something else later if you want)",
-        choices: formChoices,
-      })
-
-      const {"dry-run": dryRun, "skip-install": skipInstall, npm} = flags
-      const needsInstall = dryRun || skipInstall
+      const {"dry-run": dryRun, "no-git": skipGit} = flags
+      const needsInstall = dryRun || !shouldInstallDeps
       const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
-      const generator = new AppGenerator({
+      const generatorOpts: AppGeneratorOptions = {
         destinationRoot,
         appName,
         dryRun,
         useTs: !flags.js,
-        yarn: !npm,
-        form: promptResult.form,
+        yarn: pkgManager === "yarn",
+        pnpm: pkgManager === "pnpm",
+        form,
         version: this.config.version,
-        skipInstall,
-        skipGit: flags["no-git"],
+        skipInstall: !shouldInstallDeps,
+        skipGit,
         onPostInstall: async () => {
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
-
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
@@ -175,13 +149,14 @@ export class New extends Command {
             )
           }
         },
-      })
+      }
+      const generator = new AppGenerator(generatorOpts)
 
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
 
       if (needsInstall) {
-        postInstallSteps.push(npm ? "npm install" : "yarn")
+        postInstallSteps.push(this.installDepsCmd)
         postInstallSteps.push(
           "blitz prisma migrate dev (when asked, you can name the migration anything)",
         )
@@ -198,6 +173,180 @@ export class New extends Command {
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
       this.error(err as any)
+    }
+  }
+
+  // TODO:: there should be some problems with dry run
+  private async determinePkgManagerToInstallDeps(flags: Flags): Promise<void> {
+    if (flags["skip-install"]) {
+      this.shouldInstallDeps = false
+      return
+    }
+    const isPkgManagerSpecifiedAsFlag = flags.npm || flags.pnpm || flags.yarn
+    if (isPkgManagerSpecifiedAsFlag) {
+      if (flags.npm) {
+        this.pkgManager = "npm"
+      } else if (flags.pnpm) {
+        if (IS_PNPM_INSTALLED) {
+          this.pkgManager = "pnpm"
+        } else {
+          this.warn(`Pnpm is not installed. Fallback to ${this.pkgManager}`)
+        }
+      } else if (flags.yarn) {
+        if (IS_YARN_INSTALLED) {
+          this.pkgManager = "yarn"
+        } else {
+          this.warn(`Yarn is not installed. Fallback to ${this.pkgManager}`)
+        }
+      }
+    } else {
+      const hasPkgManagerChoice = IS_YARN_INSTALLED || IS_PNPM_INSTALLED
+      if (hasPkgManagerChoice) {
+        const {pkgManager}: any = await this.enquirer.prompt({
+          type: "select",
+          name: "pkgManager",
+          message: "Install dependencies?",
+          initial: PREFERABLE_PKG_MANAGER as any,
+          choices: [
+            {
+              name: "npm",
+              message: "via npm",
+            },
+            IS_YARN_INSTALLED && {
+              name: "yarn",
+              message: "via yarn",
+            },
+            IS_PNPM_INSTALLED && {
+              name: "pnpm",
+              message: "via pnpm",
+            },
+            "skip",
+          ].filter(Boolean),
+        })
+        if (pkgManager === "skip") {
+          this.shouldInstallDeps = false
+        } else {
+          this.pkgManager = pkgManager
+        }
+      } else {
+        const {installDeps}: any = await this.enquirer.prompt({
+          type: "confirm",
+          name: "installDeps",
+          message: "Install dependencies?",
+          initial: true,
+        })
+        this.shouldInstallDeps = installDeps
+      }
+    }
+  }
+  private async determineFormLib(flags: Flags): Promise<AppGeneratorOptions["form"]> {
+    if (flags.form) {
+      switch (flags.form) {
+        case "react-final-form":
+          return "React Final Form"
+        case "react-hook-form":
+          return "React Hook Form"
+        case "formik":
+          return "Formik"
+      }
+    }
+    const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
+      {name: "React Final Form", message: "React Final Form (recommended)"},
+      {name: "React Hook Form"},
+      {name: "Formik"},
+    ]
+
+    const promptResult: any = await this.enquirer.prompt({
+      type: "select",
+      name: "form",
+      message: "Pick a form library (you can switch to something else later if you want)",
+      choices: formChoices,
+    })
+    return promptResult.form
+  }
+  private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
+    const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(
+      (arr, key) => (flags[key] ? [...arr, `--${key}`] : arr),
+      [] as string[],
+    )
+    spawn.sync("blitz", ["new", ...Object.values(args), ...flagsArr, "--skip-upgrade"], {
+      stdio: "inherit",
+    })
+  }
+  private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
+    const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
+    if (lt(this.config.version, latestVersion)) {
+      if (await this.promptBlitzUpgrade(latestVersion)) {
+        let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
+        const upgradeOpts =
+          globalBlitzOwner === "yarn" ? ["global", "add", "blitz"] : ["i", "-g", "blitz@latest"]
+        spawn.sync(globalBlitzOwner, upgradeOpts, {stdio: "inherit"})
+
+        const versionResult = spawn.sync("blitz", ["--version"], {stdio: "pipe"})
+
+        if (versionResult.stdout) {
+          const newVersion =
+            versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
+
+          if (newVersion[0] && newVersion[0] === latestVersion) {
+            this.log(
+              chalk.green(
+                `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
+              ),
+            )
+            return true
+          }
+        }
+        this.error(
+          "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
+        )
+      }
+    }
+    return false
+  }
+  private getGlobalBlitzPkgManagerOwner(): PkgManager {
+    if (IS_PNPM_INSTALLED) {
+      const output = spawn.sync("pnpm", ["list", "-g", "--depth", "0"], {stdio: "pipe"})
+      if (output && output.stdout.toString().includes("blitz ")) {
+        return "pnpm"
+      }
+    }
+    if (IS_YARN_INSTALLED) {
+      const output = spawn.sync("yarn", ["global", "list"], {stdio: "pipe"})
+      if (output && output.stdout.toString().includes("blitz@")) {
+        return "yarn"
+      }
+    }
+    return "npm"
+  }
+  private async promptBlitzUpgrade(latestVersion: string): Promise<boolean> {
+    const upgradeChoices: Array<{name: string; message?: string}> = [
+      {name: "yes", message: `Yes - Upgrade to ${latestVersion}`},
+      {
+        name: "no",
+        message: `No - Continue with old version (${this.config.version}) - NOT recommended`,
+      },
+    ]
+
+    const promptResult: any = await this.enquirer.prompt({
+      type: "select",
+      name: "upgrade",
+      message: "Your global blitz version is outdated. Upgrade?",
+      choices: upgradeChoices,
+    })
+    return promptResult.upgrade === "yes"
+  }
+
+  private get installDepsCmd(): string {
+    switch (this.pkgManager) {
+      case "yarn":
+        return "yarn"
+      case "npm":
+        return "npm install"
+      case "pnpm":
+        return "pnpm install"
+      default:
+        return "npm install"
     }
   }
 }

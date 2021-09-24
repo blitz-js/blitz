@@ -3008,7 +3008,8 @@
       "profile": "https://github.com/s-r-x",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3083,6 +3084,24 @@
       "profile": "https://github.com/isaka1022",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "fuzzthink",
+      "name": "John Leung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20699?v=4",
+      "profile": "johnleung.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "bcye",
+      "name": "Bruce",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29666239?v=4",
+      "profile": "roettgers.co",
+      "contributions": [
+        "code"
       ]
     }
   ],
