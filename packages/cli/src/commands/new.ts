@@ -247,8 +247,7 @@ export class New extends Command {
   }
 
   private async determineLanguage(flags: Flags): Promise<void> {
-    const isJavaScriptSpecified = flags.js
-    if (isJavaScriptSpecified) {
+    if (flags.js) {
       this.useTs = false
     } else {
       const {language} = (await this.enquirer.prompt({
