@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@prisma/client": "2.x",
+    "@prisma/client": "3.x",
     "blitz": "canary",
     "react-dom": "alpha",
     "react": "alpha",
@@ -38,7 +38,7 @@
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "preview-email": "3.x",
-    "prisma": "2.x"
+    "prisma": "3.x"
   },
   "private": true
 }
