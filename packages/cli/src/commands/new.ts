@@ -33,6 +33,9 @@ const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   ? "yarn"
   : "npm"
 
+const LANGUAGES = ["TypeScript", "JavaScript"]
+const DEFAULT_LANG = "TypeScript"
+
 export class New extends Command {
   static description = "Create a new Blitz project"
 
@@ -93,11 +96,14 @@ export class New extends Command {
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
+  private useTs = true
 
   async run() {
     const {args, flags} = this.parse(New)
     debug("args: ", args)
     debug("flags: ", flags)
+
+    await this.determineLanguage(flags)
 
     await this.determinePkgManagerToInstallDeps(flags)
     const {pkgManager, shouldInstallDeps} = this
@@ -126,7 +132,7 @@ export class New extends Command {
         destinationRoot,
         appName,
         dryRun,
-        useTs: !flags.js,
+        useTs: this.useTs,
         yarn: pkgManager === "yarn",
         pnpm: pkgManager === "pnpm",
         form,
@@ -202,7 +208,7 @@ export class New extends Command {
     } else {
       const hasPkgManagerChoice = IS_YARN_INSTALLED || IS_PNPM_INSTALLED
       if (hasPkgManagerChoice) {
-        const {pkgManager}: any = await this.enquirer.prompt({
+        const {pkgManager} = (await this.enquirer.prompt({
           type: "select",
           name: "pkgManager",
           message: "Install dependencies?",
@@ -222,23 +228,40 @@ export class New extends Command {
             },
             "skip",
           ].filter(Boolean),
-        })
+        })) as {pkgManager: PkgManager | "skip"}
         if (pkgManager === "skip") {
           this.shouldInstallDeps = false
         } else {
           this.pkgManager = pkgManager
         }
       } else {
-        const {installDeps}: any = await this.enquirer.prompt({
+        const {installDeps} = (await this.enquirer.prompt({
           type: "confirm",
           name: "installDeps",
           message: "Install dependencies?",
           initial: true,
-        })
+        })) as {installDeps: boolean}
         this.shouldInstallDeps = installDeps
       }
     }
   }
+
+  private async determineLanguage(flags: Flags): Promise<void> {
+    const isJavaScriptSpecified = flags.js
+    if (isJavaScriptSpecified) {
+      this.useTs = false
+    } else {
+      const {language} = (await this.enquirer.prompt({
+        type: "select",
+        name: "language",
+        message: "Pick a new project's language",
+        initial: LANGUAGES.indexOf(DEFAULT_LANG),
+        choices: LANGUAGES,
+      })) as {language: typeof LANGUAGES[number]}
+      this.useTs = language === "TypeScript"
+    }
+  }
+
   private async determineFormLib(flags: Flags): Promise<AppGeneratorOptions["form"]> {
     if (flags.form) {
       switch (flags.form) {
@@ -256,12 +279,12 @@ export class New extends Command {
       {name: "Formik"},
     ]
 
-    const promptResult: any = await this.enquirer.prompt({
+    const promptResult = (await this.enquirer.prompt({
       type: "select",
       name: "form",
       message: "Pick a form library (you can switch to something else later if you want)",
       choices: formChoices,
-    })
+    })) as {form: typeof formChoices[number]["name"]}
     return promptResult.form
   }
   private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
@@ -328,12 +351,12 @@ export class New extends Command {
       },
     ]
 
-    const promptResult: any = await this.enquirer.prompt({
+    const promptResult = (await this.enquirer.prompt({
       type: "select",
       name: "upgrade",
       message: "Your global blitz version is outdated. Upgrade?",
       choices: upgradeChoices,
-    })
+    })) as {upgrade: typeof upgradeChoices[number]["name"]}
     return promptResult.upgrade === "yes"
   }
 
