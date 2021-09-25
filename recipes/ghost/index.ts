@@ -11,7 +11,7 @@ import path from "path"
 
 export default RecipeBuilder()
   .setName("Ghost")
-  .setDescription("Use Ghost in blitz.")
+  .setDescription("Access your Ghost CMS directly in blitz via the Ghost SDK.")
   .setOwner("Mark Hughes <m@rkhugh.es>")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
