@@ -21,6 +21,12 @@ export interface BaseGeneratorOptions extends GeneratorOptions {
 export abstract class Builder<T> implements IBuilder<T> {
   abstract getTemplateValues(Options: T): Promise<any>
 
+  public fallbackMap = {
+    string: "LabeledTextField",
+    number: "LabeledTextField",
+    boolean: "LabeledTextField",
+  }
+
   public getId(input: string = "") {
     if (!input) return input
     return `${input}Id`
@@ -50,22 +56,23 @@ export abstract class Builder<T> implements IBuilder<T> {
 
   public async getComponentForType(type: string = ""):Promise<string> {
     if (!process.env.BLITZ_APP_DIR) {
-      process.env.BLITZ_APP_DIR = "."
+      process.env.BLITZ_APP_DIR = process.cwd()
     }
 
-    const config = await this.getConfig()
+    let config = await this.getConfig()
+    if(!config.template?.typeToComponentMap){
+      config = this.fallbackMap
+    }
     const typeToComponentMap = config.template.typeToComponentMap
 
-    if (this.possibleComponentTypes.includes(type)) {
-      return typeToComponentMap[type]
-    } else {
-      return typeToComponentMap["string"]
-    }
+    let defaultComponent = typeToComponentMap["string"]
+    
+    return typeToComponentMap[type] ?? defaultComponent
   }
 
   private config: NextConfigComplete | undefined = undefined
   
-  private async getConfig(){
+  private async getConfig() {
     if(!this.config){
       const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
       this.config = await loadConfigAtRuntime()
