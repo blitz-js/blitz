@@ -25,9 +25,12 @@ export function loadConfigAtRuntime() {
 export function loadConfigProduction(pagesDir: string): NextConfigComplete {
   let userConfigModule
   try {
+    const path = join(pagesDir, CONFIG_FILE)
+    debug('Loading config from ', path)
     // eslint-disable-next-line no-eval -- block webpack from following this module path
-    userConfigModule = eval('require')(join(pagesDir, CONFIG_FILE))
+    userConfigModule = eval('require')(path)
   } catch {
+    debug('Did not find custom config file')
     // In case user does not have custom config
     userConfigModule = {}
   }

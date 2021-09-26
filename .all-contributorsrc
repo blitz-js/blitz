@@ -3008,7 +3008,8 @@
       "profile": "https://github.com/s-r-x",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3073,6 +3074,51 @@
       "contributions": [
         "code",
         "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "isaka1022",
+      "name": "Amane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28589716?v=4",
+      "profile": "https://github.com/isaka1022",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "fuzzthink",
+      "name": "John Leung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20699?v=4",
+      "profile": "johnleung.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "bcye",
+      "name": "Bruce",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29666239?v=4",
+      "profile": "roettgers.co",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "emilygracekz",
+      "name": "Emily",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57361805?v=4",
+      "profile": "https://github.com/emilygracekz",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "npverni",
+      "name": "Nathan Verni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3537?v=4",
+      "profile": "https://github.com/npverni",
+      "contributions": [
         "doc"
       ]
     }

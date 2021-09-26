@@ -16,12 +16,14 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   appName: string
   useTs: boolean
   yarn: boolean
+  pnpm?: boolean
   version: string
   skipInstall: boolean
   skipGit: boolean
   form: "React Final Form" | "React Hook Form" | "Formik"
   onPostInstall?: () => Promise<void>
 }
+type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
   sourceRoot: SourceRootType = {type: "template", path: "app"}
@@ -31,9 +33,16 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
   filesToIgnore() {
     if (!this.options.useTs) {
-      return ["tsconfig.json", "blitz-env.d.ts", "jest.config.ts"]
+      return [
+        "tsconfig.json",
+        "blitz-env.d.ts",
+        "jest.config.ts",
+        "package.ts.json",
+        "pre-push-ts",
+        "types.ts",
+      ]
     }
-    return ["jsconfig.json", "jest.config.js"]
+    return ["jsconfig.json", "jest.config.js", "package.js.json", "pre-push-js"]
   }
 
   templateValuesBuilder = new AppValuesBuilder()
@@ -46,6 +55,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   async preCommit() {
     this.fs.move(this.destinationPath("gitignore"), this.destinationPath(".gitignore"))
     this.fs.move(this.destinationPath("npmrc"), this.destinationPath(".npmrc"))
+    this.fs.move(
+      this.destinationPath(this.options.useTs ? ".husky/pre-push-ts" : ".husky/pre-push-js"),
+      this.destinationPath(".husky/pre-push"),
+    )
+    this.fs.move(
+      this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
+      this.destinationPath("package.json"),
+    )
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
       | Record<string, any>
       | undefined
@@ -84,6 +101,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   async postWrite() {
+    const {pkgManager} = this
     let gitInitSuccessful
     if (!this.options.skipGit) {
       const initResult = spawn.sync("git", ["init"], {
@@ -125,8 +143,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       spinner.succeed()
 
       await new Promise<void>((resolve) => {
-        const logFlag = this.options.yarn ? "--json" : "--loglevel=error"
-        const cp = spawn(this.options.yarn ? "yarn" : "npm", ["install", logFlag], {
+        const logFlag = pkgManager === "yarn" ? "--json" : "--loglevel=error"
+        const cp = spawn(pkgManager, ["install", logFlag], {
           stdio: ["inherit", "pipe", "pipe"],
         })
 
@@ -140,7 +158,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
         const spinners: any[] = []
 
-        if (!this.options.yarn) {
+        if (pkgManager !== "yarn") {
           const spinner = log
             .spinner(log.withBrand("Installing those dependencies (this will take a few minutes)"))
             .start()
@@ -150,7 +168,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         cp.stdout?.setEncoding("utf8")
         cp.stderr?.setEncoding("utf8")
         cp.stdout?.on("data", (data) => {
-          if (this.options.yarn) {
+          if (pkgManager === "yarn") {
             let json = getJSON(data)
             if (json && json.type === "step") {
               spinners[spinners.length - 1]?.succeed()
@@ -163,7 +181,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
           }
         })
         cp.stderr?.on("data", (data) => {
-          if (this.options.yarn) {
+          if (pkgManager === "yarn") {
             let json = getJSON(data)
             if (json && json.type === "error") {
               spinners[spinners.length - 1]?.fail()
@@ -178,7 +196,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
           }
         })
         cp.on("exit", (code) => {
-          if (!this.options.yarn && spinners[spinners.length - 1].isSpinning) {
+          if (pkgManager !== "yarn" && spinners[spinners.length - 1].isSpinning) {
             if (code !== 0) spinners[spinners.length - 1].fail()
             else {
               spinners[spinners.length - 1].succeed()
@@ -192,8 +210,11 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       await this.options.onPostInstall?.()
 
       const runLocalNodeCLI = (command: string) => {
-        if (this.options.yarn) {
+        const {pkgManager} = this
+        if (pkgManager === "yarn") {
           return spawn.sync("yarn", ["run", ...command.split(" ")])
+        } else if (pkgManager === "pnpm") {
+          return spawn.sync("pnpx", command.split(" "))
         } else {
           return spawn.sync("npx", command.split(" "))
         }
@@ -215,13 +236,15 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
     } else {
       console.log("") // New line needed
-      spinner.fail(
-        chalk.red.bold(
-          `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${
-            this.options.yarn ? "'yarn'" : "'npm install'"
-          } once you're connected again.`,
-        ),
-      )
+      if (this.options.skipInstall) {
+        spinner.succeed()
+      } else {
+        spinner.fail(
+          chalk.red.bold(
+            `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${`${this.pkgManager} install`} once you're connected again.`,
+          ),
+        )
+      }
     }
 
     if (!this.options.skipGit && gitInitSuccessful) {
@@ -269,5 +292,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
     }
     commitSpinner.succeed()
+  }
+  private get pkgManager(): PkgManager {
+    if (this.options.pnpm) {
+      return "pnpm"
+    } else if (this.options.yarn) {
+      return "yarn"
+    } else {
+      return "npm"
+    }
   }
 }
