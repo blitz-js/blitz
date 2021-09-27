@@ -11,9 +11,9 @@ const config: BlitzConfig = {
     typeToComponentMap: {
       string: "LabeledTextField",
       any: "LabeledTextField",
-      int: "LabeledNumberField",
-      number: "LabeledNumberField",
-      boolean: "LabeledBooleanField",
+      int: "LabeledTextField",
+      number: "LabeledTextField",
+      boolean: "LabeledTextField",
     }
   }
   /* Uncomment this to customize the webpack config
