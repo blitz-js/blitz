@@ -28,7 +28,9 @@ const common = {
   modulePathIgnorePatterns: ["<rootDir>/.blitz", "<rootDir>/.next"],
   moduleNameMapper: {
     // This ensures any path aliases in tsconfig also work in jest
-    ...pathsToModuleNameMapper((tsConfig && tsConfig.compilerOptions.paths) || {}),
+    ...pathsToModuleNameMapper(
+      (tsConfig && tsConfig.compilerOptions && tsConfig.compilerOptions.paths) || {},
+    ),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
     "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": path.resolve(
       __dirname,
