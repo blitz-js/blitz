@@ -44,7 +44,6 @@ export abstract class Builder<T> implements IBuilder<T> {
   }
 
   private possibleZodTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
-  private possibleComponentTypes = ["string", "any", "int", "number", "boolean", "uuid"]
 
   public getZodTypeName(type: string = "") {
     if (this.possibleZodTypes.includes(type)) {
@@ -61,7 +60,7 @@ export abstract class Builder<T> implements IBuilder<T> {
 
     let config = await this.getConfig()
     if(!config.template?.typeToComponentMap){
-      config = this.fallbackMap
+      config.template.typeToComponentMap = this.fallbackMap
     }
     const typeToComponentMap = config.template.typeToComponentMap
 
