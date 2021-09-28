@@ -1,4 +1,4 @@
-import { withFixNodeFileTrace as _withFixNodeFileTrace } from '@blitzjs/core/server';
+import { withFixNodeFileTrace as _withFixNodeFileTrace } from 'next/dist/server/utils';
 export const getServerSideProps = _withFixNodeFileTrace(async () => {
   const products = [
     {
