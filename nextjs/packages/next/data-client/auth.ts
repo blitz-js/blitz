@@ -3,6 +3,7 @@ import BadBehavior from 'bad-behavior'
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
+  LOCALSTORAGE_ANTICSRF,
   LOCALSTORAGE_PREFIX,
 } from './constants'
 import {
@@ -104,7 +105,16 @@ export const getPublicDataStore = (): PublicDataStore => {
   return (window as any).__publicDataStore
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
+export const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
+    localStorage.setItem(LOCALSTORAGE_ANTICSRF, cookieValue)
+    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
+    return cookieValue
+  } else {
+    return localStorage.getItem(LOCALSTORAGE_ANTICSRF)
+  }
+}
 
 interface UseSessionOptions {
   initialPublicData?: PublicData
