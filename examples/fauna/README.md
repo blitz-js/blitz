@@ -27,7 +27,7 @@ This example use the Fauna GraphQL API since it's more familiar to most people t
 FAUNA_SECRET=YOUR_AUTH_KEY
 ```
 
-7. Add the Fauna GraphQL URL to `.env.local`. This URL depends on your database region. For instance, for US databases it's `https://graphql.us.fauna.com/graphql`
+7. Add the Fauna GraphQL URL to `.env.local`. This URL depends on your [database region](https://docs.fauna.com/fauna/current/api/graphql/endpoints). For instance, for US databases it's `https://graphql.us.fauna.com/graphql`
 
 ```
 FAUNA_GRAPHQL_URL=YOUR_FAUNA_GRAPHQL_URL
