@@ -26,9 +26,12 @@ This example use the Fauna GraphQL API since it's more familiar to most people t
 
 ```
 FAUNA_SECRET=YOUR_AUTH_KEY
+FAUNA_GRAPHQL_URL=FAUNA_GRAPHQL_URL
 ```
 
-2. Start the dev server
+The `FAUNA_GRAPHQL_URL` depends on your database region. For instance, for US databases it's `https://graphql.us.fauna.com/graphql`
+
+1. Start the dev server
 
 ```
 yarn blitz dev
