@@ -357,11 +357,10 @@ export class SessionContextClass implements SessionContext {
         'session.revokeAll() cannot be used with anonymous sessions'
       )
     }
-    await revokeAllSessionsForUser(
-      this._req,
-      this._res,
-      this.$publicData.userId
-    )
+    // revoke the current session which uses req/res
+    await revokeSession(this._req, this._res, this.$handle)
+    // revoke other sessions for which there is no req/res object
+    await revokeAllSessionsForUser(this.$publicData.userId)
     return
   }
 
@@ -1082,28 +1081,17 @@ async function revokeSession(
   setCSRFCookie(req, res, '', new Date(0))
 }
 
-async function revokeMultipleSessions(
-  req: IncomingMessage,
-  res: ServerResponse,
-  sessionHandles: string[]
-) {
-  let revoked: string[] = []
-  for (const handle of sessionHandles) {
-    await revokeSession(req, res, handle)
-    revoked.push(handle)
-  }
-  return revoked
-}
-
-async function revokeAllSessionsForUser(
-  req: IncomingMessage,
-  res: ServerResponse,
-  userId: PublicData['userId']
-) {
+async function revokeAllSessionsForUser(userId: PublicData['userId']) {
   let sessionHandles = (await global.sessionConfig.getSessions(userId)).map(
     (session) => session.handle
   )
-  return revokeMultipleSessions(req, res, sessionHandles)
+
+  let revoked: string[] = []
+  for (const handle of sessionHandles) {
+    await global.sessionConfig.deleteSession(handle)
+    revoked.push(handle)
+  }
+  return revoked
 }
 
 async function getPublicData(
