@@ -3121,6 +3121,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "davyengone",
+      "name": "Davy Engone",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4896002?v=4",
+      "profile": "https://davyengone.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
