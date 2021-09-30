@@ -22,6 +22,7 @@ export interface Flags {
   pnpm: boolean
   yarn: boolean
   form?: string
+  minimalApp: boolean // TODO — find better name
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -89,15 +90,22 @@ export class New extends Command {
       description: "Skip blitz upgrade if outdated",
       default: false,
     }),
+    minimalApp: flags.boolean({
+      description: "Generates a minimal project.", // todo — description
+      default: false,
+    }),
   }
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
+  private template: "default" | "minimal" = "default"
 
   async run() {
     const {args, flags} = this.parse(New)
     debug("args: ", args)
     debug("flags: ", flags)
+
+    await this.determineTemplate(flags)
 
     await this.determinePkgManagerToInstallDeps(flags)
     const {pkgManager, shouldInstallDeps} = this
@@ -115,7 +123,11 @@ export class New extends Command {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      const form = await this.determineFormLib(flags)
+      // todo — fix this, have something like template's config
+      let form: AppGeneratorOptions["form"]
+      if (this.template === "default") {
+        form = await this.determineFormLib(flags)
+      }
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
       const needsInstall = dryRun || !shouldInstallDeps
@@ -123,6 +135,7 @@ export class New extends Command {
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
       const generatorOpts: AppGeneratorOptions = {
+        template: this.template,
         destinationRoot,
         appName,
         dryRun,
@@ -134,6 +147,10 @@ export class New extends Command {
         skipInstall: !shouldInstallDeps,
         skipGit,
         onPostInstall: async () => {
+          // todo — fix this logic, template's config?
+          if (this.template === "minimal") {
+            return
+          }
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
           try {
             // Required in order for DATABASE_URL to be available
@@ -239,7 +256,7 @@ export class New extends Command {
       }
     }
   }
-  private async determineFormLib(flags: Flags): Promise<AppGeneratorOptions["form"]> {
+  private async determineFormLib(flags: Flags): Promise<NonNullable<AppGeneratorOptions["form"]>> {
     if (flags.form) {
       switch (flags.form) {
         case "react-final-form":
@@ -250,7 +267,10 @@ export class New extends Command {
           return "Formik"
       }
     }
-    const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
+    const formChoices: Array<{
+      name: NonNullable<AppGeneratorOptions["form"]>
+      message?: string
+    }> = [
       {name: "React Final Form", message: "React Final Form (recommended)"},
       {name: "React Hook Form"},
       {name: "Formik"},
@@ -263,6 +283,24 @@ export class New extends Command {
       choices: formChoices,
     })
     return promptResult.form
+  }
+  private async determineTemplate(flags: Flags): Promise<void> {
+    if (flags.minimalApp) {
+      this.template = "minimal"
+    } else {
+      const choices: Array<{name: string; message?: string}> = [
+        {name: "default", message: "Default Blitz app"},
+        {name: "minimal", message: "Minimal Blitz app"},
+      ]
+      const {template} = (await this.enquirer.prompt({
+        type: "select",
+        name: "template",
+        message: "Pick a new project's template",
+        initial: 0,
+        choices,
+      })) as {template: "default" | "minimal"}
+      this.template = template
+    }
   }
   private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
     const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(

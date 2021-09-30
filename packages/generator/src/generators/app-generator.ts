@@ -13,6 +13,8 @@ function assert(condition: any, message: string): asserts condition {
 }
 
 export interface AppGeneratorOptions extends GeneratorOptions {
+  template: "default" | "minimal"
+  templatePath?: string
   appName: string
   useTs: boolean
   yarn: boolean
@@ -20,13 +22,13 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form: "React Final Form" | "React Hook Form" | "Formik"
+  form?: "React Final Form" | "React Hook Form" | "Formik"
   onPostInstall?: () => Promise<void>
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: SourceRootType = {type: "template", path: "app"}
+  sourceRoot: SourceRootType = {type: "template", path: this.options.templatePath || "app"}
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
   packageInstallSuccess: boolean = false
@@ -74,8 +76,9 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       | undefined
     assert(pkg, "couldn't find package.json")
     const ext = this.options.useTs ? "tsx" : "js"
-    let type: string
+    let type: string = ""
 
+    // todo — handle this for minimal template
     switch (this.options.form) {
       case "React Final Form":
         type = "finalform"
@@ -92,18 +95,21 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/core/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
-    )
+    // todo — remove conditinal, handle in more generic way
+    if (this.options.template === "default") {
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/Form.${ext}`),
+        this.destinationPath(`app/core/components/Form.${ext}`),
+      )
+      this.fs.move(
+        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+        this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
+      )
+
+      this.fs.writeJSON(this.destinationPath("package.json"), pkg)
+    }
 
     this.fs.delete(this.destinationPath("_forms"))
-
-    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }
 
   async postWrite() {
