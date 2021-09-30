@@ -3140,6 +3140,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "johnmurphy01",
+      "name": "John Murphy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2939548?v=4",
+      "profile": "https://github.com/johnmurphy01",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
