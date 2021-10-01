@@ -21,6 +21,6 @@ export const {
     bp1: "(min-width: 480px)",
   },
   utils: {
-    marginX: (value: String) => ({marginLeft: value, marginRight: value}),
+    marginX: (value: String|Number) => ({marginLeft: value, marginRight: value}),
   },
 })
