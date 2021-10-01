@@ -112,6 +112,16 @@ export function useQuery<
     )
   }
 
+  /* OLD
+  const suspenseConfig = getBlitzRuntimeData().suspenseEnabled
+  let enabled = isServer && suspenseConfig ? false : options?.enabled ?? options?.enabled !== null
+  const suspense = enabled === false ? false : options?.suspense
+  const session = useSession({suspense})
+  if (session.isLoading) {
+    enabled = false
+  }
+  */
+
   const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
   let enabled =
     isServer && suspenseEnabled
@@ -122,6 +132,8 @@ export function useQuery<
   if (session.isLoading) {
     enabled = false
   }
+
+  console.log({ suspenseEnabled, suspense, enabled, session })
 
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
@@ -144,6 +156,7 @@ export function useQuery<
     (!options || !('suspense' in options) || options.suspense) &&
     (!options || !('enabled' in options) || options.enabled)
   ) {
+    console.log('MANUAL THROW')
     throw new Promise(() => {})
   }
 
