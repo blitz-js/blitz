@@ -203,7 +203,7 @@ export abstract class Generator<
     return result
   }
 
-  public fieldTemplateRegExp:RegExp = new RegExp(/({?\/\*\s+template: (.*) \*\/}?|\/\/\s+template: (.*))/)
+  public fieldTemplateRegExp:RegExp = new RegExp(/({?\/\*\s*template: (.*) \*\/}?|\/\/\s*template: (.*))/)
 
   process(
     input: Buffer,
