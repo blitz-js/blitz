@@ -32,6 +32,6 @@ describe("Form Generator", () => {
     const commentWithNoSpacing = `//template: __fieldName__: z.__zodTypeName__(),`
 
     expect(commentWithSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__(),`)
-    expect(commentWithNoSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__()`)
+    expect(commentWithNoSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__(),`)
   })
 })
