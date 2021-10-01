@@ -1,6 +1,11 @@
-import { NextConfigComplete } from "next/dist/server/config-shared"
+import {NextConfigComplete} from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
-import {addSpaceBeforeCapitals, camelCaseToKebabCase, singleCamel, singlePascal} from "../../utils/inflector"
+import {
+  addSpaceBeforeCapitals,
+  camelCaseToKebabCase,
+  singleCamel,
+  singlePascal,
+} from "../../utils/inflector"
 
 export interface IBuilder<T> {
   getTemplateValues(Options: T): Promise<any>
@@ -53,38 +58,38 @@ export abstract class Builder<T> implements IBuilder<T> {
     }
   }
 
-  public async getComponentForType(type: string = ""):Promise<string> {
+  public async getComponentForType(type: string = ""): Promise<string> {
     if (!process.env.BLITZ_APP_DIR) {
       process.env.BLITZ_APP_DIR = process.cwd()
     }
 
+    let typeToComponentMap:{ [char: string]: string } = this.fallbackMap
     let config = await this.getConfig()
-    if(!config.template?.typeToComponentMap){
-      config.template.typeToComponentMap = this.fallbackMap
+    if (config.template && config.template.typeToComponentMap) {
+      typeToComponentMap = config.template.typeToComponentMap
     }
-    const typeToComponentMap = config.template.typeToComponentMap
 
     let defaultComponent = typeToComponentMap["string"]
-    
+
     return typeToComponentMap[type] ?? defaultComponent
   }
 
   private config: NextConfigComplete | undefined = undefined
-  
+
   private async getConfig() {
-    if(!this.config){
+    if (!this.config) {
       const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
       this.config = await loadConfigAtRuntime()
     }
 
     return this.config
-  }  
+  }
 
   // eslint-disable-next-line require-await
-  public async getFieldTemplateValues(args: string[]){
+  public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")
-      
+
       return {
         attributeName: singleCamel(valueName),
         zodTypeName: this.getZodTypeName(typeName),
