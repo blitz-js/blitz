@@ -192,7 +192,8 @@ export function buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            // We don't clear the publicDataStore for anonymous users
+            // We don't clear the publicDataStore for anonymous users,
+            // because there is not sensitive data
             if (
               error.name === 'AuthenticationError' &&
               getPublicDataStore().getData().userId
