@@ -43,7 +43,6 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
-  HEADER_SESSION_REVOKED,
   SESSION_TOKEN_VERSION_0,
   SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
@@ -347,21 +346,15 @@ export class SessionContextClass implements SessionContext {
     })
   }
 
-  $revoke() {
-    return revokeSession(this._req, this._res, this.$handle)
+  async $revoke() {
+    this._kernel = await revokeSession(this._req, this._res, this.$handle)
   }
 
   async $revokeAll() {
-    if (!this.$publicData.userId) {
-      throw new Error(
-        'session.revokeAll() cannot be used with anonymous sessions'
-      )
-    }
-    await revokeAllSessionsForUser(
-      this._req,
-      this._res,
-      this.$publicData.userId
-    )
+    // revoke the current session which uses req/res
+    await this.$revoke()
+    // revoke other sessions for which there is no req/res object
+    await revokeAllSessionsForUser(this.$publicData.userId)
     return
   }
 
@@ -865,7 +858,6 @@ async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, '', new Date(0))
-    removeHeader(res, HEADER_SESSION_REVOKED)
     setHeader(res, HEADER_SESSION_CREATED, 'true')
 
     return {
@@ -930,7 +922,6 @@ async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, '', new Date(0))
-    removeHeader(res, HEADER_SESSION_REVOKED)
     setHeader(res, HEADER_SESSION_CREATED, 'true')
 
     return {
@@ -1064,7 +1055,7 @@ async function revokeSession(
   res: ServerResponse,
   handle: string,
   anonymous: boolean = false
-): Promise<void> {
+) {
   debug('Revoking session', handle)
   if (!anonymous) {
     try {
@@ -1073,37 +1064,28 @@ async function revokeSession(
       // Ignore any errors, like if session doesn't exist in DB
     }
   }
-  // This is used on the frontend to clear localstorage
-  setHeader(res, HEADER_SESSION_REVOKED, 'true')
-
-  // Clear all cookies
-  setSessionCookie(req, res, '', new Date(0))
-  setAnonymousSessionCookie(req, res, '', new Date(0))
-  setCSRFCookie(req, res, '', new Date(0))
+  // Go ahead and create a new anon session. This
+  // This fixes race condition where all client side queries get refreshed
+  // in parallel and each creates a new anon session
+  // https://github.com/blitz-js/blitz/issues/2746
+  return createAnonymousSession(req, res)
 }
 
-async function revokeMultipleSessions(
-  req: IncomingMessage,
-  res: ServerResponse,
-  sessionHandles: string[]
-) {
-  let revoked: string[] = []
-  for (const handle of sessionHandles) {
-    await revokeSession(req, res, handle)
-    revoked.push(handle)
-  }
-  return revoked
-}
-
-async function revokeAllSessionsForUser(
-  req: IncomingMessage,
-  res: ServerResponse,
-  userId: PublicData['userId']
-) {
+async function revokeAllSessionsForUser(userId: PublicData['userId']) {
   let sessionHandles = (await global.sessionConfig.getSessions(userId)).map(
     (session) => session.handle
   )
-  return revokeMultipleSessions(req, res, sessionHandles)
+
+  let revoked: string[] = []
+  for (const handle of sessionHandles) {
+    try {
+      await global.sessionConfig.deleteSession(handle)
+    } catch (error) {
+      // Ignore any errors, like if session doesn't exist in DB
+    }
+    revoked.push(handle)
+  }
+  return revoked
 }
 
 async function getPublicData(

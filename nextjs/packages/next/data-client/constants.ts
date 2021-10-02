@@ -25,7 +25,9 @@ export const COOKIE_PUBLIC_DATA_TOKEN = () => `${prefix()}_sPublicDataToken`
 export const HEADER_CSRF = 'anti-csrf'
 export const HEADER_PUBLIC_DATA_TOKEN = 'public-data-token'
 export const HEADER_SESSION_CREATED = 'session-created'
-export const HEADER_SESSION_REVOKED = 'session-revoked'
 export const HEADER_CSRF_ERROR = 'csrf-error'
 
 export const LOCALSTORAGE_PREFIX = '_blitz-'
+export const LOCALSTORAGE_CSRF_TOKEN = () => `${prefix()}_sAntiCsrfToken`
+export const LOCALSTORAGE_PUBLIC_DATA_TOKEN = () =>
+  `${prefix()}_sPublicDataToken`
