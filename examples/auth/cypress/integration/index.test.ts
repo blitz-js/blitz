@@ -23,6 +23,7 @@ describe("index page", () => {
 
     cy.location("pathname").should("equal", "/")
     cy.contains("button", "Logout")
+    cy.wait(1000)
   })
 
   it("allows the user to log in", () => {
@@ -42,6 +43,7 @@ describe("index page", () => {
     cy.location("pathname").should("equal", "/")
     cy.wait(1000)
     cy.contains("button", "Logout")
+    cy.wait(1000)
   })
 
   it("allows the user to logout", () => {
