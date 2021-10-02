@@ -7,7 +7,6 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
-  HEADER_SESSION_REVOKED,
 } from './constants'
 import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
 import { getQueryKeyFromUrlAndParams, queryClient } from './react-query-utils'
@@ -137,12 +136,12 @@ export function buildRpcClient({
             getPublicDataStore().updateState()
             debug('Public data updated')
           }
-          if (response.headers.get(HEADER_SESSION_REVOKED)) {
-            debug('Session revoked')
-            getPublicDataStore().updateState()
+          if (response.headers.get(HEADER_SESSION_CREATED)) {
+            // This also runs on logout, because on logout a new anon session is created
+            debug('Session created')
             setTimeout(async () => {
               // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-              debug('Clearing and invalidating react-query cache...')
+              debug('Invalidating react-query cache...')
               await queryClient.cancelQueries()
               await queryClient.resetQueries()
               queryClient.getMutationCache().clear()
@@ -153,16 +152,6 @@ export function buildRpcClient({
               // will still run (but fail because you are now logged out)
               // Ref: https://github.com/blitz-js/blitz/issues/1935
             }, 100)
-          }
-          if (response.headers.get(HEADER_SESSION_CREATED)) {
-            debug('Session created')
-            // await queryClient.invalidateQueries("")
-            setTimeout(async () => {
-              // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
-              debug('Invalidating react-query cache...')
-              await queryClient.cancelQueries()
-              await queryClient.resetQueries()
-            })
           }
           if (response.headers.get(HEADER_CSRF_ERROR)) {
             const err = new CSRFTokenMismatchError()
