@@ -109,7 +109,7 @@ export const getAntiCSRFToken = () => {
   const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
   if (cookieValue) {
     localStorage.setItem(LOCALSTORAGE_ANTICSRF, cookieValue)
-    deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
+    deleteCookie(COOKIE_CSRF_TOKEN())
     return cookieValue
   } else {
     return localStorage.getItem(LOCALSTORAGE_ANTICSRF)
