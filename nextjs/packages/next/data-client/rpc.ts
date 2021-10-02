@@ -7,7 +7,6 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
-  HEADER_SESSION_REVOKED,
 } from './constants'
 import { isServer, CSRFTokenMismatchError } from '../stdlib/index'
 import { getQueryKeyFromUrlAndParams, queryClient } from './react-query-utils'
