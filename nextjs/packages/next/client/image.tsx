@@ -282,6 +282,13 @@ function handleLoading(
 }
 
 export default Image
+/**
+ * To add an image to your application, import the Image component:
+ *
+ * It renders a `img` element.
+ *
+ * @see Docs https://blitzjs.com/docs/image-component
+ */
 export function Image({
   src,
   sizes,
