@@ -100,7 +100,6 @@ class PublicDataStore {
     const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
     if (cookieValue) {
       localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
-      deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
       return cookieValue
     } else {
       return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
@@ -118,7 +117,6 @@ export const getAntiCSRFToken = () => {
   const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
   if (cookieValue) {
     localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
-    deleteCookie(COOKIE_CSRF_TOKEN())
     return cookieValue
   } else {
     return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())
