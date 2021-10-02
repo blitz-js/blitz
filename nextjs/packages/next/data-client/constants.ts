@@ -29,3 +29,6 @@ export const HEADER_SESSION_REVOKED = 'session-revoked'
 export const HEADER_CSRF_ERROR = 'csrf-error'
 
 export const LOCALSTORAGE_PREFIX = '_blitz-'
+export const LOCALSTORAGE_CSRF_TOKEN = () => `${prefix()}_sAntiCsrfToken`
+export const LOCALSTORAGE_PUBLIC_DATA_TOKEN = () =>
+  `${prefix()}_sPublicDataToken`

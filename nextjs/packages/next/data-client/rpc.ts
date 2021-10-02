@@ -138,8 +138,8 @@ export function buildRpcClient({
             debug('Public data updated')
           }
           if (response.headers.get(HEADER_SESSION_REVOKED)) {
-            debug('Session revoked, clearing publicData')
-            getPublicDataStore().clear()
+            debug('Session revoked')
+            getPublicDataStore().updateState()
             setTimeout(async () => {
               // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
               debug('Clearing and invalidating react-query cache...')
@@ -192,7 +192,8 @@ export function buildRpcClient({
               json: payload.error,
               meta: payload.meta?.error,
             }) as any
-            // We don't clear the publicDataStore for anonymous users
+            // We don't clear the publicDataStore for anonymous users,
+            // because there is not sensitive data
             if (
               error.name === 'AuthenticationError' &&
               getPublicDataStore().getData().userId

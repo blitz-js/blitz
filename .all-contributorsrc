@@ -3140,6 +3140,34 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "johnmurphy01",
+      "name": "John Murphy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2939548?v=4",
+      "profile": "https://github.com/johnmurphy01",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "martinsaxa",
+      "name": "martinsaxa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33789474?v=4",
+      "profile": "https://github.com/martinsaxa",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ajwgeek",
+      "name": "Austin Walhof",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2135600?v=4",
+      "profile": "https://github.com/ajwgeek",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
