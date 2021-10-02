@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.40.0-canary.9",
+  "version": "0.40.0-canary.10",
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
@@ -22,11 +22,11 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.40.0-canary.9",
-    "@blitzjs/generator": "0.40.0-canary.9",
-    "@blitzjs/installer": "0.40.0-canary.9",
-    "@blitzjs/repl": "0.40.0-canary.9",
-    "@blitzjs/server": "0.40.0-canary.9",
+    "@blitzjs/display": "0.40.0-canary.10",
+    "@blitzjs/generator": "0.40.0-canary.10",
+    "@blitzjs/installer": "0.40.0-canary.10",
+    "@blitzjs/repl": "0.40.0-canary.10",
+    "@blitzjs/server": "0.40.0-canary.10",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
