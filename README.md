@@ -25,7 +25,7 @@
 <h3 align="center"><a href="https://blitzjs.com/docs/get-started" target="_blank">Read the Documentation</a></h3>
 <br>
 
-“Zero-API” data layer **lets you import server code directly into your React components** instead of having to manually add API endpoints and do client-side fetching and caching.
+"Zero-API" data layer **lets you import server code directly into your React components** instead of having to add API endpoints and do the client-side fetching and caching manually.
 
 New Blitz apps come with **all the boring stuff already set up for you!** Like ESLint, Prettier, Jest, user sign up, log in, and password reset.
 
@@ -36,7 +36,7 @@ Provides **helpful defaults and conventions** for things like routing, file stru
 
 ### Quick Start
 
-You need Node.js 12 or newer
+You need Node.js 12 or newer.
 
 #### Install Blitz
 
@@ -88,7 +88,7 @@ While we currently only support web, we are pursuing the dream of a single monol
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! LGBTQ+, women, and minorities are especially welcome. Please read our [Code of Conduct](https://blitzjs.com/docs/code-of-conduct).
 
-[Join our Discord Community](https://discord.blitzjs.com) where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
+[Join our Discord Community](https://discord.blitzjs.com), where we help each other build Blitz apps. It's also where we collaborate on building Blitz itself.
 
 For questions and longer form discussions, [post in our forum](https://github.com/blitz-js/blitz/discussions).
 
@@ -98,7 +98,7 @@ There's still a lot of work to do, so you are especially invited to join us in b
 
 ## Financial Contributors
 
-Your financial contributions help ensure Blitz continues to be developed and maintained! We have monthly sponsorship options starting at $5/month.
+Your financial contributions help ensure Blitz continues to be developed and maintained! In addition, we have monthly sponsorship options starting at $5/month.
 
 👉 View options and contribute at [GitHub Sponsors](https://github.com/sponsors/blitz-js), [PayPal](https://paypal.me/thebayers), or [Open Collective](https://opencollective.com/blitzjs)
 
