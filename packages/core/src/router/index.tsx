@@ -22,6 +22,12 @@ export interface WithRouterProps {
   router: BlitzRouter
 }
 
+/**
+ * `withRouter` is a higher order component that wraps a React
+ * component `router` object as a prop.
+ *
+ * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
+ */
 export const withRouter: typeof withNextRouter = (WrappedComponent) => {
   function Wrapper({router, ...props}: any) {
     const query = useRouterQuery()
@@ -31,6 +37,12 @@ export const withRouter: typeof withNextRouter = (WrappedComponent) => {
   return withNextRouter(Wrapper)
 }
 
+/**
+ * `useRouter` is a custom React hook used to expose
+ * the router object within components.
+ *
+ * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
+ */
 export function useRouter() {
   const router = useNextRouter()
   const query = useRouterQuery()
