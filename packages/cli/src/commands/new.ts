@@ -99,17 +99,23 @@ export class New extends Command {
     debug("args: ", args)
     debug("flags: ", flags)
 
-    await this.determinePkgManagerToInstallDeps(flags)
-    const {pkgManager, shouldInstallDeps} = this
-
     const shouldUpgrade = !flags["skip-upgrade"]
     if (shouldUpgrade) {
+      const spinner = log
+        .spinner(log.withBrand("Checking if new Blitz release is available"))
+        .start()
       const wasUpgraded = await this.maybeUpgradeGloballyInstalledBlitz()
+      spinner.succeed()
       if (wasUpgraded) {
         this.rerunButSkipUpgrade(flags, args)
         return
       }
+
+      log.success("You already have the latest version")
     }
+
+    await this.determinePkgManagerToInstallDeps(flags)
+    const {pkgManager, shouldInstallDeps} = this
 
     try {
       const destinationRoot = require("path").resolve(args.name)
@@ -118,7 +124,7 @@ export class New extends Command {
       const form = await this.determineFormLib(flags)
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
-      const needsInstall = dryRun || !shouldInstallDeps
+      const needsInstall = !dryRun && shouldInstallDeps
       const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
