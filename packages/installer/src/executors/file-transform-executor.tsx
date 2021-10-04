@@ -1,7 +1,7 @@
+import {log} from "@blitzjs/display"
 import {createPatch} from "diff"
 import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-import Spinner from "ink-spinner"
 import * as React from "react"
 import {Newline} from "../components/newline"
 import {
@@ -60,12 +60,10 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   if (error) throw error
 
   if (!diff) {
+    const diffSpinner = log.spinner("Generating file diff...").start()
     return (
       <Box>
-        <Text>
-          <Spinner />
-          Generating file diff...
-        </Text>
+        <Text>{diffSpinner}</Text>
       </Box>
     )
   }
@@ -115,12 +113,8 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
   }, [filePath, step])
 
   if (loading) {
-    return (
-      <Box>
-        <Spinner />
-        <Text>Applying file changes</Text>
-      </Box>
-    )
+    const loadingSpinner = log.spinner("Applying file changes").start()
+    return <Box>{loadingSpinner}</Box>
   }
 
   onChangeCommitted(`Modified file: ${filePath}`)

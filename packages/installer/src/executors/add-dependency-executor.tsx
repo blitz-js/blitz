@@ -1,7 +1,7 @@
+import {log} from "@blitzjs/display"
 import {spawn} from "cross-spawn"
 import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-import Spinner from "ink-spinner"
 import * as path from "path"
 import * as React from "react"
 import {Newline} from "../components/newline"
@@ -27,10 +27,12 @@ export function isAddDependencyExecutor(executor: ExecutorConfig): executor is C
 export const type = "add-dependency"
 
 function Package({pkg, loading}: {pkg: NpmPackage; loading: boolean}) {
+  const spinner = log.spinner("Loading").start()
+
   return (
     <Text>
       {`   `}
-      {loading ? <Spinner /> : "📦"}
+      {loading ? spinner : "📦"}
       {` ${pkg.name}@${pkg.version}`}
     </Text>
   )
