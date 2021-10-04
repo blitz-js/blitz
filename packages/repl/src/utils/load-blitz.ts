@@ -55,7 +55,7 @@ export const loadBlitz = async () => {
           [name]: contextObj,
         }
       } catch (error) {
-        log.error(`Failed loading ${modulePath}: ${error}`)
+        log.error(`Failed to load ${modulePath}: ${error}`)
         debug("Failed to load module", error)
         return {}
       }
