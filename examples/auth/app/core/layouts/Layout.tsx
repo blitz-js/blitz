@@ -16,8 +16,8 @@ export default function Layout({title, children}: {title?: string; children: Rea
         {session.userId && (
           <button
             onClick={async () => {
-              router.push("/")
               await logoutMutation()
+              router.push("/")
             }}
           >
             Logout
