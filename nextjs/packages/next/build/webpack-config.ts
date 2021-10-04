@@ -263,6 +263,10 @@ export default async function getBaseWebpackConfig(
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
     hasReactExperimental // blitz
   const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
+  // Have to set this suspense env for the actual build, because the webpack
+  // string replace below only affects the build output, not anything during
+  // the build like static page optimization
+  process.env.__BLITZ_SUSPENSE_ENABLED = String(hasReactRoot)
 
   const babelConfigFile = await [
     '.babelrc',
