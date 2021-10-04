@@ -42,7 +42,6 @@
     "fs-extra": "^9.1.0",
     "globby": "11.0.2",
     "ink": "3.0.8",
-    "ink-spinner": "4.0.1",
     "ink-testing-library": "2.1.0",
     "jscodeshift": "0.11.0",
     "recast": "0.20.4"

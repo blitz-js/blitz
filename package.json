@@ -106,7 +106,6 @@
     "@types/get-port": "4.2.0",
     "@types/gulp-if": "0.0.33",
     "@types/htmlescape": "^1.1.1",
-    "@types/ink-spinner": "3.0.0",
     "@types/jest": "26.0.20",
     "@types/jsonwebtoken": "8.5.0",
     "@types/lodash": "4.14.149",
