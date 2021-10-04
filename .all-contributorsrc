@@ -3168,6 +3168,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "g3offrey",
+      "name": "Geoffrey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11151445?v=4",
+      "profile": "g3offrey.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
