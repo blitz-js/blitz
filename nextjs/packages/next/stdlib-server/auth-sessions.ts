@@ -43,7 +43,6 @@ import {
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
-  HEADER_SESSION_REVOKED,
   SESSION_TOKEN_VERSION_0,
   SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
@@ -859,7 +858,6 @@ async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the essential session cookie in case it was previously set
     setSessionCookie(req, res, '', new Date(0))
-    removeHeader(res, HEADER_SESSION_REVOKED)
     setHeader(res, HEADER_SESSION_CREATED, 'true')
 
     return {
@@ -924,7 +922,6 @@ async function createNewSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     // Clear the anonymous session cookie in case it was previously set
     setAnonymousSessionCookie(req, res, '', new Date(0))
-    removeHeader(res, HEADER_SESSION_REVOKED)
     setHeader(res, HEADER_SESSION_CREATED, 'true')
 
     return {
@@ -1067,9 +1064,6 @@ async function revokeSession(
       // Ignore any errors, like if session doesn't exist in DB
     }
   }
-  // This is used on the frontend to clear localstorage
-  setHeader(res, HEADER_SESSION_REVOKED, 'true')
-
   // Go ahead and create a new anon session. This
   // This fixes race condition where all client side queries get refreshed
   // in parallel and each creates a new anon session
