@@ -203,6 +203,13 @@ export class Generate extends Command {
       }
     }
 
+    if (modelName.includes(":")) {
+      console.warn(
+        "Model name has not been passed. Use blitz generate [type] [modelName] [field:type]...",
+      )
+      this.exit(0)
+    }
+
     return {
       model: modelName,
     }
