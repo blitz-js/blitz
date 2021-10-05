@@ -3,7 +3,9 @@ import BadBehavior from 'bad-behavior'
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
+  LOCALSTORAGE_CSRF_TOKEN,
   LOCALSTORAGE_PREFIX,
+  LOCALSTORAGE_PUBLIC_DATA_TOKEN,
 } from './constants'
 import {
   deleteCookie,
@@ -80,6 +82,7 @@ class PublicDataStore {
 
   clear() {
     deleteCookie(COOKIE_PUBLIC_DATA_TOKEN())
+    localStorage.removeItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
     this.updateState(emptyPublicData)
   }
 
@@ -94,7 +97,13 @@ class PublicDataStore {
   }
 
   private getToken() {
-    return readCookie(COOKIE_PUBLIC_DATA_TOKEN())
+    const cookieValue = readCookie(COOKIE_PUBLIC_DATA_TOKEN())
+    if (cookieValue) {
+      localStorage.setItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN(), cookieValue)
+      return cookieValue
+    } else {
+      return localStorage.getItem(LOCALSTORAGE_PUBLIC_DATA_TOKEN())
+    }
   }
 }
 export const getPublicDataStore = (): PublicDataStore => {
@@ -104,7 +113,15 @@ export const getPublicDataStore = (): PublicDataStore => {
   return (window as any).__publicDataStore
 }
 
-export const getAntiCSRFToken = () => readCookie(COOKIE_CSRF_TOKEN())
+export const getAntiCSRFToken = () => {
+  const cookieValue = readCookie(COOKIE_CSRF_TOKEN())
+  if (cookieValue) {
+    localStorage.setItem(LOCALSTORAGE_CSRF_TOKEN(), cookieValue)
+    return cookieValue
+  } else {
+    return localStorage.getItem(LOCALSTORAGE_CSRF_TOKEN())
+  }
+}
 
 interface UseSessionOptions {
   initialPublicData?: PublicData

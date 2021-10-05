@@ -12,6 +12,7 @@ import { getRedirectStatus } from '../../../../lib/load-custom-routes'
 import getRouteNoAssetPath from '../../../../shared/lib/router/utils/get-route-from-asset-path'
 import { PERMANENT_REDIRECT_STATUS } from '../../../../shared/lib/constants'
 import { resultToChunks } from '../../../../server/utils'
+import { loadConfigAtRuntime } from '../../../../server/config-shared'
 
 export function getPageHandler(ctx: ServerlessHandlerCtx) {
   const {
@@ -55,6 +56,9 @@ export function getPageHandler(ctx: ServerlessHandlerCtx) {
     normalizeDynamicRouteParams,
     normalizeVercelUrl,
   } = getUtils(ctx)
+
+  // Required for session middleware https://github.com/blitz-js/blitz/issues/2772
+  loadConfigAtRuntime()
 
   async function renderReqToHTML(
     req: IncomingMessage,
