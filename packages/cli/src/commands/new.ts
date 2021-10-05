@@ -1,5 +1,5 @@
 import {log} from "@blitzjs/display"
-import type {AppGeneratorOptions} from "@blitzjs/generator"
+import type {AppGeneratorOptions, Template} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
@@ -33,6 +33,17 @@ const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   : IS_YARN_INSTALLED
   ? "yarn"
   : "npm"
+
+const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
+  app: {
+    path: "app",
+  },
+  minimal: {
+    path: "minimalapp",
+    skipForms: true,
+    skipDatabase: true,
+  },
+}
 
 export class New extends Command {
   static description = "Create a new Blitz project"
@@ -98,7 +109,7 @@ export class New extends Command {
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
-  private template: "default" | "minimal" = "default"
+  private template: AppGeneratorOptions["template"] = templates["app"]
 
   async run() {
     const {args, flags} = this.parse(New)
@@ -123,9 +134,8 @@ export class New extends Command {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      // todo — fix this, have something like template's config
       let form: AppGeneratorOptions["form"]
-      if (this.template === "default") {
+      if (!this.template.skipForms) {
         form = await this.determineFormLib(flags)
       }
 
@@ -147,8 +157,7 @@ export class New extends Command {
         skipInstall: !shouldInstallDeps,
         skipGit,
         onPostInstall: async () => {
-          // todo — fix this logic, template's config?
-          if (this.template === "minimal") {
+          if (this.template.skipDatabase) {
             return
           }
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
@@ -286,21 +295,22 @@ export class New extends Command {
   }
   private async determineTemplate(flags: Flags): Promise<void> {
     if (flags.minimalApp) {
-      this.template = "minimal"
-    } else {
-      const choices: Array<{name: string; message?: string}> = [
-        {name: "default", message: "Default Blitz app"},
-        {name: "minimal", message: "Minimal Blitz app"},
-      ]
-      const {template} = (await this.enquirer.prompt({
-        type: "select",
-        name: "template",
-        message: "Pick a new project's template",
-        initial: 0,
-        choices,
-      })) as {template: "default" | "minimal"}
-      this.template = template
+      this.template = templates["minimal"]
+      return
     }
+    const choices: Array<{name: string; message?: string}> = [
+      {name: "app", message: "Default Blitz app"},
+      {name: "minimal", message: "Minimal Blitz app"},
+    ]
+    const {template} = (await this.enquirer.prompt({
+      type: "select",
+      name: "template",
+      message: "Pick a new project's template",
+      initial: 0,
+      choices,
+    })) as {template: "app" | "minimal"}
+
+    this.template = templates[template]
   }
   private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
     const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(

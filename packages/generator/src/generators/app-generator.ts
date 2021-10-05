@@ -12,9 +12,15 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
+type TemplateConfig = {
+  path: string
+  skipForms?: boolean
+  skipDatabase?: boolean
+}
+export type Template = "app" | "minimal"
+
 export interface AppGeneratorOptions extends GeneratorOptions {
-  template: "default" | "minimal"
-  templatePath?: string
+  template: TemplateConfig
   appName: string
   useTs: boolean
   yarn: boolean
@@ -28,7 +34,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
 type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: SourceRootType = {type: "template", path: this.options.templatePath || "app"}
+  sourceRoot: SourceRootType = {type: "template", path: this.options.template.path}
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
   packageInstallSuccess: boolean = false
@@ -95,8 +101,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         pkg.dependencies["formik"] = "2.x"
         break
     }
-    // todo — remove conditinal, handle in more generic way
-    if (this.options.template === "default") {
+    if (!this.options.template.skipForms) {
       this.fs.move(
         this.destinationPath(`_forms/${type}/Form.${ext}`),
         this.destinationPath(`app/core/components/Form.${ext}`),
