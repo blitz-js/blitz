@@ -32,10 +32,11 @@ const common = {
       (tsConfig && tsConfig.compilerOptions && tsConfig.compilerOptions.paths) || {},
     ),
     "\\.(css|less|sass|scss)$": path.resolve(__dirname, "./jest-preset/identity-obj-proxy.js"),
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": path.resolve(
+    "\\.(eot|otf|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": path.resolve(
       __dirname,
       "./jest-preset/file-mock.js",
     ),
+    "\\.(jpg|jpeg|png|gif|webp|ico)$": path.resolve(__dirname, "./jest-preset/image-mock.js"),
   },
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
   // Coverage output
