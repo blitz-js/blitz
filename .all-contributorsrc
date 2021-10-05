@@ -3197,6 +3197,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "9j",
+      "name": "Bahk Chanhee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11691670?v=4",
+      "profile": "world.hey.com/bach",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
