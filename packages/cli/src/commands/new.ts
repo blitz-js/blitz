@@ -101,17 +101,11 @@ export class New extends Command {
 
     const shouldUpgrade = !flags["skip-upgrade"]
     if (shouldUpgrade) {
-      const spinner = log
-        .spinner(log.withBrand("Checking if new Blitz release is available"))
-        .start()
       const wasUpgraded = await this.maybeUpgradeGloballyInstalledBlitz()
-      spinner.succeed()
       if (wasUpgraded) {
         this.rerunButSkipUpgrade(flags, args)
         return
       }
-
-      log.success("You already have the latest version")
     }
 
     await this.determinePkgManagerToInstallDeps(flags)
@@ -280,8 +274,10 @@ export class New extends Command {
     })
   }
   private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
+    const spinner = log.spinner(log.withBrand("Checking if new Blitz release is available")).start()
     const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
     if (lt(this.config.version, latestVersion)) {
+      spinner.succeed(log.withBrand("A new Blitz release is available"))
       if (await this.promptBlitzUpgrade(latestVersion)) {
         let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
         const upgradeOpts =
@@ -295,19 +291,22 @@ export class New extends Command {
             versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
 
           if (newVersion[0] && newVersion[0] === latestVersion) {
-            this.log(
-              chalk.green(
-                `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
-              ),
+            log.success(
+              `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
             )
+
             return true
           }
         }
+
         this.error(
           "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
         )
       }
+    } else {
+      spinner.succeed(log.withBrand("You already have the latest version"))
     }
+
     return false
   }
   private getGlobalBlitzPkgManagerOwner(): PkgManager {
