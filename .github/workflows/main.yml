@@ -185,9 +185,6 @@ jobs:
     env:
       BLITZ_TELEMETRY_DISABLED: 1
     steps:
-      # https://github.com/actions/virtual-environments/issues/1187
-      - name: tune linux network
-        run: sudo ethtool -K eth0 tx off rx off
       - uses: actions/cache@v2
         id: restore-build
         with:
@@ -286,10 +283,6 @@ jobs:
       matrix:
         group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
-      # https://github.com/actions/virtual-environments/issues/1187
-      - name: tune linux network
-        run: sudo ethtool -K eth0 tx off rx off
-
       - uses: actions/cache@v2
         id: restore-build
         with:
