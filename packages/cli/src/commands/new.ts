@@ -117,9 +117,8 @@ export class New extends Command {
     debug("flags: ", flags)
 
     await this.determineTemplate(flags)
-
     await this.determinePkgManagerToInstallDeps(flags)
-    const {pkgManager, shouldInstallDeps} = this
+    const {pkgManager, shouldInstallDeps, template} = this
 
     const shouldUpgrade = !flags["skip-upgrade"]
     if (shouldUpgrade) {
@@ -135,7 +134,7 @@ export class New extends Command {
       const appName = require("path").basename(destinationRoot)
 
       let form: AppGeneratorOptions["form"]
-      if (!this.template.skipForms) {
+      if (!template.skipForms) {
         form = await this.determineFormLib(flags)
       }
 
@@ -145,7 +144,7 @@ export class New extends Command {
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
       const generatorOpts: AppGeneratorOptions = {
-        template: this.template,
+        template,
         destinationRoot,
         appName,
         dryRun,
@@ -157,7 +156,7 @@ export class New extends Command {
         skipInstall: !shouldInstallDeps,
         skipGit,
         onPostInstall: async () => {
-          if (this.template.skipDatabase) {
+          if (template.skipDatabase) {
             return
           }
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()

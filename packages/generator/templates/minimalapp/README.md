@@ -14,20 +14,6 @@ blitz dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Environment Variables
-
-Ensure the `.env.local` file has required environment variables:
-
-```
-DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name__
-```
-
-Ensure the `.env.test.local` file has required environment variables:
-
-```
-DATABASE_URL=postgresql://<YOUR_DB_USERNAME>@localhost:5432/__name___test
-```
-
 ## Tests
 
 Runs your tests using Jest.
@@ -67,31 +53,9 @@ Here is the starting structure of your app.
 __name__
 ├── app/
 │   ├── api/
-│   ├── auth/
-│   │   ├── components/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SignupForm.tsx
-│   │   ├── mutations/
-│   │   │   ├── changePassword.ts
-│   │   │   ├── forgotPassword.test.ts
-│   │   │   ├── forgotPassword.ts
-│   │   │   ├── login.ts
-│   │   │   ├── logout.ts
-│   │   │   ├── resetPassword.test.ts
-│   │   │   ├── resetPassword.ts
-│   │   │   └── signup.ts
-│   │   ├── pages/
-│   │   │   ├── forgot-password.tsx
-│   │   │   ├── login.tsx
-│   │   │   ├── reset-password.tsx
-│   │   │   └── signup.tsx
-│   │   └── validations.ts
 │   ├── core/
 │   │   ├── components/
-│   │   │   ├── Form.tsx
-│   │   │   └── LabeledTextField.tsx
 │   │   ├── hooks/
-│   │   │   └── useCurrentUser.ts
 │   │   └── layouts/
 │   │       └── Layout.tsx
 │   ├── pages/
@@ -100,16 +64,6 @@ __name__
 │   │   ├── _document.tsx
 │   │   ├── index.test.tsx
 │   │   └── index.tsx
-│   └── users/
-│       └── queries/
-│           └── getCurrentUser.ts
-├── db/
-│   ├── index.ts
-│   ├── schema.prisma
-│   └── seeds.ts
-├── integrations/
-├── mailers/
-│   └── forgotPasswordMailer.ts
 ├── public/
 │   ├── favicon.ico*
 │   └── logo.png
@@ -131,11 +85,7 @@ These files are:
 
 - The `app/` folder is a container for most of your project. This is where you’ll put any pages or API routes.
 
-- `db/` is where your database configuration goes. If you’re writing models or checking migrations, this is where to go.
-
 - `public/` is a folder where you will put any static assets. If you have images, files, or videos which you want to use in your app, this is where to put them.
-
-- `integrations/` is a folder to put all third-party integrations like with Stripe, Sentry, etc.
 
 - `test/` is a folder where you can put test utilities and integration tests.
 
