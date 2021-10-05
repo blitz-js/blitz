@@ -32,7 +32,7 @@ function Package({pkg, loading}: {pkg: NpmPackage; loading: boolean}) {
   return (
     <Text>
       {`   `}
-      {loading ? "loading.." : "📦"}
+      {loading ? "Loading..." : "📦"}
       {` ${pkg.name}@${pkg.version}`}
     </Text>
   )
