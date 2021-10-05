@@ -263,6 +263,10 @@ export default async function getBaseWebpackConfig(
         semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
     hasReactExperimental // blitz
   const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
+  // Have to set this suspense env for the actual build, because the webpack
+  // string replace below only affects the build output, not anything during
+  // the build like static page optimization
+  process.env.__BLITZ_SUSPENSE_ENABLED = String(hasReactRoot)
 
   const babelConfigFile = await [
     '.babelrc',
@@ -1219,8 +1223,6 @@ export default async function getBaseWebpackConfig(
             }
           : {}),
         'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
-        'process.env.__BLITZ_SESSION_COOKIE_PREFIX':
-          JSON.stringify(sessionCookiePrefix),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),
@@ -1273,7 +1275,11 @@ export default async function getBaseWebpackConfig(
               // pre-webpack era (common in server-side code)
               'global.GENTLY': JSON.stringify(false),
             }
-          : undefined),
+          : {
+              'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
+                sessionCookiePrefix
+              ),
+            }),
         // stub process.env with proxy to warn a missing value is
         // being accessed in development mode
         ...(config.experimental.pageEnv && dev

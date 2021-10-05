@@ -101,6 +101,15 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
       middleware.push(secureProxyMiddleware)
     }
 
+    assert(
+      req.query.auth,
+      'req.query.auth is not defined. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route'
+    )
+    assert(
+      Array.isArray(req.query.auth),
+      'req.query.auth must be an array. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route'
+    )
+
     if (!req.query.auth.length) {
       return res.status(404).end()
     }

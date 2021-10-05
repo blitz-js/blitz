@@ -116,6 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BLITZ_TELEMETRY_DISABLED: 1
+      DEBUG: blitz:session
     steps:
       - uses: actions/cache@v2
         id: restore-build

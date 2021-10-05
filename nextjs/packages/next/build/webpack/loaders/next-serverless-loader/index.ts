@@ -12,6 +12,8 @@ import {
   REACT_LOADABLE_MANIFEST,
 } from '../../../../shared/lib/constants'
 import { normalizePathSep } from '../../../../server/normalize-page-path'
+import { getSessionCookiePrefix } from '../../../../server/lib/utils'
+import { loadConfigProduction } from '../../../../server/config-shared'
 
 export type ServerlessLoaderQuery = {
   page: string
@@ -54,8 +56,9 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
     previewProps,
     loadedEnvFiles,
     i18n,
-  }: ServerlessLoaderQuery =
-    typeof this.query === 'string' ? parse(this.query.substr(1)) : this.query
+  }: ServerlessLoaderQuery = typeof this.query === 'string'
+    ? parse(this.query.substr(1))
+    : this.query
 
   const pagesDir = normalizePathSep(rawPagesDir)
 
@@ -72,6 +75,17 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
   const encodedPreviewProps = devalue(
     JSON.parse(previewProps) as __ApiPreviewProps
   )
+
+  const sessionCookiePrefix = getSessionCookiePrefix(
+    loadConfigProduction(pagesDir)
+  )
+
+  const setEnvCode = `
+    process.env.BLITZ_APP_DIR = process.env.VERCEL && !process.env.CI
+      ? '/var/task/'
+      : "${pagesDir}"
+    process.env.__BLITZ_SESSION_COOKIE_PREFIX = "${sessionCookiePrefix}"
+  `
 
   const envLoading = `
       const { processEnv } = require('@next/env')
@@ -106,7 +120,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
 
         import { getApiHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/api-handler'
 
-        process.env.BLITZ_APP_DIR = "${pagesDir}"
+        ${setEnvCode}
 
         const combinedRewrites = Array.isArray(routesManifest.rewrites)
           ? routesManifest.rewrites
@@ -126,7 +140,6 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
           basePath: "${basePath}",
           pageIsDynamic: ${pageIsDynamicRoute},
           encodedPreviewProps: ${encodedPreviewProps},
-          pagesDir: "${pagesDir}",
         })
         export default apiHandler
       `
@@ -145,7 +158,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
       }
       import { getPageHandler } from 'next/dist/build/webpack/loaders/next-serverless-loader/page-handler'
 
-      process.env.BLITZ_APP_DIR = "${pagesDir}"
+      ${setEnvCode}
 
       const documentModule = require("${absoluteDocumentPath}")
 
