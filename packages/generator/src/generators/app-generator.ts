@@ -77,44 +77,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
     )
-    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
-      | Record<string, any>
-      | undefined
-    assert(pkg, "couldn't find package.json")
-    const ext = this.options.useTs ? "tsx" : "js"
-    let type: string = ""
 
-    // todo — handle this for minimal template
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
-        pkg.dependencies["final-form"] = "4.x"
-        pkg.dependencies["react-final-form"] = "6.x"
-        break
-      case "React Hook Form":
-        type = "hookform"
-        pkg.dependencies["react-hook-form"] = "7.x"
-        pkg.dependencies["@hookform/resolvers"] = "2.x"
-        break
-      case "Formik":
-        type = "formik"
-        pkg.dependencies["formik"] = "2.x"
-        break
-    }
     if (!this.options.template.skipForms) {
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/Form.${ext}`),
-        this.destinationPath(`app/core/components/Form.${ext}`),
-      )
-      this.fs.move(
-        this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-        this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
-      )
-
-      this.fs.writeJSON(this.destinationPath("package.json"), pkg)
+      this.updateForms()
     }
-
-    this.fs.delete(this.destinationPath("_forms"))
   }
 
   async postWrite() {
@@ -310,6 +276,44 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     commitSpinner.succeed()
   }
+  private updateForms() {
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
+
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string = ""
+
+    switch (this.options.form) {
+      case "React Final Form":
+        type = "finalform"
+        pkg.dependencies["final-form"] = "4.x"
+        pkg.dependencies["react-final-form"] = "6.x"
+        break
+      case "React Hook Form":
+        type = "hookform"
+        pkg.dependencies["react-hook-form"] = "7.x"
+        pkg.dependencies["@hookform/resolvers"] = "2.x"
+        break
+      case "Formik":
+        type = "formik"
+        pkg.dependencies["formik"] = "2.x"
+        break
+    }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/core/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
+    )
+
+    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
+    this.fs.delete(this.destinationPath("_forms"))
+  }
+
   private get pkgManager(): PkgManager {
     if (this.options.pnpm) {
       return "pnpm"
