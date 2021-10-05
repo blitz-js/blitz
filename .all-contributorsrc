@@ -1547,7 +1547,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/244174?v=4",
       "profile": "https://github.com/piotrski",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -3147,7 +3148,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2939548?v=4",
       "profile": "https://github.com/johnmurphy01",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -3166,6 +3168,43 @@
       "profile": "https://github.com/ajwgeek",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "g3offrey",
+      "name": "Geoffrey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11151445?v=4",
+      "profile": "g3offrey.dev",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "keevan",
+      "name": "Kevin Pham",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9924643?v=4",
+      "profile": "https://github.com/keevan",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kimngan-bui",
+      "name": "kimngan-bui",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20723478?v=4",
+      "profile": "https://github.com/kimngan-bui",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "9j",
+      "name": "Bahk Chanhee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11691670?v=4",
+      "profile": "world.hey.com/bach",
+      "contributions": [
+        "code"
       ]
     }
   ],

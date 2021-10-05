@@ -1,4 +1,5 @@
 import {getProjectRoot} from "@blitzjs/config"
+import {log} from "@blitzjs/display"
 import globby from "globby"
 import path from "path"
 import ProgressBar from "progress"
@@ -54,6 +55,7 @@ export const loadBlitz = async () => {
           [name]: contextObj,
         }
       } catch (error) {
+        log.error(`Failed to load ${modulePath}: ${error}`)
         debug("Failed to load module", error)
         return {}
       }
