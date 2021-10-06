@@ -29,7 +29,16 @@ export abstract class Builder<T> implements IBuilder<T> {
   public fallbackMap = {
     string: "LabeledTextField",
     number: "LabeledTextField",
+    int: "LabeledTextField",
     boolean: "LabeledTextField",
+  }
+
+  public fallbackZodMap = {
+    string: "string",
+    number: "number",
+    boolean: "boolean",
+    uuid: "string",
+    int: "number"
   }
 
   public getId(input: string = "") {
@@ -50,21 +59,23 @@ export abstract class Builder<T> implements IBuilder<T> {
 
   private possibleZodTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
 
-  public getZodTypeName(type: string = "") {
-    if (this.possibleZodTypes.includes(type)) {
-      return type
-    } else {
-      return type === "int" ? "number" : "any"
+  public async getZodTypeName(type: string = "") {
+    let typeToZodNameMap:{ [char: string]: string } = this.fallbackZodMap
+
+    let config = await this.getCachedConfig()
+    if (config.template && config.template.zod) {
+      typeToZodNameMap = config.template.typeToZodTypeMap
     }
+
+    let defaultName = "any"
+
+    return typeToZodNameMap[type] ?? defaultName
   }
 
   public async getComponentForType(type: string = ""): Promise<string> {
-    if (!process.env.BLITZ_APP_DIR) {
-      process.env.BLITZ_APP_DIR = process.cwd()
-    }
 
     let typeToComponentMap:{ [char: string]: string } = this.fallbackMap
-    let config = await this.getConfig()
+    let config = await this.getCachedConfig()
     if (config.template && config.template.typeToComponentMap) {
       typeToComponentMap = config.template.typeToComponentMap
     }
@@ -76,7 +87,7 @@ export abstract class Builder<T> implements IBuilder<T> {
 
   private config: NextConfigComplete | undefined = undefined
 
-  private async getConfig() {
+  public async getCachedConfig(): Promise<NextConfigComplete> {
     if (!this.config) {
       const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
       this.config = await loadConfigAtRuntime()
@@ -92,7 +103,7 @@ export abstract class Builder<T> implements IBuilder<T> {
 
       return {
         attributeName: singleCamel(valueName),
-        zodTypeName: this.getZodTypeName(typeName),
+        zodTypeName: await this.getZodTypeName(typeName),
         FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
         fieldName: singleCamel(valueName), // fieldName
         FieldName: singlePascal(valueName), // FieldName
