@@ -274,7 +274,7 @@ export class New extends Command {
     })
   }
   private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
-    const spinner = log.spinner(log.withBrand("Checking if new Blitz release is available")).start()
+    const spinner = log.spinner(log.withBrand("Checking if a new Blitz release is available")).start()
     const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
     if (lt(this.config.version, latestVersion)) {
       spinner.succeed(log.withBrand("A new Blitz release is available"))
@@ -304,7 +304,7 @@ export class New extends Command {
         )
       }
     } else {
-      spinner.succeed(log.withBrand("You already have the latest version"))
+      spinner.succeed(log.withBrand("You have the latest Blitz version"))
     }
 
     return false
