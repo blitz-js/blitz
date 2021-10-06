@@ -37,6 +37,13 @@ enum ResourceType {
   Resource = "resource",
 }
 
+enum ReservedModelNames {
+  Page = "page",
+  Api = "api",
+  Query = "query",
+  Mutation = "mutation",
+}
+
 interface Flags {
   context?: string
   "dry-run"?: boolean
@@ -48,7 +55,7 @@ interface Args {
   model: string
 }
 
-function modelName(input: string = "") {
+export function modelName(input: string = "") {
   return singleCamel(input)
 }
 function modelNames(input: string = "") {
@@ -208,6 +215,15 @@ export class Generate extends Command {
     }
   }
 
+  validateModelName(modelName: string): void {
+    const reservedModelNames = Object.values(ReservedModelNames) as string[]
+    if (reservedModelNames.includes(modelName)) {
+      throw new Error(
+        `ReservedModelNameError: names ${reservedModelNames} or their plurals cannot be used as model names`,
+      )
+    }
+  }
+
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug("args: ", args)
@@ -218,6 +234,7 @@ export class Generate extends Command {
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
+      this.validateModelName(singularRootContext)
 
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
