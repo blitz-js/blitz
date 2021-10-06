@@ -3,7 +3,7 @@ import db from "db"
 import {z} from "zod"
 
 const Update__ModelName__ = z.object({
-  id: z.number(), //TODO: Infer type based on prisma schema
+  id: z.__modelIdZodType__(), //TODO: Infer type based on prisma schema
   // template: __fieldName__: z.__zodTypeName__(),
 })
 
