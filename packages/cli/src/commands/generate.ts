@@ -203,10 +203,8 @@ export class Generate extends Command {
       }
     }
 
-    if (modelName.includes(":")) {
-      console.warn(
-        "Model name has not been passed. Use blitz generate [type] [modelName] [field:type]...",
-      )
+    if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
+      log.error("Incorrect model name")
       this.exit(0)
     }
 
