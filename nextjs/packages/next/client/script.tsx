@@ -132,8 +132,8 @@ export function initScriptLoader(scriptLoaderItems: ScriptProps[]) {
  *
  * With `<Script>`, you no longer need to wrap scripts in <Head>.
  *
- * For example:
  *
+ * @example
  * ```
  * import { Script } from "blitz"
  *
