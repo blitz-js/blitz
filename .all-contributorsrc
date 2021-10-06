@@ -3215,7 +3215,8 @@
       "profile": "http://www.afterecon.com/",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     }
   ],
