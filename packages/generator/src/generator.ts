@@ -220,7 +220,6 @@ export abstract class Generator<
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
-    // templatedFile.match
     
     const fieldTemplateString = templatedFile
       .match(this.fieldTemplateRegExp)?.[0]
