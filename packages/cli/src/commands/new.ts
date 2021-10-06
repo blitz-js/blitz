@@ -22,7 +22,7 @@ export interface Flags {
   pnpm: boolean
   yarn: boolean
   form?: string
-  minimalApp: boolean // TODO — find better name
+  "minimal-app": boolean
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -38,7 +38,7 @@ const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
   app: {
     path: "app",
   },
-  minimal: {
+  minimalapp: {
     path: "minimalapp",
     skipForms: true,
     skipDatabase: true,
@@ -101,8 +101,8 @@ export class New extends Command {
       description: "Skip blitz upgrade if outdated",
       default: false,
     }),
-    minimalApp: flags.boolean({
-      description: "Generates a minimal project.", // todo — description
+    "minimal-app": flags.boolean({
+      description: "Generates a minimal Blitz project — no database, auth, forms, etc.",
       default: false,
     }),
   }
@@ -293,13 +293,13 @@ export class New extends Command {
     return promptResult.form
   }
   private async determineTemplate(flags: Flags): Promise<void> {
-    if (flags.minimalApp) {
-      this.template = templates["minimal"]
+    if (flags["minimal-app"]) {
+      this.template = templates.minimalapp
       return
     }
-    const choices: Array<{name: string; message?: string}> = [
+    const choices: Array<{name: Template; message?: string}> = [
       {name: "app", message: "Default Blitz app"},
-      {name: "minimal", message: "Minimal Blitz app"},
+      {name: "minimalapp", message: "Minimal Blitz app — no database, auth, forms, etc."},
     ]
     const {template} = (await this.enquirer.prompt({
       type: "select",
@@ -307,7 +307,7 @@ export class New extends Command {
       message: "Pick a new project's template",
       initial: 0,
       choices,
-    })) as {template: "app" | "minimal"}
+    })) as {template: Template}
 
     this.template = templates[template]
   }

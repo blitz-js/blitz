@@ -17,7 +17,7 @@ type TemplateConfig = {
   skipForms?: boolean
   skipDatabase?: boolean
 }
-export type Template = "app" | "minimal"
+export type Template = "app" | "minimalapp"
 
 export interface AppGeneratorOptions extends GeneratorOptions {
   template: TemplateConfig
