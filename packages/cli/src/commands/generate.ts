@@ -55,7 +55,7 @@ interface Args {
   model: string
 }
 
-export function modelName(input: string = "") {
+function modelName(input: string = "") {
   return singleCamel(input)
 }
 function modelNames(input: string = "") {
