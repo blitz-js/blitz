@@ -116,10 +116,6 @@ export class New extends Command {
     debug("args: ", args)
     debug("flags: ", flags)
 
-    await this.determineTemplate(flags)
-    await this.determinePkgManagerToInstallDeps(flags)
-    const {pkgManager, shouldInstallDeps, template} = this
-
     const shouldUpgrade = !flags["skip-upgrade"]
     if (shouldUpgrade) {
       const wasUpgraded = await this.maybeUpgradeGloballyInstalledBlitz()
@@ -128,6 +124,10 @@ export class New extends Command {
         return
       }
     }
+
+    await this.determineTemplate(flags)
+    await this.determinePkgManagerToInstallDeps(flags)
+    const {pkgManager, shouldInstallDeps, template} = this
 
     try {
       const destinationRoot = require("path").resolve(args.name)
@@ -139,7 +139,7 @@ export class New extends Command {
       }
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
-      const needsInstall = dryRun || !shouldInstallDeps
+      const needsInstall = !dryRun && shouldInstallDeps
       const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
@@ -321,8 +321,12 @@ export class New extends Command {
     })
   }
   private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
+    const spinner = log
+      .spinner(log.withBrand("Checking if a new Blitz release is available"))
+      .start()
     const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
     if (lt(this.config.version, latestVersion)) {
+      spinner.succeed(log.withBrand("A new Blitz release is available"))
       if (await this.promptBlitzUpgrade(latestVersion)) {
         let globalBlitzOwner = this.getGlobalBlitzPkgManagerOwner()
         const upgradeOpts =
@@ -336,19 +340,22 @@ export class New extends Command {
             versionResult.stdout.toString().match(/(?<=blitz: )(.*)(?= \(global\))/) || []
 
           if (newVersion[0] && newVersion[0] === latestVersion) {
-            this.log(
-              chalk.green(
-                `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
-              ),
+            log.success(
+              `Upgraded blitz global package to ${newVersion[0]}, running blitz new command...`,
             )
+
             return true
           }
         }
+
         this.error(
           "Unable to upgrade blitz, please run `blitz new` again and select No to skip the upgrade",
         )
       }
+    } else {
+      spinner.succeed(log.withBrand("You have the latest Blitz version"))
     }
+
     return false
   }
   private getGlobalBlitzPkgManagerOwner(): PkgManager {
