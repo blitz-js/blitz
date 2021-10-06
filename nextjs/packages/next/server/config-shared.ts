@@ -173,7 +173,8 @@ export type NextConfig = { [key: string]: any } & {
     concurrentFeatures?: boolean
   }  
   template?:{
-    typeToComponentMap: any
+    typeToComponentMap: { [key in string]: string },
+    typeToZodTypeMap: { [key in string]: string }
   }
 }
 

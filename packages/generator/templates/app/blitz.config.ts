@@ -14,6 +14,13 @@ const config: BlitzConfig = {
       int: "LabeledTextField",
       number: "LabeledTextField",
       boolean: "LabeledTextField",
+    },
+    typeToZodTypeMap: {
+      string: "string",
+      uuid: "string().uuid()",
+      any: "any",
+      number: "number",
+      boolean: "boolean",
     }
   }
   /* Uncomment this to customize the webpack config
