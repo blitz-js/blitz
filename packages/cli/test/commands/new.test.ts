@@ -111,13 +111,6 @@ describe("`new` command", () => {
           } else {
             expect(blitzVersion).toEqual(latest)
           }
-
-          expect(getStepsFromOutput()).toStrictEqual([
-            `cd ${dirName}`,
-            "pnpm install",
-            "blitz prisma migrate dev (when asked, you can name the migration anything)",
-            "blitz dev",
-          ])
         }),
     )
 
@@ -137,9 +130,14 @@ describe("`new` command", () => {
       })
 
       const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
-      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
+      await whileStayingInCWD(() => New.run([newAppDir, "--pnpm", "--skip-upgrade"]))
 
-      expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz dev"])
+      expect(getStepsFromOutput()).toStrictEqual([
+        `cd ${newAppDir}`,
+        "pnpm install",
+        "blitz prisma migrate dev (when asked, you can name the migration anything)",
+        "blitz dev",
+      ])
     })
 
     it("fetches latest version from template", async () => {

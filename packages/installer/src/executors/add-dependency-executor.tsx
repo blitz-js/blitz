@@ -1,7 +1,8 @@
 import {spawn} from "cross-spawn"
 import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-import Spinner from "ink-spinner"
+// TODO: Once the dependency issue of ink-spinner is resolved, you should uncomment it (https://github.com/blitz-js/blitz/issues/2793)
+// import Spinner from "ink-spinner"
 import * as path from "path"
 import * as React from "react"
 import {Newline} from "../components/newline"
@@ -26,11 +27,12 @@ export function isAddDependencyExecutor(executor: ExecutorConfig): executor is C
 
 export const type = "add-dependency"
 
+// TODO: Once the dependency issue of ink-spinner is resolved, you should change "loading.." to <Spinner /> (https://github.com/blitz-js/blitz/issues/2793)
 function Package({pkg, loading}: {pkg: NpmPackage; loading: boolean}) {
   return (
     <Text>
       {`   `}
-      {loading ? <Spinner /> : "📦"}
+      {loading ? "Loading..." : "📦"}
       {` ${pkg.name}@${pkg.version}`}
     </Text>
   )
