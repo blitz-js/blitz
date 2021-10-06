@@ -27,6 +27,12 @@ describe("Field", () => {
     expect(field.default).toMatchObject({name: "uuid"})
   })
 
+  it("handles uuid convenience syntax", () => {
+    const [field] = Field.parse("someSpecialToken:uuid")
+    expect(field.type).toBe("String")
+    expect(field.default).toMatchObject({name: "uuid"})
+  })
+
   it("handles default autoincrement attribute", () => {
     const [field] = Field.parse("id:int:default=autoincrement")
     expect(field.default).toMatchObject({name: "autoincrement"})
