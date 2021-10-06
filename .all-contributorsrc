@@ -3206,6 +3206,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Vandivier",
+      "name": "John Vandivier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5559355?v=4",
+      "profile": "http://www.afterecon.com/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
