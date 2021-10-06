@@ -3218,6 +3218,15 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "namirsab",
+      "name": "Namir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6980777?v=4",
+      "profile": "http://namirsab.github.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
