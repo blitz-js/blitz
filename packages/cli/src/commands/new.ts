@@ -34,9 +34,9 @@ const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   ? "yarn"
   : "npm"
 
-type Template = "default" | "minimal"
+type Template = "full" | "minimal"
 const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
-  default: {
+  full: {
     path: "app",
   },
   minimal: {
@@ -104,13 +104,13 @@ export class New extends Command {
     }),
     template: flags.string({
       description: "Generates a minimal Blitz project — no database, auth, forms, etc.",
-      options: ["default", "minimal"],
+      options: ["full", "minimal"],
     }),
   }
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
-  private template: AppGeneratorOptions["template"] = templates["default"]
+  private template: AppGeneratorOptions["template"] = templates.full
 
   async run() {
     const {args, flags} = this.parse(New)
@@ -295,11 +295,11 @@ export class New extends Command {
   }
   private async determineTemplate(flags: Flags): Promise<void> {
     if (flags.template) {
-      this.template = templates[flags.template as "default" | "minimal"]
+      this.template = templates[flags.template as "full" | "minimal"]
       return
     }
     const choices: Array<{name: Template; message?: string}> = [
-      {name: "default", message: "Full - includes DB and auth (Recommended)"},
+      {name: "full", message: "Full - includes DB and auth (Recommended)"},
       {name: "minimal", message: "Minimal — no DB, no auth"},
     ]
     const {template} = (await this.enquirer.prompt({
