@@ -37,13 +37,6 @@ enum ResourceType {
   Resource = "resource",
 }
 
-enum ReservedModelNames {
-  Page = "page",
-  Api = "api",
-  Query = "query",
-  Mutation = "mutation",
-}
-
 interface Flags {
   context?: string
   "dry-run"?: boolean
@@ -216,10 +209,10 @@ export class Generate extends Command {
   }
 
   validateModelName(modelName: string): void {
-    const reservedModelNames = Object.values(ReservedModelNames) as string[]
-    if (reservedModelNames.includes(modelName)) {
+    const RESERVED_MODEL_NAMES = ["page", "api", "query", "mutation"]
+    if (RESERVED_MODEL_NAMES.includes(modelName)) {
       throw new Error(
-        `Names ${reservedModelNames} or their plurals cannot be used as model names`,
+        `Names ${RESERVED_MODEL_NAMES} or their plurals cannot be used as model names`,
       )
     }
   }
