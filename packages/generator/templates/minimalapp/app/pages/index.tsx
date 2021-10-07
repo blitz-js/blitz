@@ -1,5 +1,4 @@
 import { Image, BlitzPage } from "blitz"
-import Layout from "app/core/layouts/Layout"
 import logo from "public/logo.png"
 
 /*
@@ -192,6 +191,5 @@ const Home: BlitzPage = () => {
 }
 
 Home.suppressFirstRenderFlicker = true
-Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
 
 export default Home
