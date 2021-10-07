@@ -23,6 +23,11 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   form: "React Final Form" | "React Hook Form" | "Formik"
   onPostInstall?: () => Promise<void>
 }
+export interface AppTemplateValues {
+  name: string,
+  safeNameSlug: string,
+  username: string | undefined
+}
 type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
