@@ -17,7 +17,7 @@ const config: BlitzConfig = {
     },
     typeToZodTypeMap: {
       string: "string",
-      uuid: "string().uuid()",
+      uuid: "string().uuid",
       any: "any",
       number: "number",
       boolean: "boolean",
