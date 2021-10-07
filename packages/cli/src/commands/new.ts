@@ -22,7 +22,7 @@ export interface Flags {
   pnpm: boolean
   yarn: boolean
   form?: string
-  "minimal-app": boolean
+  template?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -101,9 +101,9 @@ export class New extends Command {
       description: "Skip blitz upgrade if outdated",
       default: false,
     }),
-    "minimal-app": flags.boolean({
+    template: flags.string({
       description: "Generates a minimal Blitz project — no database, auth, forms, etc.",
-      default: false,
+      options: ["app", "minimalapp"],
     }),
   }
 
@@ -293,8 +293,8 @@ export class New extends Command {
     return promptResult.form
   }
   private async determineTemplate(flags: Flags): Promise<void> {
-    if (flags["minimal-app"]) {
-      this.template = templates.minimalapp
+    if (flags.template) {
+      this.template = templates[flags.template as "app" | "minimalapp"]
       return
     }
     const choices: Array<{name: Template; message?: string}> = [
