@@ -57,24 +57,22 @@ export abstract class Builder<T> implements IBuilder<T> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
-  private possibleZodTypes = ["string", "null", "undefined", "unknown", "void", "boolean"]
-
   public async getZodTypeName(type: string = "") {
-    let typeToZodNameMap:{ [char: string]: string } = this.fallbackZodMap
+    let typeToZodNameMap:{ [key: string]: string } = this.fallbackZodMap
 
     let config = await this.getCachedConfig()
-    if (config.template && config.template.zod) {
+    if (config.template && config.template.typeToZodTypeMap) {
       typeToZodNameMap = config.template.typeToZodTypeMap
     }
 
     let defaultName = "any"
-
+    
     return typeToZodNameMap[type] ?? defaultName
   }
 
   public async getComponentForType(type: string = ""): Promise<string> {
 
-    let typeToComponentMap:{ [char: string]: string } = this.fallbackMap
+    let typeToComponentMap:{ [key: string]: string } = this.fallbackMap
     let config = await this.getCachedConfig()
     if (config.template && config.template.typeToComponentMap) {
       typeToComponentMap = config.template.typeToComponentMap
@@ -100,8 +98,7 @@ export abstract class Builder<T> implements IBuilder<T> {
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")
-
-      return {
+      const values = {
         attributeName: singleCamel(valueName),
         zodTypeName: await this.getZodTypeName(typeName),
         FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
@@ -111,6 +108,8 @@ export abstract class Builder<T> implements IBuilder<T> {
         Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
         Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
       }
+
+      return values
     })
     return Promise.all(argsPromises)
   }
