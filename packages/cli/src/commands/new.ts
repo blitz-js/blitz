@@ -1,5 +1,5 @@
 import {log} from "@blitzjs/display"
-import type {AppGeneratorOptions, Template} from "@blitzjs/generator"
+import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
@@ -34,11 +34,12 @@ const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   ? "yarn"
   : "npm"
 
+type Template = "default" | "minimal"
 const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
-  app: {
+  default: {
     path: "app",
   },
-  minimalapp: {
+  minimal: {
     path: "minimalapp",
     skipForms: true,
     skipDatabase: true,
@@ -103,13 +104,13 @@ export class New extends Command {
     }),
     template: flags.string({
       description: "Generates a minimal Blitz project — no database, auth, forms, etc.",
-      options: ["app", "minimalapp"],
+      options: ["default", "minimal"],
     }),
   }
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
-  private template: AppGeneratorOptions["template"] = templates["app"]
+  private template: AppGeneratorOptions["template"] = templates["default"]
 
   async run() {
     const {args, flags} = this.parse(New)
@@ -294,12 +295,12 @@ export class New extends Command {
   }
   private async determineTemplate(flags: Flags): Promise<void> {
     if (flags.template) {
-      this.template = templates[flags.template as "app" | "minimalapp"]
+      this.template = templates[flags.template as "default" | "minimal"]
       return
     }
     const choices: Array<{name: Template; message?: string}> = [
-      {name: "app", message: "Full - includes DB and auth (Recommended)"},
-      {name: "minimalapp", message: "Minimal — no DB, no auth"},
+      {name: "default", message: "Full - includes DB and auth (Recommended)"},
+      {name: "minimal", message: "Minimal — no DB, no auth"},
     ]
     const {template} = (await this.enquirer.prompt({
       type: "select",
