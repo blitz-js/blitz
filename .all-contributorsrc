@@ -3215,7 +3215,26 @@
       "profile": "http://www.afterecon.com/",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "namirsab",
+      "name": "Namir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6980777?v=4",
+      "profile": "http://namirsab.github.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "scttcper",
+      "name": "Scott Cooper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1400464?v=4",
+      "profile": "https://twitter.com/scttcper",
+      "contributions": [
+        "doc"
       ]
     }
   ],
