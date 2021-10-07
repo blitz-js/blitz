@@ -10,6 +10,7 @@ describe("Form Generator", () => {
   })
 
   it("Correctly generates field names", async () => {
+    process.env.BLITZ_APP_DIR = process.cwd()
     const templateValues = await generator.getTemplateValues()
     expect(templateValues.fieldTemplateValues[0].fieldName).toEqual("myProjectName")
     expect(templateValues.fieldTemplateValues[0].FieldName).toEqual("MyProjectName")
