@@ -52,12 +52,6 @@ Here is the starting structure of your app.
 ```
 __name__
 ├── app/
-│   ├── api/
-│   ├── core/
-│   │   ├── components/
-│   │   ├── hooks/
-│   │   └── layouts/
-│   │       └── Layout.tsx
 │   ├── pages/
 │   │   ├── 404.tsx
 │   │   ├── _app.tsx
