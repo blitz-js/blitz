@@ -151,7 +151,7 @@ describe("`new` command", () => {
       })
 
       const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
-      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-install", "--skip-upgrade"]))
 
       expect(getStepsFromOutput()).toStrictEqual([
         `cd ${newAppDir}`,
