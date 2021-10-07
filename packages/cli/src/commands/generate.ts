@@ -219,7 +219,7 @@ export class Generate extends Command {
     const reservedModelNames = Object.values(ReservedModelNames) as string[]
     if (reservedModelNames.includes(modelName)) {
       throw new Error(
-        `ReservedModelNameError: names ${reservedModelNames} or their plurals cannot be used as model names`,
+        `Names ${reservedModelNames} or their plurals cannot be used as model names`,
       )
     }
   }
