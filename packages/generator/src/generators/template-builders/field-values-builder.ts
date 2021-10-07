@@ -1,8 +1,8 @@
-import {BaseGeneratorOptions, Builder} from "./builder"
+import {FieldGeneratorOptions, Builder, CommonTemplateValues} from "./builder"
 
-export class FieldValuesBuilder extends Builder<BaseGeneratorOptions> {
+export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTemplateValues> {
   // eslint-disable-next-line require-await
-  public async getTemplateValues(options: BaseGeneratorOptions) {
+  public async getTemplateValues(options: FieldGeneratorOptions):Promise<CommonTemplateValues> {
     const values = {
       parentModelId: this.getId(options.parentModel),
       parentModelIdZodType: "number", // TODO: Need to parse prisma schema and get parent ID somehow
