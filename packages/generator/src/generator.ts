@@ -162,7 +162,7 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  public templateValuesBuilder: IBuilder<T> = NullBuilder
+  public templateValuesBuilder: IBuilder<T,any> = NullBuilder
 
   async getTemplateValues(): Promise<any> {
     const values = await this.templateValuesBuilder.getTemplateValues(this.options)
