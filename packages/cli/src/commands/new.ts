@@ -298,13 +298,13 @@ export class New extends Command {
       return
     }
     const choices: Array<{name: Template; message?: string}> = [
-      {name: "app", message: "Default Blitz app"},
-      {name: "minimalapp", message: "Minimal Blitz app — no database, auth, forms, etc."},
+      {name: "app", message: "Full - includes DB and auth (Recommended)"},
+      {name: "minimalapp", message: "Minimal — no DB, no auth"},
     ]
     const {template} = (await this.enquirer.prompt({
       type: "select",
       name: "template",
-      message: "Pick a new project's template",
+      message: "Pick your new app template",
       initial: 0,
       choices,
     })) as {template: Template}
