@@ -38,6 +38,7 @@ describe("PageGenerator", () => {
       expect(values).toEqual({
         ModelName: "project",
         ModelNames: "projects",
+        parentModelIdZodType: undefined,
         ParentModel: undefined,
         ParentModels: undefined,
         modelNamesPath: "projects",
@@ -45,6 +46,7 @@ describe("PageGenerator", () => {
         modelIdParam: "[projectId]",
         modelName: "project",
         modelNames: "projects",
+        modelIdZodType: "number",
         parentModel: undefined,
         parentModelId: "",
         parentModelParam: "",
