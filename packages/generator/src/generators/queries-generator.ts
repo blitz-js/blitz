@@ -17,7 +17,7 @@ export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
   static subdirectory = "queries"
   sourceRoot: SourceRootType = {type: "template", path: "queries"}
 
-  templateValuesBuilder = new FieldValuesBuilder()
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
   
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""

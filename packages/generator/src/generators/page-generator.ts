@@ -17,7 +17,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = "pages"
   sourceRoot: SourceRootType = {type: "template", path: "page"}
 
-  templateValuesBuilder = new FieldValuesBuilder()
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
   getTargetDirectory() {
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)

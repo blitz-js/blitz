@@ -50,7 +50,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     return ["jsconfig.json", "jest.config.js", "package.js.json", "pre-push-js"]
   }
 
-  templateValuesBuilder = new AppValuesBuilder()
+  templateValuesBuilder = new AppValuesBuilder(this.fs)
 
   getTargetDirectory() {
     return ""

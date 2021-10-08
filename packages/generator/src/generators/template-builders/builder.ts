@@ -1,3 +1,4 @@
+import { Editor } from "mem-fs-editor"
 import {NextConfigComplete} from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
 import {
@@ -53,7 +54,14 @@ export interface FieldTemplateValues {
 }
 
 export abstract class Builder<T, U> implements IBuilder<T, U> {
+  
+  public constructor(fs?: Editor){
+    this.fs = fs
+  }
+
   abstract getTemplateValues(Options: T): Promise<U>
+  
+  public fs: Editor | undefined
 
   public fallbackMap = {
     string: "LabeledTextField",

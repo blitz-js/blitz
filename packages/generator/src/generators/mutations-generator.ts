@@ -18,7 +18,7 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
   static subdirectory = "mutations"
   sourceRoot: SourceRootType = {type: "template", path: "mutations"}
 
-  templateValuesBuilder = new FieldValuesBuilder()
+  templateValuesBuilder = new FieldValuesBuilder(this.fs)
 
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
