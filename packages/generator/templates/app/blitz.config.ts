@@ -10,6 +10,7 @@ const config: BlitzConfig = {
   template:{
     typeToComponentMap: {
       string: "LabeledTextField",
+      uuid: "LabeledTextField",
       any: "LabeledTextField",
       int: "LabeledTextField",
       number: "LabeledTextField",
@@ -19,6 +20,7 @@ const config: BlitzConfig = {
       string: "string",
       uuid: "string().uuid",
       any: "any",
+      int: "number",
       number: "number",
       boolean: "boolean",
     }
