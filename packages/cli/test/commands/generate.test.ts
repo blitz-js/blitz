@@ -60,25 +60,25 @@ describe("`generate` command", () => {
       it('should throw an error for model "page"', () => {
         const getModelNameAndContext = Generate.prototype.validateModelName
         expect(() => getModelNameAndContext("page")).toThrowError(
-          "ReservedModelNameError: names page,api,query,mutation or their plurals cannot be used as model names",
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
         )
       })
       it('should throw an error for model "api"', () => {
         const getModelNameAndContext = Generate.prototype.validateModelName
         expect(() => getModelNameAndContext("api")).toThrowError(
-          "ReservedModelNameError: names page,api,query,mutation or their plurals cannot be used as model names",
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
         )
       })
       it('should throw an error for model "query"', () => {
         const getModelNameAndContext = Generate.prototype.validateModelName
         expect(() => getModelNameAndContext("query")).toThrowError(
-          "ReservedModelNameError: names page,api,query,mutation or their plurals cannot be used as model names",
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
         )
       })
       it('should throw an error for model "mutation"', () => {
         const getModelNameAndContext = Generate.prototype.validateModelName
         expect(() => getModelNameAndContext("mutation")).toThrowError(
-          "ReservedModelNameError: names page,api,query,mutation or their plurals cannot be used as model names",
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
         )
       })
     })
