@@ -4,7 +4,7 @@ import {z} from "zod"
 
 if (process.env.parentModel) {
   const Create__ModelName__ = z.object({
-    __parentModelId__: z.__parentModelIdZodType__()
+    __parentModelId__: z.__parentModelIdZodType__(),
     // template: __fieldName__: z.__zodTypeName__(),
   })
 } else {
