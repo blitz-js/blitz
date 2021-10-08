@@ -1,9 +1,14 @@
 ## Stitches
 
-Easily styling Blitz app using Stitches
+The Blitz Recipe for installing Stitches
 
-## more information
+```
+blitz install stitches
+```
 
+## More information
+
+- [How to use receipes in Blitz](https://blitzjs.com/docs/using-recipes)
 - [Stitches homepage](https://stitches.dev/)
 - [Github page](https://github.com/modulz/stitches)
 
