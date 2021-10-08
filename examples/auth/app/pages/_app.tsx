@@ -11,13 +11,12 @@ import LoginForm from "app/auth/components/LoginForm"
 import {ReactQueryDevtools} from "react-query/devtools"
 
 export default function App({Component, pageProps}: AppProps) {
-  const getLayout = Component.getLayout || ((page) => page)
   const {reset} = useQueryErrorResetBoundary()
 
   return (
     <>
       <ErrorBoundary FallbackComponent={RootErrorFallback} onReset={reset}>
-        {getLayout(<Component {...pageProps} />)}
+        <Component {...pageProps} />
       </ErrorBoundary>
       <ReactQueryDevtools />
     </>
