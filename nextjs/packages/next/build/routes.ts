@@ -214,27 +214,40 @@ export function parseDefaultExportName(contents: string): string | null {
   return result[1] ?? null
 }
 
-function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
+function dedupeBy<T>(
+  arr: [string, T][],
+  by: (v: [string, T]) => string
+): [string, T][] {
   const allKeys = arr.map(by)
-  return arr.filter((v, index) => {
-    const key = by(v)
-    const first = allKeys.indexOf(key)
-    const last = allKeys.lastIndexOf(key)
+  const countKeys = allKeys.reduce(
+    (obj, key) => ({ ...obj, [key]: (obj[key] || 0) + 1 }),
+    {} as { [key: string]: number }
+  )
+  const duplicateKeys = Object.keys(countKeys).filter(
+    (key) => countKeys[key] > 1
+  )
 
-    if (first !== last && first !== index) {
-      const { 0: firstPath } = arr[first] as any
-      const { 0: lastPath } = arr[last] as any
-      const message = `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`
+  duplicateKeys.forEach((key) => {
+    console.log(
+      `\nThe page component is named "${key}" on the following routes\n`
+    )
 
-      if (isInternalDevelopment) {
-        console.log(message)
-      } else {
-        throw Error(message)
-      }
-    }
-
-    return true
+    arr
+      .filter((v) => by(v) === key)
+      .forEach(([route]) => console.log(`\t${route}`))
   })
+
+  if (duplicateKeys.length) {
+    console.log(
+      '\nThe page component must have a unique name across all routes, so change the component names so they are all unique.\n'
+    )
+
+    if (!isInternalDevelopment) {
+      throw Error('Duplicate Page Name')
+    }
+  }
+
+  return arr.filter((v) => !duplicateKeys.includes(by(v)))
 }
 
 export function generateManifest(
