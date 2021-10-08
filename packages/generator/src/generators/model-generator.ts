@@ -3,10 +3,10 @@ import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
 import {newline} from "next/dist/server/lib/logging"
 import which from "npm-which"
-import path from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
+import { getPrismaSchema } from "../utils/get-prisma-schema"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -35,18 +35,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   // eslint-disable-next-line require-await
   async write() {
-    const schemaPath = path.resolve("db/schema.prisma")
-    if (!this.fs.exists(schemaPath)) {
-      throw new Error("Prisma schema file was not found")
-    }
-
-    let schema: ast.Schema
-    try {
-      schema = ast.getSchema(this.fs.read(schemaPath))
-    } catch (err) {
-      log.error("Failed to parse db/schema.prisma file")
-      throw err
-    }
+    const {schema, schemaPath} = getPrismaSchema(this.fs)
     const {modelName, extraArgs, dryRun} = this.options
     let updatedOrCreated = "created"
 
