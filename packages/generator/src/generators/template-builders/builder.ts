@@ -25,12 +25,12 @@ export interface FieldGeneratorOptions extends GeneratorOptions {
 }
 export interface CommonTemplateValues {
   parentModelId: string
-  parentModelIdZodType: string
   parentModelParam: string
   parentModel?: string
   parentModels?: string
   ParentModel?: string
   ParentModels?: string
+  parentModelIdZodType?: string
   modelId: string
   modelIdZodType: string
   modelIdParam: string
