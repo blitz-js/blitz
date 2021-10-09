@@ -66,6 +66,22 @@ interface RecipeMeta {
   location: RecipeLocation
 }
 
+interface Tree {
+  path: string
+  mode: string
+  type: string
+  sha: string
+  size: number
+  url: string
+}
+
+interface GithubRepoAPITrees {
+  sha: string
+  url: string
+  tree: Tree[]
+  truncated: boolean
+}
+
 export class Install extends Command {
   static description = "Install a Recipe into your Blitz app"
   static aliases = ["i"]
@@ -125,6 +141,21 @@ export class Install extends Command {
         location: RecipeLocation.Local,
       }
     }
+  }
+
+  async getOfficialRecipeList(): Promise<any[]> {
+    return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
+      (release: GithubRepoAPITrees) => {
+        // debug("[getOfficialRecipeList] Got release", release)
+        return release.tree.map((item) => {
+          const FilePathArry = item.path.split("/")
+          if (FilePathArry[0] !== "recipes" || FilePathArry[2] || !FilePathArry[1]) return
+          debug(FilePathArry[1])
+
+          return FilePathArry[1]
+        })
+      },
+    )
   }
 
   /**
@@ -208,8 +239,10 @@ export class Install extends Command {
     const {args, flags} = this.parse(Install)
 
     debug(`flags lists`, flags)
-
-    if (flags.list) return console.log("SHOW recipe List")
+    // show all official recipes
+    if (flags.list) {
+      return await console.log(this.getOfficialRecipeList())
+    }
 
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
