@@ -7,6 +7,7 @@ import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
 const debug = require("debug")("blitz:cli")
+import Table from "cli-table"
 
 declare global {
   namespace NodeJS {
@@ -242,7 +243,37 @@ export class Install extends Command {
     debug(`flags lists`, flags)
     // show all official recipes
     if (flags.list) {
-      return console.log(await this.getOfficialRecipeList())
+      const table = new Table({
+        head: ["official recipe", "install recipe command"],
+        style: {"padding-left": 0, "padding-right": 0},
+        chars: {
+          top: "",
+          "top-mid": "",
+          "top-left": "",
+          "top-right": "",
+          bottom: "",
+          "bottom-mid": "",
+          "bottom-left": "",
+          "bottom-right": "",
+          left: " ",
+          "left-mid": "",
+          mid: "",
+          "mid-mid": "",
+          right: "",
+          "right-mid": "",
+          middle: " ",
+        },
+      })
+
+      debug(await this.getOfficialRecipeList())
+      const officialRecipeList = await this.getOfficialRecipeList()
+      const TableObjext = officialRecipeList.map((recipe) => {
+        return table.push([recipe, `blitz install ${recipe}`])
+      })
+      debug("TableObjext", TableObjext)
+
+      // table.push(TableObjext)
+      return this.log(`${table}`)
     }
 
     const originalCwd = process.cwd()
