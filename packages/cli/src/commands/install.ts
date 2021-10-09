@@ -244,7 +244,7 @@ export class Install extends Command {
     // show all official recipes
     if (flags.list) {
       const table = new Table({
-        head: ["official recipe", "install recipe command"],
+        head: ["official recipes", "commands"],
         style: {"padding-left": 0, "padding-right": 0},
         chars: {
           top: "",
