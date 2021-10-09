@@ -73,12 +73,13 @@ export class Install extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    list: flags.boolean({char: "l", description: "show all official recipe list", default: false}),
   }
 
   static args = [
     {
       name: "recipe",
-      required: true,
+      required: false,
       description:
         "Name of a Blitz recipe from @blitzjs/blitz/recipes, or a file path to a local recipe definition",
     },
@@ -204,12 +205,16 @@ export class Install extends Command {
 
     await this.setupProxySupport()
 
-    const {args} = this.parse(Install)
+    const {args, flags} = this.parse(Install)
+
+    debug(`flags lists`, flags)
+
+    if (flags.list) return console.log("SHOW recipe List")
+
     const originalCwd = process.cwd()
     const recipeInfo = this.normalizeRecipePath(args.recipe)
     debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
-
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
