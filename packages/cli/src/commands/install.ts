@@ -143,17 +143,18 @@ export class Install extends Command {
     }
   }
 
-  async getOfficialRecipeList(): Promise<any[]> {
+  async getOfficialRecipeList(): Promise<string[] | (string | undefined)[]> {
     return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
       (release: GithubRepoAPITrees) => {
         // debug("[getOfficialRecipeList] Got release", release)
-        return release.tree.map((item) => {
+        const RecipeLists = release.tree.map((item) => {
           const FilePathArry = item.path.split("/")
-          if (FilePathArry[0] !== "recipes" || FilePathArry[2] || !FilePathArry[1]) return null
+          if (FilePathArry[0] !== "recipes" || FilePathArry[2] || !FilePathArry[1]) return undefined
           debug(FilePathArry[1])
 
           return FilePathArry[1]
         })
+        return RecipeLists.filter((x) => x !== undefined)
       },
     )
   }
@@ -241,7 +242,7 @@ export class Install extends Command {
     debug(`flags lists`, flags)
     // show all official recipes
     if (flags.list) {
-      return await console.log(this.getOfficialRecipeList())
+      return console.log(await this.getOfficialRecipeList())
     }
 
     const originalCwd = process.cwd()
