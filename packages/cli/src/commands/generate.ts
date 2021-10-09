@@ -203,11 +203,6 @@ export class Generate extends Command {
       }
     }
 
-    if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
-      log.error("Incorrect model name")
-      this.exit(0)
-    }
-
     return {
       model: modelName,
     }
@@ -219,6 +214,9 @@ export class Generate extends Command {
       throw new Error(
         `Names ${RESERVED_MODEL_NAMES} or their plurals cannot be used as model names`,
       )
+    }
+    if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
+      throw new Error(`Model name cannot contain any special characters`)
     }
   }
 
