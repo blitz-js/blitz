@@ -130,7 +130,28 @@ describe("`new` command", () => {
       })
 
       const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
-      await whileStayingInCWD(() => New.run([newAppDir, "--pnpm", "--skip-upgrade"]))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
+
+      expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz dev"])
+    })
+
+    testIfNotWindows("displays proper next steps message with --skip-install flag", async () => {
+      const currentBlitzWorkspaceVersion = require(path.join(
+        await pkgDir(__dirname),
+        "package.json",
+      )).version
+
+      jest.mock("@blitzjs/generator/src/utils/get-blitz-dependency-version", () => {
+        return jest.fn().mockImplementation(() => {
+          return {
+            value: currentBlitzWorkspaceVersion,
+            fallback: false,
+          }
+        })
+      })
+
+      const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-install", "--skip-upgrade"]))
 
       expect(getStepsFromOutput()).toStrictEqual([
         `cd ${newAppDir}`,
