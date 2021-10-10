@@ -126,29 +126,6 @@ export function initScriptLoader(scriptLoaderItems: ScriptProps[]) {
   scriptLoaderItems.forEach(handleClientScriptLoad)
 }
 
-/**
- * With `<Script>`, you can define the strategy property and
- * Blitz.js will optimize loading for the script:
- *
- * With `<Script>`, you no longer need to wrap scripts in <Head>.
- *
- *
- * @example
- * ```
- * import { Script } from "blitz"
- *
- * function Home() {
- *  return (
- *    <>
- *      <Script src="https://www.google-analytics.com/analytics.js" />
- *    </>
- *  )
- * }
- * ```
- *
- * @param props {@link ScriptProps}
- * @see Docs {@link https://blitzjs.com/docs/script-component}
- */
 export function Script(props: ScriptProps): JSX.Element | null {
   const {
     src = '',
