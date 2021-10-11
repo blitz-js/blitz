@@ -216,7 +216,7 @@ export class Generate extends Command {
       )
     }
     if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
-      throw new Error(`Invalid model name: ${modelName}. Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`)
+      throw new Error(`Invalid model name: "${modelName}". Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`)
     }
   }
 
