@@ -48,4 +48,39 @@ describe("`generate` command", () => {
       })
     })
   })
+
+  describe("#validateModelName", () => {
+    describe("when model name is not reserved", () => {
+      it("should do nothing", () => {
+        const validateModelName = Generate.prototype.validateModelName
+        expect(() => validateModelName("project")).not.toThrow()
+      })
+    })
+    describe("when model name is reserved", () => {
+      it('should throw an error for model "page"', () => {
+        const getModelNameAndContext = Generate.prototype.validateModelName
+        expect(() => getModelNameAndContext("page")).toThrowError(
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
+        )
+      })
+      it('should throw an error for model "api"', () => {
+        const getModelNameAndContext = Generate.prototype.validateModelName
+        expect(() => getModelNameAndContext("api")).toThrowError(
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
+        )
+      })
+      it('should throw an error for model "query"', () => {
+        const getModelNameAndContext = Generate.prototype.validateModelName
+        expect(() => getModelNameAndContext("query")).toThrowError(
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
+        )
+      })
+      it('should throw an error for model "mutation"', () => {
+        const getModelNameAndContext = Generate.prototype.validateModelName
+        expect(() => getModelNameAndContext("mutation")).toThrowError(
+          "Names page,api,query,mutation or their plurals cannot be used as model names",
+        )
+      })
+    })
+  })
 })

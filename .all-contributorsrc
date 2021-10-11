@@ -1547,7 +1547,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/244174?v=4",
       "profile": "https://github.com/piotrski",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -2005,7 +2006,8 @@
       "profile": "http://aleksandra.codes",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3175,7 +3177,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/11151445?v=4",
       "profile": "g3offrey.dev",
       "contributions": [
-        "code"
+        "code",
+        "doc",
+        "test"
       ]
     },
     {
@@ -3194,6 +3198,64 @@
       "profile": "https://github.com/kimngan-bui",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "9j",
+      "name": "Bahk Chanhee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11691670?v=4",
+      "profile": "world.hey.com/bach",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Vandivier",
+      "name": "John Vandivier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5559355?v=4",
+      "profile": "http://www.afterecon.com/",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "namirsab",
+      "name": "Namir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6980777?v=4",
+      "profile": "http://namirsab.github.io",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "scttcper",
+      "name": "Scott Cooper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1400464?v=4",
+      "profile": "https://twitter.com/scttcper",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Abduttayyeb",
+      "name": "Abduttayyeb M.r",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55306260?v=4",
+      "profile": "abduttayyeb.github.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "maybebored",
+      "name": "Mayuran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20951181?v=4",
+      "profile": "https://github.com/maybebored",
+      "contributions": [
+        "code"
       ]
     }
   ],
