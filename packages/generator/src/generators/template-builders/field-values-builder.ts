@@ -50,7 +50,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
 
       if (options.parentModel !== undefined && options.parentModel.length > 0) {
         const {schema} = getPrismaSchema(this.getEditor())
-
+        // O(N) - N is total ast Blocks
         const model = schema.list.find(function (component): component is ast.Model {
           return component.type === "model" && component.name === "Project"
           //TODO: Check case sensitivity, is  component.name === options.parentModel || component.name === options.ParentModel necessary
@@ -60,7 +60,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
         })
 
         if (model !== undefined) {
-          // O(N * M), N - Number of prisma models, M - average # properties per model
+          // O(N) - N is number of properties in parent model
           const idField = model.properties.find(function (property): property is ast.Field {
             return (
               property.type === "field" &&
