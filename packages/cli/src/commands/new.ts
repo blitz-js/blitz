@@ -103,7 +103,7 @@ export class New extends Command {
       default: false,
     }),
     template: flags.string({
-      description: "Generates a minimal Blitz project — no database, auth, forms, etc.",
+      description: "Pick your new app template. Options: full, minimal.",
       options: ["full", "minimal"],
     }),
   }
