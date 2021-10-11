@@ -1,8 +1,11 @@
 # dependencies
 node_modules
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 .pnp.*
 .npm
 web_modules/

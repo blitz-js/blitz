@@ -167,19 +167,22 @@ export default RecipeBuilder()
     singleFileSearch: "app/core/components/LabeledTextField.tsx",
     transform(program: Collection<j.Program>) {
       // Add ComponentPropsWithoutRef import
-      program
-        .find(j.ImportDeclaration)
-        .filter((importDeclaration) => importDeclaration.node.loc?.start.line === 1)
-        .forEach((path) => {
+      program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
+        if (
+          !path.value.specifiers.some(
+            (node) => (node as j.ImportSpecifier)?.imported?.name === "ComponentPropsWithoutRef",
+          )
+        ) {
           path.node.specifiers.push(j.importSpecifier(j.identifier("ComponentPropsWithoutRef")))
-        })
+        }
+      })
 
-      const componentPropsWithoutRefImport = j.importDeclaration(
+      const chakraInputImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Input"))],
         j.literal("@chakra-ui/input"),
       )
 
-      const chakraReactImport = j.importDeclaration(
+      const chakraFormControlImport = j.importDeclaration(
         [
           j.importSpecifier(j.identifier("FormControl")),
           j.importSpecifier(j.identifier("FormLabel")),
@@ -187,8 +190,8 @@ export default RecipeBuilder()
         j.literal("@chakra-ui/form-control"),
       )
 
-      addImport(program, componentPropsWithoutRefImport)
-      addImport(program, chakraReactImport)
+      addImport(program, chakraInputImport)
+      addImport(program, chakraFormControlImport)
 
       // Imperative steps to describe transformations
 

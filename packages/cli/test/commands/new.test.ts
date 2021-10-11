@@ -111,13 +111,6 @@ describe("`new` command", () => {
           } else {
             expect(blitzVersion).toEqual(latest)
           }
-
-          expect(getStepsFromOutput()).toStrictEqual([
-            `cd ${dirName}`,
-            "pnpm install",
-            "blitz prisma migrate dev (when asked, you can name the migration anything)",
-            "blitz dev",
-          ])
         }),
     )
 
@@ -140,6 +133,32 @@ describe("`new` command", () => {
       await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade"]))
 
       expect(getStepsFromOutput()).toStrictEqual([`cd ${newAppDir}`, "blitz dev"])
+    })
+
+    testIfNotWindows("displays proper next steps message with --skip-install flag", async () => {
+      const currentBlitzWorkspaceVersion = require(path.join(
+        await pkgDir(__dirname),
+        "package.json",
+      )).version
+
+      jest.mock("@blitzjs/generator/src/utils/get-blitz-dependency-version", () => {
+        return jest.fn().mockImplementation(() => {
+          return {
+            value: currentBlitzWorkspaceVersion,
+            fallback: false,
+          }
+        })
+      })
+
+      const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-install", "--skip-upgrade"]))
+
+      expect(getStepsFromOutput()).toStrictEqual([
+        `cd ${newAppDir}`,
+        "pnpm install",
+        "blitz prisma migrate dev (when asked, you can name the migration anything)",
+        "blitz dev",
+      ])
     })
 
     it("fetches latest version from template", async () => {
