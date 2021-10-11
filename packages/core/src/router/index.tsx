@@ -38,7 +38,7 @@ export interface WithRouterProps {
  * ```
  *
  * @param WrappedComponent - a React component that needs `router` object in props
- * @returns A component with a `router` object in props.
+ * @returns A component with a `router` object in props
  * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
  */
 export const withRouter: typeof withNextRouter = (WrappedComponent) => {
