@@ -3248,6 +3248,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "maybebored",
+      "name": "Mayuran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20951181?v=4",
+      "profile": "https://github.com/maybebored",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
