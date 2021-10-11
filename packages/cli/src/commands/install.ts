@@ -150,7 +150,14 @@ export class Install extends Command {
         // debug("[getOfficialRecipeList] Got release", release)
         const RecipeLists = release.tree.map((item) => {
           const FilePathArry = item.path.split("/")
-          if (FilePathArry[0] !== "recipes" || FilePathArry[2] || !FilePathArry[1]) return undefined
+          if (
+            FilePathArry[0] !== "recipes" ||
+            FilePathArry[2] ||
+            !FilePathArry[1] ||
+            item.type !== "tree"
+          ) {
+            return undefined
+          }
           debug(FilePathArry[1])
 
           return FilePathArry[1]
