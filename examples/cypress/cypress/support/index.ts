@@ -19,6 +19,6 @@ before(() => {
 })
 
 beforeEach(() => {
-  cy.task("db:clear")
+  // you can clear the database here
   cy.task("db:seed")
 })

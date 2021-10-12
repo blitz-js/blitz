@@ -26,23 +26,24 @@ const pluginConfig: Cypress.PluginConfig = (on, _config) => {
       }
       return true
     },
-    "db:clear": async () => {
-      // Delete all data without dropping tables, so migration isn't required
-      await db.$executeRaw`
-        do
-        $$
-        declare
-          l_stmt text;
-        begin
-          select 'truncate ' || string_agg(format('%I.%I', schemaname, tablename), ',')
-          into l_stmt from pg_tables
-          where schemaname in ('public');
-          execute l_stmt;
-        end;
-        $$
-      `
-      return true
-    },
+    // for Postgres
+    // "db:clear": () => {
+    // Delete all data without dropping tables, so migration isn't required
+    // await db.$executeRaw`
+    //   do
+    //   $$
+    //   declare
+    //     l_stmt text;
+    //   begin
+    //     select 'truncate ' || string_agg(format('%I.%I', schemaname, tablename), ',')
+    //     into l_stmt from pg_tables
+    //     where schemaname in ('public');
+    //     execute l_stmt;
+    //   end;
+    //   $$
+    // `
+    //   return true
+    // },
     "db:seed": async () => {
       await seed()
       return true
