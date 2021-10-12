@@ -243,7 +243,9 @@ function dedupeBy<T>(
     )
 
     if (!isInternalDevelopment) {
-      throw Error('Duplicate Page Name')
+      const error = Error('Duplicate Page Name')
+      delete error.stack
+      throw error
     }
   }
 
