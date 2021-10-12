@@ -242,7 +242,7 @@ function dedupeBy<T>(
       '\nThe page component must have a unique name across all routes, so change the component names so they are all unique.\n'
     )
 
-    if (!isInternalDevelopment) {
+    if (!(process.env.NODE_ENV === 'development') && !isInternalDevelopment) {
       const error = Error('Duplicate Page Name')
       delete error.stack
       throw error
