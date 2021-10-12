@@ -16,4 +16,4 @@ Closes: ?
 ## Feature Checklist
 
 - [ ] Integration test added (see [test docs](https://blitzjs.com/docs/contributing#running-tests) if needed)
-- [ ] Documentation added/updated (submit PR to [blitzjs.com repo](https://github.com/blitz-js/blitzjs.com))
+- [ ] Documentation added/updated (submit PR to [blitzjs.com repo `canary` branch](https://github.com/blitz-js/blitzjs.com/tree/canary))
