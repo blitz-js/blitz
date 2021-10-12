@@ -7,11 +7,12 @@
     "start": "blitz start",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run --browser chrome",
+    "test": "prisma generate && blitz codegen && yarn test:jest && yarn test:e2e",
     "test:jest": "jest --passWithNoTests",
-    "test:e2e": "start-server-and-test test-server http://localhost:3099 'cypress run'",
-    "test": "blitz codegen && prisma generate && blitz prisma migrate deploy && run-s test:*",
-    "test-server": "NODE_ENV=test blitz build && NODE_ENV=test blitz start -p 3099",
-    "cypress:open": "start-server-and-test test-server http://localhost:3099 'cypress open'"
+    "test:server": "cross-env NODE_ENV=test blitz prisma migrate deploy && blitz build && cross-env NODE_ENV=test blitz start -p 3099",
+    "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -46,6 +47,7 @@
     "@types/react": "17.0.2",
     "@types/testing-library__cypress": "5.0.9",
     "chance": "1.1.8",
+    "cross-env": "7.0.3",
     "cypress": "6.2.1",
     "eslint": "7.21.0",
     "husky": "5.1.2",
