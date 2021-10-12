@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: npm
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -63,6 +64,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: npm
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -146,6 +148,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: npm
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       # - name: Get yarn cache directory path
       #   id: yarn-cache-dir-path
@@ -245,6 +248,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: npm
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       # - name: Get yarn cache directory path
       #   id: yarn-cache-dir-path
@@ -278,7 +282,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+        group:
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+          ]
     steps:
       - uses: actions/cache@v2
         id: restore-build
@@ -307,6 +333,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: npm
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       # - name: Get yarn cache directory path
       #   id: yarn-cache-dir-path
