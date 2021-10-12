@@ -36,7 +36,6 @@
     "@salesforce/lazy-require": "0.4.0",
     "camelcase": "^6.2.0",
     "chalk": "^4.1.0",
-    "cli-table": "0.3.6",
     "cross-spawn": "7.0.3",
     "dotenv-expand": "^5.1.0",
     "dotenv-flow": "^3.2.0",
@@ -61,7 +60,6 @@
   "devDependencies": {
     "@oclif/dev-cli": "1.26.0",
     "@oclif/test": "1.2.8",
-    "@types/cli-table": "0.3.0",
     "nock": "13.0.6",
     "prisma": "2.24.1",
     "stdout-stderr": "0.1.13"

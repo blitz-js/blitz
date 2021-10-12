@@ -1,5 +1,5 @@
 import {getConfig} from "@blitzjs/config"
-import {log} from "@blitzjs/display"
+import {log, table as Table} from "@blitzjs/display"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
@@ -7,7 +7,6 @@ import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
 const debug = require("debug")("blitz:cli")
-import Table from "cli-table"
 
 declare global {
   namespace NodeJS {
@@ -250,37 +249,30 @@ export class Install extends Command {
     debug(`flags lists`, flags)
     // show all official recipes
     if (flags.list) {
-      const table = new Table({
-        head: ["official recipe", "install recipe command"],
-        style: {"padding-left": 0, "padding-right": 0},
-        chars: {
-          top: "",
-          "top-mid": "",
-          "top-left": "",
-          "top-right": "",
-          bottom: "",
-          "bottom-mid": "",
-          "bottom-left": "",
-          "bottom-right": "",
-          left: " ",
-          "left-mid": "",
-          mid: "",
-          "mid-mid": "",
-          right: "",
-          "right-mid": "",
-          middle: " ",
-        },
+      const RecipeTable = new Table({
+        columns: [
+          {
+            name: "official recipes",
+            alignment: "left",
+          },
+          {
+            name: "install recipe command",
+            alignment: "left",
+          },
+        ],
       })
-
       debug(await this.getOfficialRecipeList())
       const officialRecipeList = await this.getOfficialRecipeList()
-      const TableObjext = officialRecipeList.map((recipe) => {
-        return table.push([recipe, `blitz install ${recipe}`])
-      })
-      debug("TableObjext", TableObjext)
+      RecipeTable.addRows(
+        officialRecipeList.map((recipe) => {
+          return {"official recipes": recipe, "install recipe command": `blitz install ${recipe}`}
+        }),
+      )
+      debug("TableObjext", RecipeTable.table)
+      RecipeTable.printTable()
 
       // table.push(TableObjext)
-      return this.log(`${table}`)
+      // return this.log(`${table}`)
     }
 
     const originalCwd = process.cwd()
