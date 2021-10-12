@@ -2,8 +2,9 @@ import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
+import { baseLogger } from '../server/lib/logging'
 import { isInternalDevelopment } from '../server/utils'
-import { join, dirname, basename } from 'path'
+import { join, dirname } from 'path'
 import { outputFile } from 'fs-extra'
 import findUp from 'next/dist/compiled/find-up'
 import resolveFrom from 'resolve-from'
@@ -227,19 +228,21 @@ function dedupeBy<T>(
     (key) => countKeys[key] > 1
   )
 
-  duplicateKeys.forEach((key) => {
-    console.log(
-      `\nThe page component is named "${key}" on the following routes\n`
-    )
-
-    arr
-      .filter((v) => by(v) === key)
-      .forEach(([route]) => console.log(`\t${route}`))
-  })
-
   if (duplicateKeys.length) {
-    console.log(
-      '\nThe page component must have a unique name across all routes, so change the component names so they are all unique.\n'
+    const log = baseLogger().getChildLogger()
+
+    duplicateKeys.forEach((key) => {
+      let errorMessage = `The page component is named "${key}" on the following routes:\n\n`
+      arr
+        .filter((v) => by(v) === key)
+        .forEach(([route]) => {
+          errorMessage += `\t${route}\n`
+        })
+      log.error(errorMessage)
+    })
+
+    log.error(
+      'The page component must have a unique name across all routes, so change the component names so they are all unique.\n'
     )
 
     if (!(process.env.NODE_ENV === 'development') && !isInternalDevelopment) {
