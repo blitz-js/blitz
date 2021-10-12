@@ -260,10 +260,7 @@ export class Install extends Command {
         }),
       )
       debug("TableObjext", RecipeTable.table)
-      RecipeTable.printTable()
-
-      // table.push(TableObjext)
-      // return this.log(`${table}`)
+      return RecipeTable.printTable()
     }
 
     const originalCwd = process.cwd()
