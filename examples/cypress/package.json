@@ -1,0 +1,62 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:server": "NODE_ENV=test blitz build && NODE_ENV=test blitz start -p 3099",
+    "test:e2e": "start-server-and-test test:server http://localhost:3099 'cypress run'",
+    "cypress:open": "start-server-and-test test:server http://localhost:3099 'cypress open'"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsc && lint-staged && pretty-quick --staged",
+      "pre-push": "npm run lint && npm run test"
+    }
+  },
+  "dependencies": {
+    "@prisma/client": "3.2.1",
+    "blitz": "0.41.0",
+    "final-form": "4.20.4",
+    "react": "alpha",
+    "react-dom": "alpha",
+    "react-final-form": "6.5.7",
+    "zod": "3.9.8"
+  },
+  "devDependencies": {
+    "@testing-library/cypress": "8.0.1",
+    "@types/preview-email": "2.0.1",
+    "@types/react": "17.0.28",
+    "@types/testing-library__cypress": "5.0.9",
+    "chance": "1.1.8",
+    "cypress": "8.6.0",
+    "eslint": "7.32.0",
+    "husky": "6.0.0",
+    "lint-staged": "10.5.4",
+    "prettier": "2.4.1",
+    "prettier-plugin-prisma": "0.15.0",
+    "pretty-quick": "3.1.1",
+    "preview-email": "3.0.5",
+    "prisma": "3.2.1",
+    "start-server-and-test": "1.14.0",
+    "typescript": "~4.3"
+  },
+  "private": true
+}
