@@ -157,7 +157,7 @@ export class Install extends Command {
     )
   }
 
-  async officialRecipeListTable() {
+  async officialRecipeListTable(RecipeList: string[]): Promise<string> {
     const RecipeTable = new Table({
       columns: [
         {
@@ -170,7 +170,7 @@ export class Install extends Command {
         },
       ],
     })
-    const officialRecipeList = await this.getOfficialRecipeList()
+    const officialRecipeList = RecipeList
     debug("officialRecipeList", officialRecipeList)
     RecipeTable.addRows(
       officialRecipeList.map((recipe) => {
@@ -266,7 +266,8 @@ export class Install extends Command {
     debug(`flags`, flags)
     // show all official recipes
     if (flags.list) {
-      return console.log(await this.officialRecipeListTable())
+      const officialRecipeList = await this.getOfficialRecipeList()
+      return console.log(await this.officialRecipeListTable(officialRecipeList))
     }
 
     const originalCwd = process.cwd()

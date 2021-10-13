@@ -1,3 +1,4 @@
+import {expect as oclifExpect, test as oclifTest} from "@oclif/test"
 import * as path from "path"
 import {Install, RecipeLocation} from "../../src/commands/install"
 import tempRecipe from "../__fixtures__/installer"
@@ -56,6 +57,36 @@ describe("`install` command", () => {
             "tsconfig.json",
           ]),
         )
+      })
+    })
+
+    it("Show the table in the Recipe list", () => {
+      const officialRecipeListTable = Install.prototype.officialRecipeListTable
+      return officialRecipeListTable([
+        "base-web",
+        "bumbag-ui",
+        "chakra-ui",
+        "emotion",
+        "gh-action-yarn-mariadb",
+        "gh-action-yarn-postgres",
+        "ghost",
+        "graphql-apollo-server",
+        "logrocket",
+        "material-ui",
+        "quirrel",
+        "reflexjs",
+        "render",
+        "secureheaders",
+        "stitches",
+        "styled-components",
+        "tailwind",
+        "theme-ui",
+        "tsconfig.json",
+      ]).then((recipeList) => {
+        expect(recipeList).toContain("official recipes")
+        expect(recipeList).toContain("install recipe command")
+        expect(recipeList).toContain("ghost")
+        expect(recipeList).toContain("blitz install base-web")
       })
     })
   })
