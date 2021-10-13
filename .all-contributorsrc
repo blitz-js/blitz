@@ -3257,6 +3257,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "MuckHub",
+      "name": "Aleksei Vesselko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54979136?v=4",
+      "profile": "https://github.com/MuckHub",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
