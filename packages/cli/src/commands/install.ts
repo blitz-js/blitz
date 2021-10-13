@@ -237,7 +237,7 @@ export class Install extends Command {
 
     const {args, flags} = this.parse(Install)
 
-    debug(`flags lists`, flags)
+    debug(`flags`, flags)
     // show all official recipes
     if (flags.list) {
       const RecipeTable = new Table({
@@ -252,14 +252,14 @@ export class Install extends Command {
           },
         ],
       })
-      debug(await this.getOfficialRecipeList())
       const officialRecipeList = await this.getOfficialRecipeList()
+      debug(officialRecipeList)
       RecipeTable.addRows(
         officialRecipeList.map((recipe) => {
           return {"official recipes": recipe, "install recipe command": `blitz install ${recipe}`}
         }),
       )
-      debug("TableObjext", RecipeTable.table)
+
       return RecipeTable.printTable()
     }
 
