@@ -29,4 +29,34 @@ describe("`install` command", () => {
       location: RecipeLocation.Remote,
     })
   })
+  describe("run official recipes list flag ", () => {
+    it("list of official recipes ", () => {
+      const getOfficialRecipeList = Install.prototype.getOfficialRecipeList
+      return getOfficialRecipeList().then((recipeList) => {
+        expect(recipeList).toEqual(
+          expect.arrayContaining([
+            "base-web",
+            "bumbag-ui",
+            "chakra-ui",
+            "emotion",
+            "gh-action-yarn-mariadb",
+            "gh-action-yarn-postgres",
+            "ghost",
+            "graphql-apollo-server",
+            "logrocket",
+            "material-ui",
+            "quirrel",
+            "reflexjs",
+            "render",
+            "secureheaders",
+            "stitches",
+            "styled-components",
+            "tailwind",
+            "theme-ui",
+            "tsconfig.json",
+          ]),
+        )
+      })
+    })
+  })
 })
