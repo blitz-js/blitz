@@ -157,6 +157,32 @@ export class Install extends Command {
     )
   }
 
+  async officialRecipeListTable() {
+    const RecipeTable = new Table({
+      columns: [
+        {
+          name: "official recipes",
+          alignment: "left",
+        },
+        {
+          name: "install recipe command",
+          alignment: "left",
+        },
+      ],
+    })
+    const officialRecipeList = await this.getOfficialRecipeList()
+    debug("officialRecipeList", officialRecipeList)
+    RecipeTable.addRows(
+      officialRecipeList.map((recipe) => {
+        return {
+          "official recipes": recipe,
+          "install recipe command": `blitz install ${recipe}`,
+        }
+      }),
+    )
+    return RecipeTable.render()
+  }
+
   /**
    * Clones the repository into a temp directory, returning the path to the new directory
    *
@@ -240,27 +266,7 @@ export class Install extends Command {
     debug(`flags`, flags)
     // show all official recipes
     if (flags.list) {
-      const RecipeTable = new Table({
-        columns: [
-          {
-            name: "official recipes",
-            alignment: "left",
-          },
-          {
-            name: "install recipe command",
-            alignment: "left",
-          },
-        ],
-      })
-      const officialRecipeList = await this.getOfficialRecipeList()
-      debug(officialRecipeList)
-      RecipeTable.addRows(
-        officialRecipeList.map((recipe) => {
-          return {"official recipes": recipe, "install recipe command": `blitz install ${recipe}`}
-        }),
-      )
-
-      return RecipeTable.printTable()
+      return console.log(await this.officialRecipeListTable())
     }
 
     const originalCwd = process.cwd()
