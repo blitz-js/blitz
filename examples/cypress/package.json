@@ -9,10 +9,10 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:server": "blitz codegen && blitz prisma migrate deploy && blitz build && blitz start -p 3099",
+    "test:server": "blitz prisma migrate deploy && blitz build && blitz start -p 3099",
     "test:e2e": "cross-env NODE_ENV=test start-server-and-test test:server http://localhost:3099 cy:run",
     "test:jest": "jest --passWithNoTests",
-    "test": "yarn test:jest && yarn test:e2e"
+    "test": "blitz codegen && prisma generate && yarn test:jest && yarn test:e2e"
   },
   "prisma": {
     "schema": "db/schema.prisma"
