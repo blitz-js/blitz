@@ -2,8 +2,8 @@ import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
-import { baseLogger } from '../server/lib/logging'
-import { isInternalDevelopment } from '../server/utils'
+import { newline, baseLogger } from '../server/lib/logging'
+import { isInternalBlitzMonorepoDevelopment } from '../server/utils'
 import { join, dirname } from 'path'
 import { outputFile } from 'fs-extra'
 import findUp from 'next/dist/compiled/find-up'
@@ -173,7 +173,7 @@ async function findNodeModulesRoot(src: string) {
       )
     }
     root = join(nextPkgLocation, '../')
-  } else if (isInternalDevelopment) {
+  } else if (isInternalBlitzMonorepoDevelopment) {
     root = join(src, 'node_modules')
   } else {
     const blitzPkgLocation = dirname(
@@ -229,7 +229,8 @@ function dedupeBy<T>(
   )
 
   if (duplicateKeys.length) {
-    const log = baseLogger().getChildLogger()
+    newline()
+    const log = baseLogger({ displayDateTime: false }).getChildLogger()
 
     duplicateKeys.forEach((key) => {
       let errorMessage = `The page component is named "${key}" on the following routes:\n\n`
@@ -241,11 +242,16 @@ function dedupeBy<T>(
       log.error(errorMessage)
     })
 
-    log.error(
+    console.error(
       'The page component must have a unique name across all routes, so change the component names so they are all unique.\n'
     )
 
-    if (!isInternalDevelopment) {
+    // Don't throw error in internal monorepo development because existing nextjs
+    // integration tests all have duplicate page names
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !isInternalBlitzMonorepoDevelopment
+    ) {
       const error = Error('Duplicate Page Name')
       delete error.stack
       throw error
