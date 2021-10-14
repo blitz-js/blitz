@@ -67,7 +67,7 @@ describe("`install` command", () => {
 
     it("Show the table in the Recipe list", () => {
       const officialRecipeListTable = Install.prototype.officialRecipeListTable
-      return officialRecipeListTable([
+      const RecipeListTable = officialRecipeListTable([
         "base-web",
         "bumbag-ui",
         "chakra-ui",
@@ -86,12 +86,11 @@ describe("`install` command", () => {
         "styled-components",
         "tailwind",
         "theme-ui",
-      ]).then((recipeList) => {
-        expect(recipeList).toContain("official recipes")
-        expect(recipeList).toContain("install recipe command")
-        expect(recipeList).toContain("ghost")
-        expect(recipeList).toContain("blitz install base-web")
-      })
+      ])
+      expect(RecipeListTable).toContain("Recipe name")
+      expect(RecipeListTable).toContain("Install command")
+      expect(RecipeListTable).toContain("ghost")
+      expect(RecipeListTable).toContain("blitz install base-web")
     })
   })
 })
