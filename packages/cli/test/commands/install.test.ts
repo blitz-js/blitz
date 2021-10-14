@@ -54,9 +54,14 @@ describe("`install` command", () => {
             "styled-components",
             "tailwind",
             "theme-ui",
-            "tsconfig.json",
           ]),
         )
+      })
+    })
+    it("not to be included tsconfig.json of official recipes", () => {
+      const getOfficialRecipeList = Install.prototype.getOfficialRecipeList
+      return getOfficialRecipeList().then((recipeList) => {
+        expect(recipeList).toEqual(expect.not.arrayContaining(["tsconfig.json"]))
       })
     })
 
@@ -81,7 +86,6 @@ describe("`install` command", () => {
         "styled-components",
         "tailwind",
         "theme-ui",
-        "tsconfig.json",
       ]).then((recipeList) => {
         expect(recipeList).toContain("official recipes")
         expect(recipeList).toContain("install recipe command")
