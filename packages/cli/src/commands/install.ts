@@ -157,7 +157,7 @@ export class Install extends Command {
     )
   }
 
-  async officialRecipeListTable(RecipeList: string[]): Promise<string> {
+  officialRecipeListTable(RecipeList: string[]): string {
     const RecipeTable = new Table({
       columns: [
         {
@@ -170,10 +170,9 @@ export class Install extends Command {
         },
       ],
     })
-    const officialRecipeList = RecipeList
-    debug("officialRecipeList", officialRecipeList)
+    debug("RecipeList", RecipeList)
     RecipeTable.addRows(
-      officialRecipeList.map((recipe) => {
+      RecipeList.map((recipe) => {
         return {
           "official recipes": recipe,
           "install recipe command": `blitz install ${recipe}`,
@@ -267,7 +266,7 @@ export class Install extends Command {
     // show all official recipes
     if (flags.list) {
       const officialRecipeList = await this.getOfficialRecipeList()
-      return console.log(await this.officialRecipeListTable(officialRecipeList))
+      return console.log(this.officialRecipeListTable(officialRecipeList))
     }
 
     const originalCwd = process.cwd()
