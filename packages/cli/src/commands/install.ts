@@ -157,29 +157,29 @@ export class Install extends Command {
     )
   }
 
-  officialRecipeListTable(RecipeList: string[]): string {
-    const RecipeTable = new Table({
+  officialRecipeListTable(recipesList: string[]): string {
+    const recipesTable = new Table({
       columns: [
         {
-          name: "official recipes",
+          name: "Recipe name",
           alignment: "left",
         },
         {
-          name: "install recipe command",
+          name: "Install command",
           alignment: "left",
         },
       ],
     })
-    debug("RecipeList", RecipeList)
-    RecipeTable.addRows(
-      RecipeList.map((recipe) => {
+    debug("recipesList", recipesList)
+    recipesTable.addRows(
+      recipesList.map((recipe) => {
         return {
-          "official recipes": recipe,
-          "install recipe command": `blitz install ${recipe}`,
+          "Recipe name": recipe,
+          "Install command": `blitz install ${recipe}`,
         }
       }),
     )
-    return RecipeTable.render()
+    return recipesTable.render()
   }
 
   /**
