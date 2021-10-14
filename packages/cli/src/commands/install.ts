@@ -149,7 +149,7 @@ export class Install extends Command {
         release.tree.reduce((recipieList: string[], item) => {
           const filePath = item.path.split("/")
           const [directory, recipieName] = filePath
-          if (directory === "recipes" && filePath.length === 2) {
+          if (directory === "recipes" && filePath.length === 2 && item.type === "tree") {
             recipieList.push(recipieName)
           }
           return recipieList
