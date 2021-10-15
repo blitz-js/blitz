@@ -190,11 +190,11 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @material-ui components. We will also customize the _app component to be remove the server side injected CSS.`,
     singleFileSearch: paths.app(),
     transform(program) {
-      // import ThemeProvider and createMuiTheme
+      // import ThemeProvider and createTheme
       const themeImport = j.importDeclaration(
         [
           j.importSpecifier(j.identifier("ThemeProvider")),
-          j.importSpecifier(j.identifier("createMuiTheme")),
+          j.importSpecifier(j.identifier("createTheme")),
         ],
         j.literal("@material-ui/core/styles"),
       )
@@ -214,7 +214,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
         const theme = j.variableDeclaration("const", [
           j.variableDeclarator(
             j.identifier("theme"),
-            j.callExpression(j.identifier("createMuiTheme"), [
+            j.callExpression(j.identifier("createTheme"), [
               j.objectExpression([
                 j.objectProperty(
                   j.identifier("palette"),
