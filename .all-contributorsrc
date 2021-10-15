@@ -3226,7 +3226,9 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/6980777?v=4",
       "profile": "http://namirsab.github.io",
       "contributions": [
-        "doc"
+        "doc",
+        "code",
+        "test"
       ]
     },
     {
@@ -3234,6 +3236,33 @@
       "name": "Scott Cooper",
       "avatar_url": "https://avatars.githubusercontent.com/u/1400464?v=4",
       "profile": "https://twitter.com/scttcper",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Abduttayyeb",
+      "name": "Abduttayyeb M.r",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55306260?v=4",
+      "profile": "abduttayyeb.github.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "maybebored",
+      "name": "Mayuran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20951181?v=4",
+      "profile": "https://github.com/maybebored",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MuckHub",
+      "name": "Aleksei Vesselko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54979136?v=4",
+      "profile": "https://github.com/MuckHub",
       "contributions": [
         "doc"
       ]
