@@ -6,12 +6,14 @@ if (typeof window !== "undefined") {
 }
 
 export default function App({Component, pageProps}: AppProps) {
+  const getLayout = Component.getLayout || ((page) => page)
+
   return (
     <ErrorBoundary
       FallbackComponent={RootErrorFallback}
       onReset={useQueryErrorResetBoundary().reset}
     >
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
       <ReactQueryDevtools />
     </ErrorBoundary>
   )
