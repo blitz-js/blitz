@@ -3248,6 +3248,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "maybebored",
+      "name": "Mayuran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20951181?v=4",
+      "profile": "https://github.com/maybebored",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MuckHub",
+      "name": "Aleksei Vesselko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54979136?v=4",
+      "profile": "https://github.com/MuckHub",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "p-siriphanthong",
+      "name": "Punn Siriphanthong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29949429?v=4",
+      "profile": "https://p-siriphanthong.github.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
