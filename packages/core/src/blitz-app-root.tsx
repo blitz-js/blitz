@@ -121,8 +121,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
       }
     }
 
-    const getLayout = Page.getLayout || ((page) => page)
-    return getLayout(<Page {...props} />)
+    return <Page {...props} />
   }
   for (let [key, value] of Object.entries(Page)) {
     ;(BlitzInnerRoot as any)[key] = value

@@ -10,13 +10,14 @@ import {
 import LoginForm from "app/auth/components/LoginForm"
 
 export default function App({ Component, pageProps }: AppProps) {
+  const getLayout = Component.getLayout || ((page) => page)
 
   return (
     <ErrorBoundary
       FallbackComponent={RootErrorFallback}
       onReset={useQueryErrorResetBoundary().reset}
     >
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
     </ErrorBoundary>
   )
 }
