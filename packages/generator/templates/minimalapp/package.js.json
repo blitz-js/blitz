@@ -1,0 +1,36 @@
+{
+  "name": "__name__",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "lint": "eslint --ignore-path .gitignore --ext .js .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "blitz": "canary",
+    "react-dom": "alpha",
+    "react": "alpha"
+  },
+  "devDependencies": {
+    "eslint": "7.x",
+    "husky": "6.x",
+    "lint-staged": "10.x",
+    "prettier-plugin-prisma": "0.x",
+    "prettier": "2.x",
+    "pretty-quick": "3.x"
+  },
+  "private": true
+}
