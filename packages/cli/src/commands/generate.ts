@@ -215,6 +215,11 @@ export class Generate extends Command {
         `Names ${RESERVED_MODEL_NAMES} or their plurals cannot be used as model names`,
       )
     }
+    if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
+      throw new Error(
+        `Invalid model name: "${modelName}". Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`
+      )
+    }
   }
 
   async run() {
