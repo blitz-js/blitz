@@ -1,4 +1,4 @@
-import { Logger } from 'tslog'
+import { ISettingsParam, Logger } from 'tslog'
 import { loadConfigAtRuntime, LogLevel } from '../config-shared'
 
 // eslint-disable-next-line
@@ -28,7 +28,7 @@ export const newline = () => {
   }
 }
 
-export const baseLogger = (): Logger => {
+export const baseLogger = (options?: ISettingsParam): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
   let config
@@ -59,6 +59,7 @@ export const baseLogger = (): Logger => {
     },
     maskValuesOfKeys: ['password', 'passwordConfirmation'],
     exposeErrorCodeFrame: process.env.NODE_ENV !== 'production',
+    ...options,
   })
 
   return globalThis._blitz_baseLogger
