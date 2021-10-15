@@ -26,7 +26,7 @@ let nextOutput
 let appPort
 let app
 
-const sharpMissingText = `For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended`
+const sharpMissingText = `For production Image Optimization with Blitz.js, the optional 'sharp' package is strongly recommended`
 
 async function fsToJson(dir, output = {}) {
   const files = await fs.readdir(dir)

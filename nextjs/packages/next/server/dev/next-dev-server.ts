@@ -65,8 +65,8 @@ import { saveRouteManifest } from '../../build/routes'
 let ReactDevOverlayImpl: React.FunctionComponent
 const ReactDevOverlay = (props: any) => {
   if (ReactDevOverlayImpl === undefined) {
-    ReactDevOverlayImpl = require('@next/react-dev-overlay/lib/client')
-      .ReactDevOverlay
+    ReactDevOverlayImpl =
+      require('@next/react-dev-overlay/lib/client').ReactDevOverlay
   }
   return ReactDevOverlayImpl(props)
 }
@@ -360,10 +360,9 @@ export default class DevServer extends Server {
     setGlobal('telemetry', telemetry)
 
     process.on('unhandledRejection', (reason) => {
-      this.logErrorWithOriginalStack(
-        reason,
-        'unhandledRejection'
-      ).catch(() => {})
+      this.logErrorWithOriginalStack(reason, 'unhandledRejection').catch(
+        () => {}
+      )
     })
     process.on('uncaughtException', (err) => {
       this.logErrorWithOriginalStack(err, 'uncaughtException').catch(() => {})
@@ -676,9 +675,7 @@ export default class DevServer extends Server {
     return !snippet.includes('data-amp-development-mode-only')
   }
 
-  protected async getStaticPaths(
-    pathname: string
-  ): Promise<{
+  protected async getStaticPaths(pathname: string): Promise<{
     staticPaths: string[] | undefined
     fallbackMode: false | 'static' | 'blocking'
   }> {
@@ -686,11 +683,8 @@ export default class DevServer extends Server {
     // from waiting on them for the page to load in dev mode
 
     const __getStaticPaths = async () => {
-      const {
-        publicRuntimeConfig,
-        serverRuntimeConfig,
-        httpAgentOptions,
-      } = this.nextConfig
+      const { publicRuntimeConfig, serverRuntimeConfig, httpAgentOptions } =
+        this.nextConfig
       const { locales, defaultLocale } = this.nextConfig.i18n || {}
 
       const paths = await this.staticPathsWorker.loadStaticPaths(

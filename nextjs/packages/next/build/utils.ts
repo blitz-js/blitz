@@ -70,7 +70,7 @@ export function convertPageFilePathToRoutePath(
     .replace(new RegExp(`\\.+(${pageExtensions.join('|')})$`), '')
 }
 
-const fileExtensionRegex = /\.([a-z]+)$/
+export const fileExtensionRegex = /\.([a-z]+)$/
 
 export function convertPageFilePathToResolverName(filePathFromAppRoot: string) {
   return filePathFromAppRoot

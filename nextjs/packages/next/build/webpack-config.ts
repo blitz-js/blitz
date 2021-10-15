@@ -57,6 +57,7 @@ import { CopyFilePlugin } from './webpack/plugins/copy-file-plugin'
 import type { Span } from '../telemetry/trace'
 import { existsSync } from 'fs'
 import { getSessionCookiePrefix } from '../server/lib/utils'
+import { fileExtensionRegex } from './utils'
 
 type ExcludesFalse = <T>(x: T | false) => x is T
 
@@ -439,27 +440,55 @@ export default async function getBaseWebpackConfig(
   const customDocumentAliases: { [key: string]: string[] } = {}
 
   if (dev && isWebpack5) {
-    customAppAliases[`${PAGES_DIR_ALIAS}/_app`] = [
-      ...config.pageExtensions.reduce((prev, ext) => {
-        prev.push(path.join(pagesDir, `_app.${ext}`))
-        return prev
-      }, [] as string[]),
-      'next/dist/pages/_app.js',
-    ]
-    customAppAliases[`${PAGES_DIR_ALIAS}/_error`] = [
-      ...config.pageExtensions.reduce((prev, ext) => {
-        prev.push(path.join(pagesDir, `_error.${ext}`))
-        return prev
-      }, [] as string[]),
-      'next/dist/pages/_error.js',
-    ]
-    customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`] = [
-      ...config.pageExtensions.reduce((prev, ext) => {
-        prev.push(path.join(pagesDir, `_document.${ext}`))
-        return prev
-      }, [] as string[]),
-      'next/dist/pages/_document.js',
-    ]
+    let customAppLocation =
+      (await findPageFile(pagesDir, '/_app', config.pageExtensions)) || ''
+    customAppLocation = customAppLocation.replace(fileExtensionRegex, '')
+    customAppAliases[`${PAGES_DIR_ALIAS}/_app`] = []
+    if (customAppLocation) {
+      customAppAliases[`${PAGES_DIR_ALIAS}/_app`].push(
+        ...config.pageExtensions.reduce((prev, ext) => {
+          prev.push(`${customAppLocation}.${ext}`)
+          return prev
+        }, [] as string[])
+      )
+    }
+    customAppAliases[`${PAGES_DIR_ALIAS}/_app`].push('next/dist/pages/_app.js')
+
+    let customErrorLocation =
+      (await findPageFile(pagesDir, '/_error', config.pageExtensions)) || ''
+    customErrorLocation = customErrorLocation.replace(fileExtensionRegex, '')
+    customErrorAlias[`${PAGES_DIR_ALIAS}/_error`] = []
+    if (customErrorLocation) {
+      customErrorAlias[`${PAGES_DIR_ALIAS}/_error`].push(
+        ...config.pageExtensions.reduce((prev, ext) => {
+          prev.push(`${customErrorLocation}.${ext}`)
+          return prev
+        }, [] as string[])
+      )
+    }
+    customErrorAlias[`${PAGES_DIR_ALIAS}/_error`].push(
+      'next/dist/pages/_error.js'
+    )
+
+    let customDocumentLocation =
+      (await findPageFile(pagesDir, '/_document', config.pageExtensions)) || ''
+    customDocumentLocation = customDocumentLocation.replace(
+      fileExtensionRegex,
+      ''
+    )
+    customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`] = []
+    if (customDocumentLocation) {
+      customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`].push(
+        ...config.pageExtensions.reduce((prev, ext) => {
+          prev.push(`${customDocumentLocation}.${ext}`)
+          return prev
+        }, [] as string[])
+      )
+    }
+    customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`].push(
+      'next/dist/pages/_document.js'
+    )
+    console.log('ALIAS', customAppAliases, customDocumentAliases)
   }
 
   const resolveConfig = {
@@ -1276,9 +1305,8 @@ export default async function getBaseWebpackConfig(
               'global.GENTLY': JSON.stringify(false),
             }
           : {
-              'process.env.__BLITZ_SESSION_COOKIE_PREFIX': JSON.stringify(
-                sessionCookiePrefix
-              ),
+              'process.env.__BLITZ_SESSION_COOKIE_PREFIX':
+                JSON.stringify(sessionCookiePrefix),
             }),
         // stub process.env with proxy to warn a missing value is
         // being accessed in development mode
