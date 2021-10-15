@@ -51,6 +51,22 @@ const runTests = (mode: string) => {
         expect(text).toMatch(/AuthenticationError/)
         if (browser) await browser.close()
       })
+
+      it("should render error for protected layout", async () => {
+        const browser = await webdriver(appPort, "/layout-authenticate")
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
+      it("should render Page.authenticate = false even when Layout.authenticate = true", async () => {
+        const browser = await webdriver(appPort, "/layout-unauthenticate")
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/this should be rendered/)
+        if (browser) await browser.close()
+      })
     })
 
     describe("authenticated", () => {
@@ -98,6 +114,24 @@ const runTests = (mode: string) => {
         await waitFor(200)
 
         await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        await browser.elementByCss("#logout").click()
+        await waitFor(500)
+
+        expect(await browser.url()).toMatch(/\/login/)
+        if (browser) await browser.close()
+      })
+
+      it("Layout.authenticate = {redirect} should work ", async () => {
+        // Login
+        let browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        await browser.elementByCss("#login").click()
+        await waitFor(200)
+
+        await browser.eval(`window.location = "/layout-authenticate-redirect"`)
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -169,6 +203,27 @@ const runTests = (mode: string) => {
       })
     })
 
+    describe("Layout.redirectAuthenticatedTo", () => {
+      it("should work when redirecting to page with useQuery", async () => {
+        // https://github.com/blitz-js/blitz/issues/2527
+
+        // Ensure logged in
+        const browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-out/)) {
+          await browser.elementByCss("#login").click()
+          await waitFor(200)
+        }
+
+        await browser.eval(`window.location = "/layout-redirect-authenticated"`)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        if (browser) await browser.close()
+      })
+    })
+
     describe("setPublicData", () => {
       it("it should not throw CSRF error", async () => {
         // https://github.com/blitz-js/blitz/issues/2448
@@ -206,6 +261,10 @@ describe("dev mode", () => {
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
       "/redirect-authenticated",
+      "/layout-authenticate",
+      "/layout-authenticate-redirect",
+      "/layout-redirect-authenticated",
+      "/layout-unauthenticate",
       "/gssp-setpublicdata",
       "/api/rpc/getNoauthBasic",
       "/api/rpc/getAuthenticatedBasic",

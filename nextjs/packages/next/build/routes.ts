@@ -2,8 +2,9 @@ import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
-import { isInternalDevelopment } from '../server/utils'
-import { join, dirname, basename } from 'path'
+import { newline, baseLogger } from '../server/lib/logging'
+import { isInternalBlitzMonorepoDevelopment } from '../server/utils'
+import { join, dirname } from 'path'
 import { outputFile } from 'fs-extra'
 import findUp from 'next/dist/compiled/find-up'
 import resolveFrom from 'resolve-from'
@@ -174,7 +175,7 @@ async function findNodeModulesRoot(src: string) {
       )
     }
     root = join(nextPkgLocation, '../')
-  } else if (isInternalDevelopment) {
+  } else if (isInternalBlitzMonorepoDevelopment) {
     root = join(src, 'node_modules')
   } else {
     const blitzPkgLocation = dirname(
@@ -216,27 +217,50 @@ export function parseDefaultExportName(contents: string): string | null {
   return result[1] ?? null
 }
 
-function dedupeBy<T, K>(arr: T[], by: (v: T) => K): T[] {
+function dedupeBy<T>(
+  arr: [string, T][],
+  by: (v: [string, T]) => string
+): [string, T][] {
   const allKeys = arr.map(by)
-  return arr.filter((v, index) => {
-    const key = by(v)
-    const first = allKeys.indexOf(key)
-    const last = allKeys.lastIndexOf(key)
+  const countKeys = allKeys.reduce(
+    (obj, key) => ({ ...obj, [key]: (obj[key] || 0) + 1 }),
+    {} as { [key: string]: number }
+  )
+  const duplicateKeys = Object.keys(countKeys).filter(
+    (key) => countKeys[key] > 1
+  )
 
-    if (first !== last && first !== index) {
-      const { 0: firstPath } = arr[first] as any
-      const { 0: lastPath } = arr[last] as any
-      const message = `The page component is named "${key}" on both the ${firstPath} and ${lastPath} routes. The page component must have a unique name across all routes, so change the component name on one of those routes to avoid conflict.`
+  if (duplicateKeys.length) {
+    newline()
+    const log = baseLogger({ displayDateTime: false }).getChildLogger()
 
-      if (isInternalDevelopment) {
-        console.log(message)
-      } else {
-        throw Error(message)
-      }
+    duplicateKeys.forEach((key) => {
+      let errorMessage = `The page component is named "${key}" on the following routes:\n\n`
+      arr
+        .filter((v) => by(v) === key)
+        .forEach(([route]) => {
+          errorMessage += `\t${route}\n`
+        })
+      log.error(errorMessage)
+    })
+
+    console.error(
+      'The page component must have a unique name across all routes, so change the component names so they are all unique.\n'
+    )
+
+    // Don't throw error in internal monorepo development because existing nextjs
+    // integration tests all have duplicate page names
+    if (
+      process.env.NODE_ENV === 'production' &&
+      !isInternalBlitzMonorepoDevelopment
+    ) {
+      const error = Error('Duplicate Page Name')
+      delete error.stack
+      throw error
     }
+  }
 
-    return true
-  })
+  return arr.filter((v) => !duplicateKeys.includes(by(v)))
 }
 
 export function generateManifest(routes: Record<string, RouteManifestEntry>): {

@@ -12,7 +12,14 @@ function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
 
+type TemplateConfig = {
+  path: string
+  skipForms?: boolean
+  skipDatabase?: boolean
+}
+
 export interface AppGeneratorOptions extends GeneratorOptions {
+  template: TemplateConfig
   appName: string
   useTs: boolean
   yarn: boolean
@@ -20,13 +27,13 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   version: string
   skipInstall: boolean
   skipGit: boolean
-  form: "React Final Form" | "React Hook Form" | "Formik"
+  form?: "React Final Form" | "React Hook Form" | "Formik"
   onPostInstall?: () => Promise<void>
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
-  sourceRoot: SourceRootType = {type: "template", path: "app"}
+  sourceRoot: SourceRootType = {type: "template", path: this.options.template.path}
   // Disable file-level prettier because we manually run prettier at the end
   prettierDisabled = true
   packageInstallSuccess: boolean = false
@@ -69,41 +76,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
     )
-    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
-      | Record<string, any>
-      | undefined
-    assert(pkg, "couldn't find package.json")
-    const ext = this.options.useTs ? "tsx" : "js"
-    let type: string
 
-    switch (this.options.form) {
-      case "React Final Form":
-        type = "finalform"
-        pkg.dependencies["final-form"] = "4.x"
-        pkg.dependencies["react-final-form"] = "6.x"
-        break
-      case "React Hook Form":
-        type = "hookform"
-        pkg.dependencies["react-hook-form"] = "7.x"
-        pkg.dependencies["@hookform/resolvers"] = "2.x"
-        break
-      case "Formik":
-        type = "formik"
-        pkg.dependencies["formik"] = "2.x"
-        break
+    if (!this.options.template.skipForms) {
+      this.updateForms()
     }
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/Form.${ext}`),
-      this.destinationPath(`app/core/components/Form.${ext}`),
-    )
-    this.fs.move(
-      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
-      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
-    )
-
-    this.fs.delete(this.destinationPath("_forms"))
-
-    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
   }
 
   async postWrite() {
@@ -299,6 +275,44 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     commitSpinner.succeed()
   }
+  private updateForms() {
+    const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
+      | Record<string, any>
+      | undefined
+    assert(pkg, "couldn't find package.json")
+
+    const ext = this.options.useTs ? "tsx" : "js"
+    let type: string = ""
+
+    switch (this.options.form) {
+      case "React Final Form":
+        type = "finalform"
+        pkg.dependencies["final-form"] = "4.x"
+        pkg.dependencies["react-final-form"] = "6.x"
+        break
+      case "React Hook Form":
+        type = "hookform"
+        pkg.dependencies["react-hook-form"] = "7.x"
+        pkg.dependencies["@hookform/resolvers"] = "2.x"
+        break
+      case "Formik":
+        type = "formik"
+        pkg.dependencies["formik"] = "2.x"
+        break
+    }
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/Form.${ext}`),
+      this.destinationPath(`app/core/components/Form.${ext}`),
+    )
+    this.fs.move(
+      this.destinationPath(`_forms/${type}/LabeledTextField.${ext}`),
+      this.destinationPath(`app/core/components/LabeledTextField.${ext}`),
+    )
+
+    this.fs.writeJSON(this.destinationPath("package.json"), pkg)
+    this.fs.delete(this.destinationPath("_forms"))
+  }
+
   private get pkgManager(): PkgManager {
     if (this.options.pnpm) {
       return "pnpm"

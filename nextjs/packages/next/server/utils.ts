@@ -16,10 +16,6 @@ export function cleanAmpPath(pathname: string): string {
   return pathname
 }
 
-export const isInternalDevelopment = __dirname.match(
-  /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
-)
-
 export type RenderResult = Observable<string>
 
 export function mergeResults(results: Array<RenderResult>): RenderResult {
@@ -36,6 +32,10 @@ export async function resultsToString(
   })
   return chunks.join('')
 }
+
+export const isInternalBlitzMonorepoDevelopment = __dirname.match(
+  /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
+)
 
 export const fixNodeFileTrace = () => {
   const path = require('path')

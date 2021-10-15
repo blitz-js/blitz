@@ -2006,7 +2006,8 @@
       "profile": "http://aleksandra.codes",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3177,7 +3178,8 @@
       "profile": "g3offrey.dev",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     },
     {
@@ -3203,6 +3205,73 @@
       "name": "Bahk Chanhee",
       "avatar_url": "https://avatars.githubusercontent.com/u/11691670?v=4",
       "profile": "world.hey.com/bach",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Vandivier",
+      "name": "John Vandivier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5559355?v=4",
+      "profile": "http://www.afterecon.com/",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "namirsab",
+      "name": "Namir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6980777?v=4",
+      "profile": "http://namirsab.github.io",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "scttcper",
+      "name": "Scott Cooper",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1400464?v=4",
+      "profile": "https://twitter.com/scttcper",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Abduttayyeb",
+      "name": "Abduttayyeb M.r",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55306260?v=4",
+      "profile": "abduttayyeb.github.io",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "maybebored",
+      "name": "Mayuran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20951181?v=4",
+      "profile": "https://github.com/maybebored",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MuckHub",
+      "name": "Aleksei Vesselko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54979136?v=4",
+      "profile": "https://github.com/MuckHub",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "p-siriphanthong",
+      "name": "Punn Siriphanthong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29949429?v=4",
+      "profile": "https://p-siriphanthong.github.io/",
       "contributions": [
         "code"
       ]
