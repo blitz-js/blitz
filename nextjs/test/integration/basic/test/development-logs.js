@@ -10,7 +10,7 @@ export default (context) => {
       const browserLogs = await browser.log('browser')
 
       browserLogs.forEach((log) => {
-        if (log.message.includes('Next.js auto-prefetches automatically')) {
+        if (log.message.includes('Blitz.js auto-prefetches automatically')) {
           foundLog = true
         }
       })

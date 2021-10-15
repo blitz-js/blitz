@@ -22,9 +22,7 @@ describe('Invalid resolve alias', () => {
     })
     await fs.remove(nextConfig)
 
-    expect(stderr).toContain(
-      'Error: failed to load next.config.js, see more info here https://nextjs.org/docs/messages/next-config-error'
-    )
-    expect(stderr).toContain('SyntaxError')
+    expect(stderr).toContain('error: Expected identifier but found')
+    // expect(stderr).toContain('SyntaxError')
   })
 })

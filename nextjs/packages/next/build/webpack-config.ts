@@ -439,29 +439,37 @@ export default async function getBaseWebpackConfig(
   const customErrorAlias: { [key: string]: string[] } = {}
   const customDocumentAliases: { [key: string]: string[] } = {}
 
+  const customAppLocation =
+    (await findPageFile(pagesDir, '/_app', config.pageExtensions)) || ''
+  const customErrorLocation =
+    (await findPageFile(pagesDir, '/_error', config.pageExtensions)) || ''
+  const customDocumentLocation =
+    (await findPageFile(pagesDir, '/_document', config.pageExtensions)) || ''
   if (dev && isWebpack5) {
-    let customAppLocation =
-      (await findPageFile(pagesDir, '/_app', config.pageExtensions)) || ''
-    customAppLocation = customAppLocation.replace(fileExtensionRegex, '')
+    const customAppLocationWithoutExt = customAppLocation.replace(
+      fileExtensionRegex,
+      ''
+    )
     customAppAliases[`${PAGES_DIR_ALIAS}/_app`] = []
-    if (customAppLocation) {
+    if (customAppLocationWithoutExt) {
       customAppAliases[`${PAGES_DIR_ALIAS}/_app`].push(
         ...config.pageExtensions.reduce((prev, ext) => {
-          prev.push(`${customAppLocation}.${ext}`)
+          prev.push(`${customAppLocationWithoutExt}.${ext}`)
           return prev
         }, [] as string[])
       )
     }
     customAppAliases[`${PAGES_DIR_ALIAS}/_app`].push('next/dist/pages/_app.js')
 
-    let customErrorLocation =
-      (await findPageFile(pagesDir, '/_error', config.pageExtensions)) || ''
-    customErrorLocation = customErrorLocation.replace(fileExtensionRegex, '')
+    const customErrorLocationWithoutExt = customErrorLocation.replace(
+      fileExtensionRegex,
+      ''
+    )
     customErrorAlias[`${PAGES_DIR_ALIAS}/_error`] = []
-    if (customErrorLocation) {
+    if (customErrorLocationWithoutExt) {
       customErrorAlias[`${PAGES_DIR_ALIAS}/_error`].push(
         ...config.pageExtensions.reduce((prev, ext) => {
-          prev.push(`${customErrorLocation}.${ext}`)
+          prev.push(`${customErrorLocationWithoutExt}.${ext}`)
           return prev
         }, [] as string[])
       )
@@ -470,17 +478,15 @@ export default async function getBaseWebpackConfig(
       'next/dist/pages/_error.js'
     )
 
-    let customDocumentLocation =
-      (await findPageFile(pagesDir, '/_document', config.pageExtensions)) || ''
-    customDocumentLocation = customDocumentLocation.replace(
+    const customDocumentLocationWithoutExt = customDocumentLocation.replace(
       fileExtensionRegex,
       ''
     )
     customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`] = []
-    if (customDocumentLocation) {
+    if (customDocumentLocationWithoutExt) {
       customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`].push(
         ...config.pageExtensions.reduce((prev, ext) => {
-          prev.push(`${customDocumentLocation}.${ext}`)
+          prev.push(`${customDocumentLocationWithoutExt}.${ext}`)
           return prev
         }, [] as string[])
       )
@@ -488,7 +494,6 @@ export default async function getBaseWebpackConfig(
     customDocumentAliases[`${PAGES_DIR_ALIAS}/_document`].push(
       'next/dist/pages/_document.js'
     )
-    console.log('ALIAS', customAppAliases, customDocumentAliases)
   }
 
   const resolveConfig = {
@@ -1615,9 +1620,7 @@ export default async function getBaseWebpackConfig(
 
   webpackConfig = await buildConfiguration(webpackConfig, {
     rootDirectory: dir,
-    customAppFile: new RegExp(
-      path.join(pagesDir, `_app`).replace(/\\/g, '(/|\\\\)')
-    ),
+    customAppFile: new RegExp(customAppLocation.replace(/\\/g, '(/|\\\\)')),
     isDevelopment: dev,
     isServer,
     assetPrefix: config.assetPrefix || '',
