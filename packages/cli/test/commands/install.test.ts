@@ -64,33 +64,5 @@ describe("`install` command", () => {
         expect(recipeList).toEqual(expect.not.arrayContaining(["tsconfig.json"]))
       })
     })
-
-    it("Show the table in the Recipe list", () => {
-      const officialRecipeListTable = Install.prototype.officialRecipeListTable
-      const RecipeListTable = officialRecipeListTable([
-        "base-web",
-        "bumbag-ui",
-        "chakra-ui",
-        "emotion",
-        "gh-action-yarn-mariadb",
-        "gh-action-yarn-postgres",
-        "ghost",
-        "graphql-apollo-server",
-        "logrocket",
-        "material-ui",
-        "quirrel",
-        "reflexjs",
-        "render",
-        "secureheaders",
-        "stitches",
-        "styled-components",
-        "tailwind",
-        "theme-ui",
-      ])
-      expect(RecipeListTable).toContain("Recipe name")
-      expect(RecipeListTable).toContain("Install command")
-      expect(RecipeListTable).toContain("ghost")
-      expect(RecipeListTable).toContain("blitz install base-web")
-    })
   })
 })
