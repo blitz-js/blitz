@@ -273,7 +273,7 @@ export class Install extends Command {
     debug(`flags`, flags)
     let recipeInfo
     // show all official recipes
-    if (flags.list) {
+    if (flags.list || !args.recipe) {
       const officialRecipeList = await this.getOfficialRecipeList()
       recipeInfo = this.normalizeRecipePath(await this.officialRecipeListTable(officialRecipeList))
     } else {
