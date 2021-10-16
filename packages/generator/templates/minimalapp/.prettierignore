@@ -4,3 +4,7 @@
 *.lock
 .next
 .blitz
+.yarn
+.pnp.*
+node_modules
+.blitz.config.compiled.js
