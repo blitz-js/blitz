@@ -3275,6 +3275,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shawn-fetanat",
+      "name": "Shawn Fetanat",
+      "avatar_url": "https://avatars.githubusercontent.com/u/83679827?v=4",
+      "profile": "https://my-portfolio-292eb.web.app",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
