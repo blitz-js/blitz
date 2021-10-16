@@ -157,7 +157,7 @@ export class Install extends Command {
     )
   }
 
-  officialRecipeListTable(recipesList: string[]): string {
+  async officialRecipeListTable(recipesList: string[]): Promise<string> {
     const recipesTable = new Table({
       columns: [
         {
@@ -179,7 +179,16 @@ export class Install extends Command {
         }
       }),
     )
-    return recipesTable.render()
+
+    const installRecipe: any = await this.enquirer.prompt({
+      type: "select",
+      name: "recipeName",
+      message: "Select a recipe to install",
+      choices: recipesList,
+    })
+
+    debug("pkgManager", installRecipe)
+    return installRecipe.recipeName
   }
 
   /**
@@ -261,16 +270,18 @@ export class Install extends Command {
     await this.setupProxySupport()
 
     const {args, flags} = this.parse(Install)
-
     debug(`flags`, flags)
+    let recipeInfo
     // show all official recipes
     if (flags.list) {
       const officialRecipeList = await this.getOfficialRecipeList()
-      return console.log(this.officialRecipeListTable(officialRecipeList))
+      recipeInfo = this.normalizeRecipePath(await this.officialRecipeListTable(officialRecipeList))
+    } else {
+      recipeInfo = this.normalizeRecipePath(args.recipe)
     }
 
     const originalCwd = process.cwd()
-    const recipeInfo = this.normalizeRecipePath(args.recipe)
+
     debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
     if (recipeInfo.location === RecipeLocation.Remote) {
