@@ -187,7 +187,6 @@ export class Install extends Command {
       choices: recipesList,
     })
 
-    debug("pkgManager", installRecipe)
     return installRecipe.recipeName
   }
 
