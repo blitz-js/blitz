@@ -228,6 +228,7 @@ export class Generate extends Command {
           modelNames: modelNames(singularRootContext),
           ModelName: ModelName(singularRootContext),
           ModelNames: ModelNames(singularRootContext),
+          rawParentModelName: flags.parent,
           parentModel: modelName(flags.parent),
           parentModels: modelNames(flags.parent),
           ParentModel: ModelName(flags.parent),

@@ -12,17 +12,19 @@ export interface IBuilder<T, U> {
   getTemplateValues(Options: T): Promise<U>
 }
 
-export interface FieldGeneratorOptions extends GeneratorOptions {
+export interface ResourceGeneratorOptions extends GeneratorOptions {
   ModelName: string
   ModelNames: string
   modelName: string
   modelNames: string
+  rawParentModelName?: string
   parentModel?: string
   parentModels?: string
   ParentModel?: string
   ParentModels?: string
   extraArgs?: string[]
 }
+
 export interface CommonTemplateValues {
   parentModelId: string
   parentModelParam: string
@@ -44,7 +46,7 @@ export interface CommonTemplateValues {
 
 export interface FieldTemplateValues {
   attributeName: string
-  zodTypeName: string
+  zodType: string
   FieldComponent: string
   fieldName: string
   FieldName: string
@@ -94,7 +96,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
-  public async getZodTypeName(type: string = "") {
+  public async getZodType(type: string = "") {
     let typeToZodNameMap: {[key: string]: string} = this.fallbackZodMap
 
     let config = await this.getCachedConfig()
@@ -136,7 +138,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
       const [valueName, typeName] = arg.split(":")
       const values = {
         attributeName: singleCamel(valueName),
-        zodTypeName: await this.getZodTypeName(typeName),
+        zodType: await this.getZodType(typeName),
         FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
         fieldName: singleCamel(valueName), // fieldName
         FieldName: singlePascal(valueName), // FieldName

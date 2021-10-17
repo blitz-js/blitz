@@ -1,17 +1,8 @@
-import {FieldValuesBuilder} from ".."
-import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
+import {Generator, SourceRootType} from "../generator"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
-export interface PageGeneratorOptions extends GeneratorOptions {
-  ModelName: string
-  ModelNames: string
-  modelName: string
-  modelNames: string
-  parentModel?: string
-  parentModels?: string
-  ParentModel?: string
-  ParentModels?: string
-}
+export interface PageGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
   static subdirectory = "pages"

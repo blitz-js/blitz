@@ -22,17 +22,17 @@ describe("Form Generator", () => {
   it("matches template comments correctly", () => {
     const regex = generator.fieldTemplateRegExp
     const curlyBraceComment1 = `{/* template: <__FieldComponent__ name="__fieldName__" label="__Field_Name__" placeholder="__Field_Name__" /> */}`
-    const normalComment1 = `// template: __fieldName__: z.__zodTypeName__(),`
+    const normalComment1 = `// template: __fieldName__: z.__zodType__(),`
     expect(curlyBraceComment1.match(regex)?.[0].replace(regex, "$2$3")).toBe(`<__FieldComponent__ name="__fieldName__" label="__Field_Name__" placeholder="__Field_Name__" />`)
     expect(curlyBraceComment1.match(regex)?.[0].replace(regex, "$2$3")).not.toBe(`something Random`)
 
-    expect(normalComment1.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__(),`)
+    expect(normalComment1.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodType__(),`)
     expect(normalComment1.match(regex)?.[0].replace(regex, "$2$3")).not.toBe(`something Random`)
 
-    const commentWithSpacing = `//     template: __fieldName__: z.__zodTypeName__(),`
-    const commentWithNoSpacing = `//template: __fieldName__: z.__zodTypeName__(),`
+    const commentWithSpacing = `//     template: __fieldName__: z.__zodType__(),`
+    const commentWithNoSpacing = `//template: __fieldName__: z.__zodType__(),`
 
-    expect(commentWithSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__(),`)
-    expect(commentWithNoSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodTypeName__(),`)
+    expect(commentWithSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodType__(),`)
+    expect(commentWithNoSpacing.match(regex)?.[0].replace(regex, "$2$3")).toBe(`__fieldName__: z.__zodType__(),`)
   })
 })

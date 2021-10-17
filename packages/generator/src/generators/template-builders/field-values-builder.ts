@@ -1,10 +1,10 @@
 import {getPrismaSchema} from "../../utils/get-prisma-schema"
-import {FieldGeneratorOptions, Builder, CommonTemplateValues} from "./builder"
+import {ResourceGeneratorOptions, Builder, CommonTemplateValues} from "./builder"
 import {create as createStore} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import * as ast from "@mrleebo/prisma-ast"
 
-export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTemplateValues> {
+export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, CommonTemplateValues> {
   private getEditor = (): Editor => {
     if (this.fs !== undefined) {
       return this.fs
@@ -15,7 +15,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
   }
 
   // eslint-disable-next-line require-await
-  public async getTemplateValues(options: FieldGeneratorOptions): Promise<CommonTemplateValues> {
+  public async getTemplateValues(options: ResourceGeneratorOptions): Promise<CommonTemplateValues> {
     const values:CommonTemplateValues = {
       parentModelId: this.getId(options.parentModel),
       parentModelIdZodType: undefined,
@@ -39,7 +39,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
       const checks = options.extraArgs.map(async (arg) => {
         const [valueName, typeName] = arg.split(":")
         if (valueName === "id") {
-          values.modelIdZodType = await this.getZodTypeName(typeName)
+          values.modelIdZodType = await this.getZodType(typeName)
           argValue = arg
         }
       })
@@ -52,11 +52,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
         const {schema} = getPrismaSchema(this.getEditor())
         // O(N) - N is total ast Blocks
         const model = schema.list.find(function (component): component is ast.Model {
-          return component.type === "model" && component.name === "Project"
-          //TODO: Check case sensitivity, is  component.name === options.parentModel || component.name === options.ParentModel necessary
-          // Case sensitvity is important. Schema.prisma allows both project and Project to exist in the same file
-          // We need to inform users to pass in the exact name (in the docs), and we also need to access the raw argument passed in by the
-          // user here.
+          return component.type === "model" && component.name === options.rawParentModelName
         })
 
         if (model !== undefined) {
@@ -83,7 +79,7 @@ export class FieldValuesBuilder extends Builder<FieldGeneratorOptions, CommonTem
             }
           }
         } else {
-          // handle scenario where parent wasnt found in existing schema. Should we throw an error, or a warning asking the user to verify that the parent model exists?
+          // TODO: handle scenario where parent wasnt found in existing schema. Should we throw an error, or a warning asking the user to verify that the parent model exists?
         }
       }
 
