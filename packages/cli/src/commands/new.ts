@@ -118,7 +118,7 @@ export class New extends Command {
       const form = await this.determineFormLib(flags)
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
-      const needsInstall = !dryRun && shouldInstallDeps
+      const requiresManualInstall = dryRun || !shouldInstallDeps
       const postInstallSteps = args.name === "." ? [] : [`cd ${args.name}`]
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
@@ -155,7 +155,7 @@ export class New extends Command {
       this.log("\n" + log.withBrand("Hang tight while we set up your new Blitz app!") + "\n")
       await generator.run()
 
-      if (needsInstall) {
+      if (requiresManualInstall) {
         postInstallSteps.push(this.installDepsCmd)
         postInstallSteps.push(
           "blitz prisma migrate dev (when asked, you can name the migration anything)",
@@ -274,7 +274,9 @@ export class New extends Command {
     })
   }
   private async maybeUpgradeGloballyInstalledBlitz(): Promise<boolean> {
-    const spinner = log.spinner(log.withBrand("Checking if a new Blitz release is available")).start()
+    const spinner = log
+      .spinner(log.withBrand("Checking if a new Blitz release is available"))
+      .start()
     const latestVersion = (await getLatestVersion("blitz")).value || this.config.version
     if (lt(this.config.version, latestVersion)) {
       spinner.succeed(log.withBrand("A new Blitz release is available"))
