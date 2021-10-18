@@ -145,13 +145,13 @@ export class Install extends Command {
   async getOfficialRecipeList(): Promise<string[]> {
     return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
       (release: GithubRepoAPITrees) =>
-        release.tree.reduce((recipieList: string[], item) => {
+        release.tree.reduce((recipesList: string[], item) => {
           const filePath = item.path.split("/")
-          const [directory, recipieName] = filePath
+          const [directory, recipeName] = filePath
           if (directory === "recipes" && filePath.length === 2 && item.type === "tree") {
-            recipieList.push(recipieName)
+            recipesList.push(recipeName)
           }
-          return recipieList
+          return recipesList
         }, []),
     )
   }
