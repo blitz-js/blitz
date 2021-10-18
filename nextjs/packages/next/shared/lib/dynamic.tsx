@@ -65,7 +65,8 @@ export function noSSR<P = {}>(
 
 // function dynamic<P = {}, O extends DynamicOptions>(options: O):
 
-export default function dynamic<P = {}>(
+export default dynamic
+export function dynamic<P = {}>(
   dynamicOptions: DynamicOptions<P> | Loader<P>,
   options?: DynamicOptions<P>
 ): React.ComponentType<P> {

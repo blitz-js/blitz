@@ -36,6 +36,7 @@ const specialImports: Record<string, string> = {
   SecurePassword: 'next/stdlib-server',
   hash256: 'next/stdlib-server',
   generateToken: 'next/stdlib-server',
+  resolver: 'next/stdlib-server',
 
   BlitzProvider: 'next/data-client',
   getAntiCSRFToken: 'next/data-client',
@@ -55,17 +56,15 @@ const specialImports: Record<string, string> = {
   dehydrate: 'next/data-client',
   invoke: 'next/data-client',
 
-  Head: '@blitzjs/core/head',
+  Head: 'next/head',
 
-  App: '@blitzjs/core/app',
+  App: 'next/app',
 
-  dynamic: '@blitzjs/core/dynamic',
-  noSSR: '@blitzjs/core/dynamic',
+  dynamic: 'next/dynamic',
+  noSSR: 'next/dynamic',
 
-  getConfig: '@blitzjs/core/config',
-  setConfig: '@blitzjs/core/config',
-
-  resolver: '@blitzjs/core/server',
+  getConfig: 'next/config',
+  setConfig: 'next/config',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

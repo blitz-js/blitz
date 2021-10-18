@@ -1,6 +1,7 @@
 let runtimeConfig: any
 
-export default () => {
+export default getConfig
+export function getConfig() {
   return runtimeConfig
 }
 

@@ -9,24 +9,14 @@
   },
   "preconstruct": {
     "entrypoints": [
-      "app.ts",
-      "config.ts",
-      "dynamic.ts",
-      "head.ts",
-      "index.ts",
-      "server/index.ts"
+      "index.ts"
     ]
   },
   "main": "dist/blitzjs-core.cjs.js",
   "module": "dist/blitzjs-core.esm.js",
   "types": "dist/blitzjs-core.cjs.d.ts",
   "files": [
-    "dist",
-    "app",
-    "config",
-    "dynamic",
-    "head",
-    "server"
+    "dist"
   ],
   "dependencies": {
     "@blitzjs/config": "0.41.1",
@@ -40,8 +30,7 @@
     "superjson": "1.7.2"
   },
   "devDependencies": {
-    "react": "0.0.0-experimental-6a589ad71",
-    "zod": "3.8.1"
+    "react": "0.0.0-experimental-6a589ad71"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {
