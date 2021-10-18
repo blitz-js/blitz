@@ -29,7 +29,6 @@
     "eslint": "7.x",
     "husky": "7.x",
     "lint-staged": "11.x",
-    "prettier-plugin-prisma": "3.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "typescript": "~4.4"
