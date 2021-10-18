@@ -1,7 +1,7 @@
 const { sessionMiddleware, simpleRolesIsAuthorized } = require("blitz")
 const { GraphQLClient, gql } = require("graphql-request")
 
-const graphQLClient = new GraphQLClient("https://graphql.fauna.com/graphql", {
+const graphQLClient = new GraphQLClient(process.env.FAUNA_GRAPHQL_URL, {
   headers: {
     authorization: "Bearer " + process.env.FAUNA_SECRET,
   },
