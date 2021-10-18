@@ -26,7 +26,6 @@ function _getInitialProps({
 /**
  * `Error` component used for handling errors.
  */
-export default ErrorComponent
 export class ErrorComponent<P = {}> extends React.Component<P & ErrorProps> {
   static displayName = 'ErrorPage'
 
@@ -70,6 +69,7 @@ export class ErrorComponent<P = {}> extends React.Component<P & ErrorProps> {
     )
   }
 }
+export default ErrorComponent
 
 const styles: { [k: string]: React.CSSProperties } = {
   error: {

@@ -1,6 +1,6 @@
 let runtimeConfig: any
 
-export function getConfig() {
+export const getConfig = () => {
   return runtimeConfig
 }
 export default getConfig
