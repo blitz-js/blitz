@@ -3,6 +3,8 @@ export * from './errors'
 export const isServer = typeof window === 'undefined'
 export const isClient = typeof window !== 'undefined'
 
+export type ParserType = 'sync' | 'async'
+
 const MILLISECONDS_IN_MINUTE = 60000
 const MINUTES_IN_YEAR = 525960
 

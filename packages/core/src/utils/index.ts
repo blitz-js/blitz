@@ -1,5 +1,5 @@
+import {ParserType} from "next/stdlib"
 import {ZodError} from "zod"
-import {ParserType} from "../server/resolver"
 
 export const isServer = typeof window === "undefined"
 export const isClient = typeof window !== "undefined"
