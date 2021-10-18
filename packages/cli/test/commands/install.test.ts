@@ -1,4 +1,3 @@
-import {expect as oclifExpect, test as oclifTest} from "@oclif/test"
 import * as path from "path"
 import {Install, RecipeLocation} from "../../src/commands/install"
 import tempRecipe from "../__fixtures__/installer"
