@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import * as React from 'react'
-import type { FallbackProps } from 'next/stdlib'
-import { ErrorBoundary, useErrorHandler } from 'next/stdlib'
-import { cleanStack } from './error-boundary.unit.test'
+import {render, screen} from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import * as React from "react"
+import type {FallbackProps} from "./error-boundary"
+import {ErrorBoundary, useErrorHandler} from "./error-boundary"
+import {cleanStack} from "./error-boundary.test"
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -11,7 +11,7 @@ afterEach(() => {
 })
 
 beforeEach(() => {
-  jest.spyOn(console, 'error').mockImplementation(() => {})
+  jest.spyOn(console, "error").mockImplementation(() => {})
 })
 
 // afterEach(() => {
@@ -24,7 +24,7 @@ beforeEach(() => {
 //   }
 // })
 
-function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+function ErrorFallback({error, resetErrorBoundary}: FallbackProps) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
@@ -34,16 +34,16 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   )
 }
 
-const firstLine = (str: string) => str.split('\n')[0]
+const firstLine = (str: string) => str.split("\n")[0]
 
-test('handleError forwards along async errors', async () => {
+test("handleError forwards along async errors", async () => {
   function AsyncBomb() {
     const [explode, setExplode] = React.useState(false)
     const handleError = useErrorHandler()
     React.useEffect(() => {
       if (explode) {
         setTimeout(() => {
-          handleError(new Error('💥 CABOOM 💥'))
+          handleError(new Error("💥 CABOOM 💥"))
         })
       }
     })
@@ -52,19 +52,17 @@ test('handleError forwards along async errors', async () => {
   render(
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <AsyncBomb />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
-  userEvent.click(screen.getByRole('button', { name: /bomb/i }))
+  userEvent.click(screen.getByRole("button", {name: /bomb/i}))
 
-  await screen.findByRole('alert')
+  await screen.findByRole("alert")
 
   const consoleError = console.error as jest.Mock<void, unknown[]>
   const [[actualError], [componentStack]] = consoleError.mock.calls
   const firstLineOfError = firstLine(actualError as string)
-  expect(firstLineOfError).toMatchInlineSnapshot(
-    `"Error: Uncaught [Error: 💥 CABOOM 💥]"`
-  )
+  expect(firstLineOfError).toMatchInlineSnapshot(`"Error: Uncaught [Error: 💥 CABOOM 💥]"`)
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in the <AsyncBomb> component:
 
@@ -77,11 +75,11 @@ React will try to recreate this component tree from scratch using the error boun
   consoleError.mockClear()
 
   // can recover
-  userEvent.click(screen.getByRole('button', { name: /try again/i }))
+  userEvent.click(screen.getByRole("button", {name: /try again/i}))
   expect(console.error).not.toHaveBeenCalled()
 })
 
-test('can pass an error to useErrorHandler', async () => {
+test("can pass an error to useErrorHandler", async () => {
   function AsyncBomb() {
     const [error, setError] = React.useState<Error | null>(null)
     const [explode, setExplode] = React.useState(false)
@@ -89,7 +87,7 @@ test('can pass an error to useErrorHandler', async () => {
     React.useEffect(() => {
       if (explode) {
         setTimeout(() => {
-          setError(new Error('💥 CABOOM 💥'))
+          setError(new Error("💥 CABOOM 💥"))
         })
       }
     })
@@ -98,19 +96,17 @@ test('can pass an error to useErrorHandler', async () => {
   render(
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <AsyncBomb />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
-  userEvent.click(screen.getByRole('button', { name: /bomb/i }))
+  userEvent.click(screen.getByRole("button", {name: /bomb/i}))
 
-  await screen.findByRole('alert')
+  await screen.findByRole("alert")
 
   const consoleError = console.error as jest.Mock<void, unknown[]>
   const [[actualError], [componentStack]] = consoleError.mock.calls
   const firstLineOfError = firstLine(actualError as string)
-  expect(firstLineOfError).toMatchInlineSnapshot(
-    `"Error: Uncaught [Error: 💥 CABOOM 💥]"`
-  )
+  expect(firstLineOfError).toMatchInlineSnapshot(`"Error: Uncaught [Error: 💥 CABOOM 💥]"`)
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in the <AsyncBomb> component:
 
@@ -123,6 +119,6 @@ React will try to recreate this component tree from scratch using the error boun
   consoleError.mockClear()
 
   // can recover
-  userEvent.click(screen.getByRole('button', { name: /try again/i }))
+  userEvent.click(screen.getByRole("button", {name: /try again/i}))
   expect(console.error).not.toHaveBeenCalled()
 })

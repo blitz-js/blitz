@@ -20,10 +20,12 @@
   ],
   "dependencies": {
     "lodash.frompairs": "4.0.1",
-    "next": "0.41.1"
+    "next": "0.41.1",
+    "superjson": "1.7.2"
   },
   "devDependencies": {
-    "react": "0.0.0-experimental-6a589ad71"
+    "react": "0.0.0-experimental-6a589ad71",
+    "zod": "3.10.1"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {

@@ -12,7 +12,7 @@ function AddBlitzAppRoot(): PluginObj {
           return;
         }
 
-        wrapExportDefaultDeclaration(path, 'withBlitzAppRoot', 'next/stdlib');
+        wrapExportDefaultDeclaration(path, 'withBlitzAppRoot', '@blitzjs/core');
       },
     },
   };

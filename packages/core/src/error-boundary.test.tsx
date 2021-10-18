@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import React from 'react'
-import type { FallbackProps } from 'next/stdlib'
-import { ErrorBoundary, withErrorBoundary } from 'next/stdlib'
+import {render, screen} from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import React from "react"
+import type {FallbackProps} from "./error-boundary"
+import {ErrorBoundary, withErrorBoundary} from "./error-boundary"
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -10,7 +10,7 @@ afterEach(() => {
 })
 
 beforeEach(() => {
-  jest.spyOn(console, 'error').mockImplementation(() => {})
+  jest.spyOn(console, "error").mockImplementation(() => {})
 })
 
 // afterEach(() => {
@@ -23,7 +23,7 @@ beforeEach(() => {
 //   }
 // })
 
-function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+function ErrorFallback({error, resetErrorBoundary}: FallbackProps) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
@@ -34,29 +34,29 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 }
 
 function Bomb() {
-  throw new Error('💥 CABOOM 💥')
+  throw new Error("💥 CABOOM 💥")
   // eslint-disable-next-line
   return null
 }
 
-const firstLine = (str: string) => str.split('\n')[0]
+const firstLine = (str: string) => str.split("\n")[0]
 
 export const cleanStack = (stack: any): any => {
-  if (typeof stack === 'string') {
-    return stack.replace(/\(.*\)/g, '')
+  if (typeof stack === "string") {
+    return stack.replace(/\(.*\)/g, "")
   }
-  if (typeof stack === 'object' && stack.componentStack) {
+  if (typeof stack === "object" && stack.componentStack) {
     stack.componentStack = cleanStack(stack.componentStack)
     return stack
   }
   return stack
 }
 
-test('standard use-case', () => {
+test("standard use-case", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   function App() {
-    const [username, setUsername] = React.useState('')
+    const [username, setUsername] = React.useState("")
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
       setUsername(e.target.value)
     }
@@ -66,10 +66,10 @@ test('standard use-case', () => {
           <label htmlFor="username">Username</label>
           <input type="text" id="username" onChange={handleChange} />
         </div>
-        <div>{username === 'fail' ? 'Oh no' : 'things are good'}</div>
+        <div>{username === "fail" ? "Oh no" : "things are good"}</div>
         <div>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {username === 'fail' ? <Bomb /> : 'type "fail"'}
+            {username === "fail" ? <Bomb /> : 'type "fail"'}
           </ErrorBoundary>
         </div>
       </div>
@@ -78,11 +78,11 @@ test('standard use-case', () => {
 
   render(<App />)
 
-  userEvent.type(screen.getByRole('textbox', { name: /username/i }), 'fail')
+  userEvent.type(screen.getByRole("textbox", {name: /username/i}), "fail")
 
   const [[actualError], [componentStack]] = consoleError.mock.calls
   expect(firstLine(actualError as string)).toMatchInlineSnapshot(
-    `"Error: Uncaught [Error: 💥 CABOOM 💥]"`
+    `"Error: Uncaught [Error: 💥 CABOOM 💥]"`,
   )
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in the <Bomb> component:
@@ -98,7 +98,7 @@ React will try to recreate this component tree from scratch using the error boun
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
-  expect(screen.getByRole('alert')).toMatchInlineSnapshot(`
+  expect(screen.getByRole("alert")).toMatchInlineSnapshot(`
     <div
       role="alert"
     >
@@ -115,22 +115,22 @@ React will try to recreate this component tree from scratch using the error boun
   `)
 
   // can recover from errors when the component is rerendered and reset is clicked
-  userEvent.type(screen.getByRole('textbox', { name: /username/i }), '-not')
-  userEvent.click(screen.getByRole('button', { name: /try again/i }))
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  userEvent.type(screen.getByRole("textbox", {name: /username/i}), "-not")
+  userEvent.click(screen.getByRole("button", {name: /try again/i}))
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument()
 })
 
-test('fallbackRender prop', () => {
+test("fallbackRender prop", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
-  const workingMessage = 'Phew, we are safe!'
+  const workingMessage = "Phew, we are safe!"
 
   function App() {
     const [explode, setExplode] = React.useState(true)
     return (
       <div>
         <ErrorBoundary
-          fallbackRender={({ resetErrorBoundary }) => (
+          fallbackRender={({resetErrorBoundary}) => (
             <button
               onClick={() => {
                 setExplode(false)
@@ -153,18 +153,18 @@ test('fallbackRender prop', () => {
 
   // the render prop API allows a single action to reset the app state
   // as well as reset the ErrorBoundary state
-  userEvent.click(screen.getByRole('button', { name: /try again/i }))
+  userEvent.click(screen.getByRole("button", {name: /try again/i}))
   expect(screen.getByText(workingMessage)).toBeInTheDocument()
 })
 
-test('simple fallback is supported', () => {
+test("simple fallback is supported", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   render(
     <ErrorBoundary fallback={<div>Oh no</div>}>
       <Bomb />
       <span>child</span>
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
@@ -172,23 +172,21 @@ test('simple fallback is supported', () => {
   expect(screen.queryByText(/child/i)).not.toBeInTheDocument()
 })
 
-test('withErrorBoundary HOC', () => {
+test("withErrorBoundary HOC", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   const onErrorHandler = jest.fn()
   const Boundary = withErrorBoundary(
     () => {
-      throw new Error('💥 CABOOM 💥')
+      throw new Error("💥 CABOOM 💥")
     },
-    { FallbackComponent: ErrorFallback, onError: onErrorHandler }
+    {FallbackComponent: ErrorFallback, onError: onErrorHandler},
   )
   render(<Boundary />)
 
   const [[actualError], [componentStack]] = consoleError.mock.calls
   const firstLineOfError = firstLine(actualError as string)
-  expect(firstLineOfError).toMatchInlineSnapshot(
-    `"Error: Uncaught [Error: 💥 CABOOM 💥]"`
-  )
+  expect(firstLineOfError).toMatchInlineSnapshot(`"Error: Uncaught [Error: 💥 CABOOM 💥]"`)
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
 "The above error occurred in one of your React components:
 
@@ -201,9 +199,7 @@ React will try to recreate this component tree from scratch using the error boun
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
-  const [error, onErrorComponentStack] = (onErrorHandler.mock.calls as [
-    [Error, string]
-  ])[0]
+  const [error, onErrorComponentStack] = (onErrorHandler.mock.calls as [[Error, string]])[0]
   expect(error.message).toMatchInlineSnapshot(`"💥 CABOOM 💥"`)
   expect(cleanStack(onErrorComponentStack)).toMatchInlineSnapshot(`
 Object {
@@ -216,10 +212,10 @@ Object {
   expect(onErrorHandler).toHaveBeenCalledTimes(1)
 })
 
-test('supported but undocumented reset method', () => {
+test("supported but undocumented reset method", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
-  const children = 'Boundry children'
+  const children = "Boundry children"
   function App() {
     const errorBoundaryRef = React.useRef<ErrorBoundary | null>(null)
     const [explode, setExplode] = React.useState(false)
@@ -241,18 +237,18 @@ test('supported but undocumented reset method', () => {
     )
   }
   render(<App />)
-  userEvent.click(screen.getByText('explode'))
+  userEvent.click(screen.getByText("explode"))
 
   expect(screen.queryByText(children)).not.toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
-  userEvent.click(screen.getByText('recover'))
+  userEvent.click(screen.getByText("recover"))
   expect(screen.getByText(children)).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(0)
 })
 
-test('requires either a fallback, fallbackRender, or FallbackComponent', () => {
+test("requires either a fallback, fallbackRender, or FallbackComponent", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   expect(() =>
@@ -260,21 +256,21 @@ test('requires either a fallback, fallbackRender, or FallbackComponent', () => {
       // @ts-expect-error we're testing the runtime check of missing props here
       <ErrorBoundary>
         <Bomb />
-      </ErrorBoundary>
-    )
+      </ErrorBoundary>,
+    ),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"<ErrorBoundary> requires either a fallback, fallbackRender, or FallbackComponent prop"`
+    `"<ErrorBoundary> requires either a fallback, fallbackRender, or FallbackComponent prop"`,
   )
   consoleError.mockClear()
 })
 
 // eslint-disable-next-line max-statements
-test('supports automatic reset of error boundary when resetKeys change', () => {
+test("supports automatic reset of error boundary when resetKeys change", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   const handleReset = jest.fn()
-  const TRY_AGAIN_ARG1 = 'TRY_AGAIN_ARG1'
-  const TRY_AGAIN_ARG2 = 'TRY_AGAIN_ARG2'
+  const TRY_AGAIN_ARG1 = "TRY_AGAIN_ARG1"
+  const TRY_AGAIN_ARG2 = "TRY_AGAIN_ARG2"
   const handleResetKeysChange = jest.fn()
   function App() {
     const [explode, setExplode] = React.useState(false)
@@ -283,18 +279,12 @@ test('supports automatic reset of error boundary when resetKeys change', () => {
       <div>
         <button onClick={() => setExplode((e) => !e)}>toggle explode</button>
         <ErrorBoundary
-          fallbackRender={({ resetErrorBoundary }) => (
+          fallbackRender={({resetErrorBoundary}) => (
             <div role="alert">
-              <button
-                onClick={() =>
-                  resetErrorBoundary(TRY_AGAIN_ARG1, TRY_AGAIN_ARG2)
-                }
-              >
+              <button onClick={() => resetErrorBoundary(TRY_AGAIN_ARG1, TRY_AGAIN_ARG2)}>
                 Try again
               </button>
-              <button onClick={() => setExtra((e) => !e)}>
-                toggle extra resetKey
-              </button>
+              <button onClick={() => setExtra((e) => !e)}>toggle extra resetKey</button>
             </div>
           )}
           onReset={(...args) => {
@@ -312,14 +302,14 @@ test('supports automatic reset of error boundary when resetKeys change', () => {
   render(<App />)
 
   // blow it up
-  userEvent.click(screen.getByText('toggle explode'))
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  userEvent.click(screen.getByText("toggle explode"))
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // recover via try again button
   userEvent.click(screen.getByText(/try again/i))
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument()
   expect(consoleError).not.toHaveBeenCalled()
   expect(handleReset).toHaveBeenCalledWith(TRY_AGAIN_ARG1, TRY_AGAIN_ARG2)
   expect(handleReset).toHaveBeenCalledTimes(1)
@@ -327,62 +317,59 @@ test('supports automatic reset of error boundary when resetKeys change', () => {
   expect(handleResetKeysChange).not.toHaveBeenCalled()
 
   // blow it up again
-  userEvent.click(screen.getByText('toggle explode'))
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  userEvent.click(screen.getByText("toggle explode"))
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // recover via resetKeys change
-  userEvent.click(screen.getByText('toggle explode'))
+  userEvent.click(screen.getByText("toggle explode"))
   expect(handleResetKeysChange).toHaveBeenCalledWith([true], [false])
   expect(handleResetKeysChange).toHaveBeenCalledTimes(1)
   handleResetKeysChange.mockClear()
   expect(handleReset).not.toHaveBeenCalled()
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument()
   expect(consoleError).not.toHaveBeenCalled()
 
   // blow it up again
-  userEvent.click(screen.getByText('toggle explode'))
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  userEvent.click(screen.getByText("toggle explode"))
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // toggles adding an extra resetKey to the array
   // expect error to re-render
-  userEvent.click(screen.getByText('toggle extra resetKey'))
+  userEvent.click(screen.getByText("toggle extra resetKey"))
   expect(handleResetKeysChange).toHaveBeenCalledTimes(1)
   expect(handleResetKeysChange).toHaveBeenCalledWith([true], [true, true])
   handleResetKeysChange.mockClear()
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // toggle explode back to false
   // expect error to re-render again
-  userEvent.click(screen.getByText('toggle explode'))
+  userEvent.click(screen.getByText("toggle explode"))
   expect(handleReset).not.toHaveBeenCalled()
   expect(handleResetKeysChange).toHaveBeenCalledTimes(1)
-  expect(handleResetKeysChange).toHaveBeenCalledWith(
-    [true, true],
-    [false, true]
-  )
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  expect(handleResetKeysChange).toHaveBeenCalledWith([true, true], [false, true])
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   handleResetKeysChange.mockClear()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // toggle extra resetKey
   // expect error to be reset
-  userEvent.click(screen.getByText('toggle extra resetKey'))
+  userEvent.click(screen.getByText("toggle extra resetKey"))
   expect(handleReset).not.toHaveBeenCalled()
   expect(handleResetKeysChange).toHaveBeenCalledTimes(1)
   expect(handleResetKeysChange).toHaveBeenCalledWith([false, true], [false])
   handleResetKeysChange.mockClear()
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument()
   expect(consoleError).not.toHaveBeenCalled()
 })
 
-test('supports reset via resetKeys right after error is triggered on component mount', () => {
+test("supports reset via resetKeys right after error is triggered on component mount", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
   const handleResetKeysChange = jest.fn()
   function App() {
@@ -407,45 +394,43 @@ test('supports reset via resetKeys right after error is triggered on component m
   render(<App />)
 
   // it blows up on render
-  expect(screen.getByRole('alert')).toBeInTheDocument()
+  expect(screen.getByRole("alert")).toBeInTheDocument()
   expect(consoleError).toHaveBeenCalledTimes(2)
   consoleError.mockClear()
 
   // recover via "toggle explode" button
-  userEvent.click(screen.getByText('toggle explode'))
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  userEvent.click(screen.getByText("toggle explode"))
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument()
   expect(consoleError).not.toHaveBeenCalled()
   expect(handleResetKeysChange).toHaveBeenCalledWith([true], [false])
   expect(handleResetKeysChange).toHaveBeenCalledTimes(1)
 })
 
-test('should support not only function as FallbackComponent', () => {
+test("should support not only function as FallbackComponent", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
-  const FancyFallback = React.forwardRef(({ error }: FallbackProps) => (
+  const FancyFallback = React.forwardRef(({error}: FallbackProps) => (
     <div>
       <p>Everything is broken. Try again</p>
       <pre>{error.message}</pre>
     </div>
   ))
-  FancyFallback.displayName = 'FancyFallback'
+  FancyFallback.displayName = "FancyFallback"
 
   expect(() =>
     render(
       <ErrorBoundary FallbackComponent={FancyFallback}>
         <Bomb />
-      </ErrorBoundary>
-    )
+      </ErrorBoundary>,
+    ),
   ).not.toThrow()
 
-  expect(
-    screen.getByText('Everything is broken. Try again')
-  ).toBeInTheDocument()
+  expect(screen.getByText("Everything is broken. Try again")).toBeInTheDocument()
 
   consoleError.mockClear()
 })
 
-test('should throw error if FallbackComponent is not valid', () => {
+test("should throw error if FallbackComponent is not valid", () => {
   const consoleError = console.error as jest.Mock<void, unknown[]>
 
   expect(() =>
@@ -453,8 +438,8 @@ test('should throw error if FallbackComponent is not valid', () => {
       // @ts-expect-error we're testing the error case
       <ErrorBoundary FallbackComponent={{}}>
         <Bomb />
-      </ErrorBoundary>
-    )
+      </ErrorBoundary>,
+    ),
   ).toThrowError(/Element type is invalid/i)
 
   consoleError.mockClear()

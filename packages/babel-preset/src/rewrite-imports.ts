@@ -5,7 +5,7 @@ import { BabelType } from 'babel-plugin-tester';
  * https://astexplorer.net/#/gist/dd0cdbd56a701d8c9e078d20505b3980/latest
  */
 
-const defaultImportSource = 'next/stdlib';
+const defaultImportSource = '@blitzjs/core';
 
 const specialImports: Record<string, string> = {
   Link: 'next/link',
@@ -18,19 +18,16 @@ const specialImports: Record<string, string> = {
   Main: 'next/document',
   BlitzScript: 'next/document',
 
-  // AuthenticationError: 'next/stdlib',
-  // AuthorizationError: 'next/stdlib',
-  // CSRFTokenMismatchError: 'next/stdlib',
-  // NotFoundError: 'next/stdlib',
-  // PaginationArgumentError: 'next/stdlib',
-  // RedirectError: 'next/stdlib',
-  // formatZodError: 'next/stdlib',
-  // recursiveFormatZodErrors: 'next/stdlib',
-  // validateZodSchema: 'next/stdlib',
-  // enhancePrisma: 'next/stdlib',
-  // ErrorBoundary: 'next/stdlib',
-  // withErrorBoundary: 'next/stdlib',
-  // useErrorHandler: 'next/stdlib',
+  AuthenticationError: 'next/stdlib',
+  AuthorizationError: 'next/stdlib',
+  CSRFTokenMismatchError: 'next/stdlib',
+  NotFoundError: 'next/stdlib',
+  PaginationArgumentError: 'next/stdlib',
+  RedirectError: 'next/stdlib',
+  formatZodError: 'next/stdlib',
+  recursiveFormatZodErrors: 'next/stdlib',
+  validateZodSchema: 'next/stdlib',
+  enhancePrisma: 'next/stdlib',
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
