@@ -1,12 +1,16 @@
-import {getPublicDataStore, useAuthorizeIf, useSession} from "next/data-client"
-import {BlitzProvider} from "next/data-client"
-import {formatWithValidation} from "next/dist/shared/lib/utils"
-import {Head} from "next/head"
-import {RedirectError} from "next/stdlib"
-import {AppProps, BlitzPage} from "next/types"
-import React, {ComponentPropsWithoutRef, useEffect} from "react"
-import SuperJSON from "superjson"
-const debug = require("debug")("blitz:approot")
+import {
+  getPublicDataStore,
+  useAuthorizeIf,
+  useSession,
+  BlitzProvider,
+} from '../data-client/index'
+import { formatWithValidation } from '../shared/lib/utils'
+import { Head } from '../shared/lib/head'
+import { RedirectError } from './errors'
+import { AppProps, BlitzPage } from '../types/index'
+import React, { ComponentPropsWithoutRef, useEffect } from 'react'
+import SuperJSON from 'superjson'
+const debug = require('debug')('blitz:approot')
 
 const customCSS = `
   body::before {
@@ -34,15 +38,18 @@ const noscriptCSS = `
 const NoPageFlicker = () => {
   return (
     <Head>
-      <style dangerouslySetInnerHTML={{__html: customCSS}} />
+      <style dangerouslySetInnerHTML={{ __html: customCSS }} />
       <noscript>
-        <style dangerouslySetInnerHTML={{__html: noscriptCSS}} />
+        <style dangerouslySetInnerHTML={{ __html: noscriptCSS }} />
       </noscript>
     </Head>
   )
 }
 
-function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
+function getAuthValues(
+  Page: BlitzPage,
+  props: ComponentPropsWithoutRef<BlitzPage>
+) {
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
 
@@ -54,7 +61,10 @@ function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPag
       while (true) {
         const type = layout.type
 
-        if (type.authenticate !== undefined || type.redirectAuthenticatedTo !== undefined) {
+        if (
+          type.authenticate !== undefined ||
+          type.redirectAuthenticatedTo !== undefined
+        ) {
           authenticate = type.authenticate
           redirectAuthenticatedTo = type.redirectAuthenticatedTo
           break
@@ -69,51 +79,57 @@ function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPag
     }
   }
 
-  return {authenticate, redirectAuthenticatedTo}
+  return { authenticate, redirectAuthenticatedTo }
 }
 
 export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     // We call useSession so this will rerender anytime session changes
-    useSession({suspense: false})
+    useSession({ suspense: false })
 
-    let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+    let { authenticate, redirectAuthenticatedTo } = getAuthValues(Page, props)
 
     useAuthorizeIf(authenticate === true)
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const publicData = getPublicDataStore().getData()
       // We read directly from publicData.userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
       if (publicData.userId) {
-        debug("[BlitzInnerRoot] logged in")
+        debug('[BlitzInnerRoot] logged in')
 
-        if (typeof redirectAuthenticatedTo === "function") {
-          redirectAuthenticatedTo = redirectAuthenticatedTo({session: publicData})
+        if (typeof redirectAuthenticatedTo === 'function') {
+          redirectAuthenticatedTo = redirectAuthenticatedTo({
+            session: publicData,
+          })
         }
 
         if (redirectAuthenticatedTo) {
           const redirectUrl =
-            typeof redirectAuthenticatedTo === "string"
+            typeof redirectAuthenticatedTo === 'string'
               ? redirectAuthenticatedTo
               : formatWithValidation(redirectAuthenticatedTo)
 
-          debug("[BlitzInnerRoot] redirecting to", redirectUrl)
+          debug('[BlitzInnerRoot] redirecting to', redirectUrl)
           const error = new RedirectError(redirectUrl)
           error.stack = null!
           throw error
         }
       } else {
-        debug("[BlitzInnerRoot] logged out")
-        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
-          let {redirectTo} = authenticate
-          if (typeof redirectTo !== "string") {
+        debug('[BlitzInnerRoot] logged out')
+        if (
+          authenticate &&
+          typeof authenticate === 'object' &&
+          authenticate.redirectTo
+        ) {
+          let { redirectTo } = authenticate
+          if (typeof redirectTo !== 'string') {
             redirectTo = formatWithValidation(redirectTo)
           }
 
           const url = new URL(redirectTo, window.location.href)
-          url.searchParams.append("next", window.location.pathname)
-          debug("[BlitzInnerRoot] redirecting to", url.toString())
+          url.searchParams.append('next', window.location.pathname)
+          debug('[BlitzInnerRoot] redirecting to', url.toString())
           const error = new RedirectError(url.toString())
           error.stack = null!
           throw error
@@ -126,7 +142,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
   for (let [key, value] of Object.entries(Page)) {
     ;(BlitzInnerRoot as any)[key] = value
   }
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     BlitzInnerRoot.displayName = `BlitzInnerRoot`
   }
   return BlitzInnerRoot
@@ -134,9 +150,15 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    const component = React.useMemo(() => withBlitzInnerWrapper(props.Component), [props.Component])
+    const component = React.useMemo(
+      () => withBlitzInnerWrapper(props.Component),
+      [props.Component]
+    )
 
-    const {authenticate, redirectAuthenticatedTo} = getAuthValues(props.Component, props.pageProps)
+    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
+      props.Component,
+      props.pageProps
+    )
 
     const noPageFlicker =
       props.Component.suppressFirstRenderFlicker ||
@@ -144,15 +166,15 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       redirectAuthenticatedTo
 
     useEffect(() => {
-      document.documentElement.classList.add("blitz-first-render-complete")
+      document.documentElement.classList.add('blitz-first-render-complete')
     }, [])
 
-    let {dehydratedState, _superjson} = props.pageProps
+    let { dehydratedState, _superjson } = props.pageProps
     if (dehydratedState && _superjson) {
       const deserializedProps = SuperJSON.deserialize({
-        json: {dehydratedState},
+        json: { dehydratedState },
         meta: _superjson,
-      }) as {dehydratedState: any}
+      }) as { dehydratedState: any }
       dehydratedState = deserializedProps?.dehydratedState
     }
 
