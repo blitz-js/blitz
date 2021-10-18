@@ -1,5 +1,5 @@
 import {getConfig} from "@blitzjs/config"
-import {log, table as Table} from "@blitzjs/display"
+import {log} from "@blitzjs/display"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
