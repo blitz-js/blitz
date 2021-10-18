@@ -24,6 +24,10 @@ const specialImports: Record<string, string> = {
   NotFoundError: 'next/stdlib',
   PaginationArgumentError: 'next/stdlib',
   RedirectError: 'next/stdlib',
+  formatZodError: 'next/stdlib',
+  recursiveFormatZodErrors: 'next/stdlib',
+  validateZodSchema: 'next/stdlib',
+  enhancePrisma: 'next/stdlib',
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',

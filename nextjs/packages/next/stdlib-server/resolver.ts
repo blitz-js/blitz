@@ -6,7 +6,7 @@ import {
 } from 'next/types'
 import { Await, EnsurePromise } from 'next/types/utils'
 import type { input as zInput, output as zOutput, ZodTypeAny } from 'zod'
-import { ParserType } from '../stdlib/index'
+import { ParserType } from '../types/index'
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true

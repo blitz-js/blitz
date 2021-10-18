@@ -19,19 +19,13 @@
     "dist"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.41.1",
-    "@blitzjs/display": "0.41.1",
-    "chalk": "^4.1.0",
-    "cross-spawn": "7.0.3",
-    "htmlescape": "^1.1.1",
     "lodash.frompairs": "4.0.1",
     "next": "0.41.1",
-    "npm-which": "^3.0.1",
     "superjson": "1.7.2"
   },
   "devDependencies": {
     "react": "0.0.0-experimental-6a589ad71",
-    "zod": "3.8.1"
+    "zod": "3.10.1"
   },
   "repository": "https://github.com/blitz-js/blitz",
   "author": {

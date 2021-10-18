@@ -1,6 +1,6 @@
-import { Ctx } from 'next/types'
+import { ParserType, Ctx } from 'next/types'
 import { z } from 'zod'
-import { ParserType, resolver } from 'next/stdlib-server'
+import { resolver } from 'next/stdlib-server'
 
 describe('resolver', () => {
   it('should typecheck and pass along value', async () => {

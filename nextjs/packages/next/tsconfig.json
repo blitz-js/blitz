@@ -7,6 +7,11 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "useUnknownInCatchVariables": false,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
     "jsx": "react"
   },
   "exclude": ["dist", "./*.d.ts"]

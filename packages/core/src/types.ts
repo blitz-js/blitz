@@ -1,5 +1,3 @@
-export type {BlitzConfig} from "@blitzjs/config"
-
 export type QueryFn = (...args: any) => Promise<any>
 
 export type Dict<T> = Record<string, T | undefined>
@@ -15,13 +13,13 @@ export type Options = {
 // The actual resolver source definition
 export type Resolver<TInput, TResult> = (input: TInput, ctx?: any) => Promise<TResult>
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      _blitz_prismaClient: any
-    }
-  }
-}
+// declare global {
+//   namespace NodeJS {
+//     interface Global {
+//       _blitz_prismaClient: any
+//     }
+//   }
+// }
 
 export interface ErrorFallbackProps {
   error: Error & Record<any, any>

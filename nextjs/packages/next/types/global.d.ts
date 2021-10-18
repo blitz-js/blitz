@@ -9,6 +9,10 @@ declare namespace NodeJS {
   interface ProcessEnv {
     readonly NODE_ENV: 'development' | 'production' | 'test'
   }
+
+  interface Global {
+    _blitz_prismaClient: any
+  }
 }
 
 declare module '*.module.css' {
