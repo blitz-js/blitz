@@ -65,7 +65,6 @@ export function noSSR<P = {}>(
 
 // function dynamic<P = {}, O extends DynamicOptions>(options: O):
 
-export default dynamic
 export function dynamic<P = {}>(
   dynamicOptions: DynamicOptions<P> | Loader<P>,
   options?: DynamicOptions<P>
@@ -131,3 +130,4 @@ export function dynamic<P = {}>(
 
   return loadableFn(loadableOptions)
 }
+export default dynamic

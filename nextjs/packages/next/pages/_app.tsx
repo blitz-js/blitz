@@ -28,7 +28,6 @@ async function appGetInitialProps({
   return { pageProps }
 }
 
-export default App
 export class App<P = {}, CP = {}, S = {}> extends React.Component<
   P & AppProps<CP>,
   S
@@ -42,3 +41,4 @@ export class App<P = {}, CP = {}, S = {}> extends React.Component<
     return <Component {...pageProps} />
   }
 }
+export default App
