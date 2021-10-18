@@ -180,14 +180,14 @@ export class Install extends Command {
       }),
     )
 
-    const { recipeName } = await this.enquirer.prompt({
+    const {recipeName} = (await this.enquirer.prompt({
       type: "select",
       name: "recipeName",
       message: "Select a recipe to install",
       choices: recipesList,
-    }) as { recipeName: string }
+    })) as {recipeName: string}
 
-    return installRecipe.recipeName
+    return recipeName
   }
 
   /**
