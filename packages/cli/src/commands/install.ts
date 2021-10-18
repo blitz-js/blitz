@@ -248,13 +248,12 @@ export class Install extends Command {
 
     const {args} = this.parse(Install)
 
-    let recipeInfo
-    if (!args.recipe) {
+    let selectedRecipe = args.recipe
+    if (!selectedRecipe) {
       const officialRecipeList = await this.getOfficialRecipeList()
-      recipeInfo = this.normalizeRecipePath(await this.showRecipesPrompt(officialRecipeList))
-    } else {
-      recipeInfo = this.normalizeRecipePath(args.recipe)
+      selectedRecipe = await this.showRecipesPrompt(officialRecipeList)
     }
+    const recipeInfo = this.normalizeRecipePath(selectedRecipe)
 
     const originalCwd = process.cwd()
 
@@ -285,7 +284,7 @@ export class Install extends Command {
 4. A file path to a locally-written recipe.\n`)
         process.exit(1)
       } else {
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
+        let spinner = log.spinner(`Cloning GitHub repository for ${selectedRecipe} recipe`).start()
 
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
