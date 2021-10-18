@@ -156,29 +156,8 @@ export class Install extends Command {
     )
   }
 
-  async officialRecipeListTable(recipesList: string[]): Promise<string> {
-    const recipesTable = new Table({
-      columns: [
-        {
-          name: "Recipe name",
-          alignment: "left",
-        },
-        {
-          name: "Install command",
-          alignment: "left",
-        },
-      ],
-    })
+  async showRecipesPrompt(recipesList: string[]): Promise<string> {
     debug("recipesList", recipesList)
-    recipesTable.addRows(
-      recipesList.map((recipe) => {
-        return {
-          "Recipe name": recipe,
-          "Install command": `blitz install ${recipe}`,
-        }
-      }),
-    )
-
     const {recipeName} = (await this.enquirer.prompt({
       type: "select",
       name: "recipeName",
@@ -270,10 +249,9 @@ export class Install extends Command {
     const {args} = this.parse(Install)
 
     let recipeInfo
-    // show all official recipes
     if (!args.recipe) {
       const officialRecipeList = await this.getOfficialRecipeList()
-      recipeInfo = this.normalizeRecipePath(await this.officialRecipeListTable(officialRecipeList))
+      recipeInfo = this.normalizeRecipePath(await this.showRecipesPrompt(officialRecipeList))
     } else {
       recipeInfo = this.normalizeRecipePath(args.recipe)
     }
