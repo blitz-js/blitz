@@ -6,7 +6,7 @@ import {RedirectError} from "next/stdlib"
 import {AppProps, BlitzPage} from "next/types"
 import React, {ComponentPropsWithoutRef, useEffect} from "react"
 import SuperJSON from "superjson"
-import {clientDebug} from "./utils"
+const debug = require("debug")("blitz:approot")
 
 const customCSS = `
   body::before {
@@ -86,7 +86,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
       // We read directly from publicData.userId instead of useSession
       // so we can access userId on first render. useSession is always empty on first render
       if (publicData.userId) {
-        clientDebug("[BlitzInnerRoot] logged in")
+        debug("[BlitzInnerRoot] logged in")
 
         if (typeof redirectAuthenticatedTo === "function") {
           redirectAuthenticatedTo = redirectAuthenticatedTo({session: publicData})
@@ -98,13 +98,13 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
               ? redirectAuthenticatedTo
               : formatWithValidation(redirectAuthenticatedTo)
 
-          clientDebug("[BlitzInnerRoot] redirecting to", redirectUrl)
+          debug("[BlitzInnerRoot] redirecting to", redirectUrl)
           const error = new RedirectError(redirectUrl)
           error.stack = null!
           throw error
         }
       } else {
-        clientDebug("[BlitzInnerRoot] logged out")
+        debug("[BlitzInnerRoot] logged out")
         if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
           let {redirectTo} = authenticate
           if (typeof redirectTo !== "string") {
@@ -113,7 +113,7 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
 
           const url = new URL(redirectTo, window.location.href)
           url.searchParams.append("next", window.location.pathname)
-          clientDebug("[BlitzInnerRoot] redirecting to", url.toString())
+          debug("[BlitzInnerRoot] redirecting to", url.toString())
           const error = new RedirectError(url.toString())
           error.stack = null!
           throw error

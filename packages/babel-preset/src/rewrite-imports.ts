@@ -69,6 +69,8 @@ const specialImports: Record<string, string> = {
 
   getConfig: 'next/config',
   setConfig: 'next/config',
+
+  ErrorComponent: 'next/error',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

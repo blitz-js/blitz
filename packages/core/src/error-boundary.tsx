@@ -2,7 +2,7 @@ import {Router} from "next/router"
 import {RedirectError} from "next/stdlib"
 import * as React from "react"
 import {RouterContext} from "./router"
-import {clientDebug} from "./utils"
+const debug = require("debug")("blitz:errorboundary")
 
 const changedArray = (a: Array<unknown> = [], b: Array<unknown> = []) =>
   //eslint-disable-next-line es5/no-es6-static-methods
@@ -92,7 +92,7 @@ class ErrorBoundary extends React.Component<
 
   async componentDidCatch(error: Error, info: React.ErrorInfo) {
     if (error instanceof RedirectError) {
-      clientDebug("Redirecting from ErrorBoundary to", error.url)
+      debug("Redirecting from ErrorBoundary to", error.url)
       await (this.context as Router)?.push(error.url)
       return
     }
@@ -111,7 +111,7 @@ class ErrorBoundary extends React.Component<
   }
 
   handleRouteChange = () => {
-    clientDebug("Resetting error boundary on route change")
+    debug("Resetting error boundary on route change")
     this.props.onReset?.()
     this.reset()
   }

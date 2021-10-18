@@ -14,6 +14,8 @@ export * from "next/app"
 export * from "next/config"
 export * from "next/dynamic"
 export * from "next/head"
+export {ErrorComponent} from "next/error"
+export type {ErrorProps} from "next/error"
 
 export {Document, DocumentHead, Html, Main, BlitzScript} from "next/document"
 export type {DocumentProps, DocumentContext, DocumentInitialProps} from "next/document"
