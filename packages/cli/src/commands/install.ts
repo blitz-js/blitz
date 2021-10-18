@@ -89,7 +89,6 @@ export class Install extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
-    list: flags.boolean({char: "l", description: "show all official recipe list", default: false}),
   }
 
   static args = [
@@ -268,11 +267,11 @@ export class Install extends Command {
 
     await this.setupProxySupport()
 
-    const {args, flags} = this.parse(Install)
-    debug(`flags`, flags)
+    const {args} = this.parse(Install)
+
     let recipeInfo
     // show all official recipes
-    if (flags.list || !args.recipe) {
+    if (!args.recipe) {
       const officialRecipeList = await this.getOfficialRecipeList()
       recipeInfo = this.normalizeRecipePath(await this.officialRecipeListTable(officialRecipeList))
     } else {
