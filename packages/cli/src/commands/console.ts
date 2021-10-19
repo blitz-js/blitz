@@ -30,6 +30,6 @@ export class Console extends Command {
       require("../utils/setup-ts-node").setupTsnode()
     }
 
-    require("@blitzjs/repl").runRepl(Console.replOptions)
+    require("next/dist/cli/next-console").runRepl(Console.replOptions)
   }
 }
