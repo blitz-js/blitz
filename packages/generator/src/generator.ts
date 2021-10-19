@@ -215,6 +215,7 @@ export abstract class Generator<
     if (!this.useTs && tsExtension.test(pathEnding)) {
       return (
         babel.transform(templatedFile, {
+          configFile: false,
           plugins: [[babelTransformTypescript, {isTSX: true}]],
         })?.code || ""
       )
