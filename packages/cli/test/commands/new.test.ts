@@ -202,10 +202,12 @@ describe("`new` command", () => {
       })
     })
 
-    testIfNotWindows("accepts --dry-run flag and doesn't create a directory", async () => {
-      await whileStayingInCWD(() => New.run(["test-app", "--skip-upgrade", "--dry-run"]))
+    testIfNotWindows("accepts --dry-run flag and doesn't create files", async () => {
+      const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade", "--dry-run"]))
 
-      expect(fs.existsSync("test-app")).toBe(false)
+      expect(fs.existsSync(newAppDir)).toBe(true)
+      expect(fs.existsSync(path.join(newAppDir, "package.json"))).toBe(false)
       expect(stdout.output).toContain("Would create")
     })
 
