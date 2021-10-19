@@ -1,9 +1,4 @@
-export * from "@blitzjs/core/app"
-export * from "@blitzjs/core/config"
-export * from "@blitzjs/core/dynamic"
-export * from "@blitzjs/core/head"
-export * from "@blitzjs/core"
-export * from "@blitzjs/core/server"
+export type {BlitzConfig} from "@blitzjs/config"
 
 /*
  * IF YOU CHANGE THE BELOW EXPORTS
@@ -14,6 +9,13 @@ export {default as Image} from "next/image"
 export type {ImageProps, ImageLoader, ImageLoaderProps} from "next/image"
 
 export * from "next/link"
+export * from "next/app"
+export * from "next/config"
+export * from "next/dynamic"
+export * from "next/head"
+export {ErrorComponent} from "next/error"
+export type {ErrorProps} from "next/error"
+
 export {Document, DocumentHead, Html, Main, BlitzScript} from "next/document"
 export type {DocumentProps, DocumentContext, DocumentInitialProps} from "next/document"
 
