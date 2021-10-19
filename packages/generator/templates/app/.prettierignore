@@ -6,4 +6,6 @@ db/migrations
 .next
 .blitz
 .yarn
-.pnp*
+.pnp.*
+node_modules
+.blitz.config.compiled.js
