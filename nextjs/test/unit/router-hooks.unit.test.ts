@@ -1,10 +1,6 @@
-import {
-  extractRouterParams,
-  useParam,
-  useParams,
-  useRouterQuery,
-} from 'next/router'
-import { renderHook } from 'blitz-test-utils'
+import { useParam, useParams, useRouterQuery } from 'next/router'
+import { renderHook } from '../blitz-test-utils'
+import { extractRouterParams } from 'next/dist/shared/lib/router/router'
 
 describe('useRouterQuery', () => {
   it('returns proper values', () => {
