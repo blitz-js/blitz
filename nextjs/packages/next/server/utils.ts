@@ -44,7 +44,7 @@ export function resultToChunks(result: RenderResult): Promise<string[]> {
   })
 }
 
-export const isInternalDevelopment = __dirname.match(
+export const isInternalBlitzMonorepoDevelopment = __dirname.match(
   /[\\/]packages[\\/]next[\\/]dist[\\/]server$/
 )
 

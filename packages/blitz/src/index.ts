@@ -56,6 +56,7 @@ export type {
   Redirect,
   NextPage,
   BlitzPage,
+  BlitzLayout,
   AppProps,
   PageConfig,
   PreviewData,
