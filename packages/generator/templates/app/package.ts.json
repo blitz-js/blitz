@@ -34,14 +34,14 @@
     "@types/preview-email": "2.x",
     "@types/react": "17.x",
     "eslint": "7.x",
-    "husky": "6.x",
-    "lint-staged": "10.x",
-    "prettier-plugin-prisma": "0.x",
+    "husky": "7.x",
+    "lint-staged": "11.x",
+    "prettier-plugin-prisma": "3.x",
     "prettier": "2.x",
     "pretty-quick": "3.x",
     "preview-email": "3.x",
     "prisma": "3.x",
-    "typescript": "~4.3"
+    "typescript": "~4.4"
   },
   "private": true
 }
