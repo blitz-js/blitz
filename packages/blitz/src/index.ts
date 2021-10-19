@@ -1,4 +1,3 @@
-export * from "@blitzjs/core"
 export type {BlitzConfig} from "@blitzjs/config"
 
 /*

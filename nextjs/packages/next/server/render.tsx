@@ -31,7 +31,11 @@ import Loadable from '../shared/lib/loadable'
 import { LoadableContext } from '../shared/lib/loadable-context'
 import postProcess from '../shared/lib/post-process'
 import { RouterContext } from '../shared/lib/router-context'
-import { NextRouter } from '../shared/lib/router/router'
+import {
+  NextRouter,
+  extractRouterParams,
+  extractQueryFromAsPath,
+} from '../shared/lib/router/router'
 import { isDynamicRoute } from '../shared/lib/router/utils/is-dynamic'
 import {
   AppType,
@@ -74,6 +78,7 @@ class ServerRouter implements NextRouter {
   route: string
   pathname: string
   query: ParsedUrlQuery
+  params: ParsedUrlQuery
   asPath: string
   basePath: string
   events: any
@@ -103,6 +108,7 @@ class ServerRouter implements NextRouter {
     this.route = pathname.replace(/\/$/, '') || '/'
     this.pathname = pathname
     this.query = query
+    this.params = extractRouterParams(query, extractQueryFromAsPath(as))
     this.asPath = as
     this.isFallback = isFallback
     this.basePath = basePath

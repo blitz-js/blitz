@@ -4,6 +4,18 @@ export * from './zod-utils'
 export * from './prisma-utils'
 export * from './error-boundary'
 export * from './blitz-app-root'
+export {
+  default as Router,
+  BlitzRouter,
+  SingletonRouter,
+  RouterEvent,
+  withRouter,
+  useRouter,
+  useRouterQuery,
+  useParams,
+  useParam,
+} from '../client/router'
+export { RouterContext } from '../shared/lib/router-context'
 
 export const isServer = typeof window === 'undefined'
 export const isClient = typeof window !== 'undefined'
