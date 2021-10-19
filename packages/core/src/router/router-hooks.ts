@@ -1,7 +1,10 @@
 import fromPairs from "lodash.frompairs"
 import {useRouter} from "next/router"
 import {useMemo} from "react"
-import {Dict, ParsedUrlQuery, ParsedUrlQueryValue} from "../types"
+
+type Dict<T> = Record<string, T | undefined>
+type ParsedUrlQuery = Dict<string | string[]>
+type ParsedUrlQueryValue = string | string[] | undefined
 
 export function useRouterQuery() {
   const router = useRouter()

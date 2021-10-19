@@ -28,6 +28,9 @@ const specialImports: Record<string, string> = {
   recursiveFormatZodErrors: 'next/stdlib',
   validateZodSchema: 'next/stdlib',
   enhancePrisma: 'next/stdlib',
+  ErrorBoundary: 'next/stdlib',
+  withErrorBoundary: 'next/stdlib',
+  useErrorHandler: 'next/stdlib',
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
