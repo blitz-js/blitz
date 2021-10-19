@@ -1,6 +1,6 @@
-import {getProjectRoot} from "@blitzjs/config"
 import {watch} from "chokidar"
 import fs from "fs"
+import {getProjectRoot} from "next/dist/server/lib/utils"
 import os from "os"
 import path from "path"
 import * as REPL from "repl"

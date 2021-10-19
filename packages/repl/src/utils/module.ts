@@ -1,6 +1,6 @@
-import {getProjectRoot} from "@blitzjs/config"
+import {getProjectRootSync} from "next/server/lib/utils"
 
-const projectRoot = getProjectRoot()
+const projectRoot = getProjectRootSync()
 const isTypeScript = require("fs").existsSync(require("path").join(projectRoot, "tsconfig.json"))
 
 const invalidateCache = (module: string) => {

@@ -29,7 +29,6 @@
     "server"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.41.1",
     "@blitzjs/display": "0.41.1",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",

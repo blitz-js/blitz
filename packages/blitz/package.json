@@ -53,7 +53,6 @@
   "dependencies": {
     "@blitzjs/babel-preset": "0.41.1",
     "@blitzjs/cli": "0.41.1",
-    "@blitzjs/config": "0.41.1",
     "@blitzjs/core": "0.41.1",
     "@blitzjs/display": "0.41.1",
     "@blitzjs/generator": "0.41.1",

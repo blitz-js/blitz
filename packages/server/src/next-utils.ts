@@ -1,4 +1,3 @@
-import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
@@ -6,6 +5,7 @@ import detect from "detect-port"
 import * as esbuild from "esbuild"
 import {existsSync, readJSONSync} from "fs-extra"
 import {newline} from "next/dist/server/lib/logging"
+import {getProjectRoot} from "next/dist/server/lib/utils"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig} from "./config"
@@ -221,8 +221,8 @@ export function startCustomServer(
   config: ServerConfig,
   {watch}: CustomServerOptions = {},
 ) {
-  process.env.BLITZ_APP_DIR = config.rootFolder;
-  
+  process.env.BLITZ_APP_DIR = config.rootFolder
+
   const serverBuildPath = getCustomServerBuildPath()
 
   let spawnEnv = getSpawnEnv(config)
@@ -255,29 +255,31 @@ export function startCustomServer(
         })
     }
 
-    const skipDevCustomServerBuild = config.env === 'prod';
+    const skipDevCustomServerBuild = config.env === "prod"
 
     if (skipDevCustomServerBuild) {
-      spawnServer();
-      return;
+      spawnServer()
+      return
     }
 
     // Handle build & Starting server
     const esbuildOptions = getEsbuildOptions()
-    esbuildOptions.watch = watch ? {
-      onRebuild(error) {
-        if (error) {
-          log.error("Failed to re-build custom server")
-        } else {
-          newline()
-          log.progress("Custom server changed - restarting...")
-          newline()
-          //@ts-ignore -- incorrect TS type from node
-          process.exitCode = RESTART_CODE
-          process.kill("SIGABRT")
+    esbuildOptions.watch = watch
+      ? {
+          onRebuild(error) {
+            if (error) {
+              log.error("Failed to re-build custom server")
+            } else {
+              newline()
+              log.progress("Custom server changed - restarting...")
+              newline()
+              //@ts-ignore -- incorrect TS type from node
+              process.exitCode = RESTART_CODE
+              process.kill("SIGABRT")
+            }
+          },
         }
-      },
-    } : undefined
+      : undefined
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     esbuild.build(esbuildOptions).then(() => {
       spawnServer()

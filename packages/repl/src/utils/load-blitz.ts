@@ -1,14 +1,14 @@
-import {getProjectRoot} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import globby from "globby"
+import {getProjectRoot} from "next/dist/server/lib/utils"
 import path from "path"
 import ProgressBar from "progress"
 import {forceRequire} from "./module"
 const debug = require("debug")("blitz:repl")
 
-const projectRoot = getProjectRoot()
-
 export async function getBlitzModulePaths() {
+  const projectRoot = await getProjectRoot(process.cwd())
+
   const paths = await globby(
     [
       "app/**/{queries,mutations}/*.{js,ts,tsx}",
