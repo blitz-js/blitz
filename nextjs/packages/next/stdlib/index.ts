@@ -3,6 +3,7 @@ export * from './errors'
 export * from './zod-utils'
 export * from './prisma-utils'
 export * from './error-boundary'
+export * from './blitz-app-root'
 
 export const isServer = typeof window === 'undefined'
 export const isClient = typeof window !== 'undefined'

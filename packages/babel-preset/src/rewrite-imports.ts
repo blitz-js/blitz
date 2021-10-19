@@ -31,6 +31,7 @@ const specialImports: Record<string, string> = {
   ErrorBoundary: 'next/stdlib',
   withErrorBoundary: 'next/stdlib',
   useErrorHandler: 'next/stdlib',
+  withBlitzAppRoot: 'next/stdlib',
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
