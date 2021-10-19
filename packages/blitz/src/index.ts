@@ -1,5 +1,3 @@
-export type {BlitzConfig} from "@blitzjs/config"
-
 /*
  * IF YOU CHANGE THE BELOW EXPORTS
  *    You also need to update the rewrite map in

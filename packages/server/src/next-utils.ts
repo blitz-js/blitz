@@ -5,7 +5,7 @@ import detect from "detect-port"
 import * as esbuild from "esbuild"
 import {existsSync, readJSONSync} from "fs-extra"
 import {newline} from "next/dist/server/lib/logging"
-import {getProjectRoot} from "next/dist/server/lib/utils"
+import {getProjectRootSync} from "next/dist/server/lib/utils"
 import path from "path"
 import pkgDir from "pkg-dir"
 import {ServerConfig} from "./config"
@@ -147,7 +147,7 @@ export async function nextStart(nextBin: string, _buildFolder: string, config: S
 }
 
 export function getCustomServerPath() {
-  const projectRoot = getProjectRoot()
+  const projectRoot = getProjectRootSync()
 
   let serverPath = path.resolve(path.join(projectRoot, "server.ts"))
   if (existsSync(serverPath)) return serverPath
@@ -164,7 +164,7 @@ export function getCustomServerPath() {
   throw new Error("Unable to find custom server")
 }
 export function getCustomServerBuildPath() {
-  const projectRoot = getProjectRoot()
+  const projectRoot = getProjectRootSync()
   return path.resolve(projectRoot, ".next", "custom-server.js")
 }
 

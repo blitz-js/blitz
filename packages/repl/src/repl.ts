@@ -1,6 +1,5 @@
 import {watch} from "chokidar"
 import fs from "fs"
-import {getProjectRoot} from "next/dist/server/lib/utils"
 import os from "os"
 import path from "path"
 import * as REPL from "repl"
@@ -9,7 +8,7 @@ import {REPLCommand, REPLServer} from "repl"
 import {getBlitzModulePaths, loadBlitz} from "./utils/load-blitz"
 const debug = require("debug")("blitz:repl")
 
-const projectRoot = getProjectRoot()
+const projectRoot = require("next/dist/server/lib/utils").getProjectRootSync()
 
 const loadBlitzModules = (repl: REPLServer, modules: any) => {
   Object.assign(repl.context, modules)
