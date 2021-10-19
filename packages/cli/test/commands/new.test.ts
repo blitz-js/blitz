@@ -202,6 +202,13 @@ describe("`new` command", () => {
       })
     })
 
+    testIfNotWindows("accepts --dry-run flag and doesn't create a directory", async () => {
+      await whileStayingInCWD(() => New.run(["test-app", "--skip-upgrade", "--dry-run"]))
+
+      expect(fs.existsSync("test-app")).toBe(false)
+      expect(stdout.output).toContain("Would create")
+    })
+
     it("fetches latest version from template", async () => {
       const expectedVersion = "3.0.0"
       const templatePackage = {name: "eslint-plugin-react-hooks", version: "3.x"}
