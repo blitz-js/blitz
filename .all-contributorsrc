@@ -3292,7 +3292,8 @@
       "profile": "https://github.com/mochi-sann",
       "contributions": [
         "code",
-        "test"
+        "test",
+        "doc"
       ]
     }
   ],
