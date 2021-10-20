@@ -224,7 +224,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
                 j.objectProperty(
                   j.identifier("palette"),
                   j.objectExpression([
-                    j.objectProperty(j.identifier("type"), j.stringLiteral("light")),
+                    j.objectProperty(j.identifier("mode"), j.stringLiteral("light")),
                   ]),
                 ),
               ]),
