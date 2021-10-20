@@ -25,6 +25,7 @@ export * from "next/stdlib-server"
 export * from "next/data-client"
 
 export type {
+  BlitzConfig,
   NextPageContext,
   BlitzPageContext,
   NextComponentType,
