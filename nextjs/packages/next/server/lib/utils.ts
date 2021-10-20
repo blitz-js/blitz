@@ -23,7 +23,7 @@ export function getNodeOptionsWithoutInspect() {
 export async function getProjectRoot(dir: string) {
   const builtConfigPath = await findUp(CONFIG_FILE, { cwd: dir })
 
-  if (builtConfigPath) return builtConfigPath
+  if (builtConfigPath) return path.dirname(builtConfigPath)
 
   const pkgJsonPath = await findUp('package.json', { cwd: dir })
 
