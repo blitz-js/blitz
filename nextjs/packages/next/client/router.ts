@@ -1,6 +1,9 @@
 /* global window */
 import React from 'react'
-import Router from '../shared/lib/router/router'
+import Router, {
+  extractQueryFromAsPath,
+  extractRouterParams,
+} from '../shared/lib/router/router'
 import type { NextRouter } from '../shared/lib/router/router'
 import { RouterContext } from '../shared/lib/router-context'
 
@@ -17,6 +20,7 @@ type SingletonRouterBase = {
 export { Router }
 
 export type { NextRouter }
+export type BlitzRouter = NextRouter
 
 export type SingletonRouter = SingletonRouterBase & NextRouter
 
@@ -176,4 +180,87 @@ export function makePublicRouterInstance(router: Router): NextRouter {
   })
 
   return instance
+}
+
+export function useRouterQuery() {
+  const router = useRouter()
+
+  const query = React.useMemo(() => {
+    const query = extractQueryFromAsPath(router.asPath)
+    return query
+  }, [router.asPath])
+
+  return query
+}
+
+type Dict<T> = Record<string, T | undefined>
+type ReturnTypes = 'string' | 'number' | 'array'
+
+export function useParams(): Dict<string | string[]>
+export function useParams(returnType?: ReturnTypes): Dict<string | string[]>
+export function useParams(returnType: 'string'): Dict<string>
+export function useParams(returnType: 'number'): Dict<number>
+export function useParams(returnType: 'array'): Dict<string[]>
+
+export function useParams(
+  returnType?: 'string' | 'number' | 'array' | undefined
+) {
+  const router = useRouter()
+  const query = useRouterQuery()
+
+  const params = React.useMemo(() => {
+    const rawParams = extractRouterParams(router.query, query)
+
+    if (returnType === 'string') {
+      const params: Dict<string> = {}
+      for (const key in rawParams) {
+        if (typeof rawParams[key] === 'string') {
+          params[key] = rawParams[key] as string
+        }
+      }
+      return params
+    }
+
+    if (returnType === 'number') {
+      const params: Dict<number> = {}
+      for (const key in rawParams) {
+        if (rawParams[key]) {
+          const num = Number(rawParams[key])
+          params[key] = isNaN(num) ? undefined : num
+        }
+      }
+      return params
+    }
+
+    if (returnType === 'array') {
+      const params: Dict<string[]> = {}
+      for (const key in rawParams) {
+        const rawValue = rawParams[key]
+        if (Array.isArray(rawParams[key])) {
+          params[key] = rawValue as string[]
+        } else if (typeof rawValue === 'string') {
+          params[key] = [rawValue]
+        }
+      }
+      return params
+    }
+
+    return rawParams
+  }, [router.query, query, returnType])
+
+  return params
+}
+
+export function useParam(key: string): undefined | string | string[]
+export function useParam(key: string, returnType: 'string'): string | undefined
+export function useParam(key: string, returnType: 'number'): number | undefined
+export function useParam(key: string, returnType: 'array'): string[] | undefined
+export function useParam(
+  key: string,
+  returnType?: ReturnTypes
+): undefined | number | string | string[] {
+  const params = useParams(returnType)
+  const value = params[key]
+
+  return value
 }

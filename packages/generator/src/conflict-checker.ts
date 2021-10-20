@@ -24,6 +24,7 @@ export class ConflictChecker extends Transform {
     super({
       objectMode: true,
     })
+    this.options = options
   }
 
   _transform(file: File, _encoding: string, cb: TransformCallback): void {

@@ -1,6 +1,12 @@
-import {AuthenticatedSessionContext, Ctx, SessionContext, SessionContextBase} from "next/types"
-import {Await, EnsurePromise} from "next/types/utils"
-import type {input as zInput, output as zOutput, ZodTypeAny} from "zod"
+import {
+  AuthenticatedSessionContext,
+  Ctx,
+  SessionContext,
+  SessionContextBase,
+} from 'next/types'
+import { Await, EnsurePromise } from 'next/types/utils'
+import type { input as zInput, output as zOutput, ZodTypeAny } from 'zod'
+import { ParserType } from '../types/index'
 
 interface ResultWithContext<Result = unknown, Context = unknown> {
   __blitz: true
@@ -9,49 +15,84 @@ interface ResultWithContext<Result = unknown, Context = unknown> {
 }
 function isResultWithContext(x: unknown): x is ResultWithContext {
   return (
-    typeof x === "object" && x !== null && "ctx" in x && (x as ResultWithContext).__blitz === true
+    typeof x === 'object' &&
+    x !== null &&
+    'ctx' in x &&
+    (x as ResultWithContext).__blitz === true
   )
 }
 
-export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, "session"> {
+export interface AuthenticatedMiddlewareCtx extends Omit<Ctx, 'session'> {
   session: AuthenticatedSessionContext
 }
 
 type PipeFn<Prev, Next, PrevCtx, NextCtx = PrevCtx> = (
   i: Await<Prev>,
-  c: PrevCtx,
-) => Next extends ResultWithContext ? never : Next | ResultWithContext<Next, NextCtx>
+  c: PrevCtx
+) => Next extends ResultWithContext
+  ? never
+  : Next | ResultWithContext<Next, NextCtx>
 
-function pipe<A, Z>(ab: (i: A, c: Ctx) => Z): (input: A, ctx: Ctx) => EnsurePromise<Z>
+function pipe<A, Z>(
+  ab: (i: A, c: Ctx) => Z
+): (input: A, ctx: Ctx) => EnsurePromise<Z>
 function pipe<A, B, C, CA = Ctx, CB = CA, CC = CB>(
   ab: PipeFn<A, B, CA, CB>,
-  bc: PipeFn<B, C, CB, CC>,
+  bc: PipeFn<B, C, CB, CC>
 ): (input: A, ctx: CA) => EnsurePromise<C>
 function pipe<A, B, C, D, CA = Ctx, CB = CA, CC = CB, CD = CC>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
-  cd: PipeFn<C, D, CC, CD>,
+  cd: PipeFn<C, D, CC, CD>
 ): (input: A, ctx: CA) => EnsurePromise<D>
 function pipe<A, B, C, D, E, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
-  de: PipeFn<D, E, CD, CE>,
+  de: PipeFn<D, E, CD, CE>
 ): (input: A, ctx: CA) => EnsurePromise<E>
-function pipe<A, B, C, D, E, F, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE>(
+function pipe<
+  A,
+  B,
+  C,
+  D,
+  E,
+  F,
+  CA = Ctx,
+  CB = CA,
+  CC = CB,
+  CD = CC,
+  CE = CD,
+  CF = CE
+>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
-  ef: PipeFn<E, F, CE, CF>,
+  ef: PipeFn<E, F, CE, CF>
 ): (input: A, ctx: CA) => EnsurePromise<F>
-function pipe<A, B, C, D, E, F, G, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD, CF = CE, CG = CF>(
+function pipe<
+  A,
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  CA = Ctx,
+  CB = CA,
+  CC = CB,
+  CD = CC,
+  CE = CD,
+  CF = CE,
+  CG = CF
+>(
   ab: PipeFn<A, B, CA, CB>,
   bc: PipeFn<B, C, CB, CC>,
   cd: PipeFn<C, D, CC, CD>,
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
-  fg: PipeFn<F, G, CF, CG>,
+  fg: PipeFn<F, G, CF, CG>
 ): (input: A, ctx: CA) => EnsurePromise<CG>
 function pipe<
   A,
@@ -77,7 +118,7 @@ function pipe<
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
   fg: PipeFn<F, G, CF, CG>,
-  gh: PipeFn<G, H, CG, CH>,
+  gh: PipeFn<G, H, CG, CH>
 ): (input: A, ctx: CA) => EnsurePromise<H>
 function pipe<
   A,
@@ -106,7 +147,7 @@ function pipe<
   ef: PipeFn<E, F, CE, CF>,
   fg: PipeFn<F, G, CF, CG>,
   gh: PipeFn<G, H, CG, CH>,
-  hi: PipeFn<H, I, CH, CI>,
+  hi: PipeFn<H, I, CH, CI>
 ): (input: A, ctx: CA) => EnsurePromise<I>
 function pipe<
   A,
@@ -138,7 +179,7 @@ function pipe<
   fg: PipeFn<F, G, CF, CG>,
   gh: PipeFn<G, H, CG, CH>,
   hi: PipeFn<H, I, CH, CI>,
-  ij: PipeFn<I, J, CI, CJ>,
+  ij: PipeFn<I, J, CI, CJ>
 ): (input: A, ctx: CA) => EnsurePromise<J>
 function pipe<
   A,
@@ -173,7 +214,7 @@ function pipe<
   gh: PipeFn<G, H, CG, CH>,
   hi: PipeFn<H, I, CH, CI>,
   ij: PipeFn<I, J, CI, CJ>,
-  jk: PipeFn<J, K, CJ, CK>,
+  jk: PipeFn<J, K, CJ, CK>
 ): (input: A, ctx: CA) => EnsurePromise<K>
 function pipe<
   A,
@@ -211,7 +252,7 @@ function pipe<
   hi: PipeFn<H, I, CH, CI>,
   ij: PipeFn<I, J, CI, CJ>,
   jk: PipeFn<J, K, CJ, CK>,
-  kl: PipeFn<K, L, CK, CL>,
+  kl: PipeFn<K, L, CK, CL>
 ): (input: A, ctx: CA) => EnsurePromise<L>
 function pipe<
   A,
@@ -252,7 +293,7 @@ function pipe<
   ij: PipeFn<I, J, CI, CJ>,
   jk: PipeFn<J, K, CJ, CK>,
   kl: PipeFn<K, L, CK, CL>,
-  lm: PipeFn<L, M, CL, CM>,
+  lm: PipeFn<L, M, CL, CM>
 ): (input: A, ctx: CA) => EnsurePromise<M>
 function pipe(...args: unknown[]): unknown {
   const functions = args as PipeFn<unknown, unknown, Ctx>[]
@@ -271,9 +312,9 @@ function pipe(...args: unknown[]): unknown {
 }
 
 interface ResolverAuthorize {
-  <T, C = Ctx>(...args: Parameters<SessionContextBase["$authorize"]>): (
+  <T, C = Ctx>(...args: Parameters<SessionContextBase['$authorize']>): (
     input: T,
-    ctx: C,
+    ctx: C
   ) => ResultWithContext<T, AuthenticatedMiddlewareCtx>
 }
 
@@ -290,24 +331,30 @@ const authorize: ResolverAuthorize = (...args) => {
   }
 }
 
-export type ParserType = "sync" | "async"
-
-function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
+function zod<
+  Schema extends ZodTypeAny,
+  InputType = zInput<Schema>,
+  OutputType = zOutput<Schema>
+>(schema: Schema, parserType: 'sync'): (input: InputType) => OutputType
+function zod<
+  Schema extends ZodTypeAny,
+  InputType = zInput<Schema>,
+  OutputType = zOutput<Schema>
+>(
   schema: Schema,
-  parserType: "sync",
-): (input: InputType) => OutputType
-function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
-  schema: Schema,
-  parserType: "async",
+  parserType: 'async'
 ): (input: InputType) => Promise<OutputType>
-function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
-  schema: Schema,
-): (input: InputType) => Promise<OutputType>
-function zod<Schema extends ZodTypeAny, InputType = zInput<Schema>, OutputType = zOutput<Schema>>(
-  schema: Schema,
-  parserType: ParserType = "async",
-) {
-  if (parserType === "sync") {
+function zod<
+  Schema extends ZodTypeAny,
+  InputType = zInput<Schema>,
+  OutputType = zOutput<Schema>
+>(schema: Schema): (input: InputType) => Promise<OutputType>
+function zod<
+  Schema extends ZodTypeAny,
+  InputType = zInput<Schema>,
+  OutputType = zOutput<Schema>
+>(schema: Schema, parserType: ParserType = 'async') {
+  if (parserType === 'sync') {
     return (input: InputType): OutputType => schema.parse(input)
   } else {
     return (input: InputType): Promise<OutputType> => schema.parseAsync(input)

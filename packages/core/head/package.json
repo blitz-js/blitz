@@ -1,5 +1,0 @@
-{
-  "main": "dist/blitzjs-core-head.cjs.js",
-  "module": "dist/blitzjs-core-head.esm.js",
-  "types": "dist/blitzjs-core-head.cjs.d.ts"
-}
