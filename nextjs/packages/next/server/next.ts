@@ -130,6 +130,11 @@ export class NextServer {
     if (!this.serverPromise) {
       setTimeout(getServerImpl, 10)
       this.serverPromise = this.loadConfig().then(async (conf) => {
+        const initServerCallback = conf.experimental.initServer
+        if (initServerCallback) {
+          await initServerCallback()
+        }
+
         this.server = await this.createServer({
           ...this.options,
           conf,
