@@ -1,18 +1,11 @@
-import {ZodError} from "zod"
-import {ParserType} from "../server/resolver"
-
-export const isServer = typeof window === "undefined"
-export const isClient = typeof window !== "undefined"
-
-export function clientDebug(...args: any) {
-  if (typeof window !== "undefined" && (window as any)["DEBUG_BLITZ"]) {
-    console.log("[BLITZ]", Date.now(), ...args)
-  }
-}
+import { ParserType } from '../types/index'
+import { ZodError } from 'zod'
 
 export function formatZodError(error: ZodError) {
-  if (!error || typeof error.format !== "function") {
-    throw new Error("The argument to formatZodError must be a zod error with error.format()")
+  if (!error || typeof error.format !== 'function') {
+    throw new Error(
+      'The argument to formatZodError must be a zod error with error.format()'
+    )
   }
 
   const errors = error.format()
@@ -23,7 +16,7 @@ export function recursiveFormatZodErrors(errors: any) {
   let formattedErrors: Record<string, any> = {}
 
   for (const key in errors) {
-    if (key === "_errors") {
+    if (key === '_errors') {
       continue
     }
 
@@ -65,11 +58,20 @@ const validateZodSchemaAsync = (schema: any) => async (values: any) => {
 
 // type zodSchemaReturn = typeof validateZodSchemaAsync | typeof validateZodSchemaSync
 // : (((values:any) => any) | ((values:any) => Promise<any>)) =>
-export function validateZodSchema(schema: any, parserType: "sync"): (values: any) => any
-export function validateZodSchema(schema: any, parserType: "async"): (values: any) => Promise<any>
+export function validateZodSchema(
+  schema: any,
+  parserType: 'sync'
+): (values: any) => any
+export function validateZodSchema(
+  schema: any,
+  parserType: 'async'
+): (values: any) => Promise<any>
 export function validateZodSchema(schema: any): (values: any) => Promise<any>
-export function validateZodSchema(schema: any, parserType: ParserType = "async") {
-  if (parserType === "sync") {
+export function validateZodSchema(
+  schema: any,
+  parserType: ParserType = 'async'
+) {
+  if (parserType === 'sync') {
     return validateZodSchemaSync(schema)
   } else {
     return validateZodSchemaAsync(schema)

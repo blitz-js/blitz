@@ -52,27 +52,26 @@ Here is the starting structure of your app.
 ```
 __name__
 ├── app/
-│   ├── pages/
-│   │   ├── 404.tsx
-│   │   ├── _app.tsx
-│   │   ├── _document.tsx
-│   │   ├── index.test.tsx
-│   │   └── index.tsx
+│   ├── pages/
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   ├── 404.tsx
+│   │   ├── index.test.tsx
+│   │   └── index.tsx
 ├── public/
-│   ├── favicon.ico*
-│   └── logo.png
+│   ├── favicon.ico
+│   └── logo.png
 ├── test/
-│   ├── setup.ts
-│   └── utils.tsx
-├── README.md
+│   ├── setup.ts
+│   └── utils.tsx
+├── .eslintrc.js
 ├── babel.config.js
-├── blitz.config.js
-├── jest.config.js
+├── blitz.config.ts
+├── jest.config.ts
 ├── package.json
+├── README.md
 ├── tsconfig.json
-├── types.d.ts
-├── types.ts
-└── yarn.lock
+└── types.ts
 ```
 
 These files are:
@@ -87,9 +86,9 @@ These files are:
 
 - `tsconfig.json` is our recommended setup for TypeScript.
 
-- `.babelrc.js`, `.env`, etc. ("dotfiles") are configuration files for various bits of JavaScript tooling.
+- `.babel.config.js`, `.eslintrc.js`, `.env`, etc. ("dotfiles") are configuration files for various bits of JavaScript tooling.
 
-- `blitz.config.js` is for advanced custom configuration of Blitz. It extends [`next.config.js`](https://nextjs.org/docs/api-reference/next.config.js/introduction).
+- `blitz.config.ts` is for advanced custom configuration of Blitz. [Here you can learn how to use it](https://blitzjs.com/docs/blitz-config).
 
 - `jest.config.js` contains config for Jest tests. You can [customize it if needed](https://jestjs.io/docs/en/configuration).
 
@@ -99,9 +98,9 @@ You can read more about it in the [File Structure](https://blitzjs.com/docs/file
 
 Blitz comes with a set of tools that corrects and formats your code, facilitating its future maintenance. You can modify their options and even uninstall them.
 
-- **ESLint**: It lints your code: searches for bad practices and tell you about it. You can customize it via the `.eslintrc.js`, and you can install (or even write) plugins to have it the way you like it. It already comes with the [`blitz`](https://github.com/blitz-js/blitz/tree/canary/packages/eslint-config) config, but you can remove it safely. [Learn More](https://eslint.org).
-- **Husky**: It adds [githooks](https://git-scm.com/docs/githooks), little pieces of code that get executed when certain Git events are triggerd. For example, `pre-commit` is triggered just before a commit is created. You can see the current hooks inside `.husky/`. If are having problems commiting and pushing, check out ther [troubleshooting](https://typicode.github.io/husky/#/?id=troubleshoot) guide. [Learn More](https://typicode.github.io/husky).
-- **Prettier**: It formats your code to look the same everywhere. You can configure it via the `.prettierrc` file. The `.prettierignore` contains the files that should be ignored by Prettier; useful when you have large files or when you want to keep a custom formatting. [Learn More](https://prettier.io).
+- **ESLint**: It lints your code: searches for bad practices and tell you about it. You can customize it via the `.eslintrc.js`, and you can install (or even write) plugins to have it the way you like it. It already comes with the [`blitz`](https://github.com/blitz-js/blitz/tree/canary/packages/eslint-config) config, but you can remove it safely. [Learn More](https://blitzjs.com/docs/eslint-config).
+- **Husky**: It adds [githooks](https://git-scm.com/docs/githooks), little pieces of code that get executed when certain Git events are triggerd. For example, `pre-commit` is triggered just before a commit is created. You can see the current hooks inside `.husky/`. If are having problems commiting and pushing, check out ther [troubleshooting](https://typicode.github.io/husky/#/?id=troubleshoot) guide. [Learn More](https://blitzjs.com/docs/husky-config).
+- **Prettier**: It formats your code to look the same everywhere. You can configure it via the `.prettierrc` file. The `.prettierignore` contains the files that should be ignored by Prettier; useful when you have large files or when you want to keep a custom formatting. [Learn More](https://blitzjs.com/docs/prettier-config).
 
 ## Learn more
 
@@ -109,8 +108,8 @@ Read the [Blitz.js Documentation](https://blitzjs.com/docs/getting-started) to l
 
 The Blitz community is warm, safe, diverse, inclusive, and fun! Feel free to reach out to us in any of our communication channels.
 
-- [Website](https://blitzjs.com/)
-- [Discord](https://discord.blitzjs.com/)
+- [Website](https://blitzjs.com)
+- [Discord](https://blitzjs.com/discord)
 - [Report an issue](https://github.com/blitz-js/blitz/issues/new/choose)
 - [Forum discussions](https://github.com/blitz-js/blitz/discussions)
 - [How to Contribute](https://blitzjs.com/docs/contributing)

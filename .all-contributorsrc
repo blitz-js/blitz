@@ -3284,6 +3284,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mochi-sann",
+      "name": "Moyuru",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44772513?v=4",
+      "profile": "https://github.com/mochi-sann",
+      "contributions": [
+        "code",
+        "test",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
