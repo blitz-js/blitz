@@ -11,6 +11,25 @@ export type ExcludeRouterProps<P> = Pick<
   Exclude<keyof P, keyof WithRouterProps>
 >
 
+/**
+ * `withRouter` is a higher-order component that takes a component and returns a new one
+ * with an additional `router` prop.
+ *
+ * @example
+ * ```
+ * import {withRouter} from "blitz"
+ *
+ * function Page({router}) {
+ *  return <p>{router.pathname}</p>
+ * }
+ *
+ * export default withRouter(Page)
+ * ```
+ *
+ * @param WrappedComponent - a React component that needs `router` object in props
+ * @returns A component with a `router` object in props
+ * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
+ */
 export default function withRouter<
   P extends WithRouterProps,
   C = NextPageContext

@@ -134,6 +134,12 @@ export default singletonRouter as SingletonRouter
 // Reexport the withRoute HOC
 export { default as withRouter } from './with-router'
 
+/**
+ * `useRouter` is a React hook used to access `router` object within components
+ *
+ * @returns `router` object
+ * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
+ */
 export function useRouter(): NextRouter {
   return React.useContext(RouterContext)
 }
