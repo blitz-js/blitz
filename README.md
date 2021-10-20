@@ -110,9 +110,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
 </a></td>
- <td><a aria-label="Robert Malko" href="https://github.com/malkomalko">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rob_blitz.jpg" width="40px"/>
-</a></td>
  <td><a aria-label="Digas" href="https://digsas.com">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
 </a></td>
