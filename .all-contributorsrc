@@ -3313,6 +3313,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "vivek7405",
+      "name": "Vivek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24492244?v=4",
+      "profile": "https://github.com/vivek7405",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
