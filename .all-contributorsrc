@@ -3295,6 +3295,15 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "camsloanftc",
+      "name": "Cam Sloan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16295659?v=4",
+      "profile": "https://github.com/camsloanftc",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
