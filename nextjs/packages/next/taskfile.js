@@ -405,6 +405,16 @@ export async function ncc_lodash_curry(task, opts) {
     .target('compiled/lodash.curry')
 }
 // eslint-disable-next-line camelcase
+externals['lodash.frompairs'] = 'next/dist/compiled/lodash.frompairs'
+export async function ncc_lodash_frompairs(task, opts) {
+  await task
+    .source(
+      opts.src || relative(__dirname, require.resolve('lodash.frompairs'))
+    )
+    .ncc({ packageName: 'lodash.frompairs', externals })
+    .target('compiled/lodash.frompairs')
+}
+// eslint-disable-next-line camelcase
 externals['lru-cache'] = 'next/dist/compiled/lru-cache'
 export async function ncc_lru_cache(task, opts) {
   await task
@@ -781,6 +791,7 @@ export async function ncc(task, opts) {
         'ncc_jsonwebtoken',
         'ncc_loader_utils',
         'ncc_lodash_curry',
+        'ncc_lodash_frompairs',
         'ncc_lru_cache',
         'ncc_nanoid',
         'ncc_neo_async',

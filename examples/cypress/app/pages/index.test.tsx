@@ -1,8 +1,8 @@
 import { render } from "test/utils"
 import Home from "./index"
 
-jest.mock("@blitzjs/core", () => ({
-  ...jest.requireActual<object>("@blitzjs/core")!,
+jest.mock("next/data-client", () => ({
+  ...jest.requireActual<object>("next/data-client")!,
   useQuery: () => [
     {
       id: 1,

@@ -262,3 +262,5 @@ export type InferGetServerSidePropsType<T> = T extends GetServerSideProps<
     ) => Promise<GetServerSidePropsResult<infer P>>
   ? P
   : never
+
+export type ParserType = 'sync' | 'async'
