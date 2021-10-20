@@ -7,23 +7,63 @@ const config: BlitzConfig = {
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
-  template:{
-    typeToComponentMap: {
-      string: "LabeledTextField",
-      uuid: "LabeledTextField",
-      any: "LabeledTextField",
-      int: "LabeledTextField",
-      number: "LabeledTextField",
-      boolean: "LabeledTextField",
+  codegen:{
+    fieldTypeMap: {
+      string: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "string",
+        prismaType: "String"
+      },
+      boolean: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "boolean",
+        prismaType: "Boolean"
+      },
+      int: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Int"
+      },
+      bigint: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "BigInt"
+      },
+      float: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Float"
+      },
+      decimal: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Decimal"
+      },
+      datetime: {
+        component: "LabeledTextField",
+        inputType: "string",
+        zodType: "string",
+        prismaType: "DateTime"
+      },
+      uuid: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "string().uuid",
+        prismaType: "String"
+      },
+      json: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "any",
+        prismaType: "Json"
+      }
     },
-    typeToZodTypeMap: {
-      string: "string",
-      uuid: "string().uuid",
-      any: "any",
-      int: "number",
-      number: "number",
-      boolean: "boolean",
-    }
   }
   /* Uncomment this to customize the webpack config
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

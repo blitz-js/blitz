@@ -171,10 +171,9 @@ export type NextConfig = { [key: string]: any } & {
     pageDataCollectionTimeout?: number
     isrMemoryCacheSize?: number
     concurrentFeatures?: boolean
-  }  
-  template?:{
-    typeToComponentMap: { [key in string]: string },
-    typeToZodTypeMap: { [key in string]: string }
+  }
+  codegen?: {
+    fieldTypeMap: { [key in string]: { [key in string]: string } }
   }
 }
 
