@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.41.2-canary.2",
+  "version": "0.41.2-canary.3",
   "nextjsVersion": "11.1.0",
   "description": "The React Framework",
   "main": "./dist/server/next.js",

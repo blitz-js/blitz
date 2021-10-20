@@ -15,14 +15,12 @@
     "printWidth": 100
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix"
-    ]
+    "*.{js,ts,tsx}": ["eslint --fix"]
   },
   "dependencies": {
     "blitz": "canary",
-    "react-dom": "alpha",
-    "react": "alpha"
+    "react-dom": "18.0.0-alpha-5ca4b0433-20211020",
+    "react": "18.0.0-alpha-5ca4b0433-20211020"
   },
   "devDependencies": {
     "@types/react": "17.x",

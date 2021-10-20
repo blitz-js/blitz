@@ -3295,6 +3295,34 @@
         "test",
         "doc"
       ]
+    },
+    {
+      "login": "camsloanftc",
+      "name": "Cam Sloan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16295659?v=4",
+      "profile": "https://github.com/camsloanftc",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sitek94",
+      "name": "Maciek Sitkowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58401630?v=4",
+      "profile": "https://macieksitkowski.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "vivek7405",
+      "name": "Vivek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24492244?v=4",
+      "profile": "https://github.com/vivek7405",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
