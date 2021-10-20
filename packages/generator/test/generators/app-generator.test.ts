@@ -91,6 +91,9 @@ describe("AppGenerator", () => {
   })
 
   const generator = new AppGenerator({
+    template: {
+      path: "app",
+    },
     appName: "new-app",
     dryRun: false,
     useTs: true,

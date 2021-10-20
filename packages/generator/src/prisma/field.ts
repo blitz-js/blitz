@@ -9,6 +9,7 @@ export enum FieldType {
   Int = "Int",
   Json = "Json",
   String = "String",
+  Uuid = "Uuid",
 }
 
 export enum Relation {
@@ -55,10 +56,11 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static parse(input: string, schema?: ast.Schema): Field[] {
-    const [_fieldName, _fieldType = "String", attribute] = input.split(":")
+    const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
+    let attribute = _attribute
     let fieldName = uncapitalize(_fieldName)
     let fieldType = capitalize(_fieldType)
-    let isId = fieldName === "id"
+    const isId = fieldName === "id"
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
@@ -67,6 +69,7 @@ export class Field {
     let relationFromFields = undefined
     let relationToFields = undefined
     let maybeIdField = undefined
+
     if (fieldType.includes("?")) {
       fieldType = fieldType.replace("?", "")
       isRequired = false
@@ -75,6 +78,10 @@ export class Field {
       fieldType = fieldType.replace("[]", "")
       fieldName = uncapitalize(fieldName)
       isList = true
+    }
+    if (fieldType === FieldType.Uuid) {
+      fieldType = FieldType.String
+      attribute = "default=uuid"
     }
     // use original unmodified field name in case the list handling code
     // has modified fieldName

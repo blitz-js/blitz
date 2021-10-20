@@ -6,6 +6,7 @@ export * from './middleware'
 export * from './auth-sessions'
 export * from './auth-utils'
 export * from './passport-adapter'
+export * from './resolver'
 
 export function isLocalhost(req: NextApiRequest | IncomingMessage): boolean {
   let { host } = req.headers

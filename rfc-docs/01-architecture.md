@@ -83,7 +83,7 @@ The API for defining and using validation rules is TBD, but the plan is to integ
 
 Fine-grained authorization is another critical part of your data schema. In a Blitz app, you define your authorization rules one time, and then you can use them on both the server and the client.
 
-The API for defining and using authorization rules is TBD, but the plan is to integrate them with prisma client so all all prisma client reads & writes are always automatically authorized.
+The API for defining and using authorization rules is TBD, but the plan is to integrate them with prisma client so all prisma client reads & writes are always automatically authorized.
 
 ## 4. Computation
 
