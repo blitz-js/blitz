@@ -1,4 +1,3 @@
-import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
@@ -223,7 +222,9 @@ export class Install extends Command {
    *
    */
   private async setupProxySupport() {
-    const cli = getConfig().cli
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const blitzConfig = loadConfigProduction(process.cwd())
+    const cli = blitzConfig.cli
     const httpProxy = cli?.httpProxy || process.env.http_proxy || process.env.HTTP_PROXY
     const httpsProxy = cli?.httpsProxy || process.env.https_proxy || process.env.HTTPS_PROXY
     const noProxy = cli?.noProxy || process.env.no_proxy || process.env.NO_PROXY

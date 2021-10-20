@@ -37,9 +37,9 @@ export class Dev extends Command {
 
     try {
       const dev = (await import("@blitzjs/server")).dev
-      const {getConfig} = await import("@blitzjs/config")
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
 
-      const blitzConfig = getConfig()
+      const blitzConfig = loadConfigProduction(config.rootFolder)
       if (
         blitzConfig.cli?.clearConsoleOnBlitzDev !== false &&
         !process.env.BLITZ_TEST_ENVIRONMENT

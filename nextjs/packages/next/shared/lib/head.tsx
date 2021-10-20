@@ -27,21 +27,18 @@ function onlyReactElement(
   // Adds support for React.Fragment
   if (child.type === React.Fragment) {
     return list.concat(
-      React.Children.toArray(child.props.children).reduce(
-        (
-          fragmentList: Array<React.ReactElement<any>>,
-          fragmentChild: any // blitz :React.ReactChild
-        ): Array<React.ReactElement<any>> => {
-          if (
-            typeof fragmentChild === 'string' ||
-            typeof fragmentChild === 'number'
-          ) {
-            return fragmentList
-          }
-          return fragmentList.concat(fragmentChild)
-        },
-        []
-      ) as any //blitz
+      React.Children.toArray(child.props.children).reduce((
+        fragmentList: Array<React.ReactElement<any>>,
+        fragmentChild: any // blitz :React.ReactChild
+      ): Array<React.ReactElement<any>> => {
+        if (
+          typeof fragmentChild === 'string' ||
+          typeof fragmentChild === 'number'
+        ) {
+          return fragmentList
+        }
+        return fragmentList.concat(fragmentChild)
+      }, []) as any //blitz
     )
   }
   return list.concat(child)
@@ -147,9 +144,10 @@ function reduceComponents(
           c.type === 'link' &&
           c.props['href'] &&
           // TODO(prateekbh@): Replace this with const from `constants` when the tree shaking works.
-          ['https://fonts.googleapis.com/css', 'https://use.typekit.net/'].some(
-            (url) => c.props['href'].startsWith(url)
-          )
+          [
+            'https://fonts.googleapis.com/css',
+            'https://use.typekit.net/',
+          ].some((url) => c.props['href'].startsWith(url))
         ) {
           const newProps = { ...(c.props || {}) }
           newProps['data-href'] = newProps['href']
