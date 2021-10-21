@@ -13,7 +13,6 @@ import {PromptAbortedError} from "../errors/prompt-aborted"
 import {runPrisma} from "./prisma"
 
 export interface Flags {
-  js: boolean
   "skip-install": boolean
   "skip-upgrade": boolean
   "dry-run": boolean
@@ -23,6 +22,7 @@ export interface Flags {
   yarn: boolean
   form?: string
   template?: string
+  language?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -62,10 +62,9 @@ export class New extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
-    js: flags.boolean({
-      description: "Generates a JS project. TypeScript is the default unless you add this flag.",
-      default: false,
-      hidden: true,
+    language: flags.string({
+      description: "Pick your new app language. Options: typescript, javascript.",
+      options: ["typescript", "javascript"],
     }),
     npm: flags.boolean({
       description: "Use npm as the package manager",
@@ -272,8 +271,8 @@ export class New extends Command {
   }
 
   private async determineLanguage(flags: Flags): Promise<void> {
-    if (flags.js) {
-      this.useTs = false
+    if (flags.language) {
+      this.useTs = flags.language === "typescript"
     } else {
       const {language} = (await this.enquirer.prompt({
         type: "select",
