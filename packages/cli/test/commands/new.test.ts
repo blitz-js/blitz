@@ -202,6 +202,30 @@ describe("`new` command", () => {
       })
     })
 
+    testIfNotWindows("generates javascript app with --language=javascript flag", async () => {
+      await withNewApp(["--language=javascript", "--template=minimal"], (dirName, packageJson) => {
+        const {
+          devDependencies: {typescript},
+        } = packageJson
+
+        expect(typescript).toBeUndefined()
+
+        expect(fs.existsSync(path.join(dirName, "jsconfig.json"))).toBe(true)
+      })
+    })
+
+    testIfNotWindows("generates typescript app with --language=typescript flag", async () => {
+      await withNewApp(["--language=typescript", "--template=minimal"], (dirName, packageJson) => {
+        const {
+          devDependencies: {typescript},
+        } = packageJson
+
+        expect(typescript).not.toBeUndefined()
+
+        expect(fs.existsSync(path.join(dirName, "tsconfig.json"))).toBe(true)
+      })
+    })
+
     testIfNotWindows("accepts --dry-run flag and doesn't create files", async () => {
       const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
       await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade", "--dry-run"]))
