@@ -3323,6 +3323,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "cj",
+      "name": "CJ Lazell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1819?v=4",
+      "profile": "http://cj.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
