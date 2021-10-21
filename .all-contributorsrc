@@ -3332,6 +3332,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "RobertBroersma",
+      "name": "Robert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4519828?v=4",
+      "profile": "robertbroersma.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
