@@ -1,5 +1,5 @@
 import { Logger } from 'tslog'
-import { loadConfigAtRuntime, LogLevel } from '../config-shared'
+import { loadConfigAtRuntime, LogLevel } from '../server/config-shared'
 
 // eslint-disable-next-line
 declare module globalThis {
@@ -28,7 +28,7 @@ export const newline = () => {
   }
 }
 
-export const baseLogger = (): Logger => {
+export const logger = (): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
   let config

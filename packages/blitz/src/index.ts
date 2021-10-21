@@ -4,8 +4,6 @@ export * from "@blitzjs/core/dynamic"
 export * from "@blitzjs/core/head"
 export * from "@blitzjs/core"
 export * from "@blitzjs/core/server"
-export * from "@blitzjs/display"
-
 /*
  * IF YOU CHANGE THE BELOW EXPORTS
  *    You also need to update the rewrite map in

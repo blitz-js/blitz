@@ -23,7 +23,7 @@ import {
   getAndValidateMiddleware,
   handleRequestWithMiddleware,
 } from './middleware'
-import { baseLogger, newline } from './lib/logging'
+import { logger, newline } from '../stdlib-server/logging'
 
 export type NextApiRequestCookies = { [key: string]: string }
 export type NextApiRequestQuery = { [key: string]: string | string[] }
@@ -171,7 +171,7 @@ export function getRpcMiddleware(
   { route }: RpcHandlerCtx
 ): Middleware {
   return async (req, res, next) => {
-    const log = baseLogger().getChildLogger({
+    const log = logger().getChildLogger({
       prefix: [route.replace('/api/rpc/', '') + '()'],
     })
 

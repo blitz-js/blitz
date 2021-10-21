@@ -1,5 +1,5 @@
 /* @eslint-disable no-redeclare */
-import { baseLogger } from '../server/lib/logging'
+import { logger } from './logging'
 import cookieSession from 'cookie-session'
 import passport from 'passport'
 import type { AuthenticateOptions, Strategy } from 'passport'
@@ -71,7 +71,7 @@ export type VerifyCallbackResult = {
 
 export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
   return async function authHandler(req, res) {
-    const log = baseLogger().getChildLogger()
+    const log = logger().getChildLogger()
     const appConfig = loadConfigAtRuntime()
     const globalMiddleware = getAndValidateMiddleware(
       appConfig,

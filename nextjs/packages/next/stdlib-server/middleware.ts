@@ -15,7 +15,7 @@ import { loadConfigAtRuntime } from '../server/config-shared'
 import chalk from 'chalk'
 import { interopDefault } from '../server/load-components'
 import { AsyncFunc, FirstParam, PromiseReturnType } from '../types/utils'
-import { baseLogger, newline } from '../server/lib/logging'
+import { logger, newline } from './logging'
 import { RpcResolver } from '../data-client/rpc'
 
 export type InvokeWithMiddlewareConfig = {
@@ -59,7 +59,7 @@ export async function invokeWithMiddleware<
   }
 
   middleware.push(async (_req, res, next) => {
-    const log = baseLogger().getChildLogger({
+    const log = logger().getChildLogger({
       prefix: [resolverName + '()'],
     })
     newline()

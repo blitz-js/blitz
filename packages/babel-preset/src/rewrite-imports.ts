@@ -36,6 +36,7 @@ const specialImports: Record<string, string> = {
   SecurePassword: 'next/stdlib-server',
   hash256: 'next/stdlib-server',
   generateToken: 'next/stdlib-server',
+  logger: 'next/stdlib-server',
 
   BlitzProvider: 'next/data-client',
   getAntiCSRFToken: 'next/data-client',

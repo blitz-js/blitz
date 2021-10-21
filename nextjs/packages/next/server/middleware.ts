@@ -7,7 +7,7 @@ import {
   MiddlewareRequest,
   MiddlewareResponse,
 } from '../shared/lib/utils'
-import { baseLogger, newline } from './lib/logging'
+import { logger, newline } from '../stdlib-server/logging'
 const debug = require('debug')('blitz:middleware')
 
 export function getAndValidateMiddleware(
@@ -49,7 +49,7 @@ export async function handleRequestWithMiddleware(
     stackPrintOnError?: boolean
   } = {}
 ) {
-  const log = baseLogger().getChildLogger()
+  const log = logger().getChildLogger()
 
   if (!(res as MiddlewareResponse).blitzCtx) {
     ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
