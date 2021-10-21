@@ -213,11 +213,11 @@ export abstract class Generator<
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
-      return (
+      templatedFile =
         babel.transform(templatedFile, {
+          configFile: false,
           plugins: [[babelTransformTypescript, {isTSX: true}]],
         })?.code || ""
-      )
     }
 
     if (
@@ -229,6 +229,8 @@ export abstract class Generator<
       const options: Record<any, any> = {...prettierOptions}
       if (this.useTs) {
         options.parser = "babel-ts"
+      } else {
+        options.parser = "babel"
       }
       try {
         templatedFile = this.prettier.format(templatedFile, options)
