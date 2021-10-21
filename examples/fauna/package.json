@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "blitz": "0.39.0-canary.0",
+    "blitz": "0.41.2-canary.4",
     "final-form": "4.20.1",
     "graphql": "15.5.0",
     "graphql-request": "3.4.0",
@@ -41,7 +41,6 @@
     "@testing-library/react-hooks": "^4.0.1",
     "@types/react": "17.0.2",
     "@types/secure-password": "3.1.0",
-    "babel-eslint": "~10.1.0",
     "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",
     "eslint-plugin-flowtype": "~5.2.0",

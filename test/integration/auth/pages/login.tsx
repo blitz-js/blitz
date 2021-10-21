@@ -1,7 +1,7 @@
 import login from "app/mutations/login"
 import logout from "app/mutations/logout"
 import getCurrentUser from "app/queries/getCurrentUser"
-import {useMutation, useQuery, useRouter, useSession} from "blitz"
+import {useMutation, useQuery, useRouter} from "blitz"
 import {Suspense, useState} from "react"
 
 function Content() {
@@ -22,7 +22,7 @@ function Content() {
           onClick={async () => {
             try {
               await logoutMutation()
-            } catch (error) {
+            } catch (error: any) {
               setError(error.toString())
             }
           }}

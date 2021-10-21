@@ -2,7 +2,7 @@ import { loadEnvConfig } from '@next/env'
 import chalk from 'chalk'
 import crypto from 'crypto'
 import { promises, writeFileSync } from 'fs'
-import { Worker } from 'jest-worker'
+import { Worker } from '../lib/worker'
 import devalue from 'next/dist/compiled/devalue'
 import escapeStringRegexp from 'next/dist/compiled/escape-string-regexp'
 import findUp from 'next/dist/compiled/find-up'
@@ -18,6 +18,7 @@ import { fileExists } from '../lib/file-exists'
 import loadCustomRoutes, {
   CustomRoutes,
   getRedirectStatus,
+  modifyRouteRegex,
   normalizeRouteRegex,
   Redirect,
   Rewrite,
@@ -44,21 +45,18 @@ import {
   SERVER_DIRECTORY,
   SERVER_FILES_MANIFEST,
   STATIC_STATUS_PAGES,
-} from '../next-server/lib/constants'
+} from '../shared/lib/constants'
 import {
   getRouteRegex,
   getSortedRoutes,
   isDynamicRoute,
-} from '../next-server/lib/router/utils'
-import { __ApiPreviewProps } from '../next-server/server/api-utils'
-import loadConfig, {
-  isTargetLikeServerless,
-  NextConfig,
-} from '../next-server/server/config'
-import { BuildManifest } from '../next-server/server/get-page-files'
-import '../next-server/server/node-polyfill-fetch'
-import { normalizePagePath } from '../next-server/server/normalize-page-path'
-import { getPagePath } from '../next-server/server/require'
+} from '../shared/lib/router/utils'
+import { __ApiPreviewProps } from '../server/api-utils'
+import loadConfig, { isTargetLikeServerless } from '../server/config'
+import { BuildManifest } from '../server/get-page-files'
+import '../server/node-polyfill-fetch'
+import { normalizePagePath } from '../server/normalize-page-path'
+import { getPagePath } from '../server/require'
 import * as ciEnvironment from '../telemetry/ci-info'
 import {
   eventBuildCompleted,
@@ -88,8 +86,10 @@ import {
 import getBaseWebpackConfig from './webpack-config'
 import { PagesManifest } from './webpack/plugins/pages-manifest-plugin'
 import { writeBuildId } from './write-build-id'
-import { normalizeLocalePath } from '../next-server/lib/i18n/normalize-locale-path'
+import { normalizeLocalePath } from '../shared/lib/i18n/normalize-locale-path'
 import { isWebpack5 } from 'next/dist/compiled/webpack/webpack'
+import { NextConfigComplete } from '../server/config-shared'
+import { saveRouteManifest } from './routes'
 
 const staticCheckWorker = require.resolve('./utils')
 
@@ -129,7 +129,7 @@ export default async function build(
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
 
-    const config: NextConfig = await nextBuildSpan
+    const config: NextConfigComplete = await nextBuildSpan
       .traceChild('load-next-config')
       .traceAsyncFn(() => loadConfig(PHASE_PRODUCTION_BUILD, dir, conf))
     const { target } = config
@@ -177,6 +177,12 @@ export default async function build(
     eventNextPlugins(path.resolve(dir)).then((events) =>
       telemetry.record(events)
     )
+
+    const routeManifestSpinner = createSpinner({
+      prefixText: `${Log.prefixes.info} Generating route manifest`,
+    })
+    await saveRouteManifest(pagesDir, config)
+    routeManifestSpinner?.stopAndPersist()
 
     const ignoreTypeScriptErrors = Boolean(config.typescript?.ignoreBuildErrors)
     const typeCheckStart = process.hrtime()
@@ -267,7 +273,8 @@ export default async function build(
           buildId,
           previewProps,
           config,
-          loadedEnvFiles
+          loadedEnvFiles,
+          { pagesDir }
         )
       )
     const pageKeys = Object.keys(mappedPages)
@@ -331,6 +338,10 @@ export default async function build(
       )
     }
 
+    const restrictedRedirectPaths = ['/_next'].map((p) =>
+      config.basePath ? `${config.basePath}${p}` : p
+    )
+
     const buildCustomRoute = (
       r: {
         source: string
@@ -348,6 +359,14 @@ export default async function build(
         sensitive: false,
         delimiter: '/', // default is `/#?`, but Next does not pass query info
       })
+      let regexSource = routeRegex.source
+
+      if (!(r as any).internal) {
+        regexSource = modifyRouteRegex(
+          routeRegex.source,
+          type === 'redirect' ? restrictedRedirectPaths : undefined
+        )
+      }
 
       return {
         ...r,
@@ -357,7 +376,7 @@ export default async function build(
               permanent: undefined,
             }
           : {}),
-        regex: normalizeRouteRegex(routeRegex.source),
+        regex: normalizeRouteRegex(regexSource),
       }
     }
 
@@ -665,19 +684,43 @@ export default async function build(
       customAppGetInitialProps,
       namedExports,
       isNextImageImported,
-      isBlitzSessionMiddlewareUsed,
       hasSsrAmpPages,
       hasNonStaticErrorPage,
     } = await staticCheckSpan.traceAsyncFn(async () => {
       process.env.NEXT_PHASE = PHASE_PRODUCTION_BUILD
 
+      const timeout = config.experimental.pageDataCollectionTimeout || 0
+      let infoPrinted = false
       const staticCheckWorkers = new Worker(staticCheckWorker, {
+        timeout: timeout * 1000,
+        onRestart: (_method, [pagePath], attempts) => {
+          if (attempts >= 2) {
+            throw new Error(
+              `Collecting page data for ${pagePath} is still timing out after 2 attempts. See more info here https://nextjs.org/docs/messages/page-data-collection-timeout`
+            )
+          }
+          Log.warn(
+            `Restarted collecting page data for ${pagePath} because it took more than ${timeout} seconds`
+          )
+          if (!infoPrinted) {
+            Log.warn(
+              'See more info here https://nextjs.org/docs/messages/page-data-collection-timeout'
+            )
+            infoPrinted = true
+          }
+        },
         numWorkers: config.experimental.cpus,
         enableWorkerThreads: config.experimental.workerThreads,
-      }) as Worker & typeof import('./utils')
-
-      staticCheckWorkers.getStdout().pipe(process.stdout)
-      staticCheckWorkers.getStderr().pipe(process.stderr)
+        exposedMethods: [
+          'hasCustomGetInitialProps',
+          'isPageStatic',
+          'getNamedExports',
+        ],
+      }) as Worker &
+        Pick<
+          typeof import('./utils'),
+          'hasCustomGetInitialProps' | 'isPageStatic' | 'getNamedExports'
+        >
 
       const runtimeEnvConfig = {
         publicRuntimeConfig: config.publicRuntimeConfig,
@@ -707,6 +750,7 @@ export default async function build(
             distDir,
             isLikeServerless,
             runtimeEnvConfig,
+            config.httpAgentOptions,
             config.i18n?.locales,
             config.i18n?.defaultLocale
           )
@@ -733,8 +777,6 @@ export default async function build(
 
       // eslint-disable-next-line no-shadow
       let isNextImageImported: boolean | undefined
-      // eslint-disable-next-line no-shadow
-      let isBlitzSessionMiddlewareUsed: boolean | undefined
       // eslint-disable-next-line no-shadow
       let hasSsrAmpPages = false
 
@@ -778,6 +820,7 @@ export default async function build(
                     distDir,
                     isLikeServerless,
                     runtimeEnvConfig,
+                    config.httpAgentOptions,
                     config.i18n?.locales,
                     config.i18n?.defaultLocale,
                     isPageStaticSpan.id
@@ -798,10 +841,6 @@ export default async function build(
 
                 if (workerResult.isNextImageImported) {
                   isNextImageImported = true
-                }
-
-                if (workerResult.isBlitzSessionMiddlewareUsed) {
-                  isBlitzSessionMiddlewareUsed = true
                 }
 
                 if (workerResult.hasStaticProps) {
@@ -874,6 +913,8 @@ export default async function build(
               isHybridAmp,
               ssgPageRoutes,
               initialRevalidateSeconds: false,
+              pageDuration: undefined,
+              ssgPageDurations: undefined,
             })
           })
         })
@@ -888,7 +929,6 @@ export default async function build(
         customAppGetInitialProps: await customAppGetInitialPropsPromise,
         namedExports: await namedExportsPromise,
         isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
         hasSsrAmpPages,
         hasNonStaticErrorPage: nonStaticErrorPage,
       }
@@ -1061,6 +1101,7 @@ export default async function build(
         const exportConfig: any = {
           ...config,
           initialPageRevalidationMap: {},
+          pageDurationMap: {},
           ssgNotFoundPaths: [] as string[],
           // Default map will be the collection of automatic statically exported
           // pages and incremental pages.
@@ -1308,6 +1349,18 @@ export default async function build(
           const hasAmp = hybridAmpPages.has(page)
           const file = normalizePagePath(page)
 
+          const pageInfo = pageInfos.get(page)
+          const durationInfo = exportConfig.pageDurationMap[page]
+          if (pageInfo && durationInfo) {
+            // Set Build Duration
+            if (pageInfo.ssgPageRoutes) {
+              pageInfo.ssgPageDurations = pageInfo.ssgPageRoutes.map(
+                (pagePath) => durationInfo[pagePath]
+              )
+            }
+            pageInfo.pageDuration = durationInfo[page]
+          }
+
           // The dynamic version of SSG pages are only prerendered if the
           // fallback is enabled. Below, we handle the specific prerenders
           // of these.
@@ -1363,11 +1416,9 @@ export default async function build(
                 }
               }
               // Set Page Revalidation Interval
-              const pageInfo = pageInfos.get(page)
               if (pageInfo) {
                 pageInfo.initialRevalidateSeconds =
                   exportConfig.initialPageRevalidationMap[page]
-                pageInfos.set(page, pageInfo)
               }
             } else {
               // For a dynamic SSG page, we did not copy its data exports and only
@@ -1426,11 +1477,9 @@ export default async function build(
                 }
 
                 // Set route Revalidation Interval
-                const pageInfo = pageInfos.get(route)
                 if (pageInfo) {
                   pageInfo.initialRevalidateSeconds =
                     exportConfig.initialPageRevalidationMap[route]
-                  pageInfos.set(route, pageInfo)
                 }
               }
             }
@@ -1534,7 +1583,7 @@ export default async function build(
 
     const images = { ...config.images }
     const { deviceSizes, imageSizes } = images
-    images.sizes = [...deviceSizes, ...imageSizes]
+    ;(images as any).sizes = [...deviceSizes, ...imageSizes]
 
     await promises.writeFile(
       path.join(distDir, IMAGES_MANIFEST),
@@ -1551,7 +1600,6 @@ export default async function build(
         hasExportPathMap: typeof config.exportPathMap === 'function',
         exportTrailingSlash: config.trailingSlash === true,
         isNextImageImported: isNextImageImported === true,
-        isBlitzSessionMiddlewareUsed: isBlitzSessionMiddlewareUsed === true,
       }),
       'utf8'
     )

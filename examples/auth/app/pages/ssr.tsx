@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
       {res, req},
     )
     return {props: {user}}
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === "NotFoundError") {
       res.statusCode = 404
       res.end()

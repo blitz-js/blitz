@@ -56,6 +56,8 @@ const nextDev: cliCommand = (argv) => {
     printAndExit(`> No such directory exists as the project root: ${dir}`)
   }
 
+  process.env.BLITZ_APP_DIR = dir
+
   async function preflight() {
     const { getPackageVersion } = await import('../lib/get-package-version')
     const [sassVersion, nodeSassVersion] = await Promise.all([
@@ -78,7 +80,7 @@ const nextDev: cliCommand = (argv) => {
 
   startServer({ dir, dev: true, isNextDevCommand: true }, port, host)
     .then(async (app) => {
-      startedDevelopmentServer(appUrl, `${host}:${port}`)
+      startedDevelopmentServer(appUrl, `${host || '0.0.0.0'}:${port}`)
       // Start preflight after server is listening and ignore errors:
       preflight().catch(() => {})
       // Finalize server bootup:

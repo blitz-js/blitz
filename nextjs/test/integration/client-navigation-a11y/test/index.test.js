@@ -74,7 +74,7 @@ describe('Client Navigation accessibility', () => {
 
         const title = await browser.eval('document.title')
 
-        await waitFor(500)
+        await waitFor(1000)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()

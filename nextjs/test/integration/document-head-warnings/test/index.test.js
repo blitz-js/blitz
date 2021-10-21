@@ -24,19 +24,19 @@ describe('Custom Document Head Warnings', () => {
   describe('development mode', () => {
     it('warns when using a <title> in document/head', () => {
       expect(output).toMatch(
-        /.*Warning: <title> should not be used in _document.js's <Head>\..*/
+        /.*Warning: <title> should not be used in _document.js's <DocumentHead>\..*/
       )
     })
 
     it('warns when using viewport meta tags in document/head', () => {
       expect(output).toMatch(
-        /.*Warning: viewport meta tags should not be used in _document.js's <Head>\..*/
+        /.*Warning: viewport meta tags should not be used in _document.js's <DocumentHead>\..*/
       )
     })
 
     it('warns when using a crossOrigin attribute on document/head', () => {
       expect(output).toMatch(
-        /.*Warning: `Head` attribute `crossOrigin` is deprecated\..*/
+        /.*Warning: `DocumentHead` attribute `crossOrigin` is deprecated\..*/
       )
     })
   })

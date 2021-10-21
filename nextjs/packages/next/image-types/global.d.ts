@@ -1,11 +1,11 @@
-// this file is conditionally added/removed to next-env.d.ts
+// this file is conditionally added/removed to blitz-env.d.ts
 // if the static image import handling is enabled
 
 interface StaticImageData {
   src: string
   height: number
   width: number
-  placeholder?: string
+  blurDataURL?: string
 }
 
 declare module '*.png' {

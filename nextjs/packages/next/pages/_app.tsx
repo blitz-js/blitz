@@ -5,7 +5,7 @@ import {
   AppInitialProps,
   AppPropsType,
   NextWebVitalsMetric,
-} from '../next-server/lib/utils'
+} from '../shared/lib/utils'
 import { Router } from '../client/router'
 
 export { AppInitialProps }
@@ -28,7 +28,7 @@ async function appGetInitialProps({
   return { pageProps }
 }
 
-export default class App<P = {}, CP = {}, S = {}> extends React.Component<
+export class App<P = {}, CP = {}, S = {}> extends React.Component<
   P & AppProps<CP>,
   S
 > {
@@ -41,3 +41,4 @@ export default class App<P = {}, CP = {}, S = {}> extends React.Component<
     return <Component {...pageProps} />
   }
 }
+export default App

@@ -1,4 +1,4 @@
-import * as repl from "@blitzjs/repl"
+import * as repl from "next/dist/cli/next-console"
 import {Console} from "../../src/commands/console"
 
 jest.spyOn(global.console, "log").mockImplementation()
@@ -26,7 +26,7 @@ jest.mock("../../package.json", () => ({
 }))
 
 jest.mock(
-  "@blitzjs/repl",
+  "next/dist/cli/next-console",
   jest.fn(() => {
     return {
       runRepl: jest.fn(),

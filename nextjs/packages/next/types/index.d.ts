@@ -1,27 +1,98 @@
 /// <reference types="node" />
 /// <reference types="react" />
 /// <reference types="react-dom" />
+/// <reference types="styled-jsx" />
 
 import React from 'react'
 import { ParsedUrlQuery } from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
+import { UrlObject } from 'url'
 
 import {
   NextPageContext,
+  BlitzPageContext,
   NextComponentType,
+  BlitzComponentType,
   NextApiResponse,
+  BlitzApiResponse,
   NextApiRequest,
+  BlitzApiRequest,
   NextApiHandler,
+  BlitzApiHandler,
+  DefaultCtx,
+  Ctx,
+  MiddlewareRequest,
+  MiddlewareResponse,
+  MiddlewareNext,
+  Middleware,
+  ConnectMiddleware,
+  Session,
+  PublicData,
+  EmptyPublicData,
+  IsAuthorizedArgs,
+  SessionModel,
+  SessionConfig,
+  SessionContext,
+  SessionContextBase,
+  AuthenticatedSessionContext,
+  ClientSession,
+  AuthenticatedClientSession,
+  AppPropsType,
   // @ts-ignore This path is generated at build time and conflicts otherwise
-} from '../dist/next-server/lib/utils'
+} from '../dist/shared/lib/utils'
 
 import {
   NextApiRequestCookies,
   // @ts-ignore This path is generated at build time and conflicts otherwise
-} from '../dist/next-server/server/api-utils'
+} from '../dist/server/api-utils'
+
+// @ts-ignore This path is generated at build time and conflicts otherwise
+// export { PaginateArgs, ConnectMiddleware } from './dist/stdlib-server'
 
 // @ts-ignore This path is generated at build time and conflicts otherwise
 import next from '../dist/server/next'
+
+// @ts-ignore This path is generated at build time and conflicts otherwise
+import {
+  NextConfig as NextConfigType,
+  BlitzConfig as BlitzConfigType,
+} from '../dist/server/config'
+
+export type NextConfig = NextConfigType
+export type BlitzConfig = BlitzConfigType
+
+export default next
+
+export {
+  NextPageContext,
+  BlitzPageContext,
+  NextComponentType,
+  BlitzComponentType,
+  NextApiResponse,
+  BlitzApiResponse,
+  NextApiRequest,
+  BlitzApiRequest,
+  NextApiHandler,
+  BlitzApiHandler,
+  DefaultCtx,
+  Ctx,
+  MiddlewareRequest,
+  MiddlewareResponse,
+  MiddlewareNext,
+  Middleware,
+  ConnectMiddleware,
+  Session,
+  PublicData,
+  EmptyPublicData,
+  IsAuthorizedArgs,
+  SessionModel,
+  SessionConfig,
+  SessionContext,
+  SessionContextBase,
+  AuthenticatedSessionContext,
+  ClientSession,
+  AuthenticatedClientSession,
+}
 
 // Extend the React types with missing properties
 declare module 'react' {
@@ -33,12 +104,6 @@ declare module 'react' {
   // <link nonce=""> support
   interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
     nonce?: string
-  }
-
-  // <style jsx> and <style jsx global> support for styled-jsx
-  interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
-    jsx?: boolean
-    global?: boolean
   }
 }
 
@@ -54,10 +119,41 @@ export type Redirect =
       basePath?: false
     }
 
+export interface RouteUrlObject extends Pick<UrlObject, 'pathname' | 'query'> {
+  pathname: string
+}
+
+export type RedirectAuthenticatedTo = string | RouteUrlObject | false
+export type RedirectAuthenticatedToFnCtx = {
+  session: PublicData
+}
+export type RedirectAuthenticatedToFn = (
+  args: RedirectAuthenticatedToFnCtx
+) => RedirectAuthenticatedTo
+
 /**
  * `Page` type, use it as a guide to create `pages`.
  */
-export type NextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P>
+export type NextPage<P = {}, IP = P> = NextComponentType<
+  NextPageContext,
+  IP,
+  P
+> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | { redirectTo?: string | RouteUrlObject }
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
+export type BlitzPage<P = {}, IP = P> = NextPage<P, IP>
+
+export type AppProps<P = {}> = AppPropsType<Router, P> & {
+  Component: BlitzPage
+}
+
+export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+  authenticate?: boolean | { redirectTo?: string | RouteUrlObject }
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
 
 /**
  * `Config` type, use it for export const config
@@ -80,14 +176,6 @@ export type PageConfig = {
   env?: Array<string>
   unstable_runtimeJS?: false
   unstable_JsPreload?: false
-}
-
-export {
-  NextPageContext,
-  NextComponentType,
-  NextApiResponse,
-  NextApiRequest,
-  NextApiHandler,
 }
 
 export type PreviewData = string | false | object | undefined
@@ -175,4 +263,4 @@ export type InferGetServerSidePropsType<T> = T extends GetServerSideProps<
   ? P
   : never
 
-export default next
+export type ParserType = 'sync' | 'async'

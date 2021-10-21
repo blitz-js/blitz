@@ -41,8 +41,8 @@ jobs:
         run: yarn manypkg check
         env:
           CI: true
-      - name: Build next.js
-        run: yarn build:nextjs
+      - name: Build packages
+        run: yarn build
         env:
           CI: true
       - name: yarn lint
@@ -54,7 +54,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
         with:
@@ -91,7 +91,7 @@ jobs:
     needs: build-linux
     runs-on: ubuntu-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
         id: restore-build
@@ -112,7 +112,8 @@ jobs:
     needs: build-linux
     runs-on: ubuntu-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
+      DEBUG: blitz:session
     steps:
       - uses: actions/cache@v2
         id: restore-build
@@ -136,7 +137,7 @@ jobs:
     name: Blitz - Test Example Apps (windows-latest)
     runs-on: windows-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v2
         with:
@@ -179,14 +180,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
         id: restore-build
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-      - run: ./check-pre-compiled.sh
+      - run: ./scripts/check-pre-compiled.sh
 
   testUnit:
     name: Nextjs - Test Unit
@@ -196,7 +197,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
@@ -212,7 +213,7 @@ jobs:
     needs: build-linux
     runs-on: ubuntu-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
@@ -233,7 +234,7 @@ jobs:
     name: Blitz - Test Integration (Windows)
     runs-on: windows-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
@@ -271,7 +272,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
     strategy:
@@ -295,7 +296,7 @@ jobs:
     name: Nextjs - Test Integration (Windows)
     runs-on: windows-latest
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
@@ -334,7 +335,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-linux
     env:
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       NEXT_TEST_JOB: 1
       HEADLESS: true
       TEST_ELECTRON: 1
@@ -378,7 +379,7 @@ jobs:
     env:
       HEADLESS: true
       BROWSER_NAME: "firefox"
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/cache@v2
         id: restore-build
@@ -397,7 +398,7 @@ jobs:
     env:
       BROWSERSTACK: true
       BROWSER_NAME: "safari"
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       SKIP_LOCAL_SELENIUM_SERVER: true
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
@@ -420,7 +421,7 @@ jobs:
       BROWSERSTACK: true
       LEGACY_SAFARI: true
       BROWSERNAME: "safari"
-      NEXT_TELEMETRY_DISABLED: 1
+      BLITZ_TELEMETRY_DISABLED: 1
       SKIP_LOCAL_SELENIUM_SERVER: true
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}

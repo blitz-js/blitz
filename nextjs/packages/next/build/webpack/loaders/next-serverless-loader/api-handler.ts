@@ -1,16 +1,20 @@
 import { parse as parseUrl } from 'url'
 import { IncomingMessage, ServerResponse } from 'http'
-import { apiResolver } from '../../../../next-server/server/api-utils'
+import { apiResolver } from '../../../../server/api-utils'
 import { getUtils, vercelHeader, ServerlessHandlerCtx } from './utils'
+import { loadConfigAtRuntime } from '../../../../server/config-shared'
+import { DecodeError } from '../../../../shared/lib/utils'
 
 export function getApiHandler(ctx: ServerlessHandlerCtx) {
-  const { pageModule, encodedPreviewProps, pageIsDynamic } = ctx
+  const { page, pageModule, encodedPreviewProps, pageIsDynamic } = ctx
   const {
     handleRewrites,
     handleBasePath,
     dynamicRouteMatcher,
     normalizeDynamicRouteParams,
   } = getUtils(ctx)
+
+  const config = loadConfigAtRuntime()
 
   return async (req: IncomingMessage, res: ServerResponse) => {
     try {
@@ -45,13 +49,13 @@ export function getApiHandler(ctx: ServerlessHandlerCtx) {
         Object.assign({}, parsedUrl.query, params),
         await pageModule,
         encodedPreviewProps,
-        true
+        true,
+        { route: page, config }
       )
     } catch (err) {
       console.error(err)
 
-      // TODO: better error for DECODE_FAILED?
-      if (err.code === 'DECODE_FAILED') {
+      if (err instanceof DecodeError) {
         res.statusCode = 400
         res.end('Bad Request')
       } else {

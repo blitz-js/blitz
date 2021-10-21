@@ -1,6 +1,6 @@
 import React from 'react'
-import Head from '../next-server/lib/head'
-import { NextPageContext } from '../next-server/lib/utils'
+import Head from '../shared/lib/head'
+import { NextPageContext } from '../shared/lib/utils'
 
 const statusCodes: { [code: number]: string } = {
   400: 'Bad Request',
@@ -26,7 +26,7 @@ function _getInitialProps({
 /**
  * `Error` component used for handling errors.
  */
-export default class Error<P = {}> extends React.Component<P & ErrorProps> {
+export class ErrorComponent<P = {}> extends React.Component<P & ErrorProps> {
   static displayName = 'ErrorPage'
 
   static getInitialProps = _getInitialProps
@@ -57,11 +57,8 @@ export default class Error<P = {}> extends React.Component<P & ErrorProps> {
                 title
               ) : (
                 <>
-                  Application error: a client-side exception has occurred (
-                  <a href="https://nextjs.org/docs/messages/client-side-exception-occurred">
-                    developer guidance
-                  </a>
-                  )
+                  Application error: a client-side exception has occurred (see
+                  the browser console for more information)
                 </>
               )}
               .
@@ -72,6 +69,7 @@ export default class Error<P = {}> extends React.Component<P & ErrorProps> {
     )
   }
 }
+export default ErrorComponent
 
 const styles: { [k: string]: React.CSSProperties } = {
   error: {

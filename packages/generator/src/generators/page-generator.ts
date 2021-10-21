@@ -62,11 +62,9 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
   }
 
   async postWrite() {
-    // After pages have been generated, run `codegen` so the Routes definition is updated
-    const {generate} = await import("@blitzjs/server")
-    await generate({
-      rootFolder: process.cwd(),
-      env: "dev",
-    })
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const {saveRouteManifest} = await import("next/dist/build/routes")
+    const config = loadConfigProduction(process.cwd())
+    await saveRouteManifest(process.cwd(), config)
   }
 }

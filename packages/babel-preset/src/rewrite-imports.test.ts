@@ -7,7 +7,7 @@ pluginTester({
   tests: [
     {
       code: `import { useQuery } from 'blitz';`,
-      output: `import { useQuery } from '@blitzjs/core';`,
+      output: `import { useQuery } from 'next/data-client';`,
     },
     {
       code: `import { Image } from 'blitz';`,
@@ -16,25 +16,25 @@ pluginTester({
     {
       code: `import {Image, Link} from 'blitz';`,
       output: `
-        import { Link } from '@blitzjs/core';
+        import { Link } from 'next/link';
         import { Image } from 'next/image';
       `,
     },
     {
       code: `import {Image as BlitzImage, Link} from 'blitz';`,
       output: `
-        import { Link } from '@blitzjs/core';
+        import { Link } from 'next/link';
         import { Image as BlitzImage } from 'next/image';
       `,
     },
     {
       code: `import {Document, Html, DocumentHead, Main, BlitzScript} from "blitz";`,
       output: `
-        import { BlitzScript } from '@blitzjs/core/document';
-        import { Main } from '@blitzjs/core/document';
-        import { DocumentHead } from '@blitzjs/core/document';
-        import { Html } from '@blitzjs/core/document';
-        import { Document } from '@blitzjs/core/document';
+        import { BlitzScript } from 'next/document';
+        import { Main } from 'next/document';
+        import { DocumentHead } from 'next/document';
+        import { Html } from 'next/document';
+        import { Document } from 'next/document';
       `,
     },
   ],

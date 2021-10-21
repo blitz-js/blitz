@@ -22,9 +22,7 @@ const outdir = join(appDir, "out")
 const blitzConfig = new File(join(appDir, "blitz.config.ts"))
 jest.setTimeout(1000 * 60 * 2)
 
-beforeAll(async () => {
-  rimraf.sync(join(__dirname, "../db.json"))
-})
+const resetDb = () => rimraf.sync(join(__dirname, "../db.json"))
 
 const runTests = (mode: string) => {
   describe("Auth", () => {
@@ -51,6 +49,22 @@ const runTests = (mode: string) => {
         await browser.waitForElementByCss("#error")
         let text = await browser.elementByCss("#error").text()
         expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
+      it("should render error for protected layout", async () => {
+        const browser = await webdriver(appPort, "/layout-authenticate")
+        await browser.waitForElementByCss("#error")
+        let text = await browser.elementByCss("#error").text()
+        expect(text).toMatch(/AuthenticationError/)
+        if (browser) await browser.close()
+      })
+
+      it("should render Page.authenticate = false even when Layout.authenticate = true", async () => {
+        const browser = await webdriver(appPort, "/layout-unauthenticate")
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/this should be rendered/)
         if (browser) await browser.close()
       })
     })
@@ -100,6 +114,24 @@ const runTests = (mode: string) => {
         await waitFor(200)
 
         await browser.eval(`window.location = "/page-dot-authenticate-redirect"`)
+        await browser.waitForElementByCss("#content")
+        let text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        await browser.elementByCss("#logout").click()
+        await waitFor(500)
+
+        expect(await browser.url()).toMatch(/\/login/)
+        if (browser) await browser.close()
+      })
+
+      it("Layout.authenticate = {redirect} should work ", async () => {
+        // Login
+        let browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        await browser.elementByCss("#login").click()
+        await waitFor(200)
+
+        await browser.eval(`window.location = "/layout-authenticate-redirect"`)
         await browser.waitForElementByCss("#content")
         let text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/authenticated-basic-result/)
@@ -171,6 +203,27 @@ const runTests = (mode: string) => {
       })
     })
 
+    describe("Layout.redirectAuthenticatedTo", () => {
+      it("should work when redirecting to page with useQuery", async () => {
+        // https://github.com/blitz-js/blitz/issues/2527
+
+        // Ensure logged in
+        const browser = await webdriver(appPort, "/login")
+        await waitFor(200)
+        let text = await browser.elementByCss("#content").text()
+        if (text.match(/logged-out/)) {
+          await browser.elementByCss("#login").click()
+          await waitFor(200)
+        }
+
+        await browser.eval(`window.location = "/layout-redirect-authenticated"`)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/authenticated-basic-result/)
+        if (browser) await browser.close()
+      })
+    })
+
     describe("setPublicData", () => {
       it("it should not throw CSRF error", async () => {
         // https://github.com/blitz-js/blitz/issues/2448
@@ -196,6 +249,7 @@ const runTests = (mode: string) => {
 
 describe("dev mode", () => {
   beforeAll(async () => {
+    resetDb()
     appPort = await findPort()
     app = await launchApp(appDir, appPort)
 
@@ -207,11 +261,15 @@ describe("dev mode", () => {
       "/page-dot-authenticate",
       "/page-dot-authenticate-redirect",
       "/redirect-authenticated",
-      "/api/queries/getNoauthBasic",
-      "/api/queries/getAuthenticatedBasic",
-      "/api/mutations/login",
-      "/api/mutations/logout",
+      "/layout-authenticate",
+      "/layout-authenticate-redirect",
+      "/layout-redirect-authenticated",
+      "/layout-unauthenticate",
       "/gssp-setpublicdata",
+      "/api/rpc/getNoauthBasic",
+      "/api/rpc/getAuthenticatedBasic",
+      "/api/rpc/login",
+      "/api/rpc/logout",
     ]
     await Promise.all(prerender.map((route) => renderViaHTTP(appPort, route)))
   })
@@ -221,6 +279,7 @@ describe("dev mode", () => {
 
 describe("production mode", () => {
   beforeAll(async () => {
+    resetDb()
     await blitzBuild(appDir)
     appPort = await findPort()
     app = await blitzStart(appDir, appPort)
@@ -231,6 +290,7 @@ describe("production mode", () => {
 
 describe("serverless mode", () => {
   beforeAll(async () => {
+    resetDb()
     blitzConfig.replace("// replace me", `target: 'experimental-serverless-trace', `)
     await blitzBuild(appDir)
     appPort = await findPort()
@@ -252,6 +312,6 @@ describe("auth - blitz export should not work", () => {
 
   it("should have error during blitz export", async () => {
     const {stderr} = await blitzExport(appDir, {outdir}, {stderr: true})
-    expect(stderr).toContain("Blitz sessionMiddleware is not compatible with `blitz export`.")
+    expect(stderr).toContain("Blitz http middleware is not compatible with `blitz export`.")
   })
 })
