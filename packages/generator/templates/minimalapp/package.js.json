@@ -15,20 +15,17 @@
     "printWidth": 100
   },
   "lint-staged": {
-    "*.{js}": [
-      "eslint --fix"
-    ]
+    "*.{js}": ["eslint --fix"]
   },
   "dependencies": {
     "blitz": "canary",
-    "react-dom": "alpha",
-    "react": "alpha"
+    "react-dom": "18.0.0-alpha-5ca4b0433-20211020",
+    "react": "18.0.0-alpha-5ca4b0433-20211020"
   },
   "devDependencies": {
     "eslint": "7.x",
-    "husky": "6.x",
-    "lint-staged": "10.x",
-    "prettier-plugin-prisma": "0.x",
+    "husky": "7.x",
+    "lint-staged": "11.x",
     "prettier": "2.x",
     "pretty-quick": "3.x"
   },

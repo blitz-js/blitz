@@ -152,10 +152,10 @@ export async function saveRouteManifest(
 async function findNodeModulesRoot(src: string) {
   /*
    *  Because of our package structure, and because of how things like pnpm link modules,
-   *  we must first find blitz package, and then find @blitzjs/core and then
-   *  the root of @blitzjs/core
+   *  we must first find blitz package, and then find `next` and then
+   *  the root of `next`
    *
-   *  This is because we import from `.blitz` inside @blitzjs/core.
+   *  This is because we import from `.blitz` inside `next/stdlib`.
    *  If that changes, then this logic here will need to change
    */
   manifestDebug('src ' + src)
@@ -187,18 +187,18 @@ async function findNodeModulesRoot(src: string) {
         "Internal Blitz Error: unable to find 'blitz' package location"
       )
     }
-    const blitzCorePkgLocation = dirname(
+    const nextPkgLocation = dirname(
       (await findUp('package.json', {
-        cwd: resolveFrom(blitzPkgLocation, '@blitzjs/core'),
+        cwd: resolveFrom(blitzPkgLocation, 'next'),
       })) ?? ''
     )
-    manifestDebug('blitzCorePkgLocation ' + blitzCorePkgLocation)
-    if (!blitzCorePkgLocation) {
+    manifestDebug('nextPkgLocation ' + nextPkgLocation)
+    if (!nextPkgLocation) {
       throw new Error(
-        "Internal Blitz Error: unable to find '@blitzjs/core' package location"
+        "Internal Blitz Error: unable to find 'next' package location"
       )
     }
-    root = join(blitzCorePkgLocation, '../../')
+    root = join(nextPkgLocation, '../')
   }
   manifestDebug('root ' + root)
   return root

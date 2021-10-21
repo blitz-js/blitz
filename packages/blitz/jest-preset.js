@@ -1,8 +1,8 @@
 const path = require("path")
 const fs = require("fs")
 const {pathsToModuleNameMapper} = require("ts-jest/utils")
-const {getProjectRoot} = require("@blitzjs/config")
-const projectRoot = getProjectRoot()
+const {getProjectRootSync} = require("next/dist/server/lib/utils")
+const projectRoot = getProjectRootSync()
 
 let tsConfig = null
 const tsConfigPath = path.join(projectRoot, "tsconfig.json")
