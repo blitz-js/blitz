@@ -1,6 +1,7 @@
 import { join } from 'path'
 import * as Log from '../../output/log'
 import babelLoader from './babel-loader/src/index'
+import { getIsPageFile, getIsRpcFile } from '../../utils'
 
 // increment 'p' to invalidate cache
 // eslint-disable-next-line no-useless-concat
@@ -79,9 +80,11 @@ const customBabelLoader = babelLoader((babel) => {
         },
       }
     ) {
-      const filename = this.resourcePath
+      const filepath = this.resourcePath
       const options = Object.assign({}, cfg.options)
-      const isPageFile = filename.startsWith(pagesDir)
+      const relativePathFromRoot = filepath.replace(pagesDir, '')
+      const isPageFile = getIsPageFile(relativePathFromRoot)
+      const isRpcFile = getIsRpcFile(relativePathFromRoot)
 
       if (cfg.hasFilesystemConfig()) {
         for (const file of [cfg.babelrc, cfg.config]) {
@@ -164,10 +167,27 @@ const customBabelLoader = babelLoader((babel) => {
 
       if (isPageFile) {
         if (!isServer) {
+          // TODO - only do this if it's a page but not api route
           options.plugins.push([
             require.resolve('../../babel/plugins/next-ssg-transform'),
             {},
           ])
+        }
+      }
+
+      if (isRpcFile) {
+        if (isServer) {
+          const rpcServerTransformPlugin = babel.createConfigItem(
+            [require('../../babel/plugins/blitz-rpc-server-transform')],
+            { type: 'plugin' }
+          )
+          options.plugins.push([rpcServerTransformPlugin])
+        } else {
+          const rpcClientPlugin = babel.createConfigItem(
+            [require('../../babel/plugins/blitz-rpc-client')],
+            { type: 'plugin' }
+          )
+          options.plugins.push([rpcClientPlugin])
         }
       }
 
@@ -176,7 +196,7 @@ const customBabelLoader = babelLoader((babel) => {
         ...(options.overrides || []),
         {
           test: [
-            /next[\\/]dist[\\/]next-server[\\/]lib/,
+            /next[\\/]dist[\\/]shared[\\/]lib/,
             /next[\\/]dist[\\/]client/,
             /next[\\/]dist[\\/]pages/,
           ],

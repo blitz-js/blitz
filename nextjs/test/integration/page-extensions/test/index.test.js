@@ -63,7 +63,7 @@ describe('Page Extensions', () => {
     await fs.remove(nextConfig)
 
     expect(stderr).toContain(
-      '@zeit/next-typescript is no longer needed since Next.js has built-in support for TypeScript now'
+      '@zeit/next-typescript is no longer needed since Blitz.js has built-in support for TypeScript now'
     )
   })
 })

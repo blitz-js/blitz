@@ -2,8 +2,10 @@ import { join, sep as pathSeparator, normalize } from 'path'
 import chalk from 'chalk'
 import { warn } from '../../build/output/log'
 import { promises } from 'fs'
-import { denormalizePagePath } from '../../next-server/server/normalize-page-path'
-import { fileExists } from '../../lib/file-exists'
+import { denormalizePagePath, normalizePathSep } from '../normalize-page-path'
+import { recursiveFindPages } from '../../lib/recursive-readdir'
+import { getIsRpcRoute } from '../../shared/lib/utils'
+import { buildPageExtensionRegex } from '../../build/utils'
 
 async function isTrueCasePagePath(pagePath: string, pagesDir: string) {
   const pageSegments = normalize(pagePath).split(pathSeparator).filter(Boolean)
@@ -22,26 +24,43 @@ export async function findPageFile(
   normalizedPagePath: string,
   pageExtensions: string[]
 ): Promise<string | null> {
-  const foundPagePaths: string[] = []
-
   const page = denormalizePagePath(normalizedPagePath)
+  // console.log('[findPageFile]', { rootDir, normalizedPagePath, page })
 
-  for (const extension of pageExtensions) {
-    if (!normalizedPagePath.endsWith('/index')) {
-      const relativePagePath = `${page}.${extension}`
-      const pagePath = join(rootDir, relativePagePath)
+  const allPages = await recursiveFindPages(
+    rootDir,
+    buildPageExtensionRegex(pageExtensions)
+  )
+  // console.log('allPages', allPages)
 
-      if (await fileExists(pagePath)) {
-        foundPagePaths.push(relativePagePath)
-      }
+  let nameMatch: string
+  if (getIsRpcRoute(page)) {
+    const rpcPath = page.replace('/api/rpc', '')
+    nameMatch = `(/queries${rpcPath}|/queries${rpcPath}/index|/mutations${rpcPath}|/mutations${rpcPath}/index)`
+  } else if (page.startsWith('/api/')) {
+    if (page.endsWith('/index')) {
+      nameMatch = `{page}`
+    } else {
+      nameMatch = `(${page}|${page}/index)`
     }
-
-    const relativePagePathWithIndex = join(page, `index.${extension}`)
-    const pagePathWithIndex = join(rootDir, relativePagePathWithIndex)
-    if (await fileExists(pagePathWithIndex)) {
-      foundPagePaths.push(relativePagePathWithIndex)
-    }
+  } else if (page === '/') {
+    nameMatch = '/pages' + normalizedPagePath
+  } else if (page.endsWith('/index')) {
+    nameMatch = `/pages${page}/index`
+  } else {
+    nameMatch = `/pages(${page}|${page}/index)`
   }
+
+  // Make the regex work for dynamic routes like [...auth].ts
+  nameMatch = nameMatch.replace(/[[\]\\]/g, '\\$&')
+
+  const foundPagePaths = allPages.filter((path) =>
+    normalizePathSep(path).match(
+      new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`)
+    )
+  )
+  // console.log(new RegExp(`${nameMatch}\\.(?:${pageExtensions.join('|')})$`))
+  // console.log('FOUND', foundPagePaths)
 
   if (foundPagePaths.length < 1) {
     return null

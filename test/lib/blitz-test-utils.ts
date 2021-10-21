@@ -35,7 +35,7 @@ export function initBlitzServerScript(
   },
 ) {
   return new Promise((resolve, reject) => {
-    const instance = spawn("node", ["--no-deprecation", scriptPath], {env})
+    const instance = spawn("node", ["--no-deprecation", scriptPath], {env: env as any})
 
     function handleStdout(data: Buffer) {
       const message = data.toString()
@@ -96,7 +96,9 @@ export function fetchViaHTTP(
   query?: Record<any, any>,
   opts?: Record<any, any>,
 ) {
-  const url = `http://localhost:${appPort}${pathname}${query ? `?${qs.stringify(query)}` : ""}`
+  const url = `http://localhost:${appPort}${pathname}${
+    typeof query === "string" ? query : query ? `?${qs.stringify(query)}` : ""
+  }`
   return fetch(url, opts)
 }
 
@@ -140,11 +142,9 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
     }
 
     let stderrOutput = ""
-    if (options.stderr) {
-      instance.stderr?.on("data", function (chunk) {
-        stderrOutput += chunk
-      })
-    }
+    instance.stderr?.on("data", function (chunk) {
+      stderrOutput += chunk
+    })
 
     let stdoutOutput = ""
     if (options.stdout) {
@@ -202,12 +202,11 @@ export function runBlitzLaunchCommand(
     ...opts.env,
   }
 
+  const command = opts.blitzStart ? "start" : "dev"
+  console.log(`Running command "blitz ${command}" `)
+
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn(
-      "node",
-      ["--no-deprecation", blitzBin, opts.blitzStart ? "start" : "dev", ...argv],
-      {cwd, env},
-    )
+    const instance = spawn("node", ["--no-deprecation", blitzBin, command, ...argv], {cwd, env})
     let didResolve = false
 
     function handleStdout(data: Buffer) {

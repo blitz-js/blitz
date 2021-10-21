@@ -72,4 +72,13 @@ describe("Queries", () => {
       if (browser) await browser.close()
     })
   })
+
+  describe("DehydratedState", () => {
+    it("should work", async () => {
+      const browser = await webdriver(context.appPort, "/dehydrated-state")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/date is Date: true/)
+      if (browser) await browser.close()
+    })
+  })
 })

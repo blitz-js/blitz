@@ -29,7 +29,7 @@ export const Edit__ModelName__ = () => {
 
       <div>
         <h1>Edit __ModelName__ {__modelName__.id}</h1>
-        <pre>{JSON.stringify(__modelName__)}</pre>
+        <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
         <__ModelName__Form
           submitText="Update __ModelName__"
@@ -50,7 +50,7 @@ export const Edit__ModelName__ = () => {
                   ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: updated.id })
                   : Routes.Show__ModelName__Page({ __modelId__: updated.id }),
               )
-            } catch (error) {
+            } catch (error: any) {
               console.error(error)
               return {
                 [FORM_ERROR]: error.toString(),

@@ -45,7 +45,7 @@ export const EditProject = () => {
               })
               await setQueryData(updated)
               router.push(`/projects/${updated.id}`)
-            } catch (error) {
+            } catch (error: any) {
               console.error(error)
               return {
                 [FORM_ERROR]: error.toString(),

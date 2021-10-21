@@ -17,6 +17,6 @@
     "downlevelIteration": true,
     "jsx": "preserve"
   },
-  "exclude": ["node_modules", "cypress"],
+  "exclude": ["node_modules", "cypress", "test"],
   "include": ["**/*.ts", "**/*.tsx"]
 }

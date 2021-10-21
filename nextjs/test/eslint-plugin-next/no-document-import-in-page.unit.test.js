@@ -31,6 +31,20 @@ ruleTester.run('no-document-import-in-page', rule, {
       filename: 'pages/_document.js',
     },
     {
+      code: `import NextDocument from "next/document"
+
+    export default class MyDocument extends NextDocument {
+      render() {
+        return (
+          <Html>
+          </Html>
+        );
+      }
+    }
+    `,
+      filename: 'pages/_document.tsx',
+    },
+    {
       code: `import Document from "next/document"
 
     export default class MyDocument extends Document {
@@ -42,7 +56,35 @@ ruleTester.run('no-document-import-in-page', rule, {
       }
     }
     `,
-      filename: 'pages/_document.tsx',
+      filename: 'pages/_document.page.tsx',
+    },
+    {
+      code: `import NDocument from "next/document"
+
+    export default class Document extends NDocument {
+      render() {
+        return (
+          <Html>
+          </Html>
+        );
+      }
+    }
+    `,
+      filename: 'pages/_document/index.js',
+    },
+    {
+      code: `import NDocument from "next/document"
+
+    export default class Document extends NDocument {
+      render() {
+        return (
+          <Html>
+          </Html>
+        );
+      }
+    }
+    `,
+      filename: 'pages/_document/index.tsx',
     },
   ],
   invalid: [

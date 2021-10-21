@@ -2,14 +2,15 @@ import chalk from 'chalk'
 import { posix, join } from 'path'
 import { stringify } from 'querystring'
 import { API_ROUTE, DOT_NEXT_ALIAS, PAGES_DIR_ALIAS } from '../lib/constants'
-import { __ApiPreviewProps } from '../next-server/server/api-utils'
-import { isTargetLikeServerless } from '../next-server/server/config'
-import { normalizePagePath } from '../next-server/server/normalize-page-path'
+import { __ApiPreviewProps } from '../server/api-utils'
+import { isTargetLikeServerless } from '../server/config'
+import { normalizePagePath } from '../server/normalize-page-path'
 import { warn } from './output/log'
 import { ClientPagesLoaderOptions } from './webpack/loaders/next-client-pages-loader'
 import { ServerlessLoaderQuery } from './webpack/loaders/next-serverless-loader'
 import { LoadedEnvFiles } from '@next/env'
-import { NextConfig } from '../next-server/server/config'
+import { convertPageFilePathToRoutePath } from './utils'
+import { NextConfigComplete } from '../server/config-shared'
 
 type PagesMapping = {
   [page: string]: string
@@ -17,24 +18,25 @@ type PagesMapping = {
 
 export function createPagesMapping(
   pagePaths: string[],
-  extensions: string[]
+  pageExtensions: string[]
 ): PagesMapping {
   const previousPages: PagesMapping = {}
   const pages: PagesMapping = pagePaths.reduce(
     (result: PagesMapping, pagePath): PagesMapping => {
-      let page = `${pagePath
-        .replace(new RegExp(`\\.+(${extensions.join('|')})$`), '')
-        .replace(/\\/g, '/')}`.replace(/\/index$/, '')
+      let page = `${convertPageFilePathToRoutePath(
+        pagePath,
+        pageExtensions
+      ).replace(/\\/g, '/')}`.replace(/\/index$/, '')
 
-      const pageKey = page === '' ? '/' : page
+      let pageKey = page === '' ? '/' : page
 
       if (pageKey in result) {
         warn(
           `Duplicate page detected. ${chalk.cyan(
-            join('pages', previousPages[pageKey])
-          )} and ${chalk.cyan(
-            join('pages', pagePath)
-          )} both resolve to ${chalk.cyan(pageKey)}.`
+            previousPages[pageKey]
+          )} and ${chalk.cyan(pagePath)} both resolve to ${chalk.cyan(
+            pageKey
+          )}.`
         )
       } else {
         previousPages[pageKey] = pagePath
@@ -67,13 +69,18 @@ type Entrypoints = {
   server: WebpackEntrypoints
 }
 
+interface EntrypointsCtx {
+  pagesDir: string
+}
+
 export function createEntrypoints(
   pages: PagesMapping,
   target: 'server' | 'serverless' | 'experimental-serverless-trace',
   buildId: string,
   previewMode: __ApiPreviewProps,
-  config: NextConfig,
-  loadedEnvFiles: LoadedEnvFiles
+  config: NextConfigComplete,
+  loadedEnvFiles: LoadedEnvFiles,
+  { pagesDir }: EntrypointsCtx
 ): Entrypoints {
   const client: WebpackEntrypoints = {}
   const server: WebpackEntrypoints = {}
@@ -88,11 +95,12 @@ export function createEntrypoints(
     absoluteErrorPath: pages['/_error'],
     absolute404Path: pages['/404'] || '',
     distDir: DOT_NEXT_ALIAS,
+    pagesDir,
     buildId,
     assetPrefix: config.assetPrefix,
-    generateEtags: config.generateEtags,
+    generateEtags: config.generateEtags ? 'true' : '',
     poweredByHeader: config.poweredByHeader,
-    canonicalBase: config.amp.canonicalBase,
+    canonicalBase: config.amp.canonicalBase || '',
     basePath: config.basePath,
     runtimeConfig: hasRuntimeConfig
       ? JSON.stringify({

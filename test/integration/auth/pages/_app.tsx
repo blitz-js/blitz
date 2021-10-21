@@ -6,17 +6,24 @@ if (typeof window !== "undefined") {
 }
 
 export default function App({Component, pageProps}: AppProps) {
+  const getLayout = Component.getLayout || ((page) => page)
+
   return (
     <ErrorBoundary
       FallbackComponent={RootErrorFallback}
       onReset={useQueryErrorResetBoundary().reset}
     >
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
       <ReactQueryDevtools />
     </ErrorBoundary>
   )
 }
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
-  return <div id="error">{error.name}</div>
+  return (
+    <div>
+      <div id="error">{error.name}</div>
+      {error.statusCode} {error.message}
+    </div>
+  )
 }

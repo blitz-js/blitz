@@ -34,10 +34,10 @@ const New__ModelName__Page: BlitzPage = () => {
             )
             router.push(
               process.env.parentModel
-                ? `/__parentModels__/${__parentModelId__}/__modelNames__/${__modelName__.id}`
-                : `/__modelNames__/${__modelName__.id}`,
+                ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })
+                : Routes.Show__ModelName__Page({ __modelId__: __modelName__.id }),
             )
-          } catch (error) {
+          } catch (error: any) {
             console.error(error)
             return {
               [FORM_ERROR]: error.toString(),

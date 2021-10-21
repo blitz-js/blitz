@@ -18,17 +18,22 @@ This example use the Fauna GraphQL API since it's more familiar to most people t
 ## Getting Started
 
 1. Sign up for a Fauna account
-1. Create a new database
-1. Click on the GraphQL menu item
-1. Upload the graphql schema located at `db/schema.graphql`
-1. Click on the Security menu item
-1. Create a new auth key, and add the auth key to `.env.local` like this:
-
+2. Create a new database
+3. Click on the GraphQL menu item
+4. Upload the graphql schema located at `db/schema.graphql`
+5. Click on the Security menu item
+6. Create a new auth key, and add the auth key to `.env.local` like this:
 ```
 FAUNA_SECRET=YOUR_AUTH_KEY
 ```
 
-2. Start the dev server
+7. Add the Fauna GraphQL URL to `.env.local`. This URL depends on your [database region](https://docs.fauna.com/fauna/current/api/graphql/endpoints). For instance, for US databases it's `https://graphql.us.fauna.com/graphql`
+
+```
+FAUNA_GRAPHQL_URL=YOUR_FAUNA_GRAPHQL_URL
+```
+
+8. Start the dev server
 
 ```
 yarn blitz dev

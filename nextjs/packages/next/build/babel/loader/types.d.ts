@@ -8,10 +8,10 @@ export interface NextJsLoaderContext extends loader.LoaderContext {
 export interface NextBabelLoaderOptions {
   hasJsxRuntime: boolean
   hasReactRefresh: boolean
+  pageExtensions: string[]
   isServer: boolean
   development: boolean
   pagesDir: string
-  presets: any[]
   sourceMaps?: any[]
   overrides: any
   caller: any

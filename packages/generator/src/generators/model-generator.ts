@@ -1,6 +1,7 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
+import {newline} from "next/dist/server/lib/logging"
 import which from "npm-which"
 import path from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
@@ -79,7 +80,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     }
 
     if (model) {
-      log.newline()
+      newline()
       log.success(
         `Model '${modelDefinition.name}'${
           dryRun ? "" : ` ${updatedOrCreated} in schema.prisma`
@@ -89,7 +90,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
         .printSchema({type: "schema", list: [model]})
         .split("\n")
         .map(log.progress)
-      log.newline()
+      newline()
     }
   }
 

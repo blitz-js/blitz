@@ -8,7 +8,7 @@ function Content() {
   return <div id="content">{result}</div>
 }
 
-function Page() {
+function BodyParser() {
   return (
     <div id="page">
       <ErrorBoundary FallbackComponent={() => <div id="error">query failed</div>}>
@@ -20,4 +20,4 @@ function Page() {
   )
 }
 
-export default Page
+export default BodyParser

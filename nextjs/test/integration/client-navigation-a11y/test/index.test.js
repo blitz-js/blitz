@@ -5,6 +5,7 @@ import {
   killApp,
   launchApp,
   renderViaHTTP,
+  waitFor,
 } from '../../../lib/next-test-utils'
 import webdriver from 'next-webdriver'
 import { join } from 'path'
@@ -53,10 +54,12 @@ describe('Client Navigation accessibility', () => {
           .elementByCss('h1')
           .text()
 
+        await waitFor(500)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()
 
+        await waitFor(500)
         expect(h1Value).toBe(routeAnnouncerValue)
         await browser.close()
       })
@@ -71,6 +74,7 @@ describe('Client Navigation accessibility', () => {
 
         const title = await browser.eval('document.title')
 
+        await waitFor(1000)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()
@@ -89,6 +93,7 @@ describe('Client Navigation accessibility', () => {
 
         const pathname = '/page-without-h1-or-title'
 
+        await waitFor(500)
         const routeAnnouncerValue = await browser
           .waitForElementByCss('#__next-route-announcer__')
           .text()

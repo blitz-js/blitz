@@ -1,5 +1,5 @@
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   env: {
     browser: true,
     commonjs: true,
@@ -8,9 +8,17 @@ module.exports = {
   },
   parserOptions: {
     ecmaVersion: 6,
+    requireConfigFile: false,
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
+    },
+    babelOptions: {
+      presets: ["@babel/preset-env", "@babel/preset-react"],
+      caller: {
+        // Eslint supports top level await when a parser for it is included. We enable the parser by default for Babel.
+        supportsTopLevelAwait: true,
+      },
     },
   },
   plugins: ["import", "unicorn", "simple-import-sort"],
@@ -78,6 +86,19 @@ module.exports = {
         "import/no-default-export": "off",
         "unicorn/filename-case": "off",
         "@typescript-eslint/no-floating-promises": "off",
+      },
+    },
+    {
+      files: ["examples/**"],
+      plugins: ["cypress"],
+      parserOptions: {
+        project: null,
+      },
+      env: {
+        "cypress/globals": true,
+      },
+      rules: {
+        "simple-import-sort/imports": "off",
       },
     },
     {

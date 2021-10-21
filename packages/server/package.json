@@ -1,13 +1,10 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.37.0",
+  "version": "0.41.2-canary.4",
   "license": "MIT",
-  "bin": {
-    "next-patched": "./bin/next-patched"
-  },
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
   "author": {
@@ -19,34 +16,16 @@
   "module": "dist/blitzjs-server.esm.js",
   "types": "dist/blitzjs-server.cjs.d.ts",
   "files": [
-    "dist",
-    "register"
+    "dist"
   ],
   "dependencies": {
-    "@blitzjs/config": "0.37.0",
-    "@blitzjs/core": "0.37.0",
-    "@blitzjs/display": "0.37.0",
-    "@blitzjs/file-pipeline": "0.37.0",
+    "@blitzjs/display": "0.41.2-canary.4",
     "cross-spawn": "7.0.3",
     "detect-port": "1.3.0",
     "esbuild": "^0.11.12",
-    "expand-tilde": "2.0.2",
-    "fast-glob": "3.2.5",
-    "flush-write-stream": "2.0.0",
-    "from2": "2.3.0",
     "fs-extra": "^9.1.0",
-    "gulp-if": "3.0.0",
-    "lodash": "^4.0.0",
-    "parallel-transform": "1.2.0",
-    "parse-gitignore": "1.0.1",
-    "pirates": "4.0.1",
     "pkg-dir": "^5.0.0",
-    "pumpify": "2.0.1",
-    "readable-stream": "3.6.0",
-    "resolve-cwd": "3.0.0",
-    "slash": "^3.0.0",
-    "through2": "4.0.2",
-    "vinyl": "2.2.1"
+    "resolve-cwd": "3.0.0"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

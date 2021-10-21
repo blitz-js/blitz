@@ -1,5 +1,6 @@
 import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
+import {baseLogger} from "next/dist/server/lib/logging"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
@@ -10,7 +11,7 @@ export function getDbName(connectionString: string): string {
 async function runSeed() {
   require("../utils/setup-ts-node").setupTsnode()
 
-  const projectRoot = require("@blitzjs/config").getProjectRoot()
+  const projectRoot = require("next/dist/server/lib/utils").getProjectRootSync()
   const seedPath = require("path").join(projectRoot, "db/seeds")
   const dbPath = require("path").join(projectRoot, "db/index")
 
@@ -33,7 +34,7 @@ async function runSeed() {
     console.log("\n" + log.withCaret("Seeding..."))
     seeds && (await seeds())
   } catch (err) {
-    log.error(err)
+    baseLogger().prettyError(err as any)
     log.error(`Couldn't run imported function, are you sure it's a function?`)
     throw err
   }
@@ -79,7 +80,7 @@ ${require("chalk").bold(
         return await runSeed()
       } catch (err) {
         log.error("Could not seed database:")
-        log.error(err)
+        baseLogger().prettyError(err as any)
         process.exit(1)
       }
     }

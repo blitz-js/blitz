@@ -1,6 +1,7 @@
 # build output
 dist
 .next
+target
 
 # dependencies
 node_modules
@@ -20,6 +21,7 @@ coverage
 # test output
 test/**/out*
 test/**/next-env.d.ts
+test/**/blitz-env.d.ts
 .DS_Store
 /e2e-tests
 
@@ -37,3 +39,7 @@ test-timings.json
 # Vercel
 .vercel
 .now
+
+#blitz
+/packages/next/db.json
+/db.json

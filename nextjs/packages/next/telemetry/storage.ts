@@ -56,9 +56,17 @@ export class Telemetry {
 
   constructor({ distDir }: { distDir: string }) {
     // Read in the constructor so that .env can be loaded before reading
-    const { NEXT_TELEMETRY_DISABLED, NEXT_TELEMETRY_DEBUG } = process.env
-    this.NEXT_TELEMETRY_DISABLED = NEXT_TELEMETRY_DISABLED
-    this.NEXT_TELEMETRY_DEBUG = NEXT_TELEMETRY_DEBUG
+    const {
+      NEXT_TELEMETRY_DISABLED,
+      NEXT_TELEMETRY_DEBUG,
+      BLITZ_TELEMETRY_DISABLED,
+      BLITZ_TELEMETRY_DEBUG,
+    } = process.env
+
+    this.NEXT_TELEMETRY_DISABLED =
+      BLITZ_TELEMETRY_DISABLED || NEXT_TELEMETRY_DISABLED
+    this.NEXT_TELEMETRY_DEBUG = BLITZ_TELEMETRY_DEBUG || NEXT_TELEMETRY_DEBUG
+
     const storageDirectory = getStorageDirectory(distDir)
 
     try {
@@ -94,10 +102,10 @@ export class Telemetry {
     console.log(
       `${chalk.magenta.bold(
         'Attention'
-      )}: Next.js now collects completely anonymous telemetry regarding usage.`
+      )}: Blitz.js now collects completely anonymous telemetry regarding usage.`
     )
     console.log(
-      `This information is used to shape Next.js' roadmap and prioritize features.`
+      `This information is used to shape Blitz.js' roadmap and prioritize features.`
     )
     console.log(
       `You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:`

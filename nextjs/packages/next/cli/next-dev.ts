@@ -38,7 +38,7 @@ const nextDev: cliCommand = (argv) => {
       Usage
         $ next dev <dir> -p <port number>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the Blitz.js application.
       If no directory is provided, the current directory will be used.
 
       Options
@@ -56,42 +56,10 @@ const nextDev: cliCommand = (argv) => {
     printAndExit(`> No such directory exists as the project root: ${dir}`)
   }
 
+  process.env.BLITZ_APP_DIR = dir
+
   async function preflight() {
     const { getPackageVersion } = await import('../lib/get-package-version')
-    const semver = await import('next/dist/compiled/semver').then(
-      (res) => res.default
-    )
-
-    const reactVersion: string | null = await getPackageVersion({
-      cwd: dir,
-      name: 'react',
-    })
-    if (
-      reactVersion &&
-      semver.lt(reactVersion, '17.0.1') &&
-      semver.coerce(reactVersion)?.version !== '0.0.0'
-    ) {
-      Log.warn(
-        'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.' +
-          ' Read more: https://nextjs.org/docs/messages/react-version'
-      )
-    } else {
-      const reactDomVersion: string | null = await getPackageVersion({
-        cwd: dir,
-        name: 'react-dom',
-      })
-      if (
-        reactDomVersion &&
-        semver.lt(reactDomVersion, '17.0.1') &&
-        semver.coerce(reactDomVersion)?.version !== '0.0.0'
-      ) {
-        Log.warn(
-          'React 17.0.1 or newer will be required to leverage all of the upcoming features in Next.js 11.' +
-            ' Read more: https://nextjs.org/docs/messages/react-version'
-        )
-      }
-    }
-
     const [sassVersion, nodeSassVersion] = await Promise.all([
       getPackageVersion({ cwd: dir, name: 'sass' }),
       getPackageVersion({ cwd: dir, name: 'node-sass' }),
@@ -105,13 +73,14 @@ const nextDev: cliCommand = (argv) => {
     }
   }
 
-  const port = args['--port'] || 3000
+  const port =
+    args['--port'] || (process.env.PORT && parseInt(process.env.PORT)) || 3000
   const host = args['--hostname'] || '0.0.0.0'
   const appUrl = `http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`
 
   startServer({ dir, dev: true, isNextDevCommand: true }, port, host)
     .then(async (app) => {
-      startedDevelopmentServer(appUrl, `${host}:${port}`)
+      startedDevelopmentServer(appUrl, `${host || '0.0.0.0'}:${port}`)
       // Start preflight after server is listening and ignore errors:
       preflight().catch(() => {})
       // Finalize server bootup:

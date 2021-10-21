@@ -1,4 +1,4 @@
-import getAuthenticatedBasic from "app/queries/getAuthenticatedBasic"
+import getNoauthBasic from "app/queries/getNoauthBasic"
 import {
   dehydrate,
   getQueryKey,
@@ -7,10 +7,10 @@ import {
   QueryClient,
   useQuery,
 } from "blitz"
-import {Suspense, useEffect} from "react"
+import {Suspense} from "react"
 
 function Content() {
-  const [result] = useQuery(getAuthenticatedBasic, null, {
+  const [result] = useQuery(getNoauthBasic, null, {
     staleTime: 60 * 1000,
   })
 
@@ -18,11 +18,7 @@ function Content() {
 }
 
 function Bomb() {
-  useEffect(() => {
-    throw new Error("💣")
-  })
-
-  return <>somebody set up us the bomb</>
+  return <div id="content">somebody set up us the bomb</div>
 }
 
 export default function Page() {
@@ -40,8 +36,8 @@ Page.authenticate = true
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery(getQueryKey(getAuthenticatedBasic, null), () =>
-    invokeWithMiddleware(getAuthenticatedBasic, null, ctx),
+  await queryClient.prefetchQuery(getQueryKey(getNoauthBasic, null), () =>
+    invokeWithMiddleware(getNoauthBasic, null, ctx),
   )
 
   return {

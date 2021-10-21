@@ -11,7 +11,7 @@ interface ChainMethods {
   click: () => Chain<any>
   elementsByCss: () => Chain<Element[]>
   waitForElementByCss: (arg: string) => Chain<any>
-  eval: () => Chain<any>
+  eval: (evalStr: string) => Chain<any>
   log: () => Chain<any>
   url: () => Chain<any>
   back: () => Chain<any>

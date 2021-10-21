@@ -17,13 +17,16 @@ describe('no anonymous default export warning', () => {
   beforeEach(async () => {
     await fs.remove(join(appDir, '.next'))
   })
+  afterEach(async () => {
+    await fs.remove(join(appDir, '.next'))
+  })
 
   it('show correct warnings for page', async () => {
     let stderr = ''
 
     const appPort = await findPort()
     const app = await launchApp(appDir, appPort, {
-      env: { __NEXT_TEST_WITH_DEVTOOL: true },
+      env: { __NEXT_TEST_WITH_DEVTOOL: true, __NEXT_TEST_ANON_EXPORT: true },
       onStderr(msg) {
         stderr += msg || ''
       },
@@ -50,7 +53,7 @@ describe('no anonymous default export warning', () => {
 
     const appPort = await findPort()
     const app = await launchApp(appDir, appPort, {
-      env: { __NEXT_TEST_WITH_DEVTOOL: true },
+      env: { __NEXT_TEST_WITH_DEVTOOL: true, __NEXT_TEST_ANON_EXPORT: true },
       onStderr(msg) {
         stderr += msg || ''
       },
@@ -77,7 +80,7 @@ describe('no anonymous default export warning', () => {
 
     const appPort = await findPort()
     const app = await launchApp(appDir, appPort, {
-      env: { __NEXT_TEST_WITH_DEVTOOL: true },
+      env: { __NEXT_TEST_WITH_DEVTOOL: true, __NEXT_TEST_ANON_EXPORT: true },
       onStderr(msg) {
         stderr += msg || ''
       },

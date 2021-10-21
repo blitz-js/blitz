@@ -20,9 +20,12 @@ import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 const debug = require("debug")("blitz:generate")
-const getIsTypeScript = () =>
+const getIsTypeScript = async () =>
   require("fs").existsSync(
-    require("path").join(require("@blitzjs/config").getProjectRoot(), "tsconfig.json"),
+    require("path").join(
+      await require("next/dist/server/lib/utils").getProjectRoot(process.cwd()),
+      "tsconfig.json",
+    ),
   )
 
 enum ResourceType {
@@ -208,14 +211,31 @@ export class Generate extends Command {
     }
   }
 
+  validateModelName(modelName: string): void {
+    const RESERVED_MODEL_NAMES = ["page", "api", "query", "mutation"]
+    if (RESERVED_MODEL_NAMES.includes(modelName)) {
+      throw new Error(
+        `Names ${RESERVED_MODEL_NAMES} or their plurals cannot be used as model names`,
+      )
+    }
+    if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
+      throw new Error(
+        `Invalid model name: "${modelName}". Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`,
+      )
+    }
+  }
+
   async run() {
     const {args, argv, flags}: {args: Args; argv: string[]; flags: Flags} = this.parse(Generate)
     debug("args: ", args)
     debug("flags: ", flags)
 
+    process.env.BLITZ_APP_DIR = process.cwd()
+
     try {
       const {model, context} = this.getModelNameAndContext(args.model, flags.context)
       const singularRootContext = modelName(model)
+      this.validateModelName(singularRootContext)
 
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
@@ -234,7 +254,7 @@ export class Generate extends Command {
           Name: capitalize(model),
           dryRun: flags["dry-run"],
           context: context,
-          useTs: getIsTypeScript(),
+          useTs: await getIsTypeScript(),
         })
         await generator.run()
       }
@@ -243,7 +263,7 @@ export class Generate extends Command {
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
-      log.error(err)
+      log.error(err as any)
       this.exit(1)
     }
   }

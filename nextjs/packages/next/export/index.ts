@@ -7,7 +7,7 @@ import {
   readFileSync,
   writeFileSync,
 } from 'fs'
-import { Worker } from 'jest-worker'
+import { Worker } from '../lib/worker'
 import { dirname, join, resolve, sep } from 'path'
 import { promisify } from 'util'
 import { AmpPageStatus, formatAmpMessages } from '../build/output/index'
@@ -20,7 +20,6 @@ import {
   BUILD_ID_FILE,
   CLIENT_PUBLIC_FILES_PATH,
   CLIENT_STATIC_FILES_PATH,
-  CONFIG_FILE,
   EXPORT_DETAIL,
   EXPORT_MARKER,
   PAGES_MANIFEST,
@@ -28,23 +27,20 @@ import {
   PRERENDER_MANIFEST,
   SERVERLESS_DIRECTORY,
   SERVER_DIRECTORY,
-} from '../next-server/lib/constants'
-import loadConfig, {
-  isTargetLikeServerless,
-  NextConfig,
-} from '../next-server/server/config'
+} from '../shared/lib/constants'
+import loadConfig, { isTargetLikeServerless } from '../server/config'
+import { NextConfigComplete } from '../server/config-shared'
 import { eventCliSession } from '../telemetry/events'
 import { hasNextSupport } from '../telemetry/ci-info'
 import { Telemetry } from '../telemetry/storage'
 import {
   normalizePagePath,
   denormalizePagePath,
-} from '../next-server/server/normalize-page-path'
+} from '../server/normalize-page-path'
 import { loadEnvConfig } from '@next/env'
 import { PrerenderManifest } from '../build'
-import exportPage from './worker'
 import { PagesManifest } from '../build/webpack/plugins/pages-manifest-plugin'
-import { getPagePath } from '../next-server/server/require'
+import { getPagePath } from '../server/require'
 import { trace } from '../telemetry/trace'
 
 const exists = promisify(existsOrig)
@@ -70,6 +66,7 @@ const createProgress = (total: number, label: string) => {
   }
   let currentSegmentTotal = segments.shift()
   let currentSegmentCount = 0
+  let lastProgressOutput = Date.now()
   let curProgress = 0
   let progressSpinner = createSpinner(`${label} (${curProgress}/${total})`, {
     spinner: {
@@ -90,21 +87,29 @@ const createProgress = (total: number, label: string) => {
         '[==  ]',
         '[=   ]',
       ],
-      interval: 80,
+      interval: 500,
     },
   })
 
   return () => {
     curProgress++
-    currentSegmentCount++
 
-    // Make sure we only log once per fully generated segment
-    if (currentSegmentCount !== currentSegmentTotal) {
-      return
+    // Make sure we only log once
+    // - per fully generated segment, or
+    // - per minute
+    // when not showing the spinner
+    if (!progressSpinner) {
+      currentSegmentCount++
+
+      if (currentSegmentCount === currentSegmentTotal) {
+        currentSegmentTotal = segments.shift()
+        currentSegmentCount = 0
+      } else if (lastProgressOutput + 60000 > Date.now()) {
+        return
+      }
+
+      lastProgressOutput = Date.now()
     }
-
-    currentSegmentTotal = segments.shift()
-    currentSegmentCount = 0
 
     const newText = `${label} (${curProgress}/${total})`
     if (progressSpinner) {
@@ -136,14 +141,14 @@ interface ExportOptions {
 export default async function exportApp(
   dir: string,
   options: ExportOptions,
-  configuration?: NextConfig
+  configuration?: NextConfigComplete
 ): Promise<void> {
   const nextExportSpan = trace('next-export')
 
   return nextExportSpan.traceAsyncFn(async () => {
     dir = resolve(dir)
 
-    // attempt to load global env values so they are available in next.config.js
+    // attempt to load global env values so they are available in blitz.config.js
     nextExportSpan
       .traceChild('load-dotenv')
       .traceFn(() => loadEnvConfig(dir, false, Log))
@@ -181,7 +186,7 @@ export default async function exportApp(
 
     if (!existsSync(buildIdFile)) {
       throw new Error(
-        `Could not find a production build in the '${distDir}' directory. Try building your app with 'next build' before starting the static export. https://nextjs.org/docs/messages/next-export-no-build-id`
+        `Could not find a production build in the '${distDir}' directory. Try building your app with 'blitz build' before starting the static export. https://nextjs.org/docs/messages/next-export-no-build-id`
       )
     }
 
@@ -251,13 +256,13 @@ export default async function exportApp(
 
     if (outDir === join(dir, 'public')) {
       throw new Error(
-        `The 'public' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
+        `The 'public' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-public`
       )
     }
 
     if (outDir === join(dir, 'static')) {
       throw new Error(
-        `The 'static' directory is reserved in Next.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
+        `The 'static' directory is reserved in Blitz.js and can not be used as the export out directory. https://nextjs.org/docs/messages/can-not-output-to-static`
       )
     }
 
@@ -308,7 +313,7 @@ export default async function exportApp(
     if (typeof nextConfig.exportPathMap !== 'function') {
       if (!options.silent) {
         Log.info(
-          `No "exportPathMap" found in "${CONFIG_FILE}". Generating map from "./pages"`
+          `No "exportPathMap" found in "blitz.config.js". Generating map from "./pages"`
         )
       }
       nextConfig.exportPathMap = async (defaultMap: ExportPathMap) => {
@@ -319,19 +324,17 @@ export default async function exportApp(
     const {
       i18n,
       images: { loader = 'default' },
+      middleware,
     } = nextConfig
 
     if (i18n && !options.buildExport) {
       throw new Error(
-        `i18n support is not compatible with next export. See here for more info on deploying: https://nextjs.org/docs/deployment`
+        `i18n support is not compatible with blitz export. See here for more info on deploying: https://nextjs.org/docs/deployment`
       )
     }
 
     if (!options.buildExport) {
-      const {
-        isNextImageImported,
-        isBlitzSessionMiddlewareUsed,
-      } = await nextExportSpan
+      const { isNextImageImported } = await nextExportSpan
         .traceChild('is-next-image-imported')
         .traceAsyncFn(() =>
           promises
@@ -340,23 +343,23 @@ export default async function exportApp(
             .catch(() => ({}))
         )
 
-      if (isBlitzSessionMiddlewareUsed) {
+      if (middleware?.length) {
         throw new Error(
-          `Blitz sessionMiddleware is not compatible with \`blitz export\`.
+          `Blitz http middleware is not compatible with \`blitz export\`.
   Possible solutions:
     - Use \`blitz start\` to run a server, which supports middleware.
-    - Remove \`sessionMiddleware\` import from \`blitz.config.js\`.\n`
+    - Remove \`middleware\` from \`blitz.config.js\`.\n`
         )
       }
 
       if (isNextImageImported && loader === 'default' && !hasNextSupport) {
         throw new Error(
-          `Image Optimization using Next.js' default loader is not compatible with \`next export\`.
+          `Image Optimization using Blitz.js' default loader is not compatible with \`blitz export\`.
   Possible solutions:
-    - Use \`next start\` to run a server, which includes the Image Optimization API.
+    - Use \`blitz start\` to run a server, which includes the Image Optimization API.
     - Use any provider which supports Image Optimization (like Vercel).
-    - Configure a third-party loader in \`next.config.js\`.
-    - Use the \`loader\` prop for \`next/image\`.
+    - Configure a third-party loader in \`blitz.config.js\`.
+    - Use the \`loader\` prop for \`blitz\`.
   Read more: https://nextjs.org/docs/messages/export-image-api`
         )
       }
@@ -382,6 +385,8 @@ export default async function exportApp(
       domainLocales: i18n?.domains,
       trailingSlash: nextConfig.trailingSlash,
       disableOptimizedLoading: nextConfig.experimental.disableOptimizedLoading,
+      // TODO: We should support dynamic HTML too
+      requireStaticHTML: true,
     }
 
     const { serverRuntimeConfig, publicRuntimeConfig } = nextConfig
@@ -470,7 +475,7 @@ export default async function exportApp(
       if (!options.silent) {
         Log.warn(
           chalk.yellow(
-            `Statically exporting a Next.js application via \`next export\` disables API routes.`
+            `Statically exporting a Blitz.js application via \`blitz export\` disables API routes.`
           ) +
             `\n` +
             chalk.yellow(
@@ -480,7 +485,7 @@ export default async function exportApp(
             ) +
             `\n` +
             chalk.yellow(
-              `Pages in your application without server-side data dependencies will be automatically statically exported by \`next build\`, including pages powered by \`getStaticProps\`.`
+              `Pages in your application without server-side data dependencies will be automatically statically exported by \`blitz build\`, including pages powered by \`getStaticProps\`.`
             ) +
             `\n` +
             chalk.yellow(
@@ -521,15 +526,31 @@ export default async function exportApp(
         )
     }
 
+    const timeout = configuration?.experimental.staticPageGenerationTimeout || 0
+    let infoPrinted = false
     const worker = new Worker(require.resolve('./worker'), {
+      timeout: timeout * 1000,
+      onRestart: (_method, [{ path }], attempts) => {
+        if (attempts >= 3) {
+          throw new Error(
+            `Static page generation for ${path} is still timing out after 3 attempts. See more info here https://nextjs.org/docs/messages/static-page-generation-timeout`
+          )
+        }
+        Log.warn(
+          `Restarted static page genertion for ${path} because it took more than ${timeout} seconds`
+        )
+        if (!infoPrinted) {
+          Log.warn(
+            'See more info here https://nextjs.org/docs/messages/static-page-generation-timeout'
+          )
+          infoPrinted = true
+        }
+      },
       maxRetries: 0,
       numWorkers: threads,
       enableWorkerThreads: nextConfig.experimental.workerThreads,
       exposedMethods: ['default'],
-    }) as Worker & { default: typeof exportPage }
-
-    worker.getStdout().pipe(process.stdout)
-    worker.getStderr().pipe(process.stderr)
+    }) as Worker & typeof import('./worker')
 
     let renderError = false
     const errorPaths: string[] = []
@@ -540,9 +561,10 @@ export default async function exportApp(
         pageExportSpan.setAttribute('path', path)
 
         return pageExportSpan.traceAsyncFn(async () => {
+          const pathMap = exportPathMap[path]
           const result = await worker.default({
             path,
-            pathMap: exportPathMap[path],
+            pathMap,
             distDir,
             outDir,
             pagesDataDir,
@@ -557,6 +579,7 @@ export default async function exportApp(
             disableOptimizedLoading:
               nextConfig.experimental.disableOptimizedLoading,
             parentSpanId: pageExportSpan.id,
+            httpAgentOptions: nextConfig.httpAgentOptions,
           })
 
           for (const validation of result.ampValidations || []) {
@@ -579,6 +602,10 @@ export default async function exportApp(
             if (result.ssgNotFound === true) {
               configuration.ssgNotFoundPaths.push(path)
             }
+
+            const durations = (configuration.pageDurationMap[pathMap.page] =
+              configuration.pageDurationMap[pathMap.page] || {})
+            durations[path] = result.duration
           }
 
           if (progress) progress()

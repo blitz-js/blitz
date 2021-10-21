@@ -69,7 +69,7 @@ function transformPropGetters(
 }
 
 const HOFName = 'withFixNodeFileTrace';
-const importFrom = '@blitzjs/core/server';
+const importFrom = 'next/dist/server/utils';
 
 function addWithFixNodeFileTraceImport(path: NodePath<any>) {
   return addNamedImport(path, HOFName, importFrom);
@@ -85,17 +85,21 @@ const pagesToSkip = ([] as string[]).concat(
 );
 
 function isPage(filePath: string) {
-  if (!filePath.includes('pages' + nodePath.sep)) {
+  if (!filePath.includes(nodePath.sep + 'pages' + nodePath.sep)) {
     return false;
   }
-  if (filePath.includes('pages' + nodePath.sep + 'api')) {
+  if (
+    filePath.includes(
+      nodePath.sep + 'pages' + nodePath.sep + 'api' + nodePath.sep
+    )
+  ) {
     return false;
   }
   return !pagesToSkip.some((fileToSkip) => filePath.includes(fileToSkip));
 }
 
 function isApiRoute(filePath: string) {
-  if (filePath.includes('pages' + nodePath.sep + 'api')) {
+  if (filePath.includes(nodePath.sep + 'api' + nodePath.sep)) {
     return true;
   }
   return false;

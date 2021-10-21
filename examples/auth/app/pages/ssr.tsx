@@ -12,16 +12,8 @@ import {
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import logout from "app/auth/mutations/logout"
-import path from "path"
 
 export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  // Ensure these files are not eliminated by trace-based tree-shaking (like Vercel)
-  // https://github.com/blitz-js/blitz/issues/794
-  path.resolve("next.config.js")
-  path.resolve("blitz.config.js")
-  path.resolve(".next/blitz/db.js")
-  // End anti-tree-shaking
-
   const session = await getSession(req, res)
   console.log("Session id:", session.userId)
   try {
@@ -31,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
       {res, req},
     )
     return {props: {user}}
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === "NotFoundError") {
       res.statusCode = 404
       res.end()
@@ -54,7 +46,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
   }
 }
 
-const Test: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({user, error}) => {
+const PageSSR: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  user,
+  error,
+}) => {
   const router = useRouter()
   const [logoutMutation] = useMutation(logout)
 
@@ -77,4 +72,4 @@ const Test: BlitzPage<InferGetServerSidePropsType<typeof getServerSideProps>> = 
   )
 }
 
-export default Test
+export default PageSSR

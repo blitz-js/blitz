@@ -1,25 +1,19 @@
-import PropTypes from 'prop-types'
 import React, { Component, ReactElement, ReactNode, useContext } from 'react'
 import flush from 'styled-jsx/server'
 import {
   AMP_RENDER_TARGET,
   OPTIMIZED_FONT_PROVIDERS,
-} from '../next-server/lib/constants'
-import { DocumentContext as DocumentComponentContext } from '../next-server/lib/document-context'
+} from '../shared/lib/constants'
+import { DocumentContext as DocumentComponentContext } from '../shared/lib/document-context'
 import {
   DocumentContext,
   DocumentInitialProps,
   DocumentProps,
-} from '../next-server/lib/utils'
-import {
-  BuildManifest,
-  getPageFiles,
-} from '../next-server/server/get-page-files'
-import { cleanAmpPath } from '../next-server/server/utils'
+} from '../shared/lib/utils'
+import { BuildManifest, getPageFiles } from '../server/get-page-files'
+import { cleanAmpPath } from '../server/utils'
 import { htmlEscapeJsonString } from '../server/htmlescape'
-import Script, {
-  Props as ScriptLoaderProps,
-} from '../client/experimental-script'
+import Script, { ScriptProps } from '../client/script'
 
 export { DocumentContext, DocumentInitialProps, DocumentProps }
 
@@ -81,11 +75,12 @@ function getPreNextScripts(context: DocumentProps, props: OriginProps) {
   const { scriptLoader, disableOptimizedLoading } = context
 
   return (scriptLoader.beforeInteractive || []).map(
-    (file: ScriptLoaderProps) => {
+    (file: ScriptProps, index: number) => {
       const { strategy, ...scriptProps } = file
       return (
         <script
           {...scriptProps}
+          key={scriptProps.src || index}
           defer={!disableOptimizedLoading}
           nonce={props.nonce}
           crossOrigin={props.crossOrigin || process.env.__NEXT_CROSS_ORIGIN}
@@ -164,7 +159,7 @@ function getScripts(
  * `Document` component handles the initial `document` markup and renders only on the server side.
  * Commonly used for implementing server side rendering for `css-in-js` libraries.
  */
-export default class Document<P = {}> extends Component<DocumentProps & P> {
+export class Document<P = {}> extends Component<DocumentProps & P> {
   /**
    * `getInitialProps` hook returns the context object with the addition of `renderPage`.
    * `renderPage` callback executes `React` rendering logic synchronously to support server-rendering wrappers
@@ -204,6 +199,7 @@ export default class Document<P = {}> extends Component<DocumentProps & P> {
     )
   }
 }
+export default Document
 
 export function Html(
   props: React.DetailedHTMLProps<
@@ -237,11 +233,6 @@ export class Head extends Component<
     >
 > {
   static contextType = DocumentComponentContext
-
-  static propTypes = {
-    nonce: PropTypes.string,
-    crossOrigin: PropTypes.string,
-  }
 
   context!: React.ContextType<typeof DocumentComponentContext>
 
@@ -412,7 +403,7 @@ export class Head extends Component<
 
   handleDocumentScriptLoaderItems(children: React.ReactNode): ReactNode[] {
     const { scriptLoader } = this.context
-    const scriptLoaderItems: ScriptLoaderProps[] = []
+    const scriptLoaderItems: ScriptProps[] = []
     const filteredChildren: ReactNode[] = []
 
     React.Children.forEach(children, (child: any) => {
@@ -447,7 +438,9 @@ export class Head extends Component<
       if (
         c.type === 'link' &&
         c.props['href'] &&
-        OPTIMIZED_FONT_PROVIDERS.some((url) => c.props['href'].startsWith(url))
+        OPTIMIZED_FONT_PROVIDERS.some(({ url }) =>
+          c.props['href'].startsWith(url)
+        )
       ) {
         const newProps = { ...(c.props || {}) }
         newProps['data-href'] = newProps['href']
@@ -507,14 +500,14 @@ export class Head extends Component<
         if (!isReactHelmet) {
           if (child?.type === 'title') {
             console.warn(
-              "Warning: <title> should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-title"
+              "Warning: <title> should not be used in _document.js's <DocumentHead>. https://nextjs.org/docs/messages/no-document-title"
             )
           } else if (
             child?.type === 'meta' &&
             child?.props?.name === 'viewport'
           ) {
             console.warn(
-              "Warning: viewport meta tags should not be used in _document.js's <Head>. https://nextjs.org/docs/messages/no-document-viewport-meta"
+              "Warning: viewport meta tags should not be used in _document.js's <DocumentHead>. https://nextjs.org/docs/messages/no-document-viewport-meta"
             )
           }
         }
@@ -522,7 +515,7 @@ export class Head extends Component<
       })
       if (this.props.crossOrigin)
         console.warn(
-          'Warning: `Head` attribute `crossOrigin` is deprecated. https://nextjs.org/docs/messages/doc-crossorigin-deprecated'
+          'Warning: `DocumentHead` attribute `crossOrigin` is deprecated. https://nextjs.org/docs/messages/doc-crossorigin-deprecated'
         )
     }
 
@@ -534,11 +527,7 @@ export class Head extends Component<
       children = this.makeStylesheetInert(children) as any /* blitz */
     }
 
-    if (process.env.__NEXT_SCRIPT_LOADER) {
-      children = this.handleDocumentScriptLoaderItems(
-        children
-      ) as any /* blitz */
-    }
+    children = this.handleDocumentScriptLoaderItems(children) as any /* blitz */
 
     let hasAmphtmlRel = false
     let hasCanonicalRel = false
@@ -641,6 +630,9 @@ export class Head extends Component<
           </>
         )}
         {children}
+        {process.env.__NEXT_OPTIMIZE_FONTS && (
+          <meta name="next-font-preconnect" />
+        )}
         {head}
         <meta
           name="next-head-count"
@@ -706,6 +698,9 @@ export class Head extends Component<
             {!process.env.__NEXT_OPTIMIZE_CSS && (
               <noscript data-n-css={this.props.nonce ?? ''} />
             )}
+            {process.env.__NEXT_OPTIMIZE_IMAGES && (
+              <meta name="next-image-preload" />
+            )}
             {!disableRuntimeJS &&
               !disableJsPreload &&
               this.getPreloadDynamicChunks()}
@@ -742,6 +737,7 @@ export class Head extends Component<
     )
   }
 }
+export class DocumentHead extends Head {}
 
 export function Main() {
   const { inAmpMode, html, docComponentsRendered } = useContext(
@@ -756,11 +752,6 @@ export function Main() {
 
 export class NextScript extends Component<OriginProps> {
   static contextType = DocumentComponentContext
-
-  static propTypes = {
-    nonce: PropTypes.string,
-    crossOrigin: PropTypes.string,
-  }
 
   context!: React.ContextType<typeof DocumentComponentContext>
 
@@ -911,6 +902,7 @@ export class NextScript extends Component<OriginProps> {
     )
   }
 }
+export class BlitzScript extends NextScript {}
 
 function getAmpPath(ampPath: string, asPath: string): string {
   return ampPath || `${asPath}${asPath.includes('?') ? '&' : '?'}amp=1`

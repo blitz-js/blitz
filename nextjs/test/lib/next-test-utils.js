@@ -1,6 +1,12 @@
 import spawn from 'cross-spawn'
 import express from 'express'
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
+import {
+  existsSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+  createReadStream,
+} from 'fs'
 import { writeFile } from 'fs-extra'
 import getPort from 'get-port'
 import http from 'http'
@@ -83,7 +89,7 @@ export function renderViaHTTP(appPort, pathname, query, opts) {
 
 export function fetchViaHTTP(appPort, pathname, query, opts) {
   const url = `http://localhost:${appPort}${pathname}${
-    query ? `?${qs.stringify(query)}` : ''
+    typeof query === 'string' ? query : query ? `?${qs.stringify(query)}` : ''
   }`
   return fetch(url, opts)
 }
@@ -106,27 +112,29 @@ export function runNextCommand(argv, options = {}) {
 
   return new Promise((resolve, reject) => {
     console.log(`Running command "next ${argv.join(' ')}"`)
-    const instance = spawn('node', ['--no-deprecation', nextBin, ...argv], {
-      ...options.spawnOptions,
-      cwd,
-      env,
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
+    const instance = spawn(
+      'node',
+      [...(options.nodeArgs || []), '--no-deprecation', nextBin, ...argv],
+      {
+        ...options.spawnOptions,
+        cwd,
+        env,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }
+    )
 
     if (typeof options.instance === 'function') {
       options.instance(instance)
     }
 
     let stderrOutput = ''
-    if (options.stderr) {
-      instance.stderr.on('data', function (chunk) {
-        stderrOutput += chunk
+    instance.stderr.on('data', function (chunk) {
+      stderrOutput += chunk
 
-        if (options.stderr === 'log') {
-          console.log(chunk.toString())
-        }
-      })
-    }
+      if (options.stderr === 'log') {
+        console.log(chunk.toString())
+      }
+    })
 
     let stdoutOutput = ''
     if (options.stdout) {
@@ -146,6 +154,7 @@ export function runNextCommand(argv, options = {}) {
         !options.ignoreFail &&
         code !== 0
       ) {
+        console.log(stderrOutput)
         return reject(new Error(`command failed with code ${code}`))
       }
 
@@ -176,11 +185,16 @@ export function runNextCommandDev(argv, stdOut, opts = {}) {
     ...opts.env,
   }
 
+  const nodeArgs = opts.nodeArgs || []
   return new Promise((resolve, reject) => {
-    const instance = spawn('node', ['--no-deprecation', nextBin, ...argv], {
-      cwd,
-      env,
-    })
+    const instance = spawn(
+      'node',
+      [...nodeArgs, '--no-deprecation', nextBin, ...argv],
+      {
+        cwd,
+        env,
+      }
+    )
     let didResolve = false
 
     function handleStdout(data) {
@@ -254,6 +268,10 @@ export function nextExportDefault(dir, opts = {}) {
   return runNextCommand(['export', dir], opts)
 }
 
+export function nextLint(dir, args = [], opts = {}) {
+  return runNextCommand(['lint', dir, ...args], opts)
+}
+
 export function nextStart(dir, port, opts = {}) {
   return runNextCommandDev(['start', '-p', port, dir], undefined, {
     ...opts,
@@ -292,7 +310,7 @@ export function buildTS(args = [], cwd, env = {}) {
 // Kill a launched app
 export async function killApp(instance) {
   await new Promise((resolve, reject) => {
-    treeKill(instance.pid, (err) => {
+    treeKill(instance?.pid, (err) => {
       if (err) {
         if (
           process.platform === 'win32' &&
@@ -350,10 +368,16 @@ export function waitFor(millis) {
   return new Promise((resolve) => setTimeout(resolve, millis))
 }
 
-export async function startStaticServer(dir) {
+export async function startStaticServer(dir, notFoundFile) {
   const app = express()
   const server = http.createServer(app)
   app.use(express.static(dir))
+
+  if (notFoundFile) {
+    app.use((req, res) => {
+      createReadStream(notFoundFile).pipe(res)
+    })
+  }
 
   await promiseCall(server, 'listen')
   return server

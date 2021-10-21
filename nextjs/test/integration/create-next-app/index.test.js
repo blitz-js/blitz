@@ -53,6 +53,9 @@ describe.skip('create next app', () => {
           fs.existsSync(path.join(cwd, projectName, 'pages/index.js'))
         ).toBeTruthy()
         expect(
+          fs.existsSync(path.join(cwd, projectName, '.eslintrc.json'))
+        ).toBeTruthy()
+        expect(
           fs.existsSync(path.join(cwd, projectName, 'node_modules/next'))
         ).toBe(true)
       })
@@ -119,7 +122,10 @@ describe.skip('create next app', () => {
         fs.existsSync(path.join(cwd, projectName, 'tsconfig.json'))
       ).toBeTruthy()
       expect(
-        fs.existsSync(path.join(cwd, projectName, 'next-env.d.ts'))
+        fs.existsSync(path.join(cwd, projectName, 'blitz-env.d.ts'))
+      ).toBeTruthy()
+      expect(
+        fs.existsSync(path.join(cwd, projectName, '.eslintrc.json'))
       ).toBeTruthy()
       expect(
         fs.existsSync(path.join(cwd, projectName, 'node_modules/next'))
@@ -138,6 +144,8 @@ describe.skip('create next app', () => {
       ])
       expect(Object.keys(pkgJSON.devDependencies)).toEqual([
         '@types/react',
+        'eslint',
+        'eslint-config-next',
         'typescript',
       ])
     })
@@ -242,7 +250,12 @@ describe.skip('create next app', () => {
         )
         expect(res.exitCode).toBe(0)
 
-        const files = ['package.json', 'pages/index.js', '.gitignore']
+        const files = [
+          'package.json',
+          'pages/index.js',
+          '.gitignore',
+          '.eslintrc.json',
+        ]
         files.forEach((file) =>
           expect(fs.existsSync(path.join(cwd, projectName, file))).toBeTruthy()
         )
@@ -309,6 +322,7 @@ describe.skip('create next app', () => {
         'pages/index.js',
         '.gitignore',
         'node_modules/next',
+        '.eslintrc.json',
       ]
       files.forEach((file) =>
         expect(fs.existsSync(path.join(cwd, file))).toBeTruthy()
@@ -327,6 +341,7 @@ describe.skip('create next app', () => {
         'pages/index.js',
         '.gitignore',
         'node_modules/next',
+        '.eslintrc.json',
       ]
       files.forEach((file) =>
         expect(fs.existsSync(path.join(cwd, projectName, file))).toBeTruthy()
@@ -344,6 +359,7 @@ describe.skip('create next app', () => {
         'package.json',
         'pages/index.js',
         '.gitignore',
+        '.eslintrc.json',
         'package-lock.json',
         'node_modules/next',
       ]

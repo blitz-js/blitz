@@ -60,4 +60,11 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
       : ""
     return `app/pages/${parent}${kebabCaseModelName}`
   }
+
+  async postWrite() {
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const {saveRouteManifest} = await import("next/dist/build/routes")
+    const config = loadConfigProduction(process.cwd())
+    await saveRouteManifest(process.cwd(), config)
+  }
 }

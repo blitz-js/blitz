@@ -49,7 +49,7 @@ export const isBlitzRoot = async (): Promise<{
       }
     }
     return {err: true, message: IsBlitzRootError.BadPackageJson}
-  } catch (err) {
+  } catch (err: any) {
     // No local package.json
     if (err.code === "ENOENT") {
       const out = await checkParent()
