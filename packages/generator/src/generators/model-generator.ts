@@ -6,7 +6,7 @@ import which from "npm-which"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
-import { getPrismaSchema } from "../utils/get-prisma-schema"
+import {getPrismaSchema} from "../utils/get-prisma-schema"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -82,10 +82,12 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
   }
 
   async postWrite() {
+    const prismaBin = which(process.cwd()).sync("prisma")
+    spawn.sync(prismaBin, ["format"], {stdio: "inherit"})
+
     const shouldMigrate = await this.prismaMigratePrompt()
     if (shouldMigrate) {
       await new Promise<void>((res, rej) => {
-        const prismaBin = which(process.cwd()).sync("prisma")
         const child = spawn(prismaBin, ["migrate", "dev"], {stdio: "inherit"})
         child.on("exit", (code) => (code === 0 ? res() : rej()))
       })
