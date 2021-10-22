@@ -1,4 +1,4 @@
-import { Editor } from "mem-fs-editor"
+import {Editor} from "mem-fs-editor"
 import {NextConfigComplete} from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
 import {
@@ -56,28 +56,19 @@ export interface FieldTemplateValues {
 }
 
 export abstract class Builder<T, U> implements IBuilder<T, U> {
-  
-  public constructor(fs?: Editor){
+  public constructor(fs?: Editor) {
     this.fs = fs
   }
 
   abstract getTemplateValues(Options: T): Promise<U>
-  
+
   public fs: Editor | undefined
 
-  public fallbackMap = {
-    string: "LabeledTextField",
-    number: "LabeledTextField",
-    int: "LabeledTextField",
-    boolean: "LabeledTextField",
-  }
-
-  public fallbackZodMap = {
-    string: "string",
-    number: "number",
-    boolean: "boolean",
-    uuid: "string",
-    int: "number",
+  public fallbacks: {[key in string]: string} = {
+    component: "LabeledTextField",
+    inputType: "text",
+    zodType: "string",
+    prismaType: "String",
   }
 
   public getId(input: string = "") {
@@ -90,6 +81,17 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
     return `[${input}]`
   }
 
+  public async getResourceValueFromConfig(fieldType: string, resource: string): Promise<string> {
+    let templateValue = ""
+    try {
+      let config = await this.getCachedConfig()
+      templateValue = config.codegen.fieldTypeMap[fieldType][resource]
+    } catch (ex) {
+      templateValue = this.fallbacks[resource]
+    }
+    return templateValue
+  }
+
   public getModelNamesPath(context: string | undefined, modelNames: string) {
     const kebabCaseContext = context ? `${camelCaseToKebabCase(context)}/` : ""
     const kebabCaseModelNames = camelCaseToKebabCase(modelNames)
@@ -97,28 +99,15 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   }
 
   public async getZodType(type: string = "") {
-    let typeToZodNameMap: {[key: string]: string} = this.fallbackZodMap
-
-    let config = await this.getCachedConfig()
-    if (config.template && config.template.typeToZodTypeMap) {
-      typeToZodNameMap = config.template.typeToZodTypeMap
-    }
-
-    let defaultName = "any"
-
-    return typeToZodNameMap[type] ?? defaultName
+    return this.getResourceValueFromConfig(type, "zodType")
   }
 
   public async getComponentForType(type: string = ""): Promise<string> {
-    let typeToComponentMap: {[key: string]: string} = this.fallbackMap
-    let config = await this.getCachedConfig()
-    if (config.template && config.template.typeToComponentMap) {
-      typeToComponentMap = config.template.typeToComponentMap
-    }
+    return this.getResourceValueFromConfig(type, "component")
+  }
 
-    let defaultComponent = typeToComponentMap["string"]
-
-    return typeToComponentMap[type] ?? defaultComponent
+  public async getInputType(type: string = ""): Promise<string> {
+    return this.getResourceValueFromConfig(type, "inputType")
   }
 
   private config: NextConfigComplete | undefined = undefined
