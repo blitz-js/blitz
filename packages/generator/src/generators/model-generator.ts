@@ -83,6 +83,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   async postWrite() {
     const prismaBin = which(process.cwd()).sync("prisma")
+    //@ts-ignore
     spawn.sync(prismaBin, ["format"], {stdio: "inherit"})
 
     const shouldMigrate = await this.prismaMigratePrompt()
