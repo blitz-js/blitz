@@ -8,7 +8,7 @@ const debug = require('debug')('blitz:repl')
 import globby from 'globby'
 import ProgressBar from 'progress'
 import { getProjectRootSync } from '../server/lib/utils'
-import { baseLogger } from '../server/lib/logging'
+import { logger } from '../stdlib-server/logging'
 
 const projectRoot = getProjectRootSync()
 const isTypeScript = fs.existsSync(path.join(projectRoot, 'tsconfig.json'))
@@ -77,7 +77,7 @@ export const loadBlitz = async () => {
           [name]: contextObj,
         }
       } catch (error) {
-        baseLogger().error(`Failed to load ${modulePath}: ${error}`)
+        logger().error(`Failed to load ${modulePath}: ${error}`)
         debug('Failed to load module', error)
         return {}
       }

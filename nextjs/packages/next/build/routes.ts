@@ -2,7 +2,7 @@ import { promises } from 'fs'
 import { NextConfigComplete } from '../server/config-shared'
 import { createPagesMapping } from './entries'
 import { collectPages, getIsRpcFile } from './utils'
-import { newline, baseLogger } from '../server/lib/logging'
+import { logger, newline } from '../stdlib-server/logging'
 import { isInternalBlitzMonorepoDevelopment } from '../server/utils'
 import { join, dirname } from 'path'
 import { outputFile } from 'fs-extra'
@@ -230,7 +230,7 @@ function dedupeBy<T>(
 
   if (duplicateKeys.length) {
     newline()
-    const log = baseLogger({ displayDateTime: false }).getChildLogger()
+    const log = logger({ displayDateTime: false }).getChildLogger()
 
     duplicateKeys.forEach((key) => {
       let errorMessage = `The page component is named "${key}" on the following routes:\n\n`
