@@ -15182,6 +15182,11 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.curry@4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.curry/-/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
@@ -22239,12 +22244,13 @@ superagent@^3.8.1:
     qs "^6.5.1"
     readable-stream "^2.3.5"
 
-superjson@1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.7.2.tgz#81f531829fee8bdab5593f57c145be25d2ed54c4"
-  integrity sha512-KwMBfX2c5Mq4EcvGivXH3JBYqYFoZQbA3aMhwXIdpkyVInEkxIGaoSDk+E8y/gMe5RH3mjBU3xRpvKsjZktphw==
+superjson@1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.7.5.tgz#596d080fd3c010f6d991c53a292c03704f160649"
+  integrity sha512-AHuFroOcMTK6LdG/irwXIHwH6Gof5nh42iywnhhf7hMZ6UJqFDRtJ82ViJg14UX3AG8vWRf4Dh3oPIJcqu16Nw==
   dependencies:
     debug "^4.3.1"
+    lodash.clonedeep "^4.5.0"
 
 supports-color@^2.0.0:
   version "2.0.0"
