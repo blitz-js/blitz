@@ -11,7 +11,7 @@ export function getDbName(connectionString: string): string {
 async function runSeed() {
   require("../utils/setup-ts-node").setupTsnode()
 
-  const projectRoot = require("@blitzjs/config").getProjectRoot()
+  const projectRoot = require("next/dist/server/lib/utils").getProjectRootSync()
   const seedPath = require("path").join(projectRoot, "db/seeds")
   const dbPath = require("path").join(projectRoot, "db/index")
 

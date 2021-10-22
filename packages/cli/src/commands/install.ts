@@ -1,4 +1,3 @@
-import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
 import type {RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
@@ -66,6 +65,22 @@ interface RecipeMeta {
   location: RecipeLocation
 }
 
+interface Tree {
+  path: string
+  mode: string
+  type: string
+  sha: string
+  size: number
+  url: string
+}
+
+interface GithubRepoAPITrees {
+  sha: string
+  url: string
+  tree: Tree[]
+  truncated: boolean
+}
+
 export class Install extends Command {
   static description = "Install a Recipe into your Blitz app"
   static aliases = ["i"]
@@ -78,7 +93,7 @@ export class Install extends Command {
   static args = [
     {
       name: "recipe",
-      required: true,
+      required: false,
       description:
         "Name of a Blitz recipe from @blitzjs/blitz/recipes, or a file path to a local recipe definition",
     },
@@ -124,6 +139,32 @@ export class Install extends Command {
         location: RecipeLocation.Local,
       }
     }
+  }
+
+  async getOfficialRecipeList(): Promise<string[]> {
+    return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
+      (release: GithubRepoAPITrees) =>
+        release.tree.reduce((recipesList: string[], item) => {
+          const filePath = item.path.split("/")
+          const [directory, recipeName] = filePath
+          if (directory === "recipes" && filePath.length === 2 && item.type === "tree") {
+            recipesList.push(recipeName)
+          }
+          return recipesList
+        }, []),
+    )
+  }
+
+  async showRecipesPrompt(recipesList: string[]): Promise<string> {
+    debug("recipesList", recipesList)
+    const {recipeName} = (await this.enquirer.prompt({
+      type: "select",
+      name: "recipeName",
+      message: "Select a recipe to install",
+      choices: recipesList,
+    })) as {recipeName: string}
+
+    return recipeName
   }
 
   /**
@@ -181,7 +222,9 @@ export class Install extends Command {
    *
    */
   private async setupProxySupport() {
-    const cli = getConfig().cli
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const blitzConfig = loadConfigProduction(process.cwd())
+    const cli = blitzConfig.cli
     const httpProxy = cli?.httpProxy || process.env.http_proxy || process.env.HTTP_PROXY
     const httpsProxy = cli?.httpsProxy || process.env.https_proxy || process.env.HTTPS_PROXY
     const noProxy = cli?.noProxy || process.env.no_proxy || process.env.NO_PROXY
@@ -205,11 +248,18 @@ export class Install extends Command {
     await this.setupProxySupport()
 
     const {args} = this.parse(Install)
+
+    let selectedRecipe = args.recipe
+    if (!selectedRecipe) {
+      const officialRecipeList = await this.getOfficialRecipeList()
+      selectedRecipe = await this.showRecipesPrompt(officialRecipeList)
+    }
+    const recipeInfo = this.normalizeRecipePath(selectedRecipe)
+
     const originalCwd = process.cwd()
-    const recipeInfo = this.normalizeRecipePath(args.recipe)
+
     debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
-
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
@@ -235,7 +285,7 @@ export class Install extends Command {
 4. A file path to a locally-written recipe.\n`)
         process.exit(1)
       } else {
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
+        let spinner = log.spinner(`Cloning GitHub repository for ${selectedRecipe} recipe`).start()
 
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,

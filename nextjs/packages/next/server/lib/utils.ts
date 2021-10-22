@@ -1,4 +1,6 @@
 import findUp from 'next/dist/compiled/find-up'
+import path, { join } from 'path'
+import { existsSync } from 'fs-extra'
 import { dirname } from 'path'
 import { CONFIG_FILE } from '../../shared/lib/constants'
 import { NextConfigComplete } from '../config-shared'
@@ -21,7 +23,7 @@ export function getNodeOptionsWithoutInspect() {
 export async function getProjectRoot(dir: string) {
   const builtConfigPath = await findUp(CONFIG_FILE, { cwd: dir })
 
-  if (builtConfigPath) return builtConfigPath
+  if (builtConfigPath) return path.dirname(builtConfigPath)
 
   const pkgJsonPath = await findUp('package.json', { cwd: dir })
 
@@ -33,6 +35,20 @@ export async function getProjectRoot(dir: string) {
   }
 
   return dirname(pkgJsonPath)
+}
+
+export function getProjectRootSync() {
+  return path.dirname(getConfigSrcPath())
+}
+
+export function getConfigSrcPath() {
+  const tsPath = path.resolve(path.join(process.cwd(), 'blitz.config.ts'))
+  if (existsSync(tsPath)) {
+    return tsPath
+  } else {
+    const jsPath = path.resolve(path.join(process.cwd(), 'blitz.config.js'))
+    return jsPath
+  }
 }
 
 function round(num: number, decimalPlaces: number) {

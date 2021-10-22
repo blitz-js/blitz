@@ -6,7 +6,7 @@
     <img alt="" src="https://img.shields.io/badge/Join%20our%20community-6700EB.svg?style=for-the-badge&labelColor=000000&logoWidth=20&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQ9SURBVHgB7d3dVdtAEIbhcSpICUoH0IEogQqSVBBSAU4FSSpIOoAORAfQgSghHXzZ1U/YcMD4R9rZmf2ec3y448LyiNf27iLiGIAmPLrweC9Un3DhrzG6EarLNP09nlwJ1SOZ/lQr5N80/S/p2QMVCBf5N17XCfm1Y/rBHqjAG9PPHvBsz+mf9WAP+HLA9M/YA14cOP2payH7jpj+VCtk1wnTP+vj7xCy6cTpn7EHLMLp059iD1iD8eveJbVCNsSLheX1YA/YgOWnf8YeKB3Wmf7Ud6Fy4f/FHmtpxbl3YlC4MJ/Cj0bWdwPnPbARg+L0S54XQHS32WwuxClzd4CM0z9rPfeAuTtA5ulPXYQ7wZ04Y+oOoDD9KZc9YOoOoDj9s4dwFzgXR6w1wIPoOvPWA9buAHEJ173o3gWiy3AnuBUHLEbgmYwvAk1/wuM8vAgexThzbwPDkx7/DHwVXfFOxP2GmsKd4Ab6zPeAyU8CI7AHFmH2BRCBPXAyk18GzUrqAXCTiR4ssyj0VFw/oCU8+e+RZ33AWz6KMaYbIIWxB+JSLs1bsbkeMN0AqakHvoku9oA2sAfqBvbAQdw0QArsgb25aYBUQT3QgT2gB+yBuqGcHij2UCqXDZACe2Anlw2QYg/QAOyBuoE98CL3DZDCuK4/rh/Q7oGL6U+TOvcNkJoijN8X1C48+T+g75eQDrAH/qmqAVJgDwyqaoAUe4AGYA/UDZX3QLUNkEIZPRCd5+6BahsgVUgPROwBTSijB7jpVAvGHriHvmw9wAZ4BpX1ABvgmakHtPcbRuwBTWAPULgAV9D/jKDY9YRvwvgEaurD44uQHvAol7qBW7WKluVtIHiUS7GyvA0s6CiXDnxrpQfsgbqBS7GKk/2jYHCrVlGyfxTMrVo0ALdq1Q3sgSKofh0M9oA61a+D2QM0AHugbmAPqClmSRjK2apVVQ8UsySsoK1aHdgDesCtWnUDeyCrIpeFg1u3sylyWTi3btMA7IG6gT2wuuK3hoE9sKrit4YVslWLPaAN7IG6ocKt2zmY2h4O9sDiTG0PZw/QANy6XTewBxZj9ogYVHy025LMHhEz9cBn0We6B0yfERReBLfhx0/R1YQHPx/QBPbA0VwcEwf2wNFcHBPHHjiem3MC2QPHcXdSaJjA+KfgTPQ8hhfjBzHC40mhlzJ+Xq9lK4a4PCs43AVaGTed5mZq+iOXZwWHi3AnOj2wFWNcnxYe7gTxLtBKHuamP/J+Wnh8a5irB7ZC5Yk9gPX1QuXC+usHWqGyhYvUYR0a7zboUOFCNVhnk0krZAOW7wFOvzXhom2xnEbIHizTA1wEYhWW6YFGyC6c1gOcfg9wfA80Qj7g8B7g9HuCww+haIR8wf49wOn3Cvv9k8tGyC/s7gFOv3fY3QONkH+v9MBWqB7PeqDn9FcIT//kcitUn6kHOu/T/xfWzlQy3dEHhwAAAABJRU5ErkJggg==">
   </a>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-336-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
+<a aria-label="All Contributors" href="#contributors-"><img alt="" src="https://img.shields.io/badge/all_contributors-354-17BB8A.svg?style=for-the-badge&labelColor=000000"></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
   <a aria-label="License" href="https://github.com/blitz-js/blitz/blob/canary/LICENSE">
     <img alt="" src="https://img.shields.io/npm/l/blitz.svg?style=for-the-badge&labelColor=000000&color=blue">
@@ -110,9 +110,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
 </a></td>
- <td><a aria-label="Robert Malko" href="https://github.com/malkomalko">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/rob_blitz.jpg" width="40px"/>
-</a></td>
  <td><a aria-label="Digas" href="https://digsas.com">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/digsas.svg" width="40px"/>
 </a></td>
@@ -215,21 +212,6 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
 <table>
   <tr>
     <td align="center"><a href="http://jeremyliberman.com/"><img src="https://avatars3.githubusercontent.com/u/2754163?v=4" width="100px;" alt=""/><br /><sub><b>Jeremy Liberman</b></td>
-    <td align="center"><a href="https://github.com/engelkes-finstreet"><img src="https://avatars0.githubusercontent.com/u/36962022?s=460&u=34cfc4a3d6da0a87026f6068c371779c68daa3a2&v=4" width="100px;" alt=""/><br /><sub><b>Patrick Engelkes</b></sub></a></td>
-    <td align="center"><a href="https://twitter.com/myrondavis"><img src="https://avatars2.githubusercontent.com/u/1430136?v=4" width="100px;" alt=""/><br /><sub><b>Myron Davis</b></sub></a></td>
-    <td align="center"><a href="https://twitter.com/NaReto1125_"><img src="https://avatars.githubusercontent.com/reo777" width="100px;" alt=""/><br /><sub><b>Reo Ishiyama</b></sub></a></td>
-    <td align="center">
-      <a href="https://kevinlangleyjr.com">
-        <img
-          src="https://avatars.githubusercontent.com/u/877634?v=4"
-          width="100px;"
-          alt=""
-        /><br />
-        <sub>
-          <b>Kevin Langley Jr.</b>
-        </sub>
-      </a>
-    </td>
      <td align="center">
        <a href="https://mina.ca">
         <img src="https://avatars.githubusercontent.com/mabadir" width="100px;" alt="Mina Abadir avatar" /><br />
@@ -238,8 +220,6 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
           </sub>
       </a>
     </td>
-  </tr>
-  <tr>
      <td align="center">
        <a href="https://builtforfifty.com">
         <img src="https://avatars.githubusercontent.com/abuuzayr" width="100px;" alt="Abu Uzayr avatar" /><br />
@@ -472,7 +452,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://chriswray.dev/"><img src="https://avatars0.githubusercontent.com/u/53663762?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Christopher Wray</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=cwray-tech" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/piotrski"><img src="https://avatars0.githubusercontent.com/u/244174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Piotrek Tomczewski</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=piotrski" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/piotrski"><img src="https://avatars0.githubusercontent.com/u/244174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Piotrek Tomczewski</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=piotrski" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=piotrski" title="Documentation">📖</a></td>
     <td align="center"><a href="http://raph.site"><img src="https://avatars3.githubusercontent.com/u/1575946?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Raphaël Huchet</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=rap2hpoutre" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=rap2hpoutre" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=rap2hpoutre" title="Code">💻</a></td>
     <td align="center"><a href="http://kattcorp.com"><img src="https://avatars1.githubusercontent.com/u/459267?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alex Johansson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=KATT" title="Code">💻</a></td>
     <td align="center"><a href="http://davidmazza.com"><img src="https://avatars0.githubusercontent.com/u/120893?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Mazza</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=dmzza" title="Code">💻</a></td>
@@ -535,7 +515,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://brianypliu.com"><img src="https://avatars.githubusercontent.com/u/3888780?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Brian Liu</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=LBrian" title="Code">💻</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="http://aleksandra.codes"><img src="https://avatars.githubusercontent.com/u/9019397?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksandra Sikora</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://aleksandra.codes"><img src="https://avatars.githubusercontent.com/u/9019397?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksandra Sikora</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=beerose" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://juanm04.com"><img src="https://avatars.githubusercontent.com/u/16712703?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JuanM04</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=JuanM04" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://github.com/arenddeboer"><img src="https://avatars.githubusercontent.com/u/7022204?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Arend de Boer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=arenddeboer" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/fmilani"><img src="https://avatars.githubusercontent.com/u/1580375?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Felipe Milani</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=fmilani" title="Documentation">📖</a></td>
@@ -695,6 +675,30 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://github.com/johnmurphy01"><img src="https://avatars.githubusercontent.com/u/2939548?v=4?s=100" width="100px;" alt=""/><br /><sub><b>John Murphy</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=johnmurphy01" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=johnmurphy01" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/martinsaxa"><img src="https://avatars.githubusercontent.com/u/33789474?v=4?s=100" width="100px;" alt=""/><br /><sub><b>martinsaxa</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=martinsaxa" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ajwgeek"><img src="https://avatars.githubusercontent.com/u/2135600?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Austin Walhof</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=ajwgeek" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="g3offrey.dev"><img src="https://avatars.githubusercontent.com/u/11151445?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Geoffrey</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=g3offrey" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=g3offrey" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=g3offrey" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/keevan"><img src="https://avatars.githubusercontent.com/u/9924643?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kevin Pham</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=keevan" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/kimngan-bui"><img src="https://avatars.githubusercontent.com/u/20723478?v=4?s=100" width="100px;" alt=""/><br /><sub><b>kimngan-bui</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=kimngan-bui" title="Documentation">📖</a></td>
+    <td align="center"><a href="world.hey.com/bach"><img src="https://avatars.githubusercontent.com/u/11691670?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bahk Chanhee</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=9j" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.afterecon.com/"><img src="https://avatars.githubusercontent.com/u/5559355?v=4?s=100" width="100px;" alt=""/><br /><sub><b>John Vandivier</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=Vandivier" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=Vandivier" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=Vandivier" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://namirsab.github.io"><img src="https://avatars.githubusercontent.com/u/6980777?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Namir</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=namirsab" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=namirsab" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=namirsab" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://twitter.com/scttcper"><img src="https://avatars.githubusercontent.com/u/1400464?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Scott Cooper</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=scttcper" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="abduttayyeb.github.io"><img src="https://avatars.githubusercontent.com/u/55306260?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Abduttayyeb M.r</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=Abduttayyeb" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/maybebored"><img src="https://avatars.githubusercontent.com/u/20951181?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mayuran</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=maybebored" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/MuckHub"><img src="https://avatars.githubusercontent.com/u/54979136?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksei Vesselko</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=MuckHub" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://p-siriphanthong.github.io/"><img src="https://avatars.githubusercontent.com/u/29949429?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Punn Siriphanthong</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=p-siriphanthong" title="Code">💻</a></td>
+    <td align="center"><a href="https://my-portfolio-292eb.web.app"><img src="https://avatars.githubusercontent.com/u/83679827?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Shawn Fetanat</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=shawn-fetanat" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/mochi-sann"><img src="https://avatars.githubusercontent.com/u/44772513?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Moyuru</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=mochi-sann" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=mochi-sann" title="Tests">⚠️</a> <a href="https://github.com/blitz-js/blitz/commits?author=mochi-sann" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/camsloanftc"><img src="https://avatars.githubusercontent.com/u/16295659?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Cam Sloan</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=camsloanftc" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://macieksitkowski.com"><img src="https://avatars.githubusercontent.com/u/58401630?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Maciek Sitkowski</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=sitek94" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/vivek7405"><img src="https://avatars.githubusercontent.com/u/24492244?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vivek</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=vivek7405" title="Documentation">📖</a> <a href="https://github.com/blitz-js/blitz/commits?author=vivek7405" title="Code">💻</a></td>
+    <td align="center"><a href="http://cj.io"><img src="https://avatars.githubusercontent.com/u/1819?v=4?s=100" width="100px;" alt=""/><br /><sub><b>CJ Lazell</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=cj" title="Code">💻</a></td>
+    <td align="center"><a href="robertbroersma.com"><img src="https://avatars.githubusercontent.com/u/4519828?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Robert</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=RobertBroersma" title="Documentation">📖</a></td>
   </tr>
 </table>
 

@@ -5,7 +5,7 @@ import { BabelType } from 'babel-plugin-tester';
  * https://astexplorer.net/#/gist/dd0cdbd56a701d8c9e078d20505b3980/latest
  */
 
-const defaultImportSource = '@blitzjs/core';
+const defaultImportSource = 'next/stdlib';
 
 const specialImports: Record<string, string> = {
   Link: 'next/link',
@@ -18,12 +18,20 @@ const specialImports: Record<string, string> = {
   Main: 'next/document',
   BlitzScript: 'next/document',
 
-  AuthenticationError: 'next/stdlib',
-  AuthorizationError: 'next/stdlib',
-  CSRFTokenMismatchError: 'next/stdlib',
-  NotFoundError: 'next/stdlib',
-  PaginationArgumentError: 'next/stdlib',
-  RedirectError: 'next/stdlib',
+  // AuthenticationError: 'next/stdlib',
+  // AuthorizationError: 'next/stdlib',
+  // CSRFTokenMismatchError: 'next/stdlib',
+  // NotFoundError: 'next/stdlib',
+  // PaginationArgumentError: 'next/stdlib',
+  // RedirectError: 'next/stdlib',
+  // formatZodError: 'next/stdlib',
+  // recursiveFormatZodErrors: 'next/stdlib',
+  // validateZodSchema: 'next/stdlib',
+  // enhancePrisma: 'next/stdlib',
+  // ErrorBoundary: 'next/stdlib',
+  // withErrorBoundary: 'next/stdlib',
+  // useErrorHandler: 'next/stdlib',
+  // withBlitzAppRoot: 'next/stdlib',
 
   paginate: 'next/stdlib-server',
   isLocalhost: 'next/stdlib-server',
@@ -36,6 +44,7 @@ const specialImports: Record<string, string> = {
   SecurePassword: 'next/stdlib-server',
   hash256: 'next/stdlib-server',
   generateToken: 'next/stdlib-server',
+  resolver: 'next/stdlib-server',
   logger: 'next/stdlib-server',
 
   BlitzProvider: 'next/data-client',
@@ -56,17 +65,17 @@ const specialImports: Record<string, string> = {
   dehydrate: 'next/data-client',
   invoke: 'next/data-client',
 
-  Head: '@blitzjs/core/head',
+  Head: 'next/head',
 
-  App: '@blitzjs/core/app',
+  App: 'next/app',
 
-  dynamic: '@blitzjs/core/dynamic',
-  noSSR: '@blitzjs/core/dynamic',
+  dynamic: 'next/dynamic',
+  noSSR: 'next/dynamic',
 
-  getConfig: '@blitzjs/core/config',
-  setConfig: '@blitzjs/core/config',
+  getConfig: 'next/config',
+  setConfig: 'next/config',
 
-  resolver: '@blitzjs/core/server',
+  ErrorComponent: 'next/error',
 };
 
 function RewriteImports(babel: BabelType): PluginObj {

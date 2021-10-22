@@ -1,4 +1,0 @@
-{
-  "main": "dist/blitzjs-core-app.cjs.js",
-  "module": "dist/blitzjs-core-app.esm.js"
-}

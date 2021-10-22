@@ -10,7 +10,7 @@ nextJson.blitzVersion = nextJson.version
 nextJson.version = `${nextJson.nextjsVersion}-${nextJson.blitzVersion}`
 fs.writeJSONSync(nextJsonPath, nextJson, {spaces: 2})
 
-const blitzCoreJsonPath = "packages/core/package.json"
+const blitzCoreJsonPath = "packages/blitz/package.json"
 const blitzCoreJson = fs.readJSONSync(blitzCoreJsonPath)
 blitzCoreJson.dependencies.next = `npm:@blitzjs/next@${nextJson.version}`
 fs.writeJSONSync(blitzCoreJsonPath, blitzCoreJson, {spaces: 2})
