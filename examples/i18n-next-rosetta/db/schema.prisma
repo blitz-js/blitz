@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// --------------------------------------
+
+model User {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String?
+  email          String   @unique
+  hashedPassword String?
+  role           String   @default("USER")
+
+  tokens   Token[]
+  sessions Session[]
+}
+
+model Session {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  expiresAt          DateTime?
+  handle             String    @unique
+  hashedSessionToken String?
+  antiCSRFToken      String?
+  publicData         String?
+  privateData        String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  hashedToken String
+  type        String
+  // See note below about TokenType enum
+  // type        TokenType
+  expiresAt   DateTime
+  sentTo      String
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  @@unique([hashedToken, type])
+}
+
+// NOTE: It's highly recommended to use an enum for the token type
+//       but enums only work in Postgres.
+//       See: https://blitzjs.com/docs/database-overview#switch-to-postgresql
+// enum TokenType {
+//   RESET_PASSWORD
+// }

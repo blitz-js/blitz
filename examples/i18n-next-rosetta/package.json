@@ -1,0 +1,50 @@
+{
+  "name": "blitzI18nRosetta",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "blitz dev",
+    "build": "blitz build",
+    "start": "blitz start",
+    "studio": "blitz prisma studio",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@prisma/client": "3.2.1",
+    "blitz": "0.41.1",
+    "final-form": "4.20.4",
+    "next-rosetta": "1.3.1",
+    "react": "alpha",
+    "react-dom": "alpha",
+    "react-final-form": "6.5.7",
+    "zod": "3.10.1"
+  },
+  "devDependencies": {
+    "@types/preview-email": "2.0.1",
+    "@types/react": "17.0.30",
+    "eslint": "7.32.0",
+    "husky": "6.0.0",
+    "lint-staged": "10.5.4",
+    "prettier": "2.4.1",
+    "prettier-plugin-prisma": "0.15.0",
+    "pretty-quick": "3.1.1",
+    "preview-email": "3.0.5",
+    "prisma": "3.2.1",
+    "typescript": "~4.3"
+  },
+  "private": true
+}
