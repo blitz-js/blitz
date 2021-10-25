@@ -280,14 +280,22 @@ export abstract class Generator<
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
 
-        this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) =>
-            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
-        })
+        let sourcePath = this.sourcePath(filePath)
+        let destinationPath = this.destinationPath(pathSuffix)
+
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
+        let templatedDestinationPath = this.destinationPath(templatedPathSuffix)
+
+        const destinationExists = fs.existsSync(templatedDestinationPath)
+
+        this.fs.copy(destinationExists ? templatedDestinationPath : sourcePath, destinationPath, {
+          process: (input) =>
+            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+        })
+        
         if (templatedPathSuffix !== pathSuffix) {
           this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
         }
