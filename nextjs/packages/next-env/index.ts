@@ -78,7 +78,10 @@ export function loadEnvConfig(
   if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
   const isTest = process.env.NODE_ENV === 'test'
-  const mode = isTest ? 'test' : dev ? 'development' : 'production'
+  let mode = isTest ? 'test' : dev ? 'development' : 'production'
+  if (process.env.APP_ENV) {
+    mode = process.env.APP_ENV
+  }
   const dotenvFiles = [
     `.env.${mode}.local`,
     // Don't include `.env.local` for `test` environment
@@ -106,7 +109,7 @@ export function loadEnvConfig(
         path: envFile,
         contents,
       })
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         log.error(`Failed to load env from ${envFile}`, err)
       }

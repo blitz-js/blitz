@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@next/env",
-  "version": "11.1.0",
+  "version": "0.41.2-canary.4",
   "keywords": [
     "react",
     "next",
