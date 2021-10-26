@@ -1,5 +1,5 @@
 const BLITZ_PATH = "../blitz/bin/blitz"
-const testAppFolderName = "app"
+const TEST_APP_NAME = "app"
 
 // waiting 2 minutes for the command to execute or test breaks
 const execConfig = {
@@ -8,7 +8,7 @@ const execConfig = {
 }
 
 const buildAppCommand = (
-  appName: string,
+  appName: string = TEST_APP_NAME,
   packageManager: "yarn" | "npm",
   template: "full" | "minimal",
   formLib: "react-final-form" | "react-hook-form" | "formik",
@@ -18,34 +18,36 @@ const buildAppCommand = (
     `${BLITZ_PATH} new ${appName} --${packageManager} --template=${template}  --form=${formLib} --language=${language}`,
     execConfig,
   )
-  cy.exec("node ./test/e2e/cypress/integration/helpers/append-file.js")
+  cy.writeFile(
+    `./${TEST_APP_NAME}/types.ts`,
+    "declare module 'react' { interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> { jsx?: boolean; global?: boolean }}",
+    {encoding: "utf8", flag: "a+"},
+  )
 
-  cy.exec(`node ./test/e2e/cypress/integration/helpers/blitz-cli-version.js`).then((version) => {
-    cy.exec(`cd app && ${packageManager} add blitz@${version.stdout} --save`)
-
-    cy.exec(`node ./test/e2e/cypress/integration/helpers/blitz-cli-version.js`).then(
-      (versionTest) => {
-        expect(version.stdout).eqls(versionTest.stdout)
-      },
+  cy.readFile("../blitz/package.json").then((packageJson) => {
+    cy.exec(
+      `cd ${appName} && ${packageManager} add blitz@${packageJson.dependencies["@blitzjs/cli"]} --save`,
     )
+    cy.readFile(`./${appName}/package.json`).then((testAppPackageJson) => {
+      expect(testAppPackageJson.dependencies["blitz"]).eqls(
+        packageJson.dependencies["@blitzjs/cli"],
+      )
+    })
   })
 
-  cy.exec(
-    `export NODE_TLS_REJECT_UNAUTHORIZED=1;cd ${appName};${packageManager};${packageManager} run build`,
-    execConfig,
-  )
+  cy.exec(`cd ${appName};${packageManager};${packageManager} run build`, execConfig)
 }
 
 describe("blitz new command", () => {
   beforeEach(() => {
-    cy.exec(`rimraf ${testAppFolderName}`)
+    cy.exec(`rimraf ${TEST_APP_NAME}`)
   })
 
   afterEach(() => {
-    cy.exec(`rimraf ${testAppFolderName}`)
+    cy.exec(`rimraf ${TEST_APP_NAME}`)
   })
 
   it("Should create a new app", () => {
-    buildAppCommand(testAppFolderName, "yarn", "full", "react-hook-form", "typescript")
+    buildAppCommand(TEST_APP_NAME, "yarn", "full", "react-hook-form", "typescript")
   })
 })
