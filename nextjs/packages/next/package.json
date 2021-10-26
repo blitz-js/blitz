@@ -198,7 +198,7 @@
     "@types/lru-cache": "5.1.0",
     "@types/node-fetch": "2.5.8",
     "@types/path-to-regexp": "1.7.0",
-    "@types/react": "17.0.30",
+    "@types/react": "17.0.2",
     "@types/react-dom": "16.9.4",
     "@types/react-is": "16.7.1",
     "@types/semver": "7.3.1",

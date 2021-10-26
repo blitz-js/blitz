@@ -23,13 +23,13 @@
     "@prisma/client": "2.24.1",
     "blitz": "0.41.2-canary.4",
     "final-form": "4.20.1",
-    "prisma": "3.2.1",
+    "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.30",
+    "@types/react": "17.0.2",
     "cypress": "6.2.1",
     "start-server-and-test": "1.11.7"
   }

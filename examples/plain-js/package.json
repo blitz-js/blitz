@@ -34,22 +34,22 @@
   "dependencies": {
     "@prisma/client": "2.24.1",
     "blitz": "0.41.2-canary.4",
-    "prisma": "3.2.1",
+    "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71"
   },
   "devDependencies": {
-    "eslint": "7.32.0",
+    "eslint": "7.21.0",
     "eslint-config-react-app": "~6.0.0",
     "eslint-plugin-flowtype": "~5.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "6.0.0",
+    "husky": "5.1.2",
     "lint-staged": "10.5.4",
-    "prettier": "2.4.1",
-    "pretty-quick": "3.1.1"
+    "prettier": "2.2.1",
+    "pretty-quick": "3.1.0"
   },
   "private": true
 }
