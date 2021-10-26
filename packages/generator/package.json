@@ -53,7 +53,7 @@
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "prettier": "2.4.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
