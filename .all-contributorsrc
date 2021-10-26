@@ -3341,6 +3341,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "cbejensen",
+      "name": "Christian Jensen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12374723?v=4",
+      "profile": "https://christianjensen.netlify.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
