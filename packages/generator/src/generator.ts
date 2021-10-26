@@ -17,6 +17,7 @@ import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
 import {IBuilder} from "./generators/template-builders/builder"
 import {NullBuilder} from "./generators/template-builders/null-builder"
+import {escapePath} from 'fast-glob';
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -291,7 +292,7 @@ export abstract class Generator<
 
         const destinationExists = fs.existsSync(templatedDestinationPath)
 
-        this.fs.copy(destinationExists ? templatedDestinationPath : sourcePath, destinationPath, {
+        this.fs.copy(destinationExists ? escapePath(templatedDestinationPath) : escapePath(sourcePath), escapePath(destinationPath), {
           process: (input) =>
             this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
         })
