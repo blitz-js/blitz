@@ -49,5 +49,17 @@ describe("blitz new command", () => {
 
   it("Should create a new app", () => {
     buildAppCommand(TEST_APP_NAME, "yarn", "full", "react-hook-form", "typescript")
+    cy.writeFile(
+      `./${TEST_APP_NAME}/.env`,
+      'DATABASE_URL="file:./db.sqlite\nSESSION_SECRET_KEY="ThisIsAKeyForTestingProductionBuildStart"',
+      {encoding: "utf8", flag: "a+"},
+    )
+    cy.exec(`cd ${TEST_APP_NAME} && yarn add pm2`)
+    cy.exec(`cd ${TEST_APP_NAME} && pm2 --name testBuild start yarn -- start`)
+    cy.wait(2000)
+    cy.visit("localhost:3000")
+    cy.get("strong").contains("Congrats!")
+    cy.visit("localhost:3000/signup")
+    cy.get("h1").contains("Create an Account")
   })
 })
