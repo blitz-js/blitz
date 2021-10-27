@@ -3,7 +3,7 @@ import { BlitzConfig, sessionMiddleware, simpleRolesIsAuthorized } from "blitz"
 const config: BlitzConfig = {
   middleware: [
     sessionMiddleware({
-      cookiePrefix: "blitzI18nRosetta",
+      cookiePrefix: "i18n-next-rosetta-examples",
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],
