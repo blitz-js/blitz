@@ -35,7 +35,7 @@
     "@babel/plugin-transform-typescript": "7.12.1",
     "@blitzjs/display": "0.41.2-canary.4",
     "@blitzjs/server": "0.41.2-canary.4",
-    "@mrleebo/prisma-ast": "^0.2.4",
+    "@mrleebo/prisma-ast": "0.2.4",
     "@types/jscodeshift": "0.7.2",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
