@@ -1,10 +1,4 @@
-import {
-  addBabelPlugin,
-  addImport,
-  findModuleExportsExpressions,
-  paths,
-  RecipeBuilder,
-} from "@blitzjs/installer"
+import {addBabelPlugin, addBabelPreset, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
@@ -22,34 +16,6 @@ function applyGlobalStyles(program: Collection<j.Program>) {
             j.jsxExpressionContainer(j.identifier("globalStyles")),
           )
         }
-      })
-  })
-
-  return program
-}
-
-function replaceBabelPreset(program: Collection<j.Program>) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: "presets"}})
-      .forEach((presets) => {
-        j(presets)
-          .find(j.Literal, {value: "blitz/babel"})
-          .replaceWith(
-            j.arrayExpression([
-              j.stringLiteral("blitz/babel"),
-              j.objectExpression([
-                j.property(
-                  "init",
-                  j.identifier('"preset-react"'),
-                  j.objectExpression([
-                    j.property("init", j.identifier("runtime"), j.literal("automatic")),
-                    j.property("init", j.identifier("importSource"), j.literal("@emotion/react")),
-                  ]),
-                ),
-              ]),
-            ]),
-          )
       })
   })
 
@@ -100,8 +66,12 @@ export default RecipeBuilder()
     explanation: `Update the Babel configuration to use Emotion's plugin and preset to enable some advanced features.`,
     singleFileSearch: paths.babelConfig(),
     transform(program: Collection<j.Program>) {
-      addBabelPlugin(program, "@emotion")
-      return replaceBabelPreset(program)
+      program = addBabelPlugin(program, "@emotion")
+      program = addBabelPreset(program, [
+        "preset-react",
+        {runtime: "automatic", importSource: "@emotion/react"},
+      ])
+      return program
     },
   })
   .build()

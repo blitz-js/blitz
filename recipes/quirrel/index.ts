@@ -32,7 +32,7 @@ export default RecipeBuilder()
         if (command.includes("concurrently")) {
           command += ` 'quirrel'`
         } else {
-          command = `concurrently --raw \\\"${command}\\\" 'quirrel'`
+          command = `concurrently --raw \\"${command}\\" 'quirrel'`
         }
 
         return [start, command, end].join("")
