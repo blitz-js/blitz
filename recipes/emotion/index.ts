@@ -32,9 +32,9 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `We'll install @emotion/react and @emotion/styled for general usage, and @emotion/babel-plugin to enable some advanced features.`,
     packages: [
-      {name: "@emotion/react", version: "11"},
-      {name: "@emotion/styled", version: "11"},
-      {name: "@emotion/babel-plugin", version: "11"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
+      {name: "@emotion/babel-plugin", version: "11.x"},
     ],
   })
   .addNewFilesStep({

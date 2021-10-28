@@ -138,10 +138,10 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Chakra UI requires some other dependencies like emotion to work`,
     packages: [
-      {name: "@chakra-ui/react", version: "1.1.2"},
-      {name: "@emotion/react", version: "11.1.4"},
-      {name: "@emotion/styled", version: "11.0.0"},
-      {name: "framer-motion", version: "3.2.0"},
+      {name: "@chakra-ui/react", version: "1.x"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
+      {name: "framer-motion", version: "5.x"},
     ],
   })
   .addTransformFilesStep({

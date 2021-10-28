@@ -48,8 +48,8 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'styled-components' as a dependency and 'babel-plugin-styled-components' as a dev dependency.`,
     packages: [
-      {name: "styled-components", version: "latest"},
-      {name: "babel-plugin-styled-components", version: "11"},
+      {name: "styled-components", version: "5.x"},
+      {name: "babel-plugin-styled-components", version: "1.x"},
     ],
   })
   .addNewFilesStep({

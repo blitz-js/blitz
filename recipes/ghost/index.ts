@@ -13,8 +13,8 @@ export default RecipeBuilder()
     stepName: "Add npm dependencies",
     explanation: `@tryghost/content-api needs to be installed`,
     packages: [
-      {name: "@tryghost/content-api", version: "latest"},
-      {name: "@types/tryghost__content-api", version: "latest", isDevDep: true},
+      {name: "@tryghost/content-api", version: "1.x"},
+      {name: "@types/tryghost__content-api", version: "1.x", isDevDep: true},
     ],
   })
   .addTransformFilesStep({

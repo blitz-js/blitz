@@ -13,8 +13,8 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'logrocket' and 'logrocket-react' as dependencies.`,
     packages: [
-      {name: "logrocket", version: "latest"},
-      {name: "logrocket-react", version: "latest"},
+      {name: "logrocket", version: "2.x"},
+      {name: "logrocket-react", version: "4.x"},
     ],
   })
   .addNewFilesStep({

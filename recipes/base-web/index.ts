@@ -13,9 +13,9 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'baseui' and Styletron as a dependency too -- it's a toolkit for CSS in JS styling which Base Web relies on.`,
     packages: [
-      {name: "baseui", version: "latest"},
-      {name: "styletron-engine-atomic", version: "latest"},
-      {name: "styletron-react", version: "latest"},
+      {name: "baseui", version: "10.x"},
+      {name: "styletron-engine-atomic", version: "1.x"},
+      {name: "styletron-react", version: "6.x"},
     ],
   })
   .addNewFilesStep({

@@ -96,7 +96,7 @@ export default RecipeBuilder()
     packages: [
       {name: "theme-ui", version: "0.x"},
       {name: "@theme-ui/prism", version: "0.x"},
-      {name: NEXT_MDX_PLUGIN_MODULE, version: "10.x"},
+      {name: NEXT_MDX_PLUGIN_MODULE, version: "11.x"},
       {name: "@mdx-js/loader", version: "1.x"},
     ],
   })

@@ -12,14 +12,8 @@ export default RecipeBuilder()
     explanation:
       "Installs the Quirrel NPM package and concurrently (useful for starting Quirrel together with Blitz).",
     packages: [
-      {
-        name: "quirrel",
-        version: "latest",
-      },
-      {
-        name: "concurrently",
-        version: "latest",
-      },
+      {name: "quirrel", version: "1.x"},
+      {name: "concurrently", version: "6.x", isDevDep: true},
     ],
   })
   .addTransformFilesStep({

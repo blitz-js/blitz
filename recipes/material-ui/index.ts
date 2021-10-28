@@ -26,10 +26,10 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Add npm dependencies",
     explanation: `@mui/material needs to be installed`,
     packages: [
-      {name: "@mui/material", version: "latest"},
-      {name: "@mui/styles", version: "latest"},
-      {name: "@emotion/react", version: "latest"},
-      {name: "@emotion/styled", version: "latest"},
+      {name: "@mui/material", version: "5.x"},
+      {name: "@mui/styles", version: "5.x"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
     ],
   })
   .addTransformFilesStep({

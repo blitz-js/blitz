@@ -13,8 +13,8 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Bulma CSS requires a couple of dependencies including sass for converting sass and scss to css`,
     packages: [
-      {name: "bulma", version: "latest", isDevDep: true},
-      {name: "sass", version: "latest", isDevDep: true},
+      {name: "bulma", version: "0.9.x", isDevDep: true},
+      {name: "sass", version: "1.43.x", isDevDep: true},
     ],
   })
   .addNewFilesStep({

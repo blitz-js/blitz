@@ -13,10 +13,10 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add dependencies for defining and handling a GraphQL endpoint.`,
     packages: [
-      {name: "apollo-server-micro", version: "2"},
-      {name: "graphql", version: "15"},
-      {name: "nexus", version: "1"},
-      {name: "nexus-prisma", version: "0.24"},
+      {name: "apollo-server-micro", version: "3.x"},
+      {name: "graphql", version: "15.x"},
+      {name: "nexus", version: "1.x"},
+      {name: "nexus-prisma", version: "0.34.x"},
     ],
   })
   .addNewFilesStep({

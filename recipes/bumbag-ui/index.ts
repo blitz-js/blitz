@@ -80,8 +80,8 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Bumbag UI requires both "bumbag" and "bumbag-server" (SSR) npm packages`,
     packages: [
-      {name: "bumbag", version: "2.0.0"},
-      {name: "bumbag-server", version: "2.0.0"},
+      {name: "bumbag", version: "2.x"},
+      {name: "bumbag-server", version: "2.x"},
     ],
   })
   .addTransformFilesStep({
