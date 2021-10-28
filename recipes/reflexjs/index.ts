@@ -59,7 +59,7 @@ export default RecipeBuilder()
     stepId: "addDeps",
     stepName: "npm dependencies",
     explanation: "",
-    packages: [{name: "reflexjs", version: "1.x"}],
+    packages: [{name: "reflexjs", version: "2.x"}],
   })
   .addNewFilesStep({
     stepId: "createTheme",
@@ -116,7 +116,15 @@ export default RecipeBuilder()
     singleFileSearch: paths.babelConfig(),
 
     transform(program: Collection<j.Program>) {
-      return addBabelPreset(program, "reflexjs/babel")
+      return addBabelPreset(program, [
+        "blitz/babel",
+        {
+          "preset-react": {
+            runtime: "automatic",
+            importSource: "reflexjs",
+          },
+        },
+      ])
     },
   })
   .build()
