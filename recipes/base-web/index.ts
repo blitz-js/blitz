@@ -124,12 +124,13 @@ export default RecipeBuilder()
       addImport(program, styletronImport)
 
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
+          specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
 
@@ -272,7 +273,7 @@ export default RecipeBuilder()
               j.jsxOpeningElement(j.jsxIdentifier("DocumentHead")),
               j.jsxClosingElement(j.jsxIdentifier("DocumentHead")),
               [
-                ...node.children,
+                ...(node.children || []),
                 j.literal("\n"),
                 j.jsxExpressionContainer(
                   j.callExpression(

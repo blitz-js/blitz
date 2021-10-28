@@ -33,16 +33,13 @@ export default RecipeBuilder()
     transform(program: Collection<j.Program>) {
       // Ensure useSession is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "useSession")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("useSession")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("useSession")))
         }
       })
 
@@ -65,8 +62,10 @@ export default RecipeBuilder()
         // currently, we only check if the default export is there
         // because we use the hook as React.useEffect
         // if not then add the default export
-        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        let specifiers = path.value.specifiers || []
+
+        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
 

@@ -41,7 +41,7 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          ...node.children,
+          ...(node.children || []),
         ],
       ),
     )

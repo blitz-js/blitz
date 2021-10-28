@@ -74,16 +74,13 @@ export default RecipeBuilder()
 
       // Ensure DocumentContext is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("DocumentContext")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
       program.find(j.ClassBody).forEach((path) => {

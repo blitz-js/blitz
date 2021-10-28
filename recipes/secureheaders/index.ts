@@ -54,13 +54,13 @@ export default RecipeBuilder()
               ),
               ...addHttpMetaTag("Referrer-Policy", j.stringLiteral("origin-when-cross-origin")),
               j.literal("\n"),
-              ...path.node.children
+              ...(path.node.children || [])
                 .filter((path) => {
                   return !(
                     path.type === "JSXElement" &&
                     path.openingElement.name.type === "JSXIdentifier" &&
                     path.openingElement.name.name === "meta" &&
-                    path.openingElement.attributes.some(
+                    path.openingElement.attributes?.some(
                       (attr) =>
                         attr.type === "JSXAttribute" &&
                         attr.name.type === "JSXIdentifier" &&

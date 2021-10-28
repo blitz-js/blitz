@@ -39,7 +39,7 @@ function injectInitializeColorModeAndExtractCritical(program: Collection<j.Progr
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          ...node.children,
+          ...(node.children || []),
         ],
       ),
     )

@@ -48,25 +48,19 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
 
       program.find(j.ImportDeclaration, {source: "react"}).forEach((reactImportPath) => {
         isReactImported = true
-        if (reactImportPath.value.specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
-          reactImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importDefaultSpecifier(j.identifier("React")),
-          )
+        let specifiers = reactImportPath.value.specifiers || []
+        if (specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("DocumentContext")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
       program.find(j.ClassBody).forEach((path) => {
@@ -249,8 +243,10 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
         // currently, we only check if the default export is there
         // because we use the hook as React.useEffect
         // if not then add the default export
-        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        let specifiers = path.value.specifiers || []
+
+        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
 

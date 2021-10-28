@@ -49,9 +49,8 @@ function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
       const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
 
       // This will not include JSX elements within curly braces
-      const countOfChildrenJSXElements = path.node.children.filter(
-        (childNode) => childNode.type === "JSXElement",
-      ).length
+      const countOfChildrenJSXElements =
+        path.node.children?.filter((childNode) => childNode.type === "JSXElement").length || 0
 
       return (
         openingElementNameNode?.name === "div" &&
@@ -168,12 +167,13 @@ export default RecipeBuilder()
     transform(program: Collection<j.Program>) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
+        let specifiers = path.value.specifiers || []
         if (
-          !path.value.specifiers.some(
+          !specifiers.some(
             (node) => (node as j.ImportSpecifier)?.imported?.name === "ComponentPropsWithoutRef",
           )
         ) {
-          path.node.specifiers.push(j.importSpecifier(j.identifier("ComponentPropsWithoutRef")))
+          specifiers.push(j.importSpecifier(j.identifier("ComponentPropsWithoutRef")))
         }
       })
 
