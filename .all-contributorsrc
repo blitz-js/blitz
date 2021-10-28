@@ -3350,6 +3350,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "dvnrsn",
+      "name": "Devin Rasmussen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9112811?v=4",
+      "profile": "https://github.com/dvnrsn",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

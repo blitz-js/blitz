@@ -7,6 +7,7 @@ export {
   usePaginatedQuery,
   useInfiniteQuery,
   useMutation,
+  MutateFunction,
 } from './react-query'
 export {
   queryClient,
