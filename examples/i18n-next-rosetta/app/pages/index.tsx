@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { Image, Link, BlitzPage, useMutation, Routes } from "blitz"
+import { Image, Link, BlitzPage, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
@@ -7,6 +7,8 @@ import logo from "public/logo.png"
 import type { GetStaticProps } from "blitz"
 import { useI18n, I18nProps } from "next-rosetta"
 import type { MyLocale } from "app/core/i18n"
+import { Routes } from ".blitz"
+
 /*
  * This file is just for a pleasant getting started page for your new app.
  * You can delete everything in here and start from scratch if you like.
