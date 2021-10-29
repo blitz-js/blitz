@@ -34,7 +34,7 @@ module.exports = config
 
 ### Create locales
 
-Create a directory named `i18n` in your project. If you are using TypeScript you can define the type schema and create every locale based on that interface. An Example:
+Create a directory named `i18n` in your project. If you are using TypeScript you can define the type schema and create every locale based on that interface. An example:
 
 ```ts
 export interface MyLocale {
