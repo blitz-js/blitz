@@ -109,10 +109,6 @@ export class New extends Command {
       description: "Pick your new app template. Options: full, minimal.",
       options: ["full", "minimal"],
     }),
-    env: flags.string({
-      char: "e",
-      description: "Set your app environment name",
-    }),
   }
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
