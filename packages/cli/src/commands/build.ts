@@ -7,7 +7,7 @@ export class Build extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
-    environment: flags.string({
+    env: flags.string({
       char: "e",
       description: "Set app environment name",
     }),
@@ -18,11 +18,7 @@ export class Build extends Command {
       rootFolder: process.cwd(),
       env: "prod",
     }
-    const {flags} = this.parse(Build)
-
-    if (flags.environment) {
-      process.env.APP_ENV = flags.environment
-    }
+    this.parse(Build)
 
     try {
       const {build} = await import("@blitzjs/server")

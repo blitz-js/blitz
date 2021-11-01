@@ -23,6 +23,7 @@ export interface Flags {
   form?: string
   template?: string
   language?: string
+  env?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -107,6 +108,10 @@ export class New extends Command {
     template: flags.string({
       description: "Pick your new app template. Options: full, minimal.",
       options: ["full", "minimal"],
+    }),
+    env: flags.string({
+      char: "e",
+      description: "Set your app environment name",
     }),
   }
 

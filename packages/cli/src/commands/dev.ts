@@ -21,7 +21,7 @@ export class Dev extends Command {
     "no-incremental-build": flags.boolean({
       description: "Disable incremental build and start from a fresh cache",
     }),
-    environment: flags.string({
+    env: flags.string({
       char: "e",
       description: "Set app environment name",
     }),
@@ -37,10 +37,6 @@ export class Dev extends Command {
       inspect: flags.inspect,
       clean: flags["no-incremental-build"],
       env: "dev",
-    }
-
-    if (flags.environment) {
-      process.env.APP_ENV = flags.environment
     }
 
     try {
