@@ -23,7 +23,6 @@ export interface Flags {
   form?: string
   template?: string
   language?: string
-  env?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
