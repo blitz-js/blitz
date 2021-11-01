@@ -3359,6 +3359,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "devtombiz",
+      "name": "Thomas Brenneur",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23282613?v=4",
+      "profile": "www.linkedin.com/in/devtom",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
