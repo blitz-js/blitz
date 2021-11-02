@@ -51,7 +51,6 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/babel-preset": "0.41.2-canary.4",
     "@blitzjs/cli": "0.41.2-canary.4",
     "@blitzjs/display": "0.41.2-canary.4",
     "@blitzjs/generator": "0.41.2-canary.4",
