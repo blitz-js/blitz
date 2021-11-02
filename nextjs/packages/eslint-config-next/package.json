@@ -1,18 +1,18 @@
 {
-  "private": true,
-  "name": "eslint-config-next",
-  "version": "11.1.0",
-  "description": "ESLint configuration used by NextJS.",
+  "name": "eslint-config-blitz",
+  "version": "0.41.2-canary.4",
+  "description": "Blitz.js eslint config",
   "main": "index.js",
   "license": "MIT",
   "repository": {
-    "url": "vercel/next.js",
+    "url": "blitz-js/blitz",
     "directory": "packages/eslint-config-next"
   },
   "dependencies": {
     "@next/eslint-plugin-next": "11.1.0",
     "@rushstack/eslint-patch": "^1.0.6",
     "@typescript-eslint/parser": "^4.20.0",
+    "@typescript-eslint/eslint-plugin": "4.20.0",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
