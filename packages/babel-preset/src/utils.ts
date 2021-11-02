@@ -95,6 +95,7 @@ export function wrapDefaultExportWithBlitzRoot(
     }
   };
 
+  // Find a nested argument that should be wrapped with withBlitzAppRoot
   const visitor: Visitor<{}> = {
     Identifier: findArgument,
     FunctionExpression: findArgument,
@@ -104,6 +105,7 @@ export function wrapDefaultExportWithBlitzRoot(
 
   exportDefaultPath.traverse(visitor);
 
+  // Base case — no call expressions found, we will wrap the default export
   if (!found) {
     wrapExportDefaultDeclaration(
       exportDefaultPath,
@@ -115,6 +117,18 @@ export function wrapDefaultExportWithBlitzRoot(
 
   if (found.isExpression()) {
     if (found.isIdentifier()) {
+      /**
+       * If `found` is an identifier, we want to find it's declaration
+       * to handle possible HOCs. It covers the following scenario:
+       *
+       * const App = withX(() => null)
+       * export default App
+       *
+       * Which should result in:
+       *
+       * const App = withX(withBlitzAppRoot(() => null))
+       * export default App
+       */
       const identifier = found;
       const body = [
         ...exportDefaultPath.getAllPrevSiblings(),

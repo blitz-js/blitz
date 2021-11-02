@@ -187,7 +187,7 @@ pluginTester({
       );
       `,
     },
-    'handles multiple HOCs': {
+    'handles multiple HOCs and looks up variable declaration': {
       code: `
       const App = withX(withY(withZ(() => null)));
 
