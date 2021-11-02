@@ -203,13 +203,13 @@ pluginTester({
       code: `
       const OtherComponent = withX(() => null);
       const App = withX(withY(withZ(() => null)));
-      export default App;
+      export default withTranslations(App);
        `,
       output: `
       import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
       const OtherComponent = withX(() => null);
       const App = withX(withY(withZ(_withBlitzAppRoot(() => null))));
-      export default App;
+      export default withTranslations(App);
       `,
     },
   },
