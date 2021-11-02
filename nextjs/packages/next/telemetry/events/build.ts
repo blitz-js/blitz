@@ -27,7 +27,6 @@ export type EventLintCheckCompleted = {
   lintedFilesCount?: number
   lintFix?: boolean
   buildLint?: boolean
-  nextEslintPluginVersion?: string | null
   nextEslintPluginErrorsCount?: number
   nextEslintPluginWarningsCount?: number
 }

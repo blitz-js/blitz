@@ -520,7 +520,7 @@ describe('Telemetry CLI', () => {
   })
 
   it.skip('emits telemetry for lint during build', async () => {
-    await fs.writeFile(path.join(appDir, '.eslintrc'), `{ "extends": "next" }`)
+    await fs.writeFile(path.join(appDir, '.eslintrc'), `{ "extends": "blitz" }`)
     const { stderr } = await nextBuild(appDir, [], {
       stderr: true,
       env: { NEXT_TELEMETRY_DEBUG: 1 },
@@ -536,13 +536,12 @@ describe('Telemetry CLI', () => {
     expect(event1).toMatch(/"lintedFilesCount": [\d]{1,}/)
     expect(event1).toMatch(/"lintFix": false/)
     expect(event1).toMatch(/"buildLint": true/)
-    expect(event1).toMatch(/"nextEslintPluginVersion": ".*?\..*?\..*?"/)
     expect(event1).toMatch(/"nextEslintPluginErrorsCount": \d{1,}/)
     expect(event1).toMatch(/"nextEslintPluginWarningsCount": \d{1,}/)
   })
 
   it.skip('emits telemetry for `next lint`', async () => {
-    await fs.writeFile(path.join(appDir, '.eslintrc'), `{ "extends": "next" }`)
+    await fs.writeFile(path.join(appDir, '.eslintrc'), `{ "extends": "blitz" }`)
     const { stderr } = await nextLint(appDir, [], {
       stderr: true,
       env: { NEXT_TELEMETRY_DEBUG: 1 },
@@ -558,7 +557,6 @@ describe('Telemetry CLI', () => {
     expect(event1).toMatch(/"lintedFilesCount": [\d]{1,}/)
     expect(event1).toMatch(/"lintFix": false/)
     expect(event1).toMatch(/"buildLint": false/)
-    expect(event1).toMatch(/"nextEslintPluginVersion": ".*?\..*?\..*?"/)
     expect(event1).toMatch(/"nextEslintPluginErrorsCount": \d{1,}/)
     expect(event1).toMatch(/"nextEslintPluginWarningsCount": \d{1,}/)
   })
