@@ -11,14 +11,14 @@ pluginTester({
   tests: {
     'should wrap default function export': {
       code: `
-      export default function App({Component, pageProps}) {
+      export default function App() {
         return <div>Hello</div>;
       }
        `,
       output: `
       import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
 
-      function App({ Component, pageProps }) {
+      function App() {
         return <div>Hello</div>;
       }
 
@@ -27,7 +27,7 @@ pluginTester({
     },
     'should wrap default export with const declaration': {
       code: `
-      const App = ({Component, pageProps}) => {
+      const App = () => {
         return <div>Hello</div>;
       };
 
@@ -36,7 +36,7 @@ pluginTester({
       output: `
       import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
 
-      const App = ({ Component, pageProps }) => {
+      const App = () => {
         return <div>Hello</div>;
       };
 
@@ -65,15 +65,15 @@ pluginTester({
       export default _withBlitzAppRoot(App);
        `,
     },
-    'should wrap default function export without an id': {
+    'should wrap an unnamed function': {
       code: `
-      export default function({Component, pageProps}) {
+      export default function() {
         return <div>Hello</div>;
       }
        `,
       output: `
       import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
-      export default _withBlitzAppRoot(function ({ Component, pageProps }) {
+      export default _withBlitzAppRoot(function () {
         return <div>Hello</div>;
       });
        `,
@@ -95,6 +95,121 @@ pluginTester({
           }
         }
       );
+      `,
+    },
+    'should wrap default export with const declaration with custom HOC': {
+      code: `
+      const App = () => {
+        return <div>Hello</div>;
+      };
+      export default withTranslations(App);
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+
+      const App = () => {
+        return <div>Hello</div>;
+      };
+
+      export default withTranslations(_withBlitzAppRoot(App));
+       `,
+    },
+    'should wrap default function export with custom HOC': {
+      code: `
+      export default withTranslations(function App() {
+        return <div>Hello</div>;
+      });
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+      export default withTranslations(
+        _withBlitzAppRoot(function App() {
+          return <div>Hello</div>;
+        })
+      );
+       `,
+    },
+    'should wrap a default export with class declaration with custom HOC': {
+      code: `
+      class App extends React.Component {
+        render() {
+          return <div>Hello</div>;
+        }
+      }
+
+      export default withTranslations(App);
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+
+      class App extends React.Component {
+        render() {
+          return <div>Hello</div>;
+        }
+      }
+
+      export default withTranslations(_withBlitzAppRoot(App));
+       `,
+    },
+    'should wrap an unnamed function with custom HOC': {
+      code: `
+      export default withTranslations(function() {
+        return <div>Hello</div>;
+      })
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+      export default withTranslations(
+        _withBlitzAppRoot(function () {
+          return <div>Hello</div>;
+        })
+      );
+       `,
+    },
+    'should wrap an unnamed class component with custom HOC': {
+      code: `
+      export default withTranslations(class extends React.Component {
+        render() {
+          return <div>Hello</div>;
+        }
+      });
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+      export default withTranslations(
+        _withBlitzAppRoot(
+          class extends React.Component {
+            render() {
+              return <div>Hello</div>;
+            }
+          }
+        )
+      );
+      `,
+    },
+    'handles multiple HOCs': {
+      code: `
+      const App = withX(withY(withZ(() => null)));
+
+      export default App;
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+      const App = withX(withY(withZ(_withBlitzAppRoot(() => null))));
+      export default App;
+      `,
+    },
+    'handles multiple components and multiple HOCs': {
+      code: `
+      const OtherComponent = withX(() => null);
+      const App = withX(withY(withZ(() => null)));
+      export default App;
+       `,
+      output: `
+      import { withBlitzAppRoot as _withBlitzAppRoot } from 'next/stdlib';
+      const OtherComponent = withX(() => null);
+      const App = withX(withY(withZ(_withBlitzAppRoot(() => null))));
+      export default App;
       `,
     },
   },

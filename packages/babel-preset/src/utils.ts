@@ -1,5 +1,6 @@
 import { NodePath, PluginPass, types as t } from '@babel/core';
 import { addNamed as addNamedImport } from '@babel/helper-module-imports';
+import type { VisitNode, Visitor } from '@babel/traverse';
 
 export function functionDeclarationToExpression(
   declaration: t.FunctionDeclaration
@@ -73,5 +74,73 @@ export function wrapExportDefaultDeclaration(
         );
       }
     }
+  }
+}
+
+export function wrapDefaultExportWithBlitzRoot(
+  exportDefaultPath: NodePath<t.ExportDefaultDeclaration>
+) {
+  let found: NodePath<unknown> | undefined;
+
+  const findArgument: VisitNode<{}, any> = (path) => {
+    const parentNode = path.parent;
+    if (
+      parentNode.type === 'ExportDefaultDeclaration' ||
+      (parentNode.type === 'CallExpression' &&
+        // @todo We only support App passed as first argument.
+        parentNode.arguments[0] === path.node)
+    ) {
+      found = path;
+      path.stop();
+    }
+  };
+
+  const visitor: Visitor<{}> = {
+    Identifier: findArgument,
+    FunctionExpression: findArgument,
+    ArrowFunctionExpression: findArgument,
+    ClassExpression: findArgument,
+  };
+
+  exportDefaultPath.traverse(visitor);
+
+  if (!found) {
+    wrapExportDefaultDeclaration(
+      exportDefaultPath,
+      'withBlitzAppRoot',
+      'next/stdlib'
+    );
+    return;
+  }
+
+  if (found.isExpression()) {
+    if (found.isIdentifier()) {
+      const identifier = found;
+      const body = [
+        ...exportDefaultPath.getAllPrevSiblings(),
+        ...exportDefaultPath.getAllNextSiblings(),
+      ];
+
+      const declaration = body.find(({ node }) => {
+        return (
+          node.type === 'VariableDeclaration' &&
+          node.declarations[0].id.type === 'Identifier' &&
+          node.declarations[0].id.name === identifier.node.name
+        );
+      });
+
+      declaration?.traverse(visitor); // visitor reassigns `found`
+    }
+
+    found.replaceWith(
+      t.callExpression(
+        addNamedImport(
+          exportDefaultPath as NodePath,
+          'withBlitzAppRoot',
+          'next/stdlib'
+        ),
+        [found.node]
+      )
+    );
   }
 }
