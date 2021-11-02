@@ -9,7 +9,7 @@ export default RecipeBuilder()
   .addNewFilesStep({
     stepId: "addPassengerEntrypoint",
     stepName: "Add passenger.js",
-    explanation: `NOTE: Passenger must be configured to use passenger.js as it's startup file`,
+    explanation: `NOTE: Passenger must be configured to use passenger.js as its startup file`,
     targetDirectory: ".",
     templatePath: join(__dirname, "templates"),
     templateValues: {},
