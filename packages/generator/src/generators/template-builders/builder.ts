@@ -98,14 +98,17 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
+  // eslint-disable-next-line require-await
   public async getZodType(type: string = "") {
     return this.getResourceValueFromConfig(type, "zodType")
   }
 
+  // eslint-disable-next-line require-await
   public async getComponentForType(type: string = ""): Promise<string> {
     return this.getResourceValueFromConfig(type, "component")
   }
-
+  
+  // eslint-disable-next-line require-await
   public async getInputType(type: string = ""): Promise<string> {
     return this.getResourceValueFromConfig(type, "inputType")
   }
