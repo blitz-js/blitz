@@ -1,10 +1,9 @@
 import {addBabelPlugin, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithStyledComponentsThemeProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -65,7 +64,7 @@ export default RecipeBuilder()
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // import ServerStyleSheet
       const serverStyleSheetImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheet"))],
@@ -217,7 +216,7 @@ export default RecipeBuilder()
     stepName: "Import required provider and wrap the root of the app with it",
     explanation: `Additionally we supply ThemeProvider with a basic theme property and base global styles.`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // Import styled-components.
       const styledComponentsProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
@@ -240,7 +239,7 @@ export default RecipeBuilder()
     stepName: "Add Babel plugin and preset",
     explanation: `Update the Babel configuration to use Styled Component's SSR plugin.`,
     singleFileSearch: paths.babelConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       return addBabelPlugin(program, [
         "styled-components",
         {

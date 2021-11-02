@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -30,7 +29,7 @@ export default RecipeBuilder()
     stepName: "Import stylesheets",
     explanation: `Imports the stylesheet we just added into your app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const stylesImport = j.importDeclaration([], j.literal("app/core/styles/index.scss"))
       return addImport(program, stylesImport)
     },

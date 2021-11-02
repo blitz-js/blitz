@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -30,7 +29,7 @@ export default RecipeBuilder()
     stepName: "Import helpers and log user upon login",
     explanation: `We will add logic to initialize the LogRocket session and upon login, identify the user within LogRocket`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // Ensure useSession is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
         let specifiers = blitzImportPath.value.specifiers || []

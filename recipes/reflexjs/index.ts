@@ -1,10 +1,9 @@
 import {addBabelPreset, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithThemeProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -31,7 +30,7 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   return program
 }
 
-function injectInitializeColorMode(program: Collection<j.Program>) {
+function injectInitializeColorMode(program: j.Collection<j.Program>) {
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
     path.replace(
@@ -75,7 +74,7 @@ export default RecipeBuilder()
     explanation: "Add ThemeProvider component to `_app` and pass it the theme we just created",
     singleFileSearch: paths.app(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const providerImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
         j.literal("reflexjs"),
@@ -98,7 +97,7 @@ export default RecipeBuilder()
       "Add the `InitializeColorMode` component to the document body to support Reflexjs color mode features.",
     singleFileSearch: paths.document(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("reflexjs"),
@@ -115,7 +114,7 @@ export default RecipeBuilder()
       "Finally, update the Babel configuration to use the Reflfexjs preset. This automatically sets the jsx pragma in your Blitz app so you won't need to import it in your files.",
     singleFileSearch: paths.babelConfig(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       return addBabelPreset(program, [
         "blitz/babel",
         {

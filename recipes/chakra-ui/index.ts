@@ -1,10 +1,9 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import type {NodePath} from "ast-types/lib/node-path"
 import j, {JSXIdentifier} from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
+function wrapComponentWithChakraProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -25,7 +24,7 @@ function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
   return program
 }
 
-function updateLabeledTextFieldWithInputComponent(program: Collection<j.Program>) {
+function updateLabeledTextFieldWithInputComponent(program: j.Collection<j.Program>) {
   program
     .find(j.TSInterfaceDeclaration)
     .find(j.TSExpressionWithTypeArguments)
@@ -41,7 +40,7 @@ function updateLabeledTextFieldWithInputComponent(program: Collection<j.Program>
   return program
 }
 
-function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
+function replaceOuterDivWithFormControl(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -69,7 +68,7 @@ function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
   return program
 }
 
-function replaceInputWithChakraInput(program: Collection<j.Program>) {
+function replaceInputWithChakraInput(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -90,7 +89,7 @@ function replaceInputWithChakraInput(program: Collection<j.Program>) {
   return program
 }
 
-function replaceLabelWithChakraLabel(program: Collection<j.Program>) {
+function replaceLabelWithChakraLabel(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -110,7 +109,7 @@ function replaceLabelWithChakraLabel(program: Collection<j.Program>) {
   return program
 }
 
-function removeDefaultStyleElement(program: Collection<j.Program>) {
+function removeDefaultStyleElement(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -149,7 +148,7 @@ export default RecipeBuilder()
     stepName: "Import ChakraProvider component",
     explanation: `Import the chakra-ui provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ChakraProvider"))],
         j.literal("@chakra-ui/react"),
@@ -164,7 +163,7 @@ export default RecipeBuilder()
     stepName: "Update the `LabeledTextField` with Chakra UI's `Input` component",
     explanation: `The LabeledTextField component uses Chakra UI's input component`,
     singleFileSearch: "app/core/components/LabeledTextField.tsx",
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
         let specifiers = path.value.specifiers || []

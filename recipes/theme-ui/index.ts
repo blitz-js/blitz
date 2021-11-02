@@ -5,9 +5,8 @@ import {
   transformBlitzConfig,
   wrapBlitzConfig,
 } from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 const NEXT_MDX_PLUGIN_IMPORT = "mdxPlugin"
@@ -17,7 +16,7 @@ const NEXT_MDX_PLUGIN_OPTIONS = [
   j.property("init", j.identifier("extension"), j.literal(RegExp("mdx?$", ""))),
 ]
 
-function initializePlugin(program: Collection<j.Program>, statement: j.Statement) {
+function initializePlugin(program: j.Collection<j.Program>, statement: j.Statement) {
   const importStatementCount = program.find(j.ImportDeclaration).length
 
   if (importStatementCount === 0) {
@@ -34,7 +33,7 @@ function initializePlugin(program: Collection<j.Program>, statement: j.Statement
 }
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithThemeProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -65,7 +64,7 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   return program
 }
 
-function injectInitializeColorMode(program: Collection<j.Program>) {
+function injectInitializeColorMode(program: j.Collection<j.Program>) {
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
     path.replace(
@@ -106,7 +105,7 @@ export default RecipeBuilder()
     explanation: `Now we have to update our blitz config to support MDX`,
     singleFileSearch: paths.blitzConfig(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       program = addImport(
         program,
         j.importDeclaration(
@@ -162,7 +161,7 @@ export default RecipeBuilder()
     explanation: `We need to import the InitializeColorMode component to support color mode features in Theme UI`,
     singleFileSearch: paths.document(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("theme-ui"),
@@ -178,7 +177,7 @@ export default RecipeBuilder()
     explanation: `We can import the theme provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const providerImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
         j.literal("theme-ui"),

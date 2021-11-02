@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder, transformBlitzConfig} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -23,7 +22,7 @@ export default RecipeBuilder()
     stepName: "Set meta tags",
     explanation: `Inserts meta tags into the <head> element of _document.tsx`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const secureHeadersImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("computeCsp"))],
         j.literal("app/core/secureheaders"),
@@ -84,7 +83,7 @@ export default RecipeBuilder()
     stepName: "Set custom headers",
     explanation: `Insert custom headers into blitz.config.js and disable the "X-Powered-By: Next.js" header`,
     singleFileSearch: paths.blitzConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       return addHttpHeaders(program, [
         {name: "Strict-Transport-Security", value: "max-age=631138519"},
         {name: "X-Frame-Options", value: "sameorigin"},
@@ -112,7 +111,7 @@ function addHttpMetaTag(name: string, value: j.JSXExpressionContainer | j.String
 }
 
 const addHttpHeaders = (
-  program: Collection<j.Program>,
+  program: j.Collection<j.Program>,
   headers: Array<{name: string; value: string}>,
 ) =>
   transformBlitzConfig(program, (config) => {

@@ -1,9 +1,8 @@
 import {addBabelPlugin, addBabelPreset, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function applyGlobalStyles(program: Collection<j.Program>) {
+function applyGlobalStyles(program: j.Collection<j.Program>) {
   program.find(j.ExportDefaultDeclaration).forEach((exportPath) => {
     j(exportPath)
       .find(j.JSXElement, {openingElement: {name: {name: "ErrorBoundary"}}})
@@ -50,7 +49,7 @@ export default RecipeBuilder()
     stepName: "Import global styles",
     explanation: `Next, we'll import and render the global styles.`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("globalStyles"))],
         j.literal("app/core/styles"),
@@ -65,7 +64,7 @@ export default RecipeBuilder()
     stepName: "Add Babel plugin and preset",
     explanation: `Update the Babel configuration to use Emotion's plugin and preset to enable some advanced features.`,
     singleFileSearch: paths.babelConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       program = addBabelPlugin(program, "@emotion")
       program = addBabelPreset(program, [
         "preset-react",
