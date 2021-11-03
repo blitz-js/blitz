@@ -39,4 +39,10 @@ export default RecipeBuilder()
         assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
       }),
   })
+  .printMessage({
+    stepId: "manualStep",
+    stepName: "Informs the user about a manual step",
+    explaination: "After the graphql recipe has been installed successfully, the user has to run `blitz prisma generate` manually.",
+    message: "Please run `blitz prisma generate` in your console/terminal to generate the graphql schema."
+  })
   .build()
