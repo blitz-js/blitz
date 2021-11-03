@@ -152,40 +152,42 @@ function withBlitzInnerWrapper(Page: BlitzPage) {
 
 export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
   const BlitzOuterRoot = (props: AppProps) => {
-    const component = React.useMemo(
-      () => withBlitzInnerWrapper(props.Component),
-      [props.Component]
-    )
+    return <UserAppRoot {...props} />
 
-    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
-      props.Component,
-      props.pageProps
-    )
-
-    const noPageFlicker =
-      props.Component?.suppressFirstRenderFlicker ||
-      authenticate !== undefined ||
-      redirectAuthenticatedTo
-
-    useEffect(() => {
-      document.documentElement.classList.add('blitz-first-render-complete')
-    }, [])
-
-    let { dehydratedState, _superjson } = props.pageProps
-    if (dehydratedState && _superjson) {
-      const deserializedProps = SuperJSON.deserialize({
-        json: { dehydratedState },
-        meta: _superjson,
-      }) as { dehydratedState: any }
-      dehydratedState = deserializedProps?.dehydratedState
-    }
-
-    return (
-      <BlitzProvider dehydratedState={dehydratedState}>
-        {noPageFlicker && <NoPageFlicker />}
-        <UserAppRoot {...props} Component={component} />
-      </BlitzProvider>
-    )
+    // const component = React.useMemo(
+    //   () => withBlitzInnerWrapper(props.Component),
+    //   [props.Component]
+    // )
+    //
+    // const { authenticate, redirectAuthenticatedTo } = getAuthValues(
+    //   props.Component,
+    //   props.pageProps
+    // )
+    //
+    // const noPageFlicker =
+    //   props.Component?.suppressFirstRenderFlicker ||
+    //   authenticate !== undefined ||
+    //   redirectAuthenticatedTo
+    //
+    // useEffect(() => {
+    //   document.documentElement.classList.add('blitz-first-render-complete')
+    // }, [])
+    //
+    // let { dehydratedState, _superjson } = props.pageProps
+    // if (dehydratedState && _superjson) {
+    //   const deserializedProps = SuperJSON.deserialize({
+    //     json: { dehydratedState },
+    //     meta: _superjson,
+    //   }) as { dehydratedState: any }
+    //   dehydratedState = deserializedProps?.dehydratedState
+    // }
+    //
+    // return (
+    //   <BlitzProvider dehydratedState={dehydratedState}>
+    //     {noPageFlicker && <NoPageFlicker />}
+    //     <UserAppRoot {...props} Component={component} />
+    //   </BlitzProvider>
+    // )
   }
   return BlitzOuterRoot
 }
