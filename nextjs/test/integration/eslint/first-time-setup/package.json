@@ -1,5 +1,5 @@
 {
   "devDependencies": {
-    "eslint-config-next": "*"
+    "eslint-config-blitz": "*"
   }
 }

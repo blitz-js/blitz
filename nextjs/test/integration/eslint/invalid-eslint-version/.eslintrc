@@ -1,4 +1,4 @@
 {
-  "extends": "next",
+  "extends": "blitz",
   "root": true
 }

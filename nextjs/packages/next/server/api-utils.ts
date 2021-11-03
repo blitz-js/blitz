@@ -152,7 +152,7 @@ export async function apiResolver(
       if (propagateError) {
         throw err
       }
-      sendError(apiRes, 500, 'Internal Server Error')
+      sendError(apiRes, err.statusCode || 500, 'Internal Server Error')
     }
   }
 }
