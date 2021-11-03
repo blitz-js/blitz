@@ -200,7 +200,7 @@ export default (
       // smaller.
       require('next/dist/compiled/babel/plugin-proposal-numeric-separator'),
       require('next/dist/compiled/babel/plugin-proposal-export-namespace-from'),
-      // !isTest && require('./plugins/rewrite-imports'),
+      !isTest && require('./plugins/rewrite-imports'),
     ].filter(Boolean),
   }
 }
