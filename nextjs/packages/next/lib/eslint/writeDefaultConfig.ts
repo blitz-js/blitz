@@ -20,7 +20,7 @@ export async function writeDefaultConfig(
 
     let newFileContent
     if (ext === '.yaml' || ext === '.yml') {
-      newFileContent = "extends: 'next'"
+      newFileContent = "extends: 'blitz'"
     } else {
       newFileContent = CommentJson.stringify(selectedConfig, null, 2)
 
