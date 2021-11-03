@@ -32,7 +32,7 @@
     "@babel/plugin-transform-typescript": "7.12.1",
     "@blitzjs/display": "0.41.2-canary.4",
     "@blitzjs/generator": "0.41.2-canary.4",
-    "@mrleebo/prisma-ast": "^0.2.5",
+    "@mrleebo/prisma-ast": "0.2.4",
     "@prisma/sdk": "2.19.0",
     "@types/jscodeshift": "0.11.2",
     "ast-types": "0.14.2",
