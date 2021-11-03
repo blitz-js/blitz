@@ -4,7 +4,7 @@ exports[`addBabelPlugin transform adds babel plugin array 1`] = `
 "module.exports = {
       presets: [\\"@babel/preset-typescript\\"],
       plugins: [[\\"@babel/plugin-proposal-decorators\\", {
-        legacy: true
+        \\"legacy\\": true
       }]],
     }"
 `;
@@ -26,7 +26,7 @@ exports[`addBabelPlugin transform avoid duplicated 1`] = `
 exports[`addBabelPreset transform adds babel preset array 1`] = `
 "module.exports = {
       presets: [\\"@babel/preset-typescript\\", [\\"blitz/babel\\", {
-        legacy: true
+        \\"legacy\\": true
       }]],
       plugins: [],
     }"
