@@ -50,6 +50,7 @@ function getAuthValues(
   Page: BlitzPage,
   props: ComponentPropsWithoutRef<BlitzPage>
 ) {
+  if (!Page) return {}
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
 
@@ -83,6 +84,7 @@ function getAuthValues(
 }
 
 function withBlitzInnerWrapper(Page: BlitzPage) {
+  if (!Page) return
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     // We call useSession so this will rerender anytime session changes
     useSession({ suspense: false })
@@ -161,7 +163,7 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     )
 
     const noPageFlicker =
-      props.Component.suppressFirstRenderFlicker ||
+      props.Component?.suppressFirstRenderFlicker ||
       authenticate !== undefined ||
       redirectAuthenticatedTo
 

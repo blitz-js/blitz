@@ -201,9 +201,6 @@ export default (
       require('next/dist/compiled/babel/plugin-proposal-numeric-separator'),
       require('next/dist/compiled/babel/plugin-proposal-export-namespace-from'),
       !isTest && require('./plugins/rewrite-imports'),
-      require('./plugins/add-blitz-app-root'),
-      require('./plugins/fix-node-file-trace'),
-      require('babel-plugin-superjson-next'),
     ].filter(Boolean),
   }
 }

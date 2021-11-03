@@ -301,7 +301,7 @@ describe('next-babel-loader', () => {
         { resourcePath: pageFile, isServer: true }
       )
       expect(code).toMatchInlineSnapshot(
-        `"import\\"core-js\\";import{foo,bar}from\\"a\\";import baz from\\"b\\";import ooo from\\"ooo\\";import*as React from\\"react\\";import baz2,{yeet}from\\"c\\";import baz3,{cats}from\\"d\\";import{c,d}from\\"e\\";import{e as ee,f as ff}from\\"f\\";export function getStaticProps(){foo();baz2();ff();ooo();return{props:{}};}export default function(){return bar();}"`
+        `"import{withFixNodeFileTrace as _withFixNodeFileTrace}from\\"next/dist/server/utils\\";import\\"core-js\\";import{foo,bar}from\\"a\\";import baz from\\"b\\";import ooo from\\"ooo\\";import*as React from\\"react\\";import baz2,{yeet}from\\"c\\";import baz3,{cats}from\\"d\\";import{c,d}from\\"e\\";import{e as ee,f as ff}from\\"f\\";export const getStaticProps=_withFixNodeFileTrace(function getStaticProps(){foo();baz2();ff();ooo();return{props:{}};});export default function(){return bar();}"`
       )
     })
 
