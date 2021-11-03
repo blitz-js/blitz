@@ -146,18 +146,20 @@ function getPlugins(
         { type: 'plugin' }
       )
     : null
-  const superjsonItem = isPageFile
-    ? createConfigItem([require('babel-plugin-superjson-next')], {
-        type: 'plugin',
-      })
-    : null
-  const blitzAppRootItem = isPageFile
-    ? createConfigItem([require('../plugins/add-blitz-app-root')], {
-        type: 'plugin',
-      })
-    : null
+  const superjsonItem =
+    false && isPageFile
+      ? createConfigItem([require('babel-plugin-superjson-next')], {
+          type: 'plugin',
+        })
+      : null
+  const blitzAppRootItem =
+    false && isPageFile
+      ? createConfigItem([require('../plugins/add-blitz-app-root')], {
+          type: 'plugin',
+        })
+      : null
   const fixNodeFileTraceItem =
-    isServer && isPageFile
+    false && isServer && isPageFile
       ? createConfigItem([require('../plugins/fix-node-file-trace')], {
           type: 'plugin',
         })
