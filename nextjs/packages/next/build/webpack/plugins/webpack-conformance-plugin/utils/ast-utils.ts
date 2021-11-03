@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { namedTypes } from 'ast-types'
-import { types } from 'next/dist/compiled/recast'
 
 export function isNodeCreatingScriptElement(node: namedTypes.CallExpression) {
   const callee = node.callee as namedTypes.Identifier
@@ -15,9 +14,7 @@ export function isNodeCreatingScriptElement(node: namedTypes.CallExpression) {
   return callee.name === '__jsx' && componentNode.value === 'script'
 }
 
-export function reducePropsToObject(
-  propsNode: types.namedTypes.ObjectExpression
-) {
+export function reducePropsToObject(propsNode: namedTypes.ObjectExpression) {
   return propsNode.properties.reduce((originalProps, prop: any) => {
     // @ts-ignore
     originalProps[prop.key.name] = prop.value.value
