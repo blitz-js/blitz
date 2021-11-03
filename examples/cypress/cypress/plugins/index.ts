@@ -1,5 +1,8 @@
 process.env.NODE_ENV = "test"
-require("dotenv-flow").config({ silent: true })
+import { loadEnvConfig } from "@next/env"
+
+const projectDir = process.cwd()
+loadEnvConfig(projectDir)
 
 import "./register-ts-paths"
 import db from "db"

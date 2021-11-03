@@ -1,4 +1,6 @@
 // eslint-disable-next-line import/no-default-export
+import {loadEnvConfig} from "@next/env"
 module.exports = function globalSetup(globalConfig) {
-  require("dotenv-flow").config({silent: true})
+  const projectDir = process.cwd()
+  loadEnvConfig(projectDir)
 }

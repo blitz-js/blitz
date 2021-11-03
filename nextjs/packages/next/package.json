@@ -74,7 +74,7 @@
     "@babel/helper-module-imports": "^7.0.0",
     "@babel/runtime": "7.12.5",
     "@hapi/accept": "5.0.2",
-    "@next/env": "0.41.2-canary.4",
+    "@next/env": "0.42.0",
     "@next/polyfill-module": "11.1.0",
     "@next/react-dev-overlay": "11.1.0",
     "@next/react-refresh-utils": "11.1.0",
