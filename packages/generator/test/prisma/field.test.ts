@@ -22,6 +22,11 @@ describe("Field", () => {
     expect(field.default).toBe("true")
   })
 
+  it("handles default string attribute with double quoted value", () => {
+    const [field] = Field.parse('name:string:default="user"')
+    expect(field.default).toBe('"user"')
+  })
+
   it("handles default uuid attribute", () => {
     const [field] = Field.parse("id:string:default=uuid")
     expect(field.default).toMatchObject({name: "uuid"})

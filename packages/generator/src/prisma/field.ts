@@ -37,7 +37,7 @@ const fallbackIfUndef = <T extends any>(defaultValue: T, input?: T) => {
   return input
 }
 
-const defaultValueTest = /=([\w]+)$/
+const defaultValueTest = /=([\w"]+)$/
 const builtInGenerators = ["autoincrement", "now", "uuid", "cuid"]
 
 class MissingFieldNameError extends Error {}
