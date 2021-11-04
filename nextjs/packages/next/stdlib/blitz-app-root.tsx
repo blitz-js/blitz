@@ -7,16 +7,12 @@ import { formatWithValidation } from '../shared/lib/utils'
 import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
 import { AppProps, BlitzPage } from '../types/index'
-import React, {
-  ComponentPropsWithoutRef,
-  ComponentType,
-  useEffect,
-  FC,
-} from 'react'
+import React, { ComponentPropsWithoutRef, useEffect, FC } from 'react'
 import SuperJSON from 'superjson'
 import { Hydrate, HydrateOptions } from 'react-query/hydration'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { queryClient } from '../data-client/react-query-utils'
+import { AppComponent } from '../shared/lib/router/router'
 const debug = require('debug')('blitz:approot')
 
 export type BlitzProviderProps = {
@@ -181,7 +177,9 @@ function withBlitzInnerWrapper(Page: BlitzPage) {
   return BlitzInnerRoot
 }
 
-export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
+export function withBlitzAppRoot(
+  UserAppRoot: React.ComponentType<any>
+): AppComponent {
   const BlitzOuterRoot = (props: AppProps) => {
     const component = React.useMemo(
       () => withBlitzInnerWrapper(props.Component),
@@ -220,5 +218,5 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       </BlitzProvider>
     )
   }
-  return BlitzOuterRoot as ComponentType<{}>
+  return BlitzOuterRoot
 }

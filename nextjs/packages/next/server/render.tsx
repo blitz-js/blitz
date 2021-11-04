@@ -160,8 +160,8 @@ function enhanceComponents(
 
   return {
     App: options.enhanceApp
-      ? withBlitzAppRoot(options.enhanceApp(App))
-      : withBlitzAppRoot(App),
+      ? (withBlitzAppRoot(options.enhanceApp(App)) as any)
+      : (withBlitzAppRoot(App) as any),
     Component: options.enhanceComponent
       ? options.enhanceComponent(Component)
       : Component,
