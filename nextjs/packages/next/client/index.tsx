@@ -31,8 +31,7 @@ import {
   NotFoundError,
   RedirectError,
 } from '../stdlib/errors'
-import { QueryClientProvider } from 'react-query'
-import { queryClient } from '../data-client/react-query-utils'
+import { withBlitzAppRoot } from '../stdlib/blitz-app-root'
 
 /// <reference types="react-dom/experimental" />
 
@@ -642,27 +641,26 @@ function AppContainer({
   children,
 }: React.PropsWithChildren<{}>): React.ReactElement {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Container
-        fn={(error) =>
-          renderError({ App: CachedApp, err: error }).catch((err) =>
-            console.error('Error rendering page: ', err)
-          )
-        }
-      >
-        <RouterContext.Provider value={makePublicRouterInstance(router)}>
-          <HeadManagerContext.Provider value={headManager}>
-            {children}
-          </HeadManagerContext.Provider>
-        </RouterContext.Provider>
-      </Container>
-    </QueryClientProvider>
+    <Container
+      fn={(error) =>
+        renderError({ App: CachedApp, err: error }).catch((err) =>
+          console.error('Error rendering page: ', err)
+        )
+      }
+    >
+      <RouterContext.Provider value={makePublicRouterInstance(router)}>
+        <HeadManagerContext.Provider value={headManager}>
+          {children}
+        </HeadManagerContext.Provider>
+      </RouterContext.Provider>
+    </Container>
   )
 }
 
-const wrapApp = (App: AppComponent) => (
+const wrapApp = (BaseApp: AppComponent) => (
   wrappedAppProps: Record<string, any>
 ): JSX.Element => {
+  let App = withBlitzAppRoot(BaseApp)
   const appProps: AppProps = {
     ...wrappedAppProps,
     Component: CachedComponent,
@@ -678,7 +676,8 @@ const wrapApp = (App: AppComponent) => (
 
 let lastAppProps: AppProps
 function doRender(input: RenderRouteInfo): Promise<any> {
-  let { App, Component, props, err }: RenderRouteInfo = input
+  let { App: BaseApp, Component, props, err }: RenderRouteInfo = input
+  let App = withBlitzAppRoot(BaseApp)
   let styleSheets: StyleSheetTuple[] | undefined =
     'initial' in input ? undefined : input.styleSheets
   Component = Component || lastAppProps.Component

@@ -7,9 +7,43 @@ import { formatWithValidation } from '../shared/lib/utils'
 import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
 import { AppProps, BlitzPage } from '../types/index'
-import React, { ComponentPropsWithoutRef, useEffect } from 'react'
+import React, {
+  ComponentPropsWithoutRef,
+  ComponentType,
+  useEffect,
+  FC,
+} from 'react'
 import SuperJSON from 'superjson'
+import { Hydrate, HydrateOptions } from 'react-query/hydration'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { queryClient } from '../data-client/react-query-utils'
 const debug = require('debug')('blitz:approot')
+
+export type BlitzProviderProps = {
+  client?: QueryClient
+  contextSharing?: boolean
+  dehydratedState?: unknown
+  hydrateOptions?: HydrateOptions
+}
+
+export const BlitzProvider: FC<BlitzProviderProps> = ({
+  client,
+  contextSharing = false,
+  dehydratedState,
+  hydrateOptions,
+  children,
+}) => {
+  return (
+    <QueryClientProvider
+      client={client ?? queryClient}
+      contextSharing={contextSharing}
+    >
+      <Hydrate state={dehydratedState} options={hydrateOptions}>
+        {children}
+      </Hydrate>
+    </QueryClientProvider>
+  )
+}
 
 const customCSS = `
   body::before {
@@ -136,17 +170,7 @@ function withBlitzInnerWrapper(Page: BlitzPage) {
       }
     }
 
-    const noPageFlicker =
-      Page.suppressFirstRenderFlicker ||
-      authenticate !== undefined ||
-      redirectAuthenticatedTo
-
-    return (
-      <>
-        {noPageFlicker && <NoPageFlicker />}
-        <Page {...props} />
-      </>
-    )
+    return <Page {...props} />
   }
   for (let [key, value] of Object.entries(Page)) {
     ;(BlitzInnerRoot as any)[key] = value
@@ -164,6 +188,16 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       [props.Component]
     )
 
+    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
+      props.Component,
+      props.pageProps
+    )
+
+    const noPageFlicker =
+      props.Component.suppressFirstRenderFlicker ||
+      authenticate !== undefined ||
+      redirectAuthenticatedTo
+
     useEffect(() => {
       setTimeout(() => {
         document.documentElement.classList.add('blitz-first-render-complete')
@@ -180,12 +214,11 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     }
 
     return (
-      // <BlitzProvider dehydratedState={dehydratedState}>
-      <>
+      <BlitzProvider dehydratedState={dehydratedState}>
+        {noPageFlicker && <NoPageFlicker />}
         <UserAppRoot {...props} Component={component} />
-      </>
-      // </BlitzProvider>
+      </BlitzProvider>
     )
   }
-  return BlitzOuterRoot
+  return BlitzOuterRoot as ComponentType<{}>
 }

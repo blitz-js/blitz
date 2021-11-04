@@ -14,7 +14,7 @@ export default function preset(_api: any, options = {}) {
     plugins: [
       FixNodeFileTrace,
       require('babel-plugin-superjson-next'),
-      AddBlitzAppRoot,
+      // AddBlitzAppRoot,
     ],
   };
 

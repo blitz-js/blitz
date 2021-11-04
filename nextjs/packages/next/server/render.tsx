@@ -67,8 +67,7 @@ import {
 } from '../lib/load-custom-routes'
 import { DomainLocale } from './config'
 import { RenderResult, resultFromChunks } from './utils'
-import { QueryClientProvider } from 'react-query'
-import { queryClient } from '../data-client/react-query-utils'
+import { withBlitzAppRoot } from '../stdlib/blitz-app-root'
 
 function noRouter() {
   const message =
@@ -160,7 +159,9 @@ function enhanceComponents(
   }
 
   return {
-    App: options.enhanceApp ? options.enhanceApp(App) : App,
+    App: options.enhanceApp
+      ? withBlitzAppRoot(options.enhanceApp(App))
+      : withBlitzAppRoot(App),
     Component: options.enhanceComponent
       ? options.enhanceComponent(Component)
       : Component,
@@ -605,6 +606,7 @@ export async function renderToHTML(
     isPreview,
     (req as any).__nextIsLocaleDomain
   )
+  const WithBlitzApp = withBlitzAppRoot(App)
   const ctx = {
     err,
     req: isAutoExport ? undefined : req,
@@ -618,7 +620,7 @@ export async function renderToHTML(
     AppTree: (props: any) => {
       return (
         <AppContainer>
-          <App {...props} Component={Component} router={router} />
+          <WithBlitzApp {...props} Component={Component} router={router} />
         </AppContainer>
       )
     },
@@ -642,30 +644,28 @@ export async function renderToHTML(
     !isSSG && (renderOpts.nextExport || (dev && (isAutoExport || isFallback)))
 
   const AppContainer = ({ children }: any) => (
-    <QueryClientProvider client={queryClient}>
-      <RouterContext.Provider value={router}>
-        <AmpStateContext.Provider value={ampState}>
-          <HeadManagerContext.Provider
-            value={{
-              updateHead: (state) => {
-                head = state
-              },
-              updateScripts: (scripts) => {
-                scriptLoader = scripts
-              },
-              scripts: {},
-              mountedInstances: new Set(),
-            }}
+    <RouterContext.Provider value={router}>
+      <AmpStateContext.Provider value={ampState}>
+        <HeadManagerContext.Provider
+          value={{
+            updateHead: (state) => {
+              head = state
+            },
+            updateScripts: (scripts) => {
+              scriptLoader = scripts
+            },
+            scripts: {},
+            mountedInstances: new Set(),
+          }}
+        >
+          <LoadableContext.Provider
+            value={(moduleName) => reactLoadableModules.push(moduleName)}
           >
-            <LoadableContext.Provider
-              value={(moduleName) => reactLoadableModules.push(moduleName)}
-            >
-              {children}
-            </LoadableContext.Provider>
-          </HeadManagerContext.Provider>
-        </AmpStateContext.Provider>
-      </RouterContext.Provider>
-    </QueryClientProvider>
+            {children}
+          </LoadableContext.Provider>
+        </HeadManagerContext.Provider>
+      </AmpStateContext.Provider>
+    </RouterContext.Provider>
   )
 
   try {
