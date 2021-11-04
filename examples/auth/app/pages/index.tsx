@@ -6,20 +6,22 @@ import {
   useRouterQuery,
   useMutation,
   invoke,
+  Image,
   useQuery,
   BlitzPage,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
+import logo from "public/logo.png"
 
 import {Routes} from ".blitz"
 
 const CurrentUserInfo = () => {
   const session = useSession()
-  const [currentUser] = useQuery(getUser, {where: {id: session.userId!}})
+  // const [currentUser] = useQuery(getUser, {where: {id: session.userId!}})
 
-  return <pre>{JSON.stringify(currentUser, null, 2)}</pre>
+  return <pre>{JSON.stringify(session, null, 2)}</pre>
 }
 
 const UserStuff = () => {
@@ -88,7 +90,7 @@ const Home: BlitzPage = () => (
 
       <main>
         <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
+          <Image src={logo} alt="blitz.js" width={400} height={200} />
         </div>
 
         <Suspense fallback={"Loading..."}>

@@ -31,6 +31,8 @@ import {
   NotFoundError,
   RedirectError,
 } from '../stdlib/errors'
+import { QueryClientProvider } from 'react-query'
+import { queryClient } from '../data-client/react-query-utils'
 
 /// <reference types="react-dom/experimental" />
 
@@ -640,19 +642,21 @@ function AppContainer({
   children,
 }: React.PropsWithChildren<{}>): React.ReactElement {
   return (
-    <Container
-      fn={(error) =>
-        renderError({ App: CachedApp, err: error }).catch((err) =>
-          console.error('Error rendering page: ', err)
-        )
-      }
-    >
-      <RouterContext.Provider value={makePublicRouterInstance(router)}>
-        <HeadManagerContext.Provider value={headManager}>
-          {children}
-        </HeadManagerContext.Provider>
-      </RouterContext.Provider>
-    </Container>
+    <QueryClientProvider client={queryClient}>
+      <Container
+        fn={(error) =>
+          renderError({ App: CachedApp, err: error }).catch((err) =>
+            console.error('Error rendering page: ', err)
+          )
+        }
+      >
+        <RouterContext.Provider value={makePublicRouterInstance(router)}>
+          <HeadManagerContext.Provider value={headManager}>
+            {children}
+          </HeadManagerContext.Provider>
+        </RouterContext.Provider>
+      </Container>
+    </QueryClientProvider>
   )
 }
 

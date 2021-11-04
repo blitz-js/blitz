@@ -3,7 +3,6 @@ import {
   useAuthorizeIf,
   useSession,
 } from '../data-client/auth'
-import { BlitzProvider } from '../data-client/react-query'
 import { formatWithValidation } from '../shared/lib/utils'
 import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
@@ -137,7 +136,17 @@ function withBlitzInnerWrapper(Page: BlitzPage) {
       }
     }
 
-    return <Page {...props} />
+    const noPageFlicker =
+      Page.suppressFirstRenderFlicker ||
+      authenticate !== undefined ||
+      redirectAuthenticatedTo
+
+    return (
+      <>
+        {noPageFlicker && <NoPageFlicker />}
+        <Page {...props} />
+      </>
+    )
   }
   for (let [key, value] of Object.entries(Page)) {
     ;(BlitzInnerRoot as any)[key] = value
@@ -155,18 +164,10 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
       [props.Component]
     )
 
-    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
-      props.Component,
-      props.pageProps
-    )
-
-    const noPageFlicker =
-      props.Component.suppressFirstRenderFlicker ||
-      authenticate !== undefined ||
-      redirectAuthenticatedTo
-
     useEffect(() => {
-      document.documentElement.classList.add('blitz-first-render-complete')
+      setTimeout(() => {
+        document.documentElement.classList.add('blitz-first-render-complete')
+      })
     }, [])
 
     let { dehydratedState, _superjson } = props.pageProps
@@ -179,10 +180,11 @@ export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     }
 
     return (
-      <BlitzProvider dehydratedState={dehydratedState}>
-        {noPageFlicker && <NoPageFlicker />}
+      // <BlitzProvider dehydratedState={dehydratedState}>
+      <>
         <UserAppRoot {...props} Component={component} />
-      </BlitzProvider>
+      </>
+      // </BlitzProvider>
     )
   }
   return BlitzOuterRoot

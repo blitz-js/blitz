@@ -67,6 +67,8 @@ import {
 } from '../lib/load-custom-routes'
 import { DomainLocale } from './config'
 import { RenderResult, resultFromChunks } from './utils'
+import { QueryClientProvider } from 'react-query'
+import { queryClient } from '../data-client/react-query-utils'
 
 function noRouter() {
   const message =
@@ -640,28 +642,30 @@ export async function renderToHTML(
     !isSSG && (renderOpts.nextExport || (dev && (isAutoExport || isFallback)))
 
   const AppContainer = ({ children }: any) => (
-    <RouterContext.Provider value={router}>
-      <AmpStateContext.Provider value={ampState}>
-        <HeadManagerContext.Provider
-          value={{
-            updateHead: (state) => {
-              head = state
-            },
-            updateScripts: (scripts) => {
-              scriptLoader = scripts
-            },
-            scripts: {},
-            mountedInstances: new Set(),
-          }}
-        >
-          <LoadableContext.Provider
-            value={(moduleName) => reactLoadableModules.push(moduleName)}
+    <QueryClientProvider client={queryClient}>
+      <RouterContext.Provider value={router}>
+        <AmpStateContext.Provider value={ampState}>
+          <HeadManagerContext.Provider
+            value={{
+              updateHead: (state) => {
+                head = state
+              },
+              updateScripts: (scripts) => {
+                scriptLoader = scripts
+              },
+              scripts: {},
+              mountedInstances: new Set(),
+            }}
           >
-            {children}
-          </LoadableContext.Provider>
-        </HeadManagerContext.Provider>
-      </AmpStateContext.Provider>
-    </RouterContext.Provider>
+            <LoadableContext.Provider
+              value={(moduleName) => reactLoadableModules.push(moduleName)}
+            >
+              {children}
+            </LoadableContext.Provider>
+          </HeadManagerContext.Provider>
+        </AmpStateContext.Provider>
+      </RouterContext.Provider>
+    </QueryClientProvider>
   )
 
   try {
