@@ -202,7 +202,8 @@ export function withBlitzAppRoot(
       })
     }, [])
 
-    let { dehydratedState, _superjson } = props.pageProps
+    let dehydratedState = props.pageProps?.dehydratedState
+    let _superjson = props.pageProps?._superjson
     if (dehydratedState && _superjson) {
       const deserializedProps = SuperJSON.deserialize({
         json: { dehydratedState },
