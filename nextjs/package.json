@@ -60,7 +60,7 @@
     "@types/passport": "1.0.5",
     "@types/sharp": "0.28.4",
     "@types/string-hash": "1.1.1",
-    "@typescript-eslint/eslint-plugin": "4.17.0",
+    "@typescript-eslint/eslint-plugin": "4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "@vercel/fetch": "6.1.1",
     "@zeit/next-css": "1.0.2-canary.2",

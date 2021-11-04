@@ -3370,6 +3370,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "lucasvazq",
+      "name": "Lucas Vazquez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38964964?v=4",
+      "profile": "https://lucasvazq.github.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
