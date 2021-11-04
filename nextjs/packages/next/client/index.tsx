@@ -31,7 +31,7 @@ import {
   NotFoundError,
   RedirectError,
 } from '../stdlib/errors'
-import { withBlitzAppRoot } from '../stdlib/blitz-app-root'
+import { withBlitzInnerWrapper, BlitzWrapper } from '../stdlib/blitz-app-root'
 
 /// <reference types="react-dom/experimental" />
 
@@ -357,11 +357,11 @@ export async function initNext(opts: { webpackHMR?: any } = {}) {
     if ('error' in pageEntrypoint) {
       throw pageEntrypoint.error
     }
-    CachedComponent = pageEntrypoint.component
+    CachedComponent = withBlitzInnerWrapper(pageEntrypoint.component)
 
     if (process.env.NODE_ENV !== 'production') {
       const { isValidElementType } = require('react-is')
-      if (!isValidElementType(CachedComponent)) {
+      if (!isValidElementType(pageEntrypoint.component)) {
         throw new Error(
           `The default export is not a React Component in page: "${page}"`
         )
@@ -639,7 +639,8 @@ function clearMarks(): void {
 
 function AppContainer({
   children,
-}: React.PropsWithChildren<{}>): React.ReactElement {
+  appProps,
+}: React.PropsWithChildren<{ appProps: AppProps }>): React.ReactElement {
   return (
     <Container
       fn={(error) =>
@@ -648,19 +649,20 @@ function AppContainer({
         )
       }
     >
-      <RouterContext.Provider value={makePublicRouterInstance(router)}>
-        <HeadManagerContext.Provider value={headManager}>
-          {children}
-        </HeadManagerContext.Provider>
-      </RouterContext.Provider>
+      <BlitzWrapper appProps={appProps}>
+        <RouterContext.Provider value={makePublicRouterInstance(router)}>
+          <HeadManagerContext.Provider value={headManager}>
+            {children}
+          </HeadManagerContext.Provider>
+        </RouterContext.Provider>
+      </BlitzWrapper>
     </Container>
   )
 }
 
-const wrapApp = (BaseApp: AppComponent) => (
+const wrapApp = (App: AppComponent) => (
   wrappedAppProps: Record<string, any>
 ): JSX.Element => {
-  let App = withBlitzAppRoot(BaseApp)
   const appProps: AppProps = {
     ...wrappedAppProps,
     Component: CachedComponent,
@@ -668,7 +670,7 @@ const wrapApp = (BaseApp: AppComponent) => (
     router,
   }
   return (
-    <AppContainer>
+    <AppContainer appProps={appProps}>
       <App {...appProps} />
     </AppContainer>
   )
@@ -676,11 +678,10 @@ const wrapApp = (BaseApp: AppComponent) => (
 
 let lastAppProps: AppProps
 function doRender(input: RenderRouteInfo): Promise<any> {
-  let { App: BaseApp, Component, props, err }: RenderRouteInfo = input
-  let App = withBlitzAppRoot(BaseApp)
+  let { App, Component, props, err }: RenderRouteInfo = input
   let styleSheets: StyleSheetTuple[] | undefined =
     'initial' in input ? undefined : input.styleSheets
-  Component = Component || lastAppProps.Component
+  Component = withBlitzInnerWrapper(Component || lastAppProps.Component)
   props = props || lastAppProps.props
 
   const appProps: AppProps = {
@@ -834,7 +835,7 @@ function doRender(input: RenderRouteInfo): Promise<any> {
   const elem: JSX.Element = (
     <>
       <Head callback={onHeadCommit} />
-      <AppContainer>
+      <AppContainer appProps={appProps}>
         <App {...appProps} />
         <Portal type="next-route-announcer">
           <RouteAnnouncer />

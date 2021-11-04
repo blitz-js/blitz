@@ -64,7 +64,7 @@ const noscriptCSS = `
   }
 `
 
-const NoPageFlicker = () => {
+export const NoPageFlicker = () => {
   return (
     <Head>
       <style dangerouslySetInnerHTML={{ __html: customCSS }} />
@@ -75,7 +75,7 @@ const NoPageFlicker = () => {
   )
 }
 
-function getAuthValues(
+export function getAuthValues(
   Page: BlitzPage,
   props: ComponentPropsWithoutRef<BlitzPage>
 ) {
@@ -111,7 +111,7 @@ function getAuthValues(
   return { authenticate, redirectAuthenticatedTo }
 }
 
-function withBlitzInnerWrapper(Page: BlitzPage) {
+export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     // We call useSession so this will rerender anytime session changes
     useSession({ suspense: false })
@@ -219,5 +219,45 @@ export function withBlitzAppRoot(
       </BlitzProvider>
     )
   }
-  return BlitzOuterRoot
+  return BlitzOuterRoot as any
+}
+
+export function BlitzWrapper({
+  children,
+  appProps,
+}: React.PropsWithChildren<{ appProps: AppProps }>) {
+  const { authenticate, redirectAuthenticatedTo } = getAuthValues(
+    appProps.Component,
+    appProps.pageProps
+  )
+
+  let dehydratedState = appProps.pageProps?.dehydratedState
+  let _superjson = appProps.pageProps?._superjson
+  if (dehydratedState && _superjson) {
+    const deserializedProps = SuperJSON.deserialize({
+      json: { dehydratedState },
+      meta: _superjson,
+    }) as { dehydratedState: any }
+    dehydratedState = deserializedProps?.dehydratedState
+  }
+
+  const noPageFlicker =
+    appProps.Component.suppressFirstRenderFlicker ||
+    authenticate !== undefined ||
+    redirectAuthenticatedTo
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      document.documentElement.classList.add('blitz-first-render-complete')
+    })
+  }, [])
+
+  return (
+    <>
+      <BlitzProvider dehydratedState={dehydratedState}>
+        {noPageFlicker && <NoPageFlicker />}
+        {children}
+      </BlitzProvider>
+    </>
+  )
 }
