@@ -357,11 +357,11 @@ export async function initNext(opts: { webpackHMR?: any } = {}) {
     if ('error' in pageEntrypoint) {
       throw pageEntrypoint.error
     }
-    CachedComponent = withBlitzInnerWrapper(pageEntrypoint.component)
+    CachedComponent = pageEntrypoint.component
 
     if (process.env.NODE_ENV !== 'production') {
       const { isValidElementType } = require('react-is')
-      if (!isValidElementType(pageEntrypoint.component)) {
+      if (!isValidElementType(CachedComponent)) {
         throw new Error(
           `The default export is not a React Component in page: "${page}"`
         )
@@ -676,12 +676,22 @@ const wrapApp = (App: AppComponent) => (
   )
 }
 
+let lastUserComponent: any
+let cachedWrappedComponent: any
+
 let lastAppProps: AppProps
 function doRender(input: RenderRouteInfo): Promise<any> {
   let { App, Component, props, err }: RenderRouteInfo = input
   let styleSheets: StyleSheetTuple[] | undefined =
     'initial' in input ? undefined : input.styleSheets
-  Component = withBlitzInnerWrapper(Component || lastAppProps.Component)
+  Component = Component || lastAppProps.Component
+  if (Component === lastUserComponent) {
+    Component = cachedWrappedComponent
+  } else {
+    lastUserComponent = Component
+    cachedWrappedComponent = withBlitzInnerWrapper(Component)
+    Component = cachedWrappedComponent
+  }
   props = props || lastAppProps.props
 
   const appProps: AppProps = {
