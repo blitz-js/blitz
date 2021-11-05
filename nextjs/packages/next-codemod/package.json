@@ -4,13 +4,13 @@
   "version": "11.1.0",
   "license": "MIT",
   "dependencies": {
-    "chalk": "4.1.0",
+    "chalk": "4.1.2",
     "cheerio": "1.0.0-rc.9",
-    "execa": "4.0.3",
-    "globby": "11.0.1",
+    "execa": "5.1.1",
+    "globby": "12.0.2",
     "inquirer": "7.3.3",
     "is-git-clean": "1.1.0",
-    "jscodeshift": "^0.6.4",
+    "jscodeshift": "^0.13.0",
     "meow": "7.0.1"
   },
   "files": [
@@ -26,6 +26,6 @@
   },
   "bin": "./bin/next-codemod.js",
   "devDependencies": {
-    "@types/jscodeshift": "0.11.0"
+    "@types/jscodeshift": "0.11.2"
   }
 }

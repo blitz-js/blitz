@@ -31,29 +31,29 @@
     "url": "git+https://github.com/blitz-js/blitz.git"
   },
   "dependencies": {
-    "@babel/core": "7.12.10",
-    "@babel/plugin-transform-typescript": "7.12.1",
+    "@babel/core": "7.15.8",
+    "@babel/plugin-transform-typescript": "7.15.8",
     "@blitzjs/display": "0.42.0",
     "@blitzjs/server": "0.42.0",
-    "@mrleebo/prisma-ast": "^0.2.4",
-    "@types/jscodeshift": "0.7.2",
-    "chalk": "^4.1.0",
+    "@mrleebo/prisma-ast": "^0.2.5",
+    "@types/jscodeshift": "0.11.2",
+    "chalk": "^4.1.2",
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
-    "fs-extra": "^9.1.0",
-    "got": "^11.8.1",
-    "jscodeshift": "0.11.0",
-    "mem-fs": "1.2.0",
-    "mem-fs-editor": "8.0.0",
+    "fs-extra": "^10.0.0",
+    "got": "^11.8.2",
+    "jscodeshift": "0.13.0",
+    "mem-fs": "2.2.1",
+    "mem-fs-editor": "9.3.0",
     "npm-which": "^3.0.1",
     "pluralize": "^8.0.0",
-    "recast": "0.20.4",
-    "username": "^5.1.0",
+    "recast": "0.20.5",
+    "username": "^6.0.0",
     "vinyl": "2.2.1"
   },
   "devDependencies": {
-    "prettier": "2.2.1"
+    "prettier": "2.4.1"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }
