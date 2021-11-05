@@ -368,6 +368,7 @@ describe('Image Component Tests', () => {
     lazyLoadingTests()
     it('should automatically load images if observer does not exist', async () => {
       browser = await webdriver(appPort, '/missing-observer')
+      await waitFor(100)
       expect(
         await browser.elementById('lazy-no-observer').getAttribute('src')
       ).toBe(
@@ -394,6 +395,7 @@ describe('Image Component Tests', () => {
       await browser.waitForElementByCss('#observerlink').click()
       await waitFor(500)
       browser = await webdriver(appPort, '/missing-observer')
+      await waitFor(100)
       expect(
         await browser.elementById('lazy-no-observer').getAttribute('src')
       ).toBe(

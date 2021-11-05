@@ -961,6 +961,7 @@ const runTests = (dev = false) => {
 
   it('should use urls with basepath in router events for hash changes', async () => {
     const browser = await webdriver(appPort, `${basePath}/hello`)
+    await waitFor(100)
     try {
       await browser.eval('window._clearEventLog()')
       await waitFor(100)
@@ -982,6 +983,7 @@ const runTests = (dev = false) => {
 
   it('should use urls with basepath in router events for cancelled routes', async () => {
     const browser = await webdriver(appPort, `${basePath}/hello`)
+    await waitFor(100)
     try {
       await browser.eval('window._clearEventLog()')
       await browser
