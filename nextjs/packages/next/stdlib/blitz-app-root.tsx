@@ -99,8 +99,8 @@ export function getAuthValues(
           break
         }
 
-        if (currentElement.props.children) {
-          currentElement = currentElement.props.children
+        if (currentElement.props?.children) {
+          currentElement = currentElement.props?.children
         } else {
           break
         }
