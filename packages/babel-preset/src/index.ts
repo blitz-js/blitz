@@ -1,5 +1,4 @@
 import type { TransformOptions } from '@babel/core';
-import AddBlitzAppRoot from './add-blitz-app-root';
 import FixNodeFileTrace from './fix-node-file-trace';
 import RewriteImports from './rewrite-imports';
 
@@ -11,11 +10,7 @@ export default function preset(_api: any, options = {}) {
 
   const config: TransformOptions = {
     presets: [[require('next/babel'), options]],
-    plugins: [
-      FixNodeFileTrace,
-      require('babel-plugin-superjson-next'),
-      AddBlitzAppRoot,
-    ],
+    plugins: [FixNodeFileTrace, require('babel-plugin-superjson-next')],
   };
 
   if (!isRunningInJest) {

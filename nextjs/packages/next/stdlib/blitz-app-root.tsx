@@ -3,14 +3,43 @@ import {
   useAuthorizeIf,
   useSession,
 } from '../data-client/auth'
-import { BlitzProvider } from '../data-client/react-query'
 import { formatWithValidation } from '../shared/lib/utils'
 import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
 import { AppProps, BlitzPage } from '../types/index'
-import React, { ComponentPropsWithoutRef, useEffect } from 'react'
+import React, { ComponentPropsWithoutRef, useEffect, FC } from 'react'
 import SuperJSON from 'superjson'
+import { Hydrate, HydrateOptions } from 'react-query/hydration'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { queryClient } from '../data-client/react-query-utils'
+import { AppComponent } from '../shared/lib/router/router'
 const debug = require('debug')('blitz:approot')
+
+export type BlitzProviderProps = {
+  client?: QueryClient
+  contextSharing?: boolean
+  dehydratedState?: unknown
+  hydrateOptions?: HydrateOptions
+}
+
+export const BlitzProvider: FC<BlitzProviderProps> = ({
+  client,
+  contextSharing = false,
+  dehydratedState,
+  hydrateOptions,
+  children,
+}) => {
+  return (
+    <QueryClientProvider
+      client={client ?? queryClient}
+      contextSharing={contextSharing}
+    >
+      <Hydrate state={dehydratedState} options={hydrateOptions}>
+        {children}
+      </Hydrate>
+    </QueryClientProvider>
+  )
+}
 
 const customCSS = `
   body::before {
@@ -35,7 +64,7 @@ const noscriptCSS = `
   }
 `
 
-const NoPageFlicker = () => {
+export const NoPageFlicker = () => {
   return (
     <Head>
       <style dangerouslySetInnerHTML={{ __html: customCSS }} />
@@ -46,7 +75,7 @@ const NoPageFlicker = () => {
   )
 }
 
-function getAuthValues(
+export function getAuthValues(
   Page: BlitzPage,
   props: ComponentPropsWithoutRef<BlitzPage>
 ) {
@@ -82,7 +111,7 @@ function getAuthValues(
   return { authenticate, redirectAuthenticatedTo }
 }
 
-function withBlitzInnerWrapper(Page: BlitzPage) {
+export function withBlitzInnerWrapper(Page: BlitzPage) {
   const BlitzInnerRoot = (props: ComponentPropsWithoutRef<BlitzPage>) => {
     // We call useSession so this will rerender anytime session changes
     useSession({ suspense: false })
@@ -148,42 +177,42 @@ function withBlitzInnerWrapper(Page: BlitzPage) {
   return BlitzInnerRoot
 }
 
-export function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
-  const BlitzOuterRoot = (props: AppProps) => {
-    const component = React.useMemo(
-      () => withBlitzInnerWrapper(props.Component),
-      [props.Component]
-    )
+export function BlitzWrapper({
+  children,
+  appProps,
+}: React.PropsWithChildren<{ appProps: AppProps }>) {
+  const { authenticate, redirectAuthenticatedTo } = getAuthValues(
+    appProps.Component,
+    appProps.pageProps
+  )
 
-    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
-      props.Component,
-      props.pageProps
-    )
+  let dehydratedState = appProps.pageProps?.dehydratedState
+  let _superjson = appProps.pageProps?._superjson
+  if (dehydratedState && _superjson) {
+    const deserializedProps = SuperJSON.deserialize({
+      json: { dehydratedState },
+      meta: _superjson,
+    }) as { dehydratedState: any }
+    dehydratedState = deserializedProps?.dehydratedState
+  }
 
-    const noPageFlicker =
-      props.Component.suppressFirstRenderFlicker ||
-      authenticate !== undefined ||
-      redirectAuthenticatedTo
+  const noPageFlicker =
+    appProps.Component.suppressFirstRenderFlicker ||
+    authenticate !== undefined ||
+    redirectAuthenticatedTo
 
-    useEffect(() => {
+  React.useEffect(() => {
+    setTimeout(() => {
       document.documentElement.classList.add('blitz-first-render-complete')
-    }, [])
+    })
+  }, [])
 
-    let { dehydratedState, _superjson } = props.pageProps
-    if (dehydratedState && _superjson) {
-      const deserializedProps = SuperJSON.deserialize({
-        json: { dehydratedState },
-        meta: _superjson,
-      }) as { dehydratedState: any }
-      dehydratedState = deserializedProps?.dehydratedState
-    }
-
-    return (
+  return (
+    <>
       <BlitzProvider dehydratedState={dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
-        <UserAppRoot {...props} Component={component} />
+        {children}
       </BlitzProvider>
-    )
-  }
-  return BlitzOuterRoot
+    </>
+  )
 }
