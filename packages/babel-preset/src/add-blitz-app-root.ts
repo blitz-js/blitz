@@ -1,5 +1,5 @@
 import { PluginObj } from '@babel/core';
-import { getFileName, wrapExportDefaultDeclaration } from './utils';
+import { getFileName, wrapDefaultExportWithBlitzRoot } from './utils';
 
 function AddBlitzAppRoot(): PluginObj {
   return {
@@ -12,7 +12,7 @@ function AddBlitzAppRoot(): PluginObj {
           return;
         }
 
-        wrapExportDefaultDeclaration(path, 'withBlitzAppRoot', 'next/stdlib');
+        wrapDefaultExportWithBlitzRoot(path);
       },
     },
   };

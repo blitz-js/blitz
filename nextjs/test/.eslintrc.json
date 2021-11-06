@@ -1,5 +1,5 @@
 {
-  "extends": ["next"],
+  "extends": ["blitz"],
   "rules": {
     "import/no-anonymous-default-export": "off",
     "react/display-name": "off",
