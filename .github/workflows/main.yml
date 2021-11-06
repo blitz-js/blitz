@@ -20,19 +20,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+          cache: yarn
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -63,20 +51,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: yarn
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache node_modules
-        id: yarn-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -120,6 +96,7 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+          cache: yarn
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -146,20 +123,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: yarn
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
-      # - name: Cache node_modules
-      #   id: yarn-cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -245,20 +210,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: yarn
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
-      # - name: Cache node_modules
-      #   id: yarn-cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -307,20 +260,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+          cache: yarn
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      # - name: Get yarn cache directory path
-      #   id: yarn-cache-dir-path
-      #   run: echo "::set-output name=dir::$(yarn cache dir)"
-      # - name: Cache node_modules
-      #   id: yarn-cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
