@@ -177,51 +177,6 @@ export function withBlitzInnerWrapper(Page: BlitzPage) {
   return BlitzInnerRoot
 }
 
-export function withBlitzAppRoot(
-  UserAppRoot: React.ComponentType<any>
-): AppComponent {
-  const BlitzOuterRoot = (props: AppProps) => {
-    const component = React.useMemo(
-      () => withBlitzInnerWrapper(props.Component),
-      [props.Component]
-    )
-
-    const { authenticate, redirectAuthenticatedTo } = getAuthValues(
-      props.Component,
-      props.pageProps
-    )
-
-    const noPageFlicker =
-      props.Component.suppressFirstRenderFlicker ||
-      authenticate !== undefined ||
-      redirectAuthenticatedTo
-
-    useEffect(() => {
-      setTimeout(() => {
-        document.documentElement.classList.add('blitz-first-render-complete')
-      })
-    }, [])
-
-    let dehydratedState = props.pageProps?.dehydratedState
-    let _superjson = props.pageProps?._superjson
-    if (dehydratedState && _superjson) {
-      const deserializedProps = SuperJSON.deserialize({
-        json: { dehydratedState },
-        meta: _superjson,
-      }) as { dehydratedState: any }
-      dehydratedState = deserializedProps?.dehydratedState
-    }
-
-    return (
-      <BlitzProvider dehydratedState={dehydratedState}>
-        {noPageFlicker && <NoPageFlicker />}
-        <UserAppRoot {...props} Component={component} />
-      </BlitzProvider>
-    )
-  }
-  return BlitzOuterRoot as any
-}
-
 export function BlitzWrapper({
   children,
   appProps,
