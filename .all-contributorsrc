@@ -3388,6 +3388,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "thisdotrob",
+      "name": "Rob Stevenson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12902589?v=4",
+      "profile": "https://github.com/thisdotrob",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
