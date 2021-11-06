@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-blitz",
-  "version": "0.42.0",
+  "version": "0.42.4",
   "description": "Blitz.js eslint config",
   "main": "index.js",
   "license": "MIT",

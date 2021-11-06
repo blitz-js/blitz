@@ -152,11 +152,6 @@ function getPlugins(
           type: 'plugin',
         })
       : null
-  const blitzAppRootItem = isPageFile
-    ? createConfigItem([require('../plugins/add-blitz-app-root')], {
-        type: 'plugin',
-      })
-    : null
   const fixNodeFileTraceItem =
     false && isServer && isPageFile
       ? createConfigItem([require('../plugins/fix-node-file-trace')], {
@@ -176,7 +171,6 @@ function getPlugins(
     nextSsgItem,
     commonJsItem,
     superjsonItem,
-    blitzAppRootItem,
     fixNodeFileTraceItem,
   ].filter(Boolean)
 }

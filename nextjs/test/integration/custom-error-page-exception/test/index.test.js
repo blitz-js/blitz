@@ -2,7 +2,14 @@
 
 import { join } from 'path'
 import webdriver from 'next-webdriver'
-import { nextBuild, nextStart, findPort, killApp, check } from 'next-test-utils'
+import {
+  waitFor,
+  nextBuild,
+  nextStart,
+  findPort,
+  killApp,
+  check,
+} from 'next-test-utils'
 
 jest.setTimeout(1000 * 60 * 1)
 
@@ -20,7 +27,9 @@ describe('Custom error page exception', () => {
   it('should handle errors from _error render', async () => {
     const navSel = '#nav'
     const browser = await webdriver(appPort, '/')
+    await waitFor(100)
     await browser.waitForElementByCss(navSel).elementByCss(navSel).click()
+    await waitFor(100)
 
     await check(
       () => browser.eval('document.documentElement.innerHTML'),

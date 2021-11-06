@@ -2,7 +2,6 @@ export * from './constants'
 export * from './rpc'
 export * from './auth'
 export {
-  BlitzProvider,
   useQuery,
   usePaginatedQuery,
   useInfiniteQuery,

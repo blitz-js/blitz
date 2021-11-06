@@ -46,7 +46,6 @@ const specialImports: Record<string, string> = {
   generateToken: 'next/stdlib-server',
   resolver: 'next/stdlib-server',
 
-  BlitzProvider: 'next/data-client',
   getAntiCSRFToken: 'next/data-client',
   useSession: 'next/data-client',
   useAuthenticatedSession: 'next/data-client',
