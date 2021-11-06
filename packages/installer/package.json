@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/installer",
-  "version": "0.42.0",
+  "version": "0.42.1",
   "description": "Package installation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -30,8 +30,8 @@
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.42.0",
-    "@blitzjs/generator": "0.42.0",
+    "@blitzjs/display": "0.42.1",
+    "@blitzjs/generator": "0.42.1",
     "@mrleebo/prisma-ast": "^0.2.4",
     "@prisma/sdk": "2.19.0",
     "@types/jscodeshift": "0.7.2",
