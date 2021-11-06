@@ -9,8 +9,6 @@ import {
   useMutation as useReactQueryMutation,
   UseMutationOptions,
   UseMutationResult,
-  QueryClient,
-  QueryClientProvider,
 } from 'react-query'
 import { useSession } from './auth'
 import { FirstParam, PromiseReturnType, AsyncFunc } from '../types/utils'
@@ -22,42 +20,8 @@ import {
   QueryCacheFunctions,
   sanitizeQuery,
   sanitizeMutation,
-  queryClient,
 } from './react-query-utils'
 import { useRouter } from '../client/router'
-import React, { FC, useRef } from 'react'
-import { Hydrate, HydrateOptions } from 'react-query/hydration'
-
-export type BlitzProviderProps = {
-  client?: QueryClient
-  contextSharing?: boolean
-  dehydratedState?: unknown
-  hydrateOptions?: HydrateOptions
-}
-
-export const BlitzProvider: FC<BlitzProviderProps> = ({
-  client,
-  contextSharing = false,
-  dehydratedState,
-  hydrateOptions,
-  children,
-}) => {
-  const queryClientRef = useRef<QueryClient>()
-  if (!queryClientRef.current) {
-    queryClientRef.current = queryClient
-  }
-
-  return (
-    <QueryClientProvider
-      client={client ?? queryClient}
-      contextSharing={contextSharing}
-    >
-      <Hydrate state={dehydratedState} options={hydrateOptions}>
-        {children}
-      </Hydrate>
-    </QueryClientProvider>
-  )
-}
 
 type QueryLazyOptions = { suspense: unknown } | { enabled: unknown }
 type QueryNonLazyOptions =

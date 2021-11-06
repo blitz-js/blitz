@@ -53,7 +53,7 @@ describe('React Profiling Mode', () => {
       const browser = await webdriver(appPort, '/')
       const results = await browser.eval('window.profileResults')
 
-      expect(results.length).toBe(1)
+      expect(results.length).toBe(2)
       expect(results[0] && results[0][0]).toBe('hello')
     })
   })

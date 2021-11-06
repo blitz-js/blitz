@@ -14,7 +14,9 @@ module.exports = {
   ],
   plugins: ['import', 'react', 'jsx-a11y'],
   rules: {
-    'import/no-anonymous-default-export': 'warn',
+    'import/no-anonymous-default-export': 'error',
+    'import/no-webpack-loader-syntax': 'off',
+    'react/display-name': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'jsx-a11y/alt-text': [
@@ -29,6 +31,7 @@ module.exports = {
     'jsx-a11y/aria-unsupported-elements': 'warn',
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
+    '@next/next/no-html-link-for-pages': 'off', // Until we add multi pages support to Blitz
   },
   parser: './parser.js',
   parserOptions: {
