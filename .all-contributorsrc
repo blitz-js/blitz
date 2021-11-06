@@ -3379,6 +3379,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chrisj-back2work",
+      "name": "Chris Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68551954?v=4",
+      "profile": "https://github.com/chrisj-back2work",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "thisdotrob",
+      "name": "Rob Stevenson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12902589?v=4",
+      "profile": "https://github.com/thisdotrob",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -6,12 +6,14 @@ import {
   useRouterQuery,
   useMutation,
   invoke,
+  Image,
   useQuery,
   BlitzPage,
 } from "blitz"
 import getUser from "app/users/queries/getUser"
 import trackView from "app/users/mutations/trackView"
 import Layout from "app/core/layouts/Layout"
+import logo from "public/logo.png"
 
 import {Routes} from ".blitz"
 
@@ -88,7 +90,7 @@ const Home: BlitzPage = () => (
 
       <main>
         <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
+          <Image src={logo} alt="blitz.js" width={400} height={200} />
         </div>
 
         <Suspense fallback={"Loading..."}>
