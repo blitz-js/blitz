@@ -56,11 +56,6 @@ jobs:
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
-      - uses: actions/cache@v2
-        id: cache-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
 
   testBlitzPackages:
     name: Blitz - Test Packages
@@ -69,11 +64,6 @@ jobs:
     env:
       BLITZ_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -91,12 +81,6 @@ jobs:
       BLITZ_TELEMETRY_DISABLED: 1
       DEBUG: blitz:session
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
-          cache: yarn
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -147,11 +131,6 @@ jobs:
     env:
       BLITZ_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - run: ./scripts/check-pre-compiled.sh
 
   testUnit:
@@ -166,11 +145,6 @@ jobs:
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - run: node run-tests.js --type unit -g 1/1
 
   testIntegrationBlitz:
@@ -182,12 +156,6 @@ jobs:
       NEXT_TEST_JOB: 1
       HEADLESS: true
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
-
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
@@ -233,12 +201,6 @@ jobs:
       matrix:
         group: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
-
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
@@ -281,12 +243,6 @@ jobs:
       HEADLESS: true
       TEST_ELECTRON: 1
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
-
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -322,11 +278,6 @@ jobs:
       BROWSER_NAME: "firefox"
       BLITZ_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - run: node run-tests.js -c 1 test/integration/production/test/index.test.js
 
   testSafari:
@@ -344,11 +295,6 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js -c 1 test/integration/production/test/index.test.js'
 
   testSafariOld:
@@ -367,9 +313,4 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
-        with:
-          path: ./*
-          key: ${{ runner.os }}-${{ github.sha }}
       - run: '[[ -z "$BROWSERSTACK_ACCESS_KEY" ]] && echo "Skipping for PR" || node run-tests.js test/integration/production-nav/test/index.test.js'
