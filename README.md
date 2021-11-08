@@ -707,7 +707,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
     <td align="center"><a href="https://lucasvazq.github.io/"><img src="https://avatars.githubusercontent.com/u/38964964?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lucas Vazquez</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lucasvazq" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/chrisj-back2work"><img src="https://avatars.githubusercontent.com/u/68551954?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Chris Johnson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=chrisj-back2work" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/thisdotrob"><img src="https://avatars.githubusercontent.com/u/12902589?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rob Stevenson</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=thisdotrob" title="Documentation">📖</a></td>
-    <td align="center"><a href="www.lucas.computer"><img src="https://avatars.githubusercontent.com/u/1363056?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lucas Heymès</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lovethebomb" title="Code">💻</a></td>
+    <td align="center"><a href="www.lucas.computer"><img src="https://avatars.githubusercontent.com/u/1363056?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lucas Heymès</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=lovethebomb" title="Code">💻</a> <a href="https://github.com/blitz-js/blitz/commits?author=lovethebomb" title="Documentation">📖</a></td>
   </tr>
 </table>
 
