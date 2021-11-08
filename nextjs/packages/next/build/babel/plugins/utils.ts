@@ -1,4 +1,4 @@
-import { NodePath, PluginPass, types as t } from '@babel/core'
+import { NodePath, PluginPass, types as t } from 'next/dist/compiled/babel/core'
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
 import type { VisitNode, Visitor } from '@babel/traverse'
 

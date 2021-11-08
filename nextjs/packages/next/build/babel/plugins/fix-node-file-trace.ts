@@ -1,4 +1,4 @@
-import type { NodePath, PluginObj } from '@babel/core'
+import type { NodePath, PluginObj } from 'next/dist/compiled/babel/core'
 import { addNamed as addNamedImport } from '@babel/helper-module-imports'
 import {
   callExpression,

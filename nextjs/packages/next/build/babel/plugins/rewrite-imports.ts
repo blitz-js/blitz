@@ -1,4 +1,4 @@
-import { PluginObj } from '@babel/core'
+import { PluginObj } from 'next/dist/compiled/babel/core'
 import { BabelType } from 'babel-plugin-tester'
 
 /*
