@@ -153,7 +153,7 @@ function getPlugins(
         })
       : null
   const fixNodeFileTraceItem =
-    false && isServer && isPageFile
+    isServer && isPageFile
       ? createConfigItem([require('../plugins/fix-node-file-trace')], {
           type: 'plugin',
         })
