@@ -269,12 +269,17 @@ function omitParmsFromQuery(query: ParsedUrlQuery, params: string[]) {
   return filteredQuery
 }
 
+export function resolveHrefOnServer(href: Url): string {
+  const resolved = resolveHref({ pathname: '/', asPath: '/' }, href, true)
+  return resolved[1] || resolved[0]
+}
+
 /**
  * Resolves a given hyperlink with a certain router state (basePath not included).
  * Preserves absolute urls.
  */
 export function resolveHref(
-  router: NextRouter,
+  router: Pick<NextRouter, 'asPath' | 'pathname'>,
   href: Url,
   resolveAs?: boolean
 ): string {
