@@ -3407,6 +3407,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "NorfeldtAbtion",
+      "name": "Lasse Norfeldt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53769763?v=4",
+      "profile": "https://github.com/NorfeldtAbtion",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
