@@ -3426,6 +3426,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "5minpause",
+      "name": "Holger Frohloff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84148?v=4",
+      "profile": "https://www.holgerfrohloff.de",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
