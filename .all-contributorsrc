@@ -3416,6 +3416,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "netwarex",
+      "name": "Péter Nyári",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6048614?v=4",
+      "profile": "https://nyaripeter.hu/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
