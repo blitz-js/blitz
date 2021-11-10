@@ -23,7 +23,7 @@ module.exports = withBundleAnalyzer({
     initServer() {
       console.log("Hello world from initServer")
     },
-  },
+  },  
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     // Note: we provide webpack above so you should not `require` it
@@ -37,4 +37,62 @@ module.exports = withBundleAnalyzer({
     return config
   },
   */
+  codegen:{
+    fieldTypeMap: {
+      string: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "string",
+        prismaType: "String"
+      },
+      boolean: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "boolean",
+        prismaType: "Boolean"
+      },
+      int: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Int"
+      },
+      bigint: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "BigInt"
+      },
+      float: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Float"
+      },
+      decimal: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Decimal"
+      },
+      datetime: {
+        component: "LabeledTextField",
+        inputType: "string",
+        zodType: "string",
+        prismaType: "DateTime"
+      },
+      uuid: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "string().uuid",
+        prismaType: "String"
+      },
+      json: {
+        component: "LabeledTextField",
+        inputType: "text",
+        zodType: "any",
+        prismaType: "Json"
+      }
+    },
+  }
 })
