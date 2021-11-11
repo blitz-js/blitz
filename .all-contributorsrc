@@ -3444,6 +3444,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "danestves",
+      "name": "Daniel Esteves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31737273?v=4",
+      "profile": "https://danestves.com/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
