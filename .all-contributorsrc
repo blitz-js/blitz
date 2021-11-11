@@ -3453,6 +3453,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "coryhouse",
+      "name": "Cory House",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1688997?v=4",
+      "profile": "http://www.bitnative.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
