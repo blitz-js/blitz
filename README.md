@@ -40,15 +40,31 @@ You need Node.js 12 or newer
 
 #### Install Blitz
 
-Run `npm install -g blitz` or `yarn global add blitz`
+Run 
+```
+npm install -g blitz
+```
+or
+```
+yarn global add blitz
+```
 
 _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 #### Create a New App
 
-1. `blitz new myAppName`
-2. `cd myAppName`
-3. `blitz dev`
+1. Create new App
+```
+blitz new myAppName
+```
+2. Change directory to the App
+```
+cd myAppName
+```
+3. Run your blitz
+```
+blitz dev
+```
 4. View your brand new app at http://localhost:3000
 
 <br><br>
