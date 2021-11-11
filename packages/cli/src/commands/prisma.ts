@@ -1,3 +1,4 @@
+import {Readable} from "stream"
 import {Command} from "@oclif/command"
 
 const getPrismaBin = async () => {
@@ -23,18 +24,29 @@ export const runPrisma = async (args: string[], silent = false) => {
   }
 
   const cp = require("cross-spawn").spawn(prismaBin, args, {
-    stdio: silent ? "ignore" : "inherit",
+    stdio: silent ? "pipe" : "inherit",
     env: process.env,
   })
+
+  const cp_stderr: string[] = []
+  if (silent) {
+    cp.stderr.on("data", (chunk: Readable) => {
+      cp_stderr.push(chunk.toString());
+    });
+  }
+
   const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
 
-  return code === 0
+  return {
+    success: code === 0,
+    stderr: silent ? cp_stderr.join("") : undefined,
+  }
 }
 
 export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>) => {
-  const success = await runPrisma(...args)
+  const result = await runPrisma(...args)
 
-  if (!success) {
+  if (!result.success) {
     process.exit(1)
   }
 }

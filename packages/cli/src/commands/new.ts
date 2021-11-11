@@ -171,7 +171,7 @@ export class New extends Command {
             const projectDir = process.cwd()
             loadEnvConfig(projectDir)
             const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
-            if (!result) throw new Error()
+            if (!result.success) throw new Error()
 
             spinner.succeed()
           } catch (error) {
