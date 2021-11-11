@@ -116,6 +116,9 @@ Your financial contributions help ensure Blitz continues to be developed and mai
  <td><a aria-label="userTrack" href="https://www.usertrack.net/?ref=blitzjs">
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/usertrack.png" width="40px"/>
 </a></td>
+ <td><a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
+<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/meetkai.png" width="40px"/>
+</a></td>
   </tr>
 </table>
 
