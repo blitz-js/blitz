@@ -1,8 +1,8 @@
 {
-  "name": "@blitzjs/recipe-logrocket",
+  "name": "@blitzjs/recipe-passenger",
   "private": true,
   "version": "0.34.0-canary.0",
-  "description": "The Blitz Recipe for adding basic LogRocket integration.",
+  "description": "The Blitz Recipe for adding passenger.js",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"No tests yet\""
@@ -14,9 +14,9 @@
   "keywords": [
     "blitz",
     "blitzjs",
-    "logging"
+    "passenger"
   ],
-  "author": "Kevin Langley Jr. <me@kevinlangleyjr.com>",
+  "author": "Péter Nyári <peter.nyari@ioflair.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/blitz-js/blitz/issues"
