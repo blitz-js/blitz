@@ -3435,6 +3435,33 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "basilk76",
+      "name": "Basil Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45275512?v=4",
+      "profile": "https://github.com/basilk76",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "danestves",
+      "name": "Daniel Esteves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31737273?v=4",
+      "profile": "https://danestves.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "coryhouse",
+      "name": "Cory House",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1688997?v=4",
+      "profile": "http://www.bitnative.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
