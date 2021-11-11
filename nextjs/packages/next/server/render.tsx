@@ -68,6 +68,7 @@ import {
 import { DomainLocale } from './config'
 import { RenderResult, resultFromChunks } from './utils'
 import { BlitzWrapper } from '../stdlib/blitz-app-root'
+import { serialize as serializeWithSuperjson } from 'superjson'
 
 function noRouter() {
   const message =
@@ -967,6 +968,7 @@ export async function renderToHTML(
   // Avoid rendering page un-necessarily for getServerSideProps data request
   // and getServerSideProps/getStaticProps redirects
   if ((isDataReq && !isSSG) || (renderOpts as any).isRedirect) {
+    props.superjsonProps = serializeWithSuperjson(props.pageProps)
     return resultFromChunks([JSON.stringify(props)])
   }
 
@@ -1033,6 +1035,8 @@ export async function renderToHTML(
           })
         })
     : ReactDOMServer.renderToString
+
+  props.superjsonProps = serializeWithSuperjson(props.pageProps)
 
   const renderPage: RenderPage = (
     options: ComponentsEnhancer = {}
