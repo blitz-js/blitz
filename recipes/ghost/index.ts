@@ -1,10 +1,4 @@
-import {
-  addBlitzMiddleware,
-  addImport,
-  findModuleExportsExpressions,
-  paths,
-  RecipeBuilder,
-} from "@blitzjs/installer"
+import {addBlitzMiddleware, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
 import {Collection} from "jscodeshift"
 import path from "path"
@@ -19,8 +13,8 @@ export default RecipeBuilder()
     stepName: "Add npm dependencies",
     explanation: `@tryghost/content-api needs to be installed`,
     packages: [
-      {name: "@tryghost/content-api", version: "latest"},
-      {name: "@types/tryghost__content-api", version: "latest", isDevDep: true},
+      {name: "@tryghost/content-api", version: "1.x"},
+      {name: "@types/tryghost__content-api", version: "1.x", isDevDep: true},
     ],
   })
   .addTransformFilesStep({
@@ -60,7 +54,7 @@ export default RecipeBuilder()
     stepName: "Add default middleware to expose ghost",
     explanation: "Adds ghostapi to middleware so we can expose it in queries and mutations.",
     singleFileSearch: paths.blitzConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // // import ghostApi from integrations/ghost
       const cssBaselineImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ghostApi"))],

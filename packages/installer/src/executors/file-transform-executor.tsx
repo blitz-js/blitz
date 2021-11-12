@@ -1,8 +1,7 @@
 import {createPatch} from "diff"
 import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-// TODO: Once the dependency issue of ink-spinner is resolved, you should uncomment it (https://github.com/blitz-js/blitz/issues/2793)
-// import Spinner from "ink-spinner"
+import Spinner from "ink-spinner"
 import * as React from "react"
 import {Newline} from "../components/newline"
 import {
@@ -60,12 +59,11 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
   // process would just hang.
   if (error) throw error
 
-  // TODO: Once the dependency issue of ink-spinner is resolved, you should uncomment it (https://github.com/blitz-js/blitz/issues/2793)
   if (!diff) {
     return (
       <Box>
         <Text>
-          {/* <Spinner /> */}
+          <Spinner />
           Generating file diff...
         </Text>
       </Box>
@@ -116,11 +114,10 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
     })()
   }, [filePath, step])
 
-  // TODO: Once the dependency issue of ink-spinner is resolved, you should uncomment it (https://github.com/blitz-js/blitz/issues/2793
   if (loading) {
     return (
       <Box>
-        {/* <Spinner /> */}
+        <Spinner />
         <Text>Applying file changes</Text>
       </Box>
     )

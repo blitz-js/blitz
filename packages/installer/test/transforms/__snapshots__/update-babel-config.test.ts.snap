@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addBabelPlugin transform adds babel plugin array 1`] = `
+"module.exports = {
+      presets: [\\"@babel/preset-typescript\\"],
+      plugins: [[\\"@babel/plugin-proposal-decorators\\", {
+        \\"legacy\\": true
+      }]],
+    }"
+`;
+
+exports[`addBabelPlugin transform adds babel plugin literal 1`] = `
+"module.exports = {
+      presets: [\\"@babel/preset-typescript\\"],
+      plugins: [\\"@emotion\\"],
+    }"
+`;
+
+exports[`addBabelPlugin transform avoid duplicated 1`] = `
+"module.exports = {
+      presets: [\\"@babel/preset-typescript\\"],
+      plugins: [\\"@babel/plugin-proposal-decorators\\"],
+    }"
+`;
+
+exports[`addBabelPreset transform adds babel preset array 1`] = `
+"module.exports = {
+      presets: [\\"@babel/preset-typescript\\", [\\"blitz/babel\\", {
+        \\"legacy\\": true
+      }]],
+      plugins: [],
+    }"
+`;
+
+exports[`addBabelPreset transform adds babel preset literal 1`] = `
+"module.exports = {
+      presets: [\\"@babel/preset-typescript\\", \\"blitz/babel\\"],
+      plugins: [],
+    }"
+`;
+
+exports[`addBabelPreset transform avoid duplicated 1`] = `
+"module.exports = {
+      presets: [[\\"blitz/babel\\", {legacy: true}]],
+      plugins: [],
+    }"
+`;

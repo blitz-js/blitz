@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 
 export default RecipeBuilder()
   .setName("Material-UI")
@@ -26,10 +25,10 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Add npm dependencies",
     explanation: `@mui/material needs to be installed`,
     packages: [
-      {name: "@mui/material", version: "latest"},
-      {name: "@mui/styles", version: "latest"},
-      {name: "@emotion/react", version: "latest"},
-      {name: "@emotion/styled", version: "latest"},
+      {name: "@mui/material", version: "5.x"},
+      {name: "@mui/styles", version: "5.x"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
     ],
   })
   .addTransformFilesStep({
@@ -37,7 +36,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // import ServerStyleSheets
       const serverStyleSheetsImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheets"))],
@@ -48,25 +47,19 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
 
       program.find(j.ImportDeclaration, {source: "react"}).forEach((reactImportPath) => {
         isReactImported = true
-        if (reactImportPath.value.specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
-          reactImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importDefaultSpecifier(j.identifier("React")),
-          )
+        let specifiers = reactImportPath.value.specifiers || []
+        if (specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("DocumentContext")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
       program.find(j.ClassBody).forEach((path) => {
@@ -249,8 +242,10 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
         // currently, we only check if the default export is there
         // because we use the hook as React.useEffect
         // if not then add the default export
-        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        let specifiers = path.value.specifiers || []
+
+        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
 
