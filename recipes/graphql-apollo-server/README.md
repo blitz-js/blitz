@@ -13,7 +13,7 @@ blitz install graphql-apollo-server
 After installing the recipe, you have to run the following command to generate the graphql schema.
 
 ```
-blitz prisma migrate
+blitz prisma generate
 ```
 
 ## more information
