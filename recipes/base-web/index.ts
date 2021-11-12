@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -13,9 +12,9 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'baseui' and Styletron as a dependency too -- it's a toolkit for CSS in JS styling which Base Web relies on.`,
     packages: [
-      {name: "baseui", version: "latest"},
-      {name: "styletron-engine-atomic", version: "latest"},
-      {name: "styletron-react", version: "latest"},
+      {name: "baseui", version: "10.x"},
+      {name: "styletron-engine-atomic", version: "1.x"},
+      {name: "styletron-react", version: "6.x"},
     ],
   })
   .addNewFilesStep({
@@ -31,7 +30,7 @@ export default RecipeBuilder()
     stepName: "Import required providers and wrap the root of the app with them",
     explanation: `Additionally we supply StyletronProvider with 'value' and 'debug' props. BaseProvider requires a 'theme' prop we set with default Base Web's light theme.`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const styletronProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider"), j.identifier("StyletronProvider"))],
         j.literal("styletron-react"),
@@ -103,7 +102,7 @@ export default RecipeBuilder()
     stepName: "Modify getInitialProps method and add stylesheets to Document",
     explanation: `To make Styletron work server-side we need to modify getInitialProps method of custom Document class. We also have to put Styletron's generated stylesheets in DocumentHead.`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const styletronProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider"), j.identifier("StyletronProvider"))],
         j.literal("styletron-react"),
@@ -124,12 +123,13 @@ export default RecipeBuilder()
       addImport(program, styletronImport)
 
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
+          specifiers.push(j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
 
@@ -272,7 +272,7 @@ export default RecipeBuilder()
               j.jsxOpeningElement(j.jsxIdentifier("DocumentHead")),
               j.jsxClosingElement(j.jsxIdentifier("DocumentHead")),
               [
-                ...node.children,
+                ...(node.children || []),
                 j.literal("\n"),
                 j.jsxExpressionContainer(
                   j.callExpression(

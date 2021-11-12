@@ -1,96 +1,39 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
-import j, {ObjectExpression, variableDeclarator} from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import {
+  addImport,
+  paths,
+  RecipeBuilder,
+  transformBlitzConfig,
+  wrapBlitzConfig,
+} from "@blitzjs/installer"
+import type {NodePath} from "ast-types/lib/node-path"
+import j from "jscodeshift"
 import {join} from "path"
 
-const NEXT_MDX_PLUGIN_NAME = "withMDX"
+const NEXT_MDX_PLUGIN_IMPORT = "mdxPlugin"
 const NEXT_MDX_PLUGIN_MODULE = "@next/mdx"
+const NEXT_MDX_PLUGIN_NAME = "withMDX"
 const NEXT_MDX_PLUGIN_OPTIONS = [
   j.property("init", j.identifier("extension"), j.literal(RegExp("mdx?$", ""))),
 ]
 
-function findRequires(program: Collection<j.Program>, module: string) {
-  return program
-    .find(j.CallExpression, {
-      callee: {name: "require"},
-      arguments: (arg: any) => arg[0].value === module,
-    })
-    .filter((p: any) => p.value.arguments.length === 1)
-}
+function initializePlugin(program: j.Collection<j.Program>, statement: j.Statement) {
+  const importStatementCount = program.find(j.ImportDeclaration).length
 
-function addRequire(program: Collection<j.Program>, name: string, module: string) {
-  let existingRequire = findRequires(program, module)
-  if (existingRequire.find(j.Identifier, {value: module}).length) return program
-
-  const requireToAdd = createRequireStatement(name, module)
-
-  if (!existingRequire.length) {
-    program.find(j.Program).get("body", 0).insertBefore(requireToAdd)
+  if (importStatementCount === 0) {
+    program.find(j.Statement).at(0).insertBefore(statement)
+    return program
   }
 
-  return program
-}
-
-function createRequireStatement(name: string, module: string) {
-  const require = j.callExpression(j.identifier("require"), [j.literal(module)])
-
-  return j.variableDeclaration("const", [variableDeclarator(j.identifier(name), require)])
-}
-
-function wrapBlitzConfigWithNextMdxPlugin(program: Collection<j.Program>) {
-  program
-    .find(j.Identifier, {
-      name: "module",
-    })
-    .forEach((path) => {
-      const exports = path.get("exports").name
-      if (exports === "exports") {
-        const expression: NodePath = path.parentPath.parentPath
-        const {
-          node: {right: blitzConfig},
-        } = expression
-
-        const configWithPluginWrapper = j.callExpression(j.identifier(NEXT_MDX_PLUGIN_NAME), [
-          blitzConfig,
-        ])
-
-        const {node} = path.parentPath.parentPath
-        node.right = configWithPluginWrapper
-      }
-    })
-
-  return program
-}
-
-function initializeRequire(
-  program: Collection<j.Program>,
-  name: string,
-  module: string,
-  expression: ObjectExpression,
-) {
-  const initCallee = j.callExpression(j.identifier("require"), [j.literal(module)])
-
-  const initializedModule = j.variableDeclarator(
-    j.identifier(name),
-    j.callExpression(initCallee, [expression]),
-  )
-
-  program
-    .find(j.VariableDeclarator, {
-      id: {name: NEXT_MDX_PLUGIN_NAME},
-      init: {callee: {name: "require"}},
-    })
-    .forEach((path) => {
-      path.replace(initializedModule)
-    })
-    .toSource()
-
+  program.find(j.ImportDeclaration).forEach((stmt, idx) => {
+    if (idx === importStatementCount - 1) {
+      stmt.replace(stmt.node, statement)
+    }
+  })
   return program
 }
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithThemeProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -121,32 +64,7 @@ function wrapComponentWithThemeProvider(program: Collection<j.Program>) {
   return program
 }
 
-function updateBlitzConfigProperty(program: Collection<j.Program>, property: string) {
-  return program
-    .find(j.AssignmentExpression, {
-      operator: "=",
-      left: {object: {name: "module"}, property: {name: "exports"}},
-      right: {type: "ObjectExpression"},
-    })
-    .forEach((path) => {
-      const configProperty = j.objectProperty(
-        j.identifier(property),
-        j.arrayExpression([
-          j.literal("js"),
-          j.literal("jsx"),
-          j.literal("ts"),
-          j.literal("tsx"),
-          j.literal("md"),
-          j.literal("mdx"),
-        ]),
-      )
-
-      const properties = path.get(0).node.right.properties
-      path.get(0).node.right.properties = [...properties, configProperty]
-    })
-}
-
-function injectInitializeColorMode(program: Collection<j.Program>) {
+function injectInitializeColorMode(program: j.Collection<j.Program>) {
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
     path.replace(
@@ -156,7 +74,7 @@ function injectInitializeColorMode(program: Collection<j.Program>) {
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          ...node.children,
+          ...(node.children || []),
         ],
       ),
     )
@@ -177,7 +95,7 @@ export default RecipeBuilder()
     packages: [
       {name: "theme-ui", version: "0.x"},
       {name: "@theme-ui/prism", version: "0.x"},
-      {name: NEXT_MDX_PLUGIN_MODULE, version: "10.x"},
+      {name: NEXT_MDX_PLUGIN_MODULE, version: "11.x"},
       {name: "@mdx-js/loader", version: "1.x"},
     ],
   })
@@ -187,13 +105,54 @@ export default RecipeBuilder()
     explanation: `Now we have to update our blitz config to support MDX`,
     singleFileSearch: paths.blitzConfig(),
 
-    transform(program: Collection<j.Program>) {
-      const initExpression = j.objectExpression(NEXT_MDX_PLUGIN_OPTIONS)
+    transform(program: j.Collection<j.Program>) {
+      program = addImport(
+        program,
+        j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier(NEXT_MDX_PLUGIN_IMPORT))],
+          j.literal(NEXT_MDX_PLUGIN_MODULE),
+        ),
+      )
 
-      addRequire(program, NEXT_MDX_PLUGIN_NAME, NEXT_MDX_PLUGIN_MODULE)
-      initializeRequire(program, NEXT_MDX_PLUGIN_NAME, NEXT_MDX_PLUGIN_MODULE, initExpression)
-      updateBlitzConfigProperty(program, "pageExtensions")
-      return wrapBlitzConfigWithNextMdxPlugin(program)
+      program = initializePlugin(
+        program,
+        j.variableDeclaration("const", [
+          j.variableDeclarator(
+            j.identifier(NEXT_MDX_PLUGIN_NAME),
+            j.callExpression(j.identifier(NEXT_MDX_PLUGIN_IMPORT), [
+              j.objectExpression(NEXT_MDX_PLUGIN_OPTIONS),
+            ]),
+          ),
+        ]),
+      )
+
+      program = transformBlitzConfig(program, (config) => {
+        const arr = j.arrayExpression([
+          j.literal("js"),
+          j.literal("jsx"),
+          j.literal("ts"),
+          j.literal("tsx"),
+          j.literal("md"),
+          j.literal("mdx"),
+        ])
+
+        const pageExtensionsProp = config.properties.find(
+          (value) =>
+            value.type === "ObjectProperty" &&
+            value.key.type === "Identifier" &&
+            value.key.name === "pageExtensions",
+        ) as j.ObjectProperty | undefined
+
+        if (pageExtensionsProp) {
+          pageExtensionsProp.value = arr
+        } else {
+          config.properties.push(j.objectProperty(j.identifier("pageExtensions"), arr))
+        }
+
+        return config
+      })
+
+      return wrapBlitzConfig(program, NEXT_MDX_PLUGIN_NAME)
     },
   })
   .addTransformFilesStep({
@@ -202,7 +161,7 @@ export default RecipeBuilder()
     explanation: `We need to import the InitializeColorMode component to support color mode features in Theme UI`,
     singleFileSearch: paths.document(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("theme-ui"),
@@ -218,7 +177,7 @@ export default RecipeBuilder()
     explanation: `We can import the theme provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
 
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const providerImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
         j.literal("theme-ui"),

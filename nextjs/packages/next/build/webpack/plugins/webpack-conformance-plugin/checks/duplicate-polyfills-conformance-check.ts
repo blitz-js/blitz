@@ -2,7 +2,6 @@
 import { namedTypes } from 'ast-types'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { NodePath } from 'ast-types/lib/node-path'
-import { types } from 'next/dist/compiled/recast'
 import {
   CONFORMANCE_ERROR_PREFIX,
   CONFORMANCE_WARNING_PREFIX,
@@ -155,13 +154,12 @@ export class DuplicatePolyfillsConformanceCheck
       {
         visitor: 'visitCallExpression',
         inspectNode: (path: NodePath) => {
-          const { node }: { node: types.namedTypes.CallExpression } = path
+          const { node }: { node: namedTypes.CallExpression } = path
           if (!node.arguments || node.arguments.length < 2) {
             return EARLY_EXIT_SUCCESS_RESULT
           }
           if (isNodeCreatingScriptElement(node)) {
-            const propsNode = node
-              .arguments[1] as types.namedTypes.ObjectExpression
+            const propsNode = node.arguments[1] as namedTypes.ObjectExpression
             if (!propsNode.properties) {
               return EARLY_EXIT_SUCCESS_RESULT
             }

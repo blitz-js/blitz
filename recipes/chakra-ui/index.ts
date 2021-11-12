@@ -1,10 +1,9 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import type {NodePath} from "ast-types/lib/node-path"
 import j, {JSXIdentifier} from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
+function wrapComponentWithChakraProvider(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter(
@@ -25,7 +24,7 @@ function wrapComponentWithChakraProvider(program: Collection<j.Program>) {
   return program
 }
 
-function updateLabeledTextFieldWithInputComponent(program: Collection<j.Program>) {
+function updateLabeledTextFieldWithInputComponent(program: j.Collection<j.Program>) {
   program
     .find(j.TSInterfaceDeclaration)
     .find(j.TSExpressionWithTypeArguments)
@@ -41,7 +40,7 @@ function updateLabeledTextFieldWithInputComponent(program: Collection<j.Program>
   return program
 }
 
-function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
+function replaceOuterDivWithFormControl(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -49,9 +48,8 @@ function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
       const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
 
       // This will not include JSX elements within curly braces
-      const countOfChildrenJSXElements = path.node.children.filter(
-        (childNode) => childNode.type === "JSXElement",
-      ).length
+      const countOfChildrenJSXElements =
+        path.node.children?.filter((childNode) => childNode.type === "JSXElement").length || 0
 
       return (
         openingElementNameNode?.name === "div" &&
@@ -70,7 +68,7 @@ function replaceOuterDivWithFormControl(program: Collection<j.Program>) {
   return program
 }
 
-function replaceInputWithChakraInput(program: Collection<j.Program>) {
+function replaceInputWithChakraInput(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -91,7 +89,7 @@ function replaceInputWithChakraInput(program: Collection<j.Program>) {
   return program
 }
 
-function replaceLabelWithChakraLabel(program: Collection<j.Program>) {
+function replaceLabelWithChakraLabel(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -111,7 +109,7 @@ function replaceLabelWithChakraLabel(program: Collection<j.Program>) {
   return program
 }
 
-function removeDefaultStyleElement(program: Collection<j.Program>) {
+function removeDefaultStyleElement(program: j.Collection<j.Program>) {
   program
     .find(j.JSXElement)
     .filter((path) => {
@@ -139,10 +137,10 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Chakra UI requires some other dependencies like emotion to work`,
     packages: [
-      {name: "@chakra-ui/react", version: "1.1.2"},
-      {name: "@emotion/react", version: "11.1.4"},
-      {name: "@emotion/styled", version: "11.0.0"},
-      {name: "framer-motion", version: "3.2.0"},
+      {name: "@chakra-ui/react", version: "1.x"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
+      {name: "framer-motion", version: "5.x"},
     ],
   })
   .addTransformFilesStep({
@@ -150,7 +148,7 @@ export default RecipeBuilder()
     stepName: "Import ChakraProvider component",
     explanation: `Import the chakra-ui provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ChakraProvider"))],
         j.literal("@chakra-ui/react"),
@@ -165,15 +163,16 @@ export default RecipeBuilder()
     stepName: "Update the `LabeledTextField` with Chakra UI's `Input` component",
     explanation: `The LabeledTextField component uses Chakra UI's input component`,
     singleFileSearch: "app/core/components/LabeledTextField.tsx",
-    transform(program: Collection<j.Program>) {
+    transform(program: j.Collection<j.Program>) {
       // Add ComponentPropsWithoutRef import
       program.find(j.ImportDeclaration, {source: {value: "react"}}).forEach((path) => {
+        let specifiers = path.value.specifiers || []
         if (
-          !path.value.specifiers.some(
+          !specifiers.some(
             (node) => (node as j.ImportSpecifier)?.imported?.name === "ComponentPropsWithoutRef",
           )
         ) {
-          path.node.specifiers.push(j.importSpecifier(j.identifier("ComponentPropsWithoutRef")))
+          specifiers.push(j.importSpecifier(j.identifier("ComponentPropsWithoutRef")))
         }
       })
 
