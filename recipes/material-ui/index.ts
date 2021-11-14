@@ -36,7 +36,7 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       // import ServerStyleSheets
       const serverStyleSheetsImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheets"))],

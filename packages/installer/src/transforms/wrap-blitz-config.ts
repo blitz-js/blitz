@@ -1,10 +1,7 @@
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import {Program} from "../types"
 
-export function wrapBlitzConfig(
-  program: Collection<j.Program>,
-  functionName: string,
-): Collection<j.Program> {
+export function wrapBlitzConfig(program: Program, functionName: string): Program {
   let moduleExportsExpressions = program.find(j.AssignmentExpression, {
     operator: "=",
     left: {object: {name: "module"}, property: {name: "exports"}},

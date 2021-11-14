@@ -1,6 +1,5 @@
 import {addBlitzMiddleware, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift"
 import path from "path"
 
 export default RecipeBuilder()
@@ -54,7 +53,7 @@ export default RecipeBuilder()
     stepName: "Add default middleware to expose ghost",
     explanation: "Adds ghostapi to middleware so we can expose it in queries and mutations.",
     singleFileSearch: paths.blitzConfig(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       // // import ghostApi from integrations/ghost
       const cssBaselineImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ghostApi"))],

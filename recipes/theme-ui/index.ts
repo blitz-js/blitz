@@ -1,6 +1,7 @@
 import {
   addImport,
   paths,
+  Program,
   RecipeBuilder,
   transformBlitzConfig,
   wrapBlitzConfig,
@@ -16,7 +17,7 @@ const NEXT_MDX_PLUGIN_OPTIONS = [
   j.property("init", j.identifier("extension"), j.literal(RegExp("mdx?$", ""))),
 ]
 
-function initializePlugin(program: j.Collection<j.Program>, statement: j.Statement) {
+function initializePlugin(program: Program, statement: j.Statement) {
   const importStatementCount = program.find(j.ImportDeclaration).length
 
   if (importStatementCount === 0) {
@@ -33,7 +34,7 @@ function initializePlugin(program: j.Collection<j.Program>, statement: j.Stateme
 }
 
 // Copied from https://github.com/blitz-js/blitz/pull/805, let's add this to the @blitzjs/installer
-function wrapComponentWithThemeProvider(program: j.Collection<j.Program>) {
+function wrapComponentWithThemeProvider(program: Program) {
   program
     .find(j.JSXElement)
     .filter(
@@ -64,7 +65,7 @@ function wrapComponentWithThemeProvider(program: j.Collection<j.Program>) {
   return program
 }
 
-function injectInitializeColorMode(program: j.Collection<j.Program>) {
+function injectInitializeColorMode(program: Program) {
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
     path.replace(
@@ -105,7 +106,7 @@ export default RecipeBuilder()
     explanation: `Now we have to update our blitz config to support MDX`,
     singleFileSearch: paths.blitzConfig(),
 
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       program = addImport(
         program,
         j.importDeclaration(
@@ -161,7 +162,7 @@ export default RecipeBuilder()
     explanation: `We need to import the InitializeColorMode component to support color mode features in Theme UI`,
     singleFileSearch: paths.document(),
 
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("theme-ui"),
@@ -177,7 +178,7 @@ export default RecipeBuilder()
     explanation: `We can import the theme provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
 
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const providerImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
         j.literal("theme-ui"),
