@@ -111,8 +111,6 @@ export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccep
   )
 }
 export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
-  const [loading, setLoading] = React.useState(true)
-
   React.useEffect(() => {
     void (async function () {
       const results = await transform(
@@ -125,19 +123,14 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
       if (results.some((r) => r.status === TransformStatus.Failure)) {
         console.error(results)
       }
-      setLoading(false)
+      onChangeCommitted(`Modified file: ${filePath}`)
     })()
-  }, [filePath, step])
+  }, [filePath, onChangeCommitted, step])
 
-  if (loading) {
-    return (
-      <Box>
-        <Spinner />
-        <Text>Applying file changes</Text>
-      </Box>
-    )
-  }
-
-  onChangeCommitted(`Modified file: ${filePath}`)
-  return null
+  return (
+    <Box>
+      <Spinner />
+      <Text>Applying file changes</Text>
+    </Box>
+  )
 }
