@@ -26,7 +26,10 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     this.steps = steps
   }
 
-  async run(cliArgs: RecipeCLIArgs, cliFlags: RecipeCLIFlags): Promise<void> {
+  async run(
+    cliArgs: RecipeCLIArgs = {},
+    cliFlags: RecipeCLIFlags = {yesToAll: false},
+  ): Promise<void> {
     try {
       const {waitUntilExit} = render(
         <RecipeRenderer
