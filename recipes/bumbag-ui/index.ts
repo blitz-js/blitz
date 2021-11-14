@@ -1,8 +1,8 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 
-function wrapComponentWithBumbagProvider(program) {
+function wrapComponentWithBumbagProvider(program: Program) {
   program
     .find(j.JSXElement)
     .filter(
@@ -27,7 +27,7 @@ function wrapComponentWithBumbagProvider(program) {
   return program
 }
 
-function injectInitializeColorModeAndExtractCritical(program) {
+function injectInitializeColorModeAndExtractCritical(program: Program) {
   // Finds body element and injects InitializeColorMode before it.
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
