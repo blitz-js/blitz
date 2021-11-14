@@ -231,6 +231,14 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
           </sub>
       </a>
     </td>
+    <td align="center">
+     <a href="https://damilolarandolph.com/">
+      <img src="https://avatars.githubusercontent.com/damilolarandolph" width="100px;" alt="Damilola Randolph avatar" /><br />
+        <sub>
+          <b>Damilola Randolph</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
