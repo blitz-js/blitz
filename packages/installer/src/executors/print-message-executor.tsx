@@ -2,6 +2,7 @@ import {Box, Text} from "ink"
 import * as React from "react"
 import {EnterToContinue} from "../components/enter-to-continue"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useUserInput} from "../utils/use-user-input"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface Config extends ExecutorConfig {
@@ -11,6 +12,7 @@ export interface Config extends ExecutorConfig {
 export const type = "print-message"
 
 export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
+  const userInput = useUserInput(cliFlags)
   const generatorArgs = React.useMemo(
     () => ({
       message: getExecutorArgument((step as Config).message, cliArgs),
@@ -25,19 +27,51 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted
     onChangeCommitted(generatorArgs.stepName)
   }, [onChangeCommitted, generatorArgs])
 
-  useEnterToContinue(handleChangeCommitted, !cliFlags.yesToAll && !changeCommited)
+  const childProps: CommitChildProps = {
+    changeCommited,
+    generatorArgs,
+    handleChangeCommitted,
+  }
 
-  React.useEffect(() => {
-    if (cliFlags.yesToAll && !changeCommited) {
-      handleChangeCommitted()
-    }
-  }, [changeCommited, cliFlags.yesToAll, handleChangeCommitted])
+  if (userInput) return <CommitWithInput {...childProps} />
+  else return <CommitWithoutInput {...childProps} />
+}
+
+interface CommitChildProps {
+  changeCommited: boolean
+  generatorArgs: {message: string; stepName: string}
+  handleChangeCommitted: () => void
+}
+
+const CommitWithInput = ({
+  changeCommited,
+  generatorArgs,
+  handleChangeCommitted,
+}: CommitChildProps) => {
+  useEnterToContinue(handleChangeCommitted, !changeCommited)
 
   return (
     <Box flexDirection="column">
-      {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
       <Text>{generatorArgs.message}</Text>
-      {!cliFlags.yesToAll && <EnterToContinue />}
+      <EnterToContinue />
+    </Box>
+  )
+}
+
+const CommitWithoutInput = ({
+  changeCommited,
+  generatorArgs,
+  handleChangeCommitted,
+}: CommitChildProps) => {
+  React.useEffect(() => {
+    if (!changeCommited) {
+      handleChangeCommitted()
+    }
+  }, [changeCommited, handleChangeCommitted])
+
+  return (
+    <Box flexDirection="column">
+      <Text>{generatorArgs.message}</Text>
     </Box>
   )
 }

@@ -14,6 +14,7 @@ import {
   TransformStatus,
 } from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useUserInput} from "../utils/use-user-input"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
 
@@ -33,6 +34,7 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 
 export const type = "file-transform"
 export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
+  const userInput = useUserInput(cliFlags)
   const [diff, setDiff] = React.useState<string | null>(null)
   const [error, setError] = React.useState<Error | null>(null)
   const [filePath, setFilePath] = React.useState("")
@@ -42,8 +44,6 @@ export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccep
     setProposalAccepted(true)
     onProposalAccepted(filePath)
   }, [onProposalAccepted, filePath])
-
-  useEnterToContinue(acceptProposal, filePath !== "" && !proposalAccepted && !cliFlags.yesToAll)
 
   React.useEffect(() => {
     async function generateDiff() {
@@ -63,12 +63,6 @@ export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccep
     generateDiff().then(setDiff, setError)
   }, [cliArgs, step])
 
-  React.useEffect(() => {
-    if (filePath !== "" && !proposalAccepted && cliFlags.yesToAll) {
-      acceptProposal()
-    }
-  }, [acceptProposal, cliFlags.yesToAll, filePath, proposalAccepted])
-
   // Let the renderer deal with errors from file transformers, otherwise the
   // process would just hang.
   if (error) throw error
@@ -84,32 +78,82 @@ export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccep
     )
   }
 
+  const childProps: ProposeChildProps = {
+    diff,
+    filePath,
+    proposalAccepted,
+    acceptProposal,
+  }
+
+  if (userInput) return <ProposeWithInput {...childProps} />
+  else return <ProposeWithoutInput {...childProps} />
+}
+
+interface ProposeChildProps {
+  diff: string
+  filePath: string
+  proposalAccepted: boolean
+  acceptProposal: () => void
+}
+
+const Diff = ({diff}: {diff: string}) => (
+  <>
+    {diff
+      .split("\n")
+      .slice(2)
+      .map((line, idx) => {
+        let styleProps: any = {}
+        if (line.startsWith("-") && !line.startsWith("---")) {
+          styleProps.bold = true
+          styleProps.color = "red"
+        } else if (line.startsWith("+") && !line.startsWith("+++")) {
+          styleProps.bold = true
+          styleProps.color = "green"
+        }
+        return (
+          <Text {...styleProps} key={idx}>
+            {line}
+          </Text>
+        )
+      })}
+  </>
+)
+
+const ProposeWithInput = ({
+  diff,
+  filePath,
+  proposalAccepted,
+  acceptProposal,
+}: ProposeChildProps) => {
+  useEnterToContinue(acceptProposal, filePath !== "" && !proposalAccepted)
+
   return (
     <Box flexDirection="column">
-      {diff
-        .split("\n")
-        .slice(2)
-        .map((line, idx) => {
-          let styleProps: any = {}
-          if (line.startsWith("-") && !line.startsWith("---")) {
-            styleProps.bold = true
-            styleProps.color = "red"
-          } else if (line.startsWith("+") && !line.startsWith("+++")) {
-            styleProps.bold = true
-            styleProps.color = "green"
-          }
-          return (
-            <Text {...styleProps} key={idx}>
-              {line}
-            </Text>
-          )
-        })}
-      {!cliFlags.yesToAll && (
-        <EnterToContinue message="The above changes will be made. Press ENTER to continue" />
-      )}
+      <Diff diff={diff} />
+      <EnterToContinue message="The above changes will be made. Press ENTER to continue" />
     </Box>
   )
 }
+
+const ProposeWithoutInput = ({
+  diff,
+  filePath,
+  proposalAccepted,
+  acceptProposal,
+}: ProposeChildProps) => {
+  React.useEffect(() => {
+    if (filePath !== "" && !proposalAccepted) {
+      acceptProposal()
+    }
+  }, [acceptProposal, filePath, proposalAccepted])
+
+  return (
+    <Box flexDirection="column">
+      <Diff diff={diff} />
+    </Box>
+  )
+}
+
 export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
   React.useEffect(() => {
     void (async function () {

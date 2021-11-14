@@ -1,4 +1,4 @@
-import * as path from "path"
+import {resolve} from "path"
 import {Install, RecipeLocation} from "../../src/commands/install"
 import tempRecipe from "../__fixtures__/installer"
 
@@ -8,9 +8,9 @@ describe("`install` command", () => {
   })
 
   it("runs local installer", async () => {
-    jest.spyOn(tempRecipe, "run")
-    await Install.run([path.resolve(__dirname, "../__fixtures__/installer"), "--yes"])
-    expect(tempRecipe.run).toHaveBeenCalledWith({}, {yesToAll: true})
+    const spyRun = jest.spyOn(tempRecipe, "run")
+    await Install.run([resolve(__dirname, "../__fixtures__/installer"), "--yes"])
+    expect(spyRun).toHaveBeenCalledWith({}, {yesToAll: true})
   })
 
   it("properly parses remote installer args", () => {

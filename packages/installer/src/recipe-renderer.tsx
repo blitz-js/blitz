@@ -9,6 +9,7 @@ import * as NewFileExecutor from "./executors/new-file-executor"
 import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {RecipeCLIArgs, RecipeCLIFlags, RecipeMeta} from "./types"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
+import {useUserInput} from "./utils/use-user-input"
 
 enum Action {
   SkipStep,
@@ -100,6 +101,22 @@ function WelcomeMessage({
   )
 }
 
+function StepMessages({state}: {state: State}) {
+  const messages = state.steps
+    .map((step) => ({msg: step.successMsg, icon: step.executor.successIcon ?? "✅"}))
+    .filter((s) => s.msg)
+
+  return (
+    <>
+      {messages.map(({msg, icon}, index) => (
+        <Text key={msg + index} color="green">
+          {msg === "\n" ? "" : icon} {msg}
+        </Text>
+      ))}
+    </>
+  )
+}
+
 function StepExecutor({
   cliArgs,
   cliFlags,
@@ -165,20 +182,16 @@ function StepExecutor({
 }
 
 export function RecipeRenderer({cliArgs, cliFlags, steps, recipeMeta}: RecipeProps) {
+  const userInput = useUserInput(cliFlags)
   const {exit} = useApp()
   const [state, dispatch] = React.useReducer(recipeReducer, {
-    current: cliFlags.yesToAll ? 0 : -1,
+    current: userInput ? -1 : 0,
     steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ""})),
   })
 
-  useInput((input, key) => {
-    if (input === "c" && key.ctrl) {
-      exit(new Error("You aborted installation"))
-      return
-    }
-  })
-
-  useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
+  if (steps.length === 0) {
+    exit(new Error("This recipe has no steps"))
+  }
 
   React.useEffect(() => {
     if (
@@ -189,24 +202,51 @@ export function RecipeRenderer({cliArgs, cliFlags, steps, recipeMeta}: RecipePro
     }
   })
 
-  if (steps.length === 0) {
-    exit(new Error("This recipe has no steps"))
-  }
-
-  const messages = state.steps
-    .map((step) => ({msg: step.successMsg, icon: step.executor.successIcon ?? "✅"}))
-    .filter((s) => s.msg)
   return (
     <DispatchContext.Provider value={dispatch}>
-      {cliFlags.yesToAll || state.current === -1 ? (
-        <WelcomeMessage recipeMeta={recipeMeta} enterToContinue={!cliFlags.yesToAll} />
-      ) : null}
-      {messages.map(({msg, icon}, index) => (
-        <Text key={msg + index} color="green">
-          {msg === "\n" ? "" : icon} {msg}
-        </Text>
-      ))}
-      {state.current > -1 ? (
+      {userInput ? (
+        <RecipeRendererWithInput
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          state={state}
+          recipeMeta={recipeMeta}
+        />
+      ) : (
+        <RecipeRendererWithoutInput
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          state={state}
+          recipeMeta={recipeMeta}
+        />
+      )}
+    </DispatchContext.Provider>
+  )
+}
+
+function RecipeRendererWithInput({
+  cliArgs,
+  cliFlags,
+  recipeMeta,
+  state,
+}: Omit<RecipeProps, "steps"> & {state: State}) {
+  const {exit} = useApp()
+  const dispatch = React.useContext(DispatchContext)
+
+  useInput((input, key) => {
+    if (input === "c" && key.ctrl) {
+      exit(new Error("You aborted installation"))
+      return
+    }
+  })
+
+  useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
+
+  return (
+    <>
+      <StepMessages state={state} />
+      {state.current === -1 ? (
+        <WelcomeMessage recipeMeta={recipeMeta} />
+      ) : (
         <StepExecutor
           cliArgs={cliArgs}
           cliFlags={cliFlags}
@@ -214,7 +254,28 @@ export function RecipeRenderer({cliArgs, cliFlags, steps, recipeMeta}: RecipePro
           step={state.steps[state.current]?.executor}
           status={state.steps[state.current]?.status}
         />
-      ) : null}
-    </DispatchContext.Provider>
+      )}
+    </>
+  )
+}
+
+function RecipeRendererWithoutInput({
+  cliArgs,
+  cliFlags,
+  recipeMeta,
+  state,
+}: Omit<RecipeProps, "steps"> & {state: State}) {
+  return (
+    <>
+      <WelcomeMessage recipeMeta={recipeMeta} enterToContinue={false} />
+      <StepMessages state={state} />
+      <StepExecutor
+        cliArgs={cliArgs}
+        cliFlags={cliFlags}
+        proposalData={state.steps[state.current]?.proposalData}
+        step={state.steps[state.current]?.executor}
+        status={state.steps[state.current]?.status}
+      />
+    </>
   )
 }

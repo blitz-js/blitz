@@ -4,6 +4,7 @@ import {useEffect, useState} from "react"
 import * as React from "react"
 import {EnterToContinue} from "../components/enter-to-continue"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useUserInput} from "../utils/use-user-input"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface Config extends ExecutorConfig {
@@ -48,6 +49,7 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
 }
 
 export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
+  const userInput = useUserInput(cliFlags)
   const generatorArgs = React.useMemo(
     () => ({
       destinationRoot: ".",
@@ -69,11 +71,6 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted
     )
   }, [fileCreateLines, onChangeCommitted])
 
-  useEnterToContinue(
-    handleChangeCommitted,
-    !changeCommited && fileCreateOutput !== "" && !cliFlags.yesToAll,
-  )
-
   useEffect(() => {
     async function createNewFiles() {
       if (!fileCreateOutput) {
@@ -86,21 +83,51 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted
     createNewFiles()
   }, [fileCreateOutput, generatorArgs])
 
-  React.useEffect(() => {
-    if (cliFlags.yesToAll && !changeCommited && fileCreateOutput !== "") {
-      handleChangeCommitted()
-    }
-  }, [cliFlags.yesToAll, changeCommited, fileCreateOutput, handleChangeCommitted])
+  const childProps: CommitChildProps = {
+    changeCommited,
+    fileCreateOutput,
+    handleChangeCommitted,
+  }
+
+  if (userInput) return <CommitWithInput {...childProps} />
+  else return <CommitWithoutInput {...childProps} />
+}
+
+interface CommitChildProps {
+  changeCommited: boolean
+  fileCreateOutput: string
+  handleChangeCommitted: () => void
+}
+
+const CommitWithInput = ({
+  changeCommited,
+  fileCreateOutput,
+  handleChangeCommitted,
+}: CommitChildProps) => {
+  useEnterToContinue(handleChangeCommitted, !changeCommited && fileCreateOutput !== "")
 
   return (
     <Box flexDirection="column">
-      {fileCreateOutput ? (
+      {fileCreateOutput && (
         <>
-          {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
-          {fileCreateOutput ? <Text>{fileCreateOutput}</Text> : null}
-          {!cliFlags.yesToAll && <EnterToContinue />}
+          <Text>{fileCreateOutput}</Text>
+          <EnterToContinue />
         </>
-      ) : null}
+      )}
     </Box>
   )
+}
+
+const CommitWithoutInput = ({
+  changeCommited,
+  fileCreateOutput,
+  handleChangeCommitted,
+}: CommitChildProps) => {
+  React.useEffect(() => {
+    if (!changeCommited && fileCreateOutput !== "") {
+      handleChangeCommitted()
+    }
+  }, [changeCommited, fileCreateOutput, handleChangeCommitted])
+
+  return <Box flexDirection="column">{fileCreateOutput && <Text>{fileCreateOutput}</Text>}</Box>
 }
