@@ -1,6 +1,7 @@
 import type {ExpressionKind} from "ast-types/gen/kinds"
 import j from "jscodeshift"
 import {JsonObject, JsonValue} from "../types"
+import {Program} from "../types"
 import {findModuleExportsExpressions} from "./find-module-exports-expressions"
 
 type AddBabelItemDefinition = string | [name: string, options: JsonObject]
@@ -24,11 +25,7 @@ const jsonValueToExpression = (value: JsonValue): ExpressionKind =>
           ),
       )
 
-function updateBabelConfig(
-  program: j.Collection<j.Program>,
-  item: AddBabelItemDefinition,
-  key: string,
-) {
+function updateBabelConfig(program: Program, item: AddBabelItemDefinition, key: string): Program {
   findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
     j(moduleExportsExpression)
       .find(j.ObjectProperty, {key: {name: key}})
@@ -108,7 +105,7 @@ function updateBabelConfig(
   return program
 }
 
-export const addBabelPreset = (program: j.Collection<j.Program>, preset: AddBabelItemDefinition) =>
+export const addBabelPreset = (program: Program, preset: AddBabelItemDefinition): Program =>
   updateBabelConfig(program, preset, "presets")
-export const addBabelPlugin = (program: j.Collection<j.Program>, plugin: AddBabelItemDefinition) =>
+export const addBabelPlugin = (program: Program, plugin: AddBabelItemDefinition): Program =>
   updateBabelConfig(program, plugin, "plugins")

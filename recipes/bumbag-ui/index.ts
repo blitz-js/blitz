@@ -1,8 +1,8 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
 import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
 
-function wrapComponentWithBumbagProvider(program: j.Collection<j.Program>) {
+function wrapComponentWithBumbagProvider(program: Program) {
   program
     .find(j.JSXElement)
     .filter(
@@ -27,7 +27,7 @@ function wrapComponentWithBumbagProvider(program: j.Collection<j.Program>) {
   return program
 }
 
-function injectInitializeColorModeAndExtractCritical(program: j.Collection<j.Program>) {
+function injectInitializeColorModeAndExtractCritical(program: Program) {
   // Finds body element and injects InitializeColorMode before it.
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
@@ -88,7 +88,7 @@ export default RecipeBuilder()
     stepName: "Import BumbagProvider",
     explanation: `Import bumbag Provider as BumbagProvider into _app`,
     singleFileSearch: paths.app(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider as BumbagProvider"))],
         j.literal("bumbag"),
@@ -103,7 +103,7 @@ export default RecipeBuilder()
     stepName: "ImportExtractCritical & initializeColorMode",
     explanation: `Import InitializeColorMode from bumbag, and extractCritical into _document`,
     singleFileSearch: paths.document(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("bumbag"),

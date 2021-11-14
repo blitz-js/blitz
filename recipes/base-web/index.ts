@@ -30,7 +30,7 @@ export default RecipeBuilder()
     stepName: "Import required providers and wrap the root of the app with them",
     explanation: `Additionally we supply StyletronProvider with 'value' and 'debug' props. BaseProvider requires a 'theme' prop we set with default Base Web's light theme.`,
     singleFileSearch: paths.app(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const styletronProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider"), j.identifier("StyletronProvider"))],
         j.literal("styletron-react"),
@@ -102,7 +102,7 @@ export default RecipeBuilder()
     stepName: "Modify getInitialProps method and add stylesheets to Document",
     explanation: `To make Styletron work server-side we need to modify getInitialProps method of custom Document class. We also have to put Styletron's generated stylesheets in DocumentHead.`,
     singleFileSearch: paths.document(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const styletronProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider"), j.identifier("StyletronProvider"))],
         j.literal("styletron-react"),

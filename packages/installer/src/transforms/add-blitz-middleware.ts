@@ -1,8 +1,9 @@
 import type {ExpressionKind} from "ast-types/gen/kinds"
 import j from "jscodeshift"
+import {Program} from "../types"
 import {transformBlitzConfig} from "."
 
-export const addBlitzMiddleware = (program: j.Collection<j.Program>, middleware: ExpressionKind) =>
+export const addBlitzMiddleware = (program: Program, middleware: ExpressionKind): Program =>
   transformBlitzConfig(program, (config) => {
     // Locate the middleware property
     const middlewareProp = config.properties.find(

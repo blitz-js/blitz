@@ -1,3 +1,5 @@
+import type * as j from "jscodeshift"
+
 export interface RecipeMeta {
   name: string
   description: string
@@ -10,6 +12,8 @@ export type RecipeCLIArgs = {[Key in string]?: string | true}
 export interface RecipeCLIFlags {
   yesToAll: boolean
 }
+
+export type Program = j.Collection<j.Program>
 
 /**
 Matches a JSON object.
