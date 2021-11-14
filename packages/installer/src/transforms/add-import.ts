@@ -1,10 +1,7 @@
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import {Program} from "../types"
 
-export function addImport(
-  program: Collection<j.Program>,
-  importToAdd: j.ImportDeclaration,
-): Collection<j.Program> {
+export function addImport(program: Program, importToAdd: j.ImportDeclaration): Program {
   const importStatementCount = program.find(j.ImportDeclaration).length
   if (importStatementCount === 0) {
     program.find(j.Statement).at(0).insertBefore(importToAdd)
