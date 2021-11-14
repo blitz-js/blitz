@@ -3,7 +3,8 @@ import * as fs from "fs-extra"
 import {Box, Text} from "ink"
 import Spinner from "ink-spinner"
 import * as React from "react"
-import {Newline} from "../components/newline"
+import {EnterToContinue} from "../components/enter-to-continue"
+import {RecipeCLIArgs} from "../types"
 import {
   processFile,
   stringProcessFile,
@@ -17,7 +18,7 @@ import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from ".
 import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
-  selectTargetFiles?(cliArgs: any): any[]
+  selectTargetFiles?(cliArgs: RecipeCLIArgs): any[]
   singleFileSearch?: executorArgument<string>
   transform?: Transformer
   transformPlain?: StringTransformer
@@ -31,11 +32,18 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 }
 
 export const type = "file-transform"
-export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
+export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
   const [diff, setDiff] = React.useState<string | null>(null)
   const [error, setError] = React.useState<Error | null>(null)
-  const filePathRef = React.useRef("")
-  useEnterToContinue(() => onProposalAccepted(filePathRef.current), !!filePathRef.current)
+  const [filePath, setFilePath] = React.useState("")
+  const [proposalAccepted, setProposalAccepted] = React.useState(false)
+
+  const acceptProposal = React.useCallback(() => {
+    setProposalAccepted(true)
+    onProposalAccepted(filePath)
+  }, [onProposalAccepted, filePath])
+
+  useEnterToContinue(acceptProposal, filePath !== "" && !proposalAccepted && !cliFlags.yesToAll)
 
   React.useEffect(() => {
     async function generateDiff() {
@@ -44,7 +52,7 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
         globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
         getChoices: (step as Config).selectTargetFiles,
       })
-      filePathRef.current = fileToTransform
+      setFilePath(fileToTransform)
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
       const newFile = await ((step as Config).transformPlain
         ? stringProcessFile(originalFile, (step as Config).transformPlain!)
@@ -54,6 +62,12 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
 
     generateDiff().then(setDiff, setError)
   }, [cliArgs, step])
+
+  React.useEffect(() => {
+    if (filePath !== "" && !proposalAccepted && cliFlags.yesToAll) {
+      acceptProposal()
+    }
+  }, [acceptProposal, cliFlags.yesToAll, filePath, proposalAccepted])
 
   // Let the renderer deal with errors from file transformers, otherwise the
   // process would just hang.
@@ -90,8 +104,9 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
             </Text>
           )
         })}
-      <Newline />
-      <Text bold>The above changes will be made. Press ENTER to continue</Text>
+      {!cliFlags.yesToAll && (
+        <EnterToContinue message="The above changes will be made. Press ENTER to continue" />
+      )}
     </Box>
   )
 }

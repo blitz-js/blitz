@@ -1,17 +1,17 @@
-// import * as path from "path"
+import * as path from "path"
 import {Install, RecipeLocation} from "../../src/commands/install"
-// import tempRecipe from "../__fixtures__/installer"
+import tempRecipe from "../__fixtures__/installer"
 
 describe("`install` command", () => {
   afterAll(() => {
     jest.resetAllMocks()
   })
 
-  // it("runs local installer", async () => {
-  //   jest.spyOn(tempRecipe, "run")
-  //   await Install.run([path.resolve(__dirname, "../__fixtures__/installer")])
-  //   expect(tempRecipe.run).toHaveBeenCalledWith({})
-  // })
+  it("runs local installer", async () => {
+    jest.spyOn(tempRecipe, "run")
+    await Install.run([path.resolve(__dirname, "../__fixtures__/installer"), "--yes"])
+    expect(tempRecipe.run).toHaveBeenCalledWith({}, {yesToAll: true})
+  })
 
   it("properly parses remote installer args", () => {
     const normalizePath = Install.prototype.normalizeRecipePath

@@ -2,7 +2,7 @@ import {Generator, GeneratorOptions, SourceRootType} from "@blitzjs/generator"
 import {Box, Text} from "ink"
 import {useEffect, useState} from "react"
 import * as React from "react"
-import {Newline} from "../components/newline"
+import {EnterToContinue} from "../components/enter-to-continue"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
@@ -47,7 +47,7 @@ class TempGenerator extends Generator<TempGeneratorOptions> {
   }
 }
 
-export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) => {
+export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
   const generatorArgs = React.useMemo(
     () => ({
       destinationRoot: ".",
@@ -58,8 +58,10 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
     [cliArgs, step],
   )
   const [fileCreateOutput, setFileCreateOutput] = useState("")
+  const [changeCommited, setChangeCommited] = useState(false)
   const fileCreateLines = fileCreateOutput.split("\n")
   const handleChangeCommitted = React.useCallback(() => {
+    setChangeCommited(true)
     onChangeCommitted(
       `Successfully created ${fileCreateLines
         .map((l) => l.split(" ").slice(1).join("").trim())
@@ -67,7 +69,10 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
     )
   }, [fileCreateLines, onChangeCommitted])
 
-  useEnterToContinue(handleChangeCommitted)
+  useEnterToContinue(
+    handleChangeCommitted,
+    !changeCommited && fileCreateOutput !== "" && !cliFlags.yesToAll,
+  )
 
   useEffect(() => {
     async function createNewFiles() {
@@ -81,14 +86,19 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
     createNewFiles()
   }, [fileCreateOutput, generatorArgs])
 
+  React.useEffect(() => {
+    if (cliFlags.yesToAll && !changeCommited && fileCreateOutput !== "") {
+      handleChangeCommitted()
+    }
+  }, [cliFlags.yesToAll, changeCommited, fileCreateOutput, handleChangeCommitted])
+
   return (
     <Box flexDirection="column">
       {fileCreateOutput ? (
         <>
           {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
           {fileCreateOutput ? <Text>{fileCreateOutput}</Text> : null}
-          <Newline />
-          <Text bold>Press ENTER to continue</Text>
+          {!cliFlags.yesToAll && <EnterToContinue />}
         </>
       ) : null}
     </Box>

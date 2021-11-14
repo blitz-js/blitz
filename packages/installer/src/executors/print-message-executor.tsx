@@ -1,6 +1,6 @@
 import {Box, Text} from "ink"
 import * as React from "react"
-import {Newline} from "../components/newline"
+import {EnterToContinue} from "../components/enter-to-continue"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
@@ -10,7 +10,7 @@ export interface Config extends ExecutorConfig {
 
 export const type = "print-message"
 
-export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) => {
+export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, onChangeCommitted, step}) => {
   const generatorArgs = React.useMemo(
     () => ({
       message: getExecutorArgument((step as Config).message, cliArgs),
@@ -18,19 +18,26 @@ export const Commit: Executor["Commit"] = ({cliArgs, onChangeCommitted, step}) =
     }),
     [cliArgs, step],
   )
+  const [changeCommited, setChangeCommited] = React.useState(false)
 
   const handleChangeCommitted = React.useCallback(() => {
+    setChangeCommited(true)
     onChangeCommitted(generatorArgs.stepName)
   }, [onChangeCommitted, generatorArgs])
 
-  useEnterToContinue(handleChangeCommitted)
+  useEnterToContinue(handleChangeCommitted, !cliFlags.yesToAll && !changeCommited)
+
+  React.useEffect(() => {
+    if (cliFlags.yesToAll && !changeCommited) {
+      handleChangeCommitted()
+    }
+  }, [changeCommited, cliFlags.yesToAll, handleChangeCommitted])
 
   return (
     <Box flexDirection="column">
       {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
       <Text>{generatorArgs.message}</Text>
-      <Newline />
-      <Text bold>Press ENTER to continue</Text>
+      {!cliFlags.yesToAll && <EnterToContinue />}
     </Box>
   )
 }

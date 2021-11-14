@@ -6,7 +6,7 @@ import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import * as PrintMessageExecutor from "./executors/print-message-executor"
 import {RecipeRenderer} from "./recipe-renderer"
-import {RecipeMeta} from "./types"
+import {RecipeCLIArgs, RecipeCLIFlags, RecipeMeta} from "./types"
 // const debug = require('debug')("blitz:installer")
 
 type ExecutorConfig =
@@ -26,10 +26,15 @@ export class RecipeExecutor<Options extends RecipeMeta> {
     this.steps = steps
   }
 
-  async run(cliArgs: {}): Promise<void> {
+  async run(cliArgs: RecipeCLIArgs, cliFlags: RecipeCLIFlags): Promise<void> {
     try {
       const {waitUntilExit} = render(
-        <RecipeRenderer cliArgs={cliArgs} steps={this.steps} recipeMeta={this.options} />,
+        <RecipeRenderer
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          steps={this.steps}
+          recipeMeta={this.options}
+        />,
         {exitOnCtrlC: false},
       )
       await waitUntilExit()
