@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/installer",
-  "version": "0.41.2-canary.4",
+  "version": "0.42.4",
   "description": "Package installation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -30,21 +30,22 @@
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.41.2-canary.4",
-    "@blitzjs/generator": "0.41.2-canary.4",
-    "@mrleebo/prisma-ast": "^0.2.4",
+    "@blitzjs/display": "0.42.4",
+    "@blitzjs/generator": "0.42.4",
+    "@mrleebo/prisma-ast": "0.2.4",
     "@prisma/sdk": "2.19.0",
-    "@types/jscodeshift": "0.7.2",
+    "@types/jscodeshift": "0.11.2",
+    "ast-types": "0.14.2",
     "cross-spawn": "7.0.3",
     "diff": "5.0.0",
     "enquirer": "2.3.6",
     "fs-extra": "^9.1.0",
     "globby": "11.0.2",
-    "ink": "3.0.8",
-    "ink-spinner": "4.0.1",
+    "ink": "3.2.0",
+    "ink-spinner": "4.0.3",
     "ink-testing-library": "2.1.0",
-    "jscodeshift": "0.11.0",
-    "recast": "0.20.4"
+    "jscodeshift": "0.13.0",
+    "recast": "0.20.5"
   },
   "gitHead": "d3b9fce0bdd251c2b1890793b0aa1cd77c1c0922"
 }

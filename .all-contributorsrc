@@ -3341,6 +3341,136 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "cbejensen",
+      "name": "Christian Jensen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12374723?v=4",
+      "profile": "https://christianjensen.netlify.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dvnrsn",
+      "name": "Devin Rasmussen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9112811?v=4",
+      "profile": "https://github.com/dvnrsn",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "devtombiz",
+      "name": "Thomas Brenneur",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23282613?v=4",
+      "profile": "www.linkedin.com/in/devtom",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "lucasvazq",
+      "name": "Lucas Vazquez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38964964?v=4",
+      "profile": "https://lucasvazq.github.io/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chrisj-back2work",
+      "name": "Chris Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68551954?v=4",
+      "profile": "https://github.com/chrisj-back2work",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "thisdotrob",
+      "name": "Rob Stevenson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12902589?v=4",
+      "profile": "https://github.com/thisdotrob",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "lovethebomb",
+      "name": "Lucas Heymès",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1363056?v=4",
+      "profile": "www.lucas.computer",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "NorfeldtAbtion",
+      "name": "Lasse Norfeldt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53769763?v=4",
+      "profile": "https://github.com/NorfeldtAbtion",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "netwarex",
+      "name": "Péter Nyári",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6048614?v=4",
+      "profile": "https://nyaripeter.hu/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "5minpause",
+      "name": "Holger Frohloff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/84148?v=4",
+      "profile": "https://www.holgerfrohloff.de",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "basilk76",
+      "name": "Basil Khan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45275512?v=4",
+      "profile": "https://github.com/basilk76",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "danestves",
+      "name": "Daniel Esteves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31737273?v=4",
+      "profile": "https://danestves.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "coryhouse",
+      "name": "Cory House",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1688997?v=4",
+      "profile": "http://www.bitnative.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "rockmanvnx6",
+      "name": "Austin (Thang Pham)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16440123?v=4",
+      "profile": "https://auspham.dev/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

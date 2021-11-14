@@ -173,7 +173,7 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
   React.useEffect(() => {
     if (
       state.current === state.steps.length - 1 &&
-      state.steps[state.current].status === Status.Committed
+      state.steps[state.current]?.status === Status.Committed
     ) {
       exit()
     }

@@ -152,7 +152,7 @@ export async function apiResolver(
       if (propagateError) {
         throw err
       }
-      sendError(apiRes, 500, 'Internal Server Error')
+      sendError(apiRes, err.statusCode || 500, 'Internal Server Error')
     }
   }
 }
@@ -173,6 +173,9 @@ export function getRpcMiddleware(
   return async (req, res, next) => {
     const log = baseLogger().getChildLogger({
       prefix: [route.replace('/api/rpc/', '') + '()'],
+    })
+    const customChalk = new chalk.constructor({
+      level: log.settings.type === 'json' ? 0 : chalk.level,
     })
 
     if (req.method === 'HEAD') {
@@ -199,7 +202,7 @@ export function getRpcMiddleware(
         })
 
         log.info(
-          chalk.dim('Starting with input:'),
+          customChalk.dim('Starting with input:'),
           data ? data : JSON.stringify(data)
         )
         const startTime = Date.now()
@@ -207,7 +210,7 @@ export function getRpcMiddleware(
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
         log.debug(
-          chalk.dim('Result:'),
+          customChalk.dim('Result:'),
           result ? result : JSON.stringify(result)
         )
 
@@ -225,7 +228,7 @@ export function getRpcMiddleware(
           },
         })
         log.debug(
-          chalk.dim(
+          customChalk.dim(
             `Next.js serialization:${prettyMs(
               Date.now() - nextSerializerStartTime
             )}`
@@ -235,7 +238,7 @@ export function getRpcMiddleware(
         const duration = Date.now() - startTime
 
         log.info(
-          chalk.dim(
+          customChalk.dim(
             `Finished: resolver:${prettyMs(
               resolverDuration
             )} serializer:${prettyMs(serializerDuration)} total:${prettyMs(

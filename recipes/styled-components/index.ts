@@ -1,10 +1,9 @@
-import {addBabelPlugin, addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import {addBabelPlugin, addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
+import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function wrapComponentWithStyledComponentsThemeProvider(program: Collection<j.Program>) {
+function wrapComponentWithStyledComponentsThemeProvider(program: Program) {
   program
     .find(j.JSXElement)
     .filter(
@@ -48,8 +47,8 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'styled-components' as a dependency and 'babel-plugin-styled-components' as a dev dependency.`,
     packages: [
-      {name: "styled-components", version: "latest"},
-      {name: "babel-plugin-styled-components", version: "11"},
+      {name: "styled-components", version: "5.x"},
+      {name: "babel-plugin-styled-components", version: "1.x"},
     ],
   })
   .addNewFilesStep({
@@ -65,7 +64,7 @@ export default RecipeBuilder()
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       // import ServerStyleSheet
       const serverStyleSheetImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheet"))],
@@ -74,16 +73,13 @@ export default RecipeBuilder()
 
       // Ensure DocumentContext is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("DocumentContext")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
       program.find(j.ClassBody).forEach((path) => {
@@ -220,7 +216,7 @@ export default RecipeBuilder()
     stepName: "Import required provider and wrap the root of the app with it",
     explanation: `Additionally we supply ThemeProvider with a basic theme property and base global styles.`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       // Import styled-components.
       const styledComponentsProviderImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ThemeProvider"))],
@@ -243,7 +239,7 @@ export default RecipeBuilder()
     stepName: "Add Babel plugin and preset",
     explanation: `Update the Babel configuration to use Styled Component's SSR plugin.`,
     singleFileSearch: paths.babelConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       return addBabelPlugin(program, [
         "styled-components",
         {

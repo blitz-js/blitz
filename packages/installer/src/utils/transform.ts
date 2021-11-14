@@ -1,8 +1,8 @@
 import * as fs from "fs-extra"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babel from "recast/parsers/babel"
+import {Program} from "../types"
 
 export const customTsParser = {
   parse(source: string, options?: Overrides) {
@@ -24,9 +24,7 @@ export interface TransformResult {
 }
 
 export type StringTransformer = (program: string) => string | Promise<string>
-export type Transformer = (
-  program: Collection<j.Program>,
-) => Collection<j.Program> | Promise<Collection<j.Program>>
+export type Transformer = (program: Program) => Program | Promise<Program>
 
 export function stringProcessFile(
   original: string,

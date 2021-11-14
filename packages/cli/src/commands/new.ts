@@ -169,7 +169,7 @@ export class New extends Command {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
             const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
-            if (!result) throw new Error()
+            if (!result.success) throw new Error()
 
             spinner.succeed()
           } catch (error) {

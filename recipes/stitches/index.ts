@@ -10,7 +10,7 @@ export default RecipeBuilder()
     stepId: "addDeps",
     stepName: "npm dependencies",
     explanation: `Stitches requires one dependencies to use it with react`,
-    packages: [{name: "@stitches/react", version: "1.2.1"}],
+    packages: [{name: "@stitches/react", version: "1.x"}],
   })
   .addNewFilesStep({
     stepId: "addConfig",

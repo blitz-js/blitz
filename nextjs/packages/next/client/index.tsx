@@ -31,6 +31,7 @@ import {
   NotFoundError,
   RedirectError,
 } from '../stdlib/errors'
+import { withBlitzInnerWrapper, BlitzWrapper } from '../stdlib/blitz-app-root'
 
 /// <reference types="react-dom/experimental" />
 
@@ -507,7 +508,7 @@ export function renderError(renderErrorProps: RenderErrorProps): Promise<any> {
   return pageLoader
     .loadPage('/_error')
     .then(({ page: ErrorComponent, styleSheets }) => {
-      return lastAppProps?.Component === ErrorComponent
+      return lastUserComponent === ErrorComponent
         ? import('../pages/_error').then((m) => ({
             ErrorComponent: m.default as React.ComponentType<{}>,
             styleSheets: [],
@@ -638,7 +639,8 @@ function clearMarks(): void {
 
 function AppContainer({
   children,
-}: React.PropsWithChildren<{}>): React.ReactElement {
+  appProps,
+}: React.PropsWithChildren<{ appProps: AppProps }>): React.ReactElement {
   return (
     <Container
       fn={(error) =>
@@ -647,11 +649,13 @@ function AppContainer({
         )
       }
     >
-      <RouterContext.Provider value={makePublicRouterInstance(router)}>
-        <HeadManagerContext.Provider value={headManager}>
-          {children}
-        </HeadManagerContext.Provider>
-      </RouterContext.Provider>
+      <BlitzWrapper appProps={appProps}>
+        <RouterContext.Provider value={makePublicRouterInstance(router)}>
+          <HeadManagerContext.Provider value={headManager}>
+            {children}
+          </HeadManagerContext.Provider>
+        </RouterContext.Provider>
+      </BlitzWrapper>
     </Container>
   )
 }
@@ -666,11 +670,14 @@ const wrapApp = (App: AppComponent) => (
     router,
   }
   return (
-    <AppContainer>
+    <AppContainer appProps={appProps}>
       <App {...appProps} />
     </AppContainer>
   )
 }
+
+let lastUserComponent: any
+let cachedWrappedComponent: any
 
 let lastAppProps: AppProps
 function doRender(input: RenderRouteInfo): Promise<any> {
@@ -678,6 +685,13 @@ function doRender(input: RenderRouteInfo): Promise<any> {
   let styleSheets: StyleSheetTuple[] | undefined =
     'initial' in input ? undefined : input.styleSheets
   Component = Component || lastAppProps.Component
+  if (Component === lastUserComponent) {
+    Component = cachedWrappedComponent
+  } else {
+    lastUserComponent = Component
+    cachedWrappedComponent = withBlitzInnerWrapper(Component)
+    Component = cachedWrappedComponent
+  }
   props = props || lastAppProps.props
 
   const appProps: AppProps = {
@@ -831,7 +845,7 @@ function doRender(input: RenderRouteInfo): Promise<any> {
   const elem: JSX.Element = (
     <>
       <Head callback={onHeadCommit} />
-      <AppContainer>
+      <AppContainer appProps={appProps}>
         <App {...appProps} />
         <Portal type="next-route-announcer">
           <RouteAnnouncer />

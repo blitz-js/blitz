@@ -67,6 +67,7 @@ import {
 } from '../lib/load-custom-routes'
 import { DomainLocale } from './config'
 import { RenderResult, resultFromChunks } from './utils'
+import { BlitzWrapper } from '../stdlib/blitz-app-root'
 
 function noRouter() {
   const message =
@@ -615,7 +616,7 @@ export async function renderToHTML(
     defaultLocale: renderOpts.defaultLocale,
     AppTree: (props: any) => {
       return (
-        <AppContainer>
+        <AppContainer appProps={{ ...props, Component, router }}>
           <App {...props} Component={Component} router={router} />
         </AppContainer>
       )
@@ -639,29 +640,31 @@ export async function renderToHTML(
   const nextExport =
     !isSSG && (renderOpts.nextExport || (dev && (isAutoExport || isFallback)))
 
-  const AppContainer = ({ children }: any) => (
-    <RouterContext.Provider value={router}>
-      <AmpStateContext.Provider value={ampState}>
-        <HeadManagerContext.Provider
-          value={{
-            updateHead: (state) => {
-              head = state
-            },
-            updateScripts: (scripts) => {
-              scriptLoader = scripts
-            },
-            scripts: {},
-            mountedInstances: new Set(),
-          }}
-        >
-          <LoadableContext.Provider
-            value={(moduleName) => reactLoadableModules.push(moduleName)}
+  const AppContainer = ({ children, appProps }: any) => (
+    <BlitzWrapper appProps={appProps}>
+      <RouterContext.Provider value={router}>
+        <AmpStateContext.Provider value={ampState}>
+          <HeadManagerContext.Provider
+            value={{
+              updateHead: (state) => {
+                head = state
+              },
+              updateScripts: (scripts) => {
+                scriptLoader = scripts
+              },
+              scripts: {},
+              mountedInstances: new Set(),
+            }}
           >
-            {children}
-          </LoadableContext.Provider>
-        </HeadManagerContext.Provider>
-      </AmpStateContext.Provider>
-    </RouterContext.Provider>
+            <LoadableContext.Provider
+              value={(moduleName) => reactLoadableModules.push(moduleName)}
+            >
+              {children}
+            </LoadableContext.Provider>
+          </HeadManagerContext.Provider>
+        </AmpStateContext.Provider>
+      </RouterContext.Provider>
+    </BlitzWrapper>
   )
 
   try {
@@ -1056,7 +1059,9 @@ export async function renderToHTML(
     } = enhanceComponents(options, App, Component)
 
     const htmlOrPromise = renderToString(
-      <AppContainer>
+      <AppContainer
+        appProps={{ Component: EnhancedComponent, router, ...props }}
+      >
         <EnhancedApp Component={EnhancedComponent} router={router} {...props} />
       </AppContainer>
     )
