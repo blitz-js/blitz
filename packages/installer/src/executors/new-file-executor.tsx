@@ -108,7 +108,7 @@ const CommitWithInput = ({
 
   return (
     <Box flexDirection="column">
-      {fileCreateOutput && (
+      {fileCreateOutput !== "" && (
         <>
           <Text>{fileCreateOutput}</Text>
           <EnterToContinue />
@@ -129,5 +129,7 @@ const CommitWithoutInput = ({
     }
   }, [changeCommited, fileCreateOutput, handleChangeCommitted])
 
-  return <Box flexDirection="column">{fileCreateOutput && <Text>{fileCreateOutput}</Text>}</Box>
+  return (
+    <Box flexDirection="column">{fileCreateOutput !== "" && <Text>{fileCreateOutput}</Text>}</Box>
+  )
 }
