@@ -1,8 +1,8 @@
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
+import {Program} from "../types"
 
-export function findModuleExportsExpressions(program: Collection<j.Program>) {
-  return program.find(j.AssignmentExpression).filter((path) => {
+export const findModuleExportsExpressions = (program: Program) =>
+  program.find(j.AssignmentExpression).filter((path) => {
     const {left, right} = path.value
     return (
       left.type === "MemberExpression" &&
@@ -12,4 +12,3 @@ export function findModuleExportsExpressions(program: Collection<j.Program>) {
       right.type === "ObjectExpression"
     )
   })
-}

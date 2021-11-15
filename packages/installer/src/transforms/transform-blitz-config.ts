@@ -1,8 +1,9 @@
 import type {ExpressionKind} from "ast-types/gen/kinds"
 import j from "jscodeshift"
+import {Program} from "../types"
 
 function recursiveConfigSearch(
-  program: j.Collection<j.Program>,
+  program: Program,
   obj: ExpressionKind,
 ): j.ObjectExpression | undefined {
   // Identifier being a variable name
@@ -41,9 +42,9 @@ function recursiveConfigSearch(
 export type TransformBlitzConfigCallback = (config: j.ObjectExpression) => j.ObjectExpression
 
 export function transformBlitzConfig(
-  program: j.Collection<j.Program>,
+  program: Program,
   transform: TransformBlitzConfigCallback,
-): j.Collection<j.Program> {
+): Program {
   let moduleExportsExpressions = program.find(j.AssignmentExpression, {
     operator: "=",
     left: {object: {name: "module"}, property: {name: "exports"}},

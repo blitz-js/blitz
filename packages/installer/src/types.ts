@@ -1,9 +1,13 @@
+import type * as j from "jscodeshift"
+
 export interface RecipeMeta {
   name: string
   description: string
   owner: string
   repoLink: string
 }
+
+export type Program = j.Collection<j.Program>
 
 /**
 Matches a JSON object.

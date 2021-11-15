@@ -38,7 +38,7 @@ export default RecipeBuilder()
     stepName: "Import stylesheets",
     explanation: `Imports the stylesheet we just added into your app`,
     singleFileSearch: paths.app(),
-    transform(program: j.Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration([], j.literal("app/core/styles/index.css"))
       return addImport(program, stylesImport)
     },
