@@ -1,5 +1,28 @@
-import {addBabelPlugin, addImport, paths, RecipeBuilder, wrapBlitzConfig} from "@blitzjs/installer"
+import {
+  addBabelPlugin,
+  addImport,
+  paths,
+  Program,
+  RecipeBuilder,
+  wrapBlitzConfig,
+} from "@blitzjs/installer"
 import j from "jscodeshift"
+
+function initializePlugin(program: Program, statement: j.Statement) {
+  const importStatementCount = program.find(j.ImportDeclaration).length
+
+  if (importStatementCount === 0) {
+    program.find(j.Statement).at(0).insertBefore(statement)
+    return program
+  }
+
+  program.find(j.ImportDeclaration).forEach((stmt, idx) => {
+    if (idx === importStatementCount - 1) {
+      stmt.replace(stmt.node, statement)
+    }
+  })
+  return program
+}
 
 export default RecipeBuilder()
   .setName("vanilla-extract")
@@ -40,7 +63,18 @@ export default RecipeBuilder()
           j.literal("@vanilla-extract/next-plugin"),
         ),
       )
-      return wrapBlitzConfig(program, "createVanillaExtractPlugin")
+
+      program = initializePlugin(
+        program,
+        j.variableDeclaration("const", [
+          j.variableDeclarator(
+            j.identifier("withVanillaExtract"),
+            j.callExpression(j.identifier("createVanillaExtractPlugin"), []),
+          ),
+        ]),
+      )
+
+      return wrapBlitzConfig(program, "withVanillaExtract")
     },
   })
   .build()
