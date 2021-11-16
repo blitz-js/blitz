@@ -8,11 +8,11 @@ export function getDbName(connectionString: string): string {
   return dbName
 }
 
-async function runSeed() {
+async function runSeed(seedBasePath: string) {
   require("../utils/setup-ts-node").setupTsnode()
 
   const projectRoot = require("next/dist/server/lib/utils").getProjectRootSync()
-  const seedPath = require("path").join(projectRoot, "db/seeds")
+  const seedPath = require("path").join(projectRoot, seedBasePath)
   const dbPath = require("path").join(projectRoot, "db/index")
 
   log.branded("Seeding database")
@@ -22,10 +22,10 @@ async function runSeed() {
   try {
     seeds = require(seedPath).default
     if (seeds === undefined) {
-      throw new Error(`Cant find default export from db/seeds`)
+      throw new Error(`Couldn't find default export from ${seedBasePath}`)
     }
   } catch (err) {
-    log.error(`Couldn't import default from db/seeds.ts or db/seeds/index.ts file`)
+    log.error(`Couldn't import default from ${seedBasePath}`)
     throw err
   }
   spinner.succeed()
@@ -44,11 +44,13 @@ async function runSeed() {
   log.success("Done seeding")
 }
 
+export interface Flags {
+  file: boolean
+}
+
 export class Db extends Command {
   static description = `Run database commands
-${require("chalk").bold(
-  "seed",
-)}   Generates seeded data in database via Prisma 2. You need db/seeds.ts or db/seeds/index.ts.
+${require("chalk").bold("seed")}   Generates seeded data in database via Prisma 2.
 `
 
   static args = [
@@ -62,13 +64,18 @@ ${require("chalk").bold(
 
   static flags = {
     help: flags.help({char: "h"}),
+    file: flags.string({
+      default: "db/seeds",
+      char: "f",
+      description: `Path to the seeds file, relative to the project root folder. Examples: db/seeds, db/seeds.ts, db/seeds/index.ts, db/my-seeds`,
+    }),
   }
 
   static strict = false
 
   async run() {
     process.env.CLI_COMMAND_DB = "true"
-    const {args} = this.parse(Db)
+    const {args, flags} = this.parse(Db)
     const command = args["command"]
 
     if (command === "help") {
@@ -77,7 +84,7 @@ ${require("chalk").bold(
 
     if (command === "seed") {
       try {
-        return await runSeed()
+        return await runSeed(flags.file)
       } catch (err) {
         log.error("Could not seed database:")
         baseLogger().prettyError(err as any)
