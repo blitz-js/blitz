@@ -22,6 +22,7 @@ try {
   // noop
 }
 
+// todo: we should reuse `findNodeModulesRoot` from /nextjs/packages/next/build/routes.ts
 async function findNodeModulesRoot(src) {
   let root
   if (process.env.NEXT_PNPM_TEST) {
