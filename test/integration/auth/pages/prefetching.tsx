@@ -31,8 +31,6 @@ export default function Page() {
   )
 }
 
-Page.authenticate = true
-
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const queryClient = new QueryClient()
 
