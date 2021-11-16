@@ -1427,7 +1427,7 @@ export default class Router implements BaseRouter {
       )
 
       // Type from Nextjs is incorrect
-      if (props.superjsonProps) {
+      if ((props as any).superjsonProps) {
         ;(props as any).pageProps = deserializeWithSuperjson(
           ((props as any).superjsonProps as any) || {}
         )
