@@ -66,9 +66,11 @@ export const version = process.env.__NEXT_VERSION
 
 const looseToArray = <T extends {}>(input: any): T[] => [].slice.call(input)
 
-data.props.pageProps = deserializeWithSuperjson(
-  data.props.superjsonProps as any
-)
+if (data.props) {
+  data.props.pageProps = deserializeWithSuperjson(
+    data.props.superjsonProps as any
+  )
+}
 
 const {
   props: hydrateProps,
