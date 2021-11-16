@@ -1,5 +1,5 @@
-import {Readable} from "stream"
 import {Command} from "@oclif/command"
+import {Readable} from "stream"
 
 const getPrismaBin = async () => {
   let bin: any
@@ -31,8 +31,8 @@ export const runPrisma = async (args: string[], silent = false) => {
   const cp_stderr: string[] = []
   if (silent) {
     cp.stderr.on("data", (chunk: Readable) => {
-      cp_stderr.push(chunk.toString());
-    });
+      cp_stderr.push(chunk.toString())
+    })
   }
 
   const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
