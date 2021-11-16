@@ -1,6 +1,6 @@
 {
-  "name": "@next/env",
-  "version": "0.42.0",
+  "name": "@blitzjs/env",
+  "version": "0.42.4",
   "keywords": [
     "react",
     "next",

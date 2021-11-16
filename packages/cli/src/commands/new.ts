@@ -1,7 +1,7 @@
 import {log} from "@blitzjs/display"
+import {loadEnvConfig} from "@blitzjs/env"
 import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
-import {loadEnvConfig} from "@next/env"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
 import spawn from "cross-spawn"

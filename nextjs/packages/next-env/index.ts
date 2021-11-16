@@ -66,7 +66,7 @@ export function processEnv(
 }
 
 export function loadEnvConfig(
-  dir: string,
+  dir: string = process.cwd(),
   dev?: boolean,
   log: Log = console
 ): {

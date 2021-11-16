@@ -8,7 +8,7 @@ import { normalizePagePath } from '../server/normalize-page-path'
 import { warn } from './output/log'
 import { ClientPagesLoaderOptions } from './webpack/loaders/next-client-pages-loader'
 import { ServerlessLoaderQuery } from './webpack/loaders/next-serverless-loader'
-import { LoadedEnvFiles } from '@next/env'
+import { LoadedEnvFiles } from '@blitzjs/env'
 import { convertPageFilePathToRoutePath } from './utils'
 import { NextConfigComplete } from '../server/config-shared'
 
