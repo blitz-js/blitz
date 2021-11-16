@@ -7,11 +7,10 @@ import { formatWithValidation } from '../shared/lib/utils'
 import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
 import { AppProps, BlitzPage } from '../types/index'
-import React, { ComponentPropsWithoutRef, useEffect, FC } from 'react'
+import React, { ComponentPropsWithoutRef, FC } from 'react'
 import { Hydrate, HydrateOptions } from 'react-query/hydration'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { queryClient } from '../data-client/react-query-utils'
-import { AppComponent } from '../shared/lib/router/router'
 const debug = require('debug')('blitz:approot')
 
 export type BlitzProviderProps = {

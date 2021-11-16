@@ -112,6 +112,7 @@ const commands = {
 
 const defineCommands = (
   repl: REPLServer,
+  // eslint-disable-next-line no-shadow
   commands: Record<string, REPLCommand>
 ) => {
   Object.entries(commands).forEach(([keyword, cmd]) =>
@@ -119,6 +120,7 @@ const defineCommands = (
   )
 }
 
+// eslint-disable-next-line no-shadow
 const setupSelfRolledHistory = (repl: any, path: string) => {
   function init() {
     try {
