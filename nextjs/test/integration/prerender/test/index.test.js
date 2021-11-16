@@ -1953,7 +1953,7 @@ describe('SSG Prerender', () => {
       )
     })
 
-    it('should show serialization error during build', async () => {
+    it.skip('should show serialization error during build', async () => {
       await fs.remove(join(appDir, '.next'))
 
       const nonJsonPage = join(appDir, 'pages/non-json/[p].js')
