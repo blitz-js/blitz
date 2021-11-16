@@ -32,6 +32,7 @@ import {
   RedirectError,
 } from '../stdlib/errors'
 import { withBlitzInnerWrapper, BlitzWrapper } from '../stdlib/blitz-app-root'
+import { deserialize as deserializeWithSuperjson } from 'superjson'
 
 /// <reference types="react-dom/experimental" />
 
@@ -64,6 +65,12 @@ window.__NEXT_DATA__ = data
 export const version = process.env.__NEXT_VERSION
 
 const looseToArray = <T extends {}>(input: any): T[] => [].slice.call(input)
+
+if (data.props) {
+  data.props.pageProps = deserializeWithSuperjson(
+    (data.props.superjsonProps as any) || {}
+  )
+}
 
 const {
   props: hydrateProps,
