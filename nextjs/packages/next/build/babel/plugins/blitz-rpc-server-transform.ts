@@ -54,10 +54,12 @@ function wrapInHOF(
 ): t.Expression {
   const program = path.findParent(t.isProgram) as NodePath<t.Program>
   if (!program) throw new Error('Missing parent')
+  // eslint-disable-next-line no-shadow
   const hasMiddlewareExport = program.node.body.find((path) => {
     if (!t.isExportNamedDeclaration(path)) return null
     if (!path.declaration) return null
     if (!t.isVariableDeclaration(path.declaration)) return null
+    // eslint-disable-next-line no-shadow
     const variableDeclarator = path.declaration.declarations.find((path) =>
       t.isVariableDeclarator(path)
     )

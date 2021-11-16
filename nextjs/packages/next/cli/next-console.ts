@@ -29,6 +29,7 @@ export const forceRequire = (modulePath: string) => {
 }
 
 export async function getBlitzModulePaths() {
+  // eslint-disable-next-line no-shadow
   const projectRoot = require('next/dist/server/lib/utils').getProjectRootSync()
 
   const paths = await globby(
