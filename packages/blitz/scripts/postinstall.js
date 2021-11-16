@@ -53,6 +53,7 @@ async function findNodeModulesRoot(src) {
     if (!nextPkgLocation) {
       throw new Error("Internal Blitz Error: unable to find 'next' package location")
     }
+    root = path.join(nextPkgLocation, "../")
     if (root.endsWith("@blitzjs/")) {
       root = path.join(nextPkgLocation, "../../")
     }
@@ -232,7 +233,7 @@ function codegen() {
     try {
       const dotBlitzDir = isInBlitzMonorepo
         ? path.join(process.cwd(), "node_modules/.blitz")
-        : findNodeModulesRoot(__dirname)
+        : await findNodeModulesRoot(__dirname)
 
       await makeDir(dotBlitzDir)
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")
