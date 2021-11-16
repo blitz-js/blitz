@@ -8,7 +8,6 @@ import { Head } from '../shared/lib/head'
 import { RedirectError } from './errors'
 import { AppProps, BlitzPage } from '../types/index'
 import React, { ComponentPropsWithoutRef, useEffect, FC } from 'react'
-import SuperJSON from 'superjson'
 import { Hydrate, HydrateOptions } from 'react-query/hydration'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { queryClient } from '../data-client/react-query-utils'
@@ -186,16 +185,6 @@ export function BlitzWrapper({
     appProps.pageProps
   )
 
-  let dehydratedState = appProps.pageProps?.dehydratedState
-  let _superjson = appProps.pageProps?._superjson
-  if (dehydratedState && _superjson) {
-    const deserializedProps = SuperJSON.deserialize({
-      json: { dehydratedState },
-      meta: _superjson,
-    }) as { dehydratedState: any }
-    dehydratedState = deserializedProps?.dehydratedState
-  }
-
   const noPageFlicker =
     appProps.Component.suppressFirstRenderFlicker ||
     authenticate !== undefined ||
@@ -209,7 +198,7 @@ export function BlitzWrapper({
 
   return (
     <>
-      <BlitzProvider dehydratedState={dehydratedState}>
+      <BlitzProvider dehydratedState={appProps.pageProps?.dehydratedState}>
         {noPageFlicker && <NoPageFlicker />}
         {children}
       </BlitzProvider>
