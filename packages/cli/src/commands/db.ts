@@ -50,7 +50,7 @@ export interface Flags {
 
 export class Db extends Command {
   static description = `Run database commands
-${require("chalk").bold("seed")}   Generates seeded data in database via Prisma 2.
+${require("chalk").bold("seed")}   Generates seeded data in database via Prisma.
 `
 
   static args = [
