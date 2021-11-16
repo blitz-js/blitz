@@ -68,7 +68,7 @@ const looseToArray = <T extends {}>(input: any): T[] => [].slice.call(input)
 
 if (data.props) {
   data.props.pageProps = deserializeWithSuperjson(
-    data.props.superjsonProps as any
+    (data.props.superjsonProps as any) || {}
   )
 }
 

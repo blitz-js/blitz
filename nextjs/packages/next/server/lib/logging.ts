@@ -40,6 +40,7 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
 
   globalThis._blitz_baseLogger = new Logger({
     minLevel: config.log?.level || 'info',
+    type: config.log?.type || 'pretty',
     dateTimePattern:
       process.env.NODE_ENV === 'production'
         ? 'year-month-day hour:minute:second.millisecond'

@@ -81,7 +81,7 @@
     "@node-rs/helper": "1.2.1",
     "@types/secure-password": "3.1.0",
     "assert": "2.0.0",
-    "ast-types": "0.13.2",
+    "ast-types": "0.14.2",
     "b64-lite": "^1.4.0",
     "babel-plugin-superjson-next": "0.4.2",
     "bad-behavior": "^1.0.1",
