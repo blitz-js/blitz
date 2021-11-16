@@ -35,6 +35,7 @@ import resolveRewrites from './utils/resolve-rewrites'
 import { getRouteMatcher } from './utils/route-matcher'
 import { getRouteRegex } from './utils/route-regex'
 import fromPairs from 'next/dist/compiled/lodash.frompairs'
+import { deserialize as deserializeWithSuperjson } from 'superjson'
 
 declare global {
   interface Window {
@@ -1424,6 +1425,13 @@ export default class Router implements BaseRouter {
               } as any
             )
       )
+
+      // Type from Nextjs is incorrect
+      if ((props as any).superjsonProps) {
+        ;(props as any).pageProps = deserializeWithSuperjson(
+          ((props as any).superjsonProps as any) || {}
+        )
+      }
 
       routeInfo.props = props
       this.components[route] = routeInfo

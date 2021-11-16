@@ -1,6 +1,5 @@
-import {addImport, findModuleExportsExpressions, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, paths, Program, RecipeBuilder, transformBlitzConfig} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -23,7 +22,7 @@ export default RecipeBuilder()
     stepName: "Set meta tags",
     explanation: `Inserts meta tags into the <head> element of _document.tsx`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const secureHeadersImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("computeCsp"))],
         j.literal("app/core/secureheaders"),
@@ -54,13 +53,13 @@ export default RecipeBuilder()
               ),
               ...addHttpMetaTag("Referrer-Policy", j.stringLiteral("origin-when-cross-origin")),
               j.literal("\n"),
-              ...path.node.children
+              ...(path.node.children || [])
                 .filter((path) => {
                   return !(
                     path.type === "JSXElement" &&
                     path.openingElement.name.type === "JSXIdentifier" &&
                     path.openingElement.name.name === "meta" &&
-                    path.openingElement.attributes.some(
+                    path.openingElement.attributes?.some(
                       (attr) =>
                         attr.type === "JSXAttribute" &&
                         attr.name.type === "JSXIdentifier" &&
@@ -84,7 +83,7 @@ export default RecipeBuilder()
     stepName: "Set custom headers",
     explanation: `Insert custom headers into blitz.config.js and disable the "X-Powered-By: Next.js" header`,
     singleFileSearch: paths.blitzConfig(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       return addHttpHeaders(program, [
         {name: "Strict-Transport-Security", value: "max-age=631138519"},
         {name: "X-Frame-Options", value: "sameorigin"},
@@ -111,55 +110,52 @@ function addHttpMetaTag(name: string, value: j.JSXExpressionContainer | j.String
   ]
 }
 
-function addHttpHeaders(
-  program: Collection<j.Program>,
-  headers: Array<{name: string; value: string}>,
-) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    const config = j(moduleExportsExpression.value.right)
-
-    const arr = j.arrayExpression(
-      headers.map(({name, value}) =>
-        j.objectExpression([
-          j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
-          j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
-        ]),
-      ),
+const addHttpHeaders = (program: Program, headers: Array<{name: string; value: string}>) =>
+  transformBlitzConfig(program, (config) => {
+    let headersFunction = j.arrowFunctionExpression(
+      [],
+      j.blockStatement([
+        j.returnStatement(
+          j.arrayExpression(
+            headers.map(({name, value}) =>
+              j.objectExpression([
+                j.objectProperty(j.identifier("key"), j.stringLiteral(name)),
+                j.objectProperty(j.identifier("value"), j.stringLiteral(value)),
+              ]),
+            ),
+          ),
+        ),
+      ]),
     )
+    headersFunction.async = true
 
-    const obj = moduleExportsExpression.value.right as j.ObjectExpression
-    const poweredByProp = config
-      .find(j.ObjectProperty)
-      .filter(
-        (path) =>
-          path.value.type === "ObjectProperty" &&
-          path.value.key.type === "Identifier" &&
-          path.value.key.name === "poweredByHeader",
-      )
+    const poweredByProp = config.properties.find(
+      (value) =>
+        value.type === "ObjectProperty" &&
+        value.key.type === "Identifier" &&
+        value.key.name === "poweredByHeader",
+    ) as j.ObjectProperty | undefined
 
-    if (poweredByProp.length > 0) {
-      poweredByProp.forEach((path) => (path.value.value = j.booleanLiteral(false)))
+    if (poweredByProp) {
+      poweredByProp.value = j.booleanLiteral(false)
     } else {
-      obj.properties.push(
+      config.properties.push(
         j.objectProperty(j.identifier("poweredByHeader"), j.booleanLiteral(false)),
       )
     }
 
-    const headersCollection = config
-      .find(j.ObjectProperty)
-      .filter(
-        (path) =>
-          path.value.type === "ObjectProperty" &&
-          path.value.key.type === "Identifier" &&
-          path.value.key.name === "headers",
-      )
+    const headersCollection = config.properties.find(
+      (value) =>
+        value.type === "ObjectProperty" &&
+        value.key.type === "Identifier" &&
+        value.key.name === "headers",
+    ) as j.ObjectProperty | undefined
 
-    if (headersCollection.length > 0) {
-      headersCollection.forEach((path) => (path.value.value = arr))
+    if (headersCollection) {
+      headersCollection.value = headersFunction
     } else {
-      obj.properties.push(j.objectProperty(j.identifier("headers"), arr))
+      config.properties.push(j.objectProperty(j.identifier("headers"), headersFunction))
     }
-  })
 
-  return program
-}
+    return config
+  })

@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -13,8 +12,8 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add 'logrocket' and 'logrocket-react' as dependencies.`,
     packages: [
-      {name: "logrocket", version: "latest"},
-      {name: "logrocket-react", version: "latest"},
+      {name: "logrocket", version: "2.x"},
+      {name: "logrocket-react", version: "4.x"},
     ],
   })
   .addNewFilesStep({
@@ -30,19 +29,16 @@ export default RecipeBuilder()
     stepName: "Import helpers and log user upon login",
     explanation: `We will add logic to initialize the LogRocket session and upon login, identify the user within LogRocket`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       // Ensure useSession is in the blitz imports.
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "useSession")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("useSession")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("useSession")))
         }
       })
 
@@ -65,8 +61,10 @@ export default RecipeBuilder()
         // currently, we only check if the default export is there
         // because we use the hook as React.useEffect
         // if not then add the default export
-        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        let specifiers = path.value.specifiers || []
+
+        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
 

@@ -1,6 +1,7 @@
 ## render
 
 The Blitz Recipe for adding render.yaml
+
 ```
 blitz install render
 ```
@@ -16,4 +17,3 @@ blitz install render
 ## Contributors
 
 - Brandon Bayer <b@bayer.ws>
-
