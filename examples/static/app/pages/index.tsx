@@ -1,12 +1,13 @@
-import { BlitzPage } from "blitz"
+import { BlitzPage, Image } from "blitz"
 import Layout from "app/core/layouts/Layout"
+import logo from "public/logo.png"
 
 const Home: BlitzPage = () => {
   return (
     <div className="container">
       <main>
         <div className="logo">
-          <img src="/logo.png" alt="blitz.js" />
+          <Image src={logo} alt="blitz.js" />
         </div>
         <p>
           <strong>Congrats!</strong> Your static app is ready.
