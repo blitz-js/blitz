@@ -199,6 +199,9 @@ async function findNodeModulesRoot(src: string) {
       )
     }
     root = join(nextPkgLocation, '../')
+    if (root.endsWith('@blitzjs/')) {
+      root = join(nextPkgLocation, '../../')
+    }
   }
   manifestDebug('root ' + root)
   return root
