@@ -6,7 +6,7 @@ describe("Form Generator", () => {
   it("Correctly builds extra args", async () => {
     expect(await generator.getFieldTemplateValues(["field1:string", "field2:string"])).toBe([
       {
-        FieldComponent: "LabeledTextField",
+        component: "LabeledTextField",
         FieldName: "Field1",
         Field_Name: "Field1",
         Field_name: "Field1",
@@ -14,10 +14,10 @@ describe("Form Generator", () => {
         fieldName: "field1",
         field_name: "field1",
         zodType: "string",
-        inputType: "string"
+        inputType: "text"
       },
       {
-        FieldComponent: "LabeledTextField",
+        component: "LabeledTextField",
         FieldName: "Field2",
         Field_Name: "Field2",
         Field_name: "Field2",
@@ -25,7 +25,7 @@ describe("Form Generator", () => {
         fieldName: "field2",
         field_name: "field2",
         zodType: "string",
-        inputType: "string"
+        inputType: "text"
       },
     ])
   })
