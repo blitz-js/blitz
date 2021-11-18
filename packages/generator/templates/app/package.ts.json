@@ -19,7 +19,9 @@
     "printWidth": 100
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": ["eslint --fix"]
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@prisma/client": "3.x",
@@ -39,7 +41,7 @@
     "pretty-quick": "3.x",
     "preview-email": "3.x",
     "prisma": "3.x",
-    "typescript": "~4.4"
+    "typescript": "~4.5"
   },
   "private": true
 }
