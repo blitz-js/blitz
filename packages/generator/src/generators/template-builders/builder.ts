@@ -41,18 +41,7 @@ export interface CommonTemplateValues {
   ModelName: string
   ModelNames: string
   modelNamesPath: string
-  fieldTemplateValues?: FieldTemplateValues[]
-}
-
-export interface FieldTemplateValues {
-  attributeName: string
-  zodType: string
-  FieldComponent: string
-  fieldName: string
-  FieldName: string
-  field_name: string
-  Field_name: string
-  Field_Name: string
+  fieldTemplateValues?: {[x: string]: any}
 }
 
 export abstract class Builder<T, U> implements IBuilder<T, U> {
