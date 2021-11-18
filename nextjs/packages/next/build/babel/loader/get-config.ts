@@ -146,6 +146,12 @@ function getPlugins(
         { type: 'plugin' }
       )
     : null
+  const fixNodeFileTraceItem =
+    isServer && isPageFile
+      ? createConfigItem([require('../plugins/fix-node-file-trace')], {
+          type: 'plugin',
+        })
+      : null
 
   return [
     noAnonymousDefaultExportItem,
@@ -158,6 +164,7 @@ function getPlugins(
     transformDefineItem,
     nextSsgItem,
     commonJsItem,
+    fixNodeFileTraceItem,
   ].filter(Boolean)
 }
 

@@ -72,6 +72,7 @@ describe('Client Navigation accessibility', () => {
           .click()
           .waitForElementByCss('#page-with-title')
 
+        await waitFor(500)
         const title = await browser.eval('document.title')
 
         await waitFor(1000)
