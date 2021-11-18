@@ -116,12 +116,12 @@ function FixNodeFileTrace(): PluginObj {
         if (isPage(filePath)) {
           const body = path.get('body')
           body
-            .filter((path) => isExportNamedDeclaration(path))
-            .forEach((path) => {
+            .filter((node) => isExportNamedDeclaration(node))
+            .forEach((node) => {
               transformPropGetters(
-                path as NodePath<ExportNamedDeclaration>,
+                node as NodePath<ExportNamedDeclaration>,
                 (decl) => {
-                  return callExpression(addWithFixNodeFileTraceImport(path), [
+                  return callExpression(addWithFixNodeFileTraceImport(node), [
                     decl,
                   ])
                 }
@@ -130,8 +130,8 @@ function FixNodeFileTrace(): PluginObj {
           return
         } else if (isApiRoute(filePath)) {
           const body = path.get('body')
-          const exportDefaultDeclaration = body.find((path) =>
-            isExportDefaultDeclaration(path)
+          const exportDefaultDeclaration = body.find((node) =>
+            isExportDefaultDeclaration(node)
           )
           if (exportDefaultDeclaration) {
             wrapExportDefaultDeclaration(

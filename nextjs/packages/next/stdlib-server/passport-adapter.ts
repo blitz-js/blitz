@@ -136,6 +136,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
       log.info(`Starting authentication via ${strategyName}...`)
       console.info(`Starting authentication via ${strategyName}...`)
       if (req.query.redirectUrl) {
+        // eslint-disable-next-line no-shadow
         middleware.push(async (req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
           assert(session, 'Missing Blitz sessionMiddleware!')
@@ -154,6 +155,7 @@ export function passportAuth(config: BlitzPassportConfig): NextApiHandler {
       log.info(`Processing callback for ${strategyName}...`)
       console.info(`Processing callback for ${strategyName}...`)
       middleware.push(
+        // eslint-disable-next-line no-shadow
         connectMiddleware((req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
           assert(session, 'Missing Blitz sessionMiddleware!')

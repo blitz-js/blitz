@@ -191,10 +191,9 @@ export function makePublicRouterInstance(router: Router): NextRouter {
 export function useRouterQuery() {
   const router = useRouter()
 
-  const query = React.useMemo(() => {
-    const query = extractQueryFromAsPath(router.asPath)
-    return query
-  }, [router.asPath])
+  const query = React.useMemo(() => extractQueryFromAsPath(router.asPath), [
+    router.asPath,
+  ])
 
   return query
 }
@@ -218,37 +217,37 @@ export function useParams(
     const rawParams = extractRouterParams(router.query, query)
 
     if (returnType === 'string') {
-      const params: Dict<string> = {}
+      const parsedParams: Dict<string> = {}
       for (const key in rawParams) {
         if (typeof rawParams[key] === 'string') {
-          params[key] = rawParams[key] as string
+          parsedParams[key] = rawParams[key] as string
         }
       }
-      return params
+      return parsedParams
     }
 
     if (returnType === 'number') {
-      const params: Dict<number> = {}
+      const parsedParams: Dict<number> = {}
       for (const key in rawParams) {
         if (rawParams[key]) {
           const num = Number(rawParams[key])
-          params[key] = isNaN(num) ? undefined : num
+          parsedParams[key] = isNaN(num) ? undefined : num
         }
       }
-      return params
+      return parsedParams
     }
 
     if (returnType === 'array') {
-      const params: Dict<string[]> = {}
+      const parsedParams: Dict<string[]> = {}
       for (const key in rawParams) {
         const rawValue = rawParams[key]
         if (Array.isArray(rawParams[key])) {
-          params[key] = rawValue as string[]
+          parsedParams[key] = rawValue as string[]
         } else if (typeof rawValue === 'string') {
-          params[key] = [rawValue]
+          parsedParams[key] = [rawValue]
         }
       }
-      return params
+      return parsedParams
     }
 
     return rawParams
