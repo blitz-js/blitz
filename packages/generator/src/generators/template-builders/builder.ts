@@ -128,18 +128,27 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")
-      const values = {
-        attributeName: singleCamel(valueName),
-        zodType: await this.getZodType(typeName),
-        inputType: await this.getInputType(typeName),
-        FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
+      const values: {[key in string]: any}  = {
+        attributeName: singleCamel(valueName),        
         fieldName: singleCamel(valueName), // fieldName
         FieldName: singlePascal(valueName), // FieldName
         field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
         Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
         Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
       }
-
+      const config = await this.getCachedConfig()
+      // iterate over resources defined for this
+      let resourcesArray: string[]  = []
+      let map: {[key in string]: string}  = {}
+      try{      
+        map = config.codegen.fieldTypeMap[typeName]
+        resourcesArray = Object.keys(config.codegen.fieldTypeMap[typeName])        
+      }catch(error){
+        map = this.fallbacks
+        resourcesArray = Object.keys(this.fallbacks)
+      }
+      resourcesArray.forEach((resource) => values[resource] = map[resource])
+      // TODO: potentially overrides specified from cmd line for these?
       return values
     })
     return Promise.all(argsPromises)

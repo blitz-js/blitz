@@ -35,6 +35,12 @@ const config: BlitzConfig = {
         zodType: "number",
         prismaType: "Int"
       },
+      number: {
+        component: "LabeledTextField",
+        inputType: "number",
+        zodType: "number",
+        prismaType: "Int"
+      },
       bigint: {
         component: "LabeledTextField",
         inputType: "number",
