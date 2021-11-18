@@ -14,7 +14,7 @@
     "build": "microbundle watch -i src/index.js -o dist/polyfill-nomodule.js -f iife --no-sourcemap --external none --no-pkg-main"
   },
   "devDependencies": {
-    "core-js": "3.6.5",
+    "core-js": "3.19.1",
     "microbundle": "0.13.0",
     "object-assign": "4.1.1",
     "whatwg-fetch": "3.0.0"
