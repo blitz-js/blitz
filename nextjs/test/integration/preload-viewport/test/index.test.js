@@ -37,6 +37,7 @@ describe('Prefetching Links in viewport', () => {
     let browser
     try {
       browser = await webdriver(appPort, '/')
+      await waitFor(200)
       const links = await browser.elementsByCss('link[rel=prefetch]')
       let found = false
 
@@ -57,6 +58,7 @@ describe('Prefetching Links in viewport', () => {
     let browser
     try {
       browser = await webdriver(appPort, '/rewrite-prefetch')
+      await waitFor(200)
       const links = await browser.elementsByCss('link[rel=prefetch]')
       let found = false
 
@@ -271,6 +273,7 @@ describe('Prefetching Links in viewport', () => {
 
   it('should not have unhandledRejection when failing to prefetch on link', async () => {
     const browser = await webdriver(appPort, '/')
+    await waitFor(200)
     await browser.eval(`(function() {
       window.addEventListener('unhandledrejection', function (err) {
         window.hadUnhandledReject = true;
@@ -323,6 +326,7 @@ describe('Prefetching Links in viewport', () => {
     // info: both `/` and `/de-duped` ref the `/first` page, which we don't
     // want to be re-fetched/re-observed.
     const browser = await webdriver(appPort, '/')
+    await waitFor(200)
     await browser.eval(`(function() {
       window.calledPrefetch = false
       window.next.router.prefetch = function() {

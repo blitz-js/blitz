@@ -77,3 +77,4 @@ export type {
   RedirectAuthenticatedToFn,
   RouteUrlObject,
 } from "next/types"
+export type {PromiseReturnType} from "next/types/utils"

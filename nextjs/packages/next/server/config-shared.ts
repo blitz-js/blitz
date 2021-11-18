@@ -12,6 +12,7 @@ import { isInternalBlitzMonorepoDevelopment } from './utils'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+export type LogType = 'json' | 'pretty' | 'hidden'
 
 export function loadConfigAtRuntime() {
   if (!process.env.BLITZ_APP_DIR) {
@@ -126,6 +127,7 @@ export type NextConfig = { [key: string]: any } & {
   }
   log?: {
     level: LogLevel
+    type?: LogType
   }
   middleware?: Middleware[]
   customServer?: {

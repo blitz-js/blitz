@@ -1,6 +1,7 @@
 ## styled-components
 
 The Blitz Recipe for installing Styled Components
+
 ```
 blitz install styled-components
 ```
@@ -14,4 +15,3 @@ blitz install styled-components
 ## Contributors
 
 - Kevin Langley Jr. <me@kevinlangleyjr.com>
-

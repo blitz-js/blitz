@@ -63,13 +63,13 @@ export const ESLINT_PROMPT_VALUES = [
     title: 'Strict',
     recommended: true,
     config: {
-      extends: 'next/core-web-vitals',
+      extends: 'blitz/core-web-vitals',
     },
   },
   {
     title: 'Base',
     config: {
-      extends: 'next',
+      extends: 'blitz',
     },
   },
   {

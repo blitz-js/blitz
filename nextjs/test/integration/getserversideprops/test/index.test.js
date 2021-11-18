@@ -9,7 +9,6 @@ import {
   findPort,
   File,
   getBrowserBodyText,
-  getRedboxHeader,
   killApp,
   launchApp,
   nextBuild,
@@ -684,20 +683,20 @@ const runTests = (dev = false) => {
       )
     })
 
-    it('should show error for invalid JSON returned from getServerSideProps', async () => {
+    it('should work with Date returned from getServerSideProps', async () => {
       const html = await renderViaHTTP(appPort, '/non-json')
-      expect(html).toContain(
-        'Error serializing `.time` returned from `getServerSideProps`'
+      expect(html).toMatch(
+        /timestring:.*?\d{4}(-\d\d(-\d\d(T\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?/
       )
     })
 
-    it('should show error for invalid JSON returned from getStaticProps on CST', async () => {
+    it('should work with Date returned from getStaticProps on CST', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.elementByCss('#non-json').click()
+      await waitFor(100)
 
-      await check(
-        () => getRedboxHeader(browser),
-        /Error serializing `.time` returned from `getServerSideProps`/
+      expect(await browser.elementByCss('.data').text()).toMatch(
+        /timestring:.*?\d{4}(-\d\d(-\d\d(T\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?/
       )
     })
   } else {
@@ -749,13 +748,13 @@ const runTests = (dev = false) => {
     it('should not show error for invalid JSON returned from getServerSideProps', async () => {
       const html = await renderViaHTTP(appPort, '/non-json')
       expect(html).not.toContain('Error serializing')
-      expect(html).toContain('hello ')
+      expect(html).toContain('timestring:')
     })
 
     it('should not show error for invalid JSON returned from getStaticProps on CST', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.elementByCss('#non-json').click()
-      await check(() => getBrowserBodyText(browser), /hello /)
+      await check(() => getBrowserBodyText(browser), /timestring:/)
     })
   }
 }

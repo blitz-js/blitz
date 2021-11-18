@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -13,9 +12,9 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Tailwind CSS requires a couple of dependencies including PostCSS for removing unused styles from the production bundle`,
     packages: [
-      {name: "tailwindcss", version: "2.1.2"},
-      {name: "autoprefixer", version: "10"},
-      {name: "postcss", version: "8"},
+      {name: "tailwindcss", version: "2.x"},
+      {name: "autoprefixer", version: "10.x"},
+      {name: "postcss", version: "8.x"},
     ],
   })
   .addNewFilesStep({
@@ -39,7 +38,7 @@ export default RecipeBuilder()
     stepName: "Import stylesheets",
     explanation: `Imports the stylesheet we just added into your app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration([], j.literal("app/core/styles/index.css"))
       return addImport(program, stylesImport)
     },

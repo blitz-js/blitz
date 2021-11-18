@@ -4,8 +4,7 @@ import { Login } from "../validations"
 import { Role } from "types"
 
 export const authenticateUser = async (rawEmail: string, rawPassword: string) => {
-  const email = rawEmail.toLowerCase().trim()
-  const password = rawPassword.trim()
+  const {email, password} = Login.parse({email: rawEmail, password: rawPassword})
   const user = await db.user.findFirst({ where: { email } })
   if (!user) throw new AuthenticationError()
 

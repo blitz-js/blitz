@@ -43,7 +43,7 @@
     "prompts": "2.1.0",
     "rimraf": "3.0.0",
     "tar": "6.1.11",
-    "typescript": "4.3.4",
+    "typescript": "4.5.2",
     "update-check": "1.5.4",
     "validate-npm-package-name": "3.0.0"
   },
