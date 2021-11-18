@@ -75,6 +75,9 @@ const defaultConfig: SessionConfig = {
   method: 'essential',
   sameSite: 'lax',
   publicDataKeysToSyncAcrossSessions: ['role', 'roles'],
+  secureCookies:
+    !process.env.DISABLE_SECURE_COOKIES &&
+    process.env.NODE_ENV === 'production',
   getSession: (handle) => getDb().session.findFirst({ where: { handle } }),
   getSessions: (userId) => getDb().session.findMany({ where: { userId } }),
   createSession: (session) => {
@@ -568,10 +571,7 @@ const setSessionCookie = (
     cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: '/',
       httpOnly: true,
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === 'production' &&
-        !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -590,10 +590,7 @@ const setAnonymousSessionCookie = (
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: '/',
       httpOnly: true,
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === 'production' &&
-        !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -616,10 +613,7 @@ const setCSRFCookie = (
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: '/',
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === 'production' &&
-        !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,
@@ -638,10 +632,7 @@ const setPublicDataCookie = (
     res,
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: '/',
-      secure:
-        !process.env.DISABLE_SECURE_COOKIES &&
-        process.env.NODE_ENV === 'production' &&
-        !isLocalhost(req),
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
       sameSite: global.sessionConfig.sameSite,
       domain: global.sessionConfig.domain,
       expires: expiresAt,

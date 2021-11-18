@@ -8,10 +8,11 @@ import { join } from 'path'
 import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../shared/lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../shared/lib/utils'
-import { isInternalDevelopment } from './utils'
+import { isInternalBlitzMonorepoDevelopment } from './utils'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+export type LogType = 'json' | 'pretty' | 'hidden'
 
 export function loadConfigAtRuntime() {
   if (!process.env.BLITZ_APP_DIR) {
@@ -126,6 +127,7 @@ export type NextConfig = { [key: string]: any } & {
   }
   log?: {
     level: LogLevel
+    type?: LogType
   }
   middleware?: Middleware[]
   customServer?: {
@@ -313,10 +315,10 @@ export async function getConfigSrcPath(dir: string | null) {
   } else if (existsSync(jsPath)) {
     return jsPath
   } else if (existsSync(legacyPath)) {
-    if (isInternalDevelopment || process.env.VERCEL_BUILDER) {
+    if (isInternalBlitzMonorepoDevelopment || process.env.VERCEL_BUILDER) {
       // We read from next.config.js that Vercel automatically adds
       debug(
-        'Using next.config.js because isInternalDevelopment or VERCEL_BUILDER...'
+        'Using next.config.js because isInternalBlitzMonorepoDevelopment or VERCEL_BUILDER...'
       )
       return legacyPath
     } else {

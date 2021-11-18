@@ -2,11 +2,11 @@ export * from './constants'
 export * from './rpc'
 export * from './auth'
 export {
-  BlitzProvider,
   useQuery,
   usePaginatedQuery,
   useInfiniteQuery,
   useMutation,
+  MutateFunction,
 } from './react-query'
 export {
   queryClient,

@@ -1,9 +1,8 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import {NodePath} from "ast-types/lib/node-path"
+import {addImport, paths, Program, RecipeBuilder} from "@blitzjs/installer"
+import type {NodePath} from "ast-types/lib/node-path"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 
-function wrapComponentWithBumbagProvider(program: Collection<j.Program>) {
+function wrapComponentWithBumbagProvider(program: Program) {
   program
     .find(j.JSXElement)
     .filter(
@@ -28,7 +27,7 @@ function wrapComponentWithBumbagProvider(program: Collection<j.Program>) {
   return program
 }
 
-function injectInitializeColorModeAndExtractCritical(program: Collection<j.Program>) {
+function injectInitializeColorModeAndExtractCritical(program: Program) {
   // Finds body element and injects InitializeColorMode before it.
   program.find(j.JSXElement, {openingElement: {name: {name: "body"}}}).forEach((path) => {
     const {node} = path
@@ -39,7 +38,7 @@ function injectInitializeColorModeAndExtractCritical(program: Collection<j.Progr
         [
           j.literal("\n"),
           j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("InitializeColorMode"), [], true)),
-          ...node.children,
+          ...(node.children || []),
         ],
       ),
     )
@@ -80,8 +79,8 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Bumbag UI requires both "bumbag" and "bumbag-server" (SSR) npm packages`,
     packages: [
-      {name: "bumbag", version: "2.0.0"},
-      {name: "bumbag-server", version: "2.0.0"},
+      {name: "bumbag", version: "2.x"},
+      {name: "bumbag-server", version: "2.x"},
     ],
   })
   .addTransformFilesStep({
@@ -89,7 +88,7 @@ export default RecipeBuilder()
     stepName: "Import BumbagProvider",
     explanation: `Import bumbag Provider as BumbagProvider into _app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Provider as BumbagProvider"))],
         j.literal("bumbag"),
@@ -104,7 +103,7 @@ export default RecipeBuilder()
     stepName: "ImportExtractCritical & initializeColorMode",
     explanation: `Import InitializeColorMode from bumbag, and extractCritical into _document`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const initializeColorModeImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("InitializeColorMode"))],
         j.literal("bumbag"),

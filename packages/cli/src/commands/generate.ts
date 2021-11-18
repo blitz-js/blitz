@@ -20,9 +20,12 @@ import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
 const debug = require("debug")("blitz:generate")
-const getIsTypeScript = () =>
+const getIsTypeScript = async () =>
   require("fs").existsSync(
-    require("path").join(require("@blitzjs/config").getProjectRoot(), "tsconfig.json"),
+    require("path").join(
+      await require("next/dist/server/lib/utils").getProjectRoot(process.cwd()),
+      "tsconfig.json",
+    ),
   )
 
 enum ResourceType {
@@ -217,7 +220,7 @@ export class Generate extends Command {
     }
     if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(modelName)) {
       throw new Error(
-        `Invalid model name: "${modelName}". Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`
+        `Invalid model name: "${modelName}". Model names need to adhere to this regular expression: [A-Za-z][A-Za-z0-9_]*`,
       )
     }
   }
@@ -252,7 +255,7 @@ export class Generate extends Command {
           Name: capitalize(model),
           dryRun: flags["dry-run"],
           context: context,
-          useTs: getIsTypeScript(),
+          useTs: await getIsTypeScript(),
         })
         await generator.run()
       }

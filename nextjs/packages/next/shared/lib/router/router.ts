@@ -34,6 +34,8 @@ import { searchParamsToUrlQuery } from './utils/querystring'
 import resolveRewrites from './utils/resolve-rewrites'
 import { getRouteMatcher } from './utils/route-matcher'
 import { getRouteRegex } from './utils/route-regex'
+import fromPairs from 'next/dist/compiled/lodash.frompairs'
+import { deserialize as deserializeWithSuperjson } from 'superjson'
 
 declare global {
   interface Window {
@@ -405,6 +407,7 @@ export type BaseRouter = {
   route: string
   pathname: string
   query: ParsedUrlQuery
+  params: ParsedUrlQuery
   asPath: string
   basePath: string
   locale?: string
@@ -529,6 +532,7 @@ export default class Router implements BaseRouter {
   route: string
   pathname: string
   query: ParsedUrlQuery
+  params: ParsedUrlQuery
   asPath: string
   basePath: string
 
@@ -630,6 +634,7 @@ export default class Router implements BaseRouter {
     this.pageLoader = pageLoader
     this.pathname = pathname
     this.query = query
+    this.params = extractRouterParams(query, extractQueryFromAsPath(as))
     // if auto prerendered and dynamic route wait to update asPath
     // until after mount to prevent hydration mismatch
     const autoExportDynamic =
@@ -1421,6 +1426,13 @@ export default class Router implements BaseRouter {
             )
       )
 
+      // Type from Nextjs is incorrect
+      if ((props as any).superjsonProps) {
+        ;(props as any).pageProps = deserializeWithSuperjson(
+          ((props as any).superjsonProps as any) || {}
+        )
+      }
+
       routeInfo.props = props
       this.components[route] = routeInfo
       return routeInfo
@@ -1442,6 +1454,7 @@ export default class Router implements BaseRouter {
     this.route = route
     this.pathname = pathname
     this.query = query
+    this.params = extractRouterParams(query, extractQueryFromAsPath(as))
     this.asPath = as
     return this.notify(data, resetScroll)
   }
@@ -1708,4 +1721,76 @@ export default class Router implements BaseRouter {
       resetScroll
     )
   }
+}
+
+/*
+ * Based on the code of https://github.com/lukeed/qss
+ */
+const decodeString = (str: string) =>
+  decodeURIComponent(str.replace(/\+/g, '%20'))
+
+function decode(str: string) {
+  if (!str) return {}
+
+  let out: Record<string, string | string[]> = {}
+
+  for (const current of str.split('&')) {
+    let [key, value = ''] = current.split('=')
+    key = decodeString(key)
+    value = decodeString(value)
+
+    if (key.length === 0) continue
+
+    if (key in out) {
+      out[key] = ([] as string[]).concat(out[key], value)
+    } else {
+      out[key] = value
+    }
+  }
+
+  return out
+}
+
+type ParsedUrlQueryValue = string | string[] | undefined
+function areQueryValuesEqual(
+  value1: ParsedUrlQueryValue,
+  value2: ParsedUrlQueryValue
+) {
+  // Check if their type match
+  if (typeof value1 !== typeof value2) {
+    return false
+  }
+
+  if (Array.isArray(value1) && Array.isArray(value2)) {
+    if (value1.length !== value2.length) {
+      return false
+    }
+
+    for (let i = 0; i < value1.length; i++) {
+      if (value1[i] !== value2[i]) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  return value1 === value2
+}
+
+export function extractQueryFromAsPath(asPath: string) {
+  return decode(asPath.split('?', 2)[1])
+}
+
+export function extractRouterParams(
+  routerQuery: ParsedUrlQuery,
+  asPathQuery: ParsedUrlQuery
+) {
+  return fromPairs(
+    Object.entries(routerQuery).filter(
+      ([key, value]) =>
+        typeof asPathQuery[key] === 'undefined' ||
+        !areQueryValuesEqual(value, asPathQuery[key])
+    )
+  )
 }

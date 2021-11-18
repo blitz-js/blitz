@@ -1,13 +1,12 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 
 export default RecipeBuilder()
   .setName("Material-UI")
   .setDescription(
     `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for usage.
 
-NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @material-ui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js -
+NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @mui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js -
 
 module.exports = {
   experimental: {
@@ -24,44 +23,43 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
   .addAddDependenciesStep({
     stepId: "addDeps",
     stepName: "Add npm dependencies",
-    explanation: `@material-ui/core needs to be installed`,
-    packages: [{name: "@material-ui/core", version: "latest"}],
+    explanation: `@mui/material needs to be installed`,
+    packages: [
+      {name: "@mui/material", version: "5.x"},
+      {name: "@mui/styles", version: "5.x"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
+    ],
   })
   .addTransformFilesStep({
     stepId: "modifyGetInitialPropsInCustomDocumentApp",
     stepName: "Add custom getInitialProps logic in Custom Document",
     explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
     singleFileSearch: paths.document(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       // import ServerStyleSheets
       const serverStyleSheetsImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("ServerStyleSheets"))],
-        j.literal("@material-ui/core/styles"),
+        j.literal("@mui/styles"),
       )
 
       let isReactImported = false
 
       program.find(j.ImportDeclaration, {source: "react"}).forEach((reactImportPath) => {
         isReactImported = true
-        if (reactImportPath.value.specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
-          reactImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importDefaultSpecifier(j.identifier("React")),
-          )
+        let specifiers = reactImportPath.value.specifiers || []
+        if (specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
       program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
+        let specifiers = blitzImportPath.value.specifiers || []
         if (
-          !blitzImportPath.value.specifiers
+          !specifiers
             .filter((spec) => j.ImportSpecifier.check(spec))
             .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
         ) {
-          blitzImportPath.value.specifiers.splice(
-            0,
-            0,
-            j.importSpecifier(j.identifier("DocumentContext")),
-          )
+          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
         }
       })
       program.find(j.ClassBody).forEach((path) => {
@@ -187,22 +185,22 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
   .addTransformFilesStep({
     stepId: "importThemeProviderInCustomApp",
     stepName: "Customize App and import ThemeProvider with a base theme and CssBaseline component",
-    explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @material-ui components. We will also customize the _app component to be remove the server side injected CSS.`,
+    explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @mui components. We will also customize the _app component to be remove the server side injected CSS.`,
     singleFileSearch: paths.app(),
     transform(program) {
-      // import ThemeProvider and createMuiTheme
+      // import ThemeProvider and createTheme
       const themeImport = j.importDeclaration(
         [
           j.importSpecifier(j.identifier("ThemeProvider")),
-          j.importSpecifier(j.identifier("createMuiTheme")),
+          j.importSpecifier(j.identifier("createTheme")),
         ],
-        j.literal("@material-ui/core/styles"),
+        j.literal("@mui/material/styles"),
       )
 
       // import CSSBaseline
       const cssBaselineImport = j.importDeclaration(
         [j.importDefaultSpecifier(j.identifier("CssBaseline"))],
-        j.literal("@material-ui/core/CssBaseline"),
+        j.literal("@mui/material/CssBaseline"),
       )
 
       addImport(program, cssBaselineImport)
@@ -214,12 +212,12 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
         const theme = j.variableDeclaration("const", [
           j.variableDeclarator(
             j.identifier("theme"),
-            j.callExpression(j.identifier("createMuiTheme"), [
+            j.callExpression(j.identifier("createTheme"), [
               j.objectExpression([
                 j.objectProperty(
                   j.identifier("palette"),
                   j.objectExpression([
-                    j.objectProperty(j.identifier("type"), j.stringLiteral("light")),
+                    j.objectProperty(j.identifier("mode"), j.stringLiteral("light")),
                   ]),
                 ),
               ]),
@@ -244,8 +242,10 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
         // currently, we only check if the default export is there
         // because we use the hook as React.useEffect
         // if not then add the default export
-        if (!path.value.specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          path.value.specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
+        let specifiers = path.value.specifiers || []
+
+        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
+          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
         }
       })
 

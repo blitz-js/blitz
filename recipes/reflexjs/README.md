@@ -1,6 +1,7 @@
 ## reflexjs
 
 The Blitz Recipe for installing Reflexjs
+
 ```
 blitz install reflexjs
 ```

@@ -15,7 +15,7 @@ const Page = ({ time }) => {
 
   if (isFallback) return null
 
-  return <p>hello {time.toString()}</p>
+  return <p className="data">timestring: {time.toISOString()}</p>
 }
 
 export default Page

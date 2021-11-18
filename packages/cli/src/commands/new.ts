@@ -13,7 +13,6 @@ import {PromptAbortedError} from "../errors/prompt-aborted"
 import {runPrisma} from "./prisma"
 
 export interface Flags {
-  js: boolean
   "skip-install": boolean
   "skip-upgrade": boolean
   "dry-run": boolean
@@ -22,6 +21,8 @@ export interface Flags {
   pnpm: boolean
   yarn: boolean
   form?: string
+  template?: string
+  language?: string
 }
 type PkgManager = "npm" | "yarn" | "pnpm"
 
@@ -32,6 +33,21 @@ const PREFERABLE_PKG_MANAGER: PkgManager = IS_PNPM_INSTALLED
   : IS_YARN_INSTALLED
   ? "yarn"
   : "npm"
+
+const LANGUAGES = ["TypeScript", "JavaScript"]
+const DEFAULT_LANG = "TypeScript"
+
+type Template = "full" | "minimal"
+const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
+  full: {
+    path: "app",
+  },
+  minimal: {
+    path: "minimalapp",
+    skipForms: true,
+    skipDatabase: true,
+  },
+}
 
 export class New extends Command {
   static description = "Create a new Blitz project"
@@ -46,10 +62,9 @@ export class New extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
-    js: flags.boolean({
-      description: "Generates a JS project. TypeScript is the default unless you add this flag.",
-      default: false,
-      hidden: true,
+    language: flags.string({
+      description: "Pick your new app language. Options: typescript, javascript.",
+      options: ["typescript", "javascript"],
     }),
     npm: flags.boolean({
       description: "Use npm as the package manager",
@@ -89,10 +104,16 @@ export class New extends Command {
       description: "Skip blitz upgrade if outdated",
       default: false,
     }),
+    template: flags.string({
+      description: "Pick your new app template. Options: full, minimal.",
+      options: ["full", "minimal"],
+    }),
   }
 
   private pkgManager: PkgManager = PREFERABLE_PKG_MANAGER
   private shouldInstallDeps = true
+  private useTs = true
+  private template: AppGeneratorOptions["template"] = templates.full
 
   async run() {
     const {args, flags} = this.parse(New)
@@ -108,14 +129,19 @@ export class New extends Command {
       }
     }
 
+    await this.determineLanguage(flags)
+    await this.determineTemplate(flags)
     await this.determinePkgManagerToInstallDeps(flags)
-    const {pkgManager, shouldInstallDeps} = this
+    const {pkgManager, shouldInstallDeps, template} = this
 
     try {
       const destinationRoot = require("path").resolve(args.name)
       const appName = require("path").basename(destinationRoot)
 
-      const form = await this.determineFormLib(flags)
+      let form: AppGeneratorOptions["form"]
+      if (!template.skipForms) {
+        form = await this.determineFormLib(flags)
+      }
 
       const {"dry-run": dryRun, "no-git": skipGit} = flags
       const requiresManualInstall = dryRun || !shouldInstallDeps
@@ -123,10 +149,11 @@ export class New extends Command {
       const AppGenerator = require("@blitzjs/generator").AppGenerator
 
       const generatorOpts: AppGeneratorOptions = {
+        template,
         destinationRoot,
         appName,
         dryRun,
-        useTs: !flags.js,
+        useTs: this.useTs,
         yarn: pkgManager === "yarn",
         pnpm: pkgManager === "pnpm",
         form,
@@ -134,12 +161,15 @@ export class New extends Command {
         skipInstall: !shouldInstallDeps,
         skipGit,
         onPostInstall: async () => {
+          if (template.skipDatabase) {
+            return
+          }
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
           try {
             // Required in order for DATABASE_URL to be available
             require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
             const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
-            if (!result) throw new Error()
+            if (!result.success) throw new Error()
 
             spinner.succeed()
           } catch (error) {
@@ -202,7 +232,7 @@ export class New extends Command {
     } else {
       const hasPkgManagerChoice = IS_YARN_INSTALLED || IS_PNPM_INSTALLED
       if (hasPkgManagerChoice) {
-        const {pkgManager}: any = await this.enquirer.prompt({
+        const {pkgManager} = (await this.enquirer.prompt({
           type: "select",
           name: "pkgManager",
           message: "Install dependencies?",
@@ -222,24 +252,40 @@ export class New extends Command {
             },
             "skip",
           ].filter(Boolean),
-        })
+        })) as {pkgManager: PkgManager | "skip"}
         if (pkgManager === "skip") {
           this.shouldInstallDeps = false
         } else {
           this.pkgManager = pkgManager
         }
       } else {
-        const {installDeps}: any = await this.enquirer.prompt({
+        const {installDeps} = (await this.enquirer.prompt({
           type: "confirm",
           name: "installDeps",
           message: "Install dependencies?",
           initial: true,
-        })
+        })) as {installDeps: boolean}
         this.shouldInstallDeps = installDeps
       }
     }
   }
-  private async determineFormLib(flags: Flags): Promise<AppGeneratorOptions["form"]> {
+
+  private async determineLanguage(flags: Flags): Promise<void> {
+    if (flags.language) {
+      this.useTs = flags.language === "typescript"
+    } else {
+      const {language} = (await this.enquirer.prompt({
+        type: "select",
+        name: "language",
+        message: "Pick a new project's language",
+        initial: LANGUAGES.indexOf(DEFAULT_LANG),
+        choices: LANGUAGES,
+      })) as {language: typeof LANGUAGES[number]}
+      this.useTs = language === "TypeScript"
+    }
+  }
+
+  private async determineFormLib(flags: Flags): Promise<NonNullable<AppGeneratorOptions["form"]>> {
     if (flags.form) {
       switch (flags.form) {
         case "react-final-form":
@@ -250,19 +296,41 @@ export class New extends Command {
           return "Formik"
       }
     }
-    const formChoices: Array<{name: AppGeneratorOptions["form"]; message?: string}> = [
+    const formChoices: Array<{
+      name: NonNullable<AppGeneratorOptions["form"]>
+      message?: string
+    }> = [
       {name: "React Final Form", message: "React Final Form (recommended)"},
       {name: "React Hook Form"},
       {name: "Formik"},
     ]
 
-    const promptResult: any = await this.enquirer.prompt({
+    const promptResult = (await this.enquirer.prompt({
       type: "select",
       name: "form",
       message: "Pick a form library (you can switch to something else later if you want)",
       choices: formChoices,
-    })
+    })) as {form: typeof formChoices[number]["name"]}
     return promptResult.form
+  }
+  private async determineTemplate(flags: Flags): Promise<void> {
+    if (flags.template) {
+      this.template = templates[flags.template as "full" | "minimal"]
+      return
+    }
+    const choices: Array<{name: Template; message?: string}> = [
+      {name: "full", message: "Full - includes DB and auth (Recommended)"},
+      {name: "minimal", message: "Minimal — no DB, no auth"},
+    ]
+    const {template} = (await this.enquirer.prompt({
+      type: "select",
+      name: "template",
+      message: "Pick your new app template",
+      initial: 0,
+      choices,
+    })) as {template: Template}
+
+    this.template = templates[template]
   }
   private rerunButSkipUpgrade(flags: Flags, args: Record<string, any>) {
     const flagsArr = (Object.keys(flags) as (keyof Flags)[]).reduce(
@@ -335,12 +403,12 @@ export class New extends Command {
       },
     ]
 
-    const promptResult: any = await this.enquirer.prompt({
+    const promptResult = (await this.enquirer.prompt({
       type: "select",
       name: "upgrade",
       message: "Your global blitz version is outdated. Upgrade?",
       choices: upgradeChoices,
-    })
+    })) as {upgrade: typeof upgradeChoices[number]["name"]}
     return promptResult.upgrade === "yes"
   }
 
