@@ -16,7 +16,6 @@ const appDir = join(__dirname, '../')
 const nextConfig = join(appDir, 'next.config.js')
 let appPort
 let app
-let stderr
 
 function runTests(mode) {
   it('global middleware works', async () => {
@@ -57,13 +56,8 @@ function runTests(mode) {
 describe('middleware', () => {
   describe('dev mode', () => {
     beforeAll(async () => {
-      stderr = ''
       appPort = await findPort()
-      app = await launchApp(appDir, appPort, {
-        onStderr: (msg) => {
-          stderr += msg
-        },
-      })
+      app = await launchApp(appDir, appPort)
     })
     afterAll(() => killApp(app))
 
