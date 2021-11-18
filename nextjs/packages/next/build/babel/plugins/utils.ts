@@ -41,6 +41,7 @@ export function wrapExportDefaultDeclaration(
   HOFName: string,
   importFrom: string
 ) {
+  // eslint-disable-next-line no-shadow
   function wrapInHOF(path: NodePath<any>, expr: t.Expression) {
     return t.callExpression(addNamedImport(path, HOFName, importFrom), [expr])
   }
