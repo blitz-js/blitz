@@ -131,6 +131,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
       const values = {
         attributeName: singleCamel(valueName),
         zodType: await this.getZodType(typeName),
+        inputType: await this.getInputType(typeName),
         FieldComponent: await this.getComponentForType(typeName), // get component based on type. TODO: Override argument 3?
         fieldName: singleCamel(valueName), // fieldName
         FieldName: singlePascal(valueName), // FieldName
