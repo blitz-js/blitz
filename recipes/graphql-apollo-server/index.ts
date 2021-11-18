@@ -41,7 +41,7 @@ export default RecipeBuilder()
   })
   .printMessage({
     stepId: "manualStep",
-    stepName: "Informs the user about a manual step",
+    stepName: "Informs the user about a manual step: `blitz prisma generate`",
     message:
       "Please run `blitz prisma generate` in your console/terminal to generate the graphql schema.",
   })
