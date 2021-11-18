@@ -77,6 +77,7 @@ export function getAuthValues(
   Page: BlitzPage,
   props: ComponentPropsWithoutRef<BlitzPage>
 ) {
+  if (!Page) return {}
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
 

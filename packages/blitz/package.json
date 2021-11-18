@@ -51,7 +51,6 @@
     "url": "https://github.com/blitz-js/blitz"
   },
   "dependencies": {
-    "@blitzjs/babel-preset": "0.43.0",
     "@blitzjs/cli": "0.43.0",
     "@blitzjs/display": "0.43.0",
     "@blitzjs/generator": "0.43.0",
