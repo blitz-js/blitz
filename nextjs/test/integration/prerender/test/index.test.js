@@ -1099,7 +1099,7 @@ const runTests = (dev = false, isEmulatedServerless = false) => {
 
     it('should work with Date returned from getStaticProps on SSR', async () => {
       const browser = await webdriver(appPort, '/non-json/direct')
-      await waitFor(200)
+      await waitFor(1000)
 
       // FIXME: enable this
       // expect(await getRedboxHeader(browser)).toMatch(
@@ -1115,7 +1115,7 @@ const runTests = (dev = false, isEmulatedServerless = false) => {
     it('should work for Date returned from getStaticProps on CST', async () => {
       const browser = await webdriver(appPort, '/')
       await browser.elementByCss('#non-json').click()
-      await waitFor(200)
+      await waitFor(1000)
 
       // FIXME: enable this
       // expect(await getRedboxHeader(browser)).toMatch(
