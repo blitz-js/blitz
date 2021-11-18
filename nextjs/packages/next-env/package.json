@@ -13,7 +13,7 @@
     "url": "https://github.com/vercel/next.js",
     "directory": "packages/next-env"
   },
-  "author": "Next.js Team <support@vercel.com>",
+  "author": "Blitz.js",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
