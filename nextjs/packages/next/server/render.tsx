@@ -31,7 +31,11 @@ import Loadable from '../shared/lib/loadable'
 import { LoadableContext } from '../shared/lib/loadable-context'
 import postProcess from '../shared/lib/post-process'
 import { RouterContext } from '../shared/lib/router-context'
-import { NextRouter } from '../shared/lib/router/router'
+import {
+  NextRouter,
+  extractRouterParams,
+  extractQueryFromAsPath,
+} from '../shared/lib/router/router'
 import { isDynamicRoute } from '../shared/lib/router/utils/is-dynamic'
 import {
   AppType,
@@ -63,6 +67,8 @@ import {
 } from '../lib/load-custom-routes'
 import { DomainLocale } from './config'
 import { RenderResult, resultFromChunks } from './utils'
+import { BlitzWrapper } from '../stdlib/blitz-app-root'
+import { serialize as serializeWithSuperjson } from 'superjson'
 
 function noRouter() {
   const message =
@@ -74,6 +80,7 @@ class ServerRouter implements NextRouter {
   route: string
   pathname: string
   query: ParsedUrlQuery
+  params: ParsedUrlQuery
   asPath: string
   basePath: string
   events: any
@@ -103,6 +110,7 @@ class ServerRouter implements NextRouter {
     this.route = pathname.replace(/\/$/, '') || '/'
     this.pathname = pathname
     this.query = query
+    this.params = extractRouterParams(query, extractQueryFromAsPath(as))
     this.asPath = as
     this.isFallback = isFallback
     this.basePath = basePath
@@ -609,7 +617,7 @@ export async function renderToHTML(
     defaultLocale: renderOpts.defaultLocale,
     AppTree: (props: any) => {
       return (
-        <AppContainer>
+        <AppContainer appProps={{ ...props, Component, router }}>
           <App {...props} Component={Component} router={router} />
         </AppContainer>
       )
@@ -633,29 +641,31 @@ export async function renderToHTML(
   const nextExport =
     !isSSG && (renderOpts.nextExport || (dev && (isAutoExport || isFallback)))
 
-  const AppContainer = ({ children }: any) => (
-    <RouterContext.Provider value={router}>
-      <AmpStateContext.Provider value={ampState}>
-        <HeadManagerContext.Provider
-          value={{
-            updateHead: (state) => {
-              head = state
-            },
-            updateScripts: (scripts) => {
-              scriptLoader = scripts
-            },
-            scripts: {},
-            mountedInstances: new Set(),
-          }}
-        >
-          <LoadableContext.Provider
-            value={(moduleName) => reactLoadableModules.push(moduleName)}
+  const AppContainer = ({ children, appProps }: any) => (
+    <BlitzWrapper appProps={appProps}>
+      <RouterContext.Provider value={router}>
+        <AmpStateContext.Provider value={ampState}>
+          <HeadManagerContext.Provider
+            value={{
+              updateHead: (state) => {
+                head = state
+              },
+              updateScripts: (scripts) => {
+                scriptLoader = scripts
+              },
+              scripts: {},
+              mountedInstances: new Set(),
+            }}
           >
-            {children}
-          </LoadableContext.Provider>
-        </HeadManagerContext.Provider>
-      </AmpStateContext.Provider>
-    </RouterContext.Provider>
+            <LoadableContext.Provider
+              value={(moduleName) => reactLoadableModules.push(moduleName)}
+            >
+              {children}
+            </LoadableContext.Provider>
+          </HeadManagerContext.Provider>
+        </AmpStateContext.Provider>
+      </RouterContext.Provider>
+    </BlitzWrapper>
   )
 
   try {
@@ -958,6 +968,9 @@ export async function renderToHTML(
   // Avoid rendering page un-necessarily for getServerSideProps data request
   // and getServerSideProps/getStaticProps redirects
   if ((isDataReq && !isSSG) || (renderOpts as any).isRedirect) {
+    if (props) {
+      props.superjsonProps = serializeWithSuperjson(props.pageProps)
+    }
     return resultFromChunks([JSON.stringify(props)])
   }
 
@@ -1025,6 +1038,10 @@ export async function renderToHTML(
         })
     : ReactDOMServer.renderToString
 
+  if (props) {
+    props.superjsonProps = serializeWithSuperjson(props.pageProps)
+  }
+
   const renderPage: RenderPage = (
     options: ComponentsEnhancer = {}
   ): RenderPageResult | Promise<RenderPageResult> => {
@@ -1050,7 +1067,9 @@ export async function renderToHTML(
     } = enhanceComponents(options, App, Component)
 
     const htmlOrPromise = renderToString(
-      <AppContainer>
+      <AppContainer
+        appProps={{ Component: EnhancedComponent, router, ...props }}
+      >
         <EnhancedApp Component={EnhancedComponent} router={router} {...props} />
       </AppContainer>
     )

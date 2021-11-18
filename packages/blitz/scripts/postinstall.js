@@ -3,6 +3,7 @@ const {promisify} = require("util")
 const fs = require("fs")
 const path = require("path")
 const resolveFrom = require("resolve-from")
+const findUp = require("find-up")
 
 const copyFile = promisify(fs.copyFile)
 const mkdir = promisify(fs.mkdir)
@@ -19,6 +20,46 @@ try {
   isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
 } catch (error) {
   // noop
+}
+
+// todo: we should reuse `findNodeModulesRoot` from /nextjs/packages/next/build/routes.ts
+async function findNodeModulesRoot(src) {
+  let root
+  if (process.env.NEXT_PNPM_TEST) {
+    const nextPkgLocation = path.dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "next"),
+      })) ?? "",
+    )
+    if (!nextPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'next' package location")
+    }
+    root = path.join(nextPkgLocation, "../")
+  } else if (isInBlitzMonorepo) {
+    root = path.join(src, "node_modules")
+  } else {
+    const blitzPkgLocation = path.dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) ?? "",
+    )
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+    const nextPkgLocation = path.dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(blitzPkgLocation, "next"),
+      })) ?? "",
+    )
+    if (!nextPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'next' package location")
+    }
+    root = path.join(nextPkgLocation, "../")
+    if (root.endsWith("@blitzjs/")) {
+      root = path.join(nextPkgLocation, "../../")
+    }
+  }
+  return path.join(root, ".blitz")
 }
 
 const isUsingNpm =
@@ -85,7 +126,7 @@ function codegen() {
       // Sometimes with npm the next package is missing because of how
       // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
       debug("Missing next package, manually installing...")
-      const corePkg = require("@blitzjs/core/package.json")
+      const corePkg = require("../package.json")
       await run("npm", ["install", "--no-save", `next@${corePkg.dependencies.next}`], root, [
         "ignore",
       ])
@@ -193,7 +234,7 @@ function codegen() {
     try {
       const dotBlitzDir = isInBlitzMonorepo
         ? path.join(process.cwd(), "node_modules/.blitz")
-        : path.join(__dirname, "../../.blitz")
+        : await findNodeModulesRoot(__dirname)
 
       await makeDir(dotBlitzDir)
       const defaultIndexJsPath = path.join(dotBlitzDir, "index.js")

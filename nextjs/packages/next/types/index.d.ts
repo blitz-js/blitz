@@ -150,6 +150,11 @@ export type AppProps<P = {}> = AppPropsType<Router, P> & {
   Component: BlitzPage
 }
 
+export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+  authenticate?: boolean | { redirectTo?: string | RouteUrlObject }
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
+
 /**
  * `Config` type, use it for export const config
  */
@@ -257,3 +262,5 @@ export type InferGetServerSidePropsType<T> = T extends GetServerSideProps<
     ) => Promise<GetServerSidePropsResult<infer P>>
   ? P
   : never
+
+export type ParserType = 'sync' | 'async'

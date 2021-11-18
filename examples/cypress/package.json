@@ -1,6 +1,6 @@
 {
   "name": "@examples/cypress",
-  "version": "0.41.0",
+  "version": "0.41.1",
   "scripts": {
     "dev": "blitz dev",
     "build": "blitz build",
@@ -34,12 +34,12 @@
   },
   "dependencies": {
     "@prisma/client": "2.24.1",
-    "blitz": "0.41.0",
+    "blitz": "0.43.0",
     "final-form": "4.20.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
     "react-final-form": "6.5.2",
-    "zod": "3.8.1"
+    "zod": "3.10.1"
   },
   "devDependencies": {
     "@testing-library/cypress": "8.0.1",

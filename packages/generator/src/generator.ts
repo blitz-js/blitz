@@ -6,7 +6,6 @@ import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import * as path from "path"
@@ -73,9 +72,9 @@ function replaceConditionalNode(
 // expressions that aren't targeting templateValues so templates can include
 // checks for other env variables
 function replaceConditionalStatements(
-  program: Collection<j.Program>,
+  program: j.Collection<j.Program>,
   templateValues: any,
-): Collection<j.Program> {
+): j.Collection<j.Program> {
   const processEnvRequirements = {
     test: {
       object: {
@@ -93,7 +92,7 @@ function replaceConditionalStatements(
   return program
 }
 
-function replaceJsxConditionals(program: Collection<j.Program>, templateValues: any) {
+function replaceJsxConditionals(program: j.Collection<j.Program>, templateValues: any) {
   program.find(j.JSXIdentifier, {name: "if"}).forEach((path) => {
     if (j.JSXOpeningElement.check(path.parent.node)) {
       const conditionPath = j(path.parent)
@@ -238,11 +237,11 @@ export abstract class Generator<
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
-      return (
+      templatedFile =
         babel.transform(templatedFile, {
+          configFile: false,
           plugins: [[babelTransformTypescript, {isTSX: true}]],
         })?.code || ""
-      )
     }
 
     if (
@@ -254,6 +253,8 @@ export abstract class Generator<
       const options: Record<any, any> = {...prettierOptions}
       if (this.useTs) {
         options.parser = "babel-ts"
+      } else {
+        options.parser = "babel"
       }
       try {
         templatedFile = this.prettier.format(templatedFile, options)

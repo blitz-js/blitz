@@ -30,7 +30,7 @@ const testIfNotWindows = process.platform === "win32" ? test.skip : test
 jest.mock("enquirer", () => {
   return jest.fn().mockImplementation(() => {
     return {
-      prompt: jest.fn().mockImplementation(() => ({form: "React Final Form"})),
+      prompt: jest.fn().mockImplementation(() => ({form: "React Final Form", template: "full"})),
     }
   })
 })
@@ -81,10 +81,13 @@ describe("`new` command", () => {
       return matches
     }
 
-    async function withNewApp(test: (dirName: string, packageJson: any) => Promise<void> | void) {
+    async function withNewApp(
+      flags: string[],
+      test: (dirName: string, packageJson: any) => Promise<void> | void,
+    ) {
       const tempDir = makeTempDir()
 
-      await whileStayingInCWD(() => New.run([tempDir, "--skip-install"]))
+      await whileStayingInCWD(() => New.run([tempDir, "--skip-install", ...flags]))
 
       const packageJsonFile = fs.readFileSync(path.join(tempDir, "package.json"), {
         encoding: "utf8",
@@ -100,7 +103,7 @@ describe("`new` command", () => {
     testIfNotWindows(
       "pins Blitz to the current version",
       async () =>
-        await withNewApp(async (dirName, packageJson) => {
+        await withNewApp([], async (_dirName, packageJson) => {
           const {
             dependencies: {blitz: blitzVersion},
           } = packageJson
@@ -161,6 +164,77 @@ describe("`new` command", () => {
       ])
     })
 
+    testIfNotWindows("generates minimal app with --template=minimal flag", async () => {
+      await withNewApp(["--template=minimal"], (dirName, packageJson) => {
+        const {
+          dependencies: {prisma, zod},
+        } = packageJson
+
+        expect(prisma).toBeUndefined()
+        expect(zod).toBeUndefined()
+
+        const readme = fs.readFileSync(path.join(dirName, "README.md"), {
+          encoding: "utf8",
+          flag: "r",
+        })
+        expect(
+          readme.includes("This is a minimal [Blitz.js](https://github.com/blitz-js/blitz) app."),
+        ).toBe(true)
+      })
+    })
+
+    testIfNotWindows("generates full app with --template=full flag", async () => {
+      await withNewApp(["--template=full"], (dirName, packageJson) => {
+        const {
+          dependencies: {"@prisma/client": prismaClient, zod},
+        } = packageJson
+
+        expect(prismaClient).not.toBeUndefined()
+        expect(zod).not.toBeUndefined()
+
+        const readme = fs.readFileSync(path.join(dirName, "README.md"), {
+          encoding: "utf8",
+          flag: "r",
+        })
+        expect(
+          readme.includes("This is a [Blitz.js](https://github.com/blitz-js/blitz) app."),
+        ).toBe(true)
+      })
+    })
+
+    testIfNotWindows("generates javascript app with --language=javascript flag", async () => {
+      await withNewApp(["--language=javascript", "--template=minimal"], (dirName, packageJson) => {
+        const {
+          devDependencies: {typescript},
+        } = packageJson
+
+        expect(typescript).toBeUndefined()
+
+        expect(fs.existsSync(path.join(dirName, "jsconfig.json"))).toBe(true)
+      })
+    })
+
+    testIfNotWindows("generates typescript app with --language=typescript flag", async () => {
+      await withNewApp(["--language=typescript", "--template=minimal"], (dirName, packageJson) => {
+        const {
+          devDependencies: {typescript},
+        } = packageJson
+
+        expect(typescript).not.toBeUndefined()
+
+        expect(fs.existsSync(path.join(dirName, "tsconfig.json"))).toBe(true)
+      })
+    })
+
+    testIfNotWindows("accepts --dry-run flag and doesn't create files", async () => {
+      const newAppDir = fs.mkdtempSync(path.join(tempDir, "full-install-"))
+      await whileStayingInCWD(() => New.run([newAppDir, "--skip-upgrade", "--dry-run"]))
+
+      expect(fs.existsSync(newAppDir)).toBe(true)
+      expect(fs.existsSync(path.join(newAppDir, "package.json"))).toBe(false)
+      expect(stdout.output).toContain("Would create")
+    })
+
     it("fetches latest version from template", async () => {
       const expectedVersion = "3.0.0"
       const templatePackage = {name: "eslint-plugin-react-hooks", version: "3.x"}
@@ -190,7 +264,7 @@ describe("`new` command", () => {
       testIfNotWindows("uses template versions", async () => {
         nock("https://registry.npmjs.org").get(/.*/).reply(500).persist()
 
-        await withNewApp((_, packageJson) => {
+        await withNewApp([], (_, packageJson) => {
           const {dependencies} = packageJson
           expect(dependencies.blitz).toBe("latest")
         })

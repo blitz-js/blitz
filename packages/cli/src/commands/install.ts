@@ -1,8 +1,8 @@
-import {getConfig} from "@blitzjs/config"
 import {log} from "@blitzjs/display"
-import type {RecipeExecutor} from "@blitzjs/installer"
+import type {RecipeCLIArgs, RecipeCLIFlags, RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
+import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
@@ -47,7 +47,7 @@ function requireJSON(file: string) {
 }
 
 function checkLockFileExists(filename: string) {
-  return require("fs-extra").existsSync(require("path").resolve(filename))
+  return require("fs-extra").existsSync(resolve(filename))
 }
 
 const GH_ROOT = "https://github.com/"
@@ -66,6 +66,22 @@ interface RecipeMeta {
   location: RecipeLocation
 }
 
+interface Tree {
+  path: string
+  mode: string
+  type: string
+  sha: string
+  size: number
+  url: string
+}
+
+interface GithubRepoAPITrees {
+  sha: string
+  url: string
+  tree: Tree[]
+  truncated: boolean
+}
+
 export class Install extends Command {
   static description = "Install a Recipe into your Blitz app"
   static aliases = ["i"]
@@ -73,19 +89,24 @@ export class Install extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    yes: flags.boolean({
+      char: "y",
+      default: false,
+      description: "Install the recipe automatically without user confirmation",
+    }),
   }
 
   static args = [
     {
       name: "recipe",
-      required: true,
+      required: false,
       description:
         "Name of a Blitz recipe from @blitzjs/blitz/recipes, or a file path to a local recipe definition",
     },
     {
       name: "recipe-flags",
       description:
-        "A list of flags to pass to the recipe. Blitz will only parse these in the form key=value",
+        "A list of flags to pass to the recipe. Blitz will only parse these in the form `key=value`",
     },
   ]
 
@@ -126,6 +147,32 @@ export class Install extends Command {
     }
   }
 
+  async getOfficialRecipeList(): Promise<string[]> {
+    return await gotJSON(`${API_ROOT}blitz-js/blitz/git/trees/canary?recursive=1`).then(
+      (release: GithubRepoAPITrees) =>
+        release.tree.reduce((recipesList: string[], item) => {
+          const filePath = item.path.split("/")
+          const [directory, recipeName] = filePath
+          if (directory === "recipes" && filePath.length === 2 && item.type === "tree") {
+            recipesList.push(recipeName)
+          }
+          return recipesList
+        }, []),
+    )
+  }
+
+  async showRecipesPrompt(recipesList: string[]): Promise<string> {
+    debug("recipesList", recipesList)
+    const {recipeName} = (await this.enquirer.prompt({
+      type: "select",
+      name: "recipeName",
+      message: "Select a recipe to install",
+      choices: recipesList,
+    })) as {recipeName: string}
+
+    return recipeName
+  }
+
   /**
    * Clones the repository into a temp directory, returning the path to the new directory
    *
@@ -140,7 +187,7 @@ export class Install extends Command {
     subdirectory?: string,
   ): Promise<string> {
     debug("[cloneRepo] starting...")
-    const recipeDir = require("path").join(process.cwd(), ".blitz", "recipe-install")
+    const recipeDir = join(process.cwd(), ".blitz", "recipe-install")
     // clean up from previous run in case of error
     require("rimraf").sync(recipeDir)
     require("fs-extra").mkdirsSync(recipeDir)
@@ -160,18 +207,13 @@ export class Install extends Command {
     return recipeDir
   }
 
-  private async installRecipeAtPath(recipePath: string) {
+  private async installRecipeAtPath(
+    recipePath: string,
+    ...runArgs: Parameters<RecipeExecutor<any>["run"]>
+  ) {
     const recipe = require(recipePath).default as RecipeExecutor<any>
-    const recipeArgs = this.argv.slice(1).reduce(
-      (acc, arg) => ({
-        ...acc,
-        [arg.split("=")[0].replace(/--/g, "")]: arg.split("=")[1]
-          ? JSON.parse(`"${arg.split("=")[1]}"`)
-          : true, // if no value is provided, assume it's a boolean flag
-      }),
-      {},
-    )
-    await recipe.run(recipeArgs)
+
+    await recipe.run(...runArgs)
   }
 
   /**
@@ -181,7 +223,9 @@ export class Install extends Command {
    *
    */
   private async setupProxySupport() {
-    const cli = getConfig().cli
+    const {loadConfigProduction} = await import("next/dist/server/config-shared")
+    const blitzConfig = loadConfigProduction(process.cwd())
+    const cli = blitzConfig.cli
     const httpProxy = cli?.httpProxy || process.env.http_proxy || process.env.HTTP_PROXY
     const httpsProxy = cli?.httpsProxy || process.env.https_proxy || process.env.HTTPS_PROXY
     const noProxy = cli?.noProxy || process.env.no_proxy || process.env.NO_PROXY
@@ -204,17 +248,45 @@ export class Install extends Command {
 
     await this.setupProxySupport()
 
-    const {args} = this.parse(Install)
+    const {args, flags, argv} = this.parse(Install)
+
+    let selectedRecipe = args.recipe
+    if (!selectedRecipe) {
+      const officialRecipeList = await this.getOfficialRecipeList()
+      selectedRecipe = await this.showRecipesPrompt(officialRecipeList)
+    }
+    const recipeInfo = this.normalizeRecipePath(selectedRecipe)
+
     const originalCwd = process.cwd()
-    const recipeInfo = this.normalizeRecipePath(args.recipe)
+
+    // Take all the args after the recipe string
+    //
+    // ['material-ui', '--yes', 'prop=true']
+    // --> ['material-ui', 'prop=true']
+    // --> ['prop=true']
+    // --> { prop: 'true' }
+    const cliArgs = argv
+      .filter((arg) => !arg.startsWith("--"))
+      .slice(1)
+      .reduce<RecipeCLIArgs>(
+        (acc, arg) => ({
+          ...acc,
+          [arg.split("=")[0]]: arg.split("=")[1] ? JSON.parse(`"${arg.split("=")[1]}"`) : true, // if no value is provided, assume it's a boolean flag
+        }),
+        {},
+      )
+
+    const cliFlags: RecipeCLIFlags = {
+      yesToAll: flags.yes || false,
+    }
+
     debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
-
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
       const repoInfo = await gotJSON(apiUrl)
-      const packageJsonPath = require("path").join(
+      const packageJsonPath = join(
         `${rawUrl}`,
         repoInfo.default_branch,
         recipeInfo.subdirectory ?? "",
@@ -235,7 +307,7 @@ export class Install extends Command {
 4. A file path to a locally-written recipe.\n`)
         process.exit(1)
       } else {
-        let spinner = log.spinner(`Cloning GitHub repository for ${args.recipe} recipe`).start()
+        let spinner = log.spinner(`Cloning GitHub repository for ${selectedRecipe} recipe`).start()
 
         const recipeRepoPath = await this.cloneRepo(
           repoInfo.full_name,
@@ -264,15 +336,15 @@ export class Install extends Command {
         spinner.stop()
 
         const recipePackageMain = requireJSON("./package.json").main
-        const recipeEntry = require("path").resolve(recipePackageMain)
+        const recipeEntry = resolve(recipePackageMain)
         process.chdir(originalCwd)
 
-        await this.installRecipeAtPath(recipeEntry)
+        await this.installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
 
         require("rimraf").sync(recipeRepoPath)
       }
     } else {
-      await this.installRecipeAtPath(require("path").resolve(args.recipe))
+      await this.installRecipeAtPath(resolve(args.recipe), cliArgs, cliFlags)
     }
   }
 }

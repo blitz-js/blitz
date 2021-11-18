@@ -1,12 +1,13 @@
 import {spawn} from "cross-spawn"
 import * as fs from "fs-extra"
 import {Box, Text} from "ink"
-// TODO: Once the dependency issue of ink-spinner is resolved, you should uncomment it (https://github.com/blitz-js/blitz/issues/2793)
-// import Spinner from "ink-spinner"
+import Spinner from "ink-spinner"
 import * as path from "path"
 import * as React from "react"
 import {Newline} from "../components/newline"
+import {RecipeCLIArgs} from "../types"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useUserInput} from "../utils/use-user-input"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 
 interface NpmPackage {
@@ -27,24 +28,23 @@ export function isAddDependencyExecutor(executor: ExecutorConfig): executor is C
 
 export const type = "add-dependency"
 
-// TODO: Once the dependency issue of ink-spinner is resolved, you should change "loading.." to <Spinner /> (https://github.com/blitz-js/blitz/issues/2793)
 function Package({pkg, loading}: {pkg: NpmPackage; loading: boolean}) {
   return (
     <Text>
       {`   `}
-      {loading ? "Loading..." : "📦"}
+      {loading ? <Spinner /> : "📦"}
       {` ${pkg.name}@${pkg.version}`}
     </Text>
   )
 }
 
 const DependencyList = ({
-  lede,
+  lede = "Hang tight! Installing dependencies...",
   depsLoading = false,
   devDepsLoading = false,
   packages,
 }: {
-  lede: string
+  lede?: string
   depsLoading?: boolean
   devDepsLoading?: boolean
   packages: NpmPackage[]
@@ -101,7 +101,8 @@ export async function installPackages(packages: NpmPackage[], isDev = false) {
   })
 }
 
-export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) => {
+export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
+  const userInput = useUserInput(cliFlags)
   const [depsInstalled, setDepsInstalled] = React.useState(false)
   const [devDepsInstalled, setDevDepsInstalled] = React.useState(false)
 
@@ -110,8 +111,6 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
     const dependencies = packages.length === 1 ? "dependency" : "dependencies"
     onChangeCommitted(`Installed ${packages.length} ${dependencies}`)
   }, [onChangeCommitted, step])
-
-  useEnterToContinue(handleChangeCommitted, depsInstalled && devDepsInstalled)
 
   React.useEffect(() => {
     async function installDeps() {
@@ -148,14 +147,49 @@ export const Commit: Executor["Commit"] = ({cliArgs, step, onChangeCommitted}) =
     onChangeCommitted()
     return null
   }
+
+  const childProps: CommitChildProps = {
+    depsInstalled,
+    devDepsInstalled,
+    handleChangeCommitted,
+    step,
+    cliArgs,
+  }
+
+  if (userInput) return <CommitWithInput {...childProps} />
+  else return <CommitWithoutInput {...childProps} />
+}
+
+interface CommitChildProps {
+  depsInstalled: boolean
+  devDepsInstalled: boolean
+  handleChangeCommitted: () => void
+  step: Config
+  cliArgs: RecipeCLIArgs
+}
+
+const CommitWithInput = ({
+  depsInstalled,
+  devDepsInstalled,
+  handleChangeCommitted,
+  step,
+  cliArgs,
+}: CommitChildProps) => {
+  useEnterToContinue(handleChangeCommitted, depsInstalled && devDepsInstalled)
+
   return (
-    <>
-      <DependencyList
-        lede={"Hang tight! Installing dependencies..."}
-        depsLoading={!depsInstalled}
-        devDepsLoading={!devDepsInstalled}
-        packages={getExecutorArgument(step.packages, cliArgs)}
-      />
-    </>
+    <DependencyList
+      depsLoading={!depsInstalled}
+      devDepsLoading={!devDepsInstalled}
+      packages={getExecutorArgument(step.packages, cliArgs)}
+    />
   )
 }
+
+const CommitWithoutInput = ({depsInstalled, devDepsInstalled, step, cliArgs}: CommitChildProps) => (
+  <DependencyList
+    depsLoading={!depsInstalled}
+    devDepsLoading={!devDepsInstalled}
+    packages={getExecutorArgument(step.packages, cliArgs)}
+  />
+)

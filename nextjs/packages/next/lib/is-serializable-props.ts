@@ -60,7 +60,15 @@ export function isSerializableProps(
       // a plain object, a class, et al.
       type === 'boolean' ||
       type === 'number' ||
-      type === 'string'
+      type === 'string' ||
+      type === 'object' ||
+      type === 'bigint' ||
+      value === undefined ||
+      value instanceof Date ||
+      value instanceof Map ||
+      value instanceof Set ||
+      value instanceof RegExp ||
+      value instanceof Error
     ) {
       return true
     }
@@ -130,9 +138,7 @@ export function isSerializableProps(
       '`' +
         type +
         '`' +
-        (type === 'object'
-          ? ` ("${Object.prototype.toString.call(value)}")`
-          : '') +
+        '' +
         ' cannot be serialized as JSON. Please only return JSON serializable data types.'
     )
   }

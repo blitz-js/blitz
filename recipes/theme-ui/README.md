@@ -1,6 +1,7 @@
 ## theme-ui
 
 The Blitz Recipe for installing Theme UI
+
 ```
 blitz install theme-ui
 ```

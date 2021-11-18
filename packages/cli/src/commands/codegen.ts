@@ -30,9 +30,15 @@ export class CodeGen extends Command {
 
       if (hasPrisma && hasPrismaSchema) {
         let prismaSpinner = log.spinner(`Generating Prisma client`).start()
-        void runPrisma(["generate"], true).then((success) =>
-          success ? prismaSpinner.succeed() : prismaSpinner.fail(),
-        )
+        void runPrisma(["generate"], true).then((result) => {
+          if (result.success) {
+            prismaSpinner.succeed()
+          } else {
+            prismaSpinner.fail()
+            console.log("\n" + result.stderr)
+            process.exit(1)
+          }
+        })
       }
     } catch (err) {
       console.error(err)
