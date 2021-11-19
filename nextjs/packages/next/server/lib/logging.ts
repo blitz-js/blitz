@@ -102,9 +102,6 @@ const withX = (str: string) => {
 const withProgress = (str: string) => {
   return withCaret(str)
 }
-const withError = (str: string) => {
-  return withX(c.red.bold(str))
-}
 
 /**
  * Logs a branded purple message to stdout.
@@ -150,15 +147,6 @@ const warning = (msg: string) => {
  */
 const error = (msg: string) => {
   console.error(withX(c.red.bold(msg)))
-}
-
-/**
- * Logs a subtle gray message to stdout.
- *
- * @param {string} msg
- */
-const meta = (msg: string) => {
-  console.log(withCaret(c.gray(msg)))
 }
 
 /**
@@ -213,16 +201,11 @@ export const log = {
   withBrand,
   withWarning,
   withCaret,
-  withCheck,
-  withX,
-  withProgress,
-  withError,
   branded,
   clearLine,
   clearConsole,
   error,
   warning,
-  meta,
   progress,
   spinner,
   success,
