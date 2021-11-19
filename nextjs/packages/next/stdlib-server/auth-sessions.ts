@@ -551,13 +551,6 @@ const setHeader = (res: ServerResponse, name: string, value: string) => {
   }
 }
 
-const removeHeader = (res: ServerResponse, name: string) => {
-  res.removeHeader(name)
-  if ('_blitz' in res) {
-    delete (res as any)._blitz[name]
-  }
-}
-
 const setSessionCookie = (
   req: IncomingMessage,
   res: ServerResponse,

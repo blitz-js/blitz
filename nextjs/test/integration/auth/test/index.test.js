@@ -23,8 +23,6 @@ jest.setTimeout(1000 * 60 * 2)
 const appDir = join(__dirname, '../')
 const nextConfig = join(appDir, 'next.config.js')
 let appPort
-let stderr
-let mode
 let app
 
 function readCookie(cookieHeader, name) {
@@ -143,13 +141,8 @@ function runTests(dev = false) {
 describe('Auth', () => {
   describe('dev mode', () => {
     beforeAll(async () => {
-      stderr = ''
       appPort = await findPort()
-      app = await launchApp(appDir, appPort, {
-        onStderr: (msg) => {
-          stderr += msg
-        },
-      })
+      app = await launchApp(appDir, appPort)
     })
     afterAll(() => killApp(app))
 
@@ -159,7 +152,6 @@ describe('Auth', () => {
   describe('server mode', () => {
     beforeAll(async () => {
       await nextBuild(appDir)
-      mode = 'server'
       appPort = await findPort()
       app = await nextStart(appDir, appPort)
     })
@@ -175,7 +167,6 @@ describe('Auth', () => {
         `module.exports = { target: 'serverless' }`
       )
       await nextBuild(appDir)
-      mode = 'serverless'
       appPort = await findPort()
       app = await nextStart(appDir, appPort)
     })

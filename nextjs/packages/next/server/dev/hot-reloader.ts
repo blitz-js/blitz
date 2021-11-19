@@ -149,7 +149,6 @@ export default class HotReloader {
     dir: string,
     {
       config,
-      pagesDir,
       buildId,
       previewProps,
       rewrites,
