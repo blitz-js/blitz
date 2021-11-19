@@ -1,4 +1,3 @@
-import {log} from "@blitzjs/display"
 import {
   capitalize,
   FormGenerator,
@@ -16,6 +15,7 @@ import {
 } from "@blitzjs/generator"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
+import {log} from "next/dist/server/lib/logging"
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
@@ -180,7 +180,7 @@ export class Generate extends Command {
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      require("@blitzjs/display").log.error(
+      require("next/dist/shared/lib/display").log.error(
         "Could not determine proper location for files. Aborting.",
       )
       this.exit(0)

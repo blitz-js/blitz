@@ -1,7 +1,7 @@
-import {log} from "@blitzjs/display"
 import type {RecipeCLIArgs, RecipeCLIFlags, RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
+import {log} from "next/dist/server/lib/logging"
 import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"

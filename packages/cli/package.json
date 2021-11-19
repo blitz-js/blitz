@@ -22,7 +22,6 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.42.4",
     "@blitzjs/generator": "0.42.4",
     "@blitzjs/installer": "0.42.4",
     "@blitzjs/server": "0.42.4",

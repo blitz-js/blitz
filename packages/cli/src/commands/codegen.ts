@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
+import {log} from "next/dist/server/lib/logging"
 import {getPackageJson} from "../utils/get-package-json"
 import {runPrisma} from "./prisma"
 

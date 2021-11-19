@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import spawn from "cross-spawn"
+import {log} from "next/dist/server/lib/logging"
 import {AppGenerator} from "../../src/generators/app-generator"
 
 // Spies process to avoid trying to chdir to a non existing folder
@@ -7,7 +7,7 @@ jest.spyOn(process, "chdir").mockImplementation(() => true)
 jest.spyOn(global.console, "log").mockImplementation()
 // Mocks the log output
 jest.mock(
-  "@blitzjs/display",
+  "next/dist/server/lib/logging",
   jest.fn(() => {
     return {
       log: {

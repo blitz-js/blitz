@@ -1,7 +1,7 @@
-import {log} from "@blitzjs/display"
 import chalk from "chalk"
 import spawn from "cross-spawn"
 import {readJSONSync, writeJson} from "fs-extra"
+import {log} from "next/dist/server/lib/logging"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"

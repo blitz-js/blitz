@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import {render} from "ink"
+import {log} from "next/dist/server/lib/logging"
 import React from "react"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"

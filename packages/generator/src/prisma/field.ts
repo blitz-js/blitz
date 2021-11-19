@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
+import {log} from "next/dist/server/lib/logging"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 
 export enum FieldType {

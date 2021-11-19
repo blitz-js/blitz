@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import chalk from "chalk"
+import {log} from "next/dist/server/lib/logging"
 import {Fallbackable} from "./fallbackable"
 import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
 

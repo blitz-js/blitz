@@ -44,7 +44,7 @@ export class Dev extends Command {
         blitzConfig.cli?.clearConsoleOnBlitzDev !== false &&
         !process.env.BLITZ_TEST_ENVIRONMENT
       ) {
-        const {log} = await import("@blitzjs/display")
+        const {log} = await import("next/dist/server/lib/logging")
         log.clearConsole()
       }
 

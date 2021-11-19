@@ -30,7 +30,6 @@
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/display": "0.42.4",
     "@blitzjs/generator": "0.42.4",
     "@mrleebo/prisma-ast": "0.2.4",
     "@prisma/sdk": "2.19.0",
