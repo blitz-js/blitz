@@ -1,6 +1,7 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
+import {NextConfigComplete} from "next/dist/server/config-shared"
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -55,11 +56,13 @@ export class Field {
   relationToFields?: string[]
 
   // 'name:type?[]:attribute' => Field
-  static parse(input: string, schema?: ast.Schema): Field[] {
+  static async parse(input: string, schema?: ast.Schema): Promise<Field[]> {
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute
     let fieldName = uncapitalize(_fieldName)
-    let fieldType = capitalize(_fieldType)
+    let fieldType = await Field.getPrismaTypeForFieldType(_fieldType) //TODO: Need to make the generic function in tempalte buiolders a utility accessiable here.
+    // Check if it would make sense to expose that to users as well?
+    // Also in the case of a relationship, need to use the raw model name, cant capitalize it.
     const isId = fieldName === "id"
     let isRequired = true
     let isList = false
@@ -161,6 +164,21 @@ export class Field {
       }
       throw err
     }
+  }
+
+  public static getPrismaTypeForFieldType: (fieldType:string) => Promise<string> = async (fieldType) => {
+    let prismaType = "String"
+    const prismaTypeKey = "prismaType"
+
+    try {
+      const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
+      let config = await loadConfigAtRuntime()
+      prismaType = config.codegen.fieldTypeMap[fieldType][prismaTypeKey]
+    }catch(error){
+      console.log("Error loading field-type to prisma-type map, using default prisma type " + prismaType)
+    }
+
+    return prismaType
   }
 
   constructor(name: string, options: FieldArgs) {

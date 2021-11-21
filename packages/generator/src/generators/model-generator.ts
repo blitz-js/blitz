@@ -39,11 +39,11 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     const {modelName, extraArgs, dryRun} = this.options
     let updatedOrCreated = "created"
 
-    let fields = (extraArgs.length === 1 && extraArgs[0].includes(" ")
+    let fieldPromises = (extraArgs.length === 1 && extraArgs[0].includes(" ")
       ? extraArgs[0].split(" ")
       : extraArgs
-    ).flatMap((input) => Field.parse(input, schema))
-
+    ).map((input) => Field.parse(input, schema))
+    let fields = (await Promise.all(fieldPromises)).flatMap(fieldArray => fieldArray)
     const modelDefinition = new Model(modelName, fields)
 
     let model: ast.Model | undefined
