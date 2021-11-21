@@ -63,6 +63,10 @@
   "engines": {
     "node": ">=12"
   },
+  "volta": {
+    "node": "14.18.1",
+    "yarn": "1.22.17"
+  },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
