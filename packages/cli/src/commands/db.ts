@@ -1,6 +1,5 @@
 import {Command, flags} from "@oclif/command"
-import {baseLogger} from "next/dist/server/lib/logging"
-import {log} from "next/dist/server/lib/logging"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
