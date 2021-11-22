@@ -35,7 +35,7 @@ import {
   NextRouter,
   extractRouterParams,
   extractQueryFromAsPath,
-  resolveHrefOnServer,
+  resolveHref,
 } from '../shared/lib/router/router'
 import { isDynamicRoute } from '../shared/lib/router/utils/is-dynamic'
 import {
@@ -382,11 +382,11 @@ function checkRedirectValues(
   }
 }
 
-function normalizeRedirectValues(redirect: Redirect) {
+function normalizeRedirectValues(router: ServerRouter, redirect: Redirect) {
   const dest = redirect.destination
   if (dest && typeof dest === 'object') {
-    const resolvedDest = resolveHrefOnServer(dest)
-    redirect.destination = resolvedDest
+    const resolvedDest = resolveHref(router, dest, true)
+    redirect.destination = resolvedDest[1] || resolvedDest[0]
   }
 }
 
@@ -761,7 +761,7 @@ export async function renderToHTML(
         data.redirect &&
         typeof data.redirect === 'object'
       ) {
-        normalizeRedirectValues(data.redirect as Redirect)
+        normalizeRedirectValues(router, data.redirect as Redirect)
         checkRedirectValues(data.redirect as Redirect, req, 'getStaticProps')
 
         if (isBuildTimeSSG) {
@@ -922,7 +922,7 @@ export async function renderToHTML(
       }
 
       if ('redirect' in data && typeof data.redirect === 'object') {
-        normalizeRedirectValues(data.redirect as Redirect)
+        normalizeRedirectValues(router, data.redirect as Redirect)
         checkRedirectValues(
           data.redirect as Redirect,
           req,
