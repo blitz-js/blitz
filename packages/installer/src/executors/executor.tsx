@@ -1,6 +1,7 @@
 import {Box, Text} from "ink"
 import * as React from "react"
 import {Newline} from "../components/newline"
+import {RecipeCLIArgs, RecipeCLIFlags} from "../types"
 
 export interface ExecutorConfig {
   successIcon?: string
@@ -13,16 +14,22 @@ export interface ExecutorConfig {
 
 export interface Executor {
   type: string
-  Propose?: React.FC<{step: ExecutorConfig; onProposalAccepted: (data?: any) => void; cliArgs: any}>
+  Propose?: React.FC<{
+    step: ExecutorConfig
+    onProposalAccepted: (data?: any) => void
+    cliArgs: RecipeCLIArgs
+    cliFlags: RecipeCLIFlags
+  }>
   Commit: React.FC<{
     step: ExecutorConfig
     proposalData?: any
     onChangeCommitted: (data?: any) => void
-    cliArgs: any
+    cliArgs: RecipeCLIArgs
+    cliFlags: RecipeCLIFlags
   }>
 }
 
-type dynamicExecutorArgument<T> = (cliArgs: any) => T
+type dynamicExecutorArgument<T> = (cliArgs: RecipeCLIArgs) => T
 
 function isDynamicExecutorArgument<T>(
   input: executorArgument<T>,
@@ -56,7 +63,7 @@ export function Frontmatter({executor}: {executor: ExecutorConfig}) {
   )
 }
 
-export function getExecutorArgument<T>(input: executorArgument<T>, cliArgs: any): T {
+export function getExecutorArgument<T>(input: executorArgument<T>, cliArgs: RecipeCLIArgs): T {
   if (isDynamicExecutorArgument(input)) {
     return input(cliArgs)
   }

@@ -1,6 +1,7 @@
 ## tailwind
 
 The Blitz Recipe for installing Tailwind CSS
+
 ```
 blitz install tailwind
 ```

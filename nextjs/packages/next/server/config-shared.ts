@@ -176,6 +176,8 @@ export type NextConfig = { [key: string]: any } & {
   }
 }
 
+export type BlitzConfig = NextConfig
+
 export const defaultConfig: NextConfig = {
   env: {},
   webpack: null,

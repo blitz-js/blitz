@@ -13,10 +13,10 @@ export default RecipeBuilder()
     stepName: "Add dependencies",
     explanation: `Add dependencies for defining and handling a GraphQL endpoint.`,
     packages: [
-      {name: "apollo-server-micro", version: "2"},
-      {name: "graphql", version: "15"},
-      {name: "nexus", version: "1"},
-      {name: "nexus-prisma", version: "0.24"},
+      {name: "apollo-server-micro", version: "3.x"},
+      {name: "graphql", version: "15.x"},
+      {name: "nexus", version: "1.x"},
+      {name: "nexus-prisma", version: "0.34.x"},
     ],
   })
   .addNewFilesStep({
@@ -38,5 +38,11 @@ export default RecipeBuilder()
         name: "nexusPrisma",
         assignments: [{type: "assignment", key: "provider", value: '"nexus-prisma"'}],
       }),
+  })
+  .printMessage({
+    stepId: "manualStep",
+    stepName: "Informs the user about a manual step: `blitz prisma generate`",
+    message:
+      "Please run `blitz prisma generate` in your console/terminal to generate the graphql schema.",
   })
   .build()

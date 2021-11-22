@@ -6,7 +6,6 @@ import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
 import * as path from "path"
@@ -70,9 +69,9 @@ function replaceConditionalNode(
 // expressions that aren't targeting templateValues so templates can include
 // checks for other env variables
 function replaceConditionalStatements(
-  program: Collection<j.Program>,
+  program: j.Collection<j.Program>,
   templateValues: any,
-): Collection<j.Program> {
+): j.Collection<j.Program> {
   const processEnvRequirements = {
     test: {
       object: {
@@ -90,7 +89,7 @@ function replaceConditionalStatements(
   return program
 }
 
-function replaceJsxConditionals(program: Collection<j.Program>, templateValues: any) {
+function replaceJsxConditionals(program: j.Collection<j.Program>, templateValues: any) {
   program.find(j.JSXIdentifier, {name: "if"}).forEach((path) => {
     if (j.JSXOpeningElement.check(path.parent.node)) {
       const conditionPath = j(path.parent)

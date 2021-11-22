@@ -1,15 +1,15 @@
 import {
   addBabelPlugin,
+  addBabelPreset,
   addImport,
-  findModuleExportsExpressions,
   paths,
+  Program,
   RecipeBuilder,
 } from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
-function applyGlobalStyles(program: Collection<j.Program>) {
+function applyGlobalStyles(program: Program) {
   program.find(j.ExportDefaultDeclaration).forEach((exportPath) => {
     j(exportPath)
       .find(j.JSXElement, {openingElement: {name: {name: "ErrorBoundary"}}})
@@ -28,34 +28,6 @@ function applyGlobalStyles(program: Collection<j.Program>) {
   return program
 }
 
-function replaceBabelPreset(program: Collection<j.Program>) {
-  findModuleExportsExpressions(program).forEach((moduleExportsExpression) => {
-    j(moduleExportsExpression)
-      .find(j.ObjectProperty, {key: {name: "presets"}})
-      .forEach((presets) => {
-        j(presets)
-          .find(j.Literal, {value: "blitz/babel"})
-          .replaceWith(
-            j.arrayExpression([
-              j.stringLiteral("blitz/babel"),
-              j.objectExpression([
-                j.property(
-                  "init",
-                  j.identifier('"preset-react"'),
-                  j.objectExpression([
-                    j.property("init", j.identifier("runtime"), j.literal("automatic")),
-                    j.property("init", j.identifier("importSource"), j.literal("@emotion/react")),
-                  ]),
-                ),
-              ]),
-            ]),
-          )
-      })
-  })
-
-  return program
-}
-
 export default RecipeBuilder()
   .setName("Emotion")
   .setDescription(`This will install all necessary dependencies and configure Emotion for use.`)
@@ -66,9 +38,9 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `We'll install @emotion/react and @emotion/styled for general usage, and @emotion/babel-plugin to enable some advanced features.`,
     packages: [
-      {name: "@emotion/react", version: "11"},
-      {name: "@emotion/styled", version: "11"},
-      {name: "@emotion/babel-plugin", version: "11"},
+      {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/styled", version: "11.x"},
+      {name: "@emotion/babel-plugin", version: "11.x"},
     ],
   })
   .addNewFilesStep({
@@ -84,7 +56,7 @@ export default RecipeBuilder()
     stepName: "Import global styles",
     explanation: `Next, we'll import and render the global styles.`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("globalStyles"))],
         j.literal("app/core/styles"),
@@ -99,9 +71,13 @@ export default RecipeBuilder()
     stepName: "Add Babel plugin and preset",
     explanation: `Update the Babel configuration to use Emotion's plugin and preset to enable some advanced features.`,
     singleFileSearch: paths.babelConfig(),
-    transform(program: Collection<j.Program>) {
-      addBabelPlugin(program, "@emotion")
-      return replaceBabelPreset(program)
+    transform(program) {
+      program = addBabelPlugin(program, "@emotion")
+      program = addBabelPreset(program, [
+        "preset-react",
+        {runtime: "automatic", importSource: "@emotion/react"},
+      ])
+      return program
     },
   })
   .build()

@@ -63,6 +63,10 @@
   "engines": {
     "node": ">=12"
   },
+  "volta": {
+    "node": "14.18.1",
+    "yarn": "1.22.17"
+  },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --fix"
@@ -83,7 +87,7 @@
     "@babel/preset-env": "7.12.11",
     "@babel/preset-react": "7.12.10",
     "@babel/preset-typescript": "7.12.7",
-    "@juanm04/cpx": "2.0.0",
+    "@juanm04/cpx": "2.0.1",
     "@manypkg/cli": "0.17.0",
     "@preconstruct/cli": "2.0.7",
     "@rollup/pluginutils": "4.1.0",
@@ -195,7 +199,7 @@
     "tree-kill": "1.2.2",
     "ts-jest": "27.0.0-next.10",
     "tslib": "2.1.0",
-    "typescript": "4.4.2",
+    "typescript": "4.5.2",
     "ultra-runner": "3.10.5",
     "wait-on": "5.2.1",
     "yalc": "1.0.0-pre.49"

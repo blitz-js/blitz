@@ -1,13 +1,15 @@
 import {Box, Text, useApp, useInput} from "ink"
 import React from "react"
+import {EnterToContinue} from "./components/enter-to-continue"
 import {Newline} from "./components/newline"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import {Executor, ExecutorConfig, Frontmatter} from "./executors/executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import * as PrintMessageExecutor from "./executors/print-message-executor"
-import {RecipeMeta} from "./types"
+import {RecipeCLIArgs, RecipeCLIFlags, RecipeMeta} from "./types"
 import {useEnterToContinue} from "./utils/use-enter-to-continue"
+import {useUserInput} from "./utils/use-user-input"
 
 enum Action {
   SkipStep,
@@ -37,12 +39,7 @@ interface State {
   current: number
 }
 
-const initialState: State = {
-  steps: [],
-  current: -1,
-}
-
-function recipeReducer(state = initialState, action: {type: Action; data?: any}) {
+function recipeReducer(state: State, action: {type: Action; data?: any}) {
   const newState = {...state}
   switch (action.type) {
     case Action.ProposeChange:
@@ -68,14 +65,21 @@ function recipeReducer(state = initialState, action: {type: Action; data?: any})
 }
 
 interface RecipeProps {
-  cliArgs: any
+  cliArgs: RecipeCLIArgs
+  cliFlags: RecipeCLIFlags
   steps: ExecutorConfig[]
   recipeMeta: RecipeMeta
 }
 
 const DispatchContext = React.createContext<React.Dispatch<{type: Action; data?: any}>>(() => {})
 
-function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
+function WelcomeMessage({
+  recipeMeta,
+  enterToContinue = true,
+}: {
+  recipeMeta: RecipeMeta
+  enterToContinue?: boolean
+}) {
   return (
     <Box flexDirection="column">
       <Text color="#8a3df0" bold>
@@ -92,21 +96,38 @@ function WelcomeMessage({recipeMeta}: {recipeMeta: RecipeMeta}) {
       <Text color="gray">
         Author: <Text italic>{recipeMeta.owner}</Text>
       </Text>
-      <Newline />
-      <Text bold>Press ENTER to continue</Text>
+      {enterToContinue && <EnterToContinue />}
     </Box>
+  )
+}
+
+function StepMessages({state}: {state: State}) {
+  const messages = state.steps
+    .map((step) => ({msg: step.successMsg, icon: step.executor.successIcon ?? "✅"}))
+    .filter((s) => s.msg)
+
+  return (
+    <>
+      {messages.map(({msg, icon}, index) => (
+        <Text key={msg + index} color="green">
+          {msg === "\n" ? "" : icon} {msg}
+        </Text>
+      ))}
+    </>
   )
 }
 
 function StepExecutor({
   cliArgs,
+  cliFlags,
   proposalData,
   step,
   status,
 }: {
   step: ExecutorConfig
   status: Status
-  cliArgs: any
+  cliArgs: RecipeCLIArgs
+  cliFlags: RecipeCLIFlags
   proposalData?: any
 }) {
   const {Propose, Commit}: Executor = ExecutorMap[step.stepType]
@@ -140,11 +161,17 @@ function StepExecutor({
     <Box flexDirection="column">
       {status !== Status.Committed ? <Frontmatter executor={step} /> : null}
       {[Status.Proposed].includes(status) && Propose ? (
-        <Propose cliArgs={cliArgs} step={step} onProposalAccepted={handleProposalAccepted} />
+        <Propose
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          step={step}
+          onProposalAccepted={handleProposalAccepted}
+        />
       ) : null}
       {[Status.Committing].includes(status) ? (
         <Commit
           cliArgs={cliArgs}
+          cliFlags={cliFlags}
           proposalData={proposalData}
           step={step}
           onChangeCommitted={handleChangeCommitted}
@@ -154,12 +181,56 @@ function StepExecutor({
   )
 }
 
-export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
+export function RecipeRenderer({cliArgs, cliFlags, steps, recipeMeta}: RecipeProps) {
+  const userInput = useUserInput(cliFlags)
   const {exit} = useApp()
   const [state, dispatch] = React.useReducer(recipeReducer, {
-    ...initialState,
+    current: userInput ? -1 : 0,
     steps: steps.map((e) => ({executor: e, status: Status.Pending, successMsg: ""})),
   })
+
+  if (steps.length === 0) {
+    exit(new Error("This recipe has no steps"))
+  }
+
+  React.useEffect(() => {
+    if (
+      state.current === state.steps.length - 1 &&
+      state.steps[state.current]?.status === Status.Committed
+    ) {
+      exit()
+    }
+  })
+
+  return (
+    <DispatchContext.Provider value={dispatch}>
+      {userInput ? (
+        <RecipeRendererWithInput
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          state={state}
+          recipeMeta={recipeMeta}
+        />
+      ) : (
+        <RecipeRendererWithoutInput
+          cliArgs={cliArgs}
+          cliFlags={cliFlags}
+          state={state}
+          recipeMeta={recipeMeta}
+        />
+      )}
+    </DispatchContext.Provider>
+  )
+}
+
+function RecipeRendererWithInput({
+  cliArgs,
+  cliFlags,
+  recipeMeta,
+  state,
+}: Omit<RecipeProps, "steps"> & {state: State}) {
+  const {exit} = useApp()
+  const dispatch = React.useContext(DispatchContext)
 
   useInput((input, key) => {
     if (input === "c" && key.ctrl) {
@@ -170,34 +241,41 @@ export function RecipeRenderer({cliArgs, steps, recipeMeta}: RecipeProps) {
 
   useEnterToContinue(() => dispatch({type: Action.SkipStep}), state.current === -1)
 
-  React.useEffect(() => {
-    if (
-      state.current === state.steps.length - 1 &&
-      state.steps[state.current].status === Status.Committed
-    ) {
-      exit()
-    }
-  })
-
-  const messages = state.steps
-    .map((step) => ({msg: step.successMsg, icon: step.executor.successIcon ?? "✅"}))
-    .filter((s) => s.msg)
   return (
-    <DispatchContext.Provider value={dispatch}>
-      {messages.map(({msg, icon}, index) => (
-        <Text key={msg + index} color="green">
-          {msg === "\n" ? "" : icon} {msg}
-        </Text>
-      ))}
-      {state.current === -1 ? <WelcomeMessage recipeMeta={recipeMeta} /> : null}
-      {state.current > -1 ? (
+    <>
+      <StepMessages state={state} />
+      {state.current === -1 ? (
+        <WelcomeMessage recipeMeta={recipeMeta} />
+      ) : (
         <StepExecutor
           cliArgs={cliArgs}
+          cliFlags={cliFlags}
           proposalData={state.steps[state.current]?.proposalData}
           step={state.steps[state.current]?.executor}
           status={state.steps[state.current]?.status}
         />
-      ) : null}
-    </DispatchContext.Provider>
+      )}
+    </>
+  )
+}
+
+function RecipeRendererWithoutInput({
+  cliArgs,
+  cliFlags,
+  recipeMeta,
+  state,
+}: Omit<RecipeProps, "steps"> & {state: State}) {
+  return (
+    <>
+      <WelcomeMessage recipeMeta={recipeMeta} enterToContinue={false} />
+      <StepMessages state={state} />
+      <StepExecutor
+        cliArgs={cliArgs}
+        cliFlags={cliFlags}
+        proposalData={state.steps[state.current]?.proposalData}
+        step={state.steps[state.current]?.executor}
+        status={state.steps[state.current]?.status}
+      />
+    </>
   )
 }

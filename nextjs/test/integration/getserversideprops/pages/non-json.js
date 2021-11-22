@@ -4,8 +4,8 @@ export async function getServerSideProps() {
   }
 }
 
-const Page = ({ time }) => {
-  return <p>hello {time.toString()}</p>
+const Page = (props) => {
+  return <p className="data">timestring: {props.time.toISOString()}</p>
 }
 
 export default Page

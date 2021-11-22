@@ -1,6 +1,5 @@
 import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
 import j from "jscodeshift"
-import {Collection} from "jscodeshift/src/Collection"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -13,8 +12,8 @@ export default RecipeBuilder()
     stepName: "npm dependencies",
     explanation: `Bulma CSS requires a couple of dependencies including sass for converting sass and scss to css`,
     packages: [
-      {name: "bulma", version: "latest", isDevDep: true},
-      {name: "sass", version: "latest", isDevDep: true},
+      {name: "bulma", version: "0.9.x", isDevDep: true},
+      {name: "sass", version: "1.43.x", isDevDep: true},
     ],
   })
   .addNewFilesStep({
@@ -30,7 +29,7 @@ export default RecipeBuilder()
     stepName: "Import stylesheets",
     explanation: `Imports the stylesheet we just added into your app`,
     singleFileSearch: paths.app(),
-    transform(program: Collection<j.Program>) {
+    transform(program) {
       const stylesImport = j.importDeclaration([], j.literal("app/core/styles/index.scss"))
       return addImport(program, stylesImport)
     },
