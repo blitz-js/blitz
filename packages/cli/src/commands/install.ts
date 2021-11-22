@@ -1,7 +1,8 @@
 import {log} from "@blitzjs/display"
-import type {RecipeExecutor} from "@blitzjs/installer"
+import type {RecipeCLIArgs, RecipeCLIFlags, RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
+import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
 import {Command} from "../command"
@@ -46,7 +47,7 @@ function requireJSON(file: string) {
 }
 
 function checkLockFileExists(filename: string) {
-  return require("fs-extra").existsSync(require("path").resolve(filename))
+  return require("fs-extra").existsSync(resolve(filename))
 }
 
 const GH_ROOT = "https://github.com/"
@@ -88,6 +89,11 @@ export class Install extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    yes: flags.boolean({
+      char: "y",
+      default: false,
+      description: "Install the recipe automatically without user confirmation",
+    }),
   }
 
   static args = [
@@ -100,7 +106,7 @@ export class Install extends Command {
     {
       name: "recipe-flags",
       description:
-        "A list of flags to pass to the recipe. Blitz will only parse these in the form key=value",
+        "A list of flags to pass to the recipe. Blitz will only parse these in the form `key=value`",
     },
   ]
 
@@ -181,7 +187,7 @@ export class Install extends Command {
     subdirectory?: string,
   ): Promise<string> {
     debug("[cloneRepo] starting...")
-    const recipeDir = require("path").join(process.cwd(), ".blitz", "recipe-install")
+    const recipeDir = join(process.cwd(), ".blitz", "recipe-install")
     // clean up from previous run in case of error
     require("rimraf").sync(recipeDir)
     require("fs-extra").mkdirsSync(recipeDir)
@@ -201,18 +207,13 @@ export class Install extends Command {
     return recipeDir
   }
 
-  private async installRecipeAtPath(recipePath: string) {
+  private async installRecipeAtPath(
+    recipePath: string,
+    ...runArgs: Parameters<RecipeExecutor<any>["run"]>
+  ) {
     const recipe = require(recipePath).default as RecipeExecutor<any>
-    const recipeArgs = this.argv.slice(1).reduce(
-      (acc, arg) => ({
-        ...acc,
-        [arg.split("=")[0].replace(/--/g, "")]: arg.split("=")[1]
-          ? JSON.parse(`"${arg.split("=")[1]}"`)
-          : true, // if no value is provided, assume it's a boolean flag
-      }),
-      {},
-    )
-    await recipe.run(recipeArgs)
+
+    await recipe.run(...runArgs)
   }
 
   /**
@@ -247,7 +248,7 @@ export class Install extends Command {
 
     await this.setupProxySupport()
 
-    const {args} = this.parse(Install)
+    const {args, flags, argv} = this.parse(Install)
 
     let selectedRecipe = args.recipe
     if (!selectedRecipe) {
@@ -258,13 +259,34 @@ export class Install extends Command {
 
     const originalCwd = process.cwd()
 
+    // Take all the args after the recipe string
+    //
+    // ['material-ui', '--yes', 'prop=true']
+    // --> ['material-ui', 'prop=true']
+    // --> ['prop=true']
+    // --> { prop: 'true' }
+    const cliArgs = argv
+      .filter((arg) => !arg.startsWith("--"))
+      .slice(1)
+      .reduce<RecipeCLIArgs>(
+        (acc, arg) => ({
+          ...acc,
+          [arg.split("=")[0]]: arg.split("=")[1] ? JSON.parse(`"${arg.split("=")[1]}"`) : true, // if no value is provided, assume it's a boolean flag
+        }),
+        {},
+      )
+
+    const cliFlags: RecipeCLIFlags = {
+      yesToAll: flags.yes || false,
+    }
+
     debug("recipeInfo", recipeInfo)
     const chalk = (await import("chalk")).default
     if (recipeInfo.location === RecipeLocation.Remote) {
       const apiUrl = recipeInfo.path.replace(GH_ROOT, API_ROOT)
       const rawUrl = recipeInfo.path.replace(GH_ROOT, RAW_ROOT)
       const repoInfo = await gotJSON(apiUrl)
-      const packageJsonPath = require("path").join(
+      const packageJsonPath = join(
         `${rawUrl}`,
         repoInfo.default_branch,
         recipeInfo.subdirectory ?? "",
@@ -314,15 +336,15 @@ export class Install extends Command {
         spinner.stop()
 
         const recipePackageMain = requireJSON("./package.json").main
-        const recipeEntry = require("path").resolve(recipePackageMain)
+        const recipeEntry = resolve(recipePackageMain)
         process.chdir(originalCwd)
 
-        await this.installRecipeAtPath(recipeEntry)
+        await this.installRecipeAtPath(recipeEntry, cliArgs, cliFlags)
 
         require("rimraf").sync(recipeRepoPath)
       }
     } else {
-      await this.installRecipeAtPath(require("path").resolve(args.recipe))
+      await this.installRecipeAtPath(resolve(args.recipe), cliArgs, cliFlags)
     }
   }
 }

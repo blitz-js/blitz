@@ -1,1 +1,1 @@
-module.exports = require("@blitzjs/babel-preset")
+module.exports = require("next/dist/build/babel/preset")

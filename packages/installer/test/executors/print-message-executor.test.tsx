@@ -13,7 +13,12 @@ describe("Executor", () => {
   }
   it("should render PrintMessageExecutor", () => {
     const {lastFrame} = render(
-      <PrintMessageExecutor cliArgs={null} onChangeCommitted={() => {}} step={executorConfig} />,
+      <PrintMessageExecutor
+        cliArgs={null}
+        cliFlags={{yesToAll: false}}
+        onChangeCommitted={() => {}}
+        step={executorConfig}
+      />,
     )
 
     expect(stripAnsi(lastFrame())).toMatchSnapshot()
@@ -21,7 +26,12 @@ describe("Executor", () => {
 
   it("should contain a step name and explanation", () => {
     const {frames} = render(
-      <PrintMessageExecutor cliArgs={null} onChangeCommitted={() => {}} step={executorConfig} />,
+      <PrintMessageExecutor
+        cliArgs={null}
+        cliFlags={{yesToAll: false}}
+        onChangeCommitted={() => {}}
+        step={executorConfig}
+      />,
     )
 
     expect(frames[0].includes("My message")).toBeTruthy()

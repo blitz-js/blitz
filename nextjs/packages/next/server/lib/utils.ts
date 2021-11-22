@@ -1,5 +1,5 @@
 import findUp from 'next/dist/compiled/find-up'
-import path, { join } from 'path'
+import path from 'path'
 import { existsSync } from 'fs-extra'
 import { dirname } from 'path'
 import { CONFIG_FILE } from '../../shared/lib/constants'

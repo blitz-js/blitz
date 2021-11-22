@@ -3,7 +3,8 @@ import * as fs from "fs-extra"
 import {Box, Text} from "ink"
 import Spinner from "ink-spinner"
 import * as React from "react"
-import {Newline} from "../components/newline"
+import {EnterToContinue} from "../components/enter-to-continue"
+import {RecipeCLIArgs} from "../types"
 import {
   processFile,
   stringProcessFile,
@@ -13,11 +14,12 @@ import {
   TransformStatus,
 } from "../utils/transform"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
+import {useUserInput} from "../utils/use-user-input"
 import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
 import {filePrompt} from "./file-prompt"
 
 export interface Config extends ExecutorConfig {
-  selectTargetFiles?(cliArgs: any): any[]
+  selectTargetFiles?(cliArgs: RecipeCLIArgs): any[]
   singleFileSearch?: executorArgument<string>
   transform?: Transformer
   transformPlain?: StringTransformer
@@ -31,11 +33,17 @@ export function isFileTransformExecutor(executor: ExecutorConfig): executor is C
 }
 
 export const type = "file-transform"
-export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}) => {
+export const Propose: Executor["Propose"] = ({cliArgs, cliFlags, onProposalAccepted, step}) => {
+  const userInput = useUserInput(cliFlags)
   const [diff, setDiff] = React.useState<string | null>(null)
   const [error, setError] = React.useState<Error | null>(null)
-  const filePathRef = React.useRef("")
-  useEnterToContinue(() => onProposalAccepted(filePathRef.current), !!filePathRef.current)
+  const [filePath, setFilePath] = React.useState("")
+  const [proposalAccepted, setProposalAccepted] = React.useState(false)
+
+  const acceptProposal = React.useCallback(() => {
+    setProposalAccepted(true)
+    onProposalAccepted(filePath)
+  }, [onProposalAccepted, filePath])
 
   React.useEffect(() => {
     async function generateDiff() {
@@ -44,7 +52,7 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
         globFilter: getExecutorArgument((step as Config).singleFileSearch, cliArgs),
         getChoices: (step as Config).selectTargetFiles,
       })
-      filePathRef.current = fileToTransform
+      setFilePath(fileToTransform)
       const originalFile = fs.readFileSync(fileToTransform).toString("utf-8")
       const newFile = await ((step as Config).transformPlain
         ? stringProcessFile(originalFile, (step as Config).transformPlain!)
@@ -70,34 +78,83 @@ export const Propose: Executor["Propose"] = ({cliArgs, onProposalAccepted, step}
     )
   }
 
+  const childProps: ProposeChildProps = {
+    diff,
+    filePath,
+    proposalAccepted,
+    acceptProposal,
+  }
+
+  if (userInput) return <ProposeWithInput {...childProps} />
+  else return <ProposeWithoutInput {...childProps} />
+}
+
+interface ProposeChildProps {
+  diff: string
+  filePath: string
+  proposalAccepted: boolean
+  acceptProposal: () => void
+}
+
+const Diff = ({diff}: {diff: string}) => (
+  <>
+    {diff
+      .split("\n")
+      .slice(2)
+      .map((line, idx) => {
+        let styleProps: any = {}
+        if (line.startsWith("-") && !line.startsWith("---")) {
+          styleProps.bold = true
+          styleProps.color = "red"
+        } else if (line.startsWith("+") && !line.startsWith("+++")) {
+          styleProps.bold = true
+          styleProps.color = "green"
+        }
+        return (
+          <Text {...styleProps} key={idx}>
+            {line}
+          </Text>
+        )
+      })}
+  </>
+)
+
+const ProposeWithInput = ({
+  diff,
+  filePath,
+  proposalAccepted,
+  acceptProposal,
+}: ProposeChildProps) => {
+  useEnterToContinue(acceptProposal, filePath !== "" && !proposalAccepted)
+
   return (
     <Box flexDirection="column">
-      {diff
-        .split("\n")
-        .slice(2)
-        .map((line, idx) => {
-          let styleProps: any = {}
-          if (line.startsWith("-") && !line.startsWith("---")) {
-            styleProps.bold = true
-            styleProps.color = "red"
-          } else if (line.startsWith("+") && !line.startsWith("+++")) {
-            styleProps.bold = true
-            styleProps.color = "green"
-          }
-          return (
-            <Text {...styleProps} key={idx}>
-              {line}
-            </Text>
-          )
-        })}
-      <Newline />
-      <Text bold>The above changes will be made. Press ENTER to continue</Text>
+      <Diff diff={diff} />
+      <EnterToContinue message="The above changes will be made. Press ENTER to continue" />
     </Box>
   )
 }
-export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
-  const [loading, setLoading] = React.useState(true)
 
+const ProposeWithoutInput = ({
+  diff,
+  filePath,
+  proposalAccepted,
+  acceptProposal,
+}: ProposeChildProps) => {
+  React.useEffect(() => {
+    if (filePath !== "" && !proposalAccepted) {
+      acceptProposal()
+    }
+  }, [acceptProposal, filePath, proposalAccepted])
+
+  return (
+    <Box flexDirection="column">
+      <Diff diff={diff} />
+    </Box>
+  )
+}
+
+export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: filePath, step}) => {
   React.useEffect(() => {
     void (async function () {
       const results = await transform(
@@ -110,19 +167,14 @@ export const Commit: Executor["Commit"] = ({onChangeCommitted, proposalData: fil
       if (results.some((r) => r.status === TransformStatus.Failure)) {
         console.error(results)
       }
-      setLoading(false)
+      onChangeCommitted(`Modified file: ${filePath}`)
     })()
-  }, [filePath, step])
+  }, [filePath, onChangeCommitted, step])
 
-  if (loading) {
-    return (
-      <Box>
-        <Spinner />
-        <Text>Applying file changes</Text>
-      </Box>
-    )
-  }
-
-  onChangeCommitted(`Modified file: ${filePath}`)
-  return null
+  return (
+    <Box>
+      <Spinner />
+      <Text>Applying file changes</Text>
+    </Box>
+  )
 }
