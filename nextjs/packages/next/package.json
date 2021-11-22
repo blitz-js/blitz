@@ -112,7 +112,6 @@
     "node-libs-browser": "^2.2.1",
     "npm-which": "^3.0.1",
     "null-loader": "4.0.1",
-    "ora": "^5.3.0",
     "os-browserify": "0.3.0",
     "p-limit": "3.1.0",
     "passport": "0.4.1",
