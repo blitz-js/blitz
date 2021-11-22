@@ -35,28 +35,28 @@
   "dependencies": {
     "@prisma/client": "2.24.1",
     "blitz": "0.43.0",
-    "final-form": "4.20.1",
+    "final-form": "4.20.4",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-final-form": "6.5.2",
-    "zod": "3.10.1"
+    "react-final-form": "6.5.7",
+    "zod": "3.11.6"
   },
   "devDependencies": {
-    "@testing-library/cypress": "8.0.1",
-    "@types/preview-email": "2.0.0",
-    "@types/react": "17.0.2",
+    "@testing-library/cypress": "8.0.2",
+    "@types/preview-email": "2.0.1",
+    "@types/react": "17.0.33",
     "@types/testing-library__cypress": "5.0.9",
     "chance": "1.1.8",
     "cross-env": "7.0.3",
-    "cypress": "6.2.1",
-    "eslint": "7.21.0",
-    "husky": "5.1.2",
-    "lint-staged": "10.5.4",
-    "prettier": "2.2.1",
-    "pretty-quick": "3.1.0",
-    "preview-email": "3.0.3",
+    "cypress": "8.7.0",
+    "eslint": "8.2.0",
+    "husky": "7.0.4",
+    "lint-staged": "11.2.6",
+    "prettier": "2.4.1",
+    "pretty-quick": "3.1.1",
+    "preview-email": "3.0.5",
     "prisma": "2.24.1",
-    "start-server-and-test": "1.11.7"
+    "start-server-and-test": "1.14.0"
   },
   "private": true
 }
