@@ -1,7 +1,7 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
-import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
-import {NextConfigComplete} from "next/dist/server/config-shared"
+import {singlePascal, uncapitalize} from "../utils/inflector"
+const debug = require('debug')('blitz:field')
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -57,6 +57,8 @@ export class Field {
 
   // 'name:type?[]:attribute' => Field
   static async parse(input: string, schema?: ast.Schema): Promise<Field[]> {
+    debug(`parsing "Field" for input ${input}`)
+
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute
     let fieldName = uncapitalize(_fieldName)
@@ -169,13 +171,14 @@ export class Field {
   public static getPrismaTypeForFieldType: (fieldType:string) => Promise<string> = async (fieldType) => {
     let prismaType = "String"
     const prismaTypeKey = "prismaType"
-
     try {
       const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
       let config = await loadConfigAtRuntime()
       prismaType = config.codegen.fieldTypeMap[fieldType][prismaTypeKey]
+      debug(`prismaType for ${fieldType} is ${prismaType}`)
     }catch(error){
-      console.log("Error loading field-type to prisma-type map, using default prisma type " + prismaType)
+      log.warning("Failed loading field-type to prisma-type map: " + error)
+      log.warning("Using default prisma type " + prismaType)
     }
 
     return prismaType
