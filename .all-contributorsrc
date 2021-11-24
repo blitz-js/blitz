@@ -3481,6 +3481,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "davidchristie",
+      "name": "David Christie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12044333?v=4",
+      "profile": "https://github.com/davidchristie",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
