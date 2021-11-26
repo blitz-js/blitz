@@ -79,10 +79,7 @@ export function loadEnvConfig(
 
   const isTest = process.env.NODE_ENV === 'test'
   let mode = isTest ? 'test' : dev ? 'development' : 'production'
-  if (process.env.APP_ENV) {
-    mode = process.env.APP_ENV
-  }
-  const dotenvFiles = [
+  let dotenvFiles = [
     `.env.${mode}.local`,
     // Don't include `.env.local` for `test` environment
     // since normally you expect tests to produce the same
@@ -91,6 +88,14 @@ export function loadEnvConfig(
     `.env.${mode}`,
     '.env',
   ].filter(Boolean) as string[]
+
+  if (process.env.APP_ENV) {
+    dotenvFiles = [
+      `.env.${process.env.APP_ENV}.local`,
+      `.env.${process.env.APP_ENV}`,
+      ...dotenvFiles,
+    ]
+  }
 
   for (const envFile of dotenvFiles) {
     // only load .env if the user provided has an env config file
