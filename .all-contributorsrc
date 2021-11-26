@@ -3471,6 +3471,25 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "noxify",
+      "name": "Marcus Reinhardt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/521777?v=4",
+      "profile": "https://jammeryhq.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "davidchristie",
+      "name": "David Christie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12044333?v=4",
+      "profile": "https://github.com/davidchristie",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

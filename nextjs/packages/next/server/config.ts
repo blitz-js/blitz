@@ -18,7 +18,12 @@ import { loadEnvConfig } from '@blitzjs/env'
 import { hasNextSupport } from '../telemetry/ci-info'
 const debug = require('debug')('blitz:config')
 
-export { DomainLocale, NextConfig, normalizeConfig } from './config-shared'
+export {
+  DomainLocale,
+  NextConfig,
+  BlitzConfig,
+  normalizeConfig,
+} from './config-shared'
 
 const targets = ['server', 'serverless', 'experimental-serverless-trace']
 

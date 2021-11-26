@@ -107,15 +107,16 @@ declare module 'react' {
   }
 }
 
+export type Destination = string | RouteUrlObject
 export type Redirect =
   | {
       statusCode: 301 | 302 | 303 | 307 | 308
-      destination: string
+      destination: Destination
       basePath?: false
     }
   | {
       permanent: boolean
-      destination: string
+      destination: Destination
       basePath?: false
     }
 

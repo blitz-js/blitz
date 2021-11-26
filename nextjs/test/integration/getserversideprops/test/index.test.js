@@ -9,7 +9,6 @@ import {
   findPort,
   File,
   getBrowserBodyText,
-  getRedboxHeader,
   killApp,
   launchApp,
   nextBuild,

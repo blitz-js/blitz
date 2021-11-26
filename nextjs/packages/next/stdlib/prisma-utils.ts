@@ -34,6 +34,7 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(
         }
 
         if (!global._blitz_prismaClient) {
+          // eslint-disable-next-line no-shadow
           const client = new target(...(args as any))
 
           client.$reset = async function reset() {
