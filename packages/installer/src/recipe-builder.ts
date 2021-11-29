@@ -2,6 +2,7 @@ import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as TransformFileExecutor from "./executors/file-transform-executor"
 import * as NewFileExecutor from "./executors/new-file-executor"
 import * as PrintMessageExecutor from "./executors/print-message-executor"
+import * as RunCommandExecutor from "./executors/run-command-executor"
 import {ExecutorConfigUnion, RecipeExecutor} from "./recipe-executor"
 import {RecipeMeta} from "./types"
 
@@ -16,6 +17,7 @@ export interface IRecipeBuilder {
   addAddDependenciesStep(step: Omit<AddDependencyExecutor.Config, "stepType">): IRecipeBuilder
   addNewFilesStep(step: Omit<NewFileExecutor.Config, "stepType">): IRecipeBuilder
   addTransformFilesStep(step: Omit<TransformFileExecutor.Config, "stepType">): IRecipeBuilder
+  runCommand(step: Omit<RunCommandExecutor.Config, "stepType">): IRecipeBuilder
   build(): RecipeExecutor<any>
 }
 
@@ -64,6 +66,13 @@ export function RecipeBuilder(): IRecipeBuilder {
     addTransformFilesStep(step: Omit<TransformFileExecutor.Config, "stepType">) {
       steps.push({
         stepType: TransformFileExecutor.type,
+        ...step,
+      })
+      return this
+    },
+    runCommand(step: Omit<RunCommandExecutor.Config, "stepType">) {
+      steps.push({
+        stepType: RunCommandExecutor.type,
         ...step,
       })
       return this
