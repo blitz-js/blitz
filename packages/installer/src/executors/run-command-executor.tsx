@@ -6,7 +6,7 @@ import {Newline} from "../components/newline"
 import {RecipeCLIArgs} from "../types"
 import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
-import {Executor, executorArgument, ExecutorConfig, getExecutorArgument} from "./executor"
+import {Executor, ExecutorConfig, getExecutorArgument} from "./executor"
 
 export interface CliCommand {
   command: string
@@ -14,7 +14,7 @@ export interface CliCommand {
 }
 
 export interface Config extends ExecutorConfig {
-  command: executorArgument<CliCommand>
+  command: CliCommand
 }
 
 export interface CommitChildProps {
