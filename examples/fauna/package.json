@@ -29,27 +29,27 @@
   },
   "dependencies": {
     "blitz": "0.43.0",
-    "final-form": "4.20.1",
-    "graphql": "15.5.0",
-    "graphql-request": "3.4.0",
+    "final-form": "4.20.4",
+    "graphql": "16.0.1",
+    "graphql-request": "3.6.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-final-form": "6.5.2"
+    "react-final-form": "6.5.7"
   },
   "devDependencies": {
-    "@testing-library/react": "11.2.5",
-    "@testing-library/react-hooks": "^4.0.1",
-    "@types/react": "17.0.2",
-    "@types/secure-password": "3.1.0",
-    "eslint": "7.21.0",
+    "@testing-library/react": "12.1.2",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/react": "17.0.33",
+    "@types/secure-password": "3.1.1",
+    "eslint": "8.2.0",
     "eslint-config-react-app": "~6.0.0",
-    "eslint-plugin-flowtype": "~5.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.23.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "5.1.2",
-    "start-server-and-test": "1.11.7"
+    "eslint-plugin-flowtype": "~8.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "7.0.4",
+    "start-server-and-test": "1.14.0"
   },
   "private": true
 }

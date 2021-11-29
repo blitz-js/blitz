@@ -22,15 +22,15 @@
   "dependencies": {
     "@prisma/client": "2.24.1",
     "blitz": "0.43.0",
-    "final-form": "4.20.1",
+    "final-form": "4.20.4",
     "prisma": "2.24.1",
     "react": "0.0.0-experimental-6a589ad71",
     "react-dom": "0.0.0-experimental-6a589ad71",
-    "react-final-form": "6.5.2"
+    "react-final-form": "6.5.7"
   },
   "devDependencies": {
-    "@types/react": "17.0.2",
-    "cypress": "6.2.1",
-    "start-server-and-test": "1.11.7"
+    "@types/react": "17.0.33",
+    "cypress": "9.0.0",
+    "start-server-and-test": "1.14.0"
   }
 }

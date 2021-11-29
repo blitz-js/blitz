@@ -29,6 +29,6 @@
     "jscodeshift": "0.13.0"
   },
   "devDependencies": {
-    "@types/jscodeshift": "0.11.2"
+    "@types/jscodeshift": "0.11.3"
   }
 }
