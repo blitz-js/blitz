@@ -8,15 +8,11 @@ import {useEnterToContinue} from "../utils/use-enter-to-continue"
 import {useUserInput} from "../utils/use-user-input"
 import {Executor, ExecutorConfig, getExecutorArgument} from "./executor"
 
-export interface CliCommand {
-  command: string
-  commandArgs?: string[]
-}
+export type CliCommand = string | [string, ...string[]]
 
 export interface Config extends ExecutorConfig {
   command: CliCommand
 }
-
 export interface CommitChildProps {
   commandInstalled: boolean
   handleChangeCommitted: () => void
@@ -32,7 +28,7 @@ function Command({command, loading}: {command: CliCommand; loading: boolean}) {
     <Text>
       {`   `}
       {loading ? <Spinner /> : "✅"}
-      {` ${command.command}`} {` ${command.commandArgs?.join(" ")}`}
+      {` ${command}`}
     </Text>
   )
 }
@@ -58,11 +54,28 @@ const CommandList = ({
 }
 
 /**
- * Exported for unit testing purposes
+ * INFO: Exported for unit testing purposes
+ *
+ * This function calls the defined command with their optional arguments if defined
+ *
+ * @param {CliCommand} input  The Command and arguments
+ * @return Promise<void>
+ *
+ * @example await executeCommand("ls")
+ * @example await executeCommand(["ls"])
+ * @example await executeCommand(["ls", ...["-a", "-l"]])
  */
-export async function executeCommand(command: string, commandArgs?: string[]) {
+export async function executeCommand(input: CliCommand): Promise<void> {
+  // from https://stackoverflow.com/a/43766456/9950655
+  const argsRegex = /("[^"\\]*(?:\\[\S\s][^"\\]*)*"|'[^'\\]*(?:\\[\S\s][^'\\]*)*'|\/[^/\\]*(?:\\[\S\s][^/\\]*)*\/[gimy]*(?=\s|$)|(?:\\\s|\S)+)/g
+  const command: string[] = Array.isArray(input) ? input : input.match(argsRegex) || []
+
+  if (command.length === 0) {
+    throw new Error(`The command is too short: \`${JSON.stringify(input)}\``)
+  }
+
   await new Promise((resolve) => {
-    const cp = spawn(command, commandArgs || [], {
+    const cp = spawn(command[0], command.slice(1), {
       stdio: ["inherit", "pipe", "pipe"],
     })
     cp.on("exit", resolve)
@@ -80,9 +93,7 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
 
   React.useEffect(() => {
     async function runCommand() {
-      const command = executorCommand.command
-      const commandArgs = executorCommand.commandArgs
-      await executeCommand(command, commandArgs)
+      await executeCommand(executorCommand)
       setCommandInstalled(true)
     }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
