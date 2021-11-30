@@ -20,18 +20,19 @@ export interface Config extends ExecutorConfig {
 export interface CommitChildProps {
   commandInstalled: boolean
   handleChangeCommitted: () => void
-  step: Config
+  command: CliCommand
   cliArgs: RecipeCLIArgs
+  step: Config
 }
 
 export const type = "run-command"
 
-function Command({step, loading}: {step: Config; loading: boolean}) {
+function Command({command, loading}: {command: CliCommand; loading: boolean}) {
   return (
     <Text>
       {`   `}
       {loading ? <Spinner /> : "✅"}
-      {` ${step.command}`}
+      {` ${command.command}`} {` ${command.commandArgs?.join(" ")}`}
     </Text>
   )
 }
@@ -40,16 +41,18 @@ const CommandList = ({
   lede = "Hang tight! Running...",
   commandLoading = false,
   step,
+  command,
 }: {
   lede?: string
   commandLoading?: boolean
   step: Config
+  command: CliCommand
 }) => {
   return (
     <Box flexDirection="column">
       <Text>{lede}</Text>
       <Newline />
-      <Command key={step.stepId} step={step} loading={commandLoading} />
+      <Command key={step.stepId} command={command} loading={commandLoading} />
     </Box>
   )
 }
@@ -69,6 +72,7 @@ export async function executeCommand(command: string, commandArgs?: string[]) {
 export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCommitted}) => {
   const userInput = useUserInput(cliFlags)
   const [commandInstalled, setCommandInstalled] = React.useState(false)
+  const executorCommand = getExecutorArgument((step as Config).command, cliArgs)
 
   const handleChangeCommitted = React.useCallback(() => {
     onChangeCommitted(`Executed command`)
@@ -76,7 +80,6 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
 
   React.useEffect(() => {
     async function runCommand() {
-      const executorCommand = getExecutorArgument((step as Config).command, cliArgs)
       const command = executorCommand.command
       const commandArgs = executorCommand.commandArgs
       await executeCommand(command, commandArgs)
@@ -84,7 +87,7 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
     }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     runCommand()
-  }, [cliArgs, step])
+  }, [cliArgs, step, executorCommand])
 
   React.useEffect(() => {
     if (commandInstalled) {
@@ -95,8 +98,9 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
   const childProps: CommitChildProps = {
     commandInstalled,
     handleChangeCommitted,
-    step,
+    command: executorCommand,
     cliArgs,
+    step: step as Config,
   }
 
   if (userInput) return <CommitWithInput {...childProps} />
@@ -106,16 +110,14 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
 const CommitWithInput = ({
   commandInstalled,
   handleChangeCommitted,
+  command,
   step,
-  cliArgs,
 }: CommitChildProps) => {
   useEnterToContinue(handleChangeCommitted, commandInstalled)
 
-  return (
-    <CommandList commandLoading={!commandInstalled} step={getExecutorArgument(step, cliArgs)} />
-  )
+  return <CommandList commandLoading={!commandInstalled} step={step} command={command} />
 }
 
-const CommitWithoutInput = ({commandInstalled, step, cliArgs}: CommitChildProps) => (
-  <CommandList commandLoading={!commandInstalled} step={getExecutorArgument(step, cliArgs)} />
+const CommitWithoutInput = ({commandInstalled, command, step}: CommitChildProps) => (
+  <CommandList commandLoading={!commandInstalled} step={step} command={command} />
 )
