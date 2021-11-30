@@ -17,7 +17,7 @@ export interface IRecipeBuilder {
   addAddDependenciesStep(step: Omit<AddDependencyExecutor.Config, "stepType">): IRecipeBuilder
   addNewFilesStep(step: Omit<NewFileExecutor.Config, "stepType">): IRecipeBuilder
   addTransformFilesStep(step: Omit<TransformFileExecutor.Config, "stepType">): IRecipeBuilder
-  runCommand(step: Omit<RunCommandExecutor.Config, "stepType">): IRecipeBuilder
+  addRunCommandStep(step: Omit<RunCommandExecutor.Config, "stepType">): IRecipeBuilder
   build(): RecipeExecutor<any>
 }
 
@@ -70,7 +70,7 @@ export function RecipeBuilder(): IRecipeBuilder {
       })
       return this
     },
-    runCommand(step: Omit<RunCommandExecutor.Config, "stepType">) {
+    addRunCommandStep(step: Omit<RunCommandExecutor.Config, "stepType">) {
       steps.push({
         stepType: RunCommandExecutor.type,
         ...step,
