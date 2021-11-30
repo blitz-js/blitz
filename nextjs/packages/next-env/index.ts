@@ -78,7 +78,7 @@ export function loadEnvConfig(
   if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
   const isTest = process.env.NODE_ENV === 'test'
-  let mode = isTest ? 'test' : dev ? 'development' : 'production'
+  const mode = isTest ? 'test' : dev ? 'development' : 'production'
   let dotenvFiles = [
     `.env.${mode}.local`,
     // Don't include `.env.local` for `test` environment
