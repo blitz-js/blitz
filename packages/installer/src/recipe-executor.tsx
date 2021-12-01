@@ -1,5 +1,5 @@
 import {render} from "ink"
-import {log} from "next/dist/server/lib/logging"
+import {baseLogger} from "next/dist/server/lib/logging"
 import React from "react"
 import * as AddDependencyExecutor from "./executors/add-dependency-executor"
 import * as FileTransformExecutor from "./executors/file-transform-executor"
@@ -41,9 +41,11 @@ export class RecipeExecutor<Options extends RecipeMeta> {
         {exitOnCtrlC: false},
       )
       await waitUntilExit()
-      log.info(`\n🎉 The ${this.options.name} recipe has been installed!\n`)
+      baseLogger({displayDateTime: false, displayLogLevel: false}).silly(
+        `\n🎉 The ${this.options.name} recipe has been installed!\n`,
+      )
     } catch (e) {
-      log.error(e as any)
+      baseLogger({displayDateTime: false}).error(e as any)
       return
     }
   }

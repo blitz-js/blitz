@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import spawn from "cross-spawn"
 import {readJSONSync, writeJson} from "fs-extra"
-import {log} from "next/dist/server/lib/logging"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
@@ -92,8 +92,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
       gitInitSuccessful = initResult.status === 0
       if (!gitInitSuccessful) {
-        log.warning("Failed to run git init.")
-        log.warning("Find out more about how to install git here: https://git-scm.com/downloads.")
+        baseLogger({displayDateTime: false}).warn("Failed to run git init.")
+        baseLogger({displayDateTime: false}).warn(
+          "Find out more about how to install git here: https://git-scm.com/downloads.",
+        )
       }
     }
     const pkgJsonLocation = join(this.destinationPath(), "package.json")

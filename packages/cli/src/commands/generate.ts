@@ -15,7 +15,7 @@ import {
 } from "@blitzjs/generator"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
-import {log} from "next/dist/server/lib/logging"
+import {baseLogger} from "next/dist/server/lib/logging"
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
@@ -180,7 +180,7 @@ export class Generate extends Command {
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      require("next/dist/shared/lib/display").log.error(
+      baseLogger({displayDateTime: false}).error(
         "Could not determine proper location for files. Aborting.",
       )
       this.exit(0)
@@ -263,7 +263,7 @@ export class Generate extends Command {
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
-      log.error(err as any)
+      baseLogger({displayDateTime: false}).error(err)
       this.exit(1)
     }
   }

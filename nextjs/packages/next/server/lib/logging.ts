@@ -2,7 +2,7 @@ import { ISettingsParam, Logger } from 'tslog'
 import { loadConfigAtRuntime, LogLevel } from '../config-shared'
 import c from 'chalk'
 import { Table } from 'console-table-printer'
-import ora from 'ora'
+import ora from 'next/dist/compiled/ora'
 import readline from 'readline'
 
 // eslint-disable-next-line
@@ -83,20 +83,12 @@ const withBrand = (str: string) => {
   return c.hex(brandColor).bold(str)
 }
 
-const withWarning = (str: string) => {
-  return `⚠️  ${c.yellow(str)}`
-}
-
 const withCaret = (str: string) => {
   return `${c.gray('>')} ${str}`
 }
 
 const withCheck = (str: string) => {
   return `${c.green('✔')} ${str}`
-}
-
-const withX = (str: string) => {
-  return `${c.red.bold('✕')} ${str}`
 }
 
 const withProgress = (str: string) => {
@@ -132,34 +124,12 @@ const clearConsole = () => {
 }
 
 /**
- * Logs a red error message to stderr.
- *
- * @param {string} msg
- */
-const warning = (msg: string) => {
-  console.log(withCaret(withWarning(msg)))
-}
-
-/**
- * Logs a red error message to stderr.
- *
- * @param {string} msg
- */
-const error = (msg: string) => {
-  console.error(withX(c.red.bold(msg)))
-}
-
-/**
  * Logs a progress message to stdout.
  *
  * @param {string} msg
  */
 const progress = (msg: string) => {
   console.log(withProgress(msg))
-}
-
-const info = (msg: string) => {
-  console.log(c.bold(msg))
 }
 
 const spinner = (str: string) => {
@@ -199,18 +169,14 @@ const debug = require('debug')('blitz')
 
 export const log = {
   withBrand,
-  withWarning,
   withCaret,
   branded,
   clearLine,
   clearConsole,
-  error,
-  warning,
   progress,
   spinner,
   success,
   variable,
-  info,
   debug,
   Table,
 }

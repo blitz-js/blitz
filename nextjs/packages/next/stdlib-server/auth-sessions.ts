@@ -1,4 +1,4 @@
-import { log } from '../server/lib/logging'
+import { baseLogger } from '../server/lib/logging'
 import { fromBase64, toBase64 } from 'b64-lite'
 import cookie from 'next/dist/compiled/cookie'
 import fs from 'fs'
@@ -94,7 +94,9 @@ const defaultConfig: SessionConfig = {
     } catch (error) {
       // Session doesn't exist in DB for some reason, so create it
       if (error.code === 'P2016') {
-        log.warning("Could not update session because it's not in the DB")
+        baseLogger({ displayDateTime: false }).warn(
+          "Could not update session because it's not in the DB"
+        )
       } else {
         throw error
       }
@@ -691,7 +693,7 @@ async function getSessionKernel(
       persistedSession.antiCSRFToken !== antiCSRFToken
     ) {
       if (!antiCSRFToken) {
-        log.warning(
+        baseLogger({ displayDateTime: false }).warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`
         )
       }
@@ -767,7 +769,7 @@ async function getSessionKernel(
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
       if (!antiCSRFToken) {
-        log.warning(
+        baseLogger({ displayDateTime: false }).warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`
         )
       }

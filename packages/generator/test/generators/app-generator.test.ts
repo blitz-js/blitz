@@ -1,5 +1,5 @@
 import spawn from "cross-spawn"
-import {log} from "next/dist/server/lib/logging"
+import {baseLogger} from "next/dist/server/lib/logging"
 import {AppGenerator} from "../../src/generators/app-generator"
 
 // Spies process to avoid trying to chdir to a non existing folder
@@ -151,8 +151,10 @@ describe("AppGenerator", () => {
       })
       await generator.run()
 
-      expect(log.warning).toHaveBeenCalledWith("Failed to run git init.")
-      expect(log.warning).toHaveBeenCalledWith(
+      expect(baseLogger({displayDateTime: false}).warn).toHaveBeenCalledWith(
+        "Failed to run git init.",
+      )
+      expect(baseLogger({displayDateTime: false}).warn).toHaveBeenCalledWith(
         "Find out more about how to install git here: https://git-scm.com/downloads.",
       )
     })
