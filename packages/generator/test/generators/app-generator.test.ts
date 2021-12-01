@@ -22,6 +22,11 @@ jest.mock(
         }),
         warning: jest.fn(),
       },
+      baseLogger: jest.fn().mockImplementation(() => {
+        return {
+          warn: jest.fn(),
+        }
+      }),
     }
   }),
 )
