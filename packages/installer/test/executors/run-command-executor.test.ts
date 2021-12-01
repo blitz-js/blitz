@@ -20,29 +20,13 @@ describe("run command executor", () => {
       valid: true,
       command: [
         "npx",
-        ...[
-          "create-app",
-          "example-app",
-          "--use-npm",
-          "--example",
-          '"https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
-        ],
-      ],
-      expected:
-        'npx create-app example-app --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
-    },
-    {
-      valid: true,
-      command: [
-        "npx",
         "create-app",
         "example-app",
         "--use-npm",
         "--example",
-        '"https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
+        '"https://github.com/some/repo"',
       ],
-      expected:
-        'npx create-app example-app --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
+      expected: 'npx create-app example-app --use-npm --example "https://github.com/some/repo"',
     },
     {
       valid: false,
@@ -57,17 +41,20 @@ describe("run command executor", () => {
   ]
 
   it.each(commands)("run test case $# - `$command`", ({command, valid, expected}) => {
+    // mock the cross-spawn to get the executed command as return value
     const mockedSpawn = mockSpawn()
     mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
 
     const executeCommand = RunCommandExecutor.executeCommand
 
     if (valid) {
+      // success case
       void executeCommand(command as string | [string, ...string[]]).then(() => {
         return true
       })
       return expect(mockedSpawn.calls[0]).toEqual(expected)
     } else {
+      // error case
       try {
         executeCommand(command as string | [string, ...string[]]).catch((e) => {
           expect(e.toString()).toMatch(`The command is too short: \`${JSON.stringify(command)}\``)
