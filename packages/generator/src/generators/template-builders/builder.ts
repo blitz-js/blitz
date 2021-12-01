@@ -1,5 +1,5 @@
 import {Editor} from "mem-fs-editor"
-import {NextConfigComplete} from "next/dist/server/config-shared"
+import {getCodegen, getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {GeneratorOptions} from "../../generator"
 import {
   addSpaceBeforeCapitals,
@@ -70,17 +70,6 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
     return `[${input}]`
   }
 
-  public async getResourceValueFromConfig(fieldType: string, resource: string): Promise<string> {
-    let templateValue = ""
-    try {
-      let config = await this.getCachedConfig()
-      templateValue = config.codegen.fieldTypeMap[fieldType][resource]
-    } catch (ex) {
-      templateValue = this.fallbacks[resource]
-    }
-    return templateValue
-  }
-
   public getModelNamesPath(context: string | undefined, modelNames: string) {
     const kebabCaseContext = context ? `${camelCaseToKebabCase(context)}/` : ""
     const kebabCaseModelNames = camelCaseToKebabCase(modelNames)
@@ -89,54 +78,35 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
 
   // eslint-disable-next-line require-await
   public async getZodType(type: string = "") {
-    return this.getResourceValueFromConfig(type, "zodType")
+    return getResourceValueFromCodegen(type, "zodType")
   }
 
   // eslint-disable-next-line require-await
   public async getComponentForType(type: string = ""): Promise<string> {
-    return this.getResourceValueFromConfig(type, "component")
+    return getResourceValueFromCodegen(type, "component")
   }
-  
+
   // eslint-disable-next-line require-await
   public async getInputType(type: string = ""): Promise<string> {
-    return this.getResourceValueFromConfig(type, "inputType")
-  }
-
-  private config: NextConfigComplete | undefined = undefined
-
-  public async getCachedConfig(): Promise<NextConfigComplete> {
-    if (!this.config) {
-      const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
-      this.config = await loadConfigAtRuntime()
-    }
-
-    return this.config
+    return getResourceValueFromCodegen(type, "inputType")
   }
 
   // eslint-disable-next-line require-await
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
       const [valueName, typeName] = arg.split(":")
-      const values: {[key in string]: any}  = {
-        attributeName: singleCamel(valueName),        
+      let values: {[key in string]: any} = {
+        attributeName: singleCamel(valueName),
         fieldName: singleCamel(valueName), // fieldName
         FieldName: singlePascal(valueName), // FieldName
         field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
         Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
         Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
       }
-      const config = await this.getCachedConfig()
-      // iterate over resources defined for this
-      let resourcesArray: string[]  = []
-      let map: {[key in string]: string}  = {}
-      try{      
-        map = config.codegen.fieldTypeMap[typeName]
-        resourcesArray = Object.keys(config.codegen.fieldTypeMap[typeName])        
-      }catch(error){
-        map = this.fallbacks
-        resourcesArray = Object.keys(this.fallbacks)
-      }
-      resourcesArray.forEach((resource) => values[resource] = map[resource])
+      const codegen = (await getCodegen()).codegen
+      // iterate over resources defined for this field type
+      const map = codegen.fieldTypeMap[typeName]
+      values = {...values, ...map}
       // TODO: potentially overrides specified from cmd line for these?
       return values
     })

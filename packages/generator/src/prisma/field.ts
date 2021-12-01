@@ -1,5 +1,6 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
+import { getResourceValueFromCodegen } from "../utils/get-codegen"
 import {singlePascal, uncapitalize} from "../utils/inflector"
 const debug = require('debug')('blitz:field')
 
@@ -170,16 +171,11 @@ export class Field {
 
   public static getPrismaTypeForFieldType: (fieldType:string) => Promise<string> = async (fieldType) => {
     let prismaType = "String"
+    // TODO: Make sure that if prismaType key ever changes, this change too
+    // Should be detectable via an integration test on the CLI
     const prismaTypeKey = "prismaType"
-    try {
-      const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
-      let config = await loadConfigAtRuntime()
-      prismaType = config.codegen.fieldTypeMap[fieldType][prismaTypeKey]
-      debug(`prismaType for ${fieldType} is ${prismaType}`)
-    }catch(error){
-      log.warning("Failed loading field-type to prisma-type map: " + error)
-      log.warning("Using default prisma type " + prismaType)
-    }
+    prismaType = await getResourceValueFromCodegen(fieldType, prismaTypeKey)
+    debug(`prismaType for ${fieldType} is ${prismaType}`)
 
     return prismaType
   }
