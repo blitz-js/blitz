@@ -28,7 +28,7 @@ function Command({command, loading}: {command: CliCommand; loading: boolean}) {
     <Text>
       {`   `}
       {loading ? <Spinner /> : "✅"}
-      {` ${command}`}
+      {` ${typeof command === "string" ? command : command.join(" ")}`}
     </Text>
   )
 }
