@@ -5,75 +5,77 @@ import * as RunCommandExecutor from "../../src/executors/run-command-executor"
 jest.mock("cross-spawn")
 
 describe("run command executor", () => {
-  const cliTest1: RunCommandExecutor.Config = {
-    stepId: "runCommand",
-    stepName: "Run Command Test 1",
-    stepType: "run-command",
-    explanation: "This step will run a command for testing purposes",
-    command: ["ls", ...["-a", "-l"]],
-  }
-
-  const cliTest2: RunCommandExecutor.Config = {
-    stepId: "runCommand",
-    stepName: "Run Command Test 2",
-    stepType: "run-command",
-    explanation: "This step will run a command for testing purposes",
-    command: [
-      "npx",
-      ...[
+  const commands = [
+    {
+      valid: true,
+      command: "ls",
+      expected: "ls",
+    },
+    {
+      valid: true,
+      command: ["ls"],
+      expected: "ls",
+    },
+    {
+      valid: true,
+      command: [
+        "npx",
+        ...[
+          "create-app",
+          "example-app",
+          "--use-npm",
+          "--example",
+          '"https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
+        ],
+      ],
+      expected:
+        'npx create-app example-app --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
+    },
+    {
+      valid: true,
+      command: [
+        "npx",
         "create-app",
         "example-app",
         "--use-npm",
         "--example",
         '"https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
       ],
-    ],
-  }
+      expected:
+        'npx create-app example-app --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
+    },
+    {
+      valid: false,
+      command: "",
+      expected: "",
+    },
+    {
+      valid: false,
+      command: [],
+      expected: "",
+    },
+  ]
 
-  const cliTest3: RunCommandExecutor.Config = {
-    stepId: "runCommand",
-    stepName: "Run Command Test 3",
-    stepType: "run-command",
-    explanation: "This step will run a command for testing purposes",
-    command: "ls",
-  }
-
-  const cliTest4: RunCommandExecutor.Config = {
-    stepId: "runCommand",
-    stepName: "Run Command Test 4",
-    stepType: "run-command",
-    explanation: "This step will run a command for testing purposes",
-    command: ["ls"],
-  }
-
-  it("runs testcase 1 - simple ls", async () => {
+  it.each(commands)("run test case $# - `$command`", ({command, valid, expected}) => {
     const mockedSpawn = mockSpawn()
     mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
-    await RunCommandExecutor.executeCommand(cliTest1.command)
-    expect(mockedSpawn.calls[0]).toEqual("ls -a -l")
-  })
 
-  it("runs testcase 2 - npx create-app with double quotes", async () => {
-    const mockedSpawn = mockSpawn()
-    mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
-    await RunCommandExecutor.executeCommand(cliTest2.command)
-    expect(mockedSpawn.calls[0]).toEqual(
-      'npx create-app example-app --use-npm --example "https://github.com/vercel/next-learn/tree/master/basics/learn-starter"',
-    )
-  })
+    const executeCommand = RunCommandExecutor.executeCommand
 
-  it("runs testcase 3 - command without args", async () => {
-    const mockedSpawn = mockSpawn()
-    mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
-    await RunCommandExecutor.executeCommand(cliTest3.command)
-    expect(mockedSpawn.calls[0]).toEqual("ls ")
-  })
-
-  it("runs testcase 4 - command with empty args", async () => {
-    const mockedSpawn = mockSpawn()
-    mocked(spawn).mockImplementation(mockedSpawn.spawn as any)
-    await RunCommandExecutor.executeCommand(cliTest4.command)
-    expect(mockedSpawn.calls[0]).toEqual("ls ")
+    if (valid) {
+      void executeCommand(command as string | [string, ...string[]]).then(() => {
+        return true
+      })
+      return expect(mockedSpawn.calls[0]).toEqual(expected)
+    } else {
+      try {
+        executeCommand(command as string | [string, ...string[]]).catch((e) => {
+          expect(e.toString()).toMatch(`The command is too short: \`${JSON.stringify(command)}\``)
+        })
+      } catch (e) {
+        throw e
+      }
+    }
   })
 })
 
@@ -85,7 +87,8 @@ const mockSpawn = () => {
 
   return {
     spawn: (command: string, args: string[], _: unknown = {}) => {
-      calls.push(`${command} ${args.join(" ")}`)
+      const commandToExecute = args?.length > 0 ? `${command} ${args.join(" ")}` : `${command}`
+      calls.push(commandToExecute)
 
       return {
         on: (_: string, resolve: () => void) => resolve(),
