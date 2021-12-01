@@ -9,6 +9,7 @@ jest.spyOn(global.console, "log").mockImplementation()
 jest.mock(
   "next/dist/server/lib/logging",
   jest.fn(() => {
+    const warn = jest.fn()
     return {
       log: {
         success: jest.fn(),
@@ -20,11 +21,10 @@ jest.mock(
             start: jest.fn().mockImplementation(() => ({succeed: jest.fn()})),
           }
         }),
-        warning: jest.fn(),
       },
-      baseLogger: jest.fn().mockImplementation(() => {
+      baseLogger: jest.fn().mockImplementation((config: any) => {
         return {
-          warn: jest.fn(),
+          warn
         }
       }),
     }
@@ -146,7 +146,7 @@ describe("AppGenerator", () => {
   })
 
   describe("when git init fails", () => {
-    it("logs warn with instructions", async () => {
+    it.only("logs warn with instructions", async () => {
       // @ts-ignore (TS complains about reassign)
       spawn.sync = jest.fn().mockImplementation((command, options) => {
         if (command === "git" && options[0] === "init") {
@@ -156,10 +156,10 @@ describe("AppGenerator", () => {
       })
       await generator.run()
 
-      expect(baseLogger({displayDateTime: false}).warn).toHaveBeenCalledWith(
+      expect(baseLogger().warn).toHaveBeenCalledWith(
         "Failed to run git init.",
       )
-      expect(baseLogger({displayDateTime: false}).warn).toHaveBeenCalledWith(
+      expect(baseLogger().warn).toHaveBeenCalledWith(
         "Find out more about how to install git here: https://git-scm.com/downloads.",
       )
     })
