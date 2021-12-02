@@ -98,6 +98,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
@@ -120,6 +124,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -222,6 +230,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
@@ -285,7 +297,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
