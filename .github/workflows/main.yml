@@ -30,9 +30,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -74,9 +74,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -157,9 +157,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -256,9 +256,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -318,9 +318,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v15-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
