@@ -81,4 +81,13 @@ describe("Queries", () => {
       if (browser) await browser.close()
     })
   })
+
+  describe("DehydratedState with usePaginatedQuery", () => {
+    it("should work", async () => {
+      const browser = await webdriver(context.appPort, "/dehydrated-state-paginated-query")
+      let text = await browser.elementByCss("#content").text()
+      expect(text).toMatch(/map is Map: true/)
+      if (browser) await browser.close()
+    })
+  })
 })

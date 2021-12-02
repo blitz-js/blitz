@@ -5,7 +5,7 @@ import {
   GetServerSideProps,
   invokeWithMiddleware,
   QueryClient,
-  useQuery,
+  usePaginatedQuery,
 } from "blitz"
 import {Suspense} from "react"
 
@@ -22,12 +22,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 }
 
 function Content() {
-  const [map] = useQuery(getMap, undefined)
+  const [map] = usePaginatedQuery(getMap, undefined)
   return <p id="content">map is Map: {"" + (map instanceof Map)}</p>
 }
 
-function DehydratedState() {
+function DehydratedStateWithPagination() {
   return <Content />
 }
 
-export default DehydratedState
+export default DehydratedStateWithPagination
