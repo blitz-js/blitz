@@ -7,7 +7,6 @@ import {
   QueryClient,
   usePaginatedQuery,
 } from "blitz"
-import {Suspense} from "react"
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const queryClient = new QueryClient()
