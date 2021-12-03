@@ -20,6 +20,7 @@ import {
   QueryCacheFunctions,
   sanitizeQuery,
   sanitizeMutation,
+  getInfiniteQueryKey,
 } from './react-query-utils'
 import { useRouter } from '../client/router'
 
@@ -278,13 +279,13 @@ export function useInfiniteQuery<
 
   const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
-  const queryKey = getQueryKey(queryFn, getQueryParams)
+  const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
 
   const { data, ...queryRest } = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
-    queryKey: routerIsReady ? [...queryKey, 'infinite'] : ['_routerNotReady_'],
+    queryKey: routerIsReady ? queryKey : ['_routerNotReady_'],
     queryFn: routerIsReady
       ? ({ pageParam }) =>
           enhancedResolverRpcClient(getQueryParams(pageParam), {
