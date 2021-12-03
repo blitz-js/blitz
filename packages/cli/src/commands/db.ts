@@ -70,6 +70,10 @@ ${require("chalk").bold("seed")}   Generates seeded data in database via Prisma.
       char: "f",
       description: `Path to the seeds file, relative to the project root folder. Examples: db/seeds, db/seeds.ts, db/seeds/index.ts, db/my-seeds`,
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   static strict = false

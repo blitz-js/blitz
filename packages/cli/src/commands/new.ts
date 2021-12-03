@@ -1,3 +1,4 @@
+import {loadEnvConfig} from "@blitzjs/env"
 import type {AppGeneratorOptions} from "@blitzjs/generator"
 import {getLatestVersion} from "@blitzjs/generator"
 import {flags} from "@oclif/command"
@@ -167,7 +168,8 @@ export class New extends Command {
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
           try {
             // Required in order for DATABASE_URL to be available
-            require("dotenv-expand")(require("dotenv-flow").config({silent: true}))
+            const projectDir = process.cwd()
+            loadEnvConfig(projectDir)
             const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
             if (!result.success) throw new Error()
 

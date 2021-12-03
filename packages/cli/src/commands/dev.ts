@@ -21,6 +21,10 @@ export class Dev extends Command {
     "no-incremental-build": flags.boolean({
       description: "Disable incremental build and start from a fresh cache",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {

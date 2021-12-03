@@ -125,6 +125,23 @@ export function getQueryKey<TInput, TResult, T extends AsyncFunc>(
   return getQueryKeyFromUrlAndParams(sanitizeQuery(resolver)._routePath, params)
 }
 
+export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
+  resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
+  params?: TInput
+) {
+  if (typeof resolver === 'undefined') {
+    throw new Error(
+      'getInfiniteQueryKey is missing the first argument - it must be a resolver function'
+    )
+  }
+
+  const queryKey = getQueryKeyFromUrlAndParams(
+    sanitizeQuery(resolver)._routePath,
+    params
+  )
+  return [...queryKey, 'infinite']
+}
+
 export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
   resolver: T | Resolver<TInput, TResult> | RpcClient<TInput, TResult>,
   params?: TInput

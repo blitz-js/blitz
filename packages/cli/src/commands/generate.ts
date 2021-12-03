@@ -116,6 +116,10 @@ export class Generate extends Command {
       char: "d",
       description: "Show what files will be created without writing them to disk",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   static examples = [

@@ -94,6 +94,10 @@ export class Install extends Command {
       default: false,
       description: "Install the recipe automatically without user confirmation",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   static args = [

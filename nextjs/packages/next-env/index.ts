@@ -66,7 +66,7 @@ export function processEnv(
 }
 
 export function loadEnvConfig(
-  dir: string,
+  dir: string = process.cwd(),
   dev?: boolean,
   log: Log = console
 ): {
@@ -79,8 +79,11 @@ export function loadEnvConfig(
 
   const isTest = process.env.NODE_ENV === 'test'
   const mode = isTest ? 'test' : dev ? 'development' : 'production'
-  const dotenvFiles = [
+  const appEnv = process.env.APP_ENV
+  let dotenvFiles = [
     `.env.${mode}.local`,
+    appEnv && `.env.${appEnv}.local`,
+    appEnv && `.env.${appEnv}`,
     // Don't include `.env.local` for `test` environment
     // since normally you expect tests to produce the same
     // results for everyone
@@ -106,7 +109,7 @@ export function loadEnvConfig(
         path: envFile,
         contents,
       })
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         log.error(`Failed to load env from ${envFile}`, err)
       }
