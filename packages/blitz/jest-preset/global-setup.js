@@ -1,4 +1,6 @@
 // eslint-disable-next-line import/no-default-export
+import {loadEnvConfig} from "@blitzjs/env"
 module.exports = function globalSetup(globalConfig) {
-  require("dotenv-flow").config({silent: true})
+  const projectDir = process.cwd()
+  loadEnvConfig(projectDir)
 }

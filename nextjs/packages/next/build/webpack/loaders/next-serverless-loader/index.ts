@@ -90,7 +90,7 @@ const nextServerlessLoader: webpack.loader.Loader = function () {
     )
 
     const envLoading = `
-      const { processEnv } = require('@next/env')
+      const { processEnv } = require('@blitzjs/env')
       processEnv(${Buffer.from(loadedEnvFiles, 'base64').toString()})
     `
 

@@ -1,4 +1,4 @@
-import {Command} from "@oclif/command"
+import {Command, flags} from "@oclif/command"
 import {Readable} from "stream"
 
 const getPrismaBin = async () => {
@@ -54,6 +54,13 @@ export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>
 export class PrismaCommand extends Command {
   static description = "Loads env variables then proxies all args to Prisma CLI"
   static aliases = ["p"]
+
+  static flags = {
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
+  }
 
   static strict = false
 

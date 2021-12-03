@@ -4,6 +4,12 @@
 
 ## Notes For Core Team
 
+### To Publish a new NPM Package under `@blitzjs/` namespace
+
+1. cd into the package directory
+2. Run `npm publish --tag danger --access public`
+   - `--access public` is required because scoped packages are set to private by default
+
 ### Syncing Next.js Fork
 
 1. Run `yarn push-nextjs`

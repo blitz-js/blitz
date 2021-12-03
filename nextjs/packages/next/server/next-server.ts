@@ -82,7 +82,7 @@ import {
   resultFromChunks,
   resultToChunks,
 } from './utils'
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from '@blitzjs/env'
 import './node-polyfill-fetch'
 import { PagesManifest } from '../build/webpack/plugins/pages-manifest-plugin'
 import { removePathTrailingSlash } from '../client/normalize-trailing-slash'

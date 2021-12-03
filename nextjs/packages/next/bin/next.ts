@@ -30,10 +30,12 @@ const args = arg(
     '--version': Boolean,
     '--help': Boolean,
     '--inspect': Boolean,
+    '--env': String,
 
     // Aliases
     '-v': '--version',
     '-h': '--help',
+    '-e': '--env'
   },
   {
     permissive: true,
@@ -61,6 +63,7 @@ if (!foundCommand && args['--help']) {
       ${Object.keys(commands).join(', ')}
 
     Options
+      --env, -e       App environment name
       --version, -v   Version number
       --help, -h      Displays this message
 
@@ -81,6 +84,10 @@ if (args['--inspect'])
 // Make sure the `next <subcommand> --help` case is covered
 if (args['--help']) {
   forwardedArgs.push('--help')
+}
+
+if (args['--env']) {
+  process.env.APP_ENV = args['--env']
 }
 
 const defaultEnv = command === 'dev' ? 'development' : 'production'
