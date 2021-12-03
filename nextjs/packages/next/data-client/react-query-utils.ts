@@ -131,7 +131,7 @@ export function getInfiniteQueryKey<TInput, TResult, T extends AsyncFunc>(
 ) {
   if (typeof resolver === 'undefined') {
     throw new Error(
-      'getQueryKey is missing the first argument - it must be a resolver function'
+      'getInfiniteQueryKey is missing the first argument - it must be a resolver function'
     )
   }
 
