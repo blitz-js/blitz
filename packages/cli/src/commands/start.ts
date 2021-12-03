@@ -18,6 +18,10 @@ export class Start extends Command {
     inspect: flags.boolean({
       description: "Enable the Node.js inspector",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {

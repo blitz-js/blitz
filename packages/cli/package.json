@@ -37,7 +37,6 @@
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "dotenv-expand": "^5.1.0",
-    "dotenv-flow": "^3.2.0",
     "enquirer": "2.3.6",
     "esm": "3.2.25",
     "fs-extra": "^9.1.0",

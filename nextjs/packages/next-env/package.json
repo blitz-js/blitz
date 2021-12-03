@@ -1,7 +1,6 @@
 {
-  "private": true,
-  "name": "@next/env",
-  "version": "11.1.0",
+  "name": "@blitzjs/env",
+  "version": "0.43.0",
   "keywords": [
     "react",
     "next",
@@ -14,7 +13,7 @@
     "url": "https://github.com/vercel/next.js",
     "directory": "packages/next-env"
   },
-  "author": "Next.js Team <support@vercel.com>",
+  "author": "Blitz.js",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

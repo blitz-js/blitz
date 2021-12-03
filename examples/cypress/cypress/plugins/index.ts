@@ -1,5 +1,7 @@
 process.env.NODE_ENV = "test"
-require("dotenv-flow").config({ silent: true })
+
+import { loadEnvConfig } from "@blitzjs/env"
+loadEnvConfig()
 
 import "./register-ts-paths"
 import db from "db"

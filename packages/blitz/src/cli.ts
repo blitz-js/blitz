@@ -33,6 +33,10 @@ async function main() {
 
   const cli = require(cliPkgPath)
 
+  if (options.e || options.env) {
+    process.env.APP_ENV = options.e || options.env
+  }
+
   const hasVersionFlag = options._.length === 0 && (options.v || options.version)
   const hasVerboseFlag = options._.length === 0 && (options.V || options.verbose)
 
