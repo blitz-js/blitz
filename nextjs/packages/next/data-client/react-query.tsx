@@ -20,6 +20,7 @@ import {
   QueryCacheFunctions,
   sanitizeQuery,
   sanitizeMutation,
+  getInfiniteQueryKey,
 } from './react-query-utils'
 import { useRouter } from '../client/router'
 
@@ -166,16 +167,19 @@ export function usePaginatedQuery<
     )
   }
 
-  const suspense =
-    options?.enabled === false || options?.enabled === null
+  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  let enabled =
+    isServer && suspenseEnabled
       ? false
-      : options?.suspense
+      : options?.enabled ?? options?.enabled !== null
+  const suspense = enabled === false ? false : options?.suspense
+
   const session = useSession({ suspense })
   if (session.isLoading) {
-    options.enabled = false
+    enabled = false
   }
 
-  const routerIsReady = useRouter().isReady
+  const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
   const queryKey = getQueryKey(queryFn, params)
 
@@ -186,7 +190,19 @@ export function usePaginatedQuery<
       : (emptyQueryFn as any),
     ...options,
     keepPreviousData: true,
+    enabled,
   })
+
+  if (
+    queryRest.isIdle &&
+    isServer &&
+    suspenseEnabled !== false &&
+    !data &&
+    (!options || !('suspense' in options) || options.suspense) &&
+    (!options || !('enabled' in options) || options.enabled)
+  ) {
+    throw new Promise(() => {})
+  }
 
   const rest = {
     ...queryRest,
@@ -250,24 +266,26 @@ export function useInfiniteQuery<
     )
   }
 
-  const suspense =
-    options?.enabled === false || options?.enabled === null
+  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  let enabled =
+    isServer && suspenseEnabled
       ? false
-      : options?.suspense
+      : options?.enabled ?? options?.enabled !== null
+  const suspense = enabled === false ? false : options?.suspense
   const session = useSession({ suspense })
   if (session.isLoading) {
-    options.enabled = false
+    enabled = false
   }
 
-  const routerIsReady = useRouter().isReady
+  const routerIsReady = useRouter().isReady || (isServer && suspenseEnabled)
   const enhancedResolverRpcClient = sanitizeQuery(queryFn)
-  const queryKey = getQueryKey(queryFn, getQueryParams)
+  const queryKey = getInfiniteQueryKey(queryFn, getQueryParams)
 
   const { data, ...queryRest } = useInfiniteReactQuery({
     // we need an extra cache key for infinite loading so that the cache for
     // for this query is stored separately since the hook result is an array of results.
     // Without this cache for usePaginatedQuery and this will conflict and break.
-    queryKey: routerIsReady ? [...queryKey, 'infinite'] : ['_routerNotReady_'],
+    queryKey: routerIsReady ? queryKey : ['_routerNotReady_'],
     queryFn: routerIsReady
       ? ({ pageParam }) =>
           enhancedResolverRpcClient(getQueryParams(pageParam), {
@@ -275,7 +293,19 @@ export function useInfiniteQuery<
           })
       : (emptyQueryFn as any),
     ...options,
+    enabled,
   })
+
+  if (
+    queryRest.isIdle &&
+    isServer &&
+    suspenseEnabled !== false &&
+    !data &&
+    (!options || !('suspense' in options) || options.suspense) &&
+    (!options || !('enabled' in options) || options.enabled)
+  ) {
+    throw new Promise(() => {})
+  }
 
   const rest = {
     ...queryRest,
