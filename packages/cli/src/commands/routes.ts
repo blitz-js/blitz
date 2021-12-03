@@ -1,6 +1,6 @@
-import {table as Table} from "@blitzjs/display"
 import {ServerConfig} from "@blitzjs/server"
 import {Command, flags} from "@oclif/command"
+import {table as Table} from "next/dist/server/lib/logging"
 import {newline} from "next/dist/server/lib/logging"
 
 export class Routes extends Command {

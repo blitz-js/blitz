@@ -1,7 +1,6 @@
-import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
-import {newline} from "next/dist/server/lib/logging"
+import {baseLogger, log, newline} from "next/dist/server/lib/logging"
 import which from "npm-which"
 import path from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
@@ -46,7 +45,7 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
     try {
       schema = ast.getSchema(this.fs.read(schemaPath))
     } catch (err) {
-      log.error("Failed to parse db/schema.prisma file")
+      baseLogger({displayDateTime: false}).error("Failed to parse db/schema.prisma file")
       throw err
     }
     const {modelName, extraArgs, dryRun} = this.options

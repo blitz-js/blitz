@@ -1,15 +1,14 @@
-import {log} from "@blitzjs/display"
 import chalk from "chalk"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 import {Fallbackable} from "./fallbackable"
 import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
 
 export const logFailedVersionFetch = (dependency: string, fallback: string) => {
-  log.clearLine(
-    log.withWarning(
-      `Failed to fetch latest version of '${chalk.bold(dependency)}', falling back to '${chalk.bold(
-        fallback,
-      )}'.\n`,
-    ),
+  log.clearLine()
+  baseLogger({displayDateTime: false}).warn(
+    `Failed to fetch latest version of '${chalk.bold(dependency)}', falling back to '${chalk.bold(
+      fallback,
+    )}'.`,
   )
 }
 

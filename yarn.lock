@@ -8456,11 +8456,11 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
 console-table-printer@^2.7.5:
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/console-table-printer/-/console-table-printer-2.7.5.tgz#67abba748530698d704b55855213602990ce60ae"
-  integrity sha512-A2ag/iOJXFJs9ep1fhlMbufsToHQ+Ph4m7pZ4DeDZNDU0nbCX97uOa0sPoLmRM6f4GxXQVEsFGD+wrXT8xwSnw==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/console-table-printer/-/console-table-printer-2.10.0.tgz#4a6875b95071b36542d1c55c6d9dcc6206e1e9f0"
+  integrity sha512-7pTsysaJs1+R+OO4cCtJbl+Lr4piHYIhi7/V1qHbOg/uiYgq2yUINFgvXZtVHqm9qpW0+Uk190qkGcKvzdunvg==
   dependencies:
-    simple-wcswidth "^1.0.0"
+    simple-wcswidth "^1.0.1"
 
 constant-case@^2.0.0:
   version "2.0.0"
@@ -21583,7 +21583,7 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
-simple-wcswidth@^1.0.0:
+simple-wcswidth@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/simple-wcswidth/-/simple-wcswidth-1.0.1.tgz#8ab18ac0ae342f9d9b629604e54d2aa1ecb018b2"
   integrity sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg==
