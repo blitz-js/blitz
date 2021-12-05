@@ -45,6 +45,7 @@ const specialImports: Record<string, string> = {
   hash256: 'next/stdlib-server',
   generateToken: 'next/stdlib-server',
   resolver: 'next/stdlib-server',
+  connectMiddleware: 'next/stdlib-server',
 
   getAntiCSRFToken: 'next/data-client',
   useSession: 'next/data-client',
