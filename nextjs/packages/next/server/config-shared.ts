@@ -46,7 +46,9 @@ type NoOptionals<T> = {
   [P in keyof T]-?: T[P]
 }
 
-export type NextConfigComplete = NoOptionals<NextConfig>
+export type NextConfigComplete = NoOptionals<NextConfig> & {
+  images: ImageConfig
+}
 
 export interface I18NConfig {
   defaultLocale: string
