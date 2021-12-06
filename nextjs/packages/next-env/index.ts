@@ -77,13 +77,7 @@ export function loadEnvConfig(
   // environment values e.g. \$ENV_FILE_KEY
   if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
-  const appEnv =
-    process.env.APP_ENV ||
-    (process.env.NODE_ENV === 'test'
-      ? 'test'
-      : dev
-      ? 'development'
-      : 'production')
+  const appEnv = process.env.APP_ENV ?? process.env.NODE_ENV ?? 'development'
 
   let dotenvFiles = [
     `.env.${appEnv}.local`,
