@@ -98,7 +98,7 @@ export type NextConfig = { [key: string]: any } & {
   generateEtags?: boolean
   pageExtensions?: string[]
   compress?: boolean
-  images?: Optional<ImageConfig>
+  images?: Partial<ImageConfig>
   devIndicators?: {
     buildActivity?: boolean
   }
