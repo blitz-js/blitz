@@ -89,7 +89,7 @@ export type NextConfig = { [key: string]: any } & {
   excludeDefaultMomentLocales?: boolean
 
   trailingSlash?: boolean
-  env?: { [key: string]: string }
+  env?: { [key: string]: string | undefined }
   distDir?: string
   cleanDistDir?: boolean
   assetPrefix?: string
