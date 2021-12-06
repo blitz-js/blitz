@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.44.1",
+  "version": "0.44.2",
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
@@ -22,9 +22,9 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/generator": "0.44.1",
-    "@blitzjs/installer": "0.44.1",
-    "@blitzjs/server": "0.44.1",
+    "@blitzjs/generator": "0.44.2",
+    "@blitzjs/installer": "0.44.2",
+    "@blitzjs/server": "0.44.2",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",

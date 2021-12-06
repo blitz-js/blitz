@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "0.44.1",
+  "version": "0.44.2",
   "description": "File generation for the Blitz CLI",
   "homepage": "https://github.com/blitz-js/blitz#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
-    "@blitzjs/server": "0.44.1",
+    "@blitzjs/server": "0.44.2",
     "@mrleebo/prisma-ast": "0.2.4",
     "@types/jscodeshift": "0.11.2",
     "chalk": "^4.1.0",
