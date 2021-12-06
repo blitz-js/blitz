@@ -98,7 +98,7 @@ export type NextConfig = { [key: string]: any } & {
   generateEtags?: boolean
   pageExtensions?: string[]
   compress?: boolean
-  images?: ImageConfig
+  images?: Optional<ImageConfig>
   devIndicators?: {
     buildActivity?: boolean
   }
@@ -126,7 +126,7 @@ export type NextConfig = { [key: string]: any } & {
     noProxy?: string
   }
   log?: {
-    level: LogLevel
+    level?: LogLevel
     type?: LogType
   }
   middleware?: Middleware[]
