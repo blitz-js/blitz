@@ -5,6 +5,7 @@
     "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
+    "console": "blitz console",
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "analyze": "cross-env ANALYZE=true blitz build",
