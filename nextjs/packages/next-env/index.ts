@@ -77,18 +77,15 @@ export function loadEnvConfig(
   // environment values e.g. \$ENV_FILE_KEY
   if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
-  const isTest = process.env.NODE_ENV === 'test'
-  const mode = isTest ? 'test' : dev ? 'development' : 'production'
-  const appEnv = process.env.APP_ENV
+  const appEnv = process.env.APP_ENV ?? process.env.NODE_ENV ?? 'development'
+
   let dotenvFiles = [
-    `.env.${mode}.local`,
-    appEnv && `.env.${appEnv}.local`,
-    appEnv && `.env.${appEnv}`,
+    `.env.${appEnv}.local`,
+    `.env.${appEnv}`,
     // Don't include `.env.local` for `test` environment
     // since normally you expect tests to produce the same
     // results for everyone
-    mode !== 'test' && `.env.local`,
-    `.env.${mode}`,
+    appEnv !== 'test' && `.env.local`,
     '.env',
   ].filter(Boolean) as string[]
 

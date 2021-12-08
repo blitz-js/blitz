@@ -29,7 +29,7 @@ async function findNodeModulesRoot(src) {
     const nextPkgLocation = path.dirname(
       (await findUp("package.json", {
         cwd: resolveFrom(src, "next"),
-      })) ?? "",
+      })) || "",
     )
     if (!nextPkgLocation) {
       throw new Error("Internal Blitz Error: unable to find 'next' package location")
@@ -41,7 +41,7 @@ async function findNodeModulesRoot(src) {
     const blitzPkgLocation = path.dirname(
       (await findUp("package.json", {
         cwd: resolveFrom(src, "blitz"),
-      })) ?? "",
+      })) || "",
     )
     if (!blitzPkgLocation) {
       throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
@@ -49,7 +49,7 @@ async function findNodeModulesRoot(src) {
     const nextPkgLocation = path.dirname(
       (await findUp("package.json", {
         cwd: resolveFrom(blitzPkgLocation, "next"),
-      })) ?? "",
+      })) || "",
     )
     if (!nextPkgLocation) {
       throw new Error("Internal Blitz Error: unable to find 'next' package location")

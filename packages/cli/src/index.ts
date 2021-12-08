@@ -12,6 +12,11 @@ if (options.e || options.env) {
   process.env.APP_ENV = options.e || options.env
 }
 
+// Have to copy this here from nextjs/packages/next/bin/next.ts before loadEnvConfig()
+const defaultEnv =
+  process.argv[2] === "build" || process.argv[2] === "start" ? "production" : "development"
+;(process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
+
 // Load the .env environment variable so it's available for all commands
 loadEnvConfig()
 

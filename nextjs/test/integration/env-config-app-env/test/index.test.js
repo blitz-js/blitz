@@ -29,14 +29,10 @@ const getEnvFromHtml = async (path) => {
   return env
 }
 
-const runTests = (mode = 'dev') => {
-  const isDevOnly = mode === 'dev'
-
+const runTests = (mode = 'dev', appEnv) => {
   const checkEnvData = (data) => {
     expect(data.ENV_FILE_KEY).toBe('env')
-    expect(data.PRODUCTION_ENV_FILE_KEY).toBe(
-      isDevOnly ? undefined : 'production'
-    )
+    expect(data.PRODUCTION_ENV_FILE_KEY).toBe(undefined)
     expect(data.ENV_FILE_DEVELOPMENT_OVERRIDE_TEST).toEqual('staginglocal')
 
     expect(data.nextConfigEnv).toBe('hello from staging app')
@@ -86,7 +82,7 @@ describe('Env Config', () => {
     })
     afterAll(() => killApp(app))
 
-    runTests('dev')
+    runTests('dev', 'staging')
   })
 
   describe('server mode', () => {
@@ -107,7 +103,7 @@ describe('Env Config', () => {
     })
     afterAll(() => killApp(app))
 
-    runTests('server')
+    runTests('server', 'staging')
   })
 
   describe('serverless mode', () => {
@@ -158,6 +154,6 @@ describe('Env Config', () => {
       await killApp(app)
     })
 
-    runTests('serverless')
+    runTests('serverless', 'staging')
   })
 })

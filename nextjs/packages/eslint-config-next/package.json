@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-blitz",
-  "version": "0.44.0",
+  "version": "0.44.3",
   "description": "Blitz.js eslint config",
   "main": "index.js",
   "license": "MIT",
@@ -11,8 +11,8 @@
   "dependencies": {
     "@next/eslint-plugin-next": "11.1.0",
     "@rushstack/eslint-patch": "^1.0.6",
-    "@typescript-eslint/eslint-plugin": "4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
