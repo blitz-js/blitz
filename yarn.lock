@@ -3154,10 +3154,10 @@
   resolved "https://registry.yarnpkg.com/@mdx-js/tag/-/tag-0.18.0.tgz#386d687deaed7133699a420d74612acdd1ed1c26"
   integrity sha512-3g1NOnbw+sJZohNOEN9NlaYYDdzq1y34S7PDimSn3zLV8etCu7pTCMFbnFHMSe6mMmm4yJ1gfbS3QiE7t+WMGA==
 
-"@mrleebo/prisma-ast@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@mrleebo/prisma-ast/-/prisma-ast-0.2.4.tgz#93a413e8db03b360ebe8aa315cdb5984420f466b"
-  integrity sha512-0hjx2e8EVbpa7R8oxs+Y6L4FYxu82H2BxEoogHKoZUo0qQ6vLxy9I4mcrlfhfCR5EbOYOROQhUjH6ShPPQqRrg==
+"@mrleebo/prisma-ast@0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@mrleebo/prisma-ast/-/prisma-ast-0.2.5.tgz#f025e4b918af30e582f7d4907ed3a08e8269aafa"
+  integrity sha512-chAv59P7o1YqSh4Tm5QiH6wzyOasmoAAMGc7la/j8X+HsOF5eTG0kh4XEgH4FB5ee+kGg5Im3yj83EEmGcec1w==
   dependencies:
     chevrotain "^9.0.1"
 
