@@ -36,13 +36,14 @@
     "blitz": "0.44.3",
     "final-form": "4.20.1",
     "prisma": "2.24.1",
-    "react": "0.0.0-experimental-6a589ad71",
-    "react-dom": "0.0.0-experimental-6a589ad71",
+    "react": "18.0.0-rc.0",
+    "react-dom": "18.0.0-rc.0",
     "react-final-form": "6.5.2"
   },
   "devDependencies": {
     "@types/preview-email": "2.0.0",
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.37",
+    "@types/react-dom": "17.0.11",
     "eslint": "7.21.0",
     "husky": "5.1.2",
     "lint-staged": "10.5.4",
