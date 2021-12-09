@@ -167,9 +167,14 @@ export class New extends Command {
           }
           const spinner = log.spinner(log.withBrand("Initializing SQLite database")).start()
           try {
-            // Required in order for DATABASE_URL to be available
-            const projectDir = process.cwd()
-            loadEnvConfig(projectDir)
+            // loadEnvConfig is required in order for DATABASE_URL to be available
+            // don't print info logs from loadEnvConfig for clear output
+            loadEnvConfig(
+              process.cwd(),
+              undefined,
+              {error: console.error, info: () => {}},
+              {ignoreCache: true},
+            )
             const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
             if (!result.success) throw new Error()
 
