@@ -31,7 +31,7 @@
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
     "@blitzjs/generator": "0.44.3",
-    "@mrleebo/prisma-ast": "0.2.4",
+    "@mrleebo/prisma-ast": "0.2.6",
     "@prisma/sdk": "2.19.0",
     "@types/jscodeshift": "0.11.2",
     "ast-types": "0.14.2",
