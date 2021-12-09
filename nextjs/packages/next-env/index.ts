@@ -67,15 +67,17 @@ export function processEnv(
 
 export function loadEnvConfig(
   dir: string = process.cwd(),
-  dev?: boolean,
-  log: Log = console
+  _dev?: boolean,
+  log: Log = console,
+  { ignoreCache } = { ignoreCache: false }
 ): {
   combinedEnv: Env
   loadedEnvFiles: LoadedEnvFiles
 } {
   // don't reload env if we already have since this breaks escaped
   // environment values e.g. \$ENV_FILE_KEY
-  if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
+  if (combinedEnv && !ignoreCache)
+    return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
   const appEnv = process.env.APP_ENV ?? process.env.NODE_ENV ?? 'development'
 
