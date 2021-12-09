@@ -55,7 +55,7 @@
     "@blitzjs/generator": "0.44.3",
     "@blitzjs/server": "0.44.3",
     "@testing-library/jest-dom": "5.11.9",
-    "@testing-library/react": "11.2.5",
+    "@testing-library/react": "13.0.0-alpha.5",
     "@testing-library/react-hooks": "^4.0.1",
     "@types/jest": "26.0.20",
     "chalk": "^4.1.0",
@@ -69,7 +69,7 @@
     "next": "0.44.3",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
-    "react-test-renderer": "17.0.1",
+    "react-test-renderer": "18.0.0-rc.0",
     "resolve-from": "^5.0.0",
     "symlink-dir": "4.1.0",
     "ts-jest": "26.5.0"
