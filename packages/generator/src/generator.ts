@@ -4,6 +4,7 @@ import babelTransformTypescript from "@babel/plugin-transform-typescript"
 import {log} from "@blitzjs/display"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
+import {escapePath} from "fast-glob"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
 import {create as createStore, Store} from "mem-fs"
@@ -12,11 +13,10 @@ import * as path from "path"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
-import {pipe} from "./utils/pipe"
-import {readdirRecursive} from "./utils/readdir-recursive"
 import {IBuilder} from "./generators/template-builders/builder"
 import {NullBuilder} from "./generators/template-builders/null-builder"
-import {escapePath} from 'fast-glob';
+import {pipe} from "./utils/pipe"
+import {readdirRecursive} from "./utils/readdir-recursive"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -162,7 +162,7 @@ export abstract class Generator<
     if (!this.options.destinationRoot) this.options.destinationRoot = process.cwd()
   }
 
-  public templateValuesBuilder: IBuilder<T,any> = NullBuilder
+  public templateValuesBuilder: IBuilder<T, any> = NullBuilder
 
   async getTemplateValues(): Promise<any> {
     const values = await this.templateValuesBuilder.getTemplateValues(this.options)
@@ -203,7 +203,9 @@ export abstract class Generator<
     return result
   }
 
-  public fieldTemplateRegExp:RegExp = new RegExp(/({?\/\*\s*template: (.*) \*\/}?|\/\/\s*template: (.*))/)
+  public fieldTemplateRegExp: RegExp = new RegExp(
+    /({?\/\*\s*template: (.*) \*\/}?|\/\/\s*template: (.*))/,
+  )
 
   process(
     input: Buffer,
@@ -220,7 +222,7 @@ export abstract class Generator<
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
-    
+
     const fieldTemplateString = templatedFile
       .match(this.fieldTemplateRegExp)?.[0]
       .replace(this.fieldTemplateRegExp, "$2$3")
@@ -293,13 +295,23 @@ export abstract class Generator<
 
         const destinationExists = fs.existsSync(templatedDestinationPath)
 
-        this.fs.copy(destinationExists ? escapePath(templatedDestinationPath) : escapePath(sourcePath), escapePath(destinationPath), {
-          process: (input) =>
-            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
-        })
-        
-        if (templatedPathSuffix !== pathSuffix) {
-          this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
+        if (destinationExists) {
+          const newContent = this.process(
+            this.fs.read(templatedDestinationPath, {raw: true}) as any,
+            pathSuffix,
+            templateValues,
+            prettierOptions ?? undefined,
+          )
+          this.fs.write(templatedDestinationPath, newContent)
+        } else {
+          this.fs.copy(escapePath(sourcePath), escapePath(destinationPath), {
+            process: (input) =>
+              this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+          })
+
+          if (templatedPathSuffix !== pathSuffix) {
+            this.fs.move(destinationPath, templatedDestinationPath)
+          }
         }
       } catch (error) {
         log.error(`Error generating ${filePath}`)
