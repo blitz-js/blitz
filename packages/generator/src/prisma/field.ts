@@ -1,8 +1,8 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
-import { getResourceValueFromCodegen } from "../utils/get-codegen"
+import {getResourceValueFromCodegen} from "../utils/get-codegen"
 import {singlePascal, uncapitalize} from "../utils/inflector"
-const debug = require('debug')('blitz:field')
+const debug = require("debug")("blitz:field")
 
 export enum FieldType {
   Boolean = "Boolean",
@@ -71,10 +71,12 @@ export class Field {
     let isList = false
     let isUpdatedAt = false
     let isUnique = false
-    let defaultValue = undefined
+    let defaultValue: any = await Field.getPrismaDefaultForField(_fieldType) //todo
     let relationFromFields = undefined
     let relationToFields = undefined
     let maybeIdField = undefined
+
+    console.log({fieldType, fieldName})
 
     if (fieldType.includes("?")) {
       fieldType = fieldType.replace("?", "")
@@ -169,15 +171,20 @@ export class Field {
     }
   }
 
-  public static getPrismaTypeForFieldType: (fieldType:string) => Promise<string> = async (fieldType) => {
+  public static getPrismaTypeForFieldType: (fieldType: string) => Promise<string> = async (
+    fieldType,
+  ) => {
     let prismaType = "String"
-    // TODO: Make sure that if prismaType key ever changes, this change too
-    // Should be detectable via an integration test on the CLI
-    const prismaTypeKey = "prismaType"
-    prismaType = await getResourceValueFromCodegen(fieldType, prismaTypeKey)
+    prismaType = await getResourceValueFromCodegen(fieldType, "prismaType")
     debug(`prismaType for ${fieldType} is ${prismaType}`)
 
     return prismaType
+  }
+
+  public static getPrismaDefaultForField: (fieldType: string) => Promise<string> = async (
+    fieldType,
+  ) => {
+    return await getResourceValueFromCodegen(fieldType, "default")
   }
 
   constructor(name: string, options: FieldArgs) {

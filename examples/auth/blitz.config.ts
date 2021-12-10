@@ -23,7 +23,7 @@ module.exports = withBundleAnalyzer({
     initServer() {
       console.log("Hello world from initServer")
     },
-  },  
+  },
   /*
   webpack: (config, {buildId, dev, isServer, defaultLoaders, webpack}) => {
     // Note: we provide webpack above so you should not `require` it
@@ -37,68 +37,68 @@ module.exports = withBundleAnalyzer({
     return config
   },
   */
-  codegen:{
+  codegen: {
     fieldTypeMap: {
       string: {
         component: "LabeledTextField",
         inputType: "text",
         zodType: "string",
-        prismaType: "String"
+        prismaType: "String",
       },
       boolean: {
         component: "LabeledTextField",
         inputType: "text",
         zodType: "boolean",
-        prismaType: "Boolean"
+        prismaType: "Boolean",
       },
       int: {
         component: "LabeledTextField",
         inputType: "number",
         zodType: "number",
-        prismaType: "Int"
+        prismaType: "Int",
       },
       number: {
         component: "LabeledTextField",
         inputType: "number",
         zodType: "number",
-        prismaType: "Int"
+        prismaType: "Int",
       },
       bigint: {
         component: "LabeledTextField",
         inputType: "number",
         zodType: "number",
-        prismaType: "BigInt"
+        prismaType: "BigInt",
       },
       float: {
         component: "LabeledTextField",
         inputType: "number",
         zodType: "number",
-        prismaType: "Float"
+        prismaType: "Float",
       },
       decimal: {
         component: "LabeledTextField",
         inputType: "number",
         zodType: "number",
-        prismaType: "Decimal"
+        prismaType: "Decimal",
       },
       datetime: {
         component: "LabeledTextField",
         inputType: "string",
         zodType: "string",
-        prismaType: "DateTime"
+        prismaType: "DateTime",
       },
       uuid: {
         component: "LabeledTextField",
         inputType: "text",
         zodType: "string().uuid",
-        prismaType: "String"
+        prismaType: "Uuid",
       },
       json: {
         component: "LabeledTextField",
         inputType: "text",
         zodType: "any",
-        prismaType: "Json"
-      }
+        prismaType: "Json",
+      },
     },
-  }
+  },
 })

@@ -1,7 +1,19 @@
-import {NextConfigComplete} from "next/dist/server/config-shared"
 import {log} from "@blitzjs/display"
+import {NextConfigComplete} from "next/dist/server/config-shared"
 
-export const fallbackCodegen: {fieldTypeMap: {[key in string]: {[key in string]: string}}} = {
+export type CondegenConfig = {
+  fieldTypeMap: {
+    [key in string]: {
+      component: string
+      inputType: string
+      zodType: string
+      prismaType: string
+      default?: string
+    }
+  }
+}
+
+export const fallbackCodegen: CondegenConfig = {
   fieldTypeMap: {
     string: {
       component: "LabeledTextField",
@@ -56,6 +68,7 @@ export const fallbackCodegen: {fieldTypeMap: {[key in string]: {[key in string]:
       inputType: "text",
       zodType: "string().uuid",
       prismaType: "String",
+      default: "uuid()",
     },
     json: {
       component: "LabeledTextField",
@@ -68,7 +81,7 @@ export const fallbackCodegen: {fieldTypeMap: {[key in string]: {[key in string]:
 
 export const getResourceValueFromCodegen = async (
   fieldType: string,
-  resource: string,
+  resource: keyof CondegenConfig["fieldTypeMap"][string],
 ): Promise<string> => {
   const codegen = (await getCodegen()).codegen
   const templateValue = codegen.fieldTypeMap[fieldType][resource]
