@@ -1,6 +1,6 @@
 import {Editor} from "mem-fs-editor"
-import {getCodegen, getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {GeneratorOptions} from "../../generator"
+import {getCodegen, getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {
   addSpaceBeforeCapitals,
   camelCaseToKebabCase,
@@ -34,7 +34,7 @@ export interface CommonTemplateValues {
   ParentModels?: string
   parentModelIdZodType?: string
   modelId: string
-  modelIdZodType: string
+  modelIdZodType?: string
   modelIdParam: string
   modelName: string
   modelNames: string
@@ -82,12 +82,12 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   }
 
   // eslint-disable-next-line require-await
-  public async getComponentForType(type: string = ""): Promise<string> {
+  public async getComponentForType(type: string = "") {
     return getResourceValueFromCodegen(type, "component")
   }
 
   // eslint-disable-next-line require-await
-  public async getInputType(type: string = ""): Promise<string> {
+  public async getInputType(type: string = "") {
     return getResourceValueFromCodegen(type, "inputType")
   }
 

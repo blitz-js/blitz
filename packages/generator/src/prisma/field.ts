@@ -1,6 +1,6 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
-import {getResourceValueFromCodegen} from "../utils/get-codegen"
+import {CondegenConfig, getResourceConfigFromCodegen} from "../utils/get-codegen"
 import {singlePascal, uncapitalize} from "../utils/inflector"
 const debug = require("debug")("blitz:field")
 
@@ -63,7 +63,7 @@ export class Field {
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute
     let fieldName = uncapitalize(_fieldName)
-    let fieldType = await Field.getPrismaTypeForFieldType(_fieldType) //TODO: Need to make the generic function in tempalte buiolders a utility accessiable here.
+    let fieldType = _fieldType
     // Check if it would make sense to expose that to users as well?
     // Also in the case of a relationship, need to use the raw model name, cant capitalize it.
     const isId = fieldName === "id"
@@ -71,17 +71,24 @@ export class Field {
     let isList = false
     let isUpdatedAt = false
     let isUnique = false
-    let defaultValue: any = await Field.getPrismaDefaultForField(_fieldType) //todo
+    let defaultValue = undefined
     let relationFromFields = undefined
     let relationToFields = undefined
     let maybeIdField = undefined
-
-    console.log({fieldType, fieldName})
 
     if (fieldType.includes("?")) {
       fieldType = fieldType.replace("?", "")
       isRequired = false
     }
+
+    const {prismaType, default: defaultConfigValue} = await Field.getConfigForPrismaType(fieldType)
+    if (prismaType) {
+      fieldType = prismaType
+    }
+    if (defaultConfigValue) {
+      defaultValue = defaultConfigValue
+    }
+
     if (fieldType.includes("[]")) {
       fieldType = fieldType.replace("[]", "")
       fieldName = uncapitalize(fieldName)
@@ -171,20 +178,10 @@ export class Field {
     }
   }
 
-  public static getPrismaTypeForFieldType: (fieldType: string) => Promise<string> = async (
-    fieldType,
+  public static getConfigForPrismaType = async (
+    fieldType: keyof CondegenConfig["fieldTypeMap"],
   ) => {
-    let prismaType = "String"
-    prismaType = await getResourceValueFromCodegen(fieldType, "prismaType")
-    debug(`prismaType for ${fieldType} is ${prismaType}`)
-
-    return prismaType
-  }
-
-  public static getPrismaDefaultForField: (fieldType: string) => Promise<string> = async (
-    fieldType,
-  ) => {
-    return await getResourceValueFromCodegen(fieldType, "default")
+    return await getResourceConfigFromCodegen(fieldType)
   }
 
   constructor(name: string, options: FieldArgs) {

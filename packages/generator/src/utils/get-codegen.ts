@@ -80,12 +80,20 @@ export const fallbackCodegen: CondegenConfig = {
 }
 
 export const getResourceValueFromCodegen = async (
-  fieldType: string,
+  fieldType: keyof CondegenConfig["fieldTypeMap"],
   resource: keyof CondegenConfig["fieldTypeMap"][string],
-): Promise<string> => {
-  const codegen = (await getCodegen()).codegen
+): Promise<typeof fieldType extends "uuid" ? string : string | undefined> => {
+  const codegen = (await getCodegen()).codegen as CondegenConfig
   const templateValue = codegen.fieldTypeMap[fieldType][resource]
   return templateValue
+}
+
+export const getResourceConfigFromCodegen = async (
+  fieldType: keyof CondegenConfig["fieldTypeMap"],
+): Promise<CondegenConfig["fieldTypeMap"][string]> => {
+  const codegen = (await getCodegen()).codegen as CondegenConfig
+  const config = codegen.fieldTypeMap[fieldType] || {}
+  return config
 }
 
 export const getCodegen = async (): Promise<Pick<NextConfigComplete, "codegen">> => {
