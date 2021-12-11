@@ -2,12 +2,12 @@ services:
   - type: web
     name: blitzapp
     env: node
-    plan: starter
+    plan: free
     buildCommand: yarn --frozen-lockfile --prod=false && blitz build && blitz prisma migrate deploy
     startCommand: blitz start
     envVars:
-      # ⚠️  You must set SESSION_SECRET_KEY env var through the UI.
-      # Add this env name, then a "generate" button will appear in the value box
+      # ⚠️  First deployment of this blueprint will fail because the app will be built before the database
+      # After DB is built, click in the UI to manually `deploy latest commit`
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
@@ -19,4 +19,4 @@ services:
 
 databases:
   - name: blitzapp-db
-    plan: starter
+    plan: free
