@@ -204,7 +204,7 @@ export abstract class Generator<
   }
 
   public fieldTemplateRegExp: RegExp = new RegExp(
-    /({?\/\*\s*template: (.*) \*\/}?|\/\/\s*template: (.*))/,
+    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*)\n)/g
   )
 
   process(
