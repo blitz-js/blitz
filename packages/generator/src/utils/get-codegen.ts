@@ -56,7 +56,7 @@ export const defaultCodegenConfig: CodegenConfig = {
       inputType: "text",
       zodType: "string().uuid",
       prismaType: "String",
-      default: "uuid()",
+      default: "uuid",
     },
     json: {
       component: "LabeledTextField",

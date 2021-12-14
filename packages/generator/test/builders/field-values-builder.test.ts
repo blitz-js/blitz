@@ -1,6 +1,7 @@
 import {FieldValuesBuilder} from "../../src/generators/template-builders/field-values-builder"
 
 describe("Form Generator", () => {
+  process.env.BLITZ_APP_DIR = process.cwd()
   const generator = new FieldValuesBuilder()
 
   it("Should work with simple types", async () => {
@@ -203,7 +204,7 @@ describe("Form Generator", () => {
         zodType: "string().uuid",
         prismaType: "String",
         inputType: "text",
-        default: "uuid()",
+        default: "uuid",
       },
       {
         component: "LabeledTextField",
