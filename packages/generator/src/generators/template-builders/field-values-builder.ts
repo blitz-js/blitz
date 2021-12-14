@@ -34,7 +34,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
       modelNamesPath: this.getModelNamesPath(options.context, options.modelNames),
     }
     if (options.extraArgs) {
-      // These are arguments like 'id' or 'belongsTo', which are not meant to
+      // specialArgs - these are arguments like 'id' or 'belongsTo', which are not meant to
       // be processed as fields but have their own special logic
       let specialArgs: {[key in string]: string} = {}
 
