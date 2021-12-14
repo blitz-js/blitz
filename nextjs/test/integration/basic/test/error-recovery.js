@@ -257,7 +257,7 @@ export default (context, renderViaHTTP) => {
             'Unknown'
           )
         ).toMatch(
-          'Objects are not valid as a React child (found: /search/). If you meant to render a collection of children, use an array instead.'
+          'Objects are not valid as a React child (found: [object RegExp]). If you meant to render a collection of children, use an array instead.'
         )
 
         aboutPage.restore()
