@@ -2964,7 +2964,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/12092?v=4",
       "profile": "http://zackhobson.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -3534,6 +3535,15 @@
       "profile": "https://github.com/skotchpine",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "SofianeDjellouli",
+      "name": "Sofiane Djellouli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38258952?v=4",
+      "profile": "https://github.com/SofianeDjellouli",
+      "contributions": [
+        "doc"
       ]
     }
   ],

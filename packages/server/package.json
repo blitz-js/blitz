@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/server",
   "description": "Blitz.js server functionality",
-  "version": "0.44.3",
+  "version": "0.44.4",
   "license": "MIT",
   "scripts": {
     "test": "jest --passWithNoTests",

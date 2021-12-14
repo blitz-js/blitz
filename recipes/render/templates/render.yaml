@@ -1,13 +1,15 @@
+databases:
+  - name: blitzapp-db
+    plan: free
+
 services:
   - type: web
     name: blitzapp
     env: node
-    plan: starter
+    plan: free
     buildCommand: yarn --frozen-lockfile --prod=false && blitz build && blitz prisma migrate deploy
     startCommand: blitz start
     envVars:
-      # ⚠️  You must set SESSION_SECRET_KEY env var through the UI.
-      # Add this env name, then a "generate" button will appear in the value box
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
@@ -16,7 +18,3 @@ services:
           property: connectionString
       - key: SESSION_SECRET_KEY
         generateValue: true
-
-databases:
-  - name: blitzapp-db
-    plan: starter
