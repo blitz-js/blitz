@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import {CodegenConfig, NextConfigComplete} from "next/dist/server/config-shared"
+import {baseLogger} from "next/dist/server/lib/logging"
 
 export const defaultCodegenConfig: CodegenConfig = {
   fieldTypeMap: {
@@ -95,7 +95,7 @@ export const getCodegen = async (): Promise<Pick<NextConfigComplete, "codegen">>
     }
     return {codegen: defaultCodegenConfig}
   } catch (ex) {
-    log.warning("Failed loading config from blitz.config file " + ex)
+    baseLogger({displayDateTime: false}).warn("Failed loading config from blitz.config file " + ex)
     return {codegen: defaultCodegenConfig}
   }
 }
