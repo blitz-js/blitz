@@ -77,7 +77,7 @@ export function useQuery<
     )
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(process.env.__BLITZ_DEFAULT_SUSPENSE)
   let enabled =
     isServer && suspenseEnabled
       ? false
@@ -167,7 +167,7 @@ export function usePaginatedQuery<
     )
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(process.env.__BLITZ_DEFAULT_SUSPENSE)
   let enabled =
     isServer && suspenseEnabled
       ? false
@@ -266,7 +266,7 @@ export function useInfiniteQuery<
     )
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(process.env.__BLITZ_DEFAULT_SUSPENSE)
   let enabled =
     isServer && suspenseEnabled
       ? false

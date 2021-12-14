@@ -135,6 +135,7 @@ export type NextConfig = { [key: string]: any } & {
   customServer?: {
     hotReload?: boolean
   }
+  reactQueryDefaultBehavior?: 'legacy' | 'suspense'
   // -- Blitz end
 
   future?: {
@@ -151,7 +152,6 @@ export type NextConfig = { [key: string]: any } & {
     plugins?: boolean
     profiling?: boolean
     isrFlushToDisk?: boolean
-    reactMode?: 'legacy' | 'concurrent' | 'blocking'
     workerThreads?: boolean
     pageEnv?: boolean
     optimizeImages?: boolean
@@ -166,7 +166,6 @@ export type NextConfig = { [key: string]: any } & {
       skipValidation?: boolean
     }
     initServer?: () => void // blitz
-    reactRoot?: boolean
     disableOptimizedLoading?: boolean
     gzipSize?: boolean
     craCompat?: boolean
@@ -222,6 +221,7 @@ export const defaultConfig: NextConfig = {
   serverRuntimeConfig: {},
   publicRuntimeConfig: {},
   reactStrictMode: false,
+  reactQueryDefaultBehavior: 'suspense',
   httpAgentOptions: {
     keepAlive: true,
   },

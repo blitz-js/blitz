@@ -1,7 +1,5 @@
 module.exports = {
-  experimental: {
-    reactRoot: false,
-  },
+  reactQueryDefaultBehavior: "legacy",
   eslint: {
     ignoreDuringBuilds: true,
   },

@@ -563,29 +563,15 @@ function renderReactElement(
   }
 
   const reactEl = fn(shouldHydrate ? markHydrateComplete : markRenderComplete)
-  if (process.env.__NEXT_REACT_ROOT) {
-    // start blitz
-    if (!reactRoot) {
-      const createRootName =
-        typeof (ReactDOM as any).unstable_createRoot === 'function'
-          ? 'unstable_createRoot'
-          : 'createRoot'
-      reactRoot = (ReactDOM as any)[createRootName](domEl, {
-        hydrate: shouldHydrate,
-      })
-    }
-    reactRoot.render(reactEl)
-    shouldHydrate = false
-    // end blitz
-  } else {
-    // The check for `.hydrate` is there to support React alternatives like preact
-    if (shouldHydrate) {
-      ReactDOM.hydrate(reactEl, domEl)
-      shouldHydrate = false
-    } else {
-      ReactDOM.render(reactEl, domEl)
-    }
+  // start blitz
+  if (!reactRoot) {
+    reactRoot = (ReactDOM as any).createRoot(domEl, {
+      hydrate: shouldHydrate,
+    })
   }
+  reactRoot.render(reactEl)
+  shouldHydrate = false
+  // end blitz
 }
 
 function markHydrateComplete(): void {

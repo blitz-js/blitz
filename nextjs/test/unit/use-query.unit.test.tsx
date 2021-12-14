@@ -17,12 +17,12 @@ import {
 beforeAll(() => {
   queryClient.clear()
   process.env.__BLITZ_SESSION_COOKIE_PREFIX = 'blitz-test'
-  process.env.__BLITZ_SUSPENSE_ENABLED = 'true'
+  process.env.__BLITZ_DEFAULT_SUSPENSE = 'true'
 })
 afterAll(() => {
   jest.clearAllMocks()
   process.env.__BLITZ_SESSION_COOKIE_PREFIX = undefined
-  process.env.__BLITZ_SUSPENSE_ENABLED = undefined
+  process.env.__BLITZ_DEFAULT_SUSPENSE = undefined
 })
 
 describe('useQuery', () => {

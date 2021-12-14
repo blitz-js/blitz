@@ -51,14 +51,17 @@ function assignDefaults(userConfig: { [key: string]: any }) {
   if (typeof userConfig.experimental?.reactMode !== 'undefined') {
     console.warn(
       chalk.yellow.bold('Warning: ') +
-        'The experimental "reactMode" option has been replaced with "reactRoot". Please update your blitz.config.js.'
+        'The experimental "reactMode" has been removed as "concurrent mode" doesn\'t exist anymore. Please update your blitz.config.js.'
     )
-    if (typeof userConfig.experimental?.reactRoot === 'undefined') {
-      userConfig.experimental.reactRoot = ['concurrent', 'blocking'].includes(
-        userConfig.experimental.reactMode
-      )
-    }
     delete userConfig.experimental.reactMode
+  }
+
+  if (typeof userConfig.experimental?.reactRoot !== 'undefined') {
+    console.warn(
+      chalk.yellow.bold('Warning: ') +
+        'The experimental "reactRoot" has been removed as "concurrent mode" doesn\'t exist anymore. Please update your blitz.config.js.'
+    )
+    delete userConfig.experimental.reactRoot
   }
 
   const config = Object.keys(userConfig).reduce<{ [key: string]: any }>(

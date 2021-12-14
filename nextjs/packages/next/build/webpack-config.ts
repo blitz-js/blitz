@@ -3,7 +3,6 @@ import chalk from 'chalk'
 import crypto from 'crypto'
 import { readFileSync } from 'fs'
 import { codeFrameColumns } from 'next/dist/compiled/babel/code-frame'
-import semver from 'next/dist/compiled/semver'
 import { isWebpack5, webpack } from 'next/dist/compiled/webpack/webpack'
 import path, { join as pathJoin, relative as relativePath } from 'path'
 import {
@@ -13,7 +12,6 @@ import {
   PAGES_DIR_ALIAS,
 } from '../lib/constants'
 import { fileExists } from '../lib/file-exists'
-import { getPackageVersion } from '../lib/get-package-version'
 import { CustomRoutes } from '../lib/load-custom-routes.js'
 import { getTypeScriptConfiguration } from '../lib/typescript/getTypeScriptConfiguration'
 import {
@@ -246,22 +244,9 @@ export default async function getBaseWebpackConfig(
     rewrites.afterFiles.length > 0 ||
     rewrites.fallback.length > 0
   const hasReactRefresh: boolean = dev && !isServer
-  const reactDomVersion = await getPackageVersion({
-    cwd: dir,
-    name: 'react-dom',
-  })
-  const hasReactExperimental: boolean =
-    Boolean(reactDomVersion) && reactDomVersion!.includes('experimental') // blitz
-  const hasReact18: boolean =
-    (Boolean(reactDomVersion) &&
-      (semver.gte(reactDomVersion!, '18.0.0') ||
-        semver.coerce(reactDomVersion)?.version === '18.0.0')) ||
-    hasReactExperimental // blitz
-  const hasReactRoot: boolean = config.experimental.reactRoot ?? hasReact18
-  // Have to set this suspense env for the actual build, because the webpack
-  // string replace below only affects the build output, not anything during
-  // the build like static page optimization
-  process.env.__BLITZ_SUSPENSE_ENABLED = String(hasReactRoot)
+  const defaultSuspense = config.reactQueryDefaultBehavior === 'suspense'
+
+  process.env.__BLITZ_DEFAULT_SUSPENSE = String(defaultSuspense)
 
   const babelConfigFile = await [
     '.babelrc',
@@ -1191,7 +1176,7 @@ export default async function getBaseWebpackConfig(
               'process.env.__NEXT_DIST_DIR': JSON.stringify(distDir),
             }
           : {}),
-        'process.env.__BLITZ_SUSPENSE_ENABLED': JSON.stringify(hasReactRoot),
+        'process.env.__BLITZ_DEFAULT_SUSPENSE': JSON.stringify(defaultSuspense),
         'process.env.__NEXT_TRAILING_SLASH': JSON.stringify(
           config.trailingSlash
         ),
@@ -1204,7 +1189,6 @@ export default async function getBaseWebpackConfig(
         'process.env.__NEXT_STRICT_MODE': JSON.stringify(
           config.reactStrictMode
         ),
-        'process.env.__NEXT_REACT_ROOT': JSON.stringify(hasReactRoot),
         'process.env.__NEXT_OPTIMIZE_FONTS': JSON.stringify(
           config.optimizeFonts && !dev
         ),
@@ -1447,7 +1431,6 @@ export default async function getBaseWebpackConfig(
       productionBrowserSourceMaps: !!config.productionBrowserSourceMaps,
       plugins: config.experimental.plugins,
       reactStrictMode: config.reactStrictMode,
-      reactMode: config.experimental.reactMode,
       optimizeFonts: config.optimizeFonts,
       optimizeImages: config.experimental.optimizeImages,
       optimizeCss: config.experimental.optimizeCss,

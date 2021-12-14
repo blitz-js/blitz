@@ -130,7 +130,7 @@ interface UseSessionOptions {
 
 export const useSession = (options: UseSessionOptions = {}): ClientSession => {
   const suspense =
-    options?.suspense ?? Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+    options?.suspense ?? Boolean(process.env.__BLITZ_DEFAULT_SUSPENSE)
 
   let initialState: ClientSession
   if (options.initialPublicData) {
