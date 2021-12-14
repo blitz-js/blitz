@@ -1,7 +1,7 @@
 import {log} from "@blitzjs/display"
 import {CodegenConfig, NextConfigComplete} from "next/dist/server/config-shared"
 
-export const fallbackCodegen: CodegenConfig = {
+export const defaultCodegenConfig: CodegenConfig = {
   fieldTypeMap: {
     string: {
       component: "LabeledTextField",
@@ -47,7 +47,7 @@ export const fallbackCodegen: CodegenConfig = {
     },
     datetime: {
       component: "LabeledTextField",
-      inputType: "string",
+      inputType: "text",
       zodType: "string",
       prismaType: "DateTime",
     },
@@ -93,9 +93,9 @@ export const getCodegen = async (): Promise<Pick<NextConfigComplete, "codegen">>
       // TODO: potentially verify that codegen is well formed using zod
       return {codegen: config.codegen}
     }
-    return {codegen: fallbackCodegen}
+    return {codegen: defaultCodegenConfig}
   } catch (ex) {
     log.warning("Failed loading config from blitz.config file " + ex)
-    return {codegen: fallbackCodegen}
+    return {codegen: defaultCodegenConfig}
   }
 }

@@ -1,4 +1,5 @@
 import {Editor} from "mem-fs-editor"
+import {CodegenConfig} from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
 import {getCodegen, getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {
@@ -53,7 +54,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
 
   public fs: Editor | undefined
 
-  public fallbacks: {[key in string]: string} = {
+  public defaultFieldConfig: CodegenConfig["fieldTypeMap"][0] = {
     component: "LabeledTextField",
     inputType: "text",
     zodType: "string",
@@ -94,20 +95,22 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
   // eslint-disable-next-line require-await
   public async getFieldTemplateValues(args: string[]) {
     const argsPromises = args.map(async (arg: string) => {
-      const [valueName, typeName] = arg.split(":")
+      let [valueName, typeName] = arg.split(":")
+      if (typeName.includes("?")) {
+        typeName = typeName.replace("?", "")
+      }
       let values: {[key in string]: any} = {
         attributeName: singleCamel(valueName),
-        fieldName: singleCamel(valueName), // fieldName
-        FieldName: singlePascal(valueName), // FieldName
+        fieldName: singleCamel(valueName),
+        FieldName: singlePascal(valueName),
         field_name: addSpaceBeforeCapitals(valueName).toLocaleLowerCase(), // field name
         Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
         Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
       }
       const codegen = (await getCodegen()).codegen
       // iterate over resources defined for this field type
-      const map = codegen.fieldTypeMap[typeName]
-      values = {...values, ...map}
-      // TODO: potentially overrides specified from cmd line for these?
+      const fieldConfig = codegen.fieldTypeMap[typeName]
+      values = {...this.defaultFieldConfig, ...values, ...fieldConfig}
       return values
     })
     return Promise.all(argsPromises)
