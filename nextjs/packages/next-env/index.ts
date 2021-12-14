@@ -66,26 +66,28 @@ export function processEnv(
 }
 
 export function loadEnvConfig(
-  dir: string,
-  dev?: boolean,
-  log: Log = console
+  dir: string = process.cwd(),
+  _dev?: boolean,
+  log: Log = console,
+  { ignoreCache } = { ignoreCache: false }
 ): {
   combinedEnv: Env
   loadedEnvFiles: LoadedEnvFiles
 } {
   // don't reload env if we already have since this breaks escaped
   // environment values e.g. \$ENV_FILE_KEY
-  if (combinedEnv) return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
+  if (combinedEnv && !ignoreCache)
+    return { combinedEnv, loadedEnvFiles: cachedLoadedEnvFiles }
 
-  const isTest = process.env.NODE_ENV === 'test'
-  const mode = isTest ? 'test' : dev ? 'development' : 'production'
-  const dotenvFiles = [
-    `.env.${mode}.local`,
+  const appEnv = process.env.APP_ENV ?? process.env.NODE_ENV ?? 'development'
+
+  let dotenvFiles = [
+    `.env.${appEnv}.local`,
+    `.env.${appEnv}`,
     // Don't include `.env.local` for `test` environment
     // since normally you expect tests to produce the same
     // results for everyone
-    mode !== 'test' && `.env.local`,
-    `.env.${mode}`,
+    appEnv !== 'test' && `.env.local`,
     '.env',
   ].filter(Boolean) as string[]
 
@@ -106,7 +108,7 @@ export function loadEnvConfig(
         path: envFile,
         contents,
       })
-    } catch (err) {
+    } catch (err: any) {
       if (err.code !== 'ENOENT') {
         log.error(`Failed to load env from ${envFile}`, err)
       }

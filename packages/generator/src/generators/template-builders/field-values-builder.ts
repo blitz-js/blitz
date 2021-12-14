@@ -1,8 +1,8 @@
-import {getPrismaSchema} from "../../utils/get-prisma-schema"
-import {ResourceGeneratorOptions, Builder, CommonTemplateValues} from "./builder"
+import * as ast from "@mrleebo/prisma-ast"
 import {create as createStore} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
-import * as ast from "@mrleebo/prisma-ast"
+import {getPrismaSchema} from "../../utils/get-prisma-schema"
+import {Builder, CommonTemplateValues, ResourceGeneratorOptions} from "./builder"
 
 export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, CommonTemplateValues> {
   private getEditor = (): Editor => {
@@ -44,9 +44,9 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           values.modelIdZodType = await this.getZodType(typeName)
           specialArgs[arg] = "present"
         }
-        if (valueName === "belongsTo"){
+        if (valueName === "belongsTo") {
           // TODO: Determine how this is done. The model will generate with a field with the id name
-          // and type of the parent of this model, and forms etc. should 
+          // and type of the parent of this model, and forms etc. should
           // In addition, need to do the same logic that the options.parentModel != undefined below does
           specialArgs[arg] = "present"
         }
@@ -54,7 +54,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
       await Promise.all(processSpecialArgs)
       // Filter out special args by makins sure the argument isn't present in the list
       const nonSpecialArgs = options.extraArgs.filter((arg) => specialArgs[arg] !== "present")
-      
+
       // Get the parent model it type if options.parentModel exists
       if (options.parentModel !== undefined && options.parentModel.length > 0) {
         const {schema} = getPrismaSchema(this.getEditor())
@@ -92,7 +92,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           // TODO: handle scenario where parent wasnt found in existing schema. Should we throw an error, or a warning asking the user to verify that the parent model exists?
         }
       }
-      if(nonSpecialArgs.length > 0){
+      if (nonSpecialArgs.length > 0) {
         const ftv = await this.getFieldTemplateValues(nonSpecialArgs)
         return {...values, fieldTemplateValues: ftv}
       }

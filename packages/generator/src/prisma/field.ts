@@ -1,7 +1,8 @@
-import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
-import {CondegenConfig, getResourceConfigFromCodegen} from "../utils/get-codegen"
-import {singlePascal, uncapitalize} from "../utils/inflector"
+import {CodegenConfig} from "next/dist/server/config-shared"
+import {baseLogger, log} from "next/dist/server/lib/logging"
+import {getResourceConfigFromCodegen} from "../utils/get-codegen"
+import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 const debug = require("debug")("blitz:field")
 
 export enum FieldType {
@@ -63,18 +64,18 @@ export class Field {
     const [_fieldName, _fieldType = "String", _attribute] = input.split(":")
     let attribute = _attribute
     let fieldName = uncapitalize(_fieldName)
-    let fieldType = _fieldType
+    let fieldType = capitalize(_fieldType)
     // Check if it would make sense to expose that to users as well?
     // Also in the case of a relationship, need to use the raw model name, cant capitalize it.
     const isId = fieldName === "id"
     let isRequired = true
     let isList = false
     let isUpdatedAt = false
-    let isUnique = false
     let defaultValue = undefined
     let relationFromFields = undefined
     let relationToFields = undefined
     let maybeIdField = undefined
+    let isUnique = false
 
     if (fieldType.includes("?")) {
       fieldType = fieldType.replace("?", "")
@@ -86,7 +87,7 @@ export class Field {
       fieldType = prismaType
     }
     if (defaultConfigValue) {
-      defaultValue = defaultConfigValue
+      attribute = `default=${defaultConfigValue}`
     }
 
     if (fieldType.includes("[]")) {
@@ -178,16 +179,14 @@ export class Field {
     }
   }
 
-  public static getConfigForPrismaType = async (
-    fieldType: keyof CondegenConfig["fieldTypeMap"],
-  ) => {
-    return await getResourceConfigFromCodegen(fieldType)
+  public static getConfigForPrismaType = async (fieldType: keyof CodegenConfig["fieldTypeMap"]) => {
+    return await getResourceConfigFromCodegen(fieldType.toLowerCase())
   }
 
   constructor(name: string, options: FieldArgs) {
     if (!name) throw new MissingFieldNameError("[PrismaField]: A field name is required")
     if (!options.type) {
-      log.warning(
+      baseLogger({displayDateTime: false}).warn(
         `No field type specified for field ${log.variable(name)}, falling back to ${log.variable(
           "String",
         )}.`,

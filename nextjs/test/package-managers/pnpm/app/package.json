@@ -10,7 +10,7 @@
   "dependencies": {
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "@next/env": "^10.0.9",
+    "@blitzjs/env": "0.43.0",
     "@next/polyfill-module": "^10.0.9",
     "@next/react-dev-overlay": "^10.0.9",
     "@next/react-refresh-utils": "^10.0.9"

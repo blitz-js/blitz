@@ -1,7 +1,6 @@
 import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from "@babel/plugin-transform-typescript"
-import {log} from "@blitzjs/display"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import {escapePath} from "fast-glob"
@@ -9,6 +8,7 @@ import * as fs from "fs-extra"
 import j from "jscodeshift"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
+import {baseLogger} from "next/dist/server/lib/logging"
 import * as path from "path"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
@@ -204,7 +204,7 @@ export abstract class Generator<
   }
 
   public fieldTemplateRegExp: RegExp = new RegExp(
-    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*)\n)/g
+    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*))/g,
   )
 
   process(
@@ -235,7 +235,7 @@ export abstract class Generator<
           this.replaceTemplateValues(fieldTemplateString, values),
         ) || []),
         templatedFile.slice(fieldTemplatePosition),
-      ].join("\n")
+      ].join("")
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
@@ -261,7 +261,7 @@ export abstract class Generator<
       try {
         templatedFile = this.prettier.format(templatedFile, options)
       } catch (error) {
-        log.warning(`Failed trying to run prettier:` + error)
+        baseLogger({displayDateTime: false}).warn(`Failed trying to run prettier: ` + error)
       }
     }
     return templatedFile
@@ -314,7 +314,7 @@ export abstract class Generator<
           }
         }
       } catch (error) {
-        log.error(`Error generating ${filePath}`)
+        baseLogger({displayDateTime: false}).error(`Error generating ${filePath}`)
         throw error
       }
     }

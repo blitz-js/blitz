@@ -8,6 +8,7 @@ import {
   killApp,
   nextBuild,
   nextStart,
+  waitFor,
 } from 'next-test-utils'
 
 jest.setTimeout(1000 * 60 * 2)
@@ -19,6 +20,8 @@ const appDir = join(__dirname, '../')
 function runTests() {
   it('should load page correctly', async () => {
     const browser = await webdriver(appPort, '/')
+
+    waitFor(500)
 
     expect(
       await browser

@@ -1,7 +1,7 @@
 import * as ast from "@mrleebo/prisma-ast"
-import path from "path"
-import {log} from "@blitzjs/display"
 import {Editor} from "mem-fs-editor"
+import { baseLogger } from "next/dist/server/lib/logging"
+import path from "path"
 
 export const getPrismaSchema = (memFsEditor : Editor): {schema: ast.Schema, schemaPath: string} => {
   const schemaPath = path.resolve("db/schema.prisma")
@@ -13,7 +13,7 @@ export const getPrismaSchema = (memFsEditor : Editor): {schema: ast.Schema, sche
   try {
     schema = ast.getSchema(memFsEditor.read(schemaPath))
   } catch (err) {
-    log.error("Failed to parse db/schema.prisma file")
+    baseLogger({displayDateTime: false}).error("Failed to parse db/schema.prisma file")
     throw err
   }
   return {schema, schemaPath}

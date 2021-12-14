@@ -30,9 +30,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-
       - name: Install dependencies
         run: yarn install --frozen-lockfile --silent
         env:
@@ -74,9 +74,9 @@ jobs:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             **/node_modules
-          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+            ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -98,10 +98,41 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Test Blitz Packages
+        run: yarn testonly:packages
+        env:
+          CI: true
+
+  testNextPackages:
+    name: Next - Test Packages
+    defaults:
+      run:
+        working-directory: nextjs
+    needs: build-linux
+    runs-on: ubuntu-latest
+    env:
+      BLITZ_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Setup kernel to increase watchers
+        if: runner.os == 'Linux'
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Test Next Packages
         run: yarn testonly:packages
         env:
           CI: true
@@ -120,6 +151,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       # Needed to get cypress binary
       - run: yarn cypress install
       - name: Install sass
@@ -157,9 +192,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -222,6 +257,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
@@ -256,9 +295,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -285,7 +324,10 @@ jobs:
         with:
           path: ./*
           key: ${{ runner.os }}-${{ github.sha }}
-
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
       # TODO: remove after we fix watchpack watching too much
       - name: Setup kernel to increase watchers
         if: runner.os == 'Linux'
@@ -318,9 +360,9 @@ jobs:
       #     path: |
       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
       #       **/node_modules
-      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-${{ hashFiles('yarn.lock') }}
+      #     key: ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-${{ hashFiles('yarn.lock') }}
       #     restore-keys: |
-      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v13-
+      #       ${{ runner.os }}-${{ runner.node_version}}-yarn-v14-
       - run: yarn install --frozen-lockfile --check-files
       - name: Build Packages
         run: yarn build
@@ -363,6 +405,7 @@ jobs:
         testIntegrationBlitzWin,
         testUnit,
         testBlitzPackages,
+        testNextPackages,
         testBlitzExamples,
         testBlitzExamplesWin,
       ]

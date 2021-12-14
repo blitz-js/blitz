@@ -1,6 +1,6 @@
+import username from "username"
 import {AppGeneratorOptions, AppTemplateValues} from "../.."
 import {Builder} from "./builder"
-import username from "username"
 
 export class AppValuesBuilder extends Builder<AppGeneratorOptions, AppTemplateValues> {
   public async getTemplateValues(options: AppGeneratorOptions): Promise<AppTemplateValues> {

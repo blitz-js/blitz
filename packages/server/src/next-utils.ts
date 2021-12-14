@@ -1,10 +1,9 @@
-import {log} from "@blitzjs/display"
 import {ChildProcess} from "child_process"
 import {spawn} from "cross-spawn"
 import detect from "detect-port"
 import * as esbuild from "esbuild"
 import {existsSync, readJSONSync} from "fs-extra"
-import {newline} from "next/dist/server/lib/logging"
+import {baseLogger, log, newline} from "next/dist/server/lib/logging"
 import {getProjectRootSync} from "next/dist/server/lib/utils"
 import path from "path"
 import pkgDir from "pkg-dir"
@@ -55,7 +54,9 @@ export async function nextStartDev(
 
   return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
-      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      baseLogger({displayDateTime: false}).error(
+        `Couldn't start server on port ${config.port} because it's already in use`,
+      )
       rej("")
     } else {
       spawn(nextBin, spawnCommand, {
@@ -124,7 +125,9 @@ export async function nextStart(nextBin: string, _buildFolder: string, config: S
 
   return new Promise<void>((res, rej) => {
     if (config.port && availablePort !== config.port) {
-      log.error(`Couldn't start server on port ${config.port} because it's already in use`)
+      baseLogger({displayDateTime: false}).error(
+        `Couldn't start server on port ${config.port} because it's already in use`,
+      )
       rej("")
     } else {
       spawn(nextBin, spawnCommand, {
@@ -205,7 +208,7 @@ export function buildCustomServer({watch}: CustomServerOptions = {}) {
     esbuildOptions.watch = {
       onRebuild(error) {
         if (error) {
-          log.error("Failed to re-build custom server")
+          baseLogger({displayDateTime: false}).error("Failed to re-build custom server")
         } else {
           newline()
           log.progress("Custom server changed - rebuilding...")
@@ -268,7 +271,7 @@ export function startCustomServer(
       ? {
           onRebuild(error) {
             if (error) {
-              log.error("Failed to re-build custom server")
+              baseLogger({displayDateTime: false}).error("Failed to re-build custom server")
             } else {
               newline()
               log.progress("Custom server changed - restarting...")

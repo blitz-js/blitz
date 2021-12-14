@@ -46,7 +46,9 @@ type NoOptionals<T> = {
   [P in keyof T]-?: T[P]
 }
 
-export type NextConfigComplete = NoOptionals<NextConfig>
+export type NextConfigComplete = NoOptionals<NextConfig> & {
+  images: ImageConfig
+}
 
 export interface I18NConfig {
   defaultLocale: string
@@ -69,6 +71,19 @@ export interface ESLintConfig {
   ignoreDuringBuilds?: boolean
 }
 
+export type CodegenConfig = {
+  fieldTypeMap: {
+    [key in string]: {
+      component: string
+      inputType: string
+      zodType: string
+      prismaType: string
+      default?: string
+      [index: string]: string | undefined
+    }
+  }
+}
+
 export type NextConfig = { [key: string]: any } & {
   i18n?: I18NConfig | null
 
@@ -89,7 +104,7 @@ export type NextConfig = { [key: string]: any } & {
   excludeDefaultMomentLocales?: boolean
 
   trailingSlash?: boolean
-  env?: { [key: string]: string }
+  env?: { [key: string]: string | undefined }
   distDir?: string
   cleanDistDir?: boolean
   assetPrefix?: string
@@ -98,7 +113,7 @@ export type NextConfig = { [key: string]: any } & {
   generateEtags?: boolean
   pageExtensions?: string[]
   compress?: boolean
-  images?: ImageConfig
+  images?: Partial<ImageConfig>
   devIndicators?: {
     buildActivity?: boolean
   }
@@ -126,7 +141,7 @@ export type NextConfig = { [key: string]: any } & {
     noProxy?: string
   }
   log?: {
-    level: LogLevel
+    level?: LogLevel
     type?: LogType
   }
   middleware?: Middleware[]
@@ -174,10 +189,10 @@ export type NextConfig = { [key: string]: any } & {
     isrMemoryCacheSize?: number
     concurrentFeatures?: boolean
   }
-  codegen?: {
-    fieldTypeMap: { [key in string]: { [key in string]: string } }
-  }
+  codegen?: CodegenConfig
 }
+
+export type BlitzConfig = NextConfig
 
 export const defaultConfig: NextConfig = {
   env: {},

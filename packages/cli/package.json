@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.43.0",
+  "version": "0.44.4",
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
@@ -22,10 +22,9 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/display": "0.43.0",
-    "@blitzjs/generator": "0.43.0",
-    "@blitzjs/installer": "0.43.0",
-    "@blitzjs/server": "0.43.0",
+    "@blitzjs/generator": "0.44.4",
+    "@blitzjs/installer": "0.44.4",
+    "@blitzjs/server": "0.44.4",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
@@ -37,7 +36,6 @@
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "dotenv-expand": "^5.1.0",
-    "dotenv-flow": "^3.2.0",
     "enquirer": "2.3.6",
     "esm": "3.2.25",
     "fs-extra": "^9.1.0",

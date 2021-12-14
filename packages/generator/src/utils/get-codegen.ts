@@ -1,19 +1,7 @@
-import {log} from "@blitzjs/display"
-import {NextConfigComplete} from "next/dist/server/config-shared"
+import {CodegenConfig, NextConfigComplete} from "next/dist/server/config-shared"
+import {baseLogger} from "next/dist/server/lib/logging"
 
-export type CondegenConfig = {
-  fieldTypeMap: {
-    [key in string]: {
-      component: string
-      inputType: string
-      zodType: string
-      prismaType: string
-      default?: string
-    }
-  }
-}
-
-export const fallbackCodegen: CondegenConfig = {
+export const defaultCodegenConfig: CodegenConfig = {
   fieldTypeMap: {
     string: {
       component: "LabeledTextField",
@@ -59,7 +47,7 @@ export const fallbackCodegen: CondegenConfig = {
     },
     datetime: {
       component: "LabeledTextField",
-      inputType: "string",
+      inputType: "text",
       zodType: "string",
       prismaType: "DateTime",
     },
@@ -68,7 +56,7 @@ export const fallbackCodegen: CondegenConfig = {
       inputType: "text",
       zodType: "string().uuid",
       prismaType: "String",
-      default: "uuid()",
+      default: "uuid",
     },
     json: {
       component: "LabeledTextField",
@@ -80,34 +68,34 @@ export const fallbackCodegen: CondegenConfig = {
 }
 
 export const getResourceValueFromCodegen = async (
-  fieldType: keyof CondegenConfig["fieldTypeMap"],
-  resource: keyof CondegenConfig["fieldTypeMap"][string],
-): Promise<typeof fieldType extends "uuid" ? string : string | undefined> => {
-  const codegen = (await getCodegen()).codegen as CondegenConfig
+  fieldType: keyof CodegenConfig["fieldTypeMap"],
+  resource: keyof CodegenConfig["fieldTypeMap"][string],
+): Promise<string | undefined> => {
+  const codegen = await getCodegen()
   const templateValue = codegen.fieldTypeMap[fieldType][resource]
   return templateValue
 }
 
 export const getResourceConfigFromCodegen = async (
-  fieldType: keyof CondegenConfig["fieldTypeMap"],
-): Promise<CondegenConfig["fieldTypeMap"][string]> => {
-  const codegen = (await getCodegen()).codegen as CondegenConfig
+  fieldType: keyof CodegenConfig["fieldTypeMap"],
+): Promise<CodegenConfig["fieldTypeMap"][string]> => {
+  const codegen = await getCodegen()
   const config = codegen.fieldTypeMap[fieldType] || {}
   return config
 }
 
-export const getCodegen = async (): Promise<Pick<NextConfigComplete, "codegen">> => {
+export const getCodegen = async (): Promise<NextConfigComplete["codegen"]> => {
   try {
     const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
     const config = await loadConfigAtRuntime()
 
     if (config.codegen !== undefined) {
       // TODO: potentially verify that codegen is well formed using zod
-      return {codegen: config.codegen}
+      return config.codegen
     }
-    return {codegen: fallbackCodegen}
+    return defaultCodegenConfig
   } catch (ex) {
-    log.warning("Failed loading config from blitz.config file " + ex)
-    return {codegen: fallbackCodegen}
+    baseLogger({displayDateTime: false}).warn("Failed loading config from blitz.config file " + ex)
+    return defaultCodegenConfig
   }
 }

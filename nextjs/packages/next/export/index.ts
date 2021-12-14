@@ -37,7 +37,7 @@ import {
   normalizePagePath,
   denormalizePagePath,
 } from '../server/normalize-page-path'
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from '@blitzjs/env'
 import { PrerenderManifest } from '../build'
 import { PagesManifest } from '../build/webpack/plugins/pages-manifest-plugin'
 import { getPagePath } from '../server/require'

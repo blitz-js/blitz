@@ -18,7 +18,6 @@ jest.setTimeout(1000 * 60 * 2)
 const appDir = join(__dirname, '../')
 const nextConfig = join(appDir, 'next.config.js')
 let appPort
-let stderr
 let mode
 let app
 
@@ -152,13 +151,8 @@ function runTests(dev = false) {
 describe('RPC', () => {
   describe('dev mode', () => {
     beforeAll(async () => {
-      stderr = ''
       appPort = await findPort()
-      app = await launchApp(appDir, appPort, {
-        onStderr: (msg) => {
-          stderr += msg
-        },
-      })
+      app = await launchApp(appDir, appPort)
     })
     afterAll(() => killApp(app))
 
