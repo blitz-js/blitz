@@ -1,7 +1,6 @@
-import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
 import {spawn} from "cross-spawn"
-import {newline} from "next/dist/server/lib/logging"
+import {log,newline} from "next/dist/server/lib/logging"
 import which from "npm-which"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"

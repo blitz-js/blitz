@@ -2964,7 +2964,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/12092?v=4",
       "profile": "http://zackhobson.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -3468,6 +3469,79 @@
       "name": "Austin (Thang Pham)",
       "avatar_url": "https://avatars.githubusercontent.com/u/16440123?v=4",
       "profile": "https://auspham.dev/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "noxify",
+      "name": "Marcus Reinhardt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/521777?v=4",
+      "profile": "https://jammeryhq.com",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "davidchristie",
+      "name": "David Christie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12044333?v=4",
+      "profile": "https://github.com/davidchristie",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajanth97",
+      "name": "Ajanth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50458502?v=4",
+      "profile": "https://github.com/ajanth97",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "divpreet",
+      "name": "Div",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2805650?v=4",
+      "profile": "https://github.com/divpreet",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "david-arteaga",
+      "name": "David Arteaga",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7199015?v=4",
+      "profile": "https://github.com/david-arteaga",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "MukulKolpe",
+      "name": "Mukul Kolpe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78664749?v=4",
+      "profile": "https://github.com/MukulKolpe",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "skotchpine",
+      "name": "tyler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13043909?v=4",
+      "profile": "https://github.com/skotchpine",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SofianeDjellouli",
+      "name": "Sofiane Djellouli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38258952?v=4",
+      "profile": "https://github.com/SofianeDjellouli",
       "contributions": [
         "doc"
       ]

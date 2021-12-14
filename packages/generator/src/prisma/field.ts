@@ -1,6 +1,6 @@
-import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
 import {CodegenConfig} from "next/dist/server/config-shared"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 import {getResourceConfigFromCodegen} from "../utils/get-codegen"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
 const debug = require("debug")("blitz:field")
@@ -186,7 +186,7 @@ export class Field {
   constructor(name: string, options: FieldArgs) {
     if (!name) throw new MissingFieldNameError("[PrismaField]: A field name is required")
     if (!options.type) {
-      log.warning(
+      baseLogger({displayDateTime: false}).warn(
         `No field type specified for field ${log.variable(name)}, falling back to ${log.variable(
           "String",
         )}.`,

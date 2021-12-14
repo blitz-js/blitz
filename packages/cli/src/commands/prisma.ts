@@ -1,5 +1,5 @@
+import {Command, flags} from "@oclif/command"
 import {Readable} from "stream"
-import {Command} from "@oclif/command"
 
 const getPrismaBin = async () => {
   let bin: any
@@ -31,8 +31,8 @@ export const runPrisma = async (args: string[], silent = false) => {
   const cp_stderr: string[] = []
   if (silent) {
     cp.stderr.on("data", (chunk: Readable) => {
-      cp_stderr.push(chunk.toString());
-    });
+      cp_stderr.push(chunk.toString())
+    })
   }
 
   const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
@@ -54,6 +54,13 @@ export const runPrismaExitOnError = async (...args: Parameters<typeof runPrisma>
 export class PrismaCommand extends Command {
   static description = "Loads env variables then proxies all args to Prisma CLI"
   static aliases = ["p"]
+
+  static flags = {
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
+  }
 
   static strict = false
 

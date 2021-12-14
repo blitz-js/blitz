@@ -1,5 +1,5 @@
-import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
+import {log} from "next/dist/server/lib/logging"
 import {getPackageJson} from "../utils/get-package-json"
 import {runPrisma} from "./prisma"
 
@@ -9,6 +9,10 @@ export class CodeGen extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {

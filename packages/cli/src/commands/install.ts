@@ -1,7 +1,7 @@
-import {log} from "@blitzjs/display"
 import type {RecipeCLIArgs, RecipeCLIFlags, RecipeExecutor} from "@blitzjs/installer"
 import {flags} from "@oclif/command"
 import {bootstrap} from "global-agent"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 import {join, resolve} from "path"
 import {Stream} from "stream"
 import {promisify} from "util"
@@ -25,7 +25,7 @@ const pipeline = promisify(Stream.pipeline)
 async function got(url: string) {
   return require("got")(url).catch((e: any) => {
     if (e.response.statusCode === 403) {
-      log.error(e.response.body)
+      baseLogger({displayDateTime: false}).error(e.response.body)
     } else {
       return e
     }
@@ -93,6 +93,10 @@ export class Install extends Command {
       char: "y",
       default: false,
       description: "Install the recipe automatically without user confirmation",
+    }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
     }),
   }
 
@@ -295,7 +299,7 @@ export class Install extends Command {
 
       if (!(await isUrlValid(packageJsonPath))) {
         debug("Url is invalid for ", packageJsonPath)
-        log.error(`Could not find recipe "${args.recipe}"\n`)
+        baseLogger({displayDateTime: false}).error(`Could not find recipe "${args.recipe}"\n`)
         console.log(`${chalk.bold("Please provide one of the following:")}
 
 1. The name of a recipe to install (e.g. "tailwind")

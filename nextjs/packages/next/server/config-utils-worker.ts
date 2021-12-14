@@ -1,4 +1,4 @@
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from '@blitzjs/env'
 import findUp from 'next/dist/compiled/find-up'
 import { init as initWebpack } from 'next/dist/compiled/webpack/webpack'
 import { CONFIG_FILE, PHASE_DEVELOPMENT_SERVER } from '../shared/lib/constants'

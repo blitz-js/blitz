@@ -11,6 +11,10 @@ export class Export extends Command {
       char: "o",
       description: "set the output dir (defaults to 'out')",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {

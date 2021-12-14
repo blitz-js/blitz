@@ -11,6 +11,7 @@ export {
 export {
   queryClient,
   getQueryKey,
+  getInfiniteQueryKey,
   invalidateQuery,
   setQueryData,
 } from './react-query-utils'

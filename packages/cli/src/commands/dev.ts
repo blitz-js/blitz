@@ -21,6 +21,10 @@ export class Dev extends Command {
     "no-incremental-build": flags.boolean({
       description: "Disable incremental build and start from a fresh cache",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {
@@ -44,7 +48,7 @@ export class Dev extends Command {
         blitzConfig.cli?.clearConsoleOnBlitzDev !== false &&
         !process.env.BLITZ_TEST_ENVIRONMENT
       ) {
-        const {log} = await import("@blitzjs/display")
+        const {log} = await import("next/dist/server/lib/logging")
         log.clearConsole()
       }
 

@@ -3,7 +3,7 @@ import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
-import { useI18n, I18nProps } from "next-rosetta"
+import { useI18n } from "next-rosetta"
 import type { MyLocale } from "app/core/i18n"
 
 type LoginFormProps = {

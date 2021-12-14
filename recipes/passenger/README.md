@@ -1,6 +1,7 @@
 ## passenger
 
 The Blitz Recipe for adding passenger.js
+
 ```
 blitz install passenger
 ```
@@ -14,4 +15,3 @@ blitz install passenger
 ## Contributors
 
 - Péter Nyári <peter.nyari@ioflair.com>
-

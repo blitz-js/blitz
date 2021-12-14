@@ -1,4 +1,4 @@
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from '@blitzjs/env'
 import chalk from 'chalk'
 import crypto from 'crypto'
 import { promises, writeFileSync } from 'fs'
