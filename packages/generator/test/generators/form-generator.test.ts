@@ -28,6 +28,7 @@ describe("Form Generator", () => {
     expect(curlyBraceComment1.match(regex)?.[0].replace(regex, "$2$3")).not.toBe(`something Random`)
 
     const normalComment1 = `// template: __fieldName__: z.__zodType__(),`
+
     expect(normalComment1.match(regex)?.[0].replace(regex, "$2$3")).toBe(
       `__fieldName__: z.__zodType__(),`,
     )

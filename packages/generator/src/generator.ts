@@ -204,7 +204,7 @@ export abstract class Generator<
   }
 
   public fieldTemplateRegExp: RegExp = new RegExp(
-    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*)\n)/g,
+    /({?\/\*\s*template: (.*) \*\/}?|\s*\/\/\s*template: (.*))/g,
   )
 
   process(
@@ -235,7 +235,7 @@ export abstract class Generator<
           this.replaceTemplateValues(fieldTemplateString, values),
         ) || []),
         templatedFile.slice(fieldTemplatePosition),
-      ].join("\n")
+      ].join("")
     }
     templatedFile = this.replaceTemplateValues(templatedFile, templateValues)
     if (!this.useTs && tsExtension.test(pathEnding)) {
