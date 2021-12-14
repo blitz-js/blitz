@@ -99,7 +99,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
       if (typeName.includes("?")) {
         typeName = typeName.replace("?", "")
       }
-      let values: {[key in string]: any} = {
+      let values = {
         attributeName: singleCamel(valueName),
         fieldName: singleCamel(valueName),
         FieldName: singlePascal(valueName),
@@ -107,7 +107,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
         Field_name: singlePascal(addSpaceBeforeCapitals(valueName).toLocaleLowerCase()), // Field name
         Field_Name: singlePascal(addSpaceBeforeCapitals(valueName)), // Field Name
       }
-      const codegen = (await getCodegen()).codegen
+      const codegen = await getCodegen()
       // iterate over resources defined for this field type
       const fieldConfig = codegen.fieldTypeMap[typeName]
       values = {...this.defaultFieldConfig, ...values, ...fieldConfig}

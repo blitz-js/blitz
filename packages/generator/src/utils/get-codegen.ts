@@ -71,7 +71,7 @@ export const getResourceValueFromCodegen = async (
   fieldType: keyof CodegenConfig["fieldTypeMap"],
   resource: keyof CodegenConfig["fieldTypeMap"][string],
 ): Promise<string | undefined> => {
-  const codegen = (await getCodegen()).codegen as CodegenConfig
+  const codegen = await getCodegen()
   const templateValue = codegen.fieldTypeMap[fieldType][resource]
   return templateValue
 }
@@ -79,23 +79,23 @@ export const getResourceValueFromCodegen = async (
 export const getResourceConfigFromCodegen = async (
   fieldType: keyof CodegenConfig["fieldTypeMap"],
 ): Promise<CodegenConfig["fieldTypeMap"][string]> => {
-  const codegen = (await getCodegen()).codegen as CodegenConfig
+  const codegen = await getCodegen()
   const config = codegen.fieldTypeMap[fieldType] || {}
   return config
 }
 
-export const getCodegen = async (): Promise<Pick<NextConfigComplete, "codegen">> => {
+export const getCodegen = async (): Promise<NextConfigComplete["codegen"]> => {
   try {
     const {loadConfigAtRuntime} = await import("next/dist/server/config-shared")
     const config = await loadConfigAtRuntime()
 
     if (config.codegen !== undefined) {
       // TODO: potentially verify that codegen is well formed using zod
-      return {codegen: config.codegen}
+      return config.codegen
     }
-    return {codegen: defaultCodegenConfig}
+    return defaultCodegenConfig
   } catch (ex) {
     baseLogger({displayDateTime: false}).warn("Failed loading config from blitz.config file " + ex)
-    return {codegen: defaultCodegenConfig}
+    return defaultCodegenConfig
   }
 }
