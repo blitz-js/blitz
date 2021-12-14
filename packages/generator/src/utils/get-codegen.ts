@@ -1,19 +1,7 @@
 import {log} from "@blitzjs/display"
-import {NextConfigComplete} from "next/dist/server/config-shared"
+import {CodegenConfig, NextConfigComplete} from "next/dist/server/config-shared"
 
-export type CondegenConfig = {
-  fieldTypeMap: {
-    [key in string]: {
-      component: string
-      inputType: string
-      zodType: string
-      prismaType: string
-      default?: string
-    }
-  }
-}
-
-export const fallbackCodegen: CondegenConfig = {
+export const fallbackCodegen: CodegenConfig = {
   fieldTypeMap: {
     string: {
       component: "LabeledTextField",
@@ -80,18 +68,18 @@ export const fallbackCodegen: CondegenConfig = {
 }
 
 export const getResourceValueFromCodegen = async (
-  fieldType: keyof CondegenConfig["fieldTypeMap"],
-  resource: keyof CondegenConfig["fieldTypeMap"][string],
+  fieldType: keyof CodegenConfig["fieldTypeMap"],
+  resource: keyof CodegenConfig["fieldTypeMap"][string],
 ): Promise<string | undefined> => {
-  const codegen = (await getCodegen()).codegen as CondegenConfig
+  const codegen = (await getCodegen()).codegen as CodegenConfig
   const templateValue = codegen.fieldTypeMap[fieldType][resource]
   return templateValue
 }
 
 export const getResourceConfigFromCodegen = async (
-  fieldType: keyof CondegenConfig["fieldTypeMap"],
-): Promise<CondegenConfig["fieldTypeMap"][string]> => {
-  const codegen = (await getCodegen()).codegen as CondegenConfig
+  fieldType: keyof CodegenConfig["fieldTypeMap"],
+): Promise<CodegenConfig["fieldTypeMap"][string]> => {
+  const codegen = (await getCodegen()).codegen as CodegenConfig
   const config = codegen.fieldTypeMap[fieldType] || {}
   return config
 }

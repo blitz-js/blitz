@@ -69,6 +69,19 @@ export interface ESLintConfig {
   ignoreDuringBuilds?: boolean
 }
 
+export type CodegenConfig = {
+  fieldTypeMap: {
+    [key in string]: {
+      component: string
+      inputType: string
+      zodType: string
+      prismaType: string
+      default?: string
+      [index: string]: string | undefined
+    }
+  }
+}
+
 export type NextConfig = { [key: string]: any } & {
   i18n?: I18NConfig | null
 
@@ -174,9 +187,7 @@ export type NextConfig = { [key: string]: any } & {
     isrMemoryCacheSize?: number
     concurrentFeatures?: boolean
   }
-  codegen?: {
-    fieldTypeMap: { [key in string]: { [key in string]: string } }
-  }
+  codegen?: CodegenConfig
 }
 
 export const defaultConfig: NextConfig = {

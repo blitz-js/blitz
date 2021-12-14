@@ -1,6 +1,7 @@
 import {log} from "@blitzjs/display"
 import * as ast from "@mrleebo/prisma-ast"
-import {CondegenConfig, getResourceConfigFromCodegen} from "../utils/get-codegen"
+import {CodegenConfig} from "next/dist/server/config-shared"
+import {getResourceConfigFromCodegen} from "../utils/get-codegen"
 import {singlePascal, uncapitalize} from "../utils/inflector"
 const debug = require("debug")("blitz:field")
 
@@ -178,9 +179,7 @@ export class Field {
     }
   }
 
-  public static getConfigForPrismaType = async (
-    fieldType: keyof CondegenConfig["fieldTypeMap"],
-  ) => {
+  public static getConfigForPrismaType = async (fieldType: keyof CodegenConfig["fieldTypeMap"]) => {
     return await getResourceConfigFromCodegen(fieldType)
   }
 
