@@ -565,9 +565,11 @@ function renderReactElement(
   const reactEl = fn(shouldHydrate ? markHydrateComplete : markRenderComplete)
   // start blitz
   if (!reactRoot) {
-    reactRoot = (ReactDOM as any).createRoot(domEl, {
-      hydrate: shouldHydrate,
-    })
+    if (shouldHydrate) {
+      reactRoot = (ReactDOM as any).hydrateRoot(domEl)
+    } else {
+      reactRoot = (ReactDOM as any).createRoot(domEl)
+    }
   }
   reactRoot.render(reactEl)
   shouldHydrate = false
