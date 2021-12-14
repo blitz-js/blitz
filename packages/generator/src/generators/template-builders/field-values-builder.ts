@@ -1,6 +1,7 @@
 import * as ast from "@mrleebo/prisma-ast"
 import {create as createStore} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
+import { getResourceValueFromCodegen } from "../../utils/get-codegen"
 import {getPrismaSchema} from "../../utils/get-prisma-schema"
 import {Builder, CommonTemplateValues, ResourceGeneratorOptions} from "./builder"
 
@@ -73,8 +74,15 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           })
 
           // TODO: Do we want a map between prisma types and "user types", we can then use that map instead of these conditionals
+          // We have a map from "user types" (which are what users type into the blitz generate command)
+          // to primsa type and other types, but we dont have a reverse map 1:1. This is because we lose
+          // some information for certain maps. E.g.: fieldname:uuid will be converted into a Prisma field with 
+          // the String type, and the uuid portion is added to a decorator at the end of the field.
+          // This means it is more complicated to extract the original "user specified type" than creating a reverse map
           if (idField?.fieldType === "Int") {
-            values.parentModelIdZodType = "number"
+            // TODO: Check if ints have decorators that make them a different type, like Bigint, etc.
+            // And see if that has to map to a different user specified type
+            values.parentModelIdZodType = await getResourceValueFromCodegen("int", "zodType")
           } else if (idField?.fieldType === "String") {
             if (
               idField.attributes?.find(
@@ -83,9 +91,9 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
                   attr.args?.findIndex((arg) => arg.value === "uuid") !== -1,
               )
             ) {
-              values.parentModelIdZodType = "string().uuid"
+              values.parentModelIdZodType = await getResourceValueFromCodegen("uuid", "zodType")
             } else {
-              values.parentModelIdZodType = "string"
+              values.parentModelIdZodType = await getResourceValueFromCodegen("string", "zodType")
             }
           }
         } else {
