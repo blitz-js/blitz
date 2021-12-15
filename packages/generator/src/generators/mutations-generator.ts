@@ -49,10 +49,6 @@ export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
     }
   }
 
-  getSourceRoot(): SourceRootType {
-    return getTemplateRoot(this.options.templateDir, {type: "template", path: "mutations"})
-  }
-
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)

@@ -23,10 +23,6 @@ export class QueryGenerator extends Generator<QueryGeneratorOptions> {
     }
   }
 
-  getSourceRoot(): SourceRootType {
-    return getTemplateRoot(this.options.templateDir, {type: "template", path: "query"})
-  }
-
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}` : ""
     return `app/${context}/queries`

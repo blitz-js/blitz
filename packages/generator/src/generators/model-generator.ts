@@ -25,10 +25,6 @@ export class ModelGenerator extends Generator<ModelGeneratorOptions> {
 
   async getTemplateValues() {}
 
-  getSourceRoot(): SourceRootType {
-    return getTemplateRoot(this.options.templateDir, {type: "absolute", path: ""})
-  }
-
   getTargetDirectory() {
     return ""
   }

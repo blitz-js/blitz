@@ -50,10 +50,6 @@ export class FormGenerator extends Generator<FormGeneratorOptions> {
     }
   }
 
-  getSourceRoot(): SourceRootType {
-    return getTemplateRoot(this.options.templateDir, {type: "template", path: "form"})
-  }
-
   getTargetDirectory() {
     const context = this.options.context ? `${camelCaseToKebabCase(this.options.context)}/` : ""
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)

@@ -58,10 +58,6 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     return kebabCaseContext + kebabCaseModelNames
   }
 
-  getSourceRoot(): SourceRootType {
-    return getTemplateRoot(this.options.templateDir, {type: "template", path: "page"})
-  }
-
   getTargetDirectory() {
     const kebabCaseModelName = camelCaseToKebabCase(this.options.modelNames)
     const parent = this.options.parentModels
