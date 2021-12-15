@@ -13,7 +13,7 @@ export const getTemplateRoot = (
   const templatePath = path.join(templateDir, fallback.path)
   if (!fs.existsSync(templatePath)) {
     baseLogger({displayDateTime: false}).info(
-      `Template path ${templatePath} does not exist. Falling back to the default Blitz template.`,
+      `Template path "${templatePath}" does not exist. Falling back to the default template.`,
     )
     return fallback
   }

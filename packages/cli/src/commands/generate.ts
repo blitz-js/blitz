@@ -44,6 +44,7 @@ interface Flags {
   context?: string
   "dry-run"?: boolean
   parent?: string
+  templateDir?: string
 }
 
 interface Args {
@@ -115,6 +116,10 @@ export class Generate extends Command {
     "dry-run": flags.boolean({
       char: "d",
       description: "Show what files will be created without writing them to disk",
+    }),
+    templateDir: flags.string({
+      char: "t",
+      description: "Specify a custom template directory",
     }),
     env: flags.string({
       char: "e",
@@ -245,6 +250,7 @@ export class Generate extends Command {
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
+          templateDir: flags.templateDir,
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),

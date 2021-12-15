@@ -6,6 +6,7 @@ import path from "path"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {Field} from "../prisma/field"
 import {Model} from "../prisma/model"
+import {getTemplateRoot} from "../utils/get-template-root"
 
 export interface ModelGeneratorOptions extends GeneratorOptions {
   modelName: string
@@ -13,12 +14,20 @@ export interface ModelGeneratorOptions extends GeneratorOptions {
 }
 
 export class ModelGenerator extends Generator<ModelGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: ModelGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "absolute", path: ""})
+  }
   // default subdirectory is /app/[name], we need to back out of there to generate the model
   static subdirectory = "../.."
-  sourceRoot: SourceRootType = {type: "absolute", path: ""}
   unsafe_disableConflictChecker = true
 
   async getTemplateValues() {}
+
+  getSourceRoot(): SourceRootType {
+    return getTemplateRoot(this.options.templateDir, {type: "absolute", path: ""})
+  }
 
   getTargetDirectory() {
     return ""
