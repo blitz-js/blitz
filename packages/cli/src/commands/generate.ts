@@ -44,7 +44,6 @@ interface Flags {
   context?: string
   "dry-run"?: boolean
   parent?: string
-  templateDir?: string
 }
 
 interface Args {
@@ -116,10 +115,6 @@ export class Generate extends Command {
     "dry-run": flags.boolean({
       char: "d",
       description: "Show what files will be created without writing them to disk",
-    }),
-    templateDir: flags.string({
-      char: "t",
-      description: "Specify a custom template directory",
     }),
     env: flags.string({
       char: "e",
@@ -246,11 +241,14 @@ export class Generate extends Command {
       const singularRootContext = modelName(model)
       this.validateModelName(singularRootContext)
 
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
+      const blitzConfig = loadConfigProduction(process.cwd())
+
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
-          templateDir: flags.templateDir,
+          templateDir: blitzConfig.codegen.templateDir,
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
