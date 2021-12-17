@@ -28,6 +28,7 @@ export const customTsParser = {
 export interface GeneratorOptions {
   context?: string
   destinationRoot?: string
+  templateDir?: string
   dryRun?: boolean
   useTs?: boolean
 }
@@ -242,14 +243,15 @@ export abstract class Generator<
 
   async write(): Promise<void> {
     debug("Generator.write...")
-    const paths = await readdirRecursive(this.sourcePath(), (name) => {
+    const sourcePath = this.sourcePath()
+    const paths = await readdirRecursive(sourcePath, (name) => {
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
     try {
       this.prettier = await import("prettier")
     } catch {}
-    const prettierOptions = await this.prettier?.resolveConfig(this.sourcePath())
+    const prettierOptions = await this.prettier?.resolveConfig(sourcePath)
 
     for (let filePath of paths) {
       try {

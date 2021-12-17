@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationsGeneratorOptions extends GeneratorOptions {
@@ -13,8 +14,12 @@ export interface MutationsGeneratorOptions extends GeneratorOptions {
 }
 
 export class MutationsGenerator extends Generator<MutationsGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: MutationsGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "mutations"})
+  }
   static subdirectory = "mutations"
-  sourceRoot: SourceRootType = {type: "template", path: "mutations"}
 
   private getId(input: string = "") {
     if (!input) return input
