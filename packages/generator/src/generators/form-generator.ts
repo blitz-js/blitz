@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends GeneratorOptions {
@@ -13,8 +14,13 @@ export interface FormGeneratorOptions extends GeneratorOptions {
 }
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: FormGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "form"})
+  }
+
   static subdirectory = "queries"
-  sourceRoot: SourceRootType = {type: "template", path: "form"}
 
   private getId(input: string = "") {
     if (!input) return input

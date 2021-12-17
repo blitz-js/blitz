@@ -16,6 +16,9 @@ module.exports = withBundleAnalyzer({
   cli: {
     clearConsoleOnBlitzDev: false,
   },
+  codegen: {
+    templateDir: "./my-templates",
+  },
   log: {
     // level: "trace",
   },

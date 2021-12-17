@@ -127,6 +127,9 @@ export type NextConfig = { [key: string]: any } & {
     httpsProxy?: string
     noProxy?: string
   }
+  codegen?: {
+    templateDir?: string
+  }
   log?: {
     level?: LogLevel
     type?: LogType
