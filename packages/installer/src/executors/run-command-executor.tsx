@@ -88,8 +88,8 @@ export const Commit: Executor["Commit"] = ({cliArgs, cliFlags, step, onChangeCom
   const executorCommand = getExecutorArgument((step as Config).command, cliArgs)
 
   const handleChangeCommitted = React.useCallback(() => {
-    onChangeCommitted(`Executed command`)
-  }, [onChangeCommitted])
+    onChangeCommitted(`Executed command ${executorCommand}`)
+  }, [executorCommand, onChangeCommitted])
 
   React.useEffect(() => {
     async function runCommand() {
