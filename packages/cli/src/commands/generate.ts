@@ -248,7 +248,7 @@ export class Generate extends Command {
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
-          templateDir: blitzConfig.codegen.templateDir,
+          templateDir: blitzConfig.codegen?.templateDir,
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
