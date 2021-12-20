@@ -59,7 +59,7 @@ model Token {
 
 // NOTE: It's highly recommended to use an enum for the token type
 //       but enums only work in Postgres.
-//       See: https://blitzjs.com/docs/database-overview#switch-to-postgresql
+//       See: https://blitzjs.com/docs/database-overview#switch-to-postgre-sql
 // enum TokenType {
 //   RESET_PASSWORD
 // }
