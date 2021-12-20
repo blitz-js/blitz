@@ -76,8 +76,6 @@ export default RecipeBuilder()
       )
 
       program.find(j.ExportDefaultDeclaration).forEach((path) => {
-        path.insertBefore(j.literal("\n"))
-
         path.insertBefore(
           j.interfaceDeclaration(
             j.identifier("MyAppProps"),
