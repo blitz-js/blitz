@@ -3563,6 +3563,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "c-ciobanu",
+      "name": "Cristi Ciobanu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33382714?v=4",
+      "profile": "https://github.com/c-ciobanu",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
