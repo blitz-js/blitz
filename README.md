@@ -150,11 +150,6 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/Fauna_Logo_Blue.png" width="300px">
 </a>
 </td>
-  <td>
-<a aria-label="GraphCMS" href="https://graphcms.com/?utm_source=BlitzJS&utm_medium=sponsorship&utm_campaign=BlitzJS_Sponsorship_2021">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/graphcms.png" width="300px">
-</a>
-</td>
   </tr>
 </table>
 
