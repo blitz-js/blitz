@@ -7,6 +7,7 @@ import { Executor, ExecutorConfig, Frontmatter } from './executors/executor'
 import * as FileTransformExecutor from './executors/file-transform-executor'
 import * as NewFileExecutor from './executors/new-file-executor'
 import * as PrintMessageExecutor from './executors/print-message-executor'
+import * as RunCommandExecutor from './executors/run-command-executor'
 import { RecipeCLIArgs, RecipeCLIFlags, RecipeMeta } from './types'
 import { useEnterToContinue } from './utils/use-enter-to-continue'
 import { useUserInput } from './utils/use-user-input'
@@ -32,6 +33,7 @@ const ExecutorMap: { [key: string]: Executor } = {
   [NewFileExecutor.type]: NewFileExecutor,
   [PrintMessageExecutor.type]: PrintMessageExecutor,
   [FileTransformExecutor.type]: FileTransformExecutor,
+  [RunCommandExecutor.type]: RunCommandExecutor,
 } as const
 
 interface State {
