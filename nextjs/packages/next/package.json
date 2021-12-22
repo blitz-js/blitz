@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.43.0",
+  "version": "0.44.4",
   "nextjsVersion": "11.1.0",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
@@ -73,8 +73,8 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
     "@babel/runtime": "7.12.5",
+    "@blitzjs/env": "0.44.4",
     "@hapi/accept": "5.0.2",
-    "@next/env": "11.1.0",
     "@next/polyfill-module": "11.1.0",
     "@next/react-dev-overlay": "11.1.0",
     "@next/react-refresh-utils": "11.1.0",
@@ -90,6 +90,7 @@
     "caniuse-lite": "^1.0.30001228",
     "chalk": "2.4.2",
     "chokidar": "3.5.1",
+    "console-table-printer": "^2.7.5",
     "constants-browserify": "1.0.0",
     "cookie-session": "^1.4.0",
     "cross-spawn": "7.0.3",
@@ -123,6 +124,7 @@
     "react-is": "17.0.2",
     "react-query": "3.21.1",
     "react-refresh": "0.8.3",
+    "readline": "1.3.0",
     "resolve-from": "^5.0.0",
     "secure-password": "4.0.0",
     "stream-browserify": "3.0.0",

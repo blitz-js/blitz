@@ -1,4 +1,4 @@
-import {log} from "@blitzjs/display"
+import {log} from "next/dist/server/lib/logging"
 import {normalize, ServerConfig} from "./config"
 import {customServerExists, nextStartDev, startCustomServer} from "./next-utils"
 

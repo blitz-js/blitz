@@ -1,7 +1,7 @@
 import blitz from "blitz/custom-server"
 import {createServer} from "http"
 import {parse} from "url"
-import {log} from "@blitzjs/display"
+import {log} from "next/dist/server/lib/logging"
 
 const {PORT = "3000"} = process.env
 const dev = process.env.NODE_ENV !== "production"

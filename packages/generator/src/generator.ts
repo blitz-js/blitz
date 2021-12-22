@@ -1,13 +1,13 @@
 import * as babel from "@babel/core"
 // @ts-ignore TS wants types for this module but none exist
 import babelTransformTypescript from "@babel/plugin-transform-typescript"
-import {log} from "@blitzjs/display"
 import Enquirer from "enquirer"
 import {EventEmitter} from "events"
 import * as fs from "fs-extra"
 import j from "jscodeshift"
 import {create as createStore, Store} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
+import {baseLogger} from "next/dist/server/lib/logging"
 import * as path from "path"
 import getBabelOptions, {Overrides} from "recast/parsers/_babel_options"
 import * as babelParser from "recast/parsers/babel"
@@ -28,6 +28,7 @@ export const customTsParser = {
 export interface GeneratorOptions {
   context?: string
   destinationRoot?: string
+  templateDir?: string
   dryRun?: boolean
   useTs?: boolean
 }
@@ -234,7 +235,7 @@ export abstract class Generator<
       try {
         templatedFile = this.prettier.format(templatedFile, options)
       } catch (error) {
-        log.warning(`Failed trying to run prettier:` + error)
+        baseLogger({displayDateTime: false}).warn(`Failed trying to run prettier: ` + error)
       }
     }
     return templatedFile
@@ -242,14 +243,15 @@ export abstract class Generator<
 
   async write(): Promise<void> {
     debug("Generator.write...")
-    const paths = await readdirRecursive(this.sourcePath(), (name) => {
+    const sourcePath = this.sourcePath()
+    const paths = await readdirRecursive(sourcePath, (name) => {
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
     try {
       this.prettier = await import("prettier")
     } catch {}
-    const prettierOptions = await this.prettier?.resolveConfig(this.sourcePath())
+    const prettierOptions = await this.prettier?.resolveConfig(sourcePath)
 
     for (let filePath of paths) {
       try {
@@ -269,7 +271,7 @@ export abstract class Generator<
           this.fs.move(this.destinationPath(pathSuffix), this.destinationPath(templatedPathSuffix))
         }
       } catch (error) {
-        log.error(`Error generating ${filePath}`)
+        baseLogger({displayDateTime: false}).error(`Error generating ${filePath}`)
         throw error
       }
     }

@@ -32,10 +32,10 @@
     "packages/blitz/src/**/*",
     "packages/display/src/**/*",
     "packages/generator/src/**/*",
-    "packages/installer/src/**/*",
     "packages/repl/src/**/*",
     "packages/server/src/**/*",
-    "recipes/*"
+    "recipes/*",
+    "nextjs/packages/installer/src/**/*"
   ],
   "exclude": ["*.test.ts", "*.test.tsx"]
 }

@@ -2964,7 +2964,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/12092?v=4",
       "profile": "http://zackhobson.com/",
       "contributions": [
-        "code"
+        "code",
+        "doc"
       ]
     },
     {
@@ -3496,6 +3497,87 @@
       "name": "Ajanth",
       "avatar_url": "https://avatars.githubusercontent.com/u/50458502?v=4",
       "profile": "https://github.com/ajanth97",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "divpreet",
+      "name": "Div",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2805650?v=4",
+      "profile": "https://github.com/divpreet",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "david-arteaga",
+      "name": "David Arteaga",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7199015?v=4",
+      "profile": "https://github.com/david-arteaga",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "MukulKolpe",
+      "name": "Mukul Kolpe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/78664749?v=4",
+      "profile": "https://github.com/MukulKolpe",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "skotchpine",
+      "name": "tyler",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13043909?v=4",
+      "profile": "https://github.com/skotchpine",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "SofianeDjellouli",
+      "name": "Sofiane Djellouli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38258952?v=4",
+      "profile": "https://github.com/SofianeDjellouli",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kreako",
+      "name": "kreako",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65113001?v=4",
+      "profile": "https://github.com/kreako",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sarahdayan",
+      "name": "Sarah Dayan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5370675?v=4",
+      "profile": "https://sarahdayan.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "c-ciobanu",
+      "name": "Cristi Ciobanu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33382714?v=4",
+      "profile": "https://github.com/c-ciobanu",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "arpitdalal",
+      "name": "Arpit Dalal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61059807?v=4",
+      "profile": "https://arpitdalal.dev",
       "contributions": [
         "doc"
       ]

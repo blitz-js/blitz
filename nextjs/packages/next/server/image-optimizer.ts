@@ -8,7 +8,7 @@ import isAnimated from 'next/dist/compiled/is-animated'
 import { join } from 'path'
 import Stream from 'stream'
 import nodeUrl, { UrlWithParsedQuery } from 'url'
-import { NextConfig } from './config-shared'
+import { NextConfigComplete } from './config-shared'
 import { fileExists } from '../lib/file-exists'
 import { ImageConfig, imageConfigDefault } from './image-config'
 import { processBuffer, Operation } from './lib/squoosh/main'
@@ -52,7 +52,7 @@ export async function imageOptimizer(
   req: IncomingMessage,
   res: ServerResponse,
   parsedUrl: UrlWithParsedQuery,
-  nextConfig: NextConfig,
+  nextConfig: NextConfigComplete,
   distDir: string,
   isDev = false
 ) {

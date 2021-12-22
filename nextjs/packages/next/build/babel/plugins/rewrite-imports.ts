@@ -45,6 +45,7 @@ const specialImports: Record<string, string> = {
   hash256: 'next/stdlib-server',
   generateToken: 'next/stdlib-server',
   resolver: 'next/stdlib-server',
+  connectMiddleware: 'next/stdlib-server',
 
   getAntiCSRFToken: 'next/data-client',
   useSession: 'next/data-client',
@@ -56,6 +57,7 @@ const specialImports: Record<string, string> = {
   useMutation: 'next/data-client',
   queryClient: 'next/data-client',
   getQueryKey: 'next/data-client',
+  getInfiniteQueryKey: 'next/data-client',
   invalidateQuery: 'next/data-client',
   setQueryData: 'next/data-client',
   useQueryErrorResetBoundary: 'next/data-client',

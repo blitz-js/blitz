@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface PageGeneratorOptions extends GeneratorOptions {
@@ -13,8 +14,12 @@ export interface PageGeneratorOptions extends GeneratorOptions {
 }
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: PageGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "page"})
+  }
   static subdirectory = "pages"
-  sourceRoot: SourceRootType = {type: "template", path: "page"}
 
   private getId(input: string = "") {
     if (!input) return input

@@ -1,4 +1,3 @@
-import {log} from "@blitzjs/display"
 import {
   capitalize,
   FormGenerator,
@@ -16,6 +15,7 @@ import {
 } from "@blitzjs/generator"
 import {flags} from "@oclif/command"
 import chalk from "chalk"
+import {baseLogger} from "next/dist/server/lib/logging"
 import {Command} from "../command"
 import {PromptAbortedError} from "../errors/prompt-aborted"
 
@@ -116,6 +116,10 @@ export class Generate extends Command {
       char: "d",
       description: "Show what files will be created without writing them to disk",
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   static examples = [
@@ -180,7 +184,7 @@ export class Generate extends Command {
   async handleNoContext(message: string): Promise<void> {
     const shouldCreateNewRoot = await this.genericConfirmPrompt(message)
     if (!shouldCreateNewRoot) {
-      require("@blitzjs/display").log.error(
+      baseLogger({displayDateTime: false}).error(
         "Could not determine proper location for files. Aborting.",
       )
       this.exit(0)
@@ -237,10 +241,14 @@ export class Generate extends Command {
       const singularRootContext = modelName(model)
       this.validateModelName(singularRootContext)
 
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
+      const blitzConfig = loadConfigProduction(process.cwd())
+
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
+          templateDir: blitzConfig.codegen?.templateDir,
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),
@@ -263,7 +271,7 @@ export class Generate extends Command {
     } catch (err) {
       if (err instanceof PromptAbortedError) this.exit(0)
 
-      log.error(err as any)
+      baseLogger({displayDateTime: false}).error(err)
       this.exit(1)
     }
   }

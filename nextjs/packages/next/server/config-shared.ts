@@ -46,7 +46,9 @@ type NoOptionals<T> = {
   [P in keyof T]-?: T[P]
 }
 
-export type NextConfigComplete = NoOptionals<NextConfig>
+export type NextConfigComplete = NoOptionals<NextConfig> & {
+  images: ImageConfig
+}
 
 export interface I18NConfig {
   defaultLocale: string
@@ -89,7 +91,7 @@ export type NextConfig = { [key: string]: any } & {
   excludeDefaultMomentLocales?: boolean
 
   trailingSlash?: boolean
-  env?: { [key: string]: string }
+  env?: { [key: string]: string | undefined }
   distDir?: string
   cleanDistDir?: boolean
   assetPrefix?: string
@@ -98,7 +100,7 @@ export type NextConfig = { [key: string]: any } & {
   generateEtags?: boolean
   pageExtensions?: string[]
   compress?: boolean
-  images?: ImageConfig
+  images?: Partial<ImageConfig>
   devIndicators?: {
     buildActivity?: boolean
   }
@@ -125,8 +127,11 @@ export type NextConfig = { [key: string]: any } & {
     httpsProxy?: string
     noProxy?: string
   }
+  codegen?: {
+    templateDir?: string
+  }
   log?: {
-    level: LogLevel
+    level?: LogLevel
     type?: LogType
   }
   middleware?: Middleware[]

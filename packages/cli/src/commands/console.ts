@@ -14,12 +14,16 @@ export class Console extends Command {
 
   static flags = {
     help: flags.help({char: "h"}),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   async run() {
     process.env.CLI_COMMAND_CONSOLE = "true"
     this.parse(Console)
-    const {log} = require("@blitzjs/display")
+    const {log} = require("next/dist/server/lib/logging")
     const chalk = require("chalk")
     log.branded("You have entered the Blitz console")
     console.log(chalk.yellow("Tips: - Exit by typing .exit or pressing Ctrl-D"))

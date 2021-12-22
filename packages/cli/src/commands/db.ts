@@ -1,6 +1,5 @@
-import {log} from "@blitzjs/display"
 import {Command, flags} from "@oclif/command"
-import {baseLogger} from "next/dist/server/lib/logging"
+import {baseLogger, log} from "next/dist/server/lib/logging"
 
 export function getDbName(connectionString: string): string {
   const dbUrlParts: string[] = connectionString!.split("/")
@@ -25,7 +24,7 @@ async function runSeed(seedBasePath: string) {
       throw new Error(`Couldn't find default export from ${seedBasePath}`)
     }
   } catch (err) {
-    log.error(`Couldn't import default from ${seedBasePath}`)
+    baseLogger({displayDateTime: false}).error(`Couldn't import default from ${seedBasePath}`)
     throw err
   }
   spinner.succeed()
@@ -35,7 +34,9 @@ async function runSeed(seedBasePath: string) {
     seeds && (await seeds())
   } catch (err) {
     baseLogger().prettyError(err as any)
-    log.error(`Couldn't run imported function, are you sure it's a function?`)
+    baseLogger({displayDateTime: false}).error(
+      `Couldn't run imported function, are you sure it's a function?`,
+    )
     throw err
   }
 
@@ -69,6 +70,10 @@ ${require("chalk").bold("seed")}   Generates seeded data in database via Prisma.
       char: "f",
       description: `Path to the seeds file, relative to the project root folder. Examples: db/seeds, db/seeds.ts, db/seeds/index.ts, db/my-seeds`,
     }),
+    env: flags.string({
+      char: "e",
+      description: "Set app environment name",
+    }),
   }
 
   static strict = false
@@ -86,7 +91,7 @@ ${require("chalk").bold("seed")}   Generates seeded data in database via Prisma.
       try {
         return await runSeed(flags.file)
       } catch (err) {
-        log.error("Could not seed database:")
+        baseLogger({displayDateTime: false}).error("Could not seed database:")
         baseLogger().prettyError(err as any)
         process.exit(1)
       }

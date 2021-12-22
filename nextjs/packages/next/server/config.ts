@@ -14,7 +14,7 @@ import {
 } from './config-shared'
 import { loadWebpackHook } from './config-utils'
 import { ImageConfig, imageConfigDefault, VALID_LOADERS } from './image-config'
-import { loadEnvConfig } from '@next/env'
+import { loadEnvConfig } from '@blitzjs/env'
 import { hasNextSupport } from '../telemetry/ci-info'
 const debug = require('debug')('blitz:config')
 
