@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueryGeneratorOptions extends GeneratorOptions {
@@ -7,8 +8,12 @@ export interface QueryGeneratorOptions extends GeneratorOptions {
 }
 
 export class QueryGenerator extends Generator<QueryGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: QueryGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "query"})
+  }
   static subdirectory = "query"
-  sourceRoot: SourceRootType = {type: "template", path: "query"}
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {

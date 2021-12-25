@@ -3545,6 +3545,51 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "kreako",
+      "name": "kreako",
+      "avatar_url": "https://avatars.githubusercontent.com/u/65113001?v=4",
+      "profile": "https://github.com/kreako",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sarahdayan",
+      "name": "Sarah Dayan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5370675?v=4",
+      "profile": "https://sarahdayan.dev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "c-ciobanu",
+      "name": "Cristi Ciobanu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/33382714?v=4",
+      "profile": "https://github.com/c-ciobanu",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "arpitdalal",
+      "name": "Arpit Dalal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61059807?v=4",
+      "profile": "https://arpitdalal.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "robertrisch",
+      "name": "robertrisch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73828816?v=4",
+      "profile": "https://github.com/robertrisch",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

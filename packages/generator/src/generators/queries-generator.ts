@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface QueriesGeneratorOptions extends GeneratorOptions {
@@ -13,8 +14,12 @@ export interface QueriesGeneratorOptions extends GeneratorOptions {
 }
 
 export class QueriesGenerator extends Generator<QueriesGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: QueriesGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "queries"})
+  }
   static subdirectory = "queries"
-  sourceRoot: SourceRootType = {type: "template", path: "queries"}
 
   private getId(input: string = "") {
     if (!input) return input
