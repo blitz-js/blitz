@@ -3590,6 +3590,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "dineshgadge",
+      "name": "Dinesh Gadge",
+      "avatar_url": "https://avatars.githubusercontent.com/u/186976?v=4",
+      "profile": "https://github.com/dineshgadge",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
