@@ -549,7 +549,7 @@ export function renderError(renderErrorProps: RenderErrorProps): Promise<any> {
     })
 }
 
-let reactRoot: any = null
+let reactRoot: ReactDOM.Root | null = null
 // On initial render a hydrate should always happen
 let shouldHydrate: boolean = true
 
@@ -566,9 +566,9 @@ function renderReactElement(
   // start blitz
   if (!reactRoot) {
     if (shouldHydrate) {
-      reactRoot = (ReactDOM as any).hydrateRoot(domEl)
+      reactRoot = ReactDOM.hydrateRoot(domEl, reactEl)
     } else {
-      reactRoot = (ReactDOM as any).createRoot(domEl)
+      reactRoot = ReactDOM.createRoot(domEl)
     }
   }
   reactRoot.render(reactEl)

@@ -1,7 +1,9 @@
 /// <reference types="node" />
-/// <reference types="react" />
-/// <reference types="react-dom" />
+/// <reference types="react/next" />
+/// <reference types="react-dom/next" />
 /// <reference types="styled-jsx" />
+
+// TODO: Update `react/next` with `react` reference when React 18.0.0 releases
 
 import React from 'react'
 import { ParsedUrlQuery } from 'querystring'
