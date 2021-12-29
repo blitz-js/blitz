@@ -148,6 +148,7 @@ export type NextConfig = { [key: string]: any } & {
   customServer?: {
     hotReload?: boolean
   }
+  codegen?: CodegenConfig
   // -- Blitz end
 
   future?: {
@@ -189,7 +190,6 @@ export type NextConfig = { [key: string]: any } & {
     isrMemoryCacheSize?: number
     concurrentFeatures?: boolean
   }
-  codegen?: CodegenConfig
 }
 
 export type BlitzConfig = NextConfig
