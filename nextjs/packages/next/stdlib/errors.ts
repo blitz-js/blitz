@@ -1,7 +1,7 @@
 import SuperJson from 'superjson'
 import type { UrlObject } from 'url'
 
-const errorProps = ['name', 'message', 'code', 'statusCode', 'meta']
+const errorProps = ['name', 'message', 'code', 'statusCode', 'meta', 'url']
 if (process.env.JEST_WORKER_ID === undefined) {
   SuperJson.allowErrorProps(...errorProps)
 }
