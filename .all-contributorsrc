@@ -3599,6 +3599,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "maltekiessling",
+      "name": "Malte Kießling",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30420110?v=4",
+      "profile": "https://github.com/maltekiessling",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
