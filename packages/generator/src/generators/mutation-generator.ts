@@ -1,4 +1,5 @@
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface MutationGeneratorOptions extends GeneratorOptions {
@@ -7,8 +8,12 @@ export interface MutationGeneratorOptions extends GeneratorOptions {
 }
 
 export class MutationGenerator extends Generator<MutationGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: MutationGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "mutation"})
+  }
   static subdirectory = "mutation"
-  sourceRoot: SourceRootType = {type: "template", path: "mutation"}
 
   // eslint-disable-next-line require-await
   async getTemplateValues() {

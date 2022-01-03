@@ -241,10 +241,14 @@ export class Generate extends Command {
       const singularRootContext = modelName(model)
       this.validateModelName(singularRootContext)
 
+      const {loadConfigProduction} = await import("next/dist/server/config-shared")
+      const blitzConfig = loadConfigProduction(process.cwd())
+
       const generators = generatorMap[args.type]
       for (const GeneratorClass of generators) {
         const generator = new GeneratorClass({
           destinationRoot: require("path").resolve(),
+          templateDir: blitzConfig.codegen?.templateDir,
           extraArgs: argv.slice(2).filter((arg) => !arg.startsWith("-")),
           modelName: singularRootContext,
           modelNames: modelNames(singularRootContext),

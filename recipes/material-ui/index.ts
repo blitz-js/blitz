@@ -1,22 +1,11 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
+import {addImport, paths, RecipeBuilder, withComments, withTypeAnnotation} from "@blitzjs/installer"
 import j from "jscodeshift"
+import {join} from "path"
 
 export default RecipeBuilder()
   .setName("Material-UI")
   .setDescription(
-    `Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for usage.
-
-NOTE: Material-UI currently doesn't support concurrent mode. For the most part you can use @mui components without altering anything. But, you may face issues if you intend to use dynamic styling features like the Box component that wraps all the style functions provided as a component or pass props to the hooks created by the makeStyles utility to alter stylings during runtime. If you face any such issues, you can always opt out of the concurrent mode by adding the following to the blitz.config.js -
-
-module.exports = {
-  experimental: {
-    reactMode: "legacy"
-  },
-
-  // keep the other parts of the config as is
-},
-
-This will let the next.js app opt out of the React.Strict mode wrapping. Once you switch to legacy mode, you will also have to pass { suspense: false } to the useQuery options when querying data endpoints in your pages/components. You can check the documentation for useQuery at https://blitzjs.com/docs/use-query#options`,
+    "Configure your Blitz app's styling with Material-UI. This recipe will install all necessary dependencies and configure a base Material-UI setup for usage.",
   )
   .setOwner("s.pathak5995@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
@@ -26,161 +15,11 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     explanation: `@mui/material needs to be installed`,
     packages: [
       {name: "@mui/material", version: "5.x"},
-      {name: "@mui/styles", version: "5.x"},
+      {name: "@emotion/cache", version: "11.x"},
       {name: "@emotion/react", version: "11.x"},
+      {name: "@emotion/server", version: "11.x"},
       {name: "@emotion/styled", version: "11.x"},
     ],
-  })
-  .addTransformFilesStep({
-    stepId: "modifyGetInitialPropsInCustomDocumentApp",
-    stepName: "Add custom getInitialProps logic in Custom Document",
-    explanation: `We will add custom getInitialProps logic in _document. We need to do this so that styles are correctly rendered on the server side.`,
-    singleFileSearch: paths.document(),
-    transform(program) {
-      // import ServerStyleSheets
-      const serverStyleSheetsImport = j.importDeclaration(
-        [j.importSpecifier(j.identifier("ServerStyleSheets"))],
-        j.literal("@mui/styles"),
-      )
-
-      let isReactImported = false
-
-      program.find(j.ImportDeclaration, {source: "react"}).forEach((reactImportPath) => {
-        isReactImported = true
-        let specifiers = reactImportPath.value.specifiers || []
-        if (specifiers.some((spec) => j.ImportDefaultSpecifier.check(spec))) {
-          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
-        }
-      })
-      program.find(j.ImportDeclaration, {source: {value: "blitz"}}).forEach((blitzImportPath) => {
-        let specifiers = blitzImportPath.value.specifiers || []
-        if (
-          !specifiers
-            .filter((spec) => j.ImportSpecifier.check(spec))
-            .some((node) => (node as j.ImportSpecifier)?.imported?.name === "DocumentContext")
-        ) {
-          specifiers.splice(0, 0, j.importSpecifier(j.identifier("DocumentContext")))
-        }
-      })
-      program.find(j.ClassBody).forEach((path) => {
-        const {node} = path
-
-        const ctxParam = j.identifier("ctx")
-        ctxParam.typeAnnotation = j.tsTypeAnnotation(
-          j.tsTypeReference(j.identifier("DocumentContext")),
-        )
-
-        const getInitialPropsBody = j.blockStatement([
-          j.variableDeclaration("const", [
-            j.variableDeclarator(
-              j.identifier("sheets"),
-              j.newExpression(j.identifier("ServerStyleSheets"), []),
-            ),
-          ]),
-          j.variableDeclaration("const", [
-            j.variableDeclarator(
-              j.identifier("originalRenderPage"),
-              j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
-            ),
-          ]),
-          j.expressionStatement(
-            j.assignmentExpression(
-              "=",
-              j.memberExpression(j.identifier("ctx"), j.identifier("renderPage")),
-              j.arrowFunctionExpression(
-                [],
-                j.callExpression(j.identifier("originalRenderPage"), [
-                  j.objectExpression([
-                    j.objectProperty(
-                      j.identifier("enhanceApp"),
-                      j.arrowFunctionExpression(
-                        [j.identifier("App")],
-                        j.arrowFunctionExpression(
-                          [j.identifier("props")],
-                          j.callExpression(
-                            j.memberExpression(j.identifier("sheets"), j.identifier("collect")),
-                            [
-                              j.jsxElement(
-                                j.jsxOpeningElement(
-                                  j.jsxIdentifier("App"),
-                                  [j.jsxSpreadAttribute(j.identifier("props"))],
-                                  true,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]),
-                ]),
-              ),
-            ),
-          ),
-          j.variableDeclaration("const", [
-            j.variableDeclarator(
-              j.identifier("initialProps"),
-              j.awaitExpression(
-                j.callExpression(
-                  j.memberExpression(j.identifier("Document"), j.identifier("getInitialProps")),
-                  [j.identifier("ctx")],
-                ),
-              ),
-            ),
-          ]),
-          j.returnStatement(
-            j.objectExpression([
-              j.spreadElement(j.identifier("initialProps")),
-              j.objectProperty(
-                j.identifier("styles"),
-                j.arrayExpression([
-                  j.spreadElement(
-                    j.callExpression(
-                      j.memberExpression(
-                        j.memberExpression(j.identifier("React"), j.identifier("Children")),
-                        j.identifier("toArray"),
-                      ),
-                      [j.memberExpression(j.identifier("initialProps"), j.identifier("styles"))],
-                    ),
-                  ),
-                  j.callExpression(
-                    j.memberExpression(j.identifier("sheets"), j.identifier("getStyleElement")),
-                    [],
-                  ),
-                ]),
-              ),
-            ]),
-          ),
-        ])
-
-        const getInitialPropsMethod = j.classMethod(
-          "method",
-          j.identifier("getInitialProps"),
-          [ctxParam],
-          getInitialPropsBody,
-          false,
-          true,
-        )
-        getInitialPropsMethod.async = true
-
-        // TODO: better way will be to check if the method already exists and modify it or else add it
-        // currently it gets added assuming it did not exist before
-        node.body.splice(0, 0, getInitialPropsMethod)
-      })
-
-      // import React if it wasn't already imported
-      if (!isReactImported) {
-        const reactImport = j.importDeclaration(
-          [j.importDefaultSpecifier(j.identifier("React"))],
-          j.literal("react"),
-        )
-        addImport(program, reactImport)
-      }
-
-      addImport(program, serverStyleSheetsImport)
-
-      return program
-    },
   })
   .addTransformFilesStep({
     stepId: "importThemeProviderInCustomApp",
@@ -188,116 +27,113 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
     explanation: `We will import the ThemeProvider into _app and the CssBaseline component for easy and consistent usage of the @mui components. We will also customize the _app component to be remove the server side injected CSS.`,
     singleFileSearch: paths.app(),
     transform(program) {
-      // import ThemeProvider and createTheme
-      const themeImport = j.importDeclaration(
-        [
-          j.importSpecifier(j.identifier("ThemeProvider")),
-          j.importSpecifier(j.identifier("createTheme")),
-        ],
-        j.literal("@mui/material/styles"),
+      // import { ThemeProvider } from '@mui/material/styles'
+      addImport(
+        program,
+        j.importDeclaration(
+          [j.importSpecifier(j.identifier("ThemeProvider"))],
+          j.literal("@mui/material/styles"),
+        ),
       )
 
-      // import CSSBaseline
-      const cssBaselineImport = j.importDeclaration(
-        [j.importDefaultSpecifier(j.identifier("CssBaseline"))],
-        j.literal("@mui/material/CssBaseline"),
+      // import CssBaseline from '@mui/material/CssBaseline'
+      addImport(
+        program,
+        j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier("CssBaseline"))],
+          j.literal("@mui/material/CssBaseline"),
+        ),
       )
 
-      addImport(program, cssBaselineImport)
-      addImport(program, themeImport)
+      // import { CacheProvider, EmotionCache } from '@emotion/react'
+      addImport(
+        program,
+        j.importDeclaration(
+          [
+            j.importSpecifier(j.identifier("CacheProvider")),
+            j.importSpecifier(j.identifier("EmotionCache")),
+          ],
+          j.literal("@emotion/react"),
+        ),
+      )
 
-      let isReactImported = false
+      // import theme from 'app/core/styles/theme'
+      addImport(
+        program,
+        j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier("theme"))],
+          j.literal("app/core/styles/theme"),
+        ),
+      )
+
+      // import createEmotionCache from 'app/core/utils/createEmotionCache'
+      addImport(
+        program,
+        j.importDeclaration(
+          [j.importDefaultSpecifier(j.identifier("createEmotionCache"))],
+          j.literal("app/core/utils/createEmotionCache"),
+        ),
+      )
 
       program.find(j.ExportDefaultDeclaration).forEach((path) => {
-        const theme = j.variableDeclaration("const", [
-          j.variableDeclarator(
-            j.identifier("theme"),
-            j.callExpression(j.identifier("createTheme"), [
-              j.objectExpression([
-                j.objectProperty(
-                  j.identifier("palette"),
-                  j.objectExpression([
-                    j.objectProperty(j.identifier("mode"), j.stringLiteral("light")),
-                  ]),
-                ),
-              ]),
-            ]),
-          ),
-        ])
-        theme.comments = [
-          j.commentLine(
-            "You can customize this as you want and even move it out to a separate file",
-          ),
-        ]
-
-        path.insertBefore(theme)
-      })
-
-      program.find(j.ImportDeclaration, {source: "react"}).forEach((path) => {
-        // check if React is already imported
-        // if yes then we can skip importing it
-        // since we need it for useEffect
-        isReactImported = true
-
-        // currently, we only check if the default export is there
-        // because we use the hook as React.useEffect
-        // if not then add the default export
-        let specifiers = path.value.specifiers || []
-
-        if (!specifiers.some((node) => j.ImportDefaultSpecifier.check(node))) {
-          specifiers.splice(0, 0, j.importDefaultSpecifier(j.identifier("React")))
-        }
-      })
-
-      program.find(j.Function).forEach((path) => {
-        const {parentPath, node} = path
-
-        // assuming App component is the default export of the file
-        if (parentPath && j.ExportDefaultDeclaration.check(parentPath)) {
-          const removeServerSideInjectedCss = j.expressionStatement(
-            j.callExpression(j.memberExpression(j.identifier("React"), j.identifier("useEffect")), [
-              j.arrowFunctionExpression(
-                [],
-                j.blockStatement([
-                  j.variableDeclaration("const", [
-                    j.variableDeclarator(
-                      j.identifier("jssStyles"),
-                      j.callExpression(
-                        j.memberExpression(j.identifier("document"), j.identifier("querySelector")),
-                        [j.literal("#jss-server-side")],
-                      ),
-                    ),
-                  ]),
-                  j.ifStatement(
-                    j.logicalExpression(
-                      "&&",
-                      j.identifier("jssStyles"),
-                      j.memberExpression(j.identifier("jssStyles"), j.identifier("parentElement")),
-                    ),
-                    j.blockStatement([
-                      j.expressionStatement(
-                        j.callExpression(
-                          j.memberExpression(
-                            j.memberExpression(
-                              j.identifier("jssStyles"),
-                              j.identifier("parentElement"),
-                            ),
-                            j.identifier("removeChild"),
-                          ),
-                          [j.identifier("jssStyles")],
-                        ),
-                      ),
-                    ]),
-                  ),
-                ]),
+        path.insertBefore(
+          j.interfaceDeclaration(
+            j.identifier("MyAppProps"),
+            j.objectTypeAnnotation([
+              j.objectTypeProperty(
+                j.identifier("emotionCache"),
+                j.typeParameter("EmotionCache"),
+                true,
               ),
-              j.arrayExpression([]),
             ]),
-          )
+            [j.interfaceExtends(j.identifier("AppProps"))],
+          ),
+        )
 
-          node.body.body.splice(0, 0, removeServerSideInjectedCss)
-        }
+        path.insertBefore(
+          withComments(
+            j.variableDeclaration("const", [
+              j.variableDeclarator(
+                j.identifier("clientSideEmotionCache"),
+                j.callExpression(j.identifier("createEmotionCache"), []),
+              ),
+            ]),
+            [
+              j.commentLine(
+                " Client-side cache, shared for the whole session of the user in the browser.",
+              ),
+            ],
+          ),
+        )
       })
+
+      program
+        .find(j.FunctionDeclaration)
+        .filter((path) => path.value?.id?.name === "App")
+        .forEach((path) => {
+          let objProps = [
+            j.property("init", j.identifier("Component"), j.identifier("Component")),
+            j.property("init", j.identifier("pageProps"), j.identifier("pageProps")),
+            j.property(
+              "init",
+              j.identifier("emotionCache"),
+              j.assignmentPattern(
+                j.identifier("emotionCache"),
+                j.identifier("clientSideEmotionCache"),
+              ),
+            ),
+          ].map((prop) => {
+            prop.shorthand = true
+            return prop
+          })
+
+          path.node.params = [
+            withTypeAnnotation(
+              j.objectPattern(objProps),
+              j.tsTypeReference(j.identifier("MyAppProps")),
+            ),
+          ]
+        })
 
       program
         .find(j.JSXElement)
@@ -310,34 +146,47 @@ This will let the next.js app opt out of the React.Strict mode wrapping. Once yo
           const {node} = path
           path.replace(
             j.jsxElement(
-              j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+              j.jsxOpeningElement(j.jsxIdentifier("CacheProvider"), [
                 j.jsxAttribute(
-                  j.jsxIdentifier("theme"),
-                  j.jsxExpressionContainer(j.identifier("theme")),
+                  j.jsxIdentifier("value"),
+                  j.jsxExpressionContainer(j.identifier("emotionCache")),
                 ),
               ]),
-              j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+              j.jsxClosingElement(j.jsxIdentifier("CacheProvider")),
               [
                 j.literal("\n"),
-                j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
-                j.literal("\n"),
-                node,
+                j.jsxElement(
+                  j.jsxOpeningElement(j.jsxIdentifier("ThemeProvider"), [
+                    j.jsxAttribute(
+                      j.jsxIdentifier("theme"),
+                      j.jsxExpressionContainer(j.identifier("theme")),
+                    ),
+                  ]),
+                  j.jsxClosingElement(j.jsxIdentifier("ThemeProvider")),
+                  [
+                    j.literal("\n"),
+                    j.jsxElement(j.jsxOpeningElement(j.jsxIdentifier("CssBaseline"), [], true)),
+                    j.literal("\n"),
+                    node,
+                    j.literal("\n"),
+                  ],
+                ),
                 j.literal("\n"),
               ],
             ),
           )
         })
 
-      // import React if it wasn't already imported
-      if (!isReactImported) {
-        const reactImport = j.importDeclaration(
-          [j.importDefaultSpecifier(j.identifier("React"))],
-          j.literal("react"),
-        )
-        addImport(program, reactImport)
-      }
-
       return program
     },
+  })
+  .addNewFilesStep({
+    stepId: "addFiles",
+    stepName: "Add new files",
+    explanation:
+      "Add an updated _document, a theme file with all your customizations and a emotion cache file",
+    templatePath: join(__dirname, "templates"),
+    targetDirectory: "./app",
+    templateValues: {},
   })
   .build()

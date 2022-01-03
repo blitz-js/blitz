@@ -1,12 +1,17 @@
 import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {Generator, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface PageGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class PageGenerator extends Generator<PageGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: PageGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "page"})
+  }
   static subdirectory = "pages"
-  sourceRoot: SourceRootType = {type: "template", path: "page"}
 
   templateValuesBuilder = new FieldValuesBuilder(this.fs)
 

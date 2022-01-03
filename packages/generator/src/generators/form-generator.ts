@@ -1,12 +1,18 @@
 import {FieldValuesBuilder, ResourceGeneratorOptions} from ".."
 import {Generator, SourceRootType} from "../generator"
+import {getTemplateRoot} from "../utils/get-template-root"
 import {camelCaseToKebabCase} from "../utils/inflector"
 
 export interface FormGeneratorOptions extends ResourceGeneratorOptions {}
 
 export class FormGenerator extends Generator<FormGeneratorOptions> {
+  sourceRoot: SourceRootType
+  constructor(options: FormGeneratorOptions) {
+    super(options)
+    this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "form"})
+  }
+
   static subdirectory = "queries"
-  sourceRoot: SourceRootType = {type: "template", path: "form"}
 
   templateValuesBuilder = new FieldValuesBuilder()
 
