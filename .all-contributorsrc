@@ -3572,6 +3572,42 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "arpitdalal",
+      "name": "Arpit Dalal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/61059807?v=4",
+      "profile": "https://arpitdalal.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "robertrisch",
+      "name": "robertrisch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73828816?v=4",
+      "profile": "https://github.com/robertrisch",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "dineshgadge",
+      "name": "Dinesh Gadge",
+      "avatar_url": "https://avatars.githubusercontent.com/u/186976?v=4",
+      "profile": "https://github.com/dineshgadge",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "maltekiessling",
+      "name": "Malte Kießling",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30420110?v=4",
+      "profile": "https://github.com/maltekiessling",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
