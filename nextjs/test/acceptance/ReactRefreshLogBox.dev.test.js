@@ -890,12 +890,14 @@ test('scss syntax errors', async () => {
   expect(await session.hasRedbox(true)).toBe(true)
   const source = await session.getRedboxSource()
   expect(source).toMatchInlineSnapshot(`
-    "./index.module.scss:1:20
-    Syntax error: Invalid CSS after \\"...on { font-size:\\": expected expression (e.g. 1px, bold), was \\":5px; }\\"
-
-    > 1 | .button { font-size: :5px; }
-        |                    ^"
-  `)
+"./index.module.scss
+SassError: Expected expression.
+  ╷
+1 │ .button { font-size: :5px; }
+  │                      ^
+  ╵
+  ../../test/acceptance/__tmp__/xvqUmKsCzlsQWoF2cakfU/index.module.scss 1:22  root stylesheet"
+`)
 
   // Not local error
   await session.patch('index.module.scss', `button { font-size: 5px; }`)
