@@ -1,5 +1,5 @@
 import {Editor} from "mem-fs-editor"
-import {CodegenConfig} from "next/dist/server/config-shared"
+import {CodegenField} from "next/dist/server/config-shared"
 import {GeneratorOptions} from "../../generator"
 import {getCodegen, getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {
@@ -54,7 +54,7 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
 
   public fs: Editor | undefined
 
-  public defaultFieldConfig: CodegenConfig["fieldTypeMap"][0] = {
+  public defaultFieldConfig: CodegenField = {
     component: "LabeledTextField",
     inputType: "text",
     zodType: "string",
@@ -109,8 +109,8 @@ export abstract class Builder<T, U> implements IBuilder<T, U> {
       }
       const codegen = await getCodegen()
       // iterate over resources defined for this field type
-      const fieldConfig = codegen.fieldTypeMap[typeName]
-      values = {...this.defaultFieldConfig, ...values, ...fieldConfig}
+      const fieldConfig = codegen.fieldTypeMap?.[typeName] || this.defaultFieldConfig
+      values = {...values, ...fieldConfig}
       return values
     })
     return Promise.all(argsPromises)

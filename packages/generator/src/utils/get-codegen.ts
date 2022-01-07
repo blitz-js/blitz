@@ -1,4 +1,4 @@
-import {CodegenConfig, NextConfigComplete} from "next/dist/server/config-shared"
+import {CodegenConfig, CodegenField, NextConfigComplete} from "next/dist/server/config-shared"
 import {baseLogger} from "next/dist/server/lib/logging"
 
 export const defaultCodegenConfig: CodegenConfig = {
@@ -68,19 +68,19 @@ export const defaultCodegenConfig: CodegenConfig = {
 }
 
 export const getResourceValueFromCodegen = async (
-  fieldType: keyof CodegenConfig["fieldTypeMap"],
-  resource: keyof CodegenConfig["fieldTypeMap"][string],
+  fieldType: string,
+  resource: keyof CodegenField,
 ): Promise<string | undefined> => {
   const codegen = await getCodegen()
-  const templateValue = codegen.fieldTypeMap[fieldType][resource]
+  const templateValue = codegen.fieldTypeMap?.[fieldType]?.[resource]
   return templateValue
 }
 
 export const getResourceConfigFromCodegen = async (
-  fieldType: keyof CodegenConfig["fieldTypeMap"],
-): Promise<CodegenConfig["fieldTypeMap"][string]> => {
+  fieldType: string,
+): Promise<CodegenField | undefined> => {
   const codegen = await getCodegen()
-  const config = codegen.fieldTypeMap[fieldType] || {}
+  const config = codegen.fieldTypeMap?.[fieldType]
   return config
 }
 

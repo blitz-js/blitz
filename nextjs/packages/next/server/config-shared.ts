@@ -71,17 +71,18 @@ export interface ESLintConfig {
   ignoreDuringBuilds?: boolean
 }
 
+export type CodegenField = {
+  component: string
+  inputType: string
+  zodType: string
+  prismaType: string
+  default?: string
+  [index: string]: string | undefined
+}
+
 export type CodegenConfig = {
-  fieldTypeMap: {
-    [key in string]: {
-      component: string
-      inputType: string
-      zodType: string
-      prismaType: string
-      default?: string
-      [index: string]: string | undefined
-    }
-  }
+  templateDir?: string
+  fieldTypeMap?: Record<string, CodegenField>
 }
 
 export type NextConfig = { [key: string]: any } & {
@@ -140,9 +141,7 @@ export type NextConfig = { [key: string]: any } & {
     httpsProxy?: string
     noProxy?: string
   }
-  codegen?: {
-    templateDir?: string
-  }
+  codegen?: CodegenConfig
   log?: {
     level?: LogLevel
     type?: LogType
@@ -151,7 +150,6 @@ export type NextConfig = { [key: string]: any } & {
   customServer?: {
     hotReload?: boolean
   }
-  codegen?: CodegenConfig
   // -- Blitz end
 
   future?: {

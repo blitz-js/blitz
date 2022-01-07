@@ -1,5 +1,4 @@
 import * as ast from "@mrleebo/prisma-ast"
-import {CodegenConfig} from "next/dist/server/config-shared"
 import {baseLogger, log} from "next/dist/server/lib/logging"
 import {getResourceConfigFromCodegen} from "../utils/get-codegen"
 import {capitalize, singlePascal, uncapitalize} from "../utils/inflector"
@@ -82,7 +81,8 @@ export class Field {
       isRequired = false
     }
 
-    const {prismaType, default: defaultConfigValue} = await Field.getConfigForPrismaType(fieldType)
+    const {prismaType, default: defaultConfigValue} =
+      (await Field.getConfigForPrismaType(fieldType)) ?? {}
     if (prismaType) {
       fieldType = prismaType
     }
@@ -179,7 +179,7 @@ export class Field {
     }
   }
 
-  public static getConfigForPrismaType = async (fieldType: keyof CodegenConfig["fieldTypeMap"]) => {
+  public static getConfigForPrismaType = async (fieldType: string) => {
     return await getResourceConfigFromCodegen(fieldType.toLowerCase())
   }
 
