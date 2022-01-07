@@ -53,7 +53,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
         }
       })
       await Promise.all(processSpecialArgs)
-      // Filter out special args by makins sure the argument isn't present in the list
+      // Filter out special args by making sure the argument isn't present in the list
       const nonSpecialArgs = options.extraArgs.filter((arg) => specialArgs[arg] !== "present")
 
       // Get the parent model it type if options.parentModel exists
