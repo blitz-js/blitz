@@ -1,7 +1,8 @@
 import * as ast from "@mrleebo/prisma-ast"
 import {create as createStore} from "mem-fs"
 import {create as createEditor, Editor} from "mem-fs-editor"
-import { getResourceValueFromCodegen } from "../../utils/get-codegen"
+import {ModelName, modelName, ModelNames, modelNames} from "../../../../cli/src/commands/generate"
+import {getResourceValueFromCodegen} from "../../utils/get-codegen"
 import {getPrismaSchema} from "../../utils/get-prisma-schema"
 import {Builder, CommonTemplateValues, ResourceGeneratorOptions} from "./builder"
 
@@ -50,6 +51,12 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           // and type of the parent of this model, and forms etc. should
           // In addition, need to do the same logic that the options.parentModel != undefined below does
           specialArgs[arg] = "present"
+          process.env.parentModel = typeName
+          options.rawParentModelName = typeName
+          options.parentModel = modelName(typeName)
+          options.parentModels = modelNames(typeName)
+          options.ParentModel = ModelName(typeName)
+          options.ParentModels = ModelNames(typeName)
         }
       })
       await Promise.all(processSpecialArgs)
@@ -76,7 +83,7 @@ export class FieldValuesBuilder extends Builder<ResourceGeneratorOptions, Common
           // TODO: Do we want a map between prisma types and "user types", we can then use that map instead of these conditionals
           // We have a map from "user types" (which are what users type into the blitz generate command)
           // to primsa type and other types, but we dont have a reverse map 1:1. This is because we lose
-          // some information for certain maps. E.g.: fieldname:uuid will be converted into a Prisma field with 
+          // some information for certain maps. E.g.: fieldname:uuid will be converted into a Prisma field with
           // the String type, and the uuid portion is added to a decorator at the end of the field.
           // This means it is more complicated to extract the original "user specified type" than creating a reverse map
           if (idField?.fieldType === "Int") {

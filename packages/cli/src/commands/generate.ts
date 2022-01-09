@@ -51,16 +51,16 @@ interface Args {
   model: string
 }
 
-function modelName(input: string = "") {
+export function modelName(input: string = "") {
   return singleCamel(input)
 }
-function modelNames(input: string = "") {
+export function modelNames(input: string = "") {
   return pluralCamel(input)
 }
-function ModelName(input: string = "") {
+export function ModelName(input: string = "") {
   return singlePascal(input)
 }
-function ModelNames(input: string = "") {
+export function ModelNames(input: string = "") {
   return pluralPascal(input)
 }
 
