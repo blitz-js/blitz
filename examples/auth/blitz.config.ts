@@ -16,9 +16,6 @@ module.exports = withBundleAnalyzer({
   cli: {
     clearConsoleOnBlitzDev: false,
   },
-  codegen: {
-    templateDir: "./my-templates",
-  },
   log: {
     // level: "trace",
   },
@@ -41,6 +38,7 @@ module.exports = withBundleAnalyzer({
   },
   */
   codegen: {
+    templateDir: "./my-templates",
     fieldTypeMap: {
       string: {
         component: "LabeledTextField",
