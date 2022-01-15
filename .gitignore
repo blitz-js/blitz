@@ -8,10 +8,10 @@ node_modules
 # testing
 coverage
 
-# next.js
 .next/
 out/
 build
+dist
 
 # misc
 .DS_Store

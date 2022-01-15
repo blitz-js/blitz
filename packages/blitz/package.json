@@ -2,19 +2,23 @@
   "name": "blitz",
   "version": "0.0.0",
   "scripts": {
-    "build": "tsup index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "tsup index-browser.tsx && tsup index-server.ts",
+    "dev": "tsup index-browser.tsx --watch",
     "lint": "TIMING=1 eslint . --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index-server.js",
+  "module": "./dist/index-server.mjs",
+  "browser": "./dist/index-browser.js",
+  "types": "./dist/index-server.d.ts",
   "sideEffects": false,
   "license": "MIT",
   "files": [
     "dist/**"
   ],
+  "dependencies": {
+    "react-query": "3.34.8"
+  },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
     "@types/react": "^17.0.13",
