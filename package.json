@@ -1,0 +1,51 @@
+{
+  "name": "blitz-root",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "turbo run build",
+    "dev": "turbo run dev --no-cache --parallel --continue",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "dependencies": {
+    "only-allow": "1.0.0",
+    "prettier": "^2.5.1",
+    "turbo": "latest"
+  },
+  "turbo": {
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**"
+        ]
+      },
+      "test": {
+        "outputs": [
+          "coverage/**"
+        ],
+        "dependsOn": []
+      },
+      "lint": {
+        "outputs": []
+      },
+      "dev": {
+        "cache": false
+      },
+      "clean": {
+        "cache": false
+      }
+    }
+  }
+}

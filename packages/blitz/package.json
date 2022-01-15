@@ -1,0 +1,29 @@
+{
+  "name": "blitz",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "tsup index.tsx --format esm,cjs --dts --external react",
+    "dev": "tsup index.tsx --format esm,cjs --watch --dts --external react",
+    "lint": "TIMING=1 eslint . --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "devDependencies": {
+    "@blitzjs/config": "workspace:*",
+    "@types/react": "^17.0.13",
+    "@types/react-dom": "^17.0.8",
+    "react": "^17.0.2",
+    "tsup": "^5.10.1",
+    "typescript": "^4.5.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
