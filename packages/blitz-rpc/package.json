@@ -5,6 +5,8 @@
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
+    "test": "vitest run",
+    "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "main": "./dist/index-server.cjs",

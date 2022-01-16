@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Prisma issue?
+    url: https://github.com/prisma/prisma/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+    about: All Prisma issues should be opened in the Prisma Github
+  - name: Question, Discussion, Idea?
+    url: https://github.com/blitz-js/blitz/discussions/new
+    about: Ask questions and discuss with other community members
