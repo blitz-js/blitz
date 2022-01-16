@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# pnpx lint-staged
+pnpx pretty-quick --staged
