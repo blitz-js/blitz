@@ -1,17 +1,16 @@
-import {Button, genKey} from "blitz"
+import {todo, todoServer} from "blitz"
 
 export const getServerSideProps = () => {
-  genKey()
+  console.log(todoServer)
   return {props: {}}
 }
 
 export default function Web() {
-  // const client = new QueryClient();
+  console.log(todo)
 
   return (
     <div>
       <h1>Web</h1>
-      <Button>hello</Button>
     </div>
   )
 }
