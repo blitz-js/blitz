@@ -4,7 +4,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
-    "lint": "TIMING=1 eslint . --fix",
+    "lint": "eslint . --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "main": "./dist/index-server.cjs",
