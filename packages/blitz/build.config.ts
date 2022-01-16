@@ -1,4 +1,4 @@
-import { BuildConfig } from "unbuild";
+import {BuildConfig} from "unbuild"
 
 const config: BuildConfig = {
   entries: ["./src/index-browser", "./src/index-server"],
@@ -7,5 +7,5 @@ const config: BuildConfig = {
   rollup: {
     emitCJS: true,
   },
-};
-export default config;
+}
+export default config

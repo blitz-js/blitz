@@ -1,9 +1,9 @@
-import { Button, genKey } from "blitz";
+import {Button, genKey} from "blitz"
 
 export const getServerSideProps = () => {
-  genKey();
-  return { props: {} };
-};
+  genKey()
+  return {props: {}}
+}
 
 export default function Web() {
   // const client = new QueryClient();
@@ -13,5 +13,5 @@ export default function Web() {
       <h1>Web</h1>
       <Button>hello</Button>
     </div>
-  );
+  )
 }

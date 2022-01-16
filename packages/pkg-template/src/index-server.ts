@@ -1,3 +1,3 @@
-export * from "./index-browser";
+export * from "./index-browser"
 
-export const todoServer = true;
+export const todoServer = true

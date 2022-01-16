@@ -1,1 +1,1 @@
-module.exports = require("@blitzjs/config/eslint-preset");
+module.exports = require("@blitzjs/config/eslint-preset")
