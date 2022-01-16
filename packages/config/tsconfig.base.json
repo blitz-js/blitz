@@ -12,9 +12,12 @@
     "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "noUncheckedIndexedAccess": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "strictNullChecks": true,
+    "incremental": true
   },
   "exclude": ["node_modules"]
 }
