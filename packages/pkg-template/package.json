@@ -1,0 +1,39 @@
+{
+  "TODO": "REMOVE PRIVATE FIELD",
+  "name": "template",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "unbuild",
+    "dev": "watch unbuild src --wait=0.2",
+    "lint": "eslint . --fix",
+    "test": "vitest run",
+    "test-watch": "vitest",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "main": "./dist/index-server.cjs",
+  "module": "./dist/index-server.mjs",
+  "browser": "./dist/index-browser.mjs",
+  "types": "./dist/index-server.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/parser": "5.9.1"
+  },
+  "devDependencies": {
+    "@blitzjs/config": "workspace:*",
+    "@types/react": "^17.0.13",
+    "@types/react-dom": "^17.0.8",
+    "react": "^17.0.2",
+    "typescript": "^4.5.3",
+    "unbuild": "0.6.7",
+    "watch": "1.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

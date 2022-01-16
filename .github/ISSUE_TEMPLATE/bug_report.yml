@@ -1,0 +1,48 @@
+name: Bug Report
+description: Something is not working right. Or error messages are unclear.
+labels: "kind/bug, status/triage"
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
+  - type: textarea
+    attributes:
+      label: What is the problem?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Paste all your error logs here:"
+      value: |
+        ```
+        PASTE_HERE (leave the ``` marks)
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Paste all relevant code snippets here:"
+      value: |
+        ```
+        PASTE_HERE (leave the ``` marks)
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What are detailed steps to reproduce this?
+      value: "1."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Run `blitz -v` and paste the output here:"
+      value: |
+        ```
+        PASTE_HERE (leave the ``` marks)
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Please include below any other applicable logs and screenshots that show your problem:"
