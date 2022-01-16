@@ -2,14 +2,14 @@
   "name": "blitz",
   "version": "0.0.0",
   "scripts": {
-    "build": "tsup index-browser.tsx && tsup index-server.ts",
-    "dev": "tsup index-browser.tsx --watch",
+    "build": "unbuild",
+    "dev": "watch unbuild src --wait=0.2",
     "lint": "TIMING=1 eslint . --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index-server.js",
+  "main": "./dist/index-server.cjs",
   "module": "./dist/index-server.mjs",
-  "browser": "./dist/index-browser.js",
+  "browser": "./dist/index-browser.mjs",
   "types": "./dist/index-server.d.ts",
   "sideEffects": false,
   "license": "MIT",
@@ -17,7 +17,8 @@
     "dist/**"
   ],
   "dependencies": {
-    "react-query": "3.34.8"
+    "react-query": "3.34.8",
+    "watch": "1.0.2"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
@@ -25,7 +26,8 @@
     "@types/react-dom": "^17.0.8",
     "react": "^17.0.2",
     "tsup": "^5.10.1",
-    "typescript": "^4.5.3"
+    "typescript": "^4.5.3",
+    "unbuild": "0.6.7"
   },
   "publishConfig": {
     "access": "public"
