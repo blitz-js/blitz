@@ -30,9 +30,7 @@ importers:
       "@types/react": 17.0.37
       blitz: 0.0.0
       eslint: 7.32.0
-      jiti: 1.12.9
       next: 12.0.7
-      next-transpile-modules: 9.0.0
       react: 17.0.2
       react-dom: 17.0.2
       typescript: ^4.5.3
@@ -46,8 +44,6 @@ importers:
       "@next/bundle-analyzer": 12.0.8
       "@types/react": 17.0.37
       eslint: 7.32.0
-      jiti: 1.12.9
-      next-transpile-modules: 9.0.0
       typescript: 4.5.4
 
   packages/blitz:
@@ -2206,17 +2202,6 @@ packages:
       once: 1.4.0
     dev: false
 
-  /enhanced-resolve/5.8.3:
-    resolution:
-      {
-        integrity: sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==,
-      }
-    engines: {node: ">=10.13.0"}
-    dependencies:
-      graceful-fs: 4.2.9
-      tapable: 2.2.1
-    dev: true
-
   /enquirer/2.3.6:
     resolution:
       {
@@ -2706,6 +2691,7 @@ packages:
         integrity: sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw==,
       }
     engines: {node: ">=6"}
+    dev: false
 
   /escape-string-regexp/1.0.5:
     resolution: {integrity: sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=}
@@ -4345,16 +4331,6 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
 
-  /next-transpile-modules/9.0.0:
-    resolution:
-      {
-        integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==,
-      }
-    dependencies:
-      enhanced-resolve: 5.8.3
-      escalade: 3.1.1
-    dev: true
-
   /next/12.0.7_react-dom@17.0.2+react@17.0.2:
     resolution:
       {
@@ -5777,14 +5753,6 @@ packages:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
-
-  /tapable/2.2.1:
-    resolution:
-      {
-        integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==,
-      }
-    engines: {node: ">=6"}
-    dev: true
 
   /term-size/2.2.1:
     resolution:
