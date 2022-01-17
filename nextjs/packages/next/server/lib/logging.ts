@@ -1,5 +1,5 @@
 import { ISettingsParam, Logger } from 'tslog'
-import { loadConfigAtRuntime, LogLevel } from '../config-shared'
+import { loadConfigAtRuntime, LoggerFactory, LogLevel } from '../config-shared'
 import c from 'chalk'
 import { Table } from 'console-table-printer'
 import ora from 'next/dist/compiled/ora'
@@ -32,6 +32,8 @@ export const newline = () => {
   }
 }
 
+const defaultLoggerFactory: LoggerFactory = ({ logger }) => logger
+
 export const baseLogger = (options?: ISettingsParam): Logger => {
   if (globalThis._blitz_baseLogger) return globalThis._blitz_baseLogger
 
@@ -42,7 +44,7 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
     config = {}
   }
 
-  globalThis._blitz_baseLogger = new Logger({
+  const settings: ISettingsParam = {
     minLevel: config.log?.level || 'info',
     type: config.log?.type || 'pretty',
     dateTimePattern:
@@ -65,7 +67,12 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
     maskValuesOfKeys: ['password', 'passwordConfirmation'],
     exposeErrorCodeFrame: process.env.NODE_ENV !== 'production',
     ...options,
-  })
+  }
+
+  const defaultLogger = new Logger(settings)
+  const loggerFactory = config?.log?.loggerFactory ?? defaultLoggerFactory
+  const logger = loggerFactory({ settings, logger: defaultLogger })
+  globalThis._blitz_baseLogger = logger
 
   return globalThis._blitz_baseLogger
 }

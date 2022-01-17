@@ -9,10 +9,16 @@ import { CONFIG_FILE, PHASE_PRODUCTION_SERVER } from '../shared/lib/constants'
 import { copy, remove } from 'fs-extra'
 import { Middleware } from '../shared/lib/utils'
 import { isInternalBlitzMonorepoDevelopment } from './utils'
+import { ISettingsParam, Logger } from 'tslog'
 const debug = require('debug')('blitz:config')
 
 export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
 export type LogType = 'json' | 'pretty' | 'hidden'
+export interface LoggerFactoryParams {
+  settings: ISettingsParam
+  logger: Logger
+}
+export type LoggerFactory = (params: LoggerFactoryParams) => Logger
 
 export function loadConfigAtRuntime() {
   if (!process.env.BLITZ_APP_DIR) {
@@ -133,6 +139,7 @@ export type NextConfig = { [key: string]: any } & {
   log?: {
     level?: LogLevel
     type?: LogType
+    loggerFactory?: LoggerFactory
   }
   middleware?: Middleware[]
   customServer?: {
