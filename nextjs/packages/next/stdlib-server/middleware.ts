@@ -149,10 +149,14 @@ function getProtocol(req: MiddlewareRequest) {
   if (req.connection.encrypted) {
     return 'https'
   }
+
+  if (!req.headers) return 'http'
+
   const forwardedProto =
-    req.headers &&
-    ((req.headers['forwarded'] as string)?.match(/(?<=proto=).+/g)?.[0] ||
-      (req.headers['x-forwarded-proto'] as string))
+    (req.headers['forwarded'] as string)?.match(/(?<=proto=).+/g)?.[0] ||
+    (req.headers['x-forwarded-proto'] as string) ||
+    (req.headers['CloudFront-Forwarded-Proto'] as string)
+
   if (forwardedProto) {
     return forwardedProto.split(/\s*,\s*/)[0]
   }
