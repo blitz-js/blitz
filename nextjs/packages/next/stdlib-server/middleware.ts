@@ -139,7 +139,7 @@ export const secureProxyMiddleware: Middleware = function (
   _res: MiddlewareResponse,
   next: (error?: Error) => void
 ) {
-  req.protocol = getProtocol(req)
+  req.protocol = 'https' // getProtocol(req)
   next()
 }
 
