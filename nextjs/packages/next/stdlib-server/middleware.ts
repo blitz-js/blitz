@@ -139,22 +139,6 @@ export const secureProxyMiddleware: Middleware = function (
   _res: MiddlewareResponse,
   next: (error?: Error) => void
 ) {
-  req.protocol = getProtocol(req)
+  req.protocol = 'https'
   next()
-}
-
-function getProtocol(req: MiddlewareRequest) {
-  // @ts-ignore
-  // For some reason there is no encrypted on socket while it is expected
-  if (req.connection.encrypted) {
-    return 'https'
-  }
-  const forwardedProto =
-    req.headers &&
-    ((req.headers['forwarded'] as string)?.match(/(?<=proto=).+/g)?.[0] ||
-      (req.headers['x-forwarded-proto'] as string))
-  if (forwardedProto) {
-    return forwardedProto.split(/\s*,\s*/)[0]
-  }
-  return 'http'
 }

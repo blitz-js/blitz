@@ -3617,6 +3617,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Nfinished",
+      "name": "Adam Trager",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1719791?v=4",
+      "profile": "adamtrager.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -50,6 +50,7 @@ const specialImports: Record<string, string> = {
   getAntiCSRFToken: 'next/data-client',
   useSession: 'next/data-client',
   useAuthenticatedSession: 'next/data-client',
+  useRedirectAuthenticated: 'next/data-client',
   useAuthorize: 'next/data-client',
   useQuery: 'next/data-client',
   usePaginatedQuery: 'next/data-client',
