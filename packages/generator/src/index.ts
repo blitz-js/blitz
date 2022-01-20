@@ -12,6 +12,7 @@ export * from "./generators/template-builders/builder"
 export * from "./generators/template-builders/null-builder"
 export * from "./generators/template-builders/app-values-builder"
 export * from "./generators/template-builders/field-values-builder"
+export * from "./utils/model-names"
 export {getLatestVersion} from "./utils/get-latest-version"
 export {
   singleCamel,
@@ -20,5 +21,5 @@ export {
   pluralPascal,
   capitalize,
   uncapitalize,
-  addSpaceBeforeCapitals
+  addSpaceBeforeCapitals,
 } from "./utils/inflector"

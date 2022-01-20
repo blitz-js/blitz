@@ -2,15 +2,15 @@ import {
   capitalize,
   FormGenerator,
   ModelGenerator,
+  ModelName,
+  modelName,
+  ModelNames,
+  modelNames,
   MutationGenerator,
   MutationsGenerator,
   PageGenerator,
-  pluralCamel,
-  pluralPascal,
   QueriesGenerator,
   QueryGenerator,
-  singleCamel,
-  singlePascal,
   uncapitalize,
 } from "@blitzjs/generator"
 import {flags} from "@oclif/command"
@@ -49,19 +49,6 @@ interface Flags {
 interface Args {
   type: ResourceType
   model: string
-}
-
-export function modelName(input: string = "") {
-  return singleCamel(input)
-}
-export function modelNames(input: string = "") {
-  return pluralCamel(input)
-}
-export function ModelName(input: string = "") {
-  return singlePascal(input)
-}
-export function ModelNames(input: string = "") {
-  return pluralPascal(input)
 }
 
 const generatorMap = {
