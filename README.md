@@ -231,6 +231,14 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
         </sub>
       </a>
     </td>
+    <td align="center">
+     <a href="https://www.saheen.me/">
+      <img src="https://avatars.githubusercontent.com/shellord" width="100px;" alt="Saheen Shoukath avatar" /><br />
+        <sub>
+          <b>Saheen Shoukath</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
