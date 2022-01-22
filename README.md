@@ -239,6 +239,14 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
         </sub>
       </a>
     </td>
+<td align="center">
+     <a href="https://jahneer.me">
+      <img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="Husnul Jahneer avatar" /><br />
+        <sub>
+          <b>Husnul Jahneer</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 <!-- markdownlint-enable -->
