@@ -18,11 +18,11 @@
   "files": [
     "dist/**"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
+    "next": "12.0.7",
     "react": "^17.0.2",
     "typescript": "^4.5.3",
     "unbuild": "0.6.7",
@@ -30,5 +30,12 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "peerDependencies": {
+    "next": "12.0.7",
+    "react": "^17.0.2"
+  },
+  "dependencies": {
+    "react-query": "3.34.12"
   }
 }
