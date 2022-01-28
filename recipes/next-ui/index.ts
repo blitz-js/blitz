@@ -67,8 +67,6 @@ function removeDefaultStyleElement(program: Program) {
     .filter((path) => {
       const {node} = path
       const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
-
-      console.log(openingElementNameNode)
       // Assumes there's one style element at the point the user runs the recipe.
       return openingElementNameNode?.name === "style" && node?.openingElement?.selfClosing === false
     })
@@ -93,8 +91,8 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
-    stepName: "Import ChakraProvider component",
-    explanation: `Import the chakra-ui provider into _app, so it is accessible in the whole app`,
+    stepName: "Import NextUIProvider component",
+    explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
     singleFileSearch: paths.app(),
     transform(program) {
       const stylesImport = j.importDeclaration(
@@ -109,7 +107,7 @@ export default RecipeBuilder()
   .addTransformFilesStep({
     stepId: "updateLabeledTextField",
     stepName: "Update the `LabeledTextField` with Next UI's `Input` component",
-    explanation: `The LabeledTextField component uses Chakra UI's input component`,
+    explanation: `The LabeledTextField component uses Next UI's input component`,
     singleFileSearch: "app/core/components/LabeledTextField.tsx",
     transform(program) {
       // Add ComponentPropsWithoutRef import
@@ -139,7 +137,7 @@ export default RecipeBuilder()
       // 2. Remove the default <style jsx> styling
       removeDefaultStyleElement(program)
 
-      // 4. Replace `input` with `ChakraInput`
+      // 3. Replace `input` with `Next UI Ipnut`
       replaceInputWithChakraInput(program)
 
       return program
