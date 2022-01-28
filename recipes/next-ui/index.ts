@@ -68,6 +68,7 @@ function removeDefaultStyleElement(program: Program) {
       const {node} = path
       const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
 
+      console.log(openingElementNameNode)
       // Assumes there's one style element at the point the user runs the recipe.
       return openingElementNameNode?.name === "style" && node?.openingElement?.selfClosing === false
     })
@@ -85,10 +86,10 @@ export default RecipeBuilder()
   .setOwner("moyurusuto.mochi@gmail.com")
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
-    stepId: "Install",
+    stepId: "install",
     stepName: "Insstall Next UI",
-    explanation: `Import the chakra-ui provider into _app, so it is accessible in the whole app`,
-    packages: [{name: "@nextui-org/react", version: "1.x"}],
+    explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
+    packages: [{name: "@nextui-org/react"}],
   })
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
@@ -107,7 +108,7 @@ export default RecipeBuilder()
   })
   .addTransformFilesStep({
     stepId: "updateLabeledTextField",
-    stepName: "Update the `LabeledTextField` with Chakra UI's `Input` component",
+    stepName: "Update the `LabeledTextField` with Next UI's `Input` component",
     explanation: `The LabeledTextField component uses Chakra UI's input component`,
     singleFileSearch: "app/core/components/LabeledTextField.tsx",
     transform(program) {
