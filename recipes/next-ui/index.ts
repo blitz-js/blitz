@@ -40,34 +40,6 @@ function updateLabeledTextFieldWithInputComponent(program: Program) {
   return program
 }
 
-function replaceOuterDivWithFormControl(program: Program) {
-  program
-    .find(j.JSXElement)
-    .filter((path) => {
-      const {node} = path
-      const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
-
-      // This will not include JSX elements within curly braces
-      const countOfChildrenJSXElements =
-        path.node.children?.filter((childNode) => childNode.type === "JSXElement").length || 0
-
-      return (
-        openingElementNameNode?.name === "div" &&
-        node?.openingElement?.selfClosing === false &&
-        countOfChildrenJSXElements === 1
-      )
-    })
-    .forEach((path) => {
-      path.node.openingElement = j.jsxOpeningElement(
-        j.jsxIdentifier("FormControl"),
-        path.node.openingElement.attributes,
-      )
-      path.node.closingElement = j.jsxClosingElement(j.jsxIdentifier("FormControl"))
-    })
-
-  return program
-}
-
 function replaceInputWithChakraInput(program: Program) {
   program
     .find(j.JSXElement)
@@ -84,26 +56,6 @@ function replaceInputWithChakraInput(program: Program) {
         node.openingElement.attributes,
         node?.openingElement?.selfClosing,
       )
-    })
-
-  return program
-}
-
-function replaceLabelWithChakraLabel(program: Program) {
-  program
-    .find(j.JSXElement)
-    .filter((path) => {
-      const {node} = path
-      const openingElementNameNode = node?.openingElement?.name as JSXIdentifier
-
-      return openingElementNameNode?.name === "label" && node?.openingElement?.selfClosing === false
-    })
-    .forEach((path) => {
-      path.node.openingElement = j.jsxOpeningElement(
-        j.jsxIdentifier("FormLabel"),
-        path.node.openingElement.attributes,
-      )
-      path.node.closingElement = j.jsxClosingElement(j.jsxIdentifier("FormLabel"))
     })
 
   return program
@@ -173,19 +125,10 @@ export default RecipeBuilder()
 
       const chakraInputImport = j.importDeclaration(
         [j.importSpecifier(j.identifier("Input"))],
-        j.literal("@chakra-ui/input"),
-      )
-
-      const chakraFormControlImport = j.importDeclaration(
-        [
-          j.importSpecifier(j.identifier("FormControl")),
-          j.importSpecifier(j.identifier("FormLabel")),
-        ],
-        j.literal("@chakra-ui/form-control"),
+        j.literal("@nextui-org/react"),
       )
 
       addImport(program, chakraInputImport)
-      addImport(program, chakraFormControlImport)
 
       // Imperative steps to describe transformations
 
@@ -195,14 +138,8 @@ export default RecipeBuilder()
       // 2. Remove the default <style jsx> styling
       removeDefaultStyleElement(program)
 
-      // 3. Replace outer div with `FormControl`
-      replaceOuterDivWithFormControl(program)
-
       // 4. Replace `input` with `ChakraInput`
       replaceInputWithChakraInput(program)
-
-      // 5. Replace `label` with `ChakraLabel`
-      replaceLabelWithChakraLabel(program)
 
       return program
     },
