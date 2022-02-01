@@ -22,13 +22,12 @@ export type RedirectAuthenticatedToFn = (
 ) => RedirectAuthenticatedTo
 
 // todo: should be contructed based on the plugins
-export type NextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
+export type BlitzPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzPage<P = {}, IP = P> = NextPage<P, IP>
 
 export interface ClientPlugin<Exports extends object> {
   events: {
