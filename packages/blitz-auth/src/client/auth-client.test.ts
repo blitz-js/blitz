@@ -2,12 +2,11 @@
  * @vitest-environment jsdom
  */
 
-import {expect, describe, it, beforeAll, afterAll, spyOn, SpyFn} from "vitest"
-import {parsePublicDataToken, getPublicDataStore, useSession} from "./index"
-import {COOKIE_PUBLIC_DATA_TOKEN} from "../shared"
+import { expect, describe, it, beforeAll, afterAll, spyOn, SpyFn } from "vitest"
+import { parsePublicDataToken, getPublicDataStore } from "./index"
+import { COOKIE_PUBLIC_DATA_TOKEN } from "../shared"
 import * as stdlib from "../shared"
-import {toBase64} from "b64-lite"
-import {renderHook} from "@testing-library/react-hooks"
+import { toBase64 } from "b64-lite"
 
 beforeAll(() => {
   process.env.__BLITZ_SESSION_COOKIE_PREFIX = "blitz-test"
@@ -32,7 +31,7 @@ describe("parsePublicDataToken", () => {
   it("parses the public data", () => {
     const validJSON = '{"foo": "bar"}'
     expect(parsePublicDataToken(toBase64(validJSON))).toEqual({
-      publicData: {foo: "bar"},
+      publicData: { foo: "bar" },
     })
   })
 
@@ -90,7 +89,7 @@ describe("publicDataStore", () => {
         ret = data
       })
       getPublicDataStore().clear()
-      expect(ret).toEqual({userId: null})
+      expect(ret).toEqual({ userId: null })
     })
   })
 
@@ -99,12 +98,13 @@ describe("publicDataStore", () => {
       it("returns empty data if cookie is falsy", () => {
         const ret = getPublicDataStore().getData()
 
-        expect(ret).toEqual({userId: null})
+        expect(ret).toEqual({ userId: null })
       })
     })
   })
 })
 
+// todo
 // describe('useSession', () => {
 //   it('returns empty at when no value is set', () => {
 //     const { result } = renderHook(() => useSession())

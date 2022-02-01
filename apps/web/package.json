@@ -13,10 +13,12 @@
     "blitz": "0.0.0",
     "next": "12.0.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "@blitzjs/config": "workspace:*",
+    "@blitzjs/next": "workspace:blitz-next",
+    "@blitzjs/auth": "workspace:blitz-auth"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:*",
     "@next/bundle-analyzer": "12.0.8",
     "@types/react": "17.0.37",
     "eslint": "7.32.0",

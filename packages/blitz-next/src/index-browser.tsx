@@ -5,12 +5,14 @@ import React, {FC} from "react"
 import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "react-query"
 import {UrlObject} from "url"
 
+// todo
 type TemporaryAny = any
 
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
+// todo: move to auth package
 export type RedirectAuthenticatedTo = string | RouteUrlObject | false
 export type RedirectAuthenticatedToFnCtx = {
   session: TemporaryAny
@@ -50,7 +52,10 @@ export function createClientPlugin<TPluginOptions, TPluginExports extends object
 
 type BlitzProvider = (Page: BlitzPage) => BlitzPage
 
-const compose = (...rest: BlitzProvider[]) => (x: BlitzPage) => rest.reduceRight((y, f) => f(y), x)
+const compose =
+  (...rest: BlitzProvider[]) =>
+  (x: BlitzPage) =>
+    rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
   const providers = plugins.reduce((acc, plugin) => {
@@ -71,7 +76,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
 
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
-          {/* @ts-ignore */}
+          {/* @ts-ignore todo */}
           {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
           <UserAppRoot {...props} Component={component} />
         </BlitzProvider>
@@ -104,6 +109,7 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
   )
 }
 
+// todo: move to ts utils
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
   ? I
   : never
@@ -140,7 +146,15 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 
   const withBlitz = buildWithBlitz(plugins)
 
-  return {withBlitz, ...(exports as PluginsExports<TPlugins>)}
+  // todo: finish this
+  // Used to build BlitzPage type
+  const types = {} as {plugins: typeof plugins}
+
+  return {
+    types,
+    withBlitz,
+    ...(exports as PluginsExports<TPlugins>),
+  }
 }
 
 export {setupClient}
