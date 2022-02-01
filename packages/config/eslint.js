@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["next/lint", "prettier"],
+  extends: ["next", "prettier"],
   ignorePatterns: ["*.d.ts"],
   settings: {
     next: {

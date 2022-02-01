@@ -20,7 +20,7 @@
   ],
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
-    "@blitzjs/next": "workspace:blitz-next",
+    "@blitzjs/next": "workspace:*",
     "@types/cookie": "0.4.1",
     "@types/jsonwebtoken": "8.5.8",
     "@types/react": "^17.0.13",
