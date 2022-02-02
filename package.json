@@ -10,7 +10,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "build": "turbo run build",
-    "dev": "turbo run dev --no-cache --concurrency=8 --continue",
+    "dev": "pnpm run dev --filter '*' --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
@@ -48,10 +48,7 @@
         "outputs": []
       },
       "dev": {
-        "cache": false,
-        "dependsOn": [
-          "^dev"
-        ]
+        "cache": false
       },
       "clean": {
         "cache": false
@@ -59,5 +56,8 @@
     }
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@6.21.0"
+  "packageManager": "pnpm@6.21.0",
+  "devDependencies": {
+    "next": "12.0.7"
+  }
 }
