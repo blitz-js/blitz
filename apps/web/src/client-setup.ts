@@ -1,12 +1,8 @@
 import { setupClient } from "@blitzjs/next"
-import { AuthPlugin } from "@blitzjs/auth"
+import { AuthClientPlugin } from "@blitzjs/auth/dist/index-browser"
 
-const { withBlitz, useQuery, useSession, BlitzPage } = setupClient({
-  plugins: [AuthPlugin({}), ZeroApiPlugin({})]
+const { withBlitz, useSession } = setupClient({
+  plugins: [AuthClientPlugin({})]
 })
 
-export { withBlitz, useQuery }
-
-const p = [AuthPlugin({}), ZeroApiPlugin({})]
-
-type _ = PluginsExports<typeof p>;
+export { withBlitz, useSession }

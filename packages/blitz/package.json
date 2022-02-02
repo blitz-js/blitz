@@ -18,7 +18,6 @@
   "files": [
     "dist/**"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
     "@types/react": "^17.0.13",
