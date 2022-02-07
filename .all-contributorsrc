@@ -3626,6 +3626,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shellord",
+      "name": "saheenshoukath",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2632896?v=4",
+      "profile": "https://saheen.codes",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "husnuljahneer",
+      "name": "Husnul Jahneer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54552763?v=4",
+      "profile": "https://jahneer.me",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ReykCS",
+      "name": "Reyk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40463716?v=4",
+      "profile": "https://github.com/ReykCS",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
