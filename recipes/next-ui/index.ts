@@ -87,7 +87,13 @@ export default RecipeBuilder()
     stepId: "install",
     stepName: "Insstall Next UI",
     explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
-    packages: [{name: "@nextui-org/react"}],
+    packages: [
+      {
+        name: "@nextui-org/react",
+        version: "latest",
+        isDevDep: true,
+      },
+    ],
   })
   .addTransformFilesStep({
     stepId: "importProviderAndReset",
