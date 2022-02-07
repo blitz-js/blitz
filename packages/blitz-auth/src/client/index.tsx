@@ -6,12 +6,8 @@ import {
   LOCALSTORAGE_CSRF_TOKEN,
   LOCALSTORAGE_PREFIX,
   LOCALSTORAGE_PUBLIC_DATA_TOKEN,
-  deleteCookie,
-  readCookie,
   AuthenticationError,
   RedirectError,
-  isServer,
-  isClient,
   PublicData,
   EmptyPublicData,
   AuthenticatedClientSession,
@@ -22,7 +18,7 @@ import {UrlObject} from "url"
 import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
 import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert} from "blitz"
+import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")
@@ -34,9 +30,7 @@ export const parsePublicDataToken = (token: string) => {
       publicData,
     }
   } catch (error) {
-    throw new Error(
-      `[parsePublicDataToken] Failed to parse publicDataStr: ${publicDataStr}`,
-    )
+    throw new Error(`[parsePublicDataToken] Failed to parse publicDataStr: ${publicDataStr}`)
   }
 }
 
@@ -59,10 +53,7 @@ class PublicDataStore {
     }
   }
 
-  updateState(
-    value?: PublicData | EmptyPublicData,
-    opts?: {suppressEvent: boolean},
-  ) {
+  updateState(value?: PublicData | EmptyPublicData, opts?: {suppressEvent: boolean}) {
     // We use localStorage as a message bus between tabs.
     // Setting the current time in ms will cause other tabs to receive the `storage` event
     if (!opts?.suppressEvent) {
@@ -125,8 +116,7 @@ interface UseSessionOptions {
 }
 
 export const useSession = (options: UseSessionOptions = {}): ClientSession => {
-  const suspense =
-    options?.suspense ?? Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspense = options?.suspense ?? Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
 
   let initialState: ClientSession
   if (options.initialPublicData) {
@@ -182,10 +172,7 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-function getAuthValues(
-  Page: BlitzPage,
-  props: ComponentPropsWithoutRef<BlitzPage>,
-) {
+function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
   if (!Page) return {}
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
@@ -198,10 +185,7 @@ function getAuthValues(
       while (true) {
         const type = layout.type
 
-        if (
-          type.authenticate !== undefined ||
-          type.redirectAuthenticatedTo !== undefined
-        ) {
+        if (type.authenticate !== undefined || type.redirectAuthenticatedTo !== undefined) {
           authenticate = type.authenticate
           redirectAuthenticatedTo = type.redirectAuthenticatedTo
           break
@@ -247,26 +231,24 @@ function withBlitzAuthPlugin(Page: BlitzPage) {
 
 export interface AuthPluginClientOptions {}
 
-export const AuthClientPlugin = createClientPlugin(
-  (options: AuthPluginClientOptions) => {
-    return {
-      withProvider: withBlitzAuthPlugin,
-      events: {
-        onSessionCreate: () => {},
-        onSessionDestroy: () => {},
-        onBeforeRender: (props: AppProps) => {
-          console.log(props)
-        },
+export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
+  return {
+    withProvider: withBlitzAuthPlugin,
+    events: {
+      onSessionCreate: () => {},
+      onSessionDestroy: () => {},
+      onBeforeRender: (props: AppProps) => {
+        console.log(props)
       },
-      middleware: {
-        beforeHttpRequest: () => {},
-        beforeHttpResponse: () => {},
+    },
+    middleware: {
+      beforeHttpRequest: () => {},
+      beforeHttpResponse: () => {},
+    },
+    exports: () => ({
+      useSession: () => {
+        return {userId: "123"}
       },
-      exports: () => ({
-        useSession: () => {
-          return {userId: "123"}
-        },
-      }),
-    }
-  },
-)
+    }),
+  }
+})

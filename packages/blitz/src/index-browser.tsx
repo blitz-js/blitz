@@ -20,9 +20,7 @@ export function isLocalhost(req: any): boolean {
  * Parse cookies from the `headers` of request
  * @param req request object
  */
-export function getCookieParser(headers: {
-  [key: string]: undefined | string | string[]
-}) {
+export function getCookieParser(headers: {[key: string]: undefined | string | string[]}) {
   return function parseCookie() {
     const header: undefined | string | string[] = headers.cookie
 
@@ -33,3 +31,5 @@ export function getCookieParser(headers: {
     return parse(Array.isArray(header) ? header.join(";") : header)
   }
 }
+
+export * from "./utils"

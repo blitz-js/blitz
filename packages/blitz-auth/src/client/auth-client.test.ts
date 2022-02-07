@@ -5,7 +5,7 @@
 import { expect, describe, it, beforeAll, afterAll, spyOn, SpyFn } from "vitest"
 import { parsePublicDataToken, getPublicDataStore } from "./index"
 import { COOKIE_PUBLIC_DATA_TOKEN } from "../shared"
-import * as stdlib from "../shared"
+import * as stdlib from "blitz"
 import { toBase64 } from "b64-lite"
 
 beforeAll(() => {

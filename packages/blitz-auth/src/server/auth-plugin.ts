@@ -80,13 +80,13 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzPlugin {
       'You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)'
     )
 
-      ; (global).sessionConfig = {
+      ; (global as any).sessionConfig = {
         ...defaultConfig_,
         ...options.storage,
         ...options,
       }
 
-    const cookiePrefix = global.sessionConfig.cookiePrefix ?? 'blitz'
+    const cookiePrefix = (global as any).sessionConfig.cookiePrefix ?? 'blitz'
     assert(
       cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
       `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`
@@ -95,7 +95,6 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzPlugin {
     const blitzSessionMiddleware: Middleware = async (req, res, next) => {
       console.log('Starting sessionMiddleware...')
       if (!res.blitzCtx) {
-        res.blitzCtx = { userId: "test" } // todo: hardcoded
         await getSession(req, res)
       }
       return next()
