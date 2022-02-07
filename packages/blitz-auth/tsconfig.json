@@ -1,7 +1,8 @@
 {
   "extends": "@blitzjs/config/tsconfig.library.json",
   "compilerOptions": {
-    "lib": ["DOM"]
+    "lib": ["DOM"],
+    "allowUmdGlobalAccess": true
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

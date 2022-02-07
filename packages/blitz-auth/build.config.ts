@@ -6,11 +6,6 @@ const config: BuildConfig = {
   declaration: true,
   rollup: {
     emitCJS: true,
-    // esbuild: {
-    //   ...{ inject: ["./esbuild-jsx-shim.ts"] },
-    //   jsxFactory: "jsx",
-    //   jsxFragment: "__ReactFragment",
-    // }
   },
 }
 export default config

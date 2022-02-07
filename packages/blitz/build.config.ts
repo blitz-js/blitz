@@ -1,4 +1,4 @@
-import {BuildConfig} from "unbuild"
+import { BuildConfig } from "unbuild"
 
 const config: BuildConfig = {
   entries: ["./src/index-browser", "./src/index-server"],

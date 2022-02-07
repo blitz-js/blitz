@@ -2,8 +2,47 @@ import {NextComponentType, NextPageContext} from "next"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
-import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "react-query"
+import {
+  Hydrate,
+  HydrateOptions,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query"
 import {UrlObject} from "url"
+
+import type {NextApiRequest, NextApiResponse} from "next"
+export type {NextApiRequest, NextApiResponse}
+
+// todo: where the following should go?
+export interface MiddlewareRequest extends NextApiRequest {
+  protocol?: string
+}
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+export interface MiddlewareResponse<C> extends NextApiResponse {
+  /**
+   * This will be passed as the second argument to Blitz queries/mutations.
+   *
+   * You must set blitzCtx BEFORE calling next()
+   */
+  blitzCtx: C
+  /**
+   * This is the exact result returned from the Blitz query/mutation
+   *
+   * You must first `await next()` before reading this
+   */
+  blitzResult: unknown
+}
+
+export type Middleware<C = any> = {
+  (
+    req: MiddlewareRequest,
+    res: MiddlewareResponse<C>,
+    // eslint-disable-next-line no-shadow
+    next: MiddlewareNext,
+  ): Promise<void> | void
+  type?: string
+  config?: Record<any, any>
+}
 
 // todo
 type TemporaryAny = any
@@ -22,7 +61,11 @@ export type RedirectAuthenticatedToFn = (
 ) => RedirectAuthenticatedTo
 
 // todo: should be contructed based on the plugins
-export type BlitzPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
+export type BlitzPage<P = {}, IP = P> = NextComponentType<
+  NextPageContext,
+  IP,
+  P
+> & {
   getLayout?: (component: JSX.Element) => JSX.Element
   authenticate?: boolean | {redirectTo?: string}
   suppressFirstRenderFlicker?: boolean
@@ -36,14 +79,25 @@ export interface ClientPlugin<Exports extends object> {
     onBeforeRender?: (props: AppProps) => void
   }
   middleware: {
-    beforeHttpRequest: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-    beforeHttpResponse: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
+    beforeHttpRequest: (
+      req: TemporaryAny,
+      res: TemporaryAny,
+      next: () => void,
+    ) => void
+    beforeHttpResponse: (
+      req: TemporaryAny,
+      res: TemporaryAny,
+      next: () => void,
+    ) => void
   }
   exports: () => Exports
   withProvider: BlitzProvider | null
 }
 
-export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
+export function createClientPlugin<
+  TPluginOptions,
+  TPluginExports extends object,
+>(
   pluginConstructor: (options: TPluginOptions) => ClientPlugin<TPluginExports>,
 ) {
   return pluginConstructor
@@ -56,15 +110,22 @@ const compose =
   (x: BlitzPage) =>
     rest.reduceRight((y, f) => f(y), x)
 
-const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
+const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(
+  plugins: TPlugins,
+) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
   }, [] as BlitzProvider[])
   const withPlugins = compose(...providers)
 
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<TemporaryAny>) {
+  return function withBlitzAppRoot(
+    UserAppRoot: React.ComponentType<TemporaryAny>,
+  ) {
     const BlitzOuterRoot = (props: AppProps) => {
-      const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
+      const component = React.useMemo(
+        () => withPlugins(props.Component),
+        [props.Component],
+      )
 
       // supress first render flicker
       React.useEffect(() => {
@@ -100,7 +161,10 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
   children,
 }) => {
   return (
-    <QueryClientProvider client={client || queryClient} contextSharing={contextSharing}>
+    <QueryClientProvider
+      client={client || queryClient}
+      contextSharing={contextSharing}
+    >
       <Hydrate state={dehydratedState} options={hydrateOptions}>
         {children}
       </Hydrate>
@@ -109,19 +173,22 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
 }
 
 // todo: move to ts utils
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I,
+) => void
   ? I
   : never
 
 type Simplify<T> = {[P in keyof T]: T[P]}
 
-export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
-  UnionToIntersection<
-    {
-      [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
-    }[number]
+export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> =
+  Simplify<
+    UnionToIntersection<
+      {
+        [I in keyof TPlugins & number]: ReturnType<TPlugins[I]["exports"]>
+      }[number]
+    >
   >
->
 
 const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
@@ -141,7 +208,10 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   //   allMiddleware.push(middleware)
   // }
 
-  const exports = plugins.reduce((acc, plugin) => ({...plugin.exports(), ...acc}), {})
+  const exports = plugins.reduce(
+    (acc, plugin) => ({...plugin.exports(), ...acc}),
+    {},
+  )
 
   const withBlitz = buildWithBlitz(plugins)
 
@@ -175,7 +245,8 @@ const initializeQueryClient = () => {
           if (process.env.NODE_ENV !== "production") return false
 
           // Retry (max. 3 times) only if network error detected
-          if (error.message === "Network request failed" && failureCount <= 3) return true
+          if (error.message === "Network request failed" && failureCount <= 3)
+            return true
 
           return false
         },
