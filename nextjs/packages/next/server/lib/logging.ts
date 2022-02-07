@@ -62,6 +62,7 @@ export const baseLogger = (options?: ISettingsParam): Logger => {
       bigint: 'blue',
       boolean: 'blue',
     },
+    colorizePrettyLogs: process.env.FORCE_COLOR === '0' ? false : true,
     maskValuesOfKeys: ['password', 'passwordConfirmation'],
     exposeErrorCodeFrame: process.env.NODE_ENV !== 'production',
     ...options,
