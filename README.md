@@ -239,11 +239,11 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
         </sub>
       </a>
     </td>
-<td align="center">
+    <td align="center">
      <a href="https://jahneer.me">
       <img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="@WarM4chineRoxX#2013 avatar" /><br />
         <sub>
-          <b>Husnul Jahneer</b>
+          <b>Saheen Shoukath</b>
         </sub>
       </a>
     </td>
