@@ -243,7 +243,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
      <a href="https://jahneer.me">
       <img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="@WarM4chineRoxX#2013 avatar" /><br />
         <sub>
-          <b>Saheen Shoukath</b>
+          <b>Husnul Jahneer</b>
         </sub>
       </a>
     </td>
