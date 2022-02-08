@@ -1,10 +1,18 @@
-import { fromBase64, toBase64 } from "b64-lite"
+import {fromBase64, toBase64} from "b64-lite"
 import cookie from "cookie"
-import { IncomingMessage, ServerResponse } from "http"
-import { sign as jwtSign, verify as jwtVerify } from "jsonwebtoken"
-import { assert, isLocalhost, getCookieParser, isPast, differenceInMinutes, addYears, addMinutes, } from "blitz"
-import { MiddlewareResponse } from "@blitzjs/next"
-import type { NextApiRequest, NextApiResponse } from "@blitzjs/next"
+import {IncomingMessage, ServerResponse} from "http"
+import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
+import {
+  assert,
+  isLocalhost,
+  getCookieParser,
+  isPast,
+  differenceInMinutes,
+  addYears,
+  addMinutes,
+} from "blitz"
+import {MiddlewareResponse} from "@blitzjs/next"
+import type {NextApiRequest, NextApiResponse} from "@blitzjs/next"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -29,7 +37,7 @@ import {
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
 } from "../shared"
-import { generateToken, hash256 } from "./auth-utils"
+import {generateToken, hash256} from "./auth-utils"
 
 // todo
 declare const baseLogger: any
@@ -37,13 +45,13 @@ declare const baseLogger: any
 const debug = require("debug")("blitz:session")
 
 export interface SimpleRolesIsAuthorized<RoleType = string> {
-  ({ ctx, args }: { ctx: any; args: [roleOrRoles?: RoleType | RoleType[]] }): boolean
+  ({ctx, args}: {ctx: any; args: [roleOrRoles?: RoleType | RoleType[]]}): boolean
 }
-export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ ctx, args }) => {
+export const simpleRolesIsAuthorized: SimpleRolesIsAuthorized = ({ctx, args}) => {
   const [roleOrRoles] = args
   const publicData = (ctx.session as SessionContext).$publicData as
-    | { roles: unknown }
-    | { role: unknown }
+    | {roles: unknown}
+    | {role: unknown}
 
   if ("role" in publicData && "roles" in publicData) {
     throw new Error("Session publicData can only have only `role` or `roles`, but not both.'")
@@ -101,14 +109,14 @@ function ensureNextApiRequest(
 ): asserts req is NextApiRequest {
   if (!("cookies" in req)) {
     // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    ; (req as NextApiRequest).cookies = getCookieParser(req.headers)()
+    ;(req as NextApiRequest).cookies = getCookieParser(req.headers)()
   }
 }
 function ensureMiddlewareResponse(
   res: NextApiResponse | ServerResponse,
 ): asserts res is MiddlewareResponse {
   if (!("blitzCtx" in res)) {
-    ; (res as MiddlewareResponse).blitzCtx = {} as Ctx
+    ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
   }
 }
 
@@ -121,7 +129,7 @@ export async function getSession(
 
   debug("cookiePrefix", process.env.__BLITZ_SESSION_COOKIE_PREFIX)
 
-  let response = res as MiddlewareResponse<{ session?: SessionContext }>
+  let response = res as MiddlewareResponse<{session?: SessionContext}>
 
   if (response.blitzCtx.session) {
     return response.blitzCtx.session
@@ -191,7 +199,7 @@ export class SessionContextClass implements SessionContext {
   $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
-    return (global as any).sessionConfig.isAuthorized({ ctx: this._res.blitzCtx, args })
+    return (global as any).sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -303,7 +311,7 @@ const getSessionSecretKey = () => {
       "You must provide the SESSION_SECRET_KEY environment variable in production. This is used to sign and verify tokens. It should be 32 chars long.",
     )
     assert(
-      process.env.SESSION_SECRET_KEY.length >= 32,
+      process.env.SESSION_SECRET_KEY!.length >= 32,
       "The SESSION_SECRET_KEY environment variable must be at least 32 bytes for sufficent token security",
     )
 
@@ -320,7 +328,7 @@ const JWT_ANONYMOUS_SUBJECT = "anonymous"
 const JWT_ALGORITHM = "HS256"
 
 const createAnonymousSessionToken = (payload: AnonymousSessionPayload) => {
-  return jwtSign({ [JWT_NAMESPACE]: payload }, getSessionSecretKey(), {
+  return jwtSign({[JWT_NAMESPACE]: payload}, getSessionSecretKey() || "", {
     algorithm: JWT_ALGORITHM,
     issuer: JWT_ISSUER,
     audience: JWT_AUDIENCE,
@@ -334,7 +342,7 @@ const parseAnonymousSessionToken = (token: string) => {
   const secret = getSessionSecretKey()
 
   try {
-    const fullPayload = jwtVerify(token, secret, {
+    const fullPayload = jwtVerify(token, secret!, {
       algorithms: [JWT_ALGORITHM],
       issuer: JWT_ISSUER,
       audience: JWT_AUDIENCE,
@@ -384,7 +392,7 @@ const setCookie = (res: ServerResponse, cookieStr: string) => {
 const setHeader = (res: ServerResponse, name: string, value: string) => {
   res.setHeader(name, value)
   if ("_blitz" in res) {
-    ; (res as any)._blitz[name] = value
+    ;(res as any)._blitz[name] = value
   }
 }
 
@@ -484,7 +492,7 @@ async function getSessionKernel(
 
   if (sessionToken) {
     debug("[getSessionKernel] Request has sessionToken")
-    const { handle, version, hashedPublicData } = parseSessionToken(sessionToken)
+    const {handle, version, hashedPublicData} = parseSessionToken(sessionToken)
 
     if (!handle) {
       debug("No handle in sessionToken")
@@ -518,7 +526,7 @@ async function getSessionKernel(
     }
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
       if (!antiCSRFToken) {
-        baseLogger({ displayDateTime: false }).warn(
+        baseLogger({displayDateTime: false}).warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
         )
       }
@@ -549,7 +557,7 @@ async function getSessionKernel(
       const hasQuarterExpiryTimePassed =
         persistedSession.expiresAt &&
         differenceInMinutes(persistedSession.expiresAt, new Date()) <
-        0.75 * ((global as any).sessionConfig.sessionExpiryMinutes as number)
+          0.75 * ((global as any).sessionConfig.sessionExpiryMinutes as number)
 
       if (hasQuarterExpiryTimePassed) {
         debug("quarter expiry time has passed")
@@ -567,7 +575,7 @@ async function getSessionKernel(
             antiCSRFToken: persistedSession.antiCSRFToken,
             sessionToken,
           },
-          { publicDataChanged: hasPublicDataChanged },
+          {publicDataChanged: hasPublicDataChanged},
         )
       }
     }
@@ -594,7 +602,7 @@ async function getSessionKernel(
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
       if (!antiCSRFToken) {
-        baseLogger({ displayDateTime: false }).warn(
+        baseLogger({displayDateTime: false}).warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
         )
       }
@@ -639,7 +647,7 @@ interface CreateNewAuthedSession {
 async function createNewSession(
   args: CreateNewAnonSession | CreateNewAuthedSession,
 ): Promise<SessionKernel> {
-  const { req, res } = args
+  const {req, res} = args
   assert(args.publicData.userId !== undefined, "You must provide publicData.userId")
 
   const antiCSRFToken = createAntiCSRFToken()
@@ -683,9 +691,7 @@ async function createNewSession(
     // This carries over any private data from the anonymous session
     let existingPrivateData = {}
     if (args.jwtPayload?.isAnonymous) {
-      const session = await (global as any).sessionConfig.getSession(
-        args.jwtPayload.handle,
-      )
+      const session = await (global as any).sessionConfig.getSession(args.jwtPayload.handle)
       if (session) {
         if (session.privateData) {
           existingPrivateData = JSON.parse(session.privateData)
@@ -736,7 +742,8 @@ async function createNewSession(
     throw new Error("The advanced method is not yet supported")
   } else {
     throw new Error(
-      `Session management method ${(global as any).sessionConfig.method
+      `Session management method ${
+        (global as any).sessionConfig.method
       } is invalid. Supported methods are "essential" and "advanced"`,
     )
   }
@@ -746,7 +753,7 @@ async function createAnonymousSession(req: IncomingMessage, res: ServerResponse)
   return await createNewSession({
     req,
     res,
-    publicData: { userId: null },
+    publicData: {userId: null},
     anonymous: true,
   })
 }
@@ -759,7 +766,7 @@ async function refreshSession(
   req: IncomingMessage,
   res: ServerResponse,
   sessionKernel: SessionKernel,
-  { publicDataChanged }: { publicDataChanged: boolean },
+  {publicDataChanged}: {publicDataChanged: boolean},
 ) {
   debug("Refreshing session", sessionKernel)
   if (sessionKernel.jwtPayload?.isAnonymous) {
@@ -798,7 +805,7 @@ async function refreshSession(
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
 
-    debug("Updating session in db with", { expiresAt })
+    debug("Updating session in db with", {expiresAt})
     if (publicDataChanged) {
       await (global as any).sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
@@ -826,13 +833,11 @@ async function syncPubicDataFieldsForUserIfNeeded(
   data: Record<string, unknown>,
 ) {
   const dataToSync: Record<string, unknown> = {}
-    ; (global as any).sessionConfig.publicDataKeysToSyncAcrossSessions?.forEach(
-      (key: string) => {
-        if (data[key]) {
-          dataToSync[key] = data[key]
-        }
-      },
-    )
+  ;(global as any).sessionConfig.publicDataKeysToSyncAcrossSessions?.forEach((key: string) => {
+    if (data[key]) {
+      dataToSync[key] = data[key]
+    }
+  })
   if (Object.keys(dataToSync).length) {
     const sessions = await (global as any).sessionConfig.getSessions(userId)
 
@@ -841,7 +846,7 @@ async function syncPubicDataFieldsForUserIfNeeded(
         ...(session.publicData ? JSON.parse(session.publicData) : {}),
         ...dataToSync,
       })
-      await (global as any).sessionConfig.updateSession(session.handle, { publicData })
+      await (global as any).sessionConfig.updateSession(session.handle, {publicData})
     }
   }
 }
@@ -888,9 +893,7 @@ async function getPublicData(sessionKernel: SessionKernel): Promise<PublicData |
   if (sessionKernel.jwtPayload?.publicData) {
     return sessionKernel.jwtPayload?.publicData
   } else {
-    const session = await (global as any).sessionConfig.getSession(
-      sessionKernel.handle,
-    )
+    const session = await (global as any).sessionConfig.getSession(sessionKernel.handle)
     if (!session) {
       throw new Error("getPublicData() failed because handle doesn't exist " + sessionKernel.handle)
     }
@@ -919,7 +922,7 @@ async function setPrivateData(sessionKernel: SessionKernel, data: Record<any, an
       await (global as any).sessionConfig.createSession({
         handle: sessionKernel.handle,
       })
-    } catch (error) { }
+    } catch (error) {}
     existingPrivateData = {}
   }
   const privateData = JSON.stringify({
@@ -945,7 +948,7 @@ async function setPublicData(
     ...data,
   } as PublicData
 
-  await refreshSession(req, res, { ...sessionKernel, publicData }, { publicDataChanged: true })
+  await refreshSession(req, res, {...sessionKernel, publicData}, {publicDataChanged: true})
   return publicData
 }
 
@@ -967,7 +970,7 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
       ...data,
     })
 
-    await (global as any).sessionConfig.updateSession(session.handle, { publicData })
+    await (global as any).sessionConfig.updateSession(session.handle, {publicData})
   }
 }
 
@@ -991,8 +994,8 @@ function append(res: ServerResponse, field: string, val: string | string[]) {
     value = Array.isArray(prev)
       ? prev.concat(val)
       : Array.isArray(val)
-        ? [prev].concat(val)
-        : [prev, val]
+      ? [prev].concat(val)
+      : [prev, val]
   }
 
   value = Array.isArray(value) ? value.map(String) : String(value)

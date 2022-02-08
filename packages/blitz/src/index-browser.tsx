@@ -5,6 +5,8 @@ export function assert(condition: any, message: string): asserts condition {
 }
 
 // todo: type + where should it go?
+// move to browser
+// leave in auth
 export function isLocalhost(req: any): boolean {
   let {host} = req.headers
   let localhost = false

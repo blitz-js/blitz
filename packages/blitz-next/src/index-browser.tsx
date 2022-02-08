@@ -29,12 +29,7 @@ export interface MiddlewareResponse<C> extends NextApiResponse {
 }
 
 export type Middleware<C = any> = {
-  (
-    req: MiddlewareRequest,
-    res: MiddlewareResponse<C>,
-    // eslint-disable-next-line no-shadow
-    next: MiddlewareNext,
-  ): Promise<void> | void
+  (req: MiddlewareRequest, res: MiddlewareResponse<C>, next: MiddlewareNext): Promise<void> | void
   type?: string
   config?: Record<any, any>
 }
