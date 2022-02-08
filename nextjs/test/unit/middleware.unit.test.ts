@@ -59,28 +59,10 @@ describe('secure proxy middleware', () => {
     expect(reqSecure.protocol).toEqual('https')
   })
 
-  it('should set http protocol if X-Forwarded-Proto is http', () => {
-    // @ts-ignore
-    void secureProxyMiddleware(reqHttp, res, () => null)
-    expect(reqHttp.protocol).toEqual('http')
-  })
-
   it('should set https protocol if Forwarded is proto=https', () => {
     // @ts-ignore
     void secureProxyMiddleware(reqForwardSecure, res, () => null)
     expect(reqForwardSecure.protocol).toEqual('https')
-  })
-
-  it('should set http protocol if Forwarded is proto=http', () => {
-    // @ts-ignore
-    void secureProxyMiddleware(reqForwardHttp, res, () => null)
-    expect(reqForwardHttp.protocol).toEqual('http')
-  })
-
-  it('should set http protocol if X-Forwarded-Proto and Forwarded are absent', () => {
-    // @ts-ignore
-    void secureProxyMiddleware(reqNoHeader, res, () => null)
-    expect(reqNoHeader.protocol).toEqual('http')
   })
 })
 
