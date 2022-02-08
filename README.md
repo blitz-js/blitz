@@ -241,7 +241,7 @@ _Issue triage, pull request triage, community encouragement and moderation, etc_
     </td>
     <td align="center">
      <a href="https://jahneer.me">
-      <img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="@WarM4chineRoxX#2013 avatar" /><br />
+      <img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="Husnul Jahneer avatar" /><br />
         <sub>
           <b>Husnul Jahneer</b>
         </sub>
@@ -760,7 +760,7 @@ Thanks to these wonderful people ([emoji key](https://allcontributors.org/docs/e
   </tr>
   <tr>
     <td align="center"><a href="https://saheen.codes"><img src="https://avatars.githubusercontent.com/u/2632896?v=4?s=100" width="100px;" alt=""/><br /><sub><b>saheenshoukath</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=shellord" title="Documentation">📖</a></td>
-<td align="center"><a href="https://jahneer.me"><img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt="WarM4chineRoxX#2013"/><br /><sub><b>Husnul Jahneer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=husnuljahneer" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://jahneer.me"><img src="https://avatars.githubusercontent.com/husnuljahneer" width="100px;" alt=""/><br /><sub><b>Husnul Jahneer</b></sub></a><br /><a href="https://github.com/blitz-js/blitz/commits?author=husnuljahneer" title="Documentation">📖</a></td>
   </tr>
 </table>
 
