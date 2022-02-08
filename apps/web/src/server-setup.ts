@@ -2,7 +2,7 @@ import { setupBlitz } from "@blitzjs/next";
 import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth";
 import { prisma as db } from "../prisma/index";
 
-const { withBlitz, gSSP } = setupBlitz({
+const { withBlitz, gSSP, api } = setupBlitz({
   plugins: [AuthServerPlugin({
     storage: PrismaStorage(db),
     isAuthorized() {
@@ -12,4 +12,4 @@ const { withBlitz, gSSP } = setupBlitz({
   })]
 })
 
-export { withBlitz, gSSP }
+export { withBlitz, gSSP, api }

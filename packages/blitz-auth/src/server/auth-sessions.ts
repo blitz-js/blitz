@@ -261,6 +261,7 @@ const createSessionToken = (handle: string, publicData: PublicData | string) => 
     ),
   )
 }
+
 const parseSessionToken = (token: string) => {
   const [handle, id, hashedPublicData, version] = fromBase64(token).split(TOKEN_SEPARATOR)
 

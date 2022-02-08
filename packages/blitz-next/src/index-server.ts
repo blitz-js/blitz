@@ -26,7 +26,7 @@ export type BlitzPlugin = {
 const runMiddlewares = async (middlewares: Middleware[], req: NextApiRequest, res: MiddlewareResponse) => {
   const promises = middlewares.reduce((acc, middleware) => {
     const promise = new Promise((resolve, reject) => {
-      middleware(req, res, result =>
+      void middleware(req, res, result =>
         result instanceof Error ? reject(result) : resolve(result),
       );
     });
@@ -41,8 +41,7 @@ const buildMiddleware = (plugins: BlitzPlugin[]): BlitzMiddleware => {
     const middlewares = plugins.flatMap(p => p.middlewares);
 
     try {
-      runMiddlewares(middlewares, req, res);
-
+      void runMiddlewares(middlewares, req, res);
       return handler(req, res);
     } catch (error) {
       return res.status(400).send(error);
@@ -68,5 +67,5 @@ export const setupBlitz = ({ plugins }: SetupBlitzOptions) => {
     return handler(req, res, (res as TemporaryAny).blitzCtx);
   };
 
-  return { withBlitz: middleware, gSSP, gSP };
+  return { withBlitz: middleware, gSSP, gSP, api: middleware };
 }
