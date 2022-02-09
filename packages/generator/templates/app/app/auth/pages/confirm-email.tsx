@@ -49,7 +49,7 @@ const ConfirmPassswordPage: BlitzPage = () => {
 }
 
 ConfirmPassswordPage.getLayout = (page) => (
-  <Layout title="Reset Your Password" noVerification>
+  <Layout title="Confirm your email" noVerification>
     {page}
   </Layout>
 )
