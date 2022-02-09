@@ -14,12 +14,12 @@ module.exports = {
       files: ["**/*.ts?(x)"],
       plugins: ["@typescript-eslint"],
       parserOptions: {
-        project: `./tsconfig.json`,
+        project: "./tsconfig.json",
       },
       rules: {
         "@typescript-eslint/no-floating-promises": "error",
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": ["error"],
+        "@typescript-eslint/no-use-before-define": ["warn"],
         "no-redeclare": "off",
         "@typescript-eslint/no-redeclare": ["error"],
       },

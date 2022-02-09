@@ -10,7 +10,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "build": "turbo run build",
-    "dev": "turbo run dev --no-cache --parallel --continue",
+    "dev": "turbo run dev --no-cache --parallel --ignore=\"apps/**/*\"",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
@@ -19,6 +19,7 @@
   "dependencies": {
     "eslint": "7.32.0",
     "husky": "7.0.4",
+    "jsdom": "19.0.0",
     "lint-staged": "12.1.7",
     "only-allow": "1.0.0",
     "prettier": "^2.5.1",
@@ -55,5 +56,10 @@
       }
     }
   },
-  "npmClient": "pnpm"
+  "npmClient": "pnpm",
+  "packageManager": "pnpm@6.21.0",
+  "devDependencies": {
+    "next": "12.0.7",
+    "wait-on": "6.0.0"
+  }
 }
