@@ -40,3 +40,11 @@ export const ChangePassword = z.object({
   currentPassword: z.string(),
   newPassword: password,
 })
+
+export const SendConfirmationEmail = z.object({
+  email,
+})
+
+export const ConfirmEmail = z.object({
+  token: z.string(),
+})
