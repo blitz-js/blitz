@@ -69,7 +69,6 @@ importers:
       "@types/react-dom": ^17.0.8
       chalk: 4.1.0
       console-table-printer: 2.10.0
-      cookie: 0.4.1
       ora: 5.3.0
       react: ^17.0.2
       tslog: 3.3.1
@@ -79,7 +78,6 @@ importers:
     dependencies:
       chalk: 4.1.0
       console-table-printer: 2.10.0
-      cookie: 0.4.1
       ora: 5.3.0
       tslog: 3.3.1
     devDependencies:
