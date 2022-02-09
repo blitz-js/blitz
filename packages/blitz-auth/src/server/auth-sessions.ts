@@ -1,16 +1,8 @@
 import {fromBase64, toBase64} from "b64-lite"
-import cookie from "cookie"
+import cookie, {parse} from "cookie"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {
-  assert,
-  isLocalhost,
-  getCookieParser,
-  isPast,
-  differenceInMinutes,
-  addYears,
-  addMinutes,
-} from "blitz"
+import {assert, isPast, differenceInMinutes, addYears, addMinutes} from "blitz"
 import {MiddlewareResponse} from "@blitzjs/next"
 import type {NextApiRequest, NextApiResponse} from "@blitzjs/next"
 import {
@@ -38,6 +30,32 @@ import {
   TOKEN_SEPARATOR,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
+
+export function isLocalhost(req: any): boolean {
+  let {host} = req.headers
+  let localhost = false
+  if (host) {
+    host = host.split(":")[0]
+    localhost = host === "localhost"
+  }
+  return localhost
+}
+
+/**
+ * Parse cookies from the `headers` of request
+ * @param req request object
+ */
+export function getCookieParser(headers: {[key: string]: undefined | string | string[]}) {
+  return function parseCookie() {
+    const header: undefined | string | string[] = headers.cookie
+
+    if (!header) {
+      return {}
+    }
+
+    return parse(Array.isArray(header) ? header.join(";") : header)
+  }
+}
 
 // todo
 declare const baseLogger: any
