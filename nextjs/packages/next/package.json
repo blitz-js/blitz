@@ -1,6 +1,6 @@
 {
   "name": "next",
-  "version": "0.45.2",
+  "version": "0.45.3",
   "nextjsVersion": "11.1.0",
   "description": "The React Framework",
   "main": "./dist/server/next.js",
@@ -73,7 +73,7 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.0.0",
     "@babel/runtime": "7.12.5",
-    "@blitzjs/env": "0.45.2",
+    "@blitzjs/env": "0.45.3",
     "@hapi/accept": "5.0.2",
     "@next/polyfill-module": "11.1.0",
     "@next/react-dev-overlay": "11.1.0",
