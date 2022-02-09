@@ -4,7 +4,7 @@ const PageWithRedirect = () => {
       {JSON.stringify(
         {
           message:
-            "This is a page that will redirect you to the Home page if you are authenticated",
+            "This page requires authentication. It will redirect you to the Home page if you are NOT authenticated",
         },
         null,
         2,
@@ -13,6 +13,6 @@ const PageWithRedirect = () => {
   )
 }
 
-PageWithRedirect.redirectAuthenticatedTo = "/"
+PageWithRedirect.authenticate = {redirectTo: "/"}
 
 export default PageWithRedirect

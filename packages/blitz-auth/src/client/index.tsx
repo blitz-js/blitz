@@ -1,13 +1,11 @@
 import {fromBase64} from "b64-lite"
-import BadBehavior from "bad-behavior"
+import _BadBehavior from "bad-behavior"
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
   LOCALSTORAGE_CSRF_TOKEN,
   LOCALSTORAGE_PREFIX,
   LOCALSTORAGE_PUBLIC_DATA_TOKEN,
-  AuthenticationError,
-  RedirectError,
   PublicData,
   EmptyPublicData,
   AuthenticatedClientSession,
@@ -18,7 +16,21 @@ import {UrlObject} from "url"
 import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
 import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
+import {
+  assert,
+  deleteCookie,
+  readCookie,
+  isServer,
+  isClient,
+  RedirectError,
+  AuthenticationError,
+} from "blitz"
+
+const BadBehavior: typeof _BadBehavior =
+  "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
+
+// todo
+const debug = (...args: any) => {} // require("debug")("blitz:auth-client")
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")
@@ -172,7 +184,108 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
+// todo: move this somewhere
+export const urlObjectKeys = [
+  "auth",
+  "hash",
+  "host",
+  "hostname",
+  "href",
+  "path",
+  "pathname",
+  "port",
+  "protocol",
+  "query",
+  "search",
+  "slashes",
+]
+
+export function formatWithValidation(url: UrlObject): string {
+  if (process.env.NODE_ENV === "development") {
+    if (url !== null && typeof url === "object") {
+      Object.keys(url).forEach((key) => {
+        if (urlObjectKeys.indexOf(key) === -1) {
+          console.warn(`Unknown key passed via urlObject into url.format: ${key}`)
+        }
+      })
+    }
+  }
+
+  return formatUrl(url)
+}
+
+import {ParsedUrlQuery} from "querystring"
+
+function stringifyUrlQueryParam(param: string): string {
+  if (
+    typeof param === "string" ||
+    (typeof param === "number" && !isNaN(param)) ||
+    typeof param === "boolean"
+  ) {
+    return String(param)
+  } else {
+    return ""
+  }
+}
+
+export function urlQueryToSearchParams(urlQuery: ParsedUrlQuery): URLSearchParams {
+  const result = new URLSearchParams()
+  Object.entries(urlQuery).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => result.append(key, stringifyUrlQueryParam(item)))
+    } else {
+      result.set(key, stringifyUrlQueryParam(value!)) //blitz
+    }
+  })
+  return result
+}
+
+const slashedProtocols = /https?|ftp|gopher|file/
+
+export function formatUrl(urlObj: UrlObject) {
+  let {auth, hostname} = urlObj
+  let protocol = urlObj.protocol || ""
+  let pathname = urlObj.pathname || ""
+  let hash = urlObj.hash || ""
+  let query = urlObj.query || ""
+  let host: string | false = false
+
+  auth = auth ? encodeURIComponent(auth).replace(/%3A/i, ":") + "@" : ""
+
+  if (urlObj.host) {
+    host = auth + urlObj.host
+  } else if (hostname) {
+    host = auth + (~hostname.indexOf(":") ? `[${hostname}]` : hostname)
+    if (urlObj.port) {
+      host += ":" + urlObj.port
+    }
+  }
+
+  if (query && typeof query === "object") {
+    query = String(urlQueryToSearchParams(query as ParsedUrlQuery))
+  }
+
+  let search = urlObj.search || (query && `?${query}`) || ""
+
+  if (protocol && protocol.substr(-1) !== ":") protocol += ":"
+
+  if (urlObj.slashes || ((!protocol || slashedProtocols.test(protocol)) && host !== false)) {
+    host = "//" + (host || "")
+    if (pathname && pathname[0] !== "/") pathname = "/" + pathname
+  } else if (!host) {
+    host = ""
+  }
+
+  if (hash && hash[0] !== "#") hash = "#" + hash
+  if (search && search[0] !== "?") search = "?" + search
+
+  pathname = pathname.replace(/[?#]/g, encodeURIComponent)
+  search = search.replace("#", "%23")
+
+  return `${protocol}${host}${pathname}${search}${hash}`
+}
+
+export function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
   if (!Page) return {}
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
@@ -205,15 +318,53 @@ function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPag
 
 function withBlitzAuthPlugin(Page: BlitzPage) {
   const AuthRoot: BlitzPage = (props: ComponentPropsWithoutRef<BlitzPage>) => {
-    const {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+    useSession({suspense: false})
 
-    if (authenticate || redirectAuthenticatedTo) {
-      throw new Error("Auth error")
-    }
+    let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
-    if (authenticate !== undefined || redirectAuthenticatedTo) {
-      // @ts-ignore
-      return <Page {...props} suppressFirstRenderFlicker={true} />
+    useAuthorizeIf(authenticate === true)
+
+    if (typeof window !== "undefined") {
+      const publicData = getPublicDataStore().getData()
+
+      // We read directly from publicData.userId instead of useSession
+      // so we can access userId on first render. useSession is always empty on first render
+      if (publicData.userId) {
+        debug("[BlitzAuthInnerRoot] logged in")
+
+        if (typeof redirectAuthenticatedTo === "function") {
+          redirectAuthenticatedTo = redirectAuthenticatedTo({
+            session: publicData,
+          })
+        }
+
+        if (redirectAuthenticatedTo) {
+          const redirectUrl =
+            typeof redirectAuthenticatedTo === "string"
+              ? redirectAuthenticatedTo
+              : formatWithValidation(redirectAuthenticatedTo)
+
+          debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
+          const error = new RedirectError(redirectUrl)
+          error.stack = null!
+          throw error
+        }
+      } else {
+        debug("[BlitzAuthInnerRoot] logged out")
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
+        }
+      }
     }
 
     return <Page {...props} />
@@ -223,15 +374,19 @@ function withBlitzAuthPlugin(Page: BlitzPage) {
     AuthRoot[key] = value
   }
   if (process.env.NODE_ENV !== "production") {
-    AuthRoot.displayName = `BlitzInnerRoot`
+    AuthRoot.displayName = `BlitzAuthInnerRoot`
   }
 
   return AuthRoot
 }
 
-export interface AuthPluginClientOptions {}
+export interface AuthPluginClientOptions {
+  cookiePrefix: string
+}
 
 export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
+  // todo: how to avoid that
+  process.env.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
     events: {
