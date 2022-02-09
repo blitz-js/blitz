@@ -22,11 +22,12 @@ export type BlitzMiddleware = (
   handler: NextApiHandler,
 ) => (req: MiddlewareRequest, res: MiddlewareResponse, ctx?: TemporaryAny) => Promise<void>
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: (error?: Error) => Promise<void> | void,
-) => Promise<void> | void
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+export type Middleware = {
+  (req: MiddlewareRequest, res: MiddlewareResponse, next: MiddlewareNext): Promise<void> | void
+  type?: string
+  config?: Record<any, any>
+}
 
 export type BlitzPlugin = {
   middlewares: Middleware[]

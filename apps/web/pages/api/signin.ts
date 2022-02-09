@@ -8,11 +8,12 @@ export default api(async (req, res) => {
   const user = await prisma.user.findFirst({where: {email: (req.query.email || "") as string}})
   if (!user) {
     res.status(404).json({message: "No user found"})
+    return
   }
 
   // log in
   await blitzContext.session.$create({
-    userId: req.query.userId,
+    userId: user.id,
   })
 
   res.status(200).json({name: "John Doe", userId: blitzContext.session.userId})
