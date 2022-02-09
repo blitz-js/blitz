@@ -1,4 +1,5 @@
-import {GetServerSideProps, NextApiHandler, NextApiRequest, NextApiResponse} from "next"
+import {GetServerSideProps, NextApiRequest, NextApiResponse} from "next"
+import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
 
@@ -12,13 +13,17 @@ export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
   blitzResult: unknown
 }
 
+type NextApiHandler<T = any, C = Ctx> = (
+  req: NextApiRequest,
+  res: NextApiResponse<T> & {blitzCtx: C},
+) => void | Promise<void>
+
 export type BlitzMiddleware = (
   handler: NextApiHandler,
-) => (req: NextApiRequest, res: MiddlewareResponse, ctx?: TemporaryAny) => Promise<void>
+) => (req: MiddlewareRequest, res: MiddlewareResponse, ctx?: TemporaryAny) => Promise<void>
 
-// todo: better naming
 export type Middleware = (
-  req: NextApiRequest,
+  req: MiddlewareRequest,
   res: MiddlewareResponse,
   next: (error?: Error) => Promise<void> | void,
 ) => Promise<void> | void

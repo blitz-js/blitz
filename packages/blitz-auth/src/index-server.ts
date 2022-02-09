@@ -1,2 +1,2 @@
-export * from "./client"
+export * from "./index-browser"
 export * from "./server"
