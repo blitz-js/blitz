@@ -30,7 +30,7 @@
     "@oclif/plugin-autocomplete": "0.3.0",
     "@oclif/plugin-help": "3.2.1",
     "@oclif/plugin-not-found": "1.2.4",
-    "@prisma/sdk": "2.19.0",
+    "@prisma/sdk": "3.9.1",
     "@salesforce/lazy-require": "0.4.0",
     "camelcase": "^6.2.0",
     "chalk": "^4.1.0",
