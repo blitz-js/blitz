@@ -2,11 +2,13 @@
  * @vitest-environment jsdom
  */
 
-import { expect, describe, it, beforeAll, afterAll, spyOn, SpyFn } from "vitest"
-import { parsePublicDataToken, getPublicDataStore } from "./index"
-import { COOKIE_PUBLIC_DATA_TOKEN } from "../shared"
+import {expect, describe, it, beforeAll, afterAll, spyOn, SpyFn} from "vitest"
+import {parsePublicDataToken, getPublicDataStore, useSession} from "./index"
+import {COOKIE_PUBLIC_DATA_TOKEN} from "../shared"
 import * as stdlib from "blitz"
-import { toBase64 } from "b64-lite"
+import {toBase64} from "b64-lite"
+import {act} from "@testing-library/react"
+import {renderHook} from "@testing-library/react-hooks"
 
 beforeAll(() => {
   process.env.__BLITZ_SESSION_COOKIE_PREFIX = "blitz-test"
@@ -31,7 +33,7 @@ describe("parsePublicDataToken", () => {
   it("parses the public data", () => {
     const validJSON = '{"foo": "bar"}'
     expect(parsePublicDataToken(toBase64(validJSON))).toEqual({
-      publicData: { foo: "bar" },
+      publicData: {foo: "bar"},
     })
   })
 
@@ -89,7 +91,7 @@ describe("publicDataStore", () => {
         ret = data
       })
       getPublicDataStore().clear()
-      expect(ret).toEqual({ userId: null })
+      expect(ret).toEqual({userId: null})
     })
   })
 
@@ -98,65 +100,65 @@ describe("publicDataStore", () => {
       it("returns empty data if cookie is falsy", () => {
         const ret = getPublicDataStore().getData()
 
-        expect(ret).toEqual({ userId: null })
+        expect(ret).toEqual({userId: null})
       })
     })
   })
 })
 
-// todo
-// describe('useSession', () => {
-//   it('returns empty at when no value is set', () => {
-//     const { result } = renderHook(() => useSession())
+describe("useSession", () => {
+  it("returns empty at when no value is set", () => {
+    const {result} = renderHook(() => useSession())
 
-//     expect(result.current).toEqual({
-//       isLoading: false,
-//       userId: null,
-//     })
-//   })
+    expect(result.current).toEqual({
+      isLoading: false,
+      userId: null,
+    })
+  })
 
-// it('subscribes to the public data store', () => {
-//   const { result } = renderHook(() => useSession())
+  it("subscribes to the public data store", () => {
+    const {result} = renderHook(() => useSession())
 
-//   act(() => {
-//     getPublicDataStore().updateState({ roles: ['foo'], userId: 'bar' } as any)
-//   })
+    act(() => {
+      getPublicDataStore().updateState({roles: ["foo"], userId: "bar"} as any)
+    })
 
-//   expect(result.current).toEqual({
-//     isLoading: false,
-//     userId: 'bar',
-//     roles: ['foo'],
-//   })
+    expect(result.current).toEqual({
+      isLoading: false,
+      userId: "bar",
+      roles: ["foo"],
+    })
 
-//   act(() => {
-//     getPublicDataStore().updateState({ roles: ['baz'], userId: 'boo' } as any)
-//   })
+    act(() => {
+      getPublicDataStore().updateState({roles: ["baz"], userId: "boo"} as any)
+    })
 
-//   expect(result.current).toEqual({
-//     isLoading: false,
-//     userId: 'boo',
-//     roles: ['baz'],
-//   })
-// })
+    expect(result.current).toEqual({
+      isLoading: false,
+      userId: "boo",
+      roles: ["baz"],
+    })
+  })
 
-// it('un-subscribes from the public data store on unmount', () => {
-//   const { result, unmount } = renderHook(() => useSession())
+  it("un-subscribes from the public data store on unmount", () => {
+    const {result, unmount} = renderHook(() => useSession())
 
-//   act(() => {
-//     getPublicDataStore().updateState({ roles: ['foo'], userId: 'bar' } as any)
-//   })
+    act(() => {
+      getPublicDataStore().updateState({roles: ["foo"], userId: "bar"} as any)
+    })
 
-//   act(() => {
-//     unmount()
-//   })
+    act(() => {
+      unmount()
+    })
 
-//   act(() => {
-//     getPublicDataStore().updateState({ roles: ['baz'], userId: 'boo' } as any)
-//   })
+    act(() => {
+      getPublicDataStore().updateState({roles: ["baz"], userId: "boo"} as any)
+    })
 
-//   expect(result.current).toEqual({
-//     isLoading: false,
-//     userId: 'bar',
-//     roles: ['foo'],
-//   })
-// })
+    expect(result.current).toEqual({
+      isLoading: false,
+      userId: "bar",
+      roles: ["foo"],
+    })
+  })
+})

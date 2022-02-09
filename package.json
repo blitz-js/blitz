@@ -10,7 +10,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "build": "turbo run build",
-    "dev": "turbo run dev --no-cache --parallel --ignore=\"apps/**/*\"",
+    "dev": "turbo run dev --no-cache --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
