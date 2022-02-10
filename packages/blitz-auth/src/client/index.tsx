@@ -395,9 +395,12 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
       beforeHttpResponse: () => {},
     },
     exports: () => ({
-      useSession: () => {
-        return {userId: "123"}
-      },
+      useSession,
+      useAuthorize,
+      useAuthorizeIf,
+      useRedirectAuthenticated,
+      useAuthenticatedSession,
+      getAntiCSRFToken,
     }),
   }
 })

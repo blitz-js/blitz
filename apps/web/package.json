@@ -7,8 +7,8 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "pnpm prisma generate && pnpm prisma migrate deploy",
-    "prisma:studio": "pnpm prisma studio"
+    "prisma:start": "prisma generate && prisma migrate deploy",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@blitzjs/auth": "workspace:*",

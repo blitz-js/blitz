@@ -1,0 +1,6 @@
+import {useSession} from "../src/client-setup"
+
+export default function PgaeWithUseSession() {
+  const data = useSession()
+  return <div>{JSON.stringify({data}, null, 2)}</div>
+}

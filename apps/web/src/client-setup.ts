@@ -1,7 +1,14 @@
-import {setupClient} from "@blitzjs/next"
 import {AuthClientPlugin} from "@blitzjs/auth"
+import {setupClient} from "@blitzjs/next"
 
-const {withBlitz, useSession} = setupClient({
+const {
+  withBlitz,
+  useSession,
+  useAuthorize,
+  useAuthorizeIf,
+  useRedirectAuthenticated,
+  useAuthenticatedSession,
+} = setupClient({
   plugins: [
     AuthClientPlugin({
       cookiePrefix: "webapp-cookie-prefix",
@@ -9,4 +16,11 @@ const {withBlitz, useSession} = setupClient({
   ],
 })
 
-export {withBlitz, useSession}
+export {
+  withBlitz,
+  useSession,
+  useAuthorize,
+  useAuthorizeIf,
+  useRedirectAuthenticated,
+  useAuthenticatedSession,
+}
