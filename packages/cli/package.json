@@ -1,7 +1,7 @@
 {
   "name": "@blitzjs/cli",
   "description": "Blitz.js CLI",
-  "version": "0.45.2",
+  "version": "0.45.3",
   "license": "MIT",
   "scripts": {
     "dev": "rimraf lib && tsc --watch --pretty --preserveWatchOutput",
@@ -22,15 +22,15 @@
     "/lib"
   ],
   "dependencies": {
-    "@blitzjs/generator": "0.45.2",
-    "@blitzjs/installer": "0.45.2",
-    "@blitzjs/server": "0.45.2",
+    "@blitzjs/generator": "0.45.3",
+    "@blitzjs/installer": "0.45.3",
+    "@blitzjs/server": "0.45.3",
     "@oclif/command": "1.8.0",
     "@oclif/config": "1.17.0",
     "@oclif/plugin-autocomplete": "0.3.0",
     "@oclif/plugin-help": "3.2.1",
     "@oclif/plugin-not-found": "1.2.4",
-    "@prisma/sdk": "2.19.0",
+    "@prisma/sdk": "3.9.1",
     "@salesforce/lazy-require": "0.4.0",
     "camelcase": "^6.2.0",
     "chalk": "^4.1.0",
