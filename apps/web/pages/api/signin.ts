@@ -16,5 +16,7 @@ export default api(async (req, res) => {
     userId: user.id,
   })
 
-  res.status(200).json({name: "John Doe", userId: blitzContext.session.userId})
+  res
+    .status(200)
+    .json({email: req.query.email || "Email was not provided", userId: blitzContext.session.userId})
 })

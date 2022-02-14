@@ -98,5 +98,5 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
       return handler(req, res, (res as TemporaryAny).blitzCtx)
     }
 
-  return {withBlitz: middleware, gSSP, gSP, api: middleware}
+  return {gSSP, gSP, api: middleware}
 }
