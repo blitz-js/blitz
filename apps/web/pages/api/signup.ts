@@ -6,7 +6,9 @@ import {SecurePassword} from "@blitzjs/auth"
 export default api(async (req, res) => {
   const blitzContext = res.blitzCtx as {session: SessionContext}
 
-  const hashedPassword = await SecurePassword.hash(req.query.password || "test-password")
+  const hashedPassword = await SecurePassword.hash(
+    (req.query.password as string) || "test-password",
+  )
   const email = (req.query.email as string) || "test" + Math.random() + "@test.com"
   const user = await prisma.user.create({
     data: {email, hashedPassword, role: "user"},

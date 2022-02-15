@@ -1,7 +1,7 @@
-import {BlitzPlugin, Middleware} from "@blitzjs/next"
+import {Middleware} from "@blitzjs/next"
 import {assert} from "blitz"
 import {Ctx, PublicData, SessionModel} from "../shared/types"
-import {getSession} from "./auth-sessions"
+import {getSession, setPublicDataForUser} from "./auth-sessions"
 
 interface SessionConfigOptions {
   cookiePrefix?: string
@@ -28,7 +28,7 @@ interface IsAuthorized {
 export const PrismaStorage = (db: any /* todo */): SessionConfigMethods => {
   return {
     getSession: (handle) => db.session.findFirst({where: {handle}}),
-    getSessions: (userId) => db.session.findMTemporaryAny({where: {userId}}),
+    getSessions: (userId) => db.session.findMany({where: {userId}}),
     createSession: (session) => {
       let user
       if (session.userId) {
