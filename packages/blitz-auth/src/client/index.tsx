@@ -1,5 +1,11 @@
 import {fromBase64} from "b64-lite"
 import _BadBehavior from "bad-behavior"
+import {useEffect, useState} from "react"
+import {UrlObject} from "url"
+import {AppProps} from "next/app"
+import React, {ComponentPropsWithoutRef} from "react"
+import {BlitzPage, createClientPlugin} from "@blitzjs/next"
+import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
@@ -13,12 +19,6 @@ import {
   AuthenticatedClientSession,
   ClientSession,
 } from "../shared"
-import {useEffect, useState} from "react"
-import {UrlObject} from "url"
-import {AppProps} from "next/app"
-import React, {ComponentPropsWithoutRef} from "react"
-import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
 
@@ -117,7 +117,7 @@ export const getAntiCSRFToken = () => {
   }
 }
 
-interface UseSessionOptions {
+export interface UseSessionOptions {
   initialPublicData?: PublicData
   suspense?: boolean | null
 }

@@ -1,2 +1,8 @@
 export * from "./client"
-export type {SessionContextBase, SessionContext, AuthenticatedSessionContext} from "./shared/types"
+export type {
+  SessionContextBase,
+  SessionContext,
+  AuthenticatedSessionContext,
+  ClientSession,
+  AuthenticatedClientSession,
+} from "./shared/types"
