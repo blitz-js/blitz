@@ -2,7 +2,7 @@ import {BlitzPlugin} from "@blitzjs/next"
 import {Middleware} from "@blitzjs/next"
 import {assert} from "blitz"
 import {Ctx, PublicData, SessionModel} from "../shared/types"
-import {getSession, setPublicDataForUser} from "./auth-sessions"
+import {getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {
   cookiePrefix?: string
