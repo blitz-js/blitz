@@ -19,12 +19,12 @@ import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
 import {BlitzPage, createClientPlugin} from "@blitzjs/next"
 import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
+import _debug from "debug"
 
 const BadBehavior: typeof _BadBehavior =
   "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
 
-// todo
-const debug = (...args: any) => {} // require("debug")("blitz:auth-client")
+const debug = _debug("blitz:auth-client")
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")

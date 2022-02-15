@@ -1,12 +1,11 @@
 import {GetStaticProps} from "next"
 import {gSP} from "../src/server-setup"
 
-export const getStaticProps: GetStaticProps = gSP(async (req, res, ctx) => {
-  // const session = await getSession(req, res)
+export const getStaticProps: GetStaticProps = gSP(async ({ctx}) => {
   return {
     props: {
       data: {
-        userId: ctx?.session.userId,
+        // userId: ctx?.session.userId,
         // session: {
         //   id: session.userId,
         //   publicData: session.$publicData,

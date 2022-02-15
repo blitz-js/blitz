@@ -1,4 +1,4 @@
-import {GetServerSideProps, NextApiRequest, NextApiResponse} from "next"
+import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
 import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
@@ -51,10 +51,8 @@ const runMiddlewares = async (
   await Promise.all(promises)
 }
 
-const buildMiddleware = (plugins: BlitzPlugin[]): BlitzMiddleware => {
+const buildMiddleware = (middlewares: Middleware[]): BlitzMiddleware => {
   return (handler: NextApiHandler) => async (req, res) => {
-    const middlewares = plugins.flatMap((p) => p.middlewares)
-
     try {
       await runMiddlewares(middlewares, req, res)
       return handler(req, res)
@@ -64,38 +62,38 @@ const buildMiddleware = (plugins: BlitzPlugin[]): BlitzMiddleware => {
   }
 }
 
-type GSSPHandler = (
-  req: TemporaryAny,
-  res: TemporaryAny,
-  ctx: TemporaryAny,
-) => Promise<TemporaryAny>
-
 type SetupBlitzOptions = {
   plugins: BlitzPlugin[]
 }
+
+export type GSSPHandler = ({
+  ctx,
+  req,
+  res,
+  ...args
+}: Parameters<GetServerSideProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
+export type GSPHandler = ({
+  ctx,
+  ...args
+}: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
+
 export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
-  const middleware = buildMiddleware(plugins)
+  const middlewares = plugins.flatMap((p) => p.middlewares)
+  const middleware = buildMiddleware(middlewares)
 
   const gSSP =
     (handler: GSSPHandler): GetServerSideProps =>
-    async ({req, res}) => {
-      await runMiddlewares(
-        plugins.flatMap((p) => p.middlewares),
-        req as TemporaryAny,
-        res as TemporaryAny,
-      )
-      return handler(req, res, (res as TemporaryAny).blitzCtx)
+    async ({req, res, ...rest}) => {
+      await runMiddlewares(middlewares, req as any, res as any)
+      return handler({req, res, ctx: (res as TemporaryAny).blitzCtx, ...rest})
     }
 
+  // todo
   const gSP =
-    (handler: GSSPHandler): GetServerSideProps =>
-    async ({req, res}) => {
-      await runMiddlewares(
-        plugins.flatMap((p) => p.middlewares),
-        req as TemporaryAny,
-        res as TemporaryAny,
-      )
-      return handler(req, res, (res as TemporaryAny).blitzCtx)
+    (handler: GSPHandler): GetStaticProps =>
+    async (context) => {
+      await runMiddlewares(middlewares, {} as TemporaryAny, {} as TemporaryAny)
+      return handler({...context, ctx: ({} as TemporaryAny)?.blitzCtx})
     }
 
   return {gSSP, gSP, api: middleware}

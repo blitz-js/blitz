@@ -98,6 +98,7 @@ importers:
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
       "@types/cookie": 0.4.1
+      "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
       "@types/react": ^17.0.13
       "@types/react-dom": ^17.0.8
@@ -123,6 +124,7 @@ importers:
     dependencies:
       "@blitzjs/next": link:../blitz-next
       "@types/b64-lite": 1.3.0
+      "@types/debug": 4.1.7
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
@@ -955,6 +957,15 @@ packages:
       }
     dev: true
 
+  /@types/debug/4.1.7:
+    resolution:
+      {
+        integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==,
+      }
+    dependencies:
+      "@types/ms": 0.7.31
+    dev: false
+
   /@types/estree/0.0.39:
     resolution:
       {
@@ -993,6 +1004,13 @@ packages:
     resolution:
       {
         integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==,
+      }
+    dev: false
+
+  /@types/ms/0.7.31:
+    resolution:
+      {
+        integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==,
       }
     dev: false
 
