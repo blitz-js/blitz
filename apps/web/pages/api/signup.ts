@@ -3,8 +3,8 @@ import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 import {SecurePassword} from "@blitzjs/auth"
 
-export default api(async (req, res) => {
-  const blitzContext = res.blitzCtx as {session: SessionContext}
+export default api(async ({req, ctx, res}) => {
+  const blitzContext = ctx as {session: SessionContext}
 
   const hashedPassword = await SecurePassword.hash(
     (req.query.password as string) || "test-password",
@@ -17,6 +17,7 @@ export default api(async (req, res) => {
 
   await blitzContext.session.$create({
     userId: user.id,
+    role: "admin",
   })
 
   res.status(200).json({userId: blitzContext.session.userId, ...user, email: req.query.email})

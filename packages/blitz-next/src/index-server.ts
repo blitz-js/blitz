@@ -10,7 +10,6 @@ export interface Ctx extends DefaultCtx {}
 
 export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
   blitzCtx: C
-  blitzResult: unknown
 }
 
 type NextApiHandler<T = any, C = Ctx> = (
@@ -36,7 +35,7 @@ export type BlitzPlugin = {
 
 const runMiddlewares = async (
   middlewares: Middleware[],
-  req: NextApiRequest,
+  req: MiddlewareRequest,
   res: MiddlewareResponse,
 ) => {
   const promises = middlewares.reduce((acc, middleware) => {
@@ -51,50 +50,60 @@ const runMiddlewares = async (
   await Promise.all(promises)
 }
 
-const buildMiddleware = (middlewares: Middleware[]): BlitzMiddleware => {
-  return (handler: NextApiHandler) => async (req, res) => {
-    try {
-      await runMiddlewares(middlewares, req, res)
-      return handler(req, res)
-    } catch (error) {
-      return res.status(400).send(error)
-    }
-  }
-}
-
 type SetupBlitzOptions = {
   plugins: BlitzPlugin[]
 }
 
-export type GSSPHandler = ({
+export type BlitzGSSPHandler = ({
   ctx,
   req,
   res,
   ...args
 }: Parameters<GetServerSideProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
-export type GSPHandler = ({
+
+export type BlitzGSPHandler = ({
   ctx,
   ...args
 }: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
 
+export type BliztAPIHandler = ({
+  req,
+  res,
+  ctx,
+}: {
+  ctx: Ctx
+  req: Parameters<NextApiHandler>[0]
+  res: Parameters<NextApiHandler>[1]
+}) => ReturnType<NextApiHandler>
+
 export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
-  const middleware = buildMiddleware(middlewares)
 
   const gSSP =
-    (handler: GSSPHandler): GetServerSideProps =>
+    (handler: BlitzGSSPHandler): GetServerSideProps =>
     async ({req, res, ...rest}) => {
-      await runMiddlewares(middlewares, req as any, res as any)
+      await runMiddlewares(middlewares, req as MiddlewareRequest, res as MiddlewareResponse)
       return handler({req, res, ctx: (res as TemporaryAny).blitzCtx, ...rest})
     }
 
   // todo
   const gSP =
-    (handler: GSPHandler): GetStaticProps =>
+    (handler: BlitzGSPHandler): GetStaticProps =>
     async (context) => {
       await runMiddlewares(middlewares, {} as TemporaryAny, {} as TemporaryAny)
       return handler({...context, ctx: ({} as TemporaryAny)?.blitzCtx})
     }
 
-  return {gSSP, gSP, api: middleware}
+  const api =
+    (handler: BliztAPIHandler): NextApiHandler =>
+    async (req, res) => {
+      try {
+        await runMiddlewares(middlewares, req, res)
+        return handler({req, res, ctx: (res as TemporaryAny).blitzCtx})
+      } catch (error) {
+        return res.status(400).send(error)
+      }
+    }
+
+  return {gSSP, gSP, api}
 }

@@ -19,8 +19,8 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default api(async (req, res) => {
-  const blitzContext = res.blitzCtx as {session: SessionContext}
+export default api(async ({req, res, ctx}) => {
+  const blitzContext = ctx as {session: SessionContext}
 
   const user = await authenticateUser(req.query.email as string, req.query.password as string)
 

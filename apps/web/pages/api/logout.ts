@@ -1,8 +1,8 @@
 import {api} from "../../src/server-setup"
 import {SessionContext} from "@blitzjs/auth"
 
-export default api(async (req, res) => {
-  const blitzContext = res.blitzCtx as {session: SessionContext}
+export default api(async ({res, ctx}) => {
+  const blitzContext = ctx as {session: SessionContext}
 
   await blitzContext.session.$revoke()
 
