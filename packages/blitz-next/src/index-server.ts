@@ -30,7 +30,7 @@ export type Middleware = {
 
 export type BlitzPlugin = {
   middlewares: Middleware[]
-  // particular plugin creators should return unified BlitzPlugin type, so that this file doesn't need to know about particular plugins
+  contextMiddleware?: (ctx: Ctx) => Ctx
 }
 
 const runMiddlewares = async (
@@ -78,20 +78,25 @@ export type BliztAPIHandler = ({
 
 export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
+  const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
     (handler: BlitzGSSPHandler): GetServerSideProps =>
     async ({req, res, ...rest}) => {
       await runMiddlewares(middlewares, req as MiddlewareRequest, res as MiddlewareResponse)
+      const ctx = contextMiddleware.reduceRight(
+        (y, f) => (f ? f(y) : y),
+        (res as TemporaryAny).blitzCtx as Ctx,
+      )
       return handler({req, res, ctx: (res as TemporaryAny).blitzCtx, ...rest})
     }
 
-  // todo
   const gSP =
     (handler: BlitzGSPHandler): GetStaticProps =>
     async (context) => {
       await runMiddlewares(middlewares, {} as TemporaryAny, {} as TemporaryAny)
-      return handler({...context, ctx: ({} as TemporaryAny)?.blitzCtx})
+      const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
+      return handler({...context, ctx: ctx})
     }
 
   const api =
