@@ -836,9 +836,7 @@ async function refreshSession(
 }
 
 export async function getAllSessionHandlesForUser(userId: PublicData["userId"]) {
-  return (await _blitzGlobal.sessionConfig.getSessions(userId)).map(
-    (session: SessionKernel) => session.handle,
-  )
+  return (await _blitzGlobal.sessionConfig.getSessions(userId)).map((session) => session.handle)
 }
 
 async function syncPubicDataFieldsForUserIfNeeded(
@@ -887,7 +885,7 @@ async function revokeSession(
 
 async function revokeAllSessionsForUser(userId: PublicData["userId"]) {
   let sessionHandles = (await _blitzGlobal.sessionConfig.getSessions(userId)).map(
-    (session: SessionKernel) => session.handle,
+    (session) => session.handle,
   )
 
   let revoked: string[] = []
