@@ -37,6 +37,7 @@
     "react": "^17.0.2"
   },
   "dependencies": {
-    "react-query": "3.34.12"
+    "react-query": "3.34.12",
+    "blitz": "workspace:*"
   }
 }

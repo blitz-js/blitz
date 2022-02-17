@@ -1,21 +1,23 @@
 import {SessionContext} from "@blitzjs/auth"
-import {GetServerSideProps} from "next"
 import {gSSP} from "../src/server-setup"
 
-export const getServerSideProps: GetServerSideProps = gSSP(async ({ctx}) => {
-  const session = (ctx as {session: SessionContext}).session
+type Props = {
+  userId: unknown
+  publicData: SessionContext["$publicData"]
+}
+
+export const getServerSideProps = gSSP<Props>(async ({ctx}) => {
+  const {session} = ctx
   return {
     props: {
-      data: {
-        userId: session.userId,
-        publicData: session.$publicData,
-      },
+      userId: session.userId,
+      publicData: session.$publicData,
     },
   }
 })
 
-function Page({data}) {
-  return <div>{JSON.stringify(data, null, 2)}</div>
+function Page(props: Props) {
+  return <div>{JSON.stringify(props, null, 2)}</div>
 }
 
 export default Page

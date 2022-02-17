@@ -3,10 +3,9 @@ import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
 
-type TemporaryAny = any
+import type {Ctx} from "blitz"
 
-export interface DefaultCtx {}
-export interface Ctx extends DefaultCtx {}
+type TemporaryAny = any
 
 export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
   blitzCtx: C
@@ -54,12 +53,12 @@ type SetupBlitzOptions = {
   plugins: BlitzPlugin[]
 }
 
-export type BlitzGSSPHandler = ({
+export type BlitzGSSPHandler<TProps> = ({
   ctx,
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
+}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps<TProps>>
 
 export type BlitzGSPHandler = ({
   ctx,
@@ -81,14 +80,14 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    (handler: BlitzGSSPHandler): GetServerSideProps =>
+    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
       await runMiddlewares(middlewares, req as MiddlewareRequest, res as MiddlewareResponse)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as TemporaryAny).blitzCtx as Ctx,
       )
-      return handler({req, res, ctx: (res as TemporaryAny).blitzCtx, ...rest})
+      return handler({req, res, ctx, ...rest})
     }
 
   const gSP =
