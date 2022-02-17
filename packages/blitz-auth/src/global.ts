@@ -1,11 +1,5 @@
 import {SessionConfig} from "./shared/types"
 
 declare global {
-  export const _blitzGlobal: {
-    sessionConfig: SessionConfig
-  }
+  var sessionConfig: SessionConfig
 }
-
-Object.assign(globalThis, {
-  _blitzGlobal: {},
-})

@@ -73,13 +73,13 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzPlugin {
       "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
     )
 
-    _blitzGlobal.sessionConfig = {
+    global.sessionConfig = {
       ...defaultConfig_,
       ...options.storage,
       ...options,
     }
 
-    const cookiePrefix = _blitzGlobal.sessionConfig.cookiePrefix ?? "blitz"
+    const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
     assert(
       cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
       `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,
