@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "unbuild",
-    "dev": "watch unbuild src --wait=0.2",
+    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
+    "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
@@ -33,11 +34,11 @@
     "access": "public"
   },
   "peerDependencies": {
+    "blitz": "workspace:*",
     "next": "12.0.7",
     "react": "^17.0.2"
   },
   "dependencies": {
-    "react-query": "3.34.12",
-    "blitz": "workspace:*"
+    "react-query": "3.34.12"
   }
 }

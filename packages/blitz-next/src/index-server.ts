@@ -11,7 +11,7 @@ export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
   blitzCtx: C
 }
 
-type NextApiHandler<T = any, C = Ctx> = (
+export type NextApiHandler<T = any, C = Ctx> = (
   req: NextApiRequest,
   res: NextApiResponse<T> & {blitzCtx: C},
 ) => void | Promise<void>
