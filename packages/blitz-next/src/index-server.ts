@@ -65,7 +65,7 @@ export type BlitzGSPHandler = ({
   ...args
 }: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
 
-export type BliztAPIHandler = ({
+export type BlitzAPIHandler = ({
   req,
   res,
   ctx,
