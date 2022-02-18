@@ -1,7 +1,6 @@
-import {GetStaticProps} from "next"
 import {gSP} from "../src/server-setup"
 
-export const getStaticProps: GetStaticProps = gSP(async ({ctx}) => {
+export const getStaticProps = gSP(async ({ctx}) => {
   return {
     props: {
       data: {
