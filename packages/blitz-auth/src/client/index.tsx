@@ -279,8 +279,7 @@ export interface AuthPluginClientOptions {
 }
 
 export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
-  // todo: how to avoid that
-  process.env.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
+  globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
     events: {

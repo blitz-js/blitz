@@ -144,7 +144,7 @@ export async function getSession(
   ensureNextApiRequest(req)
   ensureMiddlewareResponse(res)
 
-  debug("cookiePrefix", process.env.__BLITZ_SESSION_COOKIE_PREFIX)
+  debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   let response = res as MiddlewareResponse<{session?: SessionContext}>
 
