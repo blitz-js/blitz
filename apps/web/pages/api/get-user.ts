@@ -2,8 +2,8 @@ import {api} from "../../src/server-setup"
 import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 
-export default api(async ({res, ctx}) => {
-  const blitzContext = ctx as {session: SessionContext}
+export default api(async (_req, res, ctx) => {
+  const blitzContext = ctx
 
   const publicData = blitzContext.session.$publicData
 

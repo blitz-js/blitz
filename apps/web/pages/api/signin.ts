@@ -1,5 +1,4 @@
 import {api} from "../../src/server-setup"
-import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 import {SecurePassword} from "@blitzjs/auth"
 
@@ -19,8 +18,8 @@ export const authenticateUser = async (email: string, password: string) => {
   return rest
 }
 
-export default api(async ({req, res, ctx}) => {
-  const blitzContext = ctx as {session: SessionContext}
+export default api(async (req, res, ctx) => {
+  const blitzContext = ctx
 
   const user = await authenticateUser(req.query.email as string, req.query.password as string)
 

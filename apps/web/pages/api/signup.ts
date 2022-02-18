@@ -1,10 +1,9 @@
 import {api} from "../../src/server-setup"
-import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 import {SecurePassword} from "@blitzjs/auth"
 
-export default api(async ({req, ctx, res}) => {
-  const blitzContext = ctx as {session: SessionContext}
+export default api(async (req, ctx, res) => {
+  const blitzContext = ctx
 
   const hashedPassword = await SecurePassword.hash(
     (req.query.password as string) || "test-password",

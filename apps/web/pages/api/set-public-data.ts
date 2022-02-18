@@ -1,9 +1,9 @@
 import {api} from "../../src/server-setup"
-import {SessionContext, setPublicDataForUser} from "@blitzjs/auth"
+import {setPublicDataForUser} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 
-export default api(async ({req, res, ctx}) => {
-  const blitzContext = ctx as {session: SessionContext}
+export default api(async (req, res, ctx) => {
+  const blitzContext = ctx
 
   await prisma.user.update({
     where: {id: blitzContext.session.userId as number},
