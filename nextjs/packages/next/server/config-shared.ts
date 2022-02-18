@@ -15,12 +15,12 @@ export type LogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'
 export type LogType = 'json' | 'pretty' | 'hidden'
 
 export function loadConfigAtRuntime() {
-  if (!process.env.BLITZ_APP_DIR) {
+  if (!process.cwd()) {
     throw new Error(
-      'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set'
+      'Internal Blitz Error: process.cwd() is not set'
     )
   }
-  return loadConfigProduction(process.env.BLITZ_APP_DIR)
+  return loadConfigProduction(process.cwd())
 }
 
 export function loadConfigProduction(pagesDir: string): NextConfigComplete {

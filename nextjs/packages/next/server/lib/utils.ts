@@ -74,7 +74,7 @@ export function prettyMs(ms: number): string {
 
 export function getSessionCookiePrefix(config: NextConfigComplete) {
   const middleware = config.middleware?.filter(
-    (m) => m.config?.name === 'blitzSessionMiddleware'
+    (m) => m?.config?.name === 'blitzSessionMiddleware'
   )[0]
   const sessionCookiePrefix = middleware?.config?.cookiePrefix || 'blitz'
   return sessionCookiePrefix
