@@ -99,7 +99,7 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
     }
 
   const api =
-    (handler: BliztAPIHandler): NextApiHandler =>
+    (handler: BlitzAPIHandler): NextApiHandler =>
     async (req, res) => {
       try {
         await runMiddlewares(middlewares, req, res)
