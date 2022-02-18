@@ -29,7 +29,7 @@ interface IsAuthorized {
 export const PrismaStorage = (db: any /* todo */): SessionConfigMethods => {
   return {
     getSession: (handle) => db.session.findFirst({where: {handle}}),
-    getSessions: (userId) => db.session.findMany({where: {userId}}),
+    getSessions: (userId) => db.session.findMTemporaryAny({where: {userId}}),
     createSession: (session) => {
       let user
       if (session.userId) {
@@ -75,13 +75,14 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzPlugin {
       options.isAuthorized,
       "You must provide an authorization implementation to sessionMiddleware as isAuthorized(userRoles, input)",
     )
-    ;(global as any).sessionConfig = {
+
+    global.sessionConfig = {
       ...defaultConfig_,
       ...options.storage,
       ...options,
     }
 
-    const cookiePrefix = (global as any).sessionConfig.cookiePrefix ?? "blitzasdasd"
+    const cookiePrefix = global.sessionConfig.cookiePrefix ?? "blitz"
     assert(
       cookiePrefix.match(/^[a-zA-Z0-9-_]+$/),
       `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,

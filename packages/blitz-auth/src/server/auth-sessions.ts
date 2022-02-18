@@ -216,7 +216,7 @@ export class SessionContextClass implements SessionContext {
   $isAuthorized(...args: IsAuthorizedArgs) {
     if (!this.userId) return false
 
-    return (global as any).sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
+    return global.sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -424,9 +424,9 @@ const setSessionCookie = (
     cookie.serialize(COOKIE_SESSION_TOKEN(), sessionToken, {
       path: "/",
       httpOnly: true,
-      secure: (global as any).sessionConfig.secureCookies && !isLocalhost(req),
-      sameSite: (global as any).sessionConfig.sameSite,
-      domain: (global as any).sessionConfig.domain,
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      sameSite: global.sessionConfig.sameSite,
+      domain: global.sessionConfig.domain,
       expires: expiresAt,
     }),
   )
@@ -443,9 +443,9 @@ const setAnonymousSessionCookie = (
     cookie.serialize(COOKIE_ANONYMOUS_SESSION_TOKEN(), token, {
       path: "/",
       httpOnly: true,
-      secure: (global as any).sessionConfig.secureCookies && !isLocalhost(req),
-      sameSite: (global as any).sessionConfig.sameSite,
-      domain: (global as any).sessionConfig.domain,
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      sameSite: global.sessionConfig.sameSite,
+      domain: global.sessionConfig.domain,
       expires: expiresAt,
     }),
   )
@@ -463,9 +463,9 @@ const setCSRFCookie = (
     res,
     cookie.serialize(COOKIE_CSRF_TOKEN(), antiCSRFToken, {
       path: "/",
-      secure: (global as any).sessionConfig.secureCookies && !isLocalhost(req),
-      sameSite: (global as any).sessionConfig.sameSite,
-      domain: (global as any).sessionConfig.domain,
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      sameSite: global.sessionConfig.sameSite,
+      domain: global.sessionConfig.domain,
       expires: expiresAt,
     }),
   )
@@ -482,9 +482,9 @@ const setPublicDataCookie = (
     res,
     cookie.serialize(COOKIE_PUBLIC_DATA_TOKEN(), publicDataToken, {
       path: "/",
-      secure: (global as any).sessionConfig.secureCookies && !isLocalhost(req),
-      sameSite: (global as any).sessionConfig.sameSite,
-      domain: (global as any).sessionConfig.domain,
+      secure: global.sessionConfig.secureCookies && !isLocalhost(req),
+      sameSite: global.sessionConfig.sameSite,
+      domain: global.sessionConfig.domain,
       expires: expiresAt,
     }),
   )
@@ -522,8 +522,8 @@ async function getSessionKernel(
       )
       return null
     }
-    debug("(global as any) session config", (global as any).sessionConfig)
-    const persistedSession = await (global as any).sessionConfig.getSession(handle)
+    debug("(global as any) session config", global.sessionConfig)
+    const persistedSession = await global.sessionConfig.getSession(handle)
     if (!persistedSession) {
       debug("Session not found in DB")
       return null
@@ -574,7 +574,7 @@ async function getSessionKernel(
       const hasQuarterExpiryTimePassed =
         persistedSession.expiresAt &&
         differenceInMinutes(persistedSession.expiresAt, new Date()) <
-          0.75 * ((global as any).sessionConfig.sessionExpiryMinutes as number)
+          0.75 * (global.sessionConfig.sessionExpiryMinutes as number)
 
       if (hasQuarterExpiryTimePassed) {
         debug("quarter expiry time has passed")
@@ -696,7 +696,7 @@ async function createNewSession(
       antiCSRFToken,
       anonymousSessionToken,
     }
-  } else if ((global as any).sessionConfig.method === "essential") {
+  } else if (global.sessionConfig.method === "essential") {
     debug("Creating new session")
     const newPublicData: PublicData = {
       // This carries over any public data from the anonymous session
@@ -708,13 +708,13 @@ async function createNewSession(
     // This carries over any private data from the anonymous session
     let existingPrivateData = {}
     if (args.jwtPayload?.isAnonymous) {
-      const session = await (global as any).sessionConfig.getSession(args.jwtPayload.handle)
+      const session = await global.sessionConfig.getSession(args.jwtPayload.handle)
       if (session) {
         if (session.privateData) {
           existingPrivateData = JSON.parse(session.privateData)
         }
         // Delete the previous anonymous session
-        await (global as any).sessionConfig.deleteSession(args.jwtPayload.handle)
+        await global.sessionConfig.deleteSession(args.jwtPayload.handle)
       }
     }
 
@@ -723,15 +723,12 @@ async function createNewSession(
       ...args.privateData,
     }
 
-    const expiresAt = addMinutes(
-      new Date(),
-      (global as any).sessionConfig.sessionExpiryMinutes as number,
-    )
+    const expiresAt = addMinutes(new Date(), global.sessionConfig.sessionExpiryMinutes as number)
     const handle = generateEssentialSessionHandle()
     const sessionToken = createSessionToken(handle, newPublicData)
     const publicDataToken = createPublicDataToken(newPublicData)
 
-    await (global as any).sessionConfig.createSession({
+    await global.sessionConfig.createSession({
       expiresAt,
       handle,
       userId: newPublicData.userId,
@@ -755,13 +752,11 @@ async function createNewSession(
       antiCSRFToken,
       sessionToken,
     }
-  } else if ((global as any).sessionConfig.method === "advanced") {
+  } else if (global.sessionConfig.method === "advanced") {
     throw new Error("The advanced method is not yet supported")
   } else {
     throw new Error(
-      `Session management method ${
-        (global as any).sessionConfig.method
-      } is invalid. Supported methods are "essential" and "advanced"`,
+      `Session management method ${global.sessionConfig.method} is invalid. Supported methods are "essential" and "advanced"`,
     )
   }
 }
@@ -798,14 +793,8 @@ async function refreshSession(
     setAnonymousSessionCookie(req, res, anonymousSessionToken, expiresAt)
     setPublicDataCookie(req, res, publicDataToken, expiresAt)
     setCSRFCookie(req, res, sessionKernel.antiCSRFToken, expiresAt)
-  } else if (
-    (global as any).sessionConfig.method === "essential" &&
-    "sessionToken" in sessionKernel
-  ) {
-    const expiresAt = addMinutes(
-      new Date(),
-      (global as any).sessionConfig.sessionExpiryMinutes as number,
-    )
+  } else if (global.sessionConfig.method === "essential" && "sessionToken" in sessionKernel) {
+    const expiresAt = addMinutes(new Date(), global.sessionConfig.sessionExpiryMinutes as number)
     const publicDataToken = createPublicDataToken(sessionKernel.publicData)
 
     let sessionToken: string
@@ -824,25 +813,23 @@ async function refreshSession(
 
     debug("Updating session in db with", {expiresAt})
     if (publicDataChanged) {
-      await (global as any).sessionConfig.updateSession(sessionKernel.handle, {
+      await global.sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
         hashedSessionToken: hash256(sessionToken),
         publicData: JSON.stringify(sessionKernel.publicData),
       })
     } else {
-      await (global as any).sessionConfig.updateSession(sessionKernel.handle, {
+      await global.sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
       })
     }
-  } else if ((global as any).sessionConfig.method === "advanced") {
+  } else if (global.sessionConfig.method === "advanced") {
     throw new Error("refreshSession() not implemented for advanced method")
   }
 }
 
 export async function getAllSessionHandlesForUser(userId: PublicData["userId"]) {
-  return (await (global as any).sessionConfig.getSessions(userId)).map(
-    (session: SessionKernel) => session.handle,
-  )
+  return (await global.sessionConfig.getSessions(userId)).map((session) => session.handle)
 }
 
 async function syncPubicDataFieldsForUserIfNeeded(
@@ -850,20 +837,20 @@ async function syncPubicDataFieldsForUserIfNeeded(
   data: Record<string, unknown>,
 ) {
   const dataToSync: Record<string, unknown> = {}
-  ;(global as any).sessionConfig.publicDataKeysToSyncAcrossSessions?.forEach((key: string) => {
+  global.sessionConfig.publicDataKeysToSyncAcrossSessions?.forEach((key: string) => {
     if (data[key]) {
       dataToSync[key] = data[key]
     }
   })
   if (Object.keys(dataToSync).length) {
-    const sessions = await (global as any).sessionConfig.getSessions(userId)
+    const sessions = await global.sessionConfig.getSessions(userId)
 
     for (const session of sessions) {
       const publicData = JSON.stringify({
         ...(session.publicData ? JSON.parse(session.publicData) : {}),
         ...dataToSync,
       })
-      await (global as any).sessionConfig.updateSession(session.handle, {publicData})
+      await global.sessionConfig.updateSession(session.handle, {publicData})
     }
   }
 }
@@ -877,7 +864,7 @@ async function revokeSession(
   debug("Revoking session", handle)
   if (!anonymous) {
     try {
-      await (global as any).sessionConfig.deleteSession(handle)
+      await global.sessionConfig.deleteSession(handle)
     } catch (error) {
       // Ignore any errors, like if session doesn't exist in DB
     }
@@ -890,14 +877,14 @@ async function revokeSession(
 }
 
 async function revokeAllSessionsForUser(userId: PublicData["userId"]) {
-  let sessionHandles = (await (global as any).sessionConfig.getSessions(userId)).map(
-    (session: SessionKernel) => session.handle,
+  let sessionHandles = (await global.sessionConfig.getSessions(userId)).map(
+    (session) => session.handle,
   )
 
   let revoked: string[] = []
   for (const handle of sessionHandles) {
     try {
-      await (global as any).sessionConfig.deleteSession(handle)
+      await global.sessionConfig.deleteSession(handle)
     } catch (error) {
       // Ignore any errors, like if session doesn't exist in DB
     }
@@ -910,7 +897,7 @@ async function getPublicData(sessionKernel: SessionKernel): Promise<PublicData |
   if (sessionKernel.jwtPayload?.publicData) {
     return sessionKernel.jwtPayload?.publicData
   } else {
-    const session = await (global as any).sessionConfig.getSession(sessionKernel.handle)
+    const session = await global.sessionConfig.getSession(sessionKernel.handle)
     if (!session) {
       throw new Error("getPublicData() failed because handle doesn't exist " + sessionKernel.handle)
     }
@@ -923,7 +910,7 @@ async function getPublicData(sessionKernel: SessionKernel): Promise<PublicData |
 }
 
 async function getPrivateData(handle: string): Promise<Record<any, any> | null> {
-  const session = await (global as any).sessionConfig.getSession(handle)
+  const session = await global.sessionConfig.getSession(handle)
   if (session && session.privateData) {
     return JSON.parse(session.privateData) as Record<any, any>
   } else {
@@ -936,7 +923,7 @@ async function setPrivateData(sessionKernel: SessionKernel, data: Record<any, an
   if (existingPrivateData === null) {
     // Anonymous sessions may not exist in the DB yet
     try {
-      await (global as any).sessionConfig.createSession({
+      await global.sessionConfig.createSession({
         handle: sessionKernel.handle,
       })
     } catch (error) {}
@@ -946,7 +933,7 @@ async function setPrivateData(sessionKernel: SessionKernel, data: Record<any, an
     ...existingPrivateData,
     ...data,
   })
-  await (global as any).sessionConfig.updateSession(sessionKernel.handle, {
+  await global.sessionConfig.updateSession(sessionKernel.handle, {
     privateData,
   })
 }
@@ -979,7 +966,7 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
   // Don't allow updating userId
   delete data.userId
 
-  const sessions = await (global as any).sessionConfig.getSessions(userId)
+  const sessions = await global.sessionConfig.getSessions(userId)
   for (const session of sessions) {
     // Merge data
     const publicData = JSON.stringify({
@@ -987,7 +974,7 @@ export async function setPublicDataForUser(userId: PublicData["userId"], data: R
       ...data,
     })
 
-    await (global as any).sessionConfig.updateSession(session.handle, {publicData})
+    await global.sessionConfig.updateSession(session.handle, {publicData})
   }
 }
 

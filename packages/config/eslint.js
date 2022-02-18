@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["next", "prettier"],
+  extends: ["eslint-config-next", "prettier"],
   ignorePatterns: ["*.d.ts"],
   settings: {
     next: {

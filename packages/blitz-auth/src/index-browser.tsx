@@ -1,3 +1,5 @@
+import "./global"
+
 export * from "./client"
 export type {
   SessionContextBase,
