@@ -65,7 +65,7 @@ export type BlitzGSPHandler = ({
   ...args
 }: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
 
-export type BliztAPIHandler = (
+export type BlitzAPIHandler = (
   req: Parameters<NextApiHandler>[0],
   res: Parameters<NextApiHandler>[1],
   ctx: Ctx,
@@ -95,7 +95,7 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
     }
 
   const api =
-    (handler: BliztAPIHandler): NextApiHandler =>
+    (handler: BlitzAPIHandler): NextApiHandler =>
     async (req, res) => {
       try {
         await runMiddlewares(middlewares, req, res)
