@@ -10,6 +10,16 @@ needs.
 blitz install secureheaders
 ```
 
+## Helpful Links
+
+- [HTTP Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+  - [Content-Security-Policy Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
+  - [Strict-Transport-Security Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+  - [X-Frame-Options Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
+  - [X-Content-Type-Options Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options)
+  - [Referrer-Policy Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)
+  - [Permissions-Policy Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy)
+
 ## More information
 
 - [How to use receipes in Blitz](https://blitzjs.com/docs/using-recipes)
@@ -17,3 +27,4 @@ blitz install secureheaders
 ## Contributors
 
 - Jeremy Liberman <jeremy@jeremyliberman.com>
+- Paul Ebose <paulebose@gmail.com>
