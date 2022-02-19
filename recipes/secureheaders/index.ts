@@ -89,6 +89,7 @@ export default RecipeBuilder()
         {name: "X-Frame-Options", value: "sameorigin"},
         {name: "X-Content-Type-Options", value: "nosniff"},
         {name: "Permissions-Policy", value: "default 'none'"},
+        {name: "Content-Security-Policy", value: "frame-ancestors 'self'"},
       ])
     },
   })
