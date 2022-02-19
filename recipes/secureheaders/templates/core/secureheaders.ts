@@ -10,7 +10,7 @@ export const cspHashOf = (text: string) => {
 export const computeCsp = (props: Readonly<DocumentProps>) => {
   const scriptHash = cspHashOf(BlitzScript.getInlineScriptSource(props))
 
-  return `default-src 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com; script-src 'self' ${
-    process.env.NODE_ENV === "production" ? "" : "'unsafe-eval'"
-  } ${scriptHash}`
+  return `default-src 'self'; img-src 'self' res.cloudinary.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com; script-src 'self' ${
+    process.env.NODE_ENV === "production" ? scriptHash : "'unsafe-eval' 'unsafe-inline'"
+  }`
 }
