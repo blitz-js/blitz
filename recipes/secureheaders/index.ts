@@ -85,7 +85,7 @@ export default RecipeBuilder()
     singleFileSearch: paths.blitzConfig(),
     transform(program) {
       return addHttpHeaders(program, [
-        {name: "Strict-Transport-Security", value: "max-age=631138519"},
+        {name: "Strict-Transport-Security", value: "max-age=631138519; includeSubDomains; preload"},
         {name: "X-Frame-Options", value: "sameorigin"},
         {name: "X-Content-Type-Options", value: "nosniff"},
         {name: "Permissions-Policy", value: "default 'none'"},
