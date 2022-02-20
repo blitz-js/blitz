@@ -4,7 +4,6 @@
  * and then export it. That way you can import here and anywhere else
  * and use it straight away.
  */
-import previewEmail from "preview-email"
 
 type ResetPasswordMailer = {
   to: string
@@ -38,6 +37,7 @@ export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
         throw new Error("No production email implementation in mailers/forgotPasswordMailer")
       } else {
         // Preview email in the browser
+        const previewEmail = (await import("preview-email")).default
         await previewEmail(msg)
       }
     },
