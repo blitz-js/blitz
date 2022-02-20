@@ -4,14 +4,13 @@
  * and then export it. That way you can import here and anywhere else
  * and use it straight away.
  */
-import previewEmail from "preview-email"
 
 type ResetPasswordMailer = {
   to: string
   token: string
 }
 
-export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
+export function forgotPasswordMailer({to, token}: ResetPasswordMailer) {
   // In production, set APP_ORIGIN to your production server origin
   const origin = process.env.APP_ORIGIN || process.env.BLITZ_DEV_SERVER_ORIGIN
   const resetUrl = `${origin}/reset-password?token=${token}`
@@ -38,6 +37,7 @@ export function forgotPasswordMailer({ to, token }: ResetPasswordMailer) {
         throw new Error("No production email implementation in mailers/forgotPasswordMailer")
       } else {
         // Preview email in the browser
+        const previewEmail = (await import("preview-email")).default
         await previewEmail(msg)
       }
     },
