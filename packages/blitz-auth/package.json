@@ -2,9 +2,9 @@
   "name": "@blitzjs/auth",
   "version": "0.0.0",
   "scripts": {
-    "build": "pnpm wait-for-blitz-next && unbuild",
-    "dev": "pnpm wait-for-blitz-next && watch unbuild src --wait=0.2",
-    "wait-for-blitz-next": "wait-on -d 250 ../blitz-next/dist/index-server.d.ts",
+    "build": "pnpm wait-for-deps && unbuild",
+    "dev": "pnpm wait-for-deps && watch unbuild src --wait=0.2",
+    "wait-for-deps": "wait-on -d 250 ../blitz-next/dist/index-server.d.ts && wait-on -d 250 ../blitz/dist/index-server.d.ts",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
