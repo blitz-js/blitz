@@ -1,5 +1,11 @@
 import {fromBase64} from "b64-lite"
-import BadBehavior from "bad-behavior"
+import _BadBehavior from "bad-behavior"
+import {useEffect, useState} from "react"
+import {UrlObject} from "url"
+import {AppProps} from "next/app"
+import React, {ComponentPropsWithoutRef} from "react"
+import {BlitzPage, createClientPlugin} from "@blitzjs/next"
+import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
@@ -13,12 +19,13 @@ import {
   AuthenticatedClientSession,
   ClientSession,
 } from "../shared"
-import {useEffect, useState} from "react"
-import {UrlObject} from "url"
-import {AppProps} from "next/app"
-import React, {ComponentPropsWithoutRef} from "react"
-import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
+import _debug from "debug"
+import {formatWithValidation} from "../shared/url-utils"
+
+const BadBehavior: typeof _BadBehavior =
+  "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
+
+const debug = _debug("blitz:auth-client")
 
 export const parsePublicDataToken = (token: string) => {
   assert(token, "[parsePublicDataToken] Failed: token is empty")
@@ -110,7 +117,7 @@ export const getAntiCSRFToken = () => {
   }
 }
 
-interface UseSessionOptions {
+export interface UseSessionOptions {
   initialPublicData?: PublicData
   suspense?: boolean | null
 }
@@ -172,7 +179,7 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
+export function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
   if (!Page) return {}
   let authenticate = Page.authenticate
   let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
@@ -205,15 +212,53 @@ function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPag
 
 function withBlitzAuthPlugin(Page: BlitzPage) {
   const AuthRoot: BlitzPage = (props: ComponentPropsWithoutRef<BlitzPage>) => {
-    const {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+    useSession({suspense: false})
 
-    if (authenticate || redirectAuthenticatedTo) {
-      throw new Error("Auth error")
-    }
+    let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
 
-    if (authenticate !== undefined || redirectAuthenticatedTo) {
-      // @ts-ignore
-      return <Page {...props} suppressFirstRenderFlicker={true} />
+    useAuthorizeIf(authenticate === true)
+
+    if (typeof window !== "undefined") {
+      const publicData = getPublicDataStore().getData()
+
+      // We read directly from publicData.userId instead of useSession
+      // so we can access userId on first render. useSession is always empty on first render
+      if (publicData.userId) {
+        debug("[BlitzAuthInnerRoot] logged in")
+
+        if (typeof redirectAuthenticatedTo === "function") {
+          redirectAuthenticatedTo = redirectAuthenticatedTo({
+            session: publicData,
+          })
+        }
+
+        if (redirectAuthenticatedTo) {
+          const redirectUrl =
+            typeof redirectAuthenticatedTo === "string"
+              ? redirectAuthenticatedTo
+              : formatWithValidation(redirectAuthenticatedTo)
+
+          debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
+          const error = new RedirectError(redirectUrl)
+          error.stack = null!
+          throw error
+        }
+      } else {
+        debug("[BlitzAuthInnerRoot] logged out")
+        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+          let {redirectTo} = authenticate
+          if (typeof redirectTo !== "string") {
+            redirectTo = formatWithValidation(redirectTo)
+          }
+
+          const url = new URL(redirectTo, window.location.href)
+          url.searchParams.append("next", window.location.pathname)
+          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+          const error = new RedirectError(url.toString())
+          error.stack = null!
+          throw error
+        }
+      }
     }
 
     return <Page {...props} />
@@ -223,15 +268,18 @@ function withBlitzAuthPlugin(Page: BlitzPage) {
     AuthRoot[key] = value
   }
   if (process.env.NODE_ENV !== "production") {
-    AuthRoot.displayName = `BlitzInnerRoot`
+    AuthRoot.displayName = `BlitzAuthInnerRoot`
   }
 
   return AuthRoot
 }
 
-export interface AuthPluginClientOptions {}
+export interface AuthPluginClientOptions {
+  cookiePrefix: string
+}
 
 export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
+  globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
     events: {
@@ -246,9 +294,12 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
       beforeHttpResponse: () => {},
     },
     exports: () => ({
-      useSession: () => {
-        return {userId: "123"}
-      },
+      useSession,
+      useAuthorize,
+      useAuthorizeIf,
+      useRedirectAuthenticated,
+      useAuthenticatedSession,
+      getAntiCSRFToken,
     }),
   }
 })

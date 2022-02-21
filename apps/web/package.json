@@ -7,15 +7,15 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
-    "prisma:start": "pnpm prisma generate && pnpm prisma migrate deploy",
-    "prisma:studio": "pnpm prisma studio"
+    "prisma:start": "prisma generate && prisma migrate deploy",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@blitzjs/auth": "workspace:*",
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@prisma/client": "3.9.0",
-    "blitz": "0.0.0",
+    "blitz": "workspace:*",
     "next": "12.0.7",
     "prisma": "3.9.0",
     "react": "17.0.2",

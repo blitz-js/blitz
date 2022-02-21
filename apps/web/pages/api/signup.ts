@@ -1,11 +1,13 @@
 import {api} from "../../src/server-setup"
-import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
+import {SecurePassword} from "@blitzjs/auth"
 
-export default api(async (req, res) => {
-  const blitzContext = res.blitzCtx as {session: SessionContext}
+export default api(async (req, res, ctx) => {
+  const blitzContext = ctx
 
-  const hashedPassword = "hashed-password"
+  const hashedPassword = await SecurePassword.hash(
+    (req.query.password as string) || "test-password",
+  )
   const email = (req.query.email as string) || "test" + Math.random() + "@test.com"
   const user = await prisma.user.create({
     data: {email, hashedPassword, role: "user"},
@@ -16,5 +18,5 @@ export default api(async (req, res) => {
     userId: user.id,
   })
 
-  res.status(200).json({userId: blitzContext.session.userId, ...user})
+  res.status(200).json({userId: blitzContext.session.userId, ...user, email: req.query.email})
 })

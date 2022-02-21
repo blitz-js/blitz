@@ -1,5 +1,15 @@
-const AuthPage = ({data}) => {
-  return <div>{JSON.stringify(data)}</div>
+const AuthPage = () => {
+  return (
+    <div>
+      {JSON.stringify(
+        {
+          message: "This is a page that requires authentication",
+        },
+        null,
+        2,
+      )}
+    </div>
+  )
 }
 
 AuthPage.authenticate = true

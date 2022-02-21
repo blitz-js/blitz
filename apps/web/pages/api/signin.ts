@@ -1,19 +1,31 @@
 import {api} from "../../src/server-setup"
-import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
+import {SecurePassword} from "@blitzjs/auth"
 
-export default api(async (req, res) => {
-  const blitzContext = res.blitzCtx as {session: SessionContext}
+export const authenticateUser = async (email: string, password: string) => {
+  const user = await prisma.user.findFirst({where: {email}})
+  if (!user) throw new Error("Authentication Error")
 
-  const user = await prisma.user.findFirst({where: {email: (req.query.email || "") as string}})
-  if (!user) {
-    res.status(404).json({message: "No user found"})
+  const result = await SecurePassword.verify(user.hashedPassword, password)
+
+  if (result === SecurePassword.VALID_NEEDS_REHASH) {
+    // Upgrade hashed password with a more secure hash
+    const improvedHash = await SecurePassword.hash(password)
+    await prisma.user.update({where: {id: user.id}, data: {hashedPassword: improvedHash}})
   }
 
-  // log in
+  const {hashedPassword, ...rest} = user
+  return rest
+}
+
+export default api(async (req, res, ctx) => {
+  const blitzContext = ctx
+
+  const user = await authenticateUser(req.query.email as string, req.query.password as string)
+
   await blitzContext.session.$create({
-    userId: req.query.userId,
+    userId: user.id,
   })
 
-  res.status(200).json({name: "John Doe", userId: blitzContext.session.userId})
+  res.status(200).json({email: req.query.email, userId: blitzContext.session.userId})
 })

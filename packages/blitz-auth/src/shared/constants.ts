@@ -5,10 +5,10 @@ export const SESSION_TYPE_ANONYMOUS_JWT = "ajwt"
 export const SESSION_TOKEN_VERSION_0 = "v0"
 
 const prefix = () => {
-  if (!process.env.__BLITZ_SESSION_COOKIE_PREFIX) {
-    throw new Error("Internal Blitz Error: process.env.__BLITZ_SESSION_COOKIE_PREFIX is not set")
+  if (!globalThis.__BLITZ_SESSION_COOKIE_PREFIX) {
+    throw new Error("Internal Blitz Error: globalThis.__BLITZ_SESSION_COOKIE_PREFIX is not set")
   }
-  return process.env.__BLITZ_SESSION_COOKIE_PREFIX
+  return globalThis.__BLITZ_SESSION_COOKIE_PREFIX
 }
 
 export const COOKIE_ANONYMOUS_SESSION_TOKEN = () => `${prefix()}_sAnonymousSessionToken`

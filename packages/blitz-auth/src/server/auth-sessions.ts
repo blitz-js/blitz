@@ -2,7 +2,7 @@ import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {assert, isPast, differenceInMinutes, addYears, addMinutes} from "blitz"
+import {assert, isPast, differenceInMinutes, addYears, addMinutes, Ctx} from "blitz"
 import {MiddlewareResponse} from "@blitzjs/next"
 import type {NextApiRequest, NextApiResponse} from "@blitzjs/next"
 import {
@@ -13,7 +13,6 @@ import {
   PublicData,
   IsAuthorizedArgs,
   SessionContext,
-  Ctx,
   COOKIE_ANONYMOUS_SESSION_TOKEN,
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
@@ -145,7 +144,7 @@ export async function getSession(
   ensureNextApiRequest(req)
   ensureMiddlewareResponse(res)
 
-  debug("cookiePrefix", process.env.__BLITZ_SESSION_COOKIE_PREFIX)
+  debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
   let response = res as MiddlewareResponse<{session?: SessionContext}>
 

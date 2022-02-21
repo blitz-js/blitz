@@ -3,3 +3,4 @@ export function assert(condition: any, message: string): asserts condition {
 }
 
 export * from "./utils"
+export * from "./types"

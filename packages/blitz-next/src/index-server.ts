@@ -1,19 +1,17 @@
-import {GetServerSideProps, NextApiRequest, NextApiResponse} from "next"
+import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
 import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
 
-type TemporaryAny = any
+import type {Ctx} from "blitz"
 
-export interface DefaultCtx {}
-export interface Ctx extends DefaultCtx {}
+type TemporaryAny = any
 
 export interface MiddlewareResponse<C = Ctx> extends NextApiResponse {
   blitzCtx: C
-  blitzResult: unknown
 }
 
-type NextApiHandler<T = any, C = Ctx> = (
+export type NextApiHandler<T = any, C = Ctx> = (
   req: NextApiRequest,
   res: NextApiResponse<T> & {blitzCtx: C},
 ) => void | Promise<void>
@@ -22,20 +20,21 @@ export type BlitzMiddleware = (
   handler: NextApiHandler,
 ) => (req: MiddlewareRequest, res: MiddlewareResponse, ctx?: TemporaryAny) => Promise<void>
 
-export type Middleware = (
-  req: MiddlewareRequest,
-  res: MiddlewareResponse,
-  next: (error?: Error) => Promise<void> | void,
-) => Promise<void> | void
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+export type Middleware = {
+  (req: MiddlewareRequest, res: MiddlewareResponse, next: MiddlewareNext): Promise<void> | void
+  type?: string
+  config?: Record<any, any>
+}
 
 export type BlitzPlugin = {
   middlewares: Middleware[]
-  // particular plugin creators should return unified BlitzPlugin type, so that this file doesn't need to know about particular plugins
+  contextMiddleware?: (ctx: Ctx) => Ctx
 }
 
 const runMiddlewares = async (
   middlewares: Middleware[],
-  req: NextApiRequest,
+  req: MiddlewareRequest,
   res: MiddlewareResponse,
 ) => {
   const promises = middlewares.reduce((acc, middleware) => {
@@ -50,52 +49,61 @@ const runMiddlewares = async (
   await Promise.all(promises)
 }
 
-const buildMiddleware = (plugins: BlitzPlugin[]): BlitzMiddleware => {
-  return (handler: NextApiHandler) => async (req, res) => {
-    const middlewares = plugins.flatMap((p) => p.middlewares)
-
-    try {
-      await runMiddlewares(middlewares, req, res)
-      return handler(req, res)
-    } catch (error) {
-      return res.status(400).send(error)
-    }
-  }
-}
-
-type GSSPHandler = (
-  req: TemporaryAny,
-  res: TemporaryAny,
-  ctx: TemporaryAny,
-) => Promise<TemporaryAny>
-
 type SetupBlitzOptions = {
   plugins: BlitzPlugin[]
 }
+
+export type BlitzGSSPHandler<TProps> = ({
+  ctx,
+  req,
+  res,
+  ...args
+}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps<TProps>>
+
+export type BlitzGSPHandler = ({
+  ctx,
+  ...args
+}: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
+
+export type BlitzAPIHandler = (
+  req: Parameters<NextApiHandler>[0],
+  res: Parameters<NextApiHandler>[1],
+  ctx: Ctx,
+) => ReturnType<NextApiHandler>
+
 export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
-  const middleware = buildMiddleware(plugins)
+  const middlewares = plugins.flatMap((p) => p.middlewares)
+  const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    (handler: GSSPHandler): GetServerSideProps =>
-    async ({req, res}) => {
-      await runMiddlewares(
-        plugins.flatMap((p) => p.middlewares),
-        req as TemporaryAny,
-        res as TemporaryAny,
+    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    async ({req, res, ...rest}) => {
+      await runMiddlewares(middlewares, req as MiddlewareRequest, res as MiddlewareResponse)
+      const ctx = contextMiddleware.reduceRight(
+        (y, f) => (f ? f(y) : y),
+        (res as TemporaryAny).blitzCtx as Ctx,
       )
-      return handler(req, res, (res as TemporaryAny).blitzCtx)
+      return handler({req, res, ctx, ...rest})
     }
 
   const gSP =
-    (handler: GSSPHandler): GetServerSideProps =>
-    async ({req, res}) => {
-      await runMiddlewares(
-        plugins.flatMap((p) => p.middlewares),
-        req as TemporaryAny,
-        res as TemporaryAny,
-      )
-      return handler(req, res, (res as TemporaryAny).blitzCtx)
+    (handler: BlitzGSPHandler): GetStaticProps =>
+    async (context) => {
+      await runMiddlewares(middlewares, {} as TemporaryAny, {} as TemporaryAny)
+      const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
+      return handler({...context, ctx: ctx})
     }
 
-  return {withBlitz: middleware, gSSP, gSP, api: middleware}
+  const api =
+    (handler: BlitzAPIHandler): NextApiHandler =>
+    async (req, res) => {
+      try {
+        await runMiddlewares(middlewares, req, res)
+        return handler(req, res, (res as TemporaryAny).blitzCtx)
+      } catch (error) {
+        return res.status(400).send(error)
+      }
+    }
+
+  return {gSSP, gSP, api}
 }

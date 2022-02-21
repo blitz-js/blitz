@@ -1,11 +1,13 @@
+import {Ctx} from "blitz"
+
 export interface Session {
   // isAuthorize can be injected here
   // PublicData can be injected here
 }
 
-export type PublicData = Session extends { PublicData: unknown }
+export type PublicData = Session extends {PublicData: unknown}
   ? Session["PublicData"]
-  : { userId: unknown }
+  : {userId: unknown}
 
 export interface EmptyPublicData extends Partial<Omit<PublicData, "userId">> {
   userId: PublicData["userId"] | null
@@ -23,8 +25,8 @@ export type IsAuthorizedArgs = Session extends {
   isAuthorized: (...args: any) => any
 }
   ? "args" extends keyof Parameters<Session["isAuthorized"]>[0]
-  ? Parameters<Session["isAuthorized"]>[0]["args"]
-  : unknown[]
+    ? Parameters<Session["isAuthorized"]>[0]["args"]
+    : unknown[]
   : unknown[]
 
 export interface SessionModel extends Record<any, any> {
@@ -50,7 +52,7 @@ export type SessionConfig = {
   createSession: (session: SessionModel) => Promise<SessionModel>
   updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
   deleteSession: (handle: string) => Promise<SessionModel>
-  isAuthorized: (data: { ctx: Ctx; args: any }) => boolean
+  isAuthorized: (data: {ctx: BlitzCtx; args: any}) => boolean
 }
 
 export interface SessionContextBase {
@@ -78,5 +80,10 @@ export interface AuthenticatedSessionContext extends SessionContextBase, PublicD
   $publicData: PublicData
 }
 
-export interface DefaultCtx { }
-export interface Ctx extends DefaultCtx { }
+declare module "blitz" {
+  export interface Ctx {
+    session: SessionContext
+  }
+}
+
+export type BlitzCtx = Ctx
