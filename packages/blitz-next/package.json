@@ -2,9 +2,9 @@
   "name": "@blitzjs/next",
   "version": "0.0.0",
   "scripts": {
-    "build": "pnpm wait-for-blitz && unbuild",
-    "dev": "pnpm wait-for-blitz && pnpm watch unbuild src --wait=0.2",
-    "wait-for-blitz": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
+    "build": "unbuild",
+    "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
+    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
