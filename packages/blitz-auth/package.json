@@ -44,6 +44,7 @@
     "@types/secure-password": "3.1.1",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
+    "blitz": "workspace:*",
     "cookie": "0.4.1",
     "debug": "4.3.3",
     "http": "0.0.1-security",
@@ -53,9 +54,6 @@
     "secure-password": "4.0.0",
     "superjson": "1.8.0",
     "url": "0.11.0"
-  },
-  "peerDependencies": {
-    "blitz": "workspace:*"
   },
   "peerDependenciesMeta": {
     "blitz": {
