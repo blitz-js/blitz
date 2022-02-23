@@ -19,6 +19,8 @@ blitz install secureheaders
   - [X-Content-Type-Options Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options)
   - [Referrer-Policy Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)
   - [Permissions-Policy Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy)
+- [Mitigate cross-site scripting (XSS) with a strict Content Security Policy (CSP)](https://web.dev/strict-csp/)
+- [Ensure CSP is effective against XSS attacks](https://web.dev/csp-xss/)
 
 ## More information
 
