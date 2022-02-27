@@ -22,29 +22,19 @@ export default RecipeBuilder()
     ],
   })
   .addNewFilesStep({
-    stepId: "addConfig",
-    stepName: "Config files",
-    explanation: `Adds config files to give you a good starting point`,
+    stepId: "addStorybookConfig",
+    stepName: "Add .storybook files",
+    explanation: `The a basic main.js and preview.js to get the bare essenstials of Storybook to work`,
     targetDirectory: ".storybook",
     templatePath: join(__dirname, "templates", ".storybook"),
     templateValues: {},
   })
   .addNewFilesStep({
-    stepId: "addStyles",
-    stepName: "Stylesheet",
-    explanation: `Adds a root CSS stylesheet where Tailwind is imported and where you can add global styles`,
+    stepId: "addExampleStories",
+    stepName: "Add Example Story Files",
+    explanation: `Adds a story file in the .mdx format. Refer to https://storybook.js.org/docs/react/get-started/whats-a-story for more info.`,
     targetDirectory: "./app/core/components",
     templatePath: join(__dirname, "templates", "stories"),
     templateValues: {},
-  })
-  .addTransformFilesStep({
-    stepId: "importStyles",
-    stepName: "Import stylesheets",
-    explanation: `Imports the stylesheet we just added into your app`,
-    singleFileSearch: paths.app(),
-    transform(program) {
-      const stylesImport = j.importDeclaration([], j.literal("app/core/styles/index.css"))
-      return addImport(program, stylesImport)
-    },
   })
   .build()
