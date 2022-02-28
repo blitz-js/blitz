@@ -16,8 +16,7 @@ export type LogType = 'json' | 'pretty' | 'hidden'
 
 export function loadConfigAtRuntime() {
   if (!process.env.BLITZ_APP_DIR) {
-    console.warn();
-    (
+    console.warn(
       'Internal Blitz Error: process.env.BLITZ_APP_DIR is not set, falling back to process.cwd()'
     )
   }
