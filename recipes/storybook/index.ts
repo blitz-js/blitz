@@ -1,5 +1,4 @@
-import {addImport, paths, RecipeBuilder} from "@blitzjs/installer"
-import j from "jscodeshift"
+import {paths, RecipeBuilder} from "@blitzjs/installer"
 import {join} from "path"
 
 export default RecipeBuilder()
@@ -21,6 +20,24 @@ export default RecipeBuilder()
       {name: "webpack", version: "4", isDevDep: true},
     ],
   })
+  .addTransformFilesStep({
+    stepId: "addStorybookScripts",
+    stepName: 'Adds Storybook script commands to package.json"',
+    explanation:
+      "Creates script commands to run or build Storybook found when you create a new Storybook project using npx sb init.",
+    singleFileSearch: paths.packageJson(),
+    transformPlain(program) {
+      return program.replace(
+        /(?<start>"scripts": \{)(?<content>[^}]*)(?<end>\})/,
+        (_fullMatch, start, content, end) => {
+          start += `\n "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",`
+
+          return [start, content, end].join("")
+        },
+      )
+    },
+  })
   .addNewFilesStep({
     stepId: "addStorybookConfig",
     stepName: "Add .storybook files",
@@ -33,7 +50,7 @@ export default RecipeBuilder()
     stepId: "addExampleStories",
     stepName: "Add Example Story Files",
     explanation: `Adds a story file in the .mdx format. Refer to https://storybook.js.org/docs/react/get-started/whats-a-story for more info.`,
-    targetDirectory: "./app/core/components",
+    targetDirectory: "./app/stories",
     templatePath: join(__dirname, "templates", "stories"),
     templateValues: {},
   })
