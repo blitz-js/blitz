@@ -1,9 +1,10 @@
+import {IncomingMessage, ServerResponse} from "http"
 import {Ctx} from "./types"
 
 export * from "./index-browser"
 export * from "./types"
 
-export type Middleware<TRequest, TResponse> = {
+export type Middleware<TRequest = IncomingMessage, TResponse = ServerResponse> = {
   (
     req: TRequest,
     res: TResponse,
@@ -36,7 +37,8 @@ export function createServerPlugin<
   return pluginConstructor
 }
 
-// nextSetupServer (plugins)
-// createServerPlugin<> (options)
-
-// const {Ctx} = setupServer([AuthPlugin<AuthC=Ctx>({}), RpcPlugin<AuthC=Ctx>({})])
+export function createSetupServer<TMiddleware extends Middleware, TExports extends object>(
+  setupServerConstructor: (plugins: BlitzServerPlugin<TMiddleware>) => TExports,
+) {
+  return setupServerConstructor
+}
