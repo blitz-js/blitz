@@ -20,7 +20,7 @@ export interface ClientPlugin<Exports extends object> {
   withProvider: (component: ComponentType) => {
     (props: any): JSX.Element
     displayName: string
-  } | null
+  }
 }
 
 export function createClientPlugin<TPluginOptions, TPluginExports extends object>(

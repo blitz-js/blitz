@@ -1,4 +1,4 @@
-import {BlitzPage, BlitzHoc, ClientPlugin} from "blitz"
+import {ClientPlugin} from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
@@ -34,16 +34,15 @@ export type Middleware<C = any> = {
   config?: Record<any, any>
 }
 
-// todo
-type TemporaryAny = any
-
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
+type BlitzHoc = (component: React.ComponentType<any>) => React.ComponentType<any>
+
 const compose =
   (...rest: BlitzHoc[]) =>
-  (x: BlitzPage) =>
+  (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
@@ -52,7 +51,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
   }, [] as BlitzHoc[])
   const withPlugins = compose(...providers)
 
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<TemporaryAny>) {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
@@ -161,7 +160,7 @@ const initializeQueryClient = () => {
       queries: {
         ...(typeof window === "undefined" && {cacheTime: 0}),
         suspense: suspenseEnabled,
-        retry: (failureCount, error: TemporaryAny) => {
+        retry: (failureCount, error: any) => {
           if (process.env.NODE_ENV !== "production") return false
 
           // Retry (max. 3 times) only if network error detected
