@@ -27,6 +27,7 @@ import {
   SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
+  AuthenticatedSessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 
@@ -217,6 +218,10 @@ export class SessionContextClass implements SessionContext {
     if (!this.userId) return false
 
     return global.sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
+  }
+
+  $thisIsAuthorized(...args: IsAuthorizedArgs): this is AuthenticatedSessionContext {
+    return this.$isAuthorized(...args)
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {

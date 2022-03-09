@@ -3,7 +3,10 @@ import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
 
-import type {Ctx} from "blitz"
+import type {Ctx as BlitzCtx} from "blitz"
+
+// Workaround for TS2742 "Inferred type cannot be named without a reference"
+export interface Ctx extends BlitzCtx {}
 
 type TemporaryAny = any
 

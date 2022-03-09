@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "build": "unbuild",
-    "dev": "pnpm predev && watch unbuild src --wait=0.2",
-    "predev": "wait-on -d 250 ../blitz-next/dist/index-server.d.ts && wait-on -d 250 ../blitz/dist/index-server.d.ts",
+    "dev": "pnpm run predev && watch unbuild src --wait=0.2",
+    "predev": "wait-on -d 500 ../blitz-next/dist/index-server.d.ts && wait-on -d 500 ../blitz/dist/index-server.d.ts",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
