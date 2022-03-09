@@ -3,7 +3,7 @@ import {MiddlewareRequest} from "./index-browser"
 
 export * from "./index-browser"
 
-import type {Ctx as BlitzCtx} from "blitz"
+import type {Ctx as BlitzCtx, BlitzServerPlugin} from "blitz"
 
 // Workaround for TS2742 "Inferred type cannot be named without a reference"
 export interface Ctx extends BlitzCtx {}
@@ -30,11 +30,6 @@ export type Middleware = {
   config?: Record<any, any>
 }
 
-export type BlitzPlugin = {
-  middlewares: Middleware[]
-  contextMiddleware?: (ctx: Ctx) => Ctx
-}
-
 const runMiddlewares = async (
   middlewares: Middleware[],
   req: MiddlewareRequest,
@@ -53,7 +48,7 @@ const runMiddlewares = async (
 }
 
 type SetupBlitzOptions = {
-  plugins: BlitzPlugin[]
+  plugins: BlitzServerPlugin<Middleware, Ctx>[]
 }
 
 export type BlitzGSSPHandler<TProps> = ({

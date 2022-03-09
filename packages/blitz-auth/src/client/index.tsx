@@ -4,8 +4,8 @@ import {useEffect, useState} from "react"
 import {UrlObject} from "url"
 import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
-import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
+import {assert, deleteCookie, readCookie, isServer, isClient, createClientPlugin} from "blitz"
+import type {BlitzPage} from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,

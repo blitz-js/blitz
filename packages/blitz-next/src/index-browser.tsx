@@ -1,4 +1,4 @@
-import {NextComponentType, NextPageContext} from "next"
+import {BlitzPage, BlitzHoc, ClientPlugin} from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
@@ -49,36 +49,6 @@ export type RedirectAuthenticatedToFnCtx = {
 export type RedirectAuthenticatedToFn = (
   args: RedirectAuthenticatedToFnCtx,
 ) => RedirectAuthenticatedTo
-
-// todo: should be contructed based on the plugins
-export type BlitzPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
-  getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string}
-  suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
-}
-
-export interface ClientPlugin<Exports extends object> {
-  events: {
-    onSessionCreate?: () => void
-    onSessionDestroy?: () => void
-    onBeforeRender?: (props: AppProps) => void
-  }
-  middleware: {
-    beforeHttpRequest: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-    beforeHttpResponse: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-  }
-  exports: () => Exports
-  withProvider: BlitzHoc | null
-}
-
-export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
-  pluginConstructor: (options: TPluginOptions) => ClientPlugin<TPluginExports>,
-) {
-  return pluginConstructor
-}
-
-type BlitzHoc = (Page: BlitzPage) => BlitzPage
 
 const compose =
   (...rest: BlitzHoc[]) =>

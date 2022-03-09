@@ -1,5 +1,4 @@
-import {BlitzPlugin} from "@blitzjs/next"
-import {Middleware} from "@blitzjs/next"
+import {BlitzServerPlugin, Middleware} from "blitz"
 import {assert, Ctx} from "blitz"
 import {PublicData, SessionModel} from "../shared/types"
 import {getSession} from "./auth-sessions"
@@ -67,7 +66,8 @@ interface AuthPluginOptions extends Partial<SessionConfigOptions>, IsAuthorized 
   storage: SessionConfigMethods
 }
 
-export function AuthServerPlugin(options: AuthPluginOptions): BlitzPlugin {
+export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<any, any> {
+  // pass types
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
 
   function authPluginSessionMiddleware() {
