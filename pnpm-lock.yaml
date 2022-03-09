@@ -96,7 +96,6 @@ importers:
   packages/blitz-auth:
     specifiers:
       "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
       "@testing-library/react": 12.1.2
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
@@ -114,7 +113,6 @@ importers:
       http: 0.0.1-security
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
-      next: 12.0.7
       path: 0.12.7
       react: ^17.0.2
       react-dom: 17.0.2
@@ -125,7 +123,6 @@ importers:
       url: 0.11.0
       watch: 1.0.2
     dependencies:
-      "@blitzjs/next": link:../blitz-next
       "@types/b64-lite": 1.3.0
       "@types/debug": 4.1.7
       "@types/secure-password": 3.1.1
@@ -149,7 +146,6 @@ importers:
       "@types/jsonwebtoken": 8.5.8
       "@types/react": 17.0.38
       "@types/react-dom": 17.0.11
-      next: 12.0.7_react-dom@17.0.2+react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       typescript: 4.5.4
@@ -567,6 +563,7 @@ packages:
       source-map: 0.8.0-beta.0
       stacktrace-parser: 0.1.10
       strip-ansi: 6.0.1
+    dev: false
 
   /@next/react-dev-overlay/12.0.7_react@17.0.2:
     resolution:
@@ -6238,6 +6235,7 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - webpack
+    dev: false
 
   /next/12.0.7_react@17.0.2:
     resolution:

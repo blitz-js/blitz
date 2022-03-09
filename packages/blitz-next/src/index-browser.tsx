@@ -41,15 +41,6 @@ export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
-// todo: move to auth package
-export type RedirectAuthenticatedTo = string | RouteUrlObject | false
-export type RedirectAuthenticatedToFnCtx = {
-  session: TemporaryAny
-}
-export type RedirectAuthenticatedToFn = (
-  args: RedirectAuthenticatedToFnCtx,
-) => RedirectAuthenticatedTo
-
 const compose =
   (...rest: BlitzHoc[]) =>
   (x: BlitzPage) =>

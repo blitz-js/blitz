@@ -3,20 +3,24 @@ import {Ctx} from "./types"
 export * from "./index-browser"
 export * from "./types"
 
-export type Middleware<TRequest, TResponse, TNext> = {
-  (req: TRequest, res: TResponse, next: TNext): Promise<void> | void
+export type Middleware<TRequest, TResponse> = {
+  (
+    req: TRequest,
+    res: TResponse,
+    next: (error?: Error) => Promise<void> | void,
+  ): Promise<void> | void
   type?: string
   config?: Record<any, any>
 }
 
 export type BlitzServerPlugin<
-  MiddlewareType = Middleware<any, any, any>,
+  MiddlewareType = Middleware<any, any>,
   TCtx extends Ctx = Ctx,
   TExports extends object = {},
 > = {
   middlewares: MiddlewareType[]
   contextMiddleware?: (ctx: TCtx) => TCtx
-  exports: TExports
+  exports?: TExports
 }
 
 export function createServerPlugin<
@@ -31,3 +35,8 @@ export function createServerPlugin<
 ) {
   return pluginConstructor
 }
+
+// nextSetupServer (plugins)
+// createServerPlugin<> (options)
+
+// const {Ctx} = setupServer([AuthPlugin<AuthC=Ctx>({}), RpcPlugin<AuthC=Ctx>({})])
