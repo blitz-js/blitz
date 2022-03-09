@@ -2,19 +2,26 @@
  * @vitest-environment jsdom
  */
 
-import {expect, describe, it, beforeAll, afterAll, spyOn, SpyFn} from "vitest"
+import {vi, expect, describe, it, beforeAll, afterAll, spyOn, SpyInstance} from "vitest"
 import {parsePublicDataToken, getPublicDataStore, useSession} from "./index"
 import {COOKIE_PUBLIC_DATA_TOKEN} from "../shared"
-import * as stdlib from "blitz"
 import {toBase64} from "b64-lite"
 import {act} from "@testing-library/react"
 import {renderHook} from "@testing-library/react-hooks"
 
+vi.mock("blitz", async () => {
+  const blitz = await vi.importActual("blitz")
+  //@ts-ignore
+  return {...blitz}
+})
+
+import * as stdlib from "blitz"
+
 beforeAll(() => {
-  process.env.__BLITZ_SESSION_COOKIE_PREFIX = "blitz-test"
+  globalThis.__BLITZ_SESSION_COOKIE_PREFIX = "blitz-test"
 })
 afterAll(() => {
-  process.env.__BLITZ_SESSION_COOKIE_PREFIX = undefined
+  globalThis.__BLITZ_SESSION_COOKIE_PREFIX = undefined
 })
 
 describe("parsePublicDataToken", () => {
@@ -54,7 +61,7 @@ describe("publicDataStore", () => {
   })
 
   describe("updateState", () => {
-    let localStorageSpy: SpyFn
+    let localStorageSpy: SpyInstance
 
     beforeAll(() => {
       localStorageSpy = spyOn(Storage.prototype, "setItem")
