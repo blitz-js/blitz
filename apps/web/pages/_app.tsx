@@ -1,41 +1,35 @@
+import {ErrorFallbackProps, ErrorComponent, ErrorBoundary} from "@blitzjs/next"
+import {AuthenticationError, AuthorizationError} from "blitz"
 import type {AppProps} from "next/app"
 import React from "react"
 import {withBlitz} from "../src/client-setup"
 
+function RootErrorFallback({error}: ErrorFallbackProps) {
+  if (error instanceof AuthenticationError) {
+    return <div>Error: You are not authenticated</div>
+  } else if (error instanceof AuthorizationError) {
+    return (
+      <ErrorComponent
+        statusCode={error.statusCode}
+        title="Sorry, you are not authorized to access this"
+      />
+    )
+  } else {
+    return (
+      <ErrorComponent
+        statusCode={(error as any)?.statusCode || 400}
+        title={error.message || error.name}
+      />
+    )
+  }
+}
+
 function MyApp({Component, pageProps}: AppProps) {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary FallbackComponent={RootErrorFallback}>
       <Component {...pageProps} />
     </ErrorBoundary>
   )
 }
 
 export default withBlitz(MyApp)
-
-class ErrorBoundary extends React.Component<{}, {hasError: boolean; error?: string}> {
-  constructor(props) {
-    super(props)
-    this.state = {hasError: false}
-  }
-
-  static getDerivedStateFromError(error) {
-    return {hasError: true, error: error.toString()}
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error(error, errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div>
-          <h1>Something went wrong.</h1>
-          <p>{this.state.error}</p>
-        </div>
-      )
-    }
-
-    return this.props.children
-  }
-}
