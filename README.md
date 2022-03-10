@@ -107,12 +107,21 @@ Your financial contributions help ensure Blitz continues to be developed and mai
 
 <table>
   <tr>
- <td><a aria-label="Andreas Asprou" href="https://andreas.fyi">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
-</a></td>
- <td><a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
-<img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/meetkai.png" width="40px"/>
-</a></td>
+    <td>
+      <a aria-label="Andreas Asprou" href="https://andreas.fyi">
+        <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/andreas.jpg" width="40px"/>
+      </a>
+    </td>
+    <td>
+      <a aria-label="MeetKai" href="https://meetkai.com/?ref=blitzjs">
+        <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/meetkai.png" width="40px"/>
+      </a>
+    </td>
+    <td>
+      <a aria-label="JDLT" href="https://jdlt.co.uk/?ref=blitzjs">
+        <img alt="" src="https://raw.githubusercontent.com/blitz-js/blitz/canary/assets/jdlt.png" width="40px"/>
+      </a>
+    </td>
   </tr>
 </table>
 
