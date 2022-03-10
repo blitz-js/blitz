@@ -39,6 +39,9 @@
     "react": "^17.0.2"
   },
   "dependencies": {
+    "@testing-library/react": "12.1.2",
+    "@testing-library/user-event": "13.5.0",
+    "debug": "4.3.3",
     "react-query": "3.34.12"
   }
 }
