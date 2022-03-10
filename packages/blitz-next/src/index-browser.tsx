@@ -1,54 +1,18 @@
-import {ClientPlugin} from "blitz"
+import type {ClientPlugin, BlitzProvider as BlitzProviderType} from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
 import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "react-query"
-import {UrlObject} from "url"
-
-import type {NextApiRequest, NextApiResponse} from "next"
-export type {NextApiRequest, NextApiResponse}
-
-// todo: where the following should go?
-export interface MiddlewareRequest extends NextApiRequest {
-  protocol?: string
-}
-export type MiddlewareNext = (error?: Error) => Promise<void> | void
-export interface MiddlewareResponse<C> extends NextApiResponse {
-  /**
-   * This will be passed as the second argument to Blitz queries/mutations.
-   *
-   * You must set blitzCtx BEFORE calling next()
-   */
-  blitzCtx: C
-  /**
-   * This is the exact result returned from the Blitz query/mutation
-   *
-   * You must first `await next()` before reading this
-   */
-  blitzResult: unknown
-}
-
-export type Middleware<C = any> = {
-  (req: MiddlewareRequest, res: MiddlewareResponse<C>, next: MiddlewareNext): Promise<void> | void
-  type?: string
-  config?: Record<any, any>
-}
-
-export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
-  pathname: string
-}
-
-type BlitzHoc = (component: React.ComponentType<any>) => React.ComponentType<any>
 
 const compose =
-  (...rest: BlitzHoc[]) =>
+  (...rest: BlitzProviderType[]) =>
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [] as BlitzHoc[])
+  }, [] as BlitzProviderType[])
   const withPlugins = compose(...providers)
 
   return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {

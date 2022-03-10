@@ -4,7 +4,15 @@ import {Ctx} from "./types"
 export * from "./index-browser"
 export * from "./types"
 
-export type Middleware<TRequest = IncomingMessage, TResponse = ServerResponse> = {
+export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
+  blitzCtx: C
+  blitzResult: unknown
+}
+
+export type Middleware<
+  TRequest extends IncomingMessage = IncomingMessage,
+  TResponse = ServerResponse,
+> = {
   (
     req: TRequest,
     res: TResponse,
@@ -12,6 +20,26 @@ export type Middleware<TRequest = IncomingMessage, TResponse = ServerResponse> =
   ): Promise<void> | void
   type?: string
   config?: Record<any, any>
+}
+
+export const runMiddlewares = async <
+  TReq extends IncomingMessage = IncomingMessage,
+  TRes extends ServerResponse = MiddlewareResponse,
+>(
+  middlewares: Middleware[],
+  req: TReq,
+  res: TRes,
+) => {
+  const promises = middlewares.reduce((acc, middleware) => {
+    const promise = new Promise(async (resolve, reject) => {
+      await middleware(req, res, (result) =>
+        result instanceof Error ? reject(result) : resolve(result),
+      )
+    })
+    return [...acc, promise]
+  }, [] as Promise<unknown>[])
+
+  await Promise.all(promises)
 }
 
 export type BlitzServerPlugin<
