@@ -26,7 +26,7 @@ export interface ClientPlugin<Exports extends object> {
       next: (error?: Error) => Promise<void> | void,
     ) => void
   }
-  exports?: () => Exports
+  exports: () => Exports
   withProvider?: BlitzProvider
 }
 
