@@ -1,4 +1,4 @@
-import {NextComponentType, NextPageContext} from "next"
+import {ClientPlugin} from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
@@ -34,55 +34,15 @@ export type Middleware<C = any> = {
   config?: Record<any, any>
 }
 
-// todo
-type TemporaryAny = any
-
 export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
 
-// todo: move to auth package
-export type RedirectAuthenticatedTo = string | RouteUrlObject | false
-export type RedirectAuthenticatedToFnCtx = {
-  session: TemporaryAny
-}
-export type RedirectAuthenticatedToFn = (
-  args: RedirectAuthenticatedToFnCtx,
-) => RedirectAuthenticatedTo
-
-// todo: should be contructed based on the plugins
-export type BlitzPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
-  getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string}
-  suppressFirstRenderFlicker?: boolean
-  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
-}
-
-export interface ClientPlugin<Exports extends object> {
-  events: {
-    onSessionCreate?: () => void
-    onSessionDestroy?: () => void
-    onBeforeRender?: (props: AppProps) => void
-  }
-  middleware: {
-    beforeHttpRequest: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-    beforeHttpResponse: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-  }
-  exports: () => Exports
-  withProvider: BlitzHoc | null
-}
-
-export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
-  pluginConstructor: (options: TPluginOptions) => ClientPlugin<TPluginExports>,
-) {
-  return pluginConstructor
-}
-
-type BlitzHoc = (Page: BlitzPage) => BlitzPage
+type BlitzHoc = (component: React.ComponentType<any>) => React.ComponentType<any>
 
 const compose =
   (...rest: BlitzHoc[]) =>
-  (x: BlitzPage) =>
+  (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
 const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugins: TPlugins) => {
@@ -91,7 +51,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
   }, [] as BlitzHoc[])
   const withPlugins = compose(...providers)
 
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<TemporaryAny>) {
+  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
@@ -200,7 +160,7 @@ const initializeQueryClient = () => {
       queries: {
         ...(typeof window === "undefined" && {cacheTime: 0}),
         suspense: suspenseEnabled,
-        retry: (failureCount, error: TemporaryAny) => {
+        retry: (failureCount, error: any) => {
           if (process.env.NODE_ENV !== "production") return false
 
           // Retry (max. 3 times) only if network error detected

@@ -4,8 +4,7 @@ import {useEffect, useState} from "react"
 import {UrlObject} from "url"
 import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
-import {BlitzPage, createClientPlugin} from "@blitzjs/next"
-import {assert, deleteCookie, readCookie, isServer, isClient} from "blitz"
+import {assert, deleteCookie, readCookie, isServer, isClient, createClientPlugin} from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
   COOKIE_PUBLIC_DATA_TOKEN,
@@ -21,6 +20,8 @@ import {
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
+import {Ctx} from "blitz"
+import {ComponentType} from "react"
 
 const BadBehavior: typeof _BadBehavior =
   "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
@@ -179,13 +180,36 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-export function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<BlitzPage>) {
+export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+  pathname: string
+}
+
+export type RedirectAuthenticatedTo = string | RouteUrlObject | false
+export type RedirectAuthenticatedToFnCtx = {
+  session: Ctx["session"]["$publicData"]
+}
+export type RedirectAuthenticatedToFn = (
+  args: RedirectAuthenticatedToFnCtx,
+) => RedirectAuthenticatedTo
+
+export type BlitzPage<P = {}> = React.ComponentType<P> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | {redirectTo?: string}
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
+
+export function getAuthValues(
+  Page: ComponentType | BlitzPage,
+  props: ComponentPropsWithoutRef<BlitzPage>,
+) {
   if (!Page) return {}
-  let authenticate = Page.authenticate
-  let redirectAuthenticatedTo = Page.redirectAuthenticatedTo
+
+  let authenticate = "authenticate" in Page && Page.authenticate
+  let redirectAuthenticatedTo = "redirectAuthenticatedTo" in Page && Page.redirectAuthenticatedTo
 
   if (authenticate === undefined && redirectAuthenticatedTo === undefined) {
-    const layout = Page.getLayout?.(<Page {...props} />)
+    const layout = "getLayout" in Page && Page.getLayout?.(<Page {...props} />)
 
     if (layout) {
       let currentElement = layout
@@ -210,8 +234,8 @@ export function getAuthValues(Page: BlitzPage, props: ComponentPropsWithoutRef<B
   return {authenticate, redirectAuthenticatedTo}
 }
 
-function withBlitzAuthPlugin(Page: BlitzPage) {
-  const AuthRoot: BlitzPage = (props: ComponentPropsWithoutRef<BlitzPage>) => {
+function withBlitzAuthPlugin(Page: ComponentType | BlitzPage) {
+  const AuthRoot = (props: ComponentPropsWithoutRef<any>) => {
     useSession({suspense: false})
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)

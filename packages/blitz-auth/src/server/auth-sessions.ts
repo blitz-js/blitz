@@ -3,8 +3,6 @@ import cookie, {parse} from "cookie"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
 import {assert, isPast, differenceInMinutes, addYears, addMinutes, Ctx} from "blitz"
-import {MiddlewareResponse} from "@blitzjs/next"
-import type {NextApiRequest, NextApiResponse} from "@blitzjs/next"
 import {
   AuthenticationError,
   AuthorizationError,
@@ -27,6 +25,7 @@ import {
   SESSION_TYPE_ANONYMOUS_JWT,
   SESSION_TYPE_OPAQUE_TOKEN_SIMPLE,
   TOKEN_SEPARATOR,
+  AuthenticatedSessionContext,
 } from "../shared"
 import {generateToken, hash256} from "./auth-utils"
 
@@ -121,35 +120,33 @@ type AuthedSessionKernel = {
 }
 type SessionKernel = AnonSessionKernel | AuthedSessionKernel
 
-function ensureNextApiRequest(
-  req: NextApiRequest | IncomingMessage,
-): asserts req is NextApiRequest {
+function ensureApiRequest(
+  req: IncomingMessage & {[key: string]: any},
+): asserts req is IncomingMessage & {cookies: {[key: string]: string}} {
   if (!("cookies" in req)) {
     // Cookie parser isn't include inside getServerSideProps, so we have to add it
-    ;(req as NextApiRequest).cookies = getCookieParser(req.headers)()
+    req.cookies = getCookieParser(req.headers)()
   }
 }
 function ensureMiddlewareResponse(
-  res: NextApiResponse | ServerResponse,
-): asserts res is MiddlewareResponse {
+  res: ServerResponse & {[key: string]: any},
+): asserts res is ServerResponse & {blitzCtx: Ctx} {
   if (!("blitzCtx" in res)) {
-    ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
+    res.blitzCtx = {} as Ctx
   }
 }
 
 export async function getSession(
-  req: NextApiRequest | IncomingMessage,
-  res: NextApiResponse | ServerResponse,
+  req: IncomingMessage,
+  res: ServerResponse,
 ): Promise<SessionContext> {
-  ensureNextApiRequest(req)
+  ensureApiRequest(req)
   ensureMiddlewareResponse(res)
 
   debug("cookiePrefix", globalThis.__BLITZ_SESSION_COOKIE_PREFIX)
 
-  let response = res as MiddlewareResponse<{session?: SessionContext}>
-
-  if (response.blitzCtx.session) {
-    return response.blitzCtx.session
+  if (res.blitzCtx.session) {
+    return res.blitzCtx.session
   }
 
   let sessionKernel = await getSessionKernel(req, res)
@@ -164,7 +161,7 @@ export async function getSession(
   }
 
   const sessionContext = makeProxyToPublicData(new SessionContextClass(req, res, sessionKernel))
-  response.blitzCtx.session = sessionContext
+  res.blitzCtx.session = sessionContext
   return sessionContext
 }
 
@@ -181,11 +178,15 @@ const makeProxyToPublicData = <T extends SessionContextClass>(ctxClass: T): T =>
 }
 
 export class SessionContextClass implements SessionContext {
-  private _req: NextApiRequest
-  private _res: MiddlewareResponse
+  private _req: IncomingMessage & {cookies: {[key: string]: string}}
+  private _res: ServerResponse & {blitzCtx: Ctx}
   private _kernel: SessionKernel
 
-  constructor(req: NextApiRequest, res: MiddlewareResponse, kernel: SessionKernel) {
+  constructor(
+    req: IncomingMessage & {cookies: {[key: string]: string}},
+    res: ServerResponse & {blitzCtx: Ctx},
+    kernel: SessionKernel,
+  ) {
     this._req = req
     this._res = res
     this._kernel = kernel
@@ -217,6 +218,10 @@ export class SessionContextClass implements SessionContext {
     if (!this.userId) return false
 
     return global.sessionConfig.isAuthorized({ctx: this._res.blitzCtx, args})
+  }
+
+  $thisIsAuthorized(...args: IsAuthorizedArgs): this is AuthenticatedSessionContext {
+    return this.$isAuthorized(...args)
   }
 
   async $create(publicData: PublicData, privateData?: Record<any, any>) {
@@ -494,7 +499,7 @@ const setPublicDataCookie = (
 // Get Session
 // --------------------------------
 async function getSessionKernel(
-  req: NextApiRequest,
+  req: IncomingMessage & {cookies: {[key: string]: string}},
   res: ServerResponse,
 ): Promise<SessionKernel | null> {
   const anonymousSessionToken = req.cookies[COOKIE_ANONYMOUS_SESSION_TOKEN()]

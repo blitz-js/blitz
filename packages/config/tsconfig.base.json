@@ -18,7 +18,8 @@
     "strict": true,
     "strictNullChecks": true,
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "preserveSymlinks": true
   },
   "exclude": ["node_modules"]
 }
