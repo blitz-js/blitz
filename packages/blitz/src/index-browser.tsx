@@ -38,3 +38,4 @@ export function createClientPlugin<TPluginOptions, TPluginExports extends object
 
 export * from "./utils"
 export * from "./types"
+export * from "./errors"

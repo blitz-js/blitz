@@ -1,12 +1,12 @@
 import _SuperJson from "superjson"
-import type { UrlObject } from "url"
+import type {UrlObject} from "url"
 
-
-const SuperJson: typeof _SuperJson = 'default' in _SuperJson ? (_SuperJson as any).default : _SuperJson
+const SuperJson: typeof _SuperJson =
+  "default" in _SuperJson ? (_SuperJson as any).default : _SuperJson
 
 const errorProps = ["name", "message", "code", "statusCode", "meta", "url"]
 if (process.env.JEST_WORKER_ID === undefined) {
-  (SuperJson).allowErrorProps(...errorProps)
+  SuperJson.allowErrorProps(...errorProps)
 }
 
 export class AuthenticationError extends Error {

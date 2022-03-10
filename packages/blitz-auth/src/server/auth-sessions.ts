@@ -2,11 +2,18 @@ import {fromBase64, toBase64} from "b64-lite"
 import cookie, {parse} from "cookie"
 import {IncomingMessage, ServerResponse} from "http"
 import {sign as jwtSign, verify as jwtVerify} from "jsonwebtoken"
-import {assert, isPast, differenceInMinutes, addYears, addMinutes, Ctx} from "blitz"
 import {
+  assert,
+  isPast,
+  differenceInMinutes,
+  addYears,
+  addMinutes,
+  Ctx,
   AuthenticationError,
   AuthorizationError,
   CSRFTokenMismatchError,
+} from "blitz"
+import {
   EmptyPublicData,
   PublicData,
   IsAuthorizedArgs,
