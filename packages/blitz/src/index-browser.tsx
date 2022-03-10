@@ -15,19 +15,19 @@ export interface ClientPlugin<Exports extends object> {
     onBeforeRender?: (props: React.ComponentProps<any>) => void
   }
   middleware: {
-    beforeHttpRequest: (
+    beforeHttpRequest?: (
       req: IncomingMessage,
       res: ServerResponse,
       next: (error?: Error) => Promise<void> | void,
     ) => void
-    beforeHttpResponse: (
+    beforeHttpResponse?: (
       req: IncomingMessage,
       res: ServerResponse,
       next: (error?: Error) => Promise<void> | void,
     ) => void
   }
-  exports: () => Exports
-  withProvider: BlitzProvider
+  exports?: () => Exports
+  withProvider?: BlitzProvider
 }
 
 export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
