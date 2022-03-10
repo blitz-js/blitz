@@ -119,7 +119,6 @@ importers:
       react: ^17.0.2
       react-dom: 17.0.2
       secure-password: 4.0.0
-      superjson: 1.8.0
       typescript: ^4.5.3
       unbuild: 0.6.9
       url: 0.11.0
@@ -138,7 +137,6 @@ importers:
       nanoid: 3.2.0
       path: 0.12.7
       secure-password: 4.0.0
-      superjson: 1.8.0
       url: 0.11.0
     devDependencies:
       "@blitzjs/config": link:../config
