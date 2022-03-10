@@ -2,7 +2,6 @@ import {fromBase64} from "b64-lite"
 import _BadBehavior from "bad-behavior"
 import {useEffect, useState} from "react"
 import {UrlObject} from "url"
-import {AppProps} from "next/app"
 import React, {ComponentPropsWithoutRef} from "react"
 import {assert, deleteCookie, readCookie, isServer, isClient, createClientPlugin} from "blitz"
 import {
@@ -22,6 +21,7 @@ import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
 import {Ctx} from "blitz"
 import {ComponentType} from "react"
+import {ComponentProps} from "react"
 
 const BadBehavior: typeof _BadBehavior =
   "default" in _BadBehavior ? (_BadBehavior as any).default : _BadBehavior
@@ -199,8 +199,8 @@ export type BlitzPage<P = {}> = React.ComponentType<P> & {
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
-export function getAuthValues(
-  Page: ComponentType | BlitzPage,
+export function getAuthValues<TProps = any>(
+  Page: ComponentType<TProps> | BlitzPage,
   props: ComponentPropsWithoutRef<BlitzPage>,
 ) {
   if (!Page) return {}
@@ -234,8 +234,8 @@ export function getAuthValues(
   return {authenticate, redirectAuthenticatedTo}
 }
 
-function withBlitzAuthPlugin(Page: ComponentType | BlitzPage) {
-  const AuthRoot = (props: ComponentPropsWithoutRef<any>) => {
+function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
+  const AuthRoot = (props: ComponentProps<any>) => {
     useSession({suspense: false})
 
     let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
@@ -287,6 +287,7 @@ function withBlitzAuthPlugin(Page: ComponentType | BlitzPage) {
 
     return <Page {...props} />
   }
+
   for (let [key, value] of Object.entries(Page)) {
     // @ts-ignore
     AuthRoot[key] = value
@@ -306,17 +307,8 @@ export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOpt
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
   return {
     withProvider: withBlitzAuthPlugin,
-    events: {
-      onSessionCreate: () => {},
-      onSessionDestroy: () => {},
-      onBeforeRender: (props: AppProps) => {
-        console.log(props)
-      },
-    },
-    middleware: {
-      beforeHttpRequest: () => {},
-      beforeHttpResponse: () => {},
-    },
+    events: {},
+    middleware: {},
     exports: () => ({
       useSession,
       useAuthorize,

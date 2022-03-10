@@ -1,10 +1,12 @@
 import React, {ComponentType} from "react"
+import {IncomingMessage, ServerResponse} from "http"
 
-export function assert(condition: any, message: string): asserts condition {
-  if (!condition) throw new Error(message)
+export type BlitzProvider = <TProps = any>(
+  component: ComponentType<TProps>,
+) => {
+  (props: TProps): JSX.Element
+  displayName: string
 }
-
-type TemporaryAny = any
 
 export interface ClientPlugin<Exports extends object> {
   events: {
@@ -13,14 +15,19 @@ export interface ClientPlugin<Exports extends object> {
     onBeforeRender?: (props: React.ComponentProps<any>) => void
   }
   middleware: {
-    beforeHttpRequest: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
-    beforeHttpResponse: (req: TemporaryAny, res: TemporaryAny, next: () => void) => void
+    beforeHttpRequest?: (
+      req: IncomingMessage,
+      res: ServerResponse,
+      next: (error?: Error) => Promise<void> | void,
+    ) => void
+    beforeHttpResponse?: (
+      req: IncomingMessage,
+      res: ServerResponse,
+      next: (error?: Error) => Promise<void> | void,
+    ) => void
   }
   exports: () => Exports
-  withProvider: (component: ComponentType) => {
-    (props: any): JSX.Element
-    displayName: string
-  }
+  withProvider?: BlitzProvider
 }
 
 export function createClientPlugin<TPluginOptions, TPluginExports extends object>(
