@@ -155,10 +155,13 @@ importers:
   packages/blitz-next:
     specifiers:
       "@blitzjs/config": workspace:*
+      "@testing-library/react": 12.1.2
+      "@testing-library/user-event": 13.5.0
       "@types/node": 17.0.16
       "@types/react": ^17.0.13
       "@types/react-dom": ^17.0.8
       blitz: workspace:*
+      debug: 4.3.3
       next: 12.0.7
       react: ^17.0.2
       react-query: 3.34.12
@@ -169,10 +172,13 @@ importers:
       react-query: 3.34.12_react@17.0.2
     devDependencies:
       "@blitzjs/config": link:../config
+      "@testing-library/react": 12.1.2_react@17.0.2
+      "@testing-library/user-event": 13.5.0
       "@types/node": 17.0.16
       "@types/react": 17.0.38
       "@types/react-dom": 17.0.11
       blitz: link:../blitz
+      debug: 4.3.3
       next: 12.0.7_react@17.0.2
       react: 17.0.2
       typescript: 4.5.4
@@ -1013,6 +1019,33 @@ packages:
       "@testing-library/dom": 8.11.3
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+    dev: true
+
+  /@testing-library/react/12.1.2_react@17.0.2:
+    resolution:
+      {
+        integrity: sha512-ihQiEOklNyHIpo2Y8FREkyD1QAea054U0MVbwH1m8N9TxeFz+KoJ9LkqoKqJlzx2JDm56DVwaJ1r36JYxZM05g==,
+      }
+    engines: {node: ">=12"}
+    peerDependencies:
+      react: "*"
+      react-dom: "*"
+    dependencies:
+      "@babel/runtime": 7.16.7
+      "@testing-library/dom": 8.11.3
+      react: 17.0.2
+    dev: true
+
+  /@testing-library/user-event/13.5.0:
+    resolution:
+      {
+        integrity: sha512-5Kwtbo3Y/NowpkbRuSepbyMFkZmHgD+vPzYB/RJ4oxt5Gj/avFFBYjhw27cqSVPVw/3a67NK1PbiIr9k4Gwmdg==,
+      }
+    engines: {node: ">=10", npm: ">=6"}
+    peerDependencies:
+      "@testing-library/dom": ">=7.21.4"
+    dependencies:
+      "@babel/runtime": 7.16.7
     dev: true
 
   /@tootallnate/once/2.0.0:

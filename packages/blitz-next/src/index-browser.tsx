@@ -4,6 +4,9 @@ import Head from "next/head"
 import React, {FC} from "react"
 import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "react-query"
 
+export * from "./error-boundary"
+export * from "./error-component"
+
 const compose =
   (...rest: BlitzProviderType[]) =>
   (x: React.ComponentType<any>) =>
