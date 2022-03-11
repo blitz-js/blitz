@@ -1,8 +1,10 @@
+import "./global"
 import {IncomingMessage, ServerResponse} from "http"
 import {Ctx} from "./types"
 
 export * from "./index-browser"
 export * from "./types"
+export * from "./prisma-utils"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C

@@ -68,10 +68,14 @@ importers:
     specifiers:
       "@blitzjs/config": workspace:*
       "@types/cookie": 0.4.1
+      "@types/cross-spawn": 6.0.2
+      "@types/npm-which": 3.0.1
       "@types/react": ^17.0.13
       "@types/react-dom": ^17.0.8
       chalk: 4.1.0
       console-table-printer: 2.10.0
+      cross-spawn: 7.0.3
+      npm-which: 3.0.1
       ora: 5.3.0
       react: ^17.0.2
       superjson: 1.8.0
@@ -88,8 +92,12 @@ importers:
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/cookie": 0.4.1
+      "@types/cross-spawn": 6.0.2
+      "@types/npm-which": 3.0.1
       "@types/react": 17.0.38
       "@types/react-dom": 17.0.11
+      cross-spawn: 7.0.3
+      npm-which: 3.0.1
       react: 17.0.2
       typescript: 4.5.4
       unbuild: 0.6.9
@@ -1093,6 +1101,15 @@ packages:
       }
     dev: true
 
+  /@types/cross-spawn/6.0.2:
+    resolution:
+      {
+        integrity: sha512-KuwNhp3eza+Rhu8IFI5HUXRP0LIhqH5cAjubUvGXXthh4YYBuP2ntwEX+Cz8GJoZUHlKo247wPWOfA9LYEq4cw==,
+      }
+    dependencies:
+      "@types/node": 17.0.16
+    dev: true
+
   /@types/debug/4.1.7:
     resolution:
       {
@@ -1178,6 +1195,15 @@ packages:
       {
         integrity: sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==,
       }
+
+  /@types/npm-which/3.0.1:
+    resolution:
+      {
+        integrity: sha512-6cCMPsnLzad47O+OuWHnz+r+GRoHb/o1fVZ4AqzS3hzliy7wVgXm6kHBj/VxkKYLvda3zJa/A3QZU0xOoDxOxg==,
+      }
+    dependencies:
+      "@types/node": 17.0.16
+    dev: true
 
   /@types/prop-types/15.7.4:
     resolution:
@@ -2552,6 +2578,13 @@ packages:
     dependencies:
       delayed-stream: 1.0.0
     dev: false
+
+  /commander/2.20.3:
+    resolution:
+      {
+        integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==,
+      }
+    dev: true
 
   /commander/6.2.1:
     resolution:
@@ -6409,6 +6442,17 @@ packages:
     engines: {node: ">=8"}
     dev: false
 
+  /npm-path/2.0.4:
+    resolution:
+      {
+        integrity: sha512-IFsj0R9C7ZdR5cP+ET342q77uSRdtWOlWpih5eC+lu29tIDbNEgDbzgVJ5UFvYHWhxDZ5TFkJafFioO0pPQjCw==,
+      }
+    engines: {node: ">=0.8"}
+    hasBin: true
+    dependencies:
+      which: 1.3.1
+    dev: true
+
   /npm-run-path/4.0.1:
     resolution:
       {
@@ -6418,6 +6462,16 @@ packages:
     dependencies:
       path-key: 3.1.1
     dev: false
+
+  /npm-which/3.0.1:
+    resolution: {integrity: sha1-kiXybsOihcIJyuZ8OxGmtKtxQKo=}
+    engines: {node: ">=4.2.0"}
+    hasBin: true
+    dependencies:
+      commander: 2.20.3
+      npm-path: 2.0.4
+      which: 1.3.1
+    dev: true
 
   /nwsapi/2.2.0:
     resolution:
@@ -9144,7 +9198,6 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-    dev: false
 
   /which/2.0.2:
     resolution:
