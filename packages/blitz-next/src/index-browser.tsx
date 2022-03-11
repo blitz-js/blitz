@@ -1,4 +1,9 @@
-import type {ClientPlugin, BlitzProvider as BlitzProviderType} from "blitz"
+import type {
+  ClientPlugin,
+  BlitzProvider as BlitzProviderType,
+  UnionToIntersection,
+  Simplify,
+} from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
@@ -63,13 +68,6 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
     </QueryClientProvider>
   )
 }
-
-// todo: move to ts utils
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void
-  ? I
-  : never
-
-type Simplify<T> = {[P in keyof T]: T[P]}
 
 export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
   UnionToIntersection<
