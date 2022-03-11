@@ -23,3 +23,11 @@ export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Await<
 export interface CancellablePromise<T> extends Promise<T> {
   cancel?: Function
 }
+
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+  k: infer I,
+) => void
+  ? I
+  : never
+
+export type Simplify<T> = {[P in keyof T]: T[P]}
