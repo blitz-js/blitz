@@ -1,3 +1,4 @@
+import "./global"
 import React, {ComponentType} from "react"
 import {IncomingMessage, ServerResponse} from "http"
 
