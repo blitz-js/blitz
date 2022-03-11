@@ -62,8 +62,8 @@ test("handleError forwards along async errors", async () => {
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
     "The above error occurred in the <AsyncBomb> component:
     
-        at AsyncBomb
-        at ErrorBoundary
+        at AsyncBomb 
+        at ErrorBoundary 
     
     React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
   `)
@@ -107,8 +107,8 @@ test("can pass an error to useErrorHandler", async () => {
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
     "The above error occurred in the <AsyncBomb> component:
     
-        at AsyncBomb
-        at ErrorBoundary
+        at AsyncBomb 
+        at ErrorBoundary 
     
     React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
   `)
