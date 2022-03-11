@@ -83,6 +83,7 @@ importers:
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
+      zod: 3.10.1
     dependencies:
       chalk: 4.1.0
       console-table-printer: 2.10.0
@@ -102,6 +103,7 @@ importers:
       typescript: 4.5.4
       unbuild: 0.6.9
       watch: 1.0.2
+      zod: 3.10.1
 
   packages/blitz-auth:
     specifiers:
@@ -9331,3 +9333,10 @@ packages:
         integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==,
       }
     engines: {node: ">=10"}
+
+  /zod/3.10.1:
+    resolution:
+      {
+        integrity: sha512-ZnIzDr3vhppKW7yTAlvUQ7QJir5yoL14DgZ6DjYNb4/D4DxFdZeysF6Q5hAahU7KXtaiTgYkGO/qiAD83YN3ig==,
+      }
+    dev: true
