@@ -1,29 +1,29 @@
-const path = require("path")
-
+const excluded = [
+  /[\\/]npm-which[\\/]/,
+  /[\\/]cross-spawn[\\/]/,
+  /@blitzjs[\\/]config/,
+  /blitz[\\/]packages[\\/]config/,
+  /blitz2[\\/]packages[\\/]config/,
+]
 module.exports = {
-  stories: ["../app/core/components/**/*.stories.@(tsx|mdx)"],
+  stories: ["../app/stories/**/*.stories.mdx", "../app/stories/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
-    "@storybook/preset-create-react-app",
-    "@storybook/addon-ie11",
-    {
-      name: "@storybook/addon-essentials",
-      options: {
-        viewport: false,
-      },
-    },
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
   ],
-  logLevel: "debug",
-  webpackFinal: (config) => {
-    // add monorepo root as a valid directory to import modules from
-    config.resolve.plugins.forEach((p) => {
-      if (Array.isArray(p.appSrcs)) {
-        p.appSrcs.push(path.join(__dirname, "..", "..", ".."))
-      }
+  webpackFinal: async (config, {configType}) => {
+    config.module.rules.push({
+      issuer: /(mutations|queries)(?!.*\.client)/,
+      resource: /_resolvers/,
+      use: {loader: "null-loader"},
     })
+
+    excluded.forEach((excluded) => {
+      config.module.rules.push({test: excluded, use: {loader: "null-loader"}})
+    })
+
     return config
   },
-  core: {
-    builder: "webpack4",
-  },
-  staticDirs: ["../public"],
+  framework: "@storybook/react",
 }
