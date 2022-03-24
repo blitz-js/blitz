@@ -11,15 +11,13 @@ export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse 
   blitzResult: unknown
 }
 
+export type MiddlewareNext = (error?: Error) => Promise<void> | void
+
 export type Middleware<
   TRequest extends IncomingMessage = IncomingMessage,
   TResponse = ServerResponse,
 > = {
-  (
-    req: TRequest,
-    res: TResponse,
-    next: (error?: Error) => Promise<void> | void,
-  ): Promise<void> | void
+  (req: TRequest, res: TResponse, next: MiddlewareNext): Promise<void> | void
   type?: string
   config?: Record<any, any>
 }
