@@ -1,3 +1,5 @@
+import {Middleware} from "./index-server"
+
 export function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
 }
@@ -71,3 +73,70 @@ export const setCookie = (name: string, value: string, expires: string) => {
   document.cookie = result
 }
 export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
+
+export function compose(middleware: Middleware[]) {
+  if (!Array.isArray(middleware)) {
+    throw new TypeError("Middleware stack must be an array!")
+  }
+
+  for (const handler of middleware) {
+    if (typeof handler !== "function") {
+      throw new TypeError("Middleware must be composed of functions!")
+    }
+  }
+
+  // Return a single middleware function that composes everything passed in
+  return function (req, res, next): Promise<any> {
+    // last called middleware #
+    let index = -1
+
+    function dispatch(i: number, error?: any): Promise<void> {
+      if (error) {
+        return Promise.reject(error)
+      }
+
+      if (i <= index) throw new Error("next() called multiple times")
+      index = i
+
+      let handler = middleware[i]
+      if (!handler) {
+        return Promise.resolve()
+      }
+
+      try {
+        console.log(`[${handler.name}] Starting handler...`)
+        return Promise.resolve(handler(req, res, dispatch.bind(null, i + 1)))
+      } catch (err) {
+        return Promise.reject(err)
+      }
+    }
+
+    // return next(result as any)
+    return dispatch(0).then(next as any)
+  } as Middleware
+}
+
+function round(num: number, decimalPlaces: number) {
+  const p = Math.pow(10, decimalPlaces)
+  const m = num * p * (1 + Number.EPSILON)
+  return Math.round(m) / p
+}
+
+/**
+ * Formats milliseconds to a string
+ * If more than 1s, it'll return seconds instead
+ * @example
+ * prettyMs(100) // -> `100ms`
+ * prettyMs(1200) // -> `1.2s`
+ * @param ms
+ */
+export function prettyMs(ms: number): string {
+  if (Math.abs(ms) >= 1000) {
+    return `${round(ms / 1000, 1)}s`
+  }
+  return `${ms}ms`
+}
+
+export function interopDefault(mod: any) {
+  return mod.default || mod
+}

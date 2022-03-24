@@ -1,7 +1,6 @@
 import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
 import type {Ctx as BlitzCtx, BlitzServerPlugin, Middleware, MiddlewareResponse} from "blitz"
-import {runMiddlewares} from "blitz"
-import {ServerResponse} from "http"
+import {handleRequestWithMiddleware} from "blitz"
 
 export * from "./index-browser"
 
@@ -46,7 +45,7 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
   const gSSP =
     <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
-      await runMiddlewares(middlewares, req, res)
+      await handleRequestWithMiddleware(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
@@ -65,7 +64,7 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
     (handler: BlitzAPIHandler): NextApiHandler =>
     async (req, res) => {
       try {
-        await runMiddlewares(middlewares, req, res)
+        await handleRequestWithMiddleware(req, res, middlewares)
         return handler(req, res, res.blitzCtx)
       } catch (error) {
         return res.status(400).send(error)
