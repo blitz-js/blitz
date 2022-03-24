@@ -5,6 +5,7 @@ import {Ctx} from "./types"
 export * from "./index-browser"
 export * from "./types"
 export * from "./prisma-utils"
+export * from "./middleware"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C
@@ -20,26 +21,6 @@ export type Middleware<
   (req: TRequest, res: TResponse, next: MiddlewareNext): Promise<void> | void
   type?: string
   config?: Record<any, any>
-}
-
-export const runMiddlewares = async <
-  TReq extends IncomingMessage = IncomingMessage,
-  TRes extends ServerResponse = MiddlewareResponse,
->(
-  middlewares: Middleware[],
-  req: TReq,
-  res: TRes,
-) => {
-  const promises = middlewares.reduce((acc, middleware) => {
-    const promise = new Promise(async (resolve, reject) => {
-      await middleware(req, res, (result) =>
-        result instanceof Error ? reject(result) : resolve(result),
-      )
-    })
-    return [...acc, promise]
-  }, [] as Promise<unknown>[])
-
-  await Promise.all(promises)
 }
 
 export type BlitzServerPlugin<

@@ -149,7 +149,7 @@ function withCallbackHandler(
  * the `next` callback function
  */
 export function connectMiddleware(
-  middleware: Middleware<IncomingMessage, MiddlewareResponse>,
+  middleware: Middleware<IncomingMessage, ServerResponse>,
 ): Middleware<IncomingMessage, MiddlewareResponse> {
   const handler = middleware.length < 3 ? noCallbackHandler : withCallbackHandler
   return function connectHandler(req: IncomingMessage, res, next) {
