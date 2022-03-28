@@ -1,7 +1,7 @@
 import {BlitzServerPlugin, Middleware} from "blitz"
 import {assert, Ctx} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {PublicData, SessionModel} from "../shared/types"
+import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
 import {getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {
@@ -14,22 +14,34 @@ interface SessionConfigOptions {
   publicDataKeysToSyncAcrossSessions?: string[]
 }
 
-interface SessionConfigMethods {
-  getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
-  createSession: (session: SessionModel) => Promise<SessionModel>
-  updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
-  deleteSession: (handle: string) => Promise<SessionModel>
-}
-
 interface IsAuthorized {
   isAuthorized: (data: {ctx: Ctx; args: any}) => boolean
 }
 
-export const PrismaStorage = (db: any /* todo */): SessionConfigMethods => {
+interface PrismaClientWithSession {
+  session: {
+    findFirst(args?: {where?: {handle?: SessionModel["handle"]}}): Promise<SessionModel | null>
+    findMany(args?: {where?: {userId?: PublicData["userId"]}}): Promise<SessionModel[]>
+    create(args: {
+      data: SessionModel & {
+        userId?: any
+        user?: {connect: {id: any}}
+      }
+    }): Promise<SessionModel>
+    update(args: {
+      data: Partial<SessionModel>
+      where: {handle?: SessionModel["handle"]}
+    }): Promise<SessionModel>
+    delete(args: {where: {handle?: SessionModel["handle"]}}): Promise<SessionModel>
+  }
+}
+
+export const PrismaStorage = <Client extends PrismaClientWithSession>(
+  db: Client,
+): SessionConfigMethods => {
   return {
     getSession: (handle) => db.session.findFirst({where: {handle}}),
-    getSessions: (userId) => db.session.findMTemporaryAny({where: {userId}}),
+    getSessions: (userId) => db.session.findMany({where: {userId}}),
     createSession: (session) => {
       let user
       if (session.userId) {

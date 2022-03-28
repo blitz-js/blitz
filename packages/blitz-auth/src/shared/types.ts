@@ -39,7 +39,18 @@ export interface SessionModel extends Record<any, any> {
   privateData?: string | null
 }
 
-export type SessionConfig = {
+export interface SessionConfigMethods {
+  getSession: (handle: string) => Promise<SessionModel | null>
+  getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
+  createSession: (session: SessionModel) => Promise<SessionModel>
+  updateSession: (
+    handle: string,
+    session: Partial<SessionModel>,
+  ) => Promise<SessionModel | undefined>
+  deleteSession: (handle: string) => Promise<SessionModel>
+}
+
+export interface SessionConfig extends SessionConfigMethods {
   cookiePrefix?: string
   sessionExpiryMinutes?: number
   method?: "essential" | "advanced"
@@ -47,11 +58,6 @@ export type SessionConfig = {
   secureCookies?: boolean
   domain?: string
   publicDataKeysToSyncAcrossSessions?: string[]
-  getSession: (handle: string) => Promise<SessionModel | null>
-  getSessions: (userId: PublicData["userId"]) => Promise<SessionModel[]>
-  createSession: (session: SessionModel) => Promise<SessionModel>
-  updateSession: (handle: string, session: Partial<SessionModel>) => Promise<SessionModel>
-  deleteSession: (handle: string) => Promise<SessionModel>
   isAuthorized: (data: {ctx: BlitzCtx; args: any}) => boolean
 }
 
