@@ -3680,6 +3680,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "jscyo",
+      "name": "Joel Coutinho",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6310783?v=4",
+      "profile": "https://github.com/jscyo",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
