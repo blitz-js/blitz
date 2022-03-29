@@ -30,6 +30,12 @@ export default class Chain {
     )
   }
 
+  elementByXpath(sel) {
+    return this.updateChain(() => {
+      return this.browser.findElement(By.xpath(sel)).getText()
+    })
+  }
+
   elementById(sel) {
     return this.elementByCss(`#${sel}`)
   }

@@ -248,7 +248,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
 
-  test/integrations/auth:
+  test/integration/auth:
     specifiers:
       "@blitzjs/auth": workspace:*
       "@blitzjs/config": workspace:*
