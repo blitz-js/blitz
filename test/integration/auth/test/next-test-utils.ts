@@ -187,10 +187,11 @@ export function runBlitzLaunchCommand(
   stdOut: unknown,
   opts: RunBlitzLaunchOptions = {},
 ) {
-  const blitzDir = path.dirname(require.resolve("blitz/package"))
-  const blitzBin = path.join(blitzDir, "bin/blitz")
-  const cwd = opts.cwd ?? path.dirname(require.resolve("blitz/package"))
-  console.log(cwd)
+  // const blitzDir = path.dirname(require.resolve("blitz/package"))
+  // const blitzBin = path.join(blitzDir, "bin/blitz")
+  // const cwd = opts.cwd ?? path.dirname(require.resolve("blitz/package"))
+  const cwd = opts.cwd
+
   const env = {
     ...process.env,
     NODE_ENV: "development" as const,
@@ -199,24 +200,28 @@ export function runBlitzLaunchCommand(
   }
 
   const command = opts.blitzStart ? "start" : "dev"
-  console.log(`Running command "blitz ${command}" `)
+  // console.log(`Running command "blitz ${command}" `)
+  console.log(`Running command "next ${command}" `)
 
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn("node", ["--no-deprecation", blitzBin, command, ...argv], {cwd, env})
+    // const instance = spawn("node", ["--no-deprecation", blitzBin, command, ...argv], {cwd, env})
+    const instance = spawn("next", [command, ...argv], {cwd, env})
+
     let didResolve = false
 
     function handleStdout(data: Buffer) {
       const message = data.toString()
-      const bootupMarkers = {
-        dev: /compiled successfully/i,
-        start: /started server/i,
-      }
-      if (bootupMarkers[opts.blitzStart || stdOut ? "start" : "dev"].test(message)) {
-        if (!didResolve) {
-          didResolve = true
-          resolve(stdOut ? message : instance)
-        }
-      }
+      // const bootupMarkers = {
+      //   dev: /compiled successfully/i,
+      //   start: /started server/i,
+      // }
+      // if (bootupMarkers[opts.blitzStart || stdOut ? "start" : "dev"].test(message)) {
+      //   if (!didResolve) {
+      //     didResolve = true
+      //     resolve(stdOut ? message : instance)
+      //   }
+      // }
+      resolve(instance)
 
       if (typeof opts.onStdout === "function") {
         opts.onStdout(message)
