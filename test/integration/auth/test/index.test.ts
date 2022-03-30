@@ -113,23 +113,23 @@ const runTests = (mode?: string) => {
   })
 }
 
-describe("dev mode", () => {
-  beforeAll(async () => {
-    appPort = await findPort()
-    app = await launchApp(appDir, appPort, {})
-    await seed()
-  }, 1000 * 60 * 2)
-  afterAll(() => killApp(app))
-  runTests()
-})
-
-// describe('server mode', () => {
+// describe("dev mode", () => {
 //   beforeAll(async () => {
-//     await nextBuild(appDir)
-//     // appPort = await findPort()
-//     // app = await nextStart(appDir, appPort)
+//     appPort = await findPort()
+//     app = await launchApp(appDir, appPort, {})
+//     await seed()
 //   }, 1000 * 60 * 2)
 //   afterAll(() => killApp(app))
-
 //   runTests()
 // })
+
+describe("server mode", () => {
+  beforeAll(async () => {
+    await nextBuild(appDir)
+    // appPort = await findPort()
+    // app = await nextStart(appDir, appPort)
+  }, 1000 * 60 * 2)
+  afterAll(() => killApp(app))
+
+  runTests()
+})

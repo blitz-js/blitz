@@ -240,7 +240,7 @@ export function launchApp(dir, port, opts) {
 }
 
 export function nextBuild(dir, args = [], opts = {}) {
-  return runNextCommand(["build", dir, ...args], opts)
+  return runNextCommand(["build", ...args], {cwd: dir, ...opts})
 }
 
 export function nextExport(dir, {outdir}, opts = {}) {
