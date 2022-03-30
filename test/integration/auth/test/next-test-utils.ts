@@ -1,18 +1,20 @@
-import {ChildProcess} from "child_process"
 import spawn from "cross-spawn"
+import {ChildProcess} from "child_process"
 import express from "express"
-import {existsSync, readFileSync, unlinkSync, writeFileSync} from "fs"
+import {existsSync, readFileSync, unlinkSync, writeFileSync, createReadStream} from "fs"
 import {writeFile} from "fs-extra"
 import getPort from "get-port"
 import http from "http"
-import _pkg from "next/package.json" // todo
+// `next` here is the symlink in `test/node_modules/next` which points to the root directory.
+// This is done so that requiring from `next` works.
+// The reason we don't import the relative path `../../dist/<etc>` is that it would lead to inconsistent module singletons
+import server from "next/dist/server/next"
 import fetch from "node-fetch"
 import path from "path"
 import qs from "querystring"
 import treeKill from "tree-kill"
 
-// export const nextServer = server
-export const pkg = _pkg
+export const nextServer = server
 
 // polyfill Object.fromEntries for the test/integration/relay-analytics tests
 // on node 10, this can be removed after we no longer support node 10
@@ -20,20 +22,11 @@ if (!Object.fromEntries) {
   Object.fromEntries = require("core-js/features/object/from-entries")
 }
 
-export function initBlitzServerScript(
-  scriptPath: string,
-  successRegexp: RegExp,
-  env: Record<any, any>,
-  failRegexp: RegExp,
-  opts?: {
-    onStdout?: (stdout: string) => void
-    onStderr?: (stderr: string) => void
-  },
-) {
+export function initNextServerScript(scriptPath, successRegexp, env, failRegexp, opts) {
   return new Promise((resolve, reject) => {
-    const instance = spawn("node", ["--no-deprecation", scriptPath], {env: env as any})
+    const instance = spawn("node", ["--no-deprecation", scriptPath], {env})
 
-    function handleStdout(data: Buffer) {
+    function handleStdout(data) {
       const message = data.toString()
       if (successRegexp.test(message)) {
         resolve(instance)
@@ -45,7 +38,7 @@ export function initBlitzServerScript(
       }
     }
 
-    function handleStderr(data: Buffer) {
+    function handleStderr(data) {
       const message = data.toString()
       if (failRegexp && failRegexp.test(message)) {
         instance.kill()
@@ -72,26 +65,16 @@ export function initBlitzServerScript(
   })
 }
 
-export function renderViaAPI(app: any, pathname: string, query: Record<any, any>) {
+export function renderViaAPI(app, pathname, query) {
   const url = `${pathname}${query ? `?${qs.stringify(query)}` : ""}`
   return app.renderToHTML({url}, {}, pathname, query)
 }
 
-export async function renderViaHTTP(
-  appPort: number,
-  pathname: string,
-  query?: Record<any, any>,
-  opts?: Record<any, any>,
-) {
+export function renderViaHTTP(appPort, pathname, query, opts) {
   return fetchViaHTTP(appPort, pathname, query, opts).then((res) => res.text())
 }
 
-export function fetchViaHTTP(
-  appPort: number,
-  pathname: string,
-  query?: Record<any, any>,
-  opts?: Record<any, any>,
-) {
+export function fetchViaHTTP(appPort, pathname, query, opts) {
   const url = `http://localhost:${appPort}${pathname}${
     typeof query === "string" ? query : query ? `?${qs.stringify(query)}` : ""
   }`
@@ -102,7 +85,7 @@ export function findPort() {
   return getPort()
 }
 
-interface RunBlitzCommandOptions {
+interface RunNextCommandOptions {
   cwd?: string
   env?: Record<any, any>
   spawnOptions?: any
@@ -112,10 +95,10 @@ interface RunBlitzCommandOptions {
   ignoreFail?: boolean
 }
 
-export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {}) {
-  const blitzDir = path.dirname(require.resolve("blitz/package"))
-  const blitzBin = path.join(blitzDir, "bin/blitz")
-  const cwd = options.cwd || blitzDir
+export function runNextCommand(argv: any[], options: RunNextCommandOptions = {}) {
+  const nextDir = path.dirname(require.resolve("next/package"))
+  const nextBin = path.join(nextDir, "dist/bin/next")
+  const cwd = options.cwd || nextDir
   // Let Next.js decide the environment
   const env = {
     ...process.env,
@@ -125,8 +108,8 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
   }
 
   return new Promise<any>((resolve, reject) => {
-    console.log(`Running command "blitz ${argv.join(" ")}"`)
-    const instance = spawn("node", ["--no-deprecation", blitzBin, ...argv], {
+    console.log(`Running command "next ${argv.join(" ")}"`)
+    const instance = spawn("node", ["--no-deprecation", nextBin, ...argv], {
       ...options.spawnOptions,
       cwd,
       env,
@@ -172,56 +155,46 @@ export function runBlitzCommand(argv: any[], options: RunBlitzCommandOptions = {
   })
 }
 
-interface RunBlitzLaunchOptions {
+interface RunNextCommandDevOptions {
   cwd?: string
   env?: Record<any, any>
   onStdout?: (stdout: string) => void
   onStderr?: (stderr: string) => void
   stderr?: boolean
   stdout?: boolean
-  blitzStart?: boolean
+  nodeArgs?: []
+  bootupMarker?: any
+  nextStart?: boolean
 }
 
-export function runBlitzLaunchCommand(
-  argv: any[],
-  stdOut: unknown,
-  opts: RunBlitzLaunchOptions = {},
-) {
-  // const blitzDir = path.dirname(require.resolve("blitz/package"))
-  // const blitzBin = path.join(blitzDir, "bin/blitz")
-  // const cwd = opts.cwd ?? path.dirname(require.resolve("blitz/package"))
-  const cwd = opts.cwd
+export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
+  const nextDir = path.dirname(require.resolve("next/package"))
+  const nextBin = path.join(nextDir, "dist/bin/next")
 
+  const cwd = opts.cwd || nextDir
   const env = {
     ...process.env,
-    NODE_ENV: "development" as const,
+    NODE_ENV: opts.nextStart ? ("production" as const) : ("development" as const),
     __NEXT_TEST_MODE: "true",
     ...opts.env,
   }
 
-  const command = opts.blitzStart ? "start" : "dev"
-  // console.log(`Running command "blitz ${command}" `)
-  console.log(`Running command "next ${command}" `)
-
+  const nodeArgs = opts.nodeArgs || []
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    // const instance = spawn("node", ["--no-deprecation", blitzBin, command, ...argv], {cwd, env})
-    const instance = spawn("next", [command, ...argv], {cwd, env})
+    const instance = spawn("node", [...nodeArgs, "--no-deprecation", nextBin, ...argv], {
+      cwd,
+      env,
+    })
 
     let didResolve = false
 
-    function handleStdout(data: Buffer) {
+    function handleStdout(data) {
       const message = data.toString()
-      // const bootupMarkers = {
-      //   dev: /compiled successfully/i,
-      //   start: /started server/i,
-      // }
-      // if (bootupMarkers[opts.blitzStart || stdOut ? "start" : "dev"].test(message)) {
-      //   if (!didResolve) {
-      //     didResolve = true
-      //     resolve(stdOut ? message : instance)
-      //   }
-      // }
-      resolve(instance)
+
+      if (!didResolve) {
+        didResolve = true
+        resolve(instance)
+      }
 
       if (typeof opts.onStdout === "function") {
         opts.onStdout(message)
@@ -232,7 +205,7 @@ export function runBlitzLaunchCommand(
       }
     }
 
-    function handleStderr(data: Buffer) {
+    function handleStderr(data) {
       const message = data.toString()
       if (typeof opts.onStderr === "function") {
         opts.onStderr(message)
@@ -262,36 +235,35 @@ export function runBlitzLaunchCommand(
 }
 
 // Launch the app in dev mode.
-export function launchApp(dir: string, port: number, opts: RunBlitzLaunchOptions = {}) {
-  return runBlitzLaunchCommand(["-p", port], undefined, {cwd: dir, ...opts})
+export function launchApp(dir, port, opts) {
+  return runNextCommandDev([dir, "-p", port], undefined, opts)
 }
 
-export function blitzBuild(dir: string, args = [], opts: RunBlitzCommandOptions = {}) {
-  return runBlitzCommand(["build", ...args], {cwd: dir, ...opts})
+export function nextBuild(dir, args = [], opts = {}) {
+  return runNextCommand(["build", dir, ...args], opts)
 }
 
-export function blitzExport(dir: string, {outdir}, opts: RunBlitzCommandOptions = {}) {
-  return runBlitzCommand(["export", "--outdir", outdir], {cwd: dir, ...opts})
+export function nextExport(dir, {outdir}, opts = {}) {
+  return runNextCommand(["export", dir, "--outdir", outdir], opts)
 }
 
-export function blitzExportDefault(dir: string, opts: RunBlitzCommandOptions = {}) {
-  return runBlitzCommand(["export"], {cwd: dir, ...opts})
+export function nextExportDefault(dir, opts = {}) {
+  return runNextCommand(["export", dir], opts)
 }
 
-export function blitzStart(dir: string, port: number, opts: RunBlitzLaunchOptions = {}) {
-  return runBlitzLaunchCommand(["-p", port], undefined, {
-    cwd: dir,
+export function nextLint(dir, args = [], opts = {}) {
+  return runNextCommand(["lint", dir, ...args], opts)
+}
+
+export function nextStart(dir, port, opts = {}) {
+  return runNextCommandDev(["start", "-p", port, dir], undefined, {
     ...opts,
-    blitzStart: true,
+    nextStart: true,
   })
 }
 
-export function buildTS(
-  args = [],
-  cwd: string,
-  env: NodeJS.ProcessEnv = {NODE_ENV: "development"},
-) {
-  cwd = cwd || path.dirname(require.resolve("@blitzjs/cli/package"))
+export function buildTS(args = [], cwd, env = {NODE_ENV: "production" as const}) {
+  cwd = cwd || path.dirname(require.resolve("next/package"))
   env = {...process.env, ...env}
 
   return new Promise<void>((resolve, reject) => {
@@ -354,18 +326,18 @@ export async function startApp(app: any) {
   return server
 }
 
-export async function stopApp(server: any) {
+export async function stopApp(server) {
   if (server.__app) {
     await server.__app.close()
   }
   await promiseCall(server, "close")
 }
 
-export function promiseCall(obj: any, method: any, ...args: any[]) {
+export function promiseCall(obj, method, ...args) {
   return new Promise((resolve, reject) => {
     const newArgs = [
       ...args,
-      function (err: any, res: any) {
+      function (err, res) {
         if (err) return reject(err)
         resolve(res)
       },
@@ -375,20 +347,26 @@ export function promiseCall(obj: any, method: any, ...args: any[]) {
   })
 }
 
-export function waitFor(millis: number) {
+export function waitFor(millis) {
   return new Promise((resolve) => setTimeout(resolve, millis))
 }
 
-export async function startStaticServer(dir: string) {
+export async function startStaticServer(dir, notFoundFile) {
   const app = express()
   const server = http.createServer(app)
   app.use(express.static(dir))
+
+  if (notFoundFile) {
+    app.use((req, res) => {
+      createReadStream(notFoundFile).pipe(res)
+    })
+  }
 
   await promiseCall(server, "listen")
   return server
 }
 
-export async function startCleanStaticServer(dir: string) {
+export async function startCleanStaticServer(dir) {
   const app = express()
   const server = http.createServer(app)
   app.use(express.static(dir, {extensions: ["html"]}))
@@ -399,9 +377,9 @@ export async function startCleanStaticServer(dir: string) {
 
 // check for content in 1 second intervals timing out after
 // 30 seconds
-export async function check(contentFn: Function, regex: RegExp, hardError = true) {
-  let content: any
-  let lastErr: any
+export async function check(contentFn, regex, hardError = true) {
+  let content
+  let lastErr
 
   for (let tries = 0; tries < 30; tries++) {
     try {
@@ -431,19 +409,19 @@ export async function check(contentFn: Function, regex: RegExp, hardError = true
 export class File {
   path: string
   originalContent: any
-  constructor(path: string) {
+  constructor(path) {
     this.path = path
     this.originalContent = existsSync(this.path) ? readFileSync(this.path, "utf8") : null
   }
 
-  write(content: any) {
+  write(content) {
     if (!this.originalContent) {
       this.originalContent = content
     }
     writeFileSync(this.path, content, "utf8")
   }
 
-  replace(pattern: any, newValue: any) {
+  replace(pattern, newValue) {
     const currentContent = readFileSync(this.path, "utf8")
     if (pattern instanceof RegExp) {
       if (!pattern.test(currentContent)) {
@@ -474,7 +452,7 @@ export class File {
   }
 }
 
-export async function evaluate(browser: any, input: any) {
+export async function evaluate(browser, input) {
   if (typeof input === "function") {
     const result = await browser.executeScript(input)
     await new Promise((resolve) => setTimeout(resolve, 30))
@@ -484,7 +462,7 @@ export async function evaluate(browser: any, input: any) {
   }
 }
 
-export async function retry(fn: Function, duration = 3000, interval = 500, description: string) {
+export async function retry(fn, duration = 3000, interval = 500, description) {
   if (duration % interval !== 0) {
     throw new Error(
       `invalid duration ${duration} and interval ${interval} mix, duration must be evenly divisible by interval`,
@@ -505,14 +483,14 @@ export async function retry(fn: Function, duration = 3000, interval = 500, descr
   }
 }
 
-export async function hasRedbox(browser: any, expected = true) {
+export async function hasRedbox(browser, expected = true) {
   let attempts = 30
   do {
     const has = await evaluate(browser, () => {
       return Boolean(
         [].slice
           .call(document.querySelectorAll("nextjs-portal"))
-          .find((p: any) =>
+          .find((p) =>
             p.shadowRoot.querySelector(
               "#nextjs__container_errors_label, #nextjs__container_build_error_label",
             ),
@@ -531,13 +509,13 @@ export async function hasRedbox(browser: any, expected = true) {
   return false
 }
 
-export async function getRedboxHeader(browser: any) {
+export async function getRedboxHeader(browser) {
   return retry(
     () =>
       evaluate(browser, () => {
         const portal = [].slice
           .call(document.querySelectorAll("nextjs-portal"))
-          .find((p: any) => p.shadowRoot.querySelector("[data-nextjs-dialog-header"))
+          .find((p) => p.shadowRoot.querySelector("[data-nextjs-dialog-header"))
         const root = portal.shadowRoot
         return root
           .querySelector("[data-nextjs-dialog-header]")
@@ -549,13 +527,13 @@ export async function getRedboxHeader(browser: any) {
   )
 }
 
-export async function getRedboxSource(browser: any) {
+export async function getRedboxSource(browser) {
   return retry(
     () =>
       evaluate(browser, () => {
         const portal = [].slice
           .call(document.querySelectorAll("nextjs-portal"))
-          .find((p: any) =>
+          .find((p) =>
             p.shadowRoot.querySelector(
               "#nextjs__container_errors_label, #nextjs__container_build_error_label",
             ),
@@ -571,11 +549,11 @@ export async function getRedboxSource(browser: any) {
   )
 }
 
-export function getBrowserBodyText(browser: any) {
+export function getBrowserBodyText(browser) {
   return browser.eval('document.getElementsByTagName("body")[0].innerText')
 }
 
-export function normalizeRegEx(src: string) {
+export function normalizeRegEx(src) {
   return new RegExp(src).source.replace(/\^\//g, "^\\/")
 }
 
@@ -583,11 +561,11 @@ function readJson(path: string) {
   return JSON.parse(readFileSync(path) as any)
 }
 
-export function getBuildManifest(dir: string) {
+export function getBuildManifest(dir) {
   return readJson(path.join(dir, ".next/build-manifest.json"))
 }
 
-export function getPageFileFromBuildManifest(dir: string, page: string) {
+export function getPageFileFromBuildManifest(dir, page) {
   const buildManifest = getBuildManifest(dir)
   const pageFiles = buildManifest.pages[page]
   if (!pageFiles) {
@@ -595,8 +573,7 @@ export function getPageFileFromBuildManifest(dir: string, page: string) {
   }
 
   const pageFile = pageFiles.find(
-    (file: string) =>
-      file.endsWith(".js") && file.includes(`pages${page === "" ? "/index" : page}`),
+    (file) => file.endsWith(".js") && file.includes(`pages${page === "" ? "/index" : page}`),
   )
   if (!pageFile) {
     throw new Error(`No page file for page ${page}`)
@@ -605,12 +582,12 @@ export function getPageFileFromBuildManifest(dir: string, page: string) {
   return pageFile
 }
 
-export function readBlitzBuildClientPageFile(appDir: string, page: string) {
+export function readNextBuildClientPageFile(appDir, page) {
   const pageFile = getPageFileFromBuildManifest(appDir, page)
   return readFileSync(path.join(appDir, ".next", pageFile), "utf8")
 }
 
-export function getPagesManifest(dir: string) {
+export function getPagesManifest(dir) {
   const serverFile = path.join(dir, ".next/server/pages-manifest.json")
 
   if (existsSync(serverFile)) {
@@ -619,7 +596,7 @@ export function getPagesManifest(dir: string) {
   return readJson(path.join(dir, ".next/serverless/pages-manifest.json"))
 }
 
-export function updatePagesManifest(dir: string, content: any) {
+export function updatePagesManifest(dir, content) {
   const serverFile = path.join(dir, ".next/server/pages-manifest.json")
 
   if (existsSync(serverFile)) {
@@ -628,7 +605,7 @@ export function updatePagesManifest(dir: string, content: any) {
   return writeFile(path.join(dir, ".next/serverless/pages-manifest.json"), content)
 }
 
-export function getPageFileFromPagesManifest(dir: string, page: string) {
+export function getPageFileFromPagesManifest(dir, page) {
   const pagesManifest = getPagesManifest(dir)
   const pageFile = pagesManifest[page]
   if (!pageFile) {
@@ -638,7 +615,7 @@ export function getPageFileFromPagesManifest(dir: string, page: string) {
   return pageFile
 }
 
-export function readBlitzBuildServerPageFile(appDir: string, page: string) {
+export function readNextBuildServerPageFile(appDir, page) {
   const pageFile = getPageFileFromPagesManifest(appDir, page)
   return readFileSync(path.join(appDir, ".next", "server", pageFile), "utf8")
 }

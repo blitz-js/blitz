@@ -33,6 +33,7 @@
     "@types/react": "^17.0.13",
     "@types/rimraf": "3.0.2",
     "@types/selenium-webdriver": "4.0.18",
+    "b64-lite": "1.4.0",
     "cross-spawn": "7.0.3",
     "eslint": "7.32.0",
     "express": "4.17.3",

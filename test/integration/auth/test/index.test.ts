@@ -1,27 +1,33 @@
-import {describe, it, expect, beforeAll, afterAll, vi} from "vitest"
-import {
-  blitzBuild,
-  blitzExport,
-  blitzStart,
-  File,
-  findPort,
-  killApp,
-  launchApp,
-  renderViaHTTP,
-  waitFor,
-  fetchViaHTTP,
-} from "./next-test-utils"
+import {describe, it, expect, beforeAll, afterAll} from "vitest"
+import {killApp, findPort, launchApp, nextBuild, nextStart} from "./next-test-utils"
 import webdriver from "./next-webdriver"
 import {join} from "path"
-import rimraf from "rimraf"
+import seed from "../prisma/seed"
+import fetch from "node-fetch"
+import {fromBase64} from "b64-lite"
 
 let app: any
 let appPort: number
-const appDir = join(__dirname, "..")
-const outdir = join(appDir, "out")
-const blitzConfig = new File(join(appDir, "blitz.config.ts"))
+const appDir = join(__dirname, "../")
+const HEADER_CSRF = "anti-csrf"
+const COOKIE_PUBLIC_DATA_TOKEN = "webapp-cookie-prefix_sPublicDataToken"
+const COOKIE_SESSION_TOKEN = "webapp-cookie-prefix_sSessionToken"
+const COOKIE_ANONYMOUS_SESSION_TOKEN = "webapp-cookie-prefix_sAnonymousSessionToken"
+const COOKIE_REFRESH_TOKEN = "webapp-cookie-prefix_sIdRefreshToken"
+const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 
-const runTests = (mode: string) => {
+function readCookie(cookieHeader, name) {
+  const setPos = cookieHeader.search(new RegExp("\\b" + name + "="))
+  const stopPos = cookieHeader.indexOf(";", setPos)
+  let res
+  if (!~setPos) return undefined
+  res = decodeURIComponent(
+    cookieHeader.substring(setPos, ~stopPos ? stopPos : undefined).split("=")[1],
+  )
+  return res.charAt(0) === "{" ? JSON.parse(res) : res
+}
+
+const runTests = (mode?: string) => {
   describe("Auth", () => {
     describe("unauthenticated", () => {
       it("should render error for protected query", async () => {
@@ -32,12 +38,76 @@ const runTests = (mode: string) => {
       })
 
       it("should render result for open query", async () => {
-        const res = await fetchViaHTTP(appPort, "/api/noauth", {
+        const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
           method: "GET",
           headers: {"Content-Type": "application/json; charset=utf-8"},
         })
+        expect(res.status).toBe(200)
+      })
+
+      it("sets correct cookie", async () => {
+        const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
+          method: "GET",
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+        })
+        const cookieHeader = res.headers.get("Set-Cookie")
+        const cookie = (name) => readCookie(cookieHeader, name)
 
         expect(res.status).toBe(200)
+        expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
+        expect(cookie(COOKIE_ANONYMOUS_SESSION_TOKEN)).not.toBeUndefined()
+        expect(cookie(COOKIE_SESSION_TOKEN)).toBe("")
+        expect(cookie(COOKIE_REFRESH_TOKEN)).toBeUndefined()
+
+        expect(res.headers.get(HEADER_PUBLIC_DATA_TOKEN)).toBe("updated")
+        expect(cookie(COOKIE_PUBLIC_DATA_TOKEN)).not.toBe(undefined)
+
+        const publicDataStr = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN))
+        const publicData = JSON.parse(publicDataStr)
+        expect(publicData.userId).toBe(null)
+      })
+    })
+
+    describe("authenticated", () => {
+      it("should login successfully", async () => {
+        const res = await fetch(
+          `http://localhost:${appPort}/api/signin?email=test@test.com&password=abcd1234`,
+          {
+            method: "POST",
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+          },
+        )
+
+        expect(res.status).toBe(200)
+        expect(res.headers.get(HEADER_CSRF)).not.toBe(undefined)
+
+        const cookieHeader = res.headers.get("Set-Cookie")
+        const cookie = (name) => readCookie(cookieHeader, name)
+        expect(cookieHeader).not.toBe(undefined)
+
+        const publicDataStr = fromBase64(cookie(COOKIE_PUBLIC_DATA_TOKEN))
+        const publicData = JSON.parse(publicDataStr)
+        expect(publicData.userId).toBe(1)
+
+        expect(readCookie(cookieHeader, COOKIE_SESSION_TOKEN)).not.toBe(undefined)
+      })
+
+      it("does not require CSRF header on HEAD requests", async () => {
+        const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
+          method: "GET",
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+        })
+        const cookieHeader = res.headers.get("Set-Cookie")
+
+        const headRes = await fetch(`http://localhost:${appPort}/api/noauth`, {
+          method: "HEAD",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            cookie: cookieHeader as string,
+          },
+        })
+
+        expect(headRes.status).toBe(200)
       })
     })
   })
@@ -45,10 +115,21 @@ const runTests = (mode: string) => {
 
 describe("dev mode", () => {
   beforeAll(async () => {
-    // rimraf.sync(join(__dirname, "../db/index.ts"))
     appPort = await findPort()
-    app = await launchApp(appDir, appPort)
+    app = await launchApp(appDir, appPort, {})
+    await seed()
   }, 1000 * 60 * 2)
   afterAll(() => killApp(app))
-  runTests("dev")
+  runTests()
 })
+
+// describe('server mode', () => {
+//   beforeAll(async () => {
+//     await nextBuild(appDir)
+//     // appPort = await findPort()
+//     // app = await nextStart(appDir, appPort)
+//   }, 1000 * 60 * 2)
+//   afterAll(() => killApp(app))
+
+//   runTests()
+// })
