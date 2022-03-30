@@ -129,7 +129,7 @@ describe("AppGenerator", () => {
       }
       return {status: 0}
     })
-    it.only("logs warn with instructions", async () => {
+    it("logs warn with instructions", async () => {
       await generator.run()
 
       expect(console.warn).toHaveBeenCalledWith("Failed to run git init.")
