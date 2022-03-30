@@ -32,7 +32,7 @@
     "express": "4.17.3",
     "http": "0.0.1-security",
     "node-fetch": "3.2.3",
-    "npm-which": "^3.0.1",
+    "npm-which": "3.0.1",
     "react": "^17.0.2",
     "test-listen": "1.1.0",
     "typescript": "^4.5.3",

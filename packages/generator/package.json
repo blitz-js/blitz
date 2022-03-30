@@ -49,12 +49,12 @@
     "jscodeshift": "0.13.0",
     "mem-fs": "1.2.0",
     "mem-fs-editor": "8.0.0",
-    "npm-which": "^3.0.1",
-    "pluralize": "^8.0.0",
+    "npm-which": "3.0.1",
+    "pluralize": "8.0.0",
     "prettier": "^2.5.1",
     "react": "^17.0.2",
     "recast": "0.20.5",
-    "username": "^5.1.0",
+    "username": "5.1.0",
     "vinyl": "2.2.1"
   },
   "publishConfig": {
