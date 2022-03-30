@@ -41,6 +41,7 @@
     "@babel/core": "7.12.10",
     "@babel/plugin-transform-typescript": "7.12.1",
     "@mrleebo/prisma-ast": "0.2.6",
+    "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
     "enquirer": "2.3.6",
     "fs-extra": "^9.1.0",
