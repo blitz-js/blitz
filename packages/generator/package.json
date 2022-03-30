@@ -1,0 +1,63 @@
+{
+  "name": "@blitzjs/generator",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "unbuild",
+    "dev": "watch unbuild src --wait=0.2",
+    "lint": "eslint . --fix",
+    "test": "vitest run -r ./test --allowOnly",
+    "test-watch": "vitest",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "main": "./dist/index-server.cjs",
+  "module": "./dist/index-server.mjs",
+  "browser": "./dist/index-browser.mjs",
+  "types": "./dist/index-server.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "devDependencies": {
+    "@blitzjs/config": "workspace:*",
+    "@types/babel__core": "7.1.19",
+    "@types/diff": "5.0.2",
+    "@types/fs-extra": "9.0.13",
+    "@types/jscodeshift": "0.11.2",
+    "@types/mem-fs": "1.1.2",
+    "@types/mem-fs-editor": "7.0.1",
+    "@types/pluralize": "0.0.29",
+    "@types/prettier": "2.4.4",
+    "@types/react": "^17.0.13",
+    "@types/react-dom": "^17.0.8",
+    "@types/vinyl": "2.0.6",
+    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/parser": "5.9.1",
+    "diff": "5.0.0",
+    "unbuild": "0.6.9",
+    "watch": "1.0.2"
+  },
+  "dependencies": {
+    "@babel/core": "7.12.10",
+    "@babel/plugin-transform-typescript": "7.12.1",
+    "@mrleebo/prisma-ast": "0.2.6",
+    "chalk": "^4.1.0",
+    "cross-spawn": "7.0.3",
+    "enquirer": "2.3.6",
+    "fs-extra": "^9.1.0",
+    "got": "^11.8.1",
+    "jscodeshift": "0.13.0",
+    "mem-fs": "1.2.0",
+    "mem-fs-editor": "8.0.0",
+    "npm-which": "3.0.1",
+    "pluralize": "8.0.0",
+    "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "recast": "0.20.5",
+    "username": "5.1.0",
+    "vinyl": "2.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

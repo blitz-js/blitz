@@ -41,7 +41,7 @@
     "zod": "3.10.1"
   },
   "dependencies": {
-    "chalk": "4.1.0",
+    "chalk": "^4.1.0",
     "console-table-printer": "2.10.0",
     "ora": "5.3.0",
     "superjson": "1.8.0",
