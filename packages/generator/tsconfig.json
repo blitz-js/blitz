@@ -1,0 +1,5 @@
+{
+  "extends": "@blitzjs/config/tsconfig.library.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules", "./templates/**"]
+}
