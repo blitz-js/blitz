@@ -1,4 +1,5 @@
 /// <reference types="./next-webdriver" />
+require("chromedriver")
 import fetch from "node-fetch"
 import os from "os"
 import path from "path"
@@ -131,7 +132,7 @@ const getDeviceIP = async () => {
 }
 
 // eslint-disable-next-line no-unused-vars
-const freshWindow = async () => {
+const freshWindow = async (appPort) => {
   // First we close all extra windows left over
   let allWindows = await browser.getAllWindowHandles()
 
@@ -146,6 +147,8 @@ const freshWindow = async () => {
 
   // now we open a fresh window
   await browser.get(`http://${deviceIP}:${global._newTabPort}`)
+
+  // await browser.executeScript(`window.location.href = "http://${deviceIP}:${appPort}"`)
 
   const newTabLink = await browser.findElement(By.css("#new"))
   await newTabLink.click()
@@ -170,9 +173,9 @@ export default async function webdriver(
   // browser.switchTo().window() fails with `missing field `handle``
   // in safari and firefox so disabling freshWindow since our
   // tests shouldn't rely on it
-  if (isChrome) {
-    await freshWindow()
-  }
+  // if (isChrome) {
+  //   await freshWindow(appPort)
+  // }
 
   const url = `http://${deviceIP}:${appPort}${path}`
   ;(browser as any).initUrl = url
