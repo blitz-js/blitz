@@ -21,7 +21,7 @@
   ],
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
-    "@testing-library/react": "12.1.2",
+    "@testing-library/react": "13.0.0",
     "@testing-library/react-hooks": "7.0.2",
     "@types/cookie": "0.4.1",
     "@types/jsonwebtoken": "8.5.8",
