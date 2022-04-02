@@ -92,6 +92,8 @@ importers:
     dependencies:
       chalk: 4.1.2
       console-table-printer: 2.10.0
+      cross-spawn: 7.0.3
+      npm-which: 3.0.1
       ora: 5.3.0
       superjson: 1.8.0
       tslog: 3.3.1
@@ -105,11 +107,9 @@ importers:
       "@types/react": 17.0.38
       "@types/react-dom": 17.0.11
       "@types/test-listen": 1.1.0
-      cross-spawn: 7.0.3
       express: 4.17.3
       http: 0.0.1-security
       node-fetch: 3.2.3
-      npm-which: 3.0.1
       react: 17.0.2
       test-listen: 1.1.0
       typescript: 4.5.5
@@ -191,6 +191,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
     dependencies:
+      debug: 4.3.3
       react-query: 3.34.12_react@17.0.2
     devDependencies:
       "@blitzjs/config": link:../config
@@ -200,7 +201,6 @@ importers:
       "@types/react": 17.0.38
       "@types/react-dom": 17.0.11
       blitz: link:../blitz
-      debug: 4.3.3
       next: 12.1.4_react@17.0.2
       react: 17.0.2
       typescript: 4.5.4
@@ -241,6 +241,7 @@ importers:
     specifiers:
       "@babel/core": 7.12.10
       "@babel/plugin-transform-typescript": 7.12.1
+      "@babel/types": 7.12.10
       "@blitzjs/config": workspace:*
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
@@ -277,9 +278,11 @@ importers:
     dependencies:
       "@babel/core": 7.12.10
       "@babel/plugin-transform-typescript": 7.12.1_@babel+core@7.12.10
+      "@babel/types": 7.12.10
       "@mrleebo/prisma-ast": 0.2.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
+      diff: 5.0.0
       enquirer: 2.3.6
       fs-extra: 9.1.0
       got: 11.8.3
@@ -308,7 +311,6 @@ importers:
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1_8c696421d8bcc701d2ea1a734127ded5
       "@typescript-eslint/parser": 5.9.1_eslint@7.32.0
-      diff: 5.0.0
       unbuild: 0.6.9
       watch: 1.0.2
 
@@ -386,7 +388,7 @@ packages:
       "@babel/parser": 7.17.8
       "@babel/template": 7.16.7
       "@babel/traverse": 7.17.3
-      "@babel/types": 7.15.0
+      "@babel/types": 7.17.0
       convert-source-map: 1.7.0
       debug: 4.3.3
       gensync: 1.0.0-beta.2
@@ -972,14 +974,14 @@ packages:
       - supports-color
     dev: false
 
-  /@babel/types/7.15.0:
+  /@babel/types/7.12.10:
     resolution:
       {
-        integrity: sha512-OBvfqnllOIdX4ojTHpwZbpvz4j3EWyjkZEdmjH0/cgsd6QOdSgU8rLSk6ard/pcW7rlmjdVSX/AWOaORR1uNOQ==,
+        integrity: sha512-sf6wboJV5mGyip2hIpDSKsr80RszPinEFjsHTalMxZAZkoQ2/2yQzxlcFN52SJqsyPfLtPmenL4g2KB3KJXPDw==,
       }
-    engines: {node: ">=6.9.0"}
     dependencies:
       "@babel/helper-validator-identifier": 7.16.7
+      lodash: 4.17.21
       to-fast-properties: 2.0.0
     dev: false
 
@@ -3391,6 +3393,7 @@ packages:
       {
         integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==,
       }
+    dev: false
 
   /commander/6.2.1:
     resolution:
@@ -3800,7 +3803,7 @@ packages:
         integrity: sha512-/VTCrvm5Z0JGty/BWHljh+BAiw3IK+2j87NGMu8Nwc/f48WoDAC395uomO9ZD117ZOBaHmkX1oyLvkVM/aIT3w==,
       }
     engines: {node: ">=0.3.1"}
-    dev: true
+    dev: false
 
   /dir-glob/2.2.2:
     resolution:
@@ -7338,6 +7341,7 @@ packages:
     hasBin: true
     dependencies:
       which: 1.3.1
+    dev: false
 
   /npm-run-path/2.0.2:
     resolution: {integrity: sha1-NakjLfo11wZ7TLLd8jV7GHFTbF8=}
@@ -7364,6 +7368,7 @@ packages:
       commander: 2.20.3
       npm-path: 2.0.4
       which: 1.3.1
+    dev: false
 
   /nwsapi/2.2.0:
     resolution:
@@ -10099,6 +10104,7 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+    dev: false
 
   /which/2.0.2:
     resolution:
