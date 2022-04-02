@@ -35,6 +35,5 @@ jobs:
       - run: pnpm manypkg check
       - run: pnpm lint
       - run: pnpm build
-      - run: pnpm next build
-        working-directory: apps/web
+      - run: pnpm turbo run buildapp
       - run: pnpm test

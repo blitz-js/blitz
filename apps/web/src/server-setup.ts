@@ -7,7 +7,7 @@ const {gSSP, gSP, api} = setupBlitz({
   plugins: [
     AuthServerPlugin({
       cookiePrefix: "webapp-cookie-prefix",
-      // TODO
+      // TODO fix type
       storage: PrismaStorage(db as any),
       isAuthorized: simpleRolesIsAuthorized,
     }),

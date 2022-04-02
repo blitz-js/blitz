@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
+    "buildapp": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
