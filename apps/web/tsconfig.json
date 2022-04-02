@@ -6,6 +6,5 @@
       "react": ["./node_modules/@types/react"]
     }
   },
-  "exclude": ["node_modules"],
-  "baseUrl": "."
+  "exclude": ["node_modules"]
 }
