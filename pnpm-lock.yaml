@@ -38,13 +38,13 @@ importers:
       "@blitzjs/next": workspace:*
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 3.9.0
-      "@types/react": ^17.0.13
+      "@types/react": 17.0.43
       blitz: workspace:*
       eslint: 7.32.0
       next: 12.1.4
       prisma: 3.9.0
-      react: ^17.0.2
-      react-dom: 17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -52,13 +52,13 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
-      next: 12.1.4_react-dom@17.0.2+react@17.0.2
+      next: 12.1.4_react-dom@18.0.0+react@18.0.0
       prisma: 3.9.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
-      "@types/react": 17.0.38
+      "@types/react": 17.0.43
       eslint: 7.32.0
       typescript: 4.5.4
 
@@ -70,8 +70,8 @@ importers:
       "@types/express": 4.17.13
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       chalk: ^4.1.0
       console-table-printer: 2.10.0
@@ -81,7 +81,7 @@ importers:
       node-fetch: 3.2.3
       npm-which: 3.0.1
       ora: 5.3.0
-      react: ^17.0.2
+      react: 18.0.0
       superjson: 1.8.0
       test-listen: 1.1.0
       tslog: 3.3.1
@@ -104,13 +104,13 @@ importers:
       "@types/express": 4.17.13
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       express: 4.17.3
       http: 0.0.1-security
       node-fetch: 3.2.3
-      react: 17.0.2
+      react: 18.0.0
       test-listen: 1.1.0
       typescript: 4.5.5
       unbuild: 0.6.9
@@ -126,8 +126,8 @@ importers:
       "@types/cookie": 0.4.1
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
@@ -138,8 +138,8 @@ importers:
       jsonwebtoken: 8.5.1
       nanoid: 3.2.0
       path: 0.12.7
-      react: ^17.0.2
-      react-dom: 17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0
       secure-password: 4.0.0
       typescript: ^4.5.3
       unbuild: 0.6.9
@@ -162,14 +162,14 @@ importers:
       url: 0.11.0
     devDependencies:
       "@blitzjs/config": link:../config
-      "@testing-library/react": 12.1.2_react-dom@17.0.2+react@17.0.2
-      "@testing-library/react-hooks": 7.0.2_react-dom@17.0.2+react@17.0.2
+      "@testing-library/react": 12.1.2_react-dom@18.0.0+react@18.0.0
+      "@testing-library/react-hooks": 7.0.2_react-dom@18.0.0+react@18.0.0
       "@types/cookie": 0.4.1
       "@types/jsonwebtoken": 8.5.8
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
       typescript: 4.5.4
       unbuild: 0.6.9
       watch: 1.0.2
@@ -180,29 +180,29 @@ importers:
       "@testing-library/react": 12.1.2
       "@testing-library/user-event": 13.5.0
       "@types/node": 17.0.16
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       blitz: workspace:*
       debug: 4.3.3
       next: 12.1.4
-      react: ^17.0.2
+      react: 18.0.0
       react-query: 3.34.12
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
     dependencies:
       debug: 4.3.3
-      react-query: 3.34.12_react@17.0.2
+      react-query: 3.34.12_react@18.0.0
     devDependencies:
       "@blitzjs/config": link:../config
-      "@testing-library/react": 12.1.2_react@17.0.2
+      "@testing-library/react": 12.1.2_react@18.0.0
       "@testing-library/user-event": 13.5.0
       "@types/node": 17.0.16
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       blitz: link:../blitz
-      next: 12.1.4_react@17.0.2
-      react: 17.0.2
+      next: 12.1.4_react@18.0.0
+      react: 18.0.0
       typescript: 4.5.4
       unbuild: 0.6.9
       watch: 1.0.2
@@ -210,17 +210,11 @@ importers:
   packages/blitz-rpc:
     specifiers:
       "@blitzjs/config": workspace:*
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
-      react: ^17.0.2
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
     devDependencies:
       "@blitzjs/config": link:../config
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
-      react: 17.0.2
       typescript: 4.5.4
       unbuild: 0.6.9
       watch: 1.0.2
@@ -252,8 +246,8 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
@@ -269,7 +263,7 @@ importers:
       npm-which: 3.0.1
       pluralize: 8.0.0
       prettier: ^2.5.1
-      react: ^17.0.2
+      react: 18.0.0
       recast: 0.20.5
       unbuild: 0.6.9
       username: 5.1.0
@@ -292,7 +286,6 @@ importers:
       npm-which: 3.0.1
       pluralize: 8.0.0
       prettier: 2.5.1
-      react: 17.0.2
       recast: 0.20.5
       username: 5.1.0
       vinyl: 2.2.1
@@ -306,22 +299,23 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1_8c696421d8bcc701d2ea1a734127ded5
       "@typescript-eslint/parser": 5.9.1_eslint@7.32.0
+      react: 18.0.0
       unbuild: 0.6.9
       watch: 1.0.2
 
   packages/pkg-template:
     specifiers:
       "@blitzjs/config": workspace:*
-      "@types/react": ^17.0.13
-      "@types/react-dom": ^17.0.8
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
-      react: ^17.0.2
+      react: 18.0.0
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
@@ -330,9 +324,9 @@ importers:
       "@typescript-eslint/parser": 5.9.1_eslint@7.32.0+typescript@4.5.4
     devDependencies:
       "@blitzjs/config": link:../config
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
-      react: 17.0.2
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
+      react: 18.0.0
       typescript: 4.5.4
       unbuild: 0.6.9
       watch: 1.0.2
@@ -1597,7 +1591,7 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@testing-library/react-hooks/7.0.2_react-dom@17.0.2+react@17.0.2:
+  /@testing-library/react-hooks/7.0.2_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
         integrity: sha512-dYxpz8u9m4q1TuzfcUApqi8iFfR6R0FaMbr2hjZJy1uC8z+bO/K4v8Gs9eogGKYQop7QsrBTFkv/BCF7MzD2Cg==,
@@ -1614,15 +1608,15 @@ packages:
         optional: true
     dependencies:
       "@babel/runtime": 7.16.7
-      "@types/react": 17.0.38
-      "@types/react-dom": 17.0.11
+      "@types/react": 17.0.43
+      "@types/react-dom": 17.0.14
       "@types/react-test-renderer": 17.0.1
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-error-boundary: 3.1.4_react@17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+      react-error-boundary: 3.1.4_react@18.0.0
     dev: true
 
-  /@testing-library/react/12.1.2_react-dom@17.0.2+react@17.0.2:
+  /@testing-library/react/12.1.2_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
         integrity: sha512-ihQiEOklNyHIpo2Y8FREkyD1QAea054U0MVbwH1m8N9TxeFz+KoJ9LkqoKqJlzx2JDm56DVwaJ1r36JYxZM05g==,
@@ -1634,11 +1628,11 @@ packages:
     dependencies:
       "@babel/runtime": 7.16.7
       "@testing-library/dom": 8.11.3
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
     dev: true
 
-  /@testing-library/react/12.1.2_react@17.0.2:
+  /@testing-library/react/12.1.2_react@18.0.0:
     resolution:
       {
         integrity: sha512-ihQiEOklNyHIpo2Y8FREkyD1QAea054U0MVbwH1m8N9TxeFz+KoJ9LkqoKqJlzx2JDm56DVwaJ1r36JYxZM05g==,
@@ -1650,7 +1644,7 @@ packages:
     dependencies:
       "@babel/runtime": 7.16.7
       "@testing-library/dom": 8.11.3
-      react: 17.0.2
+      react: 18.0.0
     dev: true
 
   /@testing-library/user-event/13.5.0:
@@ -2038,13 +2032,13 @@ packages:
       }
     dev: true
 
-  /@types/react-dom/17.0.11:
+  /@types/react-dom/17.0.14:
     resolution:
       {
-        integrity: sha512-f96K3k+24RaLGVu/Y2Ng3e1EbZ8/cVJvypZWd7cy0ofCBaf2lcM46xNhycMZ2xGwbBjRql7hOlZ+e2WlJ5MH3Q==,
+        integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==,
       }
     dependencies:
-      "@types/react": 17.0.38
+      "@types/react": 17.0.43
     dev: true
 
   /@types/react-test-renderer/17.0.1:
@@ -2053,13 +2047,13 @@ packages:
         integrity: sha512-3Fi2O6Zzq/f3QR9dRnlnHso9bMl7weKCviFmfF6B4LS1Uat6Hkm15k0ZAQuDz+UBq6B3+g+NM6IT2nr5QgPzCw==,
       }
     dependencies:
-      "@types/react": 17.0.38
+      "@types/react": 17.0.43
     dev: true
 
-  /@types/react/17.0.38:
+  /@types/react/17.0.43:
     resolution:
       {
-        integrity: sha512-SI92X1IA+FMnP3qM5m4QReluXzhcmovhZnLNm3pyeQlooi02qI7sLiepEYqT678uNiyc25XfCqxREFpy3W7YhQ==,
+        integrity: sha512-8Q+LNpdxf057brvPu1lMtC5Vn7J119xrP1aq4qiaefNioQUYANF/CYeK4NsKorSZyUGJ66g0IM+4bbjwx45o2A==,
       }
     dependencies:
       "@types/prop-types": 15.7.4
@@ -7170,7 +7164,7 @@ packages:
       }
     dev: false
 
-  /next/12.1.4_react-dom@17.0.2+react@17.0.2:
+  /next/12.1.4_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
         integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==,
@@ -7194,9 +7188,9 @@ packages:
       "@next/env": 12.1.4
       caniuse-lite: 1.0.30001320
       postcss: 8.4.5
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      styled-jsx: 5.0.1_react@17.0.2
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+      styled-jsx: 5.0.1_react@18.0.0
     optionalDependencies:
       "@next/swc-android-arm-eabi": 12.1.4
       "@next/swc-android-arm64": 12.1.4
@@ -7215,7 +7209,7 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next/12.1.4_react@17.0.2:
+  /next/12.1.4_react@18.0.0:
     resolution:
       {
         integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==,
@@ -7239,8 +7233,8 @@ packages:
       "@next/env": 12.1.4
       caniuse-lite: 1.0.30001320
       postcss: 8.4.5
-      react: 17.0.2
-      styled-jsx: 5.0.1_react@17.0.2
+      react: 18.0.0
+      styled-jsx: 5.0.1_react@18.0.0
     optionalDependencies:
       "@next/swc-android-arm-eabi": 12.1.4
       "@next/swc-android-arm64": 12.1.4
@@ -7380,6 +7374,7 @@ packages:
   /object-assign/4.1.1:
     resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}
     engines: {node: ">=0.10.0"}
+    dev: false
 
   /object-copy/0.1.0:
     resolution: {integrity: sha1-fn2Fi3gb18mRpBupde04EnVOmYw=}
@@ -8156,20 +8151,19 @@ packages:
       strip-json-comments: 2.0.1
     dev: false
 
-  /react-dom/17.0.2_react@17.0.2:
+  /react-dom/18.0.0_react@18.0.0:
     resolution:
       {
-        integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==,
+        integrity: sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==,
       }
     peerDependencies:
-      react: 17.0.2
+      react: ^18.0.0
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 17.0.2
-      scheduler: 0.20.2
+      react: 18.0.0
+      scheduler: 0.21.0
 
-  /react-error-boundary/3.1.4_react@17.0.2:
+  /react-error-boundary/3.1.4_react@18.0.0:
     resolution:
       {
         integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==,
@@ -8179,7 +8173,7 @@ packages:
       react: ">=16.13.1"
     dependencies:
       "@babel/runtime": 7.16.7
-      react: 17.0.2
+      react: 18.0.0
     dev: true
 
   /react-is/16.13.1:
@@ -8196,7 +8190,7 @@ packages:
       }
     dev: true
 
-  /react-query/3.34.12_react@17.0.2:
+  /react-query/3.34.12_react@18.0.0:
     resolution:
       {
         integrity: sha512-flDdudQVH4CqE+kNYYYyo4g2Yjek3H/36G3b9bK5oe26jD5gFnx+PPwnq0gayq5z2dcSfr2z4+drvuyeZ3A5QQ==,
@@ -8214,18 +8208,17 @@ packages:
       "@babel/runtime": 7.16.7
       broadcast-channel: 3.7.0
       match-sorter: 6.3.1
-      react: 17.0.2
+      react: 18.0.0
     dev: false
 
-  /react/17.0.2:
+  /react/18.0.0:
     resolution:
       {
-        integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==,
+        integrity: sha512-x+VL6wbT4JRVPm7EGxXhZ8w8LTROaxPXOqhlGyVSrv0sB1jkyFGgXxJ8LVoPRLvPR6/CIZGFmfzqUa2NYeMr2A==,
       }
     engines: {node: ">=0.10.0"}
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   /read-yaml-file/1.1.0:
     resolution:
@@ -8603,14 +8596,13 @@ packages:
       xmlchars: 2.2.0
     dev: false
 
-  /scheduler/0.20.2:
+  /scheduler/0.21.0:
     resolution:
       {
-        integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==,
+        integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==,
       }
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   /scule/0.2.1:
     resolution:
@@ -9143,7 +9135,7 @@ packages:
       }
     engines: {node: ">=8"}
 
-  /styled-jsx/5.0.1_react@17.0.2:
+  /styled-jsx/5.0.1_react@18.0.0:
     resolution:
       {
         integrity: sha512-+PIZ/6Uk40mphiQJJI1202b+/dYeTVd9ZnMPR80pgiWbjIwvN2zIp4r9et0BgqBuShh48I0gttPlAXA7WVvBxw==,
@@ -9159,7 +9151,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
-      react: 17.0.2
+      react: 18.0.0
 
   /superjson/1.8.0:
     resolution:
