@@ -85,7 +85,7 @@ export default RecipeBuilder()
   .setRepoLink("https://github.com/blitz-js/blitz")
   .addAddDependenciesStep({
     stepId: "install",
-    stepName: "Insstall Next UI",
+    stepName: "Install Next UI",
     explanation: `Import the Next UI provider into _app, so it is accessible in the whole app`,
     packages: [
       {
