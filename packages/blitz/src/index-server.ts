@@ -6,6 +6,7 @@ export * from "./index-browser"
 export * from "./types"
 export * from "./prisma-utils"
 export * from "./middleware"
+export * from "./paginate"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C
