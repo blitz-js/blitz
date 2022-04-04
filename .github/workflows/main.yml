@@ -35,4 +35,5 @@ jobs:
       - run: pnpm manypkg check
       - run: pnpm lint
       - run: pnpm build
+      - run: pnpm build:apps
       - run: pnpm test
