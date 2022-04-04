@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@blitzjs/manypkg": "0.19.1",
-    "blitz": "^0.0.0",
     "eslint": "7.32.0",
     "husky": "7.0.4",
     "jsdom": "19.0.0",
