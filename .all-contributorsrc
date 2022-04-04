@@ -3707,6 +3707,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Caslus",
+      "name": "lucas philippe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22855640?v=4",
+      "profile": "https://github.com/Caslus",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
