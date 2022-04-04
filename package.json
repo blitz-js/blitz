@@ -5,7 +5,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "test/integration/*"
+    "integration-tests/*"
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
