@@ -3689,6 +3689,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "davidbarker",
+      "name": "David Barker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1597139?v=4",
+      "profile": "https://github.com/davidbarker",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
