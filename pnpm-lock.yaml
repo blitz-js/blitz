@@ -65,6 +65,7 @@ importers:
   packages/blitz:
     specifiers:
       "@blitzjs/config": workspace:*
+      "@blitzjs/generator": workspace:*
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/express": 4.17.13
@@ -73,14 +74,18 @@ importers:
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
+      arg: 5.0.1
       chalk: ^4.1.0
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
+      dotenv: 16.0.0
+      dotenv-expand: 8.0.3
       express: 4.17.3
       http: 0.0.1-security
       node-fetch: 3.2.3
       npm-which: 3.0.1
       ora: 5.3.0
+      prompts: 2.4.2
       react: 18.0.0
       superjson: 1.8.0
       test-listen: 1.1.0
@@ -90,11 +95,16 @@ importers:
       watch: 1.0.2
       zod: 3.10.1
     dependencies:
+      "@blitzjs/generator": link:../generator
+      arg: 5.0.1
       chalk: 4.1.2
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
+      dotenv: 16.0.0
+      dotenv-expand: 8.0.3
       npm-which: 3.0.1
       ora: 5.3.0
+      prompts: 2.4.2
       superjson: 1.8.0
       tslog: 3.3.1
     devDependencies:
@@ -2574,6 +2584,13 @@ packages:
     engines: {node: ">=12"}
     dev: false
 
+  /arg/5.0.1:
+    resolution:
+      {
+        integrity: sha512-e0hDa9H2Z9AwFkk2qDlwhoMYE4eToKarchkQHovNdLTCYMHZHeRjI71crOh+dio4K6u1IcwubQqo79Ga4CyAQA==,
+      }
+    dev: false
+
   /argparse/1.0.10:
     resolution:
       {
@@ -3840,6 +3857,22 @@ packages:
     engines: {node: ">=12"}
     dependencies:
       webidl-conversions: 7.0.0
+    dev: false
+
+  /dotenv-expand/8.0.3:
+    resolution:
+      {
+        integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==,
+      }
+    engines: {node: ">=12"}
+    dev: false
+
+  /dotenv/16.0.0:
+    resolution:
+      {
+        integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==,
+      }
+    engines: {node: ">=12"}
     dev: false
 
   /duplexer/0.1.2:
@@ -6789,6 +6822,14 @@ packages:
       graceful-fs: 4.2.9
     dev: false
 
+  /kleur/3.0.3:
+    resolution:
+      {
+        integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==,
+      }
+    engines: {node: ">=6"}
+    dev: false
+
   /language-subtag-registry/0.3.21:
     resolution:
       {
@@ -8288,6 +8329,17 @@ packages:
       }
     engines: {node: ">=0.4.0"}
 
+  /prompts/2.4.2:
+    resolution:
+      {
+        integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==,
+      }
+    engines: {node: ">= 6"}
+    dependencies:
+      kleur: 3.0.3
+      sisteransi: 1.0.5
+    dev: false
+
   /prop-types/15.8.1:
     resolution:
       {
@@ -9052,6 +9104,13 @@ packages:
       mrmime: 1.0.0
       totalist: 1.1.0
     dev: true
+
+  /sisteransi/1.0.5:
+    resolution:
+      {
+        integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==,
+      }
+    dev: false
 
   /slash/2.0.0:
     resolution:
