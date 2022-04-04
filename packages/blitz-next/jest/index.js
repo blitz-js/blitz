@@ -4,7 +4,7 @@ const fs = require("fs")
 const {pathsToModuleNameMapper} = require("ts-jest")
 
 let tsConfig = null
-const tsConfigPath = path.join("<rootDir>", "tsconfig.json")
+const tsConfigPath = path.join(process.cwd(), "tsconfig.json")
 if (fs.existsSync(tsConfigPath)) {
   tsConfig = require(tsConfigPath)
 }
@@ -39,6 +39,10 @@ function createJestConfigForNext(options) {
           },
           testEnvironment: "jest-environment-jsdom",
           testRegex: ["^((?!queries|mutations|api|\\.server\\.).)*\\.(test|spec)\\.(j|t)sx?$"],
+          setupFilesAfterEnv: [
+            path.resolve(__dirname, "./client/setup-after-env.js"),
+            `<rootDir>/test/setup.${tsConfig ? "ts" : "js"}`,
+          ],
         },
         {
           ...common,
@@ -51,6 +55,10 @@ function createJestConfigForNext(options) {
           testRegex: [
             "\\.server\\.(spec|test)\\.(j|t)sx?$",
             "[\\/](queries|mutations|api)[\\/].*\\.(test|spec)\\.(j|t)sx?$",
+          ],
+          setupFilesAfterEnv: [
+            path.resolve(__dirname, "./server/setup-after-env.js"),
+            `<rootDir>/test/setup.${tsConfig ? "ts" : "js"}`,
           ],
         },
       ],
