@@ -3698,6 +3698,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "timfee",
+      "name": "Tim Feeley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246342?v=4",
+      "profile": "http://www.timfeeley.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
