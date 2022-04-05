@@ -30,8 +30,8 @@ const isSafari = browserName === "safari"
 const isFirefox = browserName === "firefox"
 const isIE = browserName === "internet explorer"
 
-if (process.env.ChromeWebDriver) {
-  process.env.PATH = `${process.env.ChromeWebDriver}${path.delimiter}${process.env.PATH}`
+if (CHROMEWEBDRIVER) {
+  process.env.PATH = `${CHROMEWEBDRIVER}${path.delimiter}${process.env.PATH}`
 }
 
 const isBrowserStack = BROWSERSTACK && BROWSERSTACK_USERNAME && BROWSERSTACK_ACCESS_KEY
@@ -95,11 +95,6 @@ if (CHROME_BIN) {
   console.log("chrome bin", CHROME_BIN)
   chromeOptions.setChromeBinaryPath(path.resolve(CHROME_BIN))
 }
-
-// if (CHROMEWEBDRIVER) {
-//   console.log("chromedriver path", CHROMEWEBDRIVER)
-//   chromeOptions.setChromeBinaryPath(path.resolve(CHROMEWEBDRIVER))
-// }
 
 let seleniumServer
 
