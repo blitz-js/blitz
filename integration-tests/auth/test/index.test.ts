@@ -30,12 +30,16 @@ function readCookie(cookieHeader, name) {
 const runTests = (mode?: string) => {
   describe("Auth", () => {
     describe("unauthenticated", () => {
-      it("should render error for protected query", async () => {
-        const browser = await webdriver(appPort, "/authenticated-page")
-        let errorMsg = await browser.elementByXpath(`//*[@id="__next"]/div`)
-        expect(errorMsg).toMatch(/Error: You are not authenticated/)
-        if (browser) browser.close()
-      })
+      it(
+        "should render error for protected query",
+        async () => {
+          const browser = await webdriver(appPort, "/authenticated-page")
+          let errorMsg = await browser.elementByXpath(`//*[@id="__next"]/div`)
+          expect(errorMsg).toMatch(/Error: You are not authenticated/)
+          if (browser) browser.close()
+        },
+        5000 * 60 * 2,
+      )
 
       it("should render result for open query", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
