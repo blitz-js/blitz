@@ -83,6 +83,7 @@ let safariOptions = new SafariOptions()
 chromeOptions.addArguments("--remote-debugging-port=9222")
 chromeOptions.addArguments("--headless")
 chromeOptions.addArguments("--no-sandbox")
+chromeOptions.addArguments("--disable-gpu")
 chromeOptions.addArguments("--disable-dev-shm-usage")
 
 // if (HEADLESS) {
