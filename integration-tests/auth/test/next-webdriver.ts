@@ -1,5 +1,4 @@
 /// <reference types="./next-webdriver" />
-// require("chromedriver")
 import fetch from "node-fetch"
 import os from "os"
 import path from "path"
@@ -8,7 +7,6 @@ import {Options as ChromeOptions} from "selenium-webdriver/chrome"
 import {Options as FireFoxOptions} from "selenium-webdriver/firefox"
 import {Options as SafariOptions} from "selenium-webdriver/safari"
 import Chain from "./wd-chain"
-// import locateChrome from "locate-chrome"
 
 export function waitFor(millis) {
   return new Promise((resolve) => setTimeout(resolve, millis))
@@ -82,10 +80,8 @@ let firefoxOptions = new FireFoxOptions()
 let safariOptions = new SafariOptions()
 
 chromeOptions.addArguments("--remote-debugging-port=9222")
-// locateChrome((l) => {
-//   console.log("chrome location", l)
-//   chromeOptions.setChromeBinaryPath(path.resolve(l))
-// })
+chromeOptions.addArguments("--no-sandbox")
+chromeOptions.addArguments("--disable-dev-shm-usage")
 
 if (HEADLESS) {
   const screenSize = {width: 1280, height: 720}
