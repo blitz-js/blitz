@@ -86,6 +86,7 @@ importers:
       express: 4.17.3
       fs-extra: 10.0.1
       get-port: 6.1.2
+      locate-chrome: 0.1.1
       lowdb: 3.0.0
       next: 12.1.4
       node-fetch: 3.2.3
@@ -123,6 +124,7 @@ importers:
       express: 4.17.3
       fs-extra: 10.0.1
       get-port: 6.1.2
+      locate-chrome: 0.1.1
       node-fetch: 3.2.3
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
@@ -4140,6 +4142,10 @@ packages:
       is-symbol: 1.0.4
     dev: false
 
+  /es6-promise/2.3.0:
+    resolution: {integrity: sha1-lu258v2wGZWCKyY92KratnSBgbw=}
+    dev: true
+
   /esbuild-android-64/0.14.30:
     resolution:
       {
@@ -7129,6 +7135,15 @@ packages:
     engines: {node: ">=14"}
     dev: false
 
+  /locate-chrome/0.1.1:
+    resolution: {integrity: sha1-XyDR1uyOQJJgO8d9sQ/Zlob6614=}
+    hasBin: true
+    dependencies:
+      es6-promise: 2.3.0
+      queue-async: 1.2.1
+      userhome: 1.0.0
+    dev: true
+
   /locate-path/2.0.0:
     resolution: {integrity: sha1-K1aLJl7slExtnA3pw9u7ygNUzY4=}
     engines: {node: ">=4"}
@@ -8669,6 +8684,10 @@ packages:
     engines: {node: ">=0.4.x"}
     deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
     dev: false
+
+  /queue-async/1.2.1:
+    resolution: {integrity: sha1-BYLgHa4lMljPV2/Co125b8qEf28=}
+    dev: true
 
   /queue-microtask/1.2.3:
     resolution:
@@ -10466,6 +10485,11 @@ packages:
       }
     engines: {node: ">=0.10.0"}
     dev: false
+
+  /userhome/1.0.0:
+    resolution: {integrity: sha1-tkkf8S0hpecmcd+czIcX4cZojAs=}
+    engines: {node: ">= 0.8.0"}
+    dev: true
 
   /username/5.1.0:
     resolution:

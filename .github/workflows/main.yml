@@ -27,6 +27,7 @@ jobs:
         with:
           version: 6.10.0
       - uses: browser-actions/setup-chrome@latest
+      - run: chrome --version
       - name: Setup node
         uses: actions/setup-node@v2
         with:

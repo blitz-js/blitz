@@ -40,6 +40,7 @@
     "express": "4.17.3",
     "fs-extra": "10.0.1",
     "get-port": "6.1.2",
+    "locate-chrome": "0.1.1",
     "node-fetch": "3.2.3",
     "rimraf": "3.0.2",
     "selenium-webdriver": "4.1.1",
