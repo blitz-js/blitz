@@ -27,6 +27,10 @@ jobs:
         with:
           version: 6.10.0
       - uses: browser-actions/setup-chrome@latest
+      - run: chrome --version
+        if: ${{ matrix.os == 'ubuntu-latest'}}
+      - run: start chrome
+        if: ${{ matrix.os == 'windows-latest'}}
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -34,13 +38,6 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
-      - run: |
-          if ["$RUNNER_OS" == "Windows"]; then
-            start chrome
-          else
-            chrome --version
-          fi
-        shell: bash
       - run: pnpm lint
       - run: pnpm build
       - run: pnpm build:apps
