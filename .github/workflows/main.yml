@@ -26,12 +26,7 @@ jobs:
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.10.0
-      - uses: browser-actions/setup-chrome@latest
       - uses: nanasess/setup-chromedriver@v1
-      - run: chrome --version
-        if: ${{ matrix.os == 'ubuntu-latest'}}
-      - run: start chrome
-        if: ${{ matrix.os == 'windows-latest'}}
       - run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
