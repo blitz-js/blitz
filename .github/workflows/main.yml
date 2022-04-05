@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -27,11 +27,17 @@ jobs:
         with:
           version: 6.10.0
       - uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
+      - uses: nanasess/setup-chromedriver@v1
       - run: chrome --version
         if: ${{ matrix.os == 'ubuntu-latest'}}
       - run: start chrome
+        if: ${{ matrix.os == 'windows-latest'}}
+      - run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+        if: ${{ matrix.os == 'ubuntu-latest'}}
+      - run: chromedriver --url-base=/wd/hub &
         if: ${{ matrix.os == 'windows-latest'}}
       - name: Setup node
         uses: actions/setup-node@v2
