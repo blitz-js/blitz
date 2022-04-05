@@ -85,11 +85,11 @@ chromeOptions.addArguments("--headless")
 chromeOptions.addArguments("--no-sandbox")
 chromeOptions.addArguments("--disable-dev-shm-usage")
 
-if (HEADLESS) {
-  const screenSize = {width: 1280, height: 720}
-  chromeOptions = chromeOptions.headless().windowSize(screenSize)
-  firefoxOptions = firefoxOptions.headless().windowSize(screenSize)
-}
+// if (HEADLESS) {
+//   const screenSize = {width: 1280, height: 720}
+//   chromeOptions = chromeOptions.headless().windowSize(screenSize)
+//   firefoxOptions = firefoxOptions.headless().windowSize(screenSize)
+// }
 
 if (CHROME_BIN) {
   console.log("chrome bin", CHROME_BIN)

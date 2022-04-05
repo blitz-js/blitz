@@ -118,7 +118,7 @@ describe("dev mode", () => {
     appPort = await findPort()
     app = await launchApp(appDir, appPort, {})
     await seed()
-  }, 1000 * 60 * 2)
+  }, 5000 * 60 * 2)
   afterAll(() => killApp(app))
   runTests()
 })
@@ -128,7 +128,7 @@ describe("server mode", () => {
     appPort = await findPort()
     await nextBuild(appDir)
     app = await nextStart(appDir, appPort)
-  }, 1000 * 60 * 2)
+  }, 5000 * 60 * 2)
   afterAll(() => killApp(app))
 
   runTests()
