@@ -178,12 +178,16 @@ importers:
     specifiers:
       "@blitzjs/config": workspace:*
       "@testing-library/react": 13.0.0
+      "@testing-library/react-hooks": 7.0.2
       "@testing-library/user-event": 13.5.0
+      "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
+      "@types/testing-library__react-hooks": 4.0.0
       blitz: workspace:*
       debug: 4.3.3
+      lodash.frompairs: 4.0.1
       next: 12.1.4
       react: 18.0.0
       react-dom: 18.0.0
@@ -197,11 +201,15 @@ importers:
     devDependencies:
       "@blitzjs/config": link:../config
       "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
+      "@testing-library/react-hooks": 7.0.2_react-dom@18.0.0+react@18.0.0
       "@testing-library/user-event": 13.5.0
+      "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
+      "@types/testing-library__react-hooks": 4.0.0_react-dom@18.0.0+react@18.0.0
       blitz: link:../blitz
+      lodash.frompairs: 4.0.1
       next: 12.1.4_react-dom@18.0.0+react@18.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -1903,6 +1911,22 @@ packages:
       "@types/node": 17.0.16
     dev: false
 
+  /@types/lodash.frompairs/4.0.6:
+    resolution:
+      {
+        integrity: sha512-rwCUf4NMKhXpiVjL/RXP8YOk+rd02/J4tACADEgaMXRVnzDbSSlBMKFZoX/ARmHVLg3Qc98Um4PErGv8FbxU7w==,
+      }
+    dependencies:
+      "@types/lodash": 4.14.181
+    dev: true
+
+  /@types/lodash/4.14.181:
+    resolution:
+      {
+        integrity: sha512-n3tyKthHJbkiWhDZs3DkhkCzt2MexYHXlX0td5iMplyfwketaOeKboEVBqzceH7juqvEg3q5oUoBFxSLu7zFag==,
+      }
+    dev: true
+
   /@types/mem-fs-editor/7.0.1:
     resolution:
       {
@@ -2107,6 +2131,20 @@ packages:
       }
     dependencies:
       "@types/node": 17.0.16
+    dev: true
+
+  /@types/testing-library__react-hooks/4.0.0_react-dom@18.0.0+react@18.0.0:
+    resolution:
+      {
+        integrity: sha512-UzZUXthQtVjDruR2YA+hqg9ux5AfmZ8Kaw+QDungax+T7wb/5NC4x7YOpIqRx7oY3KksGQ69bzNE/xwzb5NslQ==,
+      }
+    deprecated: This is a stub types definition. @testing-library/react-hooks provides its own type definitions, so you do not need this installed.
+    dependencies:
+      "@testing-library/react-hooks": 7.0.2_react-dom@18.0.0+react@18.0.0
+    transitivePeerDependencies:
+      - react
+      - react-dom
+      - react-test-renderer
     dev: true
 
   /@types/vinyl/2.0.6:
@@ -6915,6 +6953,10 @@ packages:
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=}
     dev: false
+
+  /lodash.frompairs/4.0.1:
+    resolution: {integrity: sha1-vE5SB/onV8E25XNhTpZkUGsrG9I=}
+    dev: true
 
   /lodash.includes/4.3.0:
     resolution: {integrity: sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=}
