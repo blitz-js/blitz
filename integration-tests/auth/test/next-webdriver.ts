@@ -1,5 +1,4 @@
 /// <reference types="./next-webdriver" />
-require("chromedriver")
 import fetch from "node-fetch"
 import os from "os"
 import path from "path"
