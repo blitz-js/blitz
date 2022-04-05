@@ -91,15 +91,15 @@ if (HEADLESS) {
   firefoxOptions = firefoxOptions.headless().windowSize(screenSize)
 }
 
-// if (CHROME_BIN) {
-//   console.log("chrome bin", CHROME_BIN)
-//   chromeOptions.setChromeBinaryPath(path.resolve(CHROME_BIN))
-// }
-
-if (CHROMEWEBDRIVER) {
-  console.log("chromedriver path", CHROMEWEBDRIVER)
-  chromeOptions.setChromeBinaryPath(path.resolve(CHROMEWEBDRIVER))
+if (CHROME_BIN) {
+  console.log("chrome bin", CHROME_BIN)
+  chromeOptions.setChromeBinaryPath(path.resolve(CHROME_BIN))
 }
+
+// if (CHROMEWEBDRIVER) {
+//   console.log("chromedriver path", CHROMEWEBDRIVER)
+//   chromeOptions.setChromeBinaryPath(path.resolve(CHROMEWEBDRIVER))
+// }
 
 let seleniumServer
 
