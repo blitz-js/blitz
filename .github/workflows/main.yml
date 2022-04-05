@@ -26,8 +26,14 @@ jobs:
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.10.0
-      - uses: browser-actions/setup-chrome@latest
-      - run: chrome --version
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@latest
+        run: |
+          if ["$RUNNER_OS" == "Windows"]; then
+            start chrome
+          else
+            chrome --version
+          fi
       - name: Setup node
         uses: actions/setup-node@v2
         with:
