@@ -80,7 +80,8 @@ let chromeOptions = new ChromeOptions()
 let firefoxOptions = new FireFoxOptions()
 let safariOptions = new SafariOptions()
 
-chromeOptions = chromeOptions.addArguments("--remote-debugging-port=9222")
+chromeOptions.addArguments("--remote-debugging-port=9222")
+
 if (HEADLESS) {
   const screenSize = {width: 1280, height: 720}
   chromeOptions = chromeOptions.headless().windowSize(screenSize)
@@ -88,7 +89,7 @@ if (HEADLESS) {
 }
 
 if (CHROME_BIN) {
-  chromeOptions = chromeOptions.setChromeBinaryPath(path.resolve(CHROME_BIN))
+  chromeOptions.setChromeBinaryPath(path.resolve(CHROME_BIN))
 }
 
 let seleniumServer
