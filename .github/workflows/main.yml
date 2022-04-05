@@ -26,14 +26,7 @@ jobs:
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.10.0
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@latest
-        run: |
-          if ["$RUNNER_OS" == "Windows"]; then
-            start chrome
-          else
-            chrome --version
-          fi
+      - uses: browser-actions/setup-chrome@latest
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -41,6 +34,12 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
+      - run: |
+          if ["$RUNNER_OS" == "Windows"]; then
+            start chrome
+          else
+            chrome --version
+          fi
       - run: pnpm lint
       - run: pnpm build
       - run: pnpm build:apps
