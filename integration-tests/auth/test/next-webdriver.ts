@@ -30,8 +30,8 @@ const isSafari = browserName === "safari"
 const isFirefox = browserName === "firefox"
 const isIE = browserName === "internet explorer"
 
-if (CHROMEWEBDRIVER) {
-  process.env.PATH = `${CHROMEWEBDRIVER}${path.delimiter}${process.env.PATH}`
+if (process.env.ChromeWebDriver) {
+  process.env.PATH = `${process.env.ChromeWebDriver}${path.delimiter}${process.env.PATH}`
 }
 
 const isBrowserStack = BROWSERSTACK && BROWSERSTACK_USERNAME && BROWSERSTACK_ACCESS_KEY
