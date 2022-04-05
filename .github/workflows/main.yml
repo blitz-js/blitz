@@ -40,6 +40,7 @@ jobs:
           else
             chrome --version
           fi
+        shell: bash
       - run: pnpm lint
       - run: pnpm build
       - run: pnpm build:apps
