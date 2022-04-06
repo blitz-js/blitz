@@ -32,9 +32,8 @@ jobs:
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
         if: ${{ matrix.os == 'ubuntu-latest'}}
-      - run: start chromedriver --whitelisted-ips="" --url-base=/wd/hub &
+      - run: chromedriver --whitelisted-ips="" --url-base=/wd/hub &
         if: ${{ matrix.os == 'windows-latest'}}
-        shell: cmd
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -47,6 +46,8 @@ jobs:
       - run: pnpm build:apps
       - run: pnpm test
         if: ${{ matrix.os == 'windows-latest'}}
-        shell: cmd
+        shell: pwsh
+        env:
+          PATH: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
       - run: pnpm test
         if: ${{ matrix.os == 'ubuntu-latest'}}
