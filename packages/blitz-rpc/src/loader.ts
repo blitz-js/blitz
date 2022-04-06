@@ -1,4 +1,8 @@
-import {toPosixPath, transformTelefuncFile, transformTelefuncFileSSR} from "./index-server"
+import {
+  toPosixPath,
+  transformBlitzRpcResolverClient,
+  transformBlitzRpcResolverServer,
+} from "./index-server"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 type Loader = {
@@ -19,11 +23,11 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
   const isSSR = compiler.name === "server"
   if (isSSR) {
-    const {code} = await transformTelefuncFileSSR(input, toPosixPath(id), toPosixPath(root))
+    const {code} = await transformBlitzRpcResolverServer(input, toPosixPath(id), toPosixPath(root))
     return code
   }
 
-  const {code} = await transformTelefuncFile(input, toPosixPath(id), toPosixPath(root))
+  const {code} = await transformBlitzRpcResolverClient(input, toPosixPath(id), toPosixPath(root))
   return code
 }
 

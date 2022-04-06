@@ -1,4 +1,5 @@
 import {assert} from "blitz"
+import {IncomingMessage, ServerResponse} from "http"
 export * from "./index-browser"
 
 import {win32, posix, sep} from "path"
@@ -37,7 +38,7 @@ export function toSystemPath(path: string) {
 // -------------
 // TRANSFORM SSR
 // -------------
-export async function transformTelefuncFileSSR(src: string, id: string, root: string) {
+export async function transformBlitzRpcResolverServer(src: string, id: string, root: string) {
   assertPosixPath(id)
   assertPosixPath(root)
 
@@ -50,18 +51,14 @@ export async function transformTelefuncFileSSR(src: string, id: string, root: st
 function getServerCode(src: string, filePath: string) {
   assertPosixPath(filePath)
 
-  const telefuncImport = 'import { __internal_addTelefunction } from "@blitzjs/rpc";'
+  const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
 
-  // No break line between `telefuncImport` and `src` in order to preserve the source map's line mapping
-  let code = telefuncImport + src
-
-  const exportNames = ["default"]
+  // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
+  let code = blitzImport + src
 
   code += "\n\n"
-  for (const exportName of exportNames) {
-    code += `__internal_addTelefunction("${exportName}", "${filePath}");`
-    code += "\n"
-  }
+  code += `__internal_addBlitzRpcResolver("${filePath}");`
+  code += "\n"
 
   return code
 }
@@ -72,43 +69,32 @@ function getServerCode(src: string, filePath: string) {
 // ----------------
 // TRANSFORM CLIENT
 // ----------------
-export async function transformTelefuncFile(src: string, id: string, root: string) {
-  const exportNames = ["default"]
-  return transformTelefuncFileSync(id, root, exportNames)
+export async function transformBlitzRpcResolverClient(_src: string, id: string, root: string) {
+  return transformResolverSync(id, root)
 }
-function transformTelefuncFileSync(
-  id: string,
-  root: string,
-  exportNames: readonly string[] | string[],
-) {
+function transformResolverSync(id: string, root: string) {
   assertPosixPath(id)
   assertPosixPath(root)
 
-  const telefuncFilePath = "/" + posix.relative(root, id)
-  assert(!telefuncFilePath.startsWith("/."), "TODO")
-  assertPosixPath(telefuncFilePath)
+  const resolverFilePath = "/" + posix.relative(root, id)
+  assert(!resolverFilePath.startsWith("/."), "TODO")
+  assertPosixPath(resolverFilePath)
 
   return {
-    code: getClientCode(exportNames, telefuncFilePath),
+    code: getClientCode(resolverFilePath),
     map: null,
   }
 }
 
-export function getClientCode(exportNames: readonly string[], telefuncFilePath: string) {
+export function getClientCode(resolverFilePath: string) {
   const lines: string[] = []
 
   lines.push("// @ts-nocheck")
 
   lines.push(`import { __internal_fetchBlitzRpc } from "@blitzjs/rpc";`)
 
-  exportNames.forEach((exportName) => {
-    const exportValue = `(...args) => __internal_fetchBlitzRpc('${telefuncFilePath}', '${exportName}', args);`
-    if (exportName === "default") {
-      lines.push(`export default ${exportValue}`)
-    } else {
-      lines.push(`export const ${exportName} = ${exportValue};`)
-    }
-  })
+  const exportValue = `(...args) => __internal_fetchBlitzRpc('${resolverFilePath}', args);`
+  lines.push(`export default ${exportValue}`)
 
   const code = lines.join("\n")
   return code
@@ -117,79 +103,52 @@ export function getClientCode(exportNames: readonly string[], telefuncFilePath: 
 // END TRANSFORM CLIENT
 // --------------------
 
-// import type { NextConfig } from 'next'
-// import { resolve } from 'path'
-// const dir = __dirname + (() => '')() // trick to avoid `@vercel/ncc` to glob import
-// const loader = resolve(dir, './loader.js')
-//
-// function install<T extends any[]>(config: { module?: { rules?: T } }) {
-//   config.module!.rules!.push({
-//     test: /\.telefunc\./,
-//     use: [{ loader }]
-//   })
-// }
-//
-// function telefuncPlugin(nextConfig: NextConfig = {}) {
-//   return Object.assign({}, nextConfig, {
-//     webpack: (config, options) => {
-//       install(config)
-//       if (typeof nextConfig.webpack === 'function') {
-//         return nextConfig.webpack(config, options)
-//       }
-//       return config
-//     }
-//   } as NextConfig)
-// }
-
 // ------
 // LOADER
 // ------
-// Mechanism used by Vite/Next/Nuxt plugins for automatically loading `.telefunc.js` files.
-
-export {loadTelefuncFilesWithInternalMechanism}
-export {__internal_addTelefunction}
+// Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
 }
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
-  assert(key.startsWith("__internal_telefunc"), "TODO")
+  assert(key.startsWith("__internal_blitz"), "unsupported key")
   if (typeof global === "undefined") {
     return defaultValue
   }
-  assert(isObject(global), "TODO")
+  assert(isObject(global), "not an object")
   return ((global as Record<string, unknown>)[key] =
     ((global as Record<string, unknown>)[key] as T) || defaultValue)
 }
 
-type Telefunction = (...args: unknown[]) => Promise<unknown>
+type Resolver = (...args: unknown[]) => Promise<unknown>
 type FileExports = Record<string, unknown>
-type TelefuncFiles = Record<string, FileExports>
+type ResolverFiles = Record<string, FileExports>
 
-// We define `global.__internal_telefuncFiles` to ensure we use the same global object.
+// We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
 // Needed for Next.js. I'm guessing that Next.js is including the `node_modules/` files in a seperate bundle than user files.
-const g = getGlobalObject<{telefuncFilesLoaded: TelefuncFiles | null}>("__internal_telefuncFiles", {
-  telefuncFilesLoaded: null,
-})
+const g = getGlobalObject<{blitzRpcResolverFilesLoaded: ResolverFiles | null}>(
+  "__internal_blitzRpcResolverFiles",
+  {
+    blitzRpcResolverFilesLoaded: null,
+  },
+)
 
-function loadTelefuncFilesWithInternalMechanism() {
-  return g.telefuncFilesLoaded
+export function loadBlitzRpcResolverFilesWithInternalMechanism() {
+  return g.blitzRpcResolverFilesLoaded
 }
 
-function __internal_addTelefunction(
-  telefunction: Telefunction,
-  telefunctionFileExport: string,
-  telefuncFilePath: string,
+export function __internal_addBlitzRpcResolver(
+  resolver: Resolver,
+  resolverFileExport: string,
+  resolverFilePath: string,
 ) {
-  g.telefuncFilesLoaded = g.telefuncFilesLoaded || {}
-  g.telefuncFilesLoaded[telefuncFilePath] = {
-    ...g.telefuncFilesLoaded[telefuncFilePath],
-    [telefunctionFileExport]: telefunction,
+  g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
+  g.blitzRpcResolverFilesLoaded[resolverFilePath] = {
+    ...g.blitzRpcResolverFilesLoaded[resolverFilePath],
+    [resolverFileExport]: resolver,
   }
 }
-// ----------
-// END LOADER
-// ----------
 
 import {resolve} from "path"
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
@@ -217,4 +176,71 @@ export function blitzPlugin(nextConfig: NextConfig = {}) {
       return config
     },
   } as NextConfig)
+}
+// ----------
+// END LOADER
+// ----------
+
+export async function handleRpcRequest(req: IncomingMessage, res: ServerResponse) {
+  // TODO - stop hard coding input to loadResolverFiles
+  const resolverFilesLoaded = await loadResolverFiles({
+    root: null,
+    isProduction: false,
+    resolverFiles: null,
+  })
+  console.log("FILES loaded", resolverFilesLoaded)
+  assert(resolverFilesLoaded, "No query or mutation resolvers found")
+}
+
+const assertUsage = assert as any
+
+async function loadResolverFiles(runContext: {
+  root: string | null
+  // viteDevServer: ViteDevServer | null
+  isProduction: boolean
+  resolverFiles: string[] | null
+}): Promise<ResolverFiles | null | undefined> {
+  // Handles:
+  // - When the user provides the telefunc file paths with `telefuncConfig.resolverFiles`
+  // if (runContext.resolverFiles) {
+  //   const telefuncFilesLoaded = loadTelefuncFilesFromConfig(
+  //     runContext.resolverFiles,
+  //     runContext.root,
+  //   )
+  //   return telefuncFilesLoaded
+  // }
+
+  // Handles:
+  // - Next.js
+  // - Nuxt
+  // - Vite with `importBuild.js`
+  {
+    const resolverFilesLoaded = loadBlitzRpcResolverFilesWithInternalMechanism()
+    if (resolverFilesLoaded) {
+      assertUsage(Object.keys(resolverFilesLoaded).length > 0, getErrMsg("webpack"))
+      return resolverFilesLoaded
+    }
+  }
+
+  // Handles:
+  // - Vite
+  // {
+  //   const {resolverFilesLoaded, viteProvider} = await loadTelefuncFilesWithVite(runContext)
+  //   if (resolverFilesLoaded) {
+  //     assertUsage(
+  //       Object.keys(resolverFilesLoaded).length > 0,
+  //       getErrMsg(`Vite [\`${viteProvider}\`]`),
+  //     )
+  //     return resolverFilesLoaded
+  //   }
+  // }
+
+  assertUsage(
+    false,
+    "You don't seem to be using Blitz RPC with a supported stack. Reach out on GitHub or Discord.",
+  )
+}
+
+function getErrMsg(crawler: string) {
+  return "No queries or mutations found. Did you create one? (Crawler: " + crawler + ".)"
 }
