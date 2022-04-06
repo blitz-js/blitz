@@ -13,9 +13,6 @@ concurrency:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
     strategy:
       matrix:
         os:
@@ -34,6 +31,9 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+        if: ${{ matrix.os == 'ubuntu-latest'}}
+      - run: chromedriver --url-base=/wd/hub &
+        if: ${{ matrix.os == 'windows-latest'}}
       - name: Setup node
         uses: actions/setup-node@v2
         with:
