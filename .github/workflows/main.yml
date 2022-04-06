@@ -45,3 +45,7 @@ jobs:
       - run: pnpm build
       - run: pnpm build:apps
       - run: pnpm test
+        if: ${{ matrix.os == 'windows-latest'}}
+        shell: cmd
+      - run: pnpm test
+        if: ${{ matrix.os == 'ubuntu-latest'}}
