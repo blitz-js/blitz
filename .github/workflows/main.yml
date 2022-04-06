@@ -49,4 +49,4 @@ jobs:
       - run: pnpm test
         if: ${{ matrix.os == 'windows-latest'}}
         env:
-          PATH: C:\Windows\System32
+          PATH: ${{%SystemRoot%}}\System32
