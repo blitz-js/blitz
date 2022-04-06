@@ -20,14 +20,14 @@ import React, {forwardRef} from "react"
 import type {ErrorFallbackProps} from "./error-boundary"
 import {ErrorBoundary, withErrorBoundary} from "./error-boundary"
 
+beforeEach(() => {
+  ;(global as any).IS_REACT_ACT_ENVIRONMENT = true
+  spyOn(console, "error").mockImplementation(() => {})
+})
 afterEach(() => {
   vi.resetAllMocks()
   vi.restoreAllMocks()
   cleanup()
-})
-
-beforeEach(() => {
-  spyOn(console, "error").mockImplementation(() => {})
 })
 
 function ErrorFallback({error, resetErrorBoundary}: ErrorFallbackProps) {
@@ -92,17 +92,19 @@ test("standard use-case", () => {
     `"Error: Uncaught [Error: 💥 CABOOM 💥]"`,
   )
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
-    "The above error occurred in the <Bomb> component:
-    
-        at Bomb 
-        at ErrorBoundary 
-        at div
-        at div
-        at App 
-    
-    React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
+    "Error: Uncaught [Error: 💥 CABOOM 💥]
+        at reportException 
+        at innerInvokeEventListeners 
+        at invokeEventListeners 
+        at HTMLUnknownElementImpl._dispatch 
+        at HTMLUnknownElementImpl.dispatchEvent 
+        at HTMLUnknownElement.dispatchEvent 
+        at Object.invokeGuardedCallbackDev 
+        at invokeGuardedCallback 
+        at beginWork\$1 
+        at performUnitOfWork "
   `)
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   expect(screen.getByRole("alert")).toMatchInlineSnapshot(`
@@ -156,7 +158,7 @@ test("fallbackRender prop", () => {
   }
 
   const {unmount} = render(<App />)
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // the render prop API allows a single action to reset the app state
@@ -175,7 +177,7 @@ test("simple fallback is supported", () => {
       <span>child</span>
     </ErrorBoundary>,
   )
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
   expect(screen.getByText(/oh no/i)).to.exist
   expect(screen.queryByText(/child/i)).to.not.exist
@@ -198,15 +200,19 @@ test("withErrorBoundary HOC", () => {
   const firstLineOfError = firstLine(actualError as string)
   expect(firstLineOfError).toMatchInlineSnapshot(`"Error: Uncaught [Error: 💥 CABOOM 💥]"`)
   expect(cleanStack(componentStack)).toMatchInlineSnapshot(`
-    "The above error occurred in one of your React components:
-    
-        at __vite_ssr_import_4__.withErrorBoundary.FallbackComponent 
-        at ErrorBoundary 
-        at withErrorBoundary
-    
-    React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary."
+    "Error: Uncaught [Error: 💥 CABOOM 💥]
+        at reportException 
+        at innerInvokeEventListeners 
+        at invokeEventListeners 
+        at HTMLUnknownElementImpl._dispatch 
+        at HTMLUnknownElementImpl.dispatchEvent 
+        at HTMLUnknownElement.dispatchEvent 
+        at Object.invokeGuardedCallbackDev 
+        at invokeGuardedCallback 
+        at beginWork\$1 
+        at performUnitOfWork "
   `)
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   const [error, onErrorComponentStack] = (onErrorHandler.mock.calls as [[Error, string]])[0]
@@ -251,7 +257,7 @@ test("supported but undocumented reset method", () => {
   userEvent.click(screen.getByText("explode"))
 
   expect(screen.queryByText(children)).not.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   userEvent.click(screen.getByText("recover"))
@@ -319,7 +325,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
   // blow it up
   userEvent.click(screen.getByText("toggle explode"))
   expect(screen.getByRole("alert")).to.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // recover via try again button
@@ -334,7 +340,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
   // blow it up again
   userEvent.click(screen.getByText("toggle explode"))
   expect(screen.getByRole("alert")).to.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // recover via resetKeys change
@@ -349,7 +355,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
   // blow it up again
   userEvent.click(screen.getByText("toggle explode"))
   expect(screen.getByRole("alert")).to.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // toggles adding an extra resetKey to the array
@@ -359,7 +365,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
   expect(handleResetKeysChange).toHaveBeenCalledWith([true], [true, true])
   handleResetKeysChange.mockClear()
   expect(screen.getByRole("alert")).to.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // toggle explode back to false
@@ -370,7 +376,7 @@ test("supports automatic reset of error boundary when resetKeys change", () => {
   expect(handleResetKeysChange).toHaveBeenCalledWith([true, true], [false, true])
   expect(screen.getByRole("alert")).to.exist
   handleResetKeysChange.mockClear()
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // toggle extra resetKey
@@ -412,7 +418,7 @@ test("supports reset via resetKeys right after error is triggered on component m
 
   // it blows up on render
   expect(screen.queryByRole("alert", {})).to.exist
-  expect(consoleError).toHaveBeenCalledTimes(2)
+  expect(consoleError).toHaveBeenCalledTimes(3)
   consoleError.mockClear()
 
   // recover via "toggle explode" button

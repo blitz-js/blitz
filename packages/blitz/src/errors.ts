@@ -92,3 +92,17 @@ if (process.env.JEST_WORKER_ID === undefined) {
     allowProps: errorProps,
   })
 }
+
+export class PaginationArgumentError extends Error {
+  name = "PaginationArgumentError"
+  statusCode = 422
+  constructor(message = "The pagination arguments are invalid") {
+    super(message)
+  }
+}
+if (process.env.JEST_WORKER_ID === undefined) {
+  SuperJson.registerClass(PaginationArgumentError, {
+    identifier: "BlitzPaginationArgumentError",
+    allowProps: errorProps,
+  })
+}

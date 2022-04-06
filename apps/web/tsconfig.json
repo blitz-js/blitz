@@ -1,11 +1,5 @@
 {
   "extends": "@blitzjs/config/tsconfig.nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "compilerOptions": {
-    "paths": {
-      "react": ["./node_modules/@types/react"]
-    }
-  },
-  "exclude": ["node_modules"],
-  "baseUrl": "."
+  "exclude": ["node_modules"]
 }
