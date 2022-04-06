@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "debug": "4.3.3",
+    "fs-extra": "^9.1.0",
     "react-query": "3.34.12"
   },
   "devDependencies": {

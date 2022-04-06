@@ -102,6 +102,7 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   // todo: finish this
   // Used to build BlitzPage type
   const types = {} as {plugins: typeof plugins}
+  /*@ts-ignore */
 
   return {
     types,
