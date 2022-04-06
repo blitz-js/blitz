@@ -34,6 +34,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest'}}
       - run: chromedriver --whitelisted-ips="" --url-base=/wd/hub &
         if: ${{ matrix.os == 'windows-latest'}}
+        shell: cmd
       - name: Setup node
         uses: actions/setup-node@v2
         with:

@@ -31,8 +31,9 @@ const isFirefox = browserName === "firefox"
 const isIE = browserName === "internet explorer"
 
 if (CHROMEWEBDRIVER) {
-  console.log(process.env.PATH)
-  console.log(`${CHROMEWEBDRIVER}${path.delimiter}${process.env.PATH}`)
+  console.log("path", process.env.PATH)
+  console.log("comspec", process.env.COMSPEC)
+  console.log("chromedriver", `${CHROMEWEBDRIVER}${path.delimiter}${process.env.PATH}`)
 }
 
 if (process.env.ChromeWebDriver) {
