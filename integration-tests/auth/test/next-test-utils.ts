@@ -114,6 +114,7 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
       cwd,
       env,
       stdio: ["ignore", "pipe", "pipe"],
+      windowsVerbatimArguments: true,
     })
 
     if (typeof options.instance === "function") {
