@@ -12,7 +12,7 @@ function assertPosixPath(path: string) {
   // assert(path.startsWith('/'), errMsg)
 }
 
-function toPosixPath(path: string) {
+export function toPosixPath(path: string) {
   if (process.platform !== "win32") {
     assert(sep === posix.sep, "TODO")
     assertPosixPath(path)
@@ -25,7 +25,7 @@ function toPosixPath(path: string) {
   }
 }
 
-function toSystemPath(path: string) {
+export function toSystemPath(path: string) {
   path = path.split(posix.sep).join(sep)
   path = path.split(win32.sep).join(sep)
   return path
@@ -37,7 +37,7 @@ function toSystemPath(path: string) {
 // -------------
 // TRANSFORM SSR
 // -------------
-async function transformTelefuncFileSSR(src: string, id: string, root: string) {
+export async function transformTelefuncFileSSR(src: string, id: string, root: string) {
   assertPosixPath(id)
   assertPosixPath(root)
 
@@ -59,7 +59,7 @@ function getServerCode(src: string, filePath: string) {
 
   code += "\n\n"
   for (const exportName of exportNames) {
-    code += `__internal_addTelefunction(${exportName}, "${exportName}", "${filePath}");`
+    code += `__internal_addTelefunction("${exportName}", "${filePath}");`
     code += "\n"
   }
 
@@ -72,7 +72,7 @@ function getServerCode(src: string, filePath: string) {
 // ----------------
 // TRANSFORM CLIENT
 // ----------------
-async function transformTelefuncFile(src: string, id: string, root: string) {
+export async function transformTelefuncFile(src: string, id: string, root: string) {
   const exportNames = ["default"]
   return transformTelefuncFileSync(id, root, exportNames)
 }
@@ -99,10 +99,10 @@ export function getClientCode(exportNames: readonly string[], telefuncFilePath: 
 
   lines.push("// @ts-nocheck")
 
-  lines.push(`import { __internal_fetchTelefunc } from "@blitzjs/rpc";`)
+  lines.push(`import { __internal_fetchBlitzRpc } from "@blitzjs/rpc";`)
 
   exportNames.forEach((exportName) => {
-    const exportValue = `(...args) => __internal_fetchTelefunc('${telefuncFilePath}', '${exportName}', args);`
+    const exportValue = `(...args) => __internal_fetchBlitzRpc('${telefuncFilePath}', '${exportName}', args);`
     if (exportName === "default") {
       lines.push(`export default ${exportValue}`)
     } else {
@@ -116,33 +116,6 @@ export function getClientCode(exportNames: readonly string[], telefuncFilePath: 
 // --------------------
 // END TRANSFORM CLIENT
 // --------------------
-
-// Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
-type Loader = {
-  _compiler?: {
-    name: string
-    context: string
-  }
-  resource: string
-}
-
-export async function loader(this: Loader, input: string): Promise<string> {
-  const compiler = this._compiler!
-  const id = this.resource
-  const root = this._compiler!.context
-
-  // TODO - enable?
-  // assert(id.includes("queries"), "TODO")
-
-  const isSSR = compiler.name === "server"
-  if (isSSR) {
-    const {code} = await transformTelefuncFileSSR(input, toPosixPath(id), toPosixPath(root))
-    return code
-  }
-
-  const {code} = await transformTelefuncFile(input, toPosixPath(id), toPosixPath(root))
-  return code
-}
 
 // import type { NextConfig } from 'next'
 // import { resolve } from 'path'
@@ -217,3 +190,31 @@ function __internal_addTelefunction(
 // ----------
 // END LOADER
 // ----------
+
+import {resolve} from "path"
+const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
+const loader = resolve(dir, "./loader.cjs")
+
+export function install<T extends any[]>(config: {module?: {rules?: T}}) {
+  config.module!.rules!.push({
+    // TODO - exclude pages, api, etc.
+    test: /\/queries\//,
+    use: [{loader}],
+  })
+}
+
+// import type { NextConfig } from 'next'
+type NextConfig = any
+
+export function blitzPlugin(nextConfig: NextConfig = {}) {
+  return Object.assign({}, nextConfig, {
+    //TODO fix type
+    webpack: (config: any, options: any) => {
+      install(config)
+      if (typeof nextConfig.webpack === "function") {
+        return nextConfig.webpack(config, options)
+      }
+      return config
+    },
+  } as NextConfig)
+}

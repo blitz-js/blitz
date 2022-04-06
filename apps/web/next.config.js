@@ -6,21 +6,15 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 // const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
 // const loader = resolve(dir, "./loader.js")
 
-const {loader} = require("@blitzjs/rpc")
+// const loader = require("path").join(require.resolve("@blitzjs/rpc"), "/dist/loader")
+// const loader = "@blitzjs/rpc/dist/loader"
+// const loader = "/Users/b/c/blitz2/packages/blitz-rpc/dist/loader"
+// console.log("LOADER", loader)
 
-module.exports = withBundleAnalyzer({
-  reactStrictMode: true,
+const {blitzPlugin} = require("@blitzjs/rpc")
 
-  webpack: (config, options) => {
-    config.module.rules.push({
-      // TODO - exclude pages, api, etc.
-      test: /\/queries\//,
-      use: [{loader}],
-    })
-
-    if (typeof nextConfig.webpack === "function") {
-      return nextConfig.webpack(config, options)
-    }
-    return config
-  },
-})
+module.exports = blitzPlugin(
+  withBundleAnalyzer({
+    reactStrictMode: true,
+  }),
+)
