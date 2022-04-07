@@ -9,10 +9,10 @@
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index-server.cjs",
-  "module": "./dist/index-server.mjs",
-  "browser": "./dist/index-browser.mjs",
-  "types": "./dist/index-server.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
   "files": [
@@ -54,6 +54,8 @@
     "@types/vinyl": "2.0.6",
     "@typescript-eslint/eslint-plugin": "5.9.1",
     "@typescript-eslint/parser": "5.9.1",
+    "babylon": "6.18.0",
+    "debug": "4.3.3",
     "react": "18.0.0",
     "unbuild": "0.6.9",
     "watch": "1.0.2"
