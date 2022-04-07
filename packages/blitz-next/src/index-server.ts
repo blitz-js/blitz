@@ -73,3 +73,4 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
 
   return {gSSP, gSP, api}
 }
+export * from "./routes-manifest"
