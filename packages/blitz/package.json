@@ -16,10 +16,11 @@
   "sideEffects": false,
   "license": "MIT",
   "files": [
-    "dist/**"
+    "dist/**",
+    "bin/**"
   ],
   "bin": {
-    "blitz": "./dist/index.cjs"
+    "blitz": "bin/run"
   },
   "dependencies": {
     "@blitzjs/generator": "workspace:*",

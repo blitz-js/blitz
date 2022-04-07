@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"

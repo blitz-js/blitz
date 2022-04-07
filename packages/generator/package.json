@@ -9,10 +9,10 @@
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "browser": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "sideEffects": false,
   "license": "MIT",
   "files": [
