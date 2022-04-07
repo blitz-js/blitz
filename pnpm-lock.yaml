@@ -277,6 +277,7 @@ importers:
       "@types/testing-library__react-hooks": 4.0.0
       blitz: workspace:*
       debug: 4.3.3
+      fs-extra: 10.0.1
       lodash.frompairs: 4.0.1
       next: 12.1.4
       react: 18.0.0
@@ -287,6 +288,7 @@ importers:
       watch: 1.0.2
     dependencies:
       debug: 4.3.3
+      fs-extra: 10.0.1
       react-query: 3.34.12_react-dom@18.0.0+react@18.0.0
     devDependencies:
       "@blitzjs/config": link:../config
