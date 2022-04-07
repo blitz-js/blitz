@@ -19,7 +19,7 @@
     "dist/**"
   ],
   "bin": {
-    "blitz": "dist/index.cjs"
+    "blitz": "./dist/index.cjs"
   },
   "dependencies": {
     "@blitzjs/generator": "workspace:*",

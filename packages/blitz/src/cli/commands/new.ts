@@ -226,7 +226,7 @@ const newApp: CliCommand = async (argv) => {
   await determineLanguage()
   await determineTemplate()
   await determinePkgManagerToInstallDeps()
-  if (projectTemplate.skipForms) {
+  if (!projectTemplate.skipForms) {
     await determineFormLib()
   }
 
