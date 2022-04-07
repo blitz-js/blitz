@@ -1,5 +1,5 @@
 import "./global"
-import React, {ComponentType} from "react"
+import {ComponentType} from "react"
 import {IncomingMessage, ServerResponse} from "http"
 import {AuthenticationError, AuthorizationError, NotFoundError, RedirectError} from "./errors"
 
@@ -51,25 +51,28 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
       ev.preventDefault()
     }
   }
-  window.addEventListener("error", onUnhandledError)
 
-  if ("Cypress" in window) {
-    // Hide some errors from Cypress, so they don't fail Cypress tests
-    // https://github.com/cypress-io/cypress/issues/7196
+  if (typeof window !== "undefined") {
+    window.addEventListener("error", onUnhandledError)
 
-    const cypressOnErrorFun = window.onerror
+    if ("Cypress" in window) {
+      // Hide some errors from Cypress, so they don't fail Cypress tests
+      // https://github.com/cypress-io/cypress/issues/7196
 
-    window.onerror = (message, source, lineno, colno, err) => {
-      if (
-        cypressOnErrorFun &&
-        !(
-          err instanceof RedirectError ||
-          err instanceof AuthenticationError ||
-          err instanceof AuthorizationError ||
-          err instanceof NotFoundError
-        )
-      ) {
-        cypressOnErrorFun(message, source, lineno, colno, err)
+      const cypressOnErrorFun = window.onerror
+
+      window.onerror = (message, source, lineno, colno, err) => {
+        if (
+          cypressOnErrorFun &&
+          !(
+            err instanceof RedirectError ||
+            err instanceof AuthenticationError ||
+            err instanceof AuthorizationError ||
+            err instanceof NotFoundError
+          )
+        ) {
+          cypressOnErrorFun(message, source, lineno, colno, err)
+        }
       }
     }
   }
