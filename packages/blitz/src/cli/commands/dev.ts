@@ -1,6 +1,6 @@
-import {cliCommand} from "../index"
+import {CliCommand} from "../index"
 
-const dev: cliCommand = (argv) => {
+const dev: CliCommand = (argv) => {
   console.log("dev hit")
 }
 

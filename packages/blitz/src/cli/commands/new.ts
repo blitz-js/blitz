@@ -3,25 +3,28 @@ import prompts from "prompts"
 import path from "path"
 import chalk from "chalk"
 import hasbin from "hasbin"
-import {cliCommand} from "../index"
+import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
 import {runPrisma} from "../../prisma-utils"
 
-enum TForms {
-  "react-final-form" = "React Final Form",
-  "react-hook-form" = "React Hook Form",
-  "formik" = "Formik",
+const forms = {
+  "react-final-form": "React Final Form" as const,
+  "react-hook-form": "React Hook Form" as const,
+  formik: "Formik" as const,
 }
-enum TLanguage {
-  "typescript" = "TypeScript",
-  "javascript" = "Javascript",
+
+type TForms = keyof typeof forms
+
+const language = {
+  typescript: "TypeScript",
+  javascript: "Javascript",
 }
+
+type TLanguage = keyof typeof language
+
 type TPkgManager = "npm" | "yarn" | "pnpm"
-enum TTemplate {
-  "full" = "full",
-  "minimal" = "minimal",
-}
+type TTemplate = "full" | "minimal"
 
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
   full: {
@@ -91,14 +94,14 @@ const determineLanguage = async () => {
   // Check if language from flag is valid
   if (
     !args["--language"] ||
-    (args["--language"] && !Object.keys(TLanguage).includes(args["--language"].toLowerCase()))
+    (args["--language"] && !Object.keys(language).includes(args["--language"].toLowerCase()))
   ) {
     const res = await prompts({
       type: "select",
       name: "language",
       message: "Pick which language you'd like to use for your new blitz project",
       initial: 0,
-      choices: Object.entries(TLanguage).map((c) => {
+      choices: Object.entries(language).map((c) => {
         return {title: c[1], value: c[1]}
       }),
     })
@@ -111,13 +114,13 @@ const determineLanguage = async () => {
 
 const determineFormLib = async () => {
   // Check if form from flag is valid
-  if (!args["--form"] || (args["--form"] && !Object.keys(TForms).includes(args["--form"]))) {
+  if (!args["--form"] || (args["--form"] && !Object.keys(forms).includes(args["--form"]))) {
     const res = await prompts({
       type: "select",
       name: "form",
       message: "Pick which form you'd like to use for your new blitz project",
       initial: 0,
-      choices: Object.entries(TForms).map((c) => {
+      choices: Object.entries(forms).map((c) => {
         return {title: c[1], value: c[1]}
       }),
     })
@@ -126,11 +129,11 @@ const determineFormLib = async () => {
   } else {
     switch (args["--form"]) {
       case "react-final-form":
-        projectFormLib = TForms["react-final-form"]
+        projectFormLib = forms["react-final-form"]
       case "react-hook-form":
-        projectFormLib = TForms["react-hook-form"]
+        projectFormLib = forms["react-hook-form"]
       case "formik":
-        projectFormLib = TForms["formik"]
+        projectFormLib = forms["formik"]
     }
   }
 }
@@ -139,15 +142,15 @@ const determineTemplate = async () => {
   // Check if template from flag is valid
   if (
     !args["--template"] ||
-    (args["--template"] && !Object.keys(TTemplate).includes(args["--template"].toLowerCase()))
+    (args["--template"] && !Object.keys(templates).includes(args["--template"].toLowerCase()))
   ) {
     const res = await prompts({
       type: "select",
       name: "template",
       message: "Pick which template you'd like to use for your new blitz project",
       initial: 0,
-      choices: Object.entries(TTemplate).map((c) => {
-        return {title: c[1], value: c[1]}
+      choices: Object.entries(templates).map((c) => {
+        return {title: c[0], value: c[0]}
       }),
     })
 
@@ -213,7 +216,7 @@ const determinePkgManagerToInstallDeps = async () => {
   }
 }
 
-const newApp: cliCommand = async (argv) => {
+const newApp: CliCommand = async (argv) => {
   const shouldUpgrade = !args["--skip-upgrade"]
   if (shouldUpgrade) {
     //TODO: Handle checking for updates
@@ -223,7 +226,7 @@ const newApp: cliCommand = async (argv) => {
   await determineLanguage()
   await determineTemplate()
   await determinePkgManagerToInstallDeps()
-  if (!projectTemplate.skipForms) {
+  if (projectTemplate.skipForms) {
     await determineFormLib()
   }
 
