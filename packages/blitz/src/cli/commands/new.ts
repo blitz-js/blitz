@@ -127,7 +127,7 @@ const determineFormLib = async () => {
 
     projectFormLib = res.form
   } else {
-    switch (args["--form"]) {
+    switch (args["--form"] as TForms) {
       case "react-final-form":
         projectFormLib = forms["react-final-form"]
       case "react-hook-form":

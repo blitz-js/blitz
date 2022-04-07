@@ -20,7 +20,7 @@
     "bin/**"
   ],
   "bin": {
-    "blitz": "bin/run"
+    "blitz": "bin/blitz"
   },
   "dependencies": {
     "@blitzjs/generator": "workspace:*",
