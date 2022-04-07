@@ -54,6 +54,7 @@
     "@types/vinyl": "2.0.6",
     "@typescript-eslint/eslint-plugin": "5.9.1",
     "@typescript-eslint/parser": "5.9.1",
+    "babylon": "6.18.0",
     "debug": "4.3.3",
     "react": "18.0.0",
     "unbuild": "0.6.9",

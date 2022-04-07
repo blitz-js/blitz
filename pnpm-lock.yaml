@@ -266,6 +266,7 @@ importers:
   packages/blitz-next:
     specifiers:
       "@blitzjs/config": workspace:*
+      "@testing-library/dom": 8.13.0
       "@testing-library/react": 13.0.0
       "@testing-library/react-hooks": 7.0.2
       "@testing-library/user-event": 13.5.0
@@ -289,9 +290,10 @@ importers:
       react-query: 3.34.12_react-dom@18.0.0+react@18.0.0
     devDependencies:
       "@blitzjs/config": link:../config
+      "@testing-library/dom": 8.13.0
       "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
       "@testing-library/react-hooks": 7.0.2_react-dom@18.0.0+react@18.0.0
-      "@testing-library/user-event": 13.5.0
+      "@testing-library/user-event": 13.5.0_@testing-library+dom@8.13.0
       "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
       "@types/react": 17.0.43
@@ -350,6 +352,7 @@ importers:
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
+      babylon: 6.18.0
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -404,6 +407,7 @@ importers:
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1_8c696421d8bcc701d2ea1a734127ded5
       "@typescript-eslint/parser": 5.9.1_eslint@7.32.0
+      babylon: 6.18.0
       debug: 4.3.3
       react: 18.0.0
       unbuild: 0.6.9
@@ -1729,7 +1733,7 @@ packages:
       react-dom: 18.0.0_react@18.0.0
     dev: true
 
-  /@testing-library/user-event/13.5.0:
+  /@testing-library/user-event/13.5.0_@testing-library+dom@8.13.0:
     resolution:
       {
         integrity: sha512-5Kwtbo3Y/NowpkbRuSepbyMFkZmHgD+vPzYB/RJ4oxt5Gj/avFFBYjhw27cqSVPVw/3a67NK1PbiIr9k4Gwmdg==,
@@ -1739,6 +1743,7 @@ packages:
       "@testing-library/dom": ">=7.21.4"
     dependencies:
       "@babel/runtime": 7.17.9
+      "@testing-library/dom": 8.13.0
     dev: true
 
   /@tootallnate/once/2.0.0:
@@ -3008,6 +3013,14 @@ packages:
     dependencies:
       object.assign: 4.1.2
     dev: false
+
+  /babylon/6.18.0:
+    resolution:
+      {
+        integrity: sha512-q/UEjfGJ2Cm3oKV71DJz9d25TPnq5rhBVL2Q4fA5wcC3jcrdn7+SssEybFIxwAvvP+YCsCYNKughoF33GxgycQ==,
+      }
+    hasBin: true
+    dev: true
 
   /bad-behavior/1.0.1:
     resolution:
