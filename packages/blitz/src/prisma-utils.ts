@@ -1,6 +1,7 @@
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import {Readable} from "stream"
+import {pEvent} from "p-event"
 
 export interface Constructor<T = unknown> {
   new (...args: never[]): T
@@ -69,7 +70,7 @@ export const runPrisma = async (args: string[], silent = false) => {
     })
   }
 
-  const code = await require("p-event")(cp, "exit", {rejectionEvents: []})
+  const code = await pEvent(cp, "exit", {rejectionEvents: []})
 
   return {
     success: code === 0,
