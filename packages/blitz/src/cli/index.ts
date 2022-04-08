@@ -1,11 +1,39 @@
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"
+import type {ServerConfig} from "./utils/config"
 
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
   dev: () => import("./commands/dev").then((i) => i.dev),
+  next: async () => async (argv) => {
+    // need to parse args and pass to config
+    const config: ServerConfig = {
+      rootFolder: process.cwd(),
+      // port: flags.port,
+      // hostname: flags.hostname,
+      // inspect: flags.inspect,
+      // clean: flags["no-incremental-build"],
+      env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+    }
+
+    switch (argv?.[0]) {
+      case "build":
+        await import("./utils/next-commands").then((i) => i.build(config))
+        break
+      case "export":
+        await import("./utils/next-commands").then((i) => i.blitzExport(config))
+      case "start":
+        await import("./utils/next-commands").then((i) => i.prod(config))
+        break
+      case "dev":
+        await import("./utils/next-commands").then((i) => i.dev(config))
+        break
+      default:
+        console.error(`Unknown command: "blitz next ${argv?.[0]}"`)
+    }
+  },
   new: () => import("./commands/new").then((i) => i.newApp),
 }
 

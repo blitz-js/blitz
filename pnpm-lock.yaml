@@ -135,8 +135,13 @@ importers:
       "@blitzjs/generator": workspace:*
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
+      "@types/debug": 4.1.7
+      "@types/detect-port": 1.3.2
       "@types/express": 4.17.13
+      "@types/find-up": 4.0.0
+      "@types/fs-extra": 9.0.13
       "@types/hasbin": 1.2.0
+      "@types/json5": 2.2.0
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
@@ -147,11 +152,17 @@ importers:
       chalk: ^4.1.0
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
+      debug: 4.3.3
+      detect-port: 1.3.0
       dotenv: 16.0.0
       dotenv-expand: 8.0.3
       express: 4.17.3
+      find-up: 6.3.0
+      fs-extra: 10.0.1
       hasbin: 1.2.3
       http: 0.0.1-security
+      json5: 2.2.1
+      next: 12.1.4
       node-fetch: 3.2.3
       npm-which: 3.0.1
       ora: 5.3.0
@@ -185,16 +196,27 @@ importers:
       "@blitzjs/config": link:../config
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
+      "@types/debug": 4.1.7
+      "@types/detect-port": 1.3.2
       "@types/express": 4.17.13
+      "@types/find-up": 4.0.0
+      "@types/fs-extra": 9.0.13
       "@types/hasbin": 1.2.0
+      "@types/json5": 2.2.0
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
+      debug: 4.3.3
+      detect-port: 1.3.0
       express: 4.17.3
+      find-up: 6.3.0
+      fs-extra: 10.0.1
       http: 0.0.1-security
+      json5: 2.2.1
+      next: 12.1.4_react@18.0.0
       node-fetch: 3.2.3
       p-event: 5.0.1
       pkg-dir: 6.0.1
@@ -1879,7 +1901,13 @@ packages:
       }
     dependencies:
       "@types/ms": 0.7.31
-    dev: false
+
+  /@types/detect-port/1.3.2:
+    resolution:
+      {
+        integrity: sha512-xxgAGA2SAU4111QefXPSp5eGbDm/hW6zhvYl9IeEPZEry9F4d66QAHm5qpUXjb6IsevZV/7emAEx5MhP6O192g==,
+      }
+    dev: true
 
   /@types/diff/5.0.2:
     resolution:
@@ -1937,6 +1965,16 @@ packages:
       "@types/express-serve-static-core": 4.17.28
       "@types/qs": 6.9.7
       "@types/serve-static": 1.13.10
+    dev: true
+
+  /@types/find-up/4.0.0:
+    resolution:
+      {
+        integrity: sha512-QlRNKeOPFWKisbNtKVOOGXw3AeLbkw8UmT/EyEGM6brfqpYffKBcch7f1y40NYN9O90aK2+K0xBMDJfOAsg2qg==,
+      }
+    deprecated: This is a stub types definition. find-up provides its own type definitions, so you do not need this installed.
+    dependencies:
+      find-up: 6.3.0
     dev: true
 
   /@types/fs-extra/9.0.13:
@@ -2007,6 +2045,16 @@ packages:
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: false
+
+  /@types/json5/2.2.0:
+    resolution:
+      {
+        integrity: sha512-NrVug5woqbvNZ0WX+Gv4R+L4TGddtmFek2u8RtccAgFZWtS9QXF2xCXY22/M4nzkaKF0q9Fc6M/5rxLDhfwc/A==,
+      }
+    deprecated: This is a stub types definition. json5 provides its own type definitions, so you do not need this installed.
+    dependencies:
+      json5: 2.2.1
+    dev: true
 
   /@types/jsonwebtoken/8.5.8:
     resolution:
@@ -2084,7 +2132,6 @@ packages:
       {
         integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==,
       }
-    dev: false
 
   /@types/node-fetch/2.6.1:
     resolution:
@@ -2644,6 +2691,14 @@ packages:
       }
     engines: {node: ">=0.4.0"}
     hasBin: true
+
+  /address/1.1.2:
+    resolution:
+      {
+        integrity: sha512-aT6camzM4xEA54YVJYSqxz1kv4IHnQZRtThJJHhUMRExaU5spC7jX5ugSwTaTgJliIgs4VhZOk7htClvQ/LmRA==,
+      }
+    engines: {node: ">= 0.12.0"}
+    dev: true
 
   /agent-base/6.0.2:
     resolution:
@@ -4067,6 +4122,18 @@ packages:
         integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==,
       }
     dev: false
+
+  /detect-port/1.3.0:
+    resolution:
+      {
+        integrity: sha512-E+B1gzkl2gqxt1IhUzwjrxBKRqx1UzC3WLONHinn8S3T6lwV/agVCyitiFOsGJ/eYuEUBvD71MZHy3Pv1G9doQ==,
+      }
+    engines: {node: ">= 4.2.1"}
+    hasBin: true
+    dependencies:
+      address: 1.1.2
+      debug: 2.6.9
+    dev: true
 
   /diff/5.0.0:
     resolution:
@@ -6774,7 +6841,6 @@ packages:
       }
     engines: {node: ">=6"}
     hasBin: true
-    dev: false
 
   /jsonc-parser/3.0.0:
     resolution:
@@ -7716,6 +7782,50 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+
+  /next/12.1.4_react@18.0.0:
+    resolution:
+      {
+        integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==,
+      }
+    engines: {node: ">=12.22.0"}
+    hasBin: true
+    peerDependencies:
+      fibers: ">= 3.1.0"
+      node-sass: ^6.0.0 || ^7.0.0
+      react: ^17.0.2 || ^18.0.0-0
+      react-dom: ^17.0.2 || ^18.0.0-0
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      fibers:
+        optional: true
+      node-sass:
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      "@next/env": 12.1.4
+      caniuse-lite: 1.0.30001325
+      postcss: 8.4.5
+      react: 18.0.0
+      styled-jsx: 5.0.1_react@18.0.0
+    optionalDependencies:
+      "@next/swc-android-arm-eabi": 12.1.4
+      "@next/swc-android-arm64": 12.1.4
+      "@next/swc-darwin-arm64": 12.1.4
+      "@next/swc-darwin-x64": 12.1.4
+      "@next/swc-linux-arm-gnueabihf": 12.1.4
+      "@next/swc-linux-arm64-gnu": 12.1.4
+      "@next/swc-linux-arm64-musl": 12.1.4
+      "@next/swc-linux-x64-gnu": 12.1.4
+      "@next/swc-linux-x64-musl": 12.1.4
+      "@next/swc-win32-arm64-msvc": 12.1.4
+      "@next/swc-win32-ia32-msvc": 12.1.4
+      "@next/swc-win32-x64-msvc": 12.1.4
+    transitivePeerDependencies:
+      - "@babel/core"
+      - babel-plugin-macros
+    dev: true
 
   /nice-try/1.0.5:
     resolution:
