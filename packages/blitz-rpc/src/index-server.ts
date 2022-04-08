@@ -1,5 +1,6 @@
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
+
 export * from "./index-browser"
 
 import {win32, posix, sep} from "path"
@@ -51,14 +52,22 @@ export async function transformBlitzRpcResolverServer(src: string, id: string, r
 function getServerCode(src: string, filePath: string) {
   assertPosixPath(filePath)
 
-  const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
+  // const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
+  //
+  // // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
+  // let code = blitzImport + src
+  //
+  // code += "\n\n"
+  // code += `__internal_addBlitzRpcResolver("${filePath}");`
+  // code += "\n"
 
-  // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
-  let code = blitzImport + src
+  const babel = require("@babel/core")
+  const code = babel.transform(src, {
+    configFile: false,
+    plugins: [[blitzRpcServerTransform, {filePath}]],
+  })?.code
 
-  code += "\n\n"
-  code += `__internal_addBlitzRpcResolver("${filePath}");`
-  code += "\n"
+  assert(code, "failed to parse Blitz RPC resolver: " + filePath)
 
   return code
 }
@@ -122,8 +131,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 }
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
-type FileExports = Record<string, unknown>
-type ResolverFiles = Record<string, FileExports>
+type ResolverFiles = Record<string, unknown>
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
 // Needed for Next.js. I'm guessing that Next.js is including the `node_modules/` files in a seperate bundle than user files.
@@ -138,19 +146,15 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
   return g.blitzRpcResolverFilesLoaded
 }
 
-export function __internal_addBlitzRpcResolver(
-  resolver: Resolver,
-  resolverFileExport: string,
-  resolverFilePath: string,
-) {
+export function __internal_addBlitzRpcResolver(resolver: Resolver, {filePath}: {filePath: string}) {
+  console.log("BABEL FILE PATH", filePath)
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
-  g.blitzRpcResolverFilesLoaded[resolverFilePath] = {
-    ...g.blitzRpcResolverFilesLoaded[resolverFilePath],
-    [resolverFileExport]: resolver,
-  }
+  g.blitzRpcResolverFilesLoaded[filePath] = resolver
+  return resolver
 }
 
 import {resolve} from "path"
+import blitzRpcServerTransform from "./babel/plugins/blitz-rpc-server-transform"
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
 const loader = resolve(dir, "./loader.cjs")
 
