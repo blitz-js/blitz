@@ -2,7 +2,8 @@
   "extends": "@blitzjs/config/tsconfig.library.json",
   "compilerOptions": {
     "lib": ["DOM", "ES2015"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

@@ -22,6 +22,7 @@ module.exports = {
         "@typescript-eslint/no-use-before-define": ["off"],
         "no-redeclare": "off",
         "@typescript-eslint/no-redeclare": ["error"],
+        "react/display-name": "off",
       },
     },
   ],
