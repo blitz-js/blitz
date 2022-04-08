@@ -8,7 +8,7 @@ import {win32, posix, sep} from "path"
 // -----
 // UTILS
 // -----
-function assertPosixPath(path: string) {
+export function assertPosixPath(path: string) {
   const errMsg = `Wrongly formatted path: ${path}`
   assert(!path.includes(win32.sep), errMsg)
   // assert(path.startsWith('/'), errMsg)
@@ -36,85 +36,6 @@ export function toSystemPath(path: string) {
 // END UTILS
 // ---------
 
-// -------------
-// TRANSFORM SSR
-// -------------
-export async function transformBlitzRpcResolverServer(src: string, id: string, root: string) {
-  assertPosixPath(id)
-  assertPosixPath(root)
-
-  return {
-    code: getServerCode(src, id.replace(root, "")),
-    map: null,
-  }
-}
-
-function getServerCode(src: string, filePath: string) {
-  assertPosixPath(filePath)
-
-  // const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
-  //
-  // // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
-  // let code = blitzImport + src
-  //
-  // code += "\n\n"
-  // code += `__internal_addBlitzRpcResolver("${filePath}");`
-  // code += "\n"
-
-  const babel = require("@babel/core")
-  const code = babel.transform(src, {
-    configFile: false,
-    plugins: [[blitzRpcServerTransform, {filePath}]],
-  })?.code
-
-  assert(code, "failed to parse Blitz RPC resolver: " + filePath)
-
-  return code
-}
-// -------------
-// END TRANSFORM SSR
-// -------------
-
-// ----------------
-// TRANSFORM CLIENT
-// ----------------
-export async function transformBlitzRpcResolverClient(_src: string, id: string, root: string) {
-  return transformResolverSync(id, root)
-}
-function transformResolverSync(id: string, root: string) {
-  assertPosixPath(id)
-  assertPosixPath(root)
-
-  const resolverFilePath = "/" + posix.relative(root, id)
-  assert(!resolverFilePath.startsWith("/."), "TODO")
-  assertPosixPath(resolverFilePath)
-
-  return {
-    code: getClientCode(resolverFilePath),
-    map: null,
-  }
-}
-
-export function getClientCode(resolverFilePath: string) {
-  const lines: string[] = []
-
-  lines.push("// @ts-nocheck")
-
-  lines.push(`import { __internal_fetchBlitzRpc } from "@blitzjs/rpc";`)
-
-  const exportValue = `(...args) => __internal_fetchBlitzRpc('${resolverFilePath}', args);`
-  lines.push(`export default ${exportValue}`)
-
-  const code = lines.join("\n")
-  return code
-}
-// --------------------
-// END TRANSFORM CLIENT
-// --------------------
-
-// ------
-// LOADER
-// ------
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
@@ -154,7 +75,6 @@ export function __internal_addBlitzRpcResolver(resolver: Resolver, {filePath}: {
 }
 
 import {resolve} from "path"
-import blitzRpcServerTransform from "./babel/plugins/blitz-rpc-server-transform"
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
 const loader = resolve(dir, "./loader.cjs")
 
