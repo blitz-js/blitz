@@ -2,6 +2,7 @@ import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"
 import type {ServerConfig} from "./utils/config"
+import {loadEnvConfig} from "../env-utils"
 
 const commonArgs = {
   // Types
@@ -70,6 +71,12 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
 const args = arg(commonArgs, {
   permissive: true,
 })
+
+if (args["--env"]) {
+  process.env.APP_ENV = args["--env"]
+}
+
+loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
 // Version is inlined into the file using taskr build pipeline
 if (args["--version"]) {
