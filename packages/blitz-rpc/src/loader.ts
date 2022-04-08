@@ -49,12 +49,10 @@ function getServerCode(src: string, filePath: string) {
   assertPosixPath(filePath)
 
   // const blitzImport = 'import { __internal_addBlitzRpcResolver } from "@blitzjs/rpc";'
-  //
   // // No break line between `blitzImport` and `src` in order to preserve the source map's line mapping
   // let code = blitzImport + src
-  //
   // code += "\n\n"
-  // code += `__internal_addBlitzRpcResolver("${filePath}");`
+  // code += `__internal_addBlitzRpcResolver({}, {filePath: "${filePath}"});`
   // code += "\n"
 
   const babel = require("@babel/core")
@@ -62,7 +60,6 @@ function getServerCode(src: string, filePath: string) {
     configFile: false,
     plugins: [[blitzRpcServerTransform, {filePath}]],
   })?.code
-
   assert(code, "failed to parse Blitz RPC resolver: " + filePath)
 
   return code

@@ -68,9 +68,10 @@ export function loadBlitzRpcResolverFilesWithInternalMechanism() {
 }
 
 export function __internal_addBlitzRpcResolver(resolver: Resolver, {filePath}: {filePath: string}) {
-  console.log("BABEL FILE PATH", filePath)
   g.blitzRpcResolverFilesLoaded = g.blitzRpcResolverFilesLoaded || {}
   g.blitzRpcResolverFilesLoaded[filePath] = resolver
+
+  console.log("DEBUG - __internal_addBlitzRpcResolver ", g.blitzRpcResolverFilesLoaded)
   return resolver
 }
 
@@ -140,6 +141,7 @@ async function loadResolverFiles(runContext: {
   // - Vite with `importBuild.js`
   {
     const resolverFilesLoaded = loadBlitzRpcResolverFilesWithInternalMechanism()
+    console.log("resolverFilesLoaded", resolverFilesLoaded)
     if (resolverFilesLoaded) {
       assertUsage(Object.keys(resolverFilesLoaded).length > 0, getErrMsg("webpack"))
       return resolverFilesLoaded
