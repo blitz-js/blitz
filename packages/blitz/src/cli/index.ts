@@ -3,6 +3,19 @@ import arg from "arg"
 import packageJson from "../../package.json"
 import type {ServerConfig} from "./utils/config"
 
+const commonArgs = {
+  // Types
+  "--version": Boolean,
+  "--help": Boolean,
+  "--inspect": Boolean,
+  "--env": String,
+
+  // Aliases
+  "-v": "--version",
+  "-h": "--help",
+  "-e": "--env",
+}
+
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
@@ -10,13 +23,28 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   next: async () => async (argv) => {
     process.env.__NEXT_PROCESSED_ENV = "true"
 
-    // need to parse args and pass to config
+    const nextArgs = arg(
+      {
+        ...commonArgs,
+        "--port": Number,
+        "--hostname": String,
+        "--inspect": Boolean,
+        "--no-incremental-build": Boolean,
+
+        "-p": "--port",
+        "-H": "--hostname",
+      },
+      {
+        permissive: true,
+      },
+    )
+
     const config: ServerConfig = {
       rootFolder: process.cwd(),
-      // port: flags.port,
-      // hostname: flags.hostname,
-      // inspect: flags.inspect,
-      // clean: flags["no-incremental-build"],
+      port: nextArgs["--port"],
+      hostname: nextArgs["--hostname"],
+      inspect: nextArgs["--inspect"],
+      clean: nextArgs["--no-incremental-build"],
       env: process.env.NODE_ENV === "production" ? "prod" : "dev",
     }
 
@@ -39,23 +67,9 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   new: () => import("./commands/new").then((i) => i.newApp),
 }
 
-const args = arg(
-  {
-    // Types
-    "--version": Boolean,
-    "--help": Boolean,
-    "--inspect": Boolean,
-    "--env": String,
-
-    // Aliases
-    "-v": "--version",
-    "-h": "--help",
-    "-e": "--env",
-  },
-  {
-    permissive: true,
-  },
-)
+const args = arg(commonArgs, {
+  permissive: true,
+})
 
 // Version is inlined into the file using taskr build pipeline
 if (args["--version"]) {
