@@ -8,6 +8,8 @@ export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
   dev: () => import("./commands/dev").then((i) => i.dev),
   next: async () => async (argv) => {
+    process.env.__NEXT_PROCESSED_ENV = "true"
+
     // need to parse args and pass to config
     const config: ServerConfig = {
       rootFolder: process.cwd(),
