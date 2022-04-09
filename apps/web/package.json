@@ -9,18 +9,22 @@
     "lint": "next lint",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "prisma:start": "prisma generate && prisma migrate deploy",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "test": "jest"
   },
   "dependencies": {
     "@blitzjs/auth": "workspace:*",
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
     "@prisma/client": "3.9.0",
+    "@types/jest": "27.4.1",
     "blitz": "workspace:*",
+    "jest": "27.5.1",
     "next": "12.1.4",
     "prisma": "3.9.0",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "ts-node": "10.7.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "12.0.8",

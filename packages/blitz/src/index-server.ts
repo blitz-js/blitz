@@ -1,8 +1,8 @@
 import "./global"
 import {IncomingMessage, ServerResponse} from "http"
 import {Ctx} from "./types"
-import {findBlitzConfigDirectory} from "./cli/utils/routes-manifest"
-import {readFileSync} from "fs-extra"
+// import {findBlitzConfigDirectory} from "./cli/utils/routes-manifest"
+// import {readFileSync} from "fs-extra"
 
 export * from "./index-browser"
 export * from "./types"
@@ -10,9 +10,9 @@ export * from "./prisma-utils"
 export * from "./middleware"
 export * from "./paginate"
 
-const blitzConfig = findBlitzConfigDirectory() as string
-const file = readFileSync(blitzConfig)
-export const Routes = eval(file.toString())
+// const blitzConfig = findBlitzConfigDirectory() as string
+// const file = readFileSync(blitzConfig)
+// export const Routes = eval(file.toString())
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C

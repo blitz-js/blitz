@@ -507,9 +507,9 @@ export async function generateManifest() {
     encoding: "utf-8",
   })
 }
-export const findBlitzConfigDirectory = () => {
-  let blitzDir = readdirSync(join(process.cwd(), ".blitz"))
-  if (blitzDir.length) {
-    return join(process.cwd(), ".blitz/index.js")
-  }
-}
+// export const findBlitzConfigDirectory = () => {
+//   let blitzDir = readdirSync(join(process.cwd(), ".blitz"))
+//   if (blitzDir.length) {
+//     return join(process.cwd(), ".blitz/index.js")
+//   }
+// }
