@@ -30,6 +30,7 @@
     "cross-spawn": "7.0.3",
     "dotenv": "16.0.0",
     "dotenv-expand": "8.0.3",
+    "fs-extra": "10.0.1",
     "hasbin": "1.2.3",
     "npm-which": "3.0.1",
     "ora": "5.3.0",

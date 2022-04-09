@@ -1,6 +1,6 @@
-import {join} from "path"
+import {join, dirname} from "path"
 import os from "os"
-import {promises} from "fs"
+import {readdirSync, promises} from "fs"
 const readFile = promises.readFile
 import {outputFile} from "fs-extra"
 
@@ -507,8 +507,9 @@ export async function generateManifest() {
     encoding: "utf-8",
   })
 }
-export const findBlitzConfigDirectory = async () => {
-  let blitzDir = await promises.readdir(join(process.cwd(), ".blitz"))
-  console.log(blitzDir)
-  return blitzDir
+export const findBlitzConfigDirectory = () => {
+  let blitzDir = readdirSync(join(process.cwd(), ".blitz"))
+  if (blitzDir.length) {
+    return join(process.cwd(), ".blitz/index.js")
+  }
 }
