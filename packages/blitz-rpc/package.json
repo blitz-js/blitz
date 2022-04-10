@@ -24,6 +24,7 @@
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
+    "debug": "4.3.3",
     "react-query": "3.21.1",
     "superjson": "1.8.0"
   },
