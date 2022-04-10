@@ -6,5 +6,6 @@ const {withBlitz} = require("@blitzjs/rpc")
 module.exports = withBlitz(
   withBundleAnalyzer({
     reactStrictMode: true,
+    target: "experimental-serverless-trace",
   }),
 )

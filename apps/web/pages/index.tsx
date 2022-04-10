@@ -1,3 +1,4 @@
+import {invoke} from "@blitzjs/rpc"
 import getBasic from "app/queries/getBasic"
 
 export const getServerSideProps = () => {
@@ -8,7 +9,7 @@ export default function Web() {
   return (
     <div>
       <h1>Web</h1>
-      <button onClick={() => getBasic("hey", {})}>GetBasic</button>
+      <button onClick={() => invoke(getBasic, "FROM BROWSER")}>GetBasic</button>
     </div>
   )
 }

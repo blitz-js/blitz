@@ -3,6 +3,7 @@ import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
 import chalk from "chalk"
 
+// TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
 
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
@@ -134,7 +135,7 @@ export function rpcHandler(config: RpcConfig) {
       prefix: [relativeRoutePath + "()"],
     })
 
-    const customChalk = new chalk.constructor({
+    const customChalk = new chalk.Instance({
       level: log.settings.type === "json" ? 0 : chalk.level,
     })
 

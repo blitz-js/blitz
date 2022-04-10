@@ -1,4 +1,10 @@
-import {assertPosixPath, toPosixPath} from "./loader-utils"
+import {
+  assertPosixPath,
+  convertFilePathToResolverName,
+  convertFilePathToResolverType,
+  convertPageFilePathToRoutePath,
+  toPosixPath,
+} from "./loader-utils"
 import {assert} from "blitz"
 import {posix} from "path"
 
@@ -33,13 +39,20 @@ export async function transformBlitzRpcResolverClient(_src: string, id: string, 
   assertPosixPath(root)
 
   const resolverFilePath = "/" + posix.relative(root, id)
-  assert(!resolverFilePath.startsWith("/."), "TODO")
   assertPosixPath(resolverFilePath)
+  const routePath = convertPageFilePathToRoutePath(resolverFilePath)
+  const resolverName = convertFilePathToResolverName(resolverFilePath)
+  const resolverType = convertFilePathToResolverType(resolverFilePath)
 
   const code = `
     // @ts-nocheck
-    import { __internal_fetchBlitzRpc } from "@blitzjs/rpc";
-    export default (...args) => __internal_fetchBlitzRpc('${resolverFilePath}', args);
+    import { __internal_buildRpcClient } from "@blitzjs/rpc";
+    export default __internal_buildRpcClient({
+      resolverName: "${resolverName}",
+      resolverType: "${resolverType}",
+      routePath: "${routePath}",
+    });
   `
+
   return code
 }
