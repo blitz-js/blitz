@@ -1,6 +1,7 @@
 import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import {killApp, findPort, launchApp, nextBuild, nextStart} from "./next-test-utils"
-import webdriver from "./next-webdriver"
+import {killApp, findPort, launchApp, nextBuild, nextStart} from "../../utils/next-test-utils"
+import webdriver, {closeBrowser} from "../../utils/next-webdriver"
+
 import {join} from "path"
 import seed from "../prisma/seed"
 import fetch from "node-fetch"
@@ -127,7 +128,7 @@ describe("dev mode", () => {
       console.log(error)
     }
   }, 5000 * 60 * 2)
-  afterAll(() => killApp(app))
+  afterAll(async () => await killApp(app))
   runTests()
 })
 
@@ -141,7 +142,7 @@ describe("server mode", () => {
       console.log(err)
     }
   }, 5000 * 60 * 2)
-  afterAll(() => killApp(app))
+  afterAll(async () => await killApp(app))
 
   runTests()
 })
