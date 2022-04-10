@@ -5,7 +5,6 @@
   "devDependencies": {
     "@types/express": "4.17.13",
     "@types/fs-extra": "9.0.13",
-    "@types/get-port": "4.2.0",
     "@types/node-fetch": "2.6.1",
     "@types/react": "17.0.43",
     "@types/rimraf": "3.0.2",
