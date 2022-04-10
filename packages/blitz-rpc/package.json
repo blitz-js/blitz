@@ -19,7 +19,10 @@
   "files": [
     "dist/**"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "superjson": "1.8.0"
+  },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
     "@types/react": "17.0.43",

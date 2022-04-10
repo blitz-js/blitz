@@ -1,5 +1,7 @@
-import {assert} from "blitz"
+import {assert, Ctx, baseLogger, prettyMs, newLine} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
+import {deserialize, serialize as superjsonSerialize} from "superjson"
+import chalk from "chalk"
 
 export * from "./index-browser"
 
@@ -61,7 +63,7 @@ export function install<T extends any[]>(config: {module?: {rules?: T}}) {
 // import type { NextConfig } from 'next'
 type NextConfig = any
 
-export function blitzPlugin(nextConfig: NextConfig = {}) {
+export function withBlitz(nextConfig: NextConfig = {}) {
   return Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       install(config)
@@ -76,7 +78,7 @@ export function blitzPlugin(nextConfig: NextConfig = {}) {
 // END LOADER
 // ----------
 
-async function loadResolverFiles(): Promise<ResolverFiles | null | undefined> {
+async function getResolverMap(): Promise<ResolverFiles | null | undefined> {
   // Handles:
   // - Next.js
   // - Nuxt
@@ -102,25 +104,126 @@ async function loadResolverFiles(): Promise<ResolverFiles | null | undefined> {
   // }
 }
 
-export async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse) {
-  const resolverFilesLoaded = await loadResolverFiles()
-  assert(resolverFilesLoaded, "No query or mutation resolvers found")
-  assert(
-    Array.isArray(req.query.blitz),
-    "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
-  )
+interface RpcConfig {
+  onError?: (error: Error) => void
+}
 
-  const routePath = "/" + req.query.blitz.join("/")
+export function rpcHandler(config: RpcConfig) {
+  return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
+    const resolverMap = await getResolverMap()
+    assert(resolverMap, "No query or mutation resolvers found")
+    assert(
+      Array.isArray(req.query.blitz),
+      "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
+    )
 
-  const loadableResolver = resolverFilesLoaded[routePath]
-  if (!loadableResolver) {
-    throw new Error("No resolver for path: " + routePath)
+    const relativeRoutePath = req.query.blitz.join("/")
+    const routePath = "/" + relativeRoutePath
+
+    const loadableResolver = resolverMap[routePath]
+    if (!loadableResolver) {
+      throw new Error("No resolver for path: " + routePath)
+    }
+
+    const resolver = (await loadableResolver()).default
+    if (!resolver) {
+      throw new Error("No default export for resolver path: " + routePath)
+    }
+
+    const log = baseLogger().getChildLogger({
+      prefix: [relativeRoutePath + "()"],
+    })
+
+    const customChalk = new chalk.constructor({
+      level: log.settings.type === "json" ? 0 : chalk.level,
+    })
+
+    if (req.method === "HEAD") {
+      // We used to initiate database connection here
+      res.status(200).end()
+      return
+    } else if (req.method === "POST") {
+      // Handle RPC call
+
+      if (typeof req.body.params === "undefined") {
+        const error = {message: "Request body is missing the `params` key"}
+        log.error(error.message)
+        res.status(400).json({
+          result: null,
+          error,
+        })
+        return
+      }
+
+      try {
+        const data = deserialize({
+          json: req.body.params,
+          meta: req.body.meta?.params,
+        })
+
+        log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        const startTime = Date.now()
+        const result = await resolver(data, (res as any).blitzCtx)
+        const resolverDuration = Date.now() - startTime
+        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+
+        const serializerStartTime = Date.now()
+        const serializedResult = superjsonSerialize(result)
+
+        const nextSerializerStartTime = Date.now()
+        ;(res as any).blitzResult = result
+        res.json({
+          result: serializedResult.json,
+          error: null,
+          meta: {
+            result: serializedResult.meta,
+          },
+        })
+        log.debug(
+          customChalk.dim(
+            `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
+          ),
+        )
+        const serializerDuration = Date.now() - serializerStartTime
+        const duration = Date.now() - startTime
+
+        log.info(
+          customChalk.dim(
+            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+              serializerDuration,
+            )} total:${prettyMs(duration)}`,
+          ),
+        )
+        newLine()
+
+        return
+      } catch (error: any) {
+        if (error._clearStack) {
+          delete error.stack
+        }
+        log.error(error)
+        newLine()
+
+        if (!error.statusCode) {
+          error.statusCode = 500
+        }
+
+        const serializedError = superjsonSerialize(error)
+
+        res.json({
+          result: null,
+          error: serializedError.json,
+          meta: {
+            error: serializedError.meta,
+          },
+        })
+        return
+      }
+    } else {
+      // Everything else is error
+      log.warn(`${req.method} method not supported`)
+      res.status(404).end()
+      return
+    }
   }
-
-  const resolver = (await loadableResolver()).default
-  if (!resolver) {
-    throw new Error("No default export for resolver path: " + routePath)
-  }
-
-  await resolver(req.body)
 }
