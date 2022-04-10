@@ -322,30 +322,21 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@babel/core": 7.12.10
-      "@babel/helper-module-imports": 7.16.7
-      "@babel/types": 7.12.10
       "@blitzjs/config": workspace:*
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
-      babel-plugin-tester: 10.1.0
       blitz: workspace:*
       next: 12.1.4
       react: 18.0.0
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
-    dependencies:
-      "@babel/core": 7.12.10
-      "@babel/helper-module-imports": 7.16.7
     devDependencies:
-      "@babel/types": 7.12.10
       "@blitzjs/config": link:../config
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
-      babel-plugin-tester: 10.1.0_@babel+core@7.12.10
       blitz: link:../blitz
-      next: 12.1.4_@babel+core@7.12.10+react@18.0.0
+      next: 12.1.4_react@18.0.0
       react: 18.0.0
       typescript: 4.6.3
       unbuild: 0.6.9
@@ -2262,16 +2253,6 @@ packages:
       }
     dev: false
 
-  /@types/babel-plugin-tester/9.0.4:
-    resolution:
-      {
-        integrity: sha512-s7SxUNtUWO/bWZZqJbFqY/tbqJFoYnW/M2zPkTHl406PAPoWVSaVyYElo/O3GcRAQ5CV/pLPTFV4tQYTpMDWEQ==,
-      }
-    dependencies:
-      "@types/babel__core": 7.1.19
-      "@types/prettier": 2.4.4
-    dev: true
-
   /@types/babel__core/7.1.19:
     resolution:
       {
@@ -3648,22 +3629,6 @@ packages:
       "@types/babel__core": 7.1.19
       "@types/babel__traverse": 7.14.2
     dev: false
-
-  /babel-plugin-tester/10.1.0_@babel+core@7.12.10:
-    resolution:
-      {
-        integrity: sha512-4P2tNaM/Mtg6ytA9YAqmgONnMYqWvdbGDuwRTpIIC9yFZGQrEHoyvDPCx+X1QALAufVb5DKieOPGj5dffiEiNg==,
-      }
-    engines: {node: ">=10.13", npm: ">=6"}
-    peerDependencies:
-      "@babel/core": ^7.11.6
-    dependencies:
-      "@babel/core": 7.12.10
-      "@types/babel-plugin-tester": 9.0.4
-      lodash.mergewith: 4.6.2
-      prettier: 2.6.2
-      strip-indent: 3.0.0
-    dev: true
 
   /babel-preset-current-node-syntax/1.0.1_@babel+core@7.17.9:
     resolution:
@@ -8748,13 +8713,6 @@ packages:
         integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==,
       }
 
-  /lodash.mergewith/4.6.2:
-    resolution:
-      {
-        integrity: sha512-GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==,
-      }
-    dev: true
-
   /lodash.once/4.1.1:
     resolution: {integrity: sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=}
     dev: false
@@ -9353,50 +9311,6 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /next/12.1.4_@babel+core@7.12.10+react@18.0.0:
-    resolution:
-      {
-        integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==,
-      }
-    engines: {node: ">=12.22.0"}
-    hasBin: true
-    peerDependencies:
-      fibers: ">= 3.1.0"
-      node-sass: ^6.0.0 || ^7.0.0
-      react: ^17.0.2 || ^18.0.0-0
-      react-dom: ^17.0.2 || ^18.0.0-0
-      sass: ^1.3.0
-    peerDependenciesMeta:
-      fibers:
-        optional: true
-      node-sass:
-        optional: true
-      sass:
-        optional: true
-    dependencies:
-      "@next/env": 12.1.4
-      caniuse-lite: 1.0.30001325
-      postcss: 8.4.5
-      react: 18.0.0
-      styled-jsx: 5.0.1_@babel+core@7.12.10+react@18.0.0
-    optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.1.4
-      "@next/swc-android-arm64": 12.1.4
-      "@next/swc-darwin-arm64": 12.1.4
-      "@next/swc-darwin-x64": 12.1.4
-      "@next/swc-linux-arm-gnueabihf": 12.1.4
-      "@next/swc-linux-arm64-gnu": 12.1.4
-      "@next/swc-linux-arm64-musl": 12.1.4
-      "@next/swc-linux-x64-gnu": 12.1.4
-      "@next/swc-linux-x64-musl": 12.1.4
-      "@next/swc-win32-arm64-msvc": 12.1.4
-      "@next/swc-win32-ia32-msvc": 12.1.4
-      "@next/swc-win32-x64-msvc": 12.1.4
-    transitivePeerDependencies:
-      - "@babel/core"
-      - babel-plugin-macros
-    dev: true
-
   /next/12.1.4_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
@@ -9440,6 +9354,50 @@ packages:
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
+
+  /next/12.1.4_react@18.0.0:
+    resolution:
+      {
+        integrity: sha512-DA4g97BM4Z0nKtDvCTm58RxdvoQyYzeg0AeVbh0N4Y/D8ELrNu47lQeEgRGF8hV4eQ+Sal90zxrJQQG/mPQ8CQ==,
+      }
+    engines: {node: ">=12.22.0"}
+    hasBin: true
+    peerDependencies:
+      fibers: ">= 3.1.0"
+      node-sass: ^6.0.0 || ^7.0.0
+      react: ^17.0.2 || ^18.0.0-0
+      react-dom: ^17.0.2 || ^18.0.0-0
+      sass: ^1.3.0
+    peerDependenciesMeta:
+      fibers:
+        optional: true
+      node-sass:
+        optional: true
+      sass:
+        optional: true
+    dependencies:
+      "@next/env": 12.1.4
+      caniuse-lite: 1.0.30001325
+      postcss: 8.4.5
+      react: 18.0.0
+      styled-jsx: 5.0.1_react@18.0.0
+    optionalDependencies:
+      "@next/swc-android-arm-eabi": 12.1.4
+      "@next/swc-android-arm64": 12.1.4
+      "@next/swc-darwin-arm64": 12.1.4
+      "@next/swc-darwin-x64": 12.1.4
+      "@next/swc-linux-arm-gnueabihf": 12.1.4
+      "@next/swc-linux-arm64-gnu": 12.1.4
+      "@next/swc-linux-arm64-musl": 12.1.4
+      "@next/swc-linux-x64-gnu": 12.1.4
+      "@next/swc-linux-x64-musl": 12.1.4
+      "@next/swc-win32-arm64-msvc": 12.1.4
+      "@next/swc-win32-ia32-msvc": 12.1.4
+      "@next/swc-win32-x64-msvc": 12.1.4
+    transitivePeerDependencies:
+      - "@babel/core"
+      - babel-plugin-macros
+    dev: true
 
   /nice-try/1.0.5:
     resolution:
@@ -10256,6 +10214,7 @@ packages:
       }
     engines: {node: ">=10.13.0"}
     hasBin: true
+    dev: false
 
   /pretty-bytes/5.6.0:
     resolution:
@@ -11569,26 +11528,6 @@ packages:
       babel-plugin-macros:
         optional: true
     dev: false
-
-  /styled-jsx/5.0.1_@babel+core@7.12.10+react@18.0.0:
-    resolution:
-      {
-        integrity: sha512-+PIZ/6Uk40mphiQJJI1202b+/dYeTVd9ZnMPR80pgiWbjIwvN2zIp4r9et0BgqBuShh48I0gttPlAXA7WVvBxw==,
-      }
-    engines: {node: ">= 12.0.0"}
-    peerDependencies:
-      "@babel/core": "*"
-      babel-plugin-macros: "*"
-      react: ">= 16.8.0 || 17.x.x || ^18.0.0-0"
-    peerDependenciesMeta:
-      "@babel/core":
-        optional: true
-      babel-plugin-macros:
-        optional: true
-    dependencies:
-      "@babel/core": 7.12.10
-      react: 18.0.0
-    dev: true
 
   /styled-jsx/5.0.1_react@18.0.0:
     resolution:

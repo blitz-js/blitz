@@ -1,8 +1,5 @@
-// import { telefunc, telefuncConfig, provideTelefuncContext } from 'telefunc'
 import {handleRpcRequest} from "@blitzjs/rpc"
 import {api} from "src/server-setup"
-// import getBasic from "app/queries/getBasic"
-
 // telefuncConfig.telefuncUrl = "/api/_telefunc"
 
 export default api(async function blitzRpc(req, res) {
@@ -12,9 +9,7 @@ export default api(async function blitzRpc(req, res) {
   // const httpResponse = await telefunc(httpRequest)
   // res.status(httpResponse.statusCode).send(httpResponse.body)
 
-  // getBasic(body, {})
-
   await handleRpcRequest(req, res)
 
-  // res.status(200).send("success")
+  res.status(200).send("success")
 })
