@@ -148,7 +148,7 @@ describe("RPC", () => {
           console.log(err)
         }
       })
-      afterAll(async () => await killApp(app))
+      afterAll(() => killApp(app))
 
       runTests(true)
     },
@@ -164,7 +164,7 @@ describe("RPC", () => {
         appPort = await findPort()
         app = await nextStart(appDir, appPort)
       })
-      afterAll(async () => await killApp(app))
+      afterAll(() => killApp(app))
 
       runTests()
     },
