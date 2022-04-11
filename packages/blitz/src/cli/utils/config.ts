@@ -26,14 +26,10 @@ export type ServerEnvironment = "dev" | "prod"
 
 export type ServerConfig = {
   rootFolder: string
-  buildFolder?: string
-  routesFolder?: string
   clean?: boolean
   // -
   isTypeScript?: boolean
   watch?: boolean
-  // -
-  writeManifestFile?: boolean
   // -
   port?: number
   hostname?: string
@@ -43,17 +39,10 @@ export type ServerConfig = {
 }
 
 type NormalizedConfig = ServerConfig & {
-  buildFolder: string
-  routesFolder: string
   clean?: boolean
   // -
   isTypeScript: boolean
   watch: boolean
-  // -
-  writeManifestFile: boolean
-  // -
-  ignore: string[]
-  include: string[]
   // -
   nextBin: string
   env: ServerEnvironment
@@ -76,42 +65,6 @@ const defaults = {
   hostname: isInDocker() ? "0.0.0.0" : "127.0.0.1",
   // -
   env: "prod" as ServerEnvironment,
-  // -
-  buildFolder: standardBuildFolderPath,
-  routesFolder: ".blitz/routes",
-  // -
-  writeManifestFile: true,
-  // -
-  ignoredPaths: [
-    "./build/**/*",
-    "**/.blitz-*/**/*",
-    "**/.blitz/**/*",
-    "**/.heroku/**/*",
-    "**/.profile.d/**/*",
-    "**/.cache/**/*",
-    "./.config/**/*",
-    "**/.DS_Store",
-    "**/.git/**/*",
-    "**/.next/**/*",
-    "**/*.log",
-    "**/.vercel/**/*",
-    "**/.now/**/*",
-    "**/*.pnp.js",
-    "**/*.sqlite*",
-    "coverage/**/*",
-    ".coverage/**/*",
-    "dist/**/*",
-    "**/node_modules/**/*",
-    "cypress/**/*",
-    "test/**/*",
-    "tests/**/*",
-    "spec/**/*",
-    "specs/**/*",
-    "**/*.test.*",
-    "**/*.spec.*",
-    "**/.yalc/**/*",
-  ],
-  includePaths: ["**/*"],
 }
 
 export async function normalize(config: ServerConfig): Promise<NormalizedConfig> {
@@ -125,17 +78,10 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     env,
     // -
     rootFolder,
-    buildFolder: resolve(rootFolder, config.buildFolder ?? defaults.buildFolder),
-    routesFolder: resolve(rootFolder, config.routesFolder ?? defaults.routesFolder),
     // -
     isTypeScript: config.isTypeScript ?? (await getIsTypeScript(rootFolder)),
     watch: config.watch ?? env === "dev",
     clean: config.clean,
-    // -
-    writeManifestFile: config.writeManifestFile ?? defaults.writeManifestFile,
-    // -
-    ignore: defaults.ignoredPaths.concat(),
-    include: defaults.includePaths.concat(),
     // -
     nextBin: await getNextBin(rootFolder, env === "dev"),
   }

@@ -30,7 +30,6 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
         "--port": Number,
         "--hostname": String,
         "--inspect": Boolean,
-        "--no-incremental-build": Boolean,
 
         "-p": "--port",
         "-H": "--hostname",
@@ -45,7 +44,6 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
       port: nextArgs["--port"],
       hostname: nextArgs["--hostname"],
       inspect: nextArgs["--inspect"],
-      clean: nextArgs["--no-incremental-build"],
       env: process.env.NODE_ENV === "production" ? "prod" : "dev",
     }
 
