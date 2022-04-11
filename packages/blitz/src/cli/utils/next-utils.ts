@@ -181,25 +181,20 @@ export async function nextStartDev(
   debug("spawn ", nextBin, spawnCommand)
 
   return new Promise<void>((res, rej) => {
-    if (config.port && availablePort !== config.port) {
-      console.error(`Couldn't start server on port ${config.port} because it's already in use`)
-      rej("")
-    } else {
-      spawn(nextBin, spawnCommand, {
-        cwd,
-        env: spawnEnv,
-        stdio: "inherit",
+    spawn(nextBin, spawnCommand, {
+      cwd,
+      env: spawnEnv,
+      stdio: "inherit",
+    })
+      .on("exit", (code: number) => {
+        if (code === 0) {
+          res()
+        } else {
+          process.exit(code)
+        }
       })
-        .on("exit", (code: number) => {
-          if (code === 0) {
-            res()
-          } else {
-            process.exit(code)
-          }
-        })
 
-        .on("error", rej)
-    }
+      .on("error", rej)
   })
 }
 
