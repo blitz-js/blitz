@@ -1,4 +1,3 @@
-export * from "./constants"
 export * from "./rpc"
 export {useQuery, usePaginatedQuery, useInfiniteQuery, useMutation} from "./react-query"
 export type {MutateFunction} from "./react-query"

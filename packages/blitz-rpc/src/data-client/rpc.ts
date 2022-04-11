@@ -2,15 +2,16 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/shared/lib/router/router"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
+import {isServer, CSRFTokenMismatchError} from "blitz"
+import {getQueryKeyFromUrlAndParams, queryClient} from "./react-query-utils"
 import {
+  getAntiCSRFToken,
+  getPublicDataStore,
   HEADER_CSRF,
   HEADER_CSRF_ERROR,
   HEADER_PUBLIC_DATA_TOKEN,
   HEADER_SESSION_CREATED,
-} from "./constants"
-import {isServer, CSRFTokenMismatchError} from "blitz"
-import {getQueryKeyFromUrlAndParams, queryClient} from "./react-query-utils"
-import {getAntiCSRFToken, getPublicDataStore} from "@blitzjs/auth"
+} from "@blitzjs/auth"
 
 export function normalizeApiRoute(path: string): string {
   return normalizePathTrailingSlash(addBasePath(path))
