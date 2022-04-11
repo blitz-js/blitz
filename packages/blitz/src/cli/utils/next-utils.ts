@@ -247,29 +247,24 @@ export function nextExport(nextBin: string, config: ServerConfig) {
 }
 
 export async function nextStart(nextBin: string, _buildFolder: string, config: ServerConfig) {
-  const {spawnCommand, spawnEnv, availablePort} = await createCommandAndPort(config, "start")
+  const {spawnCommand, spawnEnv} = await createCommandAndPort(config, "start")
 
   return new Promise<void>((res, rej) => {
-    if (config.port && availablePort !== config.port) {
-      console.error(`Couldn't start server on port ${config.port} because it's already in use`)
-      rej("")
-    } else {
-      spawn(nextBin, spawnCommand, {
-        env: spawnEnv,
-        stdio: "inherit",
+    spawn(nextBin, spawnCommand, {
+      env: spawnEnv,
+      stdio: "inherit",
+    })
+      .on("exit", (code: number) => {
+        if (code === 0) {
+          res()
+        } else {
+          process.exit(code)
+        }
       })
-        .on("exit", (code: number) => {
-          if (code === 0) {
-            res()
-          } else {
-            process.exit(code)
-          }
-        })
-        .on("error", (err) => {
-          console.error(err)
-          rej(err)
-        })
-    }
+      .on("error", (err) => {
+        console.error(err)
+        rej(err)
+      })
   })
 }
 
