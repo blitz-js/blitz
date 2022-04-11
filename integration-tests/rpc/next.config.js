@@ -1,4 +1,4 @@
 const {withBlitz} = require("@blitzjs/rpc")
 module.exports = withBlitz({
-  // update me
+  target: "experimental-serverless-trace",
 })

@@ -107,7 +107,7 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
 
   return new Promise<any>((resolve, reject) => {
     console.log(`Running command "next ${argv.join(" ")}"`)
-    const instance = spawn("pnpx", ["next", ...argv], {
+    const instance = spawn("pnpm", ["next", ...argv], {
       ...options.spawnOptions,
       cwd,
       env,
@@ -175,7 +175,7 @@ export function runNextCommandDev(argv, opts: RunNextCommandDevOptions = {}) {
   }
 
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn("pnpx", ["next", ...argv], {
+    const instance = spawn("pnpm", ["next", ...argv], {
       cwd,
       env,
     })

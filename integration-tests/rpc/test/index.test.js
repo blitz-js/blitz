@@ -109,47 +109,63 @@ function runTests(dev = false) {
 }
 
 describe("RPC", () => {
-  describe("dev mode", () => {
-    beforeAll(async () => {
-      appPort = await findPort()
-      app = await launchApp(appDir, appPort)
-    })
-    afterAll(() => killApp(app))
+  describe(
+    "dev mode",
+    () => {
+      beforeAll(async () => {
+        try {
+          appPort = await findPort()
+          app = await launchApp(appDir, appPort)
+        } catch (err) {
+          console.log(err)
+        }
+      })
+      afterAll(() => killApp(app))
 
-    runTests(true)
-  })
+      runTests(true)
+    },
+    5000 * 60 * 2,
+  )
 
-  describe("server mode", () => {
-    beforeAll(async () => {
-      await nextBuild(appDir)
-      mode = "server"
-      appPort = await findPort()
-      app = await nextStart(appDir, appPort)
-    })
-    afterAll(() => killApp(app))
+  describe(
+    "server mode",
+    () => {
+      beforeAll(async () => {
+        await nextBuild(appDir)
+        mode = "server"
+        appPort = await findPort()
+        app = await nextStart(appDir, appPort)
+      })
+      afterAll(() => killApp(app))
 
-    runTests()
-  })
+      runTests()
+    },
+    5000 * 60 * 2,
+  )
 
-  describe("serverless mode", () => {
-    let nextConfigContent = ""
-    const nextConfigPath = join(appDir, "next.config.js")
-    beforeAll(async () => {
-      nextConfigContent = await fs.readFile(nextConfigPath, "utf8")
-      await fs.writeFile(
-        nextConfigPath,
-        nextConfigContent.replace("// update me", `target: 'experimental-serverless-trace',`),
-      )
-      await nextBuild(appDir)
-      mode = "serverless"
-      appPort = await findPort()
-      app = await nextStart(appDir, appPort)
-    })
-    afterAll(async () => {
-      await killApp(app)
-      await fs.writeFile(nextConfigPath, nextConfigContent)
-    })
+  describe(
+    "serverless mode",
+    () => {
+      let nextConfigContent = ""
+      const nextConfigPath = join(appDir, "next.config.js")
+      beforeAll(async () => {
+        nextConfigContent = await fs.readFile(nextConfigPath, "utf8")
+        await fs.writeFile(
+          nextConfigPath,
+          nextConfigContent.replace("// update me", `target: 'experimental-serverless-trace',`),
+        )
+        await nextBuild(appDir)
+        mode = "serverless"
+        appPort = await findPort()
+        app = await nextStart(appDir, appPort)
+      })
+      afterAll(async () => {
+        await killApp(app)
+        await fs.writeFile(nextConfigPath, nextConfigContent)
+      })
 
-    runTests()
-  })
+      runTests()
+    },
+    5000 * 60 * 2,
+  )
 })
