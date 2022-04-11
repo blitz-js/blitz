@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
-          version: 6.10.0
+          version: 6.32.4
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -32,7 +32,7 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm manypkg check
-      - run: pnpm lint
       - run: pnpm build
+      - run: pnpm lint
       - run: pnpm build:apps
       - run: pnpm test

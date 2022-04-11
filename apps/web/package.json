@@ -16,6 +16,7 @@
     "@blitzjs/auth": "workspace:*",
     "@blitzjs/config": "workspace:*",
     "@blitzjs/next": "workspace:*",
+    "@blitzjs/rpc": "workspace:*",
     "@prisma/client": "3.9.0",
     "@types/jest": "27.4.1",
     "blitz": "workspace:*",

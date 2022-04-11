@@ -1,6 +1,6 @@
 {
   "name": "blitz",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
@@ -33,6 +33,7 @@
     "hasbin": "1.2.3",
     "npm-which": "3.0.1",
     "ora": "5.3.0",
+    "p-event": "4.2.0",
     "prompts": "2.4.2",
     "superjson": "1.8.0",
     "tslog": "3.3.1"
@@ -52,7 +53,6 @@
     "express": "4.17.3",
     "http": "0.0.1-security",
     "node-fetch": "3.2.3",
-    "p-event": "5.0.1",
     "pkg-dir": "6.0.1",
     "react": "18.0.0",
     "resolve-cwd": "3.0.0",
