@@ -14,6 +14,7 @@ import { queryClient } from '../data-client/react-query-utils'
 const debug = require('debug')('blitz:approot')
 
 export type BlitzProviderProps = {
+  children?: React.ReactNode
   client?: QueryClient
   contextSharing?: boolean
   dehydratedState?: unknown
