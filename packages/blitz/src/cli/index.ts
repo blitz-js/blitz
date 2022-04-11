@@ -51,16 +51,12 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
       case "build":
         await import("./utils/next-commands").then((i) => i.build(config))
         break
-      case "export":
-        await import("./utils/next-commands").then((i) => i.blitzExport(config))
       case "start":
         await import("./utils/next-commands").then((i) => i.prod(config))
         break
       case "dev":
         await import("./utils/next-commands").then((i) => i.dev(config))
         break
-      default:
-        console.error(`Unknown command: "blitz next ${argv?.[0]}"`)
     }
   },
   new: () => import("./commands/new").then((i) => i.newApp),
