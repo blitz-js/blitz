@@ -582,7 +582,7 @@ packages:
       }
     engines: {node: ">=6.9.0"}
     dependencies:
-      "@babel/code-frame": 7.12.11
+      "@babel/code-frame": 7.16.7
       "@babel/generator": 7.17.9
       "@babel/helper-module-transforms": 7.17.7
       "@babel/helpers": 7.17.9
@@ -3162,7 +3162,7 @@ packages:
       }
     engines: {node: ">=12"}
     dependencies:
-      "@babel/code-frame": 7.12.11
+      "@babel/code-frame": 7.16.7
       "@babel/runtime": 7.17.9
       "@types/aria-query": 4.2.2
       aria-query: 5.0.0
@@ -3897,10 +3897,10 @@ packages:
     dependencies:
       "@types/yargs-parser": 21.0.0
 
-  /@types/yauzl/2.9.2:
+  /@types/yauzl/2.10.0:
     resolution:
       {
-        integrity: sha512-8uALY5LTvSuHgloDVUvWP3pIauILm+8/0pDMokuDYIoNsOkSwd5AiHBTSEJjKTDcZr5z8UpgOWZkxBF4iJftoA==,
+        integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==,
       }
     requiresBuild: true
     dependencies:
@@ -7058,7 +7058,7 @@ packages:
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
-      "@types/yauzl": 2.9.2
+      "@types/yauzl": 2.10.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9738,10 +9738,10 @@ packages:
       yallist: 2.1.2
     dev: false
 
-  /lru-cache/7.7.3:
+  /lru-cache/7.8.1:
     resolution:
       {
-        integrity: sha512-WY9wjJNQt9+PZilnLbuFKM+SwDull9+6IAguOrarOMoOHTcJ9GnXSO11+Gw6c7xtDkBkthR57OZMtZKYr+1CEw==,
+        integrity: sha512-E1v547OCgJvbvevfjgK9sNKIVXO96NnsTsFPBlg4ZxjhsJSODoH9lk8Bm0OxvHNm6Vm5Yqkl/1fErDxhYL8Skg==,
       }
     engines: {node: ">=12"}
 
@@ -11988,7 +11988,7 @@ packages:
     engines: {node: ^10.0.0 || ^12.0.0 || ^14.0.0 || >=16.0.0}
     hasBin: true
     dependencies:
-      lru-cache: 7.7.3
+      lru-cache: 7.8.1
 
   /send/0.17.2:
     resolution:
@@ -12739,7 +12739,7 @@ packages:
       }
     dependencies:
       inherits: 2.0.4
-      readable-stream: 2.3.7
+      readable-stream: 3.6.0
     dev: false
 
   /through2/4.0.2:

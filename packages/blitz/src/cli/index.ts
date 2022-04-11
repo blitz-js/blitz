@@ -7,6 +7,7 @@ export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
   dev: () => import("./commands/dev").then((i) => i.dev),
   new: () => import("./commands/new").then((i) => i.newApp),
+  generate: () => import("./commands/generate").then((i) => i.generate),
 }
 
 const args = arg(
