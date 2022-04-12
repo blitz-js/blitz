@@ -62,7 +62,7 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
   children,
 }) => {
   return (
-    <QueryClientProvider client={client || queryClient} contextSharing={contextSharing}>
+    <QueryClientProvider client={client || globalThis.queryClient} contextSharing={contextSharing}>
       <Hydrate state={dehydratedState} options={hydrateOptions}>
         {children}
       </Hydrate>
@@ -112,34 +112,6 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 }
 
 export {setupClient}
-
-// ------------------------------------ QUERY CLIENT CODE --------------------------------------------
-
-const initializeQueryClient = () => {
-  let suspenseEnabled = true
-  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
-    suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
-  }
-
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        ...(typeof window === "undefined" && {cacheTime: 0}),
-        suspense: suspenseEnabled,
-        retry: (failureCount, error: any) => {
-          if (process.env.NODE_ENV !== "production") return false
-
-          // Retry (max. 3 times) only if network error detected
-          if (error.message === "Network request failed" && failureCount <= 3) return true
-
-          return false
-        },
-      },
-    },
-  })
-}
-
-const queryClient = initializeQueryClient()
 
 const customCSS = `
   body::before {
