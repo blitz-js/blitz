@@ -164,7 +164,6 @@ importers:
       express: 4.17.3
       fs-extra: 10.0.1
       hasbin: 1.2.3
-      http: 0.0.1-security
       node-fetch: 3.2.3
       npm-which: 3.0.1
       ora: 5.3.0
@@ -186,6 +185,7 @@ importers:
       chalk: 4.1.2
       console-table-printer: 2.10.0
       cross-spawn: 7.0.3
+      debug: 4.3.3
       detect-port: 1.3.0
       dotenv: 16.0.0
       dotenv-expand: 8.0.3
@@ -194,7 +194,10 @@ importers:
       hasbin: 1.2.3
       npm-which: 3.0.1
       ora: 5.3.0
+      p-event: 5.0.1
+      pkg-dir: 6.0.1
       prompts: 2.4.2
+      resolve-cwd: 3.0.0
       superjson: 1.8.0
       tslog: 3.3.1
     devDependencies:
@@ -212,14 +215,9 @@ importers:
       "@types/react": 17.0.43
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
-      debug: 4.3.3
       express: 4.17.3
-      http: 0.0.1-security
       node-fetch: 3.2.3
-      p-event: 5.0.1
-      pkg-dir: 6.0.1
       react: 18.0.0
-      resolve-cwd: 3.0.0
       test-listen: 1.1.0
       typescript: 4.6.3
       unbuild: 0.6.9
@@ -6341,7 +6339,6 @@ packages:
     dependencies:
       locate-path: 7.1.0
       path-exists: 5.0.0
-    dev: true
 
   /find-yarn-workspace-root/2.0.0:
     resolution:
@@ -6934,6 +6931,7 @@ packages:
       {
         integrity: sha512-RnDvP10Ty9FxqOtPZuxtebw1j4L/WiqNMDtuc1YMH1XQm5TgDRaR1G9u8upL6KD1bXHSp9eSXo/ED+8Q7FAr+g==,
       }
+    dev: false
 
   /http2-wrapper/1.0.3:
     resolution:
@@ -8696,7 +8694,6 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-locate: 6.0.0
-    dev: true
 
   /lodash.clonedeep/4.5.0:
     resolution: {integrity: sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=}
@@ -9745,7 +9742,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-timeout: 5.0.2
-    dev: true
+    dev: false
 
   /p-finally/1.0.0:
     resolution: {integrity: sha1-P7z7FbiZpEEjs0ttzBi3JDNqLK4=}
@@ -9788,7 +9785,6 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       yocto-queue: 1.0.0
-    dev: true
 
   /p-locate/2.0.0:
     resolution: {integrity: sha1-IKAQOyIqcMj9OcwuWAaA893l7EM=}
@@ -9825,7 +9821,6 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-limit: 4.0.0
-    dev: true
 
   /p-map/4.0.0:
     resolution:
@@ -9842,7 +9837,6 @@ packages:
         integrity: sha512-sEmji9Yaq+Tw+STwsGAE56hf7gMy9p0tQfJojIAamB7WHJYJKf1qlsg9jqBWG8q9VCxKPhZaP/AcXwEoBcYQhQ==,
       }
     engines: {node: ">=12"}
-    dev: true
 
   /p-try/1.0.0:
     resolution: {integrity: sha1-y8ec26+P1CKOE/Yh8rGiN8GyB7M=}
@@ -9974,7 +9968,6 @@ packages:
         integrity: sha512-RjhtfwJOxzcFmNOi6ltcbcu4Iu+FL3zEj83dk4kAS+fVpTxXLO1b38RvJgT/0QwvV/L3aY9TAnyv0EOqW4GoMQ==,
       }
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    dev: true
 
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha1-F0uSaHNVNP+8es5r9TpanhtcX18=}
@@ -10111,7 +10104,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       find-up: 6.3.0
-    dev: true
+    dev: false
 
   /pkg-types/0.3.2:
     resolution:
@@ -10649,6 +10642,7 @@ packages:
     engines: {node: ">=8"}
     dependencies:
       resolve-from: 5.0.0
+    dev: false
 
   /resolve-from/4.0.0:
     resolution:
@@ -10663,6 +10657,7 @@ packages:
         integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==,
       }
     engines: {node: ">=8"}
+    dev: false
 
   /resolve-url/0.2.1:
     resolution: {integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=}
@@ -12915,7 +12910,6 @@ packages:
         integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==,
       }
     engines: {node: ">=12.20"}
-    dev: true
 
   /zod/3.10.1:
     resolution:
