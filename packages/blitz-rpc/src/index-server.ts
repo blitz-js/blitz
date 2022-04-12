@@ -50,7 +50,7 @@ const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob imp
 const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
 
-export function install<T extends any[]>(config: {module?: {rules?: T}}) {
+export function installWebpackConfig<T extends any[]>(config: {module?: {rules?: T}}) {
   config.module!.rules!.push({
     test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
     use: [{loader: loaderServer}],
@@ -61,20 +61,6 @@ export function install<T extends any[]>(config: {module?: {rules?: T}}) {
   })
 }
 
-// import type { NextConfig } from 'next'
-type NextConfig = any
-
-export function withBlitz(nextConfig: NextConfig = {}) {
-  return Object.assign({}, nextConfig, {
-    webpack: (config: any, options: any) => {
-      install(config)
-      if (typeof nextConfig.webpack === "function") {
-        return nextConfig.webpack(config, options)
-      }
-      return config
-    },
-  } as NextConfig)
-}
 // ----------
 // END LOADER
 // ----------

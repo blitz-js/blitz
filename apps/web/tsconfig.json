@@ -1,7 +1,7 @@
 {
   "extends": "@blitzjs/config/tsconfig.nextjs.json",
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "."
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.config.js"],
   "exclude": ["node_modules", "test"]
