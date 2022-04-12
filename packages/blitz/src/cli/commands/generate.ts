@@ -170,12 +170,8 @@ const determineName = async () => {
 
 const determineContext = async () => {
   if (args["--context"] && !selectedModelName) {
-    if (args["--name"]) {
-      if (args["--name"].includes("/")) {
-        throw new Error(
-          "Your model should not contain a context when supplying a context explicitly",
-        )
-      }
+    if (args["--name"] && args["--name"].includes("/")) {
+      throw new Error("Your model should not contain a context when supplying a context explicitly")
     }
 
     const res = await prompts({
@@ -195,27 +191,37 @@ const determineContext = async () => {
 
 const getHelp = async () => {
   if (args["--help"]) {
-    console.log(
-      [
-        `${chalk.dim("# The 'crud' type will generate all queries & mutations for a model")}
-  > blitz generate --type crud --name productVariant
-      `,
-        `${chalk.dim("# The 'all' generator will scaffold out everything possible for a model")}
-  > blitz generate --type all --name products
-      `,
-        `${chalk.dim("# The '--context' flag will allow you to generate files in a nested folder")}
-  > blitz generate --type pages --name projects --context admin
-      `,
-        `${chalk.dim("# Context can also be supplied in the model name directly")}
-  > blitz generate --type pages --name admin/projects
-      `,
-        `${chalk.dim(`# To generate nested routes for dependent models (e.g. Projects that contain
-  # Tasks), specify a parent model. For example, this command generates pages under
-  # app/tasks/pages/projects/[projectId]/tasks/`)}
-  > blitz generate --type all --name tasks --parent projects
-      `,
-      ].join("#"),
-    )
+    console.log(`
+      # The 'crud' type will generate all queries & mutations for a model
+      
+        > blitz generate --type crud --name productVariant
+
+      # The 'all' generator will scaffold out everything possible for a model
+      
+        > blitz generate --type all --name products
+
+      # The '--context' flag will allow you to generate files in a nested folder
+      
+        > blitz generate --type pages --name projects --context admin
+
+      # Context can also be supplied in the model name directly
+      
+        > blitz generate --type pages --name admin/projects
+
+      # To generate nested routes for dependent models (e.g. Projects that contain Tasks), specify a parent model. 
+      For example, this command generates pages under app/tasks/pages/projects/[projectId]/tasks/
+        
+        > blitz generate --type all --name tasks --parent=projects
+
+      # Database models can also be generated directly from the CLI.
+        Model fields can be specified with any generator that generates a database model ("all", "model", "resource"). 
+        Both of the commands below will generate the proper database model for a Task.
+      
+        > blitz generate --type model --name task name:string completed:boolean:default=false belongsTo:project?
+
+        > blitz generate --type all --name tasks name:string completed:boolean:default=false belongsTo:project?
+
+    `)
 
     process.exit(0)
   }
