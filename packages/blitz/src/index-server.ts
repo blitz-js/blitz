@@ -7,6 +7,7 @@ export * from "./types"
 export * from "./prisma-utils"
 export * from "./middleware"
 export * from "./paginate"
+export {baseLogger, newLine} from "./logging"
 
 export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse {
   blitzCtx: C

@@ -1,4 +1,4 @@
-import {useAuthenticatedSession} from "../src/client-setup"
+import {useAuthenticatedSession} from "@blitzjs/auth"
 
 export default function PgaeWithUseAuthorizeIf() {
   useAuthenticatedSession()

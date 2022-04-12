@@ -96,9 +96,7 @@ interface RunNextCommandOptions {
 }
 
 export function runNextCommand(argv: any[], options: RunNextCommandOptions = {}) {
-  const nextDir = path.dirname(require.resolve("next/package"))
-  const nextBin = path.join(nextDir, "dist/bin/next")
-  const cwd = options.cwd || nextDir
+  const cwd = options.cwd
   // Let Next.js decide the environment
   const env = {
     ...process.env,
@@ -109,7 +107,7 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
 
   return new Promise<any>((resolve, reject) => {
     console.log(`Running command "next ${argv.join(" ")}"`)
-    const instance = spawn("node", ["--no-deprecation", nextBin, ...argv], {
+    const instance = spawn("pnpm", ["exec", "next", ...argv], {
       ...options.spawnOptions,
       cwd,
       env,
@@ -167,11 +165,8 @@ interface RunNextCommandDevOptions {
   nextStart?: boolean
 }
 
-export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
-  const nextDir = path.dirname(require.resolve("next/package"))
-  const nextBin = path.join(nextDir, "dist/bin/next")
-
-  const cwd = opts.cwd || nextDir
+export function runNextCommandDev(argv, opts: RunNextCommandDevOptions = {}) {
+  const cwd = opts.cwd // || nextDir
   const env = {
     ...process.env,
     NODE_ENV: opts.nextStart ? ("production" as const) : ("development" as const),
@@ -179,9 +174,8 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
     ...opts.env,
   }
 
-  const nodeArgs = opts.nodeArgs || []
   return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn("node", [...nodeArgs, "--no-deprecation", nextBin, ...argv], {
+    const instance = spawn("pnpm", ["exec", "next", ...argv], {
       cwd,
       env,
     })
@@ -236,7 +230,7 @@ export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions =
 
 // Launch the app in dev mode.
 export function launchApp(dir, port, opts) {
-  return runNextCommandDev([dir, "-p", port], undefined, opts)
+  return runNextCommandDev(["-p", port], {cwd: dir, ...opts})
 }
 
 export function nextBuild(dir, args = [], opts = {}) {
@@ -244,26 +238,27 @@ export function nextBuild(dir, args = [], opts = {}) {
 }
 
 export function nextExport(dir, {outdir}, opts = {}) {
-  return runNextCommand(["export", dir, "--outdir", outdir], opts)
+  return runNextCommand(["export", dir, "--outdir", outdir], {cwd: dir, ...opts})
 }
 
 export function nextExportDefault(dir, opts = {}) {
-  return runNextCommand(["export", dir], opts)
+  return runNextCommand(["export", dir], {cwd: dir, ...opts})
 }
 
 export function nextLint(dir, args = [], opts = {}) {
-  return runNextCommand(["lint", dir, ...args], opts)
+  return runNextCommand(["lint", dir, ...args], {cwd: dir, ...opts})
 }
 
 export function nextStart(dir, port, opts = {}) {
-  return runNextCommandDev(["start", "-p", port, dir], undefined, {
+  return runNextCommandDev(["start", "-p", port], {
+    cwd: dir,
     ...opts,
     nextStart: true,
   })
 }
 
 export function buildTS(args = [], cwd, env = {NODE_ENV: "production" as const}) {
-  cwd = cwd || path.dirname(require.resolve("next/package"))
+  cwd = cwd
   env = {...process.env, ...env}
 
   return new Promise<void>((resolve, reject) => {

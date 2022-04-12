@@ -1,4 +1,4 @@
-import {useSession} from "../src/client-setup"
+import {useSession} from "@blitzjs/auth"
 
 export default function PgaeWithUseSession() {
   const data = useSession()

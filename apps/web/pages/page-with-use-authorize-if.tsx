@@ -1,4 +1,4 @@
-import {useAuthorizeIf} from "../src/client-setup"
+import {useAuthorizeIf} from "@blitzjs/auth"
 
 export default function PgaeWithUseAuthorizeIf() {
   useAuthorizeIf(Math.random() > 0.5)
