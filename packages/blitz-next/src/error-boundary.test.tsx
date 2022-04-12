@@ -220,8 +220,7 @@ test("withErrorBoundary HOC", () => {
   expect(cleanStack(onErrorComponentStack)).toMatchInlineSnapshot(`
     {
       "componentStack": "
-        at __vite_ssr_import_4__.withErrorBoundary.FallbackComponent 
-        at ErrorBoundary 
+        at ErrorBoundary
         at withErrorBoundary",
     }
   `)

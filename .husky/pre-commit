@@ -3,4 +3,4 @@
 
 pnpm manypkg check
 pnpm lint
-pnpx pretty-quick --staged
+pnpm pretty-quick --staged

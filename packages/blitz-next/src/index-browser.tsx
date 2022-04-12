@@ -7,7 +7,8 @@ import type {
 import {AppProps} from "next/app"
 import Head from "next/head"
 import React, {FC} from "react"
-import {Hydrate, HydrateOptions, QueryClient, QueryClientProvider} from "react-query"
+import {QueryClient, QueryClientProvider} from "react-query"
+import {Hydrate, HydrateOptions} from "react-query/hydration"
 
 export * from "./error-boundary"
 export * from "./error-component"

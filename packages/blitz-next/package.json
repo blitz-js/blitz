@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "debug": "4.3.3",
-    "react-query": "3.34.12"
+    "react-query": "3.21.1"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",

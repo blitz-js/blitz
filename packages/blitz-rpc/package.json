@@ -1,9 +1,10 @@
 {
   "name": "@blitzjs/rpc",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
-    "dev": "watch unbuild src --wait=0.2",
+    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-auth/dist/index-browser.d.ts",
+    "dev": "pnpm run predev && watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
@@ -18,12 +19,30 @@
   "files": [
     "dist/**"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@blitzjs/auth": "2.0.0-alpha.0",
+    "b64-lite": "1.4.0",
+    "bad-behavior": "1.0.1",
+    "chalk": "^4.1.0",
+    "debug": "4.3.3",
+    "react-query": "3.21.1",
+    "superjson": "1.8.0"
+  },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
+    "@types/debug": "4.1.7",
+    "@types/react": "17.0.43",
+    "@types/react-dom": "17.0.14",
+    "blitz": "workspace:*",
+    "next": "12.1.4",
+    "react": "18.0.0",
     "typescript": "^4.5.3",
     "unbuild": "0.6.9",
     "watch": "1.0.2"
+  },
+  "peerDependencies": {
+    "blitz": "*",
+    "next": "*"
   },
   "publishConfig": {
     "access": "public"

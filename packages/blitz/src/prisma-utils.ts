@@ -1,7 +1,7 @@
 import {spawn} from "cross-spawn"
 import which from "npm-which"
 import {Readable} from "stream"
-import {pEvent} from "p-event"
+import pEvent from "p-event"
 
 export interface Constructor<T = unknown> {
   new (...args: never[]): T
