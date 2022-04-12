@@ -73,3 +73,18 @@ export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
 
   return {gSSP, gSP, api}
 }
+
+import type {NextConfig} from "next"
+import {installWebpackConfig} from "@blitzjs/rpc"
+
+export function withBlitz(nextConfig: NextConfig = {}) {
+  return Object.assign({}, nextConfig, {
+    webpack: (config: any, options: any) => {
+      installWebpackConfig(config)
+      if (typeof nextConfig.webpack === "function") {
+        return nextConfig.webpack(config, options)
+      }
+      return config
+    },
+  } as NextConfig)
+}
