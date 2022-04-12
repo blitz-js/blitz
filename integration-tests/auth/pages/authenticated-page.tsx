@@ -1,4 +1,4 @@
-import {useAuthorize} from "../src/client-setup"
+import {useAuthorize} from "@blitzjs/auth"
 
 export const getServerSideProps = () => {
   return {props: {}}

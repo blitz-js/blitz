@@ -1,4 +1,4 @@
-import {useRedirectAuthenticated} from "../src/client-setup"
+import {useRedirectAuthenticated} from "@blitzjs/auth"
 
 export default function PgaeWithUseAuthorizeIf() {
   useRedirectAuthenticated("/")
