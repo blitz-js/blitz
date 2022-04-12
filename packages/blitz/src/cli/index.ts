@@ -1,7 +1,6 @@
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"
-import type {ServerConfig} from "./utils/config"
 import {loadEnvConfig} from "../env-utils"
 
 const commonArgs = {
@@ -20,44 +19,15 @@ const commonArgs = {
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
-  dev: () => import("./commands/dev").then((i) => i.dev),
-  next: async () => async (argv) => {
-    process.env.__NEXT_PROCESSED_ENV = "true"
-
-    const nextArgs = arg(
-      {
-        ...commonArgs,
-        "--port": Number,
-        "--hostname": String,
-        "--inspect": Boolean,
-
-        "-p": "--port",
-        "-H": "--hostname",
-      },
-      {
-        permissive: true,
-      },
-    )
-
-    const config: ServerConfig = {
-      rootFolder: process.cwd(),
-      port: nextArgs["--port"],
-      hostname: nextArgs["--hostname"],
-      inspect: nextArgs["--inspect"],
-      env: process.env.NODE_ENV === "production" ? "prod" : "dev",
+  dev: () => import("./commands/next/dev").then((i) => i.dev),
+  build: () => import("./commands/next/build").then((i) => i.build),
+  start: () => import("./commands/next/start").then((i) => i.start),
+  next: async () => (argv) => {
+    if (argv?.[0] && ["dev", "start", "build"].includes(argv[0])) {
+      const command = argv[0] as "dev" | "start" | "build"
+      return import("./commands/next").then((i) => i[command]())
     }
-
-    switch (argv?.[0]) {
-      case "build":
-        await import("./utils/next-commands").then((i) => i.build(config))
-        break
-      case "start":
-        await import("./utils/next-commands").then((i) => i.prod(config))
-        break
-      case "dev":
-        await import("./utils/next-commands").then((i) => i.dev(config))
-        break
-    }
+    console.error(`Invalid command provided: "blitz next ${argv?.[0]}".`)
   },
   new: () => import("./commands/new").then((i) => i.newApp),
 }
