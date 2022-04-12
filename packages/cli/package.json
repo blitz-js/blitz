@@ -43,7 +43,7 @@
     "got": "^11.8.1",
     "has-yarn": "2.1.0",
     "hasbin": "1.2.3",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "p-event": "4.2.0",
     "pkg-dir": "^5.0.0",
     "pluralize": "^8.0.0",

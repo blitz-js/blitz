@@ -65,7 +65,7 @@
     "eslint-config-blitz": "0.45.4",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "next": "0.45.4",
     "os-name": "^4.0.0",
     "pkg-dir": "^5.0.0",
