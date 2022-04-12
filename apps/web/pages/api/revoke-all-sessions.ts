@@ -1,4 +1,4 @@
-import {api} from "../../src/server-setup"
+import {api} from "app/blitz-server"
 import {prisma} from "../../prisma/index"
 
 export default api(async (_req, res) => {
