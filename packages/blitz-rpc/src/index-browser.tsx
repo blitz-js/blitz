@@ -11,12 +11,12 @@ export async function __internal_fetchBlitzRpc(resolverFilePath: string, args: a
 export const queryClient = globalThis.queryClient
 
 interface BlitzRpcOptions {
-  reactQueryOptions: DefaultOptions
+  reactQueryOptions?: DefaultOptions
 }
-export const BlitzRpc = createClientPlugin<BlitzRpcOptions, any>(
+export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, any>(
   ({reactQueryOptions}: BlitzRpcOptions) => {
     const initializeQueryClient = () => {
-      let suspenseEnabled = reactQueryOptions.queries?.suspense ?? true
+      let suspenseEnabled = reactQueryOptions?.queries?.suspense ?? true
       if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
         globalThis.__BLITZ_SUSPENSE_ENABLED = suspenseEnabled
       }
@@ -34,7 +34,7 @@ export const BlitzRpc = createClientPlugin<BlitzRpcOptions, any>(
 
               return false
             },
-            ...reactQueryOptions.queries,
+            ...reactQueryOptions?.queries,
             suspense: suspenseEnabled,
           },
         },

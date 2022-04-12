@@ -33,7 +33,7 @@ type MutateOptions = {
 export const initializeQueryClient = () => {
   let suspenseEnabled = true
   if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
-    suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+    suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   }
 
   return new QueryClient({
