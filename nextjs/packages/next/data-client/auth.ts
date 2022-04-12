@@ -1,3 +1,4 @@
+import SuperJson from 'superjson'
 import { fromBase64 } from 'b64-lite'
 import BadBehavior from 'bad-behavior'
 import {
@@ -33,9 +34,12 @@ export const parsePublicDataToken = (token: string) => {
 
   const publicDataStr = fromBase64(token)
   try {
-    const publicData: PublicData = JSON.parse(publicDataStr)
+    const publicData = SuperJson.parse(publicDataStr) as PublicData | undefined
+    if (publicData !== undefined) {
+      return { publicData }
+    }
     return {
-      publicData,
+      publicData: JSON.parse(publicDataStr) as PublicData,
     }
   } catch (error) {
     throw new Error(

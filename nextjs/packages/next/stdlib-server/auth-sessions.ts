@@ -1,3 +1,4 @@
+import SuperJson from 'superjson'
 import { baseLogger } from '../server/lib/logging'
 import { fromBase64, toBase64 } from 'b64-lite'
 import cookie from 'next/dist/compiled/cookie'
@@ -411,7 +412,7 @@ const createSessionToken = (
   if (typeof publicData === 'string') {
     publicDataString = publicData
   } else {
-    publicDataString = JSON.stringify(publicData)
+    publicDataString = SuperJson.stringify(publicData)
   }
   return toBase64(
     [
@@ -443,7 +444,9 @@ const createPublicDataToken = (
   publicData: string | PublicData | EmptyPublicData
 ) => {
   const payload =
-    typeof publicData === 'string' ? publicData : JSON.stringify(publicData)
+    typeof publicData === 'string'
+      ? publicData
+      : SuperJson.stringify(publicData)
   return toBase64(payload)
 }
 
@@ -737,7 +740,7 @@ async function getSessionKernel(
           res,
           {
             handle,
-            publicData: JSON.parse(persistedSession.publicData || ''),
+            publicData: SuperJson.parse(persistedSession.publicData || ''),
             jwtPayload: null,
             antiCSRFToken: persistedSession.antiCSRFToken,
             sessionToken,
@@ -749,7 +752,7 @@ async function getSessionKernel(
 
     return {
       handle,
-      publicData: JSON.parse(persistedSession.publicData || ''),
+      publicData: SuperJson.parse(persistedSession.publicData || ''),
       jwtPayload: null,
       antiCSRFToken: persistedSession.antiCSRFToken,
       sessionToken,
@@ -869,7 +872,7 @@ async function createNewSession(
       )
       if (session) {
         if (session.privateData) {
-          existingPrivateData = JSON.parse(session.privateData)
+          existingPrivateData = SuperJson.parse(session.privateData)
         }
         // Delete the previous anonymous session
         await global.sessionConfig.deleteSession(args.jwtPayload.handle)
@@ -895,8 +898,8 @@ async function createNewSession(
       userId: newPublicData.userId,
       hashedSessionToken: hash256(sessionToken),
       antiCSRFToken,
-      publicData: JSON.stringify(newPublicData),
-      privateData: JSON.stringify(newPrivateData),
+      publicData: SuperJson.stringify(newPublicData),
+      privateData: SuperJson.stringify(newPrivateData),
     })
 
     setSessionCookie(req, res, sessionToken, expiresAt)
@@ -989,7 +992,7 @@ async function refreshSession(
       await global.sessionConfig.updateSession(sessionKernel.handle, {
         expiresAt,
         hashedSessionToken: hash256(sessionToken),
-        publicData: JSON.stringify(sessionKernel.publicData),
+        publicData: SuperJson.stringify(sessionKernel.publicData),
       })
     } else {
       await global.sessionConfig.updateSession(sessionKernel.handle, {
@@ -1023,8 +1026,8 @@ async function syncPubicDataFieldsForUserIfNeeded(
     const sessions = await global.sessionConfig.getSessions(userId)
 
     for (const session of sessions) {
-      const publicData = JSON.stringify({
-        ...(session.publicData ? JSON.parse(session.publicData) : {}),
+      const publicData = SuperJson.stringify({
+        ...(session.publicData ? SuperJson.parse(session.publicData) : {}),
         ...dataToSync,
       })
       await global.sessionConfig.updateSession(session.handle, { publicData })
@@ -1084,7 +1087,7 @@ async function getPublicData(
       )
     }
     if (session.publicData) {
-      return JSON.parse(session.publicData) as PublicData
+      return SuperJson.parse(session.publicData) as PublicData
     } else {
       return {} as PublicData
     }
@@ -1096,7 +1099,7 @@ async function getPrivateData(
 ): Promise<Record<any, any> | null> {
   const session = await global.sessionConfig.getSession(handle)
   if (session && session.privateData) {
-    return JSON.parse(session.privateData) as Record<any, any>
+    return SuperJson.parse(session.privateData) as Record<any, any>
   } else {
     return null
   }
@@ -1114,7 +1117,7 @@ async function setPrivateData(
     } catch (error) {}
     existingPrivateData = {}
   }
-  const privateData = JSON.stringify({
+  const privateData = SuperJson.stringify({
     ...existingPrivateData,
     ...data,
   })
@@ -1162,8 +1165,8 @@ export async function setPublicDataForUser(
   const sessions = await global.sessionConfig.getSessions(userId)
   for (const session of sessions) {
     // Merge data
-    const publicData = JSON.stringify({
-      ...JSON.parse(session.publicData || ''),
+    const publicData = SuperJson.stringify({
+      ...SuperJson.parse(session.publicData || ''),
       ...data,
     })
 
