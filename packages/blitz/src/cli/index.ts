@@ -1,31 +1,46 @@
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"
+import {loadEnvConfig} from "../env-utils"
+
+const commonArgs = {
+  // Types
+  "--version": Boolean,
+  "--help": Boolean,
+  "--inspect": Boolean,
+  "--env": String,
+
+  // Aliases
+  "-v": "--version",
+  "-h": "--help",
+  "-e": "--env",
+}
 
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
 const commands: {[command: string]: () => Promise<CliCommand>} = {
-  dev: () => import("./commands/dev").then((i) => i.dev),
+  dev: () => import("./commands/next/dev").then((i) => i.dev),
+  build: () => import("./commands/next/build").then((i) => i.build),
+  start: () => import("./commands/next/start").then((i) => i.start),
+  next: async () => (argv) => {
+    if (argv?.[0] && ["dev", "start", "build"].includes(argv[0])) {
+      const command = argv[0] as "dev" | "start" | "build"
+      return import("./commands/next").then((i) => i[command]())
+    }
+    console.error(`Invalid command provided: "blitz next ${argv?.[0]}".`)
+  },
   new: () => import("./commands/new").then((i) => i.newApp),
 }
 
-const args = arg(
-  {
-    // Types
-    "--version": Boolean,
-    "--help": Boolean,
-    "--inspect": Boolean,
-    "--env": String,
+const args = arg(commonArgs, {
+  permissive: true,
+})
 
-    // Aliases
-    "-v": "--version",
-    "-h": "--help",
-    "-e": "--env",
-  },
-  {
-    permissive: true,
-  },
-)
+if (args["--env"]) {
+  process.env.APP_ENV = args["--env"]
+}
+
+loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
 // Version is inlined into the file using taskr build pipeline
 if (args["--version"]) {
