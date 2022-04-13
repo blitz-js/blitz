@@ -42,10 +42,13 @@ importers:
       "@hookform/resolvers": 2.8.8
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 3.9.0
+      "@testing-library/react": 13.0.0
+      "@testing-library/react-hooks": 7.0.2
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
       "@types/react": 17.0.43
+      blitz: "workspace: *"
       eslint: 7.32.0
       husky: 7.0.4
       jest: 27.5.1
@@ -69,6 +72,7 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/resolvers": 2.8.8_react-hook-form@7.29.0
       "@prisma/client": 3.9.0_prisma@3.9.0
+      blitz: link:../../packages/blitz
       next: 12.1.4_react-dom@18.0.0+react@18.0.0
       prisma: 3.9.0
       react: 18.0.0
@@ -78,6 +82,8 @@ importers:
       zod: 3.10.1
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
+      "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
+      "@testing-library/react-hooks": 7.0.2_react-dom@18.0.0+react@18.0.0
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
@@ -390,6 +396,7 @@ importers:
   packages/blitz-next:
     specifiers:
       "@blitzjs/config": workspace:*
+      "@blitzjs/rpc": 2.0.0-alpha.0
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
       "@testing-library/react": 13.0.0
@@ -412,6 +419,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
     dependencies:
+      "@blitzjs/rpc": link:../blitz-rpc
       debug: 4.3.3
       react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
     devDependencies:

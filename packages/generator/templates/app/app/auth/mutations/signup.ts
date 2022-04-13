@@ -1,15 +1,19 @@
-import { resolver, SecurePassword } from "blitz"
-import db from "db"
-import { Signup } from "app/auth/validations"
-import { Role } from "types"
+import { prisma } from "../../../db/index"
+import { SecurePassword } from "@blitzjs/auth"
 
-export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, ctx) => {
-  const hashedPassword = await SecurePassword.hash(password.trim())
-  const user = await db.user.create({
-    data: { email: email.toLowerCase().trim(), hashedPassword, role: "USER" },
+export default async function signup(input, ctx) {
+  const blitzContext = ctx
+
+  const hashedPassword = await SecurePassword.hash((input.password as string) || "test-password")
+  const email = (input.email as string) || "test" + Math.random() + "@test.com"
+  const user = await prisma.user.create({
+    data: { email, hashedPassword, role: "user" },
     select: { id: true, name: true, email: true, role: true },
   })
 
-  await ctx.session.$create({ userId: user.id, role: user.role as Role })
-  return user
-})
+  await blitzContext.session.$create({
+    userId: user.id,
+  })
+
+  return { userId: blitzContext.session.userId, ...user, email: input.email }
+}

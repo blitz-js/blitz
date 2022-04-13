@@ -1,4 +1,4 @@
-import {resolver} from "blitz"
+import {Ctx} from "blitz"
 import db from "db"
 import {z} from "zod"
 
@@ -13,13 +13,15 @@ if (process.env.parentModel) {
   })
 }
 
-export default resolver.pipe(
-  resolver.zod(Create__ModelName__),
-  resolver.authorize(),
-  async (input) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const __modelName__ = await db.__modelName__.create({data: input})
+export default async function Create__ModelName__(input, ctx: Ctx) {
+  Create__ModelName__.parse(input)
+  ctx.session.$isAuthorized()
 
-    return __modelName__
-  },
-)
+  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  const __modelName__ = await db.__modelName__.create({data: input})
+
+  return __modelName__
+
+}
+
+

@@ -1,23 +1,26 @@
-import { NotFoundError, SecurePassword, resolver } from "blitz"
-import db from "db"
+import { NotFoundError, Ctx } from "blitz"
+import { prisma } from "../../../db/index"
 import { authenticateUser } from "./login"
 import { ChangePassword } from "../validations"
+import { SecurePassword } from "@blitzjs/auth"
 
-export default resolver.pipe(
-  resolver.zod(ChangePassword),
-  resolver.authorize(),
-  async ({ currentPassword, newPassword }, ctx) => {
-    const user = await db.user.findFirst({ where: { id: ctx.session.userId! } })
-    if (!user) throw new NotFoundError()
+export default async function changePassword(input, ctx: Ctx) {
+  ChangePassword.parse(input)
+  ctx.session.$isAuthorized()
 
-    await authenticateUser(user.email, currentPassword)
+  const user = await prisma.user.findFirst({
+    where: {
+      id: ctx.session.userId as number,
+    },
+  })
 
-    const hashedPassword = await SecurePassword.hash(newPassword.trim())
-    await db.user.update({
-      where: { id: user.id },
-      data: { hashedPassword },
-    })
+  if (!user) throw new NotFoundError()
+  await authenticateUser(user.email, input.currentPassword)
 
-    return true
-  }
-)
+  const hashedPassword = await SecurePassword.hash(input.newPassword.trim())
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { hashedPassword },
+  })
+}

@@ -1,6 +1,5 @@
 import {setPublicDataForUser} from "@blitzjs/auth"
-
-import {api} from "../../src/server-setup"
+import {api} from "app/blitz-server"
 import {prisma} from "../../prisma/index"
 
 export default api(async (req, res, ctx) => {

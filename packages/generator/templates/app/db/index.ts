@@ -4,4 +4,5 @@ import { PrismaClient } from "@prisma/client"
 const EnhancedPrisma = enhancePrisma(PrismaClient)
 
 export * from "@prisma/client"
-export default new EnhancedPrisma()
+const prisma = new EnhancedPrisma()
+export { prisma }
