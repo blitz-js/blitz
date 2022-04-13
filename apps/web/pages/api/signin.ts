@@ -25,8 +25,7 @@ export default api(async (req, res, ctx) => {
 
   await blitzContext.session.$create({
     userId: user.id,
-    role: "ADMIN",
-  } as any) // todo: fix type augmentation
+  })
 
   res.status(200).json({email: req.query.email, userId: blitzContext.session.userId})
 })
