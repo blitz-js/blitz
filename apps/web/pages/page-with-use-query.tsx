@@ -8,7 +8,7 @@ type Props = {
 }
 
 const Info = () => {
-  const [data] = useQuery(getBasic, {}, {suspense: false})
+  const [data] = useQuery(getBasic, {})
   return data
 }
 
