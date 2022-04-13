@@ -1,3 +1,4 @@
+import "./global"
 import type {
   ClientPlugin,
   BlitzProvider as BlitzProviderType,
@@ -6,7 +7,7 @@ import type {
 } from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
-import React, {FC} from "react"
+import React from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
 import {Hydrate, HydrateOptions} from "react-query/hydration"
 
@@ -37,9 +38,11 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
 
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
-          {/* @ts-ignore todo */}
-          {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-          <UserAppRoot {...props} Component={component} />
+          <>
+            {/* @ts-ignore todo */}
+            {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
+            <UserAppRoot {...props} Component={component} />
+          </>
         </BlitzProvider>
       )
     }
@@ -54,20 +57,27 @@ export type BlitzProviderProps = {
   hydrateOptions?: HydrateOptions
 }
 
-const BlitzProvider: FC<BlitzProviderProps> = ({
+const BlitzProvider = ({
   client,
   contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
-}) => {
-  return (
-    <QueryClientProvider client={client || queryClient} contextSharing={contextSharing}>
-      <Hydrate state={dehydratedState} options={hydrateOptions}>
-        {children}
-      </Hydrate>
-    </QueryClientProvider>
-  )
+}: BlitzProviderProps & {children: JSX.Element}) => {
+  if (globalThis.queryClient) {
+    return (
+      <QueryClientProvider
+        client={client || globalThis.queryClient}
+        contextSharing={contextSharing}
+      >
+        <Hydrate state={dehydratedState} options={hydrateOptions}>
+          {children}
+        </Hydrate>
+      </QueryClientProvider>
+    )
+  }
+
+  return children
 }
 
 export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
@@ -112,34 +122,6 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
 }
 
 export {setupClient}
-
-// ------------------------------------ QUERY CLIENT CODE --------------------------------------------
-
-const initializeQueryClient = () => {
-  let suspenseEnabled = true
-  if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
-    suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
-  }
-
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        ...(typeof window === "undefined" && {cacheTime: 0}),
-        suspense: suspenseEnabled,
-        retry: (failureCount, error: any) => {
-          if (process.env.NODE_ENV !== "production") return false
-
-          // Retry (max. 3 times) only if network error detected
-          if (error.message === "Network request failed" && failureCount <= 3) return true
-
-          return false
-        },
-      },
-    },
-  })
-}
-
-const queryClient = initializeQueryClient()
 
 const customCSS = `
   body::before {

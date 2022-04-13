@@ -38,7 +38,7 @@
     "@types/testing-library__react-hooks": "4.0.0",
     "blitz": "workspace:*",
     "lodash.frompairs": "4.0.1",
-    "next": "12.1.4",
+    "next": "12.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "ts-jest": "27.1.4",
