@@ -7,7 +7,7 @@ import type {
 } from "blitz"
 import {AppProps} from "next/app"
 import Head from "next/head"
-import React, {FC} from "react"
+import React from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
 import {Hydrate, HydrateOptions} from "react-query/hydration"
 
@@ -38,9 +38,11 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
 
       return (
         <BlitzProvider dehydratedState={props.pageProps?.dehydratedState}>
-          {/* @ts-ignore todo */}
-          {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-          <UserAppRoot {...props} Component={component} />
+          <>
+            {/* @ts-ignore todo */}
+            {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
+            <UserAppRoot {...props} Component={component} />
+          </>
         </BlitzProvider>
       )
     }
@@ -55,20 +57,27 @@ export type BlitzProviderProps = {
   hydrateOptions?: HydrateOptions
 }
 
-const BlitzProvider: FC<BlitzProviderProps> = ({
+const BlitzProvider = ({
   client,
   contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
-}) => {
-  return (
-    <QueryClientProvider client={client || globalThis.queryClient} contextSharing={contextSharing}>
-      <Hydrate state={dehydratedState} options={hydrateOptions}>
-        {children}
-      </Hydrate>
-    </QueryClientProvider>
-  )
+}: BlitzProviderProps & {children: JSX.Element}) => {
+  if (globalThis.queryClient) {
+    return (
+      <QueryClientProvider
+        client={client || globalThis.queryClient}
+        contextSharing={contextSharing}
+      >
+        <Hydrate state={dehydratedState} options={hydrateOptions}>
+          {children}
+        </Hydrate>
+      </QueryClientProvider>
+    )
+  }
+
+  return children
 }
 
 export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
