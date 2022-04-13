@@ -343,6 +343,7 @@ importers:
   packages/blitz-next:
     specifiers:
       "@blitzjs/config": workspace:*
+      "@blitzjs/rpc": 2.0.0-alpha.0
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
       "@testing-library/react": 13.0.0
@@ -365,6 +366,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
     dependencies:
+      "@blitzjs/rpc": link:../blitz-rpc
       debug: 4.3.3
       react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
     devDependencies:

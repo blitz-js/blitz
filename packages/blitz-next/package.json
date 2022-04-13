@@ -4,7 +4,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
-    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
+    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-rpc/dist/index-server.d.ts",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
@@ -20,6 +20,7 @@
     "dist/**"
   ],
   "dependencies": {
+    "@blitzjs/rpc": "2.0.0-alpha.0",
     "debug": "4.3.3",
     "react-query": "3.21.1"
   },
