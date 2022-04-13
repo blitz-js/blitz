@@ -2322,14 +2322,14 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blitzjs/generator@0.45.3":
-  version "0.45.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.45.3.tgz#0e850cb0e96fc33e50961cf616cee0fb50209a9e"
-  integrity sha512-Y8WAizLB+SnTIvrgPEpvrAT7dGSf6iRSQeBPrjFdmZZY8sZiyVfq8zu+ndcD2XDtBiaCL3kTb7fe7NnJ1VNMtw==
+"@blitzjs/generator@0.45.4":
+  version "0.45.4"
+  resolved "https://registry.yarnpkg.com/@blitzjs/generator/-/generator-0.45.4.tgz#eaadb3b901f920dbdcdebe3e06e1786eb31f4b37"
+  integrity sha512-faCPlnAwSzXZ3pbnzUFq30NGBx+hNx8c4VDzKEGsuOH1PFWyDGZ7q2msIwXTvgcVZneVeJxNJ0EasAPMG0FQzA==
   dependencies:
     "@babel/core" "7.12.10"
     "@babel/plugin-transform-typescript" "7.12.1"
-    "@blitzjs/server" "0.45.3"
+    "@blitzjs/server" "0.45.4"
     "@mrleebo/prisma-ast" "0.2.6"
     "@types/jscodeshift" "0.11.2"
     chalk "^4.1.0"
@@ -2347,10 +2347,10 @@
     username "^5.1.0"
     vinyl "2.2.1"
 
-"@blitzjs/server@0.45.3":
-  version "0.45.3"
-  resolved "https://registry.yarnpkg.com/@blitzjs/server/-/server-0.45.3.tgz#fa58f9bd946b570506b03216bd3577ade9509a0e"
-  integrity sha512-UGH0VSH75pYsMMbqZVXOd+hMxjW2C9Qc7GQ0HhAsgcOjI3lDkYMNdzXp2v5lElM/oIlRHt4cPYBerwHAXN14hw==
+"@blitzjs/server@0.45.4":
+  version "0.45.4"
+  resolved "https://registry.yarnpkg.com/@blitzjs/server/-/server-0.45.4.tgz#215a6c5dc8810a5954657b74a333250ea608e6c4"
+  integrity sha512-GQljY4VeXM510sOXONLw4F2etoTVqJq99mP1KzEzJ1ECxfNqOpwhYWxN1qO4J2r5kew583Tv6KXFigKsnJS9uw==
   dependencies:
     cross-spawn "7.0.3"
     detect-port "1.3.0"
@@ -21005,8 +21005,9 @@ uri-js@^4.2.2:
     punycode "^2.1.0"
 
 urijs@^1.19.1:
-  version "1.19.2"
-  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.2.tgz#f9be09f00c4c5134b7cb3cf475c1dd394526265a"
+  version "1.19.11"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.11.tgz#204b0d6b605ae80bea54bea39280cdb7c9f923cc"
+  integrity sha512-HXgFDgDommxn5/bIv0cnQZsPhHDA90NPHD6+c/v21U5+Sx5hoP8+dP9IZXBU1gIfvdRfhG8cel9QNPeionfcCQ==
 
 urix@^0.1.0:
   version "0.1.0"
