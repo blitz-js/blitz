@@ -23,7 +23,7 @@
     "@blitzjs/config": "latest",
     "@blitzjs/next": "latest",
     "blitz": "latest",
-    "next": "12.1.4",
+    "next": "12.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "ts-node": "10.7.0"

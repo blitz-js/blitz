@@ -4,8 +4,6 @@
 *.lock
 db/migrations
 .next
-.blitz
 .yarn
 .pnp.*
 node_modules
-.blitz.config.compiled.js

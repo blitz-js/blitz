@@ -1,13 +1,13 @@
 import {Ctx} from "blitz"
-import { prisma } from "db/index"
+import { prisma } from "db"
 import {z} from "zod"
 
-const Delete__ModelName__ = z.object({
+const Delete__ModelName__Input = z.object({
   id: z.number(),
 })
 
 export default async function Delete__ModelName__(input, ctx: Ctx) {
-  Delete__ModelName__.parse(input)
+  Delete__ModelName__Input.parse(input)
   ctx.session.$isAuthorized()
 
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant

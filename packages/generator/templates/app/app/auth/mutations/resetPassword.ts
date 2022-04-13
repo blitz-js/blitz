@@ -1,5 +1,5 @@
 import { SecurePassword, hash256 } from "@blitzjs/auth"
-import { prisma } from "../../../db/index"
+import { prisma } from "db"
 import { ResetPassword } from "../validations"
 import login from "./login"
 

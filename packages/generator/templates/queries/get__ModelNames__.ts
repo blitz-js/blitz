@@ -1,11 +1,11 @@
 import {paginate, Ctx} from "blitz"
-import { prisma } from "db/index"
+import { prisma } from "db"
 import { Prisma } from "@prisma/client"
 
 interface Get__ModelNames__Input
   extends Pick<Prisma.__ModelName__FindManyArgs, "where" | "orderBy" | "skip" | "take"> {}
 
-export default async function Get__ModelNames__Input(input: Get__ModelNames__Input, ctx: Ctx) {
+export default async function Get__ModelNames(input: Get__ModelNames__Input, ctx: Ctx) {
   ctx.session.$isAuthorized()
 
    // TODO: in multi-tenant app, you must add validation to ensure correct tenant

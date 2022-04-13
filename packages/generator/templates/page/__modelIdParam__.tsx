@@ -1,5 +1,11 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useParam, BlitzPage, useMutation, Routes} from "blitz"
+
+import Head from "next/head"
+import Link from 'next/link'
+import { useRouter } from "next/router"
+import {useQuery, useMutation} from '@blitzjs/rpc'
+import {useParam} from '@blitzjs/next'
+
 import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import delete__ModelName__ from "app/__modelNamesPath__/mutations/delete__ModelName__"
@@ -24,13 +30,11 @@ export const __ModelName__ = () => {
         <pre>{JSON.stringify(__modelName__, null, 2)}</pre>
 
         <if condition="parentModel">
-          <Link
-            href={Routes.Edit__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })}
-          >
+          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s/[__modelId__]/edit', query: {__parentModelId__: __parentModelId__!, __modelId__: __modelName__.id}}}>
             <a>Edit</a>
           </Link>
           <else>
-            <Link href={Routes.Edit__ModelName__Page({ __modelId__: __modelName__.id })}>
+            <Link href={{pathname: '/__modelName__s/[__modelId__]/edit', query: {__modelId__: __modelName__.id}}}>
               <a>Edit</a>
             </Link>
           </else>
@@ -42,9 +46,9 @@ export const __ModelName__ = () => {
             if (window.confirm("This will be deleted")) {
               await delete__ModelName__Mutation({id: __modelName__.id})
               if (process.env.parentModel) {
-                router.push(Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! }))
+                router.push({pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}})
               } else {
-                router.push(Routes.__ModelNames__Page())
+                router.push({pathname: '/__modelName__s'})
               }
             }
           }}
@@ -57,7 +61,7 @@ export const __ModelName__ = () => {
   )
 }
 
-const Show__ModelName__Page: BlitzPage = () => {
+const Show__ModelName__Page = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
@@ -66,11 +70,11 @@ const Show__ModelName__Page: BlitzPage = () => {
     <div>
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
+          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}}}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href={Routes.__ModelNames__Page()}>
+            <Link href={{pathname: '/__modelName__s'}}>
               <a>__ModelNames__</a>
             </Link>
           </else>

@@ -195,7 +195,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         if (pkgManager === "yarn") {
           return spawn.sync("yarn", ["run", ...command.split(" ")])
         } else if (pkgManager === "pnpm") {
-          return spawn.sync("pnpx", command.split(" "))
+          return spawn.sync("pnpm", command.split(" "))
         } else {
           return spawn.sync("npx", command.split(" "))
         }

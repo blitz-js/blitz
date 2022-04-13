@@ -5,7 +5,7 @@ import Layout from "app/core/layouts/Layout"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
-import { invoke } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/rpc"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -14,6 +14,7 @@ import { invoke } from "@blitzjs/rpc"
 
 const UserInfo = () => {
   const currentUser = useCurrentUser()
+  const [logoutMutation] = useMutation(logout)
 
   if (currentUser) {
     return (
@@ -21,7 +22,7 @@ const UserInfo = () => {
         <button
           className="button small"
           onClick={async () => {
-            await invoke(logout, "")
+            await logoutMutation()
           }}
         >
           Logout

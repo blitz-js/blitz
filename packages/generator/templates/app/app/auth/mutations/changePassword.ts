@@ -1,5 +1,5 @@
 import { NotFoundError, Ctx } from "blitz"
-import { prisma } from "../../../db/index"
+import { prisma } from "db"
 import { authenticateUser } from "./login"
 import { ChangePassword } from "../validations"
 import { SecurePassword } from "@blitzjs/auth"

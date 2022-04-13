@@ -2,13 +2,14 @@ import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
-import { invoke } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/rpc"
 
 type SignupFormProps = {
   onSuccess?: () => void
 }
 
 export const SignupForm = (props: SignupFormProps) => {
+  const [signupMutation] = useMutation(signup)
   return (
     <div>
       <h1>Create an Account</h1>
@@ -19,8 +20,8 @@ export const SignupForm = (props: SignupFormProps) => {
         initialValues={{ email: "", password: "" }}
         onSubmit={async (values) => {
           try {
-            await invoke(signup, values)
-            // props.onSuccess?.()
+            await signupMutation(values)
+            props.onSuccess?.()
           } catch (error: any) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma

@@ -19,12 +19,7 @@ import prompts from "prompts"
 import chalk from "chalk"
 
 const getIsTypeScript = async () =>
-  require("fs").existsSync(
-    require("path").join(
-      await require("next/dist/server/lib/utils").getProjectRoot(process.cwd()),
-      "tsconfig.json",
-    ),
-  )
+  require("fs").existsSync(require("path").join(process.cwd(), "tsconfig.json"))
 
 enum ResourceType {
   All = "all",
