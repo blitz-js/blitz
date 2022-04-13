@@ -1,3 +1,4 @@
+import "./global"
 import type {
   ClientPlugin,
   BlitzProvider as BlitzProviderType,
