@@ -8,8 +8,8 @@ type Props = {
 }
 
 const Info = () => {
-  const [data] = useQuery(getBasic, {})
-  return null
+  const [data] = useQuery(getBasic, {}, {suspense: false})
+  return data
 }
 
 function Page(props: Props) {

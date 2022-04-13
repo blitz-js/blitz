@@ -61,7 +61,6 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
   hydrateOptions,
   children,
 }) => {
-  console.log({client: (globalThis as any).queryClient})
   return (
     <QueryClientProvider
       client={client || (globalThis as any).queryClient}

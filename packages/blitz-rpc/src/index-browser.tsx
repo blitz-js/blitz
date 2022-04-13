@@ -4,10 +4,6 @@ import {DefaultOptions, QueryClient} from "react-query"
 
 export * from "./data-client/index"
 
-export async function __internal_fetchBlitzRpc(resolverFilePath: string, args: any[]) {
-  console.log("__internal_fetchBlitzRpc ran", resolverFilePath, args)
-}
-
 export const queryClient = globalThis.queryClient
 
 interface BlitzRpcOptions {
