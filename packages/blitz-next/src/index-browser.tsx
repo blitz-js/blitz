@@ -62,10 +62,7 @@ const BlitzProvider: FC<BlitzProviderProps> = ({
   children,
 }) => {
   return (
-    <QueryClientProvider
-      client={client || (globalThis as any).queryClient}
-      contextSharing={contextSharing}
-    >
+    <QueryClientProvider client={client || globalThis.queryClient} contextSharing={contextSharing}>
       <Hydrate state={dehydratedState} options={hydrateOptions}>
         {children}
       </Hydrate>
