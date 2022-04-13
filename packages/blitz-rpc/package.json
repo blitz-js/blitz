@@ -34,8 +34,9 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "blitz": "workspace:*",
-    "next": "12.1.4",
+    "next": "12.1.1",
     "react": "18.0.0",
+    "react-dom": "18.0.0",
     "typescript": "^4.5.3",
     "unbuild": "0.6.9",
     "watch": "1.0.2"

@@ -6,7 +6,7 @@ import {prisma as db} from "../prisma/index"
 const {gSSP, gSP, api} = setupBlitz({
   plugins: [
     AuthServerPlugin({
-      cookiePrefix: "webapp-cookie-prefix",
+      cookiePrefix: "auth-tests-cookie-prefix",
       storage: PrismaStorage(db as any),
       isAuthorized: simpleRolesIsAuthorized,
     }),

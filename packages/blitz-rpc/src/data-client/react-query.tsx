@@ -70,7 +70,7 @@ export function useQuery<
     throw new Error("useQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
   const session = useSession({suspense})
@@ -151,7 +151,7 @@ export function usePaginatedQuery<
     throw new Error("usePaginatedQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
 
@@ -243,7 +243,7 @@ export function useInfiniteQuery<
     throw new Error("useInfiniteQuery is missing the first argument - it must be a query function")
   }
 
-  const suspenseEnabled = Boolean(process.env.__BLITZ_SUSPENSE_ENABLED)
+  const suspenseEnabled = Boolean(globalThis.__BLITZ_SUSPENSE_ENABLED)
   let enabled = isServer && suspenseEnabled ? false : options?.enabled ?? options?.enabled !== null
   const suspense = enabled === false ? false : options?.suspense
   const session = useSession({suspense})
