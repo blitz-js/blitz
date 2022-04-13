@@ -1,4 +1,4 @@
-import { prisma } from "../../../db/index"
+import { prisma } from "db"
 import { generateToken, hash256 } from "@blitzjs/auth"
 import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
 import { ForgotPassword } from "../validations"

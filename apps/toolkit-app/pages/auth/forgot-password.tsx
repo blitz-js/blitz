@@ -1,13 +1,13 @@
 import Layout from "app/core/layouts/Layout"
-import { useState } from "react"
 import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
-import { invoke } from "@blitzjs/rpc"
+import { useMutation } from "@blitzjs/rpc"
 
 const ForgotPasswordPage = () => {
-  const [isSuccess, setSuccess] = useState<boolean>(false)
+  const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
+
   return (
     <Layout title="Forgot Your Password?">
       <h1>Forgot your password?</h1>
@@ -27,8 +27,7 @@ const ForgotPasswordPage = () => {
           initialValues={{ email: "" }}
           onSubmit={async (values) => {
             try {
-              await invoke(forgotPassword, values)
-              setSuccess(true)
+              await forgotPasswordMutation(values)
             } catch (error: any) {
               return {
                 [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",

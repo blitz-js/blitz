@@ -1,5 +1,5 @@
 import { AuthenticationError } from "blitz"
-import { prisma } from "../../../db/index"
+import { prisma } from "db"
 import { Login } from "../validations"
 import { SecurePassword } from "@blitzjs/auth"
 
