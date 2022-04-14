@@ -1,4 +1,4 @@
-import {api} from "../../src/server-setup"
+import {api} from "app/blitz-server"
 import {SessionContext} from "@blitzjs/auth"
 import {prisma} from "../../prisma/index"
 

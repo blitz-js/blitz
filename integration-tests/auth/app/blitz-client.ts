@@ -1,10 +1,12 @@
 import {AuthClientPlugin} from "@blitzjs/auth"
 import {setupClient} from "@blitzjs/next"
 
-export const {withBlitz} = setupClient({
+const {withBlitz} = setupClient({
   plugins: [
     AuthClientPlugin({
-      cookiePrefix: "webapp-cookie-prefix",
+      cookiePrefix: "auth-tests-cookie-prefix",
     }),
   ],
 })
+
+export {withBlitz}

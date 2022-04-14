@@ -1,7 +1,4 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-})
-
-module.exports = withBundleAnalyzer({
-  reactStrictMode: true,
+const {withBlitz} = require("@blitzjs/next")
+module.exports = withBlitz({
+  // update me
 })
