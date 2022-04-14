@@ -8,7 +8,7 @@
     "lint": "next lint",
     "prisma:start": "prisma generate && prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "test": "jest"
+    "test:local": "jest"
   },
   "prisma": {
     "schema": "db/schema.prisma"
