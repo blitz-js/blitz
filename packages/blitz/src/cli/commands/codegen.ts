@@ -3,7 +3,7 @@ import {CliCommand} from "../index"
 import {generateManifest} from "../utils/routes-manifest"
 
 const codegen: CliCommand = async () => {
-  await generateManifest(process.cwd())
+  await generateManifest()
 }
 
 export {codegen}

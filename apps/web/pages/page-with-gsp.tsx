@@ -1,4 +1,4 @@
-import {gSP} from "../src/server-setup"
+import {gSP} from "app/blitz-server"
 
 export const getStaticProps = gSP(async ({ctx}) => {
   return {

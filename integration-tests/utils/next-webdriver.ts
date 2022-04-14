@@ -144,6 +144,19 @@ const getDeviceIP = async () => {
   }
 }
 
+export const closeBrowser = async () => {
+  // First we close all extra windows left over
+  let allWindows = await browser.getAllWindowHandles()
+
+  for (const win of allWindows) {
+    if (win === initialWindow) continue
+    try {
+      await browser.switchTo().window(win)
+      await browser.close()
+    } catch (_) {}
+  }
+}
+
 // eslint-disable-next-line no-unused-vars
 const freshWindow = async (appPort) => {
   // First we close all extra windows left over

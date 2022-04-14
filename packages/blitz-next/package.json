@@ -1,10 +1,10 @@
 {
   "name": "@blitzjs/next",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
-    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
+    "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-rpc/dist/index-server.d.ts",
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
@@ -20,9 +20,10 @@
     "dist/**"
   ],
   "dependencies": {
+    "@blitzjs/rpc": "2.0.0-alpha.0",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
-    "react-query": "3.34.12"
+    "react-query": "3.21.1"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:*",
@@ -38,7 +39,7 @@
     "@types/testing-library__react-hooks": "4.0.0",
     "blitz": "workspace:*",
     "lodash.frompairs": "4.0.1",
-    "next": "12.1.4",
+    "next": "12.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "ts-jest": "27.1.4",

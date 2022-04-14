@@ -1,5 +1,5 @@
 import {SessionContext} from "@blitzjs/auth"
-import {gSSP} from "../src/server-setup"
+import {gSSP} from "app/blitz-server"
 
 type Props = {
   userId: unknown

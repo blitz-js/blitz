@@ -1,6 +1,7 @@
 import {describe, it, expect, beforeAll, afterAll} from "vitest"
-import {killApp, findPort, launchApp, nextBuild, nextStart} from "./next-test-utils"
-import webdriver from "./next-webdriver"
+import {killApp, findPort, launchApp, nextBuild, nextStart} from "../../utils/next-test-utils"
+import webdriver from "../../utils/next-webdriver"
+
 import {join} from "path"
 import seed from "../prisma/seed"
 import fetch from "node-fetch"
@@ -10,10 +11,10 @@ let app: any
 let appPort: number
 const appDir = join(__dirname, "../")
 const HEADER_CSRF = "anti-csrf"
-const COOKIE_PUBLIC_DATA_TOKEN = "webapp-cookie-prefix_sPublicDataToken"
-const COOKIE_SESSION_TOKEN = "webapp-cookie-prefix_sSessionToken"
-const COOKIE_ANONYMOUS_SESSION_TOKEN = "webapp-cookie-prefix_sAnonymousSessionToken"
-const COOKIE_REFRESH_TOKEN = "webapp-cookie-prefix_sIdRefreshToken"
+const COOKIE_PUBLIC_DATA_TOKEN = "auth-tests-cookie-prefix_sPublicDataToken"
+const COOKIE_SESSION_TOKEN = "auth-tests-cookie-prefix_sSessionToken"
+const COOKIE_ANONYMOUS_SESSION_TOKEN = "auth-tests-cookie-prefix_sAnonymousSessionToken"
+const COOKIE_REFRESH_TOKEN = "auth-tests-cookie-prefix_sIdRefreshToken"
 const HEADER_PUBLIC_DATA_TOKEN = "public-data-token"
 
 function readCookie(cookieHeader, name) {
@@ -127,7 +128,7 @@ describe("dev mode", () => {
       console.log(error)
     }
   }, 5000 * 60 * 2)
-  afterAll(() => killApp(app))
+  afterAll(async () => await killApp(app))
   runTests()
 })
 
@@ -141,7 +142,7 @@ describe("server mode", () => {
       console.log(err)
     }
   }, 5000 * 60 * 2)
-  afterAll(() => killApp(app))
+  afterAll(async () => await killApp(app))
 
   runTests()
 })
