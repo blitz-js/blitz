@@ -16,8 +16,8 @@ export const getServerSideProps = gSSP<Props>(async ({ctx}) => {
   }
 })
 
-function Page(props: Props) {
+function PageWithGssp(props: Props) {
   return <div>{JSON.stringify(props, null, 2)}</div>
 }
 
-export default Page
+export default PageWithGssp

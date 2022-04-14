@@ -1,7 +1,7 @@
-const PageWithRedirect = ({data}) => {
+const PageWithoutFlicker = ({data}) => {
   return <div>{JSON.stringify(data)}</div>
 }
 
-PageWithRedirect.suppressFirstRenderFlicker = true
+PageWithoutFlicker.suppressFirstRenderFlicker = true
 
-export default PageWithRedirect
+export default PageWithoutFlicker

@@ -14,8 +14,8 @@ export const getStaticProps = gSP(async ({ctx}) => {
   }
 })
 
-function Page({data}) {
+function PageWithGsp({data}) {
   return <div>{JSON.stringify(data, null, 2)}</div>
 }
 
-export default Page
+export default PageWithGsp
