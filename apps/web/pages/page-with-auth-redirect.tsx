@@ -1,4 +1,4 @@
-const PageWithRedirect = () => {
+const PageWithAuthRedirect = () => {
   return (
     <div>
       {JSON.stringify(
@@ -13,6 +13,6 @@ const PageWithRedirect = () => {
   )
 }
 
-PageWithRedirect.redirectAuthenticatedTo = "/"
+PageWithAuthRedirect.redirectAuthenticatedTo = "/"
 
-export default PageWithRedirect
+export default PageWithAuthRedirect

@@ -22,6 +22,7 @@
   "dependencies": {
     "@blitzjs/rpc": "2.0.0-alpha.0",
     "debug": "4.3.3",
+    "fs-extra": "10.0.1",
     "react-query": "3.21.1"
   },
   "devDependencies": {

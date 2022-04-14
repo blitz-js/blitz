@@ -30,6 +30,7 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
     console.error(`Invalid command provided: "blitz next ${argv?.[0]}".`)
   },
   new: () => import("./commands/new").then((i) => i.newApp),
+  codegen: () => import("./commands/codegen").then((i) => i.codegen),
 }
 
 const args = arg(commonArgs, {
