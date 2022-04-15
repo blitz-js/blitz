@@ -26,14 +26,12 @@
     "@blitzjs/config": "latest",
     "@blitzjs/next": "latest",
     "@blitzjs/rpc": "latest",
-    "@hookform/resolvers": "2.8.8",
     "@prisma/client": "3.9.0",
     "blitz": "latest",
     "next": "12.1.1",
     "prisma": "3.9.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "ts-node": "10.7.0",
     "zod": "3.10.1"
   },
   "devDependencies": {

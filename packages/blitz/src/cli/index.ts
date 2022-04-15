@@ -32,6 +32,7 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   new: () => import("./commands/new").then((i) => i.newApp),
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
+  prisma: () => import("./commands/prisma").then((i) => i.prisma),
 }
 
 const args = arg(commonArgs, {

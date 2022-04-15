@@ -1,5 +1,5 @@
 import {Ctx} from "blitz"
-import { prisma } from "db"
+import { db } from "db"
 import {z} from "zod"
 
 if (process.env.parentModel) {
@@ -18,7 +18,7 @@ export default async function Create__ModelName__(input, ctx: Ctx) {
   ctx.session.$isAuthorized()
 
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const __modelName__ = await prisma.__modelName__.create({data: input})
+  const __modelName__ = await db.__modelName__.create({data: input})
 
   return __modelName__
 

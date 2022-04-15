@@ -1,5 +1,5 @@
 import {paginate, Ctx} from "blitz"
-import { prisma } from "db"
+import { db } from "db"
 import { Prisma } from "@prisma/client"
 
 interface Get__ModelNames__Input
@@ -12,8 +12,8 @@ export default async function Get__ModelNames(input: Get__ModelNames__Input, ctx
    const {items: __modelNames__, hasMore, nextPage, count} = await paginate({
     skip: input.skip,
     take: input.take,
-    count: () => prisma.__modelName__.count({where: input.where}),
-    query: (paginateArgs) => prisma.__modelName__.findMany({...paginateArgs, where: input.where, orderBy: input.orderBy}),
+    count: () => db.__modelName__.count({where: input.where}),
+    query: (paginateArgs) => db.__modelName__.findMany({...paginateArgs, where: input.where, orderBy: input.orderBy}),
   })
 
   return {

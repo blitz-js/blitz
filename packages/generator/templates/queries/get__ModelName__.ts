@@ -1,5 +1,5 @@
 import {Ctx, NotFoundError} from "blitz"
-import { prisma } from "db"
+import { db } from "db"
 import {z} from "zod"
 
 const Get__ModelName__Input = z.object({
@@ -12,7 +12,7 @@ export default async function Get__ModelName__(input, ctx: Ctx) {
   ctx.session.$isAuthorized()
 
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const __modelName__ = await prisma.__modelName__.findFirst({where: {id: input.id}})
+  const __modelName__ = await db.__modelName__.findFirst({where: {id: input.id}})
 
   if (!__modelName__) throw new NotFoundError()
 

@@ -37,12 +37,12 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href="/auth/signup" passHref>
+        <Link href="/auth/signup">
           <a className="button small">
             <strong>Sign Up</strong>
           </a>
         </Link>
-        <Link href="/auth/login" passHref>
+        <Link href="/auth/login">
           <a className="button small">
             <strong>Login</strong>
           </a>
