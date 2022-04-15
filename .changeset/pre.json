@@ -1,0 +1,18 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "web": "0.0.0",
+    "test-auth": "0.0.0",
+    "test-rpc": "0.0.0",
+    "test-utils": "0.0.0",
+    "blitz": "2.0.0-alpha.0",
+    "@blitzjs/auth": "2.0.0-alpha.0",
+    "@blitzjs/next": "2.0.0-alpha.0",
+    "@blitzjs/rpc": "2.0.0-alpha.0",
+    "@blitzjs/config": "0.0.0",
+    "@blitzjs/generator": "2.0.0-alpha.0",
+    "template": "0.0.0"
+  },
+  "changesets": ["ninety-pets-heal"]
+}

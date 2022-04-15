@@ -16,7 +16,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "release": "changeset publish && git push --follow-tags"
   },
   "dependencies": {
     "@blitzjs/manypkg": "0.19.1",
