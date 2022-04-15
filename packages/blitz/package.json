@@ -1,6 +1,6 @@
 {
   "name": "blitz",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
@@ -38,7 +38,7 @@
     "npm-which": "3.0.1",
     "ora": "5.3.0",
     "p-event": "4.2.0",
-    "pkg-dir": "6.0.1",
+    "pkg-dir": "5.0.0",
     "prompts": "2.4.2",
     "resolve-cwd": "3.0.0",
     "superjson": "1.8.0",
