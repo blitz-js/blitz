@@ -56,12 +56,15 @@ if (!foundCommand && args["--help"]) {
   console.log(`
     Usage
       $ blitz <command>
+
     Available commands
       ${Object.keys(commands).join(", ")}
+
     Options
       --env, -e       App environment name
       --version, -v   Version number
       --help, -h      Displays this message
+
     For more information run a command with the --help flag
       $ blitz build --help
   `)
@@ -70,20 +73,6 @@ if (!foundCommand && args["--help"]) {
 
 const command = foundCommand ? (args._[0] as string) : defaultCommand
 const forwardedArgs = foundCommand ? args._.slice(1) : args._
-
-// Don't check for react or react-dom when running blitz new
-if (command !== "new") {
-  ;["react", "react-dom"].forEach((dependency) => {
-    try {
-      // When 'npm link' is used it checks the clone location. Not the project.
-      require.resolve(dependency)
-    } catch (err) {
-      console.warn(
-        `The module '${dependency}' was not found. Blitz.js requires that you include it in 'dependencies' of your 'package.json'. To add it, run 'npm install ${dependency}'`,
-      )
-    }
-  })
-}
 
 if (args["--help"]) {
   forwardedArgs.push("--help")
@@ -117,21 +106,3 @@ commands[command]?.()
   .catch((err) => {
     console.log(err)
   })
-
-if (command === "dev") {
-  const {watchFile} = require("fs")
-  watchFile(`${process.cwd()}/blitz.config.js`, (cur: any, prev: any) => {
-    if (cur.size > 0 || prev.size > 0) {
-      console.log(
-        `\n> Found a change in blitz.config.js. Restart the server to see the changes in effect.`,
-      )
-    }
-  })
-  watchFile(`${process.cwd()}/blitz.config.ts`, (cur: any, prev: any) => {
-    if (cur.size > 0 || prev.size > 0) {
-      console.log(
-        `\n> Found a change in blitz.config.ts. Restart the server to see the changes in effect.`,
-      )
-    }
-  })
-}

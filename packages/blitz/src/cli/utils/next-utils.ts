@@ -4,7 +4,7 @@ import detect from "detect-port"
 import path from "path"
 import {existsSync, readJSONSync} from "fs-extra"
 import * as esbuild from "esbuild"
-import {packageDirectorySync} from "pkg-dir"
+import pkgDir from "pkg-dir"
 import type {ServerConfig} from "./config"
 
 const debug = require("debug")("blitz:utils")
@@ -50,7 +50,7 @@ export function getCustomServerBuildPath() {
 }
 
 const getEsbuildOptions = (): esbuild.BuildOptions => {
-  const pkg = readJSONSync(path.join(packageDirectorySync()!, "package.json"))
+  const pkg = readJSONSync(path.join(pkgDir.sync()!, "package.json"))
   return {
     entryPoints: [getCustomServerPath()],
     outfile: getCustomServerBuildPath(),

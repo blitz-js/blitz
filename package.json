@@ -16,10 +16,13 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "pre-publish": "pnpm i && pnpm build && changeset add && changeset version",
+    "publish-release": "changeset publish && git push --follow-tags"
   },
   "dependencies": {
     "@blitzjs/manypkg": "0.19.1",
+    "@changesets/cli": "2.22.0",
     "eslint": "7.32.0",
     "husky": "7.0.4",
     "jsdom": "19.0.0",
