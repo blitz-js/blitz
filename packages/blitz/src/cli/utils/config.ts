@@ -93,6 +93,16 @@ async function getNextBin(rootFolder: string, _usePatched: boolean = false): Pro
   return resolve(rootFolder, nextBin)
 }
 
+export async function getPrismaBin(
+  rootFolder: string,
+  _usePatched: boolean = false,
+): Promise<string> {
+  const prismaBinPkg = "prisma"
+  const prismaBin = await resolveBinAsync(prismaBinPkg)
+
+  return resolve(rootFolder, prismaBin)
+}
+
 async function getIsTypeScript(rootFolder: string): Promise<boolean> {
   try {
     await promises.access(join(rootFolder, "tsconfig.json"))

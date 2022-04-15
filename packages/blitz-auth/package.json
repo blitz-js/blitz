@@ -24,7 +24,7 @@
     "@types/secure-password": "3.1.1",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
-    "blitz": "workspace:*",
+    "blitz": "2.0.0-alpha.5",
     "cookie": "0.4.1",
     "debug": "4.3.3",
     "http": "0.0.1-security",
@@ -35,7 +35,7 @@
     "url": "0.11.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:*",
+    "@blitzjs/config": "2.0.0-alpha.5",
     "@testing-library/react": "13.0.0",
     "@testing-library/react-hooks": "7.0.2",
     "@types/cookie": "0.4.1",

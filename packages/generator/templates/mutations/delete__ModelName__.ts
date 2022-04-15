@@ -1,5 +1,5 @@
 import {Ctx} from "blitz"
-import { prisma } from "db"
+import { db } from "db"
 import {z} from "zod"
 
 const Delete__ModelName__Input = z.object({
@@ -11,7 +11,7 @@ export default async function Delete__ModelName__(input, ctx: Ctx) {
   ctx.session.$isAuthorized()
 
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const __modelName__ = await prisma.__modelName__.deleteMany({where: {id: input.id}})
+  const __modelName__ = await db.__modelName__.deleteMany({where: {id: input.id}})
 
   return __modelName__
 
