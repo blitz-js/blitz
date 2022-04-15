@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.0-alpha.5
+
+### Patch Changes
+
+- new app template
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.5
+
 ## 2.0.0-alpha.4
 
 ### Patch Changes
