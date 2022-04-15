@@ -2,12 +2,12 @@ import fs, {promises} from "fs"
 import {join, resolve} from "path"
 import {readJSON} from "fs-extra"
 import path from "path"
-import {packageDirectory} from "pkg-dir"
+import pkgDir from "pkg-dir"
 import resolveCwd from "resolve-cwd"
 const debug = require("debug")("blitz:utils")
 
 export async function resolveBinAsync(pkg: string, executable = pkg) {
-  const packageDir = await packageDirectory({cwd: resolveCwd(pkg)})
+  const packageDir = await pkgDir(resolveCwd(pkg))
   if (!packageDir) throw new Error(`Could not find package.json for '${pkg}'`)
 
   const {bin} = await readJSON(path.join(packageDir, "package.json"))

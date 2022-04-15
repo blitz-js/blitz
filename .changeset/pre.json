@@ -14,5 +14,5 @@
     "@blitzjs/generator": "2.0.0-alpha.0",
     "template": "0.0.0"
   },
-  "changesets": ["nine-onions-admire", "ninety-pets-heal", "poor-peas-lick"]
+  "changesets": ["nine-onions-admire", "ninety-pets-heal", "poor-peas-lick", "ten-rivers-burn"]
 }
