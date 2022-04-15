@@ -14,5 +14,5 @@
     "@blitzjs/generator": "2.0.0-alpha.0",
     "template": "0.0.0"
   },
-  "changesets": ["ninety-pets-heal"]
+  "changesets": ["ninety-pets-heal", "poor-peas-lick"]
 }

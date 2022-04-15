@@ -458,6 +458,7 @@ importers:
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
       "@blitzjs/config": workspace:*
+      "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
       "@types/diff": 5.0.2
@@ -516,6 +517,7 @@ importers:
       vinyl: 2.2.1
     devDependencies:
       "@blitzjs/config": link:../config
+      "@juanm04/cpx": 2.0.1
       "@types/babel__core": 7.1.19
       "@types/diff": 5.0.2
       "@types/fs-extra": 9.0.13
@@ -2922,6 +2924,30 @@ packages:
       "@jridgewell/sourcemap-codec": 1.4.11
     dev: false
 
+  /@juanm04/cpx/2.0.1:
+    resolution:
+      {
+        integrity: sha512-OaTjKI3ycQnF0Cb4KvLVycB/O8nki2wUYBstmMWW7ocrkFil+YzYO23C+zY321h4p9YxSXCA1Xeg30vtminh6A==,
+      }
+    engines: {node: ">=10"}
+    hasBin: true
+    dependencies:
+      co: 4.6.0
+      debounce: 1.2.1
+      debug: 4.3.4
+      duplexer: 0.1.2
+      fs-extra: 9.1.0
+      glob: 7.2.0
+      glob2base: 0.0.12
+      minimatch: 3.1.2
+      resolve: 1.22.0
+      safe-buffer: 5.2.1
+      shell-quote: 1.7.3
+      subarg: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@manypkg/find-root/1.1.0:
     resolution:
       {
@@ -4729,6 +4755,14 @@ packages:
   /asynckit/0.4.0:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
 
+  /at-least-node/1.0.0:
+    resolution:
+      {
+        integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==,
+      }
+    engines: {node: ">= 4.0.0"}
+    dev: true
+
   /atob/2.1.2:
     resolution:
       {
@@ -5531,7 +5565,6 @@ packages:
   /co/4.6.0:
     resolution: {integrity: sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=}
     engines: {iojs: ">= 1.0.0", node: ">= 0.12.0"}
-    dev: false
 
   /collect-v8-coverage/1.0.1:
     resolution:
@@ -5902,6 +5935,13 @@ packages:
       whatwg-mimetype: 3.0.0
       whatwg-url: 10.0.0
     dev: false
+
+  /debounce/1.2.1:
+    resolution:
+      {
+        integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==,
+      }
+    dev: true
 
   /debug/2.6.9:
     resolution:
@@ -7918,6 +7958,10 @@ packages:
       pkg-dir: 3.0.0
     dev: false
 
+  /find-index/0.1.1:
+    resolution: {integrity: sha1-Z101iyyjiS15Whq0cjL4tuLg3eQ=}
+    dev: true
+
   /find-up/2.1.0:
     resolution: {integrity: sha1-RdG35QbHF93UgndaK3eSCjwMV6c=}
     engines: {node: ">=4"}
@@ -8123,6 +8167,19 @@ packages:
       universalify: 0.1.2
     dev: false
 
+  /fs-extra/9.1.0:
+    resolution:
+      {
+        integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==,
+      }
+    engines: {node: ">=10"}
+    dependencies:
+      at-least-node: 1.0.0
+      graceful-fs: 4.2.10
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: true
+
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}
 
@@ -8293,6 +8350,13 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+
+  /glob2base/0.0.12:
+    resolution: {integrity: sha1-nUGbPijxLoOjYhZKJ3BVkiycDVY=}
+    engines: {node: ">= 0.10"}
+    dependencies:
+      find-index: 0.1.1
+    dev: true
 
   /globals/11.12.0:
     resolution:
@@ -13018,6 +13082,13 @@ packages:
       }
     engines: {node: ">=8"}
 
+  /shell-quote/1.7.3:
+    resolution:
+      {
+        integrity: sha512-Vpfqwm4EnqGdlsBFNmHhxhElJYrdfcxPThu+ryKS5J8L/fhAwLazFZtq+S+TWZ9ANj2piSQLGj6NQg+lKPmxrw==,
+      }
+    dev: true
+
   /side-channel/1.0.4:
     resolution:
       {
@@ -13566,6 +13637,12 @@ packages:
         optional: true
     dependencies:
       react: 18.0.0
+
+  /subarg/1.0.0:
+    resolution: {integrity: sha1-9izxdYHplrSPyWVpn1TAauJouNI=}
+    dependencies:
+      minimist: 1.2.6
+    dev: true
 
   /superjson/1.8.0:
     resolution:

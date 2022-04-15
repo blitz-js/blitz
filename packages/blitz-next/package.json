@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
@@ -20,7 +20,7 @@
     "dist/**"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "2.0.0-alpha.1",
+    "@blitzjs/rpc": "2.0.0-alpha.2",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
     "react-query": "3.21.1"

@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "scripts": {
     "build": "unbuild",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
