@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/generator",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-alpha.5",
   "scripts": {
     "dev": "watch unbuild src --wait=0.2",
     "build": "unbuild && pnpm build:templates",

@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.5
+
+### Patch Changes
+
+- new app template
+- Updated dependencies
+  - @blitzjs/rpc@2.0.0-alpha.5
+
 ## 2.0.0-alpha.4
 
 ### Patch Changes
