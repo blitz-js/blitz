@@ -19,7 +19,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     super(options)
     this.sourceRoot = getTemplateRoot(options.templateDir, {type: "template", path: "page"})
   }
-  static subdirectory = "pages"
+  static subdirectory = "../../.."
 
   private getId(input: string = "") {
     if (!input) return input
@@ -63,7 +63,7 @@ export class PageGenerator extends Generator<PageGeneratorOptions> {
     const parent = this.options.parentModels
       ? `${this.options.parentModels}/__parentModelParam__/`
       : ""
-    return `app/pages/${parent}${kebabCaseModelName}`
+    return `pages/${parent}${kebabCaseModelName}`
   }
 
   async postWrite() {

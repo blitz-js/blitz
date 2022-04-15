@@ -1,13 +1,18 @@
 if (process.env.parentModel) {
-  import {Link, useRouter, useMutation, useParam, BlitzPage, Routes} from "blitz"
+  import Link from 'next/link'
+  import {useParam} from '@blitzjs/next'
+  import { useRouter } from "next/router"
+  import {useMutation} from '@blitzjs/rpc'
 } else {
-  import {Link, useRouter, useMutation, BlitzPage, Routes} from "blitz"
+  import Link from 'next/link'
+  import { useRouter } from "next/router"
+  import {useMutation} from '@blitzjs/rpc'
 }
 import Layout from "app/core/layouts/Layout"
 import create__ModelName__ from "app/__modelNamesPath__/mutations/create__ModelName__"
 import {__ModelName__Form, FORM_ERROR} from "app/__modelNamesPath__/components/__ModelName__Form"
 
-const New__ModelName__Page: BlitzPage = () => {
+const New__ModelName__Page = () => {
   const router = useRouter()
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
@@ -15,7 +20,7 @@ const New__ModelName__Page: BlitzPage = () => {
   const [create__ModelName__Mutation] = useMutation(create__ModelName__)
 
   return (
-    <div>
+    <Layout title={"Create New __ModelName__"}>
       <h1>Create New __ModelName__</h1>
 
       <__ModelName__Form
@@ -34,8 +39,8 @@ const New__ModelName__Page: BlitzPage = () => {
             )
             router.push(
               process.env.parentModel
-                ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: __modelName__.id })
-                : Routes.Show__ModelName__Page({ __modelId__: __modelName__.id }),
+                ? {pathname: `/__parentModel__/[__parentModelId__]/__modelName__s/[__modelId__]`, query: {__parentModelId__: __parentModelId__!, __modelId__: __modelName__.id}}
+                : {pathname: `/__modelName__s/[__modelId__]`, query: {__modelId__: __modelName__.id}},
             )
           } catch (error: any) {
             console.error(error)
@@ -48,23 +53,20 @@ const New__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
+          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}}}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href={Routes.__ModelNames__Page()}>
+            <Link href={{pathname: '/__modelName__s'}}>
               <a>__ModelNames__</a>
             </Link>
           </else>
         </if>
       </p>
-    </div>
+    </Layout>
   )
 }
 
 New__ModelName__Page.authenticate = true
-New__ModelName__Page.getLayout = (page) => (
-  <Layout title={"Create New __ModelName__"}>{page}</Layout>
-)
 
 export default New__ModelName__Page

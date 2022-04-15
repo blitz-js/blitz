@@ -1,25 +1,27 @@
-import {resolver} from "blitz"
-import db from "db"
+import {Ctx} from "blitz"
+import { prisma } from "db"
 import {z} from "zod"
 
 if (process.env.parentModel) {
-  const Create__ModelName__ = z.object({
+  const Create__ModelName__Input = z.object({
     name: z.string(),
     __parentModelId__: z.number()
   })
 } else {
-  const Create__ModelName__ = z.object({
+  const Create__ModelName__Input = z.object({
     name: z.string(),
   })
 }
 
-export default resolver.pipe(
-  resolver.zod(Create__ModelName__),
-  resolver.authorize(),
-  async (input) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const __modelName__ = await db.__modelName__.create({data: input})
+export default async function Create__ModelName__(input, ctx: Ctx) {
+  Create__ModelName__Input.parse(input)
+  ctx.session.$isAuthorized()
 
-    return __modelName__
-  },
-)
+  // TODO: in multi-tenant app, you must add validation to ensure correct tenant
+  const __modelName__ = await prisma.__modelName__.create({data: input})
+
+  return __modelName__
+
+}
+
+

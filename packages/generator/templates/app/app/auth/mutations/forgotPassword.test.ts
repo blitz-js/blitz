@@ -1,10 +1,11 @@
-import { hash256, Ctx } from "blitz"
+import { prisma } from "db"
+import { hash256 } from "@blitzjs/auth"
 import forgotPassword from "./forgotPassword"
-import db from "db"
 import previewEmail from "preview-email"
+import { Ctx } from "@blitzjs/next"
 
 beforeEach(async () => {
-  await db.$reset()
+  await prisma.$reset()
 })
 
 const generatedToken = "plain-token"
@@ -21,7 +22,7 @@ describe("forgotPassword mutation", () => {
 
   it("works correctly", async () => {
     // Create test user
-    const user = await db.user.create({
+    const user = await prisma.user.create({
       data: {
         email: "user@example.com",
         tokens: {
@@ -40,7 +41,7 @@ describe("forgotPassword mutation", () => {
     // Invoke the mutation
     await forgotPassword({ email: user.email }, {} as Ctx)
 
-    const tokens = await db.token.findMany({ where: { userId: user.id } })
+    const tokens = await prisma.token.findMany({ where: { userId: user.id } })
     const token = tokens[0]
     if (!user.tokens[0]) throw new Error("Missing user token")
     if (!token) throw new Error("Missing token")

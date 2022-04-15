@@ -1,10 +1,12 @@
 import spawn from "cross-spawn"
+import chalk from "chalk"
 import {readJSONSync, writeJson} from "fs-extra"
 import {join} from "path"
 import username from "username"
 import {Generator, GeneratorOptions, SourceRootType} from "../generator"
 import {fetchLatestVersionsFor} from "../utils/fetch-latest-version-for"
 import {getBlitzDependencyVersion} from "../utils/get-blitz-dependency-version"
+import {baseLogger, log} from "../utils/log"
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -84,22 +86,23 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     const {pkgManager} = this
     let gitInitSuccessful
     if (!this.options.skipGit) {
-      console.log({spawn})
       const initResult = spawn.sync("git", ["init"], {
         stdio: "ignore",
       })
 
       gitInitSuccessful = initResult.status === 0
       if (!gitInitSuccessful) {
-        console.warn("Failed to run git init.")
-        console.warn("Find out more about how to install git here: https://git-scm.com/downloads.")
+        baseLogger({displayDateTime: false}).warn("Failed to run git init.")
+        baseLogger({displayDateTime: false}).warn(
+          "Find out more about how to install git here: https://git-scm.com/downloads.",
+        )
       }
     }
     const pkgJsonLocation = join(this.destinationPath(), "package.json")
     const pkg = readJSONSync(pkgJsonLocation)
 
     console.log("") // New line needed
-    // todo const spinner = log.spinner(log.withBrand("Retrieving the freshest of dependencies")).start()
+    const spinner = log.spinner(log.withBrand("Retrieving the freshest of dependencies")).start()
 
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
@@ -121,7 +124,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
     if (!fallbackUsed && !this.options.skipInstall) {
-      // spinner.succeed()
+      spinner.succeed()
 
       await new Promise<void>((resolve) => {
         const logFlag = pkgManager === "yarn" ? "--json" : "--loglevel=error"
@@ -140,10 +143,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         const spinners: any[] = []
 
         if (pkgManager !== "yarn") {
-          // const spinner = log
-          //   .spinner(log.withBrand("Installing those dependencies (this will take a few minutes)"))
-          //   .start()
-          // spinners.push(spinner)
+          const spinner = log
+            .spinner(log.withBrand("Installing those dependencies (this will take a few minutes)"))
+            .start()
+          spinners.push(spinner)
         }
 
         cp.stdout?.setEncoding("utf8")
@@ -153,8 +156,8 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
             let json = getJSON(data)
             if (json && json.type === "step") {
               spinners[spinners.length - 1]?.succeed()
-              // const spinner = log.spinner(log.withBrand(json.data.message)).start()
-              // spinners.push(spinner)
+              const spinner = log.spinner(log.withBrand(json.data.message)).start()
+              spinners.push(spinner)
             }
             if (json && json.type === "success") {
               spinners[spinners.length - 1]?.succeed()
@@ -195,7 +198,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         if (pkgManager === "yarn") {
           return spawn.sync("yarn", ["run", ...command.split(" ")])
         } else if (pkgManager === "pnpm") {
-          return spawn.sync("pnpx", command.split(" "))
+          return spawn.sync("pnpm", command.split(" "))
         } else {
           return spawn.sync("npx", command.split(" "))
         }
@@ -203,28 +206,28 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
 
       // Ensure the generated files are formatted with the installed prettier version
       if (this.packageInstallSuccess) {
-        // const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
+        const formattingSpinner = log.spinner(log.withBrand("Formatting your code")).start()
         const prettierResult = runLocalNodeCLI("prettier --loglevel silent --write .")
         if (prettierResult.status !== 0) {
-          // formattingSpinner.fail(
-          //   chalk.yellow.bold(
-          //     "We had an error running Prettier, but don't worry your app will still run fine :)",
-          //   ),
-          // )
+          formattingSpinner.fail(
+            chalk.yellow.bold(
+              "We had an error running Prettier, but don't worry your app will still run fine :)",
+            ),
+          )
         } else {
-          // formattingSpinner.succeed()
+          formattingSpinner.succeed()
         }
       }
     } else {
       console.log("") // New line needed
       if (this.options.skipInstall) {
-        // spinner.succeed()
+        spinner.succeed()
       } else {
-        // spinner.fail(
-        //   chalk.red.bold(
-        //     `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${`${this.pkgManager} install`} once you're connected again.`,
-        //   ),
-        // )
+        spinner.fail(
+          chalk.red.bold(
+            `We had some trouble connecting to the network, so we'll skip installing your dependencies right now. Make sure to run ${`${this.pkgManager} install`} once you're connected again.`,
+          ),
+        )
       }
     }
 
@@ -242,7 +245,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
   }
 
   commitChanges() {
-    // const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
+    const commitSpinner = log.spinner(log.withBrand("Committing your app")).start()
     const commands: Array<[string, string[], object]> = [
       ["git", ["add", "."], {stdio: "ignore"}],
       [
@@ -264,15 +267,15 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     for (let command of commands) {
       const result = spawn.sync(...command)
       if (result.status !== 0) {
-        // commitSpinner.fail(
-        //   chalk.red.bold(
-        //     `Failed to run command ${command[0]} with ${command[1].join(" ")} options.`,
-        //   ),
-        // )
+        commitSpinner.fail(
+          chalk.red.bold(
+            `Failed to run command ${command[0]} with ${command[1].join(" ")} options.`,
+          ),
+        )
         return
       }
     }
-    // commitSpinner.succeed()
+    commitSpinner.succeed()
   }
   private updateForms() {
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as

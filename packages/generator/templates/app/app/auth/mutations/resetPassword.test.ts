@@ -1,9 +1,9 @@
 import resetPassword from "./resetPassword"
-import db from "db"
-import { hash256, SecurePassword } from "blitz"
+import { prisma } from "db"
+import { SecurePassword, hash256 } from "@blitzjs/auth"
 
 beforeEach(async () => {
-  await db.$reset()
+  await prisma.$reset()
 })
 
 const mockCtx: any = {
@@ -24,7 +24,7 @@ describe("resetPassword mutation", () => {
     const past = new Date()
     past.setHours(past.getHours() - 4)
 
-    const user = await db.user.create({
+    const user = await prisma.user.create({
       data: {
         email: "user@example.com",
         tokens: {
@@ -70,11 +70,11 @@ describe("resetPassword mutation", () => {
     )
 
     // Delete's the token
-    const numberOfTokens = await db.token.count({ where: { userId: user.id } })
+    const numberOfTokens = await prisma.token.count({ where: { userId: user.id } })
     expect(numberOfTokens).toBe(0)
 
     // Updates user's password
-    const updatedUser = await db.user.findFirst({ where: { id: user.id } })
+    const updatedUser = await prisma.user.findFirst({ where: { id: user.id } })
     expect(await SecurePassword.verify(updatedUser!.hashedPassword, newPassword)).toBe(
       SecurePassword.VALID
     )

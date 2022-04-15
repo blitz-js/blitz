@@ -1,5 +1,10 @@
 import {Suspense} from "react"
-import {Head, Link, useRouter, useQuery, useMutation, useParam, BlitzPage, Routes} from "blitz"
+import Head from "next/head"
+import Link from 'next/link'
+import { useRouter } from "next/router"
+import {useQuery, useMutation} from '@blitzjs/rpc'
+import {useParam} from '@blitzjs/next'
+
 import Layout from "app/core/layouts/Layout"
 import get__ModelName__ from "app/__modelNamesPath__/queries/get__ModelName__"
 import update__ModelName__ from "app/__modelNamesPath__/mutations/update__ModelName__"
@@ -47,8 +52,8 @@ export const Edit__ModelName__ = () => {
               await setQueryData(updated)
               router.push(
                 process.env.parentModel
-                  ? Routes.Show__ModelName__Page({ __parentModelId__: __parentModelId__!, __modelId__: updated.id })
-                  : Routes.Show__ModelName__Page({ __modelId__: updated.id }),
+                  ? {pathname: `/__parentModel__/[__parentModelId__]/__modelName__s/[__modelId__]`, query: {__parentModelId__: __parentModelId__!, __modelId__: updated.id}}
+                  : {pathname: `/__modelName__s/[__modelId__]`, query: {__modelId__: updated.id}},
               )
             } catch (error: any) {
               console.error(error)
@@ -63,7 +68,7 @@ export const Edit__ModelName__ = () => {
   )
 }
 
-const Edit__ModelName__Page: BlitzPage = () => {
+const Edit__ModelName__Page = () => {
   if (process.env.parentModel) {
     const __parentModelId__ = useParam("__parentModelId__", "number")
   }
@@ -76,11 +81,11 @@ const Edit__ModelName__Page: BlitzPage = () => {
 
       <p>
         <if condition="parentModel">
-          <Link href={Routes.__ModelNames__Page({ __parentModelId__: __parentModelId__! })}>
+          <Link href={{pathname: '/__parentModel__/[__parentModelId__]/__modelName__s', query: {__parentModelId__: __parentModelId__!}}}>
             <a>__ModelNames__</a>
           </Link>
           <else>
-            <Link href={Routes.__ModelNames__Page()}>
+            <Link href={{pathname: '/__modelName__s'}}>
               <a>__ModelNames__</a>
             </Link>
           </else>

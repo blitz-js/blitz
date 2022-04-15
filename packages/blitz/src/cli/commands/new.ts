@@ -202,7 +202,7 @@ const determinePkgManagerToInstallDeps = async () => {
       if (res.pkgManager === "skip") {
         shouldInstallDeps = false
       } else {
-        shouldInstallDeps = res.pkgManager
+        shouldInstallDeps = true
       }
     } else {
       const res = await prompts({
@@ -261,6 +261,7 @@ const newApp: CliCommand = async (argv) => {
             {ignoreCache: true},
           )
           const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
+          console.log("primsa result", result)
           if (!result.success) throw new Error()
         } catch (error) {
           postInstallSteps.push(

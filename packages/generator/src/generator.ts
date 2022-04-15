@@ -13,6 +13,7 @@ import * as babelParser from "recast/parsers/babel"
 import {ConflictChecker} from "./conflict-checker"
 import {pipe} from "./utils/pipe"
 import {readdirRecursive} from "./utils/readdir-recursive"
+import prettier from "prettier"
 const debug = require("debug")("blitz:generator")
 
 export const customTsParser = {
@@ -152,6 +153,7 @@ export abstract class Generator<
     this.store = createStore()
     this.fs = createEditor(this.store)
     this.enquirer = new Enquirer()
+    this.prettier = prettier
     this.useTs =
       typeof this.options.useTs === "undefined"
         ? fs.existsSync(path.resolve("tsconfig.json"))
@@ -207,6 +209,7 @@ export abstract class Generator<
     }
     const inputStr = input.toString("utf-8")
     let templatedFile = inputStr
+
     if (codeFileExtensions.test(pathEnding)) {
       templatedFile = this.replaceConditionals(inputStr, templateValues, prettierOptions || {})
     }
@@ -247,9 +250,7 @@ export abstract class Generator<
       const additionalFilesToIgnore = this.filesToIgnore()
       return ![...alwaysIgnoreFiles, ...additionalFilesToIgnore].includes(name)
     })
-    try {
-      this.prettier = await import("prettier")
-    } catch {}
+
     const prettierOptions = await this.prettier?.resolveConfig(sourcePath)
 
     for (let filePath of paths) {
@@ -258,11 +259,21 @@ export abstract class Generator<
         pathSuffix = path.join(this.getTargetDirectory(), pathSuffix)
         const templateValues = await this.getTemplateValues()
 
-        this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-          process: (input) =>
-            this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
-        })
         let templatedPathSuffix = this.replaceTemplateValues(pathSuffix, templateValues)
+
+        const newContent = this.process(
+          this.fs.read(this.sourcePath(filePath), {raw: true}) as any,
+          pathSuffix,
+          templateValues,
+          prettierOptions ?? undefined,
+        )
+        this.fs.write(this.destinationPath(pathSuffix), newContent)
+
+        // this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
+        //   process: (input) =>
+        //     // this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
+        //     this.process(input, pathSuffix, templateValues, undefined),
+        // })
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }
@@ -295,6 +306,7 @@ export abstract class Generator<
     } else {
       return path.join(
         __dirname,
+        "..",
         process.env.NODE_ENV === "test" ? "../templates" : "./templates",
         this.sourceRoot.path,
         ...paths,
