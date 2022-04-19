@@ -1,7 +1,8 @@
-import { AuthenticationError } from "blitz"
-import { db } from "db"
-import { Login } from "../validations"
 import { SecurePassword } from "@blitzjs/auth"
+import { resolver } from "@blitzjs/rpc"
+import { AuthenticationError } from "blitz"
+import { prisma as db } from "db"
+import { Login } from "../validations"
 
 export const authenticateUser = async (rawEmail: string, rawPassword: string) => {
   const { email, password } = Login.parse({ email: rawEmail, password: rawPassword })
@@ -20,9 +21,11 @@ export const authenticateUser = async (rawEmail: string, rawPassword: string) =>
   return rest
 }
 
-export default async function login(input, ctx) {
-  const user = await authenticateUser(input.email, input.password)
+export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ctx) => {
+  // This throws an error if credentials are invalid
+  const user = await authenticateUser(email, password)
+
   await ctx.session.$create({ userId: user.id, role: user.role })
 
   return user
-}
+})
