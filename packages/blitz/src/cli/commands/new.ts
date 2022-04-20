@@ -48,7 +48,6 @@ const PREFERABLE_PKG_MANAGER: TPkgManager = IS_PNPM_INSTALLED
 const args = arg(
   {
     // Types
-    "--name": String,
     "--npm": Boolean,
     "--yarn": Boolean,
     "--pnpm": Boolean,
@@ -61,7 +60,6 @@ const args = arg(
     "--skip-upgrade": Boolean,
 
     // Aliases
-    "-n": "--name",
   },
   {
     permissive: true,
@@ -77,7 +75,7 @@ let projectPkgManger: TPkgManager = PREFERABLE_PKG_MANAGER
 let shouldInstallDeps: boolean = true
 
 const determineProjectName = async () => {
-  if (!args["--name"]) {
+  if (args._.slice(1).length < 1) {
     const res = await prompts({
       type: "text",
       name: "name",
@@ -88,7 +86,7 @@ const determineProjectName = async () => {
     projectName = res.name.trim().replaceAll(" ", "-")
     projectPath = path.resolve(projectName)
   } else {
-    projectName = args["--name"]
+    projectName = args._.slice(1)[0] as string
     projectPath = path.resolve(projectName)
   }
 }

@@ -3639,7 +3639,7 @@ packages:
         integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==,
       }
     dependencies:
-      "@babel/types": 7.17.0
+      "@babel/types": 7.12.10
 
   /@types/babel__template/7.4.1:
     resolution:
@@ -3648,7 +3648,7 @@ packages:
       }
     dependencies:
       "@babel/parser": 7.17.9
-      "@babel/types": 7.17.0
+      "@babel/types": 7.12.10
 
   /@types/babel__traverse/7.17.0:
     resolution:
@@ -3656,7 +3656,7 @@ packages:
         integrity: sha512-r8aveDbd+rzGP+ykSdF3oPuTVRWRfbBiHl0rVDM2yNEmSMXfkObQLV46b4RnCv3Lra51OlfnZhkkFaDl2MIRaA==,
       }
     dependencies:
-      "@babel/types": 7.17.0
+      "@babel/types": 7.12.10
 
   /@types/body-parser/1.19.2:
     resolution:
@@ -9728,7 +9728,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_typescript@4.6.3
+      ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
     transitivePeerDependencies:
       - bufferutil
       - canvas
