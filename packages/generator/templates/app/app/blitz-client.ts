@@ -1,8 +1,8 @@
 import { AuthClientPlugin } from "@blitzjs/auth"
-import { setupClient } from "@blitzjs/next"
+import { setupBlitzClient } from "@blitzjs/next"
 import { BlitzRpcPlugin } from "@blitzjs/rpc"
 
-const { withBlitz } = setupClient({
+export const { withBlitz } = setupBlitzClient({
   plugins: [
     AuthClientPlugin({
       cookiePrefix: "__safeNameSlug__-cookie-prefix",
@@ -16,5 +16,3 @@ const { withBlitz } = setupClient({
     }),
   ],
 })
-
-export { withBlitz }

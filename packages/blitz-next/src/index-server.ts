@@ -38,7 +38,7 @@ export type BlitzAPIHandler = (
   ctx: Ctx,
 ) => ReturnType<NextApiHandler>
 
-export const setupBlitz = ({plugins}: SetupBlitzOptions) => {
+export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 

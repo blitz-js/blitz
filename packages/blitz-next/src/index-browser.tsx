@@ -88,7 +88,7 @@ export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = S
   >
 >
 
-const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
+const setupBlitzClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   plugins,
 }: {
   plugins: TPlugins
@@ -121,7 +121,7 @@ const setupClient = <TPlugins extends readonly ClientPlugin<object>[]>({
   }
 }
 
-export {setupClient}
+export {setupBlitzClient}
 
 const customCSS = `
   body::before {

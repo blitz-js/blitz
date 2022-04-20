@@ -1,7 +1,5 @@
-import {setupClient} from "@blitzjs/next"
+import {setupBlitzClient} from "@blitzjs/next"
 
-const {withBlitz} = setupClient({
+export const {withBlitz} = setupBlitzClient({
     plugins: []
 })
-
-export {withBlitz}
