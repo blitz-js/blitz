@@ -20,9 +20,8 @@
     ]
   },
   "dependencies": {
-    "@blitzjs/config": "latest",
-    "@blitzjs/next": "latest",
-    "blitz": "latest",
+    "@blitzjs/next": "alpha",
+    "blitz": "alpha",
     "next": "12.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",

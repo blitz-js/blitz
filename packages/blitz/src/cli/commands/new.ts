@@ -59,6 +59,9 @@ const args = arg(
     "--dry-run": Boolean,
     "--no-git": Boolean,
     "--skip-upgrade": Boolean,
+
+    // Aliases
+    "-n": "--name",
   },
   {
     permissive: true,

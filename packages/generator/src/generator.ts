@@ -40,7 +40,7 @@ export interface SourceRootType {
 
 const alwaysIgnoreFiles = [".blitz", ".DS_Store", ".git", ".next", ".now", "node_modules"]
 const ignoredExtensions = [".ico", ".png", ".jpg"]
-const tsExtension = /\.(tsx?)$/
+const tsExtension = /\.(tsx?|ts?)$/
 const codeFileExtensions = /\.(tsx?|jsx?)$/
 
 function getStatements(node: j.BlockStatement | j.Statement): j.Statement[] {
@@ -269,11 +269,6 @@ export abstract class Generator<
         )
         this.fs.write(this.destinationPath(pathSuffix), newContent)
 
-        // this.fs.copy(this.sourcePath(filePath), this.destinationPath(pathSuffix), {
-        //   process: (input) =>
-        //     // this.process(input, pathSuffix, templateValues, prettierOptions ?? undefined),
-        //     this.process(input, pathSuffix, templateValues, undefined),
-        // })
         if (!this.useTs && tsExtension.test(this.destinationPath(pathSuffix))) {
           templatedPathSuffix = templatedPathSuffix.replace(tsExtension, ".js")
         }

@@ -74,6 +74,13 @@ const args = arg(
     "--parent": String,
     "--dry-run": Boolean,
     "--env": String,
+
+    // Aliases
+    "-e": "--env",
+    "-n": "--name",
+    "-t": "--type",
+    "-c": "--context",
+    "-p": "--dry-run",
   },
   {
     permissive: true,

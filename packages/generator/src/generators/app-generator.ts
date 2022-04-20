@@ -76,6 +76,10 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
     )
+    this.fs.move(
+      this.destinationPath(`pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`),
+      this.destinationPath(`pages/api/rpc/[...blitz].${this.options.useTs ? "ts" : "js"}`),
+    )
 
     if (!this.options.template.skipForms) {
       this.updateForms()
@@ -230,6 +234,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         )
       }
     }
+
+    // if(this.options.useTs) {
+    // if(templatedPathSuffix === "pages/api/rpc/blitzrpcroute.js") {
+    //   this.fs.write(this.destinationPath("pages/api/rpc/[...blitz].js"), this.sourcePath("pages/api/rpc/blitzrpcroute.js"))
+    //  } else {
+
+    //  }
+    // }
 
     if (!this.options.skipGit && gitInitSuccessful) {
       this.commitChanges()
