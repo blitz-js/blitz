@@ -234,7 +234,7 @@ const newApp: CliCommand = async (argv) => {
   try {
     const latestBlitzVersion = (await getLatestVersion("blitz")).value
     const requireManualInstall = args["--dry-run"] || !shouldInstallDeps
-    const postInstallSteps = args["--name"] === "." ? [] : [`cd ${projectName}`]
+    const postInstallSteps = projectName === "." ? [] : [`cd ${projectName}`]
 
     const generatorOpts: AppGeneratorOptions = {
       template: projectTemplate,
