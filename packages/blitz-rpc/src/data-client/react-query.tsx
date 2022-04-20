@@ -45,7 +45,7 @@ export function useQuery<
   queryFn: T,
   params: FirstParam<T>,
   options?: UseQueryOptions<TResult, TError, TSelectedData> & QueryNonLazyOptions,
-): [TSelectedData, RestQueryResult<TSelectedData, TError>]
+): [TSelectedData | undefined, RestQueryResult<TSelectedData, TError>]
 export function useQuery<
   T extends AsyncFunc,
   TResult = PromiseReturnType<T>,
