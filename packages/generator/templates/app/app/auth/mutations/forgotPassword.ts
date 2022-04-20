@@ -1,15 +1,14 @@
-import { db } from "db"
 import { generateToken, hash256 } from "@blitzjs/auth"
+import { resolver } from "@blitzjs/rpc"
+import { db } from "db"
 import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
 import { ForgotPassword } from "../validations"
-import { Ctx } from "@blitzjs/next"
 
 const RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 
-export default async function forgotPassword(input, ctx: Ctx) {
-  ForgotPassword.parse(input)
+export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => {
   // 1. Get the user
-  const user = await db.user.findFirst({ where: { email: input.email.toLowerCase() } })
+  const user = await db.user.findFirst({ where: { email: email.toLowerCase() } })
 
   // 2. Generate the token and expiration date.
   const token = generateToken()
@@ -40,4 +39,4 @@ export default async function forgotPassword(input, ctx: Ctx) {
 
   // 8. Return the same result whether a password reset email was sent or not
   return
-}
+})

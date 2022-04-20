@@ -6,6 +6,8 @@ import chalk from "chalk"
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
 
+export * from "./resolver"
+
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
