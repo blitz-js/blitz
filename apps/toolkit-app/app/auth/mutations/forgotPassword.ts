@@ -1,15 +1,14 @@
-import { prisma } from "db"
 import { generateToken, hash256 } from "@blitzjs/auth"
+import { resolver } from "@blitzjs/rpc"
+import { prisma as db } from "db"
 import { forgotPasswordMailer } from "mailers/forgotPasswordMailer"
 import { ForgotPassword } from "../validations"
-import { Ctx } from "@blitzjs/next"
 
 const RESET_PASSWORD_TOKEN_EXPIRATION_IN_HOURS = 4
 
-export default async function forgotPassword(input, ctx: Ctx) {
-  ForgotPassword.parse(input)
+export default resolver.pipe(resolver.zod(ForgotPassword), async ({ email }) => {
   // 1. Get the user
-  const user = await prisma.user.findFirst({ where: { email: input.email.toLowerCase() } })
+  const user = await db.user.findFirst({ where: { email: email.toLowerCase() } })
 
   // 2. Generate the token and expiration date.
   const token = generateToken()
@@ -20,9 +19,9 @@ export default async function forgotPassword(input, ctx: Ctx) {
   // 3. If user with this email was found
   if (user) {
     // 4. Delete any existing password reset tokens
-    await prisma.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
+    await db.token.deleteMany({ where: { type: "RESET_PASSWORD", userId: user.id } })
     // 5. Save this new token in the database.
-    await prisma.token.create({
+    await db.token.create({
       data: {
         user: { connect: { id: user.id } },
         type: "RESET_PASSWORD",
@@ -40,4 +39,4 @@ export default async function forgotPassword(input, ctx: Ctx) {
 
   // 8. Return the same result whether a password reset email was sent or not
   return
-}
+})

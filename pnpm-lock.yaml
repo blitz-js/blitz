@@ -480,6 +480,7 @@ importers:
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
+      zod: 3.10.1
     dependencies:
       "@blitzjs/auth": link:../blitz-auth
       b64-lite: 1.4.0
@@ -488,6 +489,7 @@ importers:
       debug: 4.3.3
       react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
       superjson: 1.8.0
+      zod: 3.10.1
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
