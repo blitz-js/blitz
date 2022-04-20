@@ -17,7 +17,8 @@
   "sideEffects": false,
   "license": "MIT",
   "files": [
-    "dist/**"
+    "dist/**",
+    "eslint.js"
   ],
   "dependencies": {
     "@blitzjs/rpc": "2.0.0-alpha.5",
