@@ -1,5 +1,5 @@
 import {Readable} from "stream"
-import {getPrismaBin} from "../utils/config"
+import {getCommandBin} from "../utils/config"
 import {CliCommand} from "../index"
 import arg from "arg"
 
@@ -8,7 +8,7 @@ let prismaBin: string
 export const runPrisma = async (args: string[], silent = false) => {
   if (!prismaBin) {
     try {
-      prismaBin = await getPrismaBin(process.cwd())
+      prismaBin = await getCommandBin("prisma")
     } catch (err) {
       throw err
     }
