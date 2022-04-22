@@ -1,8 +1,8 @@
-import { NON_STANDARD_NODE_ENV } from "./utils/constants"
+import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
 import packageJson from "../../package.json"
-import { loadEnvConfig } from "../env-utils"
-import { getCommandBin } from "./utils/config"
+import {loadEnvConfig} from "../env-utils"
+import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
 
 const commonArgs = {
@@ -20,7 +20,7 @@ const commonArgs = {
 
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
-const commands: { [command: string]: () => Promise<CliCommand> } = {
+const commands: {[command: string]: () => Promise<CliCommand>} = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
@@ -45,7 +45,7 @@ if (args["--env"]) {
   process.env.APP_ENV = args["--env"]
 }
 
-loadEnvConfig(process.cwd(), undefined, { error: console.error, info: console.info })
+loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
 // Version is inlined into the file using taskr build pipeline
 if (args["--version"]) {
@@ -91,7 +91,7 @@ const standardEnv = ["production", "development", "test"]
 if (process.env.NODE_ENV && !standardEnv.includes(process.env.NODE_ENV)) {
   console.warn(NON_STANDARD_NODE_ENV)
 }
-; (process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
+;(process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
 
 // Make sure commands gracefully respect termination signals (e.g. from Docker)
 process.on("SIGTERM", () => process.exit(0))
@@ -111,12 +111,12 @@ async function runCommandFromBin() {
   }
 
   console.log(`Running command...`)
-  const result = spawn.sync(commandBin, forwardedArgs, { stdio: "inherit" })
+  const result = spawn.sync(commandBin, forwardedArgs, {stdio: "inherit"})
   process.exit(result.status || 0)
 }
 
 if (!foundCommand) {
-  runCommandFromBin()
+  void runCommandFromBin()
 }
 
 commands[command]?.()
