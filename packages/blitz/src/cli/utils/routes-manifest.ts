@@ -1,6 +1,6 @@
-import {join, dirname} from "path"
+import {join} from "path"
 import os from "os"
-import {readdirSync, promises} from "fs"
+import {promises} from "fs"
 const readFile = promises.readFile
 import {outputFile} from "fs-extra"
 
@@ -495,7 +495,7 @@ export async function generateManifest() {
 
   const {declaration, implementation} = setupManifest(routes)
 
-  const dotBlitz = join(process.cwd(), ".blitz")
+  const dotBlitz = join(process.cwd(), "node_modules/.blitz")
 
   await outputFile(join(dotBlitz, "index.js"), implementation, {
     encoding: "utf-8",

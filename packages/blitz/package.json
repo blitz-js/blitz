@@ -33,6 +33,7 @@
     "dotenv": "16.0.0",
     "dotenv-expand": "8.0.3",
     "esbuild": "0.14.34",
+    "find-up": "4.1.0",
     "fs-extra": "10.0.1",
     "hasbin": "1.2.3",
     "npm-which": "3.0.1",
@@ -41,6 +42,7 @@
     "pkg-dir": "5.0.0",
     "prompts": "2.4.2",
     "resolve-cwd": "3.0.0",
+    "resolve-from": "5.0.0",
     "superjson": "1.8.0",
     "tslog": "3.3.1"
   },

@@ -8,7 +8,8 @@
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "postinstall": "node node_modules/blitz/src/scripts/postinstall.js"
   },
   "main": "./dist/index-server.cjs",
   "module": "./dist/index-server.mjs",
