@@ -87,8 +87,13 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
   }
 }
 
-export async function getCommandBin(command: string, rootFolder: string = process.cwd(), _usePatched: boolean = false): Promise<string> {
+export async function getCommandBin(
+  command: string,
+  rootFolder: string = process.cwd(),
+  _usePatched: boolean = false,
+): Promise<string> {
   const bin = await resolveBinAsync(command)
+  console.log({bin})
   return resolve(rootFolder, bin)
 }
 
