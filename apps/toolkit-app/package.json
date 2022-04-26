@@ -35,6 +35,7 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-hook-form": "7.29.0",
+    "styled-jsx": "5.0.2",
     "ts-node": "10.7.0",
     "zod": "3.10.1"
   },

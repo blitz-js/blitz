@@ -64,6 +64,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0
       react-hook-form: 7.29.0
+      styled-jsx: 5.0.2
       ts-node: 10.7.0
       typescript: ^4.5.3
       zod: 3.10.1
@@ -80,6 +81,7 @@ importers:
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-hook-form: 7.29.0_react@18.0.0
+      styled-jsx: 5.0.2_react@18.0.0
       ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
       zod: 3.10.1
     devDependencies:
@@ -14089,6 +14091,25 @@ packages:
         optional: true
     dependencies:
       react: 18.0.0
+
+  /styled-jsx/5.0.2_react@18.0.0:
+    resolution:
+      {
+        integrity: sha512-LqPQrbBh3egD57NBcHET4qcgshPks+yblyhPlH2GY8oaDgKs8SK4C3dBh3oSJjgzJ3G5t1SYEZGHkP+QEpX9EQ==,
+      }
+    engines: {node: ">= 12.0.0"}
+    peerDependencies:
+      "@babel/core": "*"
+      babel-plugin-macros: "*"
+      react: ">= 16.8.0 || 17.x.x || ^18.0.0-0"
+    peerDependenciesMeta:
+      "@babel/core":
+        optional: true
+      babel-plugin-macros:
+        optional: true
+    dependencies:
+      react: 18.0.0
+    dev: false
 
   /subarg/1.0.0:
     resolution: {integrity: sha1-9izxdYHplrSPyWVpn1TAauJouNI=}
