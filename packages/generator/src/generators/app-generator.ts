@@ -78,7 +78,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     )
     this.fs.move(
       this.destinationPath(`pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`),
-      this.destinationPath(`pages/api/rpc/[...blitz].${this.options.useTs ? "ts" : "js"}`),
+      this.destinationPath(`pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
     )
 
     if (!this.options.template.skipForms) {
