@@ -83,24 +83,17 @@ export async function normalize(config: ServerConfig): Promise<NormalizedConfig>
     watch: config.watch ?? env === "dev",
     clean: config.clean,
     // -
-    nextBin: await getNextBin(rootFolder, env === "dev"),
+    nextBin: await getCommandBin("next", rootFolder, env === "dev"),
   }
 }
 
-async function getNextBin(rootFolder: string, _usePatched: boolean = false): Promise<string> {
-  const nextBinPkg = "next"
-  const nextBin = await resolveBinAsync(nextBinPkg)
-  return resolve(rootFolder, nextBin)
-}
-
-export async function getPrismaBin(
-  rootFolder: string,
+export async function getCommandBin(
+  command: string,
+  rootFolder: string = process.cwd(),
   _usePatched: boolean = false,
 ): Promise<string> {
-  const prismaBinPkg = "prisma"
-  const prismaBin = await resolveBinAsync(prismaBinPkg)
-
-  return resolve(rootFolder, prismaBin)
+  const bin = await resolveBinAsync(command)
+  return resolve(rootFolder, bin)
 }
 
 async function getIsTypeScript(rootFolder: string): Promise<boolean> {

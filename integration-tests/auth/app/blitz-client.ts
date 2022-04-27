@@ -1,7 +1,7 @@
 import {AuthClientPlugin} from "@blitzjs/auth"
-import {setupClient} from "@blitzjs/next"
+import {setupBlitzClient} from "@blitzjs/next"
 
-const {withBlitz} = setupClient({
+const {withBlitz} = setupBlitzClient({
   plugins: [
     AuthClientPlugin({
       cookiePrefix: "auth-tests-cookie-prefix",

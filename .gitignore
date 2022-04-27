@@ -62,6 +62,7 @@ examples/auth2
 .idea
 .ultra.cache.json
 db.sqlite-journal
+**/db/db.sqlite
 test/integration/**/db.json
 test/**/*/out
 test/**/blitz-env.d.ts
