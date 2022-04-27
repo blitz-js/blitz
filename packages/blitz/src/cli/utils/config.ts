@@ -93,7 +93,6 @@ export async function getCommandBin(
   _usePatched: boolean = false,
 ): Promise<string> {
   const bin = await resolveBinAsync(command)
-  console.log({bin})
   return resolve(rootFolder, bin)
 }
 
