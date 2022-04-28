@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.10
+
+### Patch Changes
+
+- fix source path for templates
+
 ## 2.0.0-alpha.9
 
 ## 2.0.0-alpha.8
