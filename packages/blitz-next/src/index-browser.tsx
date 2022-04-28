@@ -13,6 +13,7 @@ import {Hydrate, HydrateOptions} from "react-query/hydration"
 
 export * from "./error-boundary"
 export * from "./error-component"
+export {Routes} from ".blitz"
 
 const compose =
   (...rest: BlitzProviderType[]) =>

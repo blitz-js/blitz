@@ -1,8 +1,10 @@
 import {join, dirname} from "path"
 import os from "os"
-import {readdirSync, promises} from "fs"
+import {promises} from "fs"
 const readFile = promises.readFile
 import {outputFile} from "fs-extra"
+import findUp from "find-up"
+import resolveFrom from "resolve-from"
 
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
@@ -495,7 +497,7 @@ export async function generateManifest() {
 
   const {declaration, implementation} = setupManifest(routes)
 
-  const dotBlitz = join(process.cwd(), ".blitz")
+  const dotBlitz = join(await findNodeModulesRoot(process.cwd()), ".blitz")
 
   await outputFile(join(dotBlitz, "index.js"), implementation, {
     encoding: "utf-8",
@@ -507,9 +509,37 @@ export async function generateManifest() {
     encoding: "utf-8",
   })
 }
-// export const findBlitzConfigDirectory = () => {
-//   let blitzDir = readdirSync(join(process.cwd(), ".blitz"))
-//   if (blitzDir.length) {
-//     return join(process.cwd(), ".blitz/index.js")
-//   }
-// }
+
+export const isInternalBlitzMonorepoDevelopment = __dirname.match(
+  /[\\/]packages[\\/]blitz[\\/]dist[\\/]chunks$/,
+)
+
+async function findNodeModulesRoot(src: string) {
+  /*
+   *  Because of our package structure, and because of how things like pnpm link modules,
+   *  we must first find blitz package, and then find `next` and then
+   *  the root of `next`
+   *
+   *  This is because we import from `.blitz` inside `next/stdlib`.
+   *  If that changes, then this logic here will need to change
+   */
+
+  let root: string
+  if (isInternalBlitzMonorepoDevelopment) {
+    root = join(__dirname, "..", "..", "..", "..", "/node_modules")
+  } else {
+    const blitzPkgLocation = dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) ?? "",
+    )
+
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+
+    root = join(blitzPkgLocation, "../")
+  }
+
+  return root
+}
