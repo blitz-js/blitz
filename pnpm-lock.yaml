@@ -2211,7 +2211,7 @@ packages:
       "@babel/plugin-transform-unicode-regex": 7.16.7_@babel+core@7.12.10
       "@babel/preset-modules": 0.1.5_@babel+core@7.12.10
       "@babel/types": 7.12.10
-      core-js-compat: 3.22.2
+      core-js-compat: 3.22.3
       semver: 5.7.1
     transitivePeerDependencies:
       - supports-color
@@ -2289,7 +2289,7 @@ packages:
       }
     engines: {node: ">=6.9.0"}
     dependencies:
-      core-js-pure: 3.22.2
+      core-js-pure: 3.22.3
       regenerator-runtime: 0.13.9
     dev: false
 
@@ -5317,10 +5317,10 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001332
+      caniuse-lite: 1.0.30001334
       electron-to-chromium: 1.4.124
       escalade: 3.1.1
-      node-releases: 2.0.3
+      node-releases: 2.0.4
       picocolors: 1.0.0
 
   /bs-logger/0.2.6:
@@ -5489,10 +5489,10 @@ packages:
       }
     engines: {node: ">=10"}
 
-  /caniuse-lite/1.0.30001332:
+  /caniuse-lite/1.0.30001334:
     resolution:
       {
-        integrity: sha512-10T30NYOEQtN6C11YGg411yebhvpnC6Z102+B95eAsN0oB6KUs01ivE8u+G6FMIRtIrVlYXhL+LUwQ3/hXwDWw==,
+        integrity: sha512-kbaCEBRRVSoeNs74sCuq92MJyGrMtjWVfhltoHUCW4t4pXFvGjUBrfo47weBRViHkiV3eBYyIsfl956NtHGazw==,
       }
 
   /chai/4.3.6:
@@ -5948,20 +5948,20 @@ packages:
     engines: {node: ">=0.10.0"}
     dev: false
 
-  /core-js-compat/3.22.2:
+  /core-js-compat/3.22.3:
     resolution:
       {
-        integrity: sha512-Fns9lU06ZJ07pdfmPMu7OnkIKGPKDzXKIiuGlSvHHapwqMUF2QnnsWwtueFZtSyZEilP0o6iUeHQwpn7LxtLUw==,
+        integrity: sha512-wliMbvPI2idgFWpFe7UEyHMvu6HWgW8WA+HnDRtgzoSDYvXFMpoGX1H3tPDDXrcfUSyXafCLDd7hOeMQHEZxGw==,
       }
     dependencies:
       browserslist: 4.20.3
       semver: 7.0.0
     dev: false
 
-  /core-js-pure/3.22.2:
+  /core-js-pure/3.22.3:
     resolution:
       {
-        integrity: sha512-Lb+/XT4WC4PaCWWtZpNPaXmjiNDUe5CJuUtbkMrIM1kb1T/jJoAIp+bkVP/r5lHzMr+ZAAF8XHp7+my6Ol0ysQ==,
+        integrity: sha512-oN88zz7nmKROMy8GOjs+LN+0LedIvbMdnB5XsTlhcOg1WGARt9l0LFg0zohdoFmCsEZ1h2ZbSQ6azj3M+vhzwQ==,
       }
     requiresBuild: true
     dev: false
@@ -11496,7 +11496,7 @@ packages:
         optional: true
     dependencies:
       "@next/env": 12.1.1
-      caniuse-lite: 1.0.30001332
+      caniuse-lite: 1.0.30001334
       postcss: 8.4.5
       styled-jsx: 5.0.1
       use-subscription: 1.5.1
@@ -11540,7 +11540,7 @@ packages:
         optional: true
     dependencies:
       "@next/env": 12.1.1
-      caniuse-lite: 1.0.30001332
+      caniuse-lite: 1.0.30001334
       postcss: 8.4.5
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -11608,10 +11608,10 @@ packages:
   /node-int64/0.4.0:
     resolution: {integrity: sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=}
 
-  /node-releases/2.0.3:
+  /node-releases/2.0.4:
     resolution:
       {
-        integrity: sha512-maHFz6OLqYxz+VQyCAtA3PTX4UP/53pa05fyDNc9CwjvJ0yEh6+xBwKsgCxMNhS8taUKBFYxfuiaD9U/55iFaw==,
+        integrity: sha512-gbMzqQtTtDz/00jQzZ21PQzdI9PyLYqUSvD0p3naOhX4odFji0ZxYdnVwPTxmSwkmxhcFImpozceidSG+AgoPQ==,
       }
 
   /nodemailer/6.7.0:

@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.6
+
+### Patch Changes
+
+- fix route manifest codegen
+- Updated dependencies
+  - @blitzjs/rpc@2.0.0-alpha.6
+
 ## 2.0.0-alpha.5
 
 ### Patch Changes

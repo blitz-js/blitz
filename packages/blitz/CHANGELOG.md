@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.0-alpha.6
+
+### Patch Changes
+
+- fix route manifest codegen
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.6
+
 ## 2.0.0-alpha.5
 
 ### Patch Changes
