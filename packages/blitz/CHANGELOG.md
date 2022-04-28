@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.8
+
+### Patch Changes
+
+- fix broken cli versioning
+  - @blitzjs/generator@2.0.0-alpha.8
+
 ## 2.0.0-alpha.7
 
 ### Patch Changes
