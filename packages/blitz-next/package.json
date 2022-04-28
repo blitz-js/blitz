@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "2.0.0-alpha.6",
+  "version": "2.0.0-alpha.7",
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
@@ -22,13 +22,13 @@
     "eslint.js"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "2.0.0-alpha.6",
+    "@blitzjs/rpc": "2.0.0-alpha.7",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
     "react-query": "3.21.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace: *",
+    "@blitzjs/config": "workspace:2.0.0-alpha.7",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.0.0",
@@ -39,7 +39,7 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "@types/testing-library__react-hooks": "4.0.0",
-    "blitz": "2.0.0-alpha.6",
+    "blitz": "2.0.0-alpha.7",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
     "lodash.frompairs": "4.0.1",

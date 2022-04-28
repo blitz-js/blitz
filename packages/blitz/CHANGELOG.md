@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.7
+
+### Patch Changes
+
+- added index.cjs to blitz externals
+  - @blitzjs/generator@2.0.0-alpha.7
+
 ## 2.0.0-alpha.6
 
 ### Patch Changes
