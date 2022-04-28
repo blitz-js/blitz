@@ -25,17 +25,7 @@ try {
 // todo: we should reuse `findNodeModulesRoot` from /nextjs/packages/next/build/routes.ts
 async function findNodeModulesRoot(src) {
   let root
-  if (process.env.NEXT_PNPM_TEST) {
-    const nextPkgLocation = path.dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(src, "next"),
-      })) || "",
-    )
-    if (!nextPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'next' package location")
-    }
-    root = path.join(nextPkgLocation, "../")
-  } else if (isInBlitzMonorepo) {
+  if (isInBlitzMonorepo) {
     root = path.join(src, "node_modules")
   } else {
     const blitzPkgLocation = path.dirname(
@@ -46,63 +36,16 @@ async function findNodeModulesRoot(src) {
     if (!blitzPkgLocation) {
       throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
     }
-    const nextPkgLocation = path.dirname(
-      (await findUp("package.json", {
-        cwd: resolveFrom(blitzPkgLocation, "next"),
-      })) || "",
-    )
-    if (!nextPkgLocation) {
-      throw new Error("Internal Blitz Error: unable to find 'next' package location")
-    }
-    root = path.join(nextPkgLocation, "../")
-    if (root.endsWith("@blitzjs/")) {
-      root = path.join(nextPkgLocation, "../../")
-    }
+
+    root = path.join(blitzPkgLocation, "../")
   }
   return path.join(root, ".blitz")
 }
-
-const isUsingNpm =
-  process.env.npm_config_user_agent && process.env.npm_config_user_agent.startsWith("npm")
 
 /*
   Adapted from https://github.com/prisma/prisma/blob/974cbeff4a7f616137ce540d0ec88a2a86365892/src/packages/client/scripts/postinstall.js
 */
 function codegen() {
-  /**
-   * Adds `package.json` to the end of a path if it doesn't already exist'
-   * @param {string} pth
-   */
-  function addPackageJSON(pth) {
-    if (pth.endsWith("package.json")) return pth
-    return path.join(pth, "package.json")
-  }
-
-  /**
-   * Looks up for a `package.json` which is not `@blitz/cli` or `blitz` and returns the directory of the package
-   * @param {string} startPath - Path to Start At
-   * @param {number} limit - Find Up limit
-   * @returns {string | null}
-   */
-  function findPackageRoot(startPath, limit = 10) {
-    if (!startPath || !fs.existsSync(startPath)) return null
-    let currentPath = startPath
-    // Limit traversal
-    for (let i = 0; i < limit; i++) {
-      const pkgPath = addPackageJSON(currentPath)
-      if (fs.existsSync(pkgPath)) {
-        try {
-          const pkg = require(pkgPath)
-          if (pkg.name && !["@blitz/cli", "blitz"].includes(pkg.name)) {
-            return pkgPath.replace("package.json", "")
-          }
-        } catch {}
-      }
-      currentPath = path.join(currentPath, "../")
-    }
-    return null
-  }
-
   async function main() {
     if (process.env.INIT_CWD) {
       process.chdir(process.env.INIT_CWD) // necessary, because npm chooses __dirname as process.cwd()
@@ -111,33 +54,14 @@ function codegen() {
     await ensureEmptyDotBlitz()
 
     const localPath = getLocalPackagePath()
-    console.log("localPath", localPath)
+
     // Only execute if !localpath
     const installedGlobally = localPath ? undefined : await isInstalledGlobally()
-
-    // this is needed, so that the Generate command does not fail in postinstall
-    process.env.BLITZ_GENERATE_IN_POSTINSTALL = "true"
-
-    // this is needed, so we can find the correct schemas in yarn workspace projects
-    const root = findPackageRoot(localPath)
-
-    process.env.BLITZ_GENERATE_IN_POSTINSTALL = root ? root : "true"
-
-    if (isUsingNpm && root && !fs.existsSync(path.join(root, "node_modules", "next"))) {
-      // Sometimes with npm the next package is missing because of how
-      // we use the `npm:@blitzjs/next` syntax to install the fork at node_modules/next
-      debug("Missing next package, manually installing...")
-      const corePkg = require("../package.json")
-      await run("npm", ["install", "--no-save", `next@${corePkg.dependencies.next}`], root, [
-        "ignore",
-      ])
-    }
 
     debug({
       localPath,
       installedGlobally,
       init_cwd: process.env.INIT_CWD,
-      BLITZ_GENERATE_IN_POSTINSTALL: process.env.BLITZ_GENERATE_IN_POSTINSTALL,
     })
     try {
       if (localPath) {
@@ -149,6 +73,7 @@ function codegen() {
         ])
         return
       }
+
       if (installedGlobally) {
         await run("blitz", ["codegen", "--postinstall", doubleQuote(getPostInstallTrigger())])
         return
@@ -161,29 +86,21 @@ function codegen() {
       debug(e)
     }
 
-    // if (!localPath && !installedGlobally) {
-    //   console.error(
-    //     `In order to use "@blitz/client", please install Blitz CLI. You can install it with "npm add -D blitz".`,
-    //   )
-    // }
+    if (!localPath && !installedGlobally) {
+      console.error(`Please install Blitz CLI. You can install it with "npm add -D blitz".`)
+    }
   }
 
   function getLocalPackagePath() {
     try {
       const packagePath = require.resolve("blitz/package.json")
       if (packagePath) {
-        return require.resolve("blitz")
+        const blitzPkg = require.resolve("blitz")
+        return path.join(blitzPkg, "/dist/index.cjs")
       }
     } catch (e) {
       //
     }
-
-    try {
-      const packagePath = require.resolve("@blitz/cli/package.json")
-      if (packagePath) {
-        return require.resolve("@blitz/cli")
-      }
-    } catch (e) {}
 
     return null
   }
