@@ -1,9 +1,8 @@
 ---
-"@blitzjs/next": patch
 "blitz": patch
+"@blitzjs/next": patch
 "@blitzjs/auth": patch
 "@blitzjs/rpc": patch
-"@blitzjs/config": patch
 "@blitzjs/generator": patch
 ---
 

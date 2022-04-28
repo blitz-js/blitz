@@ -28,7 +28,7 @@
     "react-query": "3.21.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-alpha.6",
+    "@blitzjs/config": "workspace: *",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.0.0",

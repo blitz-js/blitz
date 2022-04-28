@@ -30,7 +30,7 @@
     "zod": "3.10.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-alpha.6",
+    "@blitzjs/config": "workspace: *",
     "@types/debug": "4.1.7",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
