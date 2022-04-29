@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.16
+
+### Patch Changes
+
+- remove console logs inside onPostInstall in the new cli command
+  - @blitzjs/generator@2.0.0-alpha.16
+
 ## 2.0.0-alpha.15
 
 ### Patch Changes
