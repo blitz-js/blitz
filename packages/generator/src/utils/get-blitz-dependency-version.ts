@@ -6,16 +6,16 @@ export const getBlitzDependencyVersion = async (
   cliVersion: string,
 ): Promise<Fallbackable<string>> => {
   try {
-    const {latest, canary} = await fetchDistTags("blitz")
+    const {alpha} = await fetchDistTags("blitz")
 
-    if (cliVersion.includes("canary")) {
-      return {value: canary, isFallback: false}
+    if (cliVersion.includes("alpha")) {
+      return {value: alpha}
     }
 
-    return {value: latest, isFallback: false}
+    logFailedVersionFetch("blitz")
+    return {value: ""}
   } catch (error) {
-    const fallback = "latest"
-    logFailedVersionFetch("blitz", fallback)
-    return {value: fallback, isFallback: true}
+    logFailedVersionFetch("blitz")
+    return {value: ""}
   }
 }
