@@ -1,5 +1,11 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.15
+
 ## 2.0.0-alpha.14
 
 ### Patch Changes

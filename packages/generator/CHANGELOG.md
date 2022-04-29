@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- fix template sourcepath because of new env variable
+
 ## 2.0.0-alpha.14
 
 ## 2.0.0-alpha.13
