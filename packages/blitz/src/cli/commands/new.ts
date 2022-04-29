@@ -199,6 +199,7 @@ const determinePkgManagerToInstallDeps = async () => {
           {title: "skip"},
         ],
       })
+      projectPkgManger = res.pkgManager
 
       if (res.pkgManager === "skip") {
         shouldInstallDeps = false
