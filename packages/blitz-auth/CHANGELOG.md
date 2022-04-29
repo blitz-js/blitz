@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.13
+
 ## 2.0.0-alpha.12
 
 ### Patch Changes

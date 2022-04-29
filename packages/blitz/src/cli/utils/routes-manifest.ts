@@ -538,7 +538,11 @@ async function findNodeModulesRoot(src: string) {
       throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
     }
 
-    root = join(blitzPkgLocation, "../")
+    if (blitzPkgLocation.includes(".pnpm")) {
+      root = join(blitzPkgLocation, "../../../../")
+    } else {
+      root = join(blitzPkgLocation, "../")
+    }
   }
 
   return root

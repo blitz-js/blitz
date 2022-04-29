@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Fix codegen and postinstall to make work with pnpm
+  - @blitzjs/rpc@2.0.0-alpha.13
+
 ## 2.0.0-alpha.12
 
 ### Patch Changes

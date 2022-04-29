@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Fix codegen and postinstall to make work with pnpm
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.13
+
 ## 2.0.0-alpha.12
 
 ### Patch Changes

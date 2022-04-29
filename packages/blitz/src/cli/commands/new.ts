@@ -193,12 +193,13 @@ const determinePkgManagerToInstallDeps = async () => {
         message: "Install dependencies?",
         initial: 0,
         choices: [
-          {title: "npm"},
-          {title: "yarn", disabled: !IS_YARN_INSTALLED},
-          {title: "pnpm", disabled: !IS_PNPM_INSTALLED},
+          {title: "npm", value: "npm"},
+          {title: "yarn", value: "yarn", disabled: !IS_YARN_INSTALLED},
+          {title: "pnpm", value: "pnpm", disabled: !IS_PNPM_INSTALLED},
           {title: "skip"},
         ],
       })
+
       projectPkgManger = res.pkgManager
 
       if (res.pkgManager === "skip") {

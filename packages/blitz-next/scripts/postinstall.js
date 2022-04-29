@@ -27,6 +27,16 @@ async function findNodeModulesRoot(src) {
   let root
   if (isInBlitzMonorepo) {
     root = path.join(src, "node_modules")
+  } else if (src.includes(".pnpm")) {
+    const blitzPkgLocation = path.dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) || "",
+    )
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+    root = path.join(blitzPkgLocation, "../../../../")
   } else {
     const blitzPkgLocation = path.dirname(
       (await findUp("package.json", {
@@ -96,7 +106,11 @@ function codegen() {
       const packagePath = require.resolve("blitz/package.json")
       if (packagePath) {
         const blitzPkg = require.resolve("blitz/dist/index.cjs")
-        return path.join(blitzPkg)
+        if (blitzPkg.includes(".pnpm")) {
+          return path.join(blitzPkg, "../../../../../../blitz/dist/index.cjs")
+        } else {
+          return path.join(blitzPkg)
+        }
       }
     } catch (e) {
       //
@@ -323,6 +337,6 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-if (!isInstalledGlobally) {
-  codegen()
-}
+// if (!isInstalledGlobally) {
+codegen()
+// }

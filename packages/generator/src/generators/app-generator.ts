@@ -234,14 +234,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       }
     }
 
-    // if(this.options.useTs) {
-    // if(templatedPathSuffix === "pages/api/rpc/blitzrpcroute.js") {
-    //   this.fs.write(this.destinationPath("pages/api/rpc/[...blitz].js"), this.sourcePath("pages/api/rpc/blitzrpcroute.js"))
-    //  } else {
-
-    //  }
-    // }
-
     if (!this.options.skipGit && gitInitSuccessful) {
       this.commitChanges()
     }
