@@ -9,7 +9,7 @@
     "test": "vitest run",
     "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "postinstall": "node src/scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js"
   },
   "main": "./dist/index-server.cjs",
   "module": "./dist/index-server.mjs",
@@ -19,6 +19,7 @@
   "license": "MIT",
   "files": [
     "dist/**",
+    "scripts/**",
     "eslint.js"
   ],
   "dependencies": {

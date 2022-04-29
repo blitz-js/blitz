@@ -16,7 +16,7 @@ let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
 
 try {
   const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
-  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
+  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz/dist/index.cjs")
   isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
 } catch (error) {
   // noop
@@ -95,8 +95,8 @@ function codegen() {
     try {
       const packagePath = require.resolve("blitz/package.json")
       if (packagePath) {
-        const blitzPkg = require.resolve("blitz")
-        return path.join(blitzPkg, "/dist/index.cjs")
+        const blitzPkg = require.resolve("blitz/dist/index.cjs")
+        return path.join(blitzPkg)
       }
     } catch (e) {
       //
