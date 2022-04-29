@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.14
+
+### Patch Changes
+
+- set default enviornment variable to development unless build and start command
+  - @blitzjs/generator@2.0.0-alpha.14
+
 ## 2.0.0-alpha.13
 
 ### Patch Changes
