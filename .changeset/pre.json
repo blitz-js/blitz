@@ -16,6 +16,7 @@
     "toolkit-app": "1.0.0"
   },
   "changesets": [
+    "dirty-monkeys-greet",
     "great-months-train",
     "lovely-colts-share",
     "nine-onions-admire",

@@ -1,5 +1,13 @@
 # blitz
 
+## 2.0.0-alpha.12
+
+### Patch Changes
+
+- Use alpha version for blitz dependency, fix package manager selection
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.12
+
 ## 2.0.0-alpha.11
 
 ### Patch Changes
