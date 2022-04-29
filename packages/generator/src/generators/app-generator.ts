@@ -111,7 +111,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
       {value: newDevDependencies, isFallback: devDependenciesUsedFallback},
-      {value: blitzDependencyVersion, isFallback: blitzUsedFallback},
+      {value: blitzDependencyVersion},
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
@@ -122,8 +122,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     pkg.devDependencies = newDevDependencies
     pkg.dependencies.blitz = blitzDependencyVersion
 
-    const fallbackUsed =
-      dependenciesUsedFallback || devDependenciesUsedFallback || blitzUsedFallback
+    const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
