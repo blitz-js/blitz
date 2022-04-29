@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.11
+
+### Patch Changes
+
+- Fix postinstall script not being found
+  - @blitzjs/rpc@2.0.0-alpha.11
+
 ## 2.0.0-alpha.10
 
 ### Patch Changes

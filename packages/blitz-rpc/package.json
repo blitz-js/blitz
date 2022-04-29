@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/rpc",
-  "version": "2.0.0-alpha.10",
+  "version": "2.0.0-alpha.11",
   "scripts": {
     "build": "unbuild",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts && wait-on -d 250 ../blitz-auth/dist/index-browser.d.ts",
@@ -20,7 +20,7 @@
     "dist/**"
   ],
   "dependencies": {
-    "@blitzjs/auth": "2.0.0-alpha.10",
+    "@blitzjs/auth": "2.0.0-alpha.11",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
     "chalk": "^4.1.0",
@@ -30,11 +30,11 @@
     "zod": "3.10.1"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-alpha.10",
+    "@blitzjs/config": "workspace:2.0.0-alpha.11",
     "@types/debug": "4.1.7",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
-    "blitz": "2.0.0-alpha.10",
+    "blitz": "2.0.0-alpha.11",
     "next": "12.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -43,7 +43,7 @@
     "watch": "1.0.2"
   },
   "peerDependencies": {
-    "blitz": "2.0.0-alpha.10",
+    "blitz": "2.0.0-alpha.11",
     "next": "*"
   },
   "publishConfig": {
