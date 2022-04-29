@@ -11,7 +11,7 @@ const stat = promisify(fs.stat)
 
 const debug = require("debug")("blitz:postinstall")
 
-const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../../src"))
+const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../../blitz-next"))
 let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
 
 try {
