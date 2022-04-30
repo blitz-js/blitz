@@ -1,5 +1,15 @@
 # toolkit-app
 
+## 1.0.1-alpha.12
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.17
+- @blitzjs/auth@2.0.0-alpha.17
+- @blitzjs/next@2.0.0-alpha.17
+- @blitzjs/rpc@2.0.0-alpha.17
+- @blitzjs/config@2.0.0-alpha.17
+
 ## 1.0.1-alpha.11
 
 ### Patch Changes

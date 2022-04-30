@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.17
+
+### Patch Changes
+
+- fix app generator for pnpm unmet dependency
+
 ## 2.0.0-alpha.16
 
 ## 2.0.0-alpha.15

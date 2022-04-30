@@ -155,6 +155,12 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         cp.stdout?.setEncoding("utf8")
         cp.stderr?.setEncoding("utf8")
         cp.stdout?.on("data", (data) => {
+          if (pkgManager === "pnpm") {
+            if (data.includes("ERR_PNPM_PEER_DEP_ISSUES  Unmet peer dependencies")) {
+              spinners[spinners.length - 1]?.succeed()
+            }
+          }
+
           if (pkgManager === "yarn") {
             let json = getJSON(data)
             if (json && json.type === "step") {
