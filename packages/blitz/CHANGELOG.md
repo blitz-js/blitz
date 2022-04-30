@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- fix generate cli command
+  - @blitzjs/generator@2.0.0-alpha.18
+
 ## 2.0.0-alpha.17
 
 ### Patch Changes
