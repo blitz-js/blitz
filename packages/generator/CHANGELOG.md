@@ -1,5 +1,37 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.18
+
+## 2.0.0-alpha.17
+
+### Patch Changes
+
+- fix app generator for pnpm unmet dependency
+
+## 2.0.0-alpha.16
+
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- fix template sourcepath because of new env variable
+
+## 2.0.0-alpha.14
+
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Fix codegen and postinstall to make work with pnpm
+
+## 2.0.0-alpha.12
+
+### Patch Changes
+
+- Use alpha version for blitz dependency, fix package manager selection
+
+## 2.0.0-alpha.11
+
 ## 2.0.0-alpha.10
 
 ### Patch Changes

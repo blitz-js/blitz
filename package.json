@@ -17,7 +17,7 @@
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "pre-publish": "pnpm i && pnpm build && changeset add && changeset version && git add . && git commit -v",
+    "pre-publish": "pnpm i && changeset add && changeset version && pnpm build && git add . && git commit -v",
     "publish-release": "changeset publish && git push --follow-tags"
   },
   "dependencies": {

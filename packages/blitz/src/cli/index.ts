@@ -58,7 +58,8 @@ if (args["--help"]) {
   forwardedArgs.push("--help")
 }
 
-const defaultEnv = command === "dev" ? "development" : "production"
+// env variable should default to dev unless the command is build or start
+const defaultEnv = command === "build" || command === "start" ? "production" : "development"
 
 const standardEnv = ["production", "development", "test"]
 if (process.env.NODE_ENV && !standardEnv.includes(process.env.NODE_ENV)) {

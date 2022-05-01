@@ -1,5 +1,55 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.18
+
+## 2.0.0-alpha.17
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.17
+
+## 2.0.0-alpha.16
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.16
+
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.15
+
+## 2.0.0-alpha.14
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.14
+
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Fix codegen and postinstall to make work with pnpm
+  - @blitzjs/rpc@2.0.0-alpha.13
+
+## 2.0.0-alpha.12
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.12
+
+## 2.0.0-alpha.11
+
+### Patch Changes
+
+- Fix postinstall script not being found
+  - @blitzjs/rpc@2.0.0-alpha.11
+
 ## 2.0.0-alpha.10
 
 ### Patch Changes

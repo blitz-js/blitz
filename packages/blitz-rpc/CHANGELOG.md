@@ -1,5 +1,66 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.18
+  - @blitzjs/auth@2.0.0-alpha.18
+
+## 2.0.0-alpha.17
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.17
+- @blitzjs/auth@2.0.0-alpha.17
+
+## 2.0.0-alpha.16
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.16
+  - @blitzjs/auth@2.0.0-alpha.16
+
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.15
+- @blitzjs/auth@2.0.0-alpha.15
+
+## 2.0.0-alpha.14
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.14
+  - @blitzjs/auth@2.0.0-alpha.14
+
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.13
+  - @blitzjs/auth@2.0.0-alpha.13
+
+## 2.0.0-alpha.12
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.12
+  - @blitzjs/auth@2.0.0-alpha.12
+
+## 2.0.0-alpha.11
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.11
+- blitz@2.0.0-alpha.11
+
 ## 2.0.0-alpha.10
 
 ### Patch Changes
