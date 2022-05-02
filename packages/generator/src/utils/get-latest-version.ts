@@ -2,12 +2,10 @@ import chalk from "chalk"
 import {Fallbackable} from "./fallbackable"
 import {fetchAllVersions, fetchLatestDistVersion} from "./npm-fetch"
 
-export const logFailedVersionFetch = (dependency: string, fallback: string) => {
-  // log.clearLine()
+export const logFailedVersionFetch = (dependency: string, fallback?: string) => {
   console.warn(
-    `Failed to fetch latest version of '${chalk.bold(dependency)}', falling back to '${chalk.bold(
-      fallback,
-    )}'.`,
+    `Failed to fetch latest version of '${chalk.bold(dependency)}'`,
+    fallback ? `Falling back to '${chalk.bold(fallback)}'` : "",
   )
 }
 

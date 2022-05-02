@@ -111,7 +111,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     const [
       {value: newDependencies, isFallback: dependenciesUsedFallback},
       {value: newDevDependencies, isFallback: devDependenciesUsedFallback},
-      {value: blitzDependencyVersion, isFallback: blitzUsedFallback},
+      {value: blitzDependencyVersion},
     ] = await Promise.all([
       fetchLatestVersionsFor(pkg.dependencies),
       fetchLatestVersionsFor(pkg.devDependencies),
@@ -122,8 +122,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     pkg.devDependencies = newDevDependencies
     pkg.dependencies.blitz = blitzDependencyVersion
 
-    const fallbackUsed =
-      dependenciesUsedFallback || devDependenciesUsedFallback || blitzUsedFallback
+    const fallbackUsed = dependenciesUsedFallback || devDependenciesUsedFallback
 
     await writeJson(pkgJsonLocation, pkg, {spaces: 2})
 
@@ -156,6 +155,12 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         cp.stdout?.setEncoding("utf8")
         cp.stderr?.setEncoding("utf8")
         cp.stdout?.on("data", (data) => {
+          if (pkgManager === "pnpm") {
+            if (data.includes("ERR_PNPM_PEER_DEP_ISSUES  Unmet peer dependencies")) {
+              spinners[spinners.length - 1]?.succeed()
+            }
+          }
+
           if (pkgManager === "yarn") {
             let json = getJSON(data)
             if (json && json.type === "step") {
@@ -234,14 +239,6 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         )
       }
     }
-
-    // if(this.options.useTs) {
-    // if(templatedPathSuffix === "pages/api/rpc/blitzrpcroute.js") {
-    //   this.fs.write(this.destinationPath("pages/api/rpc/[...blitz].js"), this.sourcePath("pages/api/rpc/blitzrpcroute.js"))
-    //  } else {
-
-    //  }
-    // }
 
     if (!this.options.skipGit && gitInitSuccessful) {
       this.commitChanges()

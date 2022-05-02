@@ -193,12 +193,14 @@ const determinePkgManagerToInstallDeps = async () => {
         message: "Install dependencies?",
         initial: 0,
         choices: [
-          {title: "npm"},
-          {title: "yarn", disabled: !IS_YARN_INSTALLED},
-          {title: "pnpm", disabled: !IS_PNPM_INSTALLED},
+          {title: "npm", value: "npm"},
+          {title: "yarn", value: "yarn", disabled: !IS_YARN_INSTALLED},
+          {title: "pnpm", value: "pnpm", disabled: !IS_PNPM_INSTALLED},
           {title: "skip"},
         ],
       })
+
+      projectPkgManger = res.pkgManager
 
       if (res.pkgManager === "skip") {
         shouldInstallDeps = false
@@ -262,7 +264,6 @@ const newApp: CliCommand = async (argv) => {
             {ignoreCache: true},
           )
           const result = await runPrisma(["migrate", "dev", "--name", "Initial migration"], true)
-          console.log("primsa result", result)
           if (!result.success) throw new Error()
         } catch (error) {
           postInstallSteps.push(

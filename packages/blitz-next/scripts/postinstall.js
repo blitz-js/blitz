@@ -11,12 +11,12 @@ const stat = promisify(fs.stat)
 
 const debug = require("debug")("blitz:postinstall")
 
-const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../../src"))
+const isInBlitzMonorepo = fs.existsSync(path.join(__dirname, "../../blitz-next"))
 let isInstalledGlobally = isInBlitzMonorepo ? false : true // default
 
 try {
   const maybeGlobalBlitzPath = resolveFrom(__dirname, "blitz")
-  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
+  const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz/dist/index.cjs")
   isInstalledGlobally = maybeGlobalBlitzPath !== localBlitzPath
 } catch (error) {
   // noop
@@ -27,6 +27,16 @@ async function findNodeModulesRoot(src) {
   let root
   if (isInBlitzMonorepo) {
     root = path.join(src, "node_modules")
+  } else if (src.includes(".pnpm")) {
+    const blitzPkgLocation = path.dirname(
+      (await findUp("package.json", {
+        cwd: resolveFrom(src, "blitz"),
+      })) || "",
+    )
+    if (!blitzPkgLocation) {
+      throw new Error("Internal Blitz Error: unable to find 'blitz' package location")
+    }
+    root = path.join(blitzPkgLocation, "../../../../")
   } else {
     const blitzPkgLocation = path.dirname(
       (await findUp("package.json", {
@@ -95,8 +105,12 @@ function codegen() {
     try {
       const packagePath = require.resolve("blitz/package.json")
       if (packagePath) {
-        const blitzPkg = require.resolve("blitz")
-        return path.join(blitzPkg, "/dist/index.cjs")
+        const blitzPkg = require.resolve("blitz/dist/index.cjs")
+        if (blitzPkg.includes(".pnpm")) {
+          return path.join(blitzPkg, "../../../../../../blitz/dist/index.cjs")
+        } else {
+          return path.join(blitzPkg)
+        }
       }
     } catch (e) {
       //
@@ -323,6 +337,6 @@ function codegen() {
   const UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR = 'UNABLE_TO_FIND_POSTINSTALL_TRIGGER_JSON_SCHEMA_ERROR'
 }
 
-if (!isInstalledGlobally) {
-  codegen()
-}
+// if (!isInstalledGlobally) {
+codegen()
+// }

@@ -133,8 +133,9 @@ const validateModelName = (modelName: string): void => {
 
 const determineType = async () => {
   if (
-    !args["--type"] ||
-    (args["--type"] && !Object.keys(generatorMap).includes(args["--type"].toLowerCase()))
+    !args["_"].slice(1)[0] ||
+    (args["_"].slice(1)[0] &&
+      !Object.keys(generatorMap).includes(args["_"].slice(1)[0]?.toLowerCase() as string))
   ) {
     const res = await prompts({
       type: "select",
@@ -148,12 +149,12 @@ const determineType = async () => {
 
     selectedType = res.type
   } else {
-    selectedType = args["--type"]
+    selectedType = args["_"].slice(1)[0]?.toLowerCase() as string
   }
 }
 
 const determineName = async () => {
-  if (!args["--name"]) {
+  if (!args["_"].slice(1)[1]) {
     const res = await prompts({
       type: "text",
       name: "model",
@@ -164,7 +165,7 @@ const determineName = async () => {
     selectedModelName = model
     selectedContext = context
   } else {
-    const {model, context} = getModelNameAndContext(args["--name"])
+    const {model, context} = getModelNameAndContext(args["_"].slice(1)[1]!)
     selectedModelName = model
     selectedContext = context
   }
@@ -249,7 +250,7 @@ const generate: CliCommand = async (argv) => {
       const generator = new GeneratorClass({
         destinationRoot: require("path").resolve(),
         // templateDir: blitzConfig.codegen?.templateDir,
-        extraArgs: args["_"].slice(1) as string[],
+        extraArgs: args["_"].slice(3) as string[],
         modelName: singularRootContext,
         modelNames: modelNames(singularRootContext),
         ModelName: ModelName(singularRootContext),
