@@ -4,11 +4,8 @@ export const getStaticProps = gSP(async ({ctx}) => {
   return {
     props: {
       data: {
-        // userId: ctx?.session.userId,
-        // session: {
-        //   id: session.userId,
-        //   publicData: session.$publicData,
-        // },
+        test: "hello",
+        date: new Date()
       },
     },
   }

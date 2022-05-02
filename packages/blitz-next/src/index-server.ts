@@ -1,6 +1,7 @@
 import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
 import type {Ctx as BlitzCtx, BlitzServerPlugin, Middleware, MiddlewareResponse} from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
+import { withSuperJSONProps } from "./superjson"
 
 export * from "./index-browser"
 
@@ -44,21 +45,21 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
   const gSSP =
     <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
-    async ({req, res, ...rest}) => {
+    withSuperJSONProps(async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
       return handler({req, res, ctx, ...rest})
-    }
+    })
 
   const gSP =
     (handler: BlitzGSPHandler): GetStaticProps =>
-    async (context) => {
+    withSuperJSONProps(async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       return handler({...context, ctx: ctx})
-    }
+    })
 
   const api =
     (handler: BlitzAPIHandler): NextApiHandler =>

@@ -1,5 +1,5 @@
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import type { GetServerSideProps } from 'next';
+import type { GetServerSideProps, GetStaticProps } from 'next';
 import * as React from 'react';
 import SuperJSON from 'superjson';
 
@@ -8,9 +8,9 @@ type SuperJSONProps<P> = P & {
 };
 
 export function withSuperJSONProps<P>(
-  gssp: GetServerSideProps<P>,
+  gssp: GetServerSideProps<P> | GetStaticProps<P>,
   exclude: string[] = []
-): GetServerSideProps<SuperJSONProps<P>> {
+): GetServerSideProps<SuperJSONProps<P>> | any {
   return async function withSuperJSON(...args) {
     const result = await gssp(...args);
 
@@ -59,7 +59,7 @@ export function withSuperJSONPage<P>(
 ): React.ComponentType<SuperJSONProps<P>> {
   
   function WithSuperJSON(serializedProps: SuperJSONProps<P>) {
-    return <Page {...deserializeProps<P>(serializedProps)} />;
+    return <Page {...deserializeProps<P>(serializedProps)}  />;
   }
 
   hoistNonReactStatics(WithSuperJSON, Page);
