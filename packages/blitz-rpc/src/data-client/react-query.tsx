@@ -99,7 +99,10 @@ export function useQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    throw new Promise(() => {})
+    const e = new Error()
+    e.name = "Rendering Suspense fallback..."
+    delete e.stack
+    throw e
   }
 
   const rest = {
@@ -182,7 +185,10 @@ export function usePaginatedQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    throw new Promise(() => {})
+    const e = new Error()
+    e.name = "Rendering Suspense fallback..."
+    delete e.stack
+    throw e
   }
 
   const rest = {
@@ -278,7 +284,10 @@ export function useInfiniteQuery<
     (!options || !("suspense" in options) || options.suspense) &&
     (!options || !("enabled" in options) || options.enabled)
   ) {
-    throw new Promise(() => {})
+    const e = new Error()
+    e.name = "Rendering Suspense fallback..."
+    delete e.stack
+    throw e
   }
 
   const rest = {
