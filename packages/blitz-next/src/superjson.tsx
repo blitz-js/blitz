@@ -7,9 +7,10 @@ import type {
 } from "next"
 import * as React from "react"
 import SuperJSON from "superjson"
+import type {SuperJSONResult} from "superjson/dist/types"
 
 export type SuperJSONProps<P = any> = P & {
-  _superjson?: ReturnType<typeof SuperJSON.serialize>["meta"]
+  _superjson?: ReturnType<(object: any) => SuperJSONResult>["meta"]
 }
 
 function excludeProps<P>(
