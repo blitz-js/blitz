@@ -1,5 +1,12 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.19
+- @blitzjs/auth@2.0.0-alpha.19
+
 ## 2.0.0-alpha.18
 
 ### Patch Changes

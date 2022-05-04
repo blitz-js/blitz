@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- 63605961: Use routes manifest in template app
+
 ## 2.0.0-alpha.18
 
 ## 2.0.0-alpha.17
