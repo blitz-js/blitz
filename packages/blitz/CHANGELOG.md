@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+  - @blitzjs/generator@2.0.0-alpha.20
+
 ## 2.0.0-alpha.19
 
 ### Patch Changes

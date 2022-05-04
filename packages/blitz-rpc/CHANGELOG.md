@@ -1,5 +1,14 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+- Updated dependencies
+  - blitz@2.0.0-alpha.20
+  - @blitzjs/auth@2.0.0-alpha.20
+
 ## 2.0.0-alpha.19
 
 ### Patch Changes

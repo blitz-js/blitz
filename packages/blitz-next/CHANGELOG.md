@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+- Updated dependencies
+  - @blitzjs/rpc@2.0.0-alpha.20
+
 ## 2.0.0-alpha.19
 
 ### Patch Changes
