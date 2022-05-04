@@ -18,7 +18,8 @@
     "jsx": "preserve",
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "declarationMap": true
+    "declaration": true,
+    "declarationMap": true,
   },
   "exclude": ["node_modules", "**/*.e2e.ts", "cypress"],
   "include": ["blitz-env.d.ts", "**/*.ts", "**/*.tsx", "types"]
