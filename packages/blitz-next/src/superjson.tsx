@@ -8,7 +8,7 @@ import type {
 import * as React from "react"
 import SuperJSON from "superjson"
 
-type SuperJSONProps<P = any> = P & {
+export type SuperJSONProps<P = any> = P & {
   _superjson?: ReturnType<typeof SuperJSON.serialize>["meta"]
 }
 
