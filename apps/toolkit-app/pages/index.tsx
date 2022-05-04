@@ -6,6 +6,7 @@ import { useCurrentUser } from "app/core/hooks/useCurrentUser"
 import logout from "app/auth/mutations/logout"
 import logo from "public/logo.png"
 import { useMutation } from "@blitzjs/rpc"
+import { Routes } from "@blitzjs/next"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -37,12 +38,12 @@ const UserInfo = () => {
   } else {
     return (
       <>
-        <Link href="/auth/signup" passHref>
+        <Link href={Routes.SignupPage()} passHref>
           <a className="button small">
             <strong>Sign Up</strong>
           </a>
         </Link>
-        <Link href="/auth/login" passHref>
+        <Link href={Routes.LoginPage()} passHref>
           <a className="button small">
             <strong>Login</strong>
           </a>
