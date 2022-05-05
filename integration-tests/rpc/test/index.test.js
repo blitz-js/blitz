@@ -9,8 +9,6 @@ import {
   nextBuild,
   nextStart,
   nextExport,
-  getPageFileFromBuildManifest,
-  getPageFileFromPagesManifest,
 } from "../../utils/next-test-utils"
 
 // jest.setTimeout(1000 * 60 * 2)
