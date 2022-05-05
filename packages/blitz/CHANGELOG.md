@@ -1,5 +1,26 @@
 # blitz
 
+## 2.0.0-alpha.21
+
+### Patch Changes
+
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.21
+
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+  - @blitzjs/generator@2.0.0-alpha.20
+
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- Updated dependencies [63605961]
+  - @blitzjs/generator@2.0.0-alpha.19
+
 ## 2.0.0-alpha.18
 
 ### Patch Changes

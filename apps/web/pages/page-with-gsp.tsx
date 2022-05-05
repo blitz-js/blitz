@@ -1,14 +1,11 @@
 import {gSP} from "app/blitz-server"
 
-export const getStaticProps = gSP(async ({ctx}) => {
+export const getStaticProps = gSP<{data: {test: string}}>(async ({ctx}) => {
   return {
     props: {
       data: {
-        // userId: ctx?.session.userId,
-        // session: {
-        //   id: session.userId,
-        //   publicData: session.$publicData,
-        // },
+        test: "hello",
+        date: new Date(),
       },
     },
   }

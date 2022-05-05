@@ -1,5 +1,19 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.21
+
+### Patch Changes
+
+- use latest tag for generator template on rpc & auth packages
+
+## 2.0.0-alpha.20
+
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- 63605961: Use routes manifest in template app
+
 ## 2.0.0-alpha.18
 
 ## 2.0.0-alpha.17

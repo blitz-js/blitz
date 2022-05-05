@@ -1,5 +1,27 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.21
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.21
+
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+- Updated dependencies
+  - @blitzjs/rpc@2.0.0-alpha.20
+
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- added superjson
+- 2150dcc3: Setup SuperJson for GSSP and GSP
+  - @blitzjs/rpc@2.0.0-alpha.19
+
 ## 2.0.0-alpha.18
 
 ### Patch Changes
