@@ -88,6 +88,10 @@ export default class Chain {
     return this.updateChain(() => this.browser.findElements(By.css(sel)))
   }
 
+  elementsById(sel) {
+    return this.updateChain(() => this.browser.findElements(By.id(sel)))
+  }
+
   waitForElementByCss(sel, timeout) {
     return this.updateChain(() => this.browser.wait(until.elementLocated(By.css(sel), timeout)))
   }
