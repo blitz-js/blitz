@@ -1,5 +1,16 @@
 import {IncomingMessage, ServerResponse} from "http"
-import {compose, Ctx, Middleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
+import {
+  AsyncFunc,
+  compose,
+  Ctx,
+  FirstParam,
+  interopDefault,
+  Middleware,
+  MiddlewareNext,
+  MiddlewareResponse,
+  prettyMs,
+  PromiseReturnType,
+} from "./index-server"
 
 export async function handleRequestWithMiddleware(
   req: IncomingMessage,
@@ -52,60 +63,51 @@ export async function handleRequestWithMiddleware(
   }
 }
 
-// export type InvokeWithMiddlewareConfig = {
-//   req: IncomingMessage
-//   res: ServerResponse
-//   middleware?: Middleware[]
-//   [prop: string]: any
-// }
+export type InvokeWithMiddlewareConfig = {
+  req: IncomingMessage
+  res: ServerResponse
+  middleware?: Middleware[]
+  [prop: string]: any
+}
 
-// export async function invokeWithMiddleware<
-//   T extends AsyncFunc,
-//   TInput = FirstParam<T>,
-//   TResult = PromiseReturnType<T>
-// >(
-//   resolver: T,
-//   params: TInput,
-//   ctx: InvokeWithMiddlewareConfig
-// ): Promise<TResult> {
-//   if (!ctx.req) {
-//     throw new Error(
-//       'You must provide `req` in third argument of invokeWithMiddleware()'
-//     )
-//   }
-//   if (!ctx.res) {
-//     throw new Error(
-//       'You must provide `res` in third argument of invokeWithMiddleware()'
-//     )
-//   }
+export async function invokeWithMiddleware<
+  T extends AsyncFunc,
+  TInput = FirstParam<T>,
+  TResult = PromiseReturnType<T>,
+>(resolver: T, params: TInput, ctx: InvokeWithMiddlewareConfig): Promise<TResult> {
+  if (!ctx.req) {
+    throw new Error("You must provide `req` in third argument of invokeWithMiddleware()")
+  }
+  if (!ctx.res) {
+    throw new Error("You must provide `res` in third argument of invokeWithMiddleware()")
+  }
 
-//   const rpcResolver = (resolver as unknown) as any // todo: as RpcResolver
+  const rpcResolver = resolver as unknown as any // todo: as RpcResolver
 
-//   const resolverName =
-//     rpcResolver._resolverName ?? (rpcResolver as any).default?._resolverName
+  const resolverName = rpcResolver._resolverName ?? (rpcResolver as any).default?._resolverName
 
-//   try {
-//     // todo
-//     // const log = baseLogger().getChildLogger({
-//     //   prefix: [resolverName + '()'],
-//     // })
-//     console.log("\n")
-//     console.info(chalk.dim('Starting with input:'), params)
-//     const startTime = Date.now()
+  try {
+    // todo
+    // const log = baseLogger().getChildLogger({
+    //   prefix: [resolverName + '()'],
+    // })
+    console.log("\n")
+    console.info("Starting with input:", params)
+    const startTime = Date.now()
 
-//     const result = await interopDefault(rpcResolver)(params, res.blitzCtx)
+    // const result = await interopDefault(rpcResolver)(params, res.blitzCtx)
 
-//     const duration = Date.now() - startTime
-//     console.info(chalk.dim(`Finished in ${prettyMs(duration)}`))
-//     console.log("/n")
+    const duration = Date.now() - startTime
+    console.info(`Finished in ${prettyMs(duration)}`)
+    console.log("/n")
 
-//     res.blitzResult = result // todo: remove?
-//   } catch (error) {
-//     throw error
-//   }
+    // res.blitzResult = result
+  } catch (error) {
+    throw error
+  }
 
-//   return (ctx.res as MiddlewareResponse).blitzResult as TResult
-// }
+  return (ctx.res as MiddlewareResponse).blitzResult as TResult
+}
 
 /**
  * If the middleware function doesn't declare receiving the `next` callback
