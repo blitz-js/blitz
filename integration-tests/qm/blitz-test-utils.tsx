@@ -1,15 +1,15 @@
-import { render as defaultRender } from '@testing-library/react'
-import { NextRouter } from 'next/router'
-import {vi} from 'vitest'
+import {render as defaultRender} from "@testing-library/react"
+import {NextRouter} from "next/router"
+import {vi} from "vitest"
 import {QueryClient, QueryClientProvider} from "react-query"
-import React from 'react'
-import {BlitzRpcPlugin} from '@blitzjs/rpc'
+import React from "react"
+import {BlitzRpcPlugin} from "@blitzjs/rpc"
 
 const mockRouter: NextRouter = {
-  basePath: '',
-  pathname: '/',
-  route: '/',
-  asPath: '/',
+  basePath: "",
+  pathname: "/",
+  route: "/",
+  asPath: "/",
   query: {},
   isReady: true,
   isLocaleDomain: false,
@@ -57,14 +57,13 @@ const BlitzProvider = ({
   return children
 }
 export const RouterContext = React.createContext(null as any)
-RouterContext.displayName = 'RouterContext'
+RouterContext.displayName = "RouterContext"
 const compose =
   (...rest) =>
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
-
-export const buildWithBlitz = (plugins) => {
+const buildWithBlitz = (plugins) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
   }, [])
@@ -76,7 +75,7 @@ export const buildWithBlitz = (plugins) => {
 
       return (
         <BlitzProvider>
-          <RouterContext.Provider value={{ ...mockRouter }}>
+          <RouterContext.Provider value={{...mockRouter}}>
             <UserAppRoot {...props} Component={component} />
           </RouterContext.Provider>
         </BlitzProvider>
@@ -86,24 +85,42 @@ export const buildWithBlitz = (plugins) => {
   }
 }
 
+const BlitzWrapper = ({plugins, children}) => {
+  const providers = plugins.reduce((acc, plugin) => {
+    return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
+  }, [])
+  const withPlugins = compose(...providers)
+  const component = React.useMemo(() => withPlugins(children), [children])
 
-export function render(
-  ui: RenderUI,
-  { wrapper, router, ...options }: RenderOptions = {}
-) {
+  return (
+    <BlitzProvider>
+      <RouterContext.Provider value={{...mockRouter}}>{component}</RouterContext.Provider>
+    </BlitzProvider>
+  )
+}
+
+export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
   if (!wrapper) {
-    wrapper = buildWithBlitz([
-      BlitzRpcPlugin({
-        reactQueryOptions: {
-          queries: {
-            staleTime: 7000,
-          },
-        },
-      }),
-    ])(this.children)
+    wrapper = ({children}) => {
+      return (
+        <BlitzWrapper
+          plugins={[
+            BlitzRpcPlugin({
+              reactQueryOptions: {
+                queries: {
+                  staleTime: 7000,
+                },
+              },
+            }),
+          ]}
+        >
+          {children}
+        </BlitzWrapper>
+      )
+    }
   }
 
-  return defaultRender(ui, { wrapper, ...options })
+  return defaultRender(ui, {wrapper, ...options})
 }
 
 // This enhance fn does what buildRpcFunction does during build time
@@ -113,8 +130,8 @@ export function buildQueryRpc(fn: any) {
     return fn(data, ...rest)
   }
   newFn._isRpcClient = true
-  newFn._resolverType = 'query'
-  newFn._routePath = '/api/test/url/' + Math.random()
+  newFn._resolverType = "query"
+  newFn._routePath = "/api/test/url/" + Math.random()
   return newFn
 }
 
@@ -122,7 +139,7 @@ export function buildQueryRpc(fn: any) {
 export function buildMutationRpc(fn: any) {
   const newFn = (...args: any) => fn(...args)
   newFn._isRpcClient = true
-  newFn._resolverType = 'mutation'
-  newFn._routePath = '/api/test/url'
+  newFn._resolverType = "mutation"
+  newFn._routePath = "/api/test/url"
   return newFn
 }
