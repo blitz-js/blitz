@@ -2,7 +2,7 @@ import {describe, it, expect, beforeAll, vi} from "vitest"
 import {act, screen} from "@testing-library/react"
 import {useMutation} from "@blitzjs/rpc"
 import React from "react"
-import {buildMutationRpc, buildQueryRpc, render} from "../blitz-test-utils"
+import {buildMutationRpc, buildQueryRpc, render} from "../../utils/blitz-test-utils"
 
 beforeAll(() => {
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = "qm-test-cookie-prefix"

@@ -63,28 +63,6 @@ const compose =
   (x: React.ComponentType<any>) =>
     rest.reduceRight((y, f) => f(y), x)
 
-const buildWithBlitz = (plugins) => {
-  const providers = plugins.reduce((acc, plugin) => {
-    return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
-  }, [])
-  const withPlugins = compose(...providers)
-
-  return function withBlitzAppRoot(UserAppRoot: React.ComponentType<any>) {
-    const BlitzOuterRoot = (props) => {
-      const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
-
-      return (
-        <BlitzProvider>
-          <RouterContext.Provider value={{...mockRouter}}>
-            <UserAppRoot {...props} Component={component} />
-          </RouterContext.Provider>
-        </BlitzProvider>
-      )
-    }
-    return BlitzOuterRoot
-  }
-}
-
 const BlitzWrapper = ({plugins, children}) => {
   const providers = plugins.reduce((acc, plugin) => {
     return plugin.withProvider ? acc.concat(plugin.withProvider) : acc
