@@ -1,12 +1,10 @@
 import {getCookieParser} from "@blitzjs/auth"
-import type {BlitzServerPlugin, Middleware, Ctx} from "blitz"
+import type {BlitzServerPlugin, Middleware, Ctx, AsyncFunc, FirstParam} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {QueryClient} from "react-query"
+import {DefaultOptions, QueryClient} from "react-query"
+import {DehydratedState} from "react-query/types/hydration"
 import {dehydrate, getQueryKey} from "./data-client"
 
-// store prefetchQueryClient on ctx
-
-// todo: move it somewhere because it's used in both server rpc and auth plugins
 function ensureApiRequest(
   req: IncomingMessage & {[key: string]: any},
 ): asserts req is IncomingMessage & {cookies: {[key: string]: string}} {
@@ -26,16 +24,12 @@ function ensureMiddlewareResponse(
 export async function setQueryClient(req: IncomingMessage, res: ServerResponse): Promise<void> {
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
-  // todo: make it possible to pass query client options? in plugin server setup
-  const queryClient = new QueryClient({})
 
-  // todo: types
-  res.blitzCtx.prefetchBlitzQuery = async (fn: any, input: any) => {
+  res.blitzCtx.prefetchBlitzQuery = async (fn, input, options) => {
+    const queryClient = new QueryClient({defaultOptions: options})
+
     const queryKey = getQueryKey(fn, input)
-    await queryClient.prefetchQuery(queryKey, () =>
-      // todo: should use invokeWithMiddleware(fn, input, ctx)
-      fn(input, res.blitzCtx),
-    )
+    await queryClient.prefetchQuery(queryKey, () => fn(input, res.blitzCtx))
 
     return {
       dehydratedState: dehydrate(queryClient),
@@ -43,8 +37,7 @@ export async function setQueryClient(req: IncomingMessage, res: ServerResponse):
   }
 }
 
-interface RpcServerPluginOptions {}
-export function RpcServerPlugin(_options: RpcServerPluginOptions): BlitzServerPlugin<any, any> {
+export function RpcServerPlugin(): BlitzServerPlugin<any, any> {
   function rpcPluginQueryClientMiddleware(): Middleware<
     IncomingMessage,
     ServerResponse & {blitzCtx: Ctx}
@@ -61,9 +54,14 @@ export function RpcServerPlugin(_options: RpcServerPluginOptions): BlitzServerPl
   }
 }
 
+type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
+  resolver: T,
+  params: TInput,
+  options: DefaultOptions,
+) => Promise<{dehydratedState: DehydratedState}>
+
 declare module "blitz" {
   export interface Ctx {
-    // todo: types
-    prefetchBlitzQuery: (...args: any) => Promise<{dehydratedState: any}>
+    prefetchBlitzQuery: PrefetchQueryFn
   }
 }

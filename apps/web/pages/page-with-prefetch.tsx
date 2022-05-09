@@ -3,18 +3,19 @@ import {gSSP} from "app/blitz-server"
 import getUsers from "app/queries/getUsers"
 
 export const getServerSideProps = gSSP(async ({ctx}) => {
-  const {prefetchBlitzQuery} = ctx
+  // const {prefetchBlitzQuery} = ctx
 
-  const {dehydratedState} = await prefetchBlitzQuery(getUsers, {})
+  // const {dehydratedState} = await prefetchBlitzQuery(getUsers, {})
   return {
     props: {
-      dehydratedState,
+      dehydratedState: {},
     },
   }
 })
 
 function PageWithGssp() {
-  const [users] = useQuery(getUsers, {})
+  const [users, {isLoading, isFetching}] = useQuery(getUsers, {})
+  console.log({users, isLoading, isFetching})
   return (
     <div>
       {users.map((u) => (
