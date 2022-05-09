@@ -29,7 +29,7 @@ export async function setQueryClient(
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
 
-  res.blitzCtx.prefetchBlitzQuery = async (fn, input, options) => {
+  res.blitzCtx.prefetchBlitzQuery = async (fn, input, options = {}) => {
     const queryClient = new QueryClient({
       defaultOptions: {
         mutations: {
@@ -76,7 +76,7 @@ export function RpcServerPlugin(options: RpcServerPluginOptions): BlitzServerPlu
 type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
   resolver: T,
   params: TInput,
-  options: DefaultOptions,
+  options?: DefaultOptions,
 ) => Promise<{dehydratedState: DehydratedState}>
 
 declare module "blitz" {
@@ -84,3 +84,5 @@ declare module "blitz" {
     prefetchBlitzQuery: PrefetchQueryFn
   }
 }
+
+export type {DehydratedState}
