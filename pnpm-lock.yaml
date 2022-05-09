@@ -270,8 +270,8 @@ importers:
 
   integration-tests/utils:
     specifiers:
-      "@blitzjs/config": "*"
-      "@blitzjs/rpc": "*"
+      "@blitzjs/config": "workspace: *"
+      "@blitzjs/rpc": "workspace: *"
       "@testing-library/react": 13.0.0
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
