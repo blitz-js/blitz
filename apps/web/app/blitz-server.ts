@@ -12,7 +12,7 @@ const {gSSP, gSP, api} = setupBlitzServer({
       storage: PrismaStorage(db as any),
       isAuthorized: simpleRolesIsAuthorized,
     }),
-    RpcServerPlugin(),
+    RpcServerPlugin({}),
   ],
 })
 

@@ -21,12 +21,27 @@ function ensureMiddlewareResponse(
   }
 }
 
-export async function setQueryClient(req: IncomingMessage, res: ServerResponse): Promise<void> {
+export async function setQueryClient(
+  req: IncomingMessage,
+  res: ServerResponse,
+  defaultOptions: DefaultOptions = {},
+): Promise<void> {
   ensureApiRequest(req)
   ensureMiddlewareResponse(res)
 
   res.blitzCtx.prefetchBlitzQuery = async (fn, input, options) => {
-    const queryClient = new QueryClient({defaultOptions: options})
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        mutations: {
+          ...defaultOptions.mutations,
+          ...options.mutations,
+        },
+        queries: {
+          ...defaultOptions.queries,
+          ...options.queries,
+        },
+      },
+    })
 
     const queryKey = getQueryKey(fn, input)
     await queryClient.prefetchQuery(queryKey, () => fn(input, res.blitzCtx))
@@ -37,14 +52,18 @@ export async function setQueryClient(req: IncomingMessage, res: ServerResponse):
   }
 }
 
-export function RpcServerPlugin(): BlitzServerPlugin<any, any> {
+export interface RpcServerPluginOptions {
+  prefetchQueryOptions?: DefaultOptions
+}
+
+export function RpcServerPlugin(options: RpcServerPluginOptions): BlitzServerPlugin<any, any> {
   function rpcPluginQueryClientMiddleware(): Middleware<
     IncomingMessage,
     ServerResponse & {blitzCtx: Ctx}
   > {
     return async (req, res, next) => {
       if (!res.blitzCtx?.prefetchBlitzQuery) {
-        await setQueryClient(req, res)
+        await setQueryClient(req, res, options.prefetchQueryOptions)
       }
       return next()
     }
