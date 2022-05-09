@@ -1,0 +1,5 @@
+// Vitest Snapshot v1
+
+exports[`useQuery > a "query" that converts the string parameter to uppercase > shouldn't work with mutation function 1`] = `"Cannot read properties of null (reading 'isReady')"`;
+
+exports[`useQuery > a "query" that converts the string parameter to uppercase > shouldn't work with regular functions 1`] = `"Cannot read properties of null (reading 'isReady')"`;
