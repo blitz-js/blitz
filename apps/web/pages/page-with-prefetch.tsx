@@ -3,12 +3,12 @@ import {gSSP} from "app/blitz-server"
 import getUsers from "app/queries/getUsers"
 
 export const getServerSideProps = gSSP(async ({ctx}) => {
-  // const {prefetchBlitzQuery} = ctx
+  const {prefetchBlitzQuery} = ctx
 
-  // const {dehydratedState} = await prefetchBlitzQuery(getUsers, {})
+  const {dehydratedState} = await prefetchBlitzQuery(getUsers, {})
   return {
     props: {
-      dehydratedState: {},
+      dehydratedState,
     },
   }
 })
