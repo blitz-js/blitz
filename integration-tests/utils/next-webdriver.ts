@@ -12,6 +12,8 @@ export function waitFor(millis) {
   return new Promise((resolve) => setTimeout(resolve, millis))
 }
 
+export {By}
+
 const {
   BROWSER_NAME: browserName = "chrome",
   BROWSERSTACK,

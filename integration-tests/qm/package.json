@@ -1,0 +1,34 @@
+{
+  "name": "test-auth",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test-watch": "vitest",
+    "clean": "rm -rf .turbo && rm -rf node_modules"
+  },
+  "dependencies": {
+    "@blitzjs/auth": "workspace:*",
+    "@blitzjs/config": "workspace:*",
+    "@blitzjs/next": "workspace:*",
+    "@blitzjs/rpc": "workspace:*",
+    "@prisma/client": "3.9.0",
+    "blitz": "workspace:*",
+    "next": "12.1.6-canary.17",
+    "prisma": "3.9.0",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-query": "3.21.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "13.0.0",
+    "@types/react": "17.0.43",
+    "@vitejs/plugin-react": "1.3.0",
+    "delay": "5.0.0",
+    "eslint": "7.32.0",
+    "eslint-config-next": "latest",
+    "eslint-plugin-testing-library": "5.0.1",
+    "jsdom": "^19.0.0",
+    "typescript": "^4.5.3"
+  }
+}
