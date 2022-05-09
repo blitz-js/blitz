@@ -12,7 +12,7 @@ export const getServerSideProps = gSSP<Props>(async ({ctx}) => {
     props: {
       userId: session.userId,
       publicData: session.$publicData,
-      publishedAt: new Date(0)
+      publishedAt: new Date(0),
     },
   }
 })
