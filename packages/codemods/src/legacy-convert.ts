@@ -1,9 +1,8 @@
-import {CliCommand} from "../index"
 import j from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 
-const migrate: CliCommand = async () => {
+const legacyConvert = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
   let isLegacyBlitz = fs.existsSync(path.resolve(blitzConfigFile))
@@ -53,4 +52,4 @@ const migrate: CliCommand = async () => {
   }
 }
 
-export {migrate}
+export {legacyConvert}
