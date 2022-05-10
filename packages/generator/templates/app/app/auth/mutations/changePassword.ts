@@ -16,7 +16,7 @@ export default resolver.pipe(
       if (error instanceof AuthenticationError) {
         throw new Error("Invalid Password")
       }
-      throw new Error(error)
+      throw error
     }
 
 
