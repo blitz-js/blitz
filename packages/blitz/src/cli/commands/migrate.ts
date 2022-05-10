@@ -29,23 +29,27 @@ const migrate: CliCommand = async () => {
   })
 
   // Loop through steps and run the action
-  for (let [index, step] of steps.entries()) {
-    // Ignore previous steps and continue at step that was failed
-    if (failedAt && index + 1 !== failedAt) {
-      continue
+  if (isLegacyBlitz) {
+    for (let [index, step] of steps.entries()) {
+      // Ignore previous steps and continue at step that was failed
+      if (failedAt && index + 1 !== failedAt) {
+        continue
+      }
+      console.log(`Running ${step.name}...`)
+      try {
+        step.action()
+      } catch (err) {
+        console.log(`ERROR: ${err}`)
+        failedAt = index + 1
+        fs.writeJsonSync(".migration.json", {
+          failedAt,
+        })
+        process.exit(1)
+      }
+      console.log(`Successfully ran ${step.name}`)
     }
-    console.log(`Running ${step.name}...`)
-    try {
-      step.action()
-    } catch (err) {
-      console.log(`ERROR: ${err}`)
-      failedAt = index + 1
-      fs.writeJsonSync(".migration.json", {
-        failedAt,
-      })
-      process.exit(1)
-    }
-    console.log(`Successfully ran ${step.name}`)
+  } else {
+    console.log("Legacy blitz config file not found")
   }
 }
 
