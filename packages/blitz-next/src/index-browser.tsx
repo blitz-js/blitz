@@ -10,9 +10,11 @@ import Head from "next/head"
 import React from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
 import {Hydrate, HydrateOptions} from "react-query/hydration"
+import {withSuperJSONPage} from "./superjson"
 
 export * from "./error-boundary"
 export * from "./error-component"
+export {Routes} from ".blitz"
 
 const compose =
   (...rest: BlitzProviderType[]) =>
@@ -46,7 +48,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
         </BlitzProvider>
       )
     }
-    return BlitzOuterRoot
+    return withSuperJSONPage(BlitzOuterRoot)
   }
 }
 

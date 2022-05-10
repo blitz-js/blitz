@@ -16,10 +16,28 @@
     "toolkit-app": "1.0.0"
   },
   "changesets": [
+    "breezy-cameras-double",
+    "dirty-monkeys-greet",
+    "empty-berries-rule",
+    "fair-wombats-sneeze",
+    "flat-bees-approve",
+    "great-months-train",
+    "lovely-colts-share",
     "nine-onions-admire",
     "ninety-pets-heal",
     "poor-peas-lick",
+    "poor-shrimps-think",
+    "quiet-feet-travel",
+    "sharp-falcons-begin",
+    "silent-colts-reply",
+    "stupid-walls-sell",
+    "swift-drinks-dress",
     "ten-rivers-burn",
-    "twenty-beans-pump"
+    "thirty-countries-build",
+    "twenty-beans-pump",
+    "two-kiwis-help",
+    "unlucky-papayas-sleep",
+    "wicked-ghosts-cough",
+    "wise-frogs-give"
   ]
 }

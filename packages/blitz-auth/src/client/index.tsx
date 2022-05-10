@@ -138,7 +138,10 @@ export const useSession = (options: UseSessionOptions = {}): ClientSession => {
     initialState = {...options.initialPublicData, isLoading: false}
   } else if (suspense) {
     if (isServer) {
-      throw new Promise((_) => {})
+      const e = new Error()
+      e.name = "Rendering Suspense fallback..."
+      delete e.stack
+      throw e
     } else {
       initialState = {...getPublicDataStore().getData(), isLoading: false}
     }

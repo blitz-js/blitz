@@ -1,5 +1,113 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.21
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.21
+
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- testing set dist-tag
+- Updated dependencies
+  - blitz@2.0.0-alpha.20
+
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.19
+
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.18
+
+## 2.0.0-alpha.17
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.17
+
+## 2.0.0-alpha.16
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.16
+
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.15
+
+## 2.0.0-alpha.14
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.14
+
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.13
+
+## 2.0.0-alpha.12
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.12
+
+## 2.0.0-alpha.11
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.11
+
+## 2.0.0-alpha.10
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.10
+
+## 2.0.0-alpha.9
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.9
+
+## 2.0.0-alpha.8
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.8
+
+## 2.0.0-alpha.7
+
+### Patch Changes
+
+- Updated dependencies
+  - blitz@2.0.0-alpha.7
+
+## 2.0.0-alpha.6
+
+### Patch Changes
+
+- fix route manifest codegen
+- Updated dependencies
+  - blitz@2.0.0-alpha.6
+
 ## 2.0.0-alpha.5
 
 ### Patch Changes

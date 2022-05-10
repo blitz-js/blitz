@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/next",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.21",
   "scripts": {
     "build": "unbuild",
     "dev": "pnpm predev && pnpm watch unbuild src --wait=0.2",
@@ -8,7 +8,8 @@
     "lint": "eslint . --fix",
     "test": "vitest run",
     "test-watch": "vitest",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "postinstall": "node scripts/postinstall.js"
   },
   "main": "./dist/index-server.cjs",
   "module": "./dist/index-server.mjs",
@@ -18,16 +19,20 @@
   "license": "MIT",
   "files": [
     "dist/**",
+    "scripts/**",
     "eslint.js"
   ],
   "dependencies": {
-    "@blitzjs/rpc": "2.0.0-alpha.5",
+    "@blitzjs/rpc": "2.0.0-alpha.21",
+    "@types/hoist-non-react-statics": "3.3.1",
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
-    "react-query": "3.21.1"
+    "hoist-non-react-statics": "3.3.2",
+    "react-query": "3.21.1",
+    "superjson": "1.8.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "2.0.0-alpha.5",
+    "@blitzjs/config": "workspace:2.0.0-alpha.21",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "13.0.0",
@@ -38,11 +43,14 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "@types/testing-library__react-hooks": "4.0.0",
-    "blitz": "2.0.0-alpha.5",
+    "blitz": "2.0.0-alpha.21",
+    "cross-spawn": "7.0.3",
+    "find-up": "4.1.0",
     "lodash.frompairs": "4.0.1",
-    "next": "12.1.1",
+    "next": "12.1.6-canary.17",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "resolve-from": "5.0.0",
     "ts-jest": "27.1.4",
     "typescript": "^4.5.3",
     "unbuild": "0.6.9",

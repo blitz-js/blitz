@@ -1,6 +1,7 @@
 import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
 import type {Ctx as BlitzCtx, BlitzServerPlugin, Middleware, MiddlewareResponse} from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
+import {withSuperJSONPropsGsp, withSuperJSONPropsGssp} from "./superjson"
 
 export * from "./index-browser"
 
@@ -27,10 +28,10 @@ export type BlitzGSSPHandler<TProps> = ({
   ...args
 }: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps<TProps>>
 
-export type BlitzGSPHandler = ({
+export type BlitzGSPHandler<TProps> = ({
   ctx,
   ...args
-}: Parameters<GetStaticProps>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps>
+}: Parameters<GetStaticProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetStaticProps<TProps>>
 
 export type BlitzAPIHandler = (
   req: Parameters<NextApiHandler>[0],
@@ -42,23 +43,21 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
-  const gSSP =
-    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
-    async ({req, res, ...rest}) => {
+  const gSSP = <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    withSuperJSONPropsGssp<TProps>(async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
       return handler({req, res, ctx, ...rest})
-    }
+    })
 
-  const gSP =
-    (handler: BlitzGSPHandler): GetStaticProps =>
-    async (context) => {
+  const gSP = <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
+    withSuperJSONPropsGsp<TProps>(async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       return handler({...context, ctx: ctx})
-    }
+    })
 
   const api =
     (handler: BlitzAPIHandler): NextApiHandler =>

@@ -12,7 +12,7 @@ export const fetchAllVersions = async (dependency: string) => {
   return Object.keys(res.versions)
 }
 
-type NpmDistTagsResponse = {latest: string; canary: string}
+type NpmDistTagsResponse = {latest: string; canary: string; alpha: string}
 
 export const fetchDistTags = async (dependency: string) => {
   const res = await got(`https://registry.npmjs.org/-/package/${dependency}/dist-tags`, {

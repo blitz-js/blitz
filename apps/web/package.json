@@ -21,7 +21,7 @@
     "@types/jest": "27.4.1",
     "blitz": "workspace:*",
     "jest": "27.5.1",
-    "next": "12.1.1",
+    "next": "12.1.6-canary.17",
     "prisma": "3.9.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
