@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/codemods",
-  "version": "2.0.0-alpha.21",
+  "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
@@ -19,7 +19,7 @@
     "dist/**",
     "bin/**"
   ],
-  "bin": "bin/codemod",
+  "bin": "bin/@blitzjs/codemods",
   "dependencies": {
     "arg": "5.0.1",
     "chalk": "^4.1.0",

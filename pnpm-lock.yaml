@@ -2444,6 +2444,7 @@ packages:
       "@babel/helper-validator-identifier": 7.16.7
       lodash: 4.17.21
       to-fast-properties: 2.0.0
+    dev: false
 
   /@babel/types/7.17.10:
     resolution:
@@ -3765,7 +3766,7 @@ packages:
       }
     dependencies:
       "@babel/parser": 7.17.10
-      "@babel/types": 7.12.10
+      "@babel/types": 7.17.10
       "@types/babel__generator": 7.6.4
       "@types/babel__template": 7.4.1
       "@types/babel__traverse": 7.17.1
@@ -3776,7 +3777,7 @@ packages:
         integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==,
       }
     dependencies:
-      "@babel/types": 7.12.10
+      "@babel/types": 7.17.10
 
   /@types/babel__template/7.4.1:
     resolution:
@@ -3785,7 +3786,7 @@ packages:
       }
     dependencies:
       "@babel/parser": 7.17.10
-      "@babel/types": 7.12.10
+      "@babel/types": 7.17.10
 
   /@types/babel__traverse/7.17.1:
     resolution:
@@ -3793,7 +3794,7 @@ packages:
         integrity: sha512-kVzjari1s2YVi77D3w1yuvohV2idweYXMCDzqBiVNN63TcDWrIlTVOYpqVrvbbyOE/IyzBoTKF0fdnLPEORFxA==,
       }
     dependencies:
-      "@babel/types": 7.12.10
+      "@babel/types": 7.17.10
 
   /@types/body-parser/1.19.2:
     resolution:
@@ -12550,7 +12551,7 @@ packages:
       klaw-sync: 6.0.0
       minimist: 1.2.6
       open: 7.4.2
-      rimraf: 2.7.1
+      rimraf: 2.6.3
       semver: 5.7.1
       slash: 2.0.0
       tmp: 0.0.33
@@ -13629,16 +13630,6 @@ packages:
     resolution:
       {
         integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==,
-      }
-    hasBin: true
-    dependencies:
-      glob: 7.2.0
-    dev: false
-
-  /rimraf/2.7.1:
-    resolution:
-      {
-        integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==,
       }
     hasBin: true
     dependencies:
