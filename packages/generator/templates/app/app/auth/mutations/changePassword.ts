@@ -16,9 +16,9 @@ export default resolver.pipe(
       await authenticateUser(user.email, currentPassword)
     } catch (error: any) {
       if (error instanceof AuthenticationError) {
-      throw new Error("Invalid Password")
+        throw new Error("Invalid Password")
       }
-      throw new Error(error)
+      throw error
     }
 
     const hashedPassword = await SecurePassword.hash(newPassword.trim())
