@@ -18,14 +18,18 @@ describe("Queries", () => {
   afterAll(() => killApp(context.server))
 
   describe("useQuery", () => {
-    it("should render query result", async () => {
-      const browser = await webdriver(context.appPort, "/use-query")
-      let text = await browser.elementByCss("#page").text()
-      expect(text).toMatch(/Loading/)
-      await browser.waitForElementByCss("#content")
-      text = await browser.elementByCss("#content").text()
-      expect(text).toMatch(/basic-result/)
-      if (browser) await browser.close()
-    })
+    it(
+      "should render query result",
+      async () => {
+        const browser = await webdriver(context.appPort, "/use-query")
+        let text = await browser.elementByCss("#page").text()
+        expect(text).toMatch(/Loading/)
+        await browser.waitForElementByCss("#content")
+        text = await browser.elementByCss("#content").text()
+        expect(text).toMatch(/basic-result/)
+        if (browser) await browser.close()
+      },
+      5000 * 60 * 2,
+    )
   })
 })
