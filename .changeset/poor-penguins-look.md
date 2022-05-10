@@ -2,4 +2,4 @@
 "blitz": patch
 ---
 
-added db seed cli command
+add `db seed` cli command
