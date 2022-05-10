@@ -28,6 +28,7 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   generate: () => import("./commands/generate").then((i) => i.generate),
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
+  migrate: () => import("./commands/migrate").then((i) => i.migrate),
 }
 
 const args = arg(commonArgs, {
