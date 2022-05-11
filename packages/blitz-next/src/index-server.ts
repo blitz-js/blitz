@@ -1,7 +1,15 @@
 import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
-import type {Ctx as BlitzCtx, BlitzServerPlugin, Middleware, MiddlewareResponse} from "blitz"
+import type {
+  Ctx as BlitzCtx,
+  BlitzServerPlugin,
+  Middleware,
+  MiddlewareResponse,
+  AsyncFunc,
+  FirstParam,
+} from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
 import {withSuperJSONPropsGsp, withSuperJSONPropsGssp} from "./superjson"
+import {DehydratedState} from "react-query/types/hydration"
 
 export * from "./index-browser"
 
@@ -50,13 +58,47 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
-      return handler({req, res, ctx, ...rest})
+      let queryClient: null | QueryClient = null
+
+      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+        queryClient = new QueryClient({defaultOptions})
+
+        const queryKey = getQueryKey(fn, input)
+        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+      }
+
+      const result = await handler({req, res, ctx, ...rest})
+      if ("props" in result) {
+        const props = {
+          ...result.props,
+          ...(queryClient ? {dehydratedProps: dehydrate(queryClient)} : {}),
+        }
+        return {...result, props}
+      }
+      return result
     })
 
   const gSP = <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
     withSuperJSONPropsGsp<TProps>(async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
-      return handler({...context, ctx: ctx})
+      let queryClient: null | QueryClient = null
+
+      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+        queryClient = new QueryClient({defaultOptions})
+
+        const queryKey = getQueryKey(fn, input)
+        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+      }
+
+      const result = await handler({...context, ctx: ctx})
+      if ("props" in result) {
+        const props = {
+          ...result.props,
+          ...(queryClient ? {dehydratedProps: dehydrate(queryClient)} : {}),
+        }
+        return {...result, props}
+      }
+      return result
     })
 
   const api =
@@ -74,7 +116,9 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 }
 
 import type {NextConfig} from "next"
-import {installWebpackConfig} from "@blitzjs/rpc"
+import {getQueryKey, installWebpackConfig} from "@blitzjs/rpc"
+import {dehydrate} from "@blitzjs/rpc"
+import {DefaultOptions, QueryClient} from "react-query"
 
 export function withBlitz(nextConfig: NextConfig = {}) {
   return Object.assign({}, nextConfig, {
@@ -86,4 +130,16 @@ export function withBlitz(nextConfig: NextConfig = {}) {
       return config
     },
   } as NextConfig)
+}
+
+type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
+  resolver: T,
+  params: TInput,
+  options?: DefaultOptions,
+) => Promise<void>
+
+declare module "blitz" {
+  export interface Ctx {
+    prefetchBlitzQuery: PrefetchQueryFn
+  }
 }

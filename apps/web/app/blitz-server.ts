@@ -2,7 +2,6 @@ import {setupBlitzServer} from "@blitzjs/next"
 import {AuthServerPlugin, PrismaStorage} from "@blitzjs/auth"
 import {prisma as db} from "../prisma/index"
 import {simpleRolesIsAuthorized} from "@blitzjs/auth"
-import {RpcServerPlugin} from "@blitzjs/rpc"
 
 const {gSSP, gSP, api} = setupBlitzServer({
   plugins: [
@@ -12,7 +11,6 @@ const {gSSP, gSP, api} = setupBlitzServer({
       storage: PrismaStorage(db as any),
       isAuthorized: simpleRolesIsAuthorized,
     }),
-    RpcServerPlugin({}),
   ],
 })
 

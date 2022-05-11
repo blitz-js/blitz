@@ -8,8 +8,6 @@ export * from "./index-browser"
 
 export * from "./resolver"
 
-export * from "./server-plugin"
-
 // Mechanism used by Vite/Next/Nuxt plugins for automatically loading query and mutation resolvers
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null

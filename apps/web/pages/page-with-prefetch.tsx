@@ -5,17 +5,12 @@ import getUsers from "app/queries/getUsers"
 export const getServerSideProps = gSSP(async ({ctx}) => {
   const {prefetchBlitzQuery} = ctx
 
-  const {dehydratedState} = await prefetchBlitzQuery(getUsers, {})
-  return {
-    props: {
-      dehydratedState,
-    },
-  }
+  await prefetchBlitzQuery(getUsers, {})
+  return {props: {}}
 })
 
 function PageWithGssp() {
-  const [users, {isLoading, isFetching}] = useQuery(getUsers, {})
-  console.log({users, isLoading, isFetching})
+  const [users] = useQuery(getUsers, {})
   return (
     <div>
       {users.map((u) => (
