@@ -44,6 +44,8 @@
     "resolve-cwd": "3.0.0",
     "resolve-from": "5.0.0",
     "superjson": "1.8.0",
+    "ts-node": "10.7.0",
+    "tsconfig-paths": "4.0.0",
     "tslog": "3.3.1"
   },
   "devDependencies": {
