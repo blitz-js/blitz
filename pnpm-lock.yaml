@@ -584,7 +584,7 @@ importers:
     specifiers:
       "@babel/core": 7.12.10
       "@babel/preset-env": 7.12.10
-      "@blitzjs/config": "workspace: *"
+      "@blitzjs/config": workspace:*
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1

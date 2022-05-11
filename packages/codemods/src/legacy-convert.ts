@@ -21,14 +21,49 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Error",
+    name: "Clear legacy config file and write new one",
     action: () => {
-      throw new Error("Test")
+      const nextConfig = path.resolve("next.config.js")
+      const fileBuffer = fs.readFileSync(nextConfig)
+      const fileSource = fileBuffer.toString("utf-8")
+      const program = j(fileSource)
+      const parsedProgram = program.get()
+
+      // Clear file
+      parsedProgram.value.program.body = []
+
+      // We create an object property eg. {withBlitz: withBlitz}
+      let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
+      // Then set the shorthand to true so we get {withBlitz}
+      withBlitz.shorthand = true
+
+      /* Declare the variable using the object above that equals to a require expression, eg. 
+        const {withBlitz} = require("@blitzjs/next")
+      */
+      let blitzDeclare = j.variableDeclaration("const", [
+        j.variableDeclarator(
+          j.objectPattern([withBlitz]),
+          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
+        ),
+      ])
+      parsedProgram.value.program.body.push(blitzDeclare)
+
+      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
+      let moduleExportExpression = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.memberExpression(j.identifier("module"), j.identifier("exports")),
+          j.callExpression(j.identifier("withBlitz"), []),
+        ),
+      )
+      parsedProgram.value.program.body.push(moduleExportExpression)
+
+      fs.writeFileSync(nextConfig, program.toSource())
     },
   })
 
   // Loop through steps and run the action
-  if (isLegacyBlitz) {
+  if (failedAt || failedAt !== false || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
       // Ignore previous steps and continue at step that was failed
       if (failedAt && index + 1 !== failedAt) {
@@ -47,7 +82,15 @@ const legacyConvert = async () => {
       }
       console.log(`Successfully ran ${step.name}`)
     }
+
+    fs.writeJsonSync(".migration.json", {
+      failedAt: false,
+    })
   } else {
+    if (failedAt === false) {
+      console.log("Migration already successful")
+      process.exit(0)
+    }
     console.log("Legacy blitz config file not found")
   }
 }
