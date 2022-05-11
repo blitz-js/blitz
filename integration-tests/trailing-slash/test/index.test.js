@@ -21,7 +21,7 @@ describe("Queries", () => {
     it(
       "should render query result",
       async () => {
-        const browser = await webdriver(context.appPort, "/use-query")
+        const browser = await webdriver(context.appPort, "/use-query", false)
         let text = await browser.elementByCss("#page").text()
         expect(text).toMatch(/Loading/)
         await browser.waitForElementByCss("#content")
