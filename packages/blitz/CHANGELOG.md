@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.24
+
+### Patch Changes
+
+- 8490b072: test automated publish
+  - @blitzjs/generator@2.0.0-alpha.24
+
 ## 2.0.0-alpha.23
 
 ### Patch Changes
