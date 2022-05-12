@@ -1,7 +1,7 @@
 import { ErrorFallbackProps, ErrorComponent, ErrorBoundary } from "@blitzjs/next"
 import { AuthenticationError, AuthorizationError } from "blitz"
 import type { AppProps } from "next/app"
-import React, { Suspense } from "react"
+import React from "react"
 import { withBlitz } from "app/blitz-client"
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
@@ -25,17 +25,9 @@ function RootErrorFallback({ error }: ErrorFallbackProps) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
   return (
     <ErrorBoundary FallbackComponent={RootErrorFallback}>
-      {mounted && (
-        <Suspense fallback="Loading...">
-          <Component {...pageProps} />
-        </Suspense>
-      )}
+      <Component {...pageProps} />
     </ErrorBoundary>
   )
 }
