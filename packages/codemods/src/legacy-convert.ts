@@ -62,8 +62,23 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "Update package.json",
+    action: async () => {
+      let packageJsonPath = require(path.resolve("package.json"))
+      packageJsonPath.dependencies["react"] = "latest"
+      packageJsonPath.dependencies["react-dom"] = "latest"
+      packageJsonPath.dependencies["@blitzjs/next"] = "alpha"
+      packageJsonPath.dependencies["@blitzjs/rpc"] = "latest"
+      packageJsonPath.dependencies["@blitzjs/auth"] = "latest"
+      packageJsonPath.dependencies["@blitzjs/auth"] = "alpha"
+
+      fs.writeFileSync(path.resolve("package.json"), JSON.stringify(packageJsonPath, null, " "))
+    },
+  })
+
   // Loop through steps and run the action
-  if (failedAt || failedAt !== false || isLegacyBlitz) {
+  if (failedAt || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
       // Ignore previous steps and continue at step that was failed
       if (failedAt && index + 1 !== failedAt) {
@@ -84,10 +99,10 @@ const legacyConvert = async () => {
     }
 
     fs.writeJsonSync(".migration.json", {
-      failedAt: false,
+      failedAt: "SUCCESS",
     })
   } else {
-    if (failedAt === false) {
+    if (failedAt === "SUCCESS") {
       console.log("Migration already successful")
       process.exit(0)
     }

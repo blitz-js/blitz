@@ -23,6 +23,7 @@
   "dependencies": {
     "arg": "5.0.1",
     "chalk": "^4.1.0",
+    "cross-spawn": "7.0.3",
     "debug": "4.3.3",
     "esbuild": "0.14.34",
     "fs-extra": "10.0.1",
