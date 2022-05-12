@@ -12,11 +12,9 @@ export type SuperJSONProps<P = any> = P & {
   _superjson?: any
 }
 
-export function withSuperJsonProps<P>(
-  result: GetServerSidePropsResult<P> | GetStaticPropsResult<P>,
-  exclude: string[] = [],
-) {
-  console.log({result, exclude})
+type Result = Partial<GetServerSidePropsResult<any> & GetStaticPropsResult<any>>
+
+export function withSuperJsonProps<T extends Result>(result: T, exclude: string[] = []) {
   if (!("props" in result)) {
     return result
   }

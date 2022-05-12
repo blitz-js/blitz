@@ -92,7 +92,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       }
 
       const result = await handler({...context, ctx: ctx})
-      return withSuperJsonProps<any>(withDehydratedState(result, queryClient))
+      return withSuperJsonProps(withDehydratedState(result, queryClient))
     }
 
   const api =
