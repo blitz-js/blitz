@@ -231,51 +231,6 @@ importers:
       jsdom: 19.0.0
       typescript: 4.6.3
 
-  integration-tests/resolvers-hooks:
-    specifiers:
-      "@blitzjs/auth": workspace:*
-      "@blitzjs/config": workspace:*
-      "@blitzjs/next": workspace:*
-      "@blitzjs/rpc": workspace:*
-      "@prisma/client": 3.9.0
-      "@testing-library/react": 13.0.0
-      "@types/react": 17.0.43
-      "@vitejs/plugin-react": 1.3.0
-      blitz: workspace:*
-      delay: 5.0.0
-      eslint: 7.32.0
-      eslint-config-next: latest
-      eslint-plugin-testing-library: 5.0.1
-      jsdom: ^19.0.0
-      next: 12.1.6-canary.17
-      prisma: 3.9.0
-      react: 18.0.0
-      react-dom: 18.0.0
-      react-query: 3.21.1
-      typescript: ^4.5.3
-    dependencies:
-      "@blitzjs/auth": link:../../packages/blitz-auth
-      "@blitzjs/config": link:../../packages/config
-      "@blitzjs/next": link:../../packages/blitz-next
-      "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 3.9.0_prisma@3.9.0
-      blitz: link:../../packages/blitz
-      next: 12.1.6-canary.17_react-dom@18.0.0+react@18.0.0
-      prisma: 3.9.0
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
-    devDependencies:
-      "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
-      "@types/react": 17.0.43
-      "@vitejs/plugin-react": 1.3.0
-      delay: 5.0.0
-      eslint: 7.32.0
-      eslint-config-next: 12.1.6_05c713472dcd5c624e082d9210ea9f86
-      eslint-plugin-testing-library: 5.0.1_eslint@7.32.0+typescript@4.6.3
-      jsdom: 19.0.0
-      typescript: 4.6.3
-
   integration-tests/rpc:
     specifiers:
       "@blitzjs/auth": workspace:*
@@ -10011,7 +9966,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas

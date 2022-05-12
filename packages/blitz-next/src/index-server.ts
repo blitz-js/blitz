@@ -1,4 +1,11 @@
-import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
+import {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticProps,
+  GetStaticPropsResult,
+  NextApiRequest,
+  NextApiResponse,
+} from "next"
 import type {
   Ctx as BlitzCtx,
   BlitzServerPlugin,
@@ -8,8 +15,7 @@ import type {
   FirstParam,
 } from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
-import {withSuperJSONPropsGsp, withSuperJSONPropsGssp} from "./superjson"
-import {DehydratedState} from "react-query/types/hydration"
+import {withSuperJsonProps} from "./superjson"
 
 export * from "./index-browser"
 
@@ -51,8 +57,9 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
-  const gSSP = <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
-    withSuperJSONPropsGssp<TProps>(async ({req, res, ...rest}) => {
+  const gSSP =
+    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
@@ -68,18 +75,12 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       }
 
       const result = await handler({req, res, ctx, ...rest})
-      if ("props" in result) {
-        const props = {
-          ...result.props,
-          ...(queryClient ? {dehydratedProps: dehydrate(queryClient)} : {}),
-        }
-        return {...result, props}
-      }
-      return result
-    })
+      return withSuperJsonProps(withDehydratedState(result, queryClient))
+    }
 
-  const gSP = <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
-    withSuperJSONPropsGsp<TProps>(async (context) => {
+  const gSP =
+    <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
+    async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       let queryClient: null | QueryClient = null
 
@@ -91,15 +92,8 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       }
 
       const result = await handler({...context, ctx: ctx})
-      if ("props" in result) {
-        const props = {
-          ...result.props,
-          ...(queryClient ? {dehydratedProps: dehydrate(queryClient)} : {}),
-        }
-        return {...result, props}
-      }
-      return result
-    })
+      return withSuperJsonProps<any>(withDehydratedState(result, queryClient))
+    }
 
   const api =
     (handler: BlitzAPIHandler): NextApiHandler =>
@@ -137,6 +131,16 @@ type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
   params: TInput,
   options?: DefaultOptions,
 ) => Promise<void>
+
+type Result = Partial<GetServerSidePropsResult<any> & GetStaticPropsResult<any>>
+
+function withDehydratedState<T extends Result>(result: T, queryClient: QueryClient | null) {
+  if (!queryClient) {
+    return result
+  }
+  const dehydratedProps = dehydrate(queryClient)
+  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedProps}}
+}
 
 declare module "blitz" {
   export interface Ctx {

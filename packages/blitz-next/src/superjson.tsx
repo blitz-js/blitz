@@ -12,10 +12,11 @@ export type SuperJSONProps<P = any> = P & {
   _superjson?: any
 }
 
-function excludeProps<P>(
+export function withSuperJsonProps<P>(
   result: GetServerSidePropsResult<P> | GetStaticPropsResult<P>,
   exclude: string[] = [],
 ) {
+  console.log({result, exclude})
   if (!("props" in result)) {
     return result
   }
@@ -47,27 +48,6 @@ function excludeProps<P>(
   return {
     ...result,
     props,
-  }
-}
-
-export function withSuperJSONPropsGssp<P>(
-  handler: GetServerSideProps<P>,
-  exclude: string[] = [],
-): GetServerSideProps<SuperJSONProps<P>> {
-  return async function withSuperJSON(...args) {
-    const result = await handler(...args)
-    return excludeProps(result, exclude)
-  }
-}
-
-export function withSuperJSONPropsGsp<P>(
-  handler: GetStaticProps<P>,
-  exclude: string[] = [],
-): GetStaticProps<P> {
-  return async function withSuperJSON(...args) {
-    const result = await handler(...args)
-
-    return excludeProps<any>(result, exclude)
   }
 }
 

@@ -9,7 +9,7 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
   return {props: {}}
 })
 
-function PageWithGssp() {
+function PageWithGssp(props) {
   const [users] = useQuery(getUsers, {})
   return (
     <div>
