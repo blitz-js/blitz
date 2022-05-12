@@ -206,7 +206,7 @@ importers:
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -219,7 +219,7 @@ importers:
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
     devDependencies:
       "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
       "@types/react": 18.0.1
@@ -288,7 +288,7 @@ importers:
       node-fetch: 3.2.3
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
       tree-kill: 1.2.2
@@ -312,7 +312,7 @@ importers:
       node-fetch: 3.2.3
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
       tree-kill: 1.2.2
@@ -497,7 +497,7 @@ importers:
       next: 12.1.6-canary.17
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       resolve-from: 5.0.0
       superjson: 1.8.0
       ts-jest: 27.1.4
@@ -510,7 +510,7 @@ importers:
       debug: 4.3.3
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       superjson: 1.8.0
     devDependencies:
       "@blitzjs/config": link:../config
@@ -552,7 +552,7 @@ importers:
       next: 12.1.6-canary.17
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       superjson: 1.8.0
       typescript: ^4.5.3
       unbuild: 0.6.9
@@ -564,7 +564,7 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       superjson: 1.8.0
       zod: 3.10.1
     devDependencies:
@@ -13048,13 +13048,13 @@ packages:
         integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==,
       }
 
-  /react-query/3.21.1_react-dom@18.0.0+react@18.0.0:
+  /react-query/3.39.0_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
-        integrity: sha512-aKFLfNJc/m21JBXJk7sR9tDUYPjotWA4EHAKvbZ++GgxaY+eI0tqBxXmGBuJo0Pisis1W4pZWlZgoRv9yE8yjA==,
+        integrity: sha512-Od0IkSuS79WJOhzWBx/ys0x13+7wFqgnn64vBqqAAnZ9whocVhl/y1padD5uuZ6EIkXbFbInax0qvY7zGM0thA==,
       }
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: "*"
       react-native: "*"
     peerDependenciesMeta:

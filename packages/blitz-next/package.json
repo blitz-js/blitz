@@ -28,7 +28,7 @@
     "debug": "4.3.3",
     "fs-extra": "10.0.1",
     "hoist-non-react-statics": "3.3.2",
-    "react-query": "3.21.1",
+    "react-query": "3.39.0",
     "superjson": "1.8.0"
   },
   "devDependencies": {

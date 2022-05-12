@@ -18,7 +18,7 @@
     "prisma": "3.9.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-query": "3.21.1"
+    "react-query": "3.39.0"
   },
   "devDependencies": {
     "@testing-library/react": "13.0.0",

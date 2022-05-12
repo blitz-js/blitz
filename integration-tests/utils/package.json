@@ -21,7 +21,7 @@
     "node-fetch": "3.2.3",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-query": "3.21.1",
+    "react-query": "3.39.0",
     "rimraf": "3.0.2",
     "selenium-webdriver": "4.1.1",
     "tree-kill": "1.2.2",
