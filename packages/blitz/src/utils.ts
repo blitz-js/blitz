@@ -1,4 +1,6 @@
 import {Middleware} from "./index-server"
+import * as path from "path"
+import {readFileSync} from "fs"
 
 export function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
@@ -139,4 +141,14 @@ export function prettyMs(ms: number): string {
 
 export function interopDefault(mod: any) {
   return mod.default || mod
+}
+
+export function readBlitzConfig(rootFolder: string = process.cwd()) {
+  const packageJsonFile = readFileSync(path.join(rootFolder, "package.json"), {
+    encoding: "utf8",
+    flag: "r",
+  })
+  const packageJson = JSON.parse(packageJsonFile)
+
+  return packageJson.blitz || {}
 }

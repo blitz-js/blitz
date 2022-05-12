@@ -320,8 +320,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.21
-      "@blitzjs/generator": 2.0.0-alpha.21
+      "@blitzjs/config": workspace:2.0.0-alpha.22
+      "@blitzjs/generator": 2.0.0-alpha.22
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7

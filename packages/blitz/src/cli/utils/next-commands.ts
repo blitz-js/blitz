@@ -1,3 +1,4 @@
+import {readBlitzConfig} from "../../index-server"
 import {normalize, ServerConfig} from "./config"
 import {
   nextBuild,
@@ -21,11 +22,8 @@ export async function dev(config: ServerConfig) {
   if (customServerExists()) {
     console.log("Using your custom server")
 
-    // todo
-    // const {loadConfigProduction} = await import("next/dist/server/config-shared")
-    // const blitzConfig = loadConfigProduction(config.rootFolder)
-    // const watch = blitzConfig.customServer?.hotReload ?? true
-    const watch = true
+    const blitzConfig = readBlitzConfig(rootFolder)
+    const watch = blitzConfig.customServer?.hotReload ?? true
 
     await startCustomServer(rootFolder, config, {watch})
   } else {
