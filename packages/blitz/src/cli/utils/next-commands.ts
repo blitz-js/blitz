@@ -7,24 +7,13 @@ import {
   startCustomServer,
   buildCustomServer,
 } from "./next-utils"
-import * as fs from "fs"
-import * as path from "path"
+import {readBlitzConfig} from "../../server-utils"
 
 export async function build(config: ServerConfig) {
   const {rootFolder, nextBin, watch} = await normalize(config)
 
   await nextBuild(nextBin, rootFolder, {} as any, config)
   if (customServerExists()) await buildCustomServer({watch})
-}
-
-export function readBlitzConfig(rootFolder: string = process.cwd()) {
-  const packageJsonFile = fs.readFileSync(path.join(rootFolder, "package.json"), {
-    encoding: "utf8",
-    flag: "r",
-  })
-  const packageJson = JSON.parse(packageJsonFile)
-
-  return packageJson.blitz || {}
 }
 
 export async function dev(config: ServerConfig) {
