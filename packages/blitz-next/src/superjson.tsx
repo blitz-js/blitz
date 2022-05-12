@@ -1,10 +1,5 @@
 import hoistNonReactStatics from "hoist-non-react-statics"
-import type {
-  GetServerSideProps,
-  GetServerSidePropsResult,
-  GetStaticProps,
-  GetStaticPropsResult,
-} from "next"
+import type {GetServerSidePropsResult, GetStaticPropsResult} from "next"
 import * as React from "react"
 import SuperJSON from "superjson"
 
@@ -12,10 +7,9 @@ export type SuperJSONProps<P = any> = P & {
   _superjson?: any
 }
 
-function excludeProps<P>(
-  result: GetServerSidePropsResult<P> | GetStaticPropsResult<P>,
-  exclude: string[] = [],
-) {
+type Result = Partial<GetServerSidePropsResult<any> & GetStaticPropsResult<any>>
+
+export function withSuperJsonProps<T extends Result>(result: T, exclude: string[] = []) {
   if (!("props" in result)) {
     return result
   }
@@ -47,27 +41,6 @@ function excludeProps<P>(
   return {
     ...result,
     props,
-  }
-}
-
-export function withSuperJSONPropsGssp<P>(
-  handler: GetServerSideProps<P>,
-  exclude: string[] = [],
-): GetServerSideProps<SuperJSONProps<P>> {
-  return async function withSuperJSON(...args) {
-    const result = await handler(...args)
-    return excludeProps(result, exclude)
-  }
-}
-
-export function withSuperJSONPropsGsp<P>(
-  handler: GetStaticProps<P>,
-  exclude: string[] = [],
-): GetStaticProps<P> {
-  return async function withSuperJSON(...args) {
-    const result = await handler(...args)
-
-    return excludeProps<any>(result, exclude)
   }
 }
 
