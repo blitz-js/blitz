@@ -142,13 +142,3 @@ export function prettyMs(ms: number): string {
 export function interopDefault(mod: any) {
   return mod.default || mod
 }
-
-export function readBlitzConfig(rootFolder: string = process.cwd()) {
-  const packageJsonFile = fs.readFileSync(path.join(rootFolder, "package.json"), {
-    encoding: "utf8",
-    flag: "r",
-  })
-  const packageJson = JSON.parse(packageJsonFile)
-
-  return packageJson.blitz || {}
-}
