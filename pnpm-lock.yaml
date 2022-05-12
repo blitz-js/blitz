@@ -9966,7 +9966,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
+      ts-node: 10.7.0_typescript@4.6.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
