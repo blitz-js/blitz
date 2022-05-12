@@ -49,7 +49,7 @@ importers:
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       blitz: "workspace: *"
       eslint: 7.32.0
       husky: 7.0.4
@@ -89,7 +89,7 @@ importers:
       "@types/jest": 27.4.1
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       eslint: 7.32.0
       husky: 7.0.4
       jest: 27.5.1_ts-node@10.7.0
@@ -109,7 +109,7 @@ importers:
       "@next/bundle-analyzer": 12.0.8
       "@prisma/client": 3.9.0
       "@types/jest": 27.4.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       blitz: workspace:*
       eslint: 7.32.0
       jest: 27.5.1
@@ -135,7 +135,7 @@ importers:
       ts-node: 10.7.0_typescript@4.6.3
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       eslint: 7.32.0
       typescript: 4.6.3
 
@@ -149,7 +149,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
@@ -178,7 +178,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -194,7 +194,7 @@ importers:
       "@blitzjs/rpc": workspace:*
       "@prisma/client": 3.9.0
       "@testing-library/react": 13.0.0
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@vitejs/plugin-react": 1.3.0
       blitz: workspace:*
       delay: 5.0.0
@@ -206,7 +206,7 @@ importers:
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -219,10 +219,10 @@ importers:
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
     devDependencies:
       "@testing-library/react": 13.0.0_react-dom@18.0.0+react@18.0.0
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
@@ -240,7 +240,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       b64-lite: 1.4.0
       blitz: workspace:*
       eslint: 7.32.0
@@ -262,7 +262,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       b64-lite: 1.4.0
       eslint: 7.32.0
       fs-extra: 10.0.1
@@ -276,7 +276,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/rimraf": 3.0.2
       "@types/selenium-webdriver": 4.0.18
       chromedriver: 100.0.0
@@ -288,7 +288,7 @@ importers:
       node-fetch: 3.2.3
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
       tree-kill: 1.2.2
@@ -300,7 +300,7 @@ importers:
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/node-fetch": 2.6.1
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/rimraf": 3.0.2
       "@types/selenium-webdriver": 4.0.18
       chromedriver: 100.0.0
@@ -312,7 +312,7 @@ importers:
       node-fetch: 3.2.3
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       rimraf: 3.0.2
       selenium-webdriver: 4.1.1
       tree-kill: 1.2.2
@@ -332,7 +332,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       arg: 5.0.1
@@ -403,7 +403,7 @@ importers:
       "@types/node-fetch": 2.6.1
       "@types/npm-which": 3.0.1
       "@types/prompts": 2.0.14
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
       express: 4.17.3
@@ -424,7 +424,7 @@ importers:
       "@types/cookie": 0.4.1
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
@@ -464,7 +464,7 @@ importers:
       "@types/cookie": 0.4.1
       "@types/debug": 4.1.7
       "@types/jsonwebtoken": 8.5.8
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -484,7 +484,7 @@ importers:
       "@types/hoist-non-react-statics": 3.3.1
       "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
       blitz: 2.0.0-alpha.21
@@ -497,7 +497,7 @@ importers:
       next: 12.1.6-canary.17
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       resolve-from: 5.0.0
       superjson: 1.8.0
       ts-jest: 27.1.4
@@ -510,7 +510,7 @@ importers:
       debug: 4.3.3
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       superjson: 1.8.0
     devDependencies:
       "@blitzjs/config": link:../config
@@ -521,7 +521,7 @@ importers:
       "@testing-library/user-event": 13.5.0_@testing-library+dom@8.13.0
       "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0_react-dom@18.0.0+react@18.0.0
       blitz: link:../blitz
@@ -542,7 +542,7 @@ importers:
       "@blitzjs/auth": 2.0.0-alpha.21
       "@blitzjs/config": workspace:2.0.0-alpha.21
       "@types/debug": 4.1.7
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
@@ -552,7 +552,7 @@ importers:
       next: 12.1.6-canary.17
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.21.1
+      react-query: 3.39.0
       superjson: 1.8.0
       typescript: ^4.5.3
       unbuild: 0.6.9
@@ -564,13 +564,13 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3
-      react-query: 3.21.1_react-dom@18.0.0+react@18.0.0
+      react-query: 3.39.0_react-dom@18.0.0+react@18.0.0
       superjson: 1.8.0
       zod: 3.10.1
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
       next: 12.1.6-canary.17_react-dom@18.0.0+react@18.0.0
@@ -612,7 +612,7 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -677,7 +677,7 @@ importers:
       "@types/mem-fs-editor": 7.0.1
       "@types/pluralize": 0.0.29
       "@types/prettier": 2.4.4
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/vinyl": 2.0.6
       "@typescript-eslint/eslint-plugin": 5.9.1_8d4b52c6a654d64d1d8b695e9b6b2fe5
@@ -693,7 +693,7 @@ importers:
   packages/pkg-template:
     specifiers:
       "@blitzjs/config": 2.0.0-alpha.21
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
       "@typescript-eslint/parser": 5.9.1
@@ -706,7 +706,7 @@ importers:
       "@typescript-eslint/parser": 5.9.1_eslint@7.32.0+typescript@4.6.3
     devDependencies:
       "@blitzjs/config": link:../config
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       react: 18.0.0
       typescript: 4.6.3
@@ -3696,7 +3696,7 @@ packages:
         optional: true
     dependencies:
       "@babel/runtime": 7.17.9
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/react-test-renderer": 18.0.0
       react: 18.0.0
@@ -4003,7 +4003,7 @@ packages:
         integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==,
       }
     dependencies:
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
       hoist-non-react-statics: 3.3.2
     dev: false
 
@@ -4294,7 +4294,7 @@ packages:
         integrity: sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==,
       }
     dependencies:
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
     dev: true
 
   /@types/react-test-renderer/18.0.0:
@@ -4303,13 +4303,13 @@ packages:
         integrity: sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ==,
       }
     dependencies:
-      "@types/react": 17.0.43
+      "@types/react": 18.0.1
     dev: true
 
-  /@types/react/17.0.43:
+  /@types/react/18.0.1:
     resolution:
       {
-        integrity: sha512-8Q+LNpdxf057brvPu1lMtC5Vn7J119xrP1aq4qiaefNioQUYANF/CYeK4NsKorSZyUGJ66g0IM+4bbjwx45o2A==,
+        integrity: sha512-VnWlrVgG0dYt+NqlfMI0yUYb8Rdl4XUROyH+c6gq/iFCiZ805Vi//26UW38DHnxQkbDhnrIWTBiy6oKZqL11cw==,
       }
     dependencies:
       "@types/prop-types": 15.7.5
@@ -13048,13 +13048,13 @@ packages:
         integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==,
       }
 
-  /react-query/3.21.1_react-dom@18.0.0+react@18.0.0:
+  /react-query/3.39.0_react-dom@18.0.0+react@18.0.0:
     resolution:
       {
-        integrity: sha512-aKFLfNJc/m21JBXJk7sR9tDUYPjotWA4EHAKvbZ++GgxaY+eI0tqBxXmGBuJo0Pisis1W4pZWlZgoRv9yE8yjA==,
+        integrity: sha512-Od0IkSuS79WJOhzWBx/ys0x13+7wFqgnn64vBqqAAnZ9whocVhl/y1padD5uuZ6EIkXbFbInax0qvY7zGM0thA==,
       }
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: "*"
       react-native: "*"
     peerDependenciesMeta:

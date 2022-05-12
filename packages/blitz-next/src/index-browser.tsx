@@ -53,6 +53,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
 }
 
 export type BlitzProviderProps = {
+  children: JSX.Element
   client?: QueryClient
   contextSharing?: boolean
   dehydratedState?: unknown
@@ -65,7 +66,7 @@ const BlitzProvider = ({
   dehydratedState,
   hydrateOptions,
   children,
-}: BlitzProviderProps & {children: JSX.Element}) => {
+}: BlitzProviderProps) => {
   if (globalThis.queryClient) {
     return (
       <QueryClientProvider
