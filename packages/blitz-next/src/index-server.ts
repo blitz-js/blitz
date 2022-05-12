@@ -1,7 +1,21 @@
-import {GetServerSideProps, GetStaticProps, NextApiRequest, NextApiResponse} from "next"
-import type {Ctx as BlitzCtx, BlitzServerPlugin, Middleware, MiddlewareResponse} from "blitz"
+import {
+  GetServerSideProps,
+  GetServerSidePropsResult,
+  GetStaticProps,
+  GetStaticPropsResult,
+  NextApiRequest,
+  NextApiResponse,
+} from "next"
+import type {
+  Ctx as BlitzCtx,
+  BlitzServerPlugin,
+  Middleware,
+  MiddlewareResponse,
+  AsyncFunc,
+  FirstParam,
+} from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
-import {withSuperJSONPropsGsp, withSuperJSONPropsGssp} from "./superjson"
+import {withSuperJsonProps} from "./superjson"
 
 export * from "./index-browser"
 
@@ -43,21 +57,43 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.middlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
-  const gSSP = <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
-    withSuperJSONPropsGssp<TProps>(async ({req, res, ...rest}) => {
+  const gSSP =
+    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
-      return handler({req, res, ctx, ...rest})
-    })
+      let queryClient: null | QueryClient = null
 
-  const gSP = <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
-    withSuperJSONPropsGsp<TProps>(async (context) => {
+      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+        queryClient = new QueryClient({defaultOptions})
+
+        const queryKey = getQueryKey(fn, input)
+        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+      }
+
+      const result = await handler({req, res, ctx, ...rest})
+      return withSuperJsonProps(withDehydratedState(result, queryClient))
+    }
+
+  const gSP =
+    <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
+    async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
-      return handler({...context, ctx: ctx})
-    })
+      let queryClient: null | QueryClient = null
+
+      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+        queryClient = new QueryClient({defaultOptions})
+
+        const queryKey = getQueryKey(fn, input)
+        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+      }
+
+      const result = await handler({...context, ctx: ctx})
+      return withSuperJsonProps(withDehydratedState(result, queryClient))
+    }
 
   const api =
     (handler: BlitzAPIHandler): NextApiHandler =>
@@ -74,7 +110,9 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 }
 
 import type {NextConfig} from "next"
-import {installWebpackConfig} from "@blitzjs/rpc"
+import {getQueryKey, installWebpackConfig} from "@blitzjs/rpc"
+import {dehydrate} from "@blitzjs/rpc"
+import {DefaultOptions, QueryClient} from "react-query"
 
 export function withBlitz(nextConfig: NextConfig = {}) {
   return Object.assign({}, nextConfig, {
@@ -86,4 +124,26 @@ export function withBlitz(nextConfig: NextConfig = {}) {
       return config
     },
   } as NextConfig)
+}
+
+type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
+  resolver: T,
+  params: TInput,
+  options?: DefaultOptions,
+) => Promise<void>
+
+type Result = Partial<GetServerSidePropsResult<any> & GetStaticPropsResult<any>>
+
+function withDehydratedState<T extends Result>(result: T, queryClient: QueryClient | null) {
+  if (!queryClient) {
+    return result
+  }
+  const dehydratedProps = dehydrate(queryClient)
+  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedProps}}
+}
+
+declare module "blitz" {
+  export interface Ctx {
+    prefetchBlitzQuery: PrefetchQueryFn
+  }
 }

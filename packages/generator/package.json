@@ -55,7 +55,7 @@
     "@types/mem-fs-editor": "7.0.1",
     "@types/pluralize": "0.0.29",
     "@types/prettier": "2.4.4",
-    "@types/react": "17.0.43",
+    "@types/react": "18.0.1",
     "@types/react-dom": "17.0.14",
     "@types/vinyl": "2.0.6",
     "@typescript-eslint/eslint-plugin": "5.9.1",
