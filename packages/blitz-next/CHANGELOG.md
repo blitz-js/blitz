@@ -1,5 +1,19 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.22
+
+### Patch Changes
+
+- c5c727cb: add mounted check inside withBlitz
+- 6ff9ec0d: Upgrade @types/react, fix typings inside @blitzjs/next
+- da17cc8a: Support `prefetchBlitzQuery` in gSSP and gSP
+- - Add mounted check to withBlitz
+  - Upgrade @types/react, fix typings inside @blitzjs/next
+  - Support prefetchBlitzQuery in gSP and gSSP
+  - Add db seed cli command
+  - Add try/catch to changePassword mutation
+  - @blitzjs/rpc@2.0.0-alpha.22
+
 ## 2.0.0-alpha.21
 
 ### Patch Changes

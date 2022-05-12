@@ -1,5 +1,18 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.22
+
+### Patch Changes
+
+- c5c727cb: add mounted check inside withBlitz
+- 6ff9ec0d: Upgrade @types/react, fix typings inside @blitzjs/next
+- 81b4b41a: add mounted check to app generator template
+- - Add mounted check to withBlitz
+  - Upgrade @types/react, fix typings inside @blitzjs/next
+  - Support prefetchBlitzQuery in gSP and gSSP
+  - Add db seed cli command
+  - Add try/catch to changePassword mutation
+
 ## 2.0.0-alpha.21
 
 ### Patch Changes

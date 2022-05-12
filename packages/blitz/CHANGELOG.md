@@ -1,5 +1,21 @@
 # blitz
 
+## 2.0.0-alpha.22
+
+### Patch Changes
+
+- - Add mounted check to withBlitz
+  - Upgrade @types/react, fix typings inside @blitzjs/next
+  - Support prefetchBlitzQuery in gSP and gSSP
+  - Add db seed cli command
+  - Add try/catch to changePassword mutation
+- 89bf993a: add `db seed` cli command
+- Updated dependencies [c5c727cb]
+- Updated dependencies [6ff9ec0d]
+- Updated dependencies [81b4b41a]
+- Updated dependencies
+  - @blitzjs/generator@2.0.0-alpha.22
+
 ## 2.0.0-alpha.21
 
 ### Patch Changes
