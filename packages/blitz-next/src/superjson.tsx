@@ -1,10 +1,5 @@
 import hoistNonReactStatics from "hoist-non-react-statics"
-import type {
-  GetServerSideProps,
-  GetServerSidePropsResult,
-  GetStaticProps,
-  GetStaticPropsResult,
-} from "next"
+import type {GetServerSidePropsResult, GetStaticPropsResult} from "next"
 import * as React from "react"
 import SuperJSON from "superjson"
 
