@@ -157,6 +157,27 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "Move pages dir from app dir to the pages dir created above",
+    action: () => {
+      const appDir = path.resolve("app")
+      const subdirs = fs.readdirSync(appDir)
+
+      if (subdirs.includes("pages")) {
+        const appPagesDir = fs.readdirSync(path.join(appDir, "pages"))
+        appPagesDir.forEach((dir) => {
+          fs.moveSync(
+            path.resolve(path.join(appDir, "pages", dir)),
+            path.resolve(path.join("pages", dir)),
+          )
+        })
+      }
+
+      // Remove pages dir from the app dir after move is complete
+      fs.removeSync(path.join(appDir, "pages"))
+    },
+  })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
