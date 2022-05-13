@@ -111,7 +111,7 @@ export async function handleRequestWithMiddleware(
  * If the middleware function doesn't declare receiving the `next` callback
  * assume that it's synchronous and invoke `next` ourselves
  */
-function noCallbackHandler(
+export function noCallbackHandler(
   req: IncomingMessage,
   res: MiddlewareResponse,
   next: MiddlewareNext,
@@ -127,7 +127,7 @@ function noCallbackHandler(
  * the Promise when it's called. If it's never called, the middleware stack
  * completion will stall
  */
-function withCallbackHandler(
+export function withCallbackHandler(
   req: IncomingMessage,
   res: MiddlewareResponse,
   next: MiddlewareNext,

@@ -3,10 +3,17 @@ import cookieSession from "cookie-session"
 import passport from "passport"
 import type {AuthenticateOptions, Strategy} from "passport"
 import {isLocalhost} from "./index"
-import {assert, connectMiddleware, Ctx, handleRequestWithMiddleware, Middleware, MiddlewareNext} from "blitz"
+import {
+  assert,
+  connectMiddleware,
+  Ctx,
+  handleRequestWithMiddleware,
+  Middleware,
+  MiddlewareResponse,
+  secureProxyMiddleware,
+} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {PublicData} from "../shared"
-import { NextMiddleware } from "next/server"
+import {PublicData, SessionContext} from "../shared"
 
 const isFunction = (functionToCheck: any): functionToCheck is Function =>
   typeof functionToCheck === "function"
@@ -50,33 +57,6 @@ export type VerifyCallbackResult = {
 
 export type ApiHandler = (req: IncomingMessage, res: ServerResponse) => void | Promise<void>
 
-/**
- * Returns a Blitz middleware function that varies its async logic based on if the
- * given middleware function declares at least 3 parameters, i.e. includes
- * the `next` callback function
- */
- export function connectMiddleware(middleware: Middleware): Middleware {
-  const handler =
-    middleware.length < 3 ? noCallbackHandler : withCallbackHandler
-  return function connectHandler(req: MiddlewareRequest, res, next) {
-    return handler(req, res, next, middleware)
-  } as Middleware
-}
-
-/**
- * If the middleware function doesn't declare receiving the `next` callback
- * assume that it's synchronous and invoke `next` ourselves
- */
- function noCallbackHandler(
-  req: IncomingMessage,
-  res: ServerResponse,
-  next: any,
-  middleware: Middleware
-) {
-  // Cast to any to call with two arguments for connect compatibility
-  ;(middleware as any)(req, res)
-  return next(req, res)
-}
 export function passportAuth(config: BlitzPassportConfig): ApiHandler {
   return async function authHandler(req, res) {
     const configObject: BlitzPassportConfigObject = isFunction(config)
@@ -90,27 +70,27 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const passportMiddleware = passport.initialize()
 
-    const middleware: Middleware<IncomingMessage, ServerResponse>[] = [
-      connectMiddleware(cookieSessionMiddleware),
-      connectMiddleware(passportMiddleware),
+    const middleware: Middleware<IncomingMessage, MiddlewareResponse<Ctx>>[] = [
+      connectMiddleware(cookieSessionMiddleware as any),
+      connectMiddleware(passportMiddleware as any),
       connectMiddleware(passport.session()),
     ]
 
     if (configObject.secureProxy) {
-      middleware.push(secureProxyMiddleware)
+      middleware.push(secureProxyMiddleware as any)
     }
 
     assert(
-      req.query.auth,
+      (req as any).query.auth,
       "req.query.auth is not defined. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route",
     )
     assert(
-      Array.isArray(req.query.auth),
+      Array.isArray((req as any).query.auth),
       "req.query.auth must be an array. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route",
     )
 
-    if (!req.query.auth.length) {
-      return res.status(404).end()
+    if (!(req as any).query.auth.length) {
+      return (req as any).status(404).end()
     }
 
     assert(
@@ -119,24 +99,24 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
     )
 
     const blitzStrategy = configObject.strategies.find(
-      ({strategy}) => strategy.name === req.query.auth[0],
+      ({strategy}) => strategy.name === (req as any).query.auth[0],
     )
-    assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
+    assert(blitzStrategy, `A passport strategy was not found for: ${(req as any).query.auth[0]}`)
 
     const {strategy, authenticateOptions} = blitzStrategy
 
     passport.use(strategy)
     const strategyName = strategy.name as string
 
-    if (req.query.auth.length === 1) {
+    if ((req as any).query.auth.length === 1) {
       console.info(`Starting authentication via ${strategyName}...`)
-      if (req.query.redirectUrl) {
+      if ((req as any).query.redirectUrl) {
         // eslint-disable-next-line no-shadow
         middleware.push(async (req, res, next) => {
           const session = (res as any).blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
           await session.$setPublicData({
-            [INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl,
+            [INTERNAL_REDIRECT_URL_KEY]: (req as any).query.redirectUrl,
           } as any)
           return next()
         })
@@ -144,7 +124,7 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       middleware.push(
         connectMiddleware(passport.authenticate(strategyName, {...authenticateOptions})),
       )
-    } else if (req.query.auth[1] === "callback") {
+    } else if ((req as any).query.auth[1] === "callback") {
       console.info(`Processing callback for ${strategyName}...`)
       middleware.push(
         // eslint-disable-next-line no-shadow
@@ -206,6 +186,6 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       )
     }
 
-    await handleRequestWithMiddleware(req, res, middleware)
+    await handleRequestWithMiddleware(req, res, middleware as any)
   }
 }
