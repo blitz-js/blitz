@@ -137,7 +137,7 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Create pages/api/rpc dir for next.js",
+    name: "Create pages/api/rpc dir & [...blitz] wildecard api route for next.js",
     action: () => {
       const pagesDir = path.resolve("pages/api/rpc")
 
@@ -154,8 +154,6 @@ const legacyConvert = async () => {
       export default api(rpcHandler({ onError: console.log }))
       `,
       )
-
-      throw new Error("ERROR")
     },
   })
 
@@ -163,7 +161,7 @@ const legacyConvert = async () => {
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
       // Ignore previous steps and continue at step that was failed
-      if (failedAt && index + 1 !== failedAt) {
+      if (failedAt && index + 1 < failedAt) {
         continue
       }
       console.log(`Running ${step.name}...`)
@@ -180,9 +178,9 @@ const legacyConvert = async () => {
       console.log(`Successfully ran ${step.name}`)
     }
 
-    // fs.writeJsonSync(".migration.json", {
-    //   failedAt: "SUCCESS",
-    // })
+    fs.writeJsonSync(".migration.json", {
+      failedAt: "SUCCESS",
+    })
   } else {
     if (failedAt === "SUCCESS") {
       console.log("Migration already successful")
