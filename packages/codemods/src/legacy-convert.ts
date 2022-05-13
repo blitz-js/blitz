@@ -77,8 +77,90 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "Create server & client setup files",
+    action: async () => {
+      const appDir = path.resolve("app")
+      let appDirExist = fs.existsSync(appDir)
+
+      if (appDirExist) {
+        fs.writeFileSync(
+          `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
+          `
+          import { setupBlitzServer } from "@blitzjs/next"
+          import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
+          import { db } from "db"
+          import { simpleRolesIsAuthorized } from "@blitzjs/auth"
+          
+          const { gSSP, gSP, api } = setupBlitzServer({
+            plugins: [
+              AuthServerPlugin({
+                cookiePrefix: "blitz-cookie-prefix",
+                // TODO fix type
+                storage: PrismaStorage(db${isTypescript && " as any"}),
+                isAuthorized: simpleRolesIsAuthorized,
+              }),
+            ],
+          })
+          
+          export { gSSP, gSP, api }
+        `,
+        )
+
+        fs.writeFileSync(
+          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+          `
+          import { AuthClientPlugin } from "@blitzjs/auth"
+          import { setupBlitzClient } from "@blitzjs/next"
+          import { BlitzRpcPlugin } from "@blitzjs/rpc"
+          
+          export const { withBlitz } = setupBlitzClient({
+            plugins: [
+              AuthClientPlugin({
+                cookiePrefix: "blitz-cookie-prefix",
+              }),
+              BlitzRpcPlugin({
+                reactQueryOptions: {
+                  queries: {
+                    staleTime: 7000,
+                  },
+                },
+              }),
+            ],
+          })
+        `,
+        )
+      } else {
+        throw new Error("App directory doesn't exit")
+      }
+    },
+  })
+
+  steps.push({
+    name: "Create pages/api/rpc dir for next.js",
+    action: () => {
+      const pagesDir = path.resolve("pages/api/rpc")
+
+      if (!fs.existsSync(pagesDir)) {
+        fs.mkdirSync(pagesDir, {recursive: true})
+      }
+
+      fs.writeFileSync(
+        path.resolve(`${pagesDir}/[...blitz].${isTypescript ? "ts" : "js"}`),
+        `
+      import { rpcHandler } from "@blitzjs/rpc"
+      import { api } from "app/blitz-server"
+
+      export default api(rpcHandler({ onError: console.log }))
+      `,
+      )
+
+      throw new Error("ERROR")
+    },
+  })
+
   // Loop through steps and run the action
-  if (failedAt || failedAt !== "SUCCESS" || isLegacyBlitz) {
+  if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
       // Ignore previous steps and continue at step that was failed
       if (failedAt && index + 1 !== failedAt) {
@@ -98,9 +180,9 @@ const legacyConvert = async () => {
       console.log(`Successfully ran ${step.name}`)
     }
 
-    fs.writeJsonSync(".migration.json", {
-      failedAt: "SUCCESS",
-    })
+    // fs.writeJsonSync(".migration.json", {
+    //   failedAt: "SUCCESS",
+    // })
   } else {
     if (failedAt === "SUCCESS") {
       console.log("Migration already successful")
