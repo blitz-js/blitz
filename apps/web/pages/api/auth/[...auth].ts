@@ -14,7 +14,7 @@ export default api(
             consumerKey: process.env.TWITTER_CONSUMER_KEY as string,
             consumerSecret: process.env.TWITTER_CONSUMER_SECRET as string,
             accessTokenURL: "https://api.twitter.com/oauth/access_token",
-            callbackURL: "http://127.0.0.1:3001/api/auth/twitter/callback",
+            callbackURL: "http://127.0.0.1:3000/api/auth/twitter/callback",
             includeEmail: true,
           },
           async function (_token, _tokenSecret, profile, done) {
