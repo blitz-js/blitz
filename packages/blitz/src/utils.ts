@@ -1,4 +1,6 @@
 import {Middleware} from "./index-server"
+import * as path from "path"
+import * as fs from "fs"
 
 export function assert(condition: any, message: string): asserts condition {
   if (!condition) throw new Error(message)
