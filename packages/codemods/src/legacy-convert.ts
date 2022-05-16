@@ -1,6 +1,7 @@
-import j from "jscodeshift"
+import j, {ImportDeclaration} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
+import {parseSync} from "@babel/core"
 
 const legacyConvert = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -47,7 +48,7 @@ const legacyConvert = async () => {
         ),
       ])
       parsedProgram.value.program.body.push(blitzDeclare)
-
+      j.stringLiteral
       // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
       let moduleExportExpression = j.expressionStatement(
         j.assignmentExpression(
@@ -175,6 +176,169 @@ const legacyConvert = async () => {
 
       // Remove pages dir from the app dir after move is complete
       fs.removeSync(path.join(appDir, "pages"))
+    },
+  })
+
+  steps.push({
+    name: "Remove blitz/babel from babel config file",
+    action: () => {
+      const babelConfig = path.resolve("babel.config.js")
+      const fileBuffer = fs.readFileSync(babelConfig)
+      const fileSource = fileBuffer.toString("utf-8")
+      const program = j(fileSource)
+      const parsedProgram = program.get()
+      parsedProgram.value.program.body[0].expression.right.properties.forEach((e: any) => {
+        if (e.key.name === "presets") {
+          const elem = e.value.elements.findIndex((e: any) => {
+            return e.value === "blitz/babel"
+          })
+          e.value.elements.splice(elem, 1)
+        }
+      })
+
+      fs.writeFileSync(babelConfig, program.toSource())
+    },
+  })
+
+  steps.push({
+    name: "Update imports",
+    action: () => {
+      const appDir = path.resolve("app")
+
+      const specialImports: Record<string, string> = {
+        Link: "next/link",
+        Image: "next/image",
+        Script: "next/script",
+
+        Document: "next/document",
+        DocumentHead: "next/document",
+        Html: "next/document",
+        Main: "next/document",
+        BlitzScript: "next/document",
+
+        AuthenticationError: "blitz",
+        AuthorizationError: "blitz",
+        CSRFTokenMismatchError: "blitz",
+        NotFoundError: "blitz",
+        formatZodError: "blitz",
+        recursiveFormatZodErrors: "blitz",
+        validateZodSchema: "blitz",
+        enhancePrisma: "blitz",
+        ErrorBoundary: "@blitzjs/next",
+
+        paginate: "blitz",
+        invokeWithMiddleware: "@blitzjs/rpc",
+        passportAuth: "@blitzjs/auth",
+        sessionMiddleware: "@blitzjs/auth",
+        simpleRolesIsAuthorized: "@blitzjs/auth",
+        getSession: "@blitzjz/auth",
+        setPublicDataForUser: "@blitzjs/auth",
+        SecurePassword: "@blitzjs/auth",
+        hash256: "@blitzjs/auth",
+        generateToken: "@blitzjs/auth",
+        resolver: "@blitzjs/rpc",
+        connectMiddleware: "blitz",
+
+        getAntiCSRFToken: "@blitzjs/rpc",
+        useSession: "@blitzjs/rpc",
+        useAuthenticatedSession: "@blitzjs/rpc",
+        useRedirectAuthenticated: "@blitzjs/rpc",
+        useAuthorize: "@blitzjs/rpc",
+        useQuery: "@blitzjs/rpc",
+        usePaginatedQuery: "@blitzjs/rpc",
+        useInfiniteQuery: "@blitzjs/rpc",
+        useMutation: "@blitzjs/rpc",
+        queryClient: "@blitzjs/rpc",
+        getQueryKey: "@blitzjs/rpc",
+        getInfiniteQueryKey: "@blitzjs/rpc",
+        invalidateQuery: "@blitzjs/rpc",
+        setQueryData: "@blitzjs/rpc",
+        useQueryErrorResetBoundary: "@blitzjs/rpc",
+        QueryClient: "@blitzjs/rpc",
+        dehydrate: "@blitzjs/rpc",
+        invoke: "@blitzjs/rpc",
+
+        Head: "next/head",
+
+        App: "next/app",
+
+        dynamic: "next/dynamic",
+        noSSR: "next/dynamic",
+
+        getConfig: "next/config",
+        setConfig: "next/config",
+
+        ErrorComponent: "next/error",
+      }
+
+      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+        let files = fs.readdirSync(dirPath)
+        files.forEach((file) => {
+          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+          } else {
+            arrayOfFiles.push(path.join(dirPath, "/", file))
+          }
+        })
+        return arrayOfFiles
+      }
+
+      getAllFiles(appDir).forEach((filename) => {
+        const name = path.parse(filename).name
+        const filepath = path.resolve(appDir, filename)
+        const fileBuffer = fs.readFileSync(filepath)
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: filepath, // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+        const parsedProgram = program.get()
+
+        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
+          if (e.type === "ImportDeclaration") {
+            if (e.source.value === "blitz") {
+              const specifierIndexesToRemove: number[] = []
+              e.specifiers?.slice().forEach((specifier: any, index) => {
+                const importedName =
+                  specifier.imported.type === "StringLiteral"
+                    ? specifier.imported.value
+                    : specifier.imported.name
+                if (importedName in specialImports) {
+                  parsedProgram.value.program.body.unshift(
+                    j.importDeclaration(
+                      [specifier],
+                      j.stringLiteral(specialImports[importedName] as string),
+                    ),
+                  )
+                  specifierIndexesToRemove.push(index)
+                }
+              })
+              specifierIndexesToRemove.reverse().forEach((index) => {
+                e.specifiers?.splice(index, 1)
+              })
+              if (!e.specifiers?.length) {
+                const index = parsedProgram.value.program.body.indexOf(e)
+                parsedProgram.value.program.body.splice(index, 1)
+              }
+            }
+          }
+        })
+        fs.writeFileSync(filepath, program.toSource())
+      })
     },
   })
 

@@ -21,6 +21,10 @@
   ],
   "bin": "bin/@blitzjs/codemods",
   "dependencies": {
+    "@babel/core": "7.12.10",
+    "@babel/plugin-proposal-class-properties": "7.17.12",
+    "@babel/plugin-syntax-jsx": "7.17.12",
+    "@babel/plugin-syntax-typescript": "7.17.12",
     "arg": "5.0.1",
     "chalk": "^4.1.0",
     "cross-spawn": "7.0.3",
@@ -32,7 +36,6 @@
     "ts-node": "10.7.0"
   },
   "devDependencies": {
-    "@babel/core": "7.12.10",
     "@babel/preset-env": "7.12.10",
     "@blitzjs/config": "workspace:*",
     "@types/jscodeshift": "0.11.2",
