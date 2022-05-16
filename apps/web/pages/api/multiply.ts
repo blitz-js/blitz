@@ -1,8 +1,8 @@
 import {NextApiRequest, NextApiResponse} from "next"
-import {prisma} from "../../prisma/index"
+import db from "db"
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-  const session = await prisma.session.findFirst({
+  const session = await db.session.findFirst({
     where: {
       handle: "test",
     },
