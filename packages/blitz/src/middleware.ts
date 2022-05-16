@@ -3,7 +3,7 @@ import {compose, Ctx, Middleware, MiddlewareNext, MiddlewareResponse} from "./in
 
 export async function handleRequestWithMiddleware<
   Req extends IncomingMessage = IncomingMessage,
-  Res extends MiddlewareResponse = MiddlewareResponse,
+  Res extends ServerResponse = ServerResponse,
 >(
   req: Req,
   res: Res,
@@ -16,8 +16,8 @@ export async function handleRequestWithMiddleware<
     stackPrintOnError?: boolean
   } = {},
 ) {
-  if (!res.blitzCtx) {
-    ;(res as MiddlewareResponse).blitzCtx = {} as Ctx
+  if (!(res as unknown as MiddlewareResponse).blitzCtx) {
+    ;(res as unknown as MiddlewareResponse).blitzCtx = {} as Ctx
   }
   if (!(res as any)._blitz) {
     ;(res as any)._blitz = {}
@@ -26,7 +26,7 @@ export async function handleRequestWithMiddleware<
   let handler = compose(middleware)
 
   try {
-    await handler(req as IncomingMessage, res as MiddlewareResponse, (error) => {
+    await handler(req, res, (error) => {
       if (error) {
         throw error
       }
