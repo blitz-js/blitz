@@ -1,12 +1,12 @@
 import {setPublicDataForUser} from "@blitzjs/auth"
 import {api} from "app/blitz-server"
-import {prisma} from "../../prisma/index"
+import db from "db"
 
 export default api(async (req, res, ctx) => {
   if (ctx.session.$thisIsAuthorized()) {
     ctx.session.$publicData
 
-    await prisma.user.update({
+    await db.user.update({
       where: {id: ctx.session.userId as number},
       data: {role: req.query.role as string},
     })
