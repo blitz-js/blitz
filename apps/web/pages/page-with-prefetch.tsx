@@ -1,4 +1,3 @@
-// AFTER
 
 import {gSSP} from "app/blitz-server"
 import getUsers from "app/queries/getUsers"
