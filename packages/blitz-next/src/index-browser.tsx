@@ -31,8 +31,12 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
-      // supress first render flicker
+      const [mounted, setMounted] = React.useState(false)
+
       React.useEffect(() => {
+        // Current workaround to fix react 18 suspense error issue
+        setMounted(true)
+        // supress first render flicker
         setTimeout(() => {
           document.documentElement.classList.add("blitz-first-render-complete")
         })
@@ -43,7 +47,11 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
           <>
             {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-            <UserAppRoot {...props} Component={component} />
+            {mounted && (
+              <React.Suspense fallback="Loading...">
+                <UserAppRoot {...props} Component={component} />
+              </React.Suspense>
+            )}
           </>
         </BlitzProvider>
       )
