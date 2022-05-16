@@ -15,7 +15,7 @@ import {
 import {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionContext} from "../shared"
 
-const isFunction = (functionToCheck: any): functionToCheck is Function =>
+const isFunction = (functionToCheck: unknown): functionToCheck is Function =>
   typeof functionToCheck === "function"
 
 const isVerifyCallbackResult = (value: unknown): value is VerifyCallbackResult =>
@@ -51,16 +51,25 @@ export type BlitzPassportConfigObject = {
 
 export type VerifyCallbackResult = {
   publicData: PublicData
-  privateData?: Record<string, any>
+  privateData?: Record<string, unknown>
   redirectUrl?: string
 }
 
-export type ApiHandler = (req: IncomingMessage, res: ServerResponse) => void | Promise<void>
+export type ApiHandlerIncomingMessage = IncomingMessage & {
+  query: {
+    [key: string]: string | string[]
+  }
+}
+
+export type ApiHandler = (
+  req: ApiHandlerIncomingMessage,
+  res: MiddlewareResponse & {status: (statusCode: number) => any},
+) => void | Promise<void>
 
 export function passportAuth(config: BlitzPassportConfig): ApiHandler {
   return async function authHandler(req, res) {
     const configObject: BlitzPassportConfigObject = isFunction(config)
-      ? config({ctx: (res as any).blitzCtx as Ctx, req, res})
+      ? config({ctx: res.blitzCtx, req, res})
       : config
 
     const cookieSessionMiddleware = cookieSession({
@@ -70,27 +79,27 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const passportMiddleware = passport.initialize()
 
-    const middleware: Middleware<IncomingMessage, MiddlewareResponse<Ctx>>[] = [
-      connectMiddleware(cookieSessionMiddleware as any),
-      connectMiddleware(passportMiddleware as any),
+    const middleware: Middleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
+      connectMiddleware(cookieSessionMiddleware as Middleware),
+      connectMiddleware(passportMiddleware as Middleware),
       connectMiddleware(passport.session()),
     ]
 
     if (configObject.secureProxy) {
-      middleware.push(secureProxyMiddleware as any)
+      middleware.push(secureProxyMiddleware)
     }
 
     assert(
-      (req as any).query.auth,
+      req.query.auth,
       "req.query.auth is not defined. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route",
     )
     assert(
-      Array.isArray((req as any).query.auth),
+      Array.isArray(req.query.auth),
       "req.query.auth must be an array. Page must be named [...auth].ts/js. See more at https://blitzjs.com/docs/passportjs#1-add-the-passport-js-api-route",
     )
 
-    if (!(req as any).query.auth.length) {
-      return (req as any).status(404).end()
+    if (!req.query.auth.length) {
+      return res.status(404).end()
     }
 
     assert(
@@ -99,24 +108,24 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
     )
 
     const blitzStrategy = configObject.strategies.find(
-      ({strategy}) => strategy.name === (req as any).query.auth[0],
+      ({strategy}) => strategy.name === req.query?.auth?.[0] ?? "",
     )
-    assert(blitzStrategy, `A passport strategy was not found for: ${(req as any).query.auth[0]}`)
+    assert(blitzStrategy, `A passport strategy was not found for: ${req.query.auth[0]}`)
 
     const {strategy, authenticateOptions} = blitzStrategy
 
     passport.use(strategy)
     const strategyName = strategy.name as string
 
-    if ((req as any).query.auth.length === 1) {
+    if (req.query.auth.length === 1) {
       console.info(`Starting authentication via ${strategyName}...`)
-      if ((req as any).query.redirectUrl) {
+      if (req.query.redirectUrl) {
         // eslint-disable-next-line no-shadow
         middleware.push(async (req, res, next) => {
-          const session = (res as any).blitzCtx.session as SessionContext
+          const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
           await session.$setPublicData({
-            [INTERNAL_REDIRECT_URL_KEY]: (req as any).query.redirectUrl,
+            [INTERNAL_REDIRECT_URL_KEY]: req.query.redirectUrl,
           } as any)
           return next()
         })
@@ -124,15 +133,15 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       middleware.push(
         connectMiddleware(passport.authenticate(strategyName, {...authenticateOptions})),
       )
-    } else if ((req as any).query.auth[1] === "callback") {
+    } else if (req.query.auth[1] === "callback") {
       console.info(`Processing callback for ${strategyName}...`)
       middleware.push(
         // eslint-disable-next-line no-shadow
         connectMiddleware((req, res, next) => {
-          const session = (res as any).blitzCtx.session as SessionContext
+          const session = res.blitzCtx.session as SessionContext
           assert(session, "Missing Blitz sessionMiddleware!")
 
-          passport.authenticate(strategyName, async (err: any, result: unknown) => {
+          passport.authenticate(strategyName, async (err: any, result: any) => {
             try {
               let error = err
 
@@ -144,7 +153,7 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
               }
 
               const redirectUrlFromVerifyResult =
-                result && typeof result === "object" && (result as any).redirectUrl
+                result && typeof result === "object" && result.redirectUrl
               let redirectUrl: string =
                 redirectUrlFromVerifyResult ||
                 (session.$publicData as any)[INTERNAL_REDIRECT_URL_KEY] ||
@@ -186,6 +195,10 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
       )
     }
 
-    await handleRequestWithMiddleware(req, res, middleware as any)
+    await handleRequestWithMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>(
+      req,
+      res,
+      middleware,
+    )
   }
 }
