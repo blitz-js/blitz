@@ -23,8 +23,8 @@ export * from "./index-browser"
 export interface Ctx extends BlitzCtx {}
 
 export interface BlitzNextApiResponse
-  extends NextApiResponse,
-    Omit<MiddlewareResponse, keyof NextApiResponse> {}
+  extends MiddlewareResponse,
+    Omit<NextApiResponse, keyof MiddlewareResponse> {}
 
 export type NextApiHandler = (
   req: NextApiRequest,
@@ -60,7 +60,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const gSSP =
     <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
-      await handleRequestWithMiddleware(req, res, middlewares)
+      await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
@@ -113,6 +113,7 @@ import type {NextConfig} from "next"
 import {getQueryKey, installWebpackConfig} from "@blitzjs/rpc"
 import {dehydrate} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
+import {IncomingMessage, ServerResponse} from "http"
 
 export function withBlitz(nextConfig: NextConfig = {}) {
   return Object.assign({}, nextConfig, {
