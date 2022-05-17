@@ -2,4 +2,4 @@
 "@blitzjs/next": patch
 ---
 
-Rename prefetchBlitzQuery yo prefetchQuery, add prefetchInfiniteQuery
+Rename prefetchBlitzQuery to prefetchQuery, add prefetchInfiniteQuery
