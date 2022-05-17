@@ -7,23 +7,24 @@ const legacyConvert = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
   let isLegacyBlitz = fs.existsSync(path.resolve(blitzConfigFile))
+  const appDir = path.resolve("app")
   let failedAt =
     fs.existsSync(path.resolve(".migration.json")) && fs.readJSONSync("./.migration.json").failedAt
 
   let steps: {
     name: string
-    action: () => void
+    action: () => Promise<void>
   }[] = []
 
   // Add steps in order
   steps.push({
     name: "Rename blitz.config to next.config",
-    action: () => fs.renameSync(blitzConfigFile, "next.config.js"),
+    action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
   })
 
   steps.push({
     name: "Clear legacy config file and write new one",
-    action: () => {
+    action: async () => {
       const nextConfig = path.resolve("next.config.js")
       const fileBuffer = fs.readFileSync(nextConfig)
       const fileSource = fileBuffer.toString("utf-8")
@@ -81,7 +82,6 @@ const legacyConvert = async () => {
   steps.push({
     name: "Create server & client setup files",
     action: async () => {
-      const appDir = path.resolve("app")
       let appDirExist = fs.existsSync(appDir)
 
       if (appDirExist) {
@@ -139,7 +139,7 @@ const legacyConvert = async () => {
 
   steps.push({
     name: "Create pages/api/rpc dir & [...blitz] wildecard api route for next.js",
-    action: () => {
+    action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
 
       if (!fs.existsSync(pagesDir)) {
@@ -160,7 +160,7 @@ const legacyConvert = async () => {
 
   steps.push({
     name: "Move pages dir from app dir to the pages dir created above",
-    action: () => {
+    action: async () => {
       const appDir = path.resolve("app")
       const subdirs = fs.readdirSync(appDir)
 
@@ -181,7 +181,7 @@ const legacyConvert = async () => {
 
   steps.push({
     name: "Remove blitz/babel from babel config file",
-    action: () => {
+    action: async () => {
       const babelConfig = path.resolve("babel.config.js")
       const fileBuffer = fs.readFileSync(babelConfig)
       const fileSource = fileBuffer.toString("utf-8")
@@ -202,7 +202,7 @@ const legacyConvert = async () => {
 
   steps.push({
     name: "Update imports",
-    action: () => {
+    action: async () => {
       const appDir = path.resolve("app")
 
       const specialImports: Record<string, string> = {
@@ -327,9 +327,11 @@ const legacyConvert = async () => {
                   specifierIndexesToRemove.push(index)
                 }
               })
+              // Remove import from original blitz import deconstruct
               specifierIndexesToRemove.reverse().forEach((index) => {
                 e.specifiers?.splice(index, 1)
               })
+              // Removed left over "import 'blitz';"
               if (!e.specifiers?.length) {
                 const index = parsedProgram.value.program.body.indexOf(e)
                 parsedProgram.value.program.body.splice(index, 1)
@@ -338,6 +340,34 @@ const legacyConvert = async () => {
           }
         })
         fs.writeFileSync(filepath, program.toSource())
+      })
+    },
+  })
+
+  steps.push({
+    name: "Consolidate pages dir",
+    action: async () => {
+      const getAllPagesDirs = (dirPath: string) => {
+        let files = fs.readdirSync(dirPath)
+
+        const pageDir = files.reduce((arr: {model: string; path: string}[], file: string) => {
+          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            let subs = fs.readdirSync(dirPath + "/" + file)
+            if (subs.includes("pages")) {
+              arr.push({
+                model: file,
+                path: dirPath + "/" + file + "/pages",
+              })
+            }
+          }
+          return arr
+        }, [])
+
+        return pageDir
+      }
+
+      getAllPagesDirs(appDir).forEach((pages) => {
+        fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
       })
     },
   })
@@ -351,7 +381,7 @@ const legacyConvert = async () => {
       }
       console.log(`Running ${step.name}...`)
       try {
-        step.action()
+        await step.action()
       } catch (err) {
         console.log(`ERROR: ${err}`)
         failedAt = index + 1
