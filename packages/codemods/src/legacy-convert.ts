@@ -372,6 +372,19 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "Move api routes",
+    action: async () => {
+      let apiRoutes = fs.readdirSync(path.join(appDir, "api"))
+      apiRoutes.forEach((dir) => {
+        if (fs.statSync(appDir + "/api/" + dir).isDirectory()) {
+          console.log(path.join(path.resolve("pages"), "api", dir))
+          fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
+        }
+      })
+    },
+  })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
