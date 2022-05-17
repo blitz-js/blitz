@@ -52,6 +52,7 @@ const templates: {[key in Template]: AppGeneratorOptions["template"]} = {
 
 export class New extends Command {
   static description = "Create a new Blitz project"
+  static aliases: string[] = ["n"]
 
   static args = [
     {
