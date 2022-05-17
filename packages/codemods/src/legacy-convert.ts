@@ -85,51 +85,36 @@ const legacyConvert = async () => {
       let appDirExist = fs.existsSync(appDir)
 
       if (appDirExist) {
+        const templatePath = path.join(
+          require.resolve("@blitzjs/generator"),
+          "..",
+          "..",
+          "templates",
+        )
+        const blitzServer = fs
+          .readFileSync(path.join(templatePath, "app", "app", "blitz-server.ts"))
+          .toString()
+        const blitzClient = fs
+          .readFileSync(path.join(templatePath, "app", "app", "blitz-client.ts"))
+          .toString()
+
+        const replaceTemplateValues = (input: string) => {
+          let result = input
+          const token = `__safeNameSlug__`
+          if (result.includes(token)) {
+            result = result.replace(new RegExp(token, "g"), "blitz")
+          }
+          return result
+        }
+
         fs.writeFileSync(
           `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
-          `
-          import { setupBlitzServer } from "@blitzjs/next"
-          import { AuthServerPlugin, PrismaStorage } from "@blitzjs/auth"
-          import { db } from "db"
-          import { simpleRolesIsAuthorized } from "@blitzjs/auth"
-          
-          const { gSSP, gSP, api } = setupBlitzServer({
-            plugins: [
-              AuthServerPlugin({
-                cookiePrefix: "blitz-cookie-prefix",
-                // TODO fix type
-                storage: PrismaStorage(db${isTypescript && " as any"}),
-                isAuthorized: simpleRolesIsAuthorized,
-              }),
-            ],
-          })
-          
-          export { gSSP, gSP, api }
-        `,
+          replaceTemplateValues(blitzServer),
         )
 
         fs.writeFileSync(
           `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
-          `
-          import { AuthClientPlugin } from "@blitzjs/auth"
-          import { setupBlitzClient } from "@blitzjs/next"
-          import { BlitzRpcPlugin } from "@blitzjs/rpc"
-          
-          export const { withBlitz } = setupBlitzClient({
-            plugins: [
-              AuthClientPlugin({
-                cookiePrefix: "blitz-cookie-prefix",
-              }),
-              BlitzRpcPlugin({
-                reactQueryOptions: {
-                  queries: {
-                    staleTime: 7000,
-                  },
-                },
-              }),
-            ],
-          })
-        `,
+          replaceTemplateValues(blitzClient),
         )
       } else {
         throw new Error("App directory doesn't exit")
@@ -141,6 +126,10 @@ const legacyConvert = async () => {
     name: "Create pages/api/rpc dir & [...blitz] wildecard api route for next.js",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
+      const templatePath = path.join(require.resolve("@blitzjs/generator"), "..", "..", "templates")
+      const rpcRoute = fs
+        .readFileSync(path.join(templatePath, "app", "pages", "api", "rpc", "blitzrpcroute.ts"))
+        .toString()
 
       if (!fs.existsSync(pagesDir)) {
         fs.mkdirSync(pagesDir, {recursive: true})
@@ -148,12 +137,7 @@ const legacyConvert = async () => {
 
       fs.writeFileSync(
         path.resolve(`${pagesDir}/[...blitz].${isTypescript ? "ts" : "js"}`),
-        `
-      import { rpcHandler } from "@blitzjs/rpc"
-      import { api } from "app/blitz-server"
-
-      export default api(rpcHandler({ onError: console.log }))
-      `,
+        rpcRoute,
       )
     },
   })
@@ -378,7 +362,6 @@ const legacyConvert = async () => {
       let apiRoutes = fs.readdirSync(path.join(appDir, "api"))
       apiRoutes.forEach((dir) => {
         if (fs.statSync(appDir + "/api/" + dir).isDirectory()) {
-          console.log(path.join(path.resolve("pages"), "api", dir))
           fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
         }
       })
