@@ -402,18 +402,24 @@ const legacyConvert = async () => {
                 }),
             },
           })
-          const findBlitzCall = program.find(j.Identifier, (node) => node.name === "blitz")
-          const findBlitzImport = program
-            .find(j.ImportDeclaration, (node) => {
-              return node.specifiers.some((o: any) => o.local.name === "blitz")
-            })
+
+          const findBlitzCall = program.find(
+            j.Identifier,
+            (node) => node.name === "blitz" || node.escapedText === "blitz",
+          )
+          const findBlitzCustomServerLiteral = program
+            .find(j.StringLiteral, (node) => node.value === "blitz/custom-server")
             .get()
 
-          findBlitzImport.value.source.value = "next"
-          findBlitzImport.value.specifiers[0].local.name = "next"
+          findBlitzCustomServerLiteral.value.value = "next"
           findBlitzCall.forEach((hit) => {
+            // Loops through the blitz calls. Check if its a call expression, require statement or import statement. Will check everything to next instead of blitz
             switch (hit.name) {
               case "callee":
+                hit.value.name = "next"
+              case "id":
+                hit.value.name = "next"
+              case "local":
                 hit.value.name = "next"
             }
           })
@@ -447,18 +453,23 @@ const legacyConvert = async () => {
               }),
           },
         })
-        const findBlitzCall = program.find(j.Identifier, (node) => node.name === "blitz")
-        const findBlitzImport = program
-          .find(j.ImportDeclaration, (node) => {
-            return node.specifiers.some((o: any) => o.local.name === "blitz")
-          })
+        const findBlitzCall = program.find(
+          j.Identifier,
+          (node) => node.name === "blitz" || node.escapedText === "blitz",
+        )
+        const findBlitzCustomServerLiteral = program
+          .find(j.StringLiteral, (node) => node.value === "blitz/custom-server")
           .get()
 
-        findBlitzImport.value.source.value = "next"
-        findBlitzImport.value.specifiers[0].local.name = "next"
+        findBlitzCustomServerLiteral.value.value = "next"
         findBlitzCall.forEach((hit) => {
+          // Loops through the blitz calls. Check if its a call expression, require statement or import statement. Will check everything to next instead of blitz
           switch (hit.name) {
             case "callee":
+              hit.value.name = "next"
+            case "id":
+              hit.value.name = "next"
+            case "local":
               hit.value.name = "next"
           }
         })
