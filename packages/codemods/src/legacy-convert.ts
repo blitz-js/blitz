@@ -359,12 +359,111 @@ const legacyConvert = async () => {
   steps.push({
     name: "Move api routes",
     action: async () => {
-      let apiRoutes = fs.readdirSync(path.join(appDir, "api"))
-      apiRoutes.forEach((dir) => {
-        if (fs.statSync(appDir + "/api/" + dir).isDirectory()) {
-          fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
+      const apiRoutesExist = fs.existsSync(path.join(appDir, "api"))
+      if (apiRoutesExist) {
+        let apiRoutes = fs.readdirSync(path.join(appDir, "api"))
+        apiRoutes.forEach((dir) => {
+          if (fs.statSync(appDir + "/api/" + dir).isDirectory()) {
+            fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
+          }
+        })
+      }
+    },
+  })
+
+  steps.push({
+    name: "Update custom server input",
+    action: async () => {
+      const customServerDir = path.resolve("server")
+      const customServerFile = path.resolve(`server.${isTypescript ? "ts" : "js"}`)
+
+      // If custom server is inside "server" dir
+      if (fs.existsSync(customServerDir)) {
+        if (fs.readdirSync("server").includes(`index.${isTypescript ? "ts" : "js"}`)) {
+          const fileBuffer = fs.readFileSync(
+            path.join("server", `index.${isTypescript ? "ts" : "js"}`),
+          )
+          const fileSource = fileBuffer.toString("utf-8")
+          const program = j(fileSource, {
+            parser: {
+              parse: (source: string) =>
+                parseSync(source, {
+                  plugins: [require(`@babel/plugin-syntax-jsx`)],
+                  overrides: [
+                    {
+                      test: [`**/*.ts`, `**/*.tsx`],
+                      plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                    },
+                  ],
+                  filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
+                  parserOpts: {
+                    tokens: true, // recast uses this
+                  },
+                }),
+            },
+          })
+          const findBlitzCall = program.find(j.Identifier, (node) => node.name === "blitz")
+          const findBlitzImport = program
+            .find(j.ImportDeclaration, (node) => {
+              return node.specifiers.some((o: any) => o.local.name === "blitz")
+            })
+            .get()
+
+          findBlitzImport.value.source.value = "next"
+          findBlitzImport.value.specifiers[0].local.name = "next"
+          findBlitzCall.forEach((hit) => {
+            switch (hit.name) {
+              case "callee":
+                hit.value.name = "next"
+            }
+          })
+
+          fs.writeFileSync(
+            path.join("server", `index.${isTypescript ? "ts" : "js"}`),
+            program.toSource(),
+          )
         }
-      })
+      }
+
+      // If custom server file found outside dir
+      if (fs.existsSync(customServerFile)) {
+        const fileBuffer = fs.readFileSync(customServerFile)
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: customServerFile, // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+        const findBlitzCall = program.find(j.Identifier, (node) => node.name === "blitz")
+        const findBlitzImport = program
+          .find(j.ImportDeclaration, (node) => {
+            return node.specifiers.some((o: any) => o.local.name === "blitz")
+          })
+          .get()
+
+        findBlitzImport.value.source.value = "next"
+        findBlitzImport.value.specifiers[0].local.name = "next"
+        findBlitzCall.forEach((hit) => {
+          switch (hit.name) {
+            case "callee":
+              hit.value.name = "next"
+          }
+        })
+        fs.writeFileSync(customServerFile, program.toSource())
+      }
     },
   })
 
