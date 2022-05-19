@@ -73,7 +73,11 @@ const legacyConvert = async () => {
       packageJsonPath.dependencies["@blitzjs/next"] = "alpha"
       packageJsonPath.dependencies["@blitzjs/rpc"] = "latest"
       packageJsonPath.dependencies["@blitzjs/auth"] = "latest"
-      packageJsonPath.dependencies["@blitzjs/auth"] = "alpha"
+      packageJsonPath.dependencies["blitz"] = "alpha"
+      packageJsonPath.dependencies["next"] = "latest"
+      packageJsonPath.dependencies["prisma"] = "latest"
+      packageJsonPath.dependencies["@prisma/client"] = "latest"
+      packageJsonPath.devDependencies["typescript"] = isTypescript && "latest"
 
       fs.writeFileSync(path.resolve("package.json"), JSON.stringify(packageJsonPath, null, " "))
     },
@@ -104,6 +108,7 @@ const legacyConvert = async () => {
         validateZodSchema: "blitz",
         enhancePrisma: "blitz",
         ErrorBoundary: "@blitzjs/next",
+        ErrorFallbackProps: "@blitzjs/next",
 
         paginate: "blitz",
         invokeWithMiddleware: "@blitzjs/rpc",
@@ -119,10 +124,10 @@ const legacyConvert = async () => {
         connectMiddleware: "blitz",
 
         getAntiCSRFToken: "@blitzjs/rpc",
-        useSession: "@blitzjs/rpc",
-        useAuthenticatedSession: "@blitzjs/rpc",
-        useRedirectAuthenticated: "@blitzjs/rpc",
-        useAuthorize: "@blitzjs/rpc",
+        useSession: "@blitzjs/auth",
+        useAuthenticatedSession: "@blitzjs/auth",
+        useRedirectAuthenticated: "@blitzjs/auth",
+        useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
         usePaginatedQuery: "@blitzjs/rpc",
         useInfiniteQuery: "@blitzjs/rpc",
@@ -138,6 +143,7 @@ const legacyConvert = async () => {
         invoke: "@blitzjs/rpc",
         Routes: "@blitzjs/next",
         useRouterQuery: "next/router",
+        useRouter: "next/router",
 
         Head: "next/head",
 
@@ -149,7 +155,9 @@ const legacyConvert = async () => {
         getConfig: "next/config",
         setConfig: "next/config",
 
-        ErrorComponent: "next/error",
+        ErrorComponent: "@blitzjs/next",
+        AppProps: "next/app",
+        BlitzPage: "@blitzjs/auth",
       }
 
       const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
@@ -269,7 +277,7 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Create pages/api/rpc dir & [...blitz] wildecard api route for next.js",
+    name: "Create pages/api/rpc dir & [[...blitz]] wildecard api route for next.js",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
       const templatePath = path.join(require.resolve("@blitzjs/generator"), "..", "..", "templates")
@@ -282,7 +290,7 @@ const legacyConvert = async () => {
       }
 
       fs.writeFileSync(
-        path.resolve(`${pagesDir}/[...blitz].${isTypescript ? "ts" : "js"}`),
+        path.resolve(`${pagesDir}/[[...blitz]].${isTypescript ? "ts" : "js"}`),
         rpcRoute,
       )
     },
@@ -310,23 +318,12 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Remove blitz/babel from babel config file",
+    name: "Remove babel config file",
     action: async () => {
-      const babelConfig = path.resolve("babel.config.js")
-      const fileBuffer = fs.readFileSync(babelConfig)
-      const fileSource = fileBuffer.toString("utf-8")
-      const program = j(fileSource)
-      const parsedProgram = program.get()
-      parsedProgram.value.program.body[0].expression.right.properties.forEach((e: any) => {
-        if (e.key.name === "presets") {
-          const elem = e.value.elements.findIndex((e: any) => {
-            return e.value === "blitz/babel"
-          })
-          e.value.elements.splice(elem, 1)
-        }
-      })
-
-      fs.writeFileSync(babelConfig, program.toSource())
+      const babelConfig = fs.existsSync(path.resolve("babel.config.js"))
+      if (babelConfig) {
+        fs.removeSync(path.resolve("babel.config.js"))
+      }
     },
   })
 
