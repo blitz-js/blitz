@@ -2,11 +2,11 @@ import * as fs from "fs"
 import * as path from "path"
 
 export function readBlitzConfig(rootFolder: string = process.cwd()) {
-  const packageJsonFile = fs.readFileSync(path.join(rootFolder, "package.json"), {
+  const nextConfigFile = fs.readFileSync(path.join(rootFolder, "next.config.js"), {
     encoding: "utf8",
     flag: "r",
   })
-  const packageJson = JSON.parse(packageJsonFile)
+  const nextConfig = eval(nextConfigFile)
 
-  return packageJson.blitz || {}
+  return nextConfig.blitz || {}
 }

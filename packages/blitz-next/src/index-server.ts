@@ -131,7 +131,15 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   return {gSSP, gSP, api}
 }
 
-export function withBlitz(nextConfig: NextConfig = {}) {
+export interface BlitzConfig extends NextConfig {
+  blitz?: {
+    customServer?: {
+      hotReload?: boolean
+    }
+  }
+}
+
+export function withBlitz(nextConfig: BlitzConfig = {}) {
   return Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)
