@@ -158,6 +158,7 @@ const legacyConvert = async () => {
         ErrorComponent: "@blitzjs/next",
         AppProps: "@blitzjs/next",
         BlitzPage: "@blitzjs/next",
+        BlitzLayout: "@blitzjs/next",
       }
 
       const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
