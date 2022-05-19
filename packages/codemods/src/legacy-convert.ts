@@ -80,6 +80,152 @@ const legacyConvert = async () => {
   })
 
   steps.push({
+    name: "Update imports",
+    action: async () => {
+      const appDir = path.resolve("app")
+
+      const specialImports: Record<string, string> = {
+        Link: "next/link",
+        Image: "next/image",
+        Script: "next/script",
+
+        Document: "next/document",
+        DocumentHead: "next/document",
+        Html: "next/document",
+        Main: "next/document",
+        BlitzScript: "next/document",
+
+        AuthenticationError: "blitz",
+        AuthorizationError: "blitz",
+        CSRFTokenMismatchError: "blitz",
+        NotFoundError: "blitz",
+        formatZodError: "blitz",
+        recursiveFormatZodErrors: "blitz",
+        validateZodSchema: "blitz",
+        enhancePrisma: "blitz",
+        ErrorBoundary: "@blitzjs/next",
+
+        paginate: "blitz",
+        invokeWithMiddleware: "@blitzjs/rpc",
+        passportAuth: "@blitzjs/auth",
+        sessionMiddleware: "@blitzjs/auth",
+        simpleRolesIsAuthorized: "@blitzjs/auth",
+        getSession: "@blitzjz/auth",
+        setPublicDataForUser: "@blitzjs/auth",
+        SecurePassword: "@blitzjs/auth",
+        hash256: "@blitzjs/auth",
+        generateToken: "@blitzjs/auth",
+        resolver: "@blitzjs/rpc",
+        connectMiddleware: "blitz",
+
+        getAntiCSRFToken: "@blitzjs/rpc",
+        useSession: "@blitzjs/rpc",
+        useAuthenticatedSession: "@blitzjs/rpc",
+        useRedirectAuthenticated: "@blitzjs/rpc",
+        useAuthorize: "@blitzjs/rpc",
+        useQuery: "@blitzjs/rpc",
+        usePaginatedQuery: "@blitzjs/rpc",
+        useInfiniteQuery: "@blitzjs/rpc",
+        useMutation: "@blitzjs/rpc",
+        queryClient: "@blitzjs/rpc",
+        getQueryKey: "@blitzjs/rpc",
+        getInfiniteQueryKey: "@blitzjs/rpc",
+        invalidateQuery: "@blitzjs/rpc",
+        setQueryData: "@blitzjs/rpc",
+        useQueryErrorResetBoundary: "@blitzjs/rpc",
+        QueryClient: "@blitzjs/rpc",
+        dehydrate: "@blitzjs/rpc",
+        invoke: "@blitzjs/rpc",
+        Routes: "@blitzjs/next",
+        useRouterQuery: "next/router",
+
+        Head: "next/head",
+
+        App: "next/app",
+
+        dynamic: "next/dynamic",
+        noSSR: "next/dynamic",
+
+        getConfig: "next/config",
+        setConfig: "next/config",
+
+        ErrorComponent: "next/error",
+      }
+
+      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+        let files = fs.readdirSync(dirPath)
+        files.forEach((file) => {
+          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+          } else {
+            arrayOfFiles.push(path.join(dirPath, "/", file))
+          }
+        })
+        return arrayOfFiles
+      }
+
+      getAllFiles(appDir).forEach((filename) => {
+        const filepath = path.resolve(appDir, filename)
+        const fileBuffer = fs.readFileSync(filepath)
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                configFile: false,
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: filepath, // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+        const parsedProgram = program.get()
+
+        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
+          if (e.type === "ImportDeclaration") {
+            if (e.source.value === "blitz") {
+              const specifierIndexesToRemove: number[] = []
+              e.specifiers?.slice().forEach((specifier: any, index) => {
+                const importedName =
+                  specifier.imported.type === "StringLiteral"
+                    ? specifier.imported.value
+                    : specifier.imported.name
+                if (importedName in specialImports) {
+                  parsedProgram.value.program.body.unshift(
+                    j.importDeclaration(
+                      [specifier],
+                      j.stringLiteral(specialImports[importedName] as string),
+                    ),
+                  )
+                  specifierIndexesToRemove.push(index)
+                }
+              })
+              // Remove import from original blitz import deconstruct
+              specifierIndexesToRemove.reverse().forEach((index) => {
+                e.specifiers?.splice(index, 1)
+              })
+              // Removed left over "import 'blitz';"
+              if (!e.specifiers?.length) {
+                const index = parsedProgram.value.program.body.indexOf(e)
+                parsedProgram.value.program.body.splice(index, 1)
+              }
+            }
+          }
+        })
+        fs.writeFileSync(filepath, program.toSource())
+      })
+    },
+  })
+
+  steps.push({
     name: "Create server & client setup files",
     action: async () => {
       let appDirExist = fs.existsSync(appDir)
@@ -181,150 +327,6 @@ const legacyConvert = async () => {
       })
 
       fs.writeFileSync(babelConfig, program.toSource())
-    },
-  })
-
-  steps.push({
-    name: "Update imports",
-    action: async () => {
-      const appDir = path.resolve("app")
-
-      const specialImports: Record<string, string> = {
-        Link: "next/link",
-        Image: "next/image",
-        Script: "next/script",
-
-        Document: "next/document",
-        DocumentHead: "next/document",
-        Html: "next/document",
-        Main: "next/document",
-        BlitzScript: "next/document",
-
-        AuthenticationError: "blitz",
-        AuthorizationError: "blitz",
-        CSRFTokenMismatchError: "blitz",
-        NotFoundError: "blitz",
-        formatZodError: "blitz",
-        recursiveFormatZodErrors: "blitz",
-        validateZodSchema: "blitz",
-        enhancePrisma: "blitz",
-        ErrorBoundary: "@blitzjs/next",
-
-        paginate: "blitz",
-        invokeWithMiddleware: "@blitzjs/rpc",
-        passportAuth: "@blitzjs/auth",
-        sessionMiddleware: "@blitzjs/auth",
-        simpleRolesIsAuthorized: "@blitzjs/auth",
-        getSession: "@blitzjz/auth",
-        setPublicDataForUser: "@blitzjs/auth",
-        SecurePassword: "@blitzjs/auth",
-        hash256: "@blitzjs/auth",
-        generateToken: "@blitzjs/auth",
-        resolver: "@blitzjs/rpc",
-        connectMiddleware: "blitz",
-
-        getAntiCSRFToken: "@blitzjs/rpc",
-        useSession: "@blitzjs/rpc",
-        useAuthenticatedSession: "@blitzjs/rpc",
-        useRedirectAuthenticated: "@blitzjs/rpc",
-        useAuthorize: "@blitzjs/rpc",
-        useQuery: "@blitzjs/rpc",
-        usePaginatedQuery: "@blitzjs/rpc",
-        useInfiniteQuery: "@blitzjs/rpc",
-        useMutation: "@blitzjs/rpc",
-        queryClient: "@blitzjs/rpc",
-        getQueryKey: "@blitzjs/rpc",
-        getInfiniteQueryKey: "@blitzjs/rpc",
-        invalidateQuery: "@blitzjs/rpc",
-        setQueryData: "@blitzjs/rpc",
-        useQueryErrorResetBoundary: "@blitzjs/rpc",
-        QueryClient: "@blitzjs/rpc",
-        dehydrate: "@blitzjs/rpc",
-        invoke: "@blitzjs/rpc",
-
-        Head: "next/head",
-
-        App: "next/app",
-
-        dynamic: "next/dynamic",
-        noSSR: "next/dynamic",
-
-        getConfig: "next/config",
-        setConfig: "next/config",
-
-        ErrorComponent: "next/error",
-      }
-
-      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
-        let files = fs.readdirSync(dirPath)
-        files.forEach((file) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-          } else {
-            arrayOfFiles.push(path.join(dirPath, "/", file))
-          }
-        })
-        return arrayOfFiles
-      }
-
-      getAllFiles(appDir).forEach((filename) => {
-        const name = path.parse(filename).name
-        const filepath = path.resolve(appDir, filename)
-        const fileBuffer = fs.readFileSync(filepath)
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: filepath, // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
-        const parsedProgram = program.get()
-
-        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
-          if (e.type === "ImportDeclaration") {
-            if (e.source.value === "blitz") {
-              const specifierIndexesToRemove: number[] = []
-              e.specifiers?.slice().forEach((specifier: any, index) => {
-                const importedName =
-                  specifier.imported.type === "StringLiteral"
-                    ? specifier.imported.value
-                    : specifier.imported.name
-                if (importedName in specialImports) {
-                  parsedProgram.value.program.body.unshift(
-                    j.importDeclaration(
-                      [specifier],
-                      j.stringLiteral(specialImports[importedName] as string),
-                    ),
-                  )
-                  specifierIndexesToRemove.push(index)
-                }
-              })
-              // Remove import from original blitz import deconstruct
-              specifierIndexesToRemove.reverse().forEach((index) => {
-                e.specifiers?.splice(index, 1)
-              })
-              // Removed left over "import 'blitz';"
-              if (!e.specifiers?.length) {
-                const index = parsedProgram.value.program.body.indexOf(e)
-                parsedProgram.value.program.body.splice(index, 1)
-              }
-            }
-          }
-        })
-        fs.writeFileSync(filepath, program.toSource())
-      })
     },
   })
 
@@ -475,6 +477,163 @@ const legacyConvert = async () => {
         })
         fs.writeFileSync(customServerFile, program.toSource())
       }
+    },
+  })
+
+  steps.push({
+    name: "Convert useRouterQuery to useRouter",
+    action: async () => {
+      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+        let files = fs.readdirSync(dirPath)
+        files.forEach((file) => {
+          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+          } else {
+            arrayOfFiles.push(path.join(dirPath, "/", file))
+          }
+        })
+        return arrayOfFiles
+      }
+
+      //First check ./pages
+      const pagesDir = path.resolve("pages")
+      getAllFiles(pagesDir).forEach((file) => {
+        const filepath = path.resolve(pagesDir, file)
+        const fileBuffer = fs.readFileSync(filepath)
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: filepath, // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+
+        const parsedProgram = program.get()
+        const findRouterQueryImport = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/router",
+        )
+        findRouterQueryImport.forEach((node) => {
+          const getNode = node.get()
+          getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+            const importedName =
+              specifier.imported.type === "StringLiteral"
+                ? specifier.imported.value
+                : specifier.imported.name
+            if (importedName === "useRouterQuery") {
+              parsedProgram.value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importSpecifier(j.identifier("useRouter"))],
+                  j.stringLiteral("next/router"),
+                ),
+              )
+              getNode.value.specifiers.splice(index, 1)
+              // Removed left overs
+              if (!getNode.value.specifiers?.length) {
+                const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                parsedProgram.value.program.body.splice(index, 1)
+              }
+            }
+          })
+        })
+
+        const findCallUseRouterQuery = program.find(
+          j.CallExpression,
+          (node) => node.callee.name === "useRouterQuery",
+        )
+        findCallUseRouterQuery.forEach((call) => {
+          const nodePath = call.get()
+          nodePath.parentPath.value.init = j.expressionStatement(
+            j.memberExpression(
+              j.callExpression(j.identifier("useRouter"), []),
+              j.identifier("query"),
+            ),
+          )
+        })
+
+        fs.writeFileSync(filepath, program.toSource())
+      })
+
+      getAllFiles(appDir).forEach((file) => {
+        const filepath = path.resolve(appDir, file)
+        const fileBuffer = fs.readFileSync(filepath)
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: filepath, // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+
+        const parsedProgram = program.get()
+        const findRouterQueryImport = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/router",
+        )
+        findRouterQueryImport.forEach((node) => {
+          const getNode = node.get()
+          getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+            const importedName =
+              specifier.imported.type === "StringLiteral"
+                ? specifier.imported.value
+                : specifier.imported.name
+            if (importedName === "useRouterQuery") {
+              parsedProgram.value.program.body.unshift(
+                j.importDeclaration(
+                  [j.importSpecifier(j.identifier("useRouter"))],
+                  j.stringLiteral("next/router"),
+                ),
+              )
+              getNode.value.specifiers.splice(index, 1)
+              // Removed left overs
+              if (!getNode.value.specifiers?.length) {
+                const index = parsedProgram.value.program.body.indexOf(getNode.value)
+                parsedProgram.value.program.body.splice(index, 1)
+              }
+            }
+          })
+        })
+
+        const findCallUseRouterQuery = program.find(
+          j.CallExpression,
+          (node) => node.callee.name === "useRouterQuery",
+        )
+        findCallUseRouterQuery.forEach((call) => {
+          const nodePath = call.get()
+          nodePath.parentPath.value.init = j.expressionStatement(
+            j.memberExpression(
+              j.callExpression(j.identifier("useRouter"), []),
+              j.identifier("query"),
+            ),
+          )
+        })
+
+        fs.writeFileSync(filepath, program.toSource())
+      })
     },
   })
 
