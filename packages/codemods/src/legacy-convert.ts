@@ -156,8 +156,8 @@ const legacyConvert = async () => {
         setConfig: "next/config",
 
         ErrorComponent: "@blitzjs/next",
-        AppProps: "next/app",
-        BlitzPage: "@blitzjs/auth",
+        AppProps: "@blitzjs/next",
+        BlitzPage: "@blitzjs/next",
       }
 
       const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
