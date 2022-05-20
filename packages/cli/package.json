@@ -69,6 +69,7 @@
   "oclif": {
     "commands": "./lib/src/commands",
     "bin": "blitz",
+    "helpClass": "./lib/src/help",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found",

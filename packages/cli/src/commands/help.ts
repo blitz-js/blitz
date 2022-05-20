@@ -3,7 +3,6 @@ import Help from "@oclif/plugin-help"
 
 export class HelpCommand extends Command {
   static description = "Display help for <%= config.bin %>"
-
   static aliases = ["h"]
 
   static flags = {
