@@ -688,7 +688,71 @@ const legacyConvert = async () => {
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
         program.toSource(),
       )
-      throw new Error("TEST")
+    },
+  })
+
+  steps.push({
+    name: "If _document, mod it",
+    action: async () => {
+      const pagesDir = path.resolve("pages")
+
+      if (fs.existsSync(path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`))) {
+        const fileBuffer = fs.readFileSync(
+          path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`),
+        )
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+
+        const importStatements = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/document",
+        )
+        importStatements.remove()
+        program
+          .get()
+          .value.program.body.unshift(
+            j.importDeclaration(
+              [
+                j.importDefaultSpecifier(j.identifier("Document")),
+                j.importSpecifier(j.identifier("Html")),
+                j.importSpecifier(j.identifier("Head")),
+                j.importSpecifier(j.identifier("Main")),
+                j.importSpecifier(j.identifier("NextScript")),
+              ],
+              j.stringLiteral("next/document"),
+            ),
+          )
+
+        const documentHead = program
+          .find(j.Identifier, (node) => node.name === "DocumentHead")
+          .get()
+        documentHead.value.name = "Head"
+
+        const blitzScript = program.find(j.Identifier, (node) => node.name === "BlitzScript").get()
+        blitzScript.value.name = "NextScript"
+
+        fs.writeFileSync(
+          path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`),
+          program.toSource(),
+        )
+      }
     },
   })
 
