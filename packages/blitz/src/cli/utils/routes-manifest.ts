@@ -1,10 +1,11 @@
 import {join, dirname} from "path"
 import os from "os"
-import {promises} from "fs"
+import {promises, readdir} from "fs"
 const readFile = promises.readFile
 import {outputFile} from "fs-extra"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
+import Watchpack from "watchpack"
 
 export const CONFIG_FILE = ".blitz.config.compiled.js"
 export const NEXT_CONFIG_FILE = "next.config.js"
@@ -376,7 +377,7 @@ export function setupManifest(routes: Record<string, RouteManifestEntry>): {
       "exports.Routes = {\n" + implementationLines.map((line) => "  " + line).join(",\n") + "\n}",
     declaration: `
 import type { ParsedUrlQueryInput } from "querystring"
-import type { RouteUrlObject } from "@blitzjs/auth"
+import type { RouteUrlObject } from "blitz"
 export const Routes: {
 ${declarationLines.map((line) => "  " + line).join(";\n") + declarationEnding}
 }`.trim(),
@@ -546,4 +547,47 @@ async function findNodeModulesRoot(src: string) {
   }
 
   return root
+}
+
+let webpackWatcher: Watchpack | null = null
+
+export async function startWatcher(pagesDir = ""): Promise<void> {
+  if (webpackWatcher) {
+    return
+  }
+
+  let resolved = false
+  return new Promise((resolve) => {
+    // Watchpack doesn't emit an event for an empty directory
+    readdir(pagesDir!, (_, files) => {
+      if (files?.length) {
+        return
+      }
+
+      if (!resolved) {
+        resolve()
+        resolved = true
+      }
+    })
+
+    let wp = (webpackWatcher = new Watchpack({}))
+    wp.watch(
+      [],
+      topLevelFoldersThatMayContainPages.map((dir) => join(pagesDir!, dir)),
+      0,
+    )
+
+    wp.on("aggregated", async () => {
+      await generateManifest()
+    })
+  })
+}
+
+export async function stopWatcher(): Promise<void> {
+  if (!webpackWatcher) {
+    return
+  }
+
+  webpackWatcher.close()
+  webpackWatcher = null
 }

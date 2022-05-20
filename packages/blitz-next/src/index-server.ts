@@ -15,7 +15,7 @@ import type {
   FirstParam,
   AddParameters,
 } from "blitz"
-import {handleRequestWithMiddleware} from "blitz"
+import {handleRequestWithMiddleware, startWatcher} from "blitz"
 import type {NextConfig} from "next"
 import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
 import {dehydrate} from "@blitzjs/rpc"
@@ -140,7 +140,8 @@ export interface BlitzConfig extends NextConfig {
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  return Object.assign({}, nextConfig, {
+  void startWatcher()
+  const config = Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)
       if (typeof nextConfig.webpack === "function") {
@@ -148,7 +149,9 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
       }
       return config
     },
-  } as NextConfig)
+  })
+
+  return config
 }
 
 export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
