@@ -635,6 +635,63 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "Wrapp _app",
+    action: async () => {
+      const pagesDir = path.resolve("pages")
+
+      const fileBuffer = fs.readFileSync(
+        path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
+      )
+      const fileSource = fileBuffer.toString("utf-8")
+      const program = j(fileSource, {
+        parser: {
+          parse: (source: string) =>
+            parseSync(source, {
+              plugins: [require(`@babel/plugin-syntax-jsx`)],
+              overrides: [
+                {
+                  test: [`**/*.ts`, `**/*.tsx`],
+                  plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                },
+              ],
+              filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
+              parserOpts: {
+                tokens: true, // recast uses this
+              },
+            }),
+        },
+      })
+
+      const appFunction = program.find(j.FunctionDeclaration, (node) => {
+        return node.id.name === "App"
+      })
+
+      // Store the App function
+      const storeFunction = {...appFunction.get().value}
+
+      // Create a new withBlitz call expresion with an empty argument
+      const withBlitzFunction: any = (appFunction.get().parentPath.value.declaration =
+        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), [])))
+      // Push stored function above into the argument
+      withBlitzFunction.expression.arguments.push(storeFunction)
+
+      const body = program.find(j.Program).get("body")
+      body.value.unshift(
+        j.importDeclaration(
+          [j.importSpecifier(j.identifier("withBlitz"))],
+          j.stringLiteral("app/blitz-client"),
+        ),
+      )
+
+      fs.writeFileSync(
+        path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
+        program.toSource(),
+      )
+      throw new Error("TEST")
+    },
+  })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
