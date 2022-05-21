@@ -129,6 +129,7 @@ const legacyConvert = async () => {
         useRedirectAuthenticated: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
+        useParam: "@blitzjs/next",
         usePaginatedQuery: "@blitzjs/rpc",
         useInfiniteQuery: "@blitzjs/rpc",
         useMutation: "@blitzjs/rpc",
@@ -753,6 +754,98 @@ const legacyConvert = async () => {
           program.toSource(),
         )
       }
+    },
+  })
+
+  steps.push({
+    name: "Fix default imports for next",
+    action: async () => {
+      const pagesDir = path.resolve("pages")
+      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+        let files = fs.readdirSync(dirPath)
+        files.forEach((file) => {
+          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
+          } else {
+            arrayOfFiles.push(path.join(dirPath, "/", file))
+          }
+        })
+        return arrayOfFiles
+      }
+
+      getAllFiles(pagesDir).forEach((file) => {
+        const fileBuffer = fs.readFileSync(path.resolve(file))
+        const fileSource = fileBuffer.toString("utf-8")
+        const program = j(fileSource, {
+          parser: {
+            parse: (source: string) =>
+              parseSync(source, {
+                plugins: [require(`@babel/plugin-syntax-jsx`)],
+                overrides: [
+                  {
+                    test: [`**/*.ts`, `**/*.tsx`],
+                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
+                  },
+                ],
+                filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
+                parserOpts: {
+                  tokens: true, // recast uses this
+                },
+              }),
+          },
+        })
+
+        const nextImage = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/image",
+        )
+        const nextLink = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/link",
+        )
+        const nextHead = program.find(
+          j.ImportDeclaration,
+          (node) => node.source.value === "next/head",
+        )
+
+        if (nextImage.length) {
+          nextImage.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Image"))],
+                j.stringLiteral("next/image"),
+              ),
+            )
+        }
+
+        if (nextLink.length) {
+          nextLink.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Link"))],
+                j.stringLiteral("next/link"),
+              ),
+            )
+        }
+
+        if (nextHead.length) {
+          nextHead.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Head"))],
+                j.stringLiteral("next/head"),
+              ),
+            )
+        }
+
+        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+      })
     },
   })
 
