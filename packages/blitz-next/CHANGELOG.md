@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.26
+
+### Patch Changes
+
+- 0e762fb5: export BlitzPage & BlitzLayout types from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.26
+
 ## 2.0.0-alpha.25
 
 ### Patch Changes
