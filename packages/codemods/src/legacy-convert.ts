@@ -26,15 +26,11 @@ const legacyConvert = async () => {
   }[] = []
 
   // Add steps in order
-  steps.push({
-    name: "Rename blitz.config to next.config",
-    action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
-  })
 
   steps.push({
-    name: "Clear legacy config file and write new one",
+    name: "Clear legacy config file and write new next.config.js",
     action: async () => {
-      const program = getCollectionFromSource("next.config.js")
+      const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
 
       // Clear file
