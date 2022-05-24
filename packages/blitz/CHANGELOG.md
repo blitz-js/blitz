@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- 1436e761: Export Zod utils from blitz core package
+  - @blitzjs/generator@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes
