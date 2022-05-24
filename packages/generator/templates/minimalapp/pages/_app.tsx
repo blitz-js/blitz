@@ -1,5 +1,4 @@
-import { ErrorFallbackProps, ErrorComponent, ErrorBoundary } from "@blitzjs/next"
-import type { AppProps } from "next/app"
+import { ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps } from "@blitzjs/next"
 import React from "react"
 import { withBlitz } from "app/blitz-client"
 
