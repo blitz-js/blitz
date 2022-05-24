@@ -1,5 +1,13 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- 1436e761: Add passport adapter to @blitzjs/auth
+- Updated dependencies [1436e761]
+  - blitz@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes
