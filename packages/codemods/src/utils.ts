@@ -6,13 +6,14 @@ import j, {
   FunctionDeclaration,
   VariableDeclaration,
   ExportDefaultDeclaration,
+  ImportDeclaration,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
 
-export function findPaths(
+export function findFunction(
   program: Collection<any>,
   declarationName: string,
-): ASTPath<FunctionDeclaration>[] | ASTPath<VariableDeclaration>[] | null {
+): Collection<FunctionDeclaration> | Collection<VariableDeclaration> | null {
   const funcDeclaration = program.find(
     j.FunctionDeclaration,
     (node) => node.id.name === declarationName,
@@ -24,10 +25,38 @@ export function findPaths(
   )
 
   const paths = funcDeclaration.length
-    ? funcDeclaration.paths()
+    ? funcDeclaration
     : constDeclaration.length
-    ? constDeclaration.paths()
+    ? constDeclaration
     : null
+
+  return paths
+}
+
+export function findVariable(
+  program: Collection<any>,
+  declarationName: string,
+): Collection<VariableDeclaration> | null {
+  const constDeclaration = program.find(
+    j.VariableDeclaration,
+    (node) => node.declarations[0].id.name === declarationName,
+  )
+
+  const paths = constDeclaration.length ? constDeclaration : null
+
+  return paths
+}
+
+export function findImport(
+  program: Collection<any>,
+  declarationName: string,
+): Collection<ImportDeclaration> | null {
+  const importDeclaration = program.find(
+    j.ImportDeclaration,
+    (node) => node.source.value === declarationName,
+  )
+
+  const paths = importDeclaration.length ? importDeclaration : null
 
   return paths
 }
@@ -103,6 +132,7 @@ export function addNamedImport(
   program: Collection<any>,
   importStatement: string,
   importFrom: string,
+  defaultSpecifier?: boolean,
 ) {
   const existingImport = program.find(
     j.ImportDeclaration,
@@ -115,10 +145,15 @@ export function addNamedImport(
     program
       .get()
       .value.program.body.unshift(
-        j.importDeclaration(
-          [j.importSpecifier(j.identifier(importStatement))],
-          j.stringLiteral(importFrom),
-        ),
+        defaultSpecifier
+          ? j.importDeclaration(
+              [j.importDefaultSpecifier(j.identifier(importStatement))],
+              j.stringLiteral(importFrom),
+            )
+          : j.importDeclaration(
+              [j.importSpecifier(j.identifier(importStatement))],
+              j.stringLiteral(importFrom),
+            ),
       )
   }
 }
@@ -143,6 +178,7 @@ export function getCollectionFromSource(filename: string) {
     parser: {
       parse: (source: string) =>
         parseSync(source, {
+          configFile: false,
           plugins: [require(`@babel/plugin-syntax-jsx`)],
           overrides: [
             {

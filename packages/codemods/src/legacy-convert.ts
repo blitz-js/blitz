@@ -1,11 +1,12 @@
 import j, {ImportDeclaration} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
-import {parseSync} from "@babel/core"
 import {
   addNamedImport,
   findDefaultExportPath,
-  findPaths,
+  findFunction,
+  findImport,
+  findVariable,
   getAllFiles,
   getCollectionFromSource,
   wrapDeclaration,
@@ -33,10 +34,7 @@ const legacyConvert = async () => {
   steps.push({
     name: "Clear legacy config file and write new one",
     action: async () => {
-      const nextConfig = path.resolve("next.config.js")
-      const fileBuffer = fs.readFileSync(nextConfig)
-      const fileSource = fileBuffer.toString("utf-8")
-      const program = j(fileSource)
+      const program = getCollectionFromSource("next.config.js")
       const parsedProgram = program.get()
 
       // Clear file
@@ -68,7 +66,7 @@ const legacyConvert = async () => {
       )
       parsedProgram.value.program.body.push(moduleExportExpression)
 
-      fs.writeFileSync(nextConfig, program.toSource())
+      fs.writeFileSync(path.resolve("next.config.js"), program.toSource())
     },
   })
 
@@ -94,8 +92,6 @@ const legacyConvert = async () => {
   steps.push({
     name: "Update imports",
     action: async () => {
-      const appDir = path.resolve("app")
-
       const specialImports: Record<string, string> = {
         Link: "next/link",
         Image: "next/image",
@@ -171,28 +167,7 @@ const legacyConvert = async () => {
       }
 
       getAllFiles(appDir).forEach((filename) => {
-        const filepath = path.resolve(appDir, filename)
-        const fileBuffer = fs.readFileSync(filepath)
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                configFile: false,
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: filepath, // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
+        const program = getCollectionFromSource(path.resolve(appDir, filename))
         const parsedProgram = program.get()
 
         parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
@@ -226,7 +201,58 @@ const legacyConvert = async () => {
             }
           }
         })
-        fs.writeFileSync(filepath, program.toSource())
+        fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
+      })
+    },
+  })
+
+  steps.push({
+    name: "Fix default imports for next",
+    action: async () => {
+      getAllFiles(appDir).forEach((file) => {
+        const program = getCollectionFromSource(file)
+
+        const nextImage = findImport(program, "next/image")
+        const nextLink = findImport(program, "next/link")
+        const nextHead = findImport(program, "next/head")
+
+        if (nextImage?.length) {
+          nextImage.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Image"))],
+                j.stringLiteral("next/image"),
+              ),
+            )
+        }
+
+        if (nextLink?.length) {
+          nextLink.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Link"))],
+                j.stringLiteral("next/link"),
+              ),
+            )
+        }
+
+        if (nextHead?.length) {
+          nextHead.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("Head"))],
+                j.stringLiteral("next/head"),
+              ),
+            )
+        }
+
+        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
     },
   })
@@ -377,28 +403,9 @@ const legacyConvert = async () => {
       // If custom server is inside "server" dir
       if (fs.existsSync(customServerDir)) {
         if (fs.readdirSync("server").includes(`index.${isTypescript ? "ts" : "js"}`)) {
-          const fileBuffer = fs.readFileSync(
+          const program = getCollectionFromSource(
             path.join("server", `index.${isTypescript ? "ts" : "js"}`),
           )
-          const fileSource = fileBuffer.toString("utf-8")
-          const program = j(fileSource, {
-            parser: {
-              parse: (source: string) =>
-                parseSync(source, {
-                  plugins: [require(`@babel/plugin-syntax-jsx`)],
-                  overrides: [
-                    {
-                      test: [`**/*.ts`, `**/*.tsx`],
-                      plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                    },
-                  ],
-                  filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
-                  parserOpts: {
-                    tokens: true, // recast uses this
-                  },
-                }),
-            },
-          })
 
           const findBlitzCall = program.find(
             j.Identifier,
@@ -430,26 +437,7 @@ const legacyConvert = async () => {
 
       // If custom server file found outside dir
       if (fs.existsSync(customServerFile)) {
-        const fileBuffer = fs.readFileSync(customServerFile)
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: customServerFile, // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
+        const program = getCollectionFromSource(customServerFile)
         const findBlitzCall = program.find(
           j.Identifier,
           (node) => node.name === "blitz" || node.escapedText === "blitz",
@@ -482,33 +470,12 @@ const legacyConvert = async () => {
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir).forEach((file) => {
         const filepath = path.resolve(pagesDir, file)
-        const fileBuffer = fs.readFileSync(filepath)
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: filepath, // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
+        const program = getCollectionFromSource(filepath)
 
         const parsedProgram = program.get()
-        const findRouterQueryImport = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/router",
-        )
-        findRouterQueryImport.forEach((node) => {
+
+        const findRouterQueryImport = findImport(program, "next/router")
+        findRouterQueryImport?.forEach((node) => {
           const getNode = node.get()
           getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
             const importedName =
@@ -516,12 +483,7 @@ const legacyConvert = async () => {
                 ? specifier.imported.value
                 : specifier.imported.name
             if (importedName === "useRouterQuery") {
-              parsedProgram.value.program.body.unshift(
-                j.importDeclaration(
-                  [j.importSpecifier(j.identifier("useRouter"))],
-                  j.stringLiteral("next/router"),
-                ),
-              )
+              addNamedImport(program, "useRouter", "next/router")
               getNode.value.specifiers.splice(index, 1)
               // Removed left overs
               if (!getNode.value.specifiers?.length) {
@@ -551,26 +513,7 @@ const legacyConvert = async () => {
 
       getAllFiles(appDir).forEach((file) => {
         const filepath = path.resolve(appDir, file)
-        const fileBuffer = fs.readFileSync(filepath)
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: filepath, // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
+        const program = getCollectionFromSource(filepath)
 
         const parsedProgram = program.get()
         const findRouterQueryImport = program.find(
@@ -625,28 +568,9 @@ const legacyConvert = async () => {
     action: async () => {
       const pagesDir = path.resolve("pages")
 
-      const fileBuffer = fs.readFileSync(
+      const program = getCollectionFromSource(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
       )
-      const fileSource = fileBuffer.toString("utf-8")
-      const program = j(fileSource, {
-        parser: {
-          parse: (source: string) =>
-            parseSync(source, {
-              plugins: [require(`@babel/plugin-syntax-jsx`)],
-              overrides: [
-                {
-                  test: [`**/*.ts`, `**/*.tsx`],
-                  plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                },
-              ],
-              filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
-              parserOpts: {
-                tokens: true, // recast uses this
-              },
-            }),
-        },
-      })
 
       const appFunction = program.find(j.FunctionDeclaration, (node) => {
         return node.id.name === "App"
@@ -661,13 +585,7 @@ const legacyConvert = async () => {
       // Push stored function above into the argument
       withBlitzFunction.expression.arguments.push(storeFunction)
 
-      const body = program.find(j.Program).get("body")
-      body.value.unshift(
-        j.importDeclaration(
-          [j.importSpecifier(j.identifier("withBlitz"))],
-          j.stringLiteral("app/blitz-client"),
-        ),
-      )
+      addNamedImport(program, "withBlitz", "app/blitz-client")
 
       fs.writeFileSync(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
@@ -682,34 +600,12 @@ const legacyConvert = async () => {
       const pagesDir = path.resolve("pages")
 
       if (fs.existsSync(path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`))) {
-        const fileBuffer = fs.readFileSync(
+        const program = getCollectionFromSource(
           path.join(pagesDir, `_document.${isTypescript ? "tsx" : "jsx"}`),
         )
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
 
-        const importStatements = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/document",
-        )
-        importStatements.remove()
+        const importStatements = findImport(program, "next/document")
+        importStatements?.remove()
         program
           .get()
           .value.program.body.unshift(
@@ -742,87 +638,6 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Fix default imports for next",
-    action: async () => {
-      const pagesDir = path.resolve("pages")
-
-      getAllFiles(pagesDir).forEach((file) => {
-        const fileBuffer = fs.readFileSync(path.resolve(file))
-        const fileSource = fileBuffer.toString("utf-8")
-        const program = j(fileSource, {
-          parser: {
-            parse: (source: string) =>
-              parseSync(source, {
-                plugins: [require(`@babel/plugin-syntax-jsx`)],
-                overrides: [
-                  {
-                    test: [`**/*.ts`, `**/*.tsx`],
-                    plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
-                  },
-                ],
-                filename: path.join("server", `index.${isTypescript ? "ts" : "js"}`), // this defines the loader depending on the extension
-                parserOpts: {
-                  tokens: true, // recast uses this
-                },
-              }),
-          },
-        })
-
-        const nextImage = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/image",
-        )
-        const nextLink = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/link",
-        )
-        const nextHead = program.find(
-          j.ImportDeclaration,
-          (node) => node.source.value === "next/head",
-        )
-
-        if (nextImage.length) {
-          nextImage.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Image"))],
-                j.stringLiteral("next/image"),
-              ),
-            )
-        }
-
-        if (nextLink.length) {
-          nextLink.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Link"))],
-                j.stringLiteral("next/link"),
-              ),
-            )
-        }
-
-        if (nextHead.length) {
-          nextHead.remove()
-          program
-            .get()
-            .value.program.body.unshift(
-              j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier("Head"))],
-                j.stringLiteral("next/head"),
-              ),
-            )
-        }
-
-        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
-      })
-    },
-  })
-
-  steps.push({
     name: "wrap getServerSideProps with gssp functions",
     action: async () => {
       const pagesDir = path.resolve("pages")
@@ -830,7 +645,7 @@ const legacyConvert = async () => {
         const program = getCollectionFromSource(file)
 
         // 1. getServerSideProps
-        const getServerSidePropsPath = findPaths(program, "getServerSideProps")
+        const getServerSidePropsPath = findFunction(program, "getServerSideProps")
         if (getServerSidePropsPath) {
           getServerSidePropsPath.forEach((path) =>
             wrapDeclaration(path, "getServerSideProps", "gSSP"),
@@ -839,7 +654,7 @@ const legacyConvert = async () => {
         }
 
         // 2. getStaticProps
-        const getStaticPropsPath = findPaths(program, "getStaticProps")
+        const getStaticPropsPath = findFunction(program, "getStaticProps")
         if (getStaticPropsPath) {
           getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
           addNamedImport(program, "gSP", "app/blitz-server")
@@ -872,7 +687,7 @@ const legacyConvert = async () => {
     action: async () => {
       getAllFiles(appDir, [], ["components"]).forEach((file) => {
         const program = getCollectionFromSource(file)
-        const middlewarePath = findPaths(program, "middleware")
+        const middlewarePath = findVariable(program, "middleware")
         if (middlewarePath?.length) {
           throw new Error(`Local middleware found at ${file}`)
         }
