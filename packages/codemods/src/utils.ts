@@ -7,6 +7,7 @@ import j, {
   VariableDeclaration,
   ExportDefaultDeclaration,
   ImportDeclaration,
+  CallExpression,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
 
@@ -57,6 +58,20 @@ export function findImport(
   )
 
   const paths = importDeclaration.length ? importDeclaration : null
+
+  return paths
+}
+
+export function findCallExpression(
+  program: Collection<any>,
+  declarationName: string,
+): Collection<CallExpression> | null {
+  const callExpression = program.find(
+    j.CallExpression,
+    (node) => node.callee.name === declarationName,
+  )
+
+  const paths = callExpression.length ? callExpression : null
 
   return paths
 }

@@ -3,6 +3,7 @@ import * as fs from "fs-extra"
 import path from "path"
 import {
   addNamedImport,
+  findCallExpression,
   findDefaultExportPath,
   findFunction,
   findImport,
@@ -692,6 +693,35 @@ const legacyConvert = async () => {
           throw new Error(`Local middleware found at ${file}`)
         }
       })
+    },
+  })
+
+  steps.push({
+    name: "Log an error for any usage of invokeWithMiddleware",
+    action: async () => {
+      let errors = 0
+
+      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
+        const program = getCollectionFromSource(file)
+        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
+        if (invokeWithMiddlewarePath?.length) {
+          console.error(`invokeWithMiddleware found at ${file}.`)
+          errors++
+        }
+      })
+
+      getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
+        const program = getCollectionFromSource(file)
+        const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
+        if (invokeWithMiddlewarePath?.length) {
+          console.error(`invokeWithMiddleware found at ${file}.`)
+          errors++
+        }
+      })
+
+      if (errors > 0) {
+        throw new Error("invokeWithMiddleware is not supported")
+      }
     },
   })
 
