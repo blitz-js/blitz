@@ -20,6 +20,14 @@ jobs:
         with:
           node-version: 16.x
 
+      - name: Creating .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Pre-publish
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
@@ -29,7 +37,6 @@ jobs:
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
-          version: pnpm bump
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
