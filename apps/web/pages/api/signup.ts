@@ -1,5 +1,5 @@
 import {api} from "app/blitz-server"
-import {prisma} from "../../prisma/index"
+import db from "db"
 import {SecurePassword} from "@blitzjs/auth"
 
 export default api(async (req, res, ctx) => {
@@ -9,7 +9,7 @@ export default api(async (req, res, ctx) => {
     (req.query.password as string) || "test-password",
   )
   const email = (req.query.email as string) || "test" + Math.random() + "@test.com"
-  const user = await prisma.user.create({
+  const user = await db.user.create({
     data: {email, hashedPassword, role: "user"},
     select: {id: true, name: true, email: true, role: true},
   })
