@@ -25,52 +25,52 @@ const legacyConvert = async () => {
   }[] = []
 
   // Add steps in order
-  // steps.push({
-  //   name: "Rename blitz.config to next.config",
-  //   action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
-  // })
+  steps.push({
+    name: "Rename blitz.config to next.config",
+    action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
+  })
 
-  // steps.push({
-  //   name: "Clear legacy config file and write new one",
-  //   action: async () => {
-  //     const nextConfig = path.resolve("next.config.js")
-  //     const fileBuffer = fs.readFileSync(nextConfig)
-  //     const fileSource = fileBuffer.toString("utf-8")
-  //     const program = j(fileSource)
-  //     const parsedProgram = program.get()
+  steps.push({
+    name: "Clear legacy config file and write new one",
+    action: async () => {
+      const nextConfig = path.resolve("next.config.js")
+      const fileBuffer = fs.readFileSync(nextConfig)
+      const fileSource = fileBuffer.toString("utf-8")
+      const program = j(fileSource)
+      const parsedProgram = program.get()
 
-  //     // Clear file
-  //     parsedProgram.value.program.body = []
+      // Clear file
+      parsedProgram.value.program.body = []
 
-  //     // We create an object property eg. {withBlitz: withBlitz}
-  //     let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-  //     // Then set the shorthand to true so we get {withBlitz}
-  //     withBlitz.shorthand = true
+      // We create an object property eg. {withBlitz: withBlitz}
+      let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
+      // Then set the shorthand to true so we get {withBlitz}
+      withBlitz.shorthand = true
 
-  //     /* Declare the variable using the object above that equals to a require expression, eg.
-  //       const {withBlitz} = require("@blitzjs/next")
-  //     */
-  //     let blitzDeclare = j.variableDeclaration("const", [
-  //       j.variableDeclarator(
-  //         j.objectPattern([withBlitz]),
-  //         j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
-  //       ),
-  //     ])
-  //     parsedProgram.value.program.body.push(blitzDeclare)
-  //     j.stringLiteral
-  //     // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-  //     let moduleExportExpression = j.expressionStatement(
-  //       j.assignmentExpression(
-  //         "=",
-  //         j.memberExpression(j.identifier("module"), j.identifier("exports")),
-  //         j.callExpression(j.identifier("withBlitz"), []),
-  //       ),
-  //     )
-  //     parsedProgram.value.program.body.push(moduleExportExpression)
+      /* Declare the variable using the object above that equals to a require expression, eg.
+        const {withBlitz} = require("@blitzjs/next")
+      */
+      let blitzDeclare = j.variableDeclaration("const", [
+        j.variableDeclarator(
+          j.objectPattern([withBlitz]),
+          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
+        ),
+      ])
+      parsedProgram.value.program.body.push(blitzDeclare)
 
-  //     fs.writeFileSync(nextConfig, program.toSource())
-  //   },
-  // })
+      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
+      let moduleExportExpression = j.expressionStatement(
+        j.assignmentExpression(
+          "=",
+          j.memberExpression(j.identifier("module"), j.identifier("exports")),
+          j.callExpression(j.identifier("withBlitz"), []),
+        ),
+      )
+      parsedProgram.value.program.body.push(moduleExportExpression)
+
+      fs.writeFileSync(nextConfig, program.toSource())
+    },
+  })
 
   steps.push({
     name: "Update package.json",
@@ -848,10 +848,9 @@ const legacyConvert = async () => {
         fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
       })
 
+      // 3. api
       if (fs.existsSync(path.join(pagesDir, "api"))) {
-        console.log("exists api", {allFiles: getAllFiles(path.join(pagesDir, "api"))})
-        getAllFiles(path.join(pagesDir, "api")).forEach((file) => {
-          console.log({file})
+        getAllFiles(path.join(pagesDir, "api"), [], ["rpc"]).forEach((file) => {
           const program = getCollectionFromSource(file)
 
           const defaultExportPath = findDefaultExportPath(program)
@@ -865,7 +864,19 @@ const legacyConvert = async () => {
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         })
       }
-      throw new Error()
+    },
+  })
+
+  steps.push({
+    name: "Log an error for any usage of local middleware",
+    action: async () => {
+      getAllFiles(appDir, [], ["components"]).forEach((file) => {
+        const program = getCollectionFromSource(file)
+        const middlewarePath = findPaths(program, "middleware")
+        if (middlewarePath?.length) {
+          throw new Error(`Local middleware found at ${file}`)
+        }
+      })
     },
   })
 
