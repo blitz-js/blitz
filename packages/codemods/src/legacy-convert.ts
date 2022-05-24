@@ -122,6 +122,9 @@ const legacyConvert = async () => {
         generateToken: "@blitzjs/auth",
         resolver: "@blitzjs/rpc",
         connectMiddleware: "blitz",
+        GetServerSideProps: "next",
+        InferGetServerSidePropsType: "next",
+        GetServerSidePropsContext: "next",
 
         getAntiCSRFToken: "@blitzjs/rpc",
         useSession: "@blitzjs/auth",
