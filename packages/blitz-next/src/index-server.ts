@@ -1,3 +1,4 @@
+import type {NextConfig} from "next"
 import {
   GetServerSideProps,
   GetServerSidePropsResult,
@@ -7,21 +8,21 @@ import {
   NextApiResponse,
 } from "next"
 import type {
-  Ctx as BlitzCtx,
+  AddParameters,
+  AsyncFunc,
   BlitzServerPlugin,
+  Ctx as BlitzCtx,
+  FirstParam,
   Middleware,
   MiddlewareResponse,
-  AsyncFunc,
-  FirstParam,
-  AddParameters,
 } from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
-import type {NextConfig} from "next"
-import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
-import {dehydrate} from "@blitzjs/rpc"
+import {dehydrate, getInfiniteQueryKey, getQueryKey} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
+import {resolve} from "path"
+import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
 
 export * from "./index-browser"
 
@@ -133,16 +134,50 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
+    resolverBasePath?: ResolverBasePath
     customServer?: {
       hotReload?: boolean
     }
   }
 }
 
+interface InstallWebpackConfigOptions<T extends unknown[]> {
+  webpackConfig: {
+    module: {
+      rules: T
+    }
+  }
+  nextConfig: BlitzConfig
+}
+
+const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
+const loaderServer = resolve(dir, "./loader-server.cjs")
+const loaderClient = resolve(dir, "./loader-client.cjs")
+
+export function installWebpackConfig<T extends any[]>({
+  webpackConfig,
+  nextConfig,
+}: InstallWebpackConfigOptions<T>) {
+  webpackConfig.module.rules.push({
+    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    use: [{loader: loaderServer}],
+    options: {
+      resolverBasePath: nextConfig.blitz?.resolverBasePath,
+    },
+  })
+  webpackConfig.module.rules.push({
+    test: /[\\/](queries|mutations)[\\/]/,
+    use: [{loader: loaderClient}],
+    options: {
+      resolverBasePath: nextConfig.blitz?.resolverBasePath,
+    },
+  })
+}
+
 export function withBlitz(nextConfig: BlitzConfig = {}) {
   return Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
-      installWebpackConfig(config)
+      installWebpackConfig({...config, ...nextConfig})
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }
