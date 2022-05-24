@@ -5,7 +5,6 @@ import type {
   UnionToIntersection,
   Simplify,
 } from "blitz"
-import {AppProps} from "next/app"
 import Head from "next/head"
 import React from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
@@ -13,6 +12,8 @@ import {Hydrate, HydrateOptions} from "react-query/hydration"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"
+import {AppPropsType} from "next/dist/shared/lib/utils"
+import {Router} from "next/router"
 
 export * from "./error-boundary"
 export * from "./error-component"
@@ -88,7 +89,9 @@ export type BlitzLayout<P = {}> = React.ComponentType<P> & {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-
+export type AppProps<P = {}> = AppPropsType<Router, P> & {
+  Component: BlitzPage
+}
 const BlitzProvider = ({
   client,
   contextSharing = false,
