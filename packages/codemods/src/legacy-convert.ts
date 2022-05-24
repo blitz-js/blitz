@@ -858,14 +858,9 @@ const legacyConvert = async () => {
           if (!defaultExportPath) {
             return
           }
-          console.log({
-            parentPath: defaultExportPath.parentPath,
-            defaultExportPath: defaultExportPath.get(),
-          })
 
-          defaultExportPath.replace(
-            j.callExpression(j.identifier("api"), [defaultExportPath.get().expression]),
-          )
+          const {node} = defaultExportPath
+          node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         })
