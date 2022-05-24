@@ -12,6 +12,9 @@
     "prisma:studio": "prisma studio",
     "test": "jest"
   },
+  "prisma": {
+    "schema": "./db/schema.prisma"
+  },
   "dependencies": {
     "@blitzjs/auth": "workspace:*",
     "@blitzjs/config": "workspace:*",
@@ -19,9 +22,12 @@
     "@blitzjs/rpc": "workspace:*",
     "@prisma/client": "3.9.0",
     "@types/jest": "27.4.1",
+    "@types/passport-twitter": "1.0.37",
     "blitz": "workspace:*",
     "jest": "27.5.1",
     "next": "12.1.6-canary.17",
+    "passport-mock-strategy": "2.0.0",
+    "passport-twitter": "1.0.4",
     "prisma": "3.9.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",

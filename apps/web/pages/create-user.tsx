@@ -1,8 +1,7 @@
 import {useState} from "react"
-import {SessionContext} from "@blitzjs/auth"
 import {useMutation} from "@blitzjs/rpc"
 import createUser from "app/mutations/createUser"
-import {User} from "prisma"
+import {User} from "db"
 
 function Page() {
   const [name, setName] = useState("")
