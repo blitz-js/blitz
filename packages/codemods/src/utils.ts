@@ -158,15 +158,23 @@ export function addNamedImport(
   }
 }
 
-export function getAllFiles(dirPath: string, accFiles: string[] = [], skipDirs?: string[]) {
+export function getAllFiles(
+  dirPath: string,
+  accFiles: string[] = [],
+  skipDirs?: string[],
+  skipExt?: string[],
+) {
   let currentFiles = fs.readdirSync(dirPath)
+
   currentFiles.forEach((file) => {
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
       if (!skipDirs?.includes(file)) {
-        accFiles = getAllFiles(dirPath + "/" + file, accFiles)
+        accFiles = getAllFiles(dirPath + "/" + file, accFiles, skipDirs, skipExt)
       }
     } else {
-      accFiles.push(path.join(dirPath, "/", file))
+      if (!skipExt?.includes(path.extname(file))) {
+        accFiles.push(path.join(dirPath, "/", file))
+      }
     }
   })
   return accFiles

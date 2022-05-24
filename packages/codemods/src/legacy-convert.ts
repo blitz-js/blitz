@@ -162,7 +162,7 @@ const legacyConvert = async () => {
         BlitzLayout: "@blitzjs/next",
       }
 
-      getAllFiles(appDir).forEach((filename) => {
+      getAllFiles(appDir, [], [], [".css"]).forEach((filename) => {
         const program = getCollectionFromSource(path.resolve(appDir, filename))
         const parsedProgram = program.get()
 
@@ -205,7 +205,7 @@ const legacyConvert = async () => {
   steps.push({
     name: "Fix default imports for next",
     action: async () => {
-      getAllFiles(appDir).forEach((file) => {
+      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
 
         const nextImage = findImport(program, "next/image")
@@ -464,7 +464,7 @@ const legacyConvert = async () => {
     action: async () => {
       //First check ./pages
       const pagesDir = path.resolve("pages")
-      getAllFiles(pagesDir).forEach((file) => {
+      getAllFiles(pagesDir, [], [], [".css"]).forEach((file) => {
         const filepath = path.resolve(pagesDir, file)
         const program = getCollectionFromSource(filepath)
 
@@ -507,7 +507,7 @@ const legacyConvert = async () => {
         fs.writeFileSync(filepath, program.toSource())
       })
 
-      getAllFiles(appDir).forEach((file) => {
+      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
         const filepath = path.resolve(appDir, file)
         const program = getCollectionFromSource(filepath)
 
@@ -671,6 +671,7 @@ const legacyConvert = async () => {
 
           const {node} = defaultExportPath
           node.declaration = j.callExpression(j.identifier("api"), [node.declaration as any])
+          addNamedImport(program, "api", "app/blitz-server")
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         })
@@ -681,7 +682,7 @@ const legacyConvert = async () => {
   steps.push({
     name: "Log an error for any usage of local middleware",
     action: async () => {
-      getAllFiles(appDir, [], ["components"]).forEach((file) => {
+      getAllFiles(appDir, [], ["components"], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         const middlewarePath = findVariable(program, "middleware")
         if (middlewarePath?.length) {
