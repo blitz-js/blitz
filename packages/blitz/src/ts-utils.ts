@@ -31,3 +31,8 @@ export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) ex
   : never
 
 export type Simplify<T> = {[P in keyof T]: T[P]}
+
+export type AddParameters<
+  TFunction extends (...args: any) => any,
+  TParameters extends [...args: any],
+> = (...args: [...Parameters<TFunction>, ...TParameters]) => ReturnType<TFunction>

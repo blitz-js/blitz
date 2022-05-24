@@ -13,8 +13,14 @@ import type {
   MiddlewareResponse,
   AsyncFunc,
   FirstParam,
+  AddParameters,
 } from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
+import type {NextConfig} from "next"
+import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
+import {dehydrate} from "@blitzjs/rpc"
+import {DefaultOptions, QueryClient} from "react-query"
+import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 
 export * from "./index-browser"
@@ -23,8 +29,8 @@ export * from "./index-browser"
 export interface Ctx extends BlitzCtx {}
 
 export interface BlitzNextApiResponse
-  extends NextApiResponse,
-    Omit<MiddlewareResponse, keyof NextApiResponse> {}
+  extends MiddlewareResponse,
+    Omit<NextApiResponse, keyof MiddlewareResponse> {}
 
 export type NextApiHandler = (
   req: NextApiRequest,
@@ -60,19 +66,27 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const gSSP =
     <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
-      await handleRequestWithMiddleware(req, res, middlewares)
+      await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
       let queryClient: null | QueryClient = null
 
-      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
+        fn,
+        input,
+        defaultOptions = {},
+        infinite = false,
+      ) => {
         queryClient = new QueryClient({defaultOptions})
 
-        const queryKey = getQueryKey(fn, input)
+        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
         await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
       }
+
+      ctx.prefetchQuery = prefetchQuery
+      ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       const result = await handler({req, res, ctx, ...rest})
       return withSuperJsonProps(withDehydratedState(result, queryClient))
@@ -84,12 +98,20 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       let queryClient: null | QueryClient = null
 
-      ctx.prefetchBlitzQuery = async (fn, input, defaultOptions = {}) => {
+      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
+        fn,
+        input,
+        defaultOptions = {},
+        infinite = false,
+      ) => {
         queryClient = new QueryClient({defaultOptions})
 
-        const queryKey = getQueryKey(fn, input)
+        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
         await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
       }
+
+      ctx.prefetchQuery = prefetchQuery
+      ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       const result = await handler({...context, ctx: ctx})
       return withSuperJsonProps(withDehydratedState(result, queryClient))
@@ -109,12 +131,15 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   return {gSSP, gSP, api}
 }
 
-import type {NextConfig} from "next"
-import {getQueryKey, installWebpackConfig} from "@blitzjs/rpc"
-import {dehydrate} from "@blitzjs/rpc"
-import {DefaultOptions, QueryClient} from "react-query"
+export interface BlitzConfig extends NextConfig {
+  blitz?: {
+    customServer?: {
+      hotReload?: boolean
+    }
+  }
+}
 
-export function withBlitz(nextConfig: NextConfig = {}) {
+export function withBlitz(nextConfig: BlitzConfig = {}) {
   return Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)
@@ -126,7 +151,7 @@ export function withBlitz(nextConfig: NextConfig = {}) {
   } as NextConfig)
 }
 
-type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
+export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(
   resolver: T,
   params: TInput,
   options?: DefaultOptions,
@@ -144,6 +169,7 @@ function withDehydratedState<T extends Result>(result: T, queryClient: QueryClie
 
 declare module "blitz" {
   export interface Ctx {
-    prefetchBlitzQuery: PrefetchQueryFn
+    prefetchQuery: PrefetchQueryFn
+    prefetchInfiniteQuery: PrefetchQueryFn
   }
 }
