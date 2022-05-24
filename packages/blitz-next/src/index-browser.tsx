@@ -11,6 +11,8 @@ import React from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
 import {Hydrate, HydrateOptions} from "react-query/hydration"
 import {withSuperJSONPage} from "./superjson"
+import {Ctx} from "blitz"
+import {UrlObject} from "url"
 
 export * from "./error-boundary"
 export * from "./error-component"
@@ -66,6 +68,25 @@ export type BlitzProviderProps = {
   contextSharing?: boolean
   dehydratedState?: unknown
   hydrateOptions?: HydrateOptions
+}
+
+interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+  pathname: string
+}
+type RedirectAuthenticatedTo = string | RouteUrlObject | false
+type RedirectAuthenticatedToFnCtx = {
+  session: Ctx["session"]["$publicData"]
+}
+type RedirectAuthenticatedToFn = (args: RedirectAuthenticatedToFnCtx) => RedirectAuthenticatedTo
+export type BlitzPage<P = {}> = React.ComponentType<P> & {
+  getLayout?: (component: JSX.Element) => JSX.Element
+  authenticate?: boolean | {redirectTo?: string}
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
+export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
 
 const BlitzProvider = ({
