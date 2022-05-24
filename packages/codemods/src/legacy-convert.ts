@@ -2,6 +2,14 @@ import j, {ImportDeclaration} from "jscodeshift"
 import * as fs from "fs-extra"
 import path from "path"
 import {parseSync} from "@babel/core"
+import {
+  addNamedImport,
+  findDefaultExportPath,
+  findPaths,
+  getAllFiles,
+  getCollectionFromSource,
+  wrapDeclaration,
+} from "./utils"
 
 const legacyConvert = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -17,52 +25,52 @@ const legacyConvert = async () => {
   }[] = []
 
   // Add steps in order
-  steps.push({
-    name: "Rename blitz.config to next.config",
-    action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
-  })
+  // steps.push({
+  //   name: "Rename blitz.config to next.config",
+  //   action: async () => fs.renameSync(blitzConfigFile, "next.config.js"),
+  // })
 
-  steps.push({
-    name: "Clear legacy config file and write new one",
-    action: async () => {
-      const nextConfig = path.resolve("next.config.js")
-      const fileBuffer = fs.readFileSync(nextConfig)
-      const fileSource = fileBuffer.toString("utf-8")
-      const program = j(fileSource)
-      const parsedProgram = program.get()
+  // steps.push({
+  //   name: "Clear legacy config file and write new one",
+  //   action: async () => {
+  //     const nextConfig = path.resolve("next.config.js")
+  //     const fileBuffer = fs.readFileSync(nextConfig)
+  //     const fileSource = fileBuffer.toString("utf-8")
+  //     const program = j(fileSource)
+  //     const parsedProgram = program.get()
 
-      // Clear file
-      parsedProgram.value.program.body = []
+  //     // Clear file
+  //     parsedProgram.value.program.body = []
 
-      // We create an object property eg. {withBlitz: withBlitz}
-      let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
-      // Then set the shorthand to true so we get {withBlitz}
-      withBlitz.shorthand = true
+  //     // We create an object property eg. {withBlitz: withBlitz}
+  //     let withBlitz = j.objectProperty(j.identifier("withBlitz"), j.identifier("withBlitz"))
+  //     // Then set the shorthand to true so we get {withBlitz}
+  //     withBlitz.shorthand = true
 
-      /* Declare the variable using the object above that equals to a require expression, eg. 
-        const {withBlitz} = require("@blitzjs/next")
-      */
-      let blitzDeclare = j.variableDeclaration("const", [
-        j.variableDeclarator(
-          j.objectPattern([withBlitz]),
-          j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
-        ),
-      ])
-      parsedProgram.value.program.body.push(blitzDeclare)
-      j.stringLiteral
-      // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
-      let moduleExportExpression = j.expressionStatement(
-        j.assignmentExpression(
-          "=",
-          j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("withBlitz"), []),
-        ),
-      )
-      parsedProgram.value.program.body.push(moduleExportExpression)
+  //     /* Declare the variable using the object above that equals to a require expression, eg.
+  //       const {withBlitz} = require("@blitzjs/next")
+  //     */
+  //     let blitzDeclare = j.variableDeclaration("const", [
+  //       j.variableDeclarator(
+  //         j.objectPattern([withBlitz]),
+  //         j.callExpression(j.identifier("require"), [j.stringLiteral("@blitzjs/next")]),
+  //       ),
+  //     ])
+  //     parsedProgram.value.program.body.push(blitzDeclare)
+  //     j.stringLiteral
+  //     // Create the module.exports with the withBlitz callExpression and empty arguments. Giving us module.exports = withBlitz()
+  //     let moduleExportExpression = j.expressionStatement(
+  //       j.assignmentExpression(
+  //         "=",
+  //         j.memberExpression(j.identifier("module"), j.identifier("exports")),
+  //         j.callExpression(j.identifier("withBlitz"), []),
+  //       ),
+  //     )
+  //     parsedProgram.value.program.body.push(moduleExportExpression)
 
-      fs.writeFileSync(nextConfig, program.toSource())
-    },
-  })
+  //     fs.writeFileSync(nextConfig, program.toSource())
+  //   },
+  // })
 
   steps.push({
     name: "Update package.json",
@@ -160,18 +168,6 @@ const legacyConvert = async () => {
         AppProps: "@blitzjs/next",
         BlitzPage: "@blitzjs/next",
         BlitzLayout: "@blitzjs/next",
-      }
-
-      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
-        let files = fs.readdirSync(dirPath)
-        files.forEach((file) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-          } else {
-            arrayOfFiles.push(path.join(dirPath, "/", file))
-          }
-        })
-        return arrayOfFiles
       }
 
       getAllFiles(appDir).forEach((filename) => {
@@ -482,18 +478,6 @@ const legacyConvert = async () => {
   steps.push({
     name: "Convert useRouterQuery to useRouter",
     action: async () => {
-      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
-        let files = fs.readdirSync(dirPath)
-        files.forEach((file) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-          } else {
-            arrayOfFiles.push(path.join(dirPath, "/", file))
-          }
-        })
-        return arrayOfFiles
-      }
-
       //First check ./pages
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir).forEach((file) => {
@@ -637,7 +621,7 @@ const legacyConvert = async () => {
   })
 
   steps.push({
-    name: "Wrapp _app",
+    name: "Wrap _app",
     action: async () => {
       const pagesDir = path.resolve("pages")
 
@@ -672,8 +656,8 @@ const legacyConvert = async () => {
       const storeFunction = {...appFunction.get().value}
 
       // Create a new withBlitz call expresion with an empty argument
-      const withBlitzFunction: any = (appFunction.get().parentPath.value.declaration =
-        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), [])))
+      const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
+        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
       // Push stored function above into the argument
       withBlitzFunction.expression.arguments.push(storeFunction)
 
@@ -761,17 +745,6 @@ const legacyConvert = async () => {
     name: "Fix default imports for next",
     action: async () => {
       const pagesDir = path.resolve("pages")
-      const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
-        let files = fs.readdirSync(dirPath)
-        files.forEach((file) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
-          } else {
-            arrayOfFiles.push(path.join(dirPath, "/", file))
-          }
-        })
-        return arrayOfFiles
-      }
 
       getAllFiles(pagesDir).forEach((file) => {
         const fileBuffer = fs.readFileSync(path.resolve(file))
@@ -849,6 +822,58 @@ const legacyConvert = async () => {
     },
   })
 
+  steps.push({
+    name: "wrap getServerSideProps with gssp functions",
+    action: async () => {
+      const pagesDir = path.resolve("pages")
+      getAllFiles(pagesDir, [], ["api"]).forEach((file) => {
+        const program = getCollectionFromSource(file)
+
+        // 1. getServerSideProps
+        const getServerSidePropsPath = findPaths(program, "getServerSideProps")
+        if (getServerSidePropsPath) {
+          getServerSidePropsPath.forEach((path) =>
+            wrapDeclaration(path, "getServerSideProps", "gSSP"),
+          )
+          addNamedImport(program, "gSSP", "app/blitz-server")
+        }
+
+        // 2. getStaticProps
+        const getStaticPropsPath = findPaths(program, "getStaticProps")
+        if (getStaticPropsPath) {
+          getStaticPropsPath.forEach((path) => wrapDeclaration(path, "getStaticProps", "gSP"))
+          addNamedImport(program, "gSP", "app/blitz-server")
+        }
+
+        fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+      })
+
+      if (fs.existsSync(path.join(pagesDir, "api"))) {
+        console.log("exists api", {allFiles: getAllFiles(path.join(pagesDir, "api"))})
+        getAllFiles(path.join(pagesDir, "api")).forEach((file) => {
+          console.log({file})
+          const program = getCollectionFromSource(file)
+
+          const defaultExportPath = findDefaultExportPath(program)
+          if (!defaultExportPath) {
+            return
+          }
+          console.log({
+            parentPath: defaultExportPath.parentPath,
+            defaultExportPath: defaultExportPath.get(),
+          })
+
+          defaultExportPath.replace(
+            j.callExpression(j.identifier("api"), [defaultExportPath.get().expression]),
+          )
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        })
+      }
+      throw new Error()
+    },
+  })
+
   // Loop through steps and run the action
   if ((failedAt && failedAt < steps.length) || failedAt !== "SUCCESS" || isLegacyBlitz) {
     for (let [index, step] of steps.entries()) {
@@ -860,7 +885,7 @@ const legacyConvert = async () => {
       try {
         await step.action()
       } catch (err) {
-        console.log(`ERROR: ${err}`)
+        console.error(err)
         failedAt = index + 1
         fs.writeJsonSync(".migration.json", {
           failedAt,
