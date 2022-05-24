@@ -686,13 +686,20 @@ const legacyConvert = async () => {
   steps.push({
     name: "Log an error for any usage of local middleware",
     action: async () => {
+      let errors = 0
+
       getAllFiles(appDir, [], ["components"], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         const middlewarePath = findVariable(program, "middleware")
         if (middlewarePath?.length) {
-          throw new Error(`Local middleware found at ${file}`)
+          console.error(`Local middleware found at ${file}`)
+          errors++
         }
       })
+
+      if (errors > 0) {
+        throw new Error("Local middleware is not supported")
+      }
     },
   })
 
