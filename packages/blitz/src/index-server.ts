@@ -9,7 +9,7 @@ export * from "./types"
 export * from "./prisma-utils"
 export * from "./middleware"
 export * from "./paginate"
-export {baseLogger, newLine} from "./logging"
+export {baseLogger, newLine, log} from "./logging"
 
 // const blitzConfig = findBlitzConfigDirectory() as string
 // const file = readFileSync(blitzConfig)

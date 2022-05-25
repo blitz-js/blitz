@@ -13,6 +13,7 @@ import {
   getCollectionFromSource,
   wrapDeclaration,
 } from "./utils"
+import {log} from "blitz"
 
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -757,18 +758,20 @@ const upgradeLegacy = async () => {
       if (failedAt && index + 1 < failedAt) {
         continue
       }
-      console.log(`Running ${step.name}...`)
+      const spinner = log.spinner(log.withBrand(`Running ${step.name}...`)).start()
       try {
         await step.action()
       } catch (err) {
-        console.error(err)
+        spinner.fail(`${step.name}`)
+        log.error(err as string)
         failedAt = index + 1
         fs.writeJsonSync(".migration.json", {
           failedAt,
         })
         process.exit(1)
       }
-      console.log(`Successfully ran ${step.name}`)
+
+      spinner.succeed(`Successfully ran ${step.name}`)
     }
 
     fs.writeJsonSync(".migration.json", {
@@ -776,10 +779,10 @@ const upgradeLegacy = async () => {
     })
   } else {
     if (failedAt === "SUCCESS") {
-      console.log("Migration already successful")
+      log.withBrand("Migration already successful")
       process.exit(0)
     }
-    console.log("Legacy blitz config file not found")
+    log.error("Legacy blitz config file not found")
   }
 }
 

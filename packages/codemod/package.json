@@ -5,8 +5,6 @@
     "build": "unbuild",
     "dev": "watch unbuild src --wait=0.2",
     "lint": "eslint . --fix",
-    "test": "vitest run",
-    "test-watch": "vitest",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "main": "./dist/index.cjs",
@@ -34,7 +32,8 @@
     "fs-extra": "10.0.1",
     "jscodeshift": "0.13.0",
     "prompts": "2.4.2",
-    "ts-node": "10.7.0"
+    "ts-node": "10.7.0",
+    "blitz": "2.0.0-alpha.26"
   },
   "devDependencies": {
     "@babel/preset-env": "7.12.10",
