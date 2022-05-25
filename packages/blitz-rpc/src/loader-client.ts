@@ -46,8 +46,6 @@ export async function transformBlitzRpcResolverClient(
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
 
-  console.log({routePath})
-
   const code = `
     // @ts-nocheck
     import { __internal_buildRpcClient } from "@blitzjs/rpc";

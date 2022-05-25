@@ -140,25 +140,38 @@ export interface BlitzConfig extends NextConfig {
   }
 }
 
-interface InstallWebpackConfigOptions<T extends unknown[]> {
+interface WebpackRuleOptions {
+  resolverBasePath?: ResolverBasePath
+}
+
+interface WebpackRule {
+  test: RegExp
+  use: Array<{
+    loader: string
+    options: WebpackRuleOptions
+  }>
+}
+
+interface InstallWebpackConfigOptions {
   webpackConfig: {
     module: {
-      rules: T
+      rules: WebpackRule[]
     }
   }
   nextConfig: BlitzConfig
 }
 
-export function installWebpackConfig<T extends any[]>({
-  webpackConfig,
-  nextConfig,
-}: InstallWebpackConfigOptions<T>) {
+export function installWebpackConfig({webpackConfig, nextConfig}: InstallWebpackConfigOptions) {
+  const options: WebpackRuleOptions = {
+    resolverBasePath: nextConfig.blitz?.resolverBasePath,
+  }
+
   webpackConfig.module.rules.push({
     test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
     use: [
       {
         loader: loaderServer,
-        options: {resolverBasePath: nextConfig.blitz?.resolverBasePath},
+        options,
       },
     ],
   })
@@ -167,7 +180,7 @@ export function installWebpackConfig<T extends any[]>({
     use: [
       {
         loader: loaderClient,
-        options: {resolverBasePath: nextConfig.blitz?.resolverBasePath},
+        options,
       },
     ],
   })
@@ -175,7 +188,7 @@ export function installWebpackConfig<T extends any[]>({
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
   return Object.assign({}, nextConfig, {
-    webpack: (config: any, options: any) => {
+    webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
       installWebpackConfig({webpackConfig: config, nextConfig})
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
