@@ -8,6 +8,7 @@ import j, {
   ExportDefaultDeclaration,
   ImportDeclaration,
   CallExpression,
+  ImportSpecifier,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
 
@@ -58,6 +59,20 @@ export function findImport(
   )
 
   const paths = importDeclaration.length ? importDeclaration : null
+
+  return paths
+}
+
+export function findImportSpecifier(
+  program: Collection<any>,
+  declarationName: string,
+): Collection<ImportSpecifier> | null {
+  const importSpecifier = program.find(
+    j.ImportSpecifier,
+    (node) => node.imported.name === declarationName,
+  )
+
+  const paths = importSpecifier.length ? importSpecifier : null
 
   return paths
 }

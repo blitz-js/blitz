@@ -7,6 +7,7 @@ import {
   findDefaultExportPath,
   findFunction,
   findImport,
+  findImportSpecifier,
   findVariable,
   getAllFiles,
   getCollectionFromSource,
@@ -705,31 +706,47 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Log an error for any usage of invokeWithMiddleware",
+    name: "Update invokeMiddleware to invoke",
     action: async () => {
-      let errors = 0
-
       getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
+        const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
+        importSpecifier?.paths().forEach((path) => {
+          path.get().value.imported.name = "invoke"
+        })
+
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
-          errors++
+          invokeWithMiddlewarePath?.paths().forEach((path) => {
+            path.get().value.callee.name = "invoke"
+            if (path.get().value.arguments.length === 3) {
+              delete path.get().value.arguments[2]
+            }
+          })
         }
+
+        fs.writeFileSync(path.resolve(file), program.toSource())
       })
 
       getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
+        const importSpecifier = findImportSpecifier(program, "invokeWithMiddleware")
+        importSpecifier?.paths().forEach((path) => {
+          path.get().value.imported.name = "invoke"
+        })
+
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
-          errors++
+          invokeWithMiddlewarePath?.paths().forEach((path) => {
+            path.get().value.callee.name = "invoke"
+            if (path.get().value.arguments.length === 3) {
+              delete path.get().value.arguments[2]
+            }
+          })
         }
-      })
 
-      if (errors > 0) {
-        throw new Error("invokeWithMiddleware is not supported")
-      }
+        fs.writeFileSync(path.resolve(file), program.toSource())
+      })
     },
   })
 

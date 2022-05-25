@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("@blitzjs/codemods/dist/index.cjs")
+require("@blitzjs/codemod/dist/index.cjs")
