@@ -22,7 +22,7 @@ export async function loader(this: Loader, input: string): Promise<string> {
       input,
       toPosixPath(id),
       toPosixPath(root),
-      this.options,
+      this.query,
     )
   }
 
@@ -35,16 +35,18 @@ export async function transformBlitzRpcResolverClient(
   _src: string,
   id: string,
   root: string,
-  options: LoaderOptions,
+  options?: LoaderOptions,
 ) {
   assertPosixPath(id)
   assertPosixPath(root)
 
   const resolverFilePath = "/" + posix.relative(root, id)
   assertPosixPath(resolverFilePath)
-  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options.resolverBasePath)
+  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverBasePath)
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
+
+  console.log({routePath})
 
   const code = `
     // @ts-nocheck

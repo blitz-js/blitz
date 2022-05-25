@@ -13,7 +13,7 @@ export interface Loader {
   }
   resource: string
   cacheable: (enabled: boolean) => void
-  options: LoaderOptions
+  query: LoaderOptions
 }
 
 export function assertPosixPath(path: string) {
@@ -53,9 +53,9 @@ export function convertPageFilePathToRoutePath(
   filePath: string,
   resolverBasePath: ResolverBasePath,
 ) {
-  // if (resolverBasePath === "root") {
-  //   return filePath.replace(fileExtensionRegex, "")
-  // }
+  if (resolverBasePath === "root") {
+    return filePath.replace(fileExtensionRegex, "")
+  }
 
   return filePath
     .replace(/^.*?[\\/]queries[\\/]/, "/")

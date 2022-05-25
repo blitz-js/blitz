@@ -17,11 +17,10 @@ import type {
   MiddlewareResponse,
 } from "blitz"
 import {handleRequestWithMiddleware} from "blitz"
-import {dehydrate, getInfiniteQueryKey, getQueryKey} from "@blitzjs/rpc"
+import {dehydrate, getInfiniteQueryKey, getQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
-import {resolve} from "path"
 import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
 
 export * from "./index-browser"
@@ -150,21 +149,27 @@ interface InstallWebpackConfigOptions<T extends unknown[]> {
   nextConfig: BlitzConfig
 }
 
-const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-const loaderServer = resolve(dir, "./loader-server.cjs")
-const loaderClient = resolve(dir, "./loader-client.cjs")
-
 export function installWebpackConfig<T extends any[]>({
   webpackConfig,
   nextConfig,
 }: InstallWebpackConfigOptions<T>) {
   webpackConfig.module.rules.push({
     test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
-    use: [{loader: loaderServer, options: {resolverBasePath: nextConfig.blitz?.resolverBasePath}}],
+    use: [
+      {
+        loader: loaderServer,
+        options: {resolverBasePath: nextConfig.blitz?.resolverBasePath},
+      },
+    ],
   })
   webpackConfig.module.rules.push({
     test: /[\\/](queries|mutations)[\\/]/,
-    use: [{loader: loaderClient, options: {resolverBasePath: nextConfig.blitz?.resolverBasePath}}],
+    use: [
+      {
+        loader: loaderClient,
+        options: {resolverBasePath: nextConfig.blitz?.resolverBasePath},
+      },
+    ],
   })
 }
 

@@ -28,7 +28,7 @@ export async function loader(this: Loader, input: string): Promise<string> {
       toPosixPath(id),
       toPosixPath(root),
       resolvers,
-      this.options,
+      this.query,
     )
   }
 

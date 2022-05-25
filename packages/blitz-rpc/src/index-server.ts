@@ -2,6 +2,7 @@ import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
 import chalk from "chalk"
+import {resolve} from "path"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -47,6 +48,10 @@ export function __internal_addBlitzRpcResolver(
   g.blitzRpcResolverFilesLoaded[routePath] = resolver
   return resolver
 }
+
+const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
+export const loaderServer = resolve(dir, "./loader-server.cjs")
+export const loaderClient = resolve(dir, "./loader-client.cjs")
 
 // ----------
 // END LOADER
