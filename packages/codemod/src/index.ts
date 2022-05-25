@@ -13,7 +13,7 @@ const args = arg(commonArgs, {
 })
 
 const commands: {[command: string]: () => Promise<() => void>} = {
-  "legacy-convert": () => import("./legacy-convert").then((i) => i.legacyConvert),
+  "upgrade-legacy": () => import("./upgrade-legacy").then((i) => i.upgradeLegacy),
 }
 
 const foundCommand = Boolean(commands[args._[0] as string])

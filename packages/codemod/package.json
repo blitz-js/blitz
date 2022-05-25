@@ -1,5 +1,5 @@
 {
-  "name": "@blitzjs/codemods",
+  "name": "@blitzjs/codemod",
   "version": "2.0.0-alpha.0",
   "scripts": {
     "build": "unbuild",
@@ -19,7 +19,7 @@
     "dist/**",
     "bin/**"
   ],
-  "bin": "bin/@blitzjs/codemods",
+  "bin": "bin/@blitzjs/codemod",
   "dependencies": {
     "@babel/core": "7.12.10",
     "@babel/plugin-proposal-class-properties": "7.17.12",

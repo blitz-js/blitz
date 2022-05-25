@@ -13,7 +13,7 @@ import {
   wrapDeclaration,
 } from "./utils"
 
-const legacyConvert = async () => {
+const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
   let blitzConfigFile = `blitz.config.${isTypescript ? "ts" : "js"}`
   let isLegacyBlitz = fs.existsSync(path.resolve(blitzConfigFile))
@@ -116,7 +116,7 @@ const legacyConvert = async () => {
         passportAuth: "@blitzjs/auth",
         sessionMiddleware: "@blitzjs/auth",
         simpleRolesIsAuthorized: "@blitzjs/auth",
-        getSession: "@blitzjz/auth",
+        getSession: "@blitzjs/auth",
         setPublicDataForUser: "@blitzjs/auth",
         SecurePassword: "@blitzjs/auth",
         hash256: "@blitzjs/auth",
@@ -149,6 +149,7 @@ const legacyConvert = async () => {
         Routes: "@blitzjs/next",
         useRouterQuery: "next/router",
         useRouter: "next/router",
+        Router: "next/router",
 
         Head: "next/head",
 
@@ -765,4 +766,4 @@ const legacyConvert = async () => {
   }
 }
 
-export {legacyConvert}
+export {upgradeLegacy}
