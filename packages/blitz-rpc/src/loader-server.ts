@@ -42,7 +42,7 @@ export async function transformBlitzRpcServer(
   id: string,
   root: string,
   resolvers: string[],
-  options: LoaderOptions,
+  options?: LoaderOptions,
 ) {
   assertPosixPath(id)
   assertPosixPath(root)
@@ -55,7 +55,7 @@ export async function transformBlitzRpcServer(
 
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = posix.relative(dirname(id), join(root, resolverFilePath))
-    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options.resolverBasePath)
+    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverBasePath)
     code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
     code += "\n"
   }

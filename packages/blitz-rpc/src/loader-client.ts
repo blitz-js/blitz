@@ -4,10 +4,10 @@ import {
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
   Loader,
+  LoaderOptions,
   toPosixPath,
 } from "./loader-utils"
 import {posix} from "path"
-import {ResolverBasePath} from "./index-server"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
 
@@ -31,15 +31,11 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
-interface TransformOptions {
-  resolverBasePath?: ResolverBasePath
-}
-
 export async function transformBlitzRpcResolverClient(
   _src: string,
   id: string,
   root: string,
-  options: TransformOptions,
+  options: LoaderOptions,
 ) {
   assertPosixPath(id)
   assertPosixPath(root)

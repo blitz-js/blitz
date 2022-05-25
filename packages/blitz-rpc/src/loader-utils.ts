@@ -53,9 +53,9 @@ export function convertPageFilePathToRoutePath(
   filePath: string,
   resolverBasePath: ResolverBasePath,
 ) {
-  if (resolverBasePath === "root") {
-    return filePath.replace(fileExtensionRegex, "")
-  }
+  // if (resolverBasePath === "root") {
+  //   return filePath.replace(fileExtensionRegex, "")
+  // }
 
   return filePath
     .replace(/^.*?[\\/]queries[\\/]/, "/")

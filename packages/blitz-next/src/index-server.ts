@@ -160,24 +160,18 @@ export function installWebpackConfig<T extends any[]>({
 }: InstallWebpackConfigOptions<T>) {
   webpackConfig.module.rules.push({
     test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
-    use: [{loader: loaderServer}],
-    options: {
-      resolverBasePath: nextConfig.blitz?.resolverBasePath,
-    },
+    use: [{loader: loaderServer, options: {resolverBasePath: nextConfig.blitz?.resolverBasePath}}],
   })
   webpackConfig.module.rules.push({
     test: /[\\/](queries|mutations)[\\/]/,
-    use: [{loader: loaderClient}],
-    options: {
-      resolverBasePath: nextConfig.blitz?.resolverBasePath,
-    },
+    use: [{loader: loaderClient, options: {resolverBasePath: nextConfig.blitz?.resolverBasePath}}],
   })
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
   return Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
-      installWebpackConfig({...config, ...nextConfig})
+      installWebpackConfig({webpackConfig: config, nextConfig})
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }
