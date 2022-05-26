@@ -140,10 +140,15 @@ export interface BlitzConfig extends NextConfig {
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  void startWatcher()
-  process.on("exit", function () {
-    void stopWatcher()
-  })
+  if (process.argv.length === 3 && process.argv[2] !== "build") {
+    void startWatcher()
+
+    process.on("exit", function () {
+      console.log("exit")
+      void stopWatcher()
+    })
+  }
+
   const config = Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)

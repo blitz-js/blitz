@@ -2,7 +2,7 @@ import {join, dirname} from "path"
 import os from "os"
 import {promises, readdir} from "fs"
 const readFile = promises.readFile
-import {outputFile} from "fs-extra"
+import {outputFile, readdirSync} from "fs-extra"
 import findUp from "find-up"
 import resolveFrom from "resolve-from"
 import Watchpack from "watchpack"
@@ -571,12 +571,12 @@ export async function startWatcher(pagesDir = ""): Promise<void> {
     })
 
     let wp = (webpackWatcher = new Watchpack({}))
+
     wp.watch(
       [],
       topLevelFoldersThatMayContainPages.map((dir) => join(pagesDir!, dir)),
-      0,
+      Date.now(),
     )
-
     wp.on("aggregated", async () => {
       await generateManifest()
     })
@@ -587,7 +587,7 @@ export async function stopWatcher(): Promise<void> {
   if (!webpackWatcher) {
     return
   }
-
+  console.log("stopWatcher")
   webpackWatcher.close()
   webpackWatcher = null
 }
