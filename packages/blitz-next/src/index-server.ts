@@ -140,7 +140,7 @@ export interface BlitzConfig extends NextConfig {
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  if (process.argv.length === 3 && process.argv[2] !== "build") {
+  if (process.argv.length >= 3 && process.argv[2] === "dev") {
     void startWatcher()
 
     process.on("exit", function () {
