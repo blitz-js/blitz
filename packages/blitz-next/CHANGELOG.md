@@ -1,5 +1,20 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.26
+
+### Patch Changes
+
+- 0e762fb5: export BlitzPage & BlitzLayout types from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.26
+
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- 931156c3: Rename prefetchBlitzQuery to prefetchQuery, add prefetchInfiniteQuery
+- b0c21b07: Move blitz config to next.config.js
+  - @blitzjs/rpc@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes
