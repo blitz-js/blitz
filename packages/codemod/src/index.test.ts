@@ -3,7 +3,7 @@ import spawn from "cross-spawn"
 
 describe("codemod cli", () => {
   it("errors without codemod name", async () => {
-    const run = spawn.sync("bin/@blitzjs/codemod", [], {stdio: "pipe"})
-    expect(run.stdout.toString()).toContain("Codemod not found")
+    const run = spawn.sync("node", ["dist/index.cjs"], {encoding: "utf8"})
+    expect(run.stdout).toContain("Codemod not found")
   })
 })
