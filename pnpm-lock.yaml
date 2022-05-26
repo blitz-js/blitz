@@ -399,6 +399,7 @@ importers:
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
       tslog: 3.3.1
+      watchpack: 2.1.1
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/cookie": 0.4.1
@@ -422,7 +423,6 @@ importers:
       typescript: 4.6.3
       unbuild: 0.6.9
       watch: 1.0.2
-      watchpack: 2.1.1
       zod: 3.10.1
 
   packages/blitz-auth:
@@ -8980,7 +8980,6 @@ packages:
       {
         integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==,
       }
-    dev: true
 
   /glob/7.1.7:
     resolution:
@@ -10145,7 +10144,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_typescript@4.6.3
+      ts-node: 10.7.0_2dcdb8fdc9a6e6d9aaf2aac9443a7c28
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -15760,7 +15759,7 @@ packages:
     dependencies:
       glob-to-regexp: 0.4.1
       graceful-fs: 4.2.10
-    dev: true
+    dev: false
 
   /wcwidth/1.0.1:
     resolution: {integrity: sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=}
