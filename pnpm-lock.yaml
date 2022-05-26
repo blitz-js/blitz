@@ -7216,7 +7216,7 @@ packages:
       is-shared-array-buffer: 1.0.2
       is-string: 1.0.7
       is-weakref: 1.0.2
-      object-inspect: 1.12.1
+      object-inspect: 1.12.2
       object-keys: 1.1.1
       object.assign: 4.1.2
       regexp.prototype.flags: 1.4.3
@@ -11070,7 +11070,7 @@ packages:
       whatwg-encoding: 1.0.5
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.7.0
-      ws: 7.5.7
+      ws: 7.5.8
       xml-name-validator: 3.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -11114,7 +11114,7 @@ packages:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 10.0.0
-      ws: 8.6.0
+      ws: 8.7.0
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -11456,7 +11456,7 @@ packages:
       listr2: 3.14.0
       micromatch: 4.0.5
       normalize-path: 3.0.0
-      object-inspect: 1.12.1
+      object-inspect: 1.12.2
       string-argv: 0.3.1
       supports-color: 9.2.2
       yaml: 1.10.2
@@ -12499,10 +12499,10 @@ packages:
       kind-of: 3.2.2
     dev: false
 
-  /object-inspect/1.12.1:
+  /object-inspect/1.12.2:
     resolution:
       {
-        integrity: sha512-Y/jF6vnvEtOPGiKD1+q+X0CiUYRQtEHp89MLLUJ7TUivtH8Ugn2+3A7Rynqk7BRsAoqeOQWnFnjpDrKSxDgIGA==,
+        integrity: sha512-z+cPxW0QGUp0mcqcsgQyLVRDoXFQbXOwBaqyF7VIgI4TWNQsDHrBpUQslRmIfAoYWdYzs6UlKJtB2XJpTaNSpQ==,
       }
 
   /object-keys/1.1.1:
@@ -14276,7 +14276,7 @@ packages:
     dependencies:
       jszip: 3.10.0
       tmp: 0.2.1
-      ws: 8.6.0
+      ws: 8.7.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -14445,7 +14445,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       get-intrinsic: 1.1.1
-      object-inspect: 1.12.1
+      object-inspect: 1.12.2
 
   /signal-exit/3.0.7:
     resolution:
@@ -16213,7 +16213,7 @@ packages:
       lodash: 4.17.21
       opener: 1.5.2
       sirv: 1.0.19
-      ws: 7.5.7
+      ws: 7.5.8
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -16412,10 +16412,10 @@ packages:
       signal-exit: 3.0.7
       typedarray-to-buffer: 3.1.5
 
-  /ws/7.5.7:
+  /ws/7.5.8:
     resolution:
       {
-        integrity: sha512-KMvVuFzpKBuiIXW3E4u3mySRO2/mCHSyZDJQM5NQ9Q9KHWHWh0NHgfbRMLLrceUK5qAL4ytALJbpRMjixFZh8A==,
+        integrity: sha512-ri1Id1WinAX5Jqn9HejiGb8crfRio0Qgu8+MtL36rlTA6RLsMdWt1Az/19A2Qij6uSHUMphEFaTKa4WG+UNHNw==,
       }
     engines: {node: ">=8.3.0"}
     peerDependencies:
@@ -16427,10 +16427,10 @@ packages:
       utf-8-validate:
         optional: true
 
-  /ws/8.6.0:
+  /ws/8.7.0:
     resolution:
       {
-        integrity: sha512-AzmM3aH3gk0aX7/rZLYvjdvZooofDu3fFOzGqcSnQ1tOcTWwhM/o+q++E8mAyVVIyUdajrkzWUGftaVSDLn1bw==,
+        integrity: sha512-c2gsP0PRwcLFzUiA8Mkr37/MI7ilIlHQxaEAtd0uNMbVMoy8puJyafRlm0bV9MbGSabUPeLrRRaqIBcFcA2Pqg==,
       }
     engines: {node: ">=10.0.0"}
     peerDependencies:
