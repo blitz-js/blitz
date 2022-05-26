@@ -15,7 +15,7 @@ import type {
   FirstParam,
   AddParameters,
 } from "blitz"
-import {handleRequestWithMiddleware, startWatcher} from "blitz"
+import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import type {NextConfig} from "next"
 import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
 import {dehydrate} from "@blitzjs/rpc"
@@ -141,6 +141,9 @@ export interface BlitzConfig extends NextConfig {
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
   void startWatcher()
+  process.on("exit", function () {
+    void stopWatcher()
+  })
   const config = Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)
