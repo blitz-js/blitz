@@ -140,11 +140,16 @@ export interface BlitzConfig extends NextConfig {
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  if (process.env.NODE_ENV !== "production") {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.NODE_ENV !== "test" &&
+    process.env.MODE !== "test"
+  ) {
     void startWatcher()
+
     process.on("SIGINT", () => {
       void stopWatcher()
-      process.exit()
+      process.exit(0)
     })
 
     process.on("exit", function () {
