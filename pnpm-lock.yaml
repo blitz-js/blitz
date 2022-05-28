@@ -341,6 +341,7 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
+      "@types/watchpack": 1.1.1
       arg: 5.0.1
       chalk: ^4.1.0
       console-table-printer: 2.10.0
@@ -371,6 +372,7 @@ importers:
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
+      watchpack: 2.1.1
       zod: 3.10.1
     dependencies:
       "@blitzjs/generator": link:../generator
@@ -397,6 +399,7 @@ importers:
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
       tslog: 3.3.1
+      watchpack: 2.1.1
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/cookie": 0.4.1
@@ -412,6 +415,7 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/test-listen": 1.1.0
+      "@types/watchpack": 1.1.1
       express: 4.17.3
       node-fetch: 3.2.3
       react: 18.0.0
@@ -3876,6 +3880,16 @@ packages:
       }
     dev: false
 
+  /@types/chokidar/2.1.3:
+    resolution:
+      {
+        integrity: sha512-6qK3xoLLAhQVTucQGHTySwOVA1crHRXnJeLwqK6KIFkkKa2aoMFXh+WEi8PotxDtvN6MQJLyYN9ag9P6NLV81w==,
+      }
+    deprecated: This is a stub types definition. chokidar provides its own type definitions, so you do not need this installed.
+    dependencies:
+      chokidar: 3.5.3
+    dev: true
+
   /@types/connect/3.4.35:
     resolution:
       {
@@ -4467,6 +4481,17 @@ packages:
       }
     dependencies:
       "@types/expect": 1.20.4
+      "@types/node": 17.0.24
+    dev: true
+
+  /@types/watchpack/1.1.1:
+    resolution:
+      {
+        integrity: sha512-3hDTwERUO/BZKlQ0x9bazD6EsF9nf2yJ1HL6ukimd+r6Pw5Zgf/9EzOZ2wdck6gBSx8f0Zm/HTihedojQuIrIw==,
+      }
+    dependencies:
+      "@types/chokidar": 2.1.3
+      "@types/graceful-fs": 4.1.5
       "@types/node": 17.0.24
     dev: true
 
@@ -5505,6 +5530,14 @@ packages:
       }
     engines: {node: ">=0.6"}
 
+  /binary-extensions/2.2.0:
+    resolution:
+      {
+        integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==,
+      }
+    engines: {node: ">=8"}
+    dev: true
+
   /bl/4.1.0:
     resolution:
       {
@@ -5907,6 +5940,24 @@ packages:
       "@chevrotain/utils": 9.1.0
       regexp-to-ast: 0.5.0
     dev: false
+
+  /chokidar/3.5.3:
+    resolution:
+      {
+        integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==,
+      }
+    engines: {node: ">= 8.10.0"}
+    dependencies:
+      anymatch: 3.1.2
+      braces: 3.0.2
+      glob-parent: 5.1.2
+      is-binary-path: 2.1.0
+      is-glob: 4.0.3
+      normalize-path: 3.0.0
+      readdirp: 3.6.0
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
 
   /chromedriver/100.0.0:
     resolution:
@@ -9182,6 +9233,13 @@ packages:
     resolution: {integrity: sha1-jFoUlNIGbFcMw7/kSWF1rMTVAqs=}
     dev: false
 
+  /glob-to-regexp/0.4.1:
+    resolution:
+      {
+        integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==,
+      }
+    dev: false
+
   /glob/7.1.7:
     resolution:
       {
@@ -9766,6 +9824,16 @@ packages:
       }
     dependencies:
       has-bigints: 1.0.2
+
+  /is-binary-path/2.1.0:
+    resolution:
+      {
+        integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==,
+      }
+    engines: {node: ">=8"}
+    dependencies:
+      binary-extensions: 2.2.0
+    dev: true
 
   /is-boolean-object/1.1.2:
     resolution:
@@ -10359,7 +10427,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.7.0_typescript@4.6.3
+      ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -13633,6 +13701,16 @@ packages:
       util-deprecate: 1.0.2
     dev: false
 
+  /readdirp/3.6.0:
+    resolution:
+      {
+        integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==,
+      }
+    engines: {node: ">=8.10.0"}
+    dependencies:
+      picomatch: 2.3.1
+    dev: true
+
   /recast/0.20.5:
     resolution:
       {
@@ -15204,7 +15282,6 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_typescript@4.6.3:
     resolution:
@@ -15237,6 +15314,7 @@ packages:
       typescript: 4.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: false
 
   /tsconfig-paths/3.14.1:
     resolution:
@@ -15973,6 +16051,17 @@ packages:
       exec-sh: 0.2.2
       minimist: 1.2.6
     dev: true
+
+  /watchpack/2.1.1:
+    resolution:
+      {
+        integrity: sha512-Oo7LXCmc1eE1AjyuSBmtC3+Wy4HcV8PxWh2kP6fOl8yTlNS7r0K9l1ao2lrrUza7V39Y3D/BbJgY8VeSlc5JKw==,
+      }
+    engines: {node: ">=10.13.0"}
+    dependencies:
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.10
+    dev: false
 
   /wcwidth/1.0.1:
     resolution: {integrity: sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=}

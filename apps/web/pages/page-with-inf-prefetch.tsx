@@ -9,7 +9,7 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
   return {props: {}}
 })
 
-function PageWithGssp(props) {
+function PageWithPrefetchInfiniteQuery(props) {
   const [usersPages] = useInfiniteQuery(getInfiniteUsers, (page = {take: 3, skip: 0}) => page, {
     getNextPageParam: (lastPage) => lastPage.nextPage,
   })
@@ -29,4 +29,4 @@ function PageWithGssp(props) {
   )
 }
 
-export default PageWithGssp
+export default PageWithPrefetchInfiniteQuery
