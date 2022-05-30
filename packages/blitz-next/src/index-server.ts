@@ -15,7 +15,7 @@ import type {
   FirstParam,
   AddParameters,
 } from "blitz"
-import {handleRequestWithMiddleware} from "blitz"
+import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
 import type {NextConfig} from "next"
 import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
 import {dehydrate} from "@blitzjs/rpc"
@@ -140,7 +140,24 @@ export interface BlitzConfig extends NextConfig {
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  return Object.assign({}, nextConfig, {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.NODE_ENV !== "test" &&
+    process.env.MODE !== "test"
+  ) {
+    void startWatcher()
+
+    process.on("SIGINT", () => {
+      void stopWatcher()
+      process.exit(0)
+    })
+
+    process.on("exit", function () {
+      void stopWatcher()
+    })
+  }
+
+  const config = Object.assign({}, nextConfig, {
     webpack: (config: any, options: any) => {
       installWebpackConfig(config)
       if (typeof nextConfig.webpack === "function") {
@@ -148,7 +165,9 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
       }
       return config
     },
-  } as NextConfig)
+  })
+
+  return config
 }
 
 export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(

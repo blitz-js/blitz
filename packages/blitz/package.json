@@ -46,7 +46,8 @@
     "superjson": "1.8.0",
     "ts-node": "10.7.0",
     "tsconfig-paths": "4.0.0",
-    "tslog": "3.3.1"
+    "tslog": "3.3.1",
+    "watchpack": "2.1.1"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:2.0.0-alpha.26",
@@ -63,6 +64,7 @@
     "@types/react": "18.0.1",
     "@types/react-dom": "17.0.14",
     "@types/test-listen": "1.1.0",
+    "@types/watchpack": "1.1.1",
     "express": "4.17.3",
     "node-fetch": "3.2.3",
     "react": "18.0.0",

@@ -3,7 +3,7 @@
   "version": "1.0.1-alpha.16",
   "scripts": {
     "start:dev": "pnpm run prisma:start && next dev",
-    "buildapp": "pnpm i && pnpm prisma generate && next build",
+    "buildapp": "NODE_ENV=production pnpm blitz codegen && pnpm prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "prisma:start": "prisma generate && prisma migrate deploy",
