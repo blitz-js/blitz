@@ -12,7 +12,8 @@ import path from "path"
 import qs from "querystring"
 import treeKill from "tree-kill"
 import {readJSONSync} from "fs-extra"
-import {packageDirectorySync} from "pkg-dir"
+// import {packageDirectorySync} from "pkg-dir"
+import pkgDir from "pkg-dir"
 import resolveCwd from "resolve-cwd"
 export const nextServer = server
 export const pkg = _pkg
@@ -121,7 +122,7 @@ export function findPort() {
 }
 
 export function resolveBin(pkg: string, executable = pkg) {
-  const packageDir = packageDirectorySync(resolveCwd(pkg) as any)
+  const packageDir = pkgDir.sync()!
   if (!packageDir) throw new Error(`Could not find package.json for '${pkg}'`)
   const bin = readJSONSync(path.join(packageDir, "package.json"))
   const binPath = typeof bin === "object" ? bin.dependencies[executable] : bin

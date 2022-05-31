@@ -19,7 +19,7 @@
     "fs-extra": "10.0.1",
     "get-port": "6.1.2",
     "node-fetch": "3.2.3",
-    "pkg-dir": "6.0.1",
+    "pkg-dir": "5.0.0",
     "playwright-chromium": "1.14.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
