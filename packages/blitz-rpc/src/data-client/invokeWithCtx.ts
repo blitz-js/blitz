@@ -11,6 +11,5 @@ export function invokeWithCtx<T extends (...args: any) => any, TInput = FirstPar
     )
   }
 
-  const fn = queryFn
-  return fn(params, ctx) as ReturnType<T>
+  return queryFn(params, ctx)
 }
