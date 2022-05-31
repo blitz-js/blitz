@@ -25,31 +25,32 @@ const runTests = (mode?: string) => {
     )
   })
 }
+describe("Trailing Slash Tests", () => {
+  describe("dev mode", () => {
+    beforeAll(async () => {
+      try {
+        appPort = await findPort()
+        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+      } catch (error) {
+        console.log(error)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
+    runTests()
+  })
 
-describe("dev mode", () => {
-  beforeAll(async () => {
-    try {
-      appPort = await findPort()
-      app = await launchApp(appDir, appPort, {})
-    } catch (error) {
-      console.log(error)
-    }
-  }, 5000 * 60 * 2)
-  afterAll(async () => await killApp(app))
-  runTests()
-})
+  describe("server mode", () => {
+    beforeAll(async () => {
+      try {
+        await nextBuild(appDir)
+        appPort = await findPort()
+        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+      } catch (err) {
+        console.log(err)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
 
-describe("server mode", () => {
-  beforeAll(async () => {
-    try {
-      appPort = await findPort()
-      await nextBuild(appDir)
-      app = await nextStart(appDir, appPort)
-    } catch (err) {
-      console.log(err)
-    }
-  }, 5000 * 60 * 2)
-  afterAll(async () => await killApp(app))
-
-  runTests()
+    runTests()
+  })
 })
