@@ -9,7 +9,7 @@ export const getServerSideProps = gSSP(async ({ctx}) => {
   return {props: {}}
 })
 
-function PageWithGssp(props) {
+function PageWithPrefetch(props) {
   const [users] = useQuery(getUsers, {})
   return (
     <div>
@@ -25,4 +25,4 @@ function PageWithGssp(props) {
   )
 }
 
-export default PageWithGssp
+export default PageWithPrefetch
