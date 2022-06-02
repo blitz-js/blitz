@@ -42,13 +42,17 @@ const runTests = (mode?: string) => {
         5000 * 60 * 2,
       )
 
-      it("should render result for open query", async () => {
-        const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
-          method: "GET",
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-        })
-        expect(res.status).toBe(200)
-      })
+      it(
+        "should render result for open query",
+        async () => {
+          const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+          })
+          expect(res.status).toBe(200)
+        },
+        5000 * 60 * 2,
+      )
 
       it("sets correct cookie", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
