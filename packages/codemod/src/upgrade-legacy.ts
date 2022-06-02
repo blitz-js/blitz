@@ -730,7 +730,9 @@ const upgradeLegacy = async () => {
       })
 
       if (errors > 0) {
-        throw new Error("invokeWithMiddleware is not supported")
+        throw new Error(
+          "invokeWithMiddleware is not supported. Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx",
+        )
       }
     },
   })
