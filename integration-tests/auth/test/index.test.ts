@@ -123,8 +123,8 @@ describe("Auth Tests", () => {
     beforeAll(async () => {
       try {
         appPort = await findPort()
-        await seed()
         app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        await seed()
       } catch (error) {
         console.log(error)
       }
