@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- 07292910: Add invokeWithCtx function
+  - @blitzjs/auth@2.0.0-alpha.27
+  - blitz@2.0.0-alpha.27
+
 ## 2.0.0-alpha.26
 
 ### Patch Changes

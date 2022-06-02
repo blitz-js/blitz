@@ -14,11 +14,14 @@
     "@blitzjs/generator": "2.0.0-alpha.0",
     "template": "0.0.0",
     "toolkit-app": "1.0.0",
-    "test-qm": "0.0.0"
+    "test-qm": "0.0.0",
+    "test-no-suspense": "0.0.0",
+    "test-trailing-slash": "0.0.0"
   },
   "changesets": [
     "big-phones-bow",
     "breezy-cameras-double",
+    "cool-doors-invent",
     "dirty-monkeys-greet",
     "empty-berries-rule",
     "fair-wombats-sneeze",
