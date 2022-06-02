@@ -14,19 +14,10 @@ const runTests = (mode?: string) => {
       "should render query result",
       async () => {
         const browser = await webdriver(appPort, "/use-query")
-        /* For some reason, unable to find #page element right away when rendering a child component.
-          
-          If we waitForElement on #page, it returns basic-result instead of showing the Loading... text first.
-          
-          If we explicity add Loading... text inside the Page component vs a child component like <Content /> then we can find Loading...
 
-          This has nothing to do with useQuery, as even when just returning <>Loading...</> through <Content /> it won't find the Loading... text.
-          */
-        await browser.waitForElementByCss("#page", 0)
-        let text = await browser.elementByCss("#page").text()
-        // expect(text).toMatch(/Loading/)
-        // await browser.waitForElementByCss("#content", 0)
-        // text = await browser.elementByCss("#content").text()
+        let text
+        browser.waitForElementByCss("#content", 0)
+        text = await browser.elementByCss("#content").text()
         expect(text).toMatch(/basic-result/)
         if (browser) await browser.close()
       },
