@@ -143,7 +143,7 @@ describe("RPC", () => {
       beforeAll(async () => {
         try {
           appPort = await findPort()
-          app = await launchApp(appDir, appPort)
+          app = await launchApp(appDir, appPort, {cwd: process.cwd()})
         } catch (err) {
           console.log(err)
         }
@@ -162,7 +162,7 @@ describe("RPC", () => {
         await nextBuild(appDir)
         mode = "server"
         appPort = await findPort()
-        app = await nextStart(appDir, appPort)
+        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
       })
       afterAll(() => killApp(app))
 
@@ -185,7 +185,7 @@ describe("RPC", () => {
         await nextBuild(appDir)
         mode = "serverless"
         appPort = await findPort()
-        app = await nextStart(appDir, appPort)
+        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
       })
       afterAll(async () => {
         await killApp(app)

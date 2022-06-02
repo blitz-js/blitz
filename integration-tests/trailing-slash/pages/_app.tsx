@@ -5,7 +5,7 @@ import {withBlitz} from "../app/blitz-client"
 
 function RootErrorFallback({error}: ErrorFallbackProps) {
   if (error instanceof AuthenticationError) {
-    return <div id="error">Error: You are not authenticated</div>
+    return <div>Error: You are not authenticated</div>
   } else if (error instanceof AuthorizationError) {
     return (
       <ErrorComponent
