@@ -6,3 +6,4 @@ public-hoist-pattern[]=next
 public-hoist-pattern[]=secure-password
 public-hoist-pattern[]=*jest*
 public-hoist-pattern[]=@testing-library/*
+# Dont change above this
