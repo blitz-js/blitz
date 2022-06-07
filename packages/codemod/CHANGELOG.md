@@ -1,5 +1,13 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.32
+
+### Patch Changes
+
+- e6fb09d4: Fix templates source in RPC codemod step
+  - @blitzjs/generator@2.0.0-alpha.32
+  - blitz@2.0.0-alpha.32
+
 ## 2.0.0-alpha.31
 
 ### Patch Changes
