@@ -438,6 +438,7 @@ importers:
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
       "@types/detect-port": 1.3.2
+      "@types/envinfo": 7.8.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/hasbin": 1.2.0
@@ -456,6 +457,7 @@ importers:
       detect-port: 1.3.0
       dotenv: 16.0.0
       dotenv-expand: 8.0.3
+      envinfo: 7.8.1
       esbuild: 0.14.34
       express: 4.17.3
       find-up: 4.1.0
@@ -464,6 +466,7 @@ importers:
       node-fetch: 3.2.3
       npm-which: 3.0.1
       ora: 5.3.0
+      os-name: 5.0.1
       p-event: 4.2.0
       pkg-dir: 5.0.0
       prompts: 2.4.2
@@ -490,12 +493,14 @@ importers:
       detect-port: 1.3.0
       dotenv: 16.0.0
       dotenv-expand: 8.0.3
+      envinfo: 7.8.1
       esbuild: 0.14.34
       find-up: 4.1.0
       fs-extra: 10.0.1
       hasbin: 1.2.3
       npm-which: 3.0.1
       ora: 5.3.0
+      os-name: 5.0.1
       p-event: 4.2.0
       pkg-dir: 5.0.0
       prompts: 2.4.2
@@ -512,6 +517,7 @@ importers:
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
       "@types/detect-port": 1.3.2
+      "@types/envinfo": 7.8.1
       "@types/express": 4.17.13
       "@types/fs-extra": 9.0.13
       "@types/hasbin": 1.2.0
@@ -4071,6 +4077,13 @@ packages:
       }
     dev: true
 
+  /@types/envinfo/7.8.1:
+    resolution:
+      {
+        integrity: sha512-pTyshpmGxqB9lRwG75v2YR0oqKYpCrklOYlZWQ88z/JB0fimT8EVmYekuIwpU3IxPZDHSXCqXKzkCrtAcKY25g==,
+      }
+    dev: true
+
   /@types/estree/0.0.39:
     resolution:
       {
@@ -7348,6 +7361,15 @@ packages:
         integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==,
       }
     dev: true
+
+  /envinfo/7.8.1:
+    resolution:
+      {
+        integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==,
+      }
+    engines: {node: ">=4"}
+    hasBin: true
+    dev: false
 
   /error-ex/1.3.2:
     resolution:
@@ -12052,6 +12074,14 @@ packages:
     hasBin: true
     dev: true
 
+  /macos-release/3.0.1:
+    resolution:
+      {
+        integrity: sha512-3l6OrhdDg2H2SigtuN3jBh+5dRJRWxNKuJTPBbGeNJTsmt/pj9PO25wYaNb05NuNmAsl435j4rDP6rgNXz7s7g==,
+      }
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
   /magic-string/0.25.9:
     resolution:
       {
@@ -13107,6 +13137,17 @@ packages:
       log-symbols: 4.1.0
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
+    dev: false
+
+  /os-name/5.0.1:
+    resolution:
+      {
+        integrity: sha512-0EQpaHUHq7olp2/YFUr+0vZi9tMpDTblHGz+Ch5RntKxiRXOAY0JOz1UlxhSjMSksHvkm13eD6elJj3M8Ht/kw==,
+      }
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      macos-release: 3.0.1
+      windows-release: 5.0.1
     dev: false
 
   /os-tmpdir/1.0.2:
@@ -16880,6 +16921,16 @@ packages:
     engines: {node: ">=8"}
     dependencies:
       string-width: 4.2.3
+    dev: false
+
+  /windows-release/5.0.1:
+    resolution:
+      {
+        integrity: sha512-y1xFdFvdMiDXI3xiOhMbJwt1Y7dUxidha0CWPs1NgjZIjZANTcX7+7bMqNjuezhzb8s5JGEiBAbQjQQYYy7ulw==,
+      }
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      execa: 5.1.1
     dev: false
 
   /with/7.0.2:
