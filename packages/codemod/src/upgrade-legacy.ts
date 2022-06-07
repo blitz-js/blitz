@@ -308,7 +308,12 @@ const upgradeLegacy = async () => {
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
-      const templatePath = path.join(require.resolve("@blitzjs/generator"), "..", "..", "templates")
+      const templatePath = path.join(
+        require.resolve("@blitzjs/generator"),
+        "..",
+        "..",
+        isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
+      )
       const rpcRoute = fs
         .readFileSync(path.join(templatePath, "app", "pages", "api", "rpc", "blitzrpcroute.ts"))
         .toString()
