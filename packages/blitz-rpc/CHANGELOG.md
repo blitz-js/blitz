@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- 17ce29e5: Update RPC plugin setup in templates
+  - blitz@2.0.0-alpha.31
+  - @blitzjs/auth@2.0.0-alpha.31
+
 ## 2.0.0-alpha.30
 
 ### Patch Changes

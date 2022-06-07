@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- 17ce29e5: Update RPC plugin setup in templates
+
 ## 2.0.0-alpha.30
 
 ## 2.0.0-alpha.29
