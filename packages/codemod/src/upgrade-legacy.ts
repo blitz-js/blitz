@@ -7,13 +7,14 @@ import {
   findDefaultExportPath,
   findFunction,
   findImport,
-  findImportSpecifier,
   findVariable,
   getAllFiles,
   getCollectionFromSource,
   wrapDeclaration,
 } from "./utils"
 import {log} from "blitz"
+
+const isInternalBlitzMonorepoDevelopment = fs.existsSync(path.join(__dirname, "../../blitz-next"))
 
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -270,7 +271,7 @@ const upgradeLegacy = async () => {
           require.resolve("@blitzjs/generator"),
           "..",
           "..",
-          "templates",
+          isInternalBlitzMonorepoDevelopment ? "templates" : "dist/templates",
         )
         const blitzServer = fs
           .readFileSync(path.join(templatePath, "app", "app", "blitz-server.ts"))
