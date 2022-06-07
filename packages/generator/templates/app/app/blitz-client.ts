@@ -7,6 +7,6 @@ export const { withBlitz } = setupBlitzClient({
     AuthClientPlugin({
       cookiePrefix: "__safeNameSlug__-cookie-prefix",
     }),
-    BlitzRpcPlugin(),
+    BlitzRpcPlugin({}),
   ],
 })
