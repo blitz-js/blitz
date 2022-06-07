@@ -192,17 +192,21 @@ export function getAllFiles(
   dirPath: string,
   accFiles: string[] = [],
   skipDirs?: string[],
-  skipExt?: string[],
+  allowedExt?: string[],
 ) {
   let currentFiles = fs.readdirSync(dirPath)
 
   currentFiles.forEach((file) => {
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
       if (!skipDirs?.includes(file)) {
-        accFiles = getAllFiles(dirPath + "/" + file, accFiles, skipDirs, skipExt)
+        accFiles = getAllFiles(dirPath + "/" + file, accFiles, skipDirs, allowedExt)
       }
     } else {
-      if (!skipExt?.includes(path.extname(file))) {
+      if (allowedExt?.length) {
+        if (allowedExt?.includes(path.extname(file))) {
+          accFiles.push(path.join(dirPath, "/", file))
+        }
+      } else {
         accFiles.push(path.join(dirPath, "/", file))
       }
     }

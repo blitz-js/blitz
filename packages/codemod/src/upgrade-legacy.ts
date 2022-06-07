@@ -169,7 +169,7 @@ const upgradeLegacy = async () => {
         BlitzLayout: "@blitzjs/next",
       }
 
-      getAllFiles(appDir, [], [], [".css"]).forEach((filename) => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((filename) => {
         const program = getCollectionFromSource(path.resolve(appDir, filename))
         const parsedProgram = program.get()
 
@@ -212,7 +212,7 @@ const upgradeLegacy = async () => {
   steps.push({
     name: "update NextJS' default imports",
     action: async () => {
-      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
 
         const nextImage = findImport(program, "next/image")
@@ -471,7 +471,7 @@ const upgradeLegacy = async () => {
     action: async () => {
       //First check ./pages
       const pagesDir = path.resolve("pages")
-      getAllFiles(pagesDir, [], [], [".css"]).forEach((file) => {
+      getAllFiles(pagesDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const filepath = path.resolve(pagesDir, file)
         const program = getCollectionFromSource(filepath)
 
@@ -514,7 +514,7 @@ const upgradeLegacy = async () => {
         fs.writeFileSync(filepath, program.toSource())
       })
 
-      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const filepath = path.resolve(appDir, file)
         const program = getCollectionFromSource(filepath)
 
@@ -644,7 +644,7 @@ const upgradeLegacy = async () => {
     name: "wrap getServerSideProps, getStaticProps and API handlers with gSSP, gSP, and api",
     action: async () => {
       const pagesDir = path.resolve("pages")
-      getAllFiles(pagesDir, [], ["api"]).forEach((file) => {
+      getAllFiles(pagesDir, [], ["api"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
 
         // 1. getServerSideProps
@@ -668,7 +668,12 @@ const upgradeLegacy = async () => {
 
       // 3. api
       if (fs.existsSync(path.join(pagesDir, "api"))) {
-        getAllFiles(path.join(pagesDir, "api"), [], ["rpc"]).forEach((file) => {
+        getAllFiles(
+          path.join(pagesDir, "api"),
+          [],
+          ["rpc"],
+          [".ts", ".tsx", ".js", ".jsx"],
+        ).forEach((file) => {
           const program = getCollectionFromSource(file)
 
           const defaultExportPath = findDefaultExportPath(program)
@@ -691,7 +696,7 @@ const upgradeLegacy = async () => {
     action: async () => {
       let errors = 0
 
-      getAllFiles(appDir, [], ["components"], [".css"]).forEach((file) => {
+      getAllFiles(appDir, [], ["components"], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         const middlewarePath = findVariable(program, "middleware")
         if (middlewarePath?.length) {
@@ -711,7 +716,7 @@ const upgradeLegacy = async () => {
     action: async () => {
       let errors = 0
 
-      getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
@@ -720,7 +725,7 @@ const upgradeLegacy = async () => {
         }
       })
 
-      getAllFiles(path.resolve("pages"), [], [], [".css"]).forEach((file) => {
+      getAllFiles(path.resolve("pages"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
