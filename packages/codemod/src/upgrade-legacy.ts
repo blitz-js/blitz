@@ -31,7 +31,7 @@ const upgradeLegacy = async () => {
   // Add steps in order
 
   steps.push({
-    name: "Clear legacy config file and write new next.config.js",
+    name: "move the config from blitz.config.ts to next.config.js",
     action: async () => {
       const program = getCollectionFromSource(blitzConfigFile)
       const parsedProgram = program.get()
@@ -70,7 +70,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Update package.json",
+    name: "update dependencies in package.json",
     action: async () => {
       let packageJsonPath = require(path.resolve("package.json"))
       packageJsonPath.dependencies["react"] = "latest"
@@ -89,7 +89,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Update imports",
+    name: "update project's imports",
     action: async () => {
       const specialImports: Record<string, string> = {
         Link: "next/link",
@@ -210,7 +210,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Fix default imports for next",
+    name: "update NextJS' default imports",
     action: async () => {
       getAllFiles(appDir, [], [], [".css"]).forEach((file) => {
         const program = getCollectionFromSource(file)
@@ -261,7 +261,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Create server & client setup files",
+    name: "create blitz-server.ts and blitz-client.ts setup files",
     action: async () => {
       let appDirExist = fs.existsSync(appDir)
 
@@ -304,7 +304,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Create pages/api/rpc dir & [[...blitz]] wildecard api route for next.js",
+    name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
       const templatePath = path.join(require.resolve("@blitzjs/generator"), "..", "..", "templates")
@@ -324,7 +324,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Move pages dir from app dir to the pages dir created above",
+    name: "move app/pages/ to the project root pages/ directory",
     action: async () => {
       const appDir = path.resolve("app")
       const subdirs = fs.readdirSync(appDir)
@@ -345,7 +345,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Remove babel config file",
+    name: "remove Babel config file",
     action: async () => {
       const babelConfig = fs.existsSync(path.resolve("babel.config.js"))
       if (babelConfig) {
@@ -355,7 +355,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Consolidate pages dir",
+    name: "move all pages directories to one consolidated directory",
     action: async () => {
       const getAllPagesDirs = (dirPath: string) => {
         let files = fs.readdirSync(dirPath)
@@ -383,7 +383,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Move api routes",
+    name: "move API routes to pages/api directory",
     action: async () => {
       const apiRoutesExist = fs.existsSync(path.join(appDir, "api"))
       if (apiRoutesExist) {
@@ -398,7 +398,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Update custom server input",
+    name: "update custom server to reference Next",
     action: async () => {
       const customServerDir = path.resolve("server")
       const customServerFile = path.resolve(`server.${isTypescript ? "ts" : "js"}`)
@@ -467,7 +467,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Convert useRouterQuery to useRouter",
+    name: "convert useRouterQuery to useRouter",
     action: async () => {
       //First check ./pages
       const pagesDir = path.resolve("pages")
@@ -567,7 +567,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Wrap _app",
+    name: "wrap App component with withBlitz HOC",
     action: async () => {
       const pagesDir = path.resolve("pages")
 
@@ -598,7 +598,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "If _document, mod it",
+    name: "update imports in the _document file",
     action: async () => {
       const pagesDir = path.resolve("pages")
 
@@ -641,7 +641,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "wrap getServerSideProps with gssp functions",
+    name: "wrap getServerSideProps, getStaticProps and API handlers with gSSP, gSP, and api",
     action: async () => {
       const pagesDir = path.resolve("pages")
       getAllFiles(pagesDir, [], ["api"]).forEach((file) => {
@@ -687,7 +687,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Log an error for any usage of local middleware",
+    name: "check for usages of a local middleware in resolvers files",
     action: async () => {
       let errors = 0
 
@@ -707,7 +707,7 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "Log an error for any usage of invokeWithMiddleware",
+    name: "check for usages of invokeWithMiddleware",
     action: async () => {
       let errors = 0
 
