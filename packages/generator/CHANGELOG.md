@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- 6ac2d341: updated nextjs version in generator & npmrc file
+
 ## 2.0.0-alpha.27
 
 ## 2.0.0-alpha.26
