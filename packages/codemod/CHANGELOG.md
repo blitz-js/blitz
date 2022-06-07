@@ -1,5 +1,13 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.33
+
+### Patch Changes
+
+- 9e05d6e1: allow extension catch in getAllFiles codemod util
+  - @blitzjs/generator@2.0.0-alpha.33
+  - blitz@2.0.0-alpha.33
+
 ## 2.0.0-alpha.32
 
 ### Patch Changes
