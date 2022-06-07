@@ -4,7 +4,7 @@ This example shows how to use [next-rosetta](https://www.npmjs.com/package/next-
 
 ## Getting started
 
-### Install dependecies
+### Install dependencies
 
 ```
 # with npm
