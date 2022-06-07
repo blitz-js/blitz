@@ -3728,6 +3728,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rmassie",
+      "name": "R Massie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7375518?v=4",
+      "profile": "https://github.com/rmassie",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "paulm17",
+      "name": "Paul",
+      "avatar_url": "https://avatars.githubusercontent.com/u/387463?v=4",
+      "profile": "https://github.com/paulm17",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
