@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.29
+
+### Patch Changes
+
+- 962eb58a: detailed print env info
+  - @blitzjs/generator@2.0.0-alpha.29
+
 ## 2.0.0-alpha.28
 
 ### Patch Changes
