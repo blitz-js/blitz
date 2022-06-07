@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.30
+
+### Patch Changes
+
+- ce453683: init codemod generator
+  - @blitzjs/generator@2.0.0-alpha.30
+
 ## 2.0.0-alpha.29
 
 ### Patch Changes
