@@ -3746,6 +3746,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "minho42",
+      "name": "Min ho Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15278512?v=4",
+      "profile": "https://minho42.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
