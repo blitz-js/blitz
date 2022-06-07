@@ -7,13 +7,7 @@ const {withBlitz} = setupBlitzClient({
     AuthClientPlugin({
       cookiePrefix: "trailing-slash-tests-cookie-prefix",
     }),
-    BlitzRpcPlugin({
-      reactQueryOptions: {
-        queries: {
-          staleTime: 7000,
-        },
-      },
-    }),
+    BlitzRpcPlugin({}),
   ],
 })
 

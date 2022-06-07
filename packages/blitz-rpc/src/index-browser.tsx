@@ -10,8 +10,9 @@ interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions
 }
 export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, any>(
-  ({reactQueryOptions}: BlitzRpcOptions) => {
+  (options?: BlitzRpcOptions) => {
     const initializeQueryClient = () => {
+      const {reactQueryOptions} = options || {}
       let suspenseEnabled = reactQueryOptions?.queries?.suspense ?? true
       if (!process.env.CLI_COMMAND_CONSOLE && !process.env.CLI_COMMAND_DB) {
         globalThis.__BLITZ_SUSPENSE_ENABLED = suspenseEnabled
