@@ -16,6 +16,7 @@ export default api(async (req, res, ctx) => {
 
   await blitzContext.session.$create({
     userId: user.id,
+    role: "USER",
   })
 
   res.status(200).json({userId: blitzContext.session.userId, ...user, email: req.query.email})

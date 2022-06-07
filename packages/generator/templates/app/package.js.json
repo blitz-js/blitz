@@ -27,7 +27,7 @@
     "@blitzjs/rpc": "latest",
     "@prisma/client": "3.9.0",
     "blitz": "alpha",
-    "next": "12.1.1",
+    "next": "12.1.6",
     "prisma": "3.9.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",

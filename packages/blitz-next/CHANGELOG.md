@@ -1,5 +1,18 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.28
+
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- Updated dependencies [07292910]
+  - @blitzjs/rpc@2.0.0-alpha.27
+
 ## 2.0.0-alpha.26
 
 ### Patch Changes

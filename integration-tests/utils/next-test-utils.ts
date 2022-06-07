@@ -1,30 +1,33 @@
 import spawn from "cross-spawn"
-import {ChildProcess} from "child_process"
 import express from "express"
-import {existsSync, readFileSync, unlinkSync, writeFileSync, createReadStream} from "fs"
+import {existsSync, readFileSync, createReadStream} from "fs"
 import {writeFile} from "fs-extra"
 import getPort from "get-port"
 import http from "http"
-// `next` here is the symlink in `test/node_modules/next` which points to the root directory.
-// This is done so that requiring from `next` works.
-// The reason we don't import the relative path `../../dist/<etc>` is that it would lead to inconsistent module singletons
+import https from "https"
 import server from "next/dist/server/next"
+import _pkg from "next/package.json"
 import fetch from "node-fetch"
 import path from "path"
 import qs from "querystring"
 import treeKill from "tree-kill"
-
+import {readJSONSync} from "fs-extra"
+// import {packageDirectorySync} from "pkg-dir"
+import pkgDir from "pkg-dir"
+import resolveCwd from "resolve-cwd"
 export const nextServer = server
-
-// polyfill Object.fromEntries for the test/integration/relay-analytics tests
-// on node 10, this can be removed after we no longer support node 10
-if (!Object.fromEntries) {
-  Object.fromEntries = require("core-js/features/object/from-entries")
-}
+export const pkg = _pkg
 
 export function initNextServerScript(scriptPath, successRegexp, env, failRegexp, opts) {
   return new Promise((resolve, reject) => {
-    const instance = spawn("node", ["--no-deprecation", scriptPath], {env})
+    const instance = spawn(
+      "node",
+      [...((opts && opts.nodeArgs) || []), "--no-deprecation", scriptPath],
+      {
+        env,
+        cwd: opts && opts.cwd,
+      },
+    )
 
     function handleStdout(data) {
       const message = data.toString()
@@ -65,6 +68,27 @@ export function initNextServerScript(scriptPath, successRegexp, env, failRegexp,
   })
 }
 
+export function getFullUrl(appPortOrUrl: string | number, url: string, hostname?: string) {
+  let fullUrl =
+    typeof appPortOrUrl === "string" && appPortOrUrl.startsWith("http")
+      ? appPortOrUrl
+      : `http://${hostname ? hostname : "localhost"}:${appPortOrUrl}${url}`
+
+  if (typeof appPortOrUrl === "string" && url) {
+    const parsedUrl = new URL(fullUrl)
+    const parsedPathQuery = new URL(url, fullUrl)
+
+    parsedUrl.search = parsedPathQuery.search
+    parsedUrl.pathname = parsedPathQuery.pathname
+
+    if (hostname && parsedUrl.hostname === "localhost") {
+      parsedUrl.hostname = hostname
+    }
+    fullUrl = parsedUrl.toString()
+  }
+  return fullUrl
+}
+
 export function renderViaAPI(app, pathname, query) {
   const url = `${pathname}${query ? `?${qs.stringify(query)}` : ""}`
   return app.renderToHTML({url}, {}, pathname, query)
@@ -75,40 +99,63 @@ export function renderViaHTTP(appPort, pathname, query, opts) {
 }
 
 export function fetchViaHTTP(appPort, pathname, query, opts) {
-  const url = `http://localhost:${appPort}${pathname}${
+  const url = `${pathname}${
     typeof query === "string" ? query : query ? `?${qs.stringify(query)}` : ""
   }`
-  return fetch(url, opts)
+  return fetch(getFullUrl(appPort, url), {
+    // in node.js v17 fetch favors IPv6 but Next.js is
+    // listening on IPv4 by default so force IPv4 DNS resolving
+    agent: (parsedUrl) => {
+      if (parsedUrl.protocol === "https:") {
+        return new https.Agent({family: 4})
+      }
+      if (parsedUrl.protocol === "http:") {
+        return new http.Agent({family: 4})
+      }
+    },
+    ...opts,
+  })
 }
 
 export function findPort() {
   return getPort()
 }
 
-interface RunNextCommandOptions {
-  cwd?: string
-  env?: Record<any, any>
-  spawnOptions?: any
-  instance?: any
-  stderr?: boolean
-  stdout?: boolean
-  ignoreFail?: boolean
+export function resolveBin(pkg: string, executable = pkg) {
+  const packageDir = pkgDir.sync()!
+  if (!packageDir) throw new Error(`Could not find package.json for '${pkg}'`)
+  const bin = readJSONSync(path.join(packageDir, "package.json"))
+  const binPath = typeof bin === "object" ? bin.dependencies[executable] : bin
+  if (!binPath) throw new Error(`No bin '${executable}' in module '${pkg}'`)
+
+  const fullPath = path.join(packageDir, `node_modules`, `${pkg}`)
+
+  return fullPath
+}
+export function getCommandBin(
+  command: string,
+  rootFolder: string = process.cwd(),
+  _usePatched: boolean = false,
+) {
+  const bin = resolveBin(command)
+  return path.resolve(rootFolder, bin)
 }
 
-export function runNextCommand(argv: any[], options: RunNextCommandOptions = {}) {
-  const cwd = options.cwd
+export function runNextCommand(argv, options: RunNextCommandOptions = {}) {
+  const nextnextbin = getCommandBin("next", options.cwd)
+  const nextBin = path.join(nextnextbin, "dist/bin/next")
+  const cwd = options.cwd || process.cwd()
   // Let Next.js decide the environment
   const env = {
     ...process.env,
-    ...options.env,
-    NODE_ENV: "",
+    NODE_ENV: "production" as const,
     __NEXT_TEST_MODE: "true",
+    ...options.env,
   }
 
-  return new Promise<any>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     console.log(`Running command "next ${argv.join(" ")}"`)
-    const instance = spawn("pnpm", ["exec", "next", ...argv], {
-      ...options.spawnOptions,
+    const instance = spawn("node", [nextBin, ...argv], {
       cwd,
       env,
       stdio: ["ignore", "pipe", "pipe"],
@@ -118,22 +165,43 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
       options.instance(instance)
     }
 
+    let mergedStdio = ""
+
     let stderrOutput = ""
-    instance.stderr?.on("data", function (chunk) {
-      stderrOutput += chunk
-    })
+    if (options.stderr) {
+      instance.stderr?.on("data", function (chunk) {
+        mergedStdio += chunk
+        stderrOutput += chunk
+
+        if (options.stderr === "log") {
+          console.log(chunk.toString())
+        }
+      })
+    } else {
+      instance.stderr?.on("data", function (chunk) {
+        mergedStdio += chunk
+      })
+    }
 
     let stdoutOutput = ""
     if (options.stdout) {
       instance.stdout?.on("data", function (chunk) {
+        mergedStdio += chunk
         stdoutOutput += chunk
+
+        if (options.stdout === "log") {
+          console.log(chunk.toString())
+        }
+      })
+    } else {
+      instance.stdout?.on("data", function (chunk) {
+        mergedStdio += chunk
       })
     }
 
     instance.on("close", (code, signal) => {
       if (!options.stderr && !options.stdout && !options.ignoreFail && code !== 0) {
-        console.log(stderrOutput)
-        return reject(new Error(`command failed with code ${code}`))
+        return reject(new Error(`command failed with code ${code}\n${mergedStdio}`))
       }
 
       resolve({
@@ -145,7 +213,6 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
     })
 
     instance.on("error", (err: any) => {
-      console.log(stderrOutput)
       err.stdout = stdoutOutput
       err.stderr = stderrOutput
       reject(err)
@@ -153,41 +220,41 @@ export function runNextCommand(argv: any[], options: RunNextCommandOptions = {})
   })
 }
 
-interface RunNextCommandDevOptions {
-  cwd?: string
-  env?: Record<any, any>
-  onStdout?: (stdout: string) => void
-  onStderr?: (stderr: string) => void
-  stderr?: boolean
-  stdout?: boolean
-  nodeArgs?: []
-  bootupMarker?: any
-  nextStart?: boolean
-}
+export function runNextCommandDev(argv, stdOut, opts: RunNextCommandDevOptions = {}) {
+  const nextnextbin = getCommandBin("next", opts.cwd)
+  const nextDir = path.resolve(require.resolve("next/package"))
+  const nextBin = path.join(nextnextbin, "dist/bin/next")
 
-export function runNextCommandDev(argv, opts: RunNextCommandDevOptions = {}) {
-  const cwd = opts.cwd // || nextDir
+  const cwd = opts.cwd || nextDir
   const env = {
     ...process.env,
-    NODE_ENV: opts.nextStart ? ("production" as const) : ("development" as const),
+    NODE_ENV: undefined,
     __NEXT_TEST_MODE: "true",
     ...opts.env,
   }
 
-  return new Promise<void | string | ChildProcess>((resolve, reject) => {
-    const instance = spawn("pnpm", ["exec", "next", ...argv], {
+  const nodeArgs = opts.nodeArgs || []
+  return new Promise<void>((resolve, reject) => {
+    const instance = spawn("node", [...nodeArgs, "--no-deprecation", nextBin, ...argv], {
       cwd,
       env,
-    })
-
+    } as {})
     let didResolve = false
 
     function handleStdout(data) {
       const message = data.toString()
-
-      if (!didResolve) {
-        didResolve = true
-        resolve(instance)
+      const bootupMarkers = {
+        dev: /compiled .*successfully/i,
+        start: /started server/i,
+      }
+      if (
+        (opts.bootupMarker && opts.bootupMarker.test(message)) ||
+        bootupMarkers[opts.nextStart || stdOut ? "start" : "dev"].test(message)
+      ) {
+        if (!didResolve) {
+          didResolve = true
+          resolve(stdOut ? message : instance)
+        }
       }
 
       if (typeof opts.onStdout === "function") {
@@ -229,43 +296,42 @@ export function runNextCommandDev(argv, opts: RunNextCommandDevOptions = {}) {
 }
 
 // Launch the app in dev mode.
-export function launchApp(dir, port, opts) {
-  return runNextCommandDev(["-p", port], {cwd: dir, ...opts})
+export function launchApp(dir, port, opts: RunNextCommandDevOptions) {
+  return runNextCommandDev([dir, "-p", port], undefined, opts)
 }
 
-export function nextBuild(dir, args = [], opts = {}) {
-  return runNextCommand(["build", ...args], {cwd: dir, ...opts})
+export function nextBuild(dir, args = [], opts = {}): any {
+  return runNextCommand(["build", dir, ...args], opts)
 }
 
 export function nextExport(dir, {outdir}, opts = {}) {
-  return runNextCommand(["export", dir, "--outdir", outdir], {cwd: dir, ...opts})
+  return runNextCommand(["export", dir, "--outdir", outdir], opts)
 }
 
 export function nextExportDefault(dir, opts = {}) {
-  return runNextCommand(["export", dir], {cwd: dir, ...opts})
+  return runNextCommand(["export", dir], opts)
 }
 
 export function nextLint(dir, args = [], opts = {}) {
-  return runNextCommand(["lint", dir, ...args], {cwd: dir, ...opts})
+  return runNextCommand(["lint", dir, ...args], opts)
 }
 
 export function nextStart(dir, port, opts = {}) {
-  return runNextCommandDev(["start", "-p", port], {
-    cwd: dir,
+  return runNextCommandDev(["start", "-p", port, dir], undefined, {
     ...opts,
     nextStart: true,
   })
 }
 
-export function buildTS(args = [], cwd, env = {NODE_ENV: "production" as const}) {
-  cwd = cwd
-  env = {...process.env, ...env}
+export function buildTS(args = [], cwd, env = {}) {
+  cwd = cwd || path.dirname(require.resolve("next/package"))
+  env = {...process.env, NODE_ENV: undefined, ...env}
 
   return new Promise<void>((resolve, reject) => {
     const instance = spawn(
       "node",
       ["--no-deprecation", require.resolve("typescript/lib/tsc"), ...args],
-      {cwd, env},
+      {cwd, env} as {},
     )
     let output = ""
 
@@ -285,10 +351,9 @@ export function buildTS(args = [], cwd, env = {NODE_ENV: "production" as const})
   })
 }
 
-// Kill a launched app
-export async function killApp(instance) {
+export async function killProcess(pid) {
   await new Promise<void>((resolve, reject) => {
-    treeKill(instance.pid, (err) => {
+    treeKill(pid, (err) => {
       if (err) {
         if (
           process.platform === "win32" &&
@@ -311,11 +376,25 @@ export async function killApp(instance) {
   })
 }
 
-export async function startApp(app: any) {
+// Kill a launched app
+export async function killApp(instance) {
+  if (instance) {
+    await killProcess(instance.pid)
+  }
+}
+
+export async function startApp(app) {
+  // force require usage instead of dynamic import in jest
+  // x-ref: https://github.com/nodejs/node/issues/35889
+  process.env.__NEXT_TEST_MODE = "jest"
+
+  // TODO: tests that use this should be migrated to use
+  // the nextStart test function instead as it tests outside
+  // of jest's context
   await app.prepare()
   const handler = app.getRequestHandler()
-  const server = http.createServer(handler)
-  ;(server as any).__app = app
+  const server: any = http.createServer(handler)
+  server.__app = app
 
   await promiseCall(server, "listen")
   return server
@@ -346,7 +425,7 @@ export function waitFor(millis) {
   return new Promise((resolve) => setTimeout(resolve, millis))
 }
 
-export async function startStaticServer(dir, notFoundFile) {
+export async function startStaticServer(dir, notFoundFile, fixedPort) {
   const app = express()
   const server = http.createServer(app)
   app.use(express.static(dir))
@@ -357,7 +436,7 @@ export async function startStaticServer(dir, notFoundFile) {
     })
   }
 
-  await promiseCall(server, "listen")
+  await promiseCall(server, "listen", fixedPort)
   return server
 }
 
@@ -401,55 +480,9 @@ export async function check(contentFn, regex, hardError = true) {
   return false
 }
 
-export class File {
-  path: string
-  originalContent: any
-  constructor(path) {
-    this.path = path
-    this.originalContent = existsSync(this.path) ? readFileSync(this.path, "utf8") : null
-  }
-
-  write(content) {
-    if (!this.originalContent) {
-      this.originalContent = content
-    }
-    writeFileSync(this.path, content, "utf8")
-  }
-
-  replace(pattern, newValue) {
-    const currentContent = readFileSync(this.path, "utf8")
-    if (pattern instanceof RegExp) {
-      if (!pattern.test(currentContent)) {
-        throw new Error(
-          `Failed to replace content.\n\nPattern: ${pattern.toString()}\n\nContent: ${currentContent}`,
-        )
-      }
-    } else if (typeof pattern === "string") {
-      if (!currentContent.includes(pattern)) {
-        throw new Error(
-          `Failed to replace content.\n\nPattern: ${pattern}\n\nContent: ${currentContent}`,
-        )
-      }
-    } else {
-      throw new Error(`Unknown replacement attempt type: ${pattern}`)
-    }
-
-    const newContent = currentContent.replace(pattern, newValue)
-    this.write(newContent)
-  }
-
-  delete() {
-    unlinkSync(this.path)
-  }
-
-  restore() {
-    this.write(this.originalContent)
-  }
-}
-
 export async function evaluate(browser, input) {
   if (typeof input === "function") {
-    const result = await browser.executeScript(input)
+    const result = await browser.eval(input)
     await new Promise((resolve) => setTimeout(resolve, 30))
     return result
   } else {
@@ -479,9 +512,8 @@ export async function retry(fn, duration = 3000, interval = 500, description) {
 }
 
 export async function hasRedbox(browser, expected = true) {
-  let attempts = 30
-  do {
-    const has = await evaluate(browser, () => {
+  for (let i = 0; i < 30; i++) {
+    const result = await evaluate(browser, () => {
       return Boolean(
         [].slice
           .call(document.querySelectorAll("nextjs-portal"))
@@ -492,15 +524,12 @@ export async function hasRedbox(browser, expected = true) {
           ),
       )
     })
-    if (has) {
-      return true
-    }
-    if (--attempts < 0) {
-      break
-    }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-  } while (expected)
+    if (result === expected) {
+      return result
+    }
+    await waitFor(1000)
+  }
   return false
 }
 
@@ -544,6 +573,24 @@ export async function getRedboxSource(browser) {
   )
 }
 
+export async function getRedboxDescription(browser) {
+  return retry(
+    () =>
+      evaluate(browser, () => {
+        const portal = [].slice
+          .call(document.querySelectorAll("nextjs-portal"))
+          .find((p) => p.shadowRoot.querySelector("[data-nextjs-dialog-header]"))
+        const root = portal.shadowRoot
+        return root
+          .querySelector("#nextjs__container_errors_desc")
+          .innerText.replace(/__WEBPACK_DEFAULT_EXPORT__/, "Unknown")
+      }),
+    3000,
+    500,
+    "getRedboxDescription",
+  )
+}
+
 export function getBrowserBodyText(browser) {
   return browser.eval('document.getElementsByTagName("body")[0].innerText')
 }
@@ -552,8 +599,8 @@ export function normalizeRegEx(src) {
   return new RegExp(src).source.replace(/\^\//g, "^\\/")
 }
 
-function readJson(path: string) {
-  return JSON.parse(readFileSync(path) as any)
+function readJson(path) {
+  return JSON.parse(readFileSync(path).toString())
 }
 
 export function getBuildManifest(dir) {
@@ -613,4 +660,97 @@ export function getPageFileFromPagesManifest(dir, page) {
 export function readNextBuildServerPageFile(appDir, page) {
   const pageFile = getPageFileFromPagesManifest(appDir, page)
   return readFileSync(path.join(appDir, ".next", "server", pageFile), "utf8")
+}
+
+/**
+ *
+ * @param {string} suiteName
+ * @param {{env: 'prod' | 'dev', appDir: string}} context
+ * @param {{beforeAll?: Function; afterAll?: Function; runTests: Function}} options
+ */
+function runSuite(suiteName, context, options) {
+  const {appDir, env} = context
+  describe(`${suiteName} ${env}`, () => {
+    beforeAll(async () => {
+      options.beforeAll?.(env)
+      context.stderr = ""
+      const onStderr = (msg) => {
+        context.stderr += msg
+      }
+      context.stdout = ""
+      const onStdout = (msg) => {
+        context.stdout += msg
+      }
+      if (env === "prod") {
+        context.appPort = await findPort()
+        const {stdout, stderr, code} = await nextBuild(appDir, [], {
+          stderr: true,
+          stdout: true,
+        })
+        context.stdout = stdout
+        context.stderr = stderr
+        context.code = code
+        context.server = await nextStart(context.appDir, context.appPort, {
+          onStderr,
+          onStdout,
+        })
+      } else if (env === "dev") {
+        context.appPort = await findPort()
+        context.server = await launchApp(context.appDir, context.appPort, {
+          onStderr,
+          onStdout,
+        })
+      }
+    })
+    afterAll(async () => {
+      options.afterAll?.(env)
+      if (context.server) {
+        await killApp(context.server)
+      }
+    })
+    options.runTests(context, env)
+  })
+}
+
+/**
+ *
+ * @param {string} suiteName
+ * @param {string} appDir
+ * @param {{beforeAll?: Function; afterAll?: Function; runTests: Function}} options
+ */
+export function runDevSuite(suiteName, appDir, options) {
+  return runSuite(suiteName, {appDir, env: "dev"}, options)
+}
+
+/**
+ *
+ * @param {string} suiteName
+ * @param {string} appDir
+ * @param {{beforeAll?: Function; afterAll?: Function; runTests: Function}} options
+ */
+export function runProdSuite(suiteName, appDir, options) {
+  return runSuite(suiteName, {appDir, env: "prod"}, options)
+}
+
+interface RunNextCommandOptions {
+  cwd?: string
+  env?: Record<any, any>
+  spawnOptions?: any
+  instance?: any
+  stderr?: string
+  stdout?: string
+  ignoreFail?: boolean
+  nodeArgs?: []
+}
+
+interface RunNextCommandDevOptions {
+  cwd?: string
+  env?: Record<any, any>
+  onStdout?: (stdout: string) => void
+  onStderr?: (stderr: string) => void
+  stderr?: string | boolean
+  stdout?: string | boolean
+  nodeArgs?: []
+  bootupMarker?: any
+  nextStart?: boolean
 }

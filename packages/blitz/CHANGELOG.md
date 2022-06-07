@@ -1,5 +1,18 @@
 # blitz
 
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- Updated dependencies [6ac2d341]
+  - @blitzjs/generator@2.0.0-alpha.28
+
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.27
+
 ## 2.0.0-alpha.26
 
 ### Patch Changes

@@ -35,20 +35,24 @@ const runTests = (mode?: string) => {
         "should render error for protected query",
         async () => {
           const browser = await webdriver(appPort, "/authenticated-page")
-          let errorMsg = await browser.elementByXpath(`//*[@id="__next"]/div`)
+          let errorMsg = await browser.elementById(`error`).text()
           expect(errorMsg).toMatch(/Error: You are not authenticated/)
           if (browser) browser.close()
         },
         5000 * 60 * 2,
       )
 
-      it("should render result for open query", async () => {
-        const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
-          method: "GET",
-          headers: {"Content-Type": "application/json; charset=utf-8"},
-        })
-        expect(res.status).toBe(200)
-      })
+      it(
+        "should render result for open query",
+        async () => {
+          const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json; charset=utf-8"},
+          })
+          expect(res.status).toBe(200)
+        },
+        5000 * 60 * 2,
+      )
 
       it("sets correct cookie", async () => {
         const res = await fetch(`http://localhost:${appPort}/api/noauth`, {
@@ -118,31 +122,33 @@ const runTests = (mode?: string) => {
   })
 }
 
-describe("dev mode", () => {
-  beforeAll(async () => {
-    try {
-      appPort = await findPort()
-      app = await launchApp(appDir, appPort, {})
-      await seed()
-    } catch (error) {
-      console.log(error)
-    }
-  }, 5000 * 60 * 2)
-  afterAll(async () => await killApp(app))
-  runTests()
-})
+describe("Auth Tests", () => {
+  describe("dev mode", () => {
+    beforeAll(async () => {
+      try {
+        appPort = await findPort()
+        app = await launchApp(appDir, appPort, {cwd: process.cwd()})
+        await seed()
+      } catch (error) {
+        console.log(error)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
+    runTests()
+  })
 
-describe("server mode", () => {
-  beforeAll(async () => {
-    try {
-      appPort = await findPort()
-      await nextBuild(appDir)
-      app = await nextStart(appDir, appPort)
-    } catch (err) {
-      console.log(err)
-    }
-  }, 5000 * 60 * 2)
-  afterAll(async () => await killApp(app))
+  describe("server mode", () => {
+    beforeAll(async () => {
+      try {
+        await nextBuild(appDir)
+        appPort = await findPort()
+        app = await nextStart(appDir, appPort, {cwd: process.cwd()})
+      } catch (err) {
+        console.log(err)
+      }
+    }, 5000 * 60 * 2)
+    afterAll(async () => await killApp(app))
 
-  runTests()
+    runTests()
+  })
 })
