@@ -718,12 +718,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-alpha.28
+      "@blitzjs/generator": 2.0.0-alpha.29
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-alpha.28
+      blitz: 2.0.0-alpha.29
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -738,9 +738,9 @@ importers:
       "@babel/plugin-proposal-class-properties": 7.17.12_@babel+core@7.12.10
       "@babel/plugin-syntax-jsx": 7.17.12_@babel+core@7.12.10
       "@babel/plugin-syntax-typescript": 7.17.12_@babel+core@7.12.10
-      "@blitzjs/generator": 2.0.0-alpha.28
+      "@blitzjs/generator": link:../generator
       arg: 5.0.1
-      blitz: 2.0.0-alpha.28_@types+node@17.0.16
+      blitz: link:../blitz
       chalk: 4.1.2
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -2668,41 +2668,6 @@ packages:
       {
         integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==,
       }
-
-  /@blitzjs/generator/2.0.0-alpha.28:
-    resolution:
-      {
-        integrity: sha512-rfT5cdmzn04/bOFcVGXcIZ1xiRWus2UoJ5i5oyZH5jO+2h1z16AJc7QuKchabVfaAt5hw7FfCYbYV6NKvZpu1Q==,
-      }
-    peerDependencies:
-      react: "*"
-    dependencies:
-      "@babel/core": 7.12.10
-      "@babel/plugin-transform-typescript": 7.12.1_@babel+core@7.12.10
-      "@babel/preset-env": 7.12.10_@babel+core@7.12.10
-      "@babel/types": 7.12.10
-      "@mrleebo/prisma-ast": 0.2.6
-      chalk: 4.1.2
-      console-table-printer: 2.10.0
-      cross-spawn: 7.0.3
-      diff: 5.0.0
-      enquirer: 2.3.6
-      fs-extra: 10.0.1
-      got: 11.8.5
-      jscodeshift: 0.13.0_@babel+preset-env@7.12.10
-      mem-fs: 1.2.0
-      mem-fs-editor: 8.0.0
-      npm-which: 3.0.1
-      ora: 5.3.0
-      pluralize: 8.0.0
-      prettier: 2.6.2
-      recast: 0.20.5
-      tslog: 3.3.1
-      username: 5.1.0
-      vinyl: 2.2.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /@blitzjs/manypkg/0.19.1:
     resolution:
@@ -5812,48 +5777,6 @@ packages:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.0
-    dev: false
-
-  /blitz/2.0.0-alpha.28_@types+node@17.0.16:
-    resolution:
-      {
-        integrity: sha512-gFpvrNx5dlUrmyNscAeIH5DzNuoijStdBkwy49ssNO46fwj4R+DMDbasLSOOGEqUaYhAUgQfZ5dyWt2XHDpD2Q==,
-      }
-    hasBin: true
-    peerDependencies:
-      react: "*"
-    dependencies:
-      "@blitzjs/generator": 2.0.0-alpha.28
-      arg: 5.0.1
-      chalk: 4.1.2
-      console-table-printer: 2.10.0
-      cross-spawn: 7.0.3
-      debug: 4.3.3
-      detect-port: 1.3.0
-      dotenv: 16.0.0
-      dotenv-expand: 8.0.3
-      esbuild: 0.14.34
-      find-up: 4.1.0
-      fs-extra: 10.0.1
-      hasbin: 1.2.3
-      npm-which: 3.0.1
-      ora: 5.3.0
-      p-event: 4.2.0
-      pkg-dir: 5.0.0
-      prompts: 2.4.2
-      resolve-cwd: 3.0.0
-      resolve-from: 5.0.0
-      superjson: 1.8.0
-      ts-node: 10.7.0_@types+node@17.0.16
-      tsconfig-paths: 4.0.0
-      tslog: 3.3.1
-      watchpack: 2.1.1
-    transitivePeerDependencies:
-      - "@swc/core"
-      - "@swc/wasm"
-      - "@types/node"
-      - supports-color
-      - typescript
     dev: false
 
   /body-parser/1.19.2:
@@ -16046,39 +15969,6 @@ packages:
       typescript: 4.6.3
       yargs-parser: 20.2.9
     dev: true
-
-  /ts-node/10.7.0_@types+node@17.0.16:
-    resolution:
-      {
-        integrity: sha512-TbIGS4xgJoX2i3do417KSaep1uRAW/Lu+WAL2doDHC0D6ummjirVOXU5/7aiZotbQ5p1Zp9tP7U6cYhA0O7M8A==,
-      }
-    hasBin: true
-    peerDependencies:
-      "@swc/core": ">=1.2.50"
-      "@swc/wasm": ">=1.2.50"
-      "@types/node": "*"
-      typescript: ">=2.7"
-    peerDependenciesMeta:
-      "@swc/core":
-        optional: true
-      "@swc/wasm":
-        optional: true
-    dependencies:
-      "@cspotcode/source-map-support": 0.7.0
-      "@tsconfig/node10": 1.0.8
-      "@tsconfig/node12": 1.0.9
-      "@tsconfig/node14": 1.0.1
-      "@tsconfig/node16": 1.0.2
-      "@types/node": 17.0.16
-      acorn: 8.7.1
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: false
 
   /ts-node/10.7.0_fxg3r7oju3tntkxsvleuiot4fa:
     resolution:
