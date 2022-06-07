@@ -295,7 +295,7 @@ const newApp: CliCommand = async (argv) => {
 
     postInstallSteps.push("blitz dev")
 
-    console.log("Your new Blitz app is ready! Next steps:")
+    console.log("\n Your new Blitz app is ready! Next steps:")
     postInstallSteps.forEach((step, index) => {
       console.log(chalk.yellow(`   ${index + 1}. ${step}`))
     })

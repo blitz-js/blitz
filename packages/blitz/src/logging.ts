@@ -150,6 +150,15 @@ const success = (msg: string) => {
 }
 
 /**
+ * Logs a red error message to stdout.
+ *
+ * @param {string} msg
+ */
+const error = (msg: string) => {
+  console.log(`${c.red(msg)}`)
+}
+
+/**
  * Colorizes a variable for display.
  *
  * @param {string} val
@@ -173,6 +182,7 @@ export const log = {
   progress,
   spinner,
   success,
+  error,
   variable,
   debug,
   Table,
