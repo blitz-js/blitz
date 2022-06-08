@@ -1,5 +1,31 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.33
+
+## 2.0.0-alpha.32
+
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- 17ce29e5: Update RPC plugin setup in templates
+
+## 2.0.0-alpha.30
+
+## 2.0.0-alpha.29
+
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- 6ac2d341: updated nextjs version in generator & npmrc file
+
+## 2.0.0-alpha.27
+
+## 2.0.0-alpha.26
+
+## 2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ## 2.0.0-alpha.23

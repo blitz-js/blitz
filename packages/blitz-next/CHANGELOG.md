@@ -1,5 +1,64 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.33
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.33
+
+## 2.0.0-alpha.32
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.32
+
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- Updated dependencies [17ce29e5]
+  - @blitzjs/rpc@2.0.0-alpha.31
+
+## 2.0.0-alpha.30
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.30
+
+## 2.0.0-alpha.29
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.29
+
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.28
+
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- Updated dependencies [07292910]
+  - @blitzjs/rpc@2.0.0-alpha.27
+
+## 2.0.0-alpha.26
+
+### Patch Changes
+
+- 0e762fb5: export BlitzPage & BlitzLayout types from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.26
+
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- 931156c3: Rename prefetchBlitzQuery to prefetchQuery, add prefetchInfiniteQuery
+- b0c21b07: Move blitz config to next.config.js
+  - @blitzjs/rpc@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes

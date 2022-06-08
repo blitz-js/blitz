@@ -80,21 +80,7 @@ const BlitzWrapper = ({plugins, children}) => {
 export function render(ui: RenderUI, {wrapper, router, ...options}: RenderOptions = {}) {
   if (!wrapper) {
     wrapper = ({children}) => {
-      return (
-        <BlitzWrapper
-          plugins={[
-            BlitzRpcPlugin({
-              reactQueryOptions: {
-                queries: {
-                  staleTime: 7000,
-                },
-              },
-            }),
-          ]}
-        >
-          {children}
-        </BlitzWrapper>
-      )
+      return <BlitzWrapper plugins={[BlitzRpcPlugin({})]}>{children}</BlitzWrapper>
     }
   }
 

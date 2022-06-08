@@ -1,5 +1,74 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.33
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.33
+- blitz@2.0.0-alpha.33
+
+## 2.0.0-alpha.32
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.32
+- blitz@2.0.0-alpha.32
+
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- 17ce29e5: Update RPC plugin setup in templates
+  - blitz@2.0.0-alpha.31
+  - @blitzjs/auth@2.0.0-alpha.31
+
+## 2.0.0-alpha.30
+
+### Patch Changes
+
+- Updated dependencies [ce453683]
+  - blitz@2.0.0-alpha.30
+  - @blitzjs/auth@2.0.0-alpha.30
+
+## 2.0.0-alpha.29
+
+### Patch Changes
+
+- Updated dependencies [962eb58a]
+  - blitz@2.0.0-alpha.29
+  - @blitzjs/auth@2.0.0-alpha.29
+
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.28
+- @blitzjs/auth@2.0.0-alpha.28
+
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- 07292910: Add invokeWithCtx function
+  - @blitzjs/auth@2.0.0-alpha.27
+  - blitz@2.0.0-alpha.27
+
+## 2.0.0-alpha.26
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.26
+- blitz@2.0.0-alpha.26
+
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- Updated dependencies [1436e761]
+- Updated dependencies [1436e761]
+  - blitz@2.0.0-alpha.25
+  - @blitzjs/auth@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes

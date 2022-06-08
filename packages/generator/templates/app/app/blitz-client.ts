@@ -7,12 +7,6 @@ export const { withBlitz } = setupBlitzClient({
     AuthClientPlugin({
       cookiePrefix: "__safeNameSlug__-cookie-prefix",
     }),
-    BlitzRpcPlugin({
-      reactQueryOptions: {
-        queries: {
-          staleTime: 7000,
-        },
-      },
-    }),
+    BlitzRpcPlugin({}),
   ],
 })

@@ -12,6 +12,8 @@ import {
   createClientPlugin,
   AuthenticationError,
   RedirectError,
+  RouteUrlObject,
+  Ctx,
 } from "blitz"
 import {
   COOKIE_CSRF_TOKEN,
@@ -26,7 +28,6 @@ import {
 } from "../shared"
 import _debug from "debug"
 import {formatWithValidation} from "../shared/url-utils"
-import {Ctx} from "blitz"
 import {ComponentType} from "react"
 import {ComponentProps} from "react"
 
@@ -190,9 +191,9 @@ export const useRedirectAuthenticated = (to: UrlObject | string) => {
   }
 }
 
-export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
-  pathname: string
-}
+// export interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
+//   pathname: string
+// }
 
 export type RedirectAuthenticatedTo = string | RouteUrlObject | false
 export type RedirectAuthenticatedToFnCtx = {

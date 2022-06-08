@@ -16,8 +16,8 @@ import type {
   Middleware,
   MiddlewareResponse,
 } from "blitz"
-import {handleRequestWithMiddleware} from "blitz"
-import {dehydrate, getInfiniteQueryKey, getQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
+import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
+import {dehydrate, getQueryKey, getInfiniteQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
@@ -187,7 +187,24 @@ export function installWebpackConfig({webpackConfig, nextConfig}: InstallWebpack
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
-  return Object.assign({}, nextConfig, {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    process.env.NODE_ENV !== "test" &&
+    process.env.MODE !== "test"
+  ) {
+    void startWatcher()
+
+    process.on("SIGINT", () => {
+      void stopWatcher()
+      process.exit(0)
+    })
+
+    process.on("exit", function () {
+      void stopWatcher()
+    })
+  }
+
+  const config = Object.assign({}, nextConfig, {
     webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
       installWebpackConfig({webpackConfig: config, nextConfig})
       if (typeof nextConfig.webpack === "function") {
@@ -195,7 +212,9 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
       }
       return config
     },
-  } as NextConfig)
+  })
+
+  return config
 }
 
 export type PrefetchQueryFn = <T extends AsyncFunc, TInput = FirstParam<T>>(

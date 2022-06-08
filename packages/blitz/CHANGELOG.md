@@ -1,5 +1,64 @@
 # blitz
 
+## 2.0.0-alpha.33
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.33
+
+## 2.0.0-alpha.32
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.32
+
+## 2.0.0-alpha.31
+
+### Patch Changes
+
+- Updated dependencies [17ce29e5]
+  - @blitzjs/generator@2.0.0-alpha.31
+
+## 2.0.0-alpha.30
+
+### Patch Changes
+
+- ce453683: init codemod generator
+  - @blitzjs/generator@2.0.0-alpha.30
+
+## 2.0.0-alpha.29
+
+### Patch Changes
+
+- 962eb58a: detailed print env info
+  - @blitzjs/generator@2.0.0-alpha.29
+
+## 2.0.0-alpha.28
+
+### Patch Changes
+
+- Updated dependencies [6ac2d341]
+  - @blitzjs/generator@2.0.0-alpha.28
+
+## 2.0.0-alpha.27
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.27
+
+## 2.0.0-alpha.26
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.26
+
+## 2.0.0-alpha.25
+
+### Patch Changes
+
+- 1436e761: Export Zod utils from blitz core package
+  - @blitzjs/generator@2.0.0-alpha.25
+
 ## 2.0.0-alpha.24
 
 ### Patch Changes
