@@ -3764,6 +3764,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "iDavidB",
+      "name": "David",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32268383?v=4",
+      "profile": "https://github.com/iDavidB",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
