@@ -1,12 +1,12 @@
-import { NON_STANDARD_NODE_ENV } from "./utils/constants"
+import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
-import { loadEnvConfig } from "../env-utils"
-import { getCommandBin } from "./utils/config"
+import {loadEnvConfig} from "../env-utils"
+import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
-import { readdirSync } from "fs-extra"
+import {readdirSync} from "fs-extra"
 import resolveFrom from "resolve-from"
 import pkgDir from "pkg-dir"
-import { join } from "path"
+import {join} from "path"
 
 const commonArgs = {
   // Types
@@ -26,7 +26,7 @@ const args = arg(commonArgs, {
 
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
-const commands: { [command: string]: () => Promise<CliCommand> } = {
+const commands: {[command: string]: () => Promise<CliCommand>} = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
@@ -64,7 +64,7 @@ async function runCommandFromBin() {
     process.exit(1)
   }
 
-  const result = spawn.sync(commandBin, process.argv.slice(3), { stdio: "inherit" })
+  const result = spawn.sync(commandBin, process.argv.slice(3), {stdio: "inherit"})
   process.exit(result.status || 0)
 }
 
@@ -74,8 +74,8 @@ async function printEnvInfo() {
   const pkgManager = readdirSync(process.cwd()).includes("pnpm-lock.yaml")
     ? "pnpm"
     : readdirSync(process.cwd()).includes("yarn-lock.yaml")
-      ? "yarn"
-      : "npm"
+    ? "yarn"
+    : "npm"
 
   const env = await envinfo.default.run(
     {
@@ -91,7 +91,7 @@ async function printEnvInfo() {
         "next",
       ],
     },
-    { showNotFound: true },
+    {showNotFound: true},
   )
 
   const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
@@ -117,7 +117,7 @@ async function printEnvInfo() {
 }
 
 async function main() {
-  loadEnvConfig(process.cwd(), undefined, { error: console.error, info: console.info })
+  loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
@@ -139,7 +139,7 @@ async function main() {
   if (process.env.NODE_ENV && !standardEnv.includes(process.env.NODE_ENV)) {
     console.warn(NON_STANDARD_NODE_ENV)
   }
-  ; (process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
+  ;(process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
 
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
   process.on("SIGTERM", () => process.exit(0))
@@ -161,6 +161,9 @@ async function main() {
       })
   } else {
     if (args["--help"] && args._.length === 0) {
+      // TODO: add back the generate command description once it's working
+      // generate, g     Generate new files for your Blitz project 🤠
+
       console.log(`
       Usage
         $ blitz <command>
@@ -170,8 +173,7 @@ async function main() {
         build, b        Create a production build 🏗️
         start, s        Start the production server 🐎
         new, n          Create a new Blitz project ✨
-        generate, g     Generate new files for your Blitz project 🤠
-        codegen         Manually trigger the blitz codegen 🤖
+        codegen         Run the blitz codegen 🤖
         db              Run database commands 🗄️
         
       Options
