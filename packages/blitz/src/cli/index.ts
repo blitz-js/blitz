@@ -36,7 +36,16 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
 }
-const foundCommand = Boolean(commands[args._[0] as string])
+
+const aliases: typeof commands = {
+  d: commands.dev!,
+  b: commands.build!,
+  s: commands.start!,
+  n: commands.new!,
+  g: commands.generate!,
+}
+
+const foundCommand = Boolean(commands[args._[0] as string] || aliases[args._[0] as string])
 const command = foundCommand ? (args._[0] as string) : defaultCommand
 const forwardedArgs = foundCommand ? args._.slice(1) : args._
 
@@ -148,7 +157,8 @@ async function main() {
   process.on("SIGINT", () => process.exit(0))
 
   if (foundCommand) {
-    commands[command]?.()
+    const commandFn = commands[command] || aliases[command]
+    commandFn?.()
       .then((exec: any) => exec(forwardedArgs))
       .then(() => {
         if (command === "build") {
@@ -167,8 +177,14 @@ async function main() {
         $ blitz <command>
   
       Available commands
-        ${Object.keys(commands).join(", ")}
-  
+        dev, d          Start a development server 🪄
+        build, b        Create a production build 🏗️
+        start, s        Start the production server 🐎
+        new, n          Create a new Blitz project ✨
+        generate, g     Generate new files for your Blitz project 🤠
+        codegen         Manually trigger the blitz codegen 🤖
+        db              Run database commands 🗄️
+        
       Options
         --env, -e       App environment name
         --version, -v   Version number
