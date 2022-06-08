@@ -1,6 +1,5 @@
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
-import packageJson from "../../package.json"
 import {loadEnvConfig} from "../env-utils"
 import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
@@ -51,16 +50,6 @@ const forwardedArgs = foundCommand ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
-
-const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
-
-let blitzPkgPath
-if (isInDevelopmentAsGloballyLinked) {
-  blitzPkgPath = globalBlitzPath
-} else {
-  // localBlitzPath won't exist if used outside a blitz app directory
-  blitzPkgPath = localBlitzPath || globalBlitzPath
-}
 
 async function runCommandFromBin() {
   const command = args._[0] as string
