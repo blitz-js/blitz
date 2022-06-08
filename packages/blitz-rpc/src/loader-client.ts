@@ -3,20 +3,13 @@ import {
   convertFilePathToResolverName,
   convertFilePathToResolverType,
   convertPageFilePathToRoutePath,
+  Loader,
+  LoaderOptions,
   toPosixPath,
 } from "./loader-utils"
-import {assert} from "blitz"
 import {posix} from "path"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
-type Loader = {
-  _compiler?: {
-    name: string
-    context: string
-  }
-  resource: string
-  cacheable: (enabled: boolean) => void
-}
 
 export async function loader(this: Loader, input: string): Promise<string> {
   const compiler = this._compiler!
@@ -25,8 +18,12 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
   const isSSR = compiler.name === "server"
   if (!isSSR) {
-    const code = await transformBlitzRpcResolverClient(input, toPosixPath(id), toPosixPath(root))
-    return code
+    return await transformBlitzRpcResolverClient(
+      input,
+      toPosixPath(id),
+      toPosixPath(root),
+      this.query,
+    )
   }
 
   return input
@@ -34,13 +31,18 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
-export async function transformBlitzRpcResolverClient(_src: string, id: string, root: string) {
+export async function transformBlitzRpcResolverClient(
+  _src: string,
+  id: string,
+  root: string,
+  options?: LoaderOptions,
+) {
   assertPosixPath(id)
   assertPosixPath(root)
 
   const resolverFilePath = "/" + posix.relative(root, id)
   assertPosixPath(resolverFilePath)
-  const routePath = convertPageFilePathToRoutePath(resolverFilePath)
+  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverBasePath)
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
 

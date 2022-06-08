@@ -1,3 +1,4 @@
+import type {NextConfig} from "next"
 import {
   GetServerSideProps,
   GetServerSidePropsResult,
@@ -7,21 +8,20 @@ import {
   NextApiResponse,
 } from "next"
 import type {
-  Ctx as BlitzCtx,
+  AddParameters,
+  AsyncFunc,
   BlitzServerPlugin,
+  Ctx as BlitzCtx,
+  FirstParam,
   Middleware,
   MiddlewareResponse,
-  AsyncFunc,
-  FirstParam,
-  AddParameters,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import type {NextConfig} from "next"
-import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
-import {dehydrate} from "@blitzjs/rpc"
+import {dehydrate, getQueryKey, getInfiniteQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
+import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
 
 export * from "./index-browser"
 
@@ -133,10 +133,57 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
+    resolverBasePath?: ResolverBasePath
     customServer?: {
       hotReload?: boolean
     }
   }
+}
+
+interface WebpackRuleOptions {
+  resolverBasePath?: ResolverBasePath
+}
+
+interface WebpackRule {
+  test: RegExp
+  use: Array<{
+    loader: string
+    options: WebpackRuleOptions
+  }>
+}
+
+interface InstallWebpackConfigOptions {
+  webpackConfig: {
+    module: {
+      rules: WebpackRule[]
+    }
+  }
+  nextConfig: BlitzConfig
+}
+
+export function installWebpackConfig({webpackConfig, nextConfig}: InstallWebpackConfigOptions) {
+  const options: WebpackRuleOptions = {
+    resolverBasePath: nextConfig.blitz?.resolverBasePath,
+  }
+
+  webpackConfig.module.rules.push({
+    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    use: [
+      {
+        loader: loaderServer,
+        options,
+      },
+    ],
+  })
+  webpackConfig.module.rules.push({
+    test: /[\\/](queries|mutations)[\\/]/,
+    use: [
+      {
+        loader: loaderClient,
+        options,
+      },
+    ],
+  })
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
@@ -158,8 +205,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
   }
 
   const config = Object.assign({}, nextConfig, {
-    webpack: (config: any, options: any) => {
-      installWebpackConfig(config)
+    webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
+      installWebpackConfig({webpackConfig: config, nextConfig})
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }

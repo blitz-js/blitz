@@ -1,23 +1,17 @@
-import {posix, join, dirname} from "path"
+import {dirname, join, posix} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
-  toPosixPath,
   buildPageExtensionRegex,
-  getIsRpcFile,
-  topLevelFoldersThatMayContainResolvers,
   convertPageFilePathToRoutePath,
+  getIsRpcFile,
+  Loader,
+  LoaderOptions,
+  topLevelFoldersThatMayContainResolvers,
+  toPosixPath,
 } from "./loader-utils"
 
 // Subset of `import type { LoaderDefinitionFunction } from 'webpack'`
-type Loader = {
-  _compiler?: {
-    name: string
-    context: string
-  }
-  resource: string
-  cacheable: (enabled: boolean) => void
-}
 
 export async function loader(this: Loader, input: string): Promise<string> {
   const compiler = this._compiler!
@@ -29,8 +23,13 @@ export async function loader(this: Loader, input: string): Promise<string> {
     this.cacheable(false)
 
     const resolvers = await collectResolvers(root, ["ts", "js"])
-    const code = await transformBlitzRpcServer(input, toPosixPath(id), toPosixPath(root), resolvers)
-    return code
+    return await transformBlitzRpcServer(
+      input,
+      toPosixPath(id),
+      toPosixPath(root),
+      resolvers,
+      this.query,
+    )
   }
 
   return input
@@ -43,6 +42,7 @@ export async function transformBlitzRpcServer(
   id: string,
   root: string,
   resolvers: string[],
+  options?: LoaderOptions,
 ) {
   assertPosixPath(id)
   assertPosixPath(root)
@@ -55,7 +55,7 @@ export async function transformBlitzRpcServer(
 
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = posix.relative(dirname(id), join(root, resolverFilePath))
-    const routePath = convertPageFilePathToRoutePath(resolverFilePath)
+    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverBasePath)
     code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
     code += "\n"
   }
