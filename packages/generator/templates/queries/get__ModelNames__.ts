@@ -1,5 +1,5 @@
 import {paginate, Ctx} from "blitz"
-import { db } from "db"
+import db from "db"
 import { Prisma } from "@prisma/client"
 
 interface Get__ModelNames__Input
