@@ -821,6 +821,44 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "update root types file",
+    action: async () => {
+      const typeFile = path.join(process.cwd(), "types.ts")
+
+      if (fs.existsSync(typeFile)) {
+        const program = getCollectionFromSource(typeFile)
+
+        const findDefaultCtx = () => {
+          return program.find(j.Identifier, (node) => node)
+        }
+
+        findDefaultCtx().forEach((path) => {
+          if (path.value.name === "Ctx") {
+            path.parentPath.parentPath.value.declaration.extends = []
+          }
+          if (path.value.name === "DefaultCtx" && path.name === "imported") {
+            j(path.parentPath).remove()
+          }
+        })
+
+        const findBlitzLiteral = () => {
+          return program.find(j.StringLiteral, (node) => node.value === "blitz")
+        }
+
+        findBlitzLiteral()
+          .paths()
+          .forEach((path) => {
+            path.value.value = "@blitzjs/auth"
+          })
+
+        fs.writeFileSync(typeFile, program.toSource())
+      } else {
+        log.error("There is no type file")
+      }
+    },
+  })
+
+  steps.push({
     name: "check for usages of invokeWithMiddleware",
     action: async () => {
       let errors = 0
