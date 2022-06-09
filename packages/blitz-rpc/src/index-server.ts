@@ -25,7 +25,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
 type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
-export type ResolverBasePath = "queries|mutations" | "root" | undefined
+export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
 // Needed for Next.js. I'm guessing that Next.js is including the `node_modules/` files in a seperate bundle than user files.
@@ -54,7 +54,7 @@ const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
 
 interface WebpackRuleOptions {
-  resolverBasePath: ResolverBasePath | undefined
+  resolverPath: ResolverPathOptions | undefined
 }
 
 interface WebpackRule {

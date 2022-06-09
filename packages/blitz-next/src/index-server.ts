@@ -23,7 +23,7 @@ import {
   getQueryKey,
   installWebpackConfig,
   InstallWebpackConfigOptions,
-  ResolverBasePath,
+  ResolverPathOptions,
 } from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
@@ -139,7 +139,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
-    resolverBasePath?: ResolverBasePath
+    resolverPath?: ResolverPathOptions
     customServer?: {
       hotReload?: boolean
     }
@@ -169,7 +169,7 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
       installWebpackConfig({
         webpackConfig: config,
         webPackRuleOptions: {
-          resolverBasePath: nextConfig.blitz?.resolverBasePath,
+          resolverPath: nextConfig.blitz?.resolverPath,
         },
       })
       if (typeof nextConfig.webpack === "function") {

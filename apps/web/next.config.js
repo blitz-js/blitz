@@ -10,7 +10,6 @@ module.exports = withBlitz(
       customServer: {
         hotReload: false,
       },
-      resolverBasePath: "root",
     },
   }),
 )
