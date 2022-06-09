@@ -1,5 +1,5 @@
 import {Ctx} from "blitz"
-import { db } from "db"
+import db from "db"
 import {z} from "zod"
 
 if (process.env.parentModel) {
