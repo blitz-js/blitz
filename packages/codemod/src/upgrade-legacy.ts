@@ -140,7 +140,7 @@ const upgradeLegacy = async () => {
         usePaginatedQuery: "@blitzjs/rpc",
         useInfiniteQuery: "@blitzjs/rpc",
         useMutation: "@blitzjs/rpc",
-        queryClient: "@blitzjs/rpc",
+        queryClient: "app/blitz-client",
         getQueryKey: "@blitzjs/rpc",
         getInfiniteQueryKey: "@blitzjs/rpc",
         invalidateQuery: "@blitzjs/rpc",

@@ -4,8 +4,6 @@ import {DefaultOptions, QueryClient} from "react-query"
 
 export * from "./data-client/index"
 
-export const queryClient = globalThis.queryClient
-
 interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions
 }
