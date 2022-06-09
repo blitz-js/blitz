@@ -15,7 +15,9 @@ import {
 } from "./utils"
 import {log} from "blitz"
 
-const isInternalBlitzMonorepoDevelopment = fs.existsSync(path.join(__dirname, "../../blitz-next"))
+const isInternalBlitzMonorepoDevelopment = fs.existsSync(
+  path.join(__dirname, "../../../blitz-next"),
+)
 
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -407,24 +409,66 @@ const upgradeLegacy = async () => {
       const getAllPagesDirs = (dirPath: string) => {
         let files = fs.readdirSync(dirPath)
 
-        const pageDir = files.reduce((arr: {model: string; path: string}[], file: string) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            let subs = fs.readdirSync(dirPath + "/" + file)
-            if (subs.includes("pages")) {
-              arr.push({
-                model: file,
-                path: dirPath + "/" + file + "/pages",
-              })
+        const pageDir = files.reduce(
+          (arr: {model: string; path: string; subModel?: string}[], file: string) => {
+            if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+              let subs = fs.readdirSync(dirPath + "/" + file)
+
+              if (subs.includes("pages")) {
+                // Go a level deeper into "pages"
+                let subSubs = fs.readdirSync(dirPath + "/" + file + "/pages")
+
+                for (let dir of subSubs) {
+                  if (fs.statSync(dirPath + "/" + file + "/pages" + "/" + dir).isDirectory()) {
+                    // If directory structure is like: DIRECTORY/PAGES/DIRECTORY
+                    if (dir === file) {
+                      arr.push({
+                        model: file,
+                        path: dirPath + "/" + file + "/pages" + "/" + dir,
+                      })
+                    } else {
+                      // If there is another directory that doesn't have the same name
+                      arr.push({
+                        model: file,
+                        subModel: dir,
+                        path: dirPath + "/" + file + "/pages" + "/" + dir,
+                      })
+                    }
+                  } else {
+                    arr.push({
+                      model: file,
+                      path: dirPath + "/" + file + "/pages",
+                    })
+                    break
+                  }
+                }
+              }
             }
-          }
-          return arr
-        }, [])
+            return arr
+          },
+          [],
+        )
 
         return pageDir
       }
 
-      getAllPagesDirs(appDir).forEach((pages) => {
-        fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+      getAllPagesDirs(appDir).forEach((pages, index) => {
+        if (pages.subModel) {
+          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+        } else {
+          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+        }
+
+        // Delete left over pages directory
+        let subs = fs.readdirSync(path.join(appDir, pages.model))
+        // We can only delete a directory once 😅
+        if (
+          getAllPagesDirs(appDir)[index - 1]?.model !== getAllPagesDirs(appDir)[index]?.model &&
+          index === getAllPagesDirs(appDir).length &&
+          subs.includes("pages")
+        ) {
+          fs.removeSync(path.join(appDir, pages.model, "pages"))
+        }
       })
     },
   })
