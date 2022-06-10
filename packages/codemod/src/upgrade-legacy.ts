@@ -867,7 +867,7 @@ const upgradeLegacy = async () => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
+          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
           errors++
         }
       })
@@ -876,14 +876,14 @@ const upgradeLegacy = async () => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
+          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
           errors++
         }
       })
 
       if (errors > 0) {
         throw new Error(
-          "invokeWithMiddleware is not supported. Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx",
+          "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
         )
       }
     },
