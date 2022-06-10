@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- 4cad9cca: Add queryClient to RPC Plugin exports
+  - blitz@2.0.0-alpha.36
+  - @blitzjs/auth@2.0.0-alpha.36
+
 ## 2.0.0-alpha.35
 
 ### Patch Changes
