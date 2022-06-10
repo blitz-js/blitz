@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+  - @blitzjs/generator@2.0.0-alpha.37
+
 ## 2.0.0-alpha.36
 
 ### Patch Changes
