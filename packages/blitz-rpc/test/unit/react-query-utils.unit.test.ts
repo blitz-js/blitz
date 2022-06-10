@@ -3,15 +3,13 @@
  */
 import {assert, expect, test, beforeEach, describe, spyOn, it} from "vitest"
 
-import {invalidateQuery, setQueryData} from "../../src/data-client"
+import {queryClient, invalidateQuery, setQueryData} from "../../src/data-client"
 
 import {
   getQueryCacheFunctions,
   initializeQueryClient,
 } from "../../src/data-client/react-query-utils"
 import {buildQueryRpc} from "../blitz-test-utils"
-
-const queryClient = initializeQueryClient()
 
 // eslint-disable-next-line require-await
 const isEmpty = async (arg: string): Promise<boolean> => {
