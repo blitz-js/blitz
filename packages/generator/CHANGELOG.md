@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- 4cad9cca: Update codemod and template with a new queryClient import location
+
 ## 2.0.0-alpha.35
 
 ### Patch Changes

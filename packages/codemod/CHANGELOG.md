@@ -1,5 +1,14 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- 4cad9cca: Update queryClient import in codemod
+- Updated dependencies [4cad9cca]
+  - @blitzjs/generator@2.0.0-alpha.36
+  - blitz@2.0.0-alpha.36
+
 ## 2.0.0-alpha.35
 
 ### Patch Changes
