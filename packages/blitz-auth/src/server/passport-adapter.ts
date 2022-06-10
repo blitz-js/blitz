@@ -8,7 +8,7 @@ import {
   connectMiddleware,
   Ctx,
   handleRequestWithMiddleware,
-  Middleware,
+  RequestMiddleware,
   MiddlewareResponse,
   secureProxyMiddleware,
 } from "blitz"
@@ -79,9 +79,9 @@ export function passportAuth(config: BlitzPassportConfig): ApiHandler {
 
     const passportMiddleware = passport.initialize()
 
-    const middleware: Middleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
-      connectMiddleware(cookieSessionMiddleware as Middleware),
-      connectMiddleware(passportMiddleware as Middleware),
+    const middleware: RequestMiddleware<ApiHandlerIncomingMessage, MiddlewareResponse<Ctx>>[] = [
+      connectMiddleware(cookieSessionMiddleware as RequestMiddleware),
+      connectMiddleware(passportMiddleware as RequestMiddleware),
       connectMiddleware(passport.session()),
     ]
 

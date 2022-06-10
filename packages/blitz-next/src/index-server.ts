@@ -13,7 +13,7 @@ import type {
   BlitzServerPlugin,
   Ctx as BlitzCtx,
   FirstParam,
-  Middleware,
+  RequestMiddleware,
   MiddlewareResponse,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
@@ -38,7 +38,7 @@ export type NextApiHandler = (
 ) => void | Promise<void>
 
 type SetupBlitzOptions = {
-  plugins: BlitzServerPlugin<Middleware, Ctx>[]
+  plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
 }
 
 export type BlitzGSSPHandler<TProps> = ({
@@ -60,7 +60,7 @@ export type BlitzAPIHandler = (
 ) => ReturnType<NextApiHandler>
 
 export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
-  const middlewares = plugins.flatMap((p) => p.middlewares)
+  const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
