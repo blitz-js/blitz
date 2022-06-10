@@ -1,5 +1,20 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.35
+- @blitzjs/auth@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- dfd2408e: Add resolverBasePath to Blitz config to change the way rpc routes are generated
+  - @blitzjs/auth@2.0.0-alpha.34
+  - blitz@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes

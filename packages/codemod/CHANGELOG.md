@@ -1,5 +1,21 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- e3750b04: codemod fixes
+- Updated dependencies [e3750b04]
+  - @blitzjs/generator@2.0.0-alpha.35
+  - blitz@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.34
+- blitz@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes
