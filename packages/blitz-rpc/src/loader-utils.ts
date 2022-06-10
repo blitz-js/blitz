@@ -1,5 +1,20 @@
 import {assert} from "blitz"
-import {win32, posix, sep} from "path"
+import {posix, sep, win32} from "path"
+import {ResolverBasePath} from "./index-server"
+
+export interface LoaderOptions {
+  resolverBasePath?: ResolverBasePath
+}
+
+export interface Loader {
+  _compiler?: {
+    name: string
+    context: string
+  }
+  resource: string
+  cacheable: (enabled: boolean) => void
+  query: LoaderOptions
+}
 
 export function assertPosixPath(path: string) {
   const errMsg = `Wrongly formatted path: ${path}`
@@ -34,7 +49,14 @@ export function buildPageExtensionRegex(pageExtensions: string[]) {
 
 const fileExtensionRegex = /\.([a-z]+)$/
 
-export function convertPageFilePathToRoutePath(filePath: string) {
+export function convertPageFilePathToRoutePath(
+  filePath: string,
+  resolverBasePath: ResolverBasePath,
+) {
+  if (resolverBasePath === "root") {
+    return filePath.replace(fileExtensionRegex, "")
+  }
+
   return filePath
     .replace(/^.*?[\\/]queries[\\/]/, "/")
     .replace(/^.*?[\\/]mutations[\\/]/, "/")

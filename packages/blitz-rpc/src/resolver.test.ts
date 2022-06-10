@@ -1,5 +1,5 @@
 import {Ctx} from "blitz"
-import {describe, it, expect} from "vitest"
+import {describe, expect, it} from "vitest"
 import {z} from "zod"
 import {ParserType, resolver} from "./resolver"
 
@@ -44,10 +44,9 @@ const asyncResolver = resolver.pipe(
 const resolverTest = async ({type}: {type?: ParserType}) => {
   const resolver1 = type === "sync" ? syncResolver : asyncResolver
 
-  const result1 = await resolver1(
-    {email: "test@example.com"},
-    {session: {$authorize: () => undefined} as Ctx},
-  )
+  const result1 = await resolver1({email: "test@example.com"}, {
+    session: {$authorize: () => undefined},
+  } as Ctx)
   expect(result1).toBe("test@example.com")
 
   const resolver2 = resolver.pipe(
@@ -55,9 +54,8 @@ const resolverTest = async ({type}: {type?: ParserType}) => {
       return input.email
     },
   )
-  const result2 = await resolver2(
-    {email: "test@example.com"},
-    {session: {$authorize: () => undefined} as Ctx},
-  )
+  const result2 = await resolver2({email: "test@example.com"}, {
+    session: {$authorize: () => undefined},
+  } as Ctx)
   expect(result2).toBe("test@example.com")
 }

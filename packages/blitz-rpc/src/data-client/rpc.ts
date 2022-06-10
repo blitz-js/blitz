@@ -2,7 +2,7 @@ import {normalizePathTrailingSlash} from "next/dist/client/normalize-trailing-sl
 import {addBasePath} from "next/dist/shared/lib/router/router"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
-import {isServer, CSRFTokenMismatchError} from "blitz"
+import {CSRFTokenMismatchError, isServer} from "blitz"
 import {getQueryKeyFromUrlAndParams, queryClient} from "./react-query-utils"
 import {
   getAntiCSRFToken,
@@ -55,7 +55,7 @@ export function __internal_buildRpcClient({
   resolverType,
   routePath,
 }: BuildRpcClientParams): RpcClient {
-  const fullRoutePath = normalizeApiRoute("/api/rpc/" + routePath)
+  const fullRoutePath = normalizeApiRoute("/api/rpc" + routePath)
 
   const httpClient: RpcClientBase = async (params, opts = {}) => {
     const debug = (await import("debug")).default("blitz:rpc")

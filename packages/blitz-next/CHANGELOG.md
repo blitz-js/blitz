@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- Updated dependencies [dfd2408e]
+  - @blitzjs/rpc@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes
