@@ -3,7 +3,7 @@ import {addBasePath} from "next/dist/shared/lib/router/router"
 import {deserialize, serialize} from "superjson"
 import {SuperJSONResult} from "superjson/dist/types"
 import {CSRFTokenMismatchError, isServer} from "blitz"
-import {getQueryKeyFromUrlAndParams, queryClient} from "./react-query-utils"
+import {getQueryKeyFromUrlAndParams, getQueryClient} from "./react-query-utils"
 import {
   getAntiCSRFToken,
   getPublicDataStore,
@@ -123,9 +123,9 @@ export function __internal_buildRpcClient({
             setTimeout(async () => {
               // Do these in the next tick to prevent various bugs like https://github.com/blitz-js/blitz/issues/2207
               debug("Invalidating react-query cache...")
-              await queryClient.cancelQueries()
-              await queryClient.resetQueries()
-              queryClient.getMutationCache().clear()
+              await getQueryClient().cancelQueries()
+              await getQueryClient().resetQueries()
+              getQueryClient().getMutationCache().clear()
               // We have a 100ms delay here to prevent unnecessary stale queries from running
               // This prevents the case where you logout on a page with
               // Page.authenticate = {redirectTo: '/login'}
@@ -184,7 +184,7 @@ export function __internal_buildRpcClient({
 
             if (!opts.fromQueryHook) {
               const queryKey = getQueryKeyFromUrlAndParams(routePath, params)
-              queryClient.setQueryData(queryKey, data)
+              getQueryClient().setQueryData(queryKey, data)
             }
             return data
           }

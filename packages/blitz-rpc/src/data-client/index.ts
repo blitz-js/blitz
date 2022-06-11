@@ -6,7 +6,7 @@ export {
   getInfiniteQueryKey,
   invalidateQuery,
   setQueryData,
-  queryClient,
+  getQueryClient,
 } from "./react-query-utils"
 export {useQueryErrorResetBoundary, QueryClient} from "react-query"
 export {dehydrate} from "react-query/hydration"
