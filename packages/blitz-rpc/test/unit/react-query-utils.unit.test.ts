@@ -3,13 +3,14 @@
  */
 import {assert, expect, test, beforeEach, describe, spyOn, it} from "vitest"
 
-import {queryClient, invalidateQuery, setQueryData} from "../../src/data-client"
+import {getQueryClient, invalidateQuery, setQueryData} from "../../src/data-client"
 
 import {
   getQueryCacheFunctions,
   initializeQueryClient,
 } from "../../src/data-client/react-query-utils"
 import {buildQueryRpc} from "../blitz-test-utils"
+globalThis.queryClient = initializeQueryClient()
 
 // eslint-disable-next-line require-await
 const isEmpty = async (arg: string): Promise<boolean> => {
@@ -17,7 +18,7 @@ const isEmpty = async (arg: string): Promise<boolean> => {
 }
 
 describe("getQueryCacheFunctions", () => {
-  const spyRefetchQueries = spyOn(queryClient, "invalidateQueries")
+  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
@@ -50,7 +51,7 @@ describe("getQueryCacheFunctions", () => {
 })
 
 describe("invalidateQuery", () => {
-  const spyRefetchQueries = spyOn(queryClient, "invalidateQueries")
+  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
@@ -59,15 +60,15 @@ describe("invalidateQuery", () => {
   it("invalidates a query given resolver and params", async () => {
     await invalidateQuery(buildQueryRpc(isEmpty), "a")
     expect(spyRefetchQueries).toBeCalledTimes(1)
-    const calledWith = spyRefetchQueries.mock.calls[0][0] as any
+    const calledWith = spyRefetchQueries.mock.calls[0]![0] as any
     // json of the queryKey is "a"
     expect(calledWith[1].json).toEqual("a")
   })
 })
 
 describe("setQueryData", () => {
-  const spyRefetchQueries = spyOn(queryClient, "invalidateQueries")
-  const spySetQueryData = spyOn(queryClient, "setQueryData")
+  const spyRefetchQueries = spyOn(getQueryClient(), "invalidateQueries")
+  const spySetQueryData = spyOn(getQueryClient(), "setQueryData")
 
   beforeEach(() => {
     spyRefetchQueries.mockReset()
@@ -91,7 +92,7 @@ describe("setQueryData", () => {
     expect(spyRefetchQueries).toBeCalledTimes(1)
     expect(spySetQueryData).toBeCalledTimes(1)
 
-    const invalidateCalledWith = spyRefetchQueries.mock.calls[0][0] as any
+    const invalidateCalledWith = spyRefetchQueries.mock.calls[0]![0] as any
     expect(invalidateCalledWith[1].json).toEqual("params")
 
     const calledWith = spySetQueryData.mock.calls[0] as Array<any>
