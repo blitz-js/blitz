@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- 8aee25c5: getQueryClient function & queryClient codemod updates & shared plugin config
+
 ## 2.0.0-alpha.37
 
 ## 2.0.0-alpha.36
