@@ -145,7 +145,7 @@ const upgradeLegacy = async () => {
         usePaginatedQuery: "@blitzjs/rpc",
         useInfiniteQuery: "@blitzjs/rpc",
         useMutation: "@blitzjs/rpc",
-        queryClient: "app/blitz-client",
+        queryClient: "@blitzjs/rpc",
         getQueryKey: "@blitzjs/rpc",
         getInfiniteQueryKey: "@blitzjs/rpc",
         invalidateQuery: "@blitzjs/rpc",
@@ -262,6 +262,33 @@ const upgradeLegacy = async () => {
         }
 
         fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+      })
+    },
+  })
+
+  steps.push({
+    name: "change queryClient to getQueryClient()",
+    action: async () => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
+        const filepath = path.resolve(appDir, file)
+        const program = getCollectionFromSource(filepath)
+
+        const findQueryClient = () => {
+          return program.find(j.Identifier, (node) => node.name === "queryClient")
+        }
+
+        findQueryClient().forEach((q) => {
+          switch (q.name) {
+            case "imported":
+              q.value.name = "getQueryClient"
+              break
+            case "object":
+              j(q).replaceWith(j.callExpression(j.identifier("getQueryClient"), []))
+              break
+          }
+        })
+
+        fs.writeFileSync(path.resolve(appDir, file), program.toSource())
       })
     },
   })
