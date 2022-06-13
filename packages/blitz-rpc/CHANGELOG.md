@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- 8aee25c5: getQueryClient function & queryClient codemod updates & shared plugin config
+  - blitz@2.0.0-alpha.38
+  - @blitzjs/auth@2.0.0-alpha.38
+
 ## 2.0.0-alpha.37
 
 ### Patch Changes
