@@ -710,19 +710,38 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
       )
-
       const appFunction = program.find(j.FunctionDeclaration, (node) => {
         return node.id.name === "App"
       })
 
-      // Store the App function
-      const storeFunction = {...appFunction.get().value}
+      const appIdentifier = program.find(j.Identifier, (node) => {
+        return node.name === "App"
+      })
 
-      // Create a new withBlitz call expresion with an empty argument
-      const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
-        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
-      // Push stored function above into the argument
-      withBlitzFunction.expression.arguments.push(storeFunction)
+      if (appFunction.length) {
+        // Store the App function
+        const storeFunction = {...appFunction.get().value}
+        // Create a new withBlitz call expresion with an empty argument
+        const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
+          j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+        // Push stored function above into the argument
+        withBlitzFunction.expression.arguments.push(storeFunction)
+      } else if (appIdentifier.length) {
+        appIdentifier.forEach((a) => {
+          switch (a.name) {
+            case "declaration":
+              const storeFunction = {...a.get().value}
+              // Create a new withBlitz call expresion with an empty argument
+              const withBlitzFunction = (a.get().parentPath.value.declaration =
+                j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+              // Push stored function above into the argument
+              withBlitzFunction.expression.arguments.push(storeFunction)
+              break
+          }
+        })
+      } else {
+        log.error("App function not found")
+      }
 
       addNamedImport(program, "withBlitz", "app/blitz-client")
 
