@@ -479,22 +479,41 @@ const upgradeLegacy = async () => {
         return pageDir
       }
 
-      getAllPagesDirs(appDir).forEach((pages, index) => {
+      getAllPagesDirs(appDir).forEach((pages) => {
         if (pages.subModel) {
-          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+          // If the directory exists with a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, pages.subModel!, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+          }
         } else {
-          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+          // If the directory exists without a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+          }
         }
+      })
 
-        // Delete left over pages directory
-        let subs = fs.readdirSync(path.join(appDir, pages.model))
-        // We can only delete a directory once 😅
-        if (
-          getAllPagesDirs(appDir)[index - 1]?.model !== getAllPagesDirs(appDir)[index]?.model &&
-          index === getAllPagesDirs(appDir).length &&
-          subs.includes("pages")
-        ) {
-          fs.removeSync(path.join(appDir, pages.model, "pages"))
+      //Clean up
+      getAllPagesDirs(appDir).forEach((page) => {
+        let subs = fs.readdirSync(path.join(appDir, page.model))
+        if (subs.includes("pages")) {
+          fs.removeSync(path.join(appDir, page.model, "pages"))
         }
       })
     },
