@@ -3,7 +3,7 @@ import {posix, sep, win32} from "path"
 import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
-  resolverPath: ResolverPathOptions
+  resolveResolverPath: ResolverPathOptions
 }
 
 export interface Loader {

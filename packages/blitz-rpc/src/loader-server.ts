@@ -55,7 +55,7 @@ export async function transformBlitzRpcServer(
 
   for (let resolverFilePath of resolvers) {
     const relativeResolverPath = posix.relative(dirname(id), join(root, resolverFilePath))
-    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
+    const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolveResolverPath)
     code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
     code += "\n"
   }

@@ -54,7 +54,7 @@ const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
 
 interface WebpackRuleOptions {
-  resolverPath: ResolverPathOptions | undefined
+  resolveResolverPath: ResolverPathOptions | undefined
 }
 
 interface WebpackRule {
@@ -71,19 +71,19 @@ export interface InstallWebpackConfigOptions {
       rules: WebpackRule[]
     }
   }
-  webPackRuleOptions: WebpackRuleOptions
+  webpackRuleOptions: WebpackRuleOptions
 }
 
 export function installWebpackConfig({
   webpackConfig,
-  webPackRuleOptions,
+  webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
   webpackConfig.module.rules.push({
     test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
     use: [
       {
         loader: loaderServer,
-        options: webPackRuleOptions,
+        options: webpackRuleOptions,
       },
     ],
   })
@@ -92,7 +92,7 @@ export function installWebpackConfig({
     use: [
       {
         loader: loaderClient,
-        options: webPackRuleOptions,
+        options: webpackRuleOptions,
       },
     ],
   })

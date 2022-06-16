@@ -139,7 +139,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
-    resolverPath?: ResolverPathOptions
+    resolveResolverPath?: ResolverPathOptions
     customServer?: {
       hotReload?: boolean
     }
@@ -168,8 +168,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
     webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
       installWebpackConfig({
         webpackConfig: config,
-        webPackRuleOptions: {
-          resolverPath: nextConfig.blitz?.resolverPath,
+        webpackRuleOptions: {
+          resolveResolverPath: nextConfig.blitz?.resolveResolverPath,
         },
       })
       if (typeof nextConfig.webpack === "function") {
