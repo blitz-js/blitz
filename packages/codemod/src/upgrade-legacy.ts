@@ -375,6 +375,35 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "Add cookiePrefix to blitz server",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const cookieIdentifier = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "cookiePrefix",
+      )
+      if (cookieIdentifier.length) {
+        const cookiePrefix = cookieIdentifier.get().parentPath.value.value.value
+        const blitzClientProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
+        )
+        const cookieIdentifierBlitzClient = blitzClientProgram.find(
+          j.Identifier,
+          (node) => node.name === "cookiePrefix",
+        )
+        cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+
+        fs.writeFileSync(
+          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+          blitzClientProgram.toSource(),
+        )
+      } else {
+        log.error("Cookie Prefix not found in blitz config file")
+      }
+    },
+  })
+
+  steps.push({
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
