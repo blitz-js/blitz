@@ -54,8 +54,8 @@ export const initializeQueryClient = () => {
   })
 }
 
-// Create internal QueryClient instance
-export const queryClient = initializeQueryClient()
+// Query client is initialised in `BlitzRpcPlugin`, and can only be used with BlitzRpcPlugin right now
+export const getQueryClient = () => globalThis.queryClient
 
 function isRpcClient(f: any): f is RpcClient<any, any> {
   return !!f._isRpcClient
@@ -176,7 +176,7 @@ export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
     // Params not provided, only use first query key item (url)
     queryKey = fullQueryKey[0]
   }
-  return queryClient.invalidateQueries(queryKey)
+  return getQueryClient().invalidateQueries(queryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
@@ -184,15 +184,15 @@ export function setQueryData<TInput, TResult, T extends AsyncFunc>(
   params: TInput,
   newData: TResult | ((oldData: TResult | undefined) => TResult),
   opts: MutateOptions = {refetch: true},
-): Promise<void | ReturnType<typeof queryClient.invalidateQueries>> {
+): Promise<void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>> {
   if (typeof resolver === "undefined") {
     throw new Error("setQueryData is missing the first argument - it must be a resolver function")
   }
   const queryKey = getQueryKey(resolver, params)
 
   return new Promise((res) => {
-    queryClient.setQueryData(queryKey, newData)
-    let result: void | ReturnType<typeof queryClient.invalidateQueries>
+    getQueryClient().setQueryData(queryKey, newData)
+    let result: void | ReturnType<ReturnType<typeof getQueryClient>["invalidateQueries"]>
     if (opts.refetch) {
       result = invalidateQuery(resolver, params)
     }

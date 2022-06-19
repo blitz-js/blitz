@@ -1,5 +1,39 @@
 # blitz
 
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- Updated dependencies [8aee25c5]
+  - @blitzjs/generator@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+  - @blitzjs/generator@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- Updated dependencies [4cad9cca]
+  - @blitzjs/generator@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- Updated dependencies [e3750b04]
+  - @blitzjs/generator@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes

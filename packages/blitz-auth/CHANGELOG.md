@@ -1,5 +1,37 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+- Updated dependencies [a80d2a8f]
+  - blitz@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes
