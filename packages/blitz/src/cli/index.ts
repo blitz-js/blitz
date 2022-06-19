@@ -36,26 +36,33 @@ const commands = {
   db: () => import("./commands/db").then((i) => i.db),
 }
 
-const aliases = {
-  d: commands.dev!,
-  b: commands.build!,
-  s: commands.start!,
-  n: commands.new!,
-  g: commands.generate!,
+const aliases: Record<string, keyof typeof commands> = {
+  d: "dev",
+  b: "build",
+  s: "start",
+  n: "new",
+  g: "generate",
 }
 
 type Command = keyof typeof commands
+type Alias = keyof typeof aliases
 const defaultCommand: Command = "dev"
 
 const foundCommand = Boolean(commands[args._[0] as Command])
-const command = foundCommand ? (args._[0] as Command) : defaultCommand
-const forwardedArgs = foundCommand ? args._.slice(1) : args._
+const foundAlias = Boolean(aliases[args._[0] as Alias])
+let command: Command = defaultCommand
+if (foundCommand) {
+  command = args._[0] as Command
+}
+if (foundAlias) {
+  command = aliases[args._[0] as Alias] as Command
+}
+const forwardedArgs = foundCommand || foundAlias ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
 async function runCommandFromBin() {
-  const command = args._[0] as Command
   let commandBin: string | null = null
   try {
     commandBin = await getCommandBin(command)
@@ -149,7 +156,7 @@ async function main() {
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
 
-  if (foundCommand) {
+  if (foundCommand || foundAlias) {
     const commandFn = commands[command] || aliases[command]
     commandFn?.()
       .then((exec: any) => exec(forwardedArgs))
