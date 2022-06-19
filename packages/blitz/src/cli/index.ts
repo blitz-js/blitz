@@ -36,28 +36,33 @@ const commands = {
   db: () => import("./commands/db").then((i) => i.db),
 }
 
+const aliases: Record<string, keyof typeof commands> = {
+  d: "dev",
+  b: "build",
+  s: "start",
+  n: "new",
+  g: "generate",
+}
+
 type Command = keyof typeof commands
+type Alias = keyof typeof aliases
 const defaultCommand: Command = "dev"
 
 const foundCommand = Boolean(commands[args._[0] as Command])
-const command = foundCommand ? (args._[0] as Command) : defaultCommand
-const forwardedArgs = foundCommand ? args._.slice(1) : args._
+const foundAlias = Boolean(aliases[args._[0] as Alias])
+let command: Command = defaultCommand
+if (foundCommand) {
+  command = args._[0] as Command
+}
+if (foundAlias) {
+  command = aliases[args._[0] as Alias] as Command
+}
+const forwardedArgs = foundCommand || foundAlias ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
-const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
-
-let blitzPkgPath
-if (isInDevelopmentAsGloballyLinked) {
-  blitzPkgPath = globalBlitzPath
-} else {
-  // localBlitzPath won't exist if used outside a blitz app directory
-  blitzPkgPath = localBlitzPath || globalBlitzPath
-}
-
 async function runCommandFromBin() {
-  const command = args._[0] as Command
   let commandBin: string | null = null
   try {
     commandBin = await getCommandBin(command)
@@ -151,8 +156,9 @@ async function main() {
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
 
-  if (foundCommand) {
-    commands[command]?.()
+  if (foundCommand || foundAlias) {
+    const commandFn = commands[command] || aliases[command]
+    commandFn?.()
       .then((exec: any) => exec(forwardedArgs))
       .then(() => {
         if (command === "build") {
@@ -166,13 +172,21 @@ async function main() {
       })
   } else {
     if (args["--help"] && args._.length === 0) {
+      // TODO: add back the generate command description once it's working
+      // generate, g     Generate new files for your Blitz project 🤠
+
       console.log(`
       Usage
         $ blitz <command>
   
       Available commands
-        ${Object.keys(commands).join(", ")}
-  
+        dev, d          Start a development server 🪄
+        build, b        Create a production build 🏗️
+        start, s        Start the production server 🐎
+        new, n          Create a new Blitz project ✨
+        codegen         Run the blitz codegen 🤖
+        db              Run database commands 🗄️
+        
       Options
         --env, -e       App environment name
         --version, -v   Version number
