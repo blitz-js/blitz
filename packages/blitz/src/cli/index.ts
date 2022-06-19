@@ -27,7 +27,8 @@ const args = arg(commonArgs, {
 
 const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
-const commands: {[command: string]: () => Promise<CliCommand>} = {
+
+const commands = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
@@ -36,8 +37,9 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
 }
-const foundCommand = Boolean(commands[args._[0] as string])
-const command = foundCommand ? (args._[0] as string) : defaultCommand
+
+const foundCommand = Boolean(commands[args._[0] as keyof typeof commands])
+const command = foundCommand ? (args._[0] as keyof typeof commands) : defaultCommand
 const forwardedArgs = foundCommand ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
