@@ -3795,6 +3795,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "remlse",
+      "name": "remlse",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54984957?v=4",
+      "profile": "https://github.com/remlse",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
