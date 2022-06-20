@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "blitz": "latest",
-    "react-dom": "18.0.0-alpha-5ca4b0433-20211020",
-    "react": "18.0.0-beta-149b420f6-20211119"
+    "react-dom": "18.0.0",
+    "react": "18.0.0"
   },
   "devDependencies": {
     "eslint": "7.x",

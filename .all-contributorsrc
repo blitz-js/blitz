@@ -625,7 +625,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/17050715?v=4",
       "profile": "https://cloudnweb.dev/",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -970,7 +971,9 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/3496193?v=4",
       "profile": "https://twitter.com/dillonraphael",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "doc"
       ]
     },
     {
@@ -3066,7 +3069,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/8077469?v=4",
       "profile": "https://andreas.fyi",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -3670,6 +3674,126 @@
       "profile": "https://mizle.net",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "numanaral",
+      "name": "Numan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25233323?v=4",
+      "profile": "https://numanaral.github.io/?ref=github",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jscyo",
+      "name": "Joel Coutinho",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6310783?v=4",
+      "profile": "https://github.com/jscyo",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "davidbarker",
+      "name": "David Barker",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1597139?v=4",
+      "profile": "https://github.com/davidbarker",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "timfee",
+      "name": "Tim Feeley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246342?v=4",
+      "profile": "http://www.timfeeley.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Caslus",
+      "name": "lucas philippe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22855640?v=4",
+      "profile": "https://github.com/Caslus",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "the-bayer",
+      "name": "Blake Bayer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/94391693?v=4",
+      "profile": "https://github.com/the-bayer",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rmassie",
+      "name": "R Massie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7375518?v=4",
+      "profile": "https://github.com/rmassie",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "paulm17",
+      "name": "Paul",
+      "avatar_url": "https://avatars.githubusercontent.com/u/387463?v=4",
+      "profile": "https://github.com/paulm17",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "minho42",
+      "name": "Min ho Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15278512?v=4",
+      "profile": "https://minho42.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "webdeb",
+      "name": "webdeb",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14992140?v=4",
+      "profile": "https://github.com/webdeb",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "iDavidB",
+      "name": "David",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32268383?v=4",
+      "profile": "https://github.com/iDavidB",
+      "contributions": [
+        "doc",
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "jakedee",
+      "name": "Jake Dowie",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5058625?v=4",
+      "profile": "https://jdlt.co.uk",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "datner",
+      "name": "Datner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22598347?v=4",
+      "profile": "https://github.com/datner",
+      "contributions": [
+        "doc",
+        "code"
       ]
     }
   ],

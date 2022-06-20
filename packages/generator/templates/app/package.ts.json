@@ -26,13 +26,13 @@
   "dependencies": {
     "@prisma/client": "3.x",
     "blitz": "latest",
-    "react-dom": "18.0.0-alpha-5ca4b0433-20211020",
-    "react": "18.0.0-beta-149b420f6-20211119",
+    "react-dom": "18.0.0",
+    "react": "18.0.0",
     "zod": "3.x"
   },
   "devDependencies": {
     "@types/preview-email": "2.x",
-    "@types/react": "17.x",
+    "@types/react": "18.0.1",
     "eslint": "7.x",
     "husky": "7.x",
     "lint-staged": "11.x",
