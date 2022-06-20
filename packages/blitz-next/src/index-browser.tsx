@@ -17,6 +17,7 @@ import {Router} from "next/router"
 
 export * from "./error-boundary"
 export * from "./error-component"
+export * from "./use-params"
 export {Routes} from ".blitz"
 
 const compose =
