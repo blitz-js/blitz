@@ -1,4 +1,3 @@
-import fromPairs from "lodash.frompairs"
 import {NextRouter} from "next/router"
 import {ParsedUrlQuery} from "querystring"
 import React from "react"
@@ -81,7 +80,7 @@ function areQueryValuesEqual(value1: ParsedUrlQueryValue, value2: ParsedUrlQuery
 }
 
 export function extractRouterParams(routerQuery: ParsedUrlQuery, asPathQuery: ParsedUrlQuery) {
-  return fromPairs(
+  return Object.fromEntries(
     Object.entries(routerQuery).filter(
       ([key, value]) =>
         typeof asPathQuery[key] === "undefined" || !areQueryValuesEqual(value, asPathQuery[key]),

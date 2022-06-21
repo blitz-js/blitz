@@ -612,7 +612,6 @@ importers:
       "@testing-library/react-hooks": 7.0.2
       "@testing-library/user-event": 13.5.0
       "@types/hoist-non-react-statics": 3.3.1
-      "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
@@ -623,7 +622,6 @@ importers:
       find-up: 4.1.0
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      lodash.frompairs: 4.0.1
       next: 12.1.6-canary.17
       react: 18.0.0
       react-dom: 18.0.0
@@ -649,7 +647,6 @@ importers:
       "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
       "@testing-library/react-hooks": 7.0.2_zpnidt7m3osuk7shl3s4oenomq
       "@testing-library/user-event": 13.5.0_tlwynutqiyp5mns3woioasuxnq
-      "@types/lodash.frompairs": 4.0.6
       "@types/node": 17.0.16
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
@@ -657,7 +654,6 @@ importers:
       blitz: link:../blitz
       cross-spawn: 7.0.3
       find-up: 4.1.0
-      lodash.frompairs: 4.0.1
       next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -4323,22 +4319,6 @@ packages:
     dependencies:
       "@types/node": 17.0.24
     dev: false
-
-  /@types/lodash.frompairs/4.0.6:
-    resolution:
-      {
-        integrity: sha512-rwCUf4NMKhXpiVjL/RXP8YOk+rd02/J4tACADEgaMXRVnzDbSSlBMKFZoX/ARmHVLg3Qc98Um4PErGv8FbxU7w==,
-      }
-    dependencies:
-      "@types/lodash": 4.14.182
-    dev: true
-
-  /@types/lodash/4.14.182:
-    resolution:
-      {
-        integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==,
-      }
-    dev: true
 
   /@types/mem-fs-editor/7.0.1:
     resolution:
@@ -11950,10 +11930,6 @@ packages:
         integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==,
       }
     dev: false
-
-  /lodash.frompairs/4.0.1:
-    resolution: {integrity: sha1-vE5SB/onV8E25XNhTpZkUGsrG9I=}
-    dev: true
 
   /lodash.includes/4.3.0:
     resolution:
