@@ -1,6 +1,5 @@
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
-import packageJson from "../../package.json"
 import {loadEnvConfig} from "../env-utils"
 import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
@@ -10,7 +9,7 @@ import pkgDir from "pkg-dir"
 import {join} from "path"
 
 const commonArgs = {
-  // Types
+  // Flags
   "--version": Boolean,
   "--help": Boolean,
   "--inspect": Boolean,
@@ -25,9 +24,9 @@ const args = arg(commonArgs, {
   permissive: true,
 })
 
-const defaultCommand = "dev"
 export type CliCommand = (argv?: string[]) => void
-const commands: {[command: string]: () => Promise<CliCommand>} = {
+
+const commands = {
   dev: () => import("./commands/next/dev").then((i) => i.dev),
   build: () => import("./commands/next/build").then((i) => i.build),
   start: () => import("./commands/next/start").then((i) => i.start),
@@ -36,25 +35,34 @@ const commands: {[command: string]: () => Promise<CliCommand>} = {
   codegen: () => import("./commands/codegen").then((i) => i.codegen),
   db: () => import("./commands/db").then((i) => i.db),
 }
-const foundCommand = Boolean(commands[args._[0] as string])
-const command = foundCommand ? (args._[0] as string) : defaultCommand
-const forwardedArgs = foundCommand ? args._.slice(1) : args._
+
+const aliases: Record<string, keyof typeof commands> = {
+  d: "dev",
+  b: "build",
+  s: "start",
+  n: "new",
+  g: "generate",
+}
+
+type Command = keyof typeof commands
+type Alias = keyof typeof aliases
+const defaultCommand: Command = "dev"
+
+const foundCommand = Boolean(commands[args._[0] as Command])
+const foundAlias = Boolean(aliases[args._[0] as Alias])
+let command: Command = defaultCommand
+if (foundCommand) {
+  command = args._[0] as Command
+}
+if (foundAlias) {
+  command = aliases[args._[0] as Alias] as Command
+}
+const forwardedArgs = foundCommand || foundAlias ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
-const isInDevelopmentAsGloballyLinked = __dirname.includes("packages/blitz/dist")
-
-let blitzPkgPath
-if (isInDevelopmentAsGloballyLinked) {
-  blitzPkgPath = globalBlitzPath
-} else {
-  // localBlitzPath won't exist if used outside a blitz app directory
-  blitzPkgPath = localBlitzPath || globalBlitzPath
-}
-
 async function runCommandFromBin() {
-  const command = args._[0] as string
   let commandBin: string | null = null
   try {
     commandBin = await getCommandBin(command)
@@ -96,10 +104,10 @@ async function printEnvInfo() {
     {showNotFound: true},
   )
 
-  const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath) as string
+  const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath)
   const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
 
-  if (globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
+  if (globalBlitzPkgJsonPath && globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
     // This branch won't run if user does `npx blitz` or `yarn blitz`
     const globalVersion = require(join(globalBlitzPkgJsonPath, "package.json")).version
     console.log(`Blitz version: ${globalVersion} (global)`)
@@ -141,14 +149,16 @@ async function main() {
   if (process.env.NODE_ENV && !standardEnv.includes(process.env.NODE_ENV)) {
     console.warn(NON_STANDARD_NODE_ENV)
   }
-  ;(process.env as any).NODE_ENV = process.env.NODE_ENV || defaultEnv
+
+  process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
 
   // Make sure commands gracefully respect termination signals (e.g. from Docker)
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
 
-  if (foundCommand) {
-    commands[command]?.()
+  if (foundCommand || foundAlias) {
+    const commandFn = commands[command] || aliases[command]
+    commandFn?.()
       .then((exec: any) => exec(forwardedArgs))
       .then(() => {
         if (command === "build") {
@@ -162,13 +172,21 @@ async function main() {
       })
   } else {
     if (args["--help"] && args._.length === 0) {
+      // TODO: add back the generate command description once it's working
+      // generate, g     Generate new files for your Blitz project 🤠
+
       console.log(`
       Usage
         $ blitz <command>
   
       Available commands
-        ${Object.keys(commands).join(", ")}
-  
+        dev, d          Start a development server 🪄
+        build, b        Create a production build 🏗️
+        start, s        Start the production server 🐎
+        new, n          Create a new Blitz project ✨
+        codegen         Run the blitz codegen 🤖
+        db              Run database commands 🗄️
+        
       Options
         --env, -e       App environment name
         --version, -v   Version number
