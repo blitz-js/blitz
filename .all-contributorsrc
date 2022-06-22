@@ -3795,6 +3795,24 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "remlse",
+      "name": "remlse",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54984957?v=4",
+      "profile": "https://github.com/remlse",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sergous",
+      "name": "Sergei Smirnov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/545151?v=4",
+      "profile": "https://github.com/sergous",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
