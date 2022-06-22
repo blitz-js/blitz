@@ -375,6 +375,35 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "Add cookiePrefix to blitz server",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const cookieIdentifier = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "cookiePrefix",
+      )
+      if (cookieIdentifier.length) {
+        const cookiePrefix = cookieIdentifier.get().parentPath.value.value.value
+        const blitzClientProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
+        )
+        const cookieIdentifierBlitzClient = blitzClientProgram.find(
+          j.Identifier,
+          (node) => node.name === "cookiePrefix",
+        )
+        cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+
+        fs.writeFileSync(
+          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+          blitzClientProgram.toSource(),
+        )
+      } else {
+        log.error("Cookie Prefix not found in blitz config file")
+      }
+    },
+  })
+
+  steps.push({
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
@@ -479,22 +508,41 @@ const upgradeLegacy = async () => {
         return pageDir
       }
 
-      getAllPagesDirs(appDir).forEach((pages, index) => {
+      getAllPagesDirs(appDir).forEach((pages) => {
         if (pages.subModel) {
-          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+          // If the directory exists with a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, pages.subModel!, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+          }
         } else {
-          fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+          // If the directory exists without a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+          }
         }
+      })
 
-        // Delete left over pages directory
-        let subs = fs.readdirSync(path.join(appDir, pages.model))
-        // We can only delete a directory once 😅
-        if (
-          getAllPagesDirs(appDir)[index - 1]?.model !== getAllPagesDirs(appDir)[index]?.model &&
-          index === getAllPagesDirs(appDir).length &&
-          subs.includes("pages")
-        ) {
-          fs.removeSync(path.join(appDir, pages.model, "pages"))
+      //Clean up
+      getAllPagesDirs(appDir).forEach((page) => {
+        let subs = fs.readdirSync(path.join(appDir, page.model))
+        if (subs.includes("pages")) {
+          fs.removeSync(path.join(appDir, page.model, "pages"))
         }
       })
     },
@@ -710,19 +758,38 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
       )
-
       const appFunction = program.find(j.FunctionDeclaration, (node) => {
         return node.id.name === "App"
       })
 
-      // Store the App function
-      const storeFunction = {...appFunction.get().value}
+      const appIdentifier = program.find(j.Identifier, (node) => {
+        return node.name === "App"
+      })
 
-      // Create a new withBlitz call expresion with an empty argument
-      const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
-        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
-      // Push stored function above into the argument
-      withBlitzFunction.expression.arguments.push(storeFunction)
+      if (appFunction.length) {
+        // Store the App function
+        const storeFunction = {...appFunction.get().value}
+        // Create a new withBlitz call expresion with an empty argument
+        const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
+          j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+        // Push stored function above into the argument
+        withBlitzFunction.expression.arguments.push(storeFunction)
+      } else if (appIdentifier.length) {
+        appIdentifier.forEach((a) => {
+          switch (a.name) {
+            case "declaration":
+              const storeFunction = {...a.get().value}
+              // Create a new withBlitz call expresion with an empty argument
+              const withBlitzFunction = (a.get().parentPath.value.declaration =
+                j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+              // Push stored function above into the argument
+              withBlitzFunction.expression.arguments.push(storeFunction)
+              break
+          }
+        })
+      } else {
+        log.error("App function not found")
+      }
 
       addNamedImport(program, "withBlitz", "app/blitz-client")
 
