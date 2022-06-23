@@ -1,5 +1,12 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- 7817fe3a: Add missing RouteUrlObject on Page.authenticate.redirectTo
+  - blitz@2.0.0-alpha.44
+
 ## 2.0.0-alpha.43
 
 ### Patch Changes

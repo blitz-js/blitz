@@ -1,5 +1,7 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.44
+
 ## 2.0.0-alpha.43
 
 ## 2.0.0-alpha.42
