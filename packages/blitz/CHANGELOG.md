@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.43
+
+### Patch Changes
+
+- 527e48ac: Fix running bin commands with Blitz CLI
+  - @blitzjs/generator@2.0.0-alpha.43
+
 ## 2.0.0-alpha.42
 
 ### Patch Changes
