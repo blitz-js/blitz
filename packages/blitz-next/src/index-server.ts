@@ -22,6 +22,7 @@ import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
+import {ParsedUrlQuery} from "querystring"
 
 export * from "./index-browser"
 
@@ -41,12 +42,14 @@ type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
 }
 
-export type BlitzGSSPHandler<TProps> = ({
+export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery = ParsedUrlQuery> = ({
   ctx,
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps<TProps>>
+}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<
+  GetServerSideProps<TProps, Query>
+>
 
 export type BlitzGSPHandler<TProps> = ({
   ctx,
@@ -64,7 +67,9 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery>(
+      handler: BlitzGSSPHandler<TProps, Query>,
+    ): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
