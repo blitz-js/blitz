@@ -195,7 +195,7 @@ describe("useParam", () => {
     ;({result} = renderHook(() => useParam("empty"), {router: {query}}))
     expect(result.current).toEqual("")
     ;({result} = renderHook(() => useParam("doesnt-exist"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
   })
@@ -239,23 +239,23 @@ describe("useParam", () => {
     }
 
     let {result} = renderHook(() => useParam("id", "number"), {
-      router: {...mockRouter, query},
+      router: {query},
     })
     expect(result.current).toEqual(1)
     ;({result} = renderHook(() => useParam("cat", "number"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("slug", "number"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("empty", "number"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
     ;({result} = renderHook(() => useParam("doesnt-exist", "number"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
   })
@@ -270,23 +270,23 @@ describe("useParam", () => {
     }
 
     let {result} = renderHook(() => useParam("id", "array"), {
-      router: {...mockRouter, query},
+      router: {query},
     })
     expect(result.current).toEqual(["1"])
     ;({result} = renderHook(() => useParam("cat", "array"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toEqual(["category"])
     ;({result} = renderHook(() => useParam("slug", "array"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toEqual(["example", "multiple", "slugs"])
     ;({result} = renderHook(() => useParam("empty", "array"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toEqual([""])
     ;({result} = renderHook(() => useParam("doesnt-exist", "array"), {
-      router: {...mockRouter, query},
+      router: {query},
     }))
     expect(result.current).toBeUndefined()
   })
