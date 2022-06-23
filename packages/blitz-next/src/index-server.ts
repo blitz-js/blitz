@@ -42,7 +42,7 @@ type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
 }
 
-export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery> = ({
+export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery = ParsedUrlQuery> = ({
   ctx,
   req,
   res,
@@ -67,7 +67,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps, Query extends ParsedUrlQuery>(
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery>(
       handler: BlitzGSSPHandler<TProps, Query>,
     ): GetServerSideProps<TProps> =>
     async ({req, res, ...rest}) => {
