@@ -1,20 +1,9 @@
-import {NextRouter} from "next/router"
+import {useRouter} from "next/router"
 import {ParsedUrlQuery} from "querystring"
 import React from "react"
-import {RouterContext} from "./router-context"
 
 type Dict<T> = Record<string, T | undefined>
 type ReturnTypes = "string" | "number" | "array"
-
-/**
- * `useRouter` is a React hook used to access `router` object within components
- *
- * @returns `router` object
- * @see Docs {@link https://blitzjs.com/docs/router#router-object | router}
- */
-export function useRouter(): NextRouter {
-  return React.useContext(RouterContext)
-}
 
 /*
  * Based on the code of https://github.com/lukeed/qss
