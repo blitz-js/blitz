@@ -46,26 +46,28 @@ const aliases: Record<string, keyof typeof commands> = {
 
 type Command = keyof typeof commands
 type Alias = keyof typeof aliases
-const defaultCommand: Command = "dev"
 
-const foundCommand = Boolean(commands[args._[0] as Command])
-const foundAlias = Boolean(aliases[args._[0] as Alias])
-let command: Command = defaultCommand
-if (foundCommand) {
-  command = args._[0] as Command
+let blitzCommand: Command | undefined
+if (commands[args._[0] as Command]) {
+  blitzCommand = args._[0] as Command
 }
-if (foundAlias) {
-  command = aliases[args._[0] as Alias] as Command
+if (aliases[args._[0] as Alias]) {
+  blitzCommand = aliases[args._[0] as Alias]
 }
-const forwardedArgs = foundCommand || foundAlias ? args._.slice(1) : args._
+
+const forwardedArgs = blitzCommand ? args._.slice(1) : args._
 
 const globalBlitzPath = resolveFrom(__dirname, "blitz")
 const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
 
 async function runCommandFromBin() {
+  if (!args._[0]) {
+    console.log("No command specified")
+    process.exit(1)
+  }
   let commandBin: string | null = null
   try {
-    commandBin = await getCommandBin(command)
+    commandBin = await getCommandBin(args._[0])
   } catch (e: any) {
     console.error(`Error: ${e.message}`)
   }
@@ -143,7 +145,8 @@ async function main() {
   }
 
   // env variable should default to dev unless the command is build or start
-  const defaultEnv = command === "build" || command === "start" ? "production" : "development"
+  const defaultEnv =
+    blitzCommand === "build" || blitzCommand === "start" ? "production" : "development"
 
   const standardEnv = ["production", "development", "test"]
   if (process.env.NODE_ENV && !standardEnv.includes(process.env.NODE_ENV)) {
@@ -156,12 +159,12 @@ async function main() {
   process.on("SIGTERM", () => process.exit(0))
   process.on("SIGINT", () => process.exit(0))
 
-  if (foundCommand || foundAlias) {
-    const commandFn = commands[command] || aliases[command]
+  if (blitzCommand) {
+    const commandFn = commands[blitzCommand]
     commandFn?.()
       .then((exec: any) => exec(forwardedArgs))
       .then(() => {
-        if (command === "build") {
+        if (blitzCommand === "build") {
           // ensure process exits after build completes so open handles/connections
           // don't cause process to hang
           process.exit(0)
