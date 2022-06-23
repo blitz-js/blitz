@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- Updated dependencies [7817fe3a]
+  - @blitzjs/auth@2.0.0-alpha.44
+  - blitz@2.0.0-alpha.44
+
 ## 2.0.0-alpha.43
 
 ### Patch Changes
