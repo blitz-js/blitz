@@ -40,6 +40,7 @@ export type NextApiHandler = (
 
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
+  onError?: (err: Error) => void
 }
 
 export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery = ParsedUrlQuery> = ({
@@ -62,7 +63,7 @@ export type BlitzAPIHandler = (
   ctx: Ctx,
 ) => ReturnType<NextApiHandler>
 
-export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
+export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
@@ -128,7 +129,8 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       try {
         await handleRequestWithMiddleware(req, res, middlewares)
         return handler(req, res, res.blitzCtx)
-      } catch (error) {
+      } catch (error: any) {
+        onError?.(error)
         return res.status(400).send(error)
       }
     }
