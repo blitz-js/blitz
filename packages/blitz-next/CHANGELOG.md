@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.42
+
+### Patch Changes
+
+- 9c2e7d37: Use `useRouter` from next/router in useParams function
+  - @blitzjs/rpc@2.0.0-alpha.42
+
 ## 2.0.0-alpha.41
 
 ### Patch Changes
