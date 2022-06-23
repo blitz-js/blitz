@@ -1,9 +1,8 @@
 /**
  * @vitest-environment jsdom
  */
-
 import React from "react"
-import {describe, it, expect, vi} from "vitest"
+import {describe, it, expect, vi, afterEach} from "vitest"
 import {extractRouterParams, useParam, useParams} from "./use-params"
 import {renderHook as defaultRenderHook} from "@testing-library/react-hooks"
 import {NextRouter} from "next/router"
@@ -14,6 +13,14 @@ type RenderHook = DefaultHookParams[0]
 type RenderHookOptions = DefaultHookParams[1] & {
   router?: Partial<NextRouter>
   dehydratedState?: unknown
+}
+
+// This is the router query object which includes route params
+const query = {
+  id: "1",
+  cat: "category",
+  slug: ["example", "multiple", "slugs"],
+  empty: "",
 }
 
 const mockRouter: NextRouter = {
@@ -54,6 +61,10 @@ export function renderHook(
 }
 
 describe("extractRouterParams", () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("returns proper params", () => {
     const routerQuery = {
       id: "1",
@@ -81,92 +92,99 @@ describe("extractRouterParams", () => {
 })
 
 describe("useParams", () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("works without parameter", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
-
-    const {result} = renderHook(() => useParams(), {router: {query}})
-    expect(result.current).toEqual({
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
+    vi.mock("next/router", () => {
+      return {
+        useRouter: vi.fn(() => ({...mockRouter, query})),
+      }
     })
-  })
 
-  it("works with string", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
+    it("works with string", () => {
+      vi.mock("next/router", () => {
+        return {
+          useRouter: vi.fn(() => ({...mockRouter, query})),
+        }
+      })
 
-    const {result} = renderHook(() => useParams("string"), {
-      router: {query},
+      const {result} = renderHook(() => useParams("string"), {
+        router: {query},
+      })
+      expect(result.current).toEqual({
+        id: "1",
+        cat: "category",
+        empty: "",
+      })
     })
-    expect(result.current).toEqual({
-      id: "1",
-      cat: "category",
-      empty: "",
-    })
-  })
 
-  it("works with number", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
+    it("works with string", () => {
+      vi.mock("next/router", () => {
+        return {
+          useRouter: vi.fn(() => ({...mockRouter, query})),
+        }
+      })
 
-    const {result} = renderHook(() => useParams("number"), {
-      router: {query},
+      const {result} = renderHook(() => useParams("string"), {
+        router: {query},
+      })
+      expect(result.current).toEqual({
+        id: "1",
+        cat: "category",
+        empty: "",
+      })
     })
-    expect(result.current).toEqual({
-      id: 1,
-      cat: undefined,
-      slug: undefined,
-    })
-  })
 
-  it("works with array", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
+    it("works with number", () => {
+      vi.mock("next/router", () => {
+        return {
+          useRouter: vi.fn(() => ({...mockRouter, query})),
+        }
+      })
 
-    const {result} = renderHook(() => useParams("array"), {
-      router: {query},
+      const {result} = renderHook(() => useParams("number"), {
+        router: {query},
+      })
+      expect(result.current).toEqual({
+        id: 1,
+        cat: undefined,
+        slug: undefined,
+      })
     })
-    expect(result.current).toEqual({
-      id: ["1"],
-      cat: ["category"],
-      slug: ["example", "multiple", "slugs"],
-      empty: [""],
+
+    it("works with array", () => {
+      vi.mock("next/router", () => {
+        return {
+          useRouter: vi.fn(() => ({...mockRouter, query})),
+        }
+      })
+
+      const {result} = renderHook(() => useParams("array"), {
+        router: {query},
+      })
+      expect(result.current).toEqual({
+        id: ["1"],
+        cat: ["category"],
+        slug: ["example", "multiple", "slugs"],
+        empty: [""],
+      })
     })
   })
 })
 
 describe("useParam", () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   it("works without parameter", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
+    vi.mock("next/router", () => {
+      return {
+        useRouter: vi.fn(() => ({...mockRouter, query})),
+      }
+    })
 
     let {result} = renderHook(() => useParam("id"), {router: {query}})
     expect(result.current).toEqual("1")
@@ -183,13 +201,11 @@ describe("useParam", () => {
   })
 
   it("works with string", () => {
-    // This is the router query object which includes route params
-    const query = {
-      id: "1",
-      cat: "category",
-      slug: ["example", "multiple", "slugs"],
-      empty: "",
-    }
+    vi.mock("next/router", () => {
+      return {
+        useRouter: vi.fn(() => ({...mockRouter, query})),
+      }
+    })
 
     let {result} = renderHook(() => useParam("id", "string"), {
       router: {query},
