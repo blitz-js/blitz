@@ -94,8 +94,13 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({req, res, ctx, ...rest})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({req, res, ctx, ...rest})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const gSP =
@@ -119,8 +124,13 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({...context, ctx: ctx})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({...context, ctx: ctx})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const api =
