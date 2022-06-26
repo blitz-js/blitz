@@ -473,6 +473,7 @@ importers:
       react: 18.0.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
+      semver: 7.3.7
       superjson: 1.8.0
       test-listen: 1.1.0
       ts-node: 10.7.0
@@ -506,6 +507,7 @@ importers:
       prompts: 2.4.2
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
+      semver: 7.3.7
       superjson: 1.8.0
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
