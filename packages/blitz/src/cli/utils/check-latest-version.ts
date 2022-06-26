@@ -1,10 +1,10 @@
-import fetch from "node-fetch"
+import fetch, {FetchError} from "node-fetch"
 import {gtr} from "semver"
 
 import {readVersions, resolveVersionType} from "./read-versions"
 import {getPkgManager} from "./helpers"
 
-const ENDPOINT = `https://registry.npmjs.org/-/package/blitz/dist-tags`
+const ENDPOINT = `https://registry.npmjs.org/-/package/blitz/dist-tags?foo=bar`
 
 function getUpdateString(isGlobal?: boolean) {
   const pkgManager = getPkgManager()
@@ -21,29 +21,40 @@ function getUpdateString(isGlobal?: boolean) {
 export async function checkLatestVersion() {
   const localVersions = readVersions()
 
-  const response = await fetch(ENDPOINT)
-  const versions = (await response.json()) as Record<string, string>
+  try {
+    const response = await fetch(ENDPOINT)
+    const versions = (await response.json()) as Record<string, string>
 
-  let version: string
-  if (localVersions.globalVersion) {
-    version = localVersions.globalVersion
-  } else if (localVersions.localVersion) {
-    version = localVersions.localVersion
-  } else {
-    throw new Error("Could not find local/global version")
-  }
+    console.log(response, versions)
 
-  const versionType = resolveVersionType(version)
-  const latestVersion = versions[versionType]
+    let version: string
+    if (localVersions.globalVersion) {
+      version = localVersions.globalVersion
+    } else if (localVersions.localVersion) {
+      version = localVersions.localVersion
+    } else {
+      throw new Error("Could not find local/global version")
+    }
 
-  if (!latestVersion) {
-    throw new Error(`Could not find latest version for ${versionType}`)
-  }
+    const versionType = resolveVersionType(version)
+    const latestVersion = versions[versionType]
 
-  console.log(latestVersion, version)
+    if (!latestVersion) {
+      throw new Error(`Could not find latest version for ${versionType}`)
+    }
 
-  if (gtr(latestVersion, version)) {
-    console.log(`⚠️  There is a new version of Blitz available: ${latestVersion}`)
-    console.log(`Run "${getUpdateString()}" to update`)
+    console.log(latestVersion, version)
+
+    if (gtr(latestVersion, version)) {
+      console.log(`⚠️  There is a new version of Blitz available: ${latestVersion}`)
+      console.log(`Run "${getUpdateString()}" to update`)
+    }
+  } catch (err) {
+    if (err instanceof FetchError) {
+      // TODO: Check if network error and throw otherwise
+      // pass fetch error
+    } else {
+      console.log(err)
+    }
   }
 }
