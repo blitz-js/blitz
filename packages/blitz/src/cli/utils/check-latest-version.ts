@@ -6,6 +6,18 @@ import {getPkgManager} from "./helpers"
 
 const ENDPOINT = `https://registry.npmjs.org/-/package/blitz/dist-tags`
 
+function getUpdateString(isGlobal?: boolean) {
+  const pkgManager = getPkgManager()
+  switch (pkgManager) {
+    case "npm":
+      return `npm install ${isGlobal ? "-g" : ""} blitz`
+    case "yarn":
+      return `yarn ${isGlobal ? "global" : ""} add blitz`
+    case "pnpm":
+      return `pnpm install ${isGlobal ? "-g" : ""} blitz`
+  }
+}
+
 export async function checkLatestVersion() {
   const localVersions = readVersions()
 
@@ -31,9 +43,7 @@ export async function checkLatestVersion() {
   console.log(latestVersion, version)
 
   if (gtr(latestVersion, version)) {
-    const pkgManager = getPkgManager()
-
-    console.log(`Install using ${pkgManager}`)
     console.log(`⚠️  There is a new version of Blitz available: ${latestVersion}`)
+    console.log(`Run "${getUpdateString()}" to update`)
   }
 }
