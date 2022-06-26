@@ -25,8 +25,6 @@ export async function checkLatestVersion() {
     const response = await fetch(ENDPOINT)
     const versions = (await response.json()) as Record<string, string>
 
-    console.log(response, versions)
-
     let version: string
     if (localVersions.globalVersion) {
       version = localVersions.globalVersion
