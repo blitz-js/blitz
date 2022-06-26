@@ -1,5 +1,11 @@
 # blitz
 
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.45
+
 ## 2.0.0-alpha.44
 
 ### Patch Changes
