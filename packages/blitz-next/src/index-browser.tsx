@@ -51,11 +51,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
           <>
             {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-            {mounted && (
-              <React.Suspense fallback="Loading...">
-                <UserAppRoot {...props} Component={component} />
-              </React.Suspense>
-            )}
+            {mounted && <UserAppRoot {...props} Component={component} />}
           </>
         </BlitzProvider>
       )
