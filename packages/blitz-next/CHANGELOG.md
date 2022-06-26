@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- 7817fe3a: Add missing RouteUrlObject on Page.authenticate.redirectTo
+- ae0b714f: Allow passing optional type argument for ParamsType in GSSP
+  - @blitzjs/rpc@2.0.0-alpha.44
+
 ## 2.0.0-alpha.43
 
 ### Patch Changes
