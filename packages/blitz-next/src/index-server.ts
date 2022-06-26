@@ -47,7 +47,7 @@ export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery = ParsedUrlQue
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<
+}: Parameters<GetServerSideProps<TProps, Query>>[0] & {ctx: Ctx}) => ReturnType<
   GetServerSideProps<TProps, Query>
 >
 
@@ -69,7 +69,7 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
   const gSSP =
     <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery>(
       handler: BlitzGSSPHandler<TProps, Query>,
-    ): GetServerSideProps<TProps> =>
+    ): GetServerSideProps<TProps, Query> =>
     async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
