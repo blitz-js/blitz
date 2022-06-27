@@ -34,6 +34,7 @@
     "esbuild": "0.14.34",
     "fs-extra": "10.0.1",
     "jscodeshift": "0.13.0",
+    "jscodeshift-find-imports": "2.0.4",
     "prompts": "2.4.2"
   },
   "devDependencies": {
