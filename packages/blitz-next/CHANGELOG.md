@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- 5c5decbc: Removes the suspense wrapper from withBlitz since it's not needed
+  - @blitzjs/rpc@2.0.0-alpha.45
+
 ## 2.0.0-alpha.44
 
 ### Patch Changes
