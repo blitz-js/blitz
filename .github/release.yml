@@ -1,0 +1,17 @@
+changelog:
+  categories:
+    - title: blitz
+      labels:
+        - "*"
+    - title: "@blitzjs/next"
+      labels:
+        - "*"
+    - title: "@blitzjs/rpc"
+      labels:
+        - "*"
+    - title: "@blitzjs/auth"
+      labels:
+        - "*"
+    - title: Contributors
+      labels:
+        - "*"
