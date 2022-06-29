@@ -1,5 +1,5 @@
 # https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
-* @flybayer @beerose
+* @flybayer @beerose @dillonraphael
 
 packages/generator/templates**/* @flybayer
