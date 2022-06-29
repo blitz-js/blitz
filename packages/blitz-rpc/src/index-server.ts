@@ -1,4 +1,4 @@
-import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
+import {assert, Ctx, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
 import chalk from "chalk"
@@ -110,14 +110,6 @@ export function rpcHandler(config: RpcConfig) {
       throw new Error("No default export for resolver path: " + routePath)
     }
 
-    const log = baseLogger().getChildLogger({
-      prefix: [relativeRoutePath + "()"],
-    })
-
-    const customChalk = new chalk.Instance({
-      level: log.settings.type === "json" ? 0 : chalk.level,
-    })
-
     if (req.method === "HEAD") {
       // We used to initiate database connection here
       res.status(200).end()
@@ -127,7 +119,7 @@ export function rpcHandler(config: RpcConfig) {
 
       if (typeof req.body.params === "undefined") {
         const error = {message: "Request body is missing the `params` key"}
-        log.error(error.message)
+        console.error(error.message)
         res.status(400).json({
           result: null,
           error,
@@ -141,11 +133,11 @@ export function rpcHandler(config: RpcConfig) {
           meta: req.body.meta?.params,
         })
 
-        log.info(customChalk.dim("Starting with input:"), data ? data : JSON.stringify(data))
+        console.info("Starting with input:", data ? data : JSON.stringify(data))
         const startTime = Date.now()
         const result = await resolver(data, (res as any).blitzCtx)
         const resolverDuration = Date.now() - startTime
-        log.debug(customChalk.dim("Result:"), result ? result : JSON.stringify(result))
+        console.debug("Result:", result ? result : JSON.stringify(result))
 
         const serializerStartTime = Date.now()
         const serializedResult = superjsonSerialize(result)
@@ -159,22 +151,16 @@ export function rpcHandler(config: RpcConfig) {
             result: serializedResult.meta,
           },
         })
-        log.debug(
-          customChalk.dim(
-            `Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`,
-          ),
-        )
+        console.debug(`Next.js serialization:${prettyMs(Date.now() - nextSerializerStartTime)}`)
         const serializerDuration = Date.now() - serializerStartTime
         const duration = Date.now() - startTime
 
-        log.info(
-          customChalk.dim(
-            `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
-              serializerDuration,
-            )} total:${prettyMs(duration)}`,
-          ),
+        console.info(
+          `Finished: resolver:${prettyMs(resolverDuration)} serializer:${prettyMs(
+            serializerDuration,
+          )} total:${prettyMs(duration)}`,
         )
-        newLine()
+        console.log("\n")
 
         return
       } catch (error: any) {
@@ -184,8 +170,8 @@ export function rpcHandler(config: RpcConfig) {
 
         config.onError?.(error)
 
-        log.error(error)
-        newLine()
+        console.error(error)
+        console.log("\n")
 
         if (!error.statusCode) {
           error.statusCode = 500
@@ -204,7 +190,7 @@ export function rpcHandler(config: RpcConfig) {
       }
     } else {
       // Everything else is error
-      log.warn(`${req.method} method not supported`)
+      console.warn(`${req.method} method not supported`)
       res.status(404).end()
       return
     }
