@@ -23,6 +23,7 @@ import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
 import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
 import {ParsedUrlQuery} from "querystring"
+import {PreviewData} from "next/types"
 
 export * from "./index-browser"
 
@@ -40,21 +41,32 @@ export type NextApiHandler = (
 
 type SetupBlitzOptions = {
   plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
+  onError?: (err: Error) => void
 }
 
-export type BlitzGSSPHandler<TProps, Query extends ParsedUrlQuery = ParsedUrlQuery> = ({
+export type BlitzGSSPHandler<
+  TProps,
+  Query extends ParsedUrlQuery = ParsedUrlQuery,
+  PD extends PreviewData = PreviewData,
+> = ({
   ctx,
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<
-  GetServerSideProps<TProps, Query>
+}: Parameters<GetServerSideProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
+  GetServerSideProps<TProps, Query, PD>
 >
 
-export type BlitzGSPHandler<TProps> = ({
+export type BlitzGSPHandler<
+  TProps,
+  Query extends ParsedUrlQuery = ParsedUrlQuery,
+  PD extends PreviewData = PreviewData,
+> = ({
   ctx,
   ...args
-}: Parameters<GetStaticProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetStaticProps<TProps>>
+}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
+  GetStaticProps<TProps, Query, PD>
+>
 
 export type BlitzAPIHandler = (
   req: Parameters<NextApiHandler>[0],
@@ -62,14 +74,14 @@ export type BlitzAPIHandler = (
   ctx: Ctx,
 ) => ReturnType<NextApiHandler>
 
-export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
+export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery>(
-      handler: BlitzGSSPHandler<TProps, Query>,
-    ): GetServerSideProps<TProps> =>
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+      handler: BlitzGSSPHandler<TProps, Query, PD>,
+    ): GetServerSideProps<TProps, Query, PD> =>
     async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
@@ -93,12 +105,19 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({req, res, ctx, ...rest})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({req, res, ctx, ...rest})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const gSP =
-    <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+      handler: BlitzGSPHandler<TProps, Query, PD>,
+    ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       let queryClient: null | QueryClient = null
@@ -118,8 +137,13 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({...context, ctx: ctx})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({...context, ctx: ctx})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const api =
@@ -128,7 +152,8 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       try {
         await handleRequestWithMiddleware(req, res, middlewares)
         return handler(req, res, res.blitzCtx)
-      } catch (error) {
+      } catch (error: any) {
+        onError?.(error)
         return res.status(400).send(error)
       }
     }
