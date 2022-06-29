@@ -404,6 +404,63 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "Move middleware to blitz server file",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const middlewareArray = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "middleware",
+      )
+      if (middlewareArray.length) {
+        const middlewares = middlewareArray
+          .get()
+          .parentPath.value.value.elements.filter((a: any) => a.callee.name !== "sessionMiddleware")
+        const blitzServerProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-server.${isTypescript ? "ts" : "js"}`),
+        )
+
+        const pluginArray = blitzServerProgram.find(j.Identifier, (node) => node.name === "plugins")
+
+        pluginArray.get().parentPath.value.value.elements = [
+          ...pluginArray.get().parentPath.value.value.elements,
+          ...middlewares,
+        ]
+
+        let importStatements = []
+        for (let nodes of blitzConfigProgram.get().value.program.body) {
+          if (nodes.type === "ImportDeclaration") {
+            if (nodes.source.value !== "blitz") {
+              importStatements.push(nodes)
+            }
+          }
+
+          if (nodes.type === "VariableDeclaration") {
+            if (
+              nodes.declarations &&
+              nodes.declarations.some((d: any) => d.init.type === "CallExpression")
+            ) {
+              importStatements.push(nodes)
+            }
+          }
+        }
+
+        importStatements.forEach((s) =>
+          blitzServerProgram
+            .get()
+            .value.program.body.unshift(j.variableDeclaration(s.kind, s.declarations)),
+        )
+
+        fs.writeFileSync(
+          `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
+          blitzServerProgram.toSource(),
+        )
+      } else {
+        log.error("Middleware array not found in blit config file")
+      }
+    },
+  })
+
+  steps.push({
     name: "create pages/api/rpc directory and add [[...blitz]].ts wildecard API route",
     action: async () => {
       const pagesDir = path.resolve("pages/api/rpc")
