@@ -13,6 +13,7 @@ export * from "./resolver"
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
 }
+
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
   assert(key.startsWith("__internal_blitz"), "unsupported key")
   if (typeof global === "undefined") {
@@ -180,6 +181,9 @@ export function rpcHandler(config: RpcConfig) {
         if (error._clearStack) {
           delete error.stack
         }
+
+        config.onError?.(error)
+
         log.error(error)
         newLine()
 
