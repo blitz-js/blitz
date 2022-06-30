@@ -17,7 +17,8 @@
     "toolkit-app": "1.0.0",
     "test-qm": "0.0.0",
     "test-no-suspense": "0.0.0",
-    "test-trailing-slash": "0.0.0"
+    "test-trailing-slash": "0.0.0",
+    "test-middleware": "0.0.0"
   },
   "changesets": [
     "big-phones-bow",
@@ -41,11 +42,13 @@
     "green-papayas-do",
     "healthy-rice-shout",
     "hot-drinks-approve",
+    "late-steaks-give",
     "lovely-colts-share",
     "lucky-cows-try",
     "modern-cameras-pull",
     "moody-squids-cheer",
     "nervous-beds-travel",
+    "nervous-dolls-rule",
     "nice-starfishes-live",
     "nine-onions-admire",
     "ninety-pets-heal",
@@ -67,6 +70,7 @@
     "swift-drinks-dress",
     "tame-keys-reply",
     "tasty-news-collect",
+    "ten-hairs-listen",
     "ten-rivers-burn",
     "tender-pianos-check",
     "thick-parrots-float",

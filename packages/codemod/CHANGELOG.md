@@ -1,5 +1,13 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- aafdc5b4: Move middlewares from blitz config to blitz server with codemod
+  - @blitzjs/generator@2.0.0-alpha.46
+  - blitz@2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ### Patch Changes

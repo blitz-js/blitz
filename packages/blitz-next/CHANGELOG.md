@@ -1,5 +1,14 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- bee19a25: Support RPC error middleware
+- 9ada0f66: Allow customizing PreviewData in gSSP
+- Updated dependencies [bee19a25]
+  - @blitzjs/rpc@2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ### Patch Changes
