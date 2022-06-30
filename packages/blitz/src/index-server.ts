@@ -22,7 +22,7 @@ export interface MiddlewareResponse<C extends Ctx = Ctx> extends ServerResponse 
 
 export type MiddlewareNext = (error?: Error) => Promise<void> | void
 
-export type Middleware<
+export type RequestMiddleware<
   TRequest extends IncomingMessage = IncomingMessage,
   TResponse = ServerResponse,
 > = {
@@ -32,11 +32,11 @@ export type Middleware<
 }
 
 export type BlitzServerPlugin<
-  MiddlewareType = Middleware<any, any>,
+  RequestMiddlewareType = RequestMiddleware<any, any>,
   TCtx extends Ctx = Ctx,
   TExports extends object = {},
 > = {
-  middlewares: MiddlewareType[]
+  requestMiddlewares: RequestMiddlewareType[]
   contextMiddleware?: (ctx: TCtx) => TCtx
   exports?: TExports
 }
@@ -54,7 +54,7 @@ export function createServerPlugin<
   return pluginConstructor
 }
 
-export function createSetupServer<TMiddleware extends Middleware, TExports extends object>(
+export function createSetupServer<TMiddleware extends RequestMiddleware, TExports extends object>(
   setupServerConstructor: (plugins: BlitzServerPlugin<TMiddleware>) => TExports,
 ) {
   return setupServerConstructor

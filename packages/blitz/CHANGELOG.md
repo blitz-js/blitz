@@ -1,5 +1,83 @@
 # blitz
 
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.45
+
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.44
+
+## 2.0.0-alpha.43
+
+### Patch Changes
+
+- 527e48ac: Fix running bin commands with Blitz CLI
+  - @blitzjs/generator@2.0.0-alpha.43
+
+## 2.0.0-alpha.42
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.42
+
+## 2.0.0-alpha.41
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.41
+
+## 2.0.0-alpha.40
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.40
+
+## 2.0.0-alpha.39
+
+### Patch Changes
+
+- b918055b: Add aliases for Blitz CLI commands
+  - @blitzjs/generator@2.0.0-alpha.39
+
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- Updated dependencies [8aee25c5]
+  - @blitzjs/generator@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+  - @blitzjs/generator@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- Updated dependencies [4cad9cca]
+  - @blitzjs/generator@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- Updated dependencies [e3750b04]
+  - @blitzjs/generator@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes

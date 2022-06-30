@@ -32,13 +32,14 @@ jobs:
         uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 6.32.6
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       - run: pnpm build
 
       - name: Create Release Pull Request
         uses: changesets/action@v1
         with:
           publish: pnpm release
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

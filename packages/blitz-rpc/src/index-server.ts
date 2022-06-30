@@ -1,7 +1,8 @@
-import {assert, Ctx, baseLogger, prettyMs, newLine} from "blitz"
+import {assert, baseLogger, Ctx, newLine, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
 import chalk from "chalk"
+import {resolve} from "path"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -12,6 +13,7 @@ export * from "./resolver"
 function isObject(value: unknown): value is Record<string | symbol, unknown> {
   return typeof value === "object" && value !== null
 }
+
 function getGlobalObject<T extends Record<string, unknown>>(key: string, defaultValue: T): T {
   assert(key.startsWith("__internal_blitz"), "unsupported key")
   if (typeof global === "undefined") {
@@ -24,6 +26,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
 type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
+export type ResolverBasePath = "queries|mutations" | "root" | undefined
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
 // Needed for Next.js. I'm guessing that Next.js is including the `node_modules/` files in a seperate bundle than user files.
@@ -47,21 +50,9 @@ export function __internal_addBlitzRpcResolver(
   return resolver
 }
 
-import {resolve} from "path"
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-const loaderServer = resolve(dir, "./loader-server.cjs")
-const loaderClient = resolve(dir, "./loader-client.cjs")
-
-export function installWebpackConfig<T extends any[]>(config: {module?: {rules?: T}}) {
-  config.module!.rules!.push({
-    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
-    use: [{loader: loaderServer}],
-  })
-  config.module!.rules!.push({
-    test: /[\\/](queries|mutations)[\\/]/,
-    use: [{loader: loaderClient}],
-  })
-}
+export const loaderServer = resolve(dir, "./loader-server.cjs")
+export const loaderClient = resolve(dir, "./loader-client.cjs")
 
 // ----------
 // END LOADER
@@ -190,6 +181,9 @@ export function rpcHandler(config: RpcConfig) {
         if (error._clearStack) {
           delete error.stack
         }
+
+        config.onError?.(error)
+
         log.error(error)
         newLine()
 

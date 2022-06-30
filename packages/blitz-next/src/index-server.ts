@@ -1,3 +1,4 @@
+import type {NextConfig} from "next"
 import {
   GetServerSideProps,
   GetServerSidePropsResult,
@@ -7,21 +8,22 @@ import {
   NextApiResponse,
 } from "next"
 import type {
-  Ctx as BlitzCtx,
-  BlitzServerPlugin,
-  Middleware,
-  MiddlewareResponse,
-  AsyncFunc,
-  FirstParam,
   AddParameters,
+  AsyncFunc,
+  BlitzServerPlugin,
+  Ctx as BlitzCtx,
+  FirstParam,
+  RequestMiddleware,
+  MiddlewareResponse,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import type {NextConfig} from "next"
-import {getQueryKey, getInfiniteQueryKey, installWebpackConfig} from "@blitzjs/rpc"
-import {dehydrate} from "@blitzjs/rpc"
+import {dehydrate, getQueryKey, getInfiniteQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
+import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
+import {ParsedUrlQuery} from "querystring"
+import {PreviewData} from "next/types"
 
 export * from "./index-browser"
 
@@ -38,20 +40,33 @@ export type NextApiHandler = (
 ) => void | Promise<void>
 
 type SetupBlitzOptions = {
-  plugins: BlitzServerPlugin<Middleware, Ctx>[]
+  plugins: BlitzServerPlugin<RequestMiddleware, Ctx>[]
+  onError?: (err: Error) => void
 }
 
-export type BlitzGSSPHandler<TProps> = ({
+export type BlitzGSSPHandler<
+  TProps,
+  Query extends ParsedUrlQuery = ParsedUrlQuery,
+  PD extends PreviewData = PreviewData,
+> = ({
   ctx,
   req,
   res,
   ...args
-}: Parameters<GetServerSideProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetServerSideProps<TProps>>
+}: Parameters<GetServerSideProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
+  GetServerSideProps<TProps, Query, PD>
+>
 
-export type BlitzGSPHandler<TProps> = ({
+export type BlitzGSPHandler<
+  TProps,
+  Query extends ParsedUrlQuery = ParsedUrlQuery,
+  PD extends PreviewData = PreviewData,
+> = ({
   ctx,
   ...args
-}: Parameters<GetStaticProps<TProps>>[0] & {ctx: Ctx}) => ReturnType<GetStaticProps<TProps>>
+}: Parameters<GetStaticProps<TProps, Query, PD>>[0] & {ctx: Ctx}) => ReturnType<
+  GetStaticProps<TProps, Query, PD>
+>
 
 export type BlitzAPIHandler = (
   req: Parameters<NextApiHandler>[0],
@@ -59,12 +74,14 @@ export type BlitzAPIHandler = (
   ctx: Ctx,
 ) => ReturnType<NextApiHandler>
 
-export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
-  const middlewares = plugins.flatMap((p) => p.middlewares)
+export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
+  const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
 
   const gSSP =
-    <TProps>(handler: BlitzGSSPHandler<TProps>): GetServerSideProps<TProps> =>
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+      handler: BlitzGSSPHandler<TProps, Query, PD>,
+    ): GetServerSideProps<TProps, Query, PD> =>
     async ({req, res, ...rest}) => {
       await handleRequestWithMiddleware<IncomingMessage, ServerResponse>(req, res, middlewares)
       const ctx = contextMiddleware.reduceRight(
@@ -88,12 +105,19 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({req, res, ctx, ...rest})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({req, res, ctx, ...rest})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const gSP =
-    <TProps>(handler: BlitzGSPHandler<TProps>): GetStaticProps<TProps> =>
+    <TProps, Query extends ParsedUrlQuery = ParsedUrlQuery, PD extends PreviewData = PreviewData>(
+      handler: BlitzGSPHandler<TProps, Query, PD>,
+    ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
       let queryClient: null | QueryClient = null
@@ -113,8 +137,13 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
-      const result = await handler({...context, ctx: ctx})
-      return withSuperJsonProps(withDehydratedState(result, queryClient))
+      try {
+        const result = await handler({...context, ctx: ctx})
+        return withSuperJsonProps(withDehydratedState(result, queryClient))
+      } catch (err: any) {
+        onError?.(err)
+        throw err
+      }
     }
 
   const api =
@@ -123,7 +152,8 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
       try {
         await handleRequestWithMiddleware(req, res, middlewares)
         return handler(req, res, res.blitzCtx)
-      } catch (error) {
+      } catch (error: any) {
+        onError?.(error)
         return res.status(400).send(error)
       }
     }
@@ -133,10 +163,57 @@ export const setupBlitzServer = ({plugins}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
+    resolverBasePath?: ResolverBasePath
     customServer?: {
       hotReload?: boolean
     }
   }
+}
+
+interface WebpackRuleOptions {
+  resolverBasePath?: ResolverBasePath
+}
+
+interface WebpackRule {
+  test: RegExp
+  use: Array<{
+    loader: string
+    options: WebpackRuleOptions
+  }>
+}
+
+interface InstallWebpackConfigOptions {
+  webpackConfig: {
+    module: {
+      rules: WebpackRule[]
+    }
+  }
+  nextConfig: BlitzConfig
+}
+
+export function installWebpackConfig({webpackConfig, nextConfig}: InstallWebpackConfigOptions) {
+  const options: WebpackRuleOptions = {
+    resolverBasePath: nextConfig.blitz?.resolverBasePath,
+  }
+
+  webpackConfig.module.rules.push({
+    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    use: [
+      {
+        loader: loaderServer,
+        options,
+      },
+    ],
+  })
+  webpackConfig.module.rules.push({
+    test: /[\\/](queries|mutations)[\\/]/,
+    use: [
+      {
+        loader: loaderClient,
+        options,
+      },
+    ],
+  })
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
@@ -158,8 +235,8 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
   }
 
   const config = Object.assign({}, nextConfig, {
-    webpack: (config: any, options: any) => {
-      installWebpackConfig(config)
+    webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
+      installWebpackConfig({webpackConfig: config, nextConfig})
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }

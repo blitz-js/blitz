@@ -1,4 +1,4 @@
-import {Middleware} from "./index-server"
+import {RequestMiddleware} from "./index-server"
 import * as path from "path"
 import * as fs from "fs"
 
@@ -76,7 +76,7 @@ export const setCookie = (name: string, value: string, expires: string) => {
 }
 export const deleteCookie = (name: string) => setCookie(name, "", "Thu, 01 Jan 1970 00:00:01 GMT")
 
-export function compose(middleware: Middleware<any, any>[]) {
+export function compose(middleware: RequestMiddleware<any, any>[]) {
   if (!Array.isArray(middleware)) {
     throw new TypeError("Middleware stack must be an array!")
   }
@@ -115,7 +115,7 @@ export function compose(middleware: Middleware<any, any>[]) {
 
     // return next(result as any)
     return dispatch(0).then(next as any)
-  } as Middleware
+  } as RequestMiddleware
 }
 
 function round(num: number, decimalPlaces: number) {

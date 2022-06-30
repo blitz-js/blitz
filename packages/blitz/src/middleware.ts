@@ -1,5 +1,5 @@
 import {IncomingMessage, ServerResponse} from "http"
-import {compose, Ctx, Middleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
+import {compose, Ctx, RequestMiddleware, MiddlewareNext, MiddlewareResponse} from "./index-server"
 
 export async function handleRequestWithMiddleware<
   Req extends IncomingMessage = IncomingMessage,
@@ -7,7 +7,7 @@ export async function handleRequestWithMiddleware<
 >(
   req: Req,
   res: Res,
-  middleware: Middleware<Req, Res>[],
+  middleware: RequestMiddleware<Req, Res>[],
   {
     throwOnError = true,
     stackPrintOnError = true,
@@ -117,7 +117,7 @@ export async function handleRequestWithMiddleware<
 export function noCallbackHandler<
   Req extends IncomingMessage = IncomingMessage,
   Res = MiddlewareResponse,
->(req: Req, res: Res, next: MiddlewareNext, middleware: Middleware<Req, Res>) {
+>(req: Req, res: Res, next: MiddlewareNext, middleware: RequestMiddleware<Req, Res>) {
   // Cast to any to call with two arguments for connect compatibility
   ;(middleware as any)(req, res)
   return next()
@@ -131,7 +131,7 @@ export function noCallbackHandler<
 export function withCallbackHandler<
   Req extends IncomingMessage = IncomingMessage,
   Res = MiddlewareResponse,
->(req: Req, res: Res, next: MiddlewareNext, middleware: Middleware<Req, Res>) {
+>(req: Req, res: Res, next: MiddlewareNext, middleware: RequestMiddleware<Req, Res>) {
   return new Promise((resolve, reject) => {
     // Rule doesn't matter since we are inside new Promise()
     //eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -150,14 +150,14 @@ export function withCallbackHandler<
 export function connectMiddleware<
   Req extends IncomingMessage = IncomingMessage,
   Res extends MiddlewareResponse = MiddlewareResponse,
->(middleware: Middleware<Req, Res>): Middleware<Req, Res> {
+>(middleware: RequestMiddleware<Req, Res>): RequestMiddleware<Req, Res> {
   const handler = middleware.length < 3 ? noCallbackHandler : withCallbackHandler
   return function connectHandler(req: Req, res, next) {
     return handler(req, res, next, middleware)
-  } as Middleware<Req, Res>
+  } as RequestMiddleware<Req, Res>
 }
 
-export const secureProxyMiddleware: Middleware<
+export const secureProxyMiddleware: RequestMiddleware<
   IncomingMessage & {protocol?: string},
   MiddlewareResponse
 > = function (

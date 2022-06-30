@@ -11,10 +11,13 @@ import {
   getAllFiles,
   getCollectionFromSource,
   wrapDeclaration,
+  findIdentifier,
 } from "./utils"
 import {log} from "blitz"
 
-const isInternalBlitzMonorepoDevelopment = fs.existsSync(path.join(__dirname, "../../blitz-next"))
+const isInternalBlitzMonorepoDevelopment = fs.existsSync(
+  path.join(__dirname, "../../../blitz-next"),
+)
 
 const upgradeLegacy = async () => {
   let isTypescript = fs.existsSync(path.resolve("tsconfig.json"))
@@ -61,7 +64,9 @@ const upgradeLegacy = async () => {
         j.assignmentExpression(
           "=",
           j.memberExpression(j.identifier("module"), j.identifier("exports")),
-          j.callExpression(j.identifier("withBlitz"), []),
+          j.callExpression(j.identifier("withBlitz"), [
+            j.objectExpression([j.objectProperty(j.identifier("blitz"), j.objectExpression([]))]),
+          ]),
         ),
       )
       parsedProgram.value.program.body.push(moduleExportExpression)
@@ -129,7 +134,7 @@ const upgradeLegacy = async () => {
         GetServerSideProps: "next",
         InferGetServerSidePropsType: "next",
         GetServerSidePropsContext: "next",
-
+        AuthenticatedMiddlewareCtx: "@blitz/rpc",
         getAntiCSRFToken: "@blitzjs/rpc",
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
@@ -262,6 +267,71 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "change queryClient to getQueryClient()",
+    action: async () => {
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
+        const filepath = path.resolve(appDir, file)
+        const program = getCollectionFromSource(filepath)
+
+        const findQueryClient = () => {
+          return program.find(j.Identifier, (node) => node.name === "queryClient")
+        }
+
+        findQueryClient().forEach((q) => {
+          switch (q.name) {
+            case "imported":
+              q.value.name = "getQueryClient"
+              break
+            case "object":
+              j(q).replaceWith(j.callExpression(j.identifier("getQueryClient"), []))
+              break
+          }
+        })
+
+        fs.writeFileSync(path.resolve(appDir, file), program.toSource())
+      })
+    },
+  })
+
+  steps.push({
+    name: "change BlitzApiRequest to NextApiRequest",
+    action: async () => {
+      getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
+        (file) => {
+          const program = getCollectionFromSource(file)
+
+          findIdentifier(program, "BlitzApiRequest")
+            .paths()
+            .forEach((path) => {
+              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
+                path.parentPath.parentPath.parentPath.value.source.value = "next"
+              }
+              path.value.name = "NextApiRequest"
+            })
+          findIdentifier(program, "BlitzApiResponse")
+            .paths()
+            .forEach((path) => {
+              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
+                path.parentPath.parentPath.parentPath.value.source.value = "next"
+              }
+              path.value.name = "NextApiResponse"
+            })
+          findIdentifier(program, "BlitzApiHandler")
+            .paths()
+            .forEach((path) => {
+              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
+                path.parentPath.parentPath.parentPath.value.source.value = "next"
+              }
+              path.value.name = "NextApiHandler"
+            })
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        },
+      )
+    },
+  })
+
+  steps.push({
     name: "create blitz-server.ts and blitz-client.ts setup files",
     action: async () => {
       let appDirExist = fs.existsSync(appDir)
@@ -300,6 +370,92 @@ const upgradeLegacy = async () => {
         )
       } else {
         throw new Error("App directory doesn't exit")
+      }
+    },
+  })
+
+  steps.push({
+    name: "Add cookiePrefix to blitz server",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const cookieIdentifier = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "cookiePrefix",
+      )
+      if (cookieIdentifier.length) {
+        const cookiePrefix = cookieIdentifier.get().parentPath.value.value.value
+        const blitzClientProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-client.${isTypescript ? "ts" : "js"}`),
+        )
+        const cookieIdentifierBlitzClient = blitzClientProgram.find(
+          j.Identifier,
+          (node) => node.name === "cookiePrefix",
+        )
+        cookieIdentifierBlitzClient.get().parentPath.value.value.value = cookiePrefix
+
+        fs.writeFileSync(
+          `${appDir}/blitz-client.${isTypescript ? "ts" : "js"}`,
+          blitzClientProgram.toSource(),
+        )
+      } else {
+        log.error("Cookie Prefix not found in blitz config file")
+      }
+    },
+  })
+
+  steps.push({
+    name: "Move middleware to blitz server file",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const middlewareArray = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "middleware",
+      )
+      if (middlewareArray.length) {
+        const middlewares = middlewareArray
+          .get()
+          .parentPath.value.value.elements.filter((a: any) => a.callee.name !== "sessionMiddleware")
+        const blitzServerProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-server.${isTypescript ? "ts" : "js"}`),
+        )
+
+        const pluginArray = blitzServerProgram.find(j.Identifier, (node) => node.name === "plugins")
+
+        pluginArray.get().parentPath.value.value.elements = [
+          ...pluginArray.get().parentPath.value.value.elements,
+          ...middlewares,
+        ]
+
+        let importStatements = []
+        for (let nodes of blitzConfigProgram.get().value.program.body) {
+          if (nodes.type === "ImportDeclaration") {
+            if (nodes.source.value !== "blitz") {
+              importStatements.push(nodes)
+            }
+          }
+
+          if (nodes.type === "VariableDeclaration") {
+            if (
+              nodes.declarations &&
+              nodes.declarations.some((d: any) => d.init.type === "CallExpression")
+            ) {
+              importStatements.push(nodes)
+            }
+          }
+        }
+
+        importStatements.forEach((s) =>
+          blitzServerProgram
+            .get()
+            .value.program.body.unshift(j.variableDeclaration(s.kind, s.declarations)),
+        )
+
+        fs.writeFileSync(
+          `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
+          blitzServerProgram.toSource(),
+        )
+      } else {
+        log.error("Middleware array not found in blit config file")
       }
     },
   })
@@ -366,24 +522,85 @@ const upgradeLegacy = async () => {
       const getAllPagesDirs = (dirPath: string) => {
         let files = fs.readdirSync(dirPath)
 
-        const pageDir = files.reduce((arr: {model: string; path: string}[], file: string) => {
-          if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-            let subs = fs.readdirSync(dirPath + "/" + file)
-            if (subs.includes("pages")) {
-              arr.push({
-                model: file,
-                path: dirPath + "/" + file + "/pages",
-              })
+        const pageDir = files.reduce(
+          (arr: {model: string; path: string; subModel?: string}[], file: string) => {
+            if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+              let subs = fs.readdirSync(dirPath + "/" + file)
+
+              if (subs.includes("pages")) {
+                // Go a level deeper into "pages"
+                let subSubs = fs.readdirSync(dirPath + "/" + file + "/pages")
+
+                for (let dir of subSubs) {
+                  if (fs.statSync(dirPath + "/" + file + "/pages" + "/" + dir).isDirectory()) {
+                    // If directory structure is like: DIRECTORY/PAGES/DIRECTORY
+                    if (dir === file) {
+                      arr.push({
+                        model: file,
+                        path: dirPath + "/" + file + "/pages" + "/" + dir,
+                      })
+                    } else {
+                      // If there is another directory that doesn't have the same name
+                      arr.push({
+                        model: file,
+                        subModel: dir,
+                        path: dirPath + "/" + file + "/pages" + "/" + dir,
+                      })
+                    }
+                  } else {
+                    arr.push({
+                      model: file,
+                      path: dirPath + "/" + file + "/pages",
+                    })
+                    break
+                  }
+                }
+              }
             }
-          }
-          return arr
-        }, [])
+            return arr
+          },
+          [],
+        )
 
         return pageDir
       }
 
       getAllPagesDirs(appDir).forEach((pages) => {
-        fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+        if (pages.subModel) {
+          // If the directory exists with a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, pages.subModel!, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model, pages.subModel))
+          }
+        } else {
+          // If the directory exists without a sub model (sub page directory), loop through the directory manually move each file/directory
+          if (fs.existsSync(path.join(path.resolve("pages"), pages.model))) {
+            let subs = fs.readdirSync(pages.path)
+            subs.forEach((sub) => {
+              fs.moveSync(
+                path.join(pages.path, sub),
+                path.join(path.resolve("pages"), pages.model, sub),
+              )
+            })
+          } else {
+            fs.moveSync(pages.path, path.join(path.resolve("pages"), pages.model))
+          }
+        }
+      })
+
+      //Clean up
+      getAllPagesDirs(appDir).forEach((page) => {
+        let subs = fs.readdirSync(path.join(appDir, page.model))
+        if (subs.includes("pages")) {
+          fs.removeSync(path.join(appDir, page.model, "pages"))
+        }
       })
     },
   })
@@ -396,6 +613,8 @@ const upgradeLegacy = async () => {
         let apiRoutes = fs.readdirSync(path.join(appDir, "api"))
         apiRoutes.forEach((dir) => {
           if (fs.statSync(appDir + "/api/" + dir).isDirectory()) {
+            fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
+          } else {
             fs.moveSync(appDir + "/api/" + dir, path.join(path.resolve("pages"), "api", dir))
           }
         })
@@ -420,11 +639,57 @@ const upgradeLegacy = async () => {
             j.Identifier,
             (node) => node.name === "blitz" || node.escapedText === "blitz",
           )
-          const findBlitzCustomServerLiteral = program
-            .find(j.StringLiteral, (node) => node.value === "blitz/custom-server")
-            .get()
+          const findBlitzCustomServerLiteral = program.find(
+            j.StringLiteral,
+            (node) => node.value === "blitz/custom-server",
+          )
 
-          findBlitzCustomServerLiteral.value.value = "next"
+          if (findBlitzCustomServerLiteral.length === 0) {
+            log.error(
+              `Failed to find "blitz/custom-server" import in ${customServerDir}/index.${
+                isTypescript ? "ts" : "js"
+              }. You will need to update your custom server manually.`,
+            )
+          } else {
+            findBlitzCustomServerLiteral.get().value.value = "next"
+            findBlitzCall.forEach((hit) => {
+              // Loops through the blitz calls. Check if its a call expression, require statement or import statement. Will check everything to next instead of blitz
+              switch (hit.name) {
+                case "callee":
+                  hit.value.name = "next"
+                case "id":
+                  hit.value.name = "next"
+                case "local":
+                  hit.value.name = "next"
+              }
+            })
+
+            fs.writeFileSync(
+              path.join("server", `index.${isTypescript ? "ts" : "js"}`),
+              program.toSource(),
+            )
+          }
+        }
+      }
+
+      // If custom server file found outside dir
+      if (fs.existsSync(customServerFile)) {
+        const program = getCollectionFromSource(customServerFile)
+        const findBlitzCall = program.find(
+          j.Identifier,
+          (node) => node.name === "blitz" || node.escapedText === "blitz",
+        )
+        const findBlitzCustomServerLiteral = program.find(
+          j.StringLiteral,
+          (node) => node.value === "blitz/custom-server",
+        )
+
+        if (findBlitzCustomServerLiteral.length === 0) {
+          log.error(
+            `Failed to find "blitz/custom-server" import in ${customServerFile}. You will need to update your custom server manually.`,
+          )
+        } else {
+          findBlitzCustomServerLiteral.get().value.value = "next"
           findBlitzCall.forEach((hit) => {
             // Loops through the blitz calls. Check if its a call expression, require statement or import statement. Will check everything to next instead of blitz
             switch (hit.name) {
@@ -436,38 +701,8 @@ const upgradeLegacy = async () => {
                 hit.value.name = "next"
             }
           })
-
-          fs.writeFileSync(
-            path.join("server", `index.${isTypescript ? "ts" : "js"}`),
-            program.toSource(),
-          )
+          fs.writeFileSync(customServerFile, program.toSource())
         }
-      }
-
-      // If custom server file found outside dir
-      if (fs.existsSync(customServerFile)) {
-        const program = getCollectionFromSource(customServerFile)
-        const findBlitzCall = program.find(
-          j.Identifier,
-          (node) => node.name === "blitz" || node.escapedText === "blitz",
-        )
-        const findBlitzCustomServerLiteral = program
-          .find(j.StringLiteral, (node) => node.value === "blitz/custom-server")
-          .get()
-
-        findBlitzCustomServerLiteral.value.value = "next"
-        findBlitzCall.forEach((hit) => {
-          // Loops through the blitz calls. Check if its a call expression, require statement or import statement. Will check everything to next instead of blitz
-          switch (hit.name) {
-            case "callee":
-              hit.value.name = "next"
-            case "id":
-              hit.value.name = "next"
-            case "local":
-              hit.value.name = "next"
-          }
-        })
-        fs.writeFileSync(customServerFile, program.toSource())
       }
     },
   })
@@ -580,19 +815,38 @@ const upgradeLegacy = async () => {
       const program = getCollectionFromSource(
         path.join(pagesDir, `_app.${isTypescript ? "tsx" : "jsx"}`),
       )
-
       const appFunction = program.find(j.FunctionDeclaration, (node) => {
         return node.id.name === "App"
       })
 
-      // Store the App function
-      const storeFunction = {...appFunction.get().value}
+      const appIdentifier = program.find(j.Identifier, (node) => {
+        return node.name === "App"
+      })
 
-      // Create a new withBlitz call expresion with an empty argument
-      const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
-        j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
-      // Push stored function above into the argument
-      withBlitzFunction.expression.arguments.push(storeFunction)
+      if (appFunction.length) {
+        // Store the App function
+        const storeFunction = {...appFunction.get().value}
+        // Create a new withBlitz call expresion with an empty argument
+        const withBlitzFunction = (appFunction.get().parentPath.value.declaration =
+          j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+        // Push stored function above into the argument
+        withBlitzFunction.expression.arguments.push(storeFunction)
+      } else if (appIdentifier.length) {
+        appIdentifier.forEach((a) => {
+          switch (a.name) {
+            case "declaration":
+              const storeFunction = {...a.get().value}
+              // Create a new withBlitz call expresion with an empty argument
+              const withBlitzFunction = (a.get().parentPath.value.declaration =
+                j.expressionStatement(j.callExpression(j.identifier("withBlitz"), []))) as any
+              // Push stored function above into the argument
+              withBlitzFunction.expression.arguments.push(storeFunction)
+              break
+          }
+        })
+      } else {
+        log.error("App function not found")
+      }
 
       addNamedImport(program, "withBlitz", "app/blitz-client")
 
@@ -718,6 +972,44 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
+    name: "update root types file",
+    action: async () => {
+      const typeFile = path.join(process.cwd(), "types.ts")
+
+      if (fs.existsSync(typeFile)) {
+        const program = getCollectionFromSource(typeFile)
+
+        const findDefaultCtx = () => {
+          return program.find(j.Identifier, (node) => node)
+        }
+
+        findDefaultCtx().forEach((path) => {
+          if (path.value.name === "Ctx") {
+            path.parentPath.parentPath.value.declaration.extends = []
+          }
+          if (path.value.name === "DefaultCtx" && path.name === "imported") {
+            j(path.parentPath).remove()
+          }
+        })
+
+        const findBlitzLiteral = () => {
+          return program.find(j.StringLiteral, (node) => node.value === "blitz")
+        }
+
+        findBlitzLiteral()
+          .paths()
+          .forEach((path) => {
+            path.value.value = "@blitzjs/auth"
+          })
+
+        fs.writeFileSync(typeFile, program.toSource())
+      } else {
+        log.error("There is no type file")
+      }
+    },
+  })
+
+  steps.push({
     name: "check for usages of invokeWithMiddleware",
     action: async () => {
       let errors = 0
@@ -726,7 +1018,7 @@ const upgradeLegacy = async () => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
+          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
           errors++
         }
       })
@@ -735,14 +1027,14 @@ const upgradeLegacy = async () => {
         const program = getCollectionFromSource(file)
         const invokeWithMiddlewarePath = findCallExpression(program, "invokeWithMiddleware")
         if (invokeWithMiddlewarePath?.length) {
-          console.error(`invokeWithMiddleware found at ${file}.`)
+          log.error(`\n invokeWithMiddleware found at ${file}. \n`)
           errors++
         }
       })
 
       if (errors > 0) {
         throw new Error(
-          "invokeWithMiddleware is not supported. Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx",
+          "\n invokeWithMiddleware is not supported. \n Use invokeWithCtx instead: https://canary.blitzjs.com/docs/resolver-server-utilities#invoke-with-ctx \n Fix the files above, then run the codemod again.",
         )
       }
     },

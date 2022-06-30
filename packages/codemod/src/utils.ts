@@ -9,8 +9,13 @@ import j, {
   ImportDeclaration,
   CallExpression,
   ImportSpecifier,
+  Identifier,
 } from "jscodeshift"
 import {parseSync} from "@babel/core"
+
+export function findIdentifier(program: Collection<any>, name: string): Collection<Identifier> {
+  return program.find(j.Identifier, (node) => node.name === name)
+}
 
 export function findFunction(
   program: Collection<any>,

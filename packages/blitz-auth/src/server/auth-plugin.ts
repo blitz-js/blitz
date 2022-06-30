@@ -1,4 +1,4 @@
-import type {BlitzServerPlugin, Middleware, Ctx} from "blitz"
+import type {BlitzServerPlugin, RequestMiddleware, Ctx} from "blitz"
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
 import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
@@ -101,7 +101,7 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
       `The cookie prefix used has invalid characters. Only alphanumeric characters, "-"  and "_" character are supported`,
     )
 
-    const blitzSessionMiddleware: Middleware<
+    const blitzSessionMiddleware: RequestMiddleware<
       IncomingMessage,
       ServerResponse & {blitzCtx: Ctx}
     > = async (req, res, next) => {
@@ -119,6 +119,6 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
     return blitzSessionMiddleware
   }
   return {
-    middlewares: [authPluginSessionMiddleware()],
+    requestMiddlewares: [authPluginSessionMiddleware()],
   }
 }
