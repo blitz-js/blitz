@@ -52,5 +52,7 @@ jobs:
 
       - name: Github Release
         uses: release-drafter/release-drafter@v5.19.0
+        with:
+          config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
