@@ -95,127 +95,6 @@ const upgradeLegacy = async () => {
   })
 
   steps.push({
-    name: "update project's imports",
-    action: async () => {
-      const specialImports: Record<string, string> = {
-        Link: "next/link",
-        Image: "next/image",
-        Script: "next/script",
-
-        Document: "next/document",
-        DocumentHead: "next/document",
-        Html: "next/document",
-        Main: "next/document",
-        BlitzScript: "next/document",
-
-        AuthenticationError: "blitz",
-        AuthorizationError: "blitz",
-        CSRFTokenMismatchError: "blitz",
-        NotFoundError: "blitz",
-        formatZodError: "blitz",
-        recursiveFormatZodErrors: "blitz",
-        validateZodSchema: "blitz",
-        enhancePrisma: "blitz",
-        ErrorBoundary: "@blitzjs/next",
-        ErrorFallbackProps: "@blitzjs/next",
-
-        paginate: "blitz",
-        invokeWithMiddleware: "@blitzjs/rpc",
-        passportAuth: "@blitzjs/auth",
-        sessionMiddleware: "@blitzjs/auth",
-        simpleRolesIsAuthorized: "@blitzjs/auth",
-        getSession: "@blitzjs/auth",
-        setPublicDataForUser: "@blitzjs/auth",
-        SecurePassword: "@blitzjs/auth",
-        hash256: "@blitzjs/auth",
-        generateToken: "@blitzjs/auth",
-        resolver: "@blitzjs/rpc",
-        connectMiddleware: "blitz",
-        GetServerSideProps: "next",
-        InferGetServerSidePropsType: "next",
-        GetServerSidePropsContext: "next",
-        AuthenticatedMiddlewareCtx: "@blitz/rpc",
-        getAntiCSRFToken: "@blitzjs/rpc",
-        useSession: "@blitzjs/auth",
-        useAuthenticatedSession: "@blitzjs/auth",
-        useRedirectAuthenticated: "@blitzjs/auth",
-        useAuthorize: "@blitzjs/auth",
-        useQuery: "@blitzjs/rpc",
-        useParam: "@blitzjs/next",
-        usePaginatedQuery: "@blitzjs/rpc",
-        useInfiniteQuery: "@blitzjs/rpc",
-        useMutation: "@blitzjs/rpc",
-        queryClient: "@blitzjs/rpc",
-        getQueryKey: "@blitzjs/rpc",
-        getInfiniteQueryKey: "@blitzjs/rpc",
-        invalidateQuery: "@blitzjs/rpc",
-        setQueryData: "@blitzjs/rpc",
-        useQueryErrorResetBoundary: "@blitzjs/rpc",
-        QueryClient: "@blitzjs/rpc",
-        dehydrate: "@blitzjs/rpc",
-        invoke: "@blitzjs/rpc",
-        Routes: "@blitzjs/next",
-        useRouterQuery: "next/router",
-        useRouter: "next/router",
-        Router: "next/router",
-
-        Head: "next/head",
-
-        App: "next/app",
-
-        dynamic: "next/dynamic",
-        noSSR: "next/dynamic",
-
-        getConfig: "next/config",
-        setConfig: "next/config",
-
-        ErrorComponent: "@blitzjs/next",
-        AppProps: "@blitzjs/next",
-        BlitzPage: "@blitzjs/next",
-        BlitzLayout: "@blitzjs/next",
-      }
-
-      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((filename) => {
-        const program = getCollectionFromSource(path.resolve(appDir, filename))
-        const parsedProgram = program.get()
-
-        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
-          if (e.type === "ImportDeclaration") {
-            if (e.source.value === "blitz") {
-              const specifierIndexesToRemove: number[] = []
-              e.specifiers?.slice().forEach((specifier: any, index) => {
-                const importedName =
-                  specifier.imported.type === "StringLiteral"
-                    ? specifier.imported.value
-                    : specifier.imported.name
-                if (importedName in specialImports) {
-                  parsedProgram.value.program.body.unshift(
-                    j.importDeclaration(
-                      [specifier],
-                      j.stringLiteral(specialImports[importedName] as string),
-                    ),
-                  )
-                  specifierIndexesToRemove.push(index)
-                }
-              })
-              // Remove import from original blitz import deconstruct
-              specifierIndexesToRemove.reverse().forEach((index) => {
-                e.specifiers?.splice(index, 1)
-              })
-              // Removed left over "import 'blitz';"
-              if (!e.specifiers?.length) {
-                const index = parsedProgram.value.program.body.indexOf(e)
-                parsedProgram.value.program.body.splice(index, 1)
-              }
-            }
-          }
-        })
-        fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
-      })
-    },
-  })
-
-  steps.push({
     name: "update NextJS' default imports",
     action: async () => {
       getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((file) => {
@@ -303,31 +182,147 @@ const upgradeLegacy = async () => {
           findIdentifier(program, "BlitzApiRequest")
             .paths()
             .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
               path.value.name = "NextApiRequest"
             })
           findIdentifier(program, "BlitzApiResponse")
             .paths()
             .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
               path.value.name = "NextApiResponse"
             })
           findIdentifier(program, "BlitzApiHandler")
             .paths()
             .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
               path.value.name = "NextApiHandler"
             })
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         },
       )
+    },
+  })
+
+  steps.push({
+    name: "update project's imports",
+    action: async () => {
+      const specialImports: Record<string, string> = {
+        Link: "next/link",
+        Image: "next/image",
+        Script: "next/script",
+
+        Document: "next/document",
+        DocumentHead: "next/document",
+        Html: "next/document",
+        Main: "next/document",
+        BlitzScript: "next/document",
+
+        AuthenticationError: "blitz",
+        AuthorizationError: "blitz",
+        CSRFTokenMismatchError: "blitz",
+        NotFoundError: "blitz",
+        formatZodError: "blitz",
+        recursiveFormatZodErrors: "blitz",
+        validateZodSchema: "blitz",
+        enhancePrisma: "blitz",
+        ErrorBoundary: "@blitzjs/next",
+        ErrorFallbackProps: "@blitzjs/next",
+
+        paginate: "blitz",
+        invokeWithMiddleware: "@blitzjs/rpc",
+        passportAuth: "@blitzjs/auth",
+        sessionMiddleware: "@blitzjs/auth",
+        simpleRolesIsAuthorized: "@blitzjs/auth",
+        getSession: "@blitzjs/auth",
+        setPublicDataForUser: "@blitzjs/auth",
+        SecurePassword: "@blitzjs/auth",
+        hash256: "@blitzjs/auth",
+        generateToken: "@blitzjs/auth",
+        resolver: "@blitzjs/rpc",
+        connectMiddleware: "blitz",
+        GetServerSideProps: "next",
+        InferGetServerSidePropsType: "next",
+        GetServerSidePropsContext: "next",
+        AuthenticatedMiddlewareCtx: "@blitz/rpc",
+        getAntiCSRFToken: "@blitzjs/rpc",
+        useSession: "@blitzjs/auth",
+        useAuthenticatedSession: "@blitzjs/auth",
+        useRedirectAuthenticated: "@blitzjs/auth",
+        useAuthorize: "@blitzjs/auth",
+        useQuery: "@blitzjs/rpc",
+        useParam: "@blitzjs/next",
+        usePaginatedQuery: "@blitzjs/rpc",
+        useInfiniteQuery: "@blitzjs/rpc",
+        useMutation: "@blitzjs/rpc",
+        queryClient: "@blitzjs/rpc",
+        getQueryKey: "@blitzjs/rpc",
+        getInfiniteQueryKey: "@blitzjs/rpc",
+        invalidateQuery: "@blitzjs/rpc",
+        setQueryData: "@blitzjs/rpc",
+        useQueryErrorResetBoundary: "@blitzjs/rpc",
+        QueryClient: "@blitzjs/rpc",
+        dehydrate: "@blitzjs/rpc",
+        invoke: "@blitzjs/rpc",
+        Routes: "@blitzjs/next",
+        useRouterQuery: "next/router",
+        useRouter: "next/router",
+        Router: "next/router",
+
+        Head: "next/head",
+
+        App: "next/app",
+
+        NextApiRequest: "next",
+        NextApiResponse: "next",
+        NextApiHandler: "next",
+
+        dynamic: "next/dynamic",
+        noSSR: "next/dynamic",
+
+        getConfig: "next/config",
+        setConfig: "next/config",
+
+        ErrorComponent: "@blitzjs/next",
+        AppProps: "@blitzjs/next",
+        BlitzPage: "@blitzjs/next",
+        BlitzLayout: "@blitzjs/next",
+      }
+
+      console.log("HERE 0")
+
+      getAllFiles(appDir, [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach((filename) => {
+        console.log("HERE 1")
+        const program = getCollectionFromSource(path.resolve(appDir, filename))
+        const parsedProgram = program.get()
+
+        parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
+          console.log("HERE 2")
+          if (e.type === "ImportDeclaration") {
+            if (e.source.value === "blitz") {
+              const specifierIndexesToRemove: number[] = []
+              e.specifiers?.slice().forEach((specifier: any, index) => {
+                const importedName =
+                  specifier.imported.type === "StringLiteral"
+                    ? specifier.imported.value
+                    : specifier.imported.name
+                if (importedName in specialImports) {
+                  console.log("HERE")
+                  addNamedImport(program, importedName, specialImports[importedName]!)
+                  specifierIndexesToRemove.push(index)
+                }
+              })
+              // Remove import from original blitz import deconstruct
+              specifierIndexesToRemove.reverse().forEach((index) => {
+                e.specifiers?.splice(index, 1)
+              })
+              // Removed left over "import 'blitz';"
+              if (!e.specifiers?.length) {
+                const index = parsedProgram.value.program.body.indexOf(e)
+                parsedProgram.value.program.body.splice(index, 1)
+              }
+            }
+          }
+        })
+        fs.writeFileSync(path.resolve(appDir, filename), program.toSource())
+      })
     },
   })
 
