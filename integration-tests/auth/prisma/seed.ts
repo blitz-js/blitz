@@ -1,4 +1,4 @@
-import {prisma} from "./index"
+import prisma from "./index"
 import {SecurePassword} from "@blitzjs/auth"
 
 const seed = async () => {

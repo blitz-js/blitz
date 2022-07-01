@@ -12,6 +12,9 @@
     "prisma:start": "prisma generate && prisma migrate deploy",
     "prisma:studio": "prisma studio"
   },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  },
   "dependencies": {
     "@blitzjs/auth": "workspace:*",
     "@blitzjs/next": "workspace:*",
