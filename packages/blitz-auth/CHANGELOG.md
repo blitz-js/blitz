@@ -1,5 +1,13 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - blitz@2.0.0-alpha.47
+
 ## 2.0.0-alpha.46
 
 ### Patch Changes

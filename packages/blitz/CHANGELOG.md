@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [b405c1e8]
+- Updated dependencies [b86b569d]
+  - @blitzjs/generator@2.0.0-alpha.47
+
 ## 2.0.0-alpha.46
 
 ### Patch Changes
