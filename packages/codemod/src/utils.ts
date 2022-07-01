@@ -175,6 +175,9 @@ export function addNamedImport(
   )
 
   if (existingImport.length) {
+    if (existingImport.get().value.specifiers.includes(importStatement)) {
+      return
+    }
     existingImport.get().value.specifiers.push(j.importSpecifier(j.identifier(importStatement)))
   } else {
     program
@@ -229,7 +232,6 @@ export function getCollectionFromSource(filename: string) {
           plugins: [require(`@babel/plugin-syntax-jsx`)],
           overrides: [
             {
-              test: [`**/*.ts`, `**/*.tsx`],
               plugins: [[require(`@babel/plugin-syntax-typescript`), {isTSX: true}]],
             },
           ],

@@ -1,6 +1,7 @@
 import {api} from "../../app/blitz-server"
-import {prisma} from "../../prisma/index"
+import prisma from "../../prisma/index"
 import {SecurePassword} from "@blitzjs/auth"
+import {Role} from "../../types"
 
 export const authenticateUser = async (email: string, password: string) => {
   const user = await prisma.user.findFirst({where: {email}})
@@ -26,6 +27,7 @@ export default api(async (req, res, ctx) => {
 
   await blitzContext.session.$create({
     userId: user.id,
+    role: user.role as Role,
   })
 
   res.status(200).json({email: req.query.email, userId: blitzContext.session.userId})

@@ -5,4 +5,4 @@ const EnhancedPrisma = enhancePrisma(PrismaClient)
 
 export * from "@prisma/client"
 const prisma = new EnhancedPrisma()
-export {prisma}
+export default prisma
