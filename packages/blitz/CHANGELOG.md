@@ -1,5 +1,12 @@
 # blitz
 
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- 93851d90: Handle duplicate imports with Blitz upgrade-legacy codemod
+  - @blitzjs/generator@2.0.0-alpha.48
+
 ## 2.0.0-alpha.47
 
 ### Patch Changes
