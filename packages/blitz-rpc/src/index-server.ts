@@ -54,7 +54,7 @@ const loaderServer = resolve(dir, "./loader-server.cjs")
 const loaderClient = resolve(dir, "./loader-client.cjs")
 
 interface WebpackRuleOptions {
-  resolveResolverPath: ResolverPathOptions | undefined
+  resolverPath: ResolverPathOptions | undefined
 }
 
 interface WebpackRule {
