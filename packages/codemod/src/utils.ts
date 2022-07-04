@@ -175,6 +175,14 @@ export function addNamedImport(
   )
 
   if (existingImport.length) {
+    // see if existing import has the same specifier
+    const existingSpecifier = existingImport.find(
+      j.ImportSpecifier,
+      (node) => node.imported.name === importStatement,
+    )
+    if (existingSpecifier.length) {
+      return
+    }
     existingImport.get().value.specifiers.push(j.importSpecifier(j.identifier(importStatement)))
   } else {
     program
@@ -190,6 +198,23 @@ export function addNamedImport(
               j.stringLiteral(importFrom),
             ),
       )
+  }
+}
+
+export function removeImport(
+  program: Collection<any>,
+  importStatement: string,
+  importFrom: string,
+) {
+  const existingImport = program.find(
+    j.ImportDeclaration,
+    (node) => node.source.value === importFrom,
+  )
+
+  if (existingImport.length) {
+    existingImport.get().value.specifiers = existingImport
+      .get()
+      .value.specifiers.filter((specifier: any) => specifier.imported.name !== importStatement)
   }
 }
 
@@ -240,4 +265,45 @@ export function getCollectionFromSource(filename: string) {
         }),
     },
   })
+}
+
+export function replaceImport(
+  program: Collection<any>,
+  importFrom: string,
+  importStatement: string,
+  newImportFrom: string,
+  newImportStatement: string,
+) {
+  const existingImport = findImport(program, importFrom)
+  existingImport?.forEach((node) => {
+    const getNode = node.get()
+    getNode.value.specifiers.slice().forEach((specifier: any, index: number) => {
+      const importedName =
+        specifier.imported.type === "StringLiteral"
+          ? specifier.imported.value
+          : specifier.imported.name
+      if (importedName === importStatement) {
+        addNamedImport(program, newImportStatement, newImportFrom)
+        // make sure we don't have the same import twice
+        removeImport(program, newImportStatement, importFrom)
+        getNode.value.specifiers.splice(index, 1)
+        if (!getNode.value.specifiers?.length) {
+          const index = program.get().value.program.body.indexOf(getNode.value)
+          program.get().value.program.body.splice(index, 1)
+        }
+      }
+    })
+  })
+}
+
+export function replaceIdentifiers(
+  program: Collection<any>,
+  identifier: string,
+  newIdentifier: string,
+) {
+  findIdentifier(program, identifier)
+    .paths()
+    .forEach((path) => {
+      path.value.name = "NextApiRequest"
+    })
 }
