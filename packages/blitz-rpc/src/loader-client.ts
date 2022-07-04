@@ -42,7 +42,7 @@ export async function transformBlitzRpcResolverClient(
 
   const resolverFilePath = "/" + posix.relative(root, id)
   assertPosixPath(resolverFilePath)
-  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverBasePath)
+  const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
   const resolverName = convertFilePathToResolverName(resolverFilePath)
   const resolverType = convertFilePathToResolverType(resolverFilePath)
 
