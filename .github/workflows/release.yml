@@ -42,7 +42,7 @@ jobs:
       - run: pnpm build
 
       - name: Create Release Pull Request
-        uses: changesets/action@v1
+        uses: blitz-js/changesets-action@main
         with:
           publish: pnpm release
           createGithubReleases: true
