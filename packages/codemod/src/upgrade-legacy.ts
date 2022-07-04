@@ -12,6 +12,9 @@ import {
   getCollectionFromSource,
   wrapDeclaration,
   findIdentifier,
+  removeImport,
+  replaceImport,
+  replaceIdentifiers,
 } from "./utils"
 import {log} from "blitz"
 
@@ -98,6 +101,10 @@ const upgradeLegacy = async () => {
     name: "update project's imports",
     action: async () => {
       const specialImports: Record<string, string> = {
+        NextApiHandler: "next",
+        NextApiRequest: "next",
+        NextApiResponse: "next",
+
         Link: "next/link",
         Image: "next/image",
         Script: "next/script",
@@ -139,6 +146,7 @@ const upgradeLegacy = async () => {
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
+        SessionContext: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
         useParam: "@blitzjs/next",
@@ -155,6 +163,7 @@ const upgradeLegacy = async () => {
         dehydrate: "@blitzjs/rpc",
         invoke: "@blitzjs/rpc",
         Routes: "@blitzjs/next",
+
         useRouterQuery: "next/router",
         useRouter: "next/router",
         Router: "next/router",
@@ -182,25 +191,15 @@ const upgradeLegacy = async () => {
         parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
           if (e.type === "ImportDeclaration") {
             if (e.source.value === "blitz") {
-              const specifierIndexesToRemove: number[] = []
-              e.specifiers?.slice().forEach((specifier: any, index) => {
+              e.specifiers?.slice().forEach((specifier: any) => {
                 const importedName =
                   specifier.imported.type === "StringLiteral"
                     ? specifier.imported.value
                     : specifier.imported.name
                 if (importedName in specialImports) {
-                  parsedProgram.value.program.body.unshift(
-                    j.importDeclaration(
-                      [specifier],
-                      j.stringLiteral(specialImports[importedName] as string),
-                    ),
-                  )
-                  specifierIndexesToRemove.push(index)
+                  addNamedImport(program, importedName, specialImports[importedName]!)
+                  removeImport(program, importedName, "blitz")
                 }
-              })
-              // Remove import from original blitz import deconstruct
-              specifierIndexesToRemove.reverse().forEach((index) => {
-                e.specifiers?.splice(index, 1)
               })
               // Removed left over "import 'blitz';"
               if (!e.specifiers?.length) {
@@ -300,30 +299,41 @@ const upgradeLegacy = async () => {
         (file) => {
           const program = getCollectionFromSource(file)
 
-          findIdentifier(program, "BlitzApiRequest")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiRequest"
-            })
-          findIdentifier(program, "BlitzApiResponse")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiResponse"
-            })
-          findIdentifier(program, "BlitzApiHandler")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiHandler"
-            })
+          replaceImport(program, "blitz", "BlitzApiRequest", "next", "NextApiRequest")
+          replaceIdentifiers(program, "BlitzApiRequest", "NextApiRequest")
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        },
+      )
+    },
+  })
+
+  steps.push({
+    name: "change BlitzApiResponse to NextApiResponse",
+    action: async () => {
+      getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
+        (file) => {
+          const program = getCollectionFromSource(file)
+
+          replaceImport(program, "blitz", "BlitzApiResponse", "next", "NextApiResponse")
+          replaceIdentifiers(program, "BlitzApiResponse", "NextApiResponse")
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        },
+      )
+    },
+  })
+
+  steps.push({
+    name: "change BlitzApiHandler to NextApiHandler",
+    action: async () => {
+      getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
+        (file) => {
+          const program = getCollectionFromSource(file)
+
+          // BlitzApiHandler -> NextApiHandler
+          replaceImport(program, "blitz", "BlitzApiHandler", "next", "NextApiHandler")
+          replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         },
