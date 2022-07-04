@@ -4,12 +4,10 @@ import {DefaultOptions, QueryClient} from "react-query"
 
 export * from "./data-client/index"
 
-export const queryClient = globalThis.queryClient
-
 interface BlitzRpcOptions {
   reactQueryOptions?: DefaultOptions
 }
-export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, any>(
+export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, {queryClient: QueryClient}>(
   (options?: BlitzRpcOptions) => {
     const initializeQueryClient = () => {
       const {reactQueryOptions} = options || {}
@@ -37,12 +35,14 @@ export const BlitzRpcPlugin = createClientPlugin<BlitzRpcOptions, any>(
         },
       })
     }
-
-    globalThis.queryClient = initializeQueryClient()
+    const queryClient = initializeQueryClient()
+    globalThis.queryClient = queryClient
     return {
       events: {},
       middleware: {},
-      exports: () => {},
+      exports: () => ({
+        queryClient,
+      }),
     }
   },
 )

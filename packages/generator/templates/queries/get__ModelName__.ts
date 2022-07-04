@@ -1,5 +1,5 @@
 import {Ctx, NotFoundError} from "blitz"
-import { db } from "db"
+import db from "db"
 import {z} from "zod"
 
 const Get__ModelName__Input = z.object({

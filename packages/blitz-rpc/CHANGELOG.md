@@ -1,5 +1,121 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- Updated dependencies [93851d90]
+  - blitz@2.0.0-alpha.48
+  - @blitzjs/auth@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - blitz@2.0.0-alpha.47
+  - @blitzjs/auth@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- bee19a25: Support RPC error middleware
+  - @blitzjs/auth@2.0.0-alpha.46
+  - blitz@2.0.0-alpha.46
+
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.45
+- blitz@2.0.0-alpha.45
+
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- Updated dependencies [7817fe3a]
+  - @blitzjs/auth@2.0.0-alpha.44
+  - blitz@2.0.0-alpha.44
+
+## 2.0.0-alpha.43
+
+### Patch Changes
+
+- Updated dependencies [527e48ac]
+  - blitz@2.0.0-alpha.43
+  - @blitzjs/auth@2.0.0-alpha.43
+
+## 2.0.0-alpha.42
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.42
+- blitz@2.0.0-alpha.42
+
+## 2.0.0-alpha.41
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.41
+- blitz@2.0.0-alpha.41
+
+## 2.0.0-alpha.40
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.40
+- blitz@2.0.0-alpha.40
+
+## 2.0.0-alpha.39
+
+### Patch Changes
+
+- Updated dependencies [b918055b]
+  - blitz@2.0.0-alpha.39
+  - @blitzjs/auth@2.0.0-alpha.39
+
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- 8aee25c5: getQueryClient function & queryClient codemod updates & shared plugin config
+  - blitz@2.0.0-alpha.38
+  - @blitzjs/auth@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- Updated dependencies [a80d2a8f]
+  - blitz@2.0.0-alpha.37
+  - @blitzjs/auth@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- 4cad9cca: Add queryClient to RPC Plugin exports
+  - blitz@2.0.0-alpha.36
+  - @blitzjs/auth@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.35
+- @blitzjs/auth@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- dfd2408e: Add resolverBasePath to Blitz config to change the way rpc routes are generated
+  - @blitzjs/auth@2.0.0-alpha.34
+  - blitz@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes

@@ -1,5 +1,109 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - @blitzjs/rpc@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- bee19a25: Support RPC error middleware
+- 9ada0f66: Allow customizing PreviewData in gSSP
+- Updated dependencies [bee19a25]
+  - @blitzjs/rpc@2.0.0-alpha.46
+
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- 5c5decbc: Removes the suspense wrapper from withBlitz since it's not needed
+  - @blitzjs/rpc@2.0.0-alpha.45
+
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- 7817fe3a: Add missing RouteUrlObject on Page.authenticate.redirectTo
+- ae0b714f: Allow passing optional type argument for ParamsType in GSSP
+  - @blitzjs/rpc@2.0.0-alpha.44
+
+## 2.0.0-alpha.43
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.43
+
+## 2.0.0-alpha.42
+
+### Patch Changes
+
+- 9c2e7d37: Use `useRouter` from next/router in useParams function
+  - @blitzjs/rpc@2.0.0-alpha.42
+
+## 2.0.0-alpha.41
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.41
+
+## 2.0.0-alpha.40
+
+### Patch Changes
+
+- 9ded8dac: useParam & useParams functions now accessible from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.40
+
+## 2.0.0-alpha.39
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.39
+
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- Updated dependencies [8aee25c5]
+  - @blitzjs/rpc@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+  - @blitzjs/rpc@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- Updated dependencies [4cad9cca]
+  - @blitzjs/rpc@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- Updated dependencies [dfd2408e]
+  - @blitzjs/rpc@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes

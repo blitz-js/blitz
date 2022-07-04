@@ -1,4 +1,4 @@
-import { db } from "./index"
+import db from "./index"
 
 /*
  * This seed function is executed when you run `blitz db seed`.

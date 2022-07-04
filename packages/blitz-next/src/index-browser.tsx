@@ -17,6 +17,7 @@ import {Router} from "next/router"
 
 export * from "./error-boundary"
 export * from "./error-component"
+export * from "./use-params"
 export {Routes} from ".blitz"
 
 const compose =
@@ -50,11 +51,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
           <>
             {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-            {mounted && (
-              <React.Suspense fallback="Loading...">
-                <UserAppRoot {...props} Component={component} />
-              </React.Suspense>
-            )}
+            {mounted && <UserAppRoot {...props} Component={component} />}
           </>
         </BlitzProvider>
       )
@@ -81,7 +78,7 @@ type RedirectAuthenticatedToFnCtx = {
 type RedirectAuthenticatedToFn = (args: RedirectAuthenticatedToFnCtx) => RedirectAuthenticatedTo
 export type BlitzPage<P = {}> = React.ComponentType<P> & {
   getLayout?: (component: JSX.Element) => JSX.Element
-  authenticate?: boolean | {redirectTo?: string}
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }

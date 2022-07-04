@@ -1,5 +1,103 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- Updated dependencies [93851d90]
+  - blitz@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - blitz@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.46
+
+## 2.0.0-alpha.45
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.45
+
+## 2.0.0-alpha.44
+
+### Patch Changes
+
+- 7817fe3a: Add missing RouteUrlObject on Page.authenticate.redirectTo
+  - blitz@2.0.0-alpha.44
+
+## 2.0.0-alpha.43
+
+### Patch Changes
+
+- Updated dependencies [527e48ac]
+  - blitz@2.0.0-alpha.43
+
+## 2.0.0-alpha.42
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.42
+
+## 2.0.0-alpha.41
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.41
+
+## 2.0.0-alpha.40
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.40
+
+## 2.0.0-alpha.39
+
+### Patch Changes
+
+- Updated dependencies [b918055b]
+  - blitz@2.0.0-alpha.39
+
+## 2.0.0-alpha.38
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.38
+
+## 2.0.0-alpha.37
+
+### Patch Changes
+
+- a80d2a8f: rename middleware type for blitz server plugin
+- Updated dependencies [a80d2a8f]
+  - blitz@2.0.0-alpha.37
+
+## 2.0.0-alpha.36
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.36
+
+## 2.0.0-alpha.35
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.35
+
+## 2.0.0-alpha.34
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.34
+
 ## 2.0.0-alpha.33
 
 ### Patch Changes
