@@ -1,4 +1,5 @@
 const {withBlitz} = require("@blitzjs/next")
 module.exports = withBlitz({
-  target: 'experimental-serverless-trace',
+  reactOnRecoverableError: () => {},
+  target: "experimental-serverless-trace",
 })

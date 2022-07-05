@@ -57,7 +57,7 @@ export type VerifyCallbackResult = {
 
 export type ApiHandlerIncomingMessage = IncomingMessage & {
   query: {
-    [key: string]: string | string[]
+    [key: string]: string | string[] | undefined
   }
 }
 
