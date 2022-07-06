@@ -78,7 +78,7 @@ describe("formatZodError", () => {
     })
     expect(formatZodError(result.error)).toEqual({
       students: [undefined, {name: "Required"}, {name: "Expected string, received boolean"}],
-      data: [undefined, "Expected true, received undefined"],
+      data: [undefined, "Invalid literal value, expected true"],
     })
   })
 })

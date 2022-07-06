@@ -1,4 +1,2 @@
 const {withBlitz} = require("@blitzjs/next")
-module.exports = withBlitz({
-  // update me
-})
+module.exports = withBlitz({})

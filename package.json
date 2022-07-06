@@ -28,7 +28,7 @@
     "husky": "7.0.4",
     "jsdom": "^19.0.0",
     "lint-staged": "12.1.7",
-    "next": "12.1.6-canary.17",
+    "next": "12.2.0",
     "only-allow": "1.1.0",
     "patch-package": "6.4.7",
     "prettier": "^2.5.1",
