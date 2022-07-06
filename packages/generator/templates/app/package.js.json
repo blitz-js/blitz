@@ -22,9 +22,9 @@
     "*.{js}": ["eslint --fix"]
   },
   "dependencies": {
-    "@blitzjs/auth": "latest",
+    "@blitzjs/auth": "alpha",
     "@blitzjs/next": "alpha",
-    "@blitzjs/rpc": "latest",
+    "@blitzjs/rpc": "alpha",
     "@prisma/client": "3.9.0",
     "blitz": "alpha",
     "next": "12.2.0",
