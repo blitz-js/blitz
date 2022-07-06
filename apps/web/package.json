@@ -25,7 +25,7 @@
     "@types/passport-twitter": "1.0.37",
     "blitz": "workspace:*",
     "jest": "27.5.1",
-    "next": "12.1.6-canary.17",
+    "next": "12.2.0",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
     "prisma": "3.9.0",

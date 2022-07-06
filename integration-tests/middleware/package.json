@@ -15,7 +15,7 @@
     "@blitzjs/next": "workspace:*",
     "@blitzjs/rpc": "workspace:*",
     "blitz": "workspace:*",
-    "next": "12.1.6-canary.17",
+    "next": "12.2.0",
     "react": "18.0.0",
     "react-dom": "18.0.0"
   },
