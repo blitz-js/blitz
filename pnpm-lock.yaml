@@ -1,7 +1,5 @@
 lockfileVersion: 5.4
 
-patchedDependencies: {}
-
 importers:
   .:
     specifiers:
@@ -66,7 +64,7 @@ importers:
       react-hook-form: 7.29.0
       ts-node: 10.7.0
       typescript: ^4.5.3
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -81,7 +79,7 @@ importers:
       react-dom: 18.0.0_react@18.0.0
       react-hook-form: 7.29.0_react@18.0.0
       ts-node: 10.7.0_6sxvnwysvlo53egjnie7htsx5a
-      zod: 3.10.1
+      zod: 3.17.3
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
@@ -521,7 +519,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
       watchpack: 2.1.1
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/generator": link:../generator
       arg: 5.0.1
@@ -574,7 +572,7 @@ importers:
       typescript: 4.7.4
       unbuild: 0.6.9
       watch: 1.0.2
-      zod: 3.10.1
+      zod: 3.17.3
 
   packages/blitz-auth:
     specifiers:
@@ -722,7 +720,7 @@ importers:
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/auth": link:../blitz-auth
       b64-lite: 1.4.0
@@ -731,7 +729,7 @@ importers:
       debug: 4.3.3
       react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
       superjson: 1.8.0
-      zod: 3.10.1
+      zod: 3.17.3
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
@@ -17238,8 +17236,8 @@ packages:
       }
     engines: {node: ">=10"}
 
-  /zod/3.10.1:
+  /zod/3.17.3:
     resolution:
       {
-        integrity: sha512-ZnIzDr3vhppKW7yTAlvUQ7QJir5yoL14DgZ6DjYNb4/D4DxFdZeysF6Q5hAahU7KXtaiTgYkGO/qiAD83YN3ig==,
+        integrity: sha512-4oKP5zvG6GGbMlqBkI5FESOAweldEhSOZ6LI6cG+JzUT7ofj1ZOC0PJudpQOpT1iqOFpYYtX5Pw0+o403y4bcg==,
       }

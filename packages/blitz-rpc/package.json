@@ -27,7 +27,7 @@
     "debug": "4.3.3",
     "react-query": "3.39.0",
     "superjson": "1.8.0",
-    "zod": "3.10.1"
+    "zod": "3.17.3"
   },
   "devDependencies": {
     "@blitzjs/config": "workspace:2.0.0-alpha.49",
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "blitz": "2.0.0-alpha.49",
-    "next": "12.2.0"
+    "next": ">=12.2.0"
   },
   "publishConfig": {
     "access": "public"

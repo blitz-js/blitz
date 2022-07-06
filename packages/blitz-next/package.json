@@ -58,7 +58,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "next": "*",
+    "next": ">=12.2.0",
     "react": "*"
   }
 }
