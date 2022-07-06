@@ -18,7 +18,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "pre-publish": "changeset add && changeset version && pnpm build && git add . && git commit -v",
-    "release": "pnpm build && changeset publish",
+    "release": "pnpm build && changeset publish --tag alpha",
     "publish-release": "changeset publish && git push --follow-tags"
   },
   "dependencies": {
