@@ -38,10 +38,5 @@
     "wait-on": "6.0.1"
   },
   "npmClient": "pnpm",
-  "packageManager": "pnpm@7.4.0-1",
-  "pnpm": {
-    "patchedDependencies": {
-      "next@12.2.0": "patches/next@12.2.0.patch"
-    }
-  }
+  "packageManager": "pnpm@7.4.0-1"
 }

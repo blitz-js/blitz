@@ -515,15 +515,6 @@ export const isInternalBlitzMonorepoDevelopment = __dirname.match(
 )
 
 async function findNodeModulesRoot(src: string) {
-  /*
-   *  Because of our package structure, and because of how things like pnpm link modules,
-   *  we must first find blitz package, and then find `next` and then
-   *  the root of `next`
-   *
-   *  This is because we import from `.blitz` inside `next/stdlib`.
-   *  If that changes, then this logic here will need to change
-   */
-
   let root: string
   if (isInternalBlitzMonorepoDevelopment) {
     root = join(__dirname, "..", "..", "..", "..", "/node_modules")
