@@ -45,7 +45,7 @@
     "blitz": "2.0.0-alpha.49",
     "cross-spawn": "7.0.3",
     "find-up": "4.1.0",
-    "next": "12.1.6-canary.17",
+    "next": "12.2.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "resolve-from": "5.0.0",
@@ -58,7 +58,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "next": "*",
+    "next": ">=12.2.0",
     "react": "*"
   }
 }

@@ -9,7 +9,7 @@ importers:
       husky: 7.0.4
       jsdom: ^19.0.0
       lint-staged: 12.1.7
-      next: 12.1.6-canary.17
+      next: 12.2.0
       only-allow: 1.1.0
       patch-package: 6.4.7
       prettier: ^2.5.1
@@ -25,7 +25,7 @@ importers:
       husky: 7.0.4
       jsdom: 19.0.0
       lint-staged: 12.1.7
-      next: 12.1.6-canary.17
+      next: 12.2.0
       only-allow: 1.1.0
       patch-package: 6.4.7
       prettier: 2.6.2
@@ -50,12 +50,12 @@ importers:
       "@types/node": 17.0.16
       "@types/preview-email": 2.0.1
       "@types/react": 18.0.1
-      blitz: workspace:2.0.0-alpha.48
+      blitz: workspace:2.0.0-alpha.49
       eslint: 7.32.0
       husky: 7.0.4
       jest: 27.5.1
       lint-staged: 12.1.7
-      next: 12.1.6-canary.17
+      next: 12.2.0
       prettier: ^2.5.1
       prettier-plugin-prisma: 3.8.0
       pretty-quick: 3.1.3
@@ -66,7 +66,7 @@ importers:
       react-hook-form: 7.29.0
       ts-node: 10.7.0
       typescript: ^4.5.3
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
@@ -75,13 +75,13 @@ importers:
       "@hookform/resolvers": 2.8.8_react-hook-form@7.29.0
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-hook-form: 7.29.0_react@18.0.0
       ts-node: 10.7.0_fxg3r7oju3tntkxsvleuiot4fa
-      zod: 3.10.1
+      zod: 3.17.3
     devDependencies:
       "@next/bundle-analyzer": 12.0.8
       "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
@@ -114,7 +114,7 @@ importers:
       blitz: workspace:*
       eslint: 7.32.0
       jest: 27.5.1
-      next: 12.1.6-canary.17
+      next: 12.2.0
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
       prisma: 3.9.0
@@ -132,7 +132,7 @@ importers:
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
       jest: 27.5.1_ts-node@10.7.0
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
       prisma: 3.9.0
@@ -162,7 +162,7 @@ importers:
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.1.6-canary.17
+      next: 12.2.0
       node-fetch: 3.2.3
       prisma: 3.9.0
       react: 18.0.0
@@ -175,7 +175,7 @@ importers:
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -206,7 +206,7 @@ importers:
       eslint: 7.32.0
       fs-extra: 10.0.1
       get-port: 6.1.2
-      next: 12.1.6-canary.17
+      next: 12.2.0
       node-fetch: 3.2.3
       react: 18.0.0
       react-dom: 18.0.0
@@ -216,7 +216,7 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
@@ -249,7 +249,7 @@ importers:
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.1.6-canary.17
+      next: 12.2.0
       node-fetch: 3.2.3
       prisma: 3.9.0
       react: 18.0.0
@@ -262,7 +262,7 @@ importers:
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -296,7 +296,7 @@ importers:
       eslint-config-next: latest
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
-      next: 12.1.6-canary.17
+      next: 12.2.0
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0
@@ -309,7 +309,7 @@ importers:
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -339,7 +339,7 @@ importers:
       blitz: workspace:*
       eslint: 7.32.0
       fs-extra: 10.0.1
-      next: 12.1.6-canary.17
+      next: 12.2.0
       react: 18.0.0
       react-dom: 18.0.0
       typescript: ^4.5.3
@@ -349,7 +349,7 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       blitz: link:../../packages/blitz
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
@@ -380,7 +380,7 @@ importers:
       fs-extra: 10.0.1
       get-port: 6.1.2
       lowdb: 3.0.0
-      next: 12.1.6-canary.17
+      next: 12.2.0
       node-fetch: 3.2.3
       prisma: 3.9.0
       react: 18.0.0
@@ -393,7 +393,7 @@ importers:
       "@prisma/client": 3.9.0_prisma@3.9.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       prisma: 3.9.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
@@ -471,8 +471,8 @@ importers:
 
   packages/blitz:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.48
-      "@blitzjs/generator": 2.0.0-alpha.48
+      "@blitzjs/config": workspace:2.0.0-alpha.49
+      "@blitzjs/generator": 2.0.0-alpha.49
       "@types/cookie": 0.4.1
       "@types/cross-spawn": 6.0.2
       "@types/debug": 4.1.7
@@ -521,7 +521,7 @@ importers:
       unbuild: 0.6.9
       watch: 1.0.2
       watchpack: 2.1.1
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/generator": link:../generator
       arg: 5.0.1
@@ -574,11 +574,11 @@ importers:
       typescript: 4.6.3
       unbuild: 0.6.9
       watch: 1.0.2
-      zod: 3.10.1
+      zod: 3.17.3
 
   packages/blitz-auth:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.48
+      "@blitzjs/config": workspace:2.0.0-alpha.49
       "@testing-library/react": 13.0.0
       "@testing-library/react-hooks": 7.0.2
       "@types/b64-lite": 1.3.0
@@ -592,7 +592,7 @@ importers:
       "@types/secure-password": 3.1.1
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.48
+      blitz: 2.0.0-alpha.49
       cookie: 0.4.1
       cookie-session: 2.0.0
       debug: 4.3.3
@@ -643,8 +643,8 @@ importers:
 
   packages/blitz-next:
     specifiers:
-      "@blitzjs/config": workspace:2.0.0-alpha.48
-      "@blitzjs/rpc": 2.0.0-alpha.48
+      "@blitzjs/config": workspace:2.0.0-alpha.49
+      "@blitzjs/rpc": 2.0.0-alpha.49
       "@testing-library/dom": 8.13.0
       "@testing-library/jest-dom": 5.16.3
       "@testing-library/react": 13.0.0
@@ -655,13 +655,13 @@ importers:
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@types/testing-library__react-hooks": 4.0.0
-      blitz: 2.0.0-alpha.48
+      blitz: 2.0.0-alpha.49
       cross-spawn: 7.0.3
       debug: 4.3.3
       find-up: 4.1.0
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      next: 12.1.6-canary.17
+      next: 12.2.0
       react: 18.0.0
       react-dom: 18.0.0
       react-query: 3.39.0
@@ -693,7 +693,7 @@ importers:
       blitz: link:../blitz
       cross-spawn: 7.0.3
       find-up: 4.1.0
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       resolve-from: 5.0.0
@@ -704,17 +704,17 @@ importers:
 
   packages/blitz-rpc:
     specifiers:
-      "@blitzjs/auth": 2.0.0-alpha.48
-      "@blitzjs/config": workspace:2.0.0-alpha.48
+      "@blitzjs/auth": 2.0.0-alpha.49
+      "@blitzjs/config": workspace:2.0.0-alpha.49
       "@types/debug": 4.1.7
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       b64-lite: 1.4.0
       bad-behavior: 1.0.1
-      blitz: 2.0.0-alpha.48
+      blitz: 2.0.0-alpha.49
       chalk: ^4.1.0
       debug: 4.3.3
-      next: 12.1.6-canary.17
+      next: 12.2.0
       react: 18.0.0
       react-dom: 18.0.0
       react-query: 3.39.0
@@ -722,7 +722,7 @@ importers:
       typescript: ^4.5.3
       unbuild: 0.6.9
       watch: 1.0.2
-      zod: 3.10.1
+      zod: 3.17.3
     dependencies:
       "@blitzjs/auth": link:../blitz-auth
       b64-lite: 1.4.0
@@ -731,14 +731,14 @@ importers:
       debug: 4.3.3
       react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
       superjson: 1.8.0
-      zod: 3.10.1
+      zod: 3.17.3
     devDependencies:
       "@blitzjs/config": link:../config
       "@types/debug": 4.1.7
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       blitz: link:../blitz
-      next: 12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq
+      next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       typescript: 4.6.3
@@ -753,12 +753,12 @@ importers:
       "@babel/plugin-syntax-typescript": 7.17.12
       "@babel/preset-env": 7.12.10
       "@blitzjs/config": workspace:*
-      "@blitzjs/generator": 2.0.0-alpha.48
+      "@blitzjs/generator": 2.0.0-alpha.49
       "@types/jscodeshift": 0.11.2
       "@types/node": 17.0.16
       arg: 5.0.1
       ast-types: 0.14.2
-      blitz: 2.0.0-alpha.48
+      blitz: 2.0.0-alpha.49
       chalk: ^4.1.0
       cross-spawn: 7.0.3
       debug: 4.3.3
@@ -813,7 +813,7 @@ importers:
       "@babel/plugin-transform-typescript": 7.12.1
       "@babel/preset-env": 7.12.10
       "@babel/types": 7.12.10
-      "@blitzjs/config": 2.0.0-alpha.48
+      "@blitzjs/config": 2.0.0-alpha.49
       "@juanm04/cpx": 2.0.1
       "@mrleebo/prisma-ast": 0.2.6
       "@types/babel__core": 7.1.19
@@ -904,7 +904,7 @@ importers:
 
   packages/pkg-template:
     specifiers:
-      "@blitzjs/config": 2.0.0-alpha.48
+      "@blitzjs/config": 2.0.0-alpha.49
       "@types/react": 18.0.1
       "@types/react-dom": 17.0.14
       "@typescript-eslint/eslint-plugin": 5.9.1
@@ -3431,10 +3431,10 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@next/env/12.1.6-canary.17:
+  /@next/env/12.2.0:
     resolution:
       {
-        integrity: sha512-/uCSXyxMDO37Rw1ngfI17/KH1iUWUIndRjYpRsfQDoJcL8yuCv8iB4CTw1cAdknZ/A48p0ukzJ/zktYvsa6tgg==,
+        integrity: sha512-/FCkDpL/8SodJEXvx/DYNlOD5ijTtkozf4PPulYPtkPOJaMPpBSOkzmsta4fnrnbdH6eZjbwbiXFdr6gSQCV4w==,
       }
 
   /@next/eslint-plugin-next/12.0.7:
@@ -3455,10 +3455,10 @@ packages:
       glob: 7.1.7
     dev: true
 
-  /@next/swc-android-arm-eabi/12.1.6-canary.17:
+  /@next/swc-android-arm-eabi/12.2.0:
     resolution:
       {
-        integrity: sha512-1L3HKWM+M0ruo2EbKFMYGEHDmLx6XrYAf/5gMAW0xw0vIoKIpPNupZgfl8D+fHjp07tL8lg6i8MYCooMH14ybQ==,
+        integrity: sha512-hbneH8DNRB2x0Nf5fPCYoL8a0osvdTCe4pvOc9Rv5CpDsoOlf8BWBs2OWpeP0U2BktGvIsuUhmISmdYYGyrvTw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -3466,10 +3466,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-android-arm64/12.1.6-canary.17:
+  /@next/swc-android-arm64/12.2.0:
     resolution:
       {
-        integrity: sha512-ZM+0ttYxOFeLOHDPifcBZViaa3i0Kro17U8ilLxAVdqPH9GUQkSJOcBumHsWWI4KDjEaB2brTz1d3Tf8IoZDUw==,
+        integrity: sha512-1eEk91JHjczcJomxJ8X0XaUeNcp5Lx1U2Ic7j15ouJ83oRX+3GIslOuabW2oPkSgXbHkThMClhirKpvG98kwZg==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -3477,10 +3477,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-arm64/12.1.6-canary.17:
+  /@next/swc-darwin-arm64/12.2.0:
     resolution:
       {
-        integrity: sha512-UzuX8mIXwFDkG7nfVLE53Nw1grtgk42tep+1qpVvYteG++7+ARqYboJ2H5bQA9+WaB2iZmW3PU2yMo4B+543Aw==,
+        integrity: sha512-x5U5gJd7ZvrEtTFnBld9O2bUlX8opu7mIQUqRzj7KeWzBwPhrIzTTsQXAiNqsaMuaRPvyHBVW/5d/6g6+89Y8g==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -3488,10 +3488,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-x64/12.1.6-canary.17:
+  /@next/swc-darwin-x64/12.2.0:
     resolution:
       {
-        integrity: sha512-mLt3rxUYgjavAaoyN234SmWJ1tv6hpZ1zn1ioUyV9g6qNR1TcuLDZeA+bx7wrdQsBuKrG31ssOF7W2gWYJZxCw==,
+        integrity: sha512-iwMNFsrAPjfedjKDv9AXPAV16PWIomP3qw/FfPaxkDVRbUls7BNdofBLzkQmqxqWh93WrawLwaqyXpJuAaiwJA==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -3499,10 +3499,21 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm-gnueabihf/12.1.6-canary.17:
+  /@next/swc-freebsd-x64/12.2.0:
     resolution:
       {
-        integrity: sha512-7jkGI7nPGBrnCQfOhoe2spn/PNqMZbspdkX2kcbnIsUzor4Bm03ZFL76NTK7XO9q1H5wnsEeAftPCx8GExiaDA==,
+        integrity: sha512-gRiAw8g3Akf6niTDLEm1Emfa7jXDjvaAj/crDO8hKASKA4Y1fS4kbi/tyWw5VtoFI4mUzRmCPmZ8eL0tBSG58A==,
+      }
+    engines: {node: ">= 10"}
+    cpu: [x64]
+    os: [freebsd]
+    requiresBuild: true
+    optional: true
+
+  /@next/swc-linux-arm-gnueabihf/12.2.0:
+    resolution:
+      {
+        integrity: sha512-/TJZkxaIpeEwnXh6A40trgwd40C5+LJroLUOEQwMOJdavLl62PjCA6dGl1pgooWLCIb5YdBQ0EG4ylzvLwS2+Q==,
       }
     engines: {node: ">= 10"}
     cpu: [arm]
@@ -3510,10 +3521,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-gnu/12.1.6-canary.17:
+  /@next/swc-linux-arm64-gnu/12.2.0:
     resolution:
       {
-        integrity: sha512-bxiZpiEuKfS0Oh7GdQJQUqY/z7vndBygQFkqtji62xnUmoI64LGxAwG3Wix+MfZqRu3OYv482fUKKBYsZ7zopQ==,
+        integrity: sha512-++WAB4ElXCSOKG9H8r4ENF8EaV+w0QkrpjehmryFkQXmt5juVXz+nKDVlCRMwJU7A1O0Mie82XyEoOrf6Np1pA==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -3521,10 +3532,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-musl/12.1.6-canary.17:
+  /@next/swc-linux-arm64-musl/12.2.0:
     resolution:
       {
-        integrity: sha512-IloJSboqPXy7Z6glS6M9l0J/rqSNe3Kv38651YZyvJ04oUEgCM+zZpO5bqwH2U5zvzbcuvIsnx01X8KuyT7pYQ==,
+        integrity: sha512-XrqkHi/VglEn5zs2CYK6ofJGQySrd+Lr4YdmfJ7IhsCnMKkQY1ma9Hv5THwhZVof3e+6oFHrQ9bWrw9K4WTjFA==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -3532,10 +3543,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-gnu/12.1.6-canary.17:
+  /@next/swc-linux-x64-gnu/12.2.0:
     resolution:
       {
-        integrity: sha512-Vj3Eo49sNxov3Uqp/F3M2Ae0fc0MEN/5OMQ7RdD0BDKRDtg6BZuie1u7XB6/dSUJ5/Yr/CYXpmFPxUaxptgL5g==,
+        integrity: sha512-MyhHbAKVjpn065WzRbqpLu2krj4kHLi6RITQdD1ee+uxq9r2yg5Qe02l24NxKW+1/lkmpusl4Y5Lks7rBiJn4w==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -3543,10 +3554,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-musl/12.1.6-canary.17:
+  /@next/swc-linux-x64-musl/12.2.0:
     resolution:
       {
-        integrity: sha512-tOaVOurrFWyPezjuYgEHjuo1rRNdDDRe1X+Ypl7jjGk39uPnnAJRYOhItEUmuIJI9gQKsx+Ls1FvBT4N2yeLXA==,
+        integrity: sha512-Tz1tJZ5egE0S/UqCd5V6ZPJsdSzv/8aa7FkwFmIJ9neLS8/00za+OY5pq470iZQbPrkTwpKzmfTTIPRVD5iqDg==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -3554,10 +3565,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-arm64-msvc/12.1.6-canary.17:
+  /@next/swc-win32-arm64-msvc/12.2.0:
     resolution:
       {
-        integrity: sha512-oOIirLj/xhq1pQz6anbRBowleRR+AGd1ZFP3BS8e2ypdjgzaphY/U7WonffDA0JSAcs4Pzt0vYmkXmf52VSBaA==,
+        integrity: sha512-0iRO/CPMCdCYUzuH6wXLnsfJX1ykBX4emOOvH0qIgtiZM0nVYbF8lkEyY2ph4XcsurpinS+ziWuYCXVqrOSqiw==,
       }
     engines: {node: ">= 10"}
     cpu: [arm64]
@@ -3565,10 +3576,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-ia32-msvc/12.1.6-canary.17:
+  /@next/swc-win32-ia32-msvc/12.2.0:
     resolution:
       {
-        integrity: sha512-Zld1RyPjY+e8E1DKCmmkj1qRf61dmg8o6efp3vtzg0qfUaG8mIBsVrghLGSRMla9x+/iKKGqjvw/teJWAiqttw==,
+        integrity: sha512-8A26RJVcJHwIKm8xo/qk2ePRquJ6WCI2keV2qOW/Qm+ZXrPXHMIWPYABae/nKN243YFBNyPiHytjX37VrcpUhg==,
       }
     engines: {node: ">= 10"}
     cpu: [ia32]
@@ -3576,10 +3587,10 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-x64-msvc/12.1.6-canary.17:
+  /@next/swc-win32-x64-msvc/12.2.0:
     resolution:
       {
-        integrity: sha512-gAj3x6WqHPAhQY0Gq5F4LakkHIe61KkkwN4DnMf/tgHM9G1H+babeYYUjSKZvWl1X7CJsdZq/LGzXhmG4PQDyw==,
+        integrity: sha512-OI14ozFLThEV3ey6jE47zrzSTV/6eIMsvbwozo+XfdWqOPwQ7X00YkRx4GVMKMC0rM44oGS2gmwMKYpe4EblnA==,
       }
     engines: {node: ">= 10"}
     cpu: [x64]
@@ -3838,6 +3849,14 @@ packages:
       }
     dependencies:
       "@sinonjs/commons": 1.8.3
+
+  /@swc/helpers/0.4.2:
+    resolution:
+      {
+        integrity: sha512-556Az0VX7WR6UdoTn4htt/l3zPQ7bsQWK+HqdG4swV7beUCxo/BqmvbOpUkTIm/9ih86LIf1qsUnywNL3obGHw==,
+      }
+    dependencies:
+      tslib: 2.4.0
 
   /@szmarczak/http-timer/1.1.2:
     resolution:
@@ -12739,10 +12758,10 @@ packages:
       }
     dev: false
 
-  /next/12.1.6-canary.17:
+  /next/12.2.0:
     resolution:
       {
-        integrity: sha512-Aw2snJwacpeHiT9bOIH2hmu1UM5PigklTRnZfKOsozJ4ZrapxG2bk/DMc1t/nkn+DH6kSYwWJXMIKfysP/vymg==,
+        integrity: sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA==,
       }
     engines: {node: ">=12.22.0"}
     hasBin: true
@@ -12760,32 +12779,35 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.1.6-canary.17
+      "@next/env": 12.2.0
+      "@swc/helpers": 0.4.2
       caniuse-lite: 1.0.30001339
       postcss: 8.4.5
       styled-jsx: 5.0.2
+      use-sync-external-store: 1.1.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.1.6-canary.17
-      "@next/swc-android-arm64": 12.1.6-canary.17
-      "@next/swc-darwin-arm64": 12.1.6-canary.17
-      "@next/swc-darwin-x64": 12.1.6-canary.17
-      "@next/swc-linux-arm-gnueabihf": 12.1.6-canary.17
-      "@next/swc-linux-arm64-gnu": 12.1.6-canary.17
-      "@next/swc-linux-arm64-musl": 12.1.6-canary.17
-      "@next/swc-linux-x64-gnu": 12.1.6-canary.17
-      "@next/swc-linux-x64-musl": 12.1.6-canary.17
-      "@next/swc-win32-arm64-msvc": 12.1.6-canary.17
-      "@next/swc-win32-ia32-msvc": 12.1.6-canary.17
-      "@next/swc-win32-x64-msvc": 12.1.6-canary.17
+      "@next/swc-android-arm-eabi": 12.2.0
+      "@next/swc-android-arm64": 12.2.0
+      "@next/swc-darwin-arm64": 12.2.0
+      "@next/swc-darwin-x64": 12.2.0
+      "@next/swc-freebsd-x64": 12.2.0
+      "@next/swc-linux-arm-gnueabihf": 12.2.0
+      "@next/swc-linux-arm64-gnu": 12.2.0
+      "@next/swc-linux-arm64-musl": 12.2.0
+      "@next/swc-linux-x64-gnu": 12.2.0
+      "@next/swc-linux-x64-musl": 12.2.0
+      "@next/swc-win32-arm64-msvc": 12.2.0
+      "@next/swc-win32-ia32-msvc": 12.2.0
+      "@next/swc-win32-x64-msvc": 12.2.0
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
     dev: false
 
-  /next/12.1.6-canary.17_zpnidt7m3osuk7shl3s4oenomq:
+  /next/12.2.0_zpnidt7m3osuk7shl3s4oenomq:
     resolution:
       {
-        integrity: sha512-Aw2snJwacpeHiT9bOIH2hmu1UM5PigklTRnZfKOsozJ4ZrapxG2bk/DMc1t/nkn+DH6kSYwWJXMIKfysP/vymg==,
+        integrity: sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA==,
       }
     engines: {node: ">=12.22.0"}
     hasBin: true
@@ -12803,25 +12825,28 @@ packages:
       sass:
         optional: true
     dependencies:
-      "@next/env": 12.1.6-canary.17
+      "@next/env": 12.2.0
+      "@swc/helpers": 0.4.2
       caniuse-lite: 1.0.30001339
       postcss: 8.4.5
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       styled-jsx: 5.0.2_react@18.0.0
+      use-sync-external-store: 1.1.0_react@18.0.0
     optionalDependencies:
-      "@next/swc-android-arm-eabi": 12.1.6-canary.17
-      "@next/swc-android-arm64": 12.1.6-canary.17
-      "@next/swc-darwin-arm64": 12.1.6-canary.17
-      "@next/swc-darwin-x64": 12.1.6-canary.17
-      "@next/swc-linux-arm-gnueabihf": 12.1.6-canary.17
-      "@next/swc-linux-arm64-gnu": 12.1.6-canary.17
-      "@next/swc-linux-arm64-musl": 12.1.6-canary.17
-      "@next/swc-linux-x64-gnu": 12.1.6-canary.17
-      "@next/swc-linux-x64-musl": 12.1.6-canary.17
-      "@next/swc-win32-arm64-msvc": 12.1.6-canary.17
-      "@next/swc-win32-ia32-msvc": 12.1.6-canary.17
-      "@next/swc-win32-x64-msvc": 12.1.6-canary.17
+      "@next/swc-android-arm-eabi": 12.2.0
+      "@next/swc-android-arm64": 12.2.0
+      "@next/swc-darwin-arm64": 12.2.0
+      "@next/swc-darwin-x64": 12.2.0
+      "@next/swc-freebsd-x64": 12.2.0
+      "@next/swc-linux-arm-gnueabihf": 12.2.0
+      "@next/swc-linux-arm64-gnu": 12.2.0
+      "@next/swc-linux-arm64-musl": 12.2.0
+      "@next/swc-linux-x64-gnu": 12.2.0
+      "@next/swc-linux-x64-musl": 12.2.0
+      "@next/swc-win32-arm64-msvc": 12.2.0
+      "@next/swc-win32-ia32-msvc": 12.2.0
+      "@next/swc-win32-x64-msvc": 12.2.0
     transitivePeerDependencies:
       - "@babel/core"
       - babel-plugin-macros
@@ -16633,6 +16658,25 @@ packages:
       querystring: 0.2.0
     dev: false
 
+  /use-sync-external-store/1.1.0:
+    resolution:
+      {
+        integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dev: false
+
+  /use-sync-external-store/1.1.0_react@18.0.0:
+    resolution:
+      {
+        integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.0.0
+
   /use/3.1.1:
     resolution:
       {
@@ -17360,8 +17404,8 @@ packages:
       }
     engines: {node: ">=10"}
 
-  /zod/3.10.1:
+  /zod/3.17.3:
     resolution:
       {
-        integrity: sha512-ZnIzDr3vhppKW7yTAlvUQ7QJir5yoL14DgZ6DjYNb4/D4DxFdZeysF6Q5hAahU7KXtaiTgYkGO/qiAD83YN3ig==,
+        integrity: sha512-4oKP5zvG6GGbMlqBkI5FESOAweldEhSOZ6LI6cG+JzUT7ofj1ZOC0PJudpQOpT1iqOFpYYtX5Pw0+o403y4bcg==,
       }

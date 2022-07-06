@@ -20,7 +20,7 @@
   "dependencies": {
     "@blitzjs/next": "alpha",
     "blitz": "alpha",
-    "next": "12.1.6",
+    "next": "12.2.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "ts-node": "10.7.0"
