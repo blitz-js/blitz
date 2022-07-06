@@ -26,7 +26,7 @@ function getGlobalObject<T extends Record<string, unknown>>(key: string, default
 
 type Resolver = (...args: unknown[]) => Promise<unknown>
 type ResolverFiles = Record<string, () => Promise<{default?: Resolver}>>
-export type ResolverBasePath = "queries|mutations" | "root" | undefined
+export type ResolverPathOptions = "queries|mutations" | "root" | ((path: string) => string)
 
 // We define `global.__internal_blitzRpcResolverFiles` to ensure we use the same global object.
 // Needed for Next.js. I'm guessing that Next.js is including the `node_modules/` files in a seperate bundle than user files.
@@ -51,8 +51,53 @@ export function __internal_addBlitzRpcResolver(
 }
 
 const dir = __dirname + (() => "")() // trick to avoid `@vercel/ncc` to glob import
-export const loaderServer = resolve(dir, "./loader-server.cjs")
-export const loaderClient = resolve(dir, "./loader-client.cjs")
+const loaderServer = resolve(dir, "./loader-server.cjs")
+const loaderClient = resolve(dir, "./loader-client.cjs")
+
+interface WebpackRuleOptions {
+  resolverPath: ResolverPathOptions | undefined
+}
+
+interface WebpackRule {
+  test: RegExp
+  use: Array<{
+    loader: string
+    options: WebpackRuleOptions
+  }>
+}
+
+export interface InstallWebpackConfigOptions {
+  webpackConfig: {
+    module: {
+      rules: WebpackRule[]
+    }
+  }
+  webpackRuleOptions: WebpackRuleOptions
+}
+
+export function installWebpackConfig({
+  webpackConfig,
+  webpackRuleOptions,
+}: InstallWebpackConfigOptions) {
+  webpackConfig.module.rules.push({
+    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    use: [
+      {
+        loader: loaderServer,
+        options: webpackRuleOptions,
+      },
+    ],
+  })
+  webpackConfig.module.rules.push({
+    test: /[\\/](queries|mutations)[\\/]/,
+    use: [
+      {
+        loader: loaderClient,
+        options: webpackRuleOptions,
+      },
+    ],
+  })
+}
 
 // ----------
 // END LOADER

@@ -17,11 +17,17 @@ import type {
   MiddlewareResponse,
 } from "blitz"
 import {handleRequestWithMiddleware, startWatcher, stopWatcher} from "blitz"
-import {dehydrate, getQueryKey, getInfiniteQueryKey, loaderClient, loaderServer} from "@blitzjs/rpc"
+import {
+  dehydrate,
+  getInfiniteQueryKey,
+  getQueryKey,
+  installWebpackConfig,
+  InstallWebpackConfigOptions,
+  ResolverPathOptions,
+} from "@blitzjs/rpc"
 import {DefaultOptions, QueryClient} from "react-query"
 import {IncomingMessage, ServerResponse} from "http"
 import {withSuperJsonProps} from "./superjson"
-import {ResolverBasePath} from "@blitzjs/rpc/src/index-server"
 import {ParsedUrlQuery} from "querystring"
 import {PreviewData} from "next/types"
 
@@ -163,57 +169,11 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
 
 export interface BlitzConfig extends NextConfig {
   blitz?: {
-    resolverBasePath?: ResolverBasePath
+    resolverPath?: ResolverPathOptions
     customServer?: {
       hotReload?: boolean
     }
   }
-}
-
-interface WebpackRuleOptions {
-  resolverBasePath?: ResolverBasePath
-}
-
-interface WebpackRule {
-  test: RegExp
-  use: Array<{
-    loader: string
-    options: WebpackRuleOptions
-  }>
-}
-
-interface InstallWebpackConfigOptions {
-  webpackConfig: {
-    module: {
-      rules: WebpackRule[]
-    }
-  }
-  nextConfig: BlitzConfig
-}
-
-export function installWebpackConfig({webpackConfig, nextConfig}: InstallWebpackConfigOptions) {
-  const options: WebpackRuleOptions = {
-    resolverBasePath: nextConfig.blitz?.resolverBasePath,
-  }
-
-  webpackConfig.module.rules.push({
-    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
-    use: [
-      {
-        loader: loaderServer,
-        options,
-      },
-    ],
-  })
-  webpackConfig.module.rules.push({
-    test: /[\\/](queries|mutations)[\\/]/,
-    use: [
-      {
-        loader: loaderClient,
-        options,
-      },
-    ],
-  })
 }
 
 export function withBlitz(nextConfig: BlitzConfig = {}) {
@@ -236,7 +196,12 @@ export function withBlitz(nextConfig: BlitzConfig = {}) {
 
   const config = Object.assign({}, nextConfig, {
     webpack: (config: InstallWebpackConfigOptions["webpackConfig"], options: any) => {
-      installWebpackConfig({webpackConfig: config, nextConfig})
+      installWebpackConfig({
+        webpackConfig: config,
+        webpackRuleOptions: {
+          resolverPath: nextConfig.blitz?.resolverPath,
+        },
+      })
       if (typeof nextConfig.webpack === "function") {
         return nextConfig.webpack(config, options)
       }

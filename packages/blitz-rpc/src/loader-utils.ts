@@ -1,9 +1,9 @@
 import {assert} from "blitz"
 import {posix, sep, win32} from "path"
-import {ResolverBasePath} from "./index-server"
+import {ResolverPathOptions} from "./index-server"
 
 export interface LoaderOptions {
-  resolverBasePath?: ResolverBasePath
+  resolverPath: ResolverPathOptions
 }
 
 export interface Loader {
@@ -51,9 +51,13 @@ const fileExtensionRegex = /\.([a-z]+)$/
 
 export function convertPageFilePathToRoutePath(
   filePath: string,
-  resolverBasePath: ResolverBasePath,
+  resolverPath?: ResolverPathOptions,
 ) {
-  if (resolverBasePath === "root") {
+  if (typeof resolverPath === "function") {
+    return resolverPath(filePath)
+  }
+
+  if (resolverPath === "root") {
     return filePath.replace(fileExtensionRegex, "")
   }
 

@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.49
+
+### Patch Changes
+
+- bec9512e: Allow resolverPath to be a function which is ran for every file path that is converted to RPC Route
+- Updated dependencies [bec9512e]
+  - @blitzjs/rpc@2.0.0-alpha.49
+
 ## 2.0.0-alpha.48
 
 ### Patch Changes
