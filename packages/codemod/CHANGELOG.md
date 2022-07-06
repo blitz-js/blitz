@@ -1,5 +1,13 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.51
+
+### Patch Changes
+
+- 70f9ae49: Handle next/dynamic default import in codemod
+  - @blitzjs/generator@2.0.0-alpha.51
+  - blitz@2.0.0-alpha.51
+
 ## 2.0.0-alpha.50
 
 ### Patch Changes
