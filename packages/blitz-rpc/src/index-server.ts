@@ -1,7 +1,6 @@
 import {assert, Ctx, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
-import chalk from "chalk"
 import {resolve} from "path"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
