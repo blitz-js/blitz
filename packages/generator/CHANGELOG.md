@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- c11f0401: Update Next.js version and addBasePath location
+
 ## 2.0.0-alpha.49
 
 ## 2.0.0-alpha.48

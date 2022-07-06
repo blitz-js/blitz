@@ -1,5 +1,13 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- dc694cf1: Removes the check for when withBlitz is mounted before rendering the users app. We had this previously to avoid the react 18 suspense error being showin in development with nextjs.
+- Updated dependencies [c11f0401]
+  - @blitzjs/rpc@2.0.0-alpha.50
+
 ## 2.0.0-alpha.49
 
 ### Patch Changes

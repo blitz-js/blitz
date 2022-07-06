@@ -1,5 +1,13 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- c11f0401: Update Next.js version and addBasePath location
+  - blitz@2.0.0-alpha.50
+  - @blitzjs/auth@2.0.0-alpha.50
+
 ## 2.0.0-alpha.49
 
 ### Patch Changes
