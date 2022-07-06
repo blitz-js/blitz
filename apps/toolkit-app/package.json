@@ -31,7 +31,7 @@
     "@prisma/client": "3.9.0",
     "blitz": "workspace:2.0.0-alpha.51",
     "next": "12.2.0",
-    "prisma": "3.9.0",
+    "prisma": "4.0.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-hook-form": "7.29.0",

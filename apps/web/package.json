@@ -28,7 +28,7 @@
     "next": "12.2.0",
     "passport-mock-strategy": "2.0.0",
     "passport-twitter": "1.0.4",
-    "prisma": "3.9.0",
+    "prisma": "4.0.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "ts-node": "10.7.0"
