@@ -1,0 +1,29 @@
+diff --git a/dist/build/webpack-config.js b/dist/build/webpack-config.js
+index f9cab03b74411376898fbf5bd14c187236d9ad1b..f91706ec39cc53d642e477ecc10978b17d2b8bb4 100755
+--- a/dist/build/webpack-config.js
++++ b/dist/build/webpack-config.js
+@@ -910,6 +910,7 @@ async function getBaseWebpackConfig(dir, { buildId , config , compilerType , dev
+                 "process.env.__NEXT_I18N_SUPPORT": JSON.stringify(!!config.i18n),
+                 "process.env.__NEXT_I18N_DOMAINS": JSON.stringify((ref9 = config.i18n) == null ? void 0 : ref9.domains),
+                 "process.env.__NEXT_ANALYTICS_ID": JSON.stringify(config.analyticsId),
++                'process.env.__NEXT_REACT_ONRECOVERABLE_ERROR': config.reactOnRecoverableError,
+                 ...isNodeServer || isEdgeServer ? {
+                     // Fix bad-actors in the npm ecosystem (e.g. `node-formidable`)
+                     // This is typically found in unmaintained modules from the
+diff --git a/dist/client/index.js b/dist/client/index.js
+index 74242a1991af91cc44c2d4af3516f9225043f987..ed2f298d65a636fa79b3d580ad6e3aa0792efcfd 100755
+--- a/dist/client/index.js
++++ b/dist/client/index.js
+@@ -475,7 +475,11 @@ function renderReactElement(domEl, fn) {
+     if (process.env.__NEXT_REACT_ROOT) {
+         if (!reactRoot) {
+             // Unlike with createRoot, you don't need a separate root.render() call here
+-            reactRoot = ReactDOM.hydrateRoot(domEl, reactEl);
++            reactRoot = ReactDOM.hydrateRoot(domEl, reactEl, Boolean(process.env.__NEXT_REACT_ONRECOVERABLE_ERROR)
++            ? {
++                onRecoverableError: process.env.__NEXT_REACT_ONRECOVERABLE_ERROR,
++              }
++            : undefined);
+             // TODO: Remove shouldHydrate variable when React 18 is stable as it can depend on `reactRoot` existing
+             shouldHydrate = false;
+         } else {
