@@ -85,14 +85,14 @@ export type BlitzLayout<P = {}> = React.ComponentType<P> & {
 export type AppProps<P = {}> = AppPropsType<Router, P> & {
   Component: BlitzPage
 }
-const BlitzProvider = ({
-  client,
+export const BlitzProvider = ({
+  client = globalThis.queryClient,
   contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
-  if (globalThis.queryClient) {
+  if (client) {
     return (
       <QueryClientProvider
         client={client || globalThis.queryClient}

@@ -223,6 +223,7 @@ const upgradeLegacy = async () => {
         const nextImage = findImport(program, "next/image")
         const nextLink = findImport(program, "next/link")
         const nextHead = findImport(program, "next/head")
+        const dynamic = findImport(program, "next/dynamic")
 
         if (nextImage?.length) {
           nextImage.remove()
@@ -256,6 +257,18 @@ const upgradeLegacy = async () => {
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Head"))],
                 j.stringLiteral("next/head"),
+              ),
+            )
+        }
+
+        if (dynamic?.length) {
+          dynamic.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("dynamic"))],
+                j.stringLiteral("next/dynamic"),
               ),
             )
         }
@@ -331,7 +344,6 @@ const upgradeLegacy = async () => {
         (file) => {
           const program = getCollectionFromSource(file)
 
-          // BlitzApiHandler -> NextApiHandler
           replaceImport(program, "blitz", "BlitzApiHandler", "next", "NextApiHandler")
           replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
 
