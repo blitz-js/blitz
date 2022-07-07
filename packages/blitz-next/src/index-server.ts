@@ -104,7 +104,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
       ) => {
         queryClient = new QueryClient({defaultOptions})
 
-        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
+        const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
         await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
       }
 
@@ -136,7 +136,7 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
       ) => {
         queryClient = new QueryClient({defaultOptions})
 
-        const queryKey = infinite ? getQueryKey(fn, input) : getInfiniteQueryKey(fn, input)
+        const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
         await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
       }
 
