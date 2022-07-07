@@ -58,7 +58,7 @@ importers:
       prettier-plugin-prisma: 3.8.0
       pretty-quick: 3.1.3
       preview-email: 3.x
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       react-hook-form: 7.29.0
@@ -71,10 +71,10 @@ importers:
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
       "@hookform/resolvers": 2.8.8_react-hook-form@7.29.0
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-hook-form: 7.29.0_react@18.0.0
@@ -115,7 +115,7 @@ importers:
       next: 12.2.0
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       ts-node: 10.7.0
@@ -125,7 +125,7 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       "@types/jest": 27.4.1
       "@types/passport-twitter": 1.0.37
       blitz: link:../../packages/blitz
@@ -133,7 +133,7 @@ importers:
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
       passport-mock-strategy: 2.0.0
       passport-twitter: 1.0.4
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       ts-node: 10.7.0_typescript@4.7.4
@@ -162,7 +162,7 @@ importers:
       lowdb: 3.0.0
       next: 12.2.0
       node-fetch: 3.2.3
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       typescript: ^4.5.3
@@ -170,11 +170,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
@@ -249,7 +249,7 @@ importers:
       lowdb: 3.0.0
       next: 12.2.0
       node-fetch: 3.2.3
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       typescript: ^4.5.3
@@ -257,11 +257,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
@@ -295,7 +295,7 @@ importers:
       eslint-plugin-testing-library: 5.0.1
       jsdom: ^19.0.0
       next: 12.2.0
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       react-query: 3.39.0
@@ -305,10 +305,10 @@ importers:
       "@blitzjs/config": link:../../packages/config
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
       react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
@@ -380,7 +380,7 @@ importers:
       lowdb: 3.0.0
       next: 12.2.0
       node-fetch: 3.2.3
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
       typescript: ^4.5.3
@@ -388,11 +388,11 @@ importers:
       "@blitzjs/auth": link:../../packages/blitz-auth
       "@blitzjs/next": link:../../packages/blitz-next
       "@blitzjs/rpc": link:../../packages/blitz-rpc
-      "@prisma/client": 3.9.0_prisma@3.9.0
+      "@prisma/client": 3.9.0_prisma@4.0.0
       blitz: link:../../packages/blitz
       lowdb: 3.0.0
       next: 12.2.0_zpnidt7m3osuk7shl3s4oenomq
-      prisma: 3.9.0
+      prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
     devDependencies:
@@ -3626,7 +3626,7 @@ packages:
       }
     dev: true
 
-  /@prisma/client/3.9.0_prisma@3.9.0:
+  /@prisma/client/3.9.0_prisma@4.0.0:
     resolution:
       {
         integrity: sha512-PByWVI7l+KYUQL/pqR81363qhUh3LhYMIYn2czz5slbt3JC6aAk+Wm7PE9nalqSE6s4xSIYdHj6N0yTNqr86sA==,
@@ -3640,7 +3640,7 @@ packages:
         optional: true
     dependencies:
       "@prisma/engines-version": 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
-      prisma: 3.9.0
+      prisma: 4.0.0
     dev: false
 
   /@prisma/engines-version/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
@@ -3650,10 +3650,10 @@ packages:
       }
     dev: false
 
-  /@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
+  /@prisma/engines/3.16.0-49.da41d2bb3406da22087b849f0e911199ba4fbf11:
     resolution:
       {
-        integrity: sha512-qM+uJbkelB21bnK44gYE049YTHIjHysOuj0mj5U2gDGyNLfmiazlggzFPCgEjgme4U5YB2tYs6Z5Hq08Kl8pjA==,
+        integrity: sha512-u/rG4lDHALolWBLr3yebZ+N2qImp3SDMcu7bHNJuRDaYvYEXy/MqfNRNEgd9GoPsXL3gofYf0VzJf2AmCG3YVw==,
       }
     requiresBuild: true
     dev: false
@@ -13792,16 +13792,16 @@ packages:
       - supports-color
     dev: true
 
-  /prisma/3.9.0:
+  /prisma/4.0.0:
     resolution:
       {
-        integrity: sha512-KppIukAgJH6o4q9CRYQUqpJUFt8XOK+5eTlv9W+w/SnaSzar+zbT7RCxspCkoGGVSASAQDMYWSKm3QON/o5ENg==,
+        integrity: sha512-Dtsar03XpCBkcEb2ooGWO/WcgblDTLzGhPcustbehwlFXuTMliMDRzXsfygsgYwQoZnAUKRd1rhpvBNEUziOVw==,
       }
-    engines: {node: ">=12.6"}
+    engines: {node: ">=14.17"}
     hasBin: true
     requiresBuild: true
     dependencies:
-      "@prisma/engines": 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+      "@prisma/engines": 3.16.0-49.da41d2bb3406da22087b849f0e911199ba4fbf11
     dev: false
 
   /process-nextick-args/2.0.1:
