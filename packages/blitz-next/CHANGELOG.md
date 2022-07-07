@@ -1,5 +1,12 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.53
+
+### Patch Changes
+
+- a7e37c58: Export BlitzProvider from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.53
+
 ## 2.0.0-alpha.52
 
 ### Patch Changes
