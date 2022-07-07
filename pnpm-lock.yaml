@@ -9238,18 +9238,6 @@ packages:
       jsonfile: 6.1.0
       universalify: 2.0.0
 
-  /fs-extra/10.1.0:
-    resolution:
-      {
-        integrity: sha512-oRXApq54ETRj4eMiFzGnHWGy+zo5raudjuxN0b8H7s/RU2oW0Wvsx9O0ACRN/kRq9E8Vu/ReskGB5o3ji+FzHQ==,
-      }
-    engines: {node: ">=12"}
-    dependencies:
-      graceful-fs: 4.2.10
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: true
-
   /fs-extra/7.0.1:
     resolution:
       {
@@ -12412,7 +12400,7 @@ packages:
     dependencies:
       defu: 6.0.0
       esbuild: 0.14.48
-      fs-extra: 10.1.0
+      fs-extra: 10.0.1
       globby: 11.1.0
       jiti: 1.14.0
       mri: 1.2.0
@@ -14678,7 +14666,7 @@ packages:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
       "@rollup/pluginutils": 4.2.1
-      debug: 4.3.4
+      debug: 4.3.3
       es-module-lexer: 0.9.3
       esbuild: 0.14.48
       joycon: 3.1.1
