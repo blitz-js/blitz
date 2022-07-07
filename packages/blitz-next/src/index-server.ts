@@ -224,8 +224,8 @@ function withDehydratedState<T extends Result>(result: T, queryClient: QueryClie
   if (!queryClient) {
     return result
   }
-  const dehydratedProps = dehydrate(queryClient)
-  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedProps}}
+  const dehydratedState = dehydrate(queryClient)
+  return {...result, props: {...("props" in result ? result.props : undefined), dehydratedState}}
 }
 
 declare module "blitz" {
