@@ -40,6 +40,8 @@
     "@types/preview-email": "2.0.1",
     "@types/react": "18.0.1",
     "eslint": "7.32.0",
+    "eslint-config-next": "12.2.0",
+    "eslint-config-prettier": "8.5.0",
     "husky": "7.0.4",
     "jest": "27.5.1",
     "lint-staged": "12.1.7",
