@@ -24,8 +24,13 @@ const language = {
 type TLanguage = keyof typeof language
 
 type TPkgManager = "npm" | "yarn" | "pnpm"
-type TTemplate = "full" | "minimal"
+const installCommandMap: Record<TPkgManager, string> = {
+  yarn: "yarn",
+  pnpm: "pnpm install",
+  npm: "npm install",
+}
 
+type TTemplate = "full" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
   full: {
     path: "app",
@@ -266,13 +271,8 @@ const newApp: CliCommand = async (argv) => {
     console.log(`Hang tight while we set up your new Blitz app!`)
     await generator.run()
 
-    const INSTALL_MAP: Record<TPkgManager, string> = {
-      yarn: "yarn",
-      pnpm: "pnpm install",
-      npm: "npm install",
-    }
     if (requireManualInstall) {
-      postInstallSteps.push(INSTALL_MAP[projectPkgManger])
+      postInstallSteps.push(installCommandMap[projectPkgManger])
       postInstallSteps.push(
         "blitz prisma migrate dev (when asked, you can name the migration anything)",
       )
