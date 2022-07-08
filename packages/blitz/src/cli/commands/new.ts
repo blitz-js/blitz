@@ -202,11 +202,7 @@ const determinePkgManagerToInstallDeps = async () => {
 
       projectPkgManger = res.pkgManager
 
-      if (res.pkgManager === "skip") {
-        shouldInstallDeps = false
-      } else {
-        shouldInstallDeps = true
-      }
+      shouldInstallDeps = res.pkgManager !== "skip"
     } else {
       const res = await prompts({
         type: "confirm",
