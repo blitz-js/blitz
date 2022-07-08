@@ -128,14 +128,7 @@ const determineFormLib = async () => {
 
     projectFormLib = res.form
   } else {
-    switch (args["--form"] as TForms) {
-      case "react-final-form":
-        projectFormLib = forms["react-final-form"]
-      case "react-hook-form":
-        projectFormLib = forms["react-hook-form"]
-      case "formik":
-        projectFormLib = forms["formik"]
-    }
+    projectFormLib = forms[args["--form"] as TForms]
   }
 }
 
@@ -273,17 +266,13 @@ const newApp: CliCommand = async (argv) => {
     console.log(`Hang tight while we set up your new Blitz app!`)
     await generator.run()
 
+    const INSTALL_MAP: Record<TPkgManager, string> = {
+      yarn: "yarn",
+      pnpm: "pnpm install",
+      npm: "npm install",
+    }
     if (requireManualInstall) {
-      let cmd
-      switch (projectPkgManger) {
-        case "yarn":
-          cmd = "yarn"
-        case "npm":
-          cmd = "npm install"
-        case "pnpm":
-          cmd = "pnpm install"
-      }
-      postInstallSteps.push(cmd)
+      postInstallSteps.push(INSTALL_MAP[projectPkgManger])
       postInstallSteps.push(
         "blitz prisma migrate dev (when asked, you can name the migration anything)",
       )
