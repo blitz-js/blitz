@@ -87,6 +87,10 @@ const determineProjectName = async () => {
     projectPath = path.resolve(projectName)
   } else {
     projectName = args._.slice(1)[0] as string
+    if (projectName === ".") {
+      projectName = path.basename(process.cwd())
+    }
+
     projectPath = path.resolve(projectName)
   }
 }
