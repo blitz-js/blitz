@@ -24,8 +24,13 @@ const language = {
 type TLanguage = keyof typeof language
 
 type TPkgManager = "npm" | "yarn" | "pnpm"
-type TTemplate = "full" | "minimal"
+const installCommandMap: Record<TPkgManager, string> = {
+  yarn: "yarn",
+  pnpm: "pnpm install",
+  npm: "npm install",
+}
 
+type TTemplate = "full" | "minimal"
 const templates: {[key in TTemplate]: AppGeneratorOptions["template"]} = {
   full: {
     path: "app",
@@ -132,14 +137,7 @@ const determineFormLib = async () => {
 
     projectFormLib = res.form
   } else {
-    switch (args["--form"] as TForms) {
-      case "react-final-form":
-        projectFormLib = forms["react-final-form"]
-      case "react-hook-form":
-        projectFormLib = forms["react-hook-form"]
-      case "formik":
-        projectFormLib = forms["formik"]
-    }
+    projectFormLib = forms[args["--form"] as TForms]
   }
 }
 
@@ -206,11 +204,7 @@ const determinePkgManagerToInstallDeps = async () => {
 
       projectPkgManger = res.pkgManager
 
-      if (res.pkgManager === "skip") {
-        shouldInstallDeps = false
-      } else {
-        shouldInstallDeps = true
-      }
+      shouldInstallDeps = res.pkgManager !== "skip"
     } else {
       const res = await prompts({
         type: "confirm",
@@ -282,16 +276,7 @@ const newApp: CliCommand = async (argv) => {
     await generator.run()
 
     if (requireManualInstall) {
-      let cmd
-      switch (projectPkgManger) {
-        case "yarn":
-          cmd = "yarn"
-        case "npm":
-          cmd = "npm install"
-        case "pnpm":
-          cmd = "pnpm install"
-      }
-      postInstallSteps.push(cmd)
+      postInstallSteps.push(installCommandMap[projectPkgManger])
       postInstallSteps.push(
         "blitz prisma migrate dev (when asked, you can name the migration anything)",
       )
