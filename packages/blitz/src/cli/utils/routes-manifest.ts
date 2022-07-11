@@ -296,8 +296,6 @@ const apiPathRegex = /([\\/]api[\\/])/
 export async function collectAllRoutes(directory: string, config: any) {
   const routeFiles = await collectPages(directory, config.pageExtensions!)
   const rawRouteMappings = createPagesMapping(routeFiles, config)
-  console.log(rawRouteMappings)
-
   const routes = []
   for (const [route, filePath] of Object.entries(rawRouteMappings)) {
     if (["/_app", "/_document", "/_error"].includes(route)) continue
