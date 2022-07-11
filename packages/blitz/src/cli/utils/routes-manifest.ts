@@ -243,8 +243,7 @@ export function convertPageFilePathToRoutePath(filePath: string, pageExtensions:
 }
 export function createPagesMapping(pagePaths: string[], config: any) {
   const {pageExtensions, blitz} = config
-  const resolverType: any = blitz?.resolverPath || "queries|mutations"
-  const isFunc = typeof resolverType === "function"
+  const resolverType = blitz?.resolverPath || "queries|mutations"
 
   const previousPages: PagesMapping = {}
   const pages = pagePaths.reduce<PagesMapping>((result, pagePath) => {
@@ -254,7 +253,7 @@ export function createPagesMapping(pagePaths: string[], config: any) {
     )}`.replace(/\/index$/, "")
     const isResolver = pagePath.includes("/queries/") || pagePath.includes("/mutations/")
     if (isResolver) {
-      if (isFunc) {
+      if (typeof resolverType === "function") {
         page = `/api/rpc${resolverType(pagePath)}`
       } else if (resolverType === "root") {
         page = `/api/rpc${stripExtension(pagePath, pageExtensions)}`
