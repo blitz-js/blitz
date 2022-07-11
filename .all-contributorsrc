@@ -3814,6 +3814,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Trancever",
+      "name": "Dawid Urbaniak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18584155?v=4",
+      "profile": "https://twitter.com/trensik",
+      "contributions": [
+        "doc",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
