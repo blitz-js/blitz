@@ -1,5 +1,70 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.53
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.53
+- blitz@2.0.0-alpha.53
+
+## 2.0.0-alpha.52
+
+### Patch Changes
+
+- Updated dependencies [12cb7a72]
+  - @blitzjs/generator@2.0.0-alpha.52
+  - blitz@2.0.0-alpha.52
+
+## 2.0.0-alpha.51
+
+### Patch Changes
+
+- 70f9ae49: Handle next/dynamic default import in codemod
+  - @blitzjs/generator@2.0.0-alpha.51
+  - blitz@2.0.0-alpha.51
+
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- Updated dependencies [c11f0401]
+  - @blitzjs/generator@2.0.0-alpha.50
+  - blitz@2.0.0-alpha.50
+
+## 2.0.0-alpha.49
+
+### Patch Changes
+
+- @blitzjs/generator@2.0.0-alpha.49
+- blitz@2.0.0-alpha.49
+
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- 93851d90: Handle duplicate imports with Blitz upgrade-legacy codemod
+- Updated dependencies [93851d90]
+  - blitz@2.0.0-alpha.48
+  - @blitzjs/generator@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- Updated dependencies [1d9804a6]
+- Updated dependencies [b405c1e8]
+- Updated dependencies [b86b569d]
+  - blitz@2.0.0-alpha.47
+  - @blitzjs/generator@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- aafdc5b4: Move middlewares from blitz config to blitz server with codemod
+  - @blitzjs/generator@2.0.0-alpha.46
+  - blitz@2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ### Patch Changes

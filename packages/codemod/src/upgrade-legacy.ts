@@ -12,6 +12,9 @@ import {
   getCollectionFromSource,
   wrapDeclaration,
   findIdentifier,
+  removeImport,
+  replaceImport,
+  replaceIdentifiers,
 } from "./utils"
 import {log} from "blitz"
 
@@ -82,8 +85,8 @@ const upgradeLegacy = async () => {
       packageJsonPath.dependencies["react"] = "latest"
       packageJsonPath.dependencies["react-dom"] = "latest"
       packageJsonPath.dependencies["@blitzjs/next"] = "alpha"
-      packageJsonPath.dependencies["@blitzjs/rpc"] = "latest"
-      packageJsonPath.dependencies["@blitzjs/auth"] = "latest"
+      packageJsonPath.dependencies["@blitzjs/rpc"] = "alpha"
+      packageJsonPath.dependencies["@blitzjs/auth"] = "alpha"
       packageJsonPath.dependencies["blitz"] = "alpha"
       packageJsonPath.dependencies["next"] = "latest"
       packageJsonPath.dependencies["prisma"] = "latest"
@@ -98,6 +101,10 @@ const upgradeLegacy = async () => {
     name: "update project's imports",
     action: async () => {
       const specialImports: Record<string, string> = {
+        NextApiHandler: "next",
+        NextApiRequest: "next",
+        NextApiResponse: "next",
+
         Link: "next/link",
         Image: "next/image",
         Script: "next/script",
@@ -139,6 +146,7 @@ const upgradeLegacy = async () => {
         useSession: "@blitzjs/auth",
         useAuthenticatedSession: "@blitzjs/auth",
         useRedirectAuthenticated: "@blitzjs/auth",
+        SessionContext: "@blitzjs/auth",
         useAuthorize: "@blitzjs/auth",
         useQuery: "@blitzjs/rpc",
         useParam: "@blitzjs/next",
@@ -155,6 +163,7 @@ const upgradeLegacy = async () => {
         dehydrate: "@blitzjs/rpc",
         invoke: "@blitzjs/rpc",
         Routes: "@blitzjs/next",
+
         useRouterQuery: "next/router",
         useRouter: "next/router",
         Router: "next/router",
@@ -182,25 +191,15 @@ const upgradeLegacy = async () => {
         parsedProgram.value.program.body.forEach((e: ImportDeclaration) => {
           if (e.type === "ImportDeclaration") {
             if (e.source.value === "blitz") {
-              const specifierIndexesToRemove: number[] = []
-              e.specifiers?.slice().forEach((specifier: any, index) => {
+              e.specifiers?.slice().forEach((specifier: any) => {
                 const importedName =
                   specifier.imported.type === "StringLiteral"
                     ? specifier.imported.value
                     : specifier.imported.name
                 if (importedName in specialImports) {
-                  parsedProgram.value.program.body.unshift(
-                    j.importDeclaration(
-                      [specifier],
-                      j.stringLiteral(specialImports[importedName] as string),
-                    ),
-                  )
-                  specifierIndexesToRemove.push(index)
+                  addNamedImport(program, importedName, specialImports[importedName]!)
+                  removeImport(program, importedName, "blitz")
                 }
-              })
-              // Remove import from original blitz import deconstruct
-              specifierIndexesToRemove.reverse().forEach((index) => {
-                e.specifiers?.splice(index, 1)
               })
               // Removed left over "import 'blitz';"
               if (!e.specifiers?.length) {
@@ -224,6 +223,7 @@ const upgradeLegacy = async () => {
         const nextImage = findImport(program, "next/image")
         const nextLink = findImport(program, "next/link")
         const nextHead = findImport(program, "next/head")
+        const dynamic = findImport(program, "next/dynamic")
 
         if (nextImage?.length) {
           nextImage.remove()
@@ -257,6 +257,18 @@ const upgradeLegacy = async () => {
               j.importDeclaration(
                 [j.importDefaultSpecifier(j.identifier("Head"))],
                 j.stringLiteral("next/head"),
+              ),
+            )
+        }
+
+        if (dynamic?.length) {
+          dynamic.remove()
+          program
+            .get()
+            .value.program.body.unshift(
+              j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier("dynamic"))],
+                j.stringLiteral("next/dynamic"),
               ),
             )
         }
@@ -300,30 +312,40 @@ const upgradeLegacy = async () => {
         (file) => {
           const program = getCollectionFromSource(file)
 
-          findIdentifier(program, "BlitzApiRequest")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiRequest"
-            })
-          findIdentifier(program, "BlitzApiResponse")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiResponse"
-            })
-          findIdentifier(program, "BlitzApiHandler")
-            .paths()
-            .forEach((path) => {
-              if (path.parentPath.parentPath.parentPath.value.type === "ImportDeclaration") {
-                path.parentPath.parentPath.parentPath.value.source.value = "next"
-              }
-              path.value.name = "NextApiHandler"
-            })
+          replaceImport(program, "blitz", "BlitzApiRequest", "next", "NextApiRequest")
+          replaceIdentifiers(program, "BlitzApiRequest", "NextApiRequest")
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        },
+      )
+    },
+  })
+
+  steps.push({
+    name: "change BlitzApiResponse to NextApiResponse",
+    action: async () => {
+      getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
+        (file) => {
+          const program = getCollectionFromSource(file)
+
+          replaceImport(program, "blitz", "BlitzApiResponse", "next", "NextApiResponse")
+          replaceIdentifiers(program, "BlitzApiResponse", "NextApiResponse")
+
+          fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
+        },
+      )
+    },
+  })
+
+  steps.push({
+    name: "change BlitzApiHandler to NextApiHandler",
+    action: async () => {
+      getAllFiles(path.join(appDir, "api"), [], [], [".ts", ".tsx", ".js", ".jsx"]).forEach(
+        (file) => {
+          const program = getCollectionFromSource(file)
+
+          replaceImport(program, "blitz", "BlitzApiHandler", "next", "NextApiHandler")
+          replaceIdentifiers(program, "BlitzApiHandler", "NextApiHandler")
 
           fs.writeFileSync(path.join(path.resolve(file)), program.toSource())
         },
@@ -399,6 +421,63 @@ const upgradeLegacy = async () => {
         )
       } else {
         log.error("Cookie Prefix not found in blitz config file")
+      }
+    },
+  })
+
+  steps.push({
+    name: "Move middleware to blitz server file",
+    action: async () => {
+      const blitzConfigProgram = getCollectionFromSource(blitzConfigFile)
+      const middlewareArray = blitzConfigProgram.find(
+        j.Identifier,
+        (node) => node.name === "middleware",
+      )
+      if (middlewareArray.length) {
+        const middlewares = middlewareArray
+          .get()
+          .parentPath.value.value.elements.filter((a: any) => a.callee.name !== "sessionMiddleware")
+        const blitzServerProgram = getCollectionFromSource(
+          path.join(appDir, `blitz-server.${isTypescript ? "ts" : "js"}`),
+        )
+
+        const pluginArray = blitzServerProgram.find(j.Identifier, (node) => node.name === "plugins")
+
+        pluginArray.get().parentPath.value.value.elements = [
+          ...pluginArray.get().parentPath.value.value.elements,
+          ...middlewares,
+        ]
+
+        let importStatements = []
+        for (let nodes of blitzConfigProgram.get().value.program.body) {
+          if (nodes.type === "ImportDeclaration") {
+            if (nodes.source.value !== "blitz") {
+              importStatements.push(nodes)
+            }
+          }
+
+          if (nodes.type === "VariableDeclaration") {
+            if (
+              nodes.declarations &&
+              nodes.declarations.some((d: any) => d.init.type === "CallExpression")
+            ) {
+              importStatements.push(nodes)
+            }
+          }
+        }
+
+        importStatements.forEach((s) =>
+          blitzServerProgram
+            .get()
+            .value.program.body.unshift(j.variableDeclaration(s.kind, s.declarations)),
+        )
+
+        fs.writeFileSync(
+          `${appDir}/blitz-server.${isTypescript ? "ts" : "js"}`,
+          blitzServerProgram.toSource(),
+        )
+      } else {
+        log.error("Middleware array not found in blit config file")
       }
     },
   })

@@ -1,5 +1,34 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.53
+
+## 2.0.0-alpha.52
+
+### Patch Changes
+
+- 12cb7a72: Upgrade Prisma to v4.0.0
+
+## 2.0.0-alpha.51
+
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- c11f0401: Update Next.js version and addBasePath location
+
+## 2.0.0-alpha.49
+
+## 2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- b405c1e8: Add missing \_document.tsx and 404.tsx pages to the new app templates
+- b86b569d: Remove as any assertion for the PrismaStorage argument
+
+## 2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ## 2.0.0-alpha.44

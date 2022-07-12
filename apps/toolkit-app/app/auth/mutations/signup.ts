@@ -1,5 +1,6 @@
-import { db } from "db"
+import db from "db"
 import { SecurePassword } from "@blitzjs/auth"
+import { Role } from "types"
 
 export default async function signup(input, ctx) {
   const blitzContext = ctx
@@ -13,6 +14,7 @@ export default async function signup(input, ctx) {
 
   await blitzContext.session.$create({
     userId: user.id,
+    role: user.role as Role,
   })
 
   return { userId: blitzContext.session.userId, ...user, email: input.email }

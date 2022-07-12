@@ -1,5 +1,63 @@
 # @blitzjs/next
 
+## 2.0.0-alpha.53
+
+### Patch Changes
+
+- a7e37c58: Export BlitzProvider from @blitzjs/next
+  - @blitzjs/rpc@2.0.0-alpha.53
+
+## 2.0.0-alpha.52
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.52
+
+## 2.0.0-alpha.51
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.51
+
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- dc694cf1: Removes the check for when withBlitz is mounted before rendering the users app. We had this previously to avoid the react 18 suspense error being showin in development with nextjs.
+- Updated dependencies [c11f0401]
+  - @blitzjs/rpc@2.0.0-alpha.50
+
+## 2.0.0-alpha.49
+
+### Patch Changes
+
+- bec9512e: Allow resolverPath to be a function which is ran for every file path that is converted to RPC Route
+- Updated dependencies [bec9512e]
+  - @blitzjs/rpc@2.0.0-alpha.49
+
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- @blitzjs/rpc@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - @blitzjs/rpc@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- bee19a25: Support RPC error middleware
+- 9ada0f66: Allow customizing PreviewData in gSSP
+- Updated dependencies [bee19a25]
+  - @blitzjs/rpc@2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ### Patch Changes

@@ -14,8 +14,8 @@
     "@blitzjs/rpc": "workspace:*",
     "@prisma/client": "3.9.0",
     "blitz": "workspace:*",
-    "next": "12.1.6-canary.17",
-    "prisma": "3.9.0",
+    "next": "12.2.0",
+    "prisma": "4.0.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-query": "3.39.0"

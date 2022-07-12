@@ -62,9 +62,6 @@ export function getCookieParser(headers: {[key: string]: undefined | string | st
   }
 }
 
-// todo
-declare const baseLogger: any
-
 const debug = require("debug")("blitz:session")
 
 export interface SimpleRolesIsAuthorized<RoleType = string> {
@@ -555,7 +552,7 @@ async function getSessionKernel(
     }
     if (enableCsrfProtection && persistedSession.antiCSRFToken !== antiCSRFToken) {
       if (!antiCSRFToken) {
-        baseLogger({displayDateTime: false}).warn(
+        console.warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
         )
       }
@@ -631,7 +628,7 @@ async function getSessionKernel(
 
     if (enableCsrfProtection && payload.antiCSRFToken !== antiCSRFToken) {
       if (!antiCSRFToken) {
-        baseLogger({displayDateTime: false}).warn(
+        console.warn(
           `This request is missing the ${HEADER_CSRF} header. You can learn about adding this here: https://blitzjs.com/docs/session-management#manual-api-requests`,
         )
       }

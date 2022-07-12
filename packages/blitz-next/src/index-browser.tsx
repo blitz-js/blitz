@@ -13,7 +13,8 @@ import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
-import {Router} from "next/router"
+import {Router, useRouter} from "next/router"
+import {RouterContext} from "./router-context"
 
 export * from "./error-boundary"
 export * from "./error-component"
@@ -35,11 +36,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
     const BlitzOuterRoot = (props: AppProps) => {
       const component = React.useMemo(() => withPlugins(props.Component), [props.Component])
 
-      const [mounted, setMounted] = React.useState(false)
-
       React.useEffect(() => {
-        // Current workaround to fix react 18 suspense error issue
-        setMounted(true)
         // supress first render flicker
         setTimeout(() => {
           document.documentElement.classList.add("blitz-first-render-complete")
@@ -51,7 +48,7 @@ const buildWithBlitz = <TPlugins extends readonly ClientPlugin<object>[]>(plugin
           <>
             {/* @ts-ignore todo */}
             {props.Component.suppressFirstRenderFlicker && <NoPageFlicker />}
-            {mounted && <UserAppRoot {...props} Component={component} />}
+            <UserAppRoot {...props} Component={component} />
           </>
         </BlitzProvider>
       )
@@ -71,6 +68,7 @@ export type BlitzProviderProps = {
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
+
 type RedirectAuthenticatedTo = string | RouteUrlObject | false
 type RedirectAuthenticatedToFnCtx = {
   session: Ctx["session"]["$publicData"]
@@ -89,27 +87,31 @@ export type BlitzLayout<P = {}> = React.ComponentType<P> & {
 export type AppProps<P = {}> = AppPropsType<Router, P> & {
   Component: BlitzPage
 }
-const BlitzProvider = ({
-  client,
+export const BlitzProvider = ({
+  client = globalThis.queryClient,
   contextSharing = false,
   dehydratedState,
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
-  if (globalThis.queryClient) {
+  const router = useRouter()
+
+  if (client) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
-        <Hydrate state={dehydratedState} options={hydrateOptions}>
-          {children}
-        </Hydrate>
-      </QueryClientProvider>
+      <RouterContext.Provider value={router}>
+        <QueryClientProvider
+          client={client || globalThis.queryClient}
+          contextSharing={contextSharing}
+        >
+          <Hydrate state={dehydratedState} options={hydrateOptions}>
+            {children}
+          </Hydrate>
+        </QueryClientProvider>
+      </RouterContext.Provider>
     )
   }
 
-  return children
+  return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
 }
 
 export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<

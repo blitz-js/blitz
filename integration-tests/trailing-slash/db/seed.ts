@@ -1,4 +1,4 @@
-import {prisma} from "./index"
+import prisma from "./index"
 
 const seed = async () => {
   await prisma.$reset()

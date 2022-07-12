@@ -1,13 +1,13 @@
 import {setupBlitzServer} from "@blitzjs/next"
 import {AuthServerPlugin, PrismaStorage} from "@blitzjs/auth"
 import {simpleRolesIsAuthorized} from "@blitzjs/auth"
-import {prisma as db} from "../prisma/index"
+import db from "../db"
 
 const {gSSP, gSP, api} = setupBlitzServer({
   plugins: [
     AuthServerPlugin({
       cookiePrefix: "trailing-slash-tests-cookie-prefix",
-      storage: PrismaStorage(db as any),
+      storage: PrismaStorage(db),
       isAuthorized: simpleRolesIsAuthorized,
     }),
   ],

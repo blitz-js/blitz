@@ -1,5 +1,67 @@
 # @blitzjs/rpc
 
+## 2.0.0-alpha.53
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.53
+- blitz@2.0.0-alpha.53
+
+## 2.0.0-alpha.52
+
+### Patch Changes
+
+- blitz@2.0.0-alpha.52
+- @blitzjs/auth@2.0.0-alpha.52
+
+## 2.0.0-alpha.51
+
+### Patch Changes
+
+- @blitzjs/auth@2.0.0-alpha.51
+- blitz@2.0.0-alpha.51
+
+## 2.0.0-alpha.50
+
+### Patch Changes
+
+- c11f0401: Update Next.js version and addBasePath location
+  - blitz@2.0.0-alpha.50
+  - @blitzjs/auth@2.0.0-alpha.50
+
+## 2.0.0-alpha.49
+
+### Patch Changes
+
+- bec9512e: Allow resolverPath to be a function which is ran for every file path that is converted to RPC Route
+  - @blitzjs/auth@2.0.0-alpha.49
+  - blitz@2.0.0-alpha.49
+
+## 2.0.0-alpha.48
+
+### Patch Changes
+
+- Updated dependencies [93851d90]
+  - blitz@2.0.0-alpha.48
+  - @blitzjs/auth@2.0.0-alpha.48
+
+## 2.0.0-alpha.47
+
+### Patch Changes
+
+- 1d9804a6: Remove references to the logging package
+- Updated dependencies [1d9804a6]
+  - blitz@2.0.0-alpha.47
+  - @blitzjs/auth@2.0.0-alpha.47
+
+## 2.0.0-alpha.46
+
+### Patch Changes
+
+- bee19a25: Support RPC error middleware
+  - @blitzjs/auth@2.0.0-alpha.46
+  - blitz@2.0.0-alpha.46
+
 ## 2.0.0-alpha.45
 
 ### Patch Changes
