@@ -49,7 +49,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         "types.ts",
       ]
     }
-    return ["jsconfig.json", "jest.config.js", "package.js.json", "pre-push-js"]
+    return ["jsconfig.json", "package.js.json", "pre-push-js"]
   }
 
   async getTemplateValues() {
