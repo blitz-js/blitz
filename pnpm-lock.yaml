@@ -324,7 +324,7 @@ importers:
       "@vitejs/plugin-react": 1.3.0
       delay: 5.0.0
       eslint: 7.32.0
-      eslint-config-next: 12.2.0_hrkuebk64jiu2ut2d2sm4oylnu
+      eslint-config-next: 12.2.2_hrkuebk64jiu2ut2d2sm4oylnu
       eslint-plugin-testing-library: 5.0.1_hrkuebk64jiu2ut2d2sm4oylnu
       jsdom: 19.0.0
       typescript: 4.6.3
@@ -3451,6 +3451,15 @@ packages:
     dependencies:
       glob: 7.1.7
 
+  /@next/eslint-plugin-next/12.2.2:
+    resolution:
+      {
+        integrity: sha512-XOi0WzJhGH3Lk51SkSu9eZxF+IY1ZZhWcJTIGBycAbWU877IQa6+6KxMATWCOs7c+bmp6Sd8KywXJaDRxzu0JA==,
+      }
+    dependencies:
+      glob: 7.1.7
+    dev: true
+
   /@next/swc-android-arm-eabi/12.2.0:
     resolution:
       {
@@ -4835,7 +4844,6 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -8402,7 +8410,34 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
+
+  /eslint-config-next/12.2.2_hrkuebk64jiu2ut2d2sm4oylnu:
+    resolution:
+      {
+        integrity: sha512-oJhWBLC4wDYYUFv/5APbjHUFd0QRFCojMdj/QnMoOEktmeTvwnnoA8F8uaXs0fQgsaTK0tbUxBRv9/Y4/rpxOA==,
+      }
+    peerDependencies:
+      eslint: ^7.23.0 || ^8.0.0
+      typescript: ">=3.3.1"
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      "@next/eslint-plugin-next": 12.2.2
+      "@rushstack/eslint-patch": 1.1.3
+      "@typescript-eslint/parser": 5.28.0_hrkuebk64jiu2ut2d2sm4oylnu
+      eslint: 7.32.0
+      eslint-import-resolver-node: 0.3.6
+      eslint-import-resolver-typescript: 2.7.1_hpmu7kn6tcn2vnxpfzvv33bxmy
+      eslint-plugin-import: 2.26.0_zhtk6rij7obli3ams3sxis7j7e
+      eslint-plugin-jsx-a11y: 6.5.1_eslint@7.32.0
+      eslint-plugin-react: 7.30.0_eslint@7.32.0
+      eslint-plugin-react-hooks: 4.5.0_eslint@7.32.0
+      typescript: 4.6.3
+    transitivePeerDependencies:
+      - eslint-import-resolver-webpack
+      - supports-color
+    dev: true
 
   /eslint-config-prettier/8.5.0:
     resolution:
@@ -8412,7 +8447,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:

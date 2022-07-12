@@ -99,13 +99,13 @@ async function printEnvInfo() {
     {showNotFound: true},
   )
 
-  const {globalVersion, localVersion} = readVersions()
+  const {globalVersion, localVersions} = readVersions()
   if (globalVersion) {
     console.log(`Blitz version: ${globalVersion} (global)`)
   }
 
-  if (localVersion) {
-    console.log(`Blitz version: ${localVersion} (local)`)
+  if (localVersions.blitz) {
+    console.log(`Blitz version: ${localVersions.blitz} (local)`)
   }
 
   console.log(
