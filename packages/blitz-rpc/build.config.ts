@@ -5,6 +5,7 @@ const config: BuildConfig = {
     "./src/index-browser",
     "./src/index-server",
     "./src/loader-server",
+    "./src/loader-server-resolvers",
     "./src/loader-client",
   ],
   externals: [
