@@ -5,7 +5,7 @@ import {loadEnvConfig} from "../env-utils"
 import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import {getCommandBin} from "./utils/config"
 import {readVersions} from "./utils/read-versions"
-import {checkLatestVersion} from "./utils/check-latest-version"
+
 import {getPkgManager} from "./utils/helpers"
 
 const commonArgs = {
@@ -118,7 +118,7 @@ async function printEnvInfo() {
 
 async function main() {
   loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
-  await checkLatestVersion()
+  // await checkLatestVersion()
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {
