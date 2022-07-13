@@ -516,7 +516,6 @@ importers:
       react: 18.0.0
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
-      semver: 7.3.7
       superjson: 1.8.0
       test-listen: 1.1.0
       ts-node: 10.7.0
@@ -550,7 +549,6 @@ importers:
       prompts: 2.4.2
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
-      semver: 7.3.7
       superjson: 1.8.0
       ts-node: 10.7.0_typescript@4.6.3
       tsconfig-paths: 4.0.0
@@ -4844,6 +4842,7 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -8410,6 +8409,7 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
+    dev: false
 
   /eslint-config-next/12.2.2_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -8447,6 +8447,7 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
+    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
