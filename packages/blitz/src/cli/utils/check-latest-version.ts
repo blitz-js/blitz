@@ -53,7 +53,7 @@ export async function checkLatestVersion() {
     join(nodeModulesRoot, ".blitz", "checkUpdateCache.json"),
   )
   let dotBlitzCache
-  let shouldRun = true
+  let shouldRun
 
   if (dotBlitzCacheExists) {
     dotBlitzCache = fs.readFileSync(join(nodeModulesRoot, ".blitz", "checkUpdateCache.json"))
@@ -62,7 +62,7 @@ export async function checkLatestVersion() {
       new Date(JSON.parse(dotBlitzCache.toString())["lastUpdated"]).getTime() - now.getTime(),
     )
     const hoursBetweenTimes = msBetweenTimes / (60 * 60 * 1000)
-    // shouldRun = hoursBetweenTimes > 24
+    shouldRun = hoursBetweenTimes > 24
   }
 
   if (shouldRun) {
