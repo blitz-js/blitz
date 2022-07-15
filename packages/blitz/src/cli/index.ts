@@ -118,7 +118,6 @@ async function printEnvInfo() {
 
 async function main() {
   loadEnvConfig(process.cwd(), undefined, {error: console.error, info: console.info})
-  // await checkLatestVersion()
 
   // Version is inlined into the file using taskr build pipeline
   if (args["_"].length === 0 && args["--version"]) {

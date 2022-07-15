@@ -75,5 +75,5 @@ export function resolveVersionType(version: string) {
     return "canary" as const
   }
 
-  return "mainline" as const
+  return "latest" as const
 }
