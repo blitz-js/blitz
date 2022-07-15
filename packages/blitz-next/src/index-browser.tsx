@@ -80,7 +80,7 @@ export type BlitzPage<P = {}> = React.ComponentType<P> & {
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+export type BlitzLayout<P = {}> = React.ComponentType<P & {children: JSX.Element}> & {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
