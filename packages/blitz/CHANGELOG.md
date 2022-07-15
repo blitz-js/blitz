@@ -1,5 +1,19 @@
 # blitz
 
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- f397cc20: Fixes issue when generating a new blitz app with the form flag that ends up installing the wrong form library
+- cacb65d6: Fixes wrong import of the db module in `blitz db seed` command function
+- 348fd6f5: Fix redirectAuthenticatedTo errors
+- 20fc9f80: Fix SSP / SP not prefetching queries correctly
+- a3bbe6ce: Fix routes manifest showing duplicates for non queries|resolvers reso…
+- ffa7b5cc: During `blitz new` if project name argument is set to "." change it to current folder name
+- Updated dependencies [a961aff8]
+- Updated dependencies [80e1ead7]
+  - @blitzjs/generator@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes
