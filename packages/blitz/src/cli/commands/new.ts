@@ -7,6 +7,7 @@ import {CliCommand} from "../index"
 import arg from "arg"
 import {AppGenerator, AppGeneratorOptions, getLatestVersion} from "@blitzjs/generator"
 import {runPrisma} from "../../prisma-utils"
+import {checkLatestVersion} from "../utils/check-latest-version"
 
 const forms = {
   "react-final-form": "React Final Form" as const,
@@ -220,7 +221,7 @@ const determinePkgManagerToInstallDeps = async () => {
 const newApp: CliCommand = async (argv) => {
   const shouldUpgrade = !args["--skip-upgrade"]
   if (shouldUpgrade) {
-    //TODO: Handle checking for updates
+    await checkLatestVersion()
   }
 
   await determineProjectName()

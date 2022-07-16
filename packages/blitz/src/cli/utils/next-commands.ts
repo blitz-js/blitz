@@ -7,6 +7,7 @@ import {
   startCustomServer,
   buildCustomServer,
 } from "./next-utils"
+import {checkLatestVersion} from "./check-latest-version"
 import {readBlitzConfig} from "../../server-utils"
 
 export async function build(config: ServerConfig) {
@@ -18,7 +19,7 @@ export async function build(config: ServerConfig) {
 
 export async function dev(config: ServerConfig) {
   const {rootFolder, nextBin} = await normalize({...config, env: "dev"})
-
+  void checkLatestVersion()
   if (customServerExists()) {
     console.log("Using your custom server")
 

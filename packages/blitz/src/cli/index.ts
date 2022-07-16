@@ -1,12 +1,12 @@
-import {NON_STANDARD_NODE_ENV} from "./utils/constants"
 import arg from "arg"
-import {loadEnvConfig} from "../env-utils"
-import {getCommandBin} from "./utils/config"
 import spawn from "cross-spawn"
-import {readdirSync} from "fs-extra"
-import resolveFrom from "resolve-from"
-import pkgDir from "pkg-dir"
-import {join} from "path"
+
+import {loadEnvConfig} from "../env-utils"
+import {NON_STANDARD_NODE_ENV} from "./utils/constants"
+import {getCommandBin} from "./utils/config"
+import {readVersions} from "./utils/read-versions"
+
+import {getPkgManager} from "./utils/helpers"
 
 const commonArgs = {
   // Flags
@@ -57,9 +57,6 @@ if (aliases[args._[0] as Alias]) {
 
 const forwardedArgs = blitzCommand ? args._.slice(1) : args._
 
-const globalBlitzPath = resolveFrom(__dirname, "blitz")
-const localBlitzPath = resolveFrom.silent(process.cwd(), "blitz")
-
 async function runCommandFromBin() {
   if (!args._[0]) {
     console.log("No command specified")
@@ -83,12 +80,8 @@ async function runCommandFromBin() {
 async function printEnvInfo() {
   const osName = await import("os-name")
   const envinfo = await import("envinfo")
-  const pkgManager = readdirSync(process.cwd()).includes("pnpm-lock.yaml")
-    ? "pnpm"
-    : readdirSync(process.cwd()).includes("yarn-lock.yaml")
-    ? "yarn"
-    : "npm"
 
+  const pkgManager = getPkgManager()
   const env = await envinfo.default.run(
     {
       System: ["OS", "CPU", "Memory", "Shell"],
@@ -106,18 +99,13 @@ async function printEnvInfo() {
     {showNotFound: true},
   )
 
-  const globalBlitzPkgJsonPath = pkgDir.sync(globalBlitzPath)
-  const localBlitzPkgJsonPath = pkgDir.sync(localBlitzPath)
-
-  if (globalBlitzPkgJsonPath && globalBlitzPkgJsonPath !== localBlitzPkgJsonPath) {
-    // This branch won't run if user does `npx blitz` or `yarn blitz`
-    const globalVersion = require(join(globalBlitzPkgJsonPath, "package.json")).version
+  const {globalVersion, localVersions} = readVersions()
+  if (globalVersion) {
     console.log(`Blitz version: ${globalVersion} (global)`)
   }
 
-  if (localBlitzPkgJsonPath) {
-    const localVersion = require(join(localBlitzPkgJsonPath, "package.json")).version
-    console.log(`Blitz version: ${localVersion} (local)`)
+  if (localVersions.blitz) {
+    console.log(`Blitz version: ${localVersions.blitz} (local)`)
   }
 
   console.log(
