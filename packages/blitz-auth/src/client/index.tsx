@@ -245,79 +245,95 @@ export function getAuthValues<TProps = any>(
   return {authenticate, redirectAuthenticatedTo}
 }
 
-function withBlitzAuthPlugin<TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
-  const AuthRoot = (props: ComponentProps<any>) => {
-    useSession({suspense: false})
+interface AuthPluginDefaultOptions {
+  authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
+  suppressFirstRenderFlicker?: boolean
+  redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
+}
 
-    let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+function withBlitzAuthPluginFactory(defaults?: AuthPluginDefaultOptions) {
+  return function <TProps = any>(Page: ComponentType<TProps> | BlitzPage<TProps>) {
+    const AuthRoot = (props: ComponentProps<any>) => {
+      useSession({suspense: false})
 
-    useAuthorizeIf(authenticate === true)
+      let {authenticate, redirectAuthenticatedTo} = getAuthValues(Page, props)
+      if (authenticate === undefined) {
+        authenticate = defaults?.authenticate
+      }
+      if (redirectAuthenticatedTo === undefined) {
+        redirectAuthenticatedTo = defaults?.redirectAuthenticatedTo
+      }
 
-    if (typeof window !== "undefined") {
-      const publicData = getPublicDataStore().getData()
+      useAuthorizeIf(authenticate === true)
 
-      // We read directly from publicData.userId instead of useSession
-      // so we can access userId on first render. useSession is always empty on first render
-      if (publicData.userId) {
-        debug("[BlitzAuthInnerRoot] logged in")
+      if (typeof window !== "undefined") {
+        const publicData = getPublicDataStore().getData()
 
-        if (typeof redirectAuthenticatedTo === "function") {
-          redirectAuthenticatedTo = redirectAuthenticatedTo({
-            session: publicData,
-          })
-        }
+        // We read directly from publicData.userId instead of useSession
+        // so we can access userId on first render. useSession is always empty on first render
+        if (publicData.userId) {
+          debug("[BlitzAuthInnerRoot] logged in")
 
-        if (redirectAuthenticatedTo) {
-          const redirectUrl =
-            typeof redirectAuthenticatedTo === "string"
-              ? redirectAuthenticatedTo
-              : formatWithValidation(redirectAuthenticatedTo)
-
-          debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
-          const error = new RedirectError(redirectUrl)
-          error.stack = null!
-          throw error
-        }
-      } else {
-        debug("[BlitzAuthInnerRoot] logged out")
-        if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
-          let {redirectTo} = authenticate
-          if (typeof redirectTo !== "string") {
-            redirectTo = formatWithValidation(redirectTo)
+          if (typeof redirectAuthenticatedTo === "function") {
+            redirectAuthenticatedTo = redirectAuthenticatedTo({
+              session: publicData,
+            })
           }
 
-          const url = new URL(redirectTo, window.location.href)
-          url.searchParams.append("next", window.location.pathname)
-          debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
-          const error = new RedirectError(url.toString())
-          error.stack = null!
-          throw error
+          if (redirectAuthenticatedTo) {
+            const redirectUrl =
+              typeof redirectAuthenticatedTo === "string"
+                ? redirectAuthenticatedTo
+                : formatWithValidation(redirectAuthenticatedTo)
+
+            debug("[BlitzAuthInnerRoot] redirecting to", redirectUrl)
+            const error = new RedirectError(redirectUrl)
+            error.stack = null!
+            throw error
+          }
+        } else {
+          debug("[BlitzAuthInnerRoot] logged out")
+          if (authenticate && typeof authenticate === "object" && authenticate.redirectTo) {
+            let {redirectTo} = authenticate
+            if (typeof redirectTo !== "string") {
+              redirectTo = formatWithValidation(redirectTo)
+            }
+
+            const url = new URL(redirectTo, window.location.href)
+            url.searchParams.append("next", window.location.pathname)
+            debug("[BlitzAuthInnerRoot] redirecting to", url.toString())
+            const error = new RedirectError(url.toString())
+            error.stack = null!
+            throw error
+          }
         }
       }
+
+      return <Page {...props} />
     }
 
-    return <Page {...props} />
-  }
+    for (let [key, value] of Object.entries(Page)) {
+      // @ts-ignore
+      AuthRoot[key] = value
+    }
+    if (process.env.NODE_ENV !== "production") {
+      AuthRoot.displayName = `BlitzAuthInnerRoot`
+    }
 
-  for (let [key, value] of Object.entries(Page)) {
-    // @ts-ignore
-    AuthRoot[key] = value
+    return AuthRoot
   }
-  if (process.env.NODE_ENV !== "production") {
-    AuthRoot.displayName = `BlitzAuthInnerRoot`
-  }
-
-  return AuthRoot
 }
 
 export interface AuthPluginClientOptions {
   cookiePrefix: string
+  defaults?: AuthPluginDefaultOptions
 }
 
 export const AuthClientPlugin = createClientPlugin((options: AuthPluginClientOptions) => {
   globalThis.__BLITZ_SESSION_COOKIE_PREFIX = options.cookiePrefix || "blitz"
+
   return {
-    withProvider: withBlitzAuthPlugin,
+    withProvider: withBlitzAuthPluginFactory(options.defaults),
     events: {},
     middleware: {},
     exports: () => ({
