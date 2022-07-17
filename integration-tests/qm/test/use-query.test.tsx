@@ -26,6 +26,9 @@ describe("useQuery", () => {
         suspense: true,
         ...options,
       } as any)
+
+      console.log(data)
+
       Object.assign(res, {data, setQueryData})
       return (
         <div id={`harness-${ID}`}>
@@ -67,15 +70,15 @@ describe("useQuery", () => {
     })
 
     it("should be able to change the data with setQueryData", async () => {
-      const [res, rerender] = setupHook("3", "fooBar", buildQueryRpc(upcase))
+      const [res] = setupHook("3", "fooBar", buildQueryRpc(upcase))
       await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
       await act(async () => {
         await screen.findByText("Ready3")
         expect(res.data).toBe("FOOBAR")
         res.setQueryData((p: string) => p.substr(3, 3), {refetch: false})
-        await delay(100) // this is kinda dumb, but it's the only way to wait for the rerender
-        await waitFor(() => screen.getByText("BAR"))
       })
+
+      expect(res.data).toBe("BAR")
     })
 
     it("shouldn't work with regular functions", () => {
