@@ -88,6 +88,9 @@ async function printEnvInfo() {
       Binaries: ["Node", "Yarn", "npm", "pnpm"],
       npmPackages: [
         "blitz",
+        "@blitzjs/rpc",
+        "@blitzjs/auth",
+        "@blitzjs/next",
         "typescript",
         "react",
         "react-dom",
