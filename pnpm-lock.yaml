@@ -304,7 +304,7 @@ importers:
       prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.39.0
+      react-query: 4.0.0-beta.23
       typescript: ^4.5.3
     dependencies:
       "@blitzjs/auth": link:../../packages/blitz-auth
@@ -317,7 +317,7 @@ importers:
       prisma: 4.0.0
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
+      react-query: 4.0.0-beta.23_zpnidt7m3osuk7shl3s4oenomq
     devDependencies:
       "@testing-library/react": 13.0.0_zpnidt7m3osuk7shl3s4oenomq
       "@types/react": 18.0.1
@@ -437,7 +437,7 @@ importers:
       playwright-chromium: 1.14.1
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.39.0
+      react-query: 4.0.0-beta.23
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
@@ -465,7 +465,7 @@ importers:
       playwright-chromium: 1.14.1
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
-      react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
+      react-query: 4.0.0-beta.23_zpnidt7m3osuk7shl3s4oenomq
       resolve-cwd: 3.0.0
       resolve-from: 5.0.0
       rimraf: 3.0.2
@@ -670,7 +670,7 @@ importers:
       next: 12.2.0
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.39.0
+      react-query: 4.0.0-beta.23
       resolve-from: 5.0.0
       superjson: 1.8.0
       ts-jest: 27.1.4
@@ -683,7 +683,7 @@ importers:
       debug: 4.3.3
       fs-extra: 10.0.1
       hoist-non-react-statics: 3.3.2
-      react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
+      react-query: 4.0.0-beta.23_zpnidt7m3osuk7shl3s4oenomq
       superjson: 1.8.0
     devDependencies:
       "@blitzjs/config": link:../config
@@ -723,7 +723,7 @@ importers:
       next: 12.2.0
       react: 18.0.0
       react-dom: 18.0.0
-      react-query: 3.39.0
+      react-query: 4.0.0-beta.23
       superjson: 1.8.0
       typescript: ^4.5.3
       unbuild: 0.6.9
@@ -735,7 +735,7 @@ importers:
       bad-behavior: 1.0.1
       chalk: 4.1.2
       debug: 4.3.3
-      react-query: 3.39.0_zpnidt7m3osuk7shl3s4oenomq
+      react-query: 4.0.0-beta.23_zpnidt7m3osuk7shl3s4oenomq
       superjson: 1.8.0
       zod: 3.17.3
     devDependencies:
@@ -4712,6 +4712,12 @@ packages:
       - react-test-renderer
     dev: true
 
+  /@types/use-sync-external-store/0.0.3:
+    resolution:
+      {
+        integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==,
+      }
+
   /@types/vinyl/2.0.6:
     resolution:
       {
@@ -4844,7 +4850,6 @@ packages:
       typescript: 4.6.3
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@typescript-eslint/experimental-utils/5.28.0_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -8442,7 +8447,6 @@ packages:
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
       - supports-color
-    dev: false
 
   /eslint-config-next/12.2.2_hrkuebk64jiu2ut2d2sm4oylnu:
     resolution:
@@ -8480,7 +8484,6 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: ">=7.0.0"
-    dev: false
 
   /eslint-config-prettier/8.5.0_eslint@7.32.0:
     resolution:
@@ -12721,7 +12724,10 @@ packages:
     dev: false
 
   /nano-time/1.0.0:
-    resolution: {integrity: sha1-sFVPaa2J4i0JB/ehKwmTpdlhN+8=}
+    resolution:
+      {
+        integrity: sha512-flnngywOoQ0lLQOTRNexn2gGSNuM9bKj9RZAWSzhQ+UJYaAFG9bac4DW9VHjUAzrOaIcajHybCTHe/bkvozQqA==,
+      }
     dependencies:
       big-integer: 1.6.51
 
@@ -14392,10 +14398,10 @@ packages:
         integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==,
       }
 
-  /react-query/3.39.0_zpnidt7m3osuk7shl3s4oenomq:
+  /react-query/4.0.0-beta.23_zpnidt7m3osuk7shl3s4oenomq:
     resolution:
       {
-        integrity: sha512-Od0IkSuS79WJOhzWBx/ys0x13+7wFqgnn64vBqqAAnZ9whocVhl/y1padD5uuZ6EIkXbFbInax0qvY7zGM0thA==,
+        integrity: sha512-e6mNBVAYGy0M1OwX0mhRB/lCkOedKeqTUrbPjNCqvm8hQGUsJJobqfHVvTv8o6JJaOO2MFcxKF4vZM+PEKbHZA==,
       }
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -14408,10 +14414,12 @@ packages:
         optional: true
     dependencies:
       "@babel/runtime": 7.18.3
+      "@types/use-sync-external-store": 0.0.3
       broadcast-channel: 3.7.0
       match-sorter: 6.3.1
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
+      use-sync-external-store: 1.1.0_react@18.0.0
 
   /react-refresh/0.11.0:
     resolution:
@@ -14641,7 +14649,10 @@ packages:
       jsesc: 0.5.0
 
   /remove-accents/0.4.2:
-    resolution: {integrity: sha1-CkPTqq4egNuRngeuJUsoXZ4ce7U=}
+    resolution:
+      {
+        integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==,
+      }
 
   /remove-trailing-separator/1.1.0:
     resolution:
