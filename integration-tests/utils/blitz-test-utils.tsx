@@ -1,9 +1,10 @@
-import {render as defaultRender} from "@testing-library/react"
-import {NextRouter} from "next/router"
-import {vi} from "vitest"
-import {QueryClient, QueryClientProvider} from "react-query"
 import React from "react"
-import {BlitzRpcPlugin} from "@blitzjs/rpc"
+import {vi} from "vitest"
+import {QueryClient} from "react-query"
+import {BlitzRpcPlugin, QueryClientProvider} from "@blitzjs/rpc"
+import {NextRouter} from "next/router"
+import {RouterContext} from "next/dist/shared/lib/router-context"
+import {render as defaultRender} from "@testing-library/react"
 
 const mockRouter: NextRouter = {
   basePath: "",
@@ -56,8 +57,6 @@ const BlitzProvider = ({
 
   return children
 }
-export const RouterContext = React.createContext(null as any)
-RouterContext.displayName = "RouterContext"
 const compose =
   (...rest) =>
   (x: React.ComponentType<any>) =>
