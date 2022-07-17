@@ -6,7 +6,7 @@ import {NextRouter} from "next/router"
 import {RouterContext} from "next/dist/shared/lib/router-context"
 import {render as defaultRender} from "@testing-library/react"
 
-const mockRouter: NextRouter = {
+export const mockRouter: NextRouter = {
   basePath: "",
   pathname: "/",
   route: "/",
