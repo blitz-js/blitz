@@ -27,8 +27,6 @@ describe("useQuery", () => {
         ...options,
       } as any)
 
-      console.log(data)
-
       Object.assign(res, {data, setQueryData})
       return (
         <div id={`harness-${ID}`}>
@@ -76,6 +74,7 @@ describe("useQuery", () => {
         await screen.findByText("Ready3")
         expect(res.data).toBe("FOOBAR")
         res.setQueryData((p: string) => p.substr(3, 3), {refetch: false})
+        await delay(100)
       })
 
       expect(res.data).toBe("BAR")
