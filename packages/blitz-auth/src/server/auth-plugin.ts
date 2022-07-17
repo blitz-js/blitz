@@ -1,7 +1,7 @@
 import type {BlitzServerPlugin, RequestMiddleware, Ctx} from "blitz"
 import {assert} from "blitz"
 import {IncomingMessage, ServerResponse} from "http"
-import {PublicData, SessionModel, SessionConfigMethods} from "../shared/types"
+import {PublicData, SessionModel, SessionConfigMethods, SessionContext} from "../shared/types"
 import {getSession} from "./auth-sessions"
 
 interface SessionConfigOptions {
@@ -12,6 +12,9 @@ interface SessionConfigOptions {
   secureCookies?: boolean
   domain?: string
   publicDataKeysToSyncAcrossSessions?: string[]
+  hooks?: {
+    onAuthMiddleware: (sc: SessionContext["$publicData"]) => void
+  }
 }
 
 interface IsAuthorized {
@@ -109,6 +112,9 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
       if (!res.blitzCtx?.session) {
         await getSession(req, res)
       }
+
+      options.hooks?.onAuthMiddleware(res.blitzCtx.session.$publicData)
+
       return next()
     }
 
@@ -118,6 +124,7 @@ export function AuthServerPlugin(options: AuthPluginOptions): BlitzServerPlugin<
     }
     return blitzSessionMiddleware
   }
+
   return {
     requestMiddlewares: [authPluginSessionMiddleware()],
   }
