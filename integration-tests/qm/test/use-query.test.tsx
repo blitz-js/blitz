@@ -124,25 +124,65 @@ describe("useQuery", () => {
   })
 })
 
-//   const getItems = ({id}: {id: number}) => {
-//     if (id === 1) {
-//       return "item1"
-//     } else if (id === 2) {
-//       return "item2"
-//     } else {
-//       throw new Error("No item for this id")
-//     }
-//   }
-//   it("should work", async () => {
-//     setupHook(() => ({id: 1}), buildQueryRpc(getItems))
-//     await waitForElementToBeRemoved(() => screen.getByText("Loading..."))
-//     await act(async () => {
-//       await screen.findByText("item1")
-//     })
+describe("useInfiniteQuery", () => {
+  const setupHook = (
+    ID: string,
+    params: (arg?: any) => any,
+    queryFn: (...args: any) => any,
+  ): [{data?: any; setQueryData?: any}, Function] => {
+    let res = {}
+    const qc = BlitzRpcPlugin({})
 
-//     setupHook(() => ({id: 2}), buildQueryRpc(getItems))
-//     await act(async () => {
-//       await screen.findByText("item2")
-//     })
-//   })
-// })
+    function TestHarness() {
+      // TODO - fix typing
+      //@ts-ignore
+      const [groupedData] = useInfiniteQuery(queryFn, params, {
+        suspense: true,
+        getNextPageParam: () => {},
+      })
+      Object.assign(res, {groupedData})
+      return (
+        <div id="harness">
+          <span>{groupedData ? `Ready${ID}` : "No data"}</span>
+          <div>
+            {groupedData.map((data: any, i) => (
+              <div key={i}>{data}</div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    const ui = () => (
+      <React.Suspense fallback={`Loading${ID}...`}>
+        <TestHarness />
+      </React.Suspense>
+    )
+
+    const {rerender} = render(ui(), {
+      wrapper: ({children}) => (
+        <QueryClientProvider client={globalThis.queryClient}>
+          <RouterContext.Provider value={mockRouter}>{children}</RouterContext.Provider>
+        </QueryClientProvider>
+      ),
+    })
+    return [res, () => rerender(ui())]
+  }
+
+  const getItems = ({id}: {id: number}) => {
+    if (id === 1) {
+      return "item1"
+    } else if (id === 2) {
+      return "item2"
+    } else {
+      throw new Error("No item for this id")
+    }
+  }
+  it("should show loading", async () => {
+    setupHook("1", () => ({id: 1}), buildQueryRpc(getItems))
+    await waitForElementToBeRemoved(() => screen.getByText("Loading1..."))
+    await act(async () => {
+      await screen.findByText("item1")
+    })
+  })
+})
