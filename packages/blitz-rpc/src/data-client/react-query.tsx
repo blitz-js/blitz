@@ -92,7 +92,7 @@ export function useQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -178,7 +178,7 @@ export function usePaginatedQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&
@@ -277,7 +277,7 @@ export function useInfiniteQuery<
   })
 
   if (
-    queryRest.isIdle &&
+    queryRest.fetchStatus === "idle" &&
     isServer &&
     suspenseEnabled !== false &&
     !data &&

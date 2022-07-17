@@ -169,14 +169,7 @@ export function invalidateQuery<TInput, TResult, T extends AsyncFunc>(
   }
 
   const fullQueryKey = getQueryKey(resolver, params)
-  let queryKey: QueryKey
-  if (params) {
-    queryKey = fullQueryKey
-  } else {
-    // Params not provided, only use first query key item (url)
-    queryKey = fullQueryKey[0]
-  }
-  return getQueryClient().invalidateQueries(queryKey)
+  return getQueryClient().invalidateQueries(fullQueryKey)
 }
 
 export function setQueryData<TInput, TResult, T extends AsyncFunc>(
