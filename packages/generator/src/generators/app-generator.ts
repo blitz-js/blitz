@@ -30,6 +30,7 @@ export interface AppGeneratorOptions extends GeneratorOptions {
   form?: "React Final Form" | "React Hook Form" | "Formik"
   onPostInstall?: () => Promise<void>
 }
+
 type PkgManager = "npm" | "yarn" | "pnpm"
 
 export class AppGenerator extends Generator<AppGeneratorOptions> {
@@ -49,7 +50,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
         "types.ts",
       ]
     }
-    return ["jsconfig.json", "jest.config.js", "package.js.json", "pre-push-js"]
+    return ["jsconfig.json", "package.js.json", "pre-push-js"]
   }
 
   async getTemplateValues() {
@@ -76,10 +77,14 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
       this.destinationPath(this.options.useTs ? "package.ts.json" : "package.js.json"),
       this.destinationPath("package.json"),
     )
-    this.fs.move(
-      this.destinationPath(`pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`),
-      this.destinationPath(`pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
-    )
+
+    const rpcEndpointPath = `pages/api/rpc/blitzrpcroute.${this.options.useTs ? "ts" : "js"}`
+    if (this.fs.exists(rpcEndpointPath)) {
+      this.fs.move(
+        this.destinationPath(rpcEndpointPath),
+        this.destinationPath(`pages/api/rpc/[[...blitz]].${this.options.useTs ? "ts" : "js"}`),
+      )
+    }
 
     if (!this.options.template.skipForms) {
       this.updateForms()
@@ -286,6 +291,7 @@ export class AppGenerator extends Generator<AppGeneratorOptions> {
     }
     commitSpinner.succeed()
   }
+
   private updateForms() {
     const pkg = this.fs.readJSON(this.destinationPath("package.json")) as
       | Record<string, any>
