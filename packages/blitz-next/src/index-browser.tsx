@@ -6,14 +6,15 @@ import type {
   Simplify,
 } from "blitz"
 import Head from "next/head"
-import React from "react"
+import React, {ReactNode} from "react"
 import {QueryClient, QueryClientProvider} from "react-query"
 import {Hydrate, HydrateOptions} from "react-query/hydration"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
 import {UrlObject} from "url"
 import {AppPropsType} from "next/dist/shared/lib/utils"
-import {Router} from "next/router"
+import {Router, useRouter} from "next/router"
+import {RouterContext} from "./router-context"
 
 export * from "./error-boundary"
 export * from "./error-component"
@@ -67,6 +68,7 @@ export type BlitzProviderProps = {
 interface RouteUrlObject extends Pick<UrlObject, "pathname" | "query"> {
   pathname: string
 }
+
 type RedirectAuthenticatedTo = string | RouteUrlObject | false
 type RedirectAuthenticatedToFnCtx = {
   session: Ctx["session"]["$publicData"]
@@ -78,7 +80,7 @@ export type BlitzPage<P = {}> = React.ComponentType<P> & {
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+export type BlitzLayout<P = {}> = React.ComponentType<P & {children: ReactNode}> & {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
@@ -92,20 +94,24 @@ export const BlitzProvider = ({
   hydrateOptions,
   children,
 }: BlitzProviderProps) => {
+  const router = useRouter()
+
   if (client) {
     return (
-      <QueryClientProvider
-        client={client || globalThis.queryClient}
-        contextSharing={contextSharing}
-      >
-        <Hydrate state={dehydratedState} options={hydrateOptions}>
-          {children}
-        </Hydrate>
-      </QueryClientProvider>
+      <RouterContext.Provider value={router}>
+        <QueryClientProvider
+          client={client || globalThis.queryClient}
+          contextSharing={contextSharing}
+        >
+          <Hydrate state={dehydratedState} options={hydrateOptions}>
+            {children}
+          </Hydrate>
+        </QueryClientProvider>
+      </RouterContext.Provider>
     )
   }
 
-  return children
+  return <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
 }
 
 export type PluginsExports<TPlugins extends readonly ClientPlugin<object>[]> = Simplify<
