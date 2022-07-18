@@ -54,7 +54,7 @@ function pipe<A, B, C, D, E, F, G, CA = Ctx, CB = CA, CC = CB, CD = CC, CE = CD,
   de: PipeFn<D, E, CD, CE>,
   ef: PipeFn<E, F, CE, CF>,
   fg: PipeFn<F, G, CF, CG>,
-): (input: A, ctx: CA) => EnsurePromise<CG>
+): (input: A, ctx: CA) => EnsurePromise<G>
 function pipe<
   A,
   B,

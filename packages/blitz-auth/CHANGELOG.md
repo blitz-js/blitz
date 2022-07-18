@@ -1,5 +1,26 @@
 # @blitzjs/auth
 
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- 1c809094: Fix `Page.authenticate` not working for layout components
+- Updated dependencies [8f166a5d]
+- Updated dependencies [54a66a95]
+  - blitz@2.0.0-alpha.55
+
+## 2.0.0-alpha.54
+
+### Patch Changes
+
+- Updated dependencies [f397cc20]
+- Updated dependencies [cacb65d6]
+- Updated dependencies [348fd6f5]
+- Updated dependencies [20fc9f80]
+- Updated dependencies [a3bbe6ce]
+- Updated dependencies [ffa7b5cc]
+  - blitz@2.0.0-alpha.54
+
 ## 2.0.0-alpha.53
 
 ### Patch Changes
