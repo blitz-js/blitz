@@ -1,5 +1,14 @@
 # blitz
 
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- 8f166a5d: Check for new versions when running CLI
+- 54a66a95: Show all blitz packages when running `blitz version` command
+- Updated dependencies [ab4d9de7]
+  - @blitzjs/generator@2.0.0-alpha.55
+
 ## 2.0.0-alpha.54
 
 ### Patch Changes
