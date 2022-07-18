@@ -1,5 +1,11 @@
 # @blitzjs/generator
 
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- ab4d9de7: Don't try to copy RPC API endpoint in templates that don't have it
+
 ## 2.0.0-alpha.54
 
 ### Patch Changes
