@@ -385,7 +385,7 @@ const parseAnonymousSessionToken = (token: string) => {
   }
 }
 
-const setCookie = (res: ServerResponse, cookieStr: string) => {
+export const setCookie = (res: ServerResponse, cookieStr: string) => {
   const getCookieName = (c: string) => c.split("=", 2)[0]
   const appendCookie = () => append(res, "Set-Cookie", cookieStr)
 
@@ -407,7 +407,7 @@ const setCookie = (res: ServerResponse, cookieStr: string) => {
     for (let i = 0; i < cookiesHeader.length; i++) {
       if (cookieName === getCookieName(cookiesHeader[i] || "")) {
         cookiesHeader[i] = cookieStr
-        res.setHeader("Set-Cookie", cookieStr)
+        res.setHeader("Set-Cookie", cookiesHeader)
         return
       }
     }
