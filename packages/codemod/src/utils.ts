@@ -224,7 +224,16 @@ export function getAllFiles(
   skipDirs?: string[],
   allowedExt?: string[],
 ) {
-  let currentFiles = fs.readdirSync(dirPath)
+  let currentFiles: string[] = []
+  try {
+    currentFiles = fs.readdirSync(dirPath)
+  } catch (e: any) {
+    if (e.code === "ENOENT") {
+      return []
+    }
+
+    throw e
+  }
 
   currentFiles.forEach((file) => {
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
