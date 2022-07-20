@@ -3826,6 +3826,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "SerekKiri",
+      "name": "Kacper Potyrała",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29735836?v=4",
+      "profile": "kiri.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
