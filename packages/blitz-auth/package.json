@@ -1,6 +1,6 @@
 {
   "name": "@blitzjs/auth",
-  "version": "2.0.0-alpha.55",
+  "version": "2.0.0-alpha.56",
   "scripts": {
     "build": "unbuild",
     "predev": "wait-on -d 250 ../blitz/dist/index-server.d.ts",
@@ -26,7 +26,7 @@
     "@types/secure-password": "3.1.1",
     "b64-lite": "1.4.0",
     "bad-behavior": "1.0.1",
-    "blitz": "2.0.0-alpha.55",
+    "blitz": "2.0.0-alpha.56",
     "cookie": "0.4.1",
     "cookie-session": "2.0.0",
     "debug": "4.3.3",
@@ -39,7 +39,7 @@
     "url": "0.11.0"
   },
   "devDependencies": {
-    "@blitzjs/config": "workspace:2.0.0-alpha.55",
+    "@blitzjs/config": "workspace:2.0.0-alpha.56",
     "@testing-library/react": "13.0.0",
     "@testing-library/react-hooks": "7.0.2",
     "@types/cookie": "0.4.1",

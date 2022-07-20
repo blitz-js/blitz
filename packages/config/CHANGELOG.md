@@ -1,5 +1,7 @@
 # @blitzjs/config
 
+## 2.0.0-alpha.56
+
 ## 2.0.0-alpha.55
 
 ## 2.0.0-alpha.54
