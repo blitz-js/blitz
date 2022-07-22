@@ -83,13 +83,13 @@ export type BlitzAPIHandler = (
 const prefetchQueryFactory = (
   ctx: BlitzCtx,
 ): {
-  queryClient: QueryClient | null
+  getClient: () => QueryClient | null
   prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]>
 } => {
   let queryClient: null | QueryClient = null
 
   return {
-    queryClient,
+    getClient: () => queryClient,
     prefetchQuery: async (fn, input, defaultOptions = {}, infinite = false) => {
       if (!queryClient) {
         queryClient = new QueryClient({defaultOptions})
@@ -116,14 +116,14 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
         (res as MiddlewareResponse).blitzCtx,
       )
 
-      const {queryClient, prefetchQuery} = prefetchQueryFactory(ctx)
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       try {
         const result = await handler({req, res, ctx, ...rest})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(withDehydratedState(result, getClient()))
       } catch (err: any) {
         onError?.(err)
         throw err
@@ -136,14 +136,14 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
-      const {queryClient, prefetchQuery} = prefetchQueryFactory(ctx)
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       try {
         const result = await handler({...context, ctx: ctx})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(withDehydratedState(result, getClient()))
       } catch (err: any) {
         onError?.(err)
         throw err
