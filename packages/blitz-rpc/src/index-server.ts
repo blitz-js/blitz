@@ -1,7 +1,7 @@
 import {assert, Ctx, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
-import {resolve, sep} from "path"
+import {resolve} from "path"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -80,7 +80,7 @@ export function installWebpackConfig({
   webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
   webpackConfig.module.rules.push({
-    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
@@ -147,8 +147,8 @@ export function rpcHandler(config: RpcConfig) {
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = (req.query.blitz as string[])?.join(sep)
-    const routePath = sep + relativeRoutePath
+    const relativeRoutePath = (req.query.blitz as string[])?.join("/")
+    const routePath = "/" + relativeRoutePath
 
     const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
