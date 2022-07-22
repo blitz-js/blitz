@@ -6,7 +6,7 @@ import type {
   Simplify,
 } from "blitz"
 import Head from "next/head"
-import React from "react"
+import React, {ReactNode} from "react"
 import {QueryClient, QueryClientProvider, Hydrate, HydrateOptions} from "react-query"
 import {withSuperJSONPage} from "./superjson"
 import {Ctx} from "blitz"
@@ -79,7 +79,7 @@ export type BlitzPage<P = {}> = React.ComponentType<P> & {
   suppressFirstRenderFlicker?: boolean
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }
-export type BlitzLayout<P = {}> = React.ComponentType<P> & {
+export type BlitzLayout<P = {}> = React.ComponentType<P & {children: ReactNode}> & {
   authenticate?: boolean | {redirectTo?: string | RouteUrlObject}
   redirectAuthenticatedTo?: RedirectAuthenticatedTo | RedirectAuthenticatedToFn
 }

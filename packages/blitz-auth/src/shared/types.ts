@@ -47,7 +47,7 @@ export interface SessionConfigMethods {
     handle: string,
     session: Partial<SessionModel>,
   ) => Promise<SessionModel | undefined>
-  deleteSession: (handle: string) => Promise<SessionModel>
+  deleteSession: (handle: string) => Promise<SessionModel | undefined>
 }
 
 export interface SessionConfig extends SessionConfigMethods {

@@ -19,24 +19,11 @@
 
 <br>
 
-<h1 align="center">The Fullstack React Framework</h1>
-
-<h5 align="center">"Zero-API" Data Layer — Built on Next.js — Inspired by Ruby on Rails</h3>
-<h3 align="center"><a href="https://blitzjs.com/docs/get-started" target="_blank">Read the Documentation</a></h3>
-<br>
-
-“Zero-API” data layer **lets you import server code directly into your React components** instead of having to manually add API endpoints and do client-side fetching and caching.
-
-New Blitz apps come with **all the boring stuff already set up for you!** Like ESLint, Prettier, Jest, user sign up, log in, and password reset.
-
-Provides **helpful defaults and conventions** for things like routing, file structure, and authentication while also being extremely flexible.
-
+<h1 align="center">The Missing Fullstack Toolkit for Next.js</h1>
 
 <br>
 
 ### Quick Start
-
-You need Node.js 12 or newer
 
 #### Install Blitz
 
@@ -53,36 +40,7 @@ _You can alternatively use [`npx`](https://www.npmjs.com/package/npx)_
 
 <br><br>
 
-<a aria-label="Bytes Newsletter" href="https://ui.dev/bytes/?r=blitzjs">
-<img alt="Bytes Newsletter" src="https://files-8wtskjofb.vercel.app/smarter-16x1.jpg">
-</a>
 
-
-<br><br>
-
-
-
-### The Foundational Principles
-
-1. Fullstack & Monolithic
-2. API Not Required
-3. Convention over Configuration
-4. Loose Opinions
-5. Easy to Start, Easy to Scale
-6. Stability
-7. Community over Code
-
-[The Blitz Manifesto](https://blitzjs.com/docs/manifesto) explains these principles in detail.
-
-<br>
-
-### What is Blitz Designed For?
-
-Blitz is designed for tiny to large database-backed applications that have one or more graphical user interfaces.
-
-While we currently only support web, we are pursuing the dream of a single monolithic application that runs on web and mobile with maximum code sharing and minimal boilerplate.
-
-<br>
 
 ## Welcome to the Blitz Community 👋
 
