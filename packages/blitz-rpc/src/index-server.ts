@@ -1,7 +1,7 @@
 import {assert, Ctx, prettyMs} from "blitz"
 import {NextApiRequest, NextApiResponse} from "next"
 import {deserialize, serialize as superjsonSerialize} from "superjson"
-import {resolve} from "path"
+import {resolve, sep} from "path"
 
 // TODO - optimize end user server bundles by not exporting all client stuff here
 export * from "./index-browser"
@@ -135,14 +135,15 @@ interface RpcConfig {
 export function rpcHandler(config: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
+    console.log({resolverMap})
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
       Array.isArray(req.query.blitz),
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = req.query.blitz.join("/")
-    const routePath = "/" + relativeRoutePath
+    const relativeRoutePath = req.query.blitz.join(sep)
+    const routePath = sep + relativeRoutePath
 
     const loadableResolver = resolverMap[routePath]
     if (!loadableResolver) {

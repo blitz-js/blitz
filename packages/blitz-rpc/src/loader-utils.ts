@@ -62,8 +62,8 @@ export function convertPageFilePathToRoutePath(
   }
 
   return filePath
-    .replace(/^.*?[\\/]queries[\\/]/, "/")
-    .replace(/^.*?[\\/]mutations[\\/]/, "/")
+    .replace(/^.*?[\\/]queries[\\/]/, sep)
+    .replace(/^.*?[\\/]mutations[\\/]/, sep)
     .replace(fileExtensionRegex, "")
 }
 
