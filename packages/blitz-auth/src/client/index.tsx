@@ -216,8 +216,8 @@ export function getAuthValues<TProps = any>(
 ) {
   if (!Page) return {}
 
-  let authenticate = "authenticate" in Page && Page.authenticate
-  let redirectAuthenticatedTo = "redirectAuthenticatedTo" in Page && Page.redirectAuthenticatedTo
+  let authenticate = (Page as BlitzPage)?.authenticate
+  let redirectAuthenticatedTo = (Page as BlitzPage)?.redirectAuthenticatedTo
 
   if (authenticate === undefined && redirectAuthenticatedTo === undefined) {
     const layout = "getLayout" in Page && Page.getLayout?.(<Page {...props} />)

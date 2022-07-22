@@ -1,4 +1,4 @@
-import {dirname, join, posix} from "path"
+import {dirname, join, posix, relative} from "path"
 import {promises} from "fs"
 import {
   assertPosixPath,
@@ -37,6 +37,10 @@ export async function loader(this: Loader, input: string): Promise<string> {
 
 module.exports = loader
 
+function slash(str: string) {
+  return str.replace(/\\/g, "/")
+}
+
 export async function transformBlitzRpcServer(
   src: string,
   id: string,
@@ -54,7 +58,7 @@ export async function transformBlitzRpcServer(
   code += "\n\n"
 
   for (let resolverFilePath of resolvers) {
-    const relativeResolverPath = posix.relative(dirname(id), join(root, resolverFilePath))
+    const relativeResolverPath = slash(relative(dirname(id), join(root, resolverFilePath)))
     const routePath = convertPageFilePathToRoutePath(resolverFilePath, options?.resolverPath)
     code += `__internal_addBlitzRpcResolver('${routePath}', () => import('${relativeResolverPath}'));`
     code += "\n"

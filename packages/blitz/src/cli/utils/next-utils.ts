@@ -10,7 +10,7 @@ import type {ServerConfig} from "./config"
 const debug = require("debug")("blitz:utils")
 
 export function getProjectRootSync() {
-  return path.dirname(process.cwd())
+  return process.cwd()
 }
 
 export function getCustomServerPath() {

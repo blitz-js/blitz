@@ -1,5 +1,26 @@
 # @blitzjs/codemod
 
+## 2.0.0-alpha.56
+
+### Patch Changes
+
+- Updated dependencies [abb1ad5d]
+- Updated dependencies [abe2afcc]
+- Updated dependencies [0ac6e171]
+- Updated dependencies [8bcb471a]
+  - blitz@2.0.0-alpha.56
+  - @blitzjs/generator@2.0.0-alpha.56
+
+## 2.0.0-alpha.55
+
+### Patch Changes
+
+- Updated dependencies [8f166a5d]
+- Updated dependencies [54a66a95]
+- Updated dependencies [ab4d9de7]
+  - blitz@2.0.0-alpha.55
+  - @blitzjs/generator@2.0.0-alpha.55
+
 ## 2.0.0-alpha.54
 
 ### Patch Changes

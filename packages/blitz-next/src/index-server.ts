@@ -80,6 +80,27 @@ export type BlitzAPIHandler = (
   ctx: Ctx,
 ) => ReturnType<NextApiHandler>
 
+const prefetchQueryFactory = (
+  ctx: BlitzCtx,
+): {
+  getClient: () => QueryClient | null
+  prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]>
+} => {
+  let queryClient: null | QueryClient = null
+
+  return {
+    getClient: () => queryClient,
+    prefetchQuery: async (fn, input, defaultOptions = {}, infinite = false) => {
+      if (!queryClient) {
+        queryClient = new QueryClient({defaultOptions})
+      }
+
+      const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
+      await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
+    },
+  }
+}
+
 export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
   const middlewares = plugins.flatMap((p) => p.requestMiddlewares)
   const contextMiddleware = plugins.flatMap((p) => p.contextMiddleware).filter(Boolean)
@@ -94,26 +115,15 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
         (y, f) => (f ? f(y) : y),
         (res as MiddlewareResponse).blitzCtx,
       )
-      let queryClient: null | QueryClient = null
 
-      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
-        fn,
-        input,
-        defaultOptions = {},
-        infinite = false,
-      ) => {
-        queryClient = new QueryClient({defaultOptions})
-
-        const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
-        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
-      }
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       try {
         const result = await handler({req, res, ctx, ...rest})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(withDehydratedState(result, getClient()))
       } catch (err: any) {
         onError?.(err)
         throw err
@@ -126,26 +136,14 @@ export const setupBlitzServer = ({plugins, onError}: SetupBlitzOptions) => {
     ): GetStaticProps<TProps, Query, PD> =>
     async (context) => {
       const ctx = contextMiddleware.reduceRight((y, f) => (f ? f(y) : y), {} as Ctx)
-      let queryClient: null | QueryClient = null
-
-      const prefetchQuery: AddParameters<PrefetchQueryFn, [boolean?]> = async (
-        fn,
-        input,
-        defaultOptions = {},
-        infinite = false,
-      ) => {
-        queryClient = new QueryClient({defaultOptions})
-
-        const queryKey = infinite ? getInfiniteQueryKey(fn, input) : getQueryKey(fn, input)
-        await queryClient.prefetchQuery(queryKey, () => fn(input, ctx))
-      }
+      const {getClient, prefetchQuery} = prefetchQueryFactory(ctx)
 
       ctx.prefetchQuery = prefetchQuery
       ctx.prefetchInfiniteQuery = (...args) => prefetchQuery(...args, true)
 
       try {
         const result = await handler({...context, ctx: ctx})
-        return withSuperJsonProps(withDehydratedState(result, queryClient))
+        return withSuperJsonProps(withDehydratedState(result, getClient()))
       } catch (err: any) {
         onError?.(err)
         throw err

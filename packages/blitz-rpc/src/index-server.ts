@@ -80,7 +80,7 @@ export function installWebpackConfig({
   webpackRuleOptions,
 }: InstallWebpackConfigOptions) {
   webpackConfig.module.rules.push({
-    test: /\/\[\[\.\.\.blitz]]\.[jt]s$/,
+    test: /[\\/]\[\[\.\.\.blitz]]\.[jt]sx?$/,
     use: [
       {
         loader: loaderServer,
@@ -146,10 +146,10 @@ export function rpcHandler(config: RpcConfig) {
       "It seems your Blitz RPC endpoint file is not named [[...blitz]].(jt)s. Please ensure it is",
     )
 
-    const relativeRoutePath = req.query.blitz.join("/")
+    const relativeRoutePath = (req.query.blitz as string[])?.join("/")
     const routePath = "/" + relativeRoutePath
 
-    const loadableResolver = resolverMap[routePath]
+    const loadableResolver = resolverMap?.[routePath]
     if (!loadableResolver) {
       throw new Error("No resolver for path: " + routePath)
     }
