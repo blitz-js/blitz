@@ -140,7 +140,6 @@ interface RpcConfig {
 export function rpcHandler(config: RpcConfig) {
   return async function handleRpcRequest(req: NextApiRequest, res: NextApiResponse, ctx: Ctx) {
     const resolverMap = await getResolverMap()
-    console.log({resolverMap})
     assert(resolverMap, "No query or mutation resolvers found")
     assert(
       Array.isArray(req.query.blitz),
